@@ -1,0 +1,136 @@
+Installation
+
+To build a ZK web-application just install ZK studio (an eclipse plugin), create a ZK dynamic web project in Eclipse.
+
+Then add the java files to a package in the new project and the static files to the WebContent folder.
+
+ZK will bind the correct .zul files to its "Composer" java class as specified in the root "window" tag. For example the index.zul file has use="au.org.emii.aatams.zk.AATAMSHomePageComposer" attribute. All of the event handler routines in the class are then bound to UI widgets.
+
+You also need to add the following lines to your web.xml (in WEB-INF) to specify where to save uploaded files to.
+
+  <context-param>
+    <param-name>downloads_path</param-name>
+    <param-value>*****</param-value>
+  </context-param>	
+
+
+Here are Geoff's valuable getting started with ZK tips.
+
+*********************************************************************
+
+Read all - we use the last bit (extend window + interfaces)
+http://www.zkoss.org/smalltalks/mvc3/
+
+Window attribute - use == "isa"
+window attribute - apply == "hasa"
+
+1) create .zul file - see http://zkoss.org/zkdemo/userguide/ for syntax and http://www.zkoss.org/doc/devguide/
+ for detailed syntax.  Root element should be  a window
+
+2) Create a class extending window and implementing AfterCompose and Composer (or use attached java class)
+
+3) set the use and apply attributes for the window you made in 1) to the fully qualified class you created in 2) - now if you get a reference to the window object, it's actually an instance of your class (use/isa) so you can call your public class methods on it
+
+4) ids/actions get autowired -a) make a button with id="mybutton" - create a method public void onClick$mybutton() {} and it gets executed when the button is clicked b) create a textbox id="mytextbox" now create a field in your class "private Textbox mytexbox" - it gets autowired when the window is constructed, so you can do stuff like mytextbox.getValue() to read a value from it.  GOTCHA make sure you use the right imports when autowireing or you just get null pointers - use *zul* not *zhtml*!
+
+5) All this relies on a listener servlet sitting in the background somehwere - best way is to create a new zk project in eclipse - install http://www.zkoss.org/product/zkstudio.dsp zk studio for ide support and documentation
+
+6) For 'real' deployment, your build needs to include: web.xml setup for zk listener servlets, dependency jar files in WEB-INF/lib, zk.xml in classpath - worry about that later
+
+7) At all costs (except quick and dirty see-if-it-works-then-nuke-it demos) AVOID beanshell which is the stuff in <zscript> tags.  This crap can also be written in languages such as php, javascript, groovy, etc but really it's all just going to get recompiled to beanshell at runtime.  Reasons to avoid:  1) no compile time checks 2) no meaningful stacktraces 3) not object oriented, 4) poor performance, 5) sometimes causes hard-to-find js errors on client(!)
+
+8) Styling stuff - most of it looks alright to me but I like green text on a black console so what do I know?  To style things, you can download the zk source and inspect the .dsp files which are used to build the components so you can see how the styles are applied.  The easiest way is to get Phil to do it ;-)
+
+9) building your own components - sometimes you want to create your own zk components or extend one of the core zk ones to do something special.  eg, I had to make a special datebox that handled 'gaps' in sequences of available days allowed for selection.  link: http://docs.zkoss.org/wiki/Component_Development_Tutorial  Normally you don't need to do this though.
+
+10) Suggestion: You can have window inside window - but suggest you try and limit to one window per .zul file in general.  Also write one composer per window to keep from getting a massive file with all the methods for the whole system like we had in the portal at one stage - not very oo!
+
+11) Hint:  To exec raw JS on client from Java world - use Executions.evalJavascript(String script)
+
+12) Hint: to create components from a .zul file at runtime from java world - use Excecutions.createComponents(...)
+
+13) Hint: Sessions - there is ALWAYS a session (unless there isn't one) - get it with Sessions.getCurrent(), get the real session with Sessions.getCurrent().getNative()
+
+14) Hint: Avoid modal windows (use overlapped instead) Reason: The servlet thread BLOCKS while the window is active(!)
+
+15) Hint: You can do stuff once per webapp load, once per session create, etc by setting listeners in zk.xml - you do this by implementing an interface and registering it in the xml file.
+
+16) Error handling: You can register a handler for errors in zk.xml (error-page) - set it to catch Throwable and MOST uncaught errors will end up at this page - some won't though, eg if zk fails to startup etc.  If you register another listener in web.xml (error-page) the error gets caught TWICE and you get SEVERE errors in your server log.  Only solution I can see seems to be to have the web.xml error-page set to look for error code 500 and NOT any form of exception.  This prevents the user seeing the default tomcat error 500 stack traces.
+
+That should be enough to start you off - any questions?
+
+Geoff
+
+Have fun
+Geoff
+
+
+
+package au.org.emii.portal;
+
+import org.apache.log4j.Logger;
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.ext.AfterCompose;
+import org.zkoss.zk.ui.util.Composer;
+import org.zkoss.zul.Window;
+
+/**
+ * This composer will automatically autowire and autoforward your composers.
+ * 
+ * As it extends Window, you can set both the apply and use window attributes
+ * to point to a subclass without having to re-implement the afterCompose 
+ * method each time.
+ *  
+ * Also includes a handy logger instances 
+ * @author geoff
+ *
+ */
+public abstract class GenericAutowireAutoforwardComposer extends Window implements AfterCompose, Composer {
+
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Log4j instance
+	 */
+	protected Logger logger = Logger.getLogger(this.getClass());
+
+	
+	
+	/**
+	 * This does nothing but is required to keep zk runtime happy - if
+	 * you remove it you will get classcast errors when the page loads
+	 * because we are required to implement the do Composer interface 
+	 * even though we already implement AfterCompose
+	 */
+	public void doAfterCompose(Component arg0) throws Exception {}
+	
+	/**
+	 * Perform the autowiring - courtesy of the zk mvc 3 tutorial
+	 */
+    public void afterCompose() {
+        //wire variables
+        Components.wireVariables(this, this);
+        
+        //NO need to register onXxx event listeners
+
+        //auto forward
+        Components.addForwards(this, this);
+    }
+    
+    public PortalSession getPortalSession() {
+        return (PortalSession) Sessions.getCurrent().getAttribute("portalSession");
+    }
+    
+
+
+	
+	protected MapComposer getMapComposer() {
+		return (MapComposer) getRoot();
+	}
+
+
+
+}
+ 

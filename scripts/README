@@ -1,0 +1,10 @@
+The AATAMS database schema is maintained in XML format in the aatams.xml file in this folder.
+
+An SQL script is generated from this schema file using the schema_to_ddl.xslt stylesheet.
+
+Various sets for XForms are generated from aatams.xml in a similar way see the schema_to_xforms_*.xslt and
+associated schema_to_xforms_*.bat to do run transformations.
+
+A web-page with links to all the xforms can be produced using schema_to_index.xslt/bat (useful when testing).
+
+An nice HTML format schema document can be produced using schema_to_documentation.xslt (see schema.html).

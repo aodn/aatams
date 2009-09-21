@@ -1,0 +1,20 @@
+var genus_list = [
+[1,"Caranx"],
+[2,"Carcharhinus"],
+[15,"Chlorurus"],
+[3,"Coris"],
+[4,"Epinephelus"],
+[5,"Galocerdo"],
+[16,"Hiposcarus"],
+[6,"Lethrinus"],
+[7,"Manta"],
+[8,"Negaprion"],
+[19,"Orectolobus"],
+[9,"Pastinachus"],
+[14,"Plectropomus"],
+[10,"Rhinobatos"],
+[18,"Scarus"],
+[11,"Thunnus"],
+[12,"Urogymnus"],
+[17,"Variola"]
+];

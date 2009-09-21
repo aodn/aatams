@@ -1,0 +1,11 @@
+body { font-family: tahoma, arial, helvetica; font-size:100%; margin:0px; padding:0px; background-color:#DBF0F7;  }
+div#header {  width:100%; height:123px; background: url('http://emii.org.au/aatams/img/logo_spacer_repeat.gif') repeat-x top; margin:0px;}
+div#imos_logo { position:absolute; top:0px; left:0px;}
+div#imos_logo a {  border: none; cursor:pointer; }
+div#imos_logo a img { border:none;}
+div#project_header { position:absolute; top:7px; left:274px; height:100px; margin-right:0px; color: #0033CC; font-weight:bold; font-size:24px; }
+div#project_header a { cursor:pointer; border: none; text-decoration: none; }
+div#project_header a:visited { color: #0033cc; }
+div#project_header span.project_name { display: block; margin-top:5px; }
+div#project_header span.emii { display: block; margin-top:3px; color:white; font-size:0.6em; font-weight:normal; } 
+div#project_header span.emii span.emii_link { font-weight:bold; } 

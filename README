@@ -1,33 +1,64 @@
-subfolders
+The sub-folders and their contents is as follows:
 
-data file processing
-++++++++++++++++++++
+1. data file processing
++++++++++++++++++++++++
 
-Receipt and processing of receiver files into database
+Receipt and processing of receiver files into database.
 
-data access
-+++++++++++
+The java classes responsible for this processing are actually utilised from within the ZK framework
+but are not linked to ZK. ZK just provides the upload and save to disk steps, the processing
+from that point is done by the code in this folder.
 
-Search and download access to data
+There are three requirements from that point. 
+1. Process the file data into a database
+2. Update metadata
+3. Create a report and send to registered parties of interest.
 
-forms
-++++++
+See the README and javadoc for more details on these steps.
+
+2. data access
+++++++++++++++
+
+Search for and download data.
+
+This is a web-page that gets embedded in the ZK app. It basically allows the user to search for AATAMS
+data and download it. 
+
+It is going to the WFS for some data and for detections data to ???
+
+3. forms
+++++++++
 
 Xforms for data maintenance in relational database, these are auto generated from the 
 schema document (aatams.xml) in the scripts folder.
 
-zk
-++
+These form use the XSLTForms XForms framework, which is an all browser based XForms implementation.
+It translates an XForm document into HTML using an stylesheet processing instruction added at the start
+of the Xform. 
 
-zk Web application framework, provides main AATAMS web page
+The main reason for using these is to be able to make use of a WFS as the data service and then also
+the deegree owsProxy to implement user rights restrictions on the AATAMS data.
 
-wfs
-+++
+4. zk
++++++
 
-Web Feature Services (WFS), provides main data access service
+zk Web application framework, provides main AATAMS web page, menu items are effectively pages 'embedded' within the ZK app as an iframe that
+forms the "centre" panel as specified in the index.zul page definition file, as below:
 
-scripts
-+++++++
+<center flex="true" margins="5,0,5,0">
+	<iframe id="iframe" src="http://imos.org.au/aatams.html" width="500px" height="500px" scrolling="auto"
+				style="border: 1px solid gray" />
+</center>
+
+5. wfs
+++++++
+
+Web Feature Services (WFS), provides main data access services.
+
+All the XForms access the WFS to get data to display and also to build transactions for adding data into the database via the WFS.
+
+6. scripts
+++++++++++
 
 Scripts for generation of forms, schemas etc.
 

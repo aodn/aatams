@@ -1,0 +1,33 @@
+subfolders
+
+data file processing
+++++++++++++++++++++
+
+Receipt and processing of receiver files into database
+
+data access
++++++++++++
+
+Search and download access to data
+
+forms
+++++++
+
+Xforms for data maintenance in relational database
+
+zk
+++
+
+zk Web application framework, provides main AATAMS web page
+
+wfs
++++
+
+Web Feature Services (WFS), provides main data access service
+
+scripts
++++++++
+
+Scripts for generation of forms, schemas etc.
+
+

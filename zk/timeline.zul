@@ -1,0 +1,13 @@
+<?page title="Timeline Example" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Timeline Example" border="normal">
+	<timeline height="300px" width="100%">
+		<bandinfo width="70%" id="b1" intervalUnit="month"
+			intervalPixels="100" eventSourceUrl="timeline_ex1.xml">
+		</bandinfo>
+		<bandinfo width="30%" intervalUnit="year" intervalPixels="200"
+			syncWith="b1" eventSourceUrl="timeline_ex1.xml">
+		</bandinfo>
+	</timeline>
+</window>
+</zk>

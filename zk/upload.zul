@@ -1,0 +1,7 @@
+<?page title="File upload testing" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window border="none" style="background-color:#DBF0F7"
+use="au.org.emii.aatams.zk.ReceiverDataFileUploadAndProcess">
+	<button label="Upload Files" id="FileUpload"/>
+</window>
+</zk>

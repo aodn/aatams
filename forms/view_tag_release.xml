@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:xf="http://www.w3.org/2002/xforms"
+      xmlns:ev="http://www.w3.org/2001/xml-events">
+   <head>
+      <title>AATAMS Web Interface</title>
+      <link href="aatams.css" rel="stylesheet" type="text/css"/>
+      <xf:model>
+         <xf:instance id="inst_request">
+            <wfs:GetFeature xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml"
+                            xmlns:ogc="http://www.opengis.net/ogc"
+                            outputFormat="text/xml; subtype=gml/3.1.1">
+               <wfs:Query typeName="pre3:tag_release">
+                  <ogc:Filter>
+                     <ogc:GmlObjectId gml:id=""/>
+                  </ogc:Filter>
+               </wfs:Query>
+               <aatams:dummy/>
+            </wfs:GetFeature>
+         </xf:instance>
+         <xf:instance id="inst_feature_id">
+            <id xmlns="">aatams.tag_release.NNNN</id>
+         </xf:instance>
+         <xf:bind id="feature_id" nodeset="instance('inst_feature_id')" type="xsd:string"/>
+         <xf:instance id="inst_response">
+            <wfs:FeatureCollection xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml">
+               <gml:featureMember>
+                  <aatams:tag_release/>
+               </gml:featureMember>
+            </wfs:FeatureCollection>
+         </xf:instance>
+         <xf:bind id="device" nodeset="instance('inst_response')//aatams:device/aatams:name"
+                  type="xsd:string"/>
+         <xf:bind id="classification"
+                  nodeset="instance('inst_response')//aatams:classification/aatams:name"
+                  type="xsd:string"/>
+         <xf:bind id="project"
+                  nodeset="instance('inst_response')//aatams:project_person/aatams:project_name"
+                  type="xsd:string"/>
+         <xf:bind id="person_role"
+                  nodeset="instance('inst_response')//aatams:project_person/aatams:person_name"
+                  type="xsd:string"/>
+         <xf:bind id="surgery" nodeset="instance('inst_response')//aatams:surgery/aatams:name"
+                  type="xsd:string"/>
+         <xf:bind id="release_longitude"
+                  nodeset="instance('inst_response')//aatams:tag_release/aatams:release_longitude"
+                  type="xsd:string"/>
+         <xf:bind id="release_latitude"
+                  nodeset="instance('inst_response')//aatams:tag_release/aatams:release_latitude"
+                  type="xsd:string"/>
+         <xf:bind id="release_geographic_area"
+                  nodeset="instance('inst_response')//aatams:tag_release/aatams:release_geographic_area"
+                  type="xsd:string"/>
+         <xf:bind id="release_timestamp"
+                  nodeset="instance('inst_response')//aatams:tag_release/aatams:release_timestamp"
+                  type="xsd:string"/>
+         <xf:bind id="capture_longitude"
+                  nodeset="instance('inst_response')//aatams:tag_release/aatams:capture_longitude"
+                  type="xsd:string"/>
+         <xf:bind id="capture_latitude"
+                  nodeset="instance('inst_response')//aatams:tag_release/aatams:capture_latitude"
+                  type="xsd:string"/>
+         <xf:bind id="capture_geographic_area"
+                  nodeset="instance('inst_response')//aatams:tag_release/aatams:capture_geographic_area"
+                  type="xsd:string"/>
+         <xf:bind id="capture_timestamp"
+                  nodeset="instance('inst_response')//aatams:tag_release/aatams:capture_timestamp"
+                  type="xsd:string"/>
+         <xf:bind id="tether_type"
+                  nodeset="instance('inst_response')//aatams:tether_type/aatams:name"
+                  type="xsd:string"/>
+         <xf:bind id="implant_type"
+                  nodeset="instance('inst_response')//aatams:implant_type/aatams:name"
+                  type="xsd:string"/>
+         <xf:submission id="s01" method="post" action="../deegree-wfs/services"
+                        ref="instance('inst_request')"
+                        replace="instance"
+                        instance="inst_response">
+            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+         </xf:submission>
+      </xf:model>
+   </head>
+   <body>
+      <fieldset xmlns="">
+         <legend>VIEW TAG RELEASE</legend>
+         <table xmlns="http://www.w3.org/1999/xhtml">
+            <tbody>
+               <tr>
+                  <td>
+                     <xf:input bind="feature_id">
+                        <xf:label>Enter Tag Release Id</xf:label>
+                     </xf:input>
+                  </td>
+                  <td>
+                     <xf:trigger>
+                        <xf:label>Search</xf:label>
+                        <xf:action ev:event="DOMActivate">
+                           <xf:setvalue ref="instance('inst_request')//@gml:id" value="instance('inst_feature_id')"/>
+                           <xf:send submission="s01"/>
+                        </xf:action>
+                     </xf:trigger>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+         <xf:output bind="device">
+            <xf:label>Device:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="classification">
+            <xf:label>Classification:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="project">
+            <xf:label>Project:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="person_role">
+            <xf:label>Person(Role):</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="surgery">
+            <xf:label>Surgery:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="release_longitude">
+            <xf:label>Release Longitude:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="release_latitude">
+            <xf:label>Release Latitude:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="release_geographic_area">
+            <xf:label>Release Geographic Area:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="release_timestamp">
+            <xf:label>Release Timestamp:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="capture_longitude">
+            <xf:label>Capture Longitude:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="capture_latitude">
+            <xf:label>Capture Latitude:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="capture_geographic_area">
+            <xf:label>Capture Geographic Area:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="capture_timestamp">
+            <xf:label>Capture Timestamp:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="tether_type">
+            <xf:label>Tether Type:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="implant_type">
+            <xf:label>Implant Type:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+      </fieldset>
+      <br/>
+      <div id="console" style="display:none;"/>
+   </body>
+</html>

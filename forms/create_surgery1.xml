@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><xhtml:html xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
+            xmlns:xhtml="http://www.w3.org/1999/xhtml"
+            xmlns:aatams="http://www.imos.org.au/aatams"
+            xmlns:xf="http://www.w3.org/2002/xforms"
+            xmlns:ev="http://www.w3.org/2001/xml-events"
+            xmlns:wfs="http://www.opengis.net/wfs"
+            xmlns:ogc="http://www.opengis.net/ogc">
+   <xhtml:head>
+      <xhtml:title>AATAMS Web Interface</xhtml:title>
+      <xhtml:link href="aatams.css" rel="stylesheet" type="text/css"/>
+      <script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
+      <xf:model id="model1">
+         <xf:instance id="inst_data">
+            <wfs:Transaction version="1.1.0" service="WFS">
+               <wfs:Insert>
+                  <wfs:FeatureCollection>
+                     <gml:featureMember>
+                        <aatams:surgery>
+                           <aatams:treatment_type_ref>
+                              <aatams:treatment_type/>
+                           </aatams:treatment_type_ref>
+                           <aatams:project_person_ref>
+                              <aatams:project_person/>
+                           </aatams:project_person_ref>
+                           <aatams:animal_ref>
+                              <aatams:animal/>
+                           </aatams:animal_ref>
+                           <aatams:stock/>
+                           <aatams:utc_datetime/>
+                           <aatams:comments/>
+                           <aatams:unit/>
+                           <aatams:measure/>
+                        </aatams:surgery>
+                     </gml:featureMember>
+                  </wfs:FeatureCollection>
+               </wfs:Insert>
+            </wfs:Transaction>
+         </xf:instance>
+         <xf:instance id="inst_subfeatures">
+            <data>
+               <animal_id>aatams.animal.1</animal_id>
+               <treatment_type_id>aatams.treatment_type.1</treatment_type_id>
+               <project_person_id>aatams.project_person.1</project_person_id>
+            </data>
+         </xf:instance>
+         <xf:instance id="inst_animal"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:animal"/>
+         <xf:instance id="inst_treatment_type"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:treatment_type"/>
+         <xf:instance id="inst_project_person"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
+            <data>
+               <aatams:project_person gml:id=""/>
+            </data>
+         </xf:instance>
+         <xf:instance id="inst_project"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project"/>
+         <xf:instance id="inst_project_id">
+            <data>
+               <project_id>aatams.project.1</project_id>
+            </data>
+         </xf:instance>
+         <xf:instance id="inst_response">
+            <dummy>
+               <ows:Exception/>
+               <wfs:TransactionResponse>
+                  <wfs:InsertResults>
+                     <wfs:Feature>
+                        <ogc:FeatureId/>
+                     </wfs:Feature>
+                  </wfs:InsertResults>
+               </wfs:TransactionResponse>
+            </dummy>
+         </xf:instance>
+         <xf:bind id="treatment_type" nodeset="instance('inst_subfeatures')//treatment_type_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="project_person" nodeset="instance('inst_subfeatures')//project_person_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="animal" nodeset="instance('inst_subfeatures')//animal_id" type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="stock" nodeset="instance('inst_data')//aatams:stock" type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="utc_datetime" nodeset="instance('inst_data')//aatams:utc_datetime"
+                  type="xsd:dateTime"
+                  required="true()"/>
+         <xf:bind id="comments" nodeset="instance('inst_data')//aatams:comments"
+                  type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="unit" nodeset="instance('inst_data')//aatams:unit" type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="measure" nodeset="instance('inst_data')//aatams:measure" type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
+                  type="xsd:string"/>
+         <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
+                  type="xsd:string"/>
+         <xf:submission id="s01" ref="instance('inst_data')" method="post"
+                        action="../deegree-wfs/services"
+                        replace="instance"
+                        instance="inst_response">
+            <xf:action ev:event="xforms-submit">
+               <xf:delete nodeset="instance('inst_data')//aatams:stock_id[.='']"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:animal_ref/aatams:animal"
+                          origin="instance('inst_animal')//aatams:animal[@gml:id=instance('inst_subfeatures')/animal_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:animal_ref/aatams:animal" at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:treatment_type_ref/aatams:treatment_type"
+                          origin="instance('inst_treatment_type')//aatams:treatment_type[@gml:id=instance('inst_subfeatures')/treatment_type_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:treatment_type_ref/aatams:treatment_type"
+                          at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
+                          origin="instance('inst_project_person')//aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
+                          at="1"/>
+            </xf:action>
+            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+         </xf:submission>
+      </xf:model>
+   </xhtml:head>
+   <xhtml:body><!--Debug--><xhtml:div class="form">
+         <legend>CREATE SURGERY</legend>
+         <xf:select1 bind="treatment_type" appearance="minimal" incremental="true()">
+            <xf:label>Treatment Type</xf:label>
+            <xf:itemset nodeset="instance('inst_treatment_type')//aatams:treatment_type">
+               <xf:value ref="@gml:id"/>
+               <xf:label ref="aatams:name"/>
+            </xf:itemset>
+         </xf:select1>
+         <xhtml:div class="dependant-selects">
+            <xf:select1 ref="instance('inst_project_id')/project_id" appearance="minimal"
+                        incremental="true()">
+               <xf:label>Project</xf:label>
+               <xf:itemset nodeset="instance('inst_project')//aatams:project">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:name"/>
+               </xf:itemset>
+               <xf:action ev:event="xforms-value-changed">
+                  <xf:setvalue ref="instance('inst_subfeatures')//project_person_id" value=""/>
+               </xf:action>
+            </xf:select1>
+            <xf:select1 bind="project_person" appearance="minimal" incremental="true()">
+               <xf:label>Person(Role)</xf:label>
+               <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_project_id')/project_id]">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:person_role"/>
+               </xf:itemset>
+            </xf:select1>
+         </xhtml:div>
+         <xf:select1 bind="animal" appearance="minimal" incremental="true()">
+            <xf:label>Animal</xf:label>
+            <xf:itemset nodeset="instance('inst_animal')//aatams:animal">
+               <xf:value ref="@gml:id"/>
+               <xf:label ref="aatams:name"/>
+            </xf:itemset>
+         </xf:select1>
+         <xf:input bind="stock" incremental="true()">
+            <xf:label>Stock</xf:label>
+         </xf:input>
+         <xf:input bind="utc_datetime" incremental="true()">
+            <xf:label>Utc Datetime</xf:label>
+         </xf:input>
+         <xf:textarea bind="comments">
+            <xf:label>Comments</xf:label>
+         </xf:textarea>
+         <xf:input bind="unit" incremental="true()">
+            <xf:label>Unit</xf:label>
+         </xf:input>
+         <xf:input bind="measure" incremental="true()">
+            <xf:label>Measure</xf:label>
+         </xf:input>
+         <xf:submit submission="s01">
+            <xf:label>Save</xf:label>
+         </xf:submit>
+         <xf:trigger>
+            <xf:label>Reset</xf:label>
+            <xf:reset ev:event="DOMActivate"/>
+         </xf:trigger>
+         <xf:group>
+            <xf:output bind="error_message" class="error">
+               <xf:label>Error:</xf:label>
+            </xf:output>
+            <xf:output bind="success_message">
+               <xf:label>New Record Id:</xf:label>
+            </xf:output>
+         </xf:group>
+      </xhtml:div>
+      <xhtml:br/>
+      <xhtml:div id="console"/>
+   </xhtml:body>
+</xhtml:html>

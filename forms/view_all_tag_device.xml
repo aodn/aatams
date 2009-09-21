@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:xf="http://www.w3.org/2002/xforms"
+      xmlns:ev="http://www.w3.org/2001/xml-events">
+   <head>
+      <title>AATAMS Web Interface</title>
+      <style type="text/css">ul.xforms-repeat {display:table; border-collapse:collapse;}li.xforms-repeat-item {display:table-row;}span.xforms-value {display:table-cell; padding:3px; border:solid 1px gray;}</style>
+      <xf:model>
+         <xf:instance id="inst_features"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:tag_device">
+            <wfs:FeatureCollection xmlns:gml="http://www.opengis.net/gml" xmlns:wfs="http://www.opengis.net/wfs">
+               <gml:featureMember>
+                  <aatams:tag_device/>
+               </gml:featureMember>
+            </wfs:FeatureCollection>
+         </xf:instance>
+      </xf:model>
+   </head>
+   <body>
+      <fieldset xmlns="">
+         <legend>VIEW ALL TAG DEVICE</legend>
+         <xf:repeat nodeset="instance('inst_features')//aatams:tag_device">
+            <xf:output ref="@gml:id"/>
+         </xf:repeat>
+      </fieldset>
+      <br/>
+      <div id="console" style="display:none;"/>
+   </body>
+</html>

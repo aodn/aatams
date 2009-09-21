@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><xhtml:html xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
+            xmlns:xhtml="http://www.w3.org/1999/xhtml"
+            xmlns:aatams="http://www.imos.org.au/aatams"
+            xmlns:xf="http://www.w3.org/2002/xforms"
+            xmlns:ev="http://www.w3.org/2001/xml-events"
+            xmlns:wfs="http://www.opengis.net/wfs"
+            xmlns:ogc="http://www.opengis.net/ogc">
+   <xhtml:head>
+      <xhtml:title>AATAMS Web Interface</xhtml:title>
+      <xhtml:link href="aatams.css" rel="stylesheet" type="text/css"/>
+
+      <xf:model id="model1">
+         <xf:instance id="inst_data">
+            <wfs:Transaction version="1.1.0" service="WFS">
+               <wfs:Insert>
+                  <wfs:FeatureCollection>
+                     <gml:featureMember>
+                        <aatams:deployment_download>
+                           <aatams:installation_deployment_ref>
+                              <aatams:installation_deployment/>
+                           </aatams:installation_deployment_ref>
+                           <aatams:recovery_timestamp/>
+                           <aatams:download_timestamp/>
+                           <aatams:time_correction_start/>
+                           <aatams:time_correction_end/>
+                           <aatams:time_correction_type/>
+                           <aatams:clock_drift/>
+                           <aatams:pings/>
+                           <aatams:detections/>
+                           <aatams:filename/>
+                           <aatams:comments/>
+                        </aatams:deployment_download>
+                     </gml:featureMember>
+                  </wfs:FeatureCollection>
+               </wfs:Insert>
+            </wfs:Transaction>
+         </xf:instance>
+         <xf:instance id="inst_subfeatures">
+            <data>
+               <installation_deployment_id>aatams.installation_deployment.12</installation_deployment_id>
+            </data>
+         </xf:instance>
+         <xf:instance id="inst_installation"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation">
+            <data>
+               <aatams:installation gml:id=""/>
+            </data>
+         </xf:instance>
+         <xf:instance id="inst_installation_deployment"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment"/>
+         <xf:instance id="inst_installation_id">
+            <data>
+               <installation_id>aatams.installation.1</installation_id>
+            </data>
+         </xf:instance>
+         <xf:instance id="inst_response">
+            <dummy>
+               <ows:Exception/>
+               <wfs:TransactionResponse>
+                  <wfs:InsertResults>
+                     <wfs:Feature>
+                        <ogc:FeatureId/>
+                     </wfs:Feature>
+                  </wfs:InsertResults>
+               </wfs:TransactionResponse>
+            </dummy>
+         </xf:instance>
+         <xf:bind id="installation_deployment"
+                  nodeset="instance('inst_subfeatures')//installation_deployment_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="recovery_timestamp"
+                  nodeset="instance('inst_data')//aatams:recovery_timestamp"
+                  type="xsd:dateTime"
+                  required="false()"/>
+         <xf:bind id="download_timestamp"
+                  nodeset="instance('inst_data')//aatams:download_timestamp"
+                  type="xsd:dateTime"
+                  required="true()"/>
+         <xf:bind id="time_correction_start"
+                  nodeset="instance('inst_data')//aatams:time_correction_start"
+                  type="xsd:dateTime"
+                  required="false()"/>
+         <xf:bind id="time_correction_end"
+                  nodeset="instance('inst_data')//aatams:time_correction_end"
+                  type="xsd:dateTime"
+                  required="false()"/>
+         <xf:bind id="time_correction_type"
+                  nodeset="instance('inst_data')//aatams:time_correction_type"
+                  type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="clock_drift" nodeset="instance('inst_data')//aatams:clock_drift"
+                  type="xsd:integer"
+                  required="false()"/>
+         <xf:bind id="pings" nodeset="instance('inst_data')//aatams:pings" type="xsd:integer"
+                  required="false()"/>
+         <xf:bind id="detections" nodeset="instance('inst_data')//aatams:detections"
+                  type="xsd:integer"
+                  required="false()"/>
+         <xf:bind id="filename" nodeset="instance('inst_data')//aatams:filename"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="comments" nodeset="instance('inst_data')//aatams:comments"
+                  type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
+                  type="xsd:string"/>
+         <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
+                  type="xsd:string"/>
+         <xf:submission id="s01" ref="instance('inst_data')" method="post"
+                        action="../deegree-wfs/services"
+                        replace="instance"
+                        instance="inst_response">
+            <xf:action ev:event="xforms-submit">
+               <xf:delete nodeset="instance('inst_data')//aatams:recovery_timestamp[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:time_correction_start[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:time_correction_end[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:clock_drift[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:pings[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:detections[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:status_id[.='']"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
+                          origin="instance('inst_installation_deployment')//aatams:installation_deployment[@gml:id=instance('inst_subfeatures')/installation_deployment_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
+		       at="1"/>
+           </xf:action>
+	   <xf:action ev:event="xforms-submit-done">
+		 <xf:load resource="javascript:upload()"/>
+           </xf:action>       
+            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+         </xf:submission>
+ </xf:model>
+ <xhtml:script type="text/javascript">
+function upload(){
+	var model1 = document.getElementById('model1').xfElement;
+	var binding = document.getElementById('success_message').xfElement.binding;
+	var result = binding.evaluate(model1.getInstanceDocument('inst_response'));
+	if(result.length > 0){
+		document.cookie = "download_id="+result[0].nodeValue;
+	}else{
+		alert("error: no new feature id could be obtained");
+	}
+}
+  </xhtml:script>
+   </xhtml:head>
+   <xhtml:body><!--Debug--><xhtml:div class="form">
+         <legend>ADD DEPLOYMENT DOWNLOAD</legend>
+         <xhtml:div class="dependant-selects">
+            <xf:select1 ref="instance('inst_installation_id')/installation_id" appearance="minimal"
+                        incremental="true()">
+               <xf:label>Installation</xf:label>
+               <xf:itemset nodeset="instance('inst_installation')//aatams:installation">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:name"/>
+               </xf:itemset>
+               <xf:action ev:event="xforms-value-changed">
+                  <xf:setvalue ref="instance('inst_subfeatures')//deployment_id" value=""/>
+               </xf:action>
+            </xf:select1>
+            <xf:select1 bind="installation_deployment" appearance="minimal" incremental="true()">
+               <xf:label>Deployment</xf:label>
+               <xf:itemset nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_installation_id')/installation_id]">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:name"/>
+               </xf:itemset>
+            </xf:select1>
+         </xhtml:div>
+         <xf:input bind="recovery_timestamp" incremental="true()">
+            <xf:label>Recovery Timestamp</xf:label>
+         </xf:input>
+         <xf:input bind="download_timestamp" incremental="true()">
+            <xf:label>Download Timestamp</xf:label>
+         </xf:input>
+         <xf:input bind="time_correction_start" incremental="true()">
+            <xf:label>Time Correction Start</xf:label>
+         </xf:input>
+         <xf:input bind="time_correction_end" incremental="true()">
+            <xf:label>Time Correction End</xf:label>
+         </xf:input>
+         <xf:input bind="time_correction_type" incremental="true()">
+            <xf:label>Time Correction Type</xf:label>
+         </xf:input>
+         <xf:input bind="clock_drift" incremental="true()">
+            <xf:label>Clock Drift</xf:label>
+         </xf:input>
+         <xf:input bind="pings" incremental="true()">
+            <xf:label>Pings</xf:label>
+         </xf:input>
+         <xf:input bind="detections" incremental="true()">
+            <xf:label>Detections</xf:label>
+         </xf:input>
+         <xf:input bind="filename" incremental="true()">
+            <xf:label>Filename</xf:label>
+         </xf:input>
+         <xf:textarea bind="comments">
+            <xf:label>Comments</xf:label>
+         </xf:textarea>
+         <xf:submit submission="s01">
+            <xf:label>Save</xf:label>
+         </xf:submit>
+         <xf:trigger>
+            <xf:label>Reset</xf:label>
+            <xf:reset ev:event="DOMActivate"/>
+         </xf:trigger>
+         <xf:group>
+            <xf:output bind="error_message" class="error">
+               <xf:label>Error:</xf:label>
+            </xf:output>
+            <xf:output bind="success_message">
+		    <xf:label>New Record Id:</xf:label>
+            </xf:output>
+         </xf:group> 
+         <xf:group ref="instance('inst_response')//ogc:FeatureId/@fid">
+     		<xhtml:iframe src="upload.zul" style="width:100%;height:250px;border:none;overflow:hidden;"/>
+         </xf:group>    
+      </xhtml:div>
+      <xhtml:br/>
+      <xhtml:div id="console"/>
+   </xhtml:body>
+</xhtml:html>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><xhtml:html xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
+            xmlns:xhtml="http://www.w3.org/1999/xhtml"
+            xmlns:aatams="http://www.imos.org.au/aatams"
+            xmlns:xf="http://www.w3.org/2002/xforms"
+            xmlns:ev="http://www.w3.org/2001/xml-events"
+            xmlns:wfs="http://www.opengis.net/wfs"
+            xmlns:ogc="http://www.opengis.net/ogc">
+   <xhtml:head>
+      <xhtml:title>AATAMS Web Interface</xhtml:title>
+      <xhtml:link href="aatams.css" rel="stylesheet" type="text/css"/>
+      <script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
+      <xf:model id="model1">
+         <xf:instance id="inst_data">
+            <wfs:Transaction version="1.1.0" service="WFS">
+               <wfs:Insert>
+                  <wfs:FeatureCollection>
+                     <gml:featureMember>
+                        <aatams:tag_release>
+                           <aatams:device_ref>
+                              <aatams:device/>
+                           </aatams:device_ref>
+                           <aatams:classification_ref>
+                              <aatams:classification/>
+                           </aatams:classification_ref>
+                           <aatams:project_person_ref>
+                              <aatams:project_person/>
+                           </aatams:project_person_ref>
+                           <aatams:surgery_ref>
+                              <aatams:surgery/>
+                           </aatams:surgery_ref>
+                           <aatams:release_longitude/>
+                           <aatams:release_latitude/>
+                           <aatams:release_geographic_area/>
+                           <aatams:release_timestamp/>
+                           <aatams:capture_longitude/>
+                           <aatams:capture_latitude/>
+                           <aatams:capture_geographic_area/>
+                           <aatams:capture_timestamp/>
+                           <aatams:tether_type_ref>
+                              <aatams:tether_type/>
+                           </aatams:tether_type_ref>
+                           <aatams:implant_type_ref>
+                              <aatams:implant_type/>
+                           </aatams:implant_type_ref>
+                        </aatams:tag_release>
+                     </gml:featureMember>
+                  </wfs:FeatureCollection>
+               </wfs:Insert>
+            </wfs:Transaction>
+         </xf:instance>
+         <xf:instance id="inst_subfeatures">
+            <data>
+               <classification_id>aatams.classification.1</classification_id>
+               <device_id>aatams.device.25</device_id>
+               <implant_type_id>aatams.implant_type.1</implant_type_id>
+               <project_person_id>aatams.project_person.1</project_person_id>
+               <surgery_id>aatams.surgery.1</surgery_id>
+               <tether_type_id>aatams.tether_type.1</tether_type_id>
+            </data>
+         </xf:instance>
+         <xf:instance id="inst_classification"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:classification"/>
+         <xf:instance id="inst_device"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device&amp;filter=&lt;ogc:Filter xmlns:ogc='http://www.opengis.net/ogc' xmlns:aatams='http://www.imos.org.au/aatams' xmlns:gml='http://www.opengis.net/gml'&gt;&lt;ogc:PropertyIsEqualTo&gt;&lt;ogc:PropertyName&gt;aatams:device_type_ref/aatams:device_type/aatams:name&lt;/ogc:PropertyName&gt;&lt;ogc:Literal&gt;TRANSMITTER&lt;/ogc:Literal&gt;&lt;/ogc:PropertyIsEqualTo&gt;&lt;/ogc:Filter&gt;"/>
+         <xf:instance id="inst_implant_type"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:implant_type"/>
+         <xf:instance id="inst_project_person"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
+            <data>
+               <aatams:project_person gml:id=""/>
+            </data>
+         </xf:instance>
+         <xf:instance id="inst_project"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project"/>
+         <xf:instance id="inst_project_id">
+            <data>
+               <project_id>aatams.project.1</project_id>
+            </data>
+         </xf:instance>
+         <xf:instance id="inst_surgery"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:surgery"/>
+         <xf:instance id="inst_tether_type"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:tether_type"/>
+         <xf:instance id="inst_response">
+            <dummy>
+               <ows:Exception/>
+               <wfs:TransactionResponse>
+                  <wfs:InsertResults>
+                     <wfs:Feature>
+                        <ogc:FeatureId/>
+                     </wfs:Feature>
+                  </wfs:InsertResults>
+               </wfs:TransactionResponse>
+            </dummy>
+         </xf:instance>
+         <xf:bind id="device" nodeset="instance('inst_subfeatures')//device_id" type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="classification" nodeset="instance('inst_subfeatures')//classification_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="project_person" nodeset="instance('inst_subfeatures')//project_person_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="surgery" nodeset="instance('inst_subfeatures')//surgery_id"
+                  type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="release_longitude"
+                  nodeset="instance('inst_data')//aatams:release_longitude"
+                  type="xsd:decimal"
+                  required="true()"/>
+         <xf:bind id="release_latitude" nodeset="instance('inst_data')//aatams:release_latitude"
+                  type="xsd:decimal"
+                  required="true()"/>
+         <xf:bind id="release_geographic_area"
+                  nodeset="instance('inst_data')//aatams:release_geographic_area"
+                  type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="release_timestamp"
+                  nodeset="instance('inst_data')//aatams:release_timestamp"
+                  type="xsd:dateTime"
+                  required="true()"/>
+         <xf:bind id="capture_longitude"
+                  nodeset="instance('inst_data')//aatams:capture_longitude"
+                  type="xsd:decimal"
+                  required="false()"/>
+         <xf:bind id="capture_latitude" nodeset="instance('inst_data')//aatams:capture_latitude"
+                  type="xsd:decimal"
+                  required="false()"/>
+         <xf:bind id="capture_geographic_area"
+                  nodeset="instance('inst_data')//aatams:capture_geographic_area"
+                  type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="capture_timestamp"
+                  nodeset="instance('inst_data')//aatams:capture_timestamp"
+                  type="xsd:dateTime"
+                  required="false()"/>
+         <xf:bind id="tether_type" nodeset="instance('inst_subfeatures')//tether_type_id"
+                  type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="implant_type" nodeset="instance('inst_subfeatures')//implant_type_id"
+                  type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
+                  type="xsd:string"/>
+         <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
+                  type="xsd:string"/>
+         <xf:submission id="s01" ref="instance('inst_data')" method="post"
+                        action="../deegree-wfs/services"
+                        replace="instance"
+                        instance="inst_response">
+            <xf:action ev:event="xforms-submit">
+               <xf:delete nodeset="instance('inst_data')//aatams:release_geographic_area_id[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:capture_longitude[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:capture_latitude[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:capture_geographic_area_id[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:capture_timestamp[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:status_id[.='']"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification"
+                          origin="instance('inst_classification')//aatams:classification[@gml:id=instance('inst_subfeatures')/classification_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification"
+                          at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:device_ref/aatams:device"
+                          origin="instance('inst_device')//aatams:device[@gml:id=instance('inst_subfeatures')/device_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:device_ref/aatams:device" at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:implant_type_ref/aatams:implant_type"
+                          origin="instance('inst_implant_type')//aatams:implant_type[@gml:id=instance('inst_subfeatures')/implant_type_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:implant_type_ref/aatams:implant_type"
+                          at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
+                          origin="instance('inst_project_person')//aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
+                          at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:surgery_ref/aatams:surgery"
+                          origin="instance('inst_surgery')//aatams:surgery[@gml:id=instance('inst_subfeatures')/surgery_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:surgery_ref/aatams:surgery" at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:tether_type_ref/aatams:tether_type"
+                          origin="instance('inst_tether_type')//aatams:tether_type[@gml:id=instance('inst_subfeatures')/tether_type_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:tether_type_ref/aatams:tether_type"
+                          at="1"/>
+            </xf:action>
+            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+         </xf:submission>
+      </xf:model>
+   </xhtml:head>
+   <xhtml:body><!--Debug--><xhtml:div class="form">
+         <legend>ADD TAG RELEASE</legend>
+         <xf:select1 bind="device" appearance="minimal" incremental="true()">
+            <xf:label>Device</xf:label>
+            <xf:itemset nodeset="instance('inst_device')//aatams:device">
+               <xf:value ref="@gml:id"/>
+               <xf:label ref="aatams:code_name"/>
+            </xf:itemset>
+         </xf:select1>
+         <xf:select1 bind="classification" appearance="minimal" incremental="true()">
+            <xf:label>Classification</xf:label>
+            <xf:itemset nodeset="instance('inst_classification')//aatams:classification">
+               <xf:value ref="@gml:id"/>
+               <xf:label ref="aatams:name"/>
+            </xf:itemset>
+         </xf:select1>
+         <xhtml:div class="dependant-selects">
+            <xf:select1 ref="instance('inst_project_id')/project_id" appearance="minimal"
+                        incremental="true()">
+               <xf:label>Project</xf:label>
+               <xf:itemset nodeset="instance('inst_project')//aatams:project">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:name"/>
+               </xf:itemset>
+               <xf:action ev:event="xforms-value-changed">
+                  <xf:setvalue ref="instance('inst_subfeatures')//project_person_id" value=""/>
+               </xf:action>
+            </xf:select1>
+            <xf:select1 bind="project_person" appearance="minimal" incremental="true()">
+               <xf:label>Person(Role)</xf:label>
+               <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_project_id')/project_id]">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:person_role"/>
+               </xf:itemset>
+            </xf:select1>
+         </xhtml:div>
+         <xf:select1 bind="surgery" appearance="minimal" incremental="true()">
+            <xf:label>Surgery</xf:label>
+            <xf:itemset nodeset="instance('inst_surgery')//aatams:surgery">
+               <xf:value ref="@gml:id"/>
+               <xf:label ref="aatams:name"/>
+            </xf:itemset>
+         </xf:select1>
+         <xf:input bind="release_longitude" incremental="true()">
+            <xf:label>Release Longitude</xf:label>
+         </xf:input>
+         <xf:input bind="release_latitude" incremental="true()">
+            <xf:label>Release Latitude</xf:label>
+         </xf:input>
+         <xf:input bind="release_geographic_area" incremental="true()">
+            <xf:label>Release Geographic Area</xf:label>
+         </xf:input>
+         <xf:input bind="release_timestamp" incremental="true()">
+            <xf:label>Release Timestamp</xf:label>
+         </xf:input>
+         <xf:input bind="capture_longitude" incremental="true()">
+            <xf:label>Capture Longitude</xf:label>
+         </xf:input>
+         <xf:input bind="capture_latitude" incremental="true()">
+            <xf:label>Capture Latitude</xf:label>
+         </xf:input>
+         <xf:input bind="capture_geographic_area" incremental="true()">
+            <xf:label>Capture Geographic Area</xf:label>
+         </xf:input>
+         <xf:input bind="capture_timestamp" incremental="true()">
+            <xf:label>Capture Timestamp</xf:label>
+         </xf:input>
+         <xf:select1 bind="tether_type" appearance="minimal" incremental="true()">
+            <xf:label>Tether Type</xf:label>
+            <xf:itemset nodeset="instance('inst_tether_type')//aatams:tether_type">
+               <xf:value ref="@gml:id"/>
+               <xf:label ref="aatams:name"/>
+            </xf:itemset>
+         </xf:select1>
+         <xf:select1 bind="implant_type" appearance="minimal" incremental="true()">
+            <xf:label>Implant Type</xf:label>
+            <xf:itemset nodeset="instance('inst_implant_type')//aatams:implant_type">
+               <xf:value ref="@gml:id"/>
+               <xf:label ref="aatams:name"/>
+            </xf:itemset>
+         </xf:select1>
+         <xf:submit submission="s01">
+            <xf:label>Save</xf:label>
+         </xf:submit>
+         <xf:trigger>
+            <xf:label>Reset</xf:label>
+            <xf:reset ev:event="DOMActivate"/>
+         </xf:trigger>
+         <xf:group>
+            <xf:output bind="error_message" class="error">
+               <xf:label>Error:</xf:label>
+            </xf:output>
+            <xf:output bind="success_message">
+               <xf:label>New Record Id:</xf:label>
+            </xf:output>
+         </xf:group>
+      </xhtml:div>
+      <xhtml:br/>
+      <xhtml:div id="console"/>
+   </xhtml:body>
+</xhtml:html>

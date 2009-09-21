@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><xhtml:html xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
+            xmlns:xhtml="http://www.w3.org/1999/xhtml"
+            xmlns:aatams="http://www.imos.org.au/aatams"
+            xmlns:xf="http://www.w3.org/2002/xforms"
+            xmlns:ev="http://www.w3.org/2001/xml-events"
+            xmlns:wfs="http://www.opengis.net/wfs"
+            xmlns:ogc="http://www.opengis.net/ogc">
+   <xhtml:head>
+      <xhtml:title>AATAMS Web Interface</xhtml:title>
+      <xhtml:link href="aatams.css" rel="stylesheet" type="text/css"/>
+      <script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
+      <xf:model id="model1">
+         <xf:instance id="inst_data">
+            <wfs:Transaction version="1.1.0" service="WFS">
+               <wfs:Insert>
+                  <wfs:FeatureCollection>
+                     <gml:featureMember>
+                        <aatams:treatment_type>
+                           <aatams:name/>
+                        </aatams:treatment_type>
+                     </gml:featureMember>
+                  </wfs:FeatureCollection>
+               </wfs:Insert>
+            </wfs:Transaction>
+         </xf:instance>
+         <xf:instance id="inst_subfeatures">
+            <data/>
+         </xf:instance>
+         <xf:instance id="inst_response">
+            <dummy>
+               <ows:Exception/>
+               <wfs:TransactionResponse>
+                  <wfs:InsertResults>
+                     <wfs:Feature>
+                        <ogc:FeatureId/>
+                     </wfs:Feature>
+                  </wfs:InsertResults>
+               </wfs:TransactionResponse>
+            </dummy>
+         </xf:instance>
+         <xf:bind id="name" nodeset="instance('inst_data')//aatams:name" type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
+                  type="xsd:string"/>
+         <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
+                  type="xsd:string"/>
+         <xf:submission id="s01" ref="instance('inst_data')" method="post"
+                        action="../deegree-wfs/services"
+                        replace="instance"
+                        instance="inst_response">
+            <xf:action ev:event="xforms-submit"/>
+            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+         </xf:submission>
+      </xf:model>
+   </xhtml:head>
+   <xhtml:body><!--Debug--><xhtml:div class="form">
+         <legend>ADD TREATMENT TYPE</legend>
+         <xf:input bind="name" incremental="true()">
+            <xf:label>Name</xf:label>
+         </xf:input>
+         <xf:submit submission="s01">
+            <xf:label>Save</xf:label>
+         </xf:submit>
+         <xf:trigger>
+            <xf:label>Reset</xf:label>
+            <xf:reset ev:event="DOMActivate"/>
+         </xf:trigger>
+         <xf:group>
+            <xf:output bind="error_message" class="error">
+               <xf:label>Error:</xf:label>
+            </xf:output>
+            <xf:output bind="success_message">
+               <xf:label>New Record Id:</xf:label>
+            </xf:output>
+         </xf:group>
+      </xhtml:div>
+      <xhtml:br/>
+      <xhtml:div id="console"/>
+   </xhtml:body>
+</xhtml:html>

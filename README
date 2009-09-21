@@ -13,7 +13,8 @@ Search and download access to data
 forms
 ++++++
 
-Xforms for data maintenance in relational database
+Xforms for data maintenance in relational database, these are auto generated from the 
+schema document (aatams.xml) in the scripts folder.
 
 zk
 ++

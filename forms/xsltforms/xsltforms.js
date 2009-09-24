@@ -4040,9 +4040,12 @@ function Calendar() {
     	    date.setDate(cal.day);
     	    
             if (cal.isTimestamp) {
+		//SC
+		date.setSeconds(cal.inputSec.value);
     	    	date.setMinutes(cal.inputMin.value);
     	    	date.setHours(cal.inputHour.value);
-    	    	cal.input.value = I8N.format(date);
+    	    	//SC cal.input.value = I8N.format(date);
+    	    	cal.input.value = I8N.format(date,null,true);
             } else {
                 cal.input.value = I8N.formatDate(date);
             }
@@ -4733,10 +4736,12 @@ TypeDefs.Default = {
 		"class" : "datetime",
 		"displayLength" : 20,
 		"format" : function(value) {
-			return I8N.format(I8N.parse(value, "yyyy-MM-ddThh:mm:ss"));
+			//return I8N.format(I8N.parse(value, "yyyy-MM-ddThh:mm:ss"));
+			return I8N.format(value, null, true);
 		},
 		"parse" : function(value) {
-			return I8N.format(I8N.parse(value), "yyyy-MM-ddThh:mm:ss");
+			//return I8N.format(I8N.parse(value), "yyyy-MM-ddThh:mm:ss",true);
+			return I8N.parse(value);
 		}
 	},
 

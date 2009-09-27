@@ -4737,11 +4737,11 @@ TypeDefs.Default = {
 		"displayLength" : 20,
 		"format" : function(value) {
 			//return I8N.format(I8N.parse(value, "yyyy-MM-ddThh:mm:ss"));
-			return I8N.format(value, null, true);
+			return I8N.format(I8N.parse(value, "yyyy-MM-ddThh:mm:ss"),null, true)
 		},
 		"parse" : function(value) {
 			//return I8N.format(I8N.parse(value), "yyyy-MM-ddThh:mm:ss",true);
-			return I8N.parse(value);
+			return I8N.format(I8N.parse(value), "yyyy-MM-ddThh:mm:ss", true);
 		}
 	},
 

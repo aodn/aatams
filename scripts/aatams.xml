@@ -166,6 +166,7 @@
     <table name="DETECTION">
       <column name="DETECTION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <column name="DOWNLOAD_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="DETECTION_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">

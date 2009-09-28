@@ -15,12 +15,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.xml.DOMConfigurator;
-import org.apache.log4j.Level;
+//import org.apache.log4j.xml.DOMConfigurator;
+//import org.apache.log4j.Level;
 
 
 //TODO add deployment_download_id to detection table to associate detections with a specific file.
@@ -30,14 +31,14 @@ import org.apache.log4j.Level;
  * 
  */
 public class AcousticReceiverFileProcessor {
-	private static final String timestampFormat = "dd/MM/yyyy  hh:mm:ss ";
+	private static final String timestampFormat = "yyyy-MM-dd hh:mm:ss.SSS";
 	public static final SimpleDateFormat timestampParser = new SimpleDateFormat(timestampFormat);
 	private static final String pattern = "\"([^\"]+?)\",?|([^,]+),?|,";
 	private static final Pattern csvRegex = Pattern.compile(pattern);
-	private static final String DOWNLOAD_ID_PREFIX = "aatams.dployment_download.";
+	private static final String DOWNLOAD_ID_PREFIX = "aatams.deployment_download.";
 	private Logger logger = Logger.getLogger(this.getClass());
 	public void doProcessing(
-			String downloadId,
+			String downloadFid,
 			String filePath,
 			String jdbcDriverClassName,
 			String connectionString,
@@ -80,16 +81,20 @@ public class AcousticReceiverFileProcessor {
 						List<String> values = this.parseLine(line);
 						//id is made of code-space and ID
 						String tagName = values.get(1) + "-" + values.get(2);
+						//TODO validate the tag name
+	
 						if(tags.containsKey(tagName)){
 							tags.get(tagName).detectionCount++;
 						}else{
 							tags.put(tagName,new Tag(tagName));
 						}
-						if(receiverName != null && values.get(9).equals(receiverName)){
+						if(receiverName != null && !values.get(9).equals(receiverName)){
 							throw new Exception("more than one receiver is in the file");
 						}else{
 							receiverName = values.get(9);
 						}
+						//TODO validate the receiver name
+						
 						//buffer the record
 						try{
 							detections.add(new Detection(tags.get(tagName), 
@@ -101,8 +106,12 @@ public class AcousticReceiverFileProcessor {
 				}
 				logger.info("detection count: " + detections.size());
 				fis.close();
+			}catch(IOException e){
+				logger.fatal("exiting, could not read datafile", e);
+				return;
 			}catch(Exception e){
-				
+				logger.fatal("exiting, could not process datafile", e);
+				return;
 			}
 			//2. Find the database ids of the tags detected.
 			PreparedStatement pst = conn.prepareStatement(
@@ -110,12 +119,13 @@ public class AcousticReceiverFileProcessor {
 			ResultSet rset;
 			for(Iterator<Entry<String,Tag>> i = tags.entrySet().iterator(); i.hasNext();){
 				Tag tag = i.next().getValue();
+				logger.info("checking for existing tag '" + tag.name + "' in database" );
 				pst.setString(1,tag.name);
 				pst.execute();
 				rset = pst.getResultSet();
 				if(rset != null){
-					if(rset.first()){
-						tag.id = rset.getInt(0);
+					if(rset.next()){
+						tag.id = rset.getInt(1);
 					}
 				}
 				rset.close();
@@ -123,11 +133,11 @@ public class AcousticReceiverFileProcessor {
 			//3. Check that the deployment_download record exists and is linked to the correct receiver
 			Integer projectRolePersonId = 0;
 			Integer receiverDeploymentId = 0;
-			if(downloadId != null){
-				if(downloadId.startsWith(DOWNLOAD_ID_PREFIX)){
-					Integer id;
+			Integer deploymentDownloadId;
+			if(downloadFid != null){
+				if(downloadFid.startsWith(DOWNLOAD_ID_PREFIX)){
 					try{
-						id = Integer.valueOf(downloadId.substring(DOWNLOAD_ID_PREFIX.length()));
+						deploymentDownloadId = Integer.valueOf(downloadFid.substring(DOWNLOAD_ID_PREFIX.length()));
 					}catch(NumberFormatException e){
 						throw new Exception("the downloadId parameter passed is invalid, it must end with a number", e);
 					}
@@ -138,18 +148,18 @@ public class AcousticReceiverFileProcessor {
 							"DEPLOYMENT_DOWNLOAD, RECEIVER_DEPLOYMENT, DEVICE WHERE " +
 							"DEPLOYMENT_DOWNLOAD.DEPLOYMENT_ID = RECEIVER_DEPLOYMENT.DEPLOYMENT_ID AND " +
 							"RECEIVER_DEPLOYMENT.DEVICE_ID = DEVICE.DEVICE_ID AND " +
-							"DEVICE.CODE_NAME = '" + receiverName + "'" +
-							"DOWNLOAD_ID = "+ id);
+							"DEVICE.CODE_NAME = '" + receiverName + "' AND " +
+							"DOWNLOAD_ID = "+ deploymentDownloadId );
 					if(rset != null){ 
-						if(rset.first()){
-							receiverDeploymentId = rset.getInt(0);
-							projectRolePersonId = rset.getInt(1);
+						if(rset.next()){
+							receiverDeploymentId = rset.getInt(1);
+							projectRolePersonId = rset.getInt(2);
 							if(projectRolePersonId == 0){
 								logger.info("could find a project_role_person record id to use for adding unknown tags to database"); 
 							}
 						}else{
-							throw new Exception("a matching 'deployment download' record has not been found in the database for '"+ downloadId + "'" +
-									" being linked to a receiver_deployment with receiver device code named '" + receiverName + "'"); 
+							throw new Exception("a matching 'deployment download' record has not been found in the database for '"+ deploymentDownloadId + "'" +
+									" being linked to a 'receiver deployment' record with receiver device code named '" + receiverName + "'"); 
 						}
 					}
 					rset.close();
@@ -162,7 +172,7 @@ public class AcousticReceiverFileProcessor {
 			//4. Find or create new tag records in the database.
 			HashMap<String,Tag> newTags = new HashMap<String,Tag>();
 			pst = conn.prepareStatement("INSERT INTO DEVICE (DEVICE_ID,DEVICE_TYPE_ID,CODE_NAME,PROJECT_ROLE_PERSON_ID)" +
-					" VALUES (DEVICE_SERIAL.NEXTVAL(),2,?,?)");
+					" VALUES (DEVICE_SERIAL.NEXTVAL,2,?,?)",Statement.RETURN_GENERATED_KEYS);
 			for(Iterator<Entry<String,Tag>> i = tags.entrySet().iterator(); i.hasNext();){
 				Tag tag = i.next().getValue();
 				if(tag.id == 0){
@@ -171,8 +181,15 @@ public class AcousticReceiverFileProcessor {
 					pst.execute();
 					rset = pst.getGeneratedKeys();
 					if(rset != null){ 
-						if(rset.first()){
-							tag.id = rset.getInt(0);
+						if(rset.next()){
+							Statement smt = conn.createStatement();
+							ResultSet newId = smt.executeQuery("SELECT DEVICE_ID FROM DEVICE WHERE ROWID = '" + rset.getString(1) + "'");
+							if(newId != null && newId.next()){
+								tag.id = Integer.valueOf(newId.getInt(1));
+							}else{
+								throw new Exception("could not retreive id of new tag device just created");
+							}
+							newId.close();
 						}
 					}
 					rset.close();
@@ -180,19 +197,19 @@ public class AcousticReceiverFileProcessor {
 				}
 			}
 			//5. Create new detection records in the database.
-			pst = conn.prepareStatement("INSERT INTO DETECTION (DETECTION_ID, DEPLOYMENT_ID, TAG_ID, DETECTION_TIMESTAMP)" +
-			" VALUES (DETECTION_SERIAL.NEXTVAL(),"+ receiverDeploymentId +",?,?)");
+			pst = conn.prepareStatement("INSERT INTO DETECTION (DETECTION_ID, DEPLOYMENT_ID, DOWNLOAD_ID, TAG_ID, DETECTION_TIMESTAMP)" +
+			" VALUES (DETECTION_SERIAL.NEXTVAL,"+ receiverDeploymentId +","+ deploymentDownloadId +",?,?)");
 			for(Iterator<Detection> i = detections.iterator(); i.hasNext();){
 				Detection detection = i.next();
-				pst.setInt(0, detection.tag.id);
-				pst.setTimestamp(1, detection.timestamp);
+				pst.setInt(1, detection.tag.id);
+				pst.setTimestamp(2, detection.timestamp);
 				pst.execute();
 			}
 			//happy ending
 			conn.commit();
 			conn.close();
 			//6. Prepare a report(log) file to be sent back to the submitter and data manager.
-			logger.info("deployment download id = " + downloadId);
+			logger.info("deployment download id = " + deploymentDownloadId);
 			logger.info("receiver deployment id = " + receiverDeploymentId);
 			logger.info("project role person id = " + projectRolePersonId);
 			logger.info("new tags added:");
@@ -260,7 +277,7 @@ public class AcousticReceiverFileProcessor {
 	 * @param args
 	 */
 	public static void main(String args[]) {
-		
+		BasicConfigurator.configure();
 		AcousticReceiverFileProcessor processor = new AcousticReceiverFileProcessor();
 		if(args.length == 6){
 			processor.doProcessing(args[0],args[1],args[2],args[3],args[4], args[5]);

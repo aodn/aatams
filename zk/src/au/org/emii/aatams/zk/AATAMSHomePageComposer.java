@@ -24,7 +24,7 @@ import org.zkoss.zul.Iframe;
  */
 public class AATAMSHomePageComposer extends Window implements AfterCompose, Composer {
 	public Iframe iframe;
-	private String xformsPath = "http://test.emii.org.au/aatams/";
+	private String xformsPath = "http://test.emii.org.au/aatams/forms";
 
 	private static final long serialVersionUID = 1L;
 

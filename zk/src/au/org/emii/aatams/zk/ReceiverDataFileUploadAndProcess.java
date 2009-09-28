@@ -18,7 +18,7 @@ import java.io.File;
 
 public class ReceiverDataFileUploadAndProcess extends Window implements AfterCompose, Composer {
 
-	String download_id;
+
 	String downloads_path;
 
 	private static final long serialVersionUID = 1L;
@@ -63,7 +63,8 @@ public class ReceiverDataFileUploadAndProcess extends Window implements AfterCom
 
 	public void onClick$FileUpload(Event event) {
 		// get cookie
-		download_id = null;
+		String download_id = null;
+		
 		Cookie[] cookies = ((HttpServletRequest) Executions.getCurrent().getNativeRequest()).getCookies();
 		for (int i = 0; i < cookies.length; i++) {
 			if (cookies[i].getName().equals("deployment_download_id")) {

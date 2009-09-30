@@ -619,6 +619,7 @@
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="PERSONAL_MOBILE_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
       <column name="HOME_PHONE_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="EMAIL" primaryKey="false" required="false" type="VARCHAR" size="30" autoIncrement="false"/>
       <column name="HOME_PHYSICAL_ADDRESS_1" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="HOME_PHYSICAL_ADDRESS_2" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="HOME_PHYSICAL_ADDRESS_STATE" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>

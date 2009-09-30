@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,6 +25,11 @@ import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
+import javax.mail.Message.RecipientType;
+import javax.activation.FileDataSource;
+import org.codemonkey.vesijama.Email;
+import org.codemonkey.vesijama.MailException;
+import org.codemonkey.vesijama.Mailer;
 
 // import org.apache.log4j.xml.DOMConfigurator;
 // import org.apache.log4j.Level;
@@ -36,7 +42,7 @@ import org.apache.log4j.BasicConfigurator;
  * @author Stephen Cameron
  * 
  */
-public class AcousticReceiverFileProcessor {
+public final class AcousticReceiverFileProcessor {
 
 	public String reportFolder = "c:/temp";
 
@@ -45,6 +51,13 @@ public class AcousticReceiverFileProcessor {
 	private static final String pattern = "\"([^\"]+?)\",?|([^,]+),?|,";
 	private static final Pattern csvRegex = Pattern.compile(pattern);
 	private static final String DOWNLOAD_ID_PREFIX = "aatams.deployment_download.";
+	private static final String PROCESSOR_FROM = "eMII";
+	private static final String PROCESSOR_ADDRESS = "stephen.cameron@utas.edu.au";
+	private static final String SMTP_HOST = "postoffice.utas.edu.au";
+	private static final int SMTP_PORT = 25;
+	private static final String SMTP_USER = "sc04";
+	private static final String SMTP_PWD = "66CoStHo";
+	private static final String AATAMS_WEB_SITE_URI = "http://test.emii.org.au/aatams";
 	private Logger logger = Logger.getLogger(this.getClass());
 	private Connection conn = null;
 	private TreeMap<String, Tag> tags = new TreeMap<String, Tag>();
@@ -324,10 +337,16 @@ public class AcousticReceiverFileProcessor {
 
 	private class DetectionsInserterAndReportGenerator extends Thread {
 
+		private boolean success = false;
+		private PreparedStatement pst = null;
+		private Statement smt = null;
+		private ResultSet rset = null;
+		private String reportName = null;
+		private HashMap<Integer,StringBuffer> projectTags = null;
+		
 		public void run() {
-			boolean success = false;
 			try {
-				PreparedStatement pst = conn.prepareStatement("INSERT INTO DETECTION (DETECTION_ID, DEPLOYMENT_ID, DOWNLOAD_ID, TAG_ID, DETECTION_TIMESTAMP)"
+				pst = conn.prepareStatement("INSERT INTO DETECTION (DETECTION_ID, DEPLOYMENT_ID, DOWNLOAD_ID, TAG_ID, DETECTION_TIMESTAMP)"
 						+ " VALUES (DETECTION_SERIAL.NEXTVAL," + receiverDeploymentId + "," + deploymentDownloadId + ",?,?)");
 				for (Iterator<Detection> i = detections.iterator(); i.hasNext();) {
 					Detection detection = i.next();
@@ -355,22 +374,26 @@ public class AcousticReceiverFileProcessor {
 				try {
 					if (!success) {
 						conn.rollback();
+						return;
 					}
 				} catch (SQLException e) {
 					logger.fatal("attempted rollback failed", e);
+					return;
 				}
 			}
-
+			// 6. Prepare a report(log) file to be sent back to the
+			// submitter and data manager.
 			try {
-				// 6. Prepare a report(log) file to be sent back to the
-				// submitter and data manager.
-				FileOutputStream fos = new FileOutputStream(reportFolder + "/aatams.deployment_download." + deploymentDownloadId + ".txt");
+				//add the main info
+				reportName = "aatams.deployment_download." + deploymentDownloadId + ".txt";
+				FileOutputStream fos = new FileOutputStream(reportFolder + "/" + reportName);
 				BufferedWriter buffer = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
 				buffer.append("RECEIVER DOWNLOAD FILE PROCESSING REPORT\n\n");
 				buffer.append("Processing file: " + file.getName() + "\n");
 				buffer.append("Deployment Download FID = aatams.deployment_download." + deploymentDownloadId + "\n");
 				buffer.append("Receiver Deployment FID = aatams.receiver_deployment." + receiverDeploymentId + "\n");
 				buffer.append("Project Role Person FID = aatams.project_role_person." + projectRolePersonId + "\n\n");
+				//add the known tags table
 				if (tags.size() > newTags.size()) {
 					buffer.append("KNOWN TAGS\n");
 					buffer.append("----------------------------------------\n");
@@ -385,6 +408,7 @@ public class AcousticReceiverFileProcessor {
 					}
 					buffer.append("----------------------------------------\n\n");
 				}
+				//add the new tags table
 				if (newTags.size() > 0) {
 					buffer.append("UNKNOWN(NEW)TAGS\n");
 					buffer.append("----------------------------------------\n");
@@ -396,14 +420,13 @@ public class AcousticReceiverFileProcessor {
 					}
 					buffer.append("----------------------------------------\n\n");
 				}
-
+				//add the tag detection count table	
 				try {
-					ResultSet rset;
 					long total = 0;
 					ArrayList<Long> deviceIds = new ArrayList<Long>();
 					if (detections.size() > 0) {
 						// add a tag * detections summary
-						Statement smt = conn.createStatement();
+						smt = conn.createStatement();
 						rset = smt.executeQuery("SELECT DEVICE.DEVICE_ID, DEVICE.CODE_NAME, COUNT(*) AS COUNT "
 								+ "FROM DETECTION INNER JOIN DEVICE ON DETECTION.TAG_ID = DEVICE.DEVICE_ID " + "WHERE DETECTION.DOWNLOAD_ID = "
 								+ deploymentDownloadId + " " + "GROUP BY DEVICE.DEVICE_ID, DEVICE.CODE_NAME " + "ORDER BY COUNT DESC, CODE_NAME ASC");
@@ -428,6 +451,7 @@ public class AcousticReceiverFileProcessor {
 							throw new Exception("detections count from database and file don't match: " + total + " vs " + detections.size());
 						}
 						// add a tag release summary
+						projectTags = new HashMap<Integer,StringBuffer>();
 						StringBuffer sb = new StringBuffer();
 						for (Iterator<Long> i = deviceIds.iterator(); i.hasNext();) {
 							sb.append(i.next().toString());
@@ -439,8 +463,8 @@ public class AcousticReceiverFileProcessor {
 						if(rset.next() && rset.getInt(1) > 0){
 							rset.close();
 							String qry = "SELECT TAG_RELEASE.RELEASE_ID, DEVICE.CODE_NAME, CLASSIFICATION.NAME,\n" + 
-							"CONCAT(CONCAT(CONCAT(PROJECT_PERSON.PROJECT_NAME,'('),PROJECT_PERSON.PROJECT_FID),')') AS PROJECT,\n" +
-							"PROJECT_PERSON.PERSON_ROLE\n" + 
+							"PROJECT_PERSON.PROJECT_NAME, PROJECT_PERSON.PROJECT_FID,\n" +
+							"PROJECT_PERSON.PERSON_ROLE, TAG_RELEASE.PROJECT_ROLE_PERSON_ID\n" + 
 							"FROM TAG_RELEASE INNER JOIN DEVICE ON TAG_RELEASE.DEVICE_ID = DEVICE.DEVICE_ID\n" +
 							"INNER JOIN PROJECT_PERSON ON TAG_RELEASE.PROJECT_ROLE_PERSON_ID = PROJECT_PERSON.PROJECT_ROLE_PERSON_ID\n" +
 							"LEFT OUTER JOIN CLASSIFICATION ON TAG_RELEASE.CLASSIFICATION_ID = CLASSIFICATION.CLASSIFICATION_ID\n" +
@@ -451,29 +475,97 @@ public class AcousticReceiverFileProcessor {
 							if (rset != null) {
 								while (rset.next()) {
 									if (rset.isFirst()) {
-										buffer.append("RELATED TAG RELEASE INFORMATION\n");
+										buffer.append("AVAILABLE TAG RELEASE INFORMATION FOR TAGS DETECTED\n");
 										buffer.append("------------------------------------------------------------------------------------------\n");
-										buffer.append("TAG CODE NAME       CLASSIFICATION                PROJECT             PERSON\n");
+										buffer.append("TAG CODE NAME    TAG RELEASE FID   ANIMAL CLASSIFICATION        PROJECT           PERSON\n");
 										buffer.append("------------------------------------------------------------------------------------------\n");
 									}
-									buffer.append(String.format("%-20s%-30s%-20s%-20s%n", rset.getString(2), rset.getString(3),
+									buffer.append(String.format("%-20s%-20s%-30s%-20s%-20s%n", rset.getString(2), rset.getString(1), rset.getString(3),
 											rset.getString(4), rset.getString(5)));
+									//add to the list of tags from outside the current project
+									if(rset.getInt(7) != projectRolePersonId){
+										if(!projectTags.containsKey(rset.getInt(7))){
+											projectTags.put(rset.getInt(7), new StringBuffer(rset.getString(2)));
+										}else{
+											projectTags.get(rset.getInt(7)).append("\n" + rset.getString(2));
+										}
+									}
 								}
 								buffer.append("------------------------------------------------------------------------------------------\n");
 							}
 						}else{
 							buffer.append("No tag release records have been found for the tags in the download file\n\n");
-						}
+						}	
 					} else {
 						buffer.append("No detections where found in the file to process into database\n\n");
 					}
 				} catch (SQLException e) {
 					logger.error("an sql exception was encountered when generating the download report", e);
+					return;
 				}
 				buffer.flush();
 				buffer.close();
 			} catch (Exception e) {
 				logger.error("unexpected error when generating full report", e);
+				return;
+			}
+			//7. Send the main report
+			String projectPersonName = "", projectAddressTo = "";
+			Mailer mailer = new Mailer(SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PWD);
+			Email email = new Email();
+			try{
+				rset = smt.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n" +
+						"WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" +
+						"PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = " + projectRolePersonId);
+				if(rset.next()){
+					projectPersonName = rset.getString(1);
+					projectAddressTo = rset.getString(2);
+					email.setFromAddress(PROCESSOR_FROM, PROCESSOR_ADDRESS);
+					email.addRecipient(projectPersonName, projectAddressTo, RecipientType.TO);
+					email.setSubject("AATAMS Deployment Download Processing Report (FID=aatams.deployment_download." + deploymentDownloadId +  ")");
+					email.setText("Please find attached a report with details of a Receiver Deployment Download just processed");
+					email.addAttachment(reportName, new FileDataSource(reportFolder + "/" + reportName));
+					try{
+						mailer.sendMail(email);
+					}catch(Exception e){
+						logger.error("error sending report to " + projectAddressTo, e);
+					}
+				}
+				rset.close();
+			}catch(SQLException e){
+				logger.error("an sql exception was encountered when accessing report email", e);
+			}
+			//8. Send any 'out of project' tag detection reports
+			String personName = "", addressTo = "";
+			for(Iterator<Entry<Integer,StringBuffer>> i = projectTags.entrySet().iterator();i.hasNext();){
+				Entry<Integer,StringBuffer> entry = i.next();
+				try{
+					rset = smt.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n" +
+							"WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" +
+							"PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = " + entry.getKey());
+					if(rset.next()){
+						personName = rset.getString(1);
+						addressTo = rset.getString(2);
+						email = new Email();
+						email.setFromAddress(PROCESSOR_FROM, PROCESSOR_ADDRESS);
+						email.addRecipient(personName, addressTo, RecipientType.TO);
+						email.addRecipient(projectPersonName, projectAddressTo, RecipientType.CC);
+						email.setSubject("AATAMS 'Foreign' Detections Report");
+						email.setText("The following tags, having a tag release under your name, have been found " +
+								"in another person's deployment download: \n" + entry.getValue().toString() + "\n\n" +
+								"Please contact the responsible person (carbon-copied this email) or obtain more" +
+								"information via the deployment download record FID=aatams.deployment_download." + 
+								deploymentDownloadId + " viewable at the AATAMS web site (" + AATAMS_WEB_SITE_URI + ").");
+						try{
+							mailer.sendMail(email);
+						}catch(Exception e){
+							logger.error("error sending report to " + addressTo, e);
+						}
+					}
+					rset.close();
+				}catch(SQLException e){
+					logger.error("an sql exception was encountered when accessing report email", e);
+				}
 			}
 		}
 	}

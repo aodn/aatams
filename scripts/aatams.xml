@@ -51,6 +51,7 @@
       <column name="PINGS" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="DETECTIONS" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="FILENAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
+      <column name="CC_EMAIL_ADDRESSES" primaryKey="false" required="false" type="VARCHAR" size="1000" autoIncrement="false"/>
       <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="255" autoIncrement="false"/>
       <column name="STATUS_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="1" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -75,6 +76,21 @@
       <index name="TIME_CORRECTION_TYPE_ID">
         <index-column name="TIME_CORRECTION_TYPE_ID"/>
       </index>
+    </table>
+    <table name="DOWNLOAD_TAG_SUMMARY">
+      <column name="DOWNLOAD_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+      <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10"autoIncrement="false"/>
+      <column name="DETECTION_COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <unique name="UNIQUE_INDEX">
+	    <unique-column name="DOWNLOAD_ID"/>
+	    <unique-column name="DEVICE_ID"/>
+      </unique>
+      <foreign-key foreignTable="DEPLOYMENT_DOWNLOAD" name="DOWNLOAD_TAG_SUMMARY_FK00">
+        <reference local="DOWNLOAD_ID" foreign="DOWNLOAD_ID"/>
+      </foreign-key>
+      <foreign-key foreignTable="DEVICE" name="DOWNLOAD_TAG_SUMMARY_FK01">
+        <reference local="DEVICE_ID" foreign="DEVICE_ID"/>
+      </foreign-key>
     </table>
     <table name="DEPLOYMENT_EVENT">
       <column name="DEPLOYMENT_EVENT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
@@ -1003,10 +1019,10 @@
 
     <view name="RECEIVER_DEVICE">
       <column name="DEVICE_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="MODEL_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="MANUFACTURER_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="MANUFACTURER_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	  <unique-column name="NAME"/>
       </unique>
@@ -1014,10 +1030,10 @@
 
      <view name="TRANSMITTER_DEVICE">
       <column name="DEVICE_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="MODEL_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="MANUFACTURER_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="MANUFACTURER_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	  <unique-column name="NAME"/>
       </unique>

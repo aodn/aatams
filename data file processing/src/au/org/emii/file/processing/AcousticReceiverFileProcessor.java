@@ -80,10 +80,10 @@ public final class AcousticReceiverFileProcessor {
 		}
 
 		try {
-			// Load the database driver
+			//Get db connection.
 			Class.forName(jdbcDriverClassName);
-			// Get a connection to the database
 			conn = DriverManager.getConnection(connectionString, username, password);
+			conn.setAutoCommit(false); //want to rollback if error!
 			// Print all warnings
 			for (SQLWarning warn = conn.getWarnings(); warn != null; warn = warn.getNextWarning()) {
 				logger.warn("SQL Warning:");
@@ -170,6 +170,7 @@ public final class AcousticReceiverFileProcessor {
 			outStream.println("</ul></p>");
 			// 3. Check that the deployment_download record exists and is linked
 			// to the correct receiver
+			Statement smt = null;
 			if (downloadFid != null) {
 				if (downloadFid.startsWith(DOWNLOAD_ID_PREFIX)) {
 					try {
@@ -177,7 +178,7 @@ public final class AcousticReceiverFileProcessor {
 					} catch (NumberFormatException e) {
 						throw new Exception("the downloadId parameter passed is invalid, it must end with a number", e);
 					}
-					Statement smt = conn.createStatement();
+					smt = conn.createStatement();
 					// a receiver deployment must have a project_role_person
 					// associated with it,
 					// extract this to be used for any new tags added.
@@ -205,20 +206,34 @@ public final class AcousticReceiverFileProcessor {
 			} else {
 				throw new Exception("the downloadId parameter passed is null");
 			}
+			// 3.1. Check that the file has not already been processed (potentially)
+			smt = conn.createStatement();
+			rset = smt.executeQuery("SELECT DEPLOYMENT_DOWNLOAD_ID FROM DEPLOYMENT\n" +
+					"WHERE UPPERCASE(FILE_NAME) = '" + file.getName().toUpperCase() + "'");
+			if(rset.next()){
+				throw new Exception("A download file with the same name is associated with another deployment download FID=aatams.deployment_download."+rset.getLong(1));
+			}
+			rset.close();
+			smt.close();
 			// 4. Find or create new tag records in the database.
-			pst = conn.prepareStatement("INSERT INTO DEVICE (DEVICE_ID,DEVICE_TYPE_ID,CODE_NAME,PROJECT_ROLE_PERSON_ID)"
-					+ " VALUES (DEVICE_SERIAL.NEXTVAL,2,?,?)", Statement.RETURN_GENERATED_KEYS);
-			outStream.println("<p>New tag devices:<ul>");
+			// make MODEL_ID = 0 which links to the 'UNKNOWN TAG MODEL' model.
+			pst = conn.prepareStatement("INSERT INTO DEVICE (DEVICE_ID,DEVICE_TYPE_ID,MODEL_ID,CODE_NAME,PROJECT_ROLE_PERSON_ID)"
+					+ " VALUES (DEVICE_SERIAL.NEXTVAL,2,0,?,?)", Statement.RETURN_GENERATED_KEYS);
+			boolean first = true;
 			for (Iterator<Entry<String, Tag>> i = tags.entrySet().iterator(); i.hasNext();) {
 				Tag tag = i.next().getValue();
 				if (tag.id == 0) {
+					if (first) {
+						outStream.println("<p>New tag devices:<ul>");
+						first = false;
+					}
 					pst.setString(1, tag.name);
 					pst.setInt(2, projectRolePersonId);
 					pst.execute();
 					rset = pst.getGeneratedKeys();
 					if (rset != null) {
 						if (rset.next()) {
-							Statement smt = conn.createStatement();
+							smt = conn.createStatement();
 							ResultSet rowId = smt.executeQuery("SELECT DEVICE_ID FROM DEVICE WHERE ROWID = '" + rset.getString(1) + "'");
 							if (rowId != null && rowId.next()) {
 								tag.id = Integer.valueOf(rowId.getInt(1));
@@ -233,10 +248,10 @@ public final class AcousticReceiverFileProcessor {
 					newTags.put(tag.name, tag);
 				}
 			}
-			outStream.println("</ul></p>");
+			if (!first)
+				outStream.println("</ul></p>");
 			// 5. Create new detection records in the database.
-			// this is the time consuming part, can we fork a thread to handle
-			// this?
+			// start a thread to handle this time consuming part
 			DetectionsInserterAndReportGenerator inserter = new DetectionsInserterAndReportGenerator();
 			inserter.start();
 			success = true;
@@ -342,8 +357,8 @@ public final class AcousticReceiverFileProcessor {
 		private Statement smt = null;
 		private ResultSet rset = null;
 		private String reportName = null;
-		private HashMap<Integer,StringBuffer> projectTags = null;
-		
+		private HashMap<Integer, StringBuffer> projectTags = null;
+
 		public void run() {
 			try {
 				pst = conn.prepareStatement("INSERT INTO DETECTION (DETECTION_ID, DEPLOYMENT_ID, DOWNLOAD_ID, TAG_ID, DETECTION_TIMESTAMP)"
@@ -384,20 +399,20 @@ public final class AcousticReceiverFileProcessor {
 			// 6. Prepare a report(log) file to be sent back to the
 			// submitter and data manager.
 			try {
-				//add the main info
+				// add the main info
 				reportName = "aatams.deployment_download." + deploymentDownloadId + ".txt";
 				FileOutputStream fos = new FileOutputStream(reportFolder + "/" + reportName);
 				BufferedWriter buffer = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
 				buffer.append("RECEIVER DOWNLOAD FILE PROCESSING REPORT\n\n");
-				buffer.append("Processing file: " + file.getName() + "\n");
-				buffer.append("Deployment Download FID = aatams.deployment_download." + deploymentDownloadId + "\n");
-				buffer.append("Receiver Deployment FID = aatams.receiver_deployment." + receiverDeploymentId + "\n");
-				buffer.append("Project Role Person FID = aatams.project_role_person." + projectRolePersonId + "\n\n");
-				//add the known tags table
+				buffer.append("Processing file:          " + file.getName() + "\n");
+				buffer.append("Deployment Download FID:  aatams.deployment_download." + deploymentDownloadId + "\n");
+				buffer.append("Receiver Deployment FID:  aatams.receiver_deployment." + receiverDeploymentId + "\n");
+				buffer.append("Project Role Person FID:  aatams.project_role_person." + projectRolePersonId + "\n\n");
+				// add the known tags table
 				if (tags.size() > newTags.size()) {
 					buffer.append("KNOWN TAGS\n");
 					buffer.append("----------------------------------------\n");
-					buffer.append("TAG CODE NAME                 DEVICE FID\n");
+					buffer.append("TAG CODE NAME             TAG DEVICE FID\n");
 					buffer.append("----------------------------------------\n");
 					for (Iterator<Entry<String, Tag>> i = tags.entrySet().iterator(); i.hasNext();) {
 						Entry<String, Tag> entry = i.next();
@@ -408,11 +423,11 @@ public final class AcousticReceiverFileProcessor {
 					}
 					buffer.append("----------------------------------------\n\n");
 				}
-				//add the new tags table
+				// add the new tags table
 				if (newTags.size() > 0) {
 					buffer.append("UNKNOWN(NEW)TAGS\n");
 					buffer.append("----------------------------------------\n");
-					buffer.append("TAG CODE NAME                 DEVICE FID\n");
+					buffer.append("TAG CODE NAME             TAG DEVICE FID\n");
 					buffer.append("----------------------------------------\n");
 					for (Iterator<Entry<String, Tag>> i = newTags.entrySet().iterator(); i.hasNext();) {
 						Tag tag = i.next().getValue();
@@ -420,12 +435,13 @@ public final class AcousticReceiverFileProcessor {
 					}
 					buffer.append("----------------------------------------\n\n");
 				}
-				//add the tag detection count table	
+				// add the tag detection count table
+				// put this data into the DOWNLOAD_TAG_SUMMARY table as well for later use.
 				try {
 					long total = 0;
 					ArrayList<Long> deviceIds = new ArrayList<Long>();
 					if (detections.size() > 0) {
-						// add a tag * detections summary
+						pst = conn.prepareStatement("INSERT INTO DOWNLOAD_TAG_SUMMARY(DOWNLOAD_ID,DEVICE_ID,DETECTION_COUNT)VALUES(?,?,?)");
 						smt = conn.createStatement();
 						rset = smt.executeQuery("SELECT DEVICE.DEVICE_ID, DEVICE.CODE_NAME, COUNT(*) AS COUNT "
 								+ "FROM DETECTION INNER JOIN DEVICE ON DETECTION.TAG_ID = DEVICE.DEVICE_ID " + "WHERE DETECTION.DOWNLOAD_ID = "
@@ -441,17 +457,34 @@ public final class AcousticReceiverFileProcessor {
 								buffer.append(String.format("%-30s%10s%n", rset.getString(2), rset.getString(3)));
 								total += rset.getLong(3);
 								deviceIds.add(rset.getLong(1));
+								pst.setLong(1, deploymentDownloadId);
+								pst.setLong(2, rset.getLong(1));
+								pst.setLong(3, rset.getLong(3));
+								pst.execute();
+								rset = pst.getResultSet();
+							// add a tag * detections summary
 							}
 							buffer.append("----------------------------------------\n");
 						}
 						if (total == detections.size()) {
 							buffer.append(String.format("TOTAL COUNT%29d%n", total));
-							buffer.append("----------------------------------------\n");
+							buffer.append("----------------------------------------\n\n");
 						} else {
 							throw new Exception("detections count from database and file don't match: " + total + " vs " + detections.size());
 						}
+						rset.close();
+						pst.close();
+						// set the file_name and the total detections in the deployment_download record
+						// this is the only way to prevent a file being processed twice, by checking that the file name doesn't
+						// already exist.
+						smt = conn.createStatement();
+						smt.execute("UPDATE DEPLOYMENT_DOWNLOAD SET\n" +
+								"FILE_NAME = '" + file.getName() + "',\n" +
+								"DETECTIONS = " + detections.size() + "\n" +
+								"WHERE DEPLOYMENT_DOWNLOAD_ID = " + deploymentDownloadId);
+						smt.close();
 						// add a tag release summary
-						projectTags = new HashMap<Integer,StringBuffer>();
+						projectTags = new HashMap<Integer, StringBuffer>();
 						StringBuffer sb = new StringBuffer();
 						for (Iterator<Long> i = deviceIds.iterator(); i.hasNext();) {
 							sb.append(i.next().toString());
@@ -459,43 +492,43 @@ public final class AcousticReceiverFileProcessor {
 								sb.append(",");
 						}
 						String list = sb.toString();
-						rset = smt.executeQuery("SELECT COUNT(*) FROM TAG_RELEASE WHERE DEVICE_ID IS IN (" + list + ")");
-						if(rset.next() && rset.getInt(1) > 0){
+						rset = smt.executeQuery("SELECT COUNT(*) FROM TAG_RELEASE WHERE DEVICE_ID IN (" + list + ")");
+						if (rset.next() && rset.getInt(1) > 0) {
 							rset.close();
-							String qry = "SELECT TAG_RELEASE.RELEASE_ID, DEVICE.CODE_NAME, CLASSIFICATION.NAME,\n" + 
-							"PROJECT_PERSON.PROJECT_NAME, PROJECT_PERSON.PROJECT_FID,\n" +
-							"PROJECT_PERSON.PERSON_ROLE, TAG_RELEASE.PROJECT_ROLE_PERSON_ID\n" + 
-							"FROM TAG_RELEASE INNER JOIN DEVICE ON TAG_RELEASE.DEVICE_ID = DEVICE.DEVICE_ID\n" +
-							"INNER JOIN PROJECT_PERSON ON TAG_RELEASE.PROJECT_ROLE_PERSON_ID = PROJECT_PERSON.PROJECT_ROLE_PERSON_ID\n" +
-							"LEFT OUTER JOIN CLASSIFICATION ON TAG_RELEASE.CLASSIFICATION_ID = CLASSIFICATION.CLASSIFICATION_ID\n" +
-							"WHERE TAG_RELEASE.DEVICE_ID IN (" + list + ")\n" + 
-							"ORDER BY CODE_NAME ASC";
+							String qry = "SELECT TAG_RELEASE.RELEASE_ID, DEVICE.CODE_NAME, CLASSIFICATION.NAME,\n"
+									+ "PROJECT_PERSON.PROJECT_NAME, PROJECT_PERSON.PROJECT_FID,\n"
+									+ "PROJECT_PERSON.PERSON_ROLE, TAG_RELEASE.PROJECT_ROLE_PERSON_ID\n"
+									+ "FROM TAG_RELEASE INNER JOIN DEVICE ON TAG_RELEASE.DEVICE_ID = DEVICE.DEVICE_ID\n"
+									+ "INNER JOIN PROJECT_PERSON ON TAG_RELEASE.PROJECT_ROLE_PERSON_ID = PROJECT_PERSON.PROJECT_ROLE_PERSON_ID\n"
+									+ "LEFT OUTER JOIN CLASSIFICATION ON TAG_RELEASE.CLASSIFICATION_ID = CLASSIFICATION.CLASSIFICATION_ID\n"
+									+ "WHERE TAG_RELEASE.DEVICE_ID IN (" + list + ")\n" + "ORDER BY CODE_NAME ASC";
 							System.out.print(qry);
 							rset = smt.executeQuery(qry);
 							if (rset != null) {
 								while (rset.next()) {
 									if (rset.isFirst()) {
-										buffer.append("AVAILABLE TAG RELEASE INFORMATION FOR TAGS DETECTED\n");
-										buffer.append("------------------------------------------------------------------------------------------\n");
-										buffer.append("TAG CODE NAME    TAG RELEASE FID   ANIMAL CLASSIFICATION        PROJECT           PERSON\n");
-										buffer.append("------------------------------------------------------------------------------------------\n");
+										buffer.append("AVAILABLE RELEASE INFORMATION SUMMARY FOR TAGS DETECTED\n");
+										buffer.append("-----------------------------------------------------------------------------------\n");
+										buffer.append("TAG CODE NAME     TAG RELEASE FID           ANIMAL CLASSIFICATION                  \n");
+										buffer.append("-----------------------------------------------------------------------------------\n");
 									}
-									buffer.append(String.format("%-20s%-20s%-30s%-20s%-20s%n", rset.getString(2), rset.getString(1), rset.getString(3),
-											rset.getString(4), rset.getString(5)));
-									//add to the list of tags from outside the current project
-									if(rset.getInt(7) != projectRolePersonId){
-										if(!projectTags.containsKey(rset.getInt(7))){
+									buffer.append(String.format("%-18s%-26s%-36s%n", rset.getString(2), "aatams.tag_release." + rset.getString(1), rset
+											.getString(3)));
+									// add to the list of tags from outside the
+									// current project
+									if (rset.getInt(7) != projectRolePersonId) {
+										if (!projectTags.containsKey(rset.getInt(7))) {
 											projectTags.put(rset.getInt(7), new StringBuffer(rset.getString(2)));
-										}else{
+										} else {
 											projectTags.get(rset.getInt(7)).append("\n" + rset.getString(2));
 										}
 									}
 								}
-								buffer.append("------------------------------------------------------------------------------------------\n");
+								buffer.append("-----------------------------------------------------------------------------------\n");
 							}
-						}else{
+						} else {
 							buffer.append("No tag release records have been found for the tags in the download file\n\n");
-						}	
+						}
 					} else {
 						buffer.append("No detections where found in the file to process into database\n\n");
 					}
@@ -509,41 +542,42 @@ public final class AcousticReceiverFileProcessor {
 				logger.error("unexpected error when generating full report", e);
 				return;
 			}
-			//7. Send the main report
+			// 7. Send the main report
 			String projectPersonName = "", projectAddressTo = "";
 			Mailer mailer = new Mailer(SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PWD);
 			Email email = new Email();
-			try{
-				rset = smt.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n" +
-						"WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" +
-						"PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = " + projectRolePersonId);
-				if(rset.next()){
+			try {
+				rset = smt.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n"
+						+ "WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" + "PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = "
+						+ projectRolePersonId);
+				if (rset.next()) {
 					projectPersonName = rset.getString(1);
 					projectAddressTo = rset.getString(2);
 					email.setFromAddress(PROCESSOR_FROM, PROCESSOR_ADDRESS);
 					email.addRecipient(projectPersonName, projectAddressTo, RecipientType.TO);
-					email.setSubject("AATAMS Deployment Download Processing Report (FID=aatams.deployment_download." + deploymentDownloadId +  ")");
+					email.setSubject("AATAMS Deployment Download Processing Report (FID=aatams.deployment_download." + deploymentDownloadId + ")");
 					email.setText("Please find attached a report with details of a Receiver Deployment Download just processed");
 					email.addAttachment(reportName, new FileDataSource(reportFolder + "/" + reportName));
-					try{
+					try {
 						mailer.sendMail(email);
-					}catch(Exception e){
+					} catch (Exception e) {
 						logger.error("error sending report to " + projectAddressTo, e);
 					}
 				}
 				rset.close();
-			}catch(SQLException e){
+			} catch (SQLException e) {
 				logger.error("an sql exception was encountered when accessing report email", e);
 			}
-			//8. Send any 'out of project' tag detection reports
+			// 8. Send any 'out of project' tag detection reports
 			String personName = "", addressTo = "";
-			for(Iterator<Entry<Integer,StringBuffer>> i = projectTags.entrySet().iterator();i.hasNext();){
-				Entry<Integer,StringBuffer> entry = i.next();
-				try{
-					rset = smt.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n" +
-							"WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" +
-							"PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = " + entry.getKey());
-					if(rset.next()){
+			for (Iterator<Entry<Integer, StringBuffer>> i = projectTags.entrySet().iterator(); i.hasNext();) {
+				Entry<Integer, StringBuffer> entry = i.next();
+				try {
+					rset = smt
+							.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n"
+									+ "WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" + "PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = "
+									+ entry.getKey());
+					if (rset.next()) {
 						personName = rset.getString(1);
 						addressTo = rset.getString(2);
 						email = new Email();
@@ -551,19 +585,19 @@ public final class AcousticReceiverFileProcessor {
 						email.addRecipient(personName, addressTo, RecipientType.TO);
 						email.addRecipient(projectPersonName, projectAddressTo, RecipientType.CC);
 						email.setSubject("AATAMS 'Foreign' Detections Report");
-						email.setText("The following tags, having a tag release under your name, have been found " +
-								"in another person's deployment download: \n" + entry.getValue().toString() + "\n\n" +
-								"Please contact the responsible person (carbon-copied this email) or obtain more" +
-								"information via the deployment download record FID=aatams.deployment_download." + 
-								deploymentDownloadId + " viewable at the AATAMS web site (" + AATAMS_WEB_SITE_URI + ").");
-						try{
+						email.setText("The following tags, having a tag release under your name, have been found "
+								+ "in another person's deployment download: \n" + entry.getValue().toString() + "\n\n"
+								+ "Please contact the responsible person (carbon-copied this email) or obtain more"
+								+ "information via the deployment download record FID=aatams.deployment_download." + deploymentDownloadId
+								+ " viewable at the AATAMS web site (" + AATAMS_WEB_SITE_URI + ").");
+						try {
 							mailer.sendMail(email);
-						}catch(Exception e){
+						} catch (Exception e) {
 							logger.error("error sending report to " + addressTo, e);
 						}
 					}
 					rset.close();
-				}catch(SQLException e){
+				} catch (SQLException e) {
 					logger.error("an sql exception was encountered when accessing report email", e);
 				}
 			}

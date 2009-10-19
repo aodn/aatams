@@ -34,9 +34,9 @@
             </data>
          </xf:instance>
          <xf:instance id="inst_geographic_area"
-                      src="../../degree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;geographic_area"/>
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;geographic_area"/>
          <xf:instance id="inst_installation_conf"
-                      src="../../degree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;installation_conf"/>
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;installation_conf"/>
          <xf:instance id="inst_response">
             <dummy>
                <ows:Exception/>
@@ -60,7 +60,7 @@
          <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
                   type="xsd:string"/>
          <xf:submission id="s01" ref="instance('inst_data')" method="post"
-                        action="../deegree-wfs/services"
+                        action="../../deegree-wfs/services"
                         replace="instance"
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">

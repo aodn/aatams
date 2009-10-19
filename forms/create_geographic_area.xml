@@ -54,7 +54,7 @@
          <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
                   type="xsd:string"/>
          <xf:submission id="s01" ref="instance('inst_data')" method="post"
-                        action="../deegree-wfs/services"
+                        action="../../deegree-wfs/services"
                         replace="instance"
                         instance="inst_response">
             <xf:action ev:event="xforms-submit"/>

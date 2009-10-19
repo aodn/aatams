@@ -69,7 +69,7 @@
          <xf:bind id="home_postal_address_postcode"
                   nodeset="instance('inst_response')//aatams:person/aatams:home_postal_address_postcode"
                   type="xsd:string"/>
-         <xf:submission id="s01" method="post" action="../../degree-wfs/services"
+         <xf:submission id="s01" method="post" action="../../deegree-wfs/services"
                         ref="instance('inst_request')"
                         replace="instance"
                         instance="inst_response">

@@ -54,21 +54,21 @@
             </data>
          </xf:instance>
          <xf:instance id="inst_receiver_device"
-                      src="../../degree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;receiver_device"/>
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;receiver_device"/>
          <xf:instance id="inst_installation"
-                      src="../../degree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;installation"/>
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;installation"/>
          <xf:instance id="inst_station"
-                      src="../../degree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;station"/>
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;station"/>
          <xf:instance id="inst_mooring_type"
-                      src="../../degree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;mooring_type"/>
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;mooring_type"/>
          <xf:instance id="inst_project_person"
-                      src="../../degree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
             <data>
                <aatams:project_person gml:id=""/>
             </data>
          </xf:instance>
          <xf:instance id="inst_project"
-                      src="../../degree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project"/>
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project"/>
          <xf:instance id="inst_project_id">
             <data>
                <project_id>aatams.project.1</project_id>
@@ -125,7 +125,7 @@
          <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
                   type="xsd:string"/>
          <xf:submission id="s01" ref="instance('inst_data')" method="post"
-                        action="../deegree-wfs/services"
+                        action="../../deegree-wfs/services"
                         replace="instance"
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">

@@ -3,7 +3,7 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:aatams="http://www.imos.org.au/aatams" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	<xsl:output name="xml" method="xml" encoding="UTF-8" indent="yes" />
 	<xsl:include href="help.xslt" />
-	<xsl:variable name="wfs-url">../../degree-wfs/services</xsl:variable>
+	<xsl:variable name="wfs-url">../../deegree-wfs/services</xsl:variable>
 	<xsl:template match="/">
 		<xsl:for-each select="//table">
 			<xsl:result-document href="{concat('file:///C:/eclipse_workspace/aatams/forms/create_',lower-case(@name),'.xml')}" format="xml">
@@ -62,7 +62,7 @@
 							<xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException" type="xsd:string" />
 							<xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid" type="xsd:string" />
 							<!--submission-->
-							<xf:submission id="s01" ref="instance('inst_data')" method="post" action="../deegree-wfs/services" replace="instance" instance="inst_response">
+							<xf:submission id="s01" ref="instance('inst_data')" method="post" action="{$wfs-url}" replace="instance" instance="inst_response">
 								<xf:action ev:event="xforms-submit">
 									<xsl:apply-templates select="column" mode="submission" />
 									<xsl:apply-templates select="foreign-key" mode="submission" />

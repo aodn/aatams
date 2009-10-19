@@ -31,7 +31,7 @@
          </xf:instance>
          <xf:bind id="name" nodeset="instance('inst_response')//aatams:device_type/aatams:name"
                   type="xsd:string"/>
-         <xf:submission id="s01" method="post" action="../../degree-wfs/services"
+         <xf:submission id="s01" method="post" action="../../deegree-wfs/services"
                         ref="instance('inst_request')"
                         replace="instance"
                         instance="inst_response">

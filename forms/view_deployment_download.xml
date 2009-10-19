@@ -65,7 +65,7 @@
          <xf:bind id="comments"
                   nodeset="instance('inst_response')//aatams:deployment_download/aatams:comments"
                   type="xsd:string"/>
-         <xf:submission id="s01" method="post" action="../../degree-wfs/services"
+         <xf:submission id="s01" method="post" action="../../deegree-wfs/services"
                         ref="instance('inst_request')"
                         replace="instance"
                         instance="inst_response">

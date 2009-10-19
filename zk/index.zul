@@ -1,4 +1,4 @@
-<?page title="Auto Generated index.zul"?>
+<?page title="AATAMS"?>
 
 <window id="window" border="normal" width="100%" height="100%"
 	use="au.org.emii.aatams.zk.AATAMSHomePageComposer">
@@ -358,8 +358,9 @@
 			</tabbox>
 		</west>
 		<center flex="true" margins="5,0,5,0">
-			<iframe id="iframe" src="http://imos.org.au/aatams.html" width="500px" height="500px" scrolling="auto"
-				style="border: 1px solid gray" />
+			<!--  iframe id="iframe" src="http://imos.org.au/aatams.html" width="500px" height="500px" scrolling="auto"
+				style="border: 1px solid gray" /-->
+				<window id="test" src="test1.zul"/>
 		</center>
 		<south size="40px" border="0" style="background:#0195ff;"
 			splittable="true">

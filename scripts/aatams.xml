@@ -79,7 +79,7 @@
     </table>
     <table name="DOWNLOAD_TAG_SUMMARY">
       <column name="DOWNLOAD_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10"autoIncrement="false"/>
+      <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="DETECTION_COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	    <unique-column name="DOWNLOAD_ID"/>

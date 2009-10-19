@@ -5,10 +5,10 @@
 	<xsl:include href="help.xslt" />
 	<xsl:template match="/">
 		<xsl:for-each select="//table">
-			<xsl:result-document href="{concat('file:///C:/tomcat-5.5.25/apache-tomcat-5.5.25/webapps/aatams/create_',lower-case(@name),'.xml')}" format="xml">
+			<xsl:result-document href="{concat('file:///C:/eclipse_workspace/aatams/forms/create_',lower-case(@name),'.xml')}" format="xml">
 			<!--xsl:result-document href="{concat('file:///C:/eclipse_workspace/zktest/WebContent/create_',lower-case(@name),'.xml')}" format="xml"-->
 				<xsl:processing-instruction name="xml-stylesheet">
-					<xsl:text>href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"</xsl:text>
+					<xsl:text>href="xsltforms/xsltforms.xsl" type="text/xsl"</xsl:text>
 				</xsl:processing-instruction>
 				<xhtml:html>
 					<xhtml:head>

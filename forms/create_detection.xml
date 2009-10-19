@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><xhtml:html xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><xhtml:html xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
             xmlns:xhtml="http://www.w3.org/1999/xhtml"
             xmlns:aatams="http://www.imos.org.au/aatams"
             xmlns:xf="http://www.w3.org/2002/xforms"
@@ -9,7 +9,7 @@
    <xhtml:head>
       <xhtml:title>AATAMS Web Interface</xhtml:title>
       <xhtml:link href="aatams.css" rel="stylesheet" type="text/css"/>
-      <script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
+      <xhtml:script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
       <xf:model id="model1">
          <xf:instance id="inst_data">
             <wfs:Transaction version="1.1.0" service="WFS">
@@ -20,6 +20,7 @@
                            <aatams:installation_deployment_ref>
                               <aatams:installation_deployment/>
                            </aatams:installation_deployment_ref>
+                           <aatams:download/>
                            <aatams:tag/>
                            <aatams:detection_timestamp/>
                         </aatams:detection>
@@ -62,6 +63,9 @@
                   nodeset="instance('inst_subfeatures')//installation_deployment_id"
                   type="xsd:string"
                   required="true()"/>
+         <xf:bind id="download" nodeset="instance('inst_data')//aatams:download"
+                  type="xsd:string"
+                  required="false()"/>
          <xf:bind id="tag" nodeset="instance('inst_data')//aatams:tag" type="xsd:string"
                   required="true()"/>
          <xf:bind id="detection_timestamp"
@@ -77,6 +81,7 @@
                         replace="instance"
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
+               <xf:delete nodeset="instance('inst_data')//aatams:download_id[.='']"/>
                <xf:insert nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
                           origin="instance('inst_installation_deployment')//aatams:installation_deployment[@gml:id=instance('inst_subfeatures')/installation_deployment_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
@@ -108,6 +113,9 @@
                </xf:itemset>
             </xf:select1>
          </xhtml:div>
+         <xf:input bind="download" incremental="true()">
+            <xf:label>Download</xf:label>
+         </xf:input>
          <xf:input bind="tag" incremental="true()">
             <xf:label>Tag</xf:label>
          </xf:input>

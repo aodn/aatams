@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><xhtml:html xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><xhtml:html xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
             xmlns:xhtml="http://www.w3.org/1999/xhtml"
             xmlns:aatams="http://www.imos.org.au/aatams"
             xmlns:xf="http://www.w3.org/2002/xforms"
@@ -9,7 +9,7 @@
    <xhtml:head>
       <xhtml:title>AATAMS Web Interface</xhtml:title>
       <xhtml:link href="aatams.css" rel="stylesheet" type="text/css"/>
-      <script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
+      <xhtml:script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
       <xf:model id="model1">
          <xf:instance id="inst_data">
             <wfs:Transaction version="1.1.0" service="WFS">
@@ -46,7 +46,7 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data>
-               <receiver_device_id>aatams.receiver_device.23</receiver_device_id>
+               <receiver_device_id>aatams.receiver_device.1</receiver_device_id>
                <installation_id>aatams.installation.1</installation_id>
                <station_id>aatams.station.1</station_id>
                <mooring_type_id>aatams.mooring_type.1</mooring_type_id>
@@ -115,8 +115,8 @@
                   type="xsd:string"
                   required="false()"/>
          <xf:bind id="bottom_depth" nodeset="instance('inst_data')//aatams:bottom_depth"
-                  type="xsd:string"
-                  required="false()"/>
+                  type="xsd:decimal"
+                  required="true()"/>
          <xf:bind id="comments" nodeset="instance('inst_data')//aatams:comments"
                   type="xsd:string"
                   required="false()"/>

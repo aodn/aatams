@@ -3,9 +3,9 @@
 	<xsl:template match="/">
 		<xsl:for-each select="//table">
 			<xsl:variable name="typename"><xsl:value-of select="lower-case(@name)"/></xsl:variable>
-			<xsl:result-document href="{concat('file:///C:/tomcat-5.5.25/apache-tomcat-5.5.25/webapps/aatams/view_',$typename,'.xml')}" format="xml">
+			<xsl:result-document href="{concat('file:///C:/eclipse_workspace/aatams/forms/view_',$typename,'.xml')}" format="xml">
 				<xsl:processing-instruction name="xml-stylesheet">
-					<xsl:text>href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"</xsl:text>
+					<xsl:text>href="xsltforms/xsltforms.xsl" type="text/xsl"</xsl:text>
 				</xsl:processing-instruction>
 				<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:aatams="http://www.imos.org.au/aatams">
 					<head>

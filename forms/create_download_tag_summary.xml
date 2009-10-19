@@ -16,15 +16,12 @@
                <wfs:Insert>
                   <wfs:FeatureCollection>
                      <gml:featureMember>
-                        <aatams:device_model>
-                           <aatams:device_type_ref>
-                              <aatams:device_type/>
-                           </aatams:device_type_ref>
-                           <aatams:device_manufacturer_ref>
-                              <aatams:device_manufacturer/>
-                           </aatams:device_manufacturer_ref>
-                           <aatams:name/>
-                        </aatams:device_model>
+                        <aatams:download_tag_summary>
+                           <aatams:device_ref>
+                              <aatams:device/>
+                           </aatams:device_ref>
+                           <aatams:detection_count/>
+                        </aatams:download_tag_summary>
                      </gml:featureMember>
                   </wfs:FeatureCollection>
                </wfs:Insert>
@@ -32,14 +29,14 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data>
-               <device_manufacturer_id>aatams.device_manufacturer.1</device_manufacturer_id>
-               <device_type_id>aatams.device_type.1</device_type_id>
+               <deployment_download_id>aatams.deployment_download.1</deployment_download_id>
+               <device_id>aatams.device.1</device_id>
             </data>
          </xf:instance>
-         <xf:instance id="inst_device_manufacturer"
-                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device_manufacturer"/>
-         <xf:instance id="inst_device_type"
-                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device_type"/>
+         <xf:instance id="inst_deployment_download"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:deployment_download"/>
+         <xf:instance id="inst_device"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device"/>
          <xf:instance id="inst_response">
             <dummy>
                <ows:Exception/>
@@ -52,14 +49,10 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
-         <xf:bind id="device_type" nodeset="instance('inst_subfeatures')//device_type_id"
-                  type="xsd:string"
+         <xf:bind id="device" nodeset="instance('inst_subfeatures')//device_id" type="xsd:string"
                   required="true()"/>
-         <xf:bind id="device_manufacturer"
-                  nodeset="instance('inst_subfeatures')//device_manufacturer_id"
-                  type="xsd:string"
-                  required="true()"/>
-         <xf:bind id="name" nodeset="instance('inst_data')//aatams:name" type="xsd:string"
+         <xf:bind id="detection_count" nodeset="instance('inst_data')//aatams:detection_count"
+                  type="xsd:integer"
                   required="true()"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
                   type="xsd:string"/>
@@ -70,37 +63,29 @@
                         replace="instance"
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
-               <xf:insert nodeset="instance('inst_data')//aatams:device_manufacturer_ref/aatams:device_manufacturer"
-                          origin="instance('inst_device_manufacturer')//aatams:device_manufacturer[@gml:id=instance('inst_subfeatures')/device_manufacturer_id]"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:device_manufacturer_ref/aatams:device_manufacturer"
+               <xf:insert nodeset="instance('inst_data')//aatams:deployment_download_ref/aatams:deployment_download"
+                          origin="instance('inst_deployment_download')//aatams:deployment_download[@gml:id=instance('inst_subfeatures')/deployment_download_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:deployment_download_ref/aatams:deployment_download"
                           at="1"/>
-               <xf:insert nodeset="instance('inst_data')//aatams:device_type_ref/aatams:device_type"
-                          origin="instance('inst_device_type')//aatams:device_type[@gml:id=instance('inst_subfeatures')/device_type_id]"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:device_type_ref/aatams:device_type"
-                          at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:device_ref/aatams:device"
+                          origin="instance('inst_device')//aatams:device[@gml:id=instance('inst_subfeatures')/device_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:device_ref/aatams:device" at="1"/>
             </xf:action>
             <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
          </xf:submission>
       </xf:model>
    </xhtml:head>
    <xhtml:body><!--Debug--><xhtml:div class="form">
-         <legend>ADD DEVICE MODEL</legend>
-         <xf:select1 bind="device_type" appearance="minimal" incremental="true()">
-            <xf:label>Device Type</xf:label>
-            <xf:itemset nodeset="instance('inst_device_type')//aatams:device_type">
+         <legend>ADD DOWNLOAD TAG SUMMARY</legend>
+         <xf:select1 bind="device" appearance="minimal" incremental="true()">
+            <xf:label>Device</xf:label>
+            <xf:itemset nodeset="instance('inst_device')//aatams:device">
                <xf:value ref="@gml:id"/>
                <xf:label ref="aatams:name"/>
             </xf:itemset>
          </xf:select1>
-         <xf:select1 bind="device_manufacturer" appearance="minimal" incremental="true()">
-            <xf:label>Manufacturer</xf:label>
-            <xf:itemset nodeset="instance('inst_device_manufacturer')//aatams:device_manufacturer">
-               <xf:value ref="@gml:id"/>
-               <xf:label ref="aatams:name"/>
-            </xf:itemset>
-         </xf:select1>
-         <xf:input bind="name" incremental="true()">
-            <xf:label>Name</xf:label>
+         <xf:input bind="detection_count" incremental="true()">
+            <xf:label>Detection Count</xf:label>
          </xf:input>
          <xf:submit submission="s01">
             <xf:label>Save</xf:label>

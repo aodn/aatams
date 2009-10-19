@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:xf="http://www.w3.org/2002/xforms"
       xmlns:ev="http://www.w3.org/2001/xml-events">
    <head>
@@ -29,7 +29,8 @@
                </gml:featureMember>
             </wfs:FeatureCollection>
          </xf:instance>
-         <xf:bind id="device" nodeset="instance('inst_response')//aatams:device/aatams:name"
+         <xf:bind id="transmitter_device"
+                  nodeset="instance('inst_response')//aatams:transmitter_device/aatams:name"
                   type="xsd:string"/>
          <xf:bind id="classification"
                   nodeset="instance('inst_response')//aatams:classification/aatams:name"
@@ -40,16 +41,11 @@
          <xf:bind id="person_role"
                   nodeset="instance('inst_response')//aatams:project_person/aatams:person_name"
                   type="xsd:string"/>
-         <xf:bind id="surgery" nodeset="instance('inst_response')//aatams:surgery/aatams:name"
-                  type="xsd:string"/>
          <xf:bind id="release_longitude"
                   nodeset="instance('inst_response')//aatams:tag_release/aatams:release_longitude"
                   type="xsd:string"/>
          <xf:bind id="release_latitude"
                   nodeset="instance('inst_response')//aatams:tag_release/aatams:release_latitude"
-                  type="xsd:string"/>
-         <xf:bind id="release_geographic_area"
-                  nodeset="instance('inst_response')//aatams:tag_release/aatams:release_geographic_area"
                   type="xsd:string"/>
          <xf:bind id="release_timestamp"
                   nodeset="instance('inst_response')//aatams:tag_release/aatams:release_timestamp"
@@ -60,14 +56,8 @@
          <xf:bind id="capture_latitude"
                   nodeset="instance('inst_response')//aatams:tag_release/aatams:capture_latitude"
                   type="xsd:string"/>
-         <xf:bind id="capture_geographic_area"
-                  nodeset="instance('inst_response')//aatams:tag_release/aatams:capture_geographic_area"
-                  type="xsd:string"/>
          <xf:bind id="capture_timestamp"
                   nodeset="instance('inst_response')//aatams:tag_release/aatams:capture_timestamp"
-                  type="xsd:string"/>
-         <xf:bind id="tether_type"
-                  nodeset="instance('inst_response')//aatams:tether_type/aatams:name"
                   type="xsd:string"/>
          <xf:bind id="implant_type"
                   nodeset="instance('inst_response')//aatams:implant_type/aatams:name"
@@ -103,8 +93,8 @@
                </tr>
             </tbody>
          </table>
-         <xf:output bind="device">
-            <xf:label>Device:</xf:label>
+         <xf:output bind="transmitter_device">
+            <xf:label>Transmitter Device:</xf:label>
             <xf:help>This is a presently unhelpful help message</xf:help>
          </xf:output>
          <xf:output bind="classification">
@@ -119,20 +109,12 @@
             <xf:label>Person(Role):</xf:label>
             <xf:help>This is a presently unhelpful help message</xf:help>
          </xf:output>
-         <xf:output bind="surgery">
-            <xf:label>Surgery:</xf:label>
-            <xf:help>This is a presently unhelpful help message</xf:help>
-         </xf:output>
          <xf:output bind="release_longitude">
             <xf:label>Release Longitude:</xf:label>
             <xf:help>This is a presently unhelpful help message</xf:help>
          </xf:output>
          <xf:output bind="release_latitude">
             <xf:label>Release Latitude:</xf:label>
-            <xf:help>This is a presently unhelpful help message</xf:help>
-         </xf:output>
-         <xf:output bind="release_geographic_area">
-            <xf:label>Release Geographic Area:</xf:label>
             <xf:help>This is a presently unhelpful help message</xf:help>
          </xf:output>
          <xf:output bind="release_timestamp">
@@ -147,16 +129,8 @@
             <xf:label>Capture Latitude:</xf:label>
             <xf:help>This is a presently unhelpful help message</xf:help>
          </xf:output>
-         <xf:output bind="capture_geographic_area">
-            <xf:label>Capture Geographic Area:</xf:label>
-            <xf:help>This is a presently unhelpful help message</xf:help>
-         </xf:output>
          <xf:output bind="capture_timestamp">
             <xf:label>Capture Timestamp:</xf:label>
-            <xf:help>This is a presently unhelpful help message</xf:help>
-         </xf:output>
-         <xf:output bind="tether_type">
-            <xf:label>Tether Type:</xf:label>
             <xf:help>This is a presently unhelpful help message</xf:help>
          </xf:output>
          <xf:output bind="implant_type">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:xf="http://www.w3.org/2002/xforms"
       xmlns:ev="http://www.w3.org/2001/xml-events">
    <head>
@@ -29,8 +29,8 @@
                </gml:featureMember>
             </wfs:FeatureCollection>
          </xf:instance>
-         <xf:bind id="receiver_deployment"
-                  nodeset="instance('inst_response')//aatams:receiver_deployment/aatams:name"
+         <xf:bind id="installation_deployment"
+                  nodeset="instance('inst_response')//aatams:installation_deployment/aatams:name"
                   type="xsd:string"/>
          <xf:bind id="deployment_event_type"
                   nodeset="instance('inst_response')//aatams:deployment_event_type/aatams:name"
@@ -72,8 +72,8 @@
                </tr>
             </tbody>
          </table>
-         <xf:output bind="receiver_deployment">
-            <xf:label>Receiver Deployment:</xf:label>
+         <xf:output bind="installation_deployment">
+            <xf:label>Installation Deployment:</xf:label>
             <xf:help>This is a presently unhelpful help message</xf:help>
          </xf:output>
          <xf:output bind="deployment_event_type">

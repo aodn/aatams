@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:xf="http://www.w3.org/2002/xforms"
       xmlns:ev="http://www.w3.org/2001/xml-events">
    <head>
@@ -21,20 +21,16 @@
          <legend>VIEW ALL TAG RELEASE</legend>
          <xf:repeat nodeset="instance('inst_features')//aatams:tag_release">
             <xf:output ref="@gml:id"/>
-            <xf:output ref="//aatams:device/aatams:name"/>
+            <xf:output ref="//aatams:transmitter_device/aatams:name"/>
             <xf:output ref="//aatams:classification/aatams:name"/>
             <xf:output ref="//aatams:project_person/aatams:project_name"/>
             <xf:output ref="//aatams:project_person/aatams:person_role"/>
-            <xf:output ref="//aatams:surgery/aatams:name"/>
             <xf:output ref="aatams:release_longitude"/>
             <xf:output ref="aatams:release_latitude"/>
-            <xf:output ref="aatams:release_geographic_area"/>
             <xf:output ref="aatams:release_timestamp"/>
             <xf:output ref="aatams:capture_longitude"/>
             <xf:output ref="aatams:capture_latitude"/>
-            <xf:output ref="aatams:capture_geographic_area"/>
             <xf:output ref="aatams:capture_timestamp"/>
-            <xf:output ref="//aatams:tether_type/aatams:name"/>
             <xf:output ref="//aatams:implant_type/aatams:name"/>
          </xf:repeat>
       </fieldset>

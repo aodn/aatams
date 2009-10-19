@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:xf="http://www.w3.org/2002/xforms"
       xmlns:ev="http://www.w3.org/2001/xml-events">
    <head>
@@ -35,8 +35,7 @@
          <xf:bind id="installation"
                   nodeset="instance('inst_response')//aatams:installation/aatams:name"
                   type="xsd:string"/>
-         <xf:bind id="installation_station"
-                  nodeset="instance('inst_response')//aatams:installation_station/aatams:name"
+         <xf:bind id="station" nodeset="instance('inst_response')//aatams:station/aatams:name"
                   type="xsd:string"/>
          <xf:bind id="project"
                   nodeset="instance('inst_response')//aatams:project_person/aatams:project_name"
@@ -104,8 +103,8 @@
             <xf:label>Installation:</xf:label>
             <xf:help>This is a presently unhelpful help message</xf:help>
          </xf:output>
-         <xf:output bind="installation_station">
-            <xf:label>Installation Station:</xf:label>
+         <xf:output bind="station">
+            <xf:label>Station:</xf:label>
             <xf:help>This is a presently unhelpful help message</xf:help>
          </xf:output>
          <xf:output bind="project">

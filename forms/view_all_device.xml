@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:xf="http://www.w3.org/2002/xforms"
       xmlns:ev="http://www.w3.org/2001/xml-events">
    <head>
@@ -22,6 +22,7 @@
          <xf:repeat nodeset="instance('inst_features')//aatams:device">
             <xf:output ref="@gml:id"/>
             <xf:output ref="aatams:code_name"/>
+            <xf:output ref="//aatams:device_type/aatams:name"/>
             <xf:output ref="//aatams:device_model/aatams:name"/>
             <xf:output ref="aatams:serial_number"/>
             <xf:output ref="//aatams:project_person/aatams:project_name"/>

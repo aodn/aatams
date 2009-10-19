@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:xf="http://www.w3.org/2002/xforms"
       xmlns:ev="http://www.w3.org/2001/xml-events">
    <head>
@@ -21,7 +21,7 @@
          <legend>VIEW ALL DEPLOYMENT DOWNLOAD</legend>
          <xf:repeat nodeset="instance('inst_features')//aatams:deployment_download">
             <xf:output ref="@gml:id"/>
-            <xf:output ref="//aatams:receiver_deployment/aatams:name"/>
+            <xf:output ref="//aatams:installation_deployment/aatams:name"/>
             <xf:output ref="aatams:recovery_timestamp"/>
             <xf:output ref="aatams:download_timestamp"/>
             <xf:output ref="aatams:time_correction_start"/>
@@ -31,6 +31,7 @@
             <xf:output ref="aatams:pings"/>
             <xf:output ref="aatams:detections"/>
             <xf:output ref="aatams:filename"/>
+            <xf:output ref="aatams:cc_email_addresses"/>
             <xf:output ref="aatams:comments"/>
          </xf:repeat>
       </fieldset>

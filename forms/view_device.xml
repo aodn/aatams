@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xsltforms-beta/xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:xf="http://www.w3.org/2002/xforms"
       xmlns:ev="http://www.w3.org/2001/xml-events">
    <head>
@@ -31,6 +31,9 @@
          </xf:instance>
          <xf:bind id="code_name"
                   nodeset="instance('inst_response')//aatams:device/aatams:code_name"
+                  type="xsd:string"/>
+         <xf:bind id="device_type"
+                  nodeset="instance('inst_response')//aatams:device_type/aatams:name"
                   type="xsd:string"/>
          <xf:bind id="device_model"
                   nodeset="instance('inst_response')//aatams:device_model/aatams:name"
@@ -77,6 +80,10 @@
          </table>
          <xf:output bind="code_name">
             <xf:label>Code Name:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="device_type">
+            <xf:label>Device Type:</xf:label>
             <xf:help>This is a presently unhelpful help message</xf:help>
          </xf:output>
          <xf:output bind="device_model">

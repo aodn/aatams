@@ -37,9 +37,9 @@
             </data>
          </xf:instance>
          <xf:instance id="inst_device_manufacturer"
-                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device_manufacturer"/>
+                      src="../../degree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;device_manufacturer"/>
          <xf:instance id="inst_device_type"
-                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device_type"/>
+                      src="../../degree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;device_type"/>
          <xf:instance id="inst_response">
             <dummy>
                <ows:Exception/>

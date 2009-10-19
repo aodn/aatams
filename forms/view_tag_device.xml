@@ -29,7 +29,7 @@
                </gml:featureMember>
             </wfs:FeatureCollection>
          </xf:instance>
-         <xf:submission id="s01" method="post" action="../deegree-wfs/services"
+         <xf:submission id="s01" method="post" action="../../degree-wfs/services"
                         ref="instance('inst_request')"
                         replace="instance"
                         instance="inst_response">

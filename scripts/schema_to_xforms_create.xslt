@@ -3,6 +3,7 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:aatams="http://www.imos.org.au/aatams" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	<xsl:output name="xml" method="xml" encoding="UTF-8" indent="yes" />
 	<xsl:include href="help.xslt" />
+	<xsl:variable name="wfs-url">../../degree-wfs/services</xsl:variable>
 	<xsl:template match="/">
 		<xsl:for-each select="//table">
 			<xsl:result-document href="{concat('file:///C:/eclipse_workspace/aatams/forms/create_',lower-case(@name),'.xml')}" format="xml">
@@ -123,19 +124,19 @@
 				<xsl:value-of select="lower-case(@foreignTable)" />
 			</xsl:attribute>
 			<xsl:attribute name="src">
-				<xsl:text>../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:</xsl:text>
+				<xsl:value-of select="$wfs-url"/><xsl:text>?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:"/></xsl:text>
 				<xsl:value-of select="lower-case(@foreignTable)" />
 			</xsl:attribute>
 		</xf:instance>
 	</xsl:template>
 	<xsl:template match="foreign-key[@foreignTable = 'PROJECT_PERSON']" mode="instance">
-		<xf:instance id="inst_project_person" src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
+		<xf:instance id="inst_project_person" src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
 			<!-- need to seed namespaces -->
 			<data xmlns="">
 				<aatams:project_person gml:id="" />
 			</data>
 		</xf:instance>
-		<xf:instance id="inst_project" src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project" />
+		<xf:instance id="inst_project" src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project" />
 		<xf:instance id="inst_project_id">
 			<data xmlns="">
 				<project_id>aatams.project.1</project_id>
@@ -143,13 +144,13 @@
 		</xf:instance>
 	</xsl:template>
 	<xsl:template match="foreign-key[@foreignTable = 'INSTALLATION_DEPLOYMENT']" mode="instance">
-		<xf:instance id="inst_installation" src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation">
+		<xf:instance id="inst_installation" src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation">
 			<!-- need to seed namespaces -->
 			<data xmlns="">
 				<aatams:installation gml:id="" />
 			</data>
 		</xf:instance>
-		<xf:instance id="inst_installation_deployment" src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment" />
+		<xf:instance id="inst_installation_deployment" src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment" />
 		<xf:instance id="inst_installation_id">
 			<data xmlns="">
 				<installation_id>aatams.installation.1</installation_id>

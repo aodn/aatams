@@ -36,7 +36,7 @@
             </data>
          </xf:instance>
          <xf:instance id="inst_classification"
-                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:classification"/>
+                      src="../../degree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:&#34;/&gt;classification"/>
          <xf:instance id="inst_response">
             <dummy>
                <ows:Exception/>

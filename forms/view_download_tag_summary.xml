@@ -10,7 +10,7 @@
             <wfs:GetFeature xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml"
                             xmlns:ogc="http://www.opengis.net/ogc"
                             outputFormat="text/xml; subtype=gml/3.1.1">
-               <wfs:Query typeName="pre3:measurement_unit_type">
+               <wfs:Query typeName="pre3:download_tag_summary">
                   <ogc:Filter>
                      <ogc:GmlObjectId gml:id=""/>
                   </ogc:Filter>
@@ -19,18 +19,20 @@
             </wfs:GetFeature>
          </xf:instance>
          <xf:instance id="inst_feature_id">
-            <id xmlns="">aatams.measurement_unit_type.NNNN</id>
+            <id xmlns="">aatams.download_tag_summary.NNNN</id>
          </xf:instance>
          <xf:bind id="feature_id" nodeset="instance('inst_feature_id')" type="xsd:string"/>
          <xf:instance id="inst_response">
             <wfs:FeatureCollection xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml">
                <gml:featureMember>
-                  <aatams:measurement_unit_type/>
+                  <aatams:download_tag_summary/>
                </gml:featureMember>
             </wfs:FeatureCollection>
          </xf:instance>
-         <xf:bind id="name"
-                  nodeset="instance('inst_response')//aatams:measurement_unit_type/aatams:name"
+         <xf:bind id="device" nodeset="instance('inst_response')//aatams:device/aatams:name"
+                  type="xsd:string"/>
+         <xf:bind id="detection_count"
+                  nodeset="instance('inst_response')//aatams:download_tag_summary/aatams:detection_count"
                   type="xsd:string"/>
          <xf:submission id="s01" method="post" action="../../degree-wfs/services"
                         ref="instance('inst_request')"
@@ -42,13 +44,13 @@
    </head>
    <body>
       <fieldset xmlns="">
-         <legend>VIEW MEASUREMENT UNIT TYPE</legend>
+         <legend>VIEW DOWNLOAD TAG SUMMARY</legend>
          <table xmlns="http://www.w3.org/1999/xhtml">
             <tbody>
                <tr>
                   <td>
                      <xf:input bind="feature_id">
-                        <xf:label>Enter Measurement Unit Type Id</xf:label>
+                        <xf:label>Enter Download Tag Summary Id</xf:label>
                      </xf:input>
                   </td>
                   <td>
@@ -63,8 +65,12 @@
                </tr>
             </tbody>
          </table>
-         <xf:output bind="name">
-            <xf:label>Name:</xf:label>
+         <xf:output bind="device">
+            <xf:label>Device:</xf:label>
+            <xf:help>This is a presently unhelpful help message</xf:help>
+         </xf:output>
+         <xf:output bind="detection_count">
+            <xf:label>Detection Count:</xf:label>
             <xf:help>This is a presently unhelpful help message</xf:help>
          </xf:output>
       </fieldset>

@@ -1,5 +1,6 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:aatams="http://www.imos.org.au/aatams" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
 	<xsl:output name="xml" method="xml" encoding="UTF-8" indent="yes" />
+	<xsl:variable name="wfs-url">../../degree-wfs/services</xsl:variable>
 	<xsl:template match="/">
 		<xsl:for-each select="//table">
 			<xsl:variable name="typename"><xsl:value-of select="lower-case(@name)"/></xsl:variable>
@@ -91,7 +92,7 @@
                                 </xsl:choose>
 							</xsl:for-each>
 							<!--submission-->
-							<xf:submission id="s01" method="post" action="../deegree-wfs/services" ref="instance('inst_request')" replace="instance" instance="inst_response">
+							<xf:submission id="s01" method="post" action="{$wfs-url}" ref="instance('inst_request')" replace="instance" instance="inst_response">
 								<xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
 							</xf:submission>
 						</xf:model>

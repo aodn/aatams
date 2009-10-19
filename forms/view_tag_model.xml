@@ -48,7 +48,7 @@
                   type="xsd:string"/>
          <xf:bind id="max" nodeset="instance('inst_response')//aatams:tag_model/aatams:max"
                   type="xsd:string"/>
-         <xf:submission id="s01" method="post" action="../deegree-wfs/services"
+         <xf:submission id="s01" method="post" action="../../degree-wfs/services"
                         ref="instance('inst_request')"
                         replace="instance"
                         instance="inst_response">

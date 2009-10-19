@@ -62,7 +62,7 @@
          <xf:bind id="implant_type"
                   nodeset="instance('inst_response')//aatams:implant_type/aatams:name"
                   type="xsd:string"/>
-         <xf:submission id="s01" method="post" action="../deegree-wfs/services"
+         <xf:submission id="s01" method="post" action="../../degree-wfs/services"
                         ref="instance('inst_request')"
                         replace="instance"
                         instance="inst_response">

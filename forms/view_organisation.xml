@@ -67,7 +67,7 @@
          <xf:bind id="fax_number"
                   nodeset="instance('inst_response')//aatams:organisation/aatams:fax_number"
                   type="xsd:string"/>
-         <xf:submission id="s01" method="post" action="../deegree-wfs/services"
+         <xf:submission id="s01" method="post" action="../../degree-wfs/services"
                         ref="instance('inst_request')"
                         replace="instance"
                         instance="inst_response">

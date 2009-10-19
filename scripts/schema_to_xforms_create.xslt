@@ -124,7 +124,7 @@
 				<xsl:value-of select="lower-case(@foreignTable)" />
 			</xsl:attribute>
 			<xsl:attribute name="src">
-				<xsl:value-of select="$wfs-url"/><xsl:text>?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:"/></xsl:text>
+				<xsl:value-of select="$wfs-url"/><xsl:text>?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:</xsl:text>
 				<xsl:value-of select="lower-case(@foreignTable)" />
 			</xsl:attribute>
 		</xf:instance>

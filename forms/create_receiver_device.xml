@@ -36,7 +36,7 @@
             </wfs:Transaction>
          </xf:instance>
          <xf:instance id="inst_subfeatures">
-            <data>
+            <data xmlns="">
                <device_model_id>aatams.device_model.1</device_model_id>
                <!-- device_type_id>aatams.device_type.1</device_type_id-->
                <project_person_id>aatams.project_person.1</project_person_id>
@@ -48,14 +48,14 @@
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device_type"/-->
          <xf:instance id="inst_project_person"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
-            <data>
+            <data xmlns="">
                <aatams:project_person gml:id=""/>
             </data>
          </xf:instance>
          <xf:instance id="inst_project"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project"/>
          <xf:instance id="inst_project_id">
-            <data>
+            <data xmlns="">
                <project_id>aatams.project.1</project_id>
             </data>
          </xf:instance>

@@ -59,10 +59,12 @@
                   required="true()"/>
          <xf:bind id="longitude" nodeset="instance('inst_data')//aatams:longitude"
                   type="xsd:decimal"
-                  required="true()"/>
+                  required="true()"
+                  constraint=". &gt;= -180 and . &lt;= 180"/>
          <xf:bind id="latitude" nodeset="instance('inst_data')//aatams:latitude"
                   type="xsd:decimal"
-                  required="true()"/>
+                  required="true()"
+                  constraint=". &gt;= -90 and . &lt;= 90"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
                   type="xsd:string"/>
          <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
@@ -78,7 +80,9 @@
                <xf:delete nodeset="instance('inst_data')//aatams:installation_ref/aatams:installation"
                           at="1"/>
             </xf:action>
-            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+            <xf:message level="modeless" ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
          </xf:submission>
       </xf:model>
    </xhtml:head>

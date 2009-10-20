@@ -66,7 +66,9 @@
                <xf:delete nodeset="instance('inst_data')//aatams:measurement_unit_type_ref/aatams:measurement_unit_type"
                           at="1"/>
             </xf:action>
-            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+            <xf:message level="modeless" ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
          </xf:submission>
       </xf:model>
    </xhtml:head>

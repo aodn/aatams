@@ -93,10 +93,12 @@
          <xf:bind id="release_longitude"
                   nodeset="instance('inst_data')//aatams:release_longitude"
                   type="xsd:decimal"
-                  required="true()"/>
+                  required="true()"
+                  constraint=". &gt;= -180 and . &lt;= 180"/>
          <xf:bind id="release_latitude" nodeset="instance('inst_data')//aatams:release_latitude"
                   type="xsd:decimal"
-                  required="true()"/>
+                  required="true()"
+                  constraint=". &gt;= -90 and . &lt;= 90"/>
          <xf:bind id="release_timestamp"
                   nodeset="instance('inst_data')//aatams:release_timestamp"
                   type="xsd:dateTime"
@@ -104,10 +106,12 @@
          <xf:bind id="capture_longitude"
                   nodeset="instance('inst_data')//aatams:capture_longitude"
                   type="xsd:decimal"
-                  required="false()"/>
+                  required="false()"
+                  constraint=". &gt;= -180 and . &lt;= 180"/>
          <xf:bind id="capture_latitude" nodeset="instance('inst_data')//aatams:capture_latitude"
                   type="xsd:decimal"
-                  required="false()"/>
+                  required="false()"
+                  constraint=". &gt;= -90 and . &lt;= 90"/>
          <xf:bind id="capture_timestamp"
                   nodeset="instance('inst_data')//aatams:capture_timestamp"
                   type="xsd:dateTime"
@@ -145,7 +149,9 @@
                <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
                           at="1"/>
             </xf:action>
-            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+            <xf:message level="modeless" ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
          </xf:submission>
       </xf:model>
    </xhtml:head>

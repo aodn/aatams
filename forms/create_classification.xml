@@ -64,7 +64,9 @@
             <xf:action ev:event="xforms-submit">
                <xf:delete nodeset="instance('inst_data')//aatams:parent_id[.='']"/>
             </xf:action>
-            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+            <xf:message level="modeless" ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
          </xf:submission>
       </xf:model>
    </xhtml:head>

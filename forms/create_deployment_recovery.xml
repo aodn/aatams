@@ -96,7 +96,9 @@
                <xf:delete nodeset="instance('inst_data')//aatams:recovery_status_ref/aatams:recovery_status"
                           at="1"/>
             </xf:action>
-            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+            <xf:message level="modeless" ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
          </xf:submission>
       </xf:model>
    </xhtml:head>

@@ -83,7 +83,9 @@
                           origin="instance('inst_role')//aatams:role[@gml:id=instance('inst_subfeatures')/role_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:role_ref/aatams:role" at="1"/>
             </xf:action>
-            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+            <xf:message level="modeless" ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
          </xf:submission>
       </xf:model>
    </xhtml:head>

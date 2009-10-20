@@ -1,5 +1,6 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:aatams="http://www.imos.org.au/aatams" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
 	<xsl:output name="xml" method="xml" encoding="UTF-8" indent="yes" />
+	<xsl:variable name="wfs-url"><xsl:text>../../deegree-wfs/services</xsl:text></xsl:variable>
 	<xsl:template match="/">
 		<xsl:for-each select="//table">
 			<xsl:variable name="typename"><xsl:value-of select="lower-case(@name)"/></xsl:variable>

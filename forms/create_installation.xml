@@ -74,7 +74,9 @@
                <xf:delete nodeset="instance('inst_data')//aatams:installation_conf_ref/aatams:installation_conf"
                           at="1"/>
             </xf:action>
-            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+            <xf:message level="modeless" ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
          </xf:submission>
       </xf:model>
    </xhtml:head>

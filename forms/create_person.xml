@@ -113,7 +113,9 @@
                         replace="instance"
                         instance="inst_response">
             <xf:action ev:event="xforms-submit"/>
-            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+            <xf:message level="modeless" ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
          </xf:submission>
       </xf:model>
    </xhtml:head>

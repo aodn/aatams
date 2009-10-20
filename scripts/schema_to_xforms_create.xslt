@@ -1,30 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:aatams="http://www.imos.org.au/aatams" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<xsl:stylesheet version="2.0"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:aatams="http://www.imos.org.au/aatams"
+	xmlns:xf="http://www.w3.org/2002/xforms"
+	xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:wfs="http://www.opengis.net/wfs"
+	xmlns:ogc="http://www.opengis.net/ogc"
+	xmlns:ows="http://www.opengis.net/ows"
+	xmlns:gml="http://www.opengis.net/gml"
+	xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	<xsl:output name="xml" method="xml" encoding="UTF-8" indent="yes" />
 	<xsl:include href="help.xslt" />
-	<xsl:variable name="wfs-url">../../deegree-wfs/services</xsl:variable>
+	<xsl:variable name="wfs-url"><xsl:text>../../deegree-wfs/services</xsl:text></xsl:variable>
 	<xsl:template match="/">
 		<xsl:for-each select="//table">
-			<xsl:result-document href="{concat('file:///C:/eclipse_workspace/aatams/forms/create_',lower-case(@name),'.xml')}" format="xml">
-			<!--xsl:result-document href="{concat('file:///C:/eclipse_workspace/zktest/WebContent/create_',lower-case(@name),'.xml')}" format="xml"-->
+			<xsl:result-document
+				href="{concat('file:///C:/eclipse_workspace/aatams/forms/create_',lower-case(@name),'.xml')}"
+				format="xml">
+				<!--xsl:result-document href="{concat('file:///C:/eclipse_workspace/zktest/WebContent/create_',lower-case(@name),'.xml')}" format="xml"-->
 				<xsl:processing-instruction name="xml-stylesheet">
 					<xsl:text>href="xsltforms/xsltforms.xsl" type="text/xsl"</xsl:text>
 				</xsl:processing-instruction>
 				<xhtml:html>
 					<xhtml:head>
 						<xhtml:title>AATAMS Web Interface</xhtml:title>
-						<xhtml:link href="aatams.css" rel="stylesheet" type="text/css" />
-						<xhtml:script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
+						<xhtml:link href="aatams.css" rel="stylesheet"
+							type="text/css" />
+						<xhtml:script type="text/javascript"
+							src="aatams_xforms.js" charset="UTF-8" />
 						<xf:model id="model1">
 							<!-- instance for submission -->
 							<xf:instance id="inst_data">
-								<wfs:Transaction version="1.1.0" service="WFS">
+								<wfs:Transaction version="1.1.0"
+									service="WFS">
 									<wfs:Insert>
 										<wfs:FeatureCollection>
 											<gml:featureMember>
-												<xsl:element name="aatams:{lower-case(@name)}">
-													<xsl:apply-templates select="column" mode="instance" />
+												<xsl:element
+													name="aatams:{lower-case(@name)}">
+													<xsl:apply-templates
+														select="column" mode="instance" />
 												</xsl:element>
 											</gml:featureMember>
 										</wfs:FeatureCollection>
@@ -34,20 +50,23 @@
 							<!-- instance to hold subfeature ids -->
 							<xf:instance id="inst_subfeatures">
 								<data xmlns="">
-									<xsl:for-each select="foreign-key">
-										<xsl:element name="{lower-case(@foreignTable)}_id">
-											<xsl:value-of select="concat('aatams.',lower-case(@foreignTable),'.1')" />
+									<xsl:for-each
+										select="foreign-key">
+										<xsl:element
+											name="{lower-case(@foreignTable)}_id">
+											<xsl:value-of
+												select="concat('aatams.',lower-case(@foreignTable),'.1')" />
 										</xsl:element>
 									</xsl:for-each>
 								</data>
 							</xf:instance>
 							<!-- instances for subfeature lists -->
-							<xsl:apply-templates select="foreign-key" mode="instance" />
+							<xsl:apply-templates select="foreign-key"
+								mode="instance" />
 							<!-- instance to receive response -->
 							<xf:instance id="inst_response">
 								<dummy xmlns="">
-									<ows:Exception>
-									</ows:Exception>
+									<ows:Exception></ows:Exception>
 									<wfs:TransactionResponse>
 										<wfs:InsertResults>
 											<wfs:Feature>
@@ -58,16 +77,28 @@
 								</dummy>
 							</xf:instance>
 							<!-- bindings -->
-							<xsl:apply-templates select="column" mode="binding" />
-							<xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException" type="xsd:string" />
-							<xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid" type="xsd:string" />
+							<xsl:apply-templates select="column"
+								mode="binding" />
+							<xf:bind id="error_message"
+								nodeset="instance('inst_response')//ServiceException"
+								type="xsd:string" />
+							<xf:bind id="success_message"
+								nodeset="instance('inst_response')//ogc:FeatureId/@fid"
+								type="xsd:string" />
 							<!--submission-->
-							<xf:submission id="s01" ref="instance('inst_data')" method="post" action="{$wfs-url}" replace="instance" instance="inst_response">
+							<xf:submission id="s01"
+								ref="instance('inst_data')" method="post" action="{$wfs-url}"
+								replace="instance" instance="inst_response">
 								<xf:action ev:event="xforms-submit">
-									<xsl:apply-templates select="column" mode="submission" />
-									<xsl:apply-templates select="foreign-key" mode="submission" />
+									<xsl:apply-templates select="column"
+										mode="submission" />
+									<xsl:apply-templates
+										select="foreign-key" mode="submission" />
 								</xf:action>
-								<xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+								<xf:message level="modeless"
+									ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
 							</xf:submission>
 						</xf:model>
 					</xhtml:head>
@@ -76,7 +107,9 @@
 							<!-- debugging checkbox for events display -->
 							<xhtml:div id="xformControl">
 								<xhtml:span>
-									<xhtml:input type="checkbox" onclick="$('console').style.display = this.checked? 'block' : 'none';" checked="checked" />
+									<xhtml:input type="checkbox"
+										onclick="$('console').style.display = this.checked? 'block' : 'none';"
+										checked="checked" />
 									<xsl:text>Debug</xsl:text>
 								</xhtml:span>
 							</xhtml:div>
@@ -90,27 +123,35 @@
 		</xsl:for-each>
 	</xsl:template>
 	<xsl:template match="column" mode="instance">
-		<xsl:element name="aatams:{lower-case(replace(@name,'_ID$',''))}" />
+		<xsl:element
+			name="aatams:{lower-case(replace(@name,'_ID$',''))}" />
 	</xsl:template>
-	<xsl:template match="column[@name='STATUS_ID' or @primaryKey = 'true']" mode="instance" priority="5">
+	<xsl:template
+		match="column[@name='STATUS_ID' or @primaryKey = 'true']"
+		mode="instance" priority="5">
 		<!--excluded-->
 	</xsl:template>
 	<!-- special case -->
-	<xsl:template match="column[@name='PROJECT_ROLE_PERSON_ID']" mode="instance" priority="4">
+	<xsl:template match="column[@name='PROJECT_ROLE_PERSON_ID']"
+		mode="instance" priority="4">
 		<xsl:element name="aatams:project_person_ref">
 			<xsl:element name="aatams:project_person" />
 		</xsl:element>
 	</xsl:template>
 	<!-- special case -->
-	<xsl:template match="column[@name='DEPLOYMENT_ID']" mode="instance" priority="4">
+	<xsl:template match="column[@name='DEPLOYMENT_ID']" mode="instance"
+		priority="4">
 		<xsl:element name="aatams:installation_deployment_ref">
 			<xsl:element name="aatams:installation_deployment" />
 		</xsl:element>
 	</xsl:template>
 	<!-- columns that are foreign keys are subfeatures -->
-	<xsl:template match="column[../foreign-key[reference/@local=current()/@name]]" mode="instance" priority="3">
+	<xsl:template
+		match="column[../foreign-key[reference/@local=current()/@name]]"
+		mode="instance" priority="3">
 		<xsl:variable name="foreignTable">
-			<xsl:value-of select="lower-case(../foreign-key[reference/@local=current()/@name][1]/@foreignTable)" />
+			<xsl:value-of
+				select="lower-case(../foreign-key[reference/@local=current()/@name][1]/@foreignTable)" />
 		</xsl:variable>
 		<xsl:element name="aatams:{concat($foreignTable,'_ref')}">
 			<xsl:element name="aatams:{$foreignTable}" />
@@ -124,33 +165,40 @@
 				<xsl:value-of select="lower-case(@foreignTable)" />
 			</xsl:attribute>
 			<xsl:attribute name="src">
-				<xsl:value-of select="$wfs-url"/><xsl:text>?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:</xsl:text>
+				<xsl:value-of select="$wfs-url" /><xsl:text>?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:</xsl:text>
 				<xsl:value-of select="lower-case(@foreignTable)" />
 			</xsl:attribute>
 		</xf:instance>
 	</xsl:template>
-	<xsl:template match="foreign-key[@foreignTable = 'PROJECT_PERSON']" mode="instance">
-		<xf:instance id="inst_project_person" src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
+	<xsl:template match="foreign-key[@foreignTable = 'PROJECT_PERSON']"
+		mode="instance">
+		<xf:instance id="inst_project_person"
+			src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
 			<!-- need to seed namespaces -->
 			<data xmlns="">
 				<aatams:project_person gml:id="" />
 			</data>
 		</xf:instance>
-		<xf:instance id="inst_project" src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project" />
+		<xf:instance id="inst_project"
+			src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project" />
 		<xf:instance id="inst_project_id">
 			<data xmlns="">
 				<project_id>aatams.project.1</project_id>
 			</data>
 		</xf:instance>
 	</xsl:template>
-	<xsl:template match="foreign-key[@foreignTable = 'INSTALLATION_DEPLOYMENT']" mode="instance">
-		<xf:instance id="inst_installation" src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation">
+	<xsl:template
+		match="foreign-key[@foreignTable = 'INSTALLATION_DEPLOYMENT']"
+		mode="instance">
+		<xf:instance id="inst_installation"
+			src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation">
 			<!-- need to seed namespaces -->
 			<data xmlns="">
 				<aatams:installation gml:id="" />
 			</data>
 		</xf:instance>
-		<xf:instance id="inst_installation_deployment" src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment" />
+		<xf:instance id="inst_installation_deployment"
+			src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment" />
 		<xf:instance id="inst_installation_id">
 			<data xmlns="">
 				<installation_id>aatams.installation.1</installation_id>
@@ -160,11 +208,13 @@
 	<xsl:template match="column" mode="binding">
 		<xsl:element name="xf:bind">
 			<xsl:attribute name="id">
-				<xsl:value-of select="lower-case(replace(@name,'_ID$',''))" />
+				<xsl:value-of
+					select="lower-case(replace(@name,'_ID$',''))" />
 			</xsl:attribute>
 			<xsl:attribute name="nodeset">
 				<xsl:text>instance('inst_data')//aatams:</xsl:text>
-				<xsl:value-of select="lower-case(replace(@name,'_ID$',''))" />
+				<xsl:value-of
+					select="lower-case(replace(@name,'_ID$',''))" />
 			</xsl:attribute>
 			<xsl:attribute name="type">
 				<xsl:choose>
@@ -202,13 +252,20 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:attribute>
+			<xsl:apply-templates select="." mode="constraint" />
 		</xsl:element>
 	</xsl:template>
-	<xsl:template match="column[@name = 'STATUS_ID' or @primaryKey = 'true']" mode="binding" priority="5">
+	<xsl:template
+		match="column[@name = 'STATUS_ID' or @primaryKey = 'true']"
+		mode="binding" priority="5">
 		<!-- excluded -->
 	</xsl:template>
-	<xsl:template match="column[../foreign-key[reference/@local=current()/@name]]" mode="binding" priority="4">
-		<xsl:apply-templates select="../foreign-key[reference/@local=current()/@name]" mode="binding" />
+	<xsl:template
+		match="column[../foreign-key[reference/@local=current()/@name]]"
+		mode="binding" priority="4">
+		<xsl:apply-templates
+			select="../foreign-key[reference/@local=current()/@name]"
+			mode="binding" />
 	</xsl:template>
 	<!-- bindings for subfeature ids -->
 	<xsl:template match="foreign-key" mode="binding">
@@ -225,7 +282,8 @@
 			<xsl:attribute name="required">
 				<xsl:choose>
 					<!-- see if the fk field is required="true"-->
-					<xsl:when test="../column[@name=current()/reference/@local]/@required='true'">
+					<xsl:when
+						test="../column[@name=current()/reference/@local]/@required='true'">
 						<xsl:text>true()</xsl:text>
 					</xsl:when>
 					<xsl:otherwise>
@@ -235,8 +293,20 @@
 			</xsl:attribute>
 		</xsl:element>
 	</xsl:template>
+	<!-- add any contraints to bindings -->
+	<!-- this should probably be done via schema restrictions but not sure if supported by xsltforms -->
+	<xsl:template match="column[ends-with(./@name,'LATITUDE')]"
+		mode="constraint">
+		<xsl:attribute name="constraint">. &gt;= -90 and . &lt;= 90</xsl:attribute>
+	</xsl:template>
+	<xsl:template match="column[ends-with(./@name,'LONGITUDE')]"
+		mode="constraint">
+		<xsl:attribute name="constraint">. &gt;= -180 and . &lt;= 180</xsl:attribute>
+	</xsl:template>
 	<!-- remove any non-mandatory numeric fields if no value -->
-	<xsl:template match="column[@required='false' and not(../foreign-key[reference/@local=current()/@name]) and matches(@type,'INTEGER|DECIMAL|TIMESTAMP')]" mode="submission">
+	<xsl:template
+		match="column[@required='false' and not(../foreign-key[reference/@local=current()/@name]) and matches(@type,'INTEGER|DECIMAL|TIMESTAMP')]"
+		mode="submission">
 		<xsl:element name="xf:delete">
 			<xsl:attribute name="nodeset">
 				<xsl:text>instance('inst_data')//aatams:</xsl:text>
@@ -283,7 +353,8 @@
 		<xhtml:div class="form">
 			<legend>
 				<xsl:text>ADD </xsl:text>
-				<xsl:value-of select="translate(upper-case(@name),'_',' ')" />
+				<xsl:value-of
+					select="translate(upper-case(@name),'_',' ')" />
 			</legend>
 			<xsl:apply-templates select="column" mode="form" />
 			<xf:submit submission="s01">
@@ -306,14 +377,16 @@
 	<xsl:template match="column" mode="form">
 		<xsl:element name="xf:input">
 			<xsl:attribute name="bind">
-				<xsl:value-of select="lower-case(replace(@name,'_ID',''))" />
+				<xsl:value-of
+					select="lower-case(replace(@name,'_ID',''))" />
 			</xsl:attribute>
 			<xsl:attribute name="incremental">
 				<xsl:text>true()</xsl:text>
 			</xsl:attribute>
 			<xf:label>
 				<xsl:call-template name="proper-case">
-					<xsl:with-param name="toconvert" select="translate(replace(@name,'_ID',''),'_',' ')" />
+					<xsl:with-param name="toconvert"
+						select="translate(replace(@name,'_ID',''),'_',' ')" />
 				</xsl:call-template>
 			</xf:label>
 			<xsl:call-template name="help">
@@ -323,7 +396,9 @@
 			</xsl:call-template>
 		</xsl:element>
 	</xsl:template>
-	<xsl:template match="column[@name = 'STATUS_ID' or @primaryKey = 'true']" mode="form" priority="5">
+	<xsl:template
+		match="column[@name = 'STATUS_ID' or @primaryKey = 'true']"
+		mode="form" priority="5">
 		<!-- excluded -->
 	</xsl:template>
 	<xsl:template match="column[@name = 'COMMENTS']" mode="form">
@@ -333,7 +408,8 @@
 			</xsl:attribute>
 			<xf:label>
 				<xsl:call-template name="proper-case">
-					<xsl:with-param name="toconvert" select="translate(@name,'_',' ')" />
+					<xsl:with-param name="toconvert"
+						select="translate(@name,'_',' ')" />
 				</xsl:call-template>
 			</xf:label>
 			<xsl:call-template name="help">
@@ -343,22 +419,29 @@
 			</xsl:call-template>
 		</xsl:element>
 	</xsl:template>
-	<xsl:template match="column[../foreign-key[reference/@local=current()/@name]]" mode="form" priority="3">
+	<xsl:template
+		match="column[../foreign-key[reference/@local=current()/@name]]"
+		mode="form" priority="3">
 		<xsl:call-template name="select1-from-foreign-key">
-			<xsl:with-param name="fk_node" select="../foreign-key[reference/@local=current()/@name]" />
+			<xsl:with-param name="fk_node"
+				select="../foreign-key[reference/@local=current()/@name]" />
 		</xsl:call-template>
 	</xsl:template>
-	<xsl:template match="column[@name = 'PROJECT_ROLE_PERSON_ID']" mode="form" priority="4">
+	<xsl:template match="column[@name = 'PROJECT_ROLE_PERSON_ID']"
+		mode="form" priority="4">
 		<!-- convert to project and person_role -->
 		<xhtml:div class="dependant-selects">
-			<xf:select1 ref="instance('inst_project_id')/project_id" appearance="minimal" incremental="true()">
+			<xf:select1 ref="instance('inst_project_id')/project_id"
+				appearance="minimal" incremental="true()">
 				<xf:label>Project</xf:label>
-				<xf:itemset nodeset="instance('inst_project')//aatams:project">
+				<xf:itemset
+					nodeset="instance('inst_project')//aatams:project">
 					<xf:value ref="@gml:id" />
 					<xf:label ref="aatams:name" />
 				</xf:itemset>
 				<xf:action ev:event="xforms-value-changed">
-					<xf:setvalue ref="instance('inst_subfeatures')//project_person_id" value="" />
+					<xf:setvalue
+						ref="instance('inst_subfeatures')//project_person_id" value="" />
 				</xf:action>
 				<xsl:call-template name="help">
 					<xsl:with-param name="key">
@@ -366,9 +449,11 @@
 					</xsl:with-param>
 				</xsl:call-template>
 			</xf:select1>
-			<xf:select1 bind="project_person" appearance="minimal" incremental="true()">
+			<xf:select1 bind="project_person" appearance="minimal"
+				incremental="true()">
 				<xf:label>Person(Role)</xf:label>
-				<xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_project_id')/project_id]">
+				<xf:itemset
+					nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_project_id')/project_id]">
 					<xf:value ref="@gml:id" />
 					<xf:label ref="aatams:person_role" />
 				</xf:itemset>
@@ -380,17 +465,22 @@
 			</xf:select1>
 		</xhtml:div>
 	</xsl:template>
-	<xsl:template match="column[@name = 'DEPLOYMENT_ID']" mode="form" priority="4">
+	<xsl:template match="column[@name = 'DEPLOYMENT_ID']" mode="form"
+		priority="4">
 		<!-- convert to project and person_role -->
 		<xhtml:div class="dependant-selects">
-			<xf:select1 ref="instance('inst_installation_id')/installation_id" appearance="minimal" incremental="true()">
+			<xf:select1
+				ref="instance('inst_installation_id')/installation_id"
+				appearance="minimal" incremental="true()">
 				<xf:label>Installation</xf:label>
-				<xf:itemset nodeset="instance('inst_installation')//aatams:installation">
+				<xf:itemset
+					nodeset="instance('inst_installation')//aatams:installation">
 					<xf:value ref="@gml:id" />
 					<xf:label ref="aatams:name" />
 				</xf:itemset>
 				<xf:action ev:event="xforms-value-changed">
-					<xf:setvalue ref="instance('inst_subfeatures')//deployment_id" value="" />
+					<xf:setvalue
+						ref="instance('inst_subfeatures')//deployment_id" value="" />
 				</xf:action>
 				<xsl:call-template name="help">
 					<xsl:with-param name="key">
@@ -398,9 +488,11 @@
 					</xsl:with-param>
 				</xsl:call-template>
 			</xf:select1>
-			<xf:select1 bind="installation_deployment" appearance="minimal" incremental="true()">
+			<xf:select1 bind="installation_deployment"
+				appearance="minimal" incremental="true()">
 				<xf:label>Deployment</xf:label>
-				<xf:itemset nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_installation_id')/installation_id]">
+				<xf:itemset
+					nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_installation_id')/installation_id]">
 					<xf:value ref="@gml:id" />
 					<xf:label ref="aatams:name" />
 				</xf:itemset>
@@ -412,33 +504,46 @@
 			</xf:select1>
 		</xhtml:div>
 	</xsl:template>
-	<xsl:template match="column[@name = 'INSTALLATION_ID' and following-sibling::column[1]/@name = 'STATION_ID']" mode="form" priority="4">
+	<xsl:template
+		match="column[@name = 'INSTALLATION_ID' and following-sibling::column[1]/@name = 'STATION_ID']"
+		mode="form" priority="4">
 		<!-- convert to installation and station -->
 		<xhtml:div class="dependant-selects">
-			<xf:select1 bind="installation" appearance="minimal" incremental="true()">
+			<xf:select1 bind="installation" appearance="minimal"
+				incremental="true()">
 				<xf:label>Installation</xf:label>
-				<xf:itemset nodeset="instance('inst_installation')//aatams:installation">
+				<xf:itemset
+					nodeset="instance('inst_installation')//aatams:installation">
 					<xf:value ref="@gml:id" />
 					<xf:label ref="aatams:name" />
 				</xf:itemset>
 				<xf:action ev:event="xforms-value-changed">
-					<xf:setvalue ref="instance('inst_subfeatures')/station_id" value="" />
+					<xf:setvalue
+						ref="instance('inst_subfeatures')/station_id" value="" />
 				</xf:action>
 			</xf:select1>
-			<xf:select1 bind="station" appearance="minimal" incremental="true()">
+			<xf:select1 bind="station" appearance="minimal"
+				incremental="true()">
 				<xf:label>Station</xf:label>
-				<xf:itemset nodeset="instance('inst_station')//aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
+				<xf:itemset
+					nodeset="instance('inst_station')//aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
 					<xf:value ref="@gml:id" />
 					<xf:label ref="aatams:name" />
 				</xf:itemset>
 				<xf:action ev:event="xforms-value-changed">
-					<xf:setvalue ref="instance('inst_data')//aatams:longitude" value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:longitude" />
-					<xf:setvalue ref="instance('inst_data')//aatams:latitude" value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude" />
+					<xf:setvalue
+						ref="instance('inst_data')//aatams:longitude"
+						value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:longitude" />
+					<xf:setvalue
+						ref="instance('inst_data')//aatams:latitude"
+						value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude" />
 				</xf:action>
 			</xf:select1>
 		</xhtml:div>
 	</xsl:template>
-	<xsl:template match="column[@name = 'STATION_ID' and preceding-sibling::column[1]/@name = 'INSTALLATION_ID']" mode="form" priority="4">
+	<xsl:template
+		match="column[@name = 'STATION_ID' and preceding-sibling::column[1]/@name = 'INSTALLATION_ID']"
+		mode="form" priority="4">
 		<!-- included in previous installation -->
 	</xsl:template>
 	<xsl:template name="proper-case">
@@ -449,10 +554,12 @@
 			<xsl:value-of select="upper-case($f)" />
 			<xsl:choose>
 				<xsl:when test="contains($s,' ')">
-					<xsl:value-of select="lower-case(substring-before($s,&quot; &quot;))" />
+					<xsl:value-of
+						select="lower-case(substring-before($s,&quot; &quot;))" />
 					<xsl:text> </xsl:text>
 					<xsl:call-template name="proper-case">
-						<xsl:with-param name="toconvert" select="substring-after($s,&quot; &quot;)" />
+						<xsl:with-param name="toconvert"
+							select="substring-after($s,&quot; &quot;)" />
 					</xsl:call-template>
 				</xsl:when>
 				<xsl:otherwise>
@@ -465,13 +572,15 @@
 		<xsl:param name="fk_node" />
 		<xsl:element name="xf:select1">
 			<xsl:attribute name="bind">
-				<xsl:value-of select="lower-case($fk_node[1]/@foreignTable)" />
+				<xsl:value-of
+					select="lower-case($fk_node[1]/@foreignTable)" />
 			</xsl:attribute>
 			<xsl:attribute name="appearance">minimal</xsl:attribute>
 			<xsl:attribute name="incremental">true()</xsl:attribute>
 			<xf:label>
 				<xsl:call-template name="proper-case">
-					<xsl:with-param name="toconvert" select="translate(substring-before($fk_node[1]/reference/@local,'_ID'),'_',' ')" />
+					<xsl:with-param name="toconvert"
+						select="translate(substring-before($fk_node[1]/reference/@local,'_ID'),'_',' ')" />
 				</xsl:call-template>
 			</xf:label>
 			<!-- blank entry -->
@@ -480,16 +589,18 @@
 				</xf:label>
 				<xf:value>
 				</xf:value>
-			</xf:item-->
+				</xf:item-->
 			<xsl:element name="xf:itemset">
 				<!--xsl:attribute name="ref">
 					<xsl:text>instance(</xsl:text><xsl:value-of select="lower-case($fk_node[1]/@foreignTable)"/>
-				</xsl:attribute-->
+					</xsl:attribute-->
 				<xsl:attribute name="nodeset">
 					<xsl:text>instance('inst_</xsl:text>
-					<xsl:value-of select="lower-case($fk_node[1]/@foreignTable)" />
+					<xsl:value-of
+						select="lower-case($fk_node[1]/@foreignTable)" />
 					<xsl:text>')//aatams:</xsl:text>
-					<xsl:value-of select="lower-case($fk_node[1]/@foreignTable)" />
+					<xsl:value-of
+						select="lower-case($fk_node[1]/@foreignTable)" />
 				</xsl:attribute>
 				<xsl:element name="xf:value">
 					<xsl:attribute name="ref">

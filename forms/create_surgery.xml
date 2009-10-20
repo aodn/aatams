@@ -115,7 +115,9 @@
                <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
                           at="1"/>
             </xf:action>
-            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+            <xf:message level="modeless" ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
          </xf:submission>
       </xf:model>
    </xhtml:head>

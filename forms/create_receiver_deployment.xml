@@ -100,10 +100,12 @@
                   required="true()"/>
          <xf:bind id="longitude" nodeset="instance('inst_data')//aatams:longitude"
                   type="xsd:decimal"
-                  required="true()"/>
+                  required="true()"
+                  constraint=". &gt;= -180 and . &lt;= 180"/>
          <xf:bind id="latitude" nodeset="instance('inst_data')//aatams:latitude"
                   type="xsd:decimal"
-                  required="true()"/>
+                  required="true()"
+                  constraint=". &gt;= -90 and . &lt;= 90"/>
          <xf:bind id="deployment_timestamp"
                   nodeset="instance('inst_data')//aatams:deployment_timestamp"
                   type="xsd:dateTime"
@@ -150,7 +152,9 @@
                <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
                           at="1"/>
             </xf:action>
-            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+            <xf:message level="modeless" ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
          </xf:submission>
       </xf:model>
    </xhtml:head>

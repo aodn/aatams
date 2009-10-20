@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
 <xsl:stylesheet version="2.0"
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:aatams="http://www.imos.org.au/aatams"
 	xmlns:xf="http://www.w3.org/2002/xforms"
@@ -8,8 +9,7 @@
 	xmlns:wfs="http://www.opengis.net/wfs"
 	xmlns:ogc="http://www.opengis.net/ogc"
 	xmlns:ows="http://www.opengis.net/ows"
-	xmlns:gml="http://www.opengis.net/gml"
-	xmlns:xhtml="http://www.w3.org/1999/xhtml">
+	xmlns:gml="http://www.opengis.net/gml">
 	<xsl:output name="xml" method="xml" encoding="UTF-8" indent="yes" />
 	<xsl:include href="help.xslt" />
 	<xsl:variable name="wfs-url"><xsl:text>../../deegree-wfs/services</xsl:text></xsl:variable>
@@ -22,12 +22,12 @@
 				<xsl:processing-instruction name="xml-stylesheet">
 					<xsl:text>href="xsltforms/xsltforms.xsl" type="text/xsl"</xsl:text>
 				</xsl:processing-instruction>
-				<xhtml:html>
-					<xhtml:head>
-						<xhtml:title>AATAMS Web Interface</xhtml:title>
-						<xhtml:link href="aatams.css" rel="stylesheet"
+				<html>
+					<head>
+						<title>AATAMS Web Interface</title>
+						<link href="aatams.css" rel="stylesheet"
 							type="text/css" />
-						<xhtml:script type="text/javascript"
+						<script type="text/javascript"
 							src="aatams_xforms.js" charset="UTF-8" />
 						<xf:model id="model1">
 							<!-- instance for submission -->
@@ -101,24 +101,24 @@
 								</xf:message>
 							</xf:submission>
 						</xf:model>
-					</xhtml:head>
-					<xhtml:body>
+					</head>
+					<body>
 						<xsl:comment>
 							<!-- debugging checkbox for events display -->
-							<xhtml:div id="xformControl">
-								<xhtml:span>
-									<xhtml:input type="checkbox"
+							<div id="xformControl">
+								<span>
+									<input type="checkbox"
 										onclick="$('console').style.display = this.checked? 'block' : 'none';"
 										checked="checked" />
 									<xsl:text>Debug</xsl:text>
-								</xhtml:span>
-							</xhtml:div>
+								</span>
+							</div>
 						</xsl:comment>
 						<xsl:call-template name="form" />
-						<xhtml:br />
-						<xhtml:div id="console" />
-					</xhtml:body>
-				</xhtml:html>
+						<br />
+						<div id="console" />
+					</body>
+				</html>
 			</xsl:result-document>
 		</xsl:for-each>
 	</xsl:template>
@@ -350,7 +350,7 @@
 		</xsl:element>
 	</xsl:template>
 	<xsl:template name="form">
-		<xhtml:div class="form">
+		<div class="form">
 			<legend>
 				<xsl:text>ADD </xsl:text>
 				<xsl:value-of
@@ -372,7 +372,7 @@
 					<xf:label>New Record Id:</xf:label>
 				</xf:output>
 			</xf:group>
-		</xhtml:div>
+		</div>
 	</xsl:template>
 	<xsl:template match="column" mode="form">
 		<xsl:element name="xf:input">
@@ -430,7 +430,7 @@
 	<xsl:template match="column[@name = 'PROJECT_ROLE_PERSON_ID']"
 		mode="form" priority="4">
 		<!-- convert to project and person_role -->
-		<xhtml:div class="dependant-selects">
+		<div class="dependant-selects">
 			<xf:select1 ref="instance('inst_project_id')/project_id"
 				appearance="minimal" incremental="true()">
 				<xf:label>Project</xf:label>
@@ -463,12 +463,12 @@
 					</xsl:with-param>
 				</xsl:call-template>
 			</xf:select1>
-		</xhtml:div>
+		</div>
 	</xsl:template>
 	<xsl:template match="column[@name = 'DEPLOYMENT_ID']" mode="form"
 		priority="4">
 		<!-- convert to project and person_role -->
-		<xhtml:div class="dependant-selects">
+		<div class="dependant-selects">
 			<xf:select1
 				ref="instance('inst_installation_id')/installation_id"
 				appearance="minimal" incremental="true()">
@@ -502,13 +502,13 @@
 					</xsl:with-param>
 				</xsl:call-template>
 			</xf:select1>
-		</xhtml:div>
+		</div>
 	</xsl:template>
 	<xsl:template
 		match="column[@name = 'INSTALLATION_ID' and following-sibling::column[1]/@name = 'STATION_ID']"
 		mode="form" priority="4">
 		<!-- convert to installation and station -->
-		<xhtml:div class="dependant-selects">
+		<div class="dependant-selects">
 			<xf:select1 bind="installation" appearance="minimal"
 				incremental="true()">
 				<xf:label>Installation</xf:label>
@@ -539,7 +539,7 @@
 						value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude" />
 				</xf:action>
 			</xf:select1>
-		</xhtml:div>
+		</div>
 	</xsl:template>
 	<xsl:template
 		match="column[@name = 'STATION_ID' and preceding-sibling::column[1]/@name = 'INSTALLATION_ID']"

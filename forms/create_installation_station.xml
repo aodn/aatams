@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><xhtml:html xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
-            xmlns:xhtml="http://www.w3.org/1999/xhtml"
-            xmlns:aatams="http://www.imos.org.au/aatams"
-            xmlns:xf="http://www.w3.org/2002/xforms"
-            xmlns:ev="http://www.w3.org/2001/xml-events"
-            xmlns:wfs="http://www.opengis.net/wfs"
-            xmlns:ogc="http://www.opengis.net/ogc">
-   <xhtml:head>
-      <xhtml:title>AATAMS Web Interface</xhtml:title>
-      <xhtml:link href="aatams.css" rel="stylesheet" type="text/css"/>
-      <xhtml:script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams"
+      xmlns:xf="http://www.w3.org/2002/xforms"
+      xmlns:ev="http://www.w3.org/2001/xml-events"
+      xmlns:wfs="http://www.opengis.net/wfs"
+      xmlns:ogc="http://www.opengis.net/ogc"
+      xmlns:ows="http://www.opengis.net/ows"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:gml="http://www.opengis.net/gml">
+   <head>
+      <title>AATAMS Web Interface</title>
+      <link href="aatams.css" rel="stylesheet" type="text/css"/>
+      <script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
       <xf:model id="model1">
          <xf:instance id="inst_data">
             <wfs:Transaction version="1.1.0" service="WFS">
@@ -31,14 +32,14 @@
             </wfs:Transaction>
          </xf:instance>
          <xf:instance id="inst_subfeatures">
-            <data>
+            <data xmlns="">
                <installation_id>aatams.installation.1</installation_id>
             </data>
          </xf:instance>
          <xf:instance id="inst_installation"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation"/>
          <xf:instance id="inst_response">
-            <dummy>
+            <dummy xmlns="">
                <ows:Exception/>
                <wfs:TransactionResponse>
                   <wfs:InsertResults>
@@ -85,8 +86,8 @@
 								</xf:message>
          </xf:submission>
       </xf:model>
-   </xhtml:head>
-   <xhtml:body><!--Debug--><xhtml:div class="form">
+   </head>
+   <body><!--Debug--><div class="form">
          <legend>ADD INSTALLATION STATION</legend>
          <xf:select1 bind="installation" appearance="minimal" incremental="true()">
             <xf:label>Installation</xf:label>
@@ -122,8 +123,8 @@
                <xf:label>New Record Id:</xf:label>
             </xf:output>
          </xf:group>
-      </xhtml:div>
-      <xhtml:br/>
-      <xhtml:div id="console"/>
-   </xhtml:body>
-</xhtml:html>
+      </div>
+      <br/>
+      <div id="console"/>
+   </body>
+</html>

@@ -19,7 +19,7 @@
                         <aatams:device>
                            <aatams:code_name/>
                            <aatams:device_type_ref>
-                              <aatams:device_type/>
+                              <aatams:device_type><aatams:name>TRANSMITTER</aatams:name></aatams:device_type>
                            </aatams:device_type_ref>
                            <aatams:device_model_ref>
                               <aatams:device_model/>
@@ -36,15 +36,15 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data>
-               <device_model_id>aatams.device_model.1</device_model_id>
+               <device_model_id>aatams.device_model.61</device_model_id>
                <device_type_id>aatams.device_type.1</device_type_id>
                <project_person_id>aatams.project_person.1</project_person_id>
             </data>
          </xf:instance>
          <xf:instance id="inst_device_model"
 		 src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device_model&amp;filter=&lt;ogc:Filter xmlns:ogc='http://www.opengis.net/ogc' xmlns:aatams='http://www.imos.org.au/aatams' xmlns:gml='http://www.opengis.net/gml'&gt;&lt;ogc:PropertyIsEqualTo&gt;&lt;ogc:PropertyName&gt;aatams:device_type_ref/aatams:device_type/aatams:name&lt;/ogc:PropertyName&gt;&lt;ogc:Literal&gt;TRANSMITTER&lt;/ogc:Literal&gt;&lt;/ogc:PropertyIsEqualTo&gt;&lt;/ogc:Filter&gt;"/>
-         <xf:instance id="inst_device_type"
-                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device_type"/>
+         <!--xf:instance id="inst_device_type"
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device_type"/-->
          <xf:instance id="inst_project_person"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
             <data>
@@ -73,9 +73,9 @@
          <xf:bind id="code_name" nodeset="instance('inst_data')//aatams:code_name"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="device_type" nodeset="instance('inst_subfeatures')//device_type_id"
+         <!--xf:bind id="device_type" nodeset="instance('inst_subfeatures')//device_type_id"
                   type="xsd:string"
-                  required="true()"/>
+                  required="true()"/-->
          <xf:bind id="device_model" nodeset="instance('inst_subfeatures')//device_model_id"
                   type="xsd:string"
                   required="false()"/>
@@ -99,10 +99,10 @@
                           origin="instance('inst_device_model')//aatams:device_model[@gml:id=instance('inst_subfeatures')/device_model_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:device_model_ref/aatams:device_model"
                           at="1"/>
-               <xf:insert nodeset="instance('inst_data')//aatams:device_type_ref/aatams:device_type"
+               <!--xf:insert nodeset="instance('inst_data')//aatams:device_type_ref/aatams:device_type"
                           origin="instance('inst_device_type')//aatams:device_type[@gml:id=instance('inst_subfeatures')/device_type_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:device_type_ref/aatams:device_type"
-                          at="1"/>
+                          at="1"/-->
                <xf:insert nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
                           origin="instance('inst_project_person')//aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
@@ -119,13 +119,13 @@
          <xf:input bind="code_name" incremental="true()">
             <xf:label>Code Name</xf:label>
          </xf:input>
-         <xf:select1 bind="device_type" appearance="minimal" incremental="true()">
+         <!-- xf:select1 bind="device_type" appearance="minimal" incremental="true()">
             <xf:label>Device Type</xf:label>
             <xf:itemset nodeset="instance('inst_device_type')//aatams:device_type">
                <xf:value ref="@gml:id"/>
                <xf:label ref="aatams:name"/>
             </xf:itemset>
-         </xf:select1>
+         </xf:select1-->
          <xf:select1 bind="device_model" appearance="minimal" incremental="true()">
             <xf:label>Model</xf:label>
             <xf:itemset nodeset="instance('inst_device_model')//aatams:device_model">

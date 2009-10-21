@@ -127,9 +127,9 @@
                <xf:delete nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
                           at="1"/>
             </xf:action>
-	   <xf:action ev:event="xforms-submit-done">
-		 <xf:load resource="javascript:upload()"/>
-           </xf:action>       
+            <xf:action ev:event="xforms-submit-done">
+               <xf:load resource="javascript:upload()"/>
+            </xf:action>       
             <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
          </xf:submission>
  </xf:model>
@@ -139,7 +139,7 @@ function upload(){
 	var binding = document.getElementById('success_message').xfElement.binding;
 	var result = binding.evaluate(model1.getInstanceDocument('inst_response'));
 	if(result.length > 0){
-		document.cookie = "download_id="+result[0].nodeValue;
+		document.cookie = "deployment_download_id="+result[0].nodeValue+";path=/;expires=" + new Date( today.getTime() + 300000 ).toGMTString();
 	}else{
 		alert("error: no new feature id could be obtained");
 	}

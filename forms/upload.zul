@@ -2,7 +2,7 @@
 <zk>
 <window border="none" style="background-color:#DBF0F7" width="100%"
 use="au.org.emii.aatams.zk.ReceiverDataFileUploadAndProcess">
-	<button label="Upload Files" id="FileUpload"/>
+	<button label="Upload Files" id="file_upload"/>
 	<listbox id="messages" width="100%" height="100px"/>
 </window>
 </zk>

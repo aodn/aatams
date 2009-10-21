@@ -23,12 +23,15 @@
     <table name="CLASSIFICATION">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="PARENT_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="CLASSIFICATION_LEVEL" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="COMMON_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
         <unique-column name="NAME"/>
       </unique>
+      <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="CLASSIFICATION_FK00">
+        <reference local="CLASSIFICATION_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
+      </foreign-key>
       <index name="CLASSIFICATION_ID">
         <index-column name="CLASSIFICATION_ID"/>
       </index>
@@ -37,6 +40,19 @@
       </index>
       <index name="PARENT_ID">
         <index-column name="PARENT_ID"/>
+      </index>
+    </table>
+    <table name="CLASSIFICATION_LEVEL">
+      <column name="CLASSIFICATION_LEVEL_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <unique name="UNIQUE_INDEX">
+        <unique-column name="NAME"/>
+      </unique>
+      <index name="CLASSIFICATION_ID">
+        <index-column name="CLASSIFICATION_ID"/>
+      </index>
+      <index name="CLASSIFICATION_LEVEL_ID">
+        <index-column name="CLASSIFICATION_LEVEL_ID"/>
       </index>
     </table>
     <table name="DEPLOYMENT_DOWNLOAD">
@@ -50,8 +66,7 @@
       <column name="CLOCK_DRIFT" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PINGS" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="DETECTIONS" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="FILENAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-      <column name="CC_EMAIL_ADDRESSES" primaryKey="false" required="false" type="VARCHAR" size="1000" autoIncrement="false"/>
+      <column name="CC_EMAIL_ADDRESSES" primaryKey="false" required="false" type="VARCHAR" size="255" autoIncrement="false"/>
       <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="255" autoIncrement="false"/>
       <column name="STATUS_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="1" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -827,7 +842,7 @@
     <table name="TAG_FAMILY">
       <column name="TAG_FAMILY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="MANUFACTURER_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false" />
       <unique name="UNIQUE_INDEX">
         <unique-column name="NAME"/>
       </unique>

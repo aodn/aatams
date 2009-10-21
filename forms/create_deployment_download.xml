@@ -29,7 +29,6 @@
                            <aatams:clock_drift/>
                            <aatams:pings/>
                            <aatams:detections/>
-                           <aatams:filename/>
                            <aatams:cc_email_addresses/>
                            <aatams:comments/>
                         </aatams:deployment_download>
@@ -40,7 +39,7 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
-               <installation_deployment_id>aatams.installation_deployment.1</installation_deployment_id>
+               <installation_deployment_id>aatams.installation_deployment.12</installation_deployment_id>
             </data>
          </xf:instance>
          <xf:instance id="inst_installation"
@@ -100,9 +99,6 @@
          <xf:bind id="detections" nodeset="instance('inst_data')//aatams:detections"
                   type="xsd:integer"
                   required="false()"/>
-         <xf:bind id="filename" nodeset="instance('inst_data')//aatams:filename"
-                  type="xsd:string"
-                  required="true()"/>
          <xf:bind id="cc_email_addresses"
                   nodeset="instance('inst_data')//aatams:cc_email_addresses"
                   type="xsd:string"
@@ -131,13 +127,27 @@
                <xf:delete nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
                           at="1"/>
             </xf:action>
-            <xf:message level="modeless" ev:event="xforms-submit-error">
-									Submit error.
-								</xf:message>
+	   <xf:action ev:event="xforms-submit-done">
+		 <xf:load resource="javascript:upload()"/>
+           </xf:action>       
+            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
          </xf:submission>
-      </xf:model>
+ </xf:model>
+ <script type="text/javascript">
+function upload(){
+	var model1 = document.getElementById('model1').xfElement;
+	var binding = document.getElementById('success_message').xfElement.binding;
+	var result = binding.evaluate(model1.getInstanceDocument('inst_response'));
+	if(result.length > 0){
+		document.cookie = "download_id="+result[0].nodeValue;
+	}else{
+		alert("error: no new feature id could be obtained");
+	}
+}
+  </script>
    </head>
-   <body><!--Debug--><div class="form">
+   <body>
+      <div class="form">
          <legend>ADD DEPLOYMENT DOWNLOAD</legend>
          <div class="dependant-selects">
             <xf:select1 ref="instance('inst_installation_id')/installation_id" appearance="minimal"
@@ -183,12 +193,9 @@
          <xf:input bind="detections" incremental="true()">
             <xf:label>Detections</xf:label>
          </xf:input>
-         <xf:input bind="filename" incremental="true()">
-            <xf:label>Filename</xf:label>
-         </xf:input>
-         <xf:input bind="cc_email_addresses" incremental="true()">
+         <xf:textarea bind="cc_email_addresses">
             <xf:label>Cc Email Addresses</xf:label>
-         </xf:input>
+         </xf:textarea>
          <xf:textarea bind="comments">
             <xf:label>Comments</xf:label>
          </xf:textarea>
@@ -207,6 +214,9 @@
                <xf:label>New Record Id:</xf:label>
             </xf:output>
          </xf:group>
+         <xf:group ref="instance('inst_response')//ogc:FeatureId/@fid">
+		 <iframe src="upload.zul" style="width:100%;height:250px;border:none;overflow:hidden;"/>
+         </xf:group>      
       </div>
       <br/>
       <div id="console"/>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?>
-<html xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml"
-            xmlns="http://www.w3.org/1999/xhtml"
-            xmlns:aatams="http://www.imos.org.au/aatams"
-            xmlns:xf="http://www.w3.org/2002/xforms"
-            xmlns:ev="http://www.w3.org/2001/xml-events"
-            xmlns:wfs="http://www.opengis.net/wfs"
-            xmlns:ogc="http://www.opengis.net/ogc">
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams"
+      xmlns:xf="http://www.w3.org/2002/xforms"
+      xmlns:ev="http://www.w3.org/2001/xml-events"
+      xmlns:wfs="http://www.opengis.net/wfs"
+      xmlns:ogc="http://www.opengis.net/ogc"
+      xmlns:ows="http://www.opengis.net/ows"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:gml="http://www.opengis.net/gml">
    <head>
       <title>AATAMS Web Interface</title>
       <link href="aatams.css" rel="stylesheet" type="text/css"/>
@@ -20,7 +20,7 @@
                         <aatams:device>
                            <aatams:code_name/>
                            <aatams:device_type_ref>
-                              <aatams:device_type><aatams:name>RECEIVER</aatams:name></aatams:device_type>
+				   <aatams:device_type><aatams:name>RECEIVER</aatams:name></aatams:device_type>
                            </aatams:device_type_ref>
                            <aatams:device_model_ref>
                               <aatams:device_model/>
@@ -37,30 +37,22 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
-               <device_model_id>aatams.device_model.1</device_model_id>
-               <!-- device_type_id>aatams.device_type.1</device_type_id-->
-               <project_person_id>aatams.project_person.1</project_person_id>
+               <device_model_id/>
+               <device_type_id/>
+               <project_id/>
+               <project_person_id/>
             </data>
          </xf:instance>
          <xf:instance id="inst_device_model"
 		 src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device_model&amp;filter=&lt;ogc:Filter xmlns:ogc='http://www.opengis.net/ogc' xmlns:aatams='http://www.imos.org.au/aatams' xmlns:gml='http://www.opengis.net/gml'&gt;&lt;ogc:PropertyIsEqualTo&gt;&lt;ogc:PropertyName&gt;aatams:device_type_ref/aatams:device_type/aatams:name&lt;/ogc:PropertyName&gt;&lt;ogc:Literal&gt;RECEIVER&lt;/ogc:Literal&gt;&lt;/ogc:PropertyIsEqualTo&gt;&lt;/ogc:Filter&gt;"/>
          <!-- xf:instance id="inst_device_type"
-                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device_type"/-->
+	 src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device_type"/-->
          <xf:instance id="inst_project_person"
-                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
-            <data xmlns="">
-               <aatams:project_person gml:id=""/>
-            </data>
-         </xf:instance>
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person"/>
          <xf:instance id="inst_project"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project"/>
-         <xf:instance id="inst_project_id">
-            <data xmlns="">
-               <project_id>aatams.project.1</project_id>
-            </data>
-         </xf:instance>
          <xf:instance id="inst_response">
-            <dummy>
+            <dummy xmlns="">
                <ows:Exception/>
                <wfs:TransactionResponse>
                   <wfs:InsertResults>
@@ -76,7 +68,7 @@
                   required="true()"/>
          <!-- xf:bind id="device_type" nodeset="instance('inst_subfeatures')//device_type_id"
                   type="xsd:string"
-                  required="true()"/-->
+		  required="true()"/-->
          <xf:bind id="device_model" nodeset="instance('inst_subfeatures')//device_model_id"
                   type="xsd:string"
                   required="false()"/>
@@ -103,7 +95,7 @@
                <!-- xf:insert nodeset="instance('inst_data')//aatams:device_type_ref/aatams:device_type"
                           origin="instance('inst_device_type')//aatams:device_type[@gml:id=instance('inst_subfeatures')/device_type_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:device_type_ref/aatams:device_type"
-                          at="1"/-->
+		       at="1"/-->
                <xf:insert nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
                           origin="instance('inst_project_person')//aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
@@ -113,6 +105,17 @@
 									Submit error.
 								</xf:message>
          </xf:submission>
+         <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
+         <xf:action ev:event="set-selected">
+            <xf:setvalue ref="instance('inst_subfeatures')//device_model_id"
+                         value="instance('inst_device_model')//aatams:device_model[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//device_type_id"
+                         value="instance('inst_device_type')//aatams:device_type[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//project_id"
+                         value="instance('inst_project')//aatams:project[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//project_person_id"
+                         value="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
+         </xf:action>
       </xf:model>
    </head>
    <body><!--Debug--><div class="form">
@@ -126,7 +129,7 @@
                <xf:value ref="@gml:id"/>
                <xf:label ref="aatams:name"/>
             </xf:itemset>
-         </xf:select1-->
+    </xf:select1-->
          <xf:select1 bind="device_model" appearance="minimal" incremental="true()">
             <xf:label>Model</xf:label>
             <xf:itemset nodeset="instance('inst_device_model')//aatams:device_model">
@@ -151,7 +154,7 @@
             </xf:select1>
             <xf:select1 bind="project_person" appearance="minimal" incremental="true()">
                <xf:label>Person(Role)</xf:label>
-               <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_project_id')/project_id]">
+               <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
                   <xf:value ref="@gml:id"/>
                   <xf:label ref="aatams:person_role"/>
                </xf:itemset>
@@ -163,6 +166,7 @@
          <xf:trigger>
             <xf:label>Reset</xf:label>
             <xf:reset ev:event="DOMActivate"/>
+            <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
          </xf:trigger>
          <xf:group>
             <xf:output bind="error_message" class="error">

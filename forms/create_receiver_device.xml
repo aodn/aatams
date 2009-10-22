@@ -71,13 +71,16 @@
 		  required="true()"/-->
          <xf:bind id="device_model" nodeset="instance('inst_subfeatures')//device_model_id"
                   type="xsd:string"
-                  required="false()"/>
+                  required="true()"/>
          <xf:bind id="serial_number" nodeset="instance('inst_data')//aatams:serial_number"
                   type="xsd:string"
-                  required="true()"/>
+		  required="true()"/>
+         <xf:bind id="project" nodeset="instance('inst_subfeatures')//project_id"
+                  type="xsd:string"
+		  required="true()"/>
          <xf:bind id="project_person" nodeset="instance('inst_subfeatures')//project_person_id"
                   type="xsd:string"
-                  required="false()"/>
+                  required="true()"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
                   type="xsd:string"/>
          <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
@@ -109,8 +112,8 @@
          <xf:action ev:event="set-selected">
             <xf:setvalue ref="instance('inst_subfeatures')//device_model_id"
                          value="instance('inst_device_model')//aatams:device_model[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//device_type_id"
-                         value="instance('inst_device_type')//aatams:device_type[1]/@gml:id"/>
+		 <!--<xf:setvalue ref="instance('inst_subfeatures')//device_type_id"
+			 value="instance('inst_device_type')//aatams:device_type[1]/@gml:id"/>-->
             <xf:setvalue ref="instance('inst_subfeatures')//project_id"
                          value="instance('inst_project')//aatams:project[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')//project_person_id"
@@ -141,7 +144,7 @@
             <xf:label>Serial Number</xf:label>
          </xf:input>
          <div class="dependant-selects">
-            <xf:select1 ref="instance('inst_project_id')/project_id" appearance="minimal"
+            <xf:select1 bind="project" appearance="minimal"
                         incremental="true()">
                <xf:label>Project</xf:label>
                <xf:itemset nodeset="instance('inst_project')//aatams:project">

@@ -39,22 +39,14 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
-               <installation_deployment_id>aatams.installation_deployment.12</installation_deployment_id>
+               <installation_id/>
+               <installation_deployment_id/>
             </data>
          </xf:instance>
          <xf:instance id="inst_installation"
-                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation">
-            <data xmlns="">
-               <aatams:installation gml:id=""/>
-            </data>
-         </xf:instance>
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation"/>
          <xf:instance id="inst_installation_deployment"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment"/>
-         <xf:instance id="inst_installation_id">
-            <data xmlns="">
-               <installation_id>aatams.installation.1</installation_id>
-            </data>
-         </xf:instance>
          <xf:instance id="inst_response">
             <dummy xmlns="">
                <ows:Exception/>
@@ -127,30 +119,23 @@
                <xf:delete nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
                           at="1"/>
             </xf:action>
-            <xf:action ev:event="xforms-submit-done">
-               <xf:load resource="javascript:upload()"/>
-            </xf:action>       
-            <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+            <xf:message level="modeless" ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
          </xf:submission>
- </xf:model>
- <script type="text/javascript">
-function upload(){
-	var model1 = document.getElementById('model1').xfElement;
-	var binding = document.getElementById('success_message').xfElement.binding;
-	var result = binding.evaluate(model1.getInstanceDocument('inst_response'));
-	if(result.length > 0){
-		document.cookie = "deployment_download_id="+result[0].nodeValue+";path=/;expires=" + new Date( today.getTime() + 300000 ).toGMTString();
-	}else{
-		alert("error: no new feature id could be obtained");
-	}
-}
-  </script>
+         <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
+         <xf:action ev:event="set-selected">
+            <xf:setvalue ref="instance('inst_installation_id')//installation_id"
+                         value="instance('inst_installation')//aatams:installation[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//installation_deployment_id"
+                         value="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id"/>
+         </xf:action>
+      </xf:model>
    </head>
-   <body>
-      <div class="form">
+   <body><!--Debug--><div class="form">
          <legend>ADD DEPLOYMENT DOWNLOAD</legend>
          <div class="dependant-selects">
-            <xf:select1 ref="instance('inst_installation_id')/installation_id" appearance="minimal"
+            <xf:select1 ref="instance('inst_subfeatures')/installation_id" appearance="minimal"
                         incremental="true()">
                <xf:label>Installation</xf:label>
                <xf:itemset nodeset="instance('inst_installation')//aatams:installation">
@@ -158,12 +143,12 @@ function upload(){
                   <xf:label ref="aatams:name"/>
                </xf:itemset>
                <xf:action ev:event="xforms-value-changed">
-                  <xf:setvalue ref="instance('inst_subfeatures')//deployment_id" value=""/>
+                  <xf:setvalue ref="instance('inst_subfeatures')//installation_deployment_id" value=""/>
                </xf:action>
             </xf:select1>
             <xf:select1 bind="installation_deployment" appearance="minimal" incremental="true()">
                <xf:label>Deployment</xf:label>
-               <xf:itemset nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_installation_id')/installation_id]">
+               <xf:itemset nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
                   <xf:value ref="@gml:id"/>
                   <xf:label ref="aatams:name"/>
                </xf:itemset>
@@ -193,9 +178,9 @@ function upload(){
          <xf:input bind="detections" incremental="true()">
             <xf:label>Detections</xf:label>
          </xf:input>
-         <xf:textarea bind="cc_email_addresses">
+         <xf:input bind="cc_email_addresses" incremental="true()">
             <xf:label>Cc Email Addresses</xf:label>
-         </xf:textarea>
+         </xf:input>
          <xf:textarea bind="comments">
             <xf:label>Comments</xf:label>
          </xf:textarea>
@@ -205,6 +190,7 @@ function upload(){
          <xf:trigger>
             <xf:label>Reset</xf:label>
             <xf:reset ev:event="DOMActivate"/>
+            <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
          </xf:trigger>
          <xf:group>
             <xf:output bind="error_message" class="error">
@@ -214,9 +200,6 @@ function upload(){
                <xf:label>New Record Id:</xf:label>
             </xf:output>
          </xf:group>
-         <xf:group ref="instance('inst_response')//ogc:FeatureId/@fid">
-		 <iframe src="upload.zul" style="width:100%;height:250px;border:none;overflow:hidden;"/>
-         </xf:group>      
       </div>
       <br/>
       <div id="console"/>

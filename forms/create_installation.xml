@@ -30,8 +30,8 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
-               <geographic_area_id>aatams.geographic_area.1</geographic_area_id>
-               <installation_conf_id>aatams.installation_conf.1</installation_conf_id>
+               <geographic_area_id/>
+               <installation_conf_id/>
             </data>
          </xf:instance>
          <xf:instance id="inst_geographic_area"
@@ -79,6 +79,13 @@
 									Submit error.
 								</xf:message>
          </xf:submission>
+         <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
+         <xf:action ev:event="set-selected">
+            <xf:setvalue ref="instance('inst_subfeatures')//geographic_area_id"
+                         value="instance('inst_geographic_area')//aatams:geographic_area[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//installation_conf_id"
+                         value="instance('inst_installation_conf')//aatams:installation_conf[1]/@gml:id"/>
+         </xf:action>
       </xf:model>
    </head>
    <body><!--Debug--><div class="form">
@@ -99,6 +106,7 @@
          <xf:trigger>
             <xf:label>Reset</xf:label>
             <xf:reset ev:event="DOMActivate"/>
+            <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
          </xf:trigger>
          <xf:group>
             <xf:output bind="error_message" class="error">

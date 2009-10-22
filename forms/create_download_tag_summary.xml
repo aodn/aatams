@@ -30,8 +30,8 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
-               <deployment_download_id>aatams.deployment_download.1</deployment_download_id>
-               <device_id>aatams.device.1</device_id>
+               <deployment_download_id/>
+               <device_id/>
             </data>
          </xf:instance>
          <xf:instance id="inst_deployment_download"
@@ -76,6 +76,13 @@
 									Submit error.
 								</xf:message>
          </xf:submission>
+         <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
+         <xf:action ev:event="set-selected">
+            <xf:setvalue ref="instance('inst_subfeatures')//deployment_download_id"
+                         value="instance('inst_deployment_download')//aatams:deployment_download[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//device_id"
+                         value="instance('inst_device')//aatams:device[1]/@gml:id"/>
+         </xf:action>
       </xf:model>
    </head>
    <body><!--Debug--><div class="form">
@@ -96,6 +103,7 @@
          <xf:trigger>
             <xf:label>Reset</xf:label>
             <xf:reset ev:event="DOMActivate"/>
+            <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
          </xf:trigger>
          <xf:group>
             <xf:output bind="error_message" class="error">

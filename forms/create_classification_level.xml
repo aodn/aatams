@@ -17,9 +17,9 @@
                <wfs:Insert>
                   <wfs:FeatureCollection>
                      <gml:featureMember>
-                        <aatams:status>
+                        <aatams:classification_level>
                            <aatams:name/>
-                        </aatams:status>
+                        </aatams:classification_level>
                      </gml:featureMember>
                   </wfs:FeatureCollection>
                </wfs:Insert>
@@ -60,7 +60,7 @@
       </xf:model>
    </head>
    <body><!--Debug--><div class="form">
-         <legend>ADD STATUS</legend>
+         <legend>ADD CLASSIFICATION LEVEL</legend>
          <xf:input bind="name" incremental="true()">
             <xf:label>Name</xf:label>
          </xf:input>

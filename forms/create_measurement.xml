@@ -34,8 +34,8 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
-               <measurement_type_id>aatams.measurement_type.1</measurement_type_id>
-               <surgery_id>aatams.surgery.1</surgery_id>
+               <measurement_type_id/>
+               <surgery_id/>
             </data>
          </xf:instance>
          <xf:instance id="inst_measurement_type"
@@ -87,6 +87,13 @@
 									Submit error.
 								</xf:message>
          </xf:submission>
+         <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
+         <xf:action ev:event="set-selected">
+            <xf:setvalue ref="instance('inst_subfeatures')//measurement_type_id"
+                         value="instance('inst_measurement_type')//aatams:measurement_type[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//surgery_id"
+                         value="instance('inst_surgery')//aatams:surgery[1]/@gml:id"/>
+         </xf:action>
       </xf:model>
    </head>
    <body><!--Debug--><div class="form">
@@ -117,6 +124,7 @@
          <xf:trigger>
             <xf:label>Reset</xf:label>
             <xf:reset ev:event="DOMActivate"/>
+            <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
          </xf:trigger>
          <xf:group>
             <xf:output bind="error_message" class="error">

@@ -32,22 +32,14 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
-               <installation_deployment_id>aatams.installation_deployment.1</installation_deployment_id>
+               <installation_id/>
+               <installation_deployment_id/>
             </data>
          </xf:instance>
          <xf:instance id="inst_installation"
-                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation">
-            <data xmlns="">
-               <aatams:installation gml:id=""/>
-            </data>
-         </xf:instance>
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation"/>
          <xf:instance id="inst_installation_deployment"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment"/>
-         <xf:instance id="inst_installation_id">
-            <data xmlns="">
-               <installation_id>aatams.installation.1</installation_id>
-            </data>
-         </xf:instance>
          <xf:instance id="inst_response">
             <dummy xmlns="">
                <ows:Exception/>
@@ -92,12 +84,19 @@
 									Submit error.
 								</xf:message>
          </xf:submission>
+         <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
+         <xf:action ev:event="set-selected">
+            <xf:setvalue ref="instance('inst_installation_id')//installation_id"
+                         value="instance('inst_installation')//aatams:installation[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//installation_deployment_id"
+                         value="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id"/>
+         </xf:action>
       </xf:model>
    </head>
    <body><!--Debug--><div class="form">
          <legend>ADD DETECTION</legend>
          <div class="dependant-selects">
-            <xf:select1 ref="instance('inst_installation_id')/installation_id" appearance="minimal"
+            <xf:select1 ref="instance('inst_subfeatures')/installation_id" appearance="minimal"
                         incremental="true()">
                <xf:label>Installation</xf:label>
                <xf:itemset nodeset="instance('inst_installation')//aatams:installation">
@@ -105,12 +104,12 @@
                   <xf:label ref="aatams:name"/>
                </xf:itemset>
                <xf:action ev:event="xforms-value-changed">
-                  <xf:setvalue ref="instance('inst_subfeatures')//deployment_id" value=""/>
+                  <xf:setvalue ref="instance('inst_subfeatures')//installation_deployment_id" value=""/>
                </xf:action>
             </xf:select1>
             <xf:select1 bind="installation_deployment" appearance="minimal" incremental="true()">
                <xf:label>Deployment</xf:label>
-               <xf:itemset nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_installation_id')/installation_id]">
+               <xf:itemset nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
                   <xf:value ref="@gml:id"/>
                   <xf:label ref="aatams:name"/>
                </xf:itemset>
@@ -131,6 +130,7 @@
          <xf:trigger>
             <xf:label>Reset</xf:label>
             <xf:reset ev:event="DOMActivate"/>
+            <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
          </xf:trigger>
          <xf:group>
             <xf:output bind="error_message" class="error">

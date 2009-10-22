@@ -33,8 +33,8 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
-               <device_manufacturer_id>aatams.device_manufacturer.1</device_manufacturer_id>
-               <device_type_id>aatams.device_type.1</device_type_id>
+               <device_manufacturer_id/>
+               <device_type_id/>
             </data>
          </xf:instance>
          <xf:instance id="inst_device_manufacturer"
@@ -84,6 +84,13 @@
 									Submit error.
 								</xf:message>
          </xf:submission>
+         <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
+         <xf:action ev:event="set-selected">
+            <xf:setvalue ref="instance('inst_subfeatures')//device_manufacturer_id"
+                         value="instance('inst_device_manufacturer')//aatams:device_manufacturer[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//device_type_id"
+                         value="instance('inst_device_type')//aatams:device_type[1]/@gml:id"/>
+         </xf:action>
       </xf:model>
    </head>
    <body><!--Debug--><div class="form">
@@ -111,6 +118,7 @@
          <xf:trigger>
             <xf:label>Reset</xf:label>
             <xf:reset ev:event="DOMActivate"/>
+            <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
          </xf:trigger>
          <xf:group>
             <xf:output bind="error_message" class="error">

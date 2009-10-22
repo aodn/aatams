@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
-<xsl:stylesheet version="2.0"
-	xmlns="http://www.w3.org/1999/xhtml"
+<xsl:stylesheet version="2.0" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:aatams="http://www.imos.org.au/aatams"
 	xmlns:xf="http://www.w3.org/2002/xforms"
@@ -12,7 +11,9 @@
 	xmlns:gml="http://www.opengis.net/gml">
 	<xsl:output name="xml" method="xml" encoding="UTF-8" indent="yes" />
 	<xsl:include href="help.xslt" />
-	<xsl:variable name="wfs-url"><xsl:text>../../deegree-wfs/services</xsl:text></xsl:variable>
+	<xsl:variable name="wfs-url">
+		<xsl:text>../../deegree-wfs/services</xsl:text>
+	</xsl:variable>
 	<xsl:template match="/">
 		<xsl:for-each select="//table">
 			<xsl:result-document
@@ -52,11 +53,25 @@
 								<data xmlns="">
 									<xsl:for-each
 										select="foreign-key">
-										<xsl:element
-											name="{lower-case(@foreignTable)}_id">
-											<xsl:value-of
-												select="concat('aatams.',lower-case(@foreignTable),'.1')" />
-										</xsl:element>
+										<xsl:choose>
+											<xsl:when
+												test="@foreignTable = 'PROJECT_PERSON'">
+												<project_id />
+												<project_person_id />
+											</xsl:when>
+											<xsl:when
+												test="@foreignTable = 'INSTALLATION_DEPLOYMENT'">
+												<installation_id />
+												<installation_deployment_id />
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:element
+													name="{lower-case(@foreignTable)}_id">
+													<!--xsl:value-of
+														select="concat('aatams.',lower-case(@foreignTable),'.1')" /-->
+												</xsl:element>
+											</xsl:otherwise>
+										</xsl:choose>
 									</xsl:for-each>
 								</data>
 							</xf:instance>
@@ -100,6 +115,13 @@
 									Submit error.
 								</xf:message>
 							</xf:submission>
+							<!-- subfeature defaults, need to set initial value 'selected' to first in list -->
+							<xf:dispatch ev:event="xforms-ready"
+								name="set-selected" target="model1" />
+							<xf:action ev:event="set-selected">
+								<xsl:apply-templates
+									select="foreign-key" mode="default-value" />
+							</xf:action>
 						</xf:model>
 					</head>
 					<body>
@@ -173,37 +195,17 @@
 	<xsl:template match="foreign-key[@foreignTable = 'PROJECT_PERSON']"
 		mode="instance">
 		<xf:instance id="inst_project_person"
-			src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
-			<!-- need to seed namespaces -->
-			<data xmlns="">
-				<aatams:project_person gml:id="" />
-			</data>
-		</xf:instance>
+			src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person" />
 		<xf:instance id="inst_project"
 			src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project" />
-		<xf:instance id="inst_project_id">
-			<data xmlns="">
-				<project_id>aatams.project.1</project_id>
-			</data>
-		</xf:instance>
 	</xsl:template>
 	<xsl:template
 		match="foreign-key[@foreignTable = 'INSTALLATION_DEPLOYMENT']"
 		mode="instance">
 		<xf:instance id="inst_installation"
-			src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation">
-			<!-- need to seed namespaces -->
-			<data xmlns="">
-				<aatams:installation gml:id="" />
-			</data>
-		</xf:instance>
+			src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation" />
 		<xf:instance id="inst_installation_deployment"
 			src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment" />
-		<xf:instance id="inst_installation_id">
-			<data xmlns="">
-				<installation_id>aatams.installation.1</installation_id>
-			</data>
-		</xf:instance>
 	</xsl:template>
 	<xsl:template match="column" mode="binding">
 		<xsl:element name="xf:bind">
@@ -303,6 +305,51 @@
 		mode="constraint">
 		<xsl:attribute name="constraint">. &gt;= -180 and . &lt;= 180</xsl:attribute>
 	</xsl:template>
+	<!--set the initial selected value for select1 controls,
+		this is like having a default value but actually choosing the correct 
+		default value is problematic as it may differ for each person depending on
+		what features they have access to. So better to take the first feature in each
+		itemset.  
+	-->
+	<xsl:template match="foreign-key" mode="default-value">
+		<xsl:element name="xf:setvalue">
+			<xsl:variable name="feature">
+				<xsl:value-of select="lower-case(@foreignTable)" />
+			</xsl:variable>
+			<xsl:attribute name="ref">
+				<xsl:text>instance('inst_subfeatures')//</xsl:text>
+				<xsl:value-of select="$feature" />
+				<xsl:text>_id</xsl:text>
+			</xsl:attribute>
+			<xsl:attribute name="value">
+				<xsl:text>instance('inst_</xsl:text>
+				<xsl:value-of select="$feature" />
+				<xsl:text>')//aatams:</xsl:text>
+				<xsl:value-of select="$feature" />
+				<xsl:text>[1]/@gml:id</xsl:text>
+			</xsl:attribute>
+		</xsl:element>
+	</xsl:template>
+	<!-- special cases -->
+	<xsl:template match="foreign-key[@foreignTable = 'PROJECT_PERSON']"
+		mode="default-value">
+		<!-- convert to project and person_role -->
+		<xf:setvalue ref="instance('inst_subfeatures')//project_id"
+			value="instance('inst_project')//aatams:project[1]/@gml:id" />
+		<xf:setvalue
+			ref="instance('inst_subfeatures')//project_person_id"
+			value="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id" />
+	</xsl:template>
+	<xsl:template
+		match="foreign-key[@foreignTable = 'INSTALLATION_DEPLOYMENT']"
+		mode="default-value">
+		<xf:setvalue
+			ref="instance('inst_installation_id')//installation_id"
+			value="instance('inst_installation')//aatams:installation[1]/@gml:id" />
+		<xf:setvalue
+			ref="instance('inst_subfeatures')//installation_deployment_id"
+			value="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id" />
+	</xsl:template>
 	<!-- remove any non-mandatory numeric fields if no value -->
 	<xsl:template
 		match="column[@required='false' and not(../foreign-key[reference/@local=current()/@name]) and matches(@type,'INTEGER|DECIMAL|TIMESTAMP')]"
@@ -363,6 +410,7 @@
 			<xf:trigger>
 				<xf:label>Reset</xf:label>
 				<xf:reset ev:event="DOMActivate" />
+				<xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
 			</xf:trigger>
 			<xf:group>
 				<xf:output bind="error_message" class="error">
@@ -453,7 +501,7 @@
 				incremental="true()">
 				<xf:label>Person(Role)</xf:label>
 				<xf:itemset
-					nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_project_id')/project_id]">
+					nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
 					<xf:value ref="@gml:id" />
 					<xf:label ref="aatams:person_role" />
 				</xf:itemset>
@@ -470,7 +518,7 @@
 		<!-- convert to project and person_role -->
 		<div class="dependant-selects">
 			<xf:select1
-				ref="instance('inst_installation_id')/installation_id"
+				ref="instance('inst_subfeatures')/installation_id"
 				appearance="minimal" incremental="true()">
 				<xf:label>Installation</xf:label>
 				<xf:itemset
@@ -480,7 +528,8 @@
 				</xf:itemset>
 				<xf:action ev:event="xforms-value-changed">
 					<xf:setvalue
-						ref="instance('inst_subfeatures')//deployment_id" value="" />
+						ref="instance('inst_subfeatures')//installation_deployment_id"
+						value="" />
 				</xf:action>
 				<xsl:call-template name="help">
 					<xsl:with-param name="key">
@@ -492,7 +541,7 @@
 				appearance="minimal" incremental="true()">
 				<xf:label>Deployment</xf:label>
 				<xf:itemset
-					nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_installation_id')/installation_id]">
+					nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
 					<xf:value ref="@gml:id" />
 					<xf:label ref="aatams:name" />
 				</xf:itemset>

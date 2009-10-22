@@ -47,11 +47,12 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
-               <receiver_device_id>aatams.receiver_device.1</receiver_device_id>
-               <installation_id>aatams.installation.1</installation_id>
-               <station_id>aatams.station.1</station_id>
-               <mooring_type_id>aatams.mooring_type.1</mooring_type_id>
-               <project_person_id>aatams.project_person.1</project_person_id>
+               <receiver_device_id/>
+               <installation_id/>
+               <station_id/>
+               <mooring_type_id/>
+               <project_id/>
+               <project_person_id/>
             </data>
          </xf:instance>
          <xf:instance id="inst_receiver_device"
@@ -63,18 +64,9 @@
          <xf:instance id="inst_mooring_type"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:mooring_type"/>
          <xf:instance id="inst_project_person"
-                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person">
-            <data xmlns="">
-               <aatams:project_person gml:id=""/>
-            </data>
-         </xf:instance>
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person"/>
          <xf:instance id="inst_project"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project"/>
-         <xf:instance id="inst_project_id">
-            <data xmlns="">
-               <project_id>aatams.project.1</project_id>
-            </data>
-         </xf:instance>
          <xf:instance id="inst_response">
             <dummy xmlns="">
                <ows:Exception/>
@@ -157,6 +149,21 @@
 									Submit error.
 								</xf:message>
          </xf:submission>
+         <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
+         <xf:action ev:event="set-selected">
+            <xf:setvalue ref="instance('inst_subfeatures')//receiver_device_id"
+                         value="instance('inst_receiver_device')//aatams:receiver_device[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//installation_id"
+                         value="instance('inst_installation')//aatams:installation[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//station_id"
+                         value="instance('inst_station')//aatams:station[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//mooring_type_id"
+                         value="instance('inst_mooring_type')//aatams:mooring_type[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//project_id"
+                         value="instance('inst_project')//aatams:project[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//project_person_id"
+                         value="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
+         </xf:action>
       </xf:model>
    </head>
    <body><!--Debug--><div class="form">
@@ -207,7 +214,7 @@
             </xf:select1>
             <xf:select1 bind="project_person" appearance="minimal" incremental="true()">
                <xf:label>Person(Role)</xf:label>
-               <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_project_id')/project_id]">
+               <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
                   <xf:value ref="@gml:id"/>
                   <xf:label ref="aatams:person_role"/>
                </xf:itemset>
@@ -244,6 +251,7 @@
          <xf:trigger>
             <xf:label>Reset</xf:label>
             <xf:reset ev:event="DOMActivate"/>
+            <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
          </xf:trigger>
          <xf:group>
             <xf:output bind="error_message" class="error">

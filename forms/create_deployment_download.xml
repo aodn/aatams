@@ -59,6 +59,9 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
+         <xf:bind id="installation" nodeset="instance('inst_subfeatures')//installation_id"
+                  type="xsd:string"
+                  required="true()"/>
          <xf:bind id="installation_deployment"
                   nodeset="instance('inst_subfeatures')//installation_deployment_id"
                   type="xsd:string"
@@ -125,7 +128,7 @@
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
          <xf:action ev:event="set-selected">
-            <xf:setvalue ref="instance('inst_installation_id')//installation_id"
+            <xf:setvalue ref="instance('inst_subfeatures')//installation_id"
                          value="instance('inst_installation')//aatams:installation[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')//installation_deployment_id"
                          value="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id"/>
@@ -135,8 +138,7 @@
    <body><!--Debug--><div class="form">
          <legend>ADD DEPLOYMENT DOWNLOAD</legend>
          <div class="dependant-selects">
-            <xf:select1 ref="instance('inst_subfeatures')/installation_id" appearance="minimal"
-                        incremental="true()">
+            <xf:select1 bind="installation" appearance="minimal" incremental="true()">
                <xf:label>Installation</xf:label>
                <xf:itemset nodeset="instance('inst_installation')//aatams:installation">
                   <xf:value ref="@gml:id"/>

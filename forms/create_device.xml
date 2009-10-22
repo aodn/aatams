@@ -141,8 +141,7 @@
             <xf:label>Serial Number</xf:label>
          </xf:input>
          <div class="dependant-selects">
-            <xf:select1 ref="instance('inst_project_id')/project_id" appearance="minimal"
-                        incremental="true()">
+            <xf:select1 bind="project" appearance="minimal" incremental="true()">
                <xf:label>Project</xf:label>
                <xf:itemset nodeset="instance('inst_project')//aatams:project">
                   <xf:value ref="@gml:id"/>

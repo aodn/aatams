@@ -53,6 +53,10 @@
          <xf:bind id="installation" nodeset="instance('inst_subfeatures')//installation_id"
                   type="xsd:string"
                   required="true()"/>
+         <xf:bind id="installation_station"
+                  nodeset="instance('inst_subfeatures')//installation_station_id"
+                  type="xsd:string"
+                  required="true()"/>
          <xf:bind id="curtain_position" nodeset="instance('inst_data')//aatams:curtain_position"
                   type="xsd:integer"
                   required="false()"/>

@@ -43,7 +43,11 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
-         <xf:bind id="deployment" nodeset="instance('inst_data')//aatams:deployment"
+         <xf:bind id="installation" nodeset="instance('inst_subfeatures')//installation_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="installation_deployment"
+                  nodeset="instance('inst_subfeatures')//installation_deployment_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="person" nodeset="instance('inst_data')//aatams:person" type="xsd:string"
@@ -68,8 +72,7 @@
    <body><!--Debug--><div class="form">
          <legend>ADD DEVICE DEPLOYER</legend>
          <div class="dependant-selects">
-            <xf:select1 ref="instance('inst_subfeatures')/installation_id" appearance="minimal"
-                        incremental="true()">
+            <xf:select1 bind="installation" appearance="minimal" incremental="true()">
                <xf:label>Installation</xf:label>
                <xf:itemset nodeset="instance('inst_installation')//aatams:installation">
                   <xf:value ref="@gml:id"/>

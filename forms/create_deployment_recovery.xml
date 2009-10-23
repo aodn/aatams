@@ -104,6 +104,7 @@
                          value="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')//recovery_status_id"
                          value="instance('inst_recovery_status')//aatams:recovery_status[1]/@gml:id"/>
+            <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>

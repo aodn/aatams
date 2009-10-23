@@ -82,6 +82,7 @@
                          value="instance('inst_deployment_download')//aatams:deployment_download[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')//device_id"
                          value="instance('inst_device')//aatams:device[1]/@gml:id"/>
+            <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>

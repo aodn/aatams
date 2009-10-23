@@ -76,6 +76,7 @@
          <xf:action ev:event="set-selected">
             <xf:setvalue ref="instance('inst_subfeatures')//deployment_download_id"
                          value="instance('inst_deployment_download')//aatams:deployment_download[1]/@gml:id"/>
+            <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>

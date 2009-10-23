@@ -75,6 +75,7 @@
          <xf:action ev:event="set-selected">
             <xf:setvalue ref="instance('inst_subfeatures')//measurement_unit_type_id"
                          value="instance('inst_measurement_unit_type')//aatams:measurement_unit_type[1]/@gml:id"/>
+            <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>

@@ -90,6 +90,7 @@
                          value="instance('inst_device_manufacturer')//aatams:device_manufacturer[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')//device_type_id"
                          value="instance('inst_device_type')//aatams:device_type[1]/@gml:id"/>
+            <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>

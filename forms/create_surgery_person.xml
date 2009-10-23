@@ -83,6 +83,7 @@
                          value="instance('inst_person')//aatams:person[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')//surgery_id"
                          value="instance('inst_surgery')//aatams:surgery[1]/@gml:id"/>
+            <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>

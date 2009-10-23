@@ -80,6 +80,9 @@
          <xf:bind id="classification" nodeset="instance('inst_subfeatures')//classification_id"
                   type="xsd:string"
                   required="true()"/>
+         <xf:bind id="project" nodeset="instance('inst_subfeatures')//project_id"
+                  type="xsd:string"
+                  required="true()"/>
          <xf:bind id="project_person" nodeset="instance('inst_subfeatures')//project_person_id"
                   type="xsd:string"
                   required="true()"/>
@@ -158,6 +161,7 @@
                          value="instance('inst_project')//aatams:project[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')//project_person_id"
                          value="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
+            <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>

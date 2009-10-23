@@ -83,6 +83,7 @@
          <xf:action ev:event="set-selected">
             <xf:setvalue ref="instance('inst_subfeatures')//classification_level_id"
                          value="instance('inst_classification_level')//aatams:classification_level[1]/@gml:id"/>
+            <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>

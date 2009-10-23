@@ -112,7 +112,9 @@
 								</xf:message>
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
-         <xf:action ev:event="set-selected"/>
+         <xf:action ev:event="set-selected">
+            <xf:dispatch name="xforms-revalidate" target="model1"/>
+         </xf:action>
       </xf:model>
    </head>
    <body><!--Debug--><div class="form">

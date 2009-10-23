@@ -15,7 +15,7 @@ div.form { border:outset 2px gray; padding:20px; float:left; background-color:#D
 /*span.xforms-input, span.xforms-select1, span.xforms-output  { display:block; position:relative; }*/
 span.xforms-control > span { display:table; }
 span.xforms-control > span > span { display:table-row; }
-span.xforms-control > span > span > span { display:table-cell; padding:2px; }
+span.xforms-control > span > span > span { display:table-cell; padding:2px; vertical-align:top; }
 label.xforms-label { display:block; width: 300px; text-align:right; }
 
 

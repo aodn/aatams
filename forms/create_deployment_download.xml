@@ -181,9 +181,9 @@
          <xf:input bind="detections" incremental="true()">
             <xf:label>Detections</xf:label>
          </xf:input>
-         <xf:input bind="cc_email_addresses" incremental="true()">
+         <xf:textarea bind="cc_email_addresses">
             <xf:label>Cc Email Addresses</xf:label>
-         </xf:input>
+         </xf:textarea>
          <xf:textarea bind="comments">
             <xf:label>Comments</xf:label>
          </xf:textarea>

@@ -121,6 +121,7 @@
 							<xf:action ev:event="set-selected">
 								<xsl:apply-templates
 									select="foreign-key" mode="default-value" />
+								<xf:dispatch name="xforms-revalidate" target="model1"/>
 							</xf:action>
 						</xf:model>
 					</head>
@@ -207,7 +208,7 @@
 		<xf:instance id="inst_installation_deployment"
 			src="{$wfs-url}?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment" />
 	</xsl:template>
-	<xsl:template match="column" mode="binding">
+	<xsl:template match="column" mode="binding" priority="2">
 		<xsl:element name="xf:bind">
 			<xsl:attribute name="id">
 				<xsl:value-of
@@ -245,14 +246,7 @@
 				</xsl:choose>
 			</xsl:attribute>
 			<xsl:attribute name="required">
-				<xsl:choose>
-					<xsl:when test="@required='true'">
-						<xsl:text>true()</xsl:text>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:text>false()</xsl:text>
-					</xsl:otherwise>
-				</xsl:choose>
+				<xsl:apply-templates select="@required"/>
 			</xsl:attribute>
 			<xsl:apply-templates select="." mode="constraint" />
 		</xsl:element>
@@ -262,9 +256,76 @@
 		mode="binding" priority="5">
 		<!-- excluded -->
 	</xsl:template>
+	<xsl:template match="column[@name = 'PROJECT_ROLE_PERSON_ID']"
+		mode="binding" priority="4">
+		<xsl:element name="xf:bind">
+			<xsl:attribute name="id">project</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_subfeatures')//project_id</xsl:attribute>
+			<xsl:attribute name="type">xsd:string</xsl:attribute>
+			<xsl:attribute name="required">
+				<xsl:apply-templates select="@required"/>
+			</xsl:attribute>
+		</xsl:element>
+		<xsl:element name="xf:bind">
+			<xsl:attribute name="id">project_person</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_subfeatures')//project_person_id</xsl:attribute>
+			<xsl:attribute name="type">xsd:string</xsl:attribute>
+			<xsl:attribute name="required">
+				<xsl:apply-templates select="@required"/>
+			</xsl:attribute>
+		</xsl:element>
+	</xsl:template>
+	<xsl:template match="column[@name = 'INSTALLATION_ID']"
+		mode="binding" priority="4">
+		<xsl:element name="xf:bind">
+			<xsl:attribute name="id">installation</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_subfeatures')//installation_id</xsl:attribute>
+			<xsl:attribute name="type">xsd:string</xsl:attribute>
+			<xsl:attribute name="required">
+				<xsl:apply-templates select="@required"/>
+			</xsl:attribute>
+		</xsl:element>
+		<xsl:element name="xf:bind">
+			<xsl:attribute name="id">installation_station</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_subfeatures')//installation_station_id</xsl:attribute>
+			<xsl:attribute name="type">xsd:string</xsl:attribute>
+			<xsl:attribute name="required">
+				<xsl:apply-templates select="@required"/>
+			</xsl:attribute>
+		</xsl:element>
+	</xsl:template>
+	<xsl:template match="column[@name = 'DEPLOYMENT_ID']"
+		mode="binding" priority="4">
+		<xsl:element name="xf:bind">
+			<xsl:attribute name="id">installation</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_subfeatures')//installation_id</xsl:attribute>
+			<xsl:attribute name="type">xsd:string</xsl:attribute>
+			<xsl:attribute name="required">
+				<xsl:apply-templates select="@required"/>
+			</xsl:attribute>
+		</xsl:element>
+		<xsl:element name="xf:bind">
+			<xsl:attribute name="id">installation_deployment</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_subfeatures')//installation_deployment_id</xsl:attribute>
+			<xsl:attribute name="type">xsd:string</xsl:attribute>
+			<xsl:attribute name="required">
+				<xsl:apply-templates select="@required"/>
+			</xsl:attribute>
+		</xsl:element>
+	</xsl:template>
+	<xsl:template match="@required">
+		<xsl:choose>
+			<xsl:when test="current()='true'">
+				<xsl:text>true()</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>false()</xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
 	<xsl:template
 		match="column[../foreign-key[reference/@local=current()/@name]]"
-		mode="binding" priority="4">
+		mode="binding" priority="3">
 		<xsl:apply-templates
 			select="../foreign-key[reference/@local=current()/@name]"
 			mode="binding" />
@@ -344,7 +405,7 @@
 		match="foreign-key[@foreignTable = 'INSTALLATION_DEPLOYMENT']"
 		mode="default-value">
 		<xf:setvalue
-			ref="instance('inst_installation_id')//installation_id"
+			ref="instance('inst_subfeatures')//installation_id"
 			value="instance('inst_installation')//aatams:installation[1]/@gml:id" />
 		<xf:setvalue
 			ref="instance('inst_subfeatures')//installation_deployment_id"
@@ -410,7 +471,8 @@
 			<xf:trigger>
 				<xf:label>Reset</xf:label>
 				<xf:reset ev:event="DOMActivate" />
-				<xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
+				<xf:dispatch ev:event="DOMActivate" name="set-selected"
+					target="model1" />
 			</xf:trigger>
 			<xf:group>
 				<xf:output bind="error_message" class="error">
@@ -479,8 +541,8 @@
 		mode="form" priority="4">
 		<!-- convert to project and person_role -->
 		<div class="dependant-selects">
-			<xf:select1 ref="instance('inst_project_id')/project_id"
-				appearance="minimal" incremental="true()">
+			<xf:select1 bind="project" appearance="minimal"
+				incremental="true()">
 				<xf:label>Project</xf:label>
 				<xf:itemset
 					nodeset="instance('inst_project')//aatams:project">
@@ -517,9 +579,8 @@
 		priority="4">
 		<!-- convert to project and person_role -->
 		<div class="dependant-selects">
-			<xf:select1
-				ref="instance('inst_subfeatures')/installation_id"
-				appearance="minimal" incremental="true()">
+			<xf:select1 bind="installation" appearance="minimal"
+				incremental="true()">
 				<xf:label>Installation</xf:label>
 				<xf:itemset
 					nodeset="instance('inst_installation')//aatams:installation">

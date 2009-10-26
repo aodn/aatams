@@ -358,16 +358,6 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="status" minOccurs="0" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="STATUS_ID" type="INTEGER"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>
@@ -804,12 +794,20 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="status" minOccurs="0" maxOccurs="1" type="xsd:integer">
+               <xsd:element name="project_person_ref" minOccurs="1" maxOccurs="1"
+                            type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="STATUS_ID" type="INTEGER"/>
+                        <deegreewfs:Content type="aatams:project_person">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1029,16 +1027,6 @@
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="COMMENTS" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="status" minOccurs="0" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="STATUS_ID" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1376,16 +1364,6 @@
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="status" minOccurs="0" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="STATUS_ID" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2942,16 +2920,6 @@
                                  <deegreewfs:MappingField field="IMPLANT_TYPE_ID" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="status" minOccurs="0" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="STATUS_ID" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>

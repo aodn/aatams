@@ -5,15 +5,15 @@ label, legend {
    font-weight: bold;
 }
 .error {color:red;}
-div.form { border:outset 2px gray; padding:20px; width:100%; background-color:#DBF0F7;}
-div.form-contents { width:100% }
+div.form { border:outset 2px gray; padding:20px; float:left; background-color:#DBF0F7;}
+div.form-contents { width:100%; margin-top:10px; }
 span.xforms-control { float:left; clear:left; }
 span.xforms-control > span { display:table; }
 span.xforms-control > span > span { display:table-row; }
 span.xforms-control > span > span > span { display:table-cell; padding:2px; vertical-align:top; }
 label.xforms-label { display:block; width: 300px; text-align:right; }
 textarea { height:50px; width: 300px; }
-div.dependant-selects { border:dashed 1px gray; margin-bottom:1px; }
+div.dependant-selects { float:left; clear:left; width:100%; border:dashed 1px gray; margin-bottom:1px; }
 div#console {display:none;}
 </css>
 

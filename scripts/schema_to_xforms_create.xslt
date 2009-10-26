@@ -464,28 +464,30 @@
 				<xsl:value-of
 					select="translate(upper-case(@name),'_',' ')" />
 			</legend>
-			<xsl:apply-templates select="column" mode="form" />
-			<xf:submit submission="s01">
-				<xf:label>Save</xf:label>
-			</xf:submit>
-			<xf:trigger>
-				<xf:label>Reset</xf:label>
-				<xf:reset ev:event="DOMActivate" />
-				<xf:dispatch ev:event="DOMActivate" name="set-selected"
-					target="model1" />
-				<xf:delete ev:event="DOMActivate"
-					nodeset="instance('inst_response')//ServiceException" />
-				<xf:delete ev:event="DOMActivate"
-					nodeset="instance('inst_response')//ogc:FeatureId/@fid" />
-			</xf:trigger>
-			<xf:group>
-				<xf:output bind="error_message" class="error">
-					<xf:label>Error:</xf:label>
-				</xf:output>
-				<xf:output bind="success_message">
-					<xf:label>New Record Id:</xf:label>
-				</xf:output>
-			</xf:group>
+			<div class="form-contents">
+				<xsl:apply-templates select="column" mode="form" />
+				<xf:submit submission="s01">
+					<xf:label>Save</xf:label>
+				</xf:submit>
+				<xf:trigger>
+					<xf:label>Reset</xf:label>
+					<xf:reset ev:event="DOMActivate" />
+					<xf:dispatch ev:event="DOMActivate"
+						name="set-selected" target="model1" />
+					<xf:delete ev:event="DOMActivate"
+						nodeset="instance('inst_response')//ServiceException" />
+					<xf:delete ev:event="DOMActivate"
+						nodeset="instance('inst_response')//ogc:FeatureId/@fid" />
+				</xf:trigger>
+				<xf:group>
+					<xf:output bind="error_message" class="error">
+						<xf:label>Error:</xf:label>
+					</xf:output>
+					<xf:output bind="success_message">
+						<xf:label>New Record Id:</xf:label>
+					</xf:output>
+				</xf:group>
+			</div>
 		</div>
 	</xsl:template>
 	<xsl:template match="column" mode="form">

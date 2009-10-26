@@ -88,34 +88,36 @@
    </head>
    <body><!--Debug--><div class="form">
          <legend>ADD DOWNLOAD TAG SUMMARY</legend>
-         <xf:select1 bind="device" appearance="minimal" incremental="true()">
-            <xf:label>Device</xf:label>
-            <xf:itemset nodeset="instance('inst_device')//aatams:device">
-               <xf:value ref="@gml:id"/>
-               <xf:label ref="aatams:name"/>
-            </xf:itemset>
-         </xf:select1>
-         <xf:input bind="detection_count" incremental="true()">
-            <xf:label>Detection Count</xf:label>
-         </xf:input>
-         <xf:submit submission="s01">
-            <xf:label>Save</xf:label>
-         </xf:submit>
-         <xf:trigger>
-            <xf:label>Reset</xf:label>
-            <xf:reset ev:event="DOMActivate"/>
-            <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
-            <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
-            <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
-         </xf:trigger>
-         <xf:group>
-            <xf:output bind="error_message" class="error">
-               <xf:label>Error:</xf:label>
-            </xf:output>
-            <xf:output bind="success_message">
-               <xf:label>New Record Id:</xf:label>
-            </xf:output>
-         </xf:group>
+         <div class="form-contents">
+            <xf:select1 bind="device" appearance="minimal" incremental="true()">
+               <xf:label>Device</xf:label>
+               <xf:itemset nodeset="instance('inst_device')//aatams:device">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:name"/>
+               </xf:itemset>
+            </xf:select1>
+            <xf:input bind="detection_count" incremental="true()">
+               <xf:label>Detection Count</xf:label>
+            </xf:input>
+            <xf:submit submission="s01">
+               <xf:label>Save</xf:label>
+            </xf:submit>
+            <xf:trigger>
+               <xf:label>Reset</xf:label>
+               <xf:reset ev:event="DOMActivate"/>
+               <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
+               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
+               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
+            </xf:trigger>
+            <xf:group>
+               <xf:output bind="error_message" class="error">
+                  <xf:label>Error:</xf:label>
+               </xf:output>
+               <xf:output bind="success_message">
+                  <xf:label>New Record Id:</xf:label>
+               </xf:output>
+            </xf:group>
+         </div>
       </div>
       <br/>
       <div id="console"/>

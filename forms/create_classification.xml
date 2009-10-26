@@ -89,40 +89,42 @@
    </head>
    <body><!--Debug--><div class="form">
          <legend>ADD CLASSIFICATION</legend>
-         <xf:input bind="parent" incremental="true()">
-            <xf:label>Parent</xf:label>
-         </xf:input>
-         <xf:select1 bind="classification_level" appearance="minimal" incremental="true()">
-            <xf:label>Classification Level</xf:label>
-            <xf:itemset nodeset="instance('inst_classification_level')//aatams:classification_level">
-               <xf:value ref="@gml:id"/>
-               <xf:label ref="aatams:name"/>
-            </xf:itemset>
-         </xf:select1>
-         <xf:input bind="name" incremental="true()">
-            <xf:label>Name</xf:label>
-         </xf:input>
-         <xf:input bind="common_name" incremental="true()">
-            <xf:label>Common Name</xf:label>
-         </xf:input>
-         <xf:submit submission="s01">
-            <xf:label>Save</xf:label>
-         </xf:submit>
-         <xf:trigger>
-            <xf:label>Reset</xf:label>
-            <xf:reset ev:event="DOMActivate"/>
-            <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
-            <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
-            <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
-         </xf:trigger>
-         <xf:group>
-            <xf:output bind="error_message" class="error">
-               <xf:label>Error:</xf:label>
-            </xf:output>
-            <xf:output bind="success_message">
-               <xf:label>New Record Id:</xf:label>
-            </xf:output>
-         </xf:group>
+         <div class="form-contents">
+            <xf:input bind="parent" incremental="true()">
+               <xf:label>Parent</xf:label>
+            </xf:input>
+            <xf:select1 bind="classification_level" appearance="minimal" incremental="true()">
+               <xf:label>Classification Level</xf:label>
+               <xf:itemset nodeset="instance('inst_classification_level')//aatams:classification_level">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:name"/>
+               </xf:itemset>
+            </xf:select1>
+            <xf:input bind="name" incremental="true()">
+               <xf:label>Name</xf:label>
+            </xf:input>
+            <xf:input bind="common_name" incremental="true()">
+               <xf:label>Common Name</xf:label>
+            </xf:input>
+            <xf:submit submission="s01">
+               <xf:label>Save</xf:label>
+            </xf:submit>
+            <xf:trigger>
+               <xf:label>Reset</xf:label>
+               <xf:reset ev:event="DOMActivate"/>
+               <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
+               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
+               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
+            </xf:trigger>
+            <xf:group>
+               <xf:output bind="error_message" class="error">
+                  <xf:label>Error:</xf:label>
+               </xf:output>
+               <xf:output bind="success_message">
+                  <xf:label>New Record Id:</xf:label>
+               </xf:output>
+            </xf:group>
+         </div>
       </div>
       <br/>
       <div id="console"/>

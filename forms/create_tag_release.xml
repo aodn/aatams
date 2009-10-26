@@ -167,82 +167,84 @@
    </head>
    <body><!--Debug--><div class="form">
          <legend>ADD TAG RELEASE</legend>
-         <xf:select1 bind="transmitter_device" appearance="minimal" incremental="true()">
-            <xf:label>Device</xf:label>
-            <xf:itemset nodeset="instance('inst_transmitter_device')//aatams:transmitter_device">
-               <xf:value ref="@gml:id"/>
-               <xf:label ref="aatams:name"/>
-            </xf:itemset>
-         </xf:select1>
-         <xf:select1 bind="classification" appearance="minimal" incremental="true()">
-            <xf:label>Classification</xf:label>
-            <xf:itemset nodeset="instance('inst_classification')//aatams:classification">
-               <xf:value ref="@gml:id"/>
-               <xf:label ref="aatams:name"/>
-            </xf:itemset>
-         </xf:select1>
-         <div class="dependant-selects">
-            <xf:select1 bind="project" appearance="minimal" incremental="true()">
-               <xf:label>Project</xf:label>
-               <xf:itemset nodeset="instance('inst_project')//aatams:project">
+         <div class="form-contents">
+            <xf:select1 bind="transmitter_device" appearance="minimal" incremental="true()">
+               <xf:label>Device</xf:label>
+               <xf:itemset nodeset="instance('inst_transmitter_device')//aatams:transmitter_device">
                   <xf:value ref="@gml:id"/>
                   <xf:label ref="aatams:name"/>
                </xf:itemset>
-               <xf:action ev:event="xforms-value-changed">
-                  <xf:setvalue ref="instance('inst_subfeatures')//project_person_id" value=""/>
-               </xf:action>
             </xf:select1>
-            <xf:select1 bind="project_person" appearance="minimal" incremental="true()">
-               <xf:label>Person(Role)</xf:label>
-               <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
+            <xf:select1 bind="classification" appearance="minimal" incremental="true()">
+               <xf:label>Classification</xf:label>
+               <xf:itemset nodeset="instance('inst_classification')//aatams:classification">
                   <xf:value ref="@gml:id"/>
-                  <xf:label ref="aatams:person_role"/>
+                  <xf:label ref="aatams:name"/>
                </xf:itemset>
             </xf:select1>
+            <div class="dependant-selects">
+               <xf:select1 bind="project" appearance="minimal" incremental="true()">
+                  <xf:label>Project</xf:label>
+                  <xf:itemset nodeset="instance('inst_project')//aatams:project">
+                     <xf:value ref="@gml:id"/>
+                     <xf:label ref="aatams:name"/>
+                  </xf:itemset>
+                  <xf:action ev:event="xforms-value-changed">
+                     <xf:setvalue ref="instance('inst_subfeatures')//project_person_id" value=""/>
+                  </xf:action>
+               </xf:select1>
+               <xf:select1 bind="project_person" appearance="minimal" incremental="true()">
+                  <xf:label>Person(Role)</xf:label>
+                  <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
+                     <xf:value ref="@gml:id"/>
+                     <xf:label ref="aatams:person_role"/>
+                  </xf:itemset>
+               </xf:select1>
+            </div>
+            <xf:input bind="release_longitude" incremental="true()">
+               <xf:label>Release Longitude</xf:label>
+            </xf:input>
+            <xf:input bind="release_latitude" incremental="true()">
+               <xf:label>Release Latitude</xf:label>
+            </xf:input>
+            <xf:input bind="release_timestamp" incremental="true()">
+               <xf:label>Release Timestamp</xf:label>
+            </xf:input>
+            <xf:input bind="capture_longitude" incremental="true()">
+               <xf:label>Capture Longitude</xf:label>
+            </xf:input>
+            <xf:input bind="capture_latitude" incremental="true()">
+               <xf:label>Capture Latitude</xf:label>
+            </xf:input>
+            <xf:input bind="capture_timestamp" incremental="true()">
+               <xf:label>Capture Timestamp</xf:label>
+            </xf:input>
+            <xf:select1 bind="implant_type" appearance="minimal" incremental="true()">
+               <xf:label>Implant Type</xf:label>
+               <xf:itemset nodeset="instance('inst_implant_type')//aatams:implant_type">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:name"/>
+               </xf:itemset>
+            </xf:select1>
+            <xf:submit submission="s01">
+               <xf:label>Save</xf:label>
+            </xf:submit>
+            <xf:trigger>
+               <xf:label>Reset</xf:label>
+               <xf:reset ev:event="DOMActivate"/>
+               <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
+               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
+               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
+            </xf:trigger>
+            <xf:group>
+               <xf:output bind="error_message" class="error">
+                  <xf:label>Error:</xf:label>
+               </xf:output>
+               <xf:output bind="success_message">
+                  <xf:label>New Record Id:</xf:label>
+               </xf:output>
+            </xf:group>
          </div>
-         <xf:input bind="release_longitude" incremental="true()">
-            <xf:label>Release Longitude</xf:label>
-         </xf:input>
-         <xf:input bind="release_latitude" incremental="true()">
-            <xf:label>Release Latitude</xf:label>
-         </xf:input>
-         <xf:input bind="release_timestamp" incremental="true()">
-            <xf:label>Release Timestamp</xf:label>
-         </xf:input>
-         <xf:input bind="capture_longitude" incremental="true()">
-            <xf:label>Capture Longitude</xf:label>
-         </xf:input>
-         <xf:input bind="capture_latitude" incremental="true()">
-            <xf:label>Capture Latitude</xf:label>
-         </xf:input>
-         <xf:input bind="capture_timestamp" incremental="true()">
-            <xf:label>Capture Timestamp</xf:label>
-         </xf:input>
-         <xf:select1 bind="implant_type" appearance="minimal" incremental="true()">
-            <xf:label>Implant Type</xf:label>
-            <xf:itemset nodeset="instance('inst_implant_type')//aatams:implant_type">
-               <xf:value ref="@gml:id"/>
-               <xf:label ref="aatams:name"/>
-            </xf:itemset>
-         </xf:select1>
-         <xf:submit submission="s01">
-            <xf:label>Save</xf:label>
-         </xf:submit>
-         <xf:trigger>
-            <xf:label>Reset</xf:label>
-            <xf:reset ev:event="DOMActivate"/>
-            <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
-            <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
-            <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
-         </xf:trigger>
-         <xf:group>
-            <xf:output bind="error_message" class="error">
-               <xf:label>Error:</xf:label>
-            </xf:output>
-            <xf:output bind="success_message">
-               <xf:label>New Record Id:</xf:label>
-            </xf:output>
-         </xf:group>
       </div>
       <br/>
       <div id="console"/>

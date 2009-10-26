@@ -2,27 +2,20 @@
       /* a stylesheet for X-Forms input field alignment */
  
 @namespace xf url("http://www.w3.org/2002/xforms");
-
 label, legend {
    font-family: Arial, Helvetica, sans-serif;
    font-weight: bold;
 }
-
- 
 .error {color:red;}
-
-div.form { border:outset 2px gray; padding:20px; float:left; background-color:#DBF0F7;}
-/*span.xforms-input, span.xforms-select1, span.xforms-output  { display:block; position:relative; }*/
+div.form { border:outset 2px gray; padding:20px; width:100%; background-color:#DBF0F7;}
+div.form-contents { width:100% }
+span.xforms-control { float:left; clear:left; }
 span.xforms-control > span { display:table; }
 span.xforms-control > span > span { display:table-row; }
 span.xforms-control > span > span > span { display:table-cell; padding:2px; vertical-align:top; }
 label.xforms-label { display:block; width: 300px; text-align:right; }
-
-
 textarea { height:50px; width: 300px; }
-
 div.dependant-selects { border:dashed 1px gray; margin-bottom:1px; }
-
 div#console {display:none;}
 
 </css>

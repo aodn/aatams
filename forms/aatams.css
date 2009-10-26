@@ -1,6 +1,4 @@
 <css xmlns="">
-      /* a stylesheet for X-Forms input field alignment */
- 
 @namespace xf url("http://www.w3.org/2002/xforms");
 label, legend {
    font-family: Arial, Helvetica, sans-serif;
@@ -17,7 +15,6 @@ label.xforms-label { display:block; width: 300px; text-align:right; }
 textarea { height:50px; width: 300px; }
 div.dependant-selects { border:dashed 1px gray; margin-bottom:1px; }
 div#console {display:none;}
-
 </css>
 
 

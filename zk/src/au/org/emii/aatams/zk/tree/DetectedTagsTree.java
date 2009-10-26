@@ -23,15 +23,15 @@ public class DetectedTagsTree extends AbstractTreeModel {
 
 	private static final long serialVersionUID = 1L;
 
-	protected DataSource ds = null;
+	private DataSource ds = null;
 	/**
 	 * Log4j instance
 	 */
 	protected Logger logger = Logger.getLogger(this.getClass());
 
-	public DetectedTagsTree(Object node) {
+	public DetectedTagsTree(RootNode node) {
 		super(node);
-		((BaseNode)node).parent = this;
+		node.setParentTree(this);
 		BasicConfigurator.configure();
 		try {
 			ds = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/aatams");
@@ -44,7 +44,7 @@ public class DetectedTagsTree extends AbstractTreeModel {
 		super(null);
 	}
 	
-	public DataSource getDatasource(){
+	public DataSource getDataSource(){
 		return this.ds;
 	}
 
@@ -54,7 +54,7 @@ public class DetectedTagsTree extends AbstractTreeModel {
 	@Override
 	public Object getChild(Object arg0, int arg1) {
 		try {
-			return ((BaseNode) arg0).getChild(arg1);
+			return ((DetectedTagsTreeBaseNode) arg0).getChild(arg1);
 		} catch (Exception e) {
 			logger.error(e);
 			return null;
@@ -66,7 +66,7 @@ public class DetectedTagsTree extends AbstractTreeModel {
 	 */
 	@Override
 	public int getChildCount(Object arg0) {
-		return ((BaseNode) arg0).getChildCount();
+		return ((DetectedTagsTreeBaseNode) arg0).getChildCount();
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class DetectedTagsTree extends AbstractTreeModel {
 	 */
 	@Override
 	public boolean isLeaf(Object arg0) {
-		return (((BaseNode) arg0).getChildCount() == 0);
+		return (((DetectedTagsTreeBaseNode) arg0).getChildCount() == 0);
 	}
 
 	public static RootNode getRootNode() {
@@ -106,27 +106,29 @@ public class DetectedTagsTree extends AbstractTreeModel {
 		ROOT, INSTALLATION, STATION, DEPLOYMENT, TAG
 	}
 
-	private abstract class BaseNode {
+	public abstract class DetectedTagsTreeBaseNode {
 
-		protected DetectedTagsTree parent = null;
+		protected DetectedTagsTreeBaseNode parent = null;
 		private long id = 0;
 		private String name = "";
-		protected ArrayList<BaseNode> children = new ArrayList<BaseNode>();
+		protected ArrayList<DetectedTagsTreeBaseNode> children = new ArrayList<DetectedTagsTreeBaseNode>();
 		protected boolean initialised = false;
 		protected Connection conn = null;
 		protected Statement stmt = null;
 		protected ResultSet rs = null;
-
-		public BaseNode(long identifier, String name) {
+		
+		public DetectedTagsTreeBaseNode(DetectedTagsTreeBaseNode parent, long identifier, String name) {
+			this.parent = parent;
 			this.id = identifier;
 			this.name = name;
 		}
 		
-		public void setParent(DetectedTagsTree parent){
-			this.parent = parent;
+		public DataSource getDataSource(){
+			return this.parent.getDataSource();
 		}
 
 		protected abstract void init();
+		public abstract DetectedTagsTreeBaseNode getParent();
 
 		public String toString() {
 			return this.name;
@@ -135,8 +137,12 @@ public class DetectedTagsTree extends AbstractTreeModel {
 		public long getId() {
 			return this.id;
 		}
+		
+		public String getName() {
+			return this.name;
+		}
 
-		public BaseNode getChild(int index) {
+		public DetectedTagsTreeBaseNode getChild(int index) {
 			if (!this.initialised) {
 				this.init();
 			}
@@ -150,25 +156,40 @@ public class DetectedTagsTree extends AbstractTreeModel {
 			return this.children.size();
 		}
 
-		protected BaseNode addChild(BaseNode node) {
+		protected DetectedTagsTreeBaseNode addChild(DetectedTagsTreeBaseNode node) {
 			this.children.add(node);
-			node.parent = this.parent;
 			return node;
 		}
 	}
 
-	private class RootNode extends BaseNode {
+	private class RootNode extends DetectedTagsTreeBaseNode {
+		
+		private DetectedTagsTree parentTree = null;
+		
 		public RootNode() {
-			super(0, "");
+			super(null, 0, "");
 		}
 
+		private void setParentTree(DetectedTagsTree tree){
+			this.parentTree = tree;
+		}
+		
+		public DetectedTagsTreeBaseNode getParent(){
+			return null;
+		}
+		
+		@Override
+		public DataSource getDataSource(){
+			return this.parentTree.getDataSource();
+		}
+		
 		protected void init() {
 			try {
-				conn = this.parent.getDatasource().getConnection();
+				conn = this.getDataSource().getConnection();
 				stmt = conn.createStatement();
 				rs = stmt.executeQuery("select installation_id, name from installation");
 				while (rs.next()) {
-					this.addChild(new InstallationNode(rs.getLong(1), rs.getString(2)));
+					this.addChild(new InstallationNode(this, rs.getLong(1), rs.getString(2)));
 				}
 				rs.close();
 				stmt.close();
@@ -179,21 +200,26 @@ public class DetectedTagsTree extends AbstractTreeModel {
 		}
 	}
 
-	private class InstallationNode extends BaseNode {
-		public InstallationNode(long identifier, String name) {
-			super(identifier, name);
+	private class InstallationNode extends DetectedTagsTreeBaseNode {
+		public InstallationNode(RootNode parent, long identifier, String name) {
+			super(parent, identifier, name);
+		}
+		
+		@Override
+		public RootNode getParent(){
+			return (RootNode)this.parent;
 		}
 
 		protected void init() {
 			try {
-				conn = this.parent.getDatasource().getConnection();
+				conn = this.getDataSource().getConnection();
 				stmt = conn.createStatement();
 				// find all stations in this installation that have deployments
 				rs = stmt.executeQuery("select station_id, name from installation_station\n" + "where station_id in\n"
 						+ "(select distinct(station_id) from receiver_deployment\n" + "where installation_id = " + this.getId() + ""
 						+ "and station_id is not null)\n" + "order by installation_station.name");
 				while (rs.next()) {
-					this.addChild(new StationNode(rs.getLong(1), rs.getString(2)));
+					this.addChild(new StationNode(this,rs.getLong(1), rs.getString(2)));
 				}
 				rs.close();
 				// find all receiver deployments not assigned to a station for
@@ -208,7 +234,7 @@ public class DetectedTagsTree extends AbstractTreeModel {
 								+ "receiver_deployment.station_id is null\n"
 								+ "order by device.code_name");
 				while (rs.next()) {
-					this.addChild(new ReceiverDeploymentNode(rs.getLong(1), rs.getString(2)));
+					this.addChild(new ReceiverDeploymentNode(this, rs.getLong(1), rs.getString(2)));
 				}
 				rs.close();
 				stmt.close();
@@ -219,14 +245,19 @@ public class DetectedTagsTree extends AbstractTreeModel {
 		}
 	}
 
-	private class StationNode extends BaseNode {
-		public StationNode(long identifier, String name) {
-			super(identifier, name);
+	private class StationNode extends DetectedTagsTreeBaseNode {
+		public StationNode(InstallationNode parent, long identifier, String name) {
+			super(parent,identifier, name);
+		}
+		
+		@Override
+		public InstallationNode getParent(){
+			return (InstallationNode)this.parent;
 		}
 
 		protected void init() {
 			try {
-				conn = this.parent.getDatasource().getConnection();
+				conn = this.getDataSource().getConnection();
 				stmt = conn.createStatement();
 				// find all receiver deployments assigned to this station
 				rs = stmt
@@ -237,7 +268,7 @@ public class DetectedTagsTree extends AbstractTreeModel {
 								+ "\n"
 								+ "order by device.code_name");
 				while (rs.next()) {
-					this.addChild(new ReceiverDeploymentNode(rs.getLong(1), rs.getString(2)));
+					this.addChild(new ReceiverDeploymentNode(this, rs.getLong(1), rs.getString(2)));
 				}
 				rs.close();
 				stmt.close();
@@ -248,20 +279,29 @@ public class DetectedTagsTree extends AbstractTreeModel {
 		}
 	}
 
-	private class ReceiverDeploymentNode extends BaseNode {
-		public ReceiverDeploymentNode(long identifier, String name) {
-			super(identifier, name);
+	private class ReceiverDeploymentNode extends DetectedTagsTreeBaseNode {
+		public ReceiverDeploymentNode(InstallationNode parent, long identifier, String name) {
+			super(parent, identifier, name);
+		}
+		
+		public ReceiverDeploymentNode(StationNode parent, long identifier, String name) {
+			super(parent, identifier, name);
+		}
+		
+		@Override
+		public DetectedTagsTreeBaseNode getParent(){
+			return (DetectedTagsTreeBaseNode)this.parent;
 		}
 
 		protected void init() {
 			try {
-				conn = this.parent.getDatasource().getConnection();
+				conn = this.getDataSource().getConnection();
 				stmt = conn.createStatement();
 				// find all distinct tags detected for deployment.
 				rs = stmt.executeQuery("select device_id, code_name from device where device_id in "
 						+ "(select distinct(device_id) from detection where deployment_id = " + this.getId() + ")" + "order by code_name");
 				while (rs.next()) {
-					this.addChild(new TagNode(rs.getLong(1), rs.getString(2)));
+					this.addChild(new TagNode(this, rs.getLong(1), rs.getString(2)));
 				}
 				rs.close();
 				stmt.close();
@@ -272,10 +312,15 @@ public class DetectedTagsTree extends AbstractTreeModel {
 		}
 	}
 
-	private class TagNode extends BaseNode {
-		public TagNode(long identifier, String name) {
-			super(identifier, name);
-			this.children = new ArrayList<BaseNode>();
+	private class TagNode extends DetectedTagsTreeBaseNode {
+		public TagNode(ReceiverDeploymentNode parent, long identifier, String name) {
+			super(parent, identifier, name);
+			this.children = new ArrayList<DetectedTagsTreeBaseNode>();
+		}
+		
+		@Override
+		public ReceiverDeploymentNode getParent(){
+			return (ReceiverDeploymentNode)this.parent;
 		}
 
 		protected void init() {
@@ -283,22 +328,21 @@ public class DetectedTagsTree extends AbstractTreeModel {
 		}
 	}
 
-	public class TestRoot extends BaseNode {
+	public class TestRoot extends RootNode {
 
 		public TestRoot() {
-			super(1, "root");
+			super();
 			this.init();
 		}
 
 		protected void init() {
-			BaseNode inst1, inst2, depl1, tag1, tag2, tag3, tag4;
-			inst1 = super.addChild(new InstallationNode(2, "Installation1"));
-			inst2 = super.addChild(new InstallationNode(3, "Installation2"));
-			depl1 = inst1.addChild(new ReceiverDeploymentNode(4, "Deployment1"));
-			tag1 = depl1.addChild(new TagNode(5, "Tag1"));
-			tag2 = depl1.addChild(new TagNode(6, "Tag2"));
-			tag3 = depl1.addChild(new TagNode(7, "Tag3"));
-			tag4 = depl1.addChild(new TagNode(8, "Tag4"));
+			InstallationNode inst1 = (InstallationNode)super.addChild(new InstallationNode(this,2, "Installation1"));
+			InstallationNode inst2 = (InstallationNode)super.addChild(new InstallationNode(this,3, "Installation2"));
+			ReceiverDeploymentNode depl1 = (ReceiverDeploymentNode)inst1.addChild(new ReceiverDeploymentNode(inst1,4, "Deployment1"));
+			TagNode tag1 = (TagNode)depl1.addChild(new TagNode(depl1, 5, "Tag1")); 
+			TagNode tag2 = (TagNode)depl1.addChild(new TagNode(depl1, 6, "Tag2"));
+			TagNode tag3 = (TagNode)depl1.addChild(new TagNode(depl1, 7, "Tag3"));
+			TagNode tag4 = (TagNode)depl1.addChild(new TagNode(depl1, 8, "Tag4"));
 		}
 	}
 }

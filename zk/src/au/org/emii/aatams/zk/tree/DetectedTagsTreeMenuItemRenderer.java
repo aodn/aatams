@@ -1,12 +1,11 @@
 package au.org.emii.aatams.zk.tree;
 
-
-import org.zkoss.zul.Image;
-import org.zkoss.zul.Label;
 import org.zkoss.zul.Treecell;
 import org.zkoss.zul.Treeitem;
 import org.zkoss.zul.TreeitemRenderer;
 import org.zkoss.zul.Treerow;
+
+import org.zkoss.zk.ui.Path;
 
 import au.org.emii.aatams.zk.tree.DetectedTagsTree;
 import au.org.emii.aatams.zk.tree.DetectedTagsTree.NodeType;
@@ -32,11 +31,23 @@ public class DetectedTagsTreeMenuItemRenderer implements TreeitemRenderer {
 		Treecell cell = new Treecell();
 		cell.setLabel(node.toString());
 		cell.setParent(row);
-		//decide what to do in row
-		//if (DetectedTagsTree.getNodeType(node).equals(NodeType.TAG)) {
-		//} else {
-		//	throw new Exception("Unknown Node Type encountered");
-		//}
+		//for tags add event listener
+		if (DetectedTagsTree.getNodeType(node).equals(NodeType.TAG)) {
+			if (! cell.isListenerAvailable("onClick", false)) {
+				try{
+					//AATAMSHomePageComposer wind = (AATAMSHomePageComposer)treeitem.getPage().getFellow("window");
+					cell.addForward("onClick", Path.getComponent("//timeline/window/timelineplot"), "onClick", node);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+				try{
+					//AATAMSHomePageComposer wind = (AATAMSHomePageComposer)treeitem.getPage().getFellow("window");
+					cell.addForward("onClick", Path.getComponent("//timeseries/window/timeseriesplot"), "onClick", node);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 

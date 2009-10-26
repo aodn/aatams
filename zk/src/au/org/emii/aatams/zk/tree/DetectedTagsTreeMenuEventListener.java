@@ -2,29 +2,27 @@ package au.org.emii.aatams.zk.tree;
 
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
-import org.zkoss.zul.Treeitem;
+import org.zkforge.timeline.Timeline;
+import org.zkforge.timeplot.Timeplot;
+
+import org.apache.log4j.Logger;
+
+import au.org.emii.aatams.zk.tree.DetectedTagsTree.DetectedTagsTreeBaseNode;
 
 public class DetectedTagsTreeMenuEventListener implements EventListener {
-	
+	private Logger logger = Logger.getLogger(this.getClass());
 	public void onEvent(Event event) throws Exception {
-		Treeitem target = (Treeitem )event.getTarget();
-		Object obj = event.getData();
-		/*logger.debug("Handle tree click");
-		MapComposer mapComposer = getMapComposer(event);
-		Treeitem target = null;
-		MenuItem mi = null; 
-		if ((mapComposer != null ) && mapComposer.safeToPerformMapAction()) {
-			mi = getMenuItem(event);
-			target = getTarget(event);
-			if ((mi != null) && mi.isLeaf()) {
-				mapComposer.activateMenuItem(mi);
-			}
-			else if (target.getTreechildren() != null) {
-				// open a non-leaf node, then exit
-				target.setOpen(true);
-			}
-		}*/
-		System.out.print("clicked");
+		if(event.getTarget() instanceof Timeline){
+			Timeline timeline = (Timeline)event.getTarget();
+			logger.info("event for timeline");
+		}else if(event.getTarget() instanceof Timeplot){
+			logger.info("event for timeplot");
+		}
+		if(event.getData() != null){
+			DetectedTagsTreeBaseNode node = (DetectedTagsTreeBaseNode)event.getData(); 
+			logger.info(node.getId());
+			logger.info(node.toString());
+			//tell the detections data page about the event
+		}
 	}
-
 }

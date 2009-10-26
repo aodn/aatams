@@ -150,15 +150,16 @@
 			</xf:action>
 		</xf:model>
 		<script type="text/javascript">
-			function upload(){ var model1 =
-			document.getElementById('model1').xfElement; var binding =
-			document.getElementById('success_message').xfElement.binding;
-			var result =
-			binding.evaluate(model1.getInstanceDocument('inst_response'));
+		function upload(){ 
+			var model1 = document.getElementById('model1').xfElement;
+	       	var binding = document.getElementById('success_message').xfElement.binding;
+			var result = binding.evaluate(model1.getInstanceDocument('inst_response'));
 			if(result.length > 0){ 
-			   document.getElementById("iframe").src="../upload.zul?fid="+result[0].nodeValue; 
-			}else{ alert("error: no new feature id
-			could be obtained"); } }
+				document.getElementById("iframe").src="../upload.zul?fid="+result[0].nodeValue; 
+			}else{ 
+				alert("error: no new feature id could be obtained");
+			} 
+		}
 		</script>
 	</head>
 	<body>
@@ -248,7 +249,7 @@
 				</xf:group>
 				<xf:group
 					ref="instance('inst_response')//ogc:FeatureId/@fid">
-					<iframe src="upload.zul"
+					<iframe id="iframe" src=""
 						style="width:100%;height:250px;border:none;overflow:hidden;" />
 				</xf:group>
 			</div>

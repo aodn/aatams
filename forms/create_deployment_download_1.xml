@@ -8,6 +8,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:gml="http://www.opengis.net/gml">
    <head>
+      <!--  this is the same as create_deployment_download.xml but has the additional file upload parts -->
       <title>AATAMS Web Interface</title>
       <link href="aatams.css" rel="stylesheet" type="text/css"/>
       <script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
@@ -134,7 +135,22 @@
                          value="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
+         <xf:action ev:event="xforms-submit-done">
+		 	<xf:load resource="javascript:upload()"/>
+         </xf:action> 
       </xf:model>
+  <script type="text/javascript">
+function upload(){
+	var model1 = document.getElementById('model1').xfElement;
+	var binding = document.getElementById('success_message').xfElement.binding;
+	var result = binding.evaluate(model1.getInstanceDocument('inst_response'));
+	if(result.length > 0){
+		document.cookie = "deployment_download_id="+result[0].nodeValue + ";path=/aatams";
+	}else{
+		alert("error: no new feature id could be obtained");
+	}
+}
+  </script>
    </head>
    <body><!--Debug--><div class="form">
          <legend>ADD DEPLOYMENT DOWNLOAD</legend>
@@ -194,8 +210,6 @@
             <xf:label>Reset</xf:label>
             <xf:reset ev:event="DOMActivate"/>
             <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
-            <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
-            <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
          </xf:trigger>
          <xf:group>
             <xf:output bind="error_message" class="error">
@@ -205,6 +219,9 @@
                <xf:label>New Record Id:</xf:label>
             </xf:output>
          </xf:group>
+         <xf:group ref="instance('inst_response')//ogc:FeatureId/@fid">
+		 	<iframe src="upload.zul" style="width:100%;height:250px;border:none;overflow:hidden;"/>
+         </xf:group>  
       </div>
       <br/>
       <div id="console"/>

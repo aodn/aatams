@@ -121,7 +121,8 @@
 							<xf:action ev:event="set-selected">
 								<xsl:apply-templates
 									select="foreign-key" mode="default-value" />
-								<xf:dispatch name="xforms-revalidate" target="model1"/>
+								<xf:dispatch name="xforms-revalidate"
+									target="model1" />
 							</xf:action>
 						</xf:model>
 					</head>
@@ -246,7 +247,7 @@
 				</xsl:choose>
 			</xsl:attribute>
 			<xsl:attribute name="required">
-				<xsl:apply-templates select="@required"/>
+				<xsl:apply-templates select="@required" />
 			</xsl:attribute>
 			<xsl:apply-templates select="." mode="constraint" />
 		</xsl:element>
@@ -263,7 +264,7 @@
 			<xsl:attribute name="nodeset">instance('inst_subfeatures')//project_id</xsl:attribute>
 			<xsl:attribute name="type">xsd:string</xsl:attribute>
 			<xsl:attribute name="required">
-				<xsl:apply-templates select="@required"/>
+				<xsl:apply-templates select="@required" />
 			</xsl:attribute>
 		</xsl:element>
 		<xsl:element name="xf:bind">
@@ -271,7 +272,7 @@
 			<xsl:attribute name="nodeset">instance('inst_subfeatures')//project_person_id</xsl:attribute>
 			<xsl:attribute name="type">xsd:string</xsl:attribute>
 			<xsl:attribute name="required">
-				<xsl:apply-templates select="@required"/>
+				<xsl:apply-templates select="@required" />
 			</xsl:attribute>
 		</xsl:element>
 	</xsl:template>
@@ -282,7 +283,7 @@
 			<xsl:attribute name="nodeset">instance('inst_subfeatures')//installation_id</xsl:attribute>
 			<xsl:attribute name="type">xsd:string</xsl:attribute>
 			<xsl:attribute name="required">
-				<xsl:apply-templates select="@required"/>
+				<xsl:apply-templates select="@required" />
 			</xsl:attribute>
 		</xsl:element>
 		<xsl:element name="xf:bind">
@@ -290,18 +291,18 @@
 			<xsl:attribute name="nodeset">instance('inst_subfeatures')//installation_station_id</xsl:attribute>
 			<xsl:attribute name="type">xsd:string</xsl:attribute>
 			<xsl:attribute name="required">
-				<xsl:apply-templates select="@required"/>
+				<xsl:apply-templates select="@required" />
 			</xsl:attribute>
 		</xsl:element>
 	</xsl:template>
-	<xsl:template match="column[@name = 'DEPLOYMENT_ID']"
-		mode="binding" priority="4">
+	<xsl:template match="column[@name = 'DEPLOYMENT_ID']" mode="binding"
+		priority="4">
 		<xsl:element name="xf:bind">
 			<xsl:attribute name="id">installation</xsl:attribute>
 			<xsl:attribute name="nodeset">instance('inst_subfeatures')//installation_id</xsl:attribute>
 			<xsl:attribute name="type">xsd:string</xsl:attribute>
 			<xsl:attribute name="required">
-				<xsl:apply-templates select="@required"/>
+				<xsl:apply-templates select="@required" />
 			</xsl:attribute>
 		</xsl:element>
 		<xsl:element name="xf:bind">
@@ -309,7 +310,7 @@
 			<xsl:attribute name="nodeset">instance('inst_subfeatures')//installation_deployment_id</xsl:attribute>
 			<xsl:attribute name="type">xsd:string</xsl:attribute>
 			<xsl:attribute name="required">
-				<xsl:apply-templates select="@required"/>
+				<xsl:apply-templates select="@required" />
 			</xsl:attribute>
 		</xsl:element>
 	</xsl:template>
@@ -404,8 +405,7 @@
 	<xsl:template
 		match="foreign-key[@foreignTable = 'INSTALLATION_DEPLOYMENT']"
 		mode="default-value">
-		<xf:setvalue
-			ref="instance('inst_subfeatures')//installation_id"
+		<xf:setvalue ref="instance('inst_subfeatures')//installation_id"
 			value="instance('inst_installation')//aatams:installation[1]/@gml:id" />
 		<xf:setvalue
 			ref="instance('inst_subfeatures')//installation_deployment_id"
@@ -473,6 +473,10 @@
 				<xf:reset ev:event="DOMActivate" />
 				<xf:dispatch ev:event="DOMActivate" name="set-selected"
 					target="model1" />
+				<xf:delete ev:event="DOMActivate"
+					nodeset="instance('inst_response')//ServiceException" />
+				<xf:delete ev:event="DOMActivate"
+					nodeset="instance('inst_response')//ogc:FeatureId/@fid" />
 			</xf:trigger>
 			<xf:group>
 				<xf:output bind="error_message" class="error">
@@ -511,7 +515,9 @@
 		mode="form" priority="5">
 		<!-- excluded -->
 	</xsl:template>
-	<xsl:template match="column[@name = 'COMMENTS']" mode="form">
+	<xsl:template
+		match="column[@name = 'COMMENTS' or @name = 'CC_EMAIL_ADDRESSES']"
+		mode="form">
 		<xsl:element name="xf:textarea">
 			<xsl:attribute name="bind">
 				<xsl:value-of select="lower-case(@name)" />

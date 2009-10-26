@@ -26,6 +26,9 @@
                               <aatams:device_model/>
                            </aatams:device_model_ref>
                            <aatams:serial_number/>
+                           <aatams:project_person_ref>
+                              <aatams:project_person/>
+                           </aatams:project_person_ref>
                         </aatams:device>
                      </gml:featureMember>
                   </wfs:FeatureCollection>
@@ -70,6 +73,12 @@
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="serial_number" nodeset="instance('inst_data')//aatams:serial_number"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="project" nodeset="instance('inst_subfeatures')//project_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="project_person" nodeset="instance('inst_subfeatures')//project_person_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
@@ -135,6 +144,25 @@
          <xf:input bind="serial_number" incremental="true()">
             <xf:label>Serial Number</xf:label>
          </xf:input>
+         <div class="dependant-selects">
+            <xf:select1 bind="project" appearance="minimal" incremental="true()">
+               <xf:label>Project</xf:label>
+               <xf:itemset nodeset="instance('inst_project')//aatams:project">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:name"/>
+               </xf:itemset>
+               <xf:action ev:event="xforms-value-changed">
+                  <xf:setvalue ref="instance('inst_subfeatures')//project_person_id" value=""/>
+               </xf:action>
+            </xf:select1>
+            <xf:select1 bind="project_person" appearance="minimal" incremental="true()">
+               <xf:label>Person(Role)</xf:label>
+               <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:person_role"/>
+               </xf:itemset>
+            </xf:select1>
+         </div>
          <xf:submit submission="s01">
             <xf:label>Save</xf:label>
          </xf:submit>
@@ -142,6 +170,8 @@
             <xf:label>Reset</xf:label>
             <xf:reset ev:event="DOMActivate"/>
             <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
+            <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
+            <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
          </xf:trigger>
          <xf:group>
             <xf:output bind="error_message" class="error">

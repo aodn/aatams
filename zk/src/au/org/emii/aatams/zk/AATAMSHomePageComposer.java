@@ -7,8 +7,9 @@ import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zul.Window;
 import org.zkoss.zk.ui.event.*;
-import org.zkoss.zul.Menuitem;
-import org.zkoss.zul.Iframe;
+import org.zkoss.zul.Include;
+import org.zkoss.zul.Tab;
+
 
 /**
  * This composer will automatically autowire and autoforward your composers.
@@ -23,8 +24,13 @@ import org.zkoss.zul.Iframe;
  * 
  */
 public class AATAMSHomePageComposer extends Window implements AfterCompose, Composer {
-	public Iframe iframe;
-	private String xformsPath = "http://test.emii.org.au/aatams/forms";
+	public Include centerInclude;
+	private Tab home;
+	private Tab data_entry;
+	private Tab data_search;
+	private Tab tools;
+	private Tab links;
+	private Tab forms;
 
 	private static final long serialVersionUID = 1L;
 
@@ -54,99 +60,119 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 		// auto forward
 		Components.addForwards(this, this);
 	}
-
-	public void setIFrameSrc(String source) {
-		iframe.setSrc(source);
+	
+	public void onClick$home(Event event) {
+		centerInclude.setSrc("home.zul");
+	}
+	
+	public void onClick$data_entry(Event event) {
+		centerInclude.setSrc("data_entry.zul");
+	}
+	
+	public void onClick$data_search(Event event) {
+		centerInclude.setSrc("data_search.zul");
+	}
+	
+	public void onClick$tools(Event event) {
+		centerInclude.setSrc("tools.zul");
+	}
+	
+	public void onClick$links(Event event) {
+		centerInclude.setSrc("links.zul");
 	}
 
 	public void onClick$AddTagDevice(Event event) {
-		iframe.setSrc(this.xformsPath + "create_transmitter_device.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_transmitter_device.xml");
 	}
 
 	public void onClick$AddReceiverDevice(Event event) {
-		iframe.setSrc(this.xformsPath + "create_receiver_device.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_receiver_device.xml");
 	}
 
 	public void onClick$AddDeviceModel(Event event) {
-		iframe.setSrc(this.xformsPath + "create_device_model.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_device_model.xml");
 	}
 
 	public void onClick$AddDeployment(Event event) {
-		iframe.setSrc(this.xformsPath + "create_receiver_deployment.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_receiver_deployment.xml");
 	}
 
 	public void onClick$ModifyDeployment(Event event) {
-		iframe.setSrc(this.xformsPath + "modify_receiver_deployment.xml");
+		centerInclude.setSrc("not_implemented.zul");
+		//centerInclude.setSrc("xform.zul?form=forms/modify_receiver_deployment.xml");
 	}
 	
 	public void onClick$AddRecovery(Event event) {
-		iframe.setSrc(this.xformsPath + "create_deployment_recovery.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_deployment_recovery.xml");
 	}
 
 	public void onClick$AddDownload(Event event) {
-		iframe.setSrc(this.xformsPath + "create_deployment_download.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_deployment_download_1.xml");
 	}
 	
 	public void onClick$AddTagRelease(Event event) {
-		iframe.setSrc(this.xformsPath + "create_tag_release.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_tag_release.xml");
 	}
 
 	public void onClick$AddSurgery(Event event) {
-		iframe.setSrc(this.xformsPath + "create_surgery.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_surgery.xml");
 	}
 
 	// Data Entry > Other
 	public void onClick$AddInstallation(Event event) {
-		iframe.setSrc(this.xformsPath + "create_installation.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_installation.xml");
 	}
 
 	public void onClick$ModifyInstallation(Event event) {
-		iframe.setSrc(this.xformsPath + "update_installation.xml");
+		centerInclude.setSrc("not_implemented.zul");
+		//centerInclude.setSrc("xform.zul?form=forms/update_installation.xml");
 	}
 	
 	public void onClick$AddStation(Event event) {
-		iframe.setSrc(this.xformsPath + "create_installation_station.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_installation_station.xml");
 	}
 
 	public void onClick$ModifyStation(Event event) {
-		iframe.setSrc(this.xformsPath + "update_installation_station.xml");
+		centerInclude.setSrc("not_implemented.zul");
+		//centerInclude.setSrc("xform.zul?form=forms/update_installation_station.xml");
 	}
 
 	public void onClick$AddOrganisation(Event event) {
-		iframe.setSrc(this.xformsPath + "create_organisation.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_organisation.xml");
 	}
 
 	public void onClick$ModifyOrganisation(Event event) {
-		iframe.setSrc(this.xformsPath + "update_organisation.xml");
+		centerInclude.setSrc("not_implemented.zul");
+		//centerInclude.setSrc("xform.zul?form=forms/update_organisation.xml");
 	}
 
 	public void onClick$AddPerson(Event event) {
-		iframe.setSrc(this.xformsPath + "create_person.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_person.xml");
 	}
 
 	public void onClick$ModifyPerson(Event event) {
-		iframe.setSrc(this.xformsPath + "update_person.xml");
+		centerInclude.setSrc("not_implemented.zul");
+		//centerInclude.setSrc("xform.zul?form=forms/update_person.xml");
 	}
 
 	public void onClick$AddProject(Event event) {
-		iframe.setSrc(this.xformsPath + "create_project.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_project.xml");
 	}
 
 	public void onClick$ModifyProject(Event event) {
-		iframe.setSrc(this.xformsPath + "update_project.xml");
+		centerInclude.setSrc("not_implemented.zul");
+		//centerInclude.setSrc("xform.zul?form=forms/update_project.xml");
 	}
 
 	public void onClick$AddProjectPerson(Event event) {
-		iframe.setSrc(this.xformsPath + "create_project_person.xml");
+		centerInclude.setSrc("xform.zul?form=forms/create_project_person.xml");
 	}
 
 	public void onOpen$timeline_plot(Event event) {
-		iframe.setSrc(this.xformsPath + "timeline.zul");
+		centerInclude.setSrc("timeline.zul");
 	}
 
 	public void onOpen$timeseries_plot(Event event) {
-		iframe.setSrc(this.xformsPath + "timeseries.zul");
+		centerInclude.setSrc("timeseries.zul");
 	}
-
 }
-

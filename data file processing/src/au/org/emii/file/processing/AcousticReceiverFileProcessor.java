@@ -133,13 +133,13 @@ public final class AcousticReceiverFileProcessor {
 	/**
 	 * Processes an uploaded CSV export file from the AATAMS website. 
 	 * 
-	 * @param database
-	 * @param downloadFid
-	 * @param filePath
-	 * @param outStream
+	 * @param database - database connection
+	 * @param downloadFid - the Feature Identifier (gml:id) for the deployment download
+	 * @param filePath - the full path to the file for processing
+	 * @param messages - array for message addition to return to user
 	 */
 	public void doProcessing(Connection conn, String downloadFid, String filePath, 
-			PrintStream outStream) throws IllegalArgumentException {
+			ArrayList<String> messages) throws IllegalArgumentException {
 		//validate parameters
 		if(conn == null){
 			throw new IllegalArgumentException("database connection argument cannot be null");
@@ -158,9 +158,8 @@ public final class AcousticReceiverFileProcessor {
 		if(filePath == null){
 			throw new IllegalArgumentException("filePath argument cannot be null");
 		}
-		// if not passed set outStream to System.out;
-		if (outStream == null) {
-			outStream = System.out;
+		if(messages == null){
+			throw new IllegalArgumentException("messages argument cannot be null");
 		}
 		boolean success = false;
 
@@ -186,7 +185,7 @@ public final class AcousticReceiverFileProcessor {
 			// Also check that there is only one receiver in the file.
 			try {
 				// open file for reading
-				outStream.println("Processing file: " + file.getName());
+				messages.add("Processing file: " + file.getName());
 				logger.info("reading file: " + file.getAbsolutePath());
 				FileInputStream fis = new FileInputStream(file);
 				BufferedReader buffer = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
@@ -205,7 +204,7 @@ public final class AcousticReceiverFileProcessor {
 						}
 						if (receiverName != null && !values.get(9).equals(receiverName)) {
 							String msg = "more than one receiver is in the file";
-							outStream.println(msg);
+							messages.add(msg);
 							throw new Exception(msg);
 						} else {
 							receiverName = values.get(9);
@@ -217,13 +216,13 @@ public final class AcousticReceiverFileProcessor {
 							detections.add(new Detection(tags.get(tagName), new Timestamp(timestampParser.parse(values.get(0)).getTime())));
 						} catch (ParseException e) {
 							String msg = "an invalid timestamp string has been found (" + values.get(0) + "), expecting format " + timestampFormat;
-							outStream.println(msg);
+							messages.add(msg);
 							throw new Exception(msg);
 						}
 					}
 				}
 				String msg = "Total detections count: " + detections.size();
-				outStream.println(msg);
+				messages.add(msg);
 				logger.info(msg);
 				fis.close();
 			} catch (IOException e) {
@@ -234,7 +233,7 @@ public final class AcousticReceiverFileProcessor {
 			// 2. Find the database ids of the tags detected.
 			PreparedStatement pst = conn.prepareStatement("SELECT DEVICE_ID FROM DEVICE WHERE CODE_NAME = ? AND DEVICE_TYPE_ID = 2");
 			ResultSet rset;
-			outStream.println("<p>Known tag devices:<ul>");
+			messages.add("Known tag devices:");
 			for (Iterator<Entry<String, Tag>> i = tags.entrySet().iterator(); i.hasNext();) {
 				Tag tag = i.next().getValue();
 				logger.info("checking for existing tag '" + tag.name + "' in database");
@@ -244,12 +243,11 @@ public final class AcousticReceiverFileProcessor {
 				if (rset != null) {
 					if (rset.next()) {
 						tag.id = rset.getInt(1);
-						outStream.println("<li>fid = aatams.device." + tag.id + ", code_name = " + tag.name + "</li>");
+						messages.add("fid = aatams.device." + tag.id + ", code_name = " + tag.name );
 					}
 				}
 				rset.close();
 			}
-			outStream.println("</ul></p>");
 			// 3. Check that the deployment_download record exists and is linked
 			// to the correct receiver
 			Statement smt = null;
@@ -314,7 +312,7 @@ public final class AcousticReceiverFileProcessor {
 				Tag tag = i.next().getValue();
 				if (tag.id == 0) {
 					if (first) {
-						outStream.println("<p>New tag devices:<ul>");
+						messages.add("New tag devices:");
 						first = false;
 					}
 					pst.setString(1, tag.name);
@@ -327,7 +325,7 @@ public final class AcousticReceiverFileProcessor {
 							ResultSet rowId = smt.executeQuery("SELECT DEVICE_ID FROM DEVICE WHERE ROWID = '" + rset.getString(1) + "'");
 							if (rowId != null && rowId.next()) {
 								tag.id = Integer.valueOf(rowId.getInt(1));
-								outStream.println("\t" + "fid = aatams.device." + tag.id + ", code_name = " + tag.name);
+								messages.add("FID = aatams.device." + tag.id + ", code_name = " + tag.name);
 							} else {
 								throw new Exception("could not retrieve id of new tag device just created");
 							}
@@ -338,8 +336,6 @@ public final class AcousticReceiverFileProcessor {
 					newTags.put(tag.name, tag);
 				}
 			}
-			if (!first)
-				outStream.println("</ul></p>");
 			// 5. Create new detection records in the database.
 			// start a thread to handle this time consuming part
 			DetectionsInserterAndReportGenerator inserter = new DetectionsInserterAndReportGenerator();
@@ -358,11 +354,10 @@ public final class AcousticReceiverFileProcessor {
 			logger.fatal(e);
 		} finally {
 			if (success) {
-				outStream
-						.println("<p>A full download file processing report will be emailed to all email addressees linked to deployment aatams.receiver_deployment."
-								+ receiverDeploymentId + ".</p>");
+				messages.add("A full download file processing report will be emailed to all email addressees linked to deployment aatams.receiver_deployment."
+								+ receiverDeploymentId + ".");
 			} else {
-				outStream.println("File processing of " + downloadFid + " has failed due to an unforseen error, contact eMII for more information.");
+				messages.add("File processing of " + downloadFid + " has failed due to an unforseen error, contact eMII for more information.");
 				try {
 					if (conn != null && !conn.isClosed()) {
 						conn.rollback();

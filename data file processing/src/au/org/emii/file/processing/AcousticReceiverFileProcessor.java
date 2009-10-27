@@ -28,7 +28,6 @@ import org.apache.log4j.BasicConfigurator;
 import javax.mail.Message.RecipientType;
 import javax.activation.FileDataSource;
 import org.codemonkey.vesijama.Email;
-import org.codemonkey.vesijama.MailException;
 import org.codemonkey.vesijama.Mailer;
 
 // import org.apache.log4j.xml.DOMConfigurator;
@@ -64,9 +63,14 @@ public final class AcousticReceiverFileProcessor {
 	private TreeMap<String, Tag> newTags = new TreeMap<String, Tag>();
 	private ArrayList<Detection> detections = new ArrayList<Detection>();
 	private String receiverName = null;
+	private int installationId = 0;
+	private int installationStationId = 0;
 	private int projectRolePersonId = 0;
 	private int receiverDeploymentId = 0;
-	private int deploymentDownloadId;
+	private int deploymentDownloadId = 0;
+	private Timestamp deploymentDownloadTimestamp = null;
+	private float deploymentLatitude;
+	private float deploymentLongitude;
 	private File file;
 
 	public void doProcessing(String downloadFid, String filePath, String jdbcDriverClassName, String connectionString, String username, String password,
@@ -182,7 +186,10 @@ public final class AcousticReceiverFileProcessor {
 					// a receiver deployment must have a project_role_person
 					// associated with it,
 					// extract this to be used for any new tags added.
-					rset = smt.executeQuery("SELECT RECEIVER_DEPLOYMENT.DEPLOYMENT_ID, RECEIVER_DEPLOYMENT.PROJECT_ROLE_PERSON_ID FROM "
+					rset = smt.executeQuery("SELECT RECEIVER_DEPLOYMENT.DEPLOYMENT_ID, RECEIVER_DEPLOYMENT.PROJECT_ROLE_PERSON_ID, "
+							+ "RECEIVER_DEPLOYMENT.INSTALLATION_ID, RECEIVER_DEPLOYMENT.STATION_ID, " 
+							+ "RECEIVER_DEPLOYMENT.LONGITUDE, RECEIVER_DEPLOYMENT.LATITUDE, " 
+							+ "DEPLOYMENT_DOWNLOAD.DOWNLOAD_TIMESTAMP  FROM "
 							+ "DEPLOYMENT_DOWNLOAD, RECEIVER_DEPLOYMENT, DEVICE WHERE "
 							+ "DEPLOYMENT_DOWNLOAD.DEPLOYMENT_ID = RECEIVER_DEPLOYMENT.DEPLOYMENT_ID AND "
 							+ "RECEIVER_DEPLOYMENT.DEVICE_ID = DEVICE.DEVICE_ID AND " + "DEVICE.CODE_NAME = '" + receiverName + "' AND " + "DOWNLOAD_ID = "
@@ -191,6 +198,11 @@ public final class AcousticReceiverFileProcessor {
 						if (rset.next()) {
 							receiverDeploymentId = rset.getInt(1);
 							projectRolePersonId = rset.getInt(2);
+							installationId = rset.getInt(3);
+							installationStationId = rset.getInt(4);
+							deploymentLongitude = rset.getFloat(5);
+							deploymentLatitude =  rset.getFloat(6);
+							deploymentDownloadTimestamp = rset.getTimestamp(7);
 							if (projectRolePersonId == 0) {
 								logger.info("could find a project_role_person record id to use for adding unknown tags to database");
 							}
@@ -208,8 +220,8 @@ public final class AcousticReceiverFileProcessor {
 			}
 			// 3.1. Check that the file has not already been processed (potentially)
 			smt = conn.createStatement();
-			rset = smt.executeQuery("SELECT DEPLOYMENT_DOWNLOAD_ID FROM DEPLOYMENT\n" +
-					"WHERE UPPERCASE(FILE_NAME) = '" + file.getName().toUpperCase() + "'");
+			rset = smt.executeQuery("SELECT DOWNLOAD_ID FROM DEPLOYMENT_DOWNLOAD\n" +
+					"WHERE UPPER(FILENAME) = '" + file.getName().toUpperCase() + "'");
 			if(rset.next()){
 				throw new Exception("A download file with the same name is associated with another deployment download FID=aatams.deployment_download."+rset.getLong(1));
 			}
@@ -358,7 +370,11 @@ public final class AcousticReceiverFileProcessor {
 		private ResultSet rset = null;
 		private String reportName = null;
 		private HashMap<Integer, StringBuffer> projectTags = null;
-
+		private String installationName = null;
+		private String installationStationName = null;
+		private String receiverDeploymentName = null;
+		private String responsiblePersonNameAndRole = null;
+		
 		public void run() {
 			try {
 				pst = conn.prepareStatement("INSERT INTO DETECTION (DETECTION_ID, DEPLOYMENT_ID, DOWNLOAD_ID, TAG_ID, DETECTION_TIMESTAMP)"
@@ -399,20 +415,78 @@ public final class AcousticReceiverFileProcessor {
 			// 6. Prepare a report(log) file to be sent back to the
 			// submitter and data manager.
 			try {
-				// add the main info
+				// get the main info on installation, deployment and deployment download
+				smt = conn.createStatement();
+				if(installationId > 0){
+					rset = smt.executeQuery("SELECT NAME FROM INSTALLATION WHERE INSTALLATION_ID = " + installationId);
+				    if(rset.next()){
+				    	installationName = rset.getString(1);
+				    }else{ //unlikely
+				    	throw new Exception("cannot locate installation with id = " + installationId);
+				    }
+				    rset.close();
+				}else{
+					installationName = "N/A";
+				}
+				if(installationStationId > 0){
+					rset = smt.executeQuery("SELECT NAME, CURTAIN_POSITION FROM INSTALLATION_STATION WHERE STATION_ID = " + installationStationId);
+				    if(rset.next()){
+				    	installationStationName = rset.getString(1);
+				    	int pos = rset.getInt(2);
+				    	installationStationName += (rset.wasNull()) ? "" : "(Position="+pos+")";
+				    }else{ //unlikely
+				    	throw new Exception("cannot locate installation station with id = " + installationStationId);
+				    }
+				    rset.close();
+				}else{
+					installationStationName = "N/A";
+				}
+				if(receiverDeploymentId > 0){
+					rset = smt.executeQuery("SELECT NAME FROM INSTALLATION_DEPLOYMENT WHERE DEPLOYMENT_ID = " + receiverDeploymentId);
+				    if(rset.next()){
+				    	receiverDeploymentName = rset.getString(1);
+				    }else{ //unlikely
+				    	throw new Exception("cannot locate receiver deployment with id = " + receiverDeploymentId);
+				    }
+				    rset.close();
+				}else{//never
+					throw new Exception("receiver deployment id is 0");
+				}
+				if(projectRolePersonId > 0){
+					rset = smt.executeQuery("SELECT PERSON_ROLE FROM PROJECT_PERSON WHERE PROJECT_ROLE_PERSON_ID = " + projectRolePersonId);
+				    if(rset.next()){
+				    	responsiblePersonNameAndRole = rset.getString(1);
+				    }else{ //unlikely
+				    	throw new Exception("cannot locate project person with id = " + projectRolePersonId);
+				    }
+				    rset.close();
+				}else{//never
+					throw new Exception("project role person id is 0");
+				}
+				// add the known tags table
 				reportName = "aatams.deployment_download." + deploymentDownloadId + ".txt";
-				FileOutputStream fos = new FileOutputStream(reportFolder + "/" + reportName);
+				File report = new File(reportFolder + "/" + reportName);
+				if(report.exists()){
+					throw new Exception("receiver file processing report already exists (" + report.getAbsolutePath() + ")");
+				}
+				FileOutputStream fos = new FileOutputStream(report);
 				BufferedWriter buffer = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
 				buffer.append("RECEIVER DOWNLOAD FILE PROCESSING REPORT\n\n");
-				buffer.append("Processing file:          " + file.getName() + "\n");
-				buffer.append("Deployment Download FID:  aatams.deployment_download." + deploymentDownloadId + "\n");
-				buffer.append("Receiver Deployment FID:  aatams.receiver_deployment." + receiverDeploymentId + "\n");
-				buffer.append("Project Role Person FID:  aatams.project_role_person." + projectRolePersonId + "\n\n");
+				buffer.append(String.format("%-20s %s%n","Processing file:",file.getName()));
+				buffer.append(String.format("%-20s %s%n","Installation:", installationName + " (FID*=aatams.installation." + installationId  + ")"));
+				buffer.append(String.format("%-20s %s%n","Station:", installationStationName + " (FID*=aatams.installation_station." + installationStationId  + ")"));
+				buffer.append(String.format("%-20s %s%n","Receiver Deployment:", receiverDeploymentName +  " (FID*=aatams.receiver_deployment." + receiverDeploymentId + ")" ));
+				buffer.append(String.format("%-20s %s%n","Longitude:", deploymentLongitude));
+				buffer.append(String.format("%-20s %s%n","Latitude:", deploymentLatitude));
+				buffer.append(String.format("%-20s %s%n","Download Timestamp: ", (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(deploymentDownloadTimestamp)) ));
+				buffer.append(String.format("%-20s %s%n%n","Deployment Owner: ", responsiblePersonNameAndRole + " (FID*=aatams.project_role_person." + projectRolePersonId + ")"));
+				buffer.append("* FID=Feature Identifier, This id code can be used in the AATAMS web site to retrieve specific features (records) of interest.\n");
+				buffer.append("Please see the help documentation on the website for more details (http://www.emii.org.au/aatams/help.html)\n\n");
 				// add the known tags table
 				if (tags.size() > newTags.size()) {
 					buffer.append("KNOWN TAGS\n");
 					buffer.append("----------------------------------------\n");
-					buffer.append("TAG CODE NAME             TAG DEVICE FID\n");
+					buffer.append("TAG CODE NAME            TAG DEVICE FID*\n");
 					buffer.append("----------------------------------------\n");
 					for (Iterator<Entry<String, Tag>> i = tags.entrySet().iterator(); i.hasNext();) {
 						Entry<String, Tag> entry = i.next();
@@ -427,7 +501,7 @@ public final class AcousticReceiverFileProcessor {
 				if (newTags.size() > 0) {
 					buffer.append("UNKNOWN(NEW)TAGS\n");
 					buffer.append("----------------------------------------\n");
-					buffer.append("TAG CODE NAME             TAG DEVICE FID\n");
+					buffer.append("TAG CODE NAME            TAG DEVICE FID*\n");
 					buffer.append("----------------------------------------\n");
 					for (Iterator<Entry<String, Tag>> i = newTags.entrySet().iterator(); i.hasNext();) {
 						Tag tag = i.next().getValue();
@@ -461,8 +535,6 @@ public final class AcousticReceiverFileProcessor {
 								pst.setLong(2, rset.getLong(1));
 								pst.setLong(3, rset.getLong(3));
 								pst.execute();
-								rset = pst.getResultSet();
-							// add a tag * detections summary
 							}
 							buffer.append("----------------------------------------\n");
 						}
@@ -477,12 +549,11 @@ public final class AcousticReceiverFileProcessor {
 						// set the file_name and the total detections in the deployment_download record
 						// this is the only way to prevent a file being processed twice, by checking that the file name doesn't
 						// already exist.
-						smt = conn.createStatement();
 						smt.execute("UPDATE DEPLOYMENT_DOWNLOAD SET\n" +
-								"FILE_NAME = '" + file.getName() + "',\n" +
+								"FILENAME = '" + file.getName() + "',\n" +
 								"DETECTIONS = " + detections.size() + "\n" +
-								"WHERE DEPLOYMENT_DOWNLOAD_ID = " + deploymentDownloadId);
-						smt.close();
+								"WHERE DOWNLOAD_ID = " + deploymentDownloadId);
+						conn.commit();
 						// add a tag release summary
 						projectTags = new HashMap<Integer, StringBuffer>();
 						StringBuffer sb = new StringBuffer();
@@ -502,14 +573,13 @@ public final class AcousticReceiverFileProcessor {
 									+ "INNER JOIN PROJECT_PERSON ON TAG_RELEASE.PROJECT_ROLE_PERSON_ID = PROJECT_PERSON.PROJECT_ROLE_PERSON_ID\n"
 									+ "LEFT OUTER JOIN CLASSIFICATION ON TAG_RELEASE.CLASSIFICATION_ID = CLASSIFICATION.CLASSIFICATION_ID\n"
 									+ "WHERE TAG_RELEASE.DEVICE_ID IN (" + list + ")\n" + "ORDER BY CODE_NAME ASC";
-							System.out.print(qry);
 							rset = smt.executeQuery(qry);
 							if (rset != null) {
 								while (rset.next()) {
 									if (rset.isFirst()) {
 										buffer.append("AVAILABLE RELEASE INFORMATION SUMMARY FOR TAGS DETECTED\n");
 										buffer.append("-----------------------------------------------------------------------------------\n");
-										buffer.append("TAG CODE NAME     TAG RELEASE FID           ANIMAL CLASSIFICATION                  \n");
+										buffer.append("TAG CODE NAME     TAG RELEASE FID*          ANIMAL CLASSIFICATION                  \n");
 										buffer.append("-----------------------------------------------------------------------------------\n");
 									}
 									buffer.append(String.format("%-18s%-26s%-36s%n", rset.getString(2), "aatams.tag_release." + rset.getString(1), rset
@@ -526,9 +596,11 @@ public final class AcousticReceiverFileProcessor {
 								}
 								buffer.append("-----------------------------------------------------------------------------------\n");
 							}
+							rset.close();
 						} else {
 							buffer.append("No tag release records have been found for the tags in the download file\n\n");
 						}
+						smt.close();
 					} else {
 						buffer.append("No detections where found in the file to process into database\n\n");
 					}
@@ -547,6 +619,7 @@ public final class AcousticReceiverFileProcessor {
 			Mailer mailer = new Mailer(SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PWD);
 			Email email = new Email();
 			try {
+				smt = conn.createStatement();
 				rset = smt.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n"
 						+ "WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" + "PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = "
 						+ projectRolePersonId);
@@ -565,6 +638,7 @@ public final class AcousticReceiverFileProcessor {
 					}
 				}
 				rset.close();
+				smt.close();
 			} catch (SQLException e) {
 				logger.error("an sql exception was encountered when accessing report email", e);
 			}
@@ -573,6 +647,7 @@ public final class AcousticReceiverFileProcessor {
 			for (Iterator<Entry<Integer, StringBuffer>> i = projectTags.entrySet().iterator(); i.hasNext();) {
 				Entry<Integer, StringBuffer> entry = i.next();
 				try {
+					smt = conn.createStatement();
 					rset = smt
 							.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n"
 									+ "WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" + "PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = "
@@ -597,6 +672,7 @@ public final class AcousticReceiverFileProcessor {
 						}
 					}
 					rset.close();
+					smt.close();
 				} catch (SQLException e) {
 					logger.error("an sql exception was encountered when accessing report email", e);
 				}

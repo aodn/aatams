@@ -41,10 +41,11 @@ import java.sql.DriverManager;
 /**
  * Processes an uploaded CSV export file from the AATAMS website.
  * 
- * Reads and validates the file sending feedback to the user.
+ * Reads and validates the file, sending feedback to the user.
  * 
  * On validation of the file a <class>'DetectionsInserterAndReportGenerator</class> thread
- * is executed that does the creation of the detection records in the database.
+ * is executed that does the creation of the detection records in the database and creates
+ * a report that is emailed to the person responsible for the receiver deployment.
  * 
  * @author Stephen Cameron
  * 
@@ -57,14 +58,14 @@ public final class AcousticReceiverFileProcessor {
 	private static final SimpleDateFormat timestampParser = new SimpleDateFormat(timestampFormat);
 	private static final String pattern = "\"([^\"]+?)\",?|([^,]+),?|,";
 	private static final Pattern csvRegex = Pattern.compile(pattern);
-	private String downloadFidPrefix = "aatams.deployment_download.";
-	private String reportSenderName = "eMII";
-	private String reportSenderEmailAddress = "stephen.cameron@utas.edu.au";
+	private String downloadFidPrefix = null;
+	private String reportSenderName = null;
+	private String reportSenderEmailAddress = null;
 	private String smtpHost = "postoffice.utas.edu.au";
 	private int smtpPort = 25;
-	private String smtpUser = "sc04";
-	private String smtpPassword = "66CoStHo";
-	private String aatamsWebsiteUri = "http://test.emii.org.au/aatams";
+	private String smtpUser = null;
+	private String smtpPassword = null;
+	private String aatamsWebsiteUri = null;
 	private Logger logger = Logger.getLogger(this.getClass());
 	private Connection conn = null;
 	private TreeMap<String, Tag> tags = new TreeMap<String, Tag>();

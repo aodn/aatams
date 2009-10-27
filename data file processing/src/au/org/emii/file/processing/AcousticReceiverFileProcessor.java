@@ -3,7 +3,6 @@
  */
 package au.org.emii.file.processing;
 
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,15 +28,24 @@ import javax.mail.Message.RecipientType;
 import javax.activation.FileDataSource;
 import org.codemonkey.vesijama.Email;
 import org.codemonkey.vesijama.Mailer;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import javax.sql.DataSource;
+import java.sql.DriverManager;
 
-// import org.apache.log4j.xml.DOMConfigurator;
-// import org.apache.log4j.Level;
-
-// TODO add deployment_download_id to detection table to associate detections
-// with a specific file.
-// this allows a final cross-check of detections in database after commit with
-// those in file.
 /**
+ * Processes an uploaded CSV export file from the AATAMS website.
+ * 
+ * Reads and validates the file sending feedback to the user.
+ * 
+ * On validation of the file a <class>'DetectionsInserterAndReportGenerator</class> thread
+ * is executed that does the creation of the detection records in the database.
+ * 
  * @author Stephen Cameron
  * 
  */
@@ -49,14 +57,14 @@ public final class AcousticReceiverFileProcessor {
 	private static final SimpleDateFormat timestampParser = new SimpleDateFormat(timestampFormat);
 	private static final String pattern = "\"([^\"]+?)\",?|([^,]+),?|,";
 	private static final Pattern csvRegex = Pattern.compile(pattern);
-	private static final String DOWNLOAD_ID_PREFIX = "aatams.deployment_download.";
-	private static final String PROCESSOR_FROM = "eMII";
-	private static final String PROCESSOR_ADDRESS = "stephen.cameron@utas.edu.au";
-	private static final String SMTP_HOST = "postoffice.utas.edu.au";
-	private static final int SMTP_PORT = 25;
-	private static final String SMTP_USER = "sc04";
-	private static final String SMTP_PWD = "66CoStHo";
-	private static final String AATAMS_WEB_SITE_URI = "http://test.emii.org.au/aatams";
+	private String downloadFidPrefix = "aatams.deployment_download.";
+	private String reportSenderName = "eMII";
+	private String reportSenderEmailAddress = "stephen.cameron@utas.edu.au";
+	private String smtpHost = "postoffice.utas.edu.au";
+	private int smtpPort = 25;
+	private String smtpUser = "sc04";
+	private String smtpPassword = "66CoStHo";
+	private String aatamsWebsiteUri = "http://test.emii.org.au/aatams";
 	private Logger logger = Logger.getLogger(this.getClass());
 	private Connection conn = null;
 	private TreeMap<String, Tag> tags = new TreeMap<String, Tag>();
@@ -72,21 +80,91 @@ public final class AcousticReceiverFileProcessor {
 	private float deploymentLatitude;
 	private float deploymentLongitude;
 	private File file;
+	
+	//make default constructor private
+	private AcousticReceiverFileProcessor(){}
+	
+	public AcousticReceiverFileProcessor(
+			String downloadFidPrefix,
+			String reportSenderName,
+			String reportSenderEmailAddress,
+			String smtpHost,
+			int smtpPort,
+			String smtpUser,
+			String smtpPassword,
+			String aatamsWebsiteUri) throws IllegalArgumentException{
+		if(downloadFidPrefix == null){
+			throw new IllegalArgumentException("downloadFidPrefix argument cannot be null");
+		}else{
+			this.downloadFidPrefix = downloadFidPrefix;
+		}
+		if(reportSenderName == null){
+			throw new IllegalArgumentException("reportSenderName argument cannot be null");
+		}else{
+			this.reportSenderName = reportSenderName;
+		}
+		if(reportSenderEmailAddress == null){
+			throw new IllegalArgumentException("reportSenderEmailAddress argument cannot be null");
+		}else{
+			this.reportSenderEmailAddress = reportSenderEmailAddress;
+		}
+		if(smtpHost == null){
+			throw new IllegalArgumentException("smtpHost argument cannot be null");
+		}else{
+			this.smtpHost = smtpHost;
+		}
+		if(smtpUser == null){
+			throw new IllegalArgumentException("smtpUser argument cannot be null");
+		}else{
+			this.smtpUser = smtpUser;
+		}
+		if(smtpPassword == null){
+			throw new IllegalArgumentException("smtpPassword argument cannot be null");
+		}else{
+			this.smtpPassword = smtpPassword;
+		}
+		if(aatamsWebsiteUri == null){
+			throw new IllegalArgumentException("aatamsWebsiteUri argument cannot be null");
+		}else{
+			this.aatamsWebsiteUri = aatamsWebsiteUri;
+		}	
+	}
 
-	public void doProcessing(String downloadFid, String filePath, String jdbcDriverClassName, String connectionString, String username, String password,
-			PrintStream outStream) {
-
-		boolean success = false;
-
+	/**
+	 * Processes an uploaded CSV export file from the AATAMS website. 
+	 * 
+	 * @param database
+	 * @param downloadFid
+	 * @param filePath
+	 * @param outStream
+	 */
+	public void doProcessing(Connection conn, String downloadFid, String filePath, 
+			PrintStream outStream) throws IllegalArgumentException {
+		//validate parameters
+		if(conn == null){
+			throw new IllegalArgumentException("database connection argument cannot be null");
+		}else{
+			try{
+				if(!conn.isValid(0)){
+					throw new IllegalArgumentException("database connection argument is invalid");
+				}
+			}catch(SQLException e){
+				throw new IllegalArgumentException("database connection argument is invalid", e);
+			}
+		}
+		if(downloadFid == null){
+			throw new IllegalArgumentException("downloadFid argument cannot be null");
+		}
+		if(filePath == null){
+			throw new IllegalArgumentException("filePath argument cannot be null");
+		}
 		// if not passed set outStream to System.out;
 		if (outStream == null) {
 			outStream = System.out;
 		}
+		boolean success = false;
 
 		try {
-			//Get db connection.
-			Class.forName(jdbcDriverClassName);
-			conn = DriverManager.getConnection(connectionString, username, password);
 			conn.setAutoCommit(false); //want to rollback if error!
 			// Print all warnings
 			for (SQLWarning warn = conn.getWarnings(); warn != null; warn = warn.getNextWarning()) {
@@ -176,9 +254,9 @@ public final class AcousticReceiverFileProcessor {
 			// to the correct receiver
 			Statement smt = null;
 			if (downloadFid != null) {
-				if (downloadFid.startsWith(DOWNLOAD_ID_PREFIX)) {
+				if (downloadFid.startsWith(downloadFidPrefix)) {
 					try {
-						deploymentDownloadId = Integer.valueOf(downloadFid.substring(DOWNLOAD_ID_PREFIX.length()));
+						deploymentDownloadId = Integer.valueOf(downloadFid.substring(downloadFidPrefix.length()));
 					} catch (NumberFormatException e) {
 						throw new Exception("the downloadId parameter passed is invalid, it must end with a number", e);
 					}
@@ -213,7 +291,7 @@ public final class AcousticReceiverFileProcessor {
 					}
 					rset.close();
 				} else {
-					throw new Exception("the downloadId parameter passed is invalid, it must start with '" + DOWNLOAD_ID_PREFIX + "'");
+					throw new Exception("the downloadId parameter passed is invalid, it must start with '" + downloadFidPrefix + "'");
 				}
 			} else {
 				throw new Exception("the downloadId parameter passed is null");
@@ -327,14 +405,23 @@ public final class AcousticReceiverFileProcessor {
 		return list;
 	}
 
-	/**
+	/*
+	 * For testing outside of web server
+	 * 
 	 * @param args
 	 */
 	public static void main(String args[]) {
 		BasicConfigurator.configure();
 		AcousticReceiverFileProcessor processor = new AcousticReceiverFileProcessor();
 		if (args.length == 6) {
-			processor.doProcessing(args[0], args[1], args[2], args[3], args[4], args[5], null);
+			//aatams.deployment_download.28 "c:\temp\aatams.deployment_download.28\VUE_Export.csv" "oracle.jdbc.driver.OracleDriver" "jdbc:oracle:thin:@obsidian.bluenet.utas.edu.au:1521:orcl" AATAMS boomerSIMS
+			try{
+				Class.forName(args[2]);
+				Connection conn = DriverManager.getConnection(args[33], args[4], args[5]);
+				processor.doProcessing(conn, args[0], args[1], null);
+			}catch(Exception e){
+				processor.logger.fatal("unexpected error", e);
+			}
 		} else {
 			processor.logger.error("6 parameters are needed: download id, file path, jdbc driver class, connection string, username and password");
 		}
@@ -481,7 +568,7 @@ public final class AcousticReceiverFileProcessor {
 				buffer.append(String.format("%-20s %s%n","Download Timestamp: ", (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(deploymentDownloadTimestamp)) ));
 				buffer.append(String.format("%-20s %s%n%n","Deployment Owner: ", responsiblePersonNameAndRole + " (FID*=aatams.project_role_person." + projectRolePersonId + ")"));
 				buffer.append("* FID=Feature Identifier, This id code can be used in the AATAMS web site to retrieve specific features (records) of interest.\n");
-				buffer.append("Please see the help documentation on the website for more details (http://www.emii.org.au/aatams/help.html)\n\n");
+				buffer.append("Please see the help documentation on the website for more details (" + aatamsWebsiteUri + "/help.html)\n\n");
 				// add the known tags table
 				if (tags.size() > newTags.size()) {
 					buffer.append("KNOWN TAGS\n");
@@ -616,7 +703,7 @@ public final class AcousticReceiverFileProcessor {
 			}
 			// 7. Send the main report
 			String projectPersonName = "", projectAddressTo = "";
-			Mailer mailer = new Mailer(SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PWD);
+			Mailer mailer = new Mailer(smtpHost, smtpPort, smtpUser, smtpPassword);
 			Email email = new Email();
 			try {
 				smt = conn.createStatement();
@@ -626,7 +713,7 @@ public final class AcousticReceiverFileProcessor {
 				if (rset.next()) {
 					projectPersonName = rset.getString(1);
 					projectAddressTo = rset.getString(2);
-					email.setFromAddress(PROCESSOR_FROM, PROCESSOR_ADDRESS);
+					email.setFromAddress(reportSenderName, reportSenderEmailAddress);
 					email.addRecipient(projectPersonName, projectAddressTo, RecipientType.TO);
 					email.setSubject("AATAMS Deployment Download Processing Report (FID=aatams.deployment_download." + deploymentDownloadId + ")");
 					email.setText("Please find attached a report with details of a Receiver Deployment Download just processed");
@@ -656,7 +743,7 @@ public final class AcousticReceiverFileProcessor {
 						personName = rset.getString(1);
 						addressTo = rset.getString(2);
 						email = new Email();
-						email.setFromAddress(PROCESSOR_FROM, PROCESSOR_ADDRESS);
+						email.setFromAddress(reportSenderName, reportSenderEmailAddress);
 						email.addRecipient(personName, addressTo, RecipientType.TO);
 						email.addRecipient(projectPersonName, projectAddressTo, RecipientType.CC);
 						email.setSubject("AATAMS 'Foreign' Detections Report");
@@ -664,7 +751,7 @@ public final class AcousticReceiverFileProcessor {
 								+ "in another person's deployment download: \n" + entry.getValue().toString() + "\n\n"
 								+ "Please contact the responsible person (carbon-copied this email) or obtain more"
 								+ "information via the deployment download record FID=aatams.deployment_download." + deploymentDownloadId
-								+ " viewable at the AATAMS web site (" + AATAMS_WEB_SITE_URI + ").");
+								+ " viewable at the AATAMS web site (" + aatamsWebsiteUri + ").");
 						try {
 							mailer.sendMail(email);
 						} catch (Exception e) {

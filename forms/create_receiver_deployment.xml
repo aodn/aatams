@@ -10,7 +10,6 @@
    <head>
       <title>AATAMS Web Interface</title>
       <link href="aatams.css" rel="stylesheet" type="text/css"/>
-      <script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
       <xf:model id="model1">
          <xf:instance id="inst_data">
             <wfs:Transaction version="1.1.0" service="WFS">
@@ -131,7 +130,6 @@
                         replace="instance"
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
-               <xf:delete nodeset="instance('inst_data')//aatams:status_id[.='']"/>
                <xf:insert nodeset="instance('inst_data')//aatams:receiver_device_ref/aatams:receiver_device"
                           origin="instance('inst_receiver_device')//aatams:receiver_device[@gml:id=instance('inst_subfeatures')/receiver_device_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:receiver_device_ref/aatams:receiver_device"

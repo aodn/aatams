@@ -10,7 +10,6 @@
    <head>
       <title>AATAMS Web Interface</title>
       <link href="aatams.css" rel="stylesheet" type="text/css"/>
-      <script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
       <xf:model id="model1">
          <xf:instance id="inst_data">
             <wfs:Transaction version="1.1.0" service="WFS">
@@ -116,7 +115,6 @@
                <xf:delete nodeset="instance('inst_data')//aatams:clock_drift[.='']"/>
                <xf:delete nodeset="instance('inst_data')//aatams:pings[.='']"/>
                <xf:delete nodeset="instance('inst_data')//aatams:detections[.='']"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:status_id[.='']"/>
                <xf:insert nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
                           origin="instance('inst_installation_deployment')//aatams:installation_deployment[@gml:id=instance('inst_subfeatures')/installation_deployment_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"

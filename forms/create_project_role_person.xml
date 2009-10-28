@@ -10,7 +10,6 @@
    <head>
       <title>AATAMS Web Interface</title>
       <link href="aatams.css" rel="stylesheet" type="text/css"/>
-      <script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
       <xf:model id="model1">
          <xf:instance id="inst_data">
             <wfs:Transaction version="1.1.0" service="WFS">

@@ -10,7 +10,6 @@
    <head>
       <title>AATAMS Web Interface</title>
       <link href="aatams.css" rel="stylesheet" type="text/css"/>
-      <script type="text/javascript" src="aatams_xforms.js" charset="UTF-8"/>
       <xf:model id="model1">
          <xf:instance id="inst_data">
             <wfs:Transaction version="1.1.0" service="WFS">
@@ -127,7 +126,6 @@
                <xf:delete nodeset="instance('inst_data')//aatams:capture_longitude[.='']"/>
                <xf:delete nodeset="instance('inst_data')//aatams:capture_latitude[.='']"/>
                <xf:delete nodeset="instance('inst_data')//aatams:capture_timestamp[.='']"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:status_id[.='']"/>
                <xf:insert nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification"
                           origin="instance('inst_classification')//aatams:classification[@gml:id=instance('inst_subfeatures')/classification_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification"

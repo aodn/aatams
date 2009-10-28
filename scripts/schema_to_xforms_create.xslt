@@ -28,8 +28,8 @@
 						<title>AATAMS Web Interface</title>
 						<link href="aatams.css" rel="stylesheet"
 							type="text/css" />
-						<script type="text/javascript"
-							src="aatams_xforms.js" charset="UTF-8" />
+						<!--script type="text/javascript"
+							src="aatams_xforms.js" charset="UTF-8" /-->
 						<xf:model id="model1">
 							<!-- instance for submission -->
 							<xf:instance id="inst_data">

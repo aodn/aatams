@@ -593,7 +593,7 @@ public final class AcousticReceiverFileProcessor {
 				buffer.append(String.format("%-20s %s%n","Download Timestamp: ", (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(deploymentDownloadTimestamp)) ));
 				buffer.append(String.format("%-20s %s%n%n","Deployment Owner: ", responsiblePersonNameAndRole + " (FID*=aatams.project_role_person." + projectRolePersonId + ")"));
 				buffer.append("* FID=Feature Identifier, This id code can be used in the AATAMS web site to retrieve specific features (records) of interest.\n");
-				buffer.append("Please see the help documentation on the website for more details (" + aatamsWebsiteUri + "/help.html)\n\n");
+				buffer.append("Please see the help documentation on the website for more details (" + aatamsWebsiteUri + "?tab=help)\n\n");
 				// add the known tags table
 				if (tags.size() > newTags.size()) {
 					buffer.append("KNOWN TAGS\n");

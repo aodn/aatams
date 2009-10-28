@@ -83,7 +83,9 @@ public final class AcousticReceiverFileProcessor {
 	private File file;
 	
 	//make default constructor private
-	private AcousticReceiverFileProcessor(){}
+	private AcousticReceiverFileProcessor() throws Exception{
+		throw new Exception("use public constructor");
+	}
 	
 	public AcousticReceiverFileProcessor(
 			String downloadFidPrefix,
@@ -128,7 +130,9 @@ public final class AcousticReceiverFileProcessor {
 			throw new IllegalArgumentException("aatamsWebsiteUri argument cannot be null");
 		}else{
 			this.aatamsWebsiteUri = aatamsWebsiteUri;
-		}	
+		}
+		//configure logging
+		BasicConfigurator.configure();
 	}
 
 	/**
@@ -139,15 +143,18 @@ public final class AcousticReceiverFileProcessor {
 	 * @param filePath - the full path to the file for processing
 	 * @param messages - array for message addition to return to user
 	 */
-	public void doProcessing(Connection conn, String downloadFid, String filePath, 
+	public void doProcessing(Connection connection, String downloadFid, String filePath, 
 			ArrayList<String> messages) throws IllegalArgumentException {
 		//validate parameters
-		if(conn == null){
+		if(connection == null){
 			throw new IllegalArgumentException("database connection argument cannot be null");
 		}else{
 			try{
-				if(!conn.isValid(0)){
-					throw new IllegalArgumentException("database connection argument is invalid");
+				if(connection.isClosed()){
+					throw new IllegalArgumentException("database connection argument is closed");
+				}else{
+					//hold a reference so thread can access it after this method returns
+					conn = connection;
 				}
 			}catch(SQLException e){
 				throw new IllegalArgumentException("database connection argument is invalid", e);
@@ -260,8 +267,7 @@ public final class AcousticReceiverFileProcessor {
 						throw new Exception("the downloadId parameter passed is invalid, it must end with a number", e);
 					}
 					smt = conn.createStatement();
-					// a receiver deployment must have a project_role_person
-					// associated with it,
+					// a receiver deployment must have a project_role_person associated with it,
 					// extract this to be used for any new tags added.
 					rset = smt.executeQuery("SELECT RECEIVER_DEPLOYMENT.DEPLOYMENT_ID, RECEIVER_DEPLOYMENT.PROJECT_ROLE_PERSON_ID, "
 							+ "RECEIVER_DEPLOYMENT.INSTALLATION_ID, RECEIVER_DEPLOYMENT.STATION_ID, " 
@@ -408,13 +414,19 @@ public final class AcousticReceiverFileProcessor {
 	 */
 	public static void main(String args[]) {
 		BasicConfigurator.configure();
-		AcousticReceiverFileProcessor processor = new AcousticReceiverFileProcessor();
+		AcousticReceiverFileProcessor processor = new AcousticReceiverFileProcessor("aatams.deployment_download.",
+				 "eMII", "stephen.cameron@utas.edu.au", "postoffice.utas.edu.au", 25, 
+				 "sc04","66CoStHo", "http://test.emii.org.au/aatams");
 		if (args.length == 6) {
 			//aatams.deployment_download.28 "c:\temp\aatams.deployment_download.28\VUE_Export.csv" "oracle.jdbc.driver.OracleDriver" "jdbc:oracle:thin:@obsidian.bluenet.utas.edu.au:1521:orcl" AATAMS boomerSIMS
 			try{
 				Class.forName(args[2]);
-				Connection conn = DriverManager.getConnection(args[33], args[4], args[5]);
-				processor.doProcessing(conn, args[0], args[1], null);
+				Connection conn = DriverManager.getConnection(args[3], args[4], args[5]);
+				ArrayList<String> messages = new ArrayList<String>();
+				processor.doProcessing(conn, args[0], args[1], messages);
+				for(int i = 0; i<messages.size(); i++){
+					System.out.println(messages.get(i));
+				}
 			}catch(Exception e){
 				processor.logger.fatal("unexpected error", e);
 			}
@@ -481,8 +493,6 @@ public final class AcousticReceiverFileProcessor {
 					se = se.getNextException();
 				}
 			} catch (Exception e) {
-				// outStream.println("file processing of " + downloadFid + " has
-				// failed due t, contact eMII for more information.");
 				logger.fatal(e);
 			} finally {
 				try {

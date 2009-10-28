@@ -228,17 +228,27 @@ public final class AcousticReceiverFileProcessor {
 							throw new Exception(msg);
 						}
 					}
+					String msg = "Total detections count: " + detections.size();
+					messages.add(msg);
+					logger.info(msg);
+				}else{
+					String msg = "invalid file header line";
+					logger.fatal(msg);
+					messages.add("invalid file header line");
+					return;
 				}
-				String msg = "Total detections count: " + detections.size();
-				messages.add(msg);
-				logger.info(msg);
 				fis.close();
 			} catch (IOException e) {
 				throw new Exception("exiting, could not read datafile", e);
 			} catch (Exception e) {
 				throw new Exception("exiting, could not process datafile", e);
 			}
-			// 2. Find the database ids of the tags detected.
+			//if no detections?
+			if(detections.size()==0){
+				messages.add("No detection records found in file, file processing completed");
+				return;
+			}
+			//2. Find the database ids of the tags detected.
 			PreparedStatement pst = conn.prepareStatement("SELECT DEVICE_ID FROM DEVICE WHERE CODE_NAME = ? AND DEVICE_TYPE_ID = 2");
 			ResultSet rset;
 			messages.add("Known tag devices:");
@@ -376,8 +386,17 @@ public final class AcousticReceiverFileProcessor {
 		}
 	}
 
-	private boolean validHeader(String line) {
-		return true;
+	private boolean validHeader(String header) {
+		String[] tokens = header.split(",");
+		if(tokens[0].matches("Date/Time") &&
+			tokens[1].matches("Code Space") &&
+			tokens[2].matches("ID") &&
+			tokens[9].matches("Receiver Name")){
+			return true;
+		}else{
+			return false;
+		}
+
 	}
 
 	/**

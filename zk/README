@@ -12,9 +12,25 @@ You also need to add the following lines to your web.xml (in WEB-INF) to specify
     <param-name>downloads_path</param-name>
     <param-value>*****</param-value>
   </context-param>	
+  
+For database connectivity we make use of the JDBC 'DataSource' support in Tomcat. The application obtains a
+DataSource reference via JNDI:
+  
+	javax.sql.DataSource ds = (javax.sql.DataSource) new InitialContext().lookup("java:comp/env/jdbc/aatams");
+  			
+The connection details are specified in a Tomcat context.xml file:
+  
+ <Context>
+ 	<Resource name="jdbc/aatams" username="AATAMS" password="boomerSIMS" 
+     url="jdbc:oracle:thin:@obsidian.bluenet.utas.edu.au:1521:orcl" 
+     auth="Container" defaultAutoCommit="false" 
+     driverClassName="oracle.jdbc.driver.OracleDriver" maxActive="10" 
+     timeBetweenEvictionRunsMillis="60000" 
+     type="javax.sql.DataSource" />    
+</Context> 
 
 
-Here are Geoff's valuable getting started with ZK tips.
+Here are Geoff's valuable "getting started with ZK" tips.
 
 *********************************************************************
 

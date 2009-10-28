@@ -355,6 +355,8 @@ public final class AcousticReceiverFileProcessor {
 			}
 			// 5. Create new detection records in the database.
 			// start a thread to handle this time consuming part
+			messages.add("A full download file processing report will be emailed to all email addressees linked to deployment aatams.receiver_deployment."
+					+ receiverDeploymentId + ".");
 			DetectionsInserterAndReportGenerator inserter = new DetectionsInserterAndReportGenerator();
 			inserter.start();
 			success = true;
@@ -367,14 +369,12 @@ public final class AcousticReceiverFileProcessor {
 				logger.fatal("Error  : " + se.getErrorCode());
 				se = se.getNextException();
 			}
+			messages.add("File processing of " + downloadFid + " has failed due to an unforseen error, contact eMII for more information.");
 		} catch (Exception e) {
+			messages.add("File processing of " + downloadFid + " has failed due to an unforseen error, contact eMII for more information.");
 			logger.fatal(e);
 		} finally {
-			if (success) {
-				messages.add("A full download file processing report will be emailed to all email addressees linked to deployment aatams.receiver_deployment."
-								+ receiverDeploymentId + ".");
-			} else {
-				messages.add("File processing of " + downloadFid + " has failed due to an unforseen error, contact eMII for more information.");
+			if (!success) {
 				try {
 					if (conn != null && !conn.isClosed()) {
 						conn.rollback();

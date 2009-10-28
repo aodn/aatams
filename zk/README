@@ -18,7 +18,7 @@ DataSource reference via JNDI:
   
 	javax.sql.DataSource ds = (javax.sql.DataSource) new InitialContext().lookup("java:comp/env/jdbc/aatams");
   			
-The connection details are specified in a Tomcat context.xml file:
+The connection details are specified in a Tomcat context.xml file placed in the META-INF directory:
   
  <Context>
  	<Resource name="jdbc/aatams" username="AATAMS" password="boomerSIMS" 
@@ -28,6 +28,9 @@ The connection details are specified in a Tomcat context.xml file:
      timeBetweenEvictionRunsMillis="60000" 
      type="javax.sql.DataSource" />    
 </Context> 
+
+On loading a war file this will be copied to $CATALINA_HOME/conf/[enginename]/[hostname]/ and renamed to match the application's context path.
+
 
 
 Here are Geoff's valuable "getting started with ZK" tips.

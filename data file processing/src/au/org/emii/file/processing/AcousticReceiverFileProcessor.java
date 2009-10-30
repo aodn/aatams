@@ -54,7 +54,7 @@ public final class AcousticReceiverFileProcessor {
 
 	public String reportFolder = "c:/temp";
 
-	private static final String timestampFormat = "yyyy-MM-dd hh:mm:ss.SSS";
+	private static final String timestampFormat = "yyyy-MM-dd hh:mm:ss[.SSS]";
 	private static final SimpleDateFormat timestampParser = new SimpleDateFormat(timestampFormat);
 	private static final String pattern = "\"([^\"]+?)\",?|([^,]+),?|,";
 	private static final Pattern csvRegex = Pattern.compile(pattern);
@@ -221,7 +221,7 @@ public final class AcousticReceiverFileProcessor {
 
 						// buffer the record
 						try {
-							detections.add(new Detection(tags.get(tagName), new Timestamp(timestampParser.parse(values.get(0)).getTime())));
+							detections.add(new Detection(tags.get(tagName), new Timestamp(timestampParser.parse((values.get(0)+".000").substring(0,19)).getTime())));
 						} catch (ParseException e) {
 							String msg = "an invalid timestamp string has been found (" + values.get(0) + "), expecting format " + timestampFormat;
 							messages.add(msg);

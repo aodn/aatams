@@ -6,7 +6,7 @@
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="DISPLAY_LEVEL_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="DISPLAY_START_DATE" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="200" autoIncrement="false"/>
+      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
       <foreign-key foreignTable="CLASSIFICATION" name="ANIMAL_FK00">
         <reference local="CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
       </foreign-key>
@@ -22,7 +22,7 @@
     </table>
     <table name="CLASSIFICATION">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="PARENT_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="COMMON_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -32,6 +32,9 @@
       <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="CLASSIFICATION_FK00">
         <reference local="CLASSIFICATION_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
       </foreign-key>
+      <foreign-key foreignTable="CLASSIFICATION" name="CLASSIFICATION_FK01">
+        <reference local="PARENT_CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
+      </foreign-key>   
       <index name="CLASSIFICATION_ID">
         <index-column name="CLASSIFICATION_ID"/>
       </index>
@@ -66,8 +69,8 @@
       <column name="CLOCK_DRIFT" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PINGS" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="DETECTIONS" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="CC_EMAIL_ADDRESSES" primaryKey="false" required="false" type="VARCHAR" size="255" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="255" autoIncrement="false"/>
+      <column name="CC_EMAIL_ADDRESSES" primaryKey="false" required="false" type="VARCHAR" size="500" autoIncrement="false"/>
+      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	 <unique-column name="DEPLOYMENT_ID"/>
 	 <unique-column name="DOWNLOAD_TIMESTAMP"/>
@@ -111,7 +114,7 @@
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="EVENT_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="EVENT_TIMESTAMP" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	 <unique-column name="DEPLOYMENT_ID"/>
 	 <unique-column name="EVENT_TYPE_ID"/>
@@ -154,7 +157,7 @@
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="RECOVERY_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
       <column name="RECOVERY_STATUS_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="LONGVARCHAR" size="1073741823" autoIncrement="false"/>
+      <column name="COMMENTS" primaryKey="false" required="false" type="LONGVARCHAR" size="4000" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	 <unique-column name="DEPLOYMENT_ID"/>
 	 <unique-column name="RECOVERY_TIMESTAMP"/>
@@ -295,7 +298,7 @@
       <column name="ACOUSTIC_RELEASE_ID" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="MOORING_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="BOTTOM_DEPTH" primaryKey="false" required="true"  type="DECIMAL" size="5,2" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="255" autoIncrement="false"/>
+      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	 <unique-column name="DEVICE_ID"/>
 	 <unique-column name="LONGITUDE"/>
@@ -430,8 +433,8 @@
     <table name="GEOGRAPHIC_AREA">
       <column name="GEOGRAPHIC_AREA_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="BOUNDARY_POINTS" primaryKey="false" required="false" type="VARCHAR" size="255" autoIncrement="false"/>
-      <column name="DESCRIPTION" primaryKey="false" required="true" type="VARCHAR" size="255" autoIncrement="false"/>
+      <column name="BOUNDARY_POINTS" primaryKey="false" required="false" type="VARCHAR" size="500" autoIncrement="false"/>
+      <column name="DESCRIPTION" primaryKey="false" required="true" type="VARCHAR" size="500" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
         <unique-column name="NAME"/>
       </unique>
@@ -519,7 +522,7 @@
       <column name="SURGERY_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="MEASUREMENT_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="VALUE" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
       <foreign-key foreignTable="MEASUREMENT_TYPE" name="MEASUREMENT_FK00">
         <reference local="MEASUREMENT_TYPE_ID" foreign="MEASUREMENT_TYPE_ID"/>
       </foreign-key>
@@ -575,7 +578,7 @@
     <table name="MOORING_TYPE">
       <column name="MOORING_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="DESCRIPTION" primaryKey="false" required="false" type="VARCHAR" size="255" autoIncrement="false"/>
+      <column name="DESCRIPTION" primaryKey="false" required="false" type="VARCHAR" size="500" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
         <unique-column name="NAME"/>
       </unique>
@@ -771,7 +774,7 @@
       <column name="ANIMAL_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="STOCK_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="UTC_DATETIME" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="255" autoIncrement="false"/>
+      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
       <column name="UNIT" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="MEASURE" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <foreign-key foreignTable="ANIMAL" name="SURGERY_FK00">
@@ -999,7 +1002,7 @@
       <column name="TETHER_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="DESCRIPTION" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="PICTURE_REFERENCE" primaryKey="false" required="false" type="LONGVARCHAR" size="1073741823" autoIncrement="false"/>
+      <column name="PICTURE_REFERENCE" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
         <unique-column name="NAME"/>
       </unique>

@@ -1,0 +1,275 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+   <head>
+	<script type="text/javascript" src="sarissa/sarissa.js"> </script>
+	<script type="text/javascript" src="sarissa/sarissa_ieemu_xpath.js"> </script>
+<link rel="stylesheet" href="mktree/mktree.css" type="text/css">
+<script type="text/javascript" src="mktree/mktree.js"> </script>
+<script type="text/javascript">
+    // <![CDATA[
+    var xmlDoc;
+    var tags = new Array();
+    var current_tree_node = null;
+    var max_table_rows = 100;
+    var display_position = 1;
+    var nodes = null;
+    function init() {
+       try{
+           xmlDoc = Sarissa.getDomDocument();
+          // the following two lines are needed for IE
+           xmlDoc.setProperty("SelectionNamespaces", "xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:gml='http://www.opengis.net/gml' xmlns:aatams='http://www.imos.org.au/aatams' xmlns:wfs='http://www.opengis.net/wfs'");
+          xmlDoc.setProperty("SelectionLanguage", "XPath");
+          xmlDoc.async = false;
+          //xmlDoc.load('AATAMS-Surgery.xml');
+          xmlDoc.load("../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device");
+
+          nodes = xmlDoc.selectNodes( "/wfs:FeatureCollection/gml:featureMember/*");
+          alert(nodes.length);
+          //display feature member list
+          build_tree();
+
+          //parse feature members for properties list
+          for(var i=0;i<nodes.length && i<100;i++){
+             find_node_names(nodes[i],tags);
+          }
+          //create properties table header
+          var table = document.getElementById("table");
+          var head = table.getElementsByTagName("thead")[0];
+          var header = document.createElement("tr");
+          head.appendChild(header);
+          header.appendChild(document.createElement("th"));
+          for(var name in tags){
+             var col = document.createElement("th");
+             col.innerHTML = tags[name][1];
+             header.appendChild(col);
+          }
+          //fill table
+          var body = table.getElementsByTagName("tbody")[0];
+          for(var i=0;i<nodes.length && i<max_table_rows;i++){
+             var row = document.createElement("tr");
+             body.appendChild(row);
+             row.appendChild(document.createElement("td")).innerHTML = i+1;
+             for(var name in tags){
+                var cell = document.createElement("td");
+                if(tags[name][0]==Node.TEXT_NODE){
+                   var tnodes = nodes[i].selectNodes(name);
+                   if(tnodes.length>0){
+                      cell.innerHTML = tnodes[0].childNodes[0].nodeValue;
+                      cell.className = "value";
+                   }
+                   else{
+                      cell.innerHTML = "";
+                      cell.className = "";
+                   }
+                }
+                else{
+                   cell.innerHTML =  "<div class='node'>"+name+"</div>";
+                   cell.className = "node";
+                }
+                row.appendChild(cell);
+             }
+          }
+          //load remaining rows into tree in batches
+          //so that user can see and interact with screen
+          window.setTimeout(build_tree,1000);
+       }
+       catch(e){
+          alert(e.message);
+       }
+    }
+
+    /**
+     
+     */
+    function build_tree(){
+       var tree = document.getElementById("tree");
+       for(var i=0;display_position<=nodes.length && i<1000;i++){
+          var div = document.createElement("div");
+          div.id = "tree_node_" + i;
+          div.node = nodes[display_position-1];
+          div.position = display_position;
+          div.onclick = select_node;
+          div.innerHTML = "<div class='node_number' onclick='open_node(this)'>"+display_position+"<img class='toggle' src='plus.gif'/></div>"+nodes[i].nodeName;
+          div.className = "node tree_node";
+          tree.appendChild(div);
+          //create another div for tree
+          var div = document.createElement("div");
+          div.className = "node_tree_container";
+          tree.appendChild(div);
+          display_position++;
+       }
+       if(display_position<=nodes.length){
+          window.setTimeout(build_tree,1000);
+       }
+    }
+
+    /**
+    
+    */
+    function fill_table(start_pos){
+       var table = document.getElementById("table");
+       var body = table.getElementsByTagName("tbody")[0];
+       var node_idx = start_pos-1;
+       for(var i=0;i<body.childNodes.length;i++){
+          var row = body.childNodes[i];
+          var cell_counter = 0;
+          if(node_idx<nodes.length){
+              row.childNodes[cell_counter++].innerHTML = node_idx+1;         
+              for(var name in tags){   
+                 var cell = row.childNodes[cell_counter++];
+                 if(tags[name][0]==Node.TEXT_NODE){
+                    var tnodes = nodes[node_idx].selectNodes(name);
+                    if(tnodes.length>0){
+                       cell.innerHTML = tnodes[0].childNodes[0].nodeValue;
+                       cell.className = "";
+                    }
+                    else{
+                       cell.innerHTML = "";
+                       cell.className = "";
+                    }
+                 }
+                 else{
+                    cell.innerHTML =  name;
+                    cell.className = "node";
+                 }
+              }
+           }
+           else{
+              row.childNodes[cell_counter++].innerHTML = "";         
+              for(var name in tags){   
+                 var cell = row.childNodes[cell_counter++];
+                 cell.innerHTML =  "&nbsp;";
+                 cell.className = "";
+              } 
+           }
+           node_idx++;
+       }
+    }
+
+    /**
+    Finds all property (tag) names to build a pseudo-schema
+    */
+    function find_node_names(node,names){    
+       var nodes = node.selectNodes("*");
+       for(var i=0;i<nodes.length;i++){
+          if(nodes[i].nodeType == Node.ELEMENT_NODE){
+             var name = nodes[i].nodeName;
+             if(nodes[i].childNodes.length > 0 && nodes[i].childNodes[0].nodeType == Node.TEXT_NODE){
+                //alert(name+"="+nodes[i].childNodes[0].nodeValue);
+                if(!names[name]){
+                   names[name] = [Node.TEXT_NODE,name,null];
+                }
+             }
+             else{
+                //go to next level
+                if(!names[name]){
+                   names[name] = [Node.ELEMENT_NODE,name,[]];
+                   find_node_names(nodes[i],names[name][2]);
+                }
+             }
+          }
+          else if(nodes[i].nodeType == Node.ATTRIBUTE_NODE){
+            
+          }
+       }
+    }
+
+    function select_node(){
+       this.style.backgroundColor = 'red';
+       if(current_tree_node != null){
+          current_tree_node.style.backgroundColor = "#DDDDDD";
+       }
+       current_tree_node = this;
+       fill_table(this.position);
+    }
+
+    function open_node(element){
+       if(typeof(element.open) != 'undefined'){
+          if(element.open == true){
+             element.parentNode.nextSibling.style.display = "none";
+             element.open = false;
+          }
+          else{
+             element.parentNode.nextSibling.style.display = "block";
+             element.open = true;
+          }
+       }
+       else{
+          var node = element.parentNode.node;
+          //alert(new XMLSerializer().serializeToString(node));
+          var list = document.createElement("ul");
+          list.className = "mktree";
+          //recursive routine to build sub-tree
+          build_sub_tree(node, list, tags);
+          element.parentNode.nextSibling.appendChild(list);
+          element.parentNode.nextSibling.style.display = "block";
+          processList(list);
+          element.open = true;
+       }
+    }
+
+    function build_sub_tree(xmlNode, listNode, levelTags){
+       for(var name in levelTags){
+          if(levelTags[name][0]==Node.TEXT_NODE){
+             var xmlNodes = xmlNode.selectNodes(name);
+             if(xmlNodes.length>0){ //create a list item
+                var item = document.createElement("li");
+                item.innerHTML = "<span style='font-weight:bold;'>"+name+": </span>"+xmlNodes[0].childNodes[0].nodeValue;
+                listNode.appendChild(item);
+             }
+             else{
+                  //empty node
+             }
+          }
+          else{ //recurse    
+             var xmlNodes = xmlNode.selectNodes(name);
+             for(var i=0;i<xmlNodes.length;i++){
+                var item = document.createElement("li");
+                item.className = "liClosed";
+                item.innerHTML = "<div class='node_tree_node'>"+name+"</div>";
+                listNode.appendChild(item);
+                var list = document.createElement("ul");
+                build_sub_tree(xmlNodes[i], list, levelTags[name][2]);
+                item.appendChild(list);
+             }
+          }
+       }
+    }
+
+    function display_node(node){     
+       alert(new XMLSerializer().serializeToString(node));
+    }
+
+   // ]]>
+   </script>
+   <style type="text/css">th{ border: 1px solid #6699CC;border-collapse: collapse;background-color: #BEC8D1;font-family: Verdana;font-weight: bold;font-size: 11px;color: /*#404040*/ black; padding: 5px; }td{ border: 1px solid #9CF;border-collapse: collapse;font-family: Verdana, sans-serif, Arial;font-weight: normal;font-size: 11px;color: /*#404040*/ black;white-space: nowrap;background-color: #fafafa; }table{ text-align: center;font-family: Verdana;font-weight: normal;font-size: 11px;color: /*#404040*/ black;background-color: #fafafa;border: 1px #6699CC solid;border-collapse: collapse;border-spacing: 0px; }
+
+      .node { background-color:#DDDDDD; cursor:pointer; /*border:outset 1px gray; padding:0px 2px;*/ }
+      .value {}
+      .toggle {vertical-align: middle; margin:0px; display: inline; }
+      .node_number { background-color: pink; display: inline; }
+      #tree { width:300px; height:600px; overflow:auto; border:inset 2px gray; background-color:#FFFFFF; text-align:left; }
+      .tree_node { border-bottom:1px solid #6699CC; border-right:1px solid #6699CC; width:auto;  }
+      .node_tree_container { display:none; border-width:0px; padding:0px 0px 0px 10px;}
+      .node_tree_node { background-color:#DDDDDD; display:inline; border:1px solid #6699CC;  }
+   </style>
+</head>
+<body onload="init()" style="margin:0px 0px 0px 20px;">
+   <table>
+      <tbody>
+      <tr style="vertical-align:top;">
+         <td style="background-color:blue;">
+               <div id="tree" ></div>
+         </td>
+         <td>
+               <table id="table"><thead></thead><tbody></tbody></table>
+         </td>
+      </tr>
+      </tbody>
+   </table>
+</body>
+</html>
+

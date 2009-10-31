@@ -310,7 +310,7 @@ public final class AcousticReceiverFileProcessor {
 								deploymentLongitude = rset.getFloat(6);
 								deploymentLatitude =  rset.getFloat(7);
 								deploymentDownloadTimestamp = rset.getTimestamp(8);
-								ccEmailAddresses = rset.getString(8);
+								ccEmailAddresses = rset.getString(9);
 								if (projectRolePersonId == 0) {
 									logger.info("could not find a project_role_person record id to use for adding unknown tags to database");
 								}
@@ -776,7 +776,11 @@ public final class AcousticReceiverFileProcessor {
 						if(ccEmailAddresses != null){
 							String[] addresses = ccEmailAddresses.split(";\\s*|,\\s*|\\s+");
 							for(int i = 0; i<addresses.length; i++){
-								email.addRecipient("",addresses[i],RecipientType.CC);
+								if(validator.isValid(addresses[i])){
+									email.addRecipient("",addresses[i],RecipientType.CC);
+								}else{
+									logger.error("invalid email address, foreign detection report not cc'd to " + addresses[i] );
+								}
 							}
 						}
 						try {
@@ -815,7 +819,7 @@ public final class AcousticReceiverFileProcessor {
 							if(validator.isValid(projectAddressTo)){
 								email.addRecipient(projectPersonName, projectAddressTo, RecipientType.CC);
 							}else{
-								logger.error("invalid email address, foreign detection report not sent to " + projectAddressTo );
+								logger.error("invalid email address, foreign detection report not cc'd to " + projectAddressTo );
 							}
 							email.setSubject("AATAMS 'Foreign' Detections Report");
 							email.setText("The following tags, having a tag release under your name, have been found "
@@ -829,7 +833,7 @@ public final class AcousticReceiverFileProcessor {
 									if(validator.isValid(addresses[j])){
 										email.addRecipient("",addresses[j],RecipientType.BCC);
 									}else{
-										logger.error("invalid email address, foreign detection report not cc'd to " + projectAddressTo );
+										logger.error("invalid email address, foreign detection report not bcc'd to " + addresses[j] );
 									}
 								}
 							}

@@ -52,9 +52,9 @@ import java.sql.DriverManager;
  */
 public final class AcousticReceiverFileProcessor {
 
-	public String reportFolder = "c:/temp";
+	public String reportFolder = null;
 
-	private static final String timestampFormat = "yyyy-MM-dd hh:mm:ss[.SSS]";
+	private static final String timestampFormat = "yyyy-MM-dd hh:mm:ss.SSS";
 	private static final SimpleDateFormat timestampParser = new SimpleDateFormat(timestampFormat);
 	private static final String pattern = "\"([^\"]+?)\",?|([^,]+),?|,";
 	private static final Pattern csvRegex = Pattern.compile(pattern);
@@ -195,6 +195,7 @@ public final class AcousticReceiverFileProcessor {
 				// open file for reading
 				messages.add("Processing file: " + file.getName());
 				logger.info("reading file: " + file.getAbsolutePath());
+				reportFolder = file.getParentFile().getAbsolutePath();
 				FileInputStream fis = new FileInputStream(file);
 				BufferedReader buffer = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
 				String line = buffer.readLine();
@@ -211,7 +212,7 @@ public final class AcousticReceiverFileProcessor {
 							tags.put(tagName, new Tag(tagName));
 						}
 						if (receiverName != null && !values.get(9).equals(receiverName)) {
-							String msg = "more than one receiver is in the file";
+							String msg = "More than one receiver is in the file";
 							messages.add(msg);
 							throw new Exception(msg);
 						} else {
@@ -221,9 +222,9 @@ public final class AcousticReceiverFileProcessor {
 
 						// buffer the record
 						try {
-							detections.add(new Detection(tags.get(tagName), new Timestamp(timestampParser.parse((values.get(0)+".000").substring(0,19)).getTime())));
+							detections.add(new Detection(tags.get(tagName), new Timestamp(timestampParser.parse((values.get(0)+".000").substring(0,23)).getTime())));
 						} catch (ParseException e) {
-							String msg = "an invalid timestamp string has been found (" + values.get(0) + "), expecting format " + timestampFormat;
+							String msg = "An invalid timestamp string has been found (" + values.get(0) + "), expecting format " + timestampFormat;
 							messages.add(msg);
 							throw new Exception(msg);
 						}
@@ -251,7 +252,9 @@ public final class AcousticReceiverFileProcessor {
 			//2. Find the database ids of the tags detected.
 			PreparedStatement pst = conn.prepareStatement("SELECT DEVICE_ID FROM DEVICE WHERE CODE_NAME = ? AND DEVICE_TYPE_ID = 2");
 			ResultSet rset;
-			messages.add("Known tag devices:");
+			if(tags.entrySet().size()> 0){
+				messages.add("Known tag devices:");
+			}
 			for (Iterator<Entry<String, Tag>> i = tags.entrySet().iterator(); i.hasNext();) {
 				Tag tag = i.next().getValue();
 				logger.info("checking for existing tag '" + tag.name + "' in database");
@@ -297,11 +300,13 @@ public final class AcousticReceiverFileProcessor {
 							deploymentLatitude =  rset.getFloat(6);
 							deploymentDownloadTimestamp = rset.getTimestamp(7);
 							if (projectRolePersonId == 0) {
-								logger.info("could find a project_role_person record id to use for adding unknown tags to database");
+								logger.info("could not find a project_role_person record id to use for adding unknown tags to database");
 							}
 						} else {
-							throw new Exception("a matching 'deployment download' record has not been found in the database for '" + deploymentDownloadId + "'"
-									+ " being linked to a 'receiver deployment' record with receiver device code named '" + receiverName + "'");
+							String msg = "A matching 'deployment download' record has not been found in the database for '" + deploymentDownloadId + "'"
+									+ " being linked to a 'receiver deployment' record with receiver device code named '" + receiverName + "'";
+							messages.add(msg);
+							throw new Exception(msg);
 						}
 					}
 					rset.close();

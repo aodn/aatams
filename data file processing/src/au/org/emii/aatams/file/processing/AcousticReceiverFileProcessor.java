@@ -343,6 +343,8 @@ public final class AcousticReceiverFileProcessor {
 					pst.setString(1, tag.name);
 					pst.setInt(2, projectRolePersonId);
 					pst.execute();
+					//commit new tags straight-away
+					conn.commit();
 					rset = pst.getGeneratedKeys();
 					if (rset != null) {
 						if (rset.next()) {
@@ -511,12 +513,12 @@ public final class AcousticReceiverFileProcessor {
 				conn.commit();
 				success = true;
 			} catch (SQLException se) {
-				logger.fatal("SQL Exception:");
+				logger.error("SQL Exception:");
 				// Loop through the SQL Exceptions
 				while (se != null) {
-					logger.fatal("State  : " + se.getSQLState());
-					logger.fatal("Message: " + se.getMessage());
-					logger.fatal("Error  : " + se.getErrorCode());
+					logger.error("State  : " + se.getSQLState());
+					logger.error("Message: " + se.getMessage());
+					logger.error("Error  : " + se.getErrorCode());
 					se = se.getNextException();
 				}
 			} catch (Exception e) {
@@ -525,6 +527,7 @@ public final class AcousticReceiverFileProcessor {
 				try {
 					if (!success) {
 						conn.rollback();
+						logger.fatal("exiting after SQL Exception");
 						return;
 					}
 				} catch (SQLException e) {
@@ -725,13 +728,13 @@ public final class AcousticReceiverFileProcessor {
 						buffer.append("No detections where found in the file to process into database\n\n");
 					}
 				} catch (SQLException e) {
-					logger.error("an sql exception was encountered when generating the download report", e);
+					logger.fatal("an sql exception was encountered when generating the download report", e);
 					return;
 				}
 				buffer.flush();
 				buffer.close();
 			} catch (Exception e) {
-				logger.error("unexpected error when generating full report", e);
+				logger.fatal("unexpected error when generating full report", e);
 				return;
 			}
 			// 7. Send the main report
@@ -760,7 +763,7 @@ public final class AcousticReceiverFileProcessor {
 				rset.close();
 				smt.close();
 			} catch (SQLException e) {
-				logger.error("an sql exception was encountered when accessing report email", e);
+				logger.fatal("an sql exception was encountered when accessing report email", e);
 			}
 			// 8. Send any 'out of project' tag detection reports
 			String personName = "", addressTo = "";
@@ -794,7 +797,7 @@ public final class AcousticReceiverFileProcessor {
 					rset.close();
 					smt.close();
 				} catch (SQLException e) {
-					logger.error("an sql exception was encountered when accessing report email", e);
+					logger.fatal("an sql exception was encountered when accessing report email", e);
 				}
 			}
 		}

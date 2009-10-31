@@ -25,6 +25,7 @@ import java.text.ParseException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
 import javax.mail.Message.RecipientType;
+import javax.mail.search.RecipientTerm;
 import javax.activation.FileDataSource;
 import org.codemonkey.vesijama.Email;
 import org.codemonkey.vesijama.Mailer;
@@ -80,6 +81,7 @@ public final class AcousticReceiverFileProcessor {
 	private Timestamp deploymentDownloadTimestamp = null;
 	private float deploymentLatitude;
 	private float deploymentLongitude;
+	private String ccEmailAddresses = null;
 	private File file;
 	
 	//make default constructor private
@@ -266,7 +268,7 @@ public final class AcousticReceiverFileProcessor {
 							first = false;
 						}
 						tag.id = rset.getInt(1);
-						messages.add("fid = aatams.device." + tag.id + ", code_name = " + tag.name );
+						messages.add("FID = aatams.device." + tag.id + ", code_name = " + tag.name );
 					}
 				}
 				rset.close();
@@ -284,25 +286,26 @@ public final class AcousticReceiverFileProcessor {
 					smt = conn.createStatement();
 					// a receiver deployment must have a project_role_person associated with it,
 					// extract this to be used for any new tags added.
-					rset = smt.executeQuery("SELECT RECEIVER_DEPLOYMENT.DEPLOYMENT_ID, RECEIVER_DEPLOYMENT.PROJECT_ROLE_PERSON_ID, "
+					rset = smt.executeQuery("SELECT DEVICE.CODE_NAME, RECEIVER_DEPLOYMENT.DEPLOYMENT_ID, RECEIVER_DEPLOYMENT.PROJECT_ROLE_PERSON_ID, "
 							+ "RECEIVER_DEPLOYMENT.INSTALLATION_ID, RECEIVER_DEPLOYMENT.STATION_ID, " 
 							+ "RECEIVER_DEPLOYMENT.LONGITUDE, RECEIVER_DEPLOYMENT.LATITUDE, " 
-							+ "DEPLOYMENT_DOWNLOAD.DOWNLOAD_TIMESTAMP, DEVICE.CODE_NAME  FROM "
-							+ "DEPLOYMENT_DOWNLOAD, RECEIVER_DEPLOYMENT, DEVICE WHERE "
+							+ "DEPLOYMENT_DOWNLOAD.DOWNLOAD_TIMESTAMP, DEPLOYMENT_DOWNLOAD.CC_EMAIL_ADDRESSES "
+							+ "FROM DEPLOYMENT_DOWNLOAD, RECEIVER_DEPLOYMENT, DEVICE WHERE "
 							+ "DEPLOYMENT_DOWNLOAD.DEPLOYMENT_ID = RECEIVER_DEPLOYMENT.DEPLOYMENT_ID AND "
 							+ "RECEIVER_DEPLOYMENT.DEVICE_ID = DEVICE.DEVICE_ID AND " 
 							+ "DEVICE.CODE_NAME = '" + receiverName + "' AND "
 							+ "DOWNLOAD_ID = " + deploymentDownloadId);
 					if (rset != null) {
 						if (rset.next()) {
-							if(rset.getString(8).equals(receiverName)){
-								receiverDeploymentId = rset.getInt(1);
-								projectRolePersonId = rset.getInt(2);
-								installationId = rset.getInt(3);
-								installationStationId = rset.getInt(4);
-								deploymentLongitude = rset.getFloat(5);
-								deploymentLatitude =  rset.getFloat(6);
-								deploymentDownloadTimestamp = rset.getTimestamp(7);
+							if(rset.getString(1).equals(receiverName)){
+								receiverDeploymentId = rset.getInt(2);
+								projectRolePersonId = rset.getInt(3);
+								installationId = rset.getInt(4);
+								installationStationId = rset.getInt(5);
+								deploymentLongitude = rset.getFloat(6);
+								deploymentLatitude =  rset.getFloat(7);
+								deploymentDownloadTimestamp = rset.getTimestamp(8);
+								ccEmailAddresses = rset.getString(8);
 								if (projectRolePersonId == 0) {
 									logger.info("could not find a project_role_person record id to use for adding unknown tags to database");
 								}
@@ -759,6 +762,12 @@ public final class AcousticReceiverFileProcessor {
 					email.setSubject("AATAMS Deployment Download Processing Report (FID=aatams.deployment_download." + deploymentDownloadId + ")");
 					email.setText("Please find attached a report with details of a Receiver Deployment Download just processed");
 					email.addAttachment(reportName, new FileDataSource(reportFolder + "/" + reportName));
+					if(ccEmailAddresses != null){
+						String[] addresses = ccEmailAddresses.split(",|\\s");
+						for(int i = 0; i<addresses.length; i++){
+							email.addRecipient("",addresses[i],RecipientType.CC);
+						}
+					}
 					try {
 						mailer.sendMail(email);
 					} catch (Exception e) {
@@ -793,6 +802,12 @@ public final class AcousticReceiverFileProcessor {
 								+ "Please contact the responsible person (carbon-copied this email) or obtain more"
 								+ "information via the deployment download record FID=aatams.deployment_download." + deploymentDownloadId
 								+ " viewable at the AATAMS web site (" + aatamsWebsiteUri + ").");
+						if(ccEmailAddresses != null){
+							String[] addresses = ccEmailAddresses.split(",|\\s");
+							for(int j = 0; j<addresses.length; j++){
+								email.addRecipient("",addresses[j],RecipientType.BCC);
+							}
+						}
 						try {
 							mailer.sendMail(email);
 						} catch (Exception e) {

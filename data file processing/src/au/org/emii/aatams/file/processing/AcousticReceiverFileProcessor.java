@@ -287,7 +287,7 @@ public final class AcousticReceiverFileProcessor {
 					rset = smt.executeQuery("SELECT RECEIVER_DEPLOYMENT.DEPLOYMENT_ID, RECEIVER_DEPLOYMENT.PROJECT_ROLE_PERSON_ID, "
 							+ "RECEIVER_DEPLOYMENT.INSTALLATION_ID, RECEIVER_DEPLOYMENT.STATION_ID, " 
 							+ "RECEIVER_DEPLOYMENT.LONGITUDE, RECEIVER_DEPLOYMENT.LATITUDE, " 
-							+ "DEPLOYMENT_DOWNLOAD.DOWNLOAD_TIMESTAMP  FROM "
+							+ "DEPLOYMENT_DOWNLOAD.DOWNLOAD_TIMESTAMP, DEVICE.CODE_NAME  FROM "
 							+ "DEPLOYMENT_DOWNLOAD, RECEIVER_DEPLOYMENT, DEVICE WHERE "
 							+ "DEPLOYMENT_DOWNLOAD.DEPLOYMENT_ID = RECEIVER_DEPLOYMENT.DEPLOYMENT_ID AND "
 							+ "RECEIVER_DEPLOYMENT.DEVICE_ID = DEVICE.DEVICE_ID AND " 
@@ -295,19 +295,24 @@ public final class AcousticReceiverFileProcessor {
 							+ "DOWNLOAD_ID = " + deploymentDownloadId);
 					if (rset != null) {
 						if (rset.next()) {
-							receiverDeploymentId = rset.getInt(1);
-							projectRolePersonId = rset.getInt(2);
-							installationId = rset.getInt(3);
-							installationStationId = rset.getInt(4);
-							deploymentLongitude = rset.getFloat(5);
-							deploymentLatitude =  rset.getFloat(6);
-							deploymentDownloadTimestamp = rset.getTimestamp(7);
-							if (projectRolePersonId == 0) {
-								logger.info("could not find a project_role_person record id to use for adding unknown tags to database");
+							if(rset.getString(8).equals(receiverName)){
+								receiverDeploymentId = rset.getInt(1);
+								projectRolePersonId = rset.getInt(2);
+								installationId = rset.getInt(3);
+								installationStationId = rset.getInt(4);
+								deploymentLongitude = rset.getFloat(5);
+								deploymentLatitude =  rset.getFloat(6);
+								deploymentDownloadTimestamp = rset.getTimestamp(7);
+								if (projectRolePersonId == 0) {
+									logger.info("could not find a project_role_person record id to use for adding unknown tags to database");
+								}
+							}else{
+								String msg = "The receiver code name read from the csv file does not match that associatd with deployment download FID='" + downloadFid + "'";
+								messages.add(msg);
+								throw new Exception(msg);
 							}
 						} else {
-							String msg = "A matching 'deployment download' record has not been found in the database for '" + deploymentDownloadId + "'"
-									+ " being linked to a 'receiver deployment' record with receiver device code named '" + receiverName + "'";
+							String msg = "A matching 'deployment download' record has not been found in the database for '" + deploymentDownloadId + "'";
 							messages.add(msg);
 							throw new Exception(msg);
 						}

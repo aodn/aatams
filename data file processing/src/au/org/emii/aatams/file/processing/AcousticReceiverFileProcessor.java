@@ -252,9 +252,7 @@ public final class AcousticReceiverFileProcessor {
 			//2. Find the database ids of the tags detected.
 			PreparedStatement pst = conn.prepareStatement("SELECT DEVICE_ID FROM DEVICE WHERE CODE_NAME = ? AND DEVICE_TYPE_ID = 2");
 			ResultSet rset;
-			if(tags.entrySet().size()> 0){
-				messages.add("Known tag devices:");
-			}
+			boolean first = true;
 			for (Iterator<Entry<String, Tag>> i = tags.entrySet().iterator(); i.hasNext();) {
 				Tag tag = i.next().getValue();
 				logger.info("checking for existing tag '" + tag.name + "' in database");
@@ -263,6 +261,10 @@ public final class AcousticReceiverFileProcessor {
 				rset = pst.getResultSet();
 				if (rset != null) {
 					if (rset.next()) {
+						if(first){
+							messages.add("Known tag devices:");
+							first = false;
+						}
 						tag.id = rset.getInt(1);
 						messages.add("fid = aatams.device." + tag.id + ", code_name = " + tag.name );
 					}
@@ -288,8 +290,9 @@ public final class AcousticReceiverFileProcessor {
 							+ "DEPLOYMENT_DOWNLOAD.DOWNLOAD_TIMESTAMP  FROM "
 							+ "DEPLOYMENT_DOWNLOAD, RECEIVER_DEPLOYMENT, DEVICE WHERE "
 							+ "DEPLOYMENT_DOWNLOAD.DEPLOYMENT_ID = RECEIVER_DEPLOYMENT.DEPLOYMENT_ID AND "
-							+ "RECEIVER_DEPLOYMENT.DEVICE_ID = DEVICE.DEVICE_ID AND " + "DEVICE.CODE_NAME = '" + receiverName + "' AND " + "DOWNLOAD_ID = "
-							+ deploymentDownloadId);
+							+ "RECEIVER_DEPLOYMENT.DEVICE_ID = DEVICE.DEVICE_ID AND " 
+							+ "DEVICE.CODE_NAME = '" + receiverName + "' AND "
+							+ "DOWNLOAD_ID = " + deploymentDownloadId);
 					if (rset != null) {
 						if (rset.next()) {
 							receiverDeploymentId = rset.getInt(1);
@@ -329,7 +332,7 @@ public final class AcousticReceiverFileProcessor {
 			// make MODEL_ID = 0 which links to the 'UNKNOWN TAG MODEL' model.
 			pst = conn.prepareStatement("INSERT INTO DEVICE (DEVICE_ID,DEVICE_TYPE_ID,MODEL_ID,CODE_NAME,PROJECT_ROLE_PERSON_ID)"
 					+ " VALUES (DEVICE_SERIAL.NEXTVAL,2,0,?,?)", Statement.RETURN_GENERATED_KEYS);
-			boolean first = true;
+			first = true;
 			for (Iterator<Entry<String, Tag>> i = tags.entrySet().iterator(); i.hasNext();) {
 				Tag tag = i.next().getValue();
 				if (tag.id == 0) {

@@ -73,6 +73,7 @@ public final class AcousticReceiverFileProcessor {
 	private TreeMap<String, Tag> newTags = new TreeMap<String, Tag>();
 	private ArrayList<Detection> detections = new ArrayList<Detection>();
 	private String receiverName = null;
+	private String downloadFid = null;
 	private int installationId = 0;
 	private int installationStationId = 0;
 	private int projectRolePersonId = 0;
@@ -164,6 +165,8 @@ public final class AcousticReceiverFileProcessor {
 		}
 		if(downloadFid == null){
 			throw new IllegalArgumentException("downloadFid argument cannot be null");
+		}else{
+			this.downloadFid = downloadFid;
 		}
 		if(filePath == null){
 			throw new IllegalArgumentException("filePath argument cannot be null");
@@ -508,6 +511,8 @@ public final class AcousticReceiverFileProcessor {
 		private String responsiblePersonNameAndRole = null;
 		
 		public void run() {
+			
+			logger.info("inserting detection records");
 			try {
 				pst = conn.prepareStatement("INSERT INTO DETECTION (DETECTION_ID, DEPLOYMENT_ID, DOWNLOAD_ID, TAG_ID, DETECTION_TIMESTAMP)"
 						+ " VALUES (DETECTION_SERIAL.NEXTVAL," + receiverDeploymentId + "," + deploymentDownloadId + ",?,?)");
@@ -600,6 +605,7 @@ public final class AcousticReceiverFileProcessor {
 				if(report.exists()){
 					throw new Exception("receiver file processing report already exists (" + report.getAbsolutePath() + ")");
 				}
+				logger.info("building report");
 				FileOutputStream fos = new FileOutputStream(report);
 				BufferedWriter buffer = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
 				buffer.append("RECEIVER DOWNLOAD FILE PROCESSING REPORT\n\n");
@@ -769,6 +775,7 @@ public final class AcousticReceiverFileProcessor {
 						}
 					}
 					try {
+						logger.info("sending main report to " + projectAddressTo);
 						mailer.sendMail(email);
 					} catch (Exception e) {
 						logger.error("error sending report to " + projectAddressTo, e);
@@ -809,6 +816,7 @@ public final class AcousticReceiverFileProcessor {
 							}
 						}
 						try {
+							logger.info("sending foreign detections report to " + addressTo + " and " + projectAddressTo);
 							mailer.sendMail(email);
 						} catch (Exception e) {
 							logger.error("error sending report to " + addressTo, e);
@@ -816,6 +824,7 @@ public final class AcousticReceiverFileProcessor {
 					}
 					rset.close();
 					smt.close();
+					logger.info("file processing completed for " + downloadFid);
 				} catch (SQLException e) {
 					logger.fatal("an sql exception was encountered when accessing report email", e);
 				}

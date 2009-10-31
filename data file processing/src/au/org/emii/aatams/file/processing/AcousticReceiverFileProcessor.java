@@ -38,6 +38,8 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import javax.sql.DataSource;
 import java.sql.DriverManager;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Processes an uploaded CSV export file from the AATAMS website.
@@ -753,6 +755,7 @@ public final class AcousticReceiverFileProcessor {
 			}
 			// 7. Send the main report
 			String projectPersonName = "", projectAddressTo = "";
+			EmailAddressValidator validator = new EmailAddressValidator();
 			Mailer mailer = new Mailer(smtpHost, smtpPort, smtpUser, smtpPassword);
 			Email email = new Email();
 			try {
@@ -764,21 +767,26 @@ public final class AcousticReceiverFileProcessor {
 					projectPersonName = rset.getString(1);
 					projectAddressTo = rset.getString(2);
 					email.setFromAddress(reportSenderName, reportSenderEmailAddress);
-					email.addRecipient(projectPersonName, projectAddressTo, RecipientType.TO);
-					email.setSubject("AATAMS Deployment Download Processing Report (FID=aatams.deployment_download." + deploymentDownloadId + ")");
-					email.setText("Please find attached a report with details of a Receiver Deployment Download just processed");
-					email.addAttachment(reportName, new FileDataSource(reportFolder + "/" + reportName));
-					if(ccEmailAddresses != null){
-						String[] addresses = ccEmailAddresses.split(",|\\s");
-						for(int i = 0; i<addresses.length; i++){
-							email.addRecipient("",addresses[i],RecipientType.CC);
+					if(validator.isValid(projectAddressTo)){
+						email.addRecipient(projectPersonName, projectAddressTo, RecipientType.TO);
+						email.addRecipient(reportSenderName, reportSenderEmailAddress, RecipientType.BCC);
+						email.setSubject("AATAMS Deployment Download Processing Report (FID=aatams.deployment_download." + deploymentDownloadId + ")");
+						email.setText("Please find attached a report with details of a Receiver Deployment Download just processed");
+						email.addAttachment(reportName, new FileDataSource(reportFolder + "/" + reportName));
+						if(ccEmailAddresses != null){
+							String[] addresses = ccEmailAddresses.split(";\\s*|,\\s*|\\s+");
+							for(int i = 0; i<addresses.length; i++){
+								email.addRecipient("",addresses[i],RecipientType.CC);
+							}
 						}
-					}
-					try {
-						logger.info("sending main report to " + projectAddressTo);
-						mailer.sendMail(email);
-					} catch (Exception e) {
-						logger.error("error sending report to " + projectAddressTo, e);
+						try {
+							logger.info("sending main report to " + projectAddressTo);
+							mailer.sendMail(email);
+						} catch (Exception e) {
+							logger.error("error sending report to " + projectAddressTo, e);
+						}
+					}else{
+						logger.error("invalid email address, report not sent " + projectAddressTo );
 					}
 				}
 				rset.close();
@@ -799,36 +807,62 @@ public final class AcousticReceiverFileProcessor {
 					if (rset.next()) {
 						personName = rset.getString(1);
 						addressTo = rset.getString(2);
-						email = new Email();
-						email.setFromAddress(reportSenderName, reportSenderEmailAddress);
-						email.addRecipient(personName, addressTo, RecipientType.TO);
-						email.addRecipient(projectPersonName, projectAddressTo, RecipientType.CC);
-						email.setSubject("AATAMS 'Foreign' Detections Report");
-						email.setText("The following tags, having a tag release under your name, have been found "
-								+ "in another person's deployment download: \n" + entry.getValue().toString() + "\n\n"
-								+ "Please contact the responsible person (carbon-copied this email) or obtain more"
-								+ "information via the deployment download record FID=aatams.deployment_download." + deploymentDownloadId
-								+ " viewable at the AATAMS web site (" + aatamsWebsiteUri + ").");
-						if(ccEmailAddresses != null){
-							String[] addresses = ccEmailAddresses.split(",|\\s");
-							for(int j = 0; j<addresses.length; j++){
-								email.addRecipient("",addresses[j],RecipientType.BCC);
+						if(validator.isValid(addressTo)){
+							email = new Email();
+							email.setFromAddress(reportSenderName, reportSenderEmailAddress);
+							email.addRecipient(personName, addressTo, RecipientType.TO);
+							email.addRecipient(reportSenderName, reportSenderEmailAddress,RecipientType.BCC);
+							if(validator.isValid(projectAddressTo)){
+								email.addRecipient(projectPersonName, projectAddressTo, RecipientType.CC);
+							}else{
+								logger.error("invalid email address, foreign detection report not sent to " + projectAddressTo );
 							}
-						}
-						try {
-							logger.info("sending foreign detections report to " + addressTo + " and " + projectAddressTo);
-							mailer.sendMail(email);
-						} catch (Exception e) {
-							logger.error("error sending report to " + addressTo, e);
+							email.setSubject("AATAMS 'Foreign' Detections Report");
+							email.setText("The following tags, having a tag release under your name, have been found "
+									+ "in another person's deployment download: \n" + entry.getValue().toString() + "\n\n"
+									+ "Please contact the responsible person (carbon-copied this email) or obtain more"
+									+ "information via the deployment download record FID=aatams.deployment_download." + deploymentDownloadId
+									+ " viewable at the AATAMS web site (" + aatamsWebsiteUri + ").");
+							if(ccEmailAddresses != null ){
+								String[] addresses = ccEmailAddresses.split(";\\s*|,\\s*|\\s+");
+								for(int j = 0; j<addresses.length; j++){
+									if(validator.isValid(addresses[j])){
+										email.addRecipient("",addresses[j],RecipientType.BCC);
+									}else{
+										logger.error("invalid email address, foreign detection report not cc'd to " + projectAddressTo );
+									}
+								}
+							}
+							try {
+								logger.info("sending foreign detections report to " + addressTo + " and " + projectAddressTo);
+								mailer.sendMail(email);
+							} catch (Exception e) {
+								logger.error("error sending report to " + addressTo, e);
+							}
+						}else{
+							logger.error("invalid email address, report not sent " + projectAddressTo );
 						}
 					}
 					rset.close();
 					smt.close();
-					logger.info("file processing completed for " + downloadFid);
 				} catch (SQLException e) {
 					logger.fatal("an sql exception was encountered when accessing report email", e);
 				}
 			}
+			logger.info("file processing completed for " + downloadFid);
+		}
+	}
+
+
+	public class EmailAddressValidator {
+		
+		private final String expression = "^[\\w\\-]+(\\.[\\w\\-]+)*@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$";
+		private final Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+
+		public boolean isValid(String emailAddress) {
+			CharSequence inputStr = emailAddress;
+			Matcher matcher = pattern.matcher(inputStr);
+			return matcher.matches();
 		}
 	}
 }

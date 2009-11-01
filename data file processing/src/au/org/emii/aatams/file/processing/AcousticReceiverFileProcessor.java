@@ -273,7 +273,7 @@ public final class AcousticReceiverFileProcessor {
 							first = false;
 						}
 						tag.id = rset.getInt(1);
-						messages.add("FID = aatams.device." + tag.id + ", code_name = " + tag.name );
+						messages.add("FID = aatams.device." + tag.id + ", code-name = " + tag.name );
 					}
 				}
 				rset.close();
@@ -297,8 +297,7 @@ public final class AcousticReceiverFileProcessor {
 							+ "DEPLOYMENT_DOWNLOAD.DOWNLOAD_TIMESTAMP, DEPLOYMENT_DOWNLOAD.CC_EMAIL_ADDRESSES "
 							+ "FROM DEPLOYMENT_DOWNLOAD, RECEIVER_DEPLOYMENT, DEVICE WHERE "
 							+ "DEPLOYMENT_DOWNLOAD.DEPLOYMENT_ID = RECEIVER_DEPLOYMENT.DEPLOYMENT_ID AND "
-							+ "RECEIVER_DEPLOYMENT.DEVICE_ID = DEVICE.DEVICE_ID AND " 
-							+ "DEVICE.CODE_NAME = '" + receiverName + "' AND "
+							+ "RECEIVER_DEPLOYMENT.DEVICE_ID = DEVICE.DEVICE_ID AND "
 							+ "DOWNLOAD_ID = " + deploymentDownloadId);
 					if (rset != null) {
 						if (rset.next()) {

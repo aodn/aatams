@@ -22,7 +22,7 @@
     </table>
     <table name="CLASSIFICATION">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="COMMON_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -588,7 +588,9 @@
     </table>
     <table name="ORGANISATION">
       <column name="ORGANISATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="200" autoIncrement="false"/>
+      <column name="PHONE_NUMBER" primaryKey="false" required="true" type="VARCHAR" size="20" autoIncrement="false"/>
+       <column name="FAX_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="20" autoIncrement="false"/>
       <column name="PHYSICAL_ADDRESS_1" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
       <column name="PHYSICAL_ADDRESS_2" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
       <column name="PHYSICAL_ADDRESS_STATE" primaryKey="false" required="false" type="VARCHAR" size="20" autoIncrement="false"/>
@@ -599,8 +601,6 @@
       <column name="POSTAL_ADDRESS_STATE" primaryKey="false" required="false" type="VARCHAR" size="20" autoIncrement="false"/>
       <column name="POSTAL_ADDRESS_COUNTRY" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="POSTAL_ADDRESS_POSTCODE" primaryKey="false" required="false" type="VARCHAR" size="6" autoIncrement="false"/>
-      <column name="PHONE_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="20" autoIncrement="false"/>
-      <column name="FAX_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="20" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
         <unique-column name="NAME"/>
       </unique>
@@ -649,10 +649,10 @@
     </table>
     <table name="PERSON">
       <column name="PERSON_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="200" autoIncrement="false"/>
       <column name="PERSONAL_MOBILE_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
-      <column name="HOME_PHONE_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
-      <column name="EMAIL" primaryKey="false" required="false" type="VARCHAR" size="30" autoIncrement="false"/>
+      <column name="HOME_PHONE_NUMBER" primaryKey="true" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="EMAIL" primaryKey="false" required="true" type="VARCHAR" size="30" autoIncrement="false"/>
       <column name="HOME_PHYSICAL_ADDRESS_1" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="HOME_PHYSICAL_ADDRESS_2" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="HOME_PHYSICAL_ADDRESS_STATE" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>

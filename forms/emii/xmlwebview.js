@@ -94,48 +94,10 @@
        }
     }
 
+
+
+
     function fill_table(start_pos){
-       var table = document.getElementById("xmlwebview_table");
-       var body = table.getElementsByTagName("tbody")[0];
-       var node_idx = start_pos-1;
-       for(var i=0;i<body.childNodes.length;i++){
-          var row = body.childNodes[i];
-          var cell_counter = 0;
-          if(node_idx<nodes.length){
-              row.childNodes[cell_counter++].innerHTML = node_idx+1;         
-              for(var name in tags){   
-                 var cell = row.childNodes[cell_counter++];
-                 if(tags[name][0]==Node.TEXT_NODE){
-                    var tnodes = nodes[node_idx].selectNodes(name);
-                    if(tnodes.length>0){
-                       cell.innerHTML = tnodes[0].childNodes[0].nodeValue;
-                       cell.className = "";
-                    }
-                    else{
-                       cell.innerHTML = "";
-                       cell.className = "";
-                    }
-                 }
-                 else{
-                    cell.innerHTML =  name;
-                    cell.className = "node";
-                 }
-              }
-           }
-           else{
-              row.childNodes[cell_counter++].innerHTML = "";         
-              for(var name in tags){   
-                 var cell = row.childNodes[cell_counter++];
-                 cell.innerHTML =  "&nbsp;";
-                 cell.className = "";
-              } 
-           }
-           node_idx++;
-       }
-    }
-
-
- /*   function fill_table(start_pos){
        var table = document.getElementById("table");
        var body = table.getElementsByTagName("tbody")[0];
        var node_idx = start_pos-1;
@@ -173,7 +135,7 @@
            }
            node_idx++;
        }
-    }*/
+    }
 
     function find_node_names(node,names){    
        var nodes = node.selectNodes("*");

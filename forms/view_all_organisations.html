@@ -24,10 +24,10 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
           xmlDoc.setProperty("SelectionLanguage", "XPath");
           xmlDoc.async = false;
           //xmlDoc.load('AATAMS-Surgery.xml');
-          xmlDoc.load("../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device");
+          xmlDoc.load("../../deegree-wfs/services?service=WFS&version=1.1.0&request=GetFeature&namespace=xmlns(aatams=http://www.imos.org.au/aatams)&typename=aatams:organisation");
 
           nodes = xmlDoc.selectNodes( "/wfs:FeatureCollection/gml:featureMember/*");
-          alert(nodes.length);
+          //alert(nodes.length);
           //display feature member list
           build_tree();
 
@@ -254,14 +254,14 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
       #tree { width:300px; height:600px; overflow:auto; border:inset 2px gray; background-color:#FFFFFF; text-align:left; }
       .tree_node { border-bottom:1px solid #6699CC; border-right:1px solid #6699CC; width:auto;  }
       .node_tree_container { display:none; border-width:0px; padding:0px 0px 0px 10px;}
-      .node_tree_node { background-color:#DDDDDD; display:inline; border:1px solid #6699CC;  }
+      .node_tree_node { background-color:#DDDDDD; display:inline; border:1px solid #CEE7F5;  }
    </style>
 </head>
 <body onload="init()" style="margin:0px 0px 0px 20px;">
    <table>
       <tbody>
       <tr style="vertical-align:top;">
-         <td style="background-color:blue;">
+         <td>
                <div id="tree" ></div>
          </td>
          <td>

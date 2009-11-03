@@ -98,7 +98,7 @@
 
 
     function fill_table(start_pos){
-       var table = document.getElementById("table");
+       var table = document.getElementById("xmlwebview_table");
        var body = table.getElementsByTagName("tbody")[0];
        var node_idx = start_pos-1;
        for(var i=0;i<body.childNodes.length;i++){

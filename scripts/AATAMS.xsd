@@ -956,7 +956,7 @@
                <xsd:element name="longitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
                   <xsd:annotation>
                      <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="LONGITUDE" type="DECIMAL"/>
                         </deegreewfs:Content>
@@ -966,7 +966,7 @@
                <xsd:element name="latitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
                   <xsd:annotation>
                      <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="LATITUDE" type="DECIMAL"/>
                         </deegreewfs:Content>

@@ -300,10 +300,8 @@
       <column name="BOTTOM_DEPTH" primaryKey="false" required="true"  type="DECIMAL" size="5,2" autoIncrement="false"/>
       <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
-	 <unique-column name="DEVICE_ID"/>
-	 <unique-column name="LONGITUDE"/>
-	 <unique-column name="LATITUDE"/>
-	 <unique-column name="DEPLOYMENT_TIMESTAMP"/>
+	    <unique-column name="DEVICE_ID"/>
+	    <unique-column name="DEPLOYMENT_TIMESTAMP"/>
       </unique>     
       <foreign-key foreignTable="RECEIVER_DEVICE" name="RECEIVER_DEPLOYMENT_FK00">
         <reference local="DEVICE_ID" foreign="DEVICE_ID"/>

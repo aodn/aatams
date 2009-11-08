@@ -18,14 +18,12 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
 import javax.mail.Message.RecipientType;
-import javax.mail.search.RecipientTerm;
 import javax.activation.FileDataSource;
 import org.codemonkey.vesijama.Email;
 import org.codemonkey.vesijama.Mailer;
@@ -36,10 +34,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
-import javax.sql.DataSource;
 import java.sql.DriverManager;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Processes an uploaded CSV export file from the AATAMS website.

@@ -1,5 +1,5 @@
       //global variables
-      var wfs = 'http://localhost:8080/deegree-wfs/services';
+      var wfs = 'http://www.emii.org.au/aatams/services';
       var feature_type = null;
       var params_div = null;
       var params_header_div = null;
@@ -10,6 +10,7 @@
       var is_count = false; 
       var help_open = false; //for ToggleHelp()
       var query_max = true; //for ToggleQuery()
+      var citation_open = true; //for ToggleCitation()
 
       /**
       Initialisation, called on body onload event
@@ -17,6 +18,7 @@
       function Init(){
          try{
             document.getElementById('wfs_uri').value = wfs;
+	    document.getElementById('access_date').innerHTML = new Date().format("d MMM yyyy");
             params_div = document.getElementById('params');
             if(!params_div)
                throw new Error("initialisation failed to find 'params' div element");
@@ -1996,6 +1998,26 @@
             document.getElementById('help_content').style.display = "block";
             document.getElementById('query_display').style.display = "none";
             help_open = true;
+         }
+      }
+
+      /**
+       Toggles the citation display
+       */
+      function ToggleCitation(){
+         if(citation_open == true){
+            //hide
+            document.getElementById('citation_aatams').style.display = "none";
+	    document.getElementById('params').style.display = "block";
+            citation_open = false;
+         }
+         else{
+            //show
+            ShowQuery();
+            document.getElementById('citation_aatams').style.display = "block";
+	    document.getElementById('access_date').innerHTML = new Date().format("d MMM yyyy");
+	    document.getElementById('params').style.display = "none";
+            citation_open = true;
          }
       }
 

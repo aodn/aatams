@@ -11,4 +11,4 @@ var installation_list = [
 [15,"Skeleton Beach - Sharks"],
 [12,"South line"],
 [14,"Stanley Pool - Manta"],
-[17,"Bondi line"]];
+[17,"Sydney line"]];

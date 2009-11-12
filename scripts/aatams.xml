@@ -95,17 +95,21 @@
       </index>
     </table>
     <table name="DOWNLOAD_TAG_SUMMARY">
-      <column name="DOWNLOAD_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+      <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="DOWNLOAD_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="DETECTION_COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	    <unique-column name="DOWNLOAD_ID"/>
 	    <unique-column name="DEVICE_ID"/>
       </unique>
-      <foreign-key foreignTable="DEPLOYMENT_DOWNLOAD" name="DOWNLOAD_TAG_SUMMARY_FK00">
+      <foreign-key foreignTable="RECEIVER_DEPLOYMENT" name="DOWNLOAD_TAG_SUMMARY_FK00">
+        <reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID"/>
+      </foreign-key>
+      <foreign-key foreignTable="DEPLOYMENT_DOWNLOAD" name="DOWNLOAD_TAG_SUMMARY_FK01">
         <reference local="DOWNLOAD_ID" foreign="DOWNLOAD_ID"/>
       </foreign-key>
-      <foreign-key foreignTable="DEVICE" name="DOWNLOAD_TAG_SUMMARY_FK01">
+      <foreign-key foreignTable="DEVICE" name="DOWNLOAD_TAG_SUMMARY_FK02">
         <reference local="DEVICE_ID" foreign="DEVICE_ID"/>
       </foreign-key>
     </table>

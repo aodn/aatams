@@ -52,7 +52,7 @@ public final class AcousticReceiverFileProcessor {
 
 	public String reportFolder = null;
 
-	private static final String timestampFormat = "yyyy-MM-dd hh:mm:ss.SSS";
+	private static final String timestampFormat = "yyyy-MM-dd HH:mm:ss.SSS";
 	private static final SimpleDateFormat timestampParser = new SimpleDateFormat(timestampFormat);
 	private static final String pattern = "\"([^\"]+?)\",?|([^,]+),?|,";
 	private static final Pattern csvRegex = Pattern.compile(pattern);
@@ -96,6 +96,10 @@ public final class AcousticReceiverFileProcessor {
 			String smtpUser,
 			String smtpPassword,
 			String aatamsWebsiteUri) throws IllegalArgumentException{
+		//had a problem where format was hh:mm:ss instead 
+		//of HH:mm:ss and everything was processed correctly except 12:nn:nn times!!!
+		//so set this to be what is should be by default.
+		timestampParser.setLenient(false);
 		if(downloadFidPrefix == null){
 			throw new IllegalArgumentException("downloadFidPrefix argument cannot be null");
 		}else{
@@ -648,7 +652,7 @@ public final class AcousticReceiverFileProcessor {
 					long total = 0;
 					ArrayList<Long> deviceIds = new ArrayList<Long>();
 					if (detections.size() > 0) {
-						pst = conn.prepareStatement("INSERT INTO DOWNLOAD_TAG_SUMMARY(DOWNLOAD_ID,DEVICE_ID,DETECTION_COUNT)VALUES(?,?,?)");
+						pst = conn.prepareStatement("INSERT INTO DOWNLOAD_TAG_SUMMARY(DEPLOYMENT_ID,DOWNLOAD_ID,DEVICE_ID,DETECTION_COUNT)VALUES(?,?,?,?)");
 						smt = conn.createStatement();
 						rset = smt.executeQuery("SELECT DEVICE.DEVICE_ID, DEVICE.CODE_NAME, COUNT(*) AS COUNT "
 								+ "FROM DETECTION INNER JOIN DEVICE ON DETECTION.TAG_ID = DEVICE.DEVICE_ID " + "WHERE DETECTION.DOWNLOAD_ID = "
@@ -664,9 +668,10 @@ public final class AcousticReceiverFileProcessor {
 								buffer.append(String.format("%-30s%10s%n", rset.getString(2), rset.getString(3)));
 								total += rset.getLong(3);
 								deviceIds.add(rset.getLong(1));
-								pst.setLong(1, deploymentDownloadId);
-								pst.setLong(2, rset.getLong(1));
-								pst.setLong(3, rset.getLong(3));
+								pst.setLong(1, receiverDeploymentId);
+								pst.setLong(2, deploymentDownloadId);
+								pst.setLong(3, rset.getLong(1));
+								pst.setLong(4, rset.getLong(3));
 								pst.execute();
 							}
 							buffer.append("----------------------------------------\n");
@@ -847,10 +852,12 @@ public final class AcousticReceiverFileProcessor {
 					logger.fatal("an sql exception was encountered when accessing report email", e);
 				}
 			}
+			try{
+				conn.close();
+			}catch(SQLException e){}
 			logger.info("file processing completed for " + downloadFid);
 		}
 	}
-
 
 	public class EmailAddressValidator {
 		

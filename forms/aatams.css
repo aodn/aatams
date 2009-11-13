@@ -4,6 +4,7 @@ label, legend {
    font-family: Arial, Helvetica, sans-serif;
    font-weight: bold;
 }
+body {background-color:#b2b2b2;}
 .error {color:red;}
 div.form { border:outset 2px gray; padding:20px; float:left; background-color:#DBF0F7;}
 div.form-contents { width:100%; margin-top:10px; }

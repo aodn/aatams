@@ -41,9 +41,10 @@ import java.sql.DriverManager;
  * 
  * Reads and validates the file, sending feedback to the user.
  * 
- * On validation of the file a <class>'DetectionsInserterAndReportGenerator</class> thread
- * is executed that does the creation of the detection records in the database and creates
- * a report that is emailed to the person responsible for the receiver deployment.
+ * On validation of the file a <class>'DetectionsInserterAndReportGenerator</class>
+ * thread is executed that does the creation of the detection records in the
+ * database and creates a report that is emailed to the person responsible for
+ * the receiver deployment.
  * 
  * @author Stephen Cameron
  * 
@@ -63,6 +64,7 @@ public final class AcousticReceiverFileProcessor {
 	private int smtpPort = 25;
 	private String smtpUser = null;
 	private String smtpPassword = null;
+	private boolean sendReports = true;
 	private String aatamsWebsiteUri = null;
 	private Logger logger = Logger.getLogger(this.getClass());
 	private Connection conn = null;
@@ -81,104 +83,106 @@ public final class AcousticReceiverFileProcessor {
 	private float deploymentLongitude;
 	private String ccEmailAddresses = null;
 	private File file;
-	
-	//make default constructor private
-	private AcousticReceiverFileProcessor() throws Exception{
+
+	// make default constructor private
+	private AcousticReceiverFileProcessor() throws Exception {
 		throw new Exception("use public constructor");
 	}
-	
-	public AcousticReceiverFileProcessor(
-			String downloadFidPrefix,
-			String reportSenderName,
-			String reportSenderEmailAddress,
-			String smtpHost,
-			int smtpPort,
-			String smtpUser,
-			String smtpPassword,
-			String aatamsWebsiteUri) throws IllegalArgumentException{
-		//had a problem where format was hh:mm:ss instead 
-		//of HH:mm:ss and everything was processed correctly except 12:nn:nn times!!!
-		//so set this to be what is should be by default.
+
+	public AcousticReceiverFileProcessor(String downloadFidPrefix, String reportSenderName, String reportSenderEmailAddress, String smtpHost, int smtpPort,
+			String smtpUser, String smtpPassword, String aatamsWebsiteUri) throws IllegalArgumentException {
+		// had a problem where format was hh:mm:ss instead
+		// of HH:mm:ss and everything was processed correctly except 12:nn:nn
+		// times!!!
+		// so set this to be what is should be by default.
 		timestampParser.setLenient(false);
-		if(downloadFidPrefix == null){
+		if (downloadFidPrefix == null) {
 			throw new IllegalArgumentException("downloadFidPrefix argument cannot be null");
-		}else{
+		} else {
 			this.downloadFidPrefix = downloadFidPrefix;
 		}
-		if(reportSenderName == null){
+		if (reportSenderName == null) {
 			throw new IllegalArgumentException("reportSenderName argument cannot be null");
-		}else{
+		} else {
 			this.reportSenderName = reportSenderName;
 		}
-		if(reportSenderEmailAddress == null){
+		if (reportSenderEmailAddress == null) {
 			throw new IllegalArgumentException("reportSenderEmailAddress argument cannot be null");
-		}else{
+		} else {
 			this.reportSenderEmailAddress = reportSenderEmailAddress;
 		}
-		if(smtpHost == null){
+		if (smtpHost == null) {
 			throw new IllegalArgumentException("smtpHost argument cannot be null");
-		}else{
+		} else {
 			this.smtpHost = smtpHost;
 		}
-		if(smtpUser == null){
+		if (smtpUser == null) {
 			throw new IllegalArgumentException("smtpUser argument cannot be null");
-		}else{
+		} else {
 			this.smtpUser = smtpUser;
 		}
-		if(smtpPassword == null){
+		if (smtpPassword == null) {
 			throw new IllegalArgumentException("smtpPassword argument cannot be null");
-		}else{
+		} else {
 			this.smtpPassword = smtpPassword;
 		}
-		if(aatamsWebsiteUri == null){
+		if (aatamsWebsiteUri == null) {
 			throw new IllegalArgumentException("aatamsWebsiteUri argument cannot be null");
-		}else{
+		} else {
 			this.aatamsWebsiteUri = aatamsWebsiteUri;
 		}
-		//configure logging
+		// configure logging
 		BasicConfigurator.configure();
 	}
 
 	/**
-	 * Processes an uploaded CSV export file from the AATAMS website. 
+	 * Processes an uploaded CSV export file from the AATAMS website.
 	 * 
-	 * @param database - database connection
-	 * @param downloadFid - the Feature Identifier (gml:id) for the deployment download
-	 * @param filePath - the full path to the file for processing
-	 * @param messages - array for message addition to return to user
+	 * @param database -
+	 *            database connection
+	 * @param this.downloadFid -
+	 *            the Feature Identifier (gml:id) for the deployment download
+	 * @param filePath -
+	 *            the full path to the file for processing
+	 * @param messages -
+	 *            array for message addition to return to user
+	 * @param sendReports -
+	 *            send out processing reports via email.
 	 */
-	public void doProcessing(Connection connection, String downloadFid, String filePath, 
-			ArrayList<String> messages) throws IllegalArgumentException {
-		//validate parameters
-		if(connection == null){
+	public void doProcessing(Connection connection, String downloadFid, String filePath, ArrayList<String> messages, boolean sendReports)
+			throws IllegalArgumentException {
+		// validate parameters
+		if (connection == null) {
 			throw new IllegalArgumentException("database connection argument cannot be null");
-		}else{
-			try{
-				if(connection.isClosed()){
+		} else {
+			try {
+				if (connection.isClosed()) {
 					throw new IllegalArgumentException("database connection argument is closed");
-				}else{
-					//hold a reference so thread can access it after this method returns
+				} else {
+					// hold a reference so thread can access it after this
+					// method returns
 					conn = connection;
 				}
-			}catch(SQLException e){
+			} catch (SQLException e) {
 				throw new IllegalArgumentException("database connection argument is invalid", e);
 			}
 		}
-		if(downloadFid == null){
+		if (downloadFid == null) {
 			throw new IllegalArgumentException("downloadFid argument cannot be null");
-		}else{
+		} else {
 			this.downloadFid = downloadFid;
 		}
-		if(filePath == null){
+		if (filePath == null) {
 			throw new IllegalArgumentException("filePath argument cannot be null");
 		}
-		if(messages == null){
+		if (messages == null) {
 			throw new IllegalArgumentException("messages argument cannot be null");
 		}
+		this.sendReports = sendReports;
 		boolean success = false;
 
 		try {
-			conn.setAutoCommit(false); //want to rollback if error!
+			conn.setAutoCommit(false); // want to rollback if error!
 			// Print all warnings
 			for (SQLWarning warn = conn.getWarnings(); warn != null; warn = warn.getNextWarning()) {
 				logger.warn("SQL Warning:");
@@ -194,7 +198,7 @@ public final class AcousticReceiverFileProcessor {
 			if (!file.canRead()) {
 				throw new Exception("file at " + filePath + " cannot be opened for reading");
 			}
-			// 1. Parse the file and get a unique list of tags - there are
+			// 1. Parse the file and get a unique list of this.tags - there are
 			// usually lots of duplicates
 			// Also check that there is only one receiver in the file.
 			try {
@@ -228,17 +232,18 @@ public final class AcousticReceiverFileProcessor {
 
 						// buffer the record
 						try {
-							detections.add(new Detection(tags.get(tagName), new Timestamp(timestampParser.parse((values.get(0)+".000").substring(0,23)).getTime())));
+							AcousticReceiverFileProcessor.this.detections.add(new Detection(tags.get(tagName), new Timestamp(timestampParser.parse((values.get(0) + ".000").substring(0, 23))
+									.getTime())));
 						} catch (ParseException e) {
 							String msg = "An invalid timestamp string has been found (" + values.get(0) + "), expecting format " + timestampFormat;
 							messages.add(msg);
 							throw new Exception(msg);
 						}
 					}
-					String msg = "Total detections count: " + detections.size();
+					String msg = "Total this.detections count: " + AcousticReceiverFileProcessor.this.detections.size();
 					messages.add(msg);
 					logger.info(msg);
-				}else{
+				} else {
 					String msg = "invalid file header line";
 					logger.fatal(msg);
 					messages.add("invalid file header line");
@@ -250,16 +255,16 @@ public final class AcousticReceiverFileProcessor {
 			} catch (Exception e) {
 				throw new Exception("exiting, could not process datafile", e);
 			}
-			//if no detections?
-			if(detections.size()==0){
+			// if no this.detections?
+			if (this.detections.size() == 0) {
 				messages.add("No detection records found in file, file processing completed");
 				return;
 			}
-			//2. Find the database ids of the tags detected.
+			// 2. Find the database ids of the this.tags detected.
 			PreparedStatement pst = conn.prepareStatement("SELECT DEVICE_ID FROM DEVICE WHERE CODE_NAME = ? AND DEVICE_TYPE_ID = 2");
 			ResultSet rset;
 			boolean first = true;
-			for (Iterator<Entry<String, Tag>> i = tags.entrySet().iterator(); i.hasNext();) {
+			for (Iterator<Entry<String, Tag>> i = this.tags.entrySet().iterator(); i.hasNext();) {
 				Tag tag = i.next().getValue();
 				logger.info("checking for existing tag '" + tag.name + "' in database");
 				pst.setString(1, tag.name);
@@ -267,12 +272,12 @@ public final class AcousticReceiverFileProcessor {
 				rset = pst.getResultSet();
 				if (rset != null) {
 					if (rset.next()) {
-						if(first){
+						if (first) {
 							messages.add("Known tag devices:");
 							first = false;
 						}
 						tag.id = rset.getInt(1);
-						messages.add("FID = aatams.device." + tag.id + ", code-name = " + tag.name );
+						messages.add("FID = aatams.device." + tag.id + ", code-name = " + tag.name);
 					}
 				}
 				rset.close();
@@ -281,61 +286,63 @@ public final class AcousticReceiverFileProcessor {
 			// to the correct receiver
 			Statement smt = null;
 			if (downloadFid != null) {
-				if (downloadFid.startsWith(downloadFidPrefix)) {
+				if (downloadFid.startsWith(this.downloadFidPrefix)) {
 					try {
-						deploymentDownloadId = Integer.valueOf(downloadFid.substring(downloadFidPrefix.length()));
+						this.deploymentDownloadId = Integer.valueOf(downloadFid.substring(downloadFidPrefix.length()));
 					} catch (NumberFormatException e) {
 						throw new Exception("the downloadId parameter passed is invalid, it must end with a number", e);
 					}
 					smt = conn.createStatement();
-					// a receiver deployment must have a project_role_person associated with it,
-					// extract this to be used for any new tags added.
+					// a receiver deployment must have a project_role_person
+					// associated with it,
+					// extract this to be used for any new this.tags added.
 					rset = smt.executeQuery("SELECT DEVICE.CODE_NAME, RECEIVER_DEPLOYMENT.DEPLOYMENT_ID, RECEIVER_DEPLOYMENT.PROJECT_ROLE_PERSON_ID, "
-							+ "RECEIVER_DEPLOYMENT.INSTALLATION_ID, RECEIVER_DEPLOYMENT.STATION_ID, " 
-							+ "RECEIVER_DEPLOYMENT.LONGITUDE, RECEIVER_DEPLOYMENT.LATITUDE, " 
+							+ "RECEIVER_DEPLOYMENT.INSTALLATION_ID, RECEIVER_DEPLOYMENT.STATION_ID, "
+							+ "RECEIVER_DEPLOYMENT.LONGITUDE, RECEIVER_DEPLOYMENT.LATITUDE, "
 							+ "DEPLOYMENT_DOWNLOAD.DOWNLOAD_TIMESTAMP, DEPLOYMENT_DOWNLOAD.CC_EMAIL_ADDRESSES "
 							+ "FROM DEPLOYMENT_DOWNLOAD, RECEIVER_DEPLOYMENT, DEVICE WHERE "
 							+ "DEPLOYMENT_DOWNLOAD.DEPLOYMENT_ID = RECEIVER_DEPLOYMENT.DEPLOYMENT_ID AND "
-							+ "RECEIVER_DEPLOYMENT.DEVICE_ID = DEVICE.DEVICE_ID AND "
-							+ "DOWNLOAD_ID = " + deploymentDownloadId);
+							+ "RECEIVER_DEPLOYMENT.DEVICE_ID = DEVICE.DEVICE_ID AND " + "DOWNLOAD_ID = " + this.deploymentDownloadId);
 					if (rset != null) {
 						if (rset.next()) {
-							if(rset.getString(1).equals(receiverName)){
-								receiverDeploymentId = rset.getInt(2);
-								projectRolePersonId = rset.getInt(3);
-								installationId = rset.getInt(4);
-								installationStationId = rset.getInt(5);
-								deploymentLongitude = rset.getFloat(6);
-								deploymentLatitude =  rset.getFloat(7);
-								deploymentDownloadTimestamp = rset.getTimestamp(8);
-								ccEmailAddresses = rset.getString(9);
-								if (projectRolePersonId == 0) {
-									logger.info("could not find a project_role_person record id to use for adding unknown tags to database");
+							if (rset.getString(1).equals(receiverName)) {
+								this.receiverDeploymentId = rset.getInt(2);
+								this.projectRolePersonId = rset.getInt(3);
+								this.installationId = rset.getInt(4);
+								this.installationStationId = rset.getInt(5);
+								this.deploymentLongitude = rset.getFloat(6);
+								this.deploymentLatitude = rset.getFloat(7);
+								this.deploymentDownloadTimestamp = rset.getTimestamp(8);
+								this.ccEmailAddresses = rset.getString(9);
+								if (this.projectRolePersonId == 0) {
+									logger.info("could not find a project_role_person record id to use for adding unknown this.tags to database");
 								}
-							}else{
-								String msg = "The receiver code name read from the csv file does not match that associatd with deployment download FID='" + downloadFid + "'";
+							} else {
+								String msg = "The receiver code name read from the csv file does not match that associatd with deployment download FID='"
+										+ this.downloadFid + "'";
 								messages.add(msg);
 								throw new Exception(msg);
 							}
 						} else {
-							String msg = "A matching 'deployment download' record has not been found in the database for '" + deploymentDownloadId + "'";
+							String msg = "A matching 'deployment download' record has not been found in the database for '" + this.deploymentDownloadId + "'";
 							messages.add(msg);
 							throw new Exception(msg);
 						}
 					}
 					rset.close();
 				} else {
-					throw new Exception("the downloadId parameter passed is invalid, it must start with '" + downloadFidPrefix + "'");
+					throw new Exception("the downloadId parameter passed is invalid, it must start with '" + this.downloadFidPrefix + "'");
 				}
 			} else {
 				throw new Exception("the downloadId parameter passed is null");
 			}
-			// 3.1. Check that the file has not already been processed (potentially)
+			// 3.1. Check that the file has not already been processed
+			// (potentially)
 			smt = conn.createStatement();
-			rset = smt.executeQuery("SELECT DOWNLOAD_ID FROM DEPLOYMENT_DOWNLOAD\n" +
-					"WHERE UPPER(FILENAME) = '" + file.getName().toUpperCase() + "'");
-			if(rset.next()){
-				throw new Exception("A download file with the same name is associated with another deployment download FID=aatams.deployment_download."+rset.getLong(1));
+			rset = smt.executeQuery("SELECT DOWNLOAD_ID FROM DEPLOYMENT_DOWNLOAD\n" + "WHERE UPPER(FILENAME) = '" + file.getName().toUpperCase() + "'");
+			if (rset.next()) {
+				throw new Exception("A download file with the same name is associated with another deployment download FID=aatams.deployment_download."
+						+ rset.getLong(1));
 			}
 			rset.close();
 			smt.close();
@@ -344,7 +351,7 @@ public final class AcousticReceiverFileProcessor {
 			pst = conn.prepareStatement("INSERT INTO DEVICE (DEVICE_ID,DEVICE_TYPE_ID,MODEL_ID,CODE_NAME,PROJECT_ROLE_PERSON_ID)"
 					+ " VALUES (DEVICE_SERIAL.NEXTVAL,2,0,?,?)", Statement.RETURN_GENERATED_KEYS);
 			first = true;
-			for (Iterator<Entry<String, Tag>> i = tags.entrySet().iterator(); i.hasNext();) {
+			for (Iterator<Entry<String, Tag>> i = this.tags.entrySet().iterator(); i.hasNext();) {
 				Tag tag = i.next().getValue();
 				if (tag.id == 0) {
 					if (first) {
@@ -352,9 +359,9 @@ public final class AcousticReceiverFileProcessor {
 						first = false;
 					}
 					pst.setString(1, tag.name);
-					pst.setInt(2, projectRolePersonId);
+					pst.setInt(2, this.projectRolePersonId);
 					pst.execute();
-					//commit new tags straight-away
+					// commit new this.tags straight-away
 					conn.commit();
 					rset = pst.getGeneratedKeys();
 					if (rset != null) {
@@ -377,7 +384,7 @@ public final class AcousticReceiverFileProcessor {
 			// 5. Create new detection records in the database.
 			// start a thread to handle this time consuming part
 			messages.add("A full download file processing report will be emailed to all email addressees linked to deployment aatams.receiver_deployment."
-					+ receiverDeploymentId + ".");
+					+ this.receiverDeploymentId + ".");
 			DetectionsInserterAndReportGenerator inserter = new DetectionsInserterAndReportGenerator();
 			inserter.start();
 			success = true;
@@ -390,9 +397,9 @@ public final class AcousticReceiverFileProcessor {
 				logger.fatal("Error  : " + se.getErrorCode());
 				se = se.getNextException();
 			}
-			messages.add("File processing of " + downloadFid + " has failed due to an unforseen error, contact eMII for more information.");
+			messages.add("File processing of " + this.downloadFid + " has failed due to an unforseen error, contact eMII for more information.");
 		} catch (Exception e) {
-			messages.add("File processing of " + downloadFid + " has failed due to an unforseen error, contact eMII for more information.");
+			messages.add("File processing of " + this.downloadFid + " has failed due to an unforseen error, contact eMII for more information.");
 			logger.fatal(e);
 		} finally {
 			if (!success) {
@@ -409,15 +416,11 @@ public final class AcousticReceiverFileProcessor {
 
 	private boolean validHeader(String header) {
 		String[] tokens = header.split(",");
-		if(tokens[0].matches("Date/Time") &&
-			tokens[1].matches("Code Space") &&
-			tokens[2].matches("ID") &&
-			tokens[9].matches("Receiver Name")){
+		if (tokens[0].matches("Date/Time") && tokens[1].matches("Code Space") && tokens[2].matches("ID") && tokens[9].matches("Receiver Name")) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
-
 	}
 
 	/**
@@ -428,7 +431,7 @@ public final class AcousticReceiverFileProcessor {
 	private List<String> parseLine(String line) {
 
 		List<String> list = new ArrayList<String>();
-		Matcher m = csvRegex.matcher(line);
+		Matcher m = this.csvRegex.matcher(line);
 		// For each field
 		while (m.find()) {
 			String match = m.group();
@@ -454,20 +457,18 @@ public final class AcousticReceiverFileProcessor {
 	 */
 	public static void main(String args[]) {
 		BasicConfigurator.configure();
-		AcousticReceiverFileProcessor processor = new AcousticReceiverFileProcessor("aatams.deployment_download.",
-				 "eMII", "stephen.cameron@utas.edu.au", "postoffice.utas.edu.au", 25, 
-				 "sc04","66CoStHo", "http://test.emii.org.au/aatams");
+		AcousticReceiverFileProcessor processor = new AcousticReceiverFileProcessor("aatams.deployment_download.", "eMII", "stephen.cameron@utas.edu.au",
+				"postoffice.utas.edu.au", 25, "sc04", "66CoStHo", "http://test.emii.org.au/aatams");
 		if (args.length == 6) {
-			//aatams.deployment_download.28 "c:\temp\aatams.deployment_download.28\VUE_Export.csv" "oracle.jdbc.driver.OracleDriver" "jdbc:oracle:thin:@obsidian.bluenet.utas.edu.au:1521:orcl" AATAMS boomerSIMS
-			try{
+			try {
 				Class.forName(args[2]);
 				Connection conn = DriverManager.getConnection(args[3], args[4], args[5]);
 				ArrayList<String> messages = new ArrayList<String>();
-				processor.doProcessing(conn, args[0], args[1], messages);
-				for(int i = 0; i<messages.size(); i++){
+				processor.doProcessing(conn, args[0], args[1], messages, false);
+				for (int i = 0; i < messages.size(); i++) {
 					System.out.println(messages.get(i));
 				}
-			}catch(Exception e){
+			} catch (Exception e) {
 				processor.logger.fatal("unexpected error", e);
 			}
 		} else {
@@ -499,24 +500,28 @@ public final class AcousticReceiverFileProcessor {
 
 	private class DetectionsInserterAndReportGenerator extends Thread {
 
-		private boolean success = false;
-		private PreparedStatement pst = null;
-		private Statement smt = null;
-		private ResultSet rset = null;
-		private String reportName = null;
-		private HashMap<Integer, StringBuffer> projectTags = null;
-		private String installationName = null;
-		private String installationStationName = null;
-		private String receiverDeploymentName = null;
-		private String responsiblePersonNameAndRole = null;
-		
+		private DetectionsInserterAndReportGenerator() {
+		}
+
 		public void run() {
 			
+			boolean success = false;
+			PreparedStatement pst = null;
+			Statement smt = null;
+			ResultSet rset = null;
+			String reportName = null;
+			HashMap<Integer, StringBuffer> projectTags = null;
+			String installationName = null;
+			String installationStationName = null;
+			String receiverDeploymentName = null;
+			String responsiblePersonNameAndRole = null;
+
 			logger.info("inserting detection records");
 			try {
 				pst = conn.prepareStatement("INSERT INTO DETECTION (DETECTION_ID, DEPLOYMENT_ID, DOWNLOAD_ID, TAG_ID, DETECTION_TIMESTAMP)"
-						+ " VALUES (DETECTION_SERIAL.NEXTVAL," + receiverDeploymentId + "," + deploymentDownloadId + ",?,?)");
-				for (Iterator<Detection> i = detections.iterator(); i.hasNext();) {
+						+ " VALUES (DETECTION_SERIAL.NEXTVAL," + AcousticReceiverFileProcessor.this.receiverDeploymentId + ","
+						+ AcousticReceiverFileProcessor.this.deploymentDownloadId + ",?,?)");
+				for (Iterator<Detection> i = AcousticReceiverFileProcessor.this.detections.iterator(); i.hasNext();) {
 					Detection detection = i.next();
 					pst.setInt(1, detection.tag.id);
 					pst.setTimestamp(2, detection.timestamp);
@@ -551,112 +556,124 @@ public final class AcousticReceiverFileProcessor {
 			// 6. Prepare a report(log) file to be sent back to the
 			// submitter and data manager.
 			try {
-				// get the main info on installation, deployment and deployment download
+				// get the main info on installation, deployment and deployment
+				// download
 				smt = conn.createStatement();
-				if(installationId > 0){
-					rset = smt.executeQuery("SELECT NAME FROM INSTALLATION WHERE INSTALLATION_ID = " + installationId);
-				    if(rset.next()){
-				    	installationName = rset.getString(1);
-				    }else{ //unlikely
-				    	throw new Exception("cannot locate installation with id = " + installationId);
-				    }
-				    rset.close();
-				}else{
+				if (AcousticReceiverFileProcessor.this.installationId > 0) {
+					rset = smt.executeQuery("SELECT NAME FROM INSTALLATION WHERE INSTALLATION_ID = " + AcousticReceiverFileProcessor.this.installationId);
+					if (rset.next()) {
+						installationName = rset.getString(1);
+					} else { // unlikely
+						throw new Exception("cannot locate installation with id = " + AcousticReceiverFileProcessor.this.installationId);
+					}
+					rset.close();
+				} else {
 					installationName = "N/A";
 				}
-				if(installationStationId > 0){
-					rset = smt.executeQuery("SELECT NAME, CURTAIN_POSITION FROM INSTALLATION_STATION WHERE STATION_ID = " + installationStationId);
-				    if(rset.next()){
-				    	installationStationName = rset.getString(1);
-				    	int pos = rset.getInt(2);
-				    	installationStationName += (rset.wasNull()) ? "" : "(Position="+pos+")";
-				    }else{ //unlikely
-				    	throw new Exception("cannot locate installation station with id = " + installationStationId);
-				    }
-				    rset.close();
-				}else{
+				if (AcousticReceiverFileProcessor.this.installationStationId > 0) {
+					rset = smt.executeQuery("SELECT NAME, CURTAIN_POSITION FROM INSTALLATION_STATION WHERE STATION_ID = "
+							+ AcousticReceiverFileProcessor.this.installationStationId);
+					if (rset.next()) {
+						installationStationName = rset.getString(1);
+						int pos = rset.getInt(2);
+						installationStationName += (rset.wasNull()) ? "" : "(Position=" + pos + ")";
+					} else { // unlikely
+						throw new Exception("cannot locate installation station with id = " + AcousticReceiverFileProcessor.this.installationStationId);
+					}
+					rset.close();
+				} else {
 					installationStationName = "N/A";
 				}
-				if(receiverDeploymentId > 0){
-					rset = smt.executeQuery("SELECT NAME FROM INSTALLATION_DEPLOYMENT WHERE DEPLOYMENT_ID = " + receiverDeploymentId);
-				    if(rset.next()){
-				    	receiverDeploymentName = rset.getString(1);
-				    }else{ //unlikely
-				    	throw new Exception("cannot locate receiver deployment with id = " + receiverDeploymentId);
-				    }
-				    rset.close();
-				}else{//never
+				if (AcousticReceiverFileProcessor.this.receiverDeploymentId > 0) {
+					rset = smt.executeQuery("SELECT NAME FROM INSTALLATION_DEPLOYMENT WHERE DEPLOYMENT_ID = "
+							+ AcousticReceiverFileProcessor.this.receiverDeploymentId);
+					if (rset.next()) {
+						receiverDeploymentName = rset.getString(1);
+					} else { // unlikely
+						throw new Exception("cannot locate receiver deployment with id = " + AcousticReceiverFileProcessor.this.receiverDeploymentId);
+					}
+					rset.close();
+				} else {// never
 					throw new Exception("receiver deployment id is 0");
 				}
-				if(projectRolePersonId > 0){
-					rset = smt.executeQuery("SELECT PERSON_ROLE FROM PROJECT_PERSON WHERE PROJECT_ROLE_PERSON_ID = " + projectRolePersonId);
-				    if(rset.next()){
-				    	responsiblePersonNameAndRole = rset.getString(1);
-				    }else{ //unlikely
-				    	throw new Exception("cannot locate project person with id = " + projectRolePersonId);
-				    }
-				    rset.close();
-				}else{//never
+				if (AcousticReceiverFileProcessor.this.projectRolePersonId > 0) {
+					rset = smt.executeQuery("SELECT PERSON_ROLE FROM PROJECT_PERSON WHERE PROJECT_ROLE_PERSON_ID = "
+							+ AcousticReceiverFileProcessor.this.projectRolePersonId);
+					if (rset.next()) {
+						responsiblePersonNameAndRole = rset.getString(1);
+					} else { // unlikely
+						throw new Exception("cannot locate project person with id = " + AcousticReceiverFileProcessor.this.projectRolePersonId);
+					}
+					rset.close();
+				} else {// never
 					throw new Exception("project role person id is 0");
 				}
-				// add the known tags table
-				reportName = "aatams.deployment_download." + deploymentDownloadId + ".txt";
+				// add the known this.tags table
+				reportName = "aatams.deployment_download." + AcousticReceiverFileProcessor.this.deploymentDownloadId + ".txt";
 				File report = new File(reportFolder + "/" + reportName);
-				if(report.exists()){
+				if (report.exists()) {
 					throw new Exception("receiver file processing report already exists (" + report.getAbsolutePath() + ")");
 				}
 				logger.info("building report");
 				FileOutputStream fos = new FileOutputStream(report);
 				BufferedWriter buffer = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
 				buffer.append("RECEIVER DOWNLOAD FILE PROCESSING REPORT\n\n");
-				buffer.append(String.format("%-20s %s%n","Processing file:",file.getName()));
-				buffer.append(String.format("%-20s %s%n","Installation:", installationName + " (FID*=aatams.installation." + installationId  + ")"));
-				buffer.append(String.format("%-20s %s%n","Station:", installationStationName + " (FID*=aatams.installation_station." + installationStationId  + ")"));
-				buffer.append(String.format("%-20s %s%n","Receiver Deployment:", receiverDeploymentName +  " (FID*=aatams.receiver_deployment." + receiverDeploymentId + ")" ));
-				buffer.append(String.format("%-20s %s%n","Longitude:", deploymentLongitude));
-				buffer.append(String.format("%-20s %s%n","Latitude:", deploymentLatitude));
-				buffer.append(String.format("%-20s %s%n","Download Timestamp: ", (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(deploymentDownloadTimestamp)) ));
-				buffer.append(String.format("%-20s %s%n%n","Deployment Owner: ", responsiblePersonNameAndRole + " (FID*=aatams.project_role_person." + projectRolePersonId + ")"));
-				buffer.append("* FID=Feature Identifier, This id code can be used in the AATAMS web site to retrieve specific features (records) of interest.\n");
-				buffer.append("Please see the help documentation on the website for more details (" + aatamsWebsiteUri + "?tab=help)\n\n");
-				// add the known tags table
-				if (tags.size() > newTags.size()) {
+				buffer.append(String.format("%-20s %s%n", "Processing file:", AcousticReceiverFileProcessor.this.file.getName()));
+				buffer.append(String.format("%-20s %s%n", "Installation:", installationName + " (FID*=aatams.installation."
+						+ AcousticReceiverFileProcessor.this.installationId + ")"));
+				buffer.append(String.format("%-20s %s%n", "Station:", installationStationName + " (FID*=aatams.installation_station."
+						+ AcousticReceiverFileProcessor.this.installationStationId + ")"));
+				buffer.append(String.format("%-20s %s%n", "Receiver Deployment:", receiverDeploymentName + " (FID*=aatams.receiver_deployment."
+						+ AcousticReceiverFileProcessor.this.receiverDeploymentId + ")"));
+				buffer.append(String.format("%-20s %s%n", "Longitude:", AcousticReceiverFileProcessor.this.deploymentLongitude));
+				buffer.append(String.format("%-20s %s%n", "Latitude:", AcousticReceiverFileProcessor.this.deploymentLatitude));
+				buffer.append(String.format("%-20s %s%n", "Download Timestamp: ", (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+						.format(AcousticReceiverFileProcessor.this.deploymentDownloadTimestamp))));
+				buffer.append(String.format("%-20s %s%n%n", "Deployment Owner: ", responsiblePersonNameAndRole + " (FID*=aatams.project_role_person."
+						+ AcousticReceiverFileProcessor.this.projectRolePersonId + ")"));
+				buffer
+						.append("* FID=Feature Identifier, This id code can be used in the AATAMS web site to retrieve specific features (records) of interest.\n");
+				buffer.append("Please see the help documentation on the website for more details (" + AcousticReceiverFileProcessor.this.aatamsWebsiteUri + "?tab=help)\n\n");
+				// add the known this.tags table
+				if (AcousticReceiverFileProcessor.this.tags.size() > AcousticReceiverFileProcessor.this.newTags.size()) {
 					buffer.append("KNOWN TAGS\n");
 					buffer.append("----------------------------------------\n");
 					buffer.append("TAG CODE NAME            TAG DEVICE FID*\n");
 					buffer.append("----------------------------------------\n");
-					for (Iterator<Entry<String, Tag>> i = tags.entrySet().iterator(); i.hasNext();) {
+					for (Iterator<Entry<String, Tag>> i = AcousticReceiverFileProcessor.this.tags.entrySet().iterator(); i.hasNext();) {
 						Entry<String, Tag> entry = i.next();
-						if (!newTags.containsKey(entry.getKey())) {
+						if (!AcousticReceiverFileProcessor.this.newTags.containsKey(entry.getKey())) {
 							Tag tag = entry.getValue();
 							buffer.append(String.format("%-20s%20s%n", tag.name, "aatams.device." + tag.id));
 						}
 					}
 					buffer.append("----------------------------------------\n\n");
 				}
-				// add the new tags table
-				if (newTags.size() > 0) {
+				// add the new this.tags table
+				if (AcousticReceiverFileProcessor.this.newTags.size() > 0) {
 					buffer.append("UNKNOWN(NEW)TAGS\n");
 					buffer.append("----------------------------------------\n");
 					buffer.append("TAG CODE NAME            TAG DEVICE FID*\n");
 					buffer.append("----------------------------------------\n");
-					for (Iterator<Entry<String, Tag>> i = newTags.entrySet().iterator(); i.hasNext();) {
+					for (Iterator<Entry<String, Tag>> i = AcousticReceiverFileProcessor.this.newTags.entrySet().iterator(); i.hasNext();) {
 						Tag tag = i.next().getValue();
 						buffer.append(String.format("%-20s%20s%n", tag.name, "aatams.device." + tag.id));
 					}
 					buffer.append("----------------------------------------\n\n");
 				}
 				// add the tag detection count table
-				// put this data into the DOWNLOAD_TAG_SUMMARY table as well for later use.
+				// put this data into the DOWNLOAD_TAG_SUMMARY table as well for
+				// later use.
 				try {
 					long total = 0;
 					ArrayList<Long> deviceIds = new ArrayList<Long>();
-					if (detections.size() > 0) {
+					if (AcousticReceiverFileProcessor.this.detections.size() > 0) {
 						pst = conn.prepareStatement("INSERT INTO DOWNLOAD_TAG_SUMMARY(DEPLOYMENT_ID,DOWNLOAD_ID,DEVICE_ID,DETECTION_COUNT)VALUES(?,?,?,?)");
 						smt = conn.createStatement();
 						rset = smt.executeQuery("SELECT DEVICE.DEVICE_ID, DEVICE.CODE_NAME, COUNT(*) AS COUNT "
 								+ "FROM DETECTION INNER JOIN DEVICE ON DETECTION.TAG_ID = DEVICE.DEVICE_ID " + "WHERE DETECTION.DOWNLOAD_ID = "
-								+ deploymentDownloadId + " " + "GROUP BY DEVICE.DEVICE_ID, DEVICE.CODE_NAME " + "ORDER BY COUNT DESC, CODE_NAME ASC");
+								+ AcousticReceiverFileProcessor.this.deploymentDownloadId + " " + "GROUP BY DEVICE.DEVICE_ID, DEVICE.CODE_NAME "
+								+ "ORDER BY COUNT DESC, CODE_NAME ASC");
 						if (rset != null) {
 							while (rset.next()) {
 								if (rset.isFirst()) {
@@ -668,29 +685,32 @@ public final class AcousticReceiverFileProcessor {
 								buffer.append(String.format("%-30s%10s%n", rset.getString(2), rset.getString(3)));
 								total += rset.getLong(3);
 								deviceIds.add(rset.getLong(1));
-								pst.setLong(1, receiverDeploymentId);
-								pst.setLong(2, deploymentDownloadId);
+								pst.setLong(1, AcousticReceiverFileProcessor.this.receiverDeploymentId);
+								pst.setLong(2, AcousticReceiverFileProcessor.this.deploymentDownloadId);
 								pst.setLong(3, rset.getLong(1));
 								pst.setLong(4, rset.getLong(3));
 								pst.execute();
 							}
 							buffer.append("----------------------------------------\n");
 						}
-						if (total == detections.size()) {
+						if (total == AcousticReceiverFileProcessor.this.detections.size()) {
 							buffer.append(String.format("TOTAL COUNT%29d%n", total));
 							buffer.append("----------------------------------------\n\n");
 						} else {
-							throw new Exception("detections count from database and file don't match: " + total + " vs " + detections.size());
+							throw new Exception("detections count from database and file don't match: " + total + " vs " + 
+									AcousticReceiverFileProcessor.this.detections.size());
 						}
 						rset.close();
 						pst.close();
-						// set the file_name and the total detections in the deployment_download record
-						// this is the only way to prevent a file being processed twice, by checking that the file name doesn't
+						// set the file_name and the total this.detections in the
+						// deployment_download record
+						// this is the only way to prevent a file being
+						// processed twice, by checking that the file name
+						// doesn't
 						// already exist.
-						smt.execute("UPDATE DEPLOYMENT_DOWNLOAD SET\n" +
-								"FILENAME = '" + file.getName() + "',\n" +
-								"DETECTIONS = " + detections.size() + "\n" +
-								"WHERE DOWNLOAD_ID = " + deploymentDownloadId);
+						smt.execute("UPDATE DEPLOYMENT_DOWNLOAD SET\n" + "FILENAME = '" + AcousticReceiverFileProcessor.this.file.getName() + "',\n" + "DETECTIONS = " +
+								AcousticReceiverFileProcessor.this.detections.size() + "\n"
+								+ "WHERE DOWNLOAD_ID = " + AcousticReceiverFileProcessor.this.deploymentDownloadId);
 						conn.commit();
 						// add a tag release summary
 						projectTags = new HashMap<Integer, StringBuffer>();
@@ -722,9 +742,9 @@ public final class AcousticReceiverFileProcessor {
 									}
 									buffer.append(String.format("%-18s%-26s%-36s%n", rset.getString(2), "aatams.tag_release." + rset.getString(1), rset
 											.getString(3)));
-									// add to the list of tags from outside the
+									// add to the list of this.tags from outside the
 									// current project
-									if (rset.getInt(7) != projectRolePersonId) {
+									if (rset.getInt(7) != AcousticReceiverFileProcessor.this.projectRolePersonId) {
 										if (!projectTags.containsKey(rset.getInt(7))) {
 											projectTags.put(rset.getInt(7), new StringBuffer(rset.getString(2)));
 										} else {
@@ -736,11 +756,11 @@ public final class AcousticReceiverFileProcessor {
 							}
 							rset.close();
 						} else {
-							buffer.append("No tag release records have been found for the tags in the download file\n\n");
+							buffer.append("No tag release records have been found for the this.tags in the download file\n\n");
 						}
 						smt.close();
 					} else {
-						buffer.append("No detections where found in the file to process into database\n\n");
+						buffer.append("No this.detections where found in the file to process into database\n\n");
 					}
 				} catch (SQLException e) {
 					logger.fatal("an sql exception was encountered when generating the download report", e);
@@ -755,30 +775,35 @@ public final class AcousticReceiverFileProcessor {
 			// 7. Send the main report
 			String projectPersonName = "", projectAddressTo = "";
 			EmailAddressValidator validator = new EmailAddressValidator();
-			Mailer mailer = new Mailer(smtpHost, smtpPort, smtpUser, smtpPassword);
+			Mailer mailer = new Mailer(AcousticReceiverFileProcessor.this.smtpHost,
+					AcousticReceiverFileProcessor.this.smtpPort,
+					AcousticReceiverFileProcessor.this.smtpUser,
+					AcousticReceiverFileProcessor.this.smtpPassword);
 			Email email = new Email();
 			try {
 				smt = conn.createStatement();
 				rset = smt.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n"
 						+ "WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" + "PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = "
-						+ projectRolePersonId);
+						+ AcousticReceiverFileProcessor.this.projectRolePersonId);
 				if (rset.next()) {
 					projectPersonName = rset.getString(1);
 					projectAddressTo = rset.getString(2);
-					email.setFromAddress(reportSenderName, reportSenderEmailAddress);
-					if(validator.isValid(projectAddressTo)){
+					email.setFromAddress(AcousticReceiverFileProcessor.this.reportSenderName, AcousticReceiverFileProcessor.this.reportSenderEmailAddress);
+					if (validator.isValid(projectAddressTo)) {
 						email.addRecipient(projectPersonName, projectAddressTo, RecipientType.TO);
-						email.addRecipient(reportSenderName, reportSenderEmailAddress, RecipientType.BCC);
-						email.setSubject("AATAMS Deployment Download Processing Report (FID=aatams.deployment_download." + deploymentDownloadId + ")");
+						email.addRecipient(AcousticReceiverFileProcessor.this.reportSenderName, AcousticReceiverFileProcessor.this.reportSenderEmailAddress,
+								RecipientType.BCC);
+						email.setSubject("AATAMS Deployment Download Processing Report (FID=aatams.deployment_download."
+								+ AcousticReceiverFileProcessor.this.deploymentDownloadId + ")");
 						email.setText("Please find attached a report with details of a Receiver Deployment Download just processed");
 						email.addAttachment(reportName, new FileDataSource(reportFolder + "/" + reportName));
-						if(ccEmailAddresses != null){
-							String[] addresses = ccEmailAddresses.split(";\\s*|,\\s*|\\s+");
-							for(int i = 0; i<addresses.length; i++){
-								if(validator.isValid(addresses[i])){
-									email.addRecipient("",addresses[i],RecipientType.CC);
-								}else{
-									logger.error("invalid email address, foreign detection report not cc'd to " + addresses[i] );
+						if (AcousticReceiverFileProcessor.this.ccEmailAddresses != null) {
+							String[] addresses = AcousticReceiverFileProcessor.this.ccEmailAddresses.split(";\\s*|,\\s*|\\s+");
+							for (int i = 0; i < addresses.length; i++) {
+								if (validator.isValid(addresses[i])) {
+									email.addRecipient("", addresses[i], RecipientType.CC);
+								} else {
+									logger.error("invalid email address, foreign detection report not cc'd to " + addresses[i]);
 								}
 							}
 						}
@@ -788,8 +813,8 @@ public final class AcousticReceiverFileProcessor {
 						} catch (Exception e) {
 							logger.error("error sending report to " + projectAddressTo, e);
 						}
-					}else{
-						logger.error("invalid email address, report not sent " + projectAddressTo );
+					} else {
+						logger.error("invalid email address, report not sent " + projectAddressTo);
 					}
 				}
 				rset.close();
@@ -810,29 +835,32 @@ public final class AcousticReceiverFileProcessor {
 					if (rset.next()) {
 						personName = rset.getString(1);
 						addressTo = rset.getString(2);
-						if(validator.isValid(addressTo)){
+						if (validator.isValid(addressTo)) {
 							email = new Email();
-							email.setFromAddress(reportSenderName, reportSenderEmailAddress);
+							email.setFromAddress(AcousticReceiverFileProcessor.this.reportSenderName,
+									AcousticReceiverFileProcessor.this.reportSenderEmailAddress);
 							email.addRecipient(personName, addressTo, RecipientType.TO);
-							email.addRecipient(reportSenderName, reportSenderEmailAddress,RecipientType.BCC);
-							if(validator.isValid(projectAddressTo)){
+							email.addRecipient(AcousticReceiverFileProcessor.this.reportSenderName,
+									AcousticReceiverFileProcessor.this.reportSenderEmailAddress, RecipientType.BCC);
+							if (validator.isValid(projectAddressTo)) {
 								email.addRecipient(projectPersonName, projectAddressTo, RecipientType.CC);
-							}else{
-								logger.error("invalid email address, foreign detection report not cc'd to " + projectAddressTo );
+							} else {
+								logger.error("invalid email address, foreign detection report not cc'd to " + projectAddressTo);
 							}
 							email.setSubject("AATAMS 'Foreign' Detections Report");
 							email.setText("The following tags, having a tag release under your name, have been found "
 									+ "in another person's deployment download: \n" + entry.getValue().toString() + "\n\n"
 									+ "Please contact the responsible person (carbon-copied this email) or obtain more"
-									+ "information via the deployment download record FID=aatams.deployment_download." + deploymentDownloadId
-									+ " viewable at the AATAMS web site (" + aatamsWebsiteUri + ").");
-							if(ccEmailAddresses != null ){
-								String[] addresses = ccEmailAddresses.split(";\\s*|,\\s*|\\s+");
-								for(int j = 0; j<addresses.length; j++){
-									if(validator.isValid(addresses[j])){
-										email.addRecipient("",addresses[j],RecipientType.BCC);
-									}else{
-										logger.error("invalid email address, foreign detection report not bcc'd to " + addresses[j] );
+									+ "information via the deployment download record FID=aatams.deployment_download."
+									+ AcousticReceiverFileProcessor.this.deploymentDownloadId + " viewable at the AATAMS web site (" +
+									AcousticReceiverFileProcessor.this.aatamsWebsiteUri + ").");
+							if (AcousticReceiverFileProcessor.this.ccEmailAddresses != null) {
+								String[] addresses = AcousticReceiverFileProcessor.this.ccEmailAddresses.split(";\\s*|,\\s*|\\s+");
+								for (int j = 0; j < addresses.length; j++) {
+									if (validator.isValid(addresses[j])) {
+										email.addRecipient("", addresses[j], RecipientType.BCC);
+									} else {
+										logger.error("invalid email address, foreign detection report not bcc'd to " + addresses[j]);
 									}
 								}
 							}
@@ -842,8 +870,8 @@ public final class AcousticReceiverFileProcessor {
 							} catch (Exception e) {
 								logger.error("error sending report to " + addressTo, e);
 							}
-						}else{
-							logger.error("invalid email address, report not sent " + projectAddressTo );
+						} else {
+							logger.error("invalid email address, report not sent " + projectAddressTo);
 						}
 					}
 					rset.close();
@@ -852,15 +880,16 @@ public final class AcousticReceiverFileProcessor {
 					logger.fatal("an sql exception was encountered when accessing report email", e);
 				}
 			}
-			try{
+			try {
 				conn.close();
-			}catch(SQLException e){}
-			logger.info("file processing completed for " + downloadFid);
+			} catch (SQLException e) {
+			}
+			logger.info("file processing completed for " + AcousticReceiverFileProcessor.this.downloadFid);
 		}
 	}
 
 	public class EmailAddressValidator {
-		
+
 		private final String expression = "^[\\w\\-]+(\\.[\\w\\-]+)*@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$";
 		private final Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
 

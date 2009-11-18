@@ -773,102 +773,46 @@ public final class AcousticReceiverFileProcessor {
 				return;
 			}
 			// 7. Send the main report
-			String projectPersonName = "", projectAddressTo = "";
-			EmailAddressValidator validator = new EmailAddressValidator();
-			Mailer mailer = new Mailer(AcousticReceiverFileProcessor.this.smtpHost,
-					AcousticReceiverFileProcessor.this.smtpPort,
-					AcousticReceiverFileProcessor.this.smtpUser,
-					AcousticReceiverFileProcessor.this.smtpPassword);
-			Email email = new Email();
-			try {
-				smt = conn.createStatement();
-				rset = smt.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n"
-						+ "WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" + "PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = "
-						+ AcousticReceiverFileProcessor.this.projectRolePersonId);
-				if (rset.next()) {
-					projectPersonName = rset.getString(1);
-					projectAddressTo = rset.getString(2);
-					email.setFromAddress(AcousticReceiverFileProcessor.this.reportSenderName, AcousticReceiverFileProcessor.this.reportSenderEmailAddress);
-					if (validator.isValid(projectAddressTo)) {
-						email.addRecipient(projectPersonName, projectAddressTo, RecipientType.TO);
-						email.addRecipient(AcousticReceiverFileProcessor.this.reportSenderName, AcousticReceiverFileProcessor.this.reportSenderEmailAddress,
-								RecipientType.BCC);
-						email.setSubject("AATAMS Deployment Download Processing Report (FID=aatams.deployment_download."
-								+ AcousticReceiverFileProcessor.this.deploymentDownloadId + ")");
-						email.setText("Please find attached a report with details of a Receiver Deployment Download just processed");
-						email.addAttachment(reportName, new FileDataSource(reportFolder + "/" + reportName));
-						if (AcousticReceiverFileProcessor.this.ccEmailAddresses != null) {
-							String[] addresses = AcousticReceiverFileProcessor.this.ccEmailAddresses.split(";\\s*|,\\s*|\\s+");
-							for (int i = 0; i < addresses.length; i++) {
-								if (validator.isValid(addresses[i])) {
-									email.addRecipient("", addresses[i], RecipientType.CC);
-								} else {
-									logger.error("invalid email address, foreign detection report not cc'd to " + addresses[i]);
-								}
-							}
-						}
-						try {
-							logger.info("sending main report to " + projectAddressTo);
-							mailer.sendMail(email);
-						} catch (Exception e) {
-							logger.error("error sending report to " + projectAddressTo, e);
-						}
-					} else {
-						logger.error("invalid email address, report not sent " + projectAddressTo);
-					}
-				}
-				rset.close();
-				smt.close();
-			} catch (SQLException e) {
-				logger.fatal("an sql exception was encountered when accessing report email", e);
-			}
-			// 8. Send any 'out of project' tag detection reports
-			String personName = "", addressTo = "";
-			for (Iterator<Entry<Integer, StringBuffer>> i = projectTags.entrySet().iterator(); i.hasNext();) {
-				Entry<Integer, StringBuffer> entry = i.next();
+			if(AcousticReceiverFileProcessor.this.sendReports){
+				String projectPersonName = "", projectAddressTo = "";
+				EmailAddressValidator validator = new EmailAddressValidator();
+				Mailer mailer = new Mailer(AcousticReceiverFileProcessor.this.smtpHost,
+						AcousticReceiverFileProcessor.this.smtpPort,
+						AcousticReceiverFileProcessor.this.smtpUser,
+						AcousticReceiverFileProcessor.this.smtpPassword);
+				Email email = new Email();
 				try {
 					smt = conn.createStatement();
-					rset = smt
-							.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n"
-									+ "WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" + "PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = "
-									+ entry.getKey());
+					rset = smt.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n"
+							+ "WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" + "PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = "
+							+ AcousticReceiverFileProcessor.this.projectRolePersonId);
 					if (rset.next()) {
-						personName = rset.getString(1);
-						addressTo = rset.getString(2);
-						if (validator.isValid(addressTo)) {
-							email = new Email();
-							email.setFromAddress(AcousticReceiverFileProcessor.this.reportSenderName,
-									AcousticReceiverFileProcessor.this.reportSenderEmailAddress);
-							email.addRecipient(personName, addressTo, RecipientType.TO);
-							email.addRecipient(AcousticReceiverFileProcessor.this.reportSenderName,
-									AcousticReceiverFileProcessor.this.reportSenderEmailAddress, RecipientType.BCC);
-							if (validator.isValid(projectAddressTo)) {
-								email.addRecipient(projectPersonName, projectAddressTo, RecipientType.CC);
-							} else {
-								logger.error("invalid email address, foreign detection report not cc'd to " + projectAddressTo);
-							}
-							email.setSubject("AATAMS 'Foreign' Detections Report");
-							email.setText("The following tags, having a tag release under your name, have been found "
-									+ "in another person's deployment download: \n" + entry.getValue().toString() + "\n\n"
-									+ "Please contact the responsible person (carbon-copied this email) or obtain more"
-									+ "information via the deployment download record FID=aatams.deployment_download."
-									+ AcousticReceiverFileProcessor.this.deploymentDownloadId + " viewable at the AATAMS web site (" +
-									AcousticReceiverFileProcessor.this.aatamsWebsiteUri + ").");
+						projectPersonName = rset.getString(1);
+						projectAddressTo = rset.getString(2);
+						email.setFromAddress(AcousticReceiverFileProcessor.this.reportSenderName, AcousticReceiverFileProcessor.this.reportSenderEmailAddress);
+						if (validator.isValid(projectAddressTo)) {
+							email.addRecipient(projectPersonName, projectAddressTo, RecipientType.TO);
+							email.addRecipient(AcousticReceiverFileProcessor.this.reportSenderName, AcousticReceiverFileProcessor.this.reportSenderEmailAddress,
+									RecipientType.BCC);
+							email.setSubject("AATAMS Deployment Download Processing Report (FID=aatams.deployment_download."
+									+ AcousticReceiverFileProcessor.this.deploymentDownloadId + ")");
+							email.setText("Please find attached a report with details of a Receiver Deployment Download just processed");
+							email.addAttachment(reportName, new FileDataSource(reportFolder + "/" + reportName));
 							if (AcousticReceiverFileProcessor.this.ccEmailAddresses != null) {
 								String[] addresses = AcousticReceiverFileProcessor.this.ccEmailAddresses.split(";\\s*|,\\s*|\\s+");
-								for (int j = 0; j < addresses.length; j++) {
-									if (validator.isValid(addresses[j])) {
-										email.addRecipient("", addresses[j], RecipientType.BCC);
+								for (int i = 0; i < addresses.length; i++) {
+									if (validator.isValid(addresses[i])) {
+										email.addRecipient("", addresses[i], RecipientType.CC);
 									} else {
-										logger.error("invalid email address, foreign detection report not bcc'd to " + addresses[j]);
+										logger.error("invalid email address, foreign detection report not cc'd to " + addresses[i]);
 									}
 								}
 							}
 							try {
-								logger.info("sending foreign detections report to " + addressTo + " and " + projectAddressTo);
+								logger.info("sending main report to " + projectAddressTo);
 								mailer.sendMail(email);
 							} catch (Exception e) {
-								logger.error("error sending report to " + addressTo, e);
+								logger.error("error sending report to " + projectAddressTo, e);
 							}
 						} else {
 							logger.error("invalid email address, report not sent " + projectAddressTo);
@@ -879,10 +823,71 @@ public final class AcousticReceiverFileProcessor {
 				} catch (SQLException e) {
 					logger.fatal("an sql exception was encountered when accessing report email", e);
 				}
-			}
-			try {
-				conn.close();
-			} catch (SQLException e) {
+				// 8. Send any 'out of project' tag detection reports
+				String personName = "", addressTo = "";
+				for (Iterator<Entry<Integer, StringBuffer>> i = projectTags.entrySet().iterator(); i.hasNext();) {
+					Entry<Integer, StringBuffer> entry = i.next();
+					try {
+						smt = conn.createStatement();
+						rset = smt
+								.executeQuery("SELECT PERSON.NAME, PERSON.EMAIL FROM PERSON, PROJECT_ROLE_PERSON\n"
+										+ "WHERE PERSON.PERSON_ID = PROJECT_ROLE_PERSON.PERSON_ID AND\n" + "PROJECT_ROLE_PERSON.PROJECT_ROLE_PERSON_ID = "
+										+ entry.getKey());
+						if (rset.next()) {
+							personName = rset.getString(1);
+							addressTo = rset.getString(2);
+							if (validator.isValid(addressTo)) {
+								email = new Email();
+								email.setFromAddress(AcousticReceiverFileProcessor.this.reportSenderName,
+										AcousticReceiverFileProcessor.this.reportSenderEmailAddress);
+								email.addRecipient(personName, addressTo, RecipientType.TO);
+								email.addRecipient(AcousticReceiverFileProcessor.this.reportSenderName,
+										AcousticReceiverFileProcessor.this.reportSenderEmailAddress, RecipientType.BCC);
+								if (validator.isValid(projectAddressTo)) {
+									email.addRecipient(projectPersonName, projectAddressTo, RecipientType.CC);
+								} else {
+									logger.error("invalid email address, foreign detection report not cc'd to " + projectAddressTo);
+								}
+								email.setSubject("AATAMS 'Foreign' Detections Report");
+								email.setText("The following tags, having a tag release under your name, have been found "
+										+ "in another person's deployment download: \n" + entry.getValue().toString() + "\n\n"
+										+ "Please contact the responsible person (carbon-copied this email) or obtain more"
+										+ "information via the deployment download record FID=aatams.deployment_download."
+										+ AcousticReceiverFileProcessor.this.deploymentDownloadId + " viewable at the AATAMS web site (" +
+										AcousticReceiverFileProcessor.this.aatamsWebsiteUri + ").");
+								if (AcousticReceiverFileProcessor.this.ccEmailAddresses != null) {
+									String[] addresses = AcousticReceiverFileProcessor.this.ccEmailAddresses.split(";\\s*|,\\s*|\\s+");
+									for (int j = 0; j < addresses.length; j++) {
+										if (validator.isValid(addresses[j])) {
+											email.addRecipient("", addresses[j], RecipientType.BCC);
+										} else {
+											logger.error("invalid email address, foreign detection report not bcc'd to " + addresses[j]);
+										}
+									}
+								}
+								try {
+									logger.info("sending foreign detections report to " + addressTo + " and " + projectAddressTo);
+									mailer.sendMail(email);
+								} catch (Exception e) {
+									logger.error("error sending report to " + addressTo, e);
+								}
+							} else {
+								logger.error("invalid email address, report not sent " + projectAddressTo);
+							}
+						}
+						rset.close();
+						smt.close();
+					} catch (SQLException e) {
+						logger.fatal("an sql exception was encountered when accessing report email", e);
+					}
+				}
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					logger.fatal("an sql exception was encountered when closing db connection", e);
+				}
+			}else{
+				logger.info("flag set to not send reports");
 			}
 			logger.info("file processing completed for " + AcousticReceiverFileProcessor.this.downloadFid);
 		}
@@ -890,7 +895,7 @@ public final class AcousticReceiverFileProcessor {
 
 	public class EmailAddressValidator {
 
-		private final String expression = "^[\\w\\-]+(\\.[\\w\\-]+)*@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$";
+		private static final String expression = "^[\\w\\-]+(\\.[\\w\\-]+)*@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$";
 		private final Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
 
 		public boolean isValid(String emailAddress) {

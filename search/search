@@ -1,0 +1,14 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd"> 
+<html>
+<frameset id="frames" rows="90%,*">
+	<frame src="query.html">
+	<frame name="results">
+</frameset>
+<noframes>
+	<body>Your browser does not handle frames!</br>This page uses frames to display query results</body>
+</noframes>
+
+</html>
+

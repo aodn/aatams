@@ -1084,5 +1084,15 @@
 	  <unique-column name="NAME"/>
       </unique>
     </view>
+    
+    <view name="TRANSMITTER_MODEL">
+      <column name="MODEL_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+    </view>
+    
+     <view name="RECEIVER_MODEL">
+      <column name="MODEL_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+    </view>
   
   </database>

@@ -3,63 +3,17 @@
 PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
-    <head> 
-    <style type="text/css">
-    	body {  font-family: Arial, Helvetica, sans-serif;  background-color:#DBF0F7; margin:0px;}
-        div#main { position:relative; width:96%; margin-left:2%; margin-top:10px; z-index:0; }
-        input#wfs_uri { width:300px; border: inset 1px gray;  }
-        th { font-weight:bold; font-size:1.5em; }
-        table.search { margin:0px; width:100%; border-spacing:0px; }
-        table.search td { font-size:1.2em; padding:10px 10px 10px 0px; vertical-align:top;  }
-        th#features_header { width:200px; text-align:left; padding-left:0px;}
-        div.features { height:100px; width:100%; overflow:auto; border:inset 2px #999999; background-color:white; }
-        th#params_header { width:70%; text-align:left; padding-left:15px; }  
-        div#params {width: 100%; border:groove 3px #CCCCCC; padding:4px; display:none; }
-        table.params { border-collapse:collapse; border-spacing:0px;}
-        table.params td  { font-size:1.0em; padding:3px 10px 3px 10px; vertical-align:top;  border-bottom:solid 1px #CCCCCC; white-space: nowrap;}
-        table.params td.last_row  { border-bottom:solid 0px gray; }
-        .param_name { font-weight:bold; }
-        .download { font-size:0.8em; }
-        .date_group { font-weight:bold; margin-bottom:2px; }
-        .operator_list { width:40px; }
-        table.lon_lat td { border:solid 0px gray; padding-top:0px; }
-        td ul { padding: 0px; margin: 0px; list-style-type: none; }
-        div#request { border: solid 1px #66BBDD; padding: 3px 0px; }
-        div#request p { display:block; margin:0px; padding:5px; }
-        span.feature_type{ cursor:pointer }
-        span.format_type{ cursor:pointer }  
-        img.calendar{ margin-left:5px; margin-right:5px; vertical-align: top;  }
-        input#max_members { width:50px }
-        .button {overflow:visible;font-weight:bold;padding:2px;cursor:pointer; }
-        input#query {width:auto; display:none; overflow:hidden; }
-        div#help_toggle { width:100%; height:15px; display:block; margin-top:0px; }
-        div#help_toggle_button {float:right; clear:right; margin-right:20px;}
-        div#help_toggle_button img {cursor:pointer;}
-        div#data_source {margin-left:20px; display:none; font-size:0.8em;}
-        div#help_content {height:auto; display:none; background-color:white; border:dotted 1px gray; margin:0px 20px; padding: 3px; font-size:0.8em; }
-        div#query_display { font-size:0.7em; height:20px; width:100px; background:url('img/frame.gif') no-repeat;  font-weight:bold; cursor:pointer;
-               padding-left:5px; padding-top:3px;}
-        span#help_label { font-size:0.6em; }
-        span#location_status_message { font-size:0.6em; color:red; font-weight:bold; }
-        div#javascript_needed {position:relative;  left:50%; margin-left:-25%; width:50%; color:red; font-weight:bold; font-size:1.5em; top:50%; margin-top:-10%; }
-        span#zip_format {display:inline; font-size:0.8em; margin-left:20px;}
-        div#citation_aatams { position:absolute; width:700px; height:auto; top:123px; left:50%; margin-left:-350px; z-index:100; background-color:#DDDDDD; padding:20px;
-               font-size:0.8em; font-weight:bold; border:ridge 3px gray; text-align:justify; display:none;}
-        div#citation_toggle { width:100%; height:15px; display:block; margin-top:0px; }
-        div#citation_toggle_button {float:right; clear:right; margin-right:20px; cursor:pointer; }
-        div#citation_toggle_button img {cursor:pointer; margin-right:5px;}
-        div#citation_main { font-size:0.5em; background-color:#66BBDD; padding:3px; cursor:pointer; color:#333333; text-align:justify; }
-        div#citation_header { width:50%; float:left; background-color:black; color:white; text-align:center;}
-    </style>
+   <head> 
+    <link href="css/query.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="js/query.js"> </script>
     <script type="text/javascript" src="js/dates/date.js"> </script>
-    <script type="text/javascript" src="js/installations.js"> </script>
-    <script type="text/javascript" src="js/genus.js"> </script>
-    <script type="text/javascript" src="js/species.js"> </script>
-    <script type="text/javascript" src="js/tag_models.js"> </script>
-    <script type="text/javascript" src="js/receiver_models.js"> </script>
-    <script type="text/javascript" src="js/query.js"> </script> 
+    <script type="text/javascript" src="http://localhost:8080/deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation&amp;outputformat=text%2fxml;%20subtype%3djson"> </script>
+    <script type="text/javascript" src="http://localhost:8080/deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:transmitter_model&amp;outputformat=text%2fxml;%20subtype%3djson"> </script>
+    <script type="text/javascript" src="http://localhost:8080/deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:receiver_model&amp;outputformat=text%2fxml;%20subtype%3djson"> </script>
+    <script type="text/javascript" src="http://localhost:8080/deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:genus&amp;outputformat=text%2fxml;%20subtype%3djson"> </script>
+    <script type="text/javascript" src="http://localhost:8080/deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:species&amp;outputformat=text%2fxml;%20subtype%3djson"> </script>
     <script type="text/javascript"> 
-	    var search_type = ['installations','deployments','tags','receivers','tag_releases','classifications'];
+	    var search_type = ['deployments', 'tag_releases', 'receivers', 'tags', 'detections'];
     </script>
     </head>
     <body onload="Init();ToggleCitation();">
@@ -82,7 +36,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                <div id="citation_toggle_button"><img id="citation_button" src="img/minus.jpg" onclick="ToggleCitation();"/><span id="citation_close_label" onclick="ToggleCitation();">Close</span></div>
             </div>
 	    <p>AATAMS data was sourced as part of the <a href="http://www.imos.org.au">Integrated Marine Observing System (IMOS)</a> - an initiative of the Australian Government being conducted as part of the <a href="http://ncris.innovation.gov.au">National Collaborative Research Infrastructure Strategy</a></p>
-            <p>Intellectual Property rights for this data are owned by Sydney Institute of Marine Science.  AATAMS data may be re-used, provided that related metadata explaining the data has been reviewed by the user, and the AATAMS data is appropriately acknowledged.</p>
+            <p>Intellectual Property rights for this data are owned by Sydney Institute of Marine Science. AATAMS data may be re-used, provided that related metadata explaining the data has been
+reviewed by the user, and the AATAMS data is appropriately acknowledged.</p>
             <p>Use and/or redistribution of the AATAMS data should always acknowledge it as "AATAMS data was sourced as part of the Integrated Marine Observing System (IMOS) - an initiative of the Australian Government being conducted as part of the National Collaborative Research Infrastructure Strategy. http://imos.org.au/emii_aatams.html"</p>
             <p>Any publication's citation for this data - where detailed explanation of the relevant data is included in the publication text- should include:
  Integrated Marine Observing System, [Year], [Title], [AATAMS searchpage URL], accessed [date-of-access].</p>
@@ -92,25 +47,25 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     </div> 
     <div id="main">
             <table class="search">
-                <thead>
+                <!--thead>
                     <tr>
 			<th id="features_header"></th>
 			<th id="params_header">Filter Parameters for INSTALLATIONS</th>
                     </tr>
-                </thead>
-                <tbody>
+                </thead-->
+	           <tbody>
                     <tr>
-                        <td>
+                        <td rowspan="2" >
                             <div id="request">
-                                <p>Maximum records to download: <input id="max_members" type="textbox" value="100"/>
+                                <p>Maximum records to download: <input id="max_members" type="textbox" value="1000"/>
                                 </p>
                                 <p>Format:
-                                    <input type="radio" name="output_format" value="xml" title="Select for XML format" onclick="Reset();"/>
-                                    <span class="format_type" onclick="SelectFormat(0);Reset();">XML</span>
-                                    <input type="radio" name="output_format" value="html" title="Select for HTML format" onclick="Reset();"/>
-                                    <span class="format_type" onclick="SelectFormat(1);Reset();">HTML</span>
-                                    <input type="radio" name="output_format" value="csv" checked="checked" title="Select for CSV format" onclick="Reset();"/>
-                                    <span class="format_type" onclick="SelectFormat(2);Reset();">CSV</span>
+                                    <input type="radio" name="output_format" value="html" title="Select for HTML Table format" onclick="Reset();"/>
+                                    <span class="format_type" onclick="SelectFormat(0);Reset();">HTML</span>
+                                    <input type="radio" name="output_format" value="csv" checked="checked" title="Select for 'Comma Separated Values' format" onclick="Reset();"/>
+                                    <span class="format_type" onclick="SelectFormat(1);Reset();">CSV</span>
+                                    <input type="radio" name="output_format" value="xml" title="Select for 'Web Feature Service' format" onclick="Reset();"/>
+                                    <span class="format_type" onclick="SelectFormat(2);Reset();">WFS</span>
                                 </p>
                                 <p>
                                     <input class="button" id="get_data" type="button" value="Display Data" onclick="DisplayData(false);" title="Click to request dataset displayed below"/><!--<input class="button" id="get_data" type="button" value="Display Data 2" onclick="DisplayDataNew(false);" title="Click to request dataset displayed below"/>-->
@@ -118,14 +73,18 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                                     <!--<input class="button" id="get_hit_count" type="button" value="Display Record Count 2" onclick="DisplayDataNew(true);" 
                                     title="Click to request feature member count displayed below"/> -->
                                 </p>
-                <p><input class="button" type="button" value="Download Data" onclick="DownloadData();"/><span id="zip_format"><input type="checkbox" id="zipped" onchange="Reset();"/> download as zip</span>
-                </p>
-                <input id="query" type="text" value=""/>
-                  </div>
-                  <div id="citation_main" onclick="ToggleCitation();">This data was sourced as part of the <b>Integrated Marine Observing System</b> (IMOS) - an initiative of the Australian Government being conducted as part of the National Collaborative Research Infrastructure Strategy
-                   <div style="width:100%;text-align:center;margin-top:4px;"><img src="img/NCRIS_Initiative_inline2.png"/></div>
-                  </div>
-                        </td>
+                                <p>
+                                   <input class="button" type="button" value="Download Data" onclick="DownloadData();"/><span id="zip_format"><input type="checkbox" id="zipped" onchange="Reset();"/> download as zip</span>
+                                </p>
+                                <input id="query" type="text" value=""/>
+                            </div>
+                            <!--div id="citation_main" onclick="ToggleCitation();">This data was sourced as part of the <b>Integrated Marine Observing System</b> (IMOS) - an initiative of the Australian Government being conducted as part of the National Collaborative Research Infrastructure Strategy
+                                <div style="width:100%;text-align:center;margin-top:4px;"><img src="img/NCRIS_Initiative_inline2.png"/></div>
+                            </div-->
+		        </td>
+                        <td id="params_header">Filter Parameters for INSTALLATIONS</td>
+                    </tr>
+                    <tr>
                         <td>
                             <div id="params">&nbsp;
                             </div>

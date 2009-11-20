@@ -1,5 +1,5 @@
       //global variables
-      var wfs = 'http://www.emii.org.au/aatams/services';
+      var wfs = 'http://localhost:8080/deegree-wfs/services';
       var feature_type = null;
       var params_div = null;
       var params_header_div = null;
@@ -61,33 +61,24 @@
          for(i=0; i<pairs.length; i++){
             if(pairs[i][0]=="_dataset"){
                switch(pairs[i][1]){
-               case "installations":
+               case "deployments":
                   SelectType(0);
                   break;
-               case "deployments":
+               case "tag_releases":
                   SelectType(1);
                   break;
-               case "detections":
+               case "receivers":
                   SelectType(2);
                   break;
                case "tags":
                   SelectType(3);
                   break;
-               case "receivers":
+               case "detections":
                   SelectType(4);
-                  break;
-               case "surgeries":
-                  SelectType(5);
-                  break;
-               case "animals":
-                  SelectType(6);
-                  break;
-               case "species":
-                  SelectType(7);
                   break;
                default:
                   throw new Error("unknown _dataset parameter value: " + pairs[i][1] + 
-                        ", it should be one of (installations, deployments, detections, tags, receivers, surgeries, animals, species)"); 
+                        ", it should be one of (deployments, tag_releases, tags, receivers, detections)"); 
                }
             }
             else if(pairs[i][0]=="_max"){
@@ -107,13 +98,13 @@
             else if(pairs[i][0]=="_format"){
                switch(pairs[i][1]){
                case 'xml':
-                  SelectFormat(0);
+                  SelectFormat(2);
                   break;
                case 'html':
-                  SelectFormat(1);
+                  SelectFormat(0);
                   break;
                case 'csv':
-                  SelectFormat(2);
+                  SelectFormat(1);
                   break;
                default:
                   throw new Error("unknown _format parameter value: " + pairs[i][1] + ", it should be one of (xml, html, csv)"); 
@@ -130,32 +121,20 @@
       */ 
       function SetFilterParameters(values){
          switch (feature_type) {
-            case "installations":
-               SetInstallationsFilter(values);
-               break;
             case "deployments":
                SetDeploymentsFilter(values);
                break;
-            case "detections":
-               SetDetectionsFilter(values);
-               break;
-            case "detection_deployment_animal_species":
-               SetDetectionDeploymentAnimalSpeciesFilter(values);
-               break;
-            case "tags":
-               SetTagsFilter(values);
+            case "tag_releases":
+               SetTagReleasesFilter(values);
                break;
             case "receivers":
                SetReceiversFilter(values);
                break;
-            case "surgeries":
-               SetSurgeriesFilter(values);
+            case "tags":
+               SetTagsFilter(values);
                break;
-            case "animals":
-               SetAnimalsFilter(values);
-               break;
-            case "species":
-               SetSpeciesFilter(values);
+            case "detections":
+               SetDetectionsFilter(values);
                break;
             default:
                throw new Error("unknown dataset type: " + feature_type);
@@ -172,20 +151,12 @@
             throw Error("search 'type' parameter is null");
 
          switch(feature_type){
-         case "installations":
-            params_header_div.innerHTML = "Filter Parameters for INSTALLATIONS";      
-            SetInstallationsFilterParametersHtml();
-            break;
          case "deployments":
-            params_header_div.innerHTML = "Filter Parameters for DEPLOYMENTS";   
+            params_header_div.innerHTML = "Filter Parameters for RECEIVER DEPLOYMENTS";   
             SetDeploymentsFilterParametersHtml();
             break;
-         case "detections":
-            params_header_div.innerHTML = "Filter Parameters for DETECTIONS";
-            SetDetectionsFilterParametersHtml();
-            break;
-         case "detection_deployment_animal_species":
-            params_header_div.innerHTML = "Filter Parameters for DETECTIONS";
+         case "tag_releases":
+            params_header_div.innerHTML = "Filter Parameters for TAG RELEASES";
             SetDetectionDeploymentAnimalSpeciesFilterParametersHtml();
             break;
          case "tags":
@@ -196,17 +167,9 @@
             params_header_div.innerHTML = "Filter Parameters for RECEIVERS";
             SetReceiversFilterParametersHtml();
             break;
-         case "surgeries":
-            params_header_div.innerHTML = "Filter Parameters for SURGERIES";
-            SetSurgeriesFilterParametersHtml();
-            break;
-         case "animals":
-            params_header_div.innerHTML = "Filter Parameters for TAGGED ANIMALS";
-            SetAnimalsFilterParametersHtml();
-            break;
-         case "species":
-            params_header_div.innerHTML = "Filter Parameters for TAGGED SPECIES";
-            SetSpeciesFilterParametersHtml();
+	 case "detections":
+            params_header_div.innerHTML = "Filter Parameters for DETECTIONS";
+            SetDetectionsFilterParametersHtml();
             break;
          default: throw new Error("unknown dataset type: " + feature_type);
          }
@@ -245,32 +208,20 @@
          var filter;
          var uri = "?service=WFS&version=1.0.0&request=GetFeature&namespace=xmlns(aatams=http://www.imos.org.au/aatams)";
          switch(feature_type){
-         case "installations":
-            uri += "&typename=aatams:Installation" + GetInstallationsFilter();
-            break;
          case "deployments":
-            uri += "&typename=aatams:Deployment" + GetDeploymentsFilter();
+            uri += "&typename=aatams:receiver_deployment" + GetDeploymentsFilter();
+            break;
+         case "tag_releases":
+            uri += "&typename=aatams:tag_releases" + GetTagReleasesFilter();
+            break;
+         case "tags":
+            uri += "&typename=aatams:tag_device" + GetTagsFilter();
+            break;
+         case "receivers":
+            uri += "&typename=aatams:receiver_device" + GetReceiversFilter();
             break;
          case "detections":
             uri += "&typename=aatams:Detection" + GetDetectionsFilter();
-            break;
-         case "detection_deployment_animal_species":
-            uri += "&typename=aatams:DetectionDeploymentAnimalSpecies" + GetDetectionDeploymentAnimalSpeciesFilter();
-            break;
-         case "tags":
-            uri += "&typename=aatams:Device" + GetTagsFilter();
-            break;
-         case "receivers":
-            uri += "&typename=aatams:Device" + GetReceiversFilter();
-            break;
-         case "surgeries":
-            uri += "&typename=aatams:Surgery" + GetSurgeriesFilter();
-            break;   
-         case "animals":
-            uri += "&typename=aatams:Animal" + GetAnimalsFilter();
-            break;
-         case "species":
-            uri += "&typename=aatams:Species" + GetSpeciesFilter();
             break;
          default: throw new Error("unknown search type: " + feature_type);
          }
@@ -319,39 +270,6 @@
        */ 
       function DownloadData(){
          if(pending_download != null){ window.location.href = pending_download; }
-      }
-
-      /**
-      Inserts installations search parameters markup
-      */
-      function SetInstallationsFilterParametersHtml(){
-         params_div.innerHTML = "<table class='params'><tbody>" +
-            //"<tr><td class='param_name last_row'>Installation Id:</td><td class='last_row'>" + OperatorList('=|<=|>=|<|>','installation_id_operator') + 
-            //   " <input id='installation_id' type='text' size='10' onblur='Reset()'/></td></tr>" +            
-            "<tr><td class='param_name last_row'>Installation name:</td><td class='last_row'>" + OperatorList('=','installation_id_operator') + 
-               " " + InstallationsSelectList() + "</td></tr>" +
-            //"<tr><td class='param_name'>Detected Species:</td><td>"  + OperatorList('=','species_id_operator') +
-            //   " " + SpeciesSelectList() + "</td></tr>" +
-            //"<tr><td class='param_name last_row'>Location Bounding Box: </td><td class='last_row'>" + LocationBoundingBox() + "</td></tr>" +
-            "</tbody></table>";
-      }
-
-      /**
-      Inserts installations search parameter values
-      */
-      function SetInstallationsFilter(values){
-         for(var i=0; i<values.length; i++){
-            switch(values[i][0]){
-            case "installation_id":
-               document.getElementById("installation_id").value = values[i][1];
-               break;
-            case "installation_id_operator":
-               document.getElementById("installation_id_operator").value = DecodeOperator(values[i][1]);
-               break;
-            default:
-               throw new Error("unknown installations filter parameter: " + values[i][0]);
-            }
-         }
       }
 
       /**
@@ -469,7 +387,7 @@
       /**
       Inserts detections search parameters markup
        */
-      function SetDetectionDeploymentAnimalSpeciesFilterParametersHtml(){
+      function SetTagReleasesParametersHtml(){
          params_div.innerHTML = "<table class='params'><tbody>" +
             //"<tr><td class='param_name'>Genus:</td><td>"  + OperatorList('=','genus_id_operator') +
             //   " " + GenusSelectList() + "</td></tr>" +
@@ -508,7 +426,7 @@
       /**
       Sets detections search parameters
        */
-      function SetDetectionDeploymentAnimalSpeciesFilter(values){
+      function SetTagReleasesFilter(values){
          for(var i=0; i<values.length; i++){
             switch(values[i][0]){
             case "species_id":
@@ -683,132 +601,6 @@
                break;
             default:
                throw new Error("unknown receivers filter parameter: " + values[i][0]);
-            }
-         }
-      }
-
-      /**
-      Inserts surgeries search parameters markup
-      */
-      function SetSurgeriesFilterParametersHtml(){
-         params_div.innerHTML = "<table class='params'><tbody>" +
-            "<tr><td class='param_name'>Surgery Id:</td><td>" + OperatorList('=|<=|>=|<|>','surgery_id_operator') +
-               " <input id='surgery_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
-            "<tr><td class='param_name'>Animal Id:</td><td>" + OperatorList('=|<=|>=|<|>','animal_id_operator') +
-               " <input id='animal_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
-            "<tr><td class='param_name'>Tag Device Id: </td><td>" + OperatorList('=|<=|>=|<|>','device_id_operator') +
-               " <input id='device_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
-            "<tr><td class='param_name'>Tag Name:</td><td>" + OperatorList('=|<=|>=|<|>','device_name_operator') +
-               " <input id='device_name' type='text' size='20'/></td></tr>" +
-            "<tr><td class='param_name last_row'>Location Bounding Box: </td><td class='last_row'>" + LocationBoundingBox() + "</td></tr>" +
-            "</tbody></table>";         
-      }
-
-      /**
-      Sets surgeries search parameters
-       */
-      function SetSurgeriesFilter(values){
-         for(var i=0; i<values.length; i++){
-            switch(values[i][0]){
-            case "surgery_id":
-               document.getElementById("surgery_id").value = values[i][1];
-               break;
-            case "surgery_id_operator":
-               document.getElementById("surgery_id_operator").value = DecodeOperator(values[i][1]);
-               break;
-            case "animal_id":
-               document.getElementById("animal_id").value = values[i][1];
-               break;
-            case "animal_id_operator":
-               document.getElementById("animal_id_operator").value = DecodeOperator(values[i][1]);
-               break;
-            case "tag_device_id":
-               document.getElementById("device_id").value = values[i][1];
-               break;
-            case "tag_device_id_operator":
-               document.getElementById("device_id_operator").value = DecodeOperator(values[i][1]);
-               break;
-            case "tag_name":
-               document.getElementById("device_name").value = values[i][1];
-               break;
-            case "tag_name_operator":
-               document.getElementById("device_name_operator").value = DecodeOperator(values[i][1]);
-               break;
-            case "bbox":
-               SetLocationBoundingBox(values[i][1]);
-               break;
-            default:
-               throw new Error("unknown surgeries filter parameter: " + values[i][0]);
-            }
-         }
-      }
-
-
-
-      /**
-      Inserts animals search parameters markup
-      */
-      function SetAnimalsFilterParametersHtml(){
-         params_div.innerHTML = "<table class='params'><tbody>" +
-            "<tr><td class='param_name'>Animal Id:</td><td>" + OperatorList('=|<=|>=|<|>','animal_id_operator') +
-               " <input id='animal_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
-            //"<tr><td class='param_name last_row'>Genus:</td><td  class='last_row'>" + OperatorList('=','genus_id_operator') +
-            //   " " + GenusSelectList() + "</td></tr>" +
-            "<tr><td class='param_name last_row'>Species:</td><td  class='last_row'>" + OperatorList('=','species_id_operator') +
-               " " + SpeciesSelectList() + "</td></tr>" +            
-            "</tbody></table>";
-      }
-
-      /**
-      Sets animals search parameters
-       */
-      function SetAnimalsFilter(values){
-         for(var i=0; i<values.length; i++){
-            switch(values[i][0]){
-            case "animal_id":
-               document.getElementById("animal_id").value = values[i][1];
-               break;
-            case "animal_id_operator":
-               document.getElementById("animal_id_operator").value = DecodeOperator(values[i][1]);
-               break;
-            case "species_id":
-               document.getElementById("species_id").value = values[i][1];
-               break;
-            case "species_id_operator":
-               document.getElementById("species_id_operator").value = DecodeOperator(values[i][1]);
-               break;
-            default:
-               throw new Error("unknown animals filter parameter: " + values[i][0]);
-            }
-         }
-      }
-
-      /**
-      Inserts species search parameters markup
-      */
-      function SetSpeciesFilterParametersHtml(){
-         params_div.innerHTML = "<table class='params'><tbody>" +
-            //"<tr><td class='param_name last_row'>Genus:</td><td  class='last_row'>" + OperatorList('=','genus_id_operator') +
-            //   " " + GenusSelectList() + "</td></tr>" +
-            "<tr><td class='param_name last_row'>Species:</td><td  class='last_row'>" + OperatorList('=','species_id_operator') +
-               " " + SpeciesSelectList() + "</td></tr>" +            
-            "</tbody></table>";
-      }
-
-      /**
-      Sets species search parameters
-       */
-      function SetSpeciesFilter(values){
-         for(var i=0; i<values.length; i++){
-            switch(values[i][0]){
-            case "species_id":
-               document.getElementById("species_id").value = values[i][1];
-               break;
-            case "species_id_operator":
-               document.getElementById("species_id_operator").value = DecodeOperator(values[i][1]);
-               break;
-            default:
-               throw new Error("unknown species filter parameter: " + values[i][0]);
             }
          }
       }
@@ -1278,7 +1070,6 @@
             "</table><span id='location_status_message'/>";
       }
 
-
       /**
       Sets lat/long bounding box inputs
       */
@@ -1331,47 +1122,6 @@
       }
 
       /*** OGC filter clause generation functions ***/
-
-      function GetInstallationsFilter(){
-         var element;
-         var bbox;
-         var filter = "";
-         if(element = document.getElementById('installation_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:installationId', document.getElementById('installation_id_operator').value, value);   
-         }
-         if(element = document.getElementById('name')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:installationId', document.getElementById('name_operator').value, value);
-         }
-         /**if(element = document.getElementById('start_date')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:detection_timestamp', document.getElementById('start_date_operator').value, value);   
-         }
-         if(element = document.getElementById('end_date')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:detection_timestamp', document.getElementById('end_date_operator').value, value);   
-         }
-         if(element = document.getElementById('species_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:species_id', document.getElementById('species_id_operator').value, value);   
-         }
-         if(element = document.getElementById('tag_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:tag_id', document.getElementById('tag_id_operator').value, value);   
-         }
-         if(bbox = GetBoundingBoxFilter('aatams:location')){
-            filter += bbox;   
-         }*/
-         return BuildFilterKVP(filter);
-      }
-
       function GetDeploymentsFilter(){
          var element;
          var bbox;
@@ -1472,10 +1222,9 @@
             filter += bbox;   
          }
          return BuildFilterKVP(filter);
-
       }
 
-      function GetDetectionDeploymentAnimalSpeciesFilter(){
+      function GetTagReleaseFilter(){
          var element;
          var value;
          var bbox;
@@ -1557,7 +1306,6 @@
             filter += bbox;   
          }
          return BuildFilterKVP(filter);
-
       }
 
       function GetTagsFilter(){
@@ -1601,87 +1349,6 @@
          return BuildFilterKVP(filter);
       }
 
-      function GetSurgeriesFilter(){
-         var element;
-         var bbox;
-         var filter = "";
-         if(element = document.getElementById('surgery_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:surgeryId', document.getElementById('surgery_id_operator').value, value);   
-         }
-         if(element = document.getElementById('animal_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:surgeryOn/aatams:Animal/aatams:animalId', document.getElementById('animal_id_operator').value, value);
-         }
-         /**if(element = document.getElementById('start_date')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:surgery_timestamp', document.getElementById('start_date_operator').value, value);   
-         }
-         if(element = document.getElementById('end_date')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:surgery_timestamp', document.getElementById('end_date_operator').value, value);   
-         }*/
-         if(element = document.getElementById('species_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:speciesId', document.getElementById('species_id_operator').value, value);   
-         }
-         if(element = document.getElementById('device_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:implanted/aatams:Device/aatams:deviceId', document.getElementById('device_id_operator').value, value);   
-         }
-         if(element = document.getElementById('device_name')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:implanted/aatams:Device/aatams:name', document.getElementById('device_name_operator').value, value);
-         }
-         if(bbox = GetBoundingBoxFilter('aatams:location')){
-            filter += bbox;   
-         }
-         return BuildFilterKVP(filter);
-      }
-
-
-      function GetAnimalsFilter(){
-         var filter = "";
-         if(element = document.getElementById('animal_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:animalId', document.getElementById('animal_id_operator').value, value);   
-         }
-         /**if(element = document.getElementById('genus_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:classification/aatams:Species/aatams:genus', document.getElementById('genus_id_operator').value, value);
-         }*/
-         if(element = document.getElementById('species_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:classification/aatams:Species/aatams:speciesId', document.getElementById('species_id_operator').value, value);
-         }
-         return BuildFilterKVP(filter);
-      }
-
-      function GetSpeciesFilter(){
-         var filter = "";
-         if(element = document.getElementById('species_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:speciesId', document.getElementById('species_id_operator').value, value);
-         }
-         if(element = document.getElementById('genus_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:genusId', document.getElementById('genus_id_operator').value, value);
-         }
-         return BuildFilterKVP(filter);
-      }
-
       function BuildFilterKVP(filter){
          if(filter != null && filter.match(/\S/g)){
             if(predicate_count > 1)
@@ -1692,6 +1359,7 @@
          else
             return "";
       }
+
       /**
       Generates an OGC filter comparison clause
       */
@@ -1724,6 +1392,9 @@
             break;
          case 7:
             return "<ogc:PropertyIsNull><ogc:PropertyName>" + name + "</ogc:PropertyName></ogc:PropertyIsNull>";
+            break;            
+         case 8:
+            return "<ogc:GmlObjectId gml:id='" + Sanitize(value) + "'/>";
             break;            
          default:
             throw new Error("unknown operator symbol: " + operator);

@@ -370,7 +370,7 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="download_tag_summary" substitutionGroup="gml:_Feature"
+   <!--xsd:element name="download_tag_summary" substitutionGroup="gml:_Feature"
                 type="aatams:download_tag_summary_type">
       <xsd:annotation>
          <xsd:appinfo>
@@ -457,7 +457,7 @@
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>
-   </xsd:complexType>
+   </xsd:complexType-->
    <xsd:element name="deployment_event" substitutionGroup="gml:_Feature"
                 type="aatams:deployment_event_type">
       <xsd:annotation>
@@ -2047,7 +2047,7 @@
          <xsd:appinfo>
             <deegreewfs:table>PERSON</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.person.">
-               <deegreewfs:MappingField field="PERSON_ID HOME_PHONE_NUMBER" type="INTEGER VARCHAR"/>
+               <deegreewfs:MappingField field="PERSON_ID" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
                   <deegreewfs:param name="sequence">PERSON_SERIAL</deegreewfs:param>
                </deegreewfs:IdGenerator>
@@ -2078,6 +2078,16 @@
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="PERSONAL_MOBILE_NUMBER" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="home_phone_number" minOccurs="0" maxOccurs="1" type="xsd:string">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="HOME_PHONE_NUMBER" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3502,6 +3512,99 @@
       </xsd:annotation>
    </xsd:element>
    <xsd:complexType name="receiver_model_type">
+      <xsd:complexContent>
+         <xsd:extension base="gml:AbstractFeatureType">
+            <xsd:sequence>
+               <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <xsd:element name="family" substitutionGroup="gml:_Feature" type="aatams:family_type">
+      <xsd:annotation>
+         <xsd:appinfo>
+            <deegreewfs:table>FAMILY</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.family.">
+               <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+            </deegreewfs:gmlId>
+            <deegreewfs:visible>true</deegreewfs:visible>
+            <deegreewfs:transaction update="false" delete="false" insert="false"/>
+         </xsd:appinfo>
+      </xsd:annotation>
+   </xsd:element>
+   <xsd:complexType name="family_type">
+      <xsd:complexContent>
+         <xsd:extension base="gml:AbstractFeatureType">
+            <xsd:sequence>
+               <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <xsd:element name="genus" substitutionGroup="gml:_Feature" type="aatams:genus_type">
+      <xsd:annotation>
+         <xsd:appinfo>
+            <deegreewfs:table>GENUS</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.genus.">
+               <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+            </deegreewfs:gmlId>
+            <deegreewfs:visible>true</deegreewfs:visible>
+            <deegreewfs:transaction update="false" delete="false" insert="false"/>
+         </xsd:appinfo>
+      </xsd:annotation>
+   </xsd:element>
+   <xsd:complexType name="genus_type">
+      <xsd:complexContent>
+         <xsd:extension base="gml:AbstractFeatureType">
+            <xsd:sequence>
+               <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <xsd:element name="species" substitutionGroup="gml:_Feature" type="aatams:species_type">
+      <xsd:annotation>
+         <xsd:appinfo>
+            <deegreewfs:table>SPECIES</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.species.">
+               <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+            </deegreewfs:gmlId>
+            <deegreewfs:visible>true</deegreewfs:visible>
+            <deegreewfs:transaction update="false" delete="false" insert="false"/>
+         </xsd:appinfo>
+      </xsd:annotation>
+   </xsd:element>
+   <xsd:complexType name="species_type">
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>

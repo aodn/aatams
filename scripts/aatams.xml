@@ -653,7 +653,7 @@
       <column name="PERSON_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="200" autoIncrement="false"/>
       <column name="PERSONAL_MOBILE_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
-      <column name="HOME_PHONE_NUMBER" primaryKey="true" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
+      <column name="HOME_PHONE_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
       <column name="EMAIL" primaryKey="false" required="true" type="VARCHAR" size="30" autoIncrement="false"/>
       <column name="HOME_PHYSICAL_ADDRESS_1" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="HOME_PHYSICAL_ADDRESS_2" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1092,6 +1092,21 @@
     
      <view name="RECEIVER_MODEL">
       <column name="MODEL_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+    </view>
+    
+    <view name="FAMILY">
+      <column name="CLASSIFICATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+    </view>
+    
+    <view name="GENUS">
+      <column name="CLASSIFICATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+    </view>
+    
+    <view name="SPECIES">
+      <column name="CLASSIFICATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
     </view>
   

@@ -370,94 +370,6 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <!--xsd:element name="download_tag_summary" substitutionGroup="gml:_Feature"
-                type="aatams:download_tag_summary_type">
-      <xsd:annotation>
-         <xsd:appinfo>
-            <deegreewfs:table>DOWNLOAD_TAG_SUMMARY</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.download_tag_summary.">
-               <deegreewfs:MappingField field="" type=""/>
-               <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">DOWNLOAD_TAG_SUMMARY_SERIAL</deegreewfs:param>
-               </deegreewfs:IdGenerator>
-               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-            </deegreewfs:gmlId>
-            <deegreewfs:visible>true</deegreewfs:visible>
-            <deegreewfs:transaction update="true" delete="true" insert="true"/>
-         </xsd:appinfo>
-      </xsd:annotation>
-   </xsd:element>
-   <xsd:complexType name="download_tag_summary_type">
-      <xsd:complexContent>
-         <xsd:extension base="gml:AbstractFeatureType">
-            <xsd:sequence>
-               <xsd:element name="receiver_deployment_ref" minOccurs="1" maxOccurs="1"
-                            type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:receiver_deployment">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="deployment_download_ref" minOccurs="1" maxOccurs="1"
-                            type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:deployment_download">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DOWNLOAD_ID" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DOWNLOAD_ID" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="device_ref" minOccurs="1" maxOccurs="1" type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:device">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="detection_count" minOccurs="1" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DETECTION_COUNT" type="INTEGER"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-            </xsd:sequence>
-         </xsd:extension>
-      </xsd:complexContent>
-   </xsd:complexType-->
    <xsd:element name="deployment_event" substitutionGroup="gml:_Feature"
                 type="aatams:deployment_event_type">
       <xsd:annotation>
@@ -2627,194 +2539,6 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="tag_device" substitutionGroup="gml:_Feature"
-                type="aatams:tag_device_type">
-      <xsd:annotation>
-         <xsd:appinfo>
-            <deegreewfs:table>TAG_DEVICE</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.tag_device.">
-               <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>
-               <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">TAG_DEVICE_SERIAL</deegreewfs:param>
-               </deegreewfs:IdGenerator>
-               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-            </deegreewfs:gmlId>
-            <deegreewfs:visible>true</deegreewfs:visible>
-            <deegreewfs:transaction update="true" delete="true" insert="true"/>
-         </xsd:appinfo>
-      </xsd:annotation>
-   </xsd:element>
-   <xsd:complexType name="tag_device_type">
-      <xsd:complexContent>
-         <xsd:extension base="gml:AbstractFeatureType">
-            <xsd:sequence/>
-         </xsd:extension>
-      </xsd:complexContent>
-   </xsd:complexType>
-   <xsd:element name="tag_family" substitutionGroup="gml:_Feature"
-                type="aatams:tag_family_type">
-      <xsd:annotation>
-         <xsd:appinfo>
-            <deegreewfs:table>TAG_FAMILY</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.tag_family.">
-               <deegreewfs:MappingField field="TAG_FAMILY_ID" type="INTEGER"/>
-               <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">TAG_FAMILY_SERIAL</deegreewfs:param>
-               </deegreewfs:IdGenerator>
-               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-            </deegreewfs:gmlId>
-            <deegreewfs:visible>true</deegreewfs:visible>
-            <deegreewfs:transaction update="true" delete="true" insert="true"/>
-         </xsd:appinfo>
-      </xsd:annotation>
-   </xsd:element>
-   <xsd:complexType name="tag_family_type">
-      <xsd:complexContent>
-         <xsd:extension base="gml:AbstractFeatureType">
-            <xsd:sequence>
-               <xsd:element name="manufacturer" minOccurs="1" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="MANUFACTURER_ID" type="INTEGER"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-            </xsd:sequence>
-         </xsd:extension>
-      </xsd:complexContent>
-   </xsd:complexType>
-   <xsd:element name="tag_model" substitutionGroup="gml:_Feature" type="aatams:tag_model_type">
-      <xsd:annotation>
-         <xsd:appinfo>
-            <deegreewfs:table>TAG_MODEL</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.tag_model.">
-               <deegreewfs:MappingField field="MODEL_ID" type="INTEGER"/>
-               <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">TAG_MODEL_SERIAL</deegreewfs:param>
-               </deegreewfs:IdGenerator>
-               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-            </deegreewfs:gmlId>
-            <deegreewfs:visible>true</deegreewfs:visible>
-            <deegreewfs:transaction update="true" delete="true" insert="true"/>
-         </xsd:appinfo>
-      </xsd:annotation>
-   </xsd:element>
-   <xsd:complexType name="tag_model_type">
-      <xsd:complexContent>
-         <xsd:extension base="gml:AbstractFeatureType">
-            <xsd:sequence>
-               <xsd:element name="tag_family_ref" minOccurs="1" maxOccurs="1"
-                            type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:tag_family">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="TAG_FAMILY_ID" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="TAG_FAMILY_ID" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="vue_coding" minOccurs="1" maxOccurs="1" type="xsd:string">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="VUE_CODING" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="tag_type_ref" minOccurs="1" maxOccurs="1" type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:tag_type">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="TAG_TYPE_ID" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="TAG_TYPE_ID" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="frequency" minOccurs="1" maxOccurs="1" type="xsd:string">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="FREQUENCY" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="sync" minOccurs="1" maxOccurs="1" type="xsd:string">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="SYNC" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="bin" minOccurs="1" maxOccurs="1" type="xsd:string">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="BIN" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="min" minOccurs="1" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="MIN" type="INTEGER"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="max" minOccurs="1" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="MAX" type="INTEGER"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-            </xsd:sequence>
-         </xsd:extension>
-      </xsd:complexContent>
-   </xsd:complexType>
    <xsd:element name="tag_release" substitutionGroup="gml:_Feature"
                 type="aatams:tag_release_type">
       <xsd:annotation>
@@ -3639,12 +3363,19 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="parent_classification" minOccurs="0" maxOccurs="1" type="xsd:integer">
+               <xsd:element name="family_ref" minOccurs="0" maxOccurs="1" type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                        <deegreewfs:Content type="aatams:family">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3680,12 +3411,19 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="parent_classification" minOccurs="0" maxOccurs="1" type="xsd:integer">
+               <xsd:element name="genus_ref" minOccurs="0" maxOccurs="1" type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                        <deegreewfs:Content type="aatams:genus">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>

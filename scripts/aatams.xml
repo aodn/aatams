@@ -94,7 +94,7 @@
         <index-column name="TIME_CORRECTION_TYPE_ID"/>
       </index>
     </table>
-    <table name="DOWNLOAD_TAG_SUMMARY">
+    <!--table name="DOWNLOAD_TAG_SUMMARY">
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="DOWNLOAD_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -112,7 +112,7 @@
       <foreign-key foreignTable="DEVICE" name="DOWNLOAD_TAG_SUMMARY_FK02">
         <reference local="DEVICE_ID" foreign="DEVICE_ID"/>
       </foreign-key>
-    </table>
+    </table-->
     <table name="DEPLOYMENT_EVENT">
       <column name="DEPLOYMENT_EVENT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -856,7 +856,7 @@
       <index name="TAG_TYPE_ID">
         <index-column name="TAG_FAMILY_ID"/>
       </index>
-    </table-->
+    </table>
     <table name="TAG_MODEL">
       <column name="MODEL_ID" primaryKey="true" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="TAG_FAMILY_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -901,7 +901,7 @@
       <index name="TAG_TYPETAG_MODEL">
         <index-column name="TAG_TYPE_ID"/>
       </index>
-    </table>
+    </table-->
     <table name="TAG_RELEASE">
       <column name="RELEASE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -1095,7 +1095,10 @@
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
     </view>
     
-    <!--  NEED THIS TO AVOID "CANNOT EXPORT CYCLIC FEATURES IF SUPPRESS XLINK=TRUE" ERROR IN DEEGREE -->
+    <!-- 
+     NEED THIS TO AVOID "CANNOT EXPORT CYCLIC FEATURES IF SUPPRESS XLINK=TRUE" ERROR IN DEEGREE 
+     SEE CLASSIFICATION TABLE.
+     -->
      <view name="PARENT_CLASSIFICATION">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -1114,7 +1117,7 @@
       <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <foreign-key foreignTable="FAMILY" name="GENUS_FK01">
-        <reference local="PARENT_ID" foreign="CLASSIFICATION_ID"/>
+        <reference local="PARENT_CLASSIFICATION_ID" foreign="PARENT_CLASSIFICATION_ID"/>
       </foreign-key>
     </view>
     
@@ -1123,7 +1126,7 @@
       <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <foreign-key foreignTable="GENUS" name="SPECIES_FK01">
-        <reference local="PARENT_ID" foreign="CLASSIFICATION_ID"/>
+        <reference local="PARENT_CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
       </foreign-key>
     </view>
   

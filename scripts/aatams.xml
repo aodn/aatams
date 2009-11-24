@@ -837,7 +837,7 @@
         <index-column name="SURGERY_ID"/>
       </index>
     </table>
-    <table name="TAG_DEVICE">
+    <!--table name="TAG_DEVICE">
       <column name="DEVICE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <index name="DEVICE_ID">
         <index-column name="DEVICE_ID"/>
@@ -856,7 +856,7 @@
       <index name="TAG_TYPE_ID">
         <index-column name="TAG_FAMILY_ID"/>
       </index>
-    </table>
+    </table-->
     <table name="TAG_MODEL">
       <column name="MODEL_ID" primaryKey="true" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="TAG_FAMILY_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>

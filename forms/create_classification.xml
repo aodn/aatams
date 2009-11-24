@@ -17,9 +17,9 @@
                   <wfs:FeatureCollection>
                      <gml:featureMember>
                         <aatams:classification>
-                           <aatams:classification_ref>
-                              <aatams:classification/>
-                           </aatams:classification_ref>
+                           <aatams:parent_classification_ref>
+                              <aatams:parent_classification/>
+                           </aatams:parent_classification_ref>
                            <aatams:classification_level_ref>
                               <aatams:classification_level/>
                            </aatams:classification_level_ref>
@@ -34,13 +34,13 @@
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
                <classification_level_id/>
-               <classification_id/>
+               <parent_classification_id/>
             </data>
          </xf:instance>
          <xf:instance id="inst_classification_level"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:classification_level"/>
-         <xf:instance id="inst_classification"
-                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:classification"/>
+         <xf:instance id="inst_parent_classification"
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:parent_classification"/>
          <xf:instance id="inst_response">
             <dummy xmlns="">
                <ows:Exception/>
@@ -53,9 +53,10 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
-         <xf:bind id="classification" nodeset="instance('inst_subfeatures')//classification_id"
+         <xf:bind id="parent_classification"
+                  nodeset="instance('inst_subfeatures')//parent_classification_id"
                   type="xsd:string"
-                  required="false()"/>
+                  required="true()"/>
          <xf:bind id="classification_level"
                   nodeset="instance('inst_subfeatures')//classification_level_id"
                   type="xsd:string"
@@ -78,9 +79,9 @@
                           origin="instance('inst_classification_level')//aatams:classification_level[@gml:id=instance('inst_subfeatures')/classification_level_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:classification_level_ref/aatams:classification_level"
                           at="1"/>
-               <xf:insert nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification"
-                          origin="instance('inst_classification')//aatams:classification[@gml:id=instance('inst_subfeatures')/classification_id]"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification"
+               <xf:insert nodeset="instance('inst_data')//aatams:parent_classification_ref/aatams:parent_classification"
+                          origin="instance('inst_parent_classification')//aatams:parent_classification[@gml:id=instance('inst_subfeatures')/parent_classification_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:parent_classification_ref/aatams:parent_classification"
                           at="1"/>
             </xf:action>
             <xf:message level="modeless" ev:event="xforms-submit-error">
@@ -91,8 +92,8 @@
          <xf:action ev:event="set-selected">
             <xf:setvalue ref="instance('inst_subfeatures')//classification_level_id"
                          value="instance('inst_classification_level')//aatams:classification_level[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//classification_id"
-                         value="instance('inst_classification')//aatams:classification[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//parent_classification_id"
+                         value="instance('inst_parent_classification')//aatams:parent_classification[1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
@@ -100,9 +101,9 @@
    <body><!--Debug--><div class="form">
          <legend>ADD CLASSIFICATION</legend>
          <div class="form-contents">
-            <xf:select1 bind="classification" appearance="minimal" incremental="true()">
+            <xf:select1 bind="parent_classification" appearance="minimal" incremental="true()">
                <xf:label>Parent Classification</xf:label>
-               <xf:itemset nodeset="instance('inst_classification')//aatams:classification">
+               <xf:itemset nodeset="instance('inst_parent_classification')//aatams:parent_classification">
                   <xf:value ref="@gml:id"/>
                   <xf:label ref="aatams:name"/>
                </xf:itemset>

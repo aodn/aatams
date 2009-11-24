@@ -63,7 +63,7 @@
                   type="xsd:string"
                   required="false()"/>
          <xf:bind id="email" nodeset="instance('inst_data')//aatams:email" type="xsd:string"
-                  required="false()"/>
+                  required="true()"/>
          <xf:bind id="home_physical_address_1"
                   nodeset="instance('inst_data')//aatams:home_physical_address_1"
                   type="xsd:string"

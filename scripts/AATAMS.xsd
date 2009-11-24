@@ -132,12 +132,12 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="classification_ref" minOccurs="1" maxOccurs="1"
+               <xsd:element name="parent_classification_ref" minOccurs="1" maxOccurs="1"
                             type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:classification">
+                        <deegreewfs:Content type="aatams:parent_classification">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
                                  <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
@@ -370,7 +370,7 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <!--xsd:element name="download_tag_summary" substitutionGroup="gml:_Feature"
+   <xsd:element name="download_tag_summary" substitutionGroup="gml:_Feature"
                 type="aatams:download_tag_summary_type">
       <xsd:annotation>
          <xsd:appinfo>
@@ -457,7 +457,7 @@
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>
-   </xsd:complexType-->
+   </xsd:complexType>
    <xsd:element name="deployment_event" substitutionGroup="gml:_Feature"
                 type="aatams:deployment_event_type">
       <xsd:annotation>
@@ -3529,6 +3529,68 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
+   <xsd:element name="parent_classification" substitutionGroup="gml:_Feature"
+                type="aatams:parent_classification_type">
+      <xsd:annotation>
+         <xsd:appinfo>
+            <deegreewfs:table>PARENT_CLASSIFICATION</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.parent_classification.">
+               <deegreewfs:MappingField field="" type=""/>
+               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+            </deegreewfs:gmlId>
+            <deegreewfs:visible>true</deegreewfs:visible>
+            <deegreewfs:transaction update="false" delete="false" insert="false"/>
+         </xsd:appinfo>
+      </xsd:annotation>
+   </xsd:element>
+   <xsd:complexType name="parent_classification_type">
+      <xsd:complexContent>
+         <xsd:extension base="gml:AbstractFeatureType">
+            <xsd:sequence>
+               <xsd:element name="parent_classification" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="classification_level" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="CLASSIFICATION_LEVEL_ID" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="common_name" minOccurs="0" maxOccurs="1" type="xsd:string">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="COMMON_NAME" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
    <xsd:element name="family" substitutionGroup="gml:_Feature" type="aatams:family_type">
       <xsd:annotation>
          <xsd:appinfo>
@@ -3546,6 +3608,16 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
+               <xsd:element name="parent_classification" minOccurs="0" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
                <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
@@ -3577,6 +3649,16 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
+               <xsd:element name="parent_classification" minOccurs="0" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
                <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
@@ -3608,6 +3690,16 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
+               <xsd:element name="parent_classification" minOccurs="0" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
                <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>

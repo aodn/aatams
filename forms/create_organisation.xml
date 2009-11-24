@@ -18,6 +18,8 @@
                      <gml:featureMember>
                         <aatams:organisation>
                            <aatams:name/>
+                           <aatams:phone_number/>
+                           <aatams:fax_number/>
                            <aatams:physical_address_1/>
                            <aatams:physical_address_2/>
                            <aatams:physical_address_state/>
@@ -28,8 +30,6 @@
                            <aatams:postal_address_state/>
                            <aatams:postal_address_country/>
                            <aatams:postal_address_postcode/>
-                           <aatams:phone_number/>
-                           <aatams:fax_number/>
                         </aatams:organisation>
                      </gml:featureMember>
                   </wfs:FeatureCollection>
@@ -53,6 +53,12 @@
          </xf:instance>
          <xf:bind id="name" nodeset="instance('inst_data')//aatams:name" type="xsd:string"
                   required="true()"/>
+         <xf:bind id="phone_number" nodeset="instance('inst_data')//aatams:phone_number"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="fax_number" nodeset="instance('inst_data')//aatams:fax_number"
+                  type="xsd:string"
+                  required="false()"/>
          <xf:bind id="physical_address_1"
                   nodeset="instance('inst_data')//aatams:physical_address_1"
                   type="xsd:string"
@@ -91,12 +97,6 @@
                   nodeset="instance('inst_data')//aatams:postal_address_postcode"
                   type="xsd:string"
                   required="false()"/>
-         <xf:bind id="phone_number" nodeset="instance('inst_data')//aatams:phone_number"
-                  type="xsd:string"
-                  required="false()"/>
-         <xf:bind id="fax_number" nodeset="instance('inst_data')//aatams:fax_number"
-                  type="xsd:string"
-                  required="false()"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
                   type="xsd:string"/>
          <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
@@ -121,6 +121,12 @@
          <div class="form-contents">
             <xf:input bind="name" incremental="true()">
                <xf:label>Name</xf:label>
+            </xf:input>
+            <xf:input bind="phone_number" incremental="true()">
+               <xf:label>Phone Number</xf:label>
+            </xf:input>
+            <xf:input bind="fax_number" incremental="true()">
+               <xf:label>Fax Number</xf:label>
             </xf:input>
             <xf:input bind="physical_address_1" incremental="true()">
                <xf:label>Physical Address 1</xf:label>
@@ -151,12 +157,6 @@
             </xf:input>
             <xf:input bind="postal_address_postcode" incremental="true()">
                <xf:label>Postal Address Postcode</xf:label>
-            </xf:input>
-            <xf:input bind="phone_number" incremental="true()">
-               <xf:label>Phone Number</xf:label>
-            </xf:input>
-            <xf:input bind="fax_number" incremental="true()">
-               <xf:label>Fax Number</xf:label>
             </xf:input>
             <xf:submit submission="s01">
                <xf:label>Save</xf:label>

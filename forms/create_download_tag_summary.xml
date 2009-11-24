@@ -17,6 +17,12 @@
                   <wfs:FeatureCollection>
                      <gml:featureMember>
                         <aatams:download_tag_summary>
+                           <aatams:installation_deployment_ref>
+                              <aatams:installation_deployment/>
+                           </aatams:installation_deployment_ref>
+                           <aatams:deployment_download_ref>
+                              <aatams:deployment_download/>
+                           </aatams:deployment_download_ref>
                            <aatams:device_ref>
                               <aatams:device/>
                            </aatams:device_ref>
@@ -29,10 +35,13 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
+               <receiver_deployment_id/>
                <deployment_download_id/>
                <device_id/>
             </data>
          </xf:instance>
+         <xf:instance id="inst_receiver_deployment"
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:receiver_deployment"/>
          <xf:instance id="inst_deployment_download"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:deployment_download"/>
          <xf:instance id="inst_device"
@@ -49,6 +58,17 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
+         <xf:bind id="installation" nodeset="instance('inst_subfeatures')//installation_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="installation_deployment"
+                  nodeset="instance('inst_subfeatures')//installation_deployment_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="deployment_download"
+                  nodeset="instance('inst_subfeatures')//deployment_download_id"
+                  type="xsd:string"
+                  required="true()"/>
          <xf:bind id="device" nodeset="instance('inst_subfeatures')//device_id" type="xsd:string"
                   required="true()"/>
          <xf:bind id="detection_count" nodeset="instance('inst_data')//aatams:detection_count"
@@ -63,6 +83,10 @@
                         replace="instance"
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
+               <xf:insert nodeset="instance('inst_data')//aatams:receiver_deployment_ref/aatams:receiver_deployment"
+                          origin="instance('inst_receiver_deployment')//aatams:receiver_deployment[@gml:id=instance('inst_subfeatures')/receiver_deployment_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:receiver_deployment_ref/aatams:receiver_deployment"
+                          at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:deployment_download_ref/aatams:deployment_download"
                           origin="instance('inst_deployment_download')//aatams:deployment_download[@gml:id=instance('inst_subfeatures')/deployment_download_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:deployment_download_ref/aatams:deployment_download"
@@ -77,6 +101,8 @@
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
          <xf:action ev:event="set-selected">
+            <xf:setvalue ref="instance('inst_subfeatures')//receiver_deployment_id"
+                         value="instance('inst_receiver_deployment')//aatams:receiver_deployment[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')//deployment_download_id"
                          value="instance('inst_deployment_download')//aatams:deployment_download[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')//device_id"
@@ -88,6 +114,32 @@
    <body><!--Debug--><div class="form">
          <legend>ADD DOWNLOAD TAG SUMMARY</legend>
          <div class="form-contents">
+            <div class="dependant-selects">
+               <xf:select1 bind="installation" appearance="minimal" incremental="true()">
+                  <xf:label>Installation</xf:label>
+                  <xf:itemset nodeset="instance('inst_installation')//aatams:installation">
+                     <xf:value ref="@gml:id"/>
+                     <xf:label ref="aatams:name"/>
+                  </xf:itemset>
+                  <xf:action ev:event="xforms-value-changed">
+                     <xf:setvalue ref="instance('inst_subfeatures')//installation_deployment_id" value=""/>
+                  </xf:action>
+               </xf:select1>
+               <xf:select1 bind="installation_deployment" appearance="minimal" incremental="true()">
+                  <xf:label>Deployment</xf:label>
+                  <xf:itemset nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
+                     <xf:value ref="@gml:id"/>
+                     <xf:label ref="aatams:name"/>
+                  </xf:itemset>
+               </xf:select1>
+            </div>
+            <xf:select1 bind="deployment_download" appearance="minimal" incremental="true()">
+               <xf:label>Download</xf:label>
+               <xf:itemset nodeset="instance('inst_deployment_download')//aatams:deployment_download">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:name"/>
+               </xf:itemset>
+            </xf:select1>
             <xf:select1 bind="device" appearance="minimal" incremental="true()">
                <xf:label>Device</xf:label>
                <xf:itemset nodeset="instance('inst_device')//aatams:device">

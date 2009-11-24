@@ -32,7 +32,7 @@
       <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="CLASSIFICATION_FK00">
         <reference local="CLASSIFICATION_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
       </foreign-key>
-      <foreign-key foreignTable="CLASSIFICATION" name="CLASSIFICATION_FK01">
+      <foreign-key foreignTable="PARENT_CLASSIFICATION" name="CLASSIFICATION_FK01">
         <reference local="PARENT_CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
       </foreign-key>   
       <index name="CLASSIFICATION_ID">
@@ -1095,19 +1095,36 @@
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
     </view>
     
+    <!--  NEED THIS TO AVOID "CANNOT EXPORT CYCLIC FEATURES IF SUPPRESS XLINK=TRUE" ERROR IN DEEGREE -->
+     <view name="PARENT_CLASSIFICATION">
+      <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="COMMON_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
+    </view>
+    
     <view name="FAMILY">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
     </view>
     
     <view name="GENUS">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <foreign-key foreignTable="FAMILY" name="GENUS_FK01">
+        <reference local="PARENT_ID" foreign="CLASSIFICATION_ID"/>
+      </foreign-key>
     </view>
     
     <view name="SPECIES">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <foreign-key foreignTable="GENUS" name="SPECIES_FK01">
+        <reference local="PARENT_ID" foreign="CLASSIFICATION_ID"/>
+      </foreign-key>
     </view>
   
   </database>

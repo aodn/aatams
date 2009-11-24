@@ -1117,7 +1117,7 @@
       <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <foreign-key foreignTable="FAMILY" name="GENUS_FK01">
-        <reference local="PARENT_CLASSIFICATION_ID" foreign="PARENT_CLASSIFICATION_ID"/>
+        <reference local="PARENT_CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
       </foreign-key>
     </view>
     

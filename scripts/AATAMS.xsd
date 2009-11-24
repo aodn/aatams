@@ -3373,7 +3373,7 @@
                                  <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>

@@ -1097,7 +1097,7 @@
     
     <!--  NEED THIS TO AVOID "CANNOT EXPORT CYCLIC FEATURES IF SUPPRESS XLINK=TRUE" ERROR IN DEEGREE -->
      <view name="PARENT_CLASSIFICATION">
-      <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="COMMON_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>

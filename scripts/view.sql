@@ -1,6 +1,31 @@
 --------------------------------------------------------
---  File created - Thursday-November-19-2009   
+--  File created - Tuesday-December-01-2009   
 --------------------------------------------------------
+--------------------------------------------------------
+--  DDL for View CLASSIFICATION_HIERARCHY
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "CLASSIFICATION_HIERARCHY" ("SPECIES_ID", "SPECIES_NAME", "CLASSIFICATION_ID", "SPECIES_COMMON_NAME", "GENUS_ID", "GENUS_NAME", "GENUS_COMMON_NAME", "FAMILY_ID", "FAMILY_NAME", "FAMILY_COMMON_NAME", "FAMILY_LEVEL_ID", "GENUS_LEVEL_ID", "SPECIES_LEVEL_ID") AS 
+  select s.classification_id as species_id, s.name as species_name, f.classification_id, s.common_name as species_common_name,
+g.classification_id as genus_id, g.name as genus_name, g.common_name as genus_common_name,
+f.classification_id as family_id, f.name as family_name, f.common_name as family_common_name,
+10 as family_level_id, 11 as genus_level_id, 12 as species_level_id
+from classification s left outer join classification g on g.classification_id = s.parent_classification_id 
+left outer join classification f on f.classification_id = g.parent_classification_id
+where s.classification_level_id = 12;
+--------------------------------------------------------
+--  DDL for View DETECTION_MAX
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTION_MAX" ("INSTALLATION_ID", "STATION_ID", "DEPLOYMENT_ID", "DETECTION_ID", "DETECTION_TIMESTAMP", "LONGITUDE", "LATITUDE", "TAG_ID", "TAG_NAME", "RECEIVER_ID", "RECEIVER_NAME", "RELEASE_LONGITUDE", "RELEASE_LATITUDE", "RELEASE_TIMESTAMP", "CLASSIFICATION_ID", "CLASSIFICATION") AS 
+  select
+rd.installation_id, rd.station_id, rd.deployment_id, d.detection_id, d.detection_timestamp, rd.longitude, rd.latitude, d.tag_id, t.code_name, rd.device_id, r.code_name, tr.release_longitude, tr.release_latitude, tr.release_timestamp, c.classification_id, c.name
+from detection d 
+inner join receiver_deployment rd on rd.deployment_id = d.deployment_id
+inner join tag_device t on t.device_id = d.tag_id
+inner join receiver_device r on r.device_id = rd.device_id
+left outer join tag_release tr on tr.device_id = d.tag_id
+left outer join classification c on c.classification_id = tr.classification_id;
 --------------------------------------------------------
 --  DDL for View DETECTION_MIN
 --------------------------------------------------------
@@ -11,8 +36,62 @@ rd.installation_id, rd.station_id, rd.deployment_id, d.detection_id, d.detection
 from detection d, receiver_deployment rd, tag_device t, receiver_device r 
 where rd.deployment_id = d.deployment_id
 and d.tag_id = t.device_id
-and rd.device_id = r.device_id 
-order by d.detection_timestamp asc;
+and rd.device_id = r.device_id;
+--------------------------------------------------------
+--  DDL for View DISPLAY_CLASSIFICATION
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DISPLAY_CLASSIFICATION" ("TRUE_CLASSIFICATION_ID", "CLASSIFICATION_ID", "NAME", "COMMON_NAME", "CLASSIFICATION_LEVEL_ID", "CLASSIFICATION_LEVEL_NAME") AS 
+  select species_id as true_classification_id,
+case when classification_level_id = 10 then family_id when classification_level_id = 11 then genus_id else species_id end as classification_id,
+case when classification_level_id = 10 then family_name when classification_level_id = 11 then genus_name else species_name end as name,
+case when classification_level_id = 10 then family_common_name when classification_level_id = 11 then genus_common_name else species_common_name end as common_name,
+classification_level_id as classification_level_id, 
+name as classification_level_name 
+from classification_hierarchy , classification_level
+where classification_hierarchy.species_level_id = classification_level_id or
+classification_hierarchy.genus_level_id = classification_level_id or
+classification_hierarchy.family_level_id = classification_level_id;
+--------------------------------------------------------
+--  DDL for View DISPLAY_TAG_RELEASE
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DISPLAY_TAG_RELEASE" ("RELEASE_ID", "DEVICE_ID", "CLASSIFICATION_ID", "PROJECT_ROLE_PERSON_ID", "SURGERY_ID", "RELEASE_LONGITUDE", "RELEASE_LATITUDE", "RELEASE_GEOGRAPHIC_AREA_ID", "RELEASE_TIMESTAMP", "CAPTURE_LONGITUDE", "CAPTURE_LATITUDE", "CAPTURE_GEOGRAPHIC_AREA_ID", "CAPTURE_TIMESTAMP", "TETHER_TYPE_ID", "IMPLANT_TYPE_ID") AS 
+  select tr.RELEASE_ID,
+tr.DEVICE_ID,
+dc.CLASSIFICATION_ID,
+tr.PROJECT_ROLE_PERSON_ID,
+tr.SURGERY_ID,
+tr.RELEASE_LONGITUDE,
+tr.RELEASE_LATITUDE,
+tr.RELEASE_GEOGRAPHIC_AREA_ID,
+tr.RELEASE_TIMESTAMP,
+tr.CAPTURE_LONGITUDE,
+tr.CAPTURE_LATITUDE,
+tr.CAPTURE_GEOGRAPHIC_AREA_ID,
+tr.CAPTURE_TIMESTAMP,
+tr.TETHER_TYPE_ID,
+tr.IMPLANT_TYPE_ID from tag_release tr, display_classification dc
+where tr.classification_id = dc.true_classification_id and
+tr.displayed_level_id = dc.classification_level_id;
+--------------------------------------------------------
+--  DDL for View FAMILY
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "FAMILY" ("CLASSIFICATION_ID", "PARENT_CLASSIFICATION_ID", "NAME") AS 
+  SELECT CLASSIFICATION_ID, PARENT_CLASSIFICATION_ID, CONCAT(NAME,CASE  WHEN LENGTH(COMMON_NAME) > 0 THEN CONCAT(CONCAT('(',COMMON_NAME),')') ELSE '' END) AS NAME
+FROM CLASSIFICATION
+WHERE CLASSIFICATION_LEVEL_ID = 10
+ORDER BY NAME;
+--------------------------------------------------------
+--  DDL for View GENUS
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "GENUS" ("CLASSIFICATION_ID", "PARENT_CLASSIFICATION_ID", "NAME") AS 
+  SELECT CLASSIFICATION_ID, PARENT_CLASSIFICATION_ID, CONCAT(NAME,CASE  WHEN LENGTH(COMMON_NAME) > 0 THEN CONCAT(CONCAT('(',COMMON_NAME),')') ELSE '' END) AS NAME
+FROM CLASSIFICATION
+WHERE CLASSIFICATION_LEVEL_ID = 11
+ORDER BY NAME;
 --------------------------------------------------------
 --  DDL for View INSTALLATION_DEPLOYMENT
 --------------------------------------------------------
@@ -33,6 +112,14 @@ from receiver_deployment left outer join installation_station on installation_st
 inner join installation on installation.installation_id = receiver_deployment.installation_id
 inner join receiver_device on receiver_device.device_id = receiver_deployment.device_id
 order by installation.name, receiver_device.name, receiver_deployment.deployment_timestamp;
+--------------------------------------------------------
+--  DDL for View PARENT_CLASSIFICATION
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "PARENT_CLASSIFICATION" ("CLASSIFICATION_ID", "NAME", "COMMON_NAME", "CLASSIFICATION_LEVEL_ID") AS 
+  SELECT CLASSIFICATION_ID, NAME, COMMON_NAME, CLASSIFICATION_LEVEL_ID
+FROM CLASSIFICATION WHERE CLASSIFICATION_LEVEL_ID < 12
+ORDER BY CLASSIFICATION_LEVEL_ID, NAME;
 --------------------------------------------------------
 --  DDL for View PROJECT_PERSON
 --------------------------------------------------------
@@ -65,6 +152,15 @@ order by device.code_name;
   CREATE OR REPLACE VIEW "RECEIVER_MODEL" ("MODEL_ID", "DEVICE_TYPE_ID", "MANUFACTURER_ID", "NAME", "DISABLED", "CREATED", "MODIFIED") AS 
   SELECT  "MODEL_ID","DEVICE_TYPE_ID","MANUFACTURER_ID","NAME","DISABLED","CREATED","MODIFIED" FROM DEVICE_MODEL
 WHERE DEVICE_TYPE_ID = 1
+ORDER BY NAME;
+--------------------------------------------------------
+--  DDL for View SPECIES
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "SPECIES" ("CLASSIFICATION_ID", "PARENT_CLASSIFICATION_ID", "NAME") AS 
+  SELECT CLASSIFICATION_ID, PARENT_CLASSIFICATION_ID, CONCAT(NAME,CASE  WHEN LENGTH(COMMON_NAME) > 0 THEN CONCAT(CONCAT(' (',COMMON_NAME),')') ELSE '' END) AS NAME
+FROM CLASSIFICATION
+WHERE CLASSIFICATION_LEVEL_ID = 12
 ORDER BY NAME;
 --------------------------------------------------------
 --  DDL for View STATION

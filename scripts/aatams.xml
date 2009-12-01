@@ -917,6 +917,7 @@
       <column name="CAPTURE_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
       <!--column name="TETHER_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
       <column name="IMPLANT_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="DISPLAYED_LEVEL_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
          <unique-column name="DEVICE_ID"/>
          <unique-column name="RELEASE_TIMESTAMP"/>
@@ -924,10 +925,13 @@
       <foreign-key foreignTable="CLASSIFICATION" name="TAG_RELEASE_FK00">
         <reference local="CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
       </foreign-key>
-      <foreign-key foreignTable="TRANSMITTER_DEVICE" name="TAG_RELEASE_FK01">
+       <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="TAG_RELEASE_FK01">
+        <reference local="DISPLAYED_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
+      </foreign-key>
+      <foreign-key foreignTable="TRANSMITTER_DEVICE" name="TAG_RELEASE_FK02">
         <reference local="DEVICE_ID" foreign="DEVICE_ID"/>
       </foreign-key>
-      <foreign-key foreignTable="IMPLANT_TYPE" name="TAG_RELEASE_FK02">
+      <foreign-key foreignTable="IMPLANT_TYPE" name="TAG_RELEASE_FK03">
         <reference local="IMPLANT_TYPE_ID" foreign="IMPLANT_TYPE_ID"/>
       </foreign-key>
       <foreign-key foreignTable="PROJECT_PERSON" name="TAG_RELEASE_FK04">
@@ -1088,8 +1092,8 @@
       <column name="MODEL_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
     </view>
-    
-     <view name="RECEIVER_MODEL">
+   
+    <view name="RECEIVER_MODEL">
       <column name="MODEL_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
     </view>
@@ -1098,6 +1102,7 @@
      NEED THESE 4 VIEWS TO AVOID "CANNOT EXPORT CYCLIC FEATURES IF SUPPRESSXLINK=TRUE" ERROR IN DEEGREE 
      SEE CLASSIFICATION TABLE.
      -->
+     
      <view name="PARENT_CLASSIFICATION">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -1129,6 +1134,46 @@
       </foreign-key>
     </view>
     
+    <!-- experiment to see if visibility of tag release classification can be different to what was
+    created via this view -->
+    <view name="DISPLAY_CLASSIFICATION">
+      <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+      <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="COMMON_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
+      <unique name="UNIQUE_INDEX">
+        <unique-column name="NAME"/>
+      </unique>
+    </view>
+    
+    <view name="DISPLAY_TAG_RELEASE">
+      <column name="RELEASE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+      <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="CLASSIFICATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="PROJECT_ROLE_PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="RELEASE_LONGITUDE" primaryKey="false" required="true" type="DECIMAL" size="8,5" autoIncrement="false"/>
+      <column name="RELEASE_LATITUDE" primaryKey="false" required="true" type="DECIMAL" size="7,5" autoIncrement="false"/>
+      <column name="RELEASE_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
+      <column name="CAPTURE_LONGITUDE" primaryKey="false" required="false" type="DECIMAL" size="8,5" autoIncrement="false"/>
+      <column name="CAPTURE_LATITUDE" primaryKey="false" required="false" type="DECIMAL" size="7,5" autoIncrement="false"/>
+      <column name="CAPTURE_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
+      <column name="IMPLANT_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <foreign-key foreignTable="CLASSIFICATION" name="DISPLAY_TAG_RELEASE_FK00">
+        <reference local="CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
+      </foreign-key>
+       <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="DISPLAY_TAG_RELEASE_FK01">
+        <reference local="DISPLAYED_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
+      </foreign-key>
+      <foreign-key foreignTable="TRANSMITTER_DEVICE" name="DISPLAY_TAG_RELEASE_FK02">
+        <reference local="DEVICE_ID" foreign="DEVICE_ID"/>
+      </foreign-key>
+      <foreign-key foreignTable="IMPLANT_TYPE" name="DISPLAY_TAG_RELEASE_FK03">
+        <reference local="IMPLANT_TYPE_ID" foreign="IMPLANT_TYPE_ID"/>
+      </foreign-key>
+      <foreign-key foreignTable="PROJECT_PERSON" name="DISPLAY_TAG_RELEASE_FK04">
+        <reference local="PROJECT_ROLE_PERSON_ID" foreign="PROJECT_ROLE_PERSON_ID"/>
+      </foreign-key>
+    </view>
     <!--  THIS IS THE VIEW USED FOR DETECTIONS ADVANCED SEARCH
  
     DOWNLOADING DETECTIONS DATA USING THIS VIEW IS NOT THAT EFFICIENT (DUE TO WFS SERVER LIMITATIONS)

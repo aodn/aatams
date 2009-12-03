@@ -1149,7 +1149,9 @@
     <view name="DISPLAY_TAG_RELEASE">
       <column name="RELEASE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="CLASSIFICATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="FAMILY_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="GENUS_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="SPECIES_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PROJECT_ROLE_PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="RELEASE_LONGITUDE" primaryKey="false" required="true" type="DECIMAL" size="8,5" autoIncrement="false"/>
       <column name="RELEASE_LATITUDE" primaryKey="false" required="true" type="DECIMAL" size="7,5" autoIncrement="false"/>
@@ -1158,19 +1160,25 @@
       <column name="CAPTURE_LATITUDE" primaryKey="false" required="false" type="DECIMAL" size="7,5" autoIncrement="false"/>
       <column name="CAPTURE_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
       <column name="IMPLANT_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <foreign-key foreignTable="CLASSIFICATION" name="DISPLAY_TAG_RELEASE_FK00">
-        <reference local="CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
+      <foreign-key foreignTable="FAMILY" name="DISPLAY_TAG_RELEASE_FK00">
+        <reference local="FAMILY_ID" foreign="CLASSIFICATION_ID"/>
       </foreign-key>
-       <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="DISPLAY_TAG_RELEASE_FK01">
+      <foreign-key foreignTable="GENUS" name="DISPLAY_TAG_RELEASE_FK01">
+        <reference local="GENUS_ID" foreign="CLASSIFICATION_ID"/>
+      </foreign-key>
+      <foreign-key foreignTable="SPECIES" name="DISPLAY_TAG_RELEASE_FK02">
+        <reference local="SPECIES_ID" foreign="CLASSIFICATION_ID"/>
+      </foreign-key>
+       <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="DISPLAY_TAG_RELEASE_FK03">
         <reference local="DISPLAYED_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
       </foreign-key>
-      <foreign-key foreignTable="TRANSMITTER_DEVICE" name="DISPLAY_TAG_RELEASE_FK02">
+      <foreign-key foreignTable="TRANSMITTER_DEVICE" name="DISPLAY_TAG_RELEASE_FK04">
         <reference local="DEVICE_ID" foreign="DEVICE_ID"/>
       </foreign-key>
-      <foreign-key foreignTable="IMPLANT_TYPE" name="DISPLAY_TAG_RELEASE_FK03">
+      <foreign-key foreignTable="IMPLANT_TYPE" name="DISPLAY_TAG_RELEASE_FK05">
         <reference local="IMPLANT_TYPE_ID" foreign="IMPLANT_TYPE_ID"/>
       </foreign-key>
-      <foreign-key foreignTable="PROJECT_PERSON" name="DISPLAY_TAG_RELEASE_FK04">
+      <foreign-key foreignTable="PROJECT_PERSON" name="DISPLAY_TAG_RELEASE_FK06">
         <reference local="PROJECT_ROLE_PERSON_ID" foreign="PROJECT_ROLE_PERSON_ID"/>
       </foreign-key>
     </view>

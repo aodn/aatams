@@ -3445,7 +3445,7 @@
       <xsd:annotation>
          <xsd:appinfo>
             <deegreewfs:table>DISPLAY_TAG_RELEASE</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.tag_release.">
+            <deegreewfs:gmlId prefix="aatams.display_tag_release.">
                <deegreewfs:MappingField field="RELEASE_ID" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -3476,15 +3476,48 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="classification_ref" minOccurs="1" maxOccurs="1"
-                            type="gml:FeaturePropertyType">
+               <xsd:element name="family_ref" minOccurs="1" maxOccurs="1" type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:classification">
+                        <deegreewfs:Content type="aatams:family">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="FAMILY_ID" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
                                  <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="genus_ref" minOccurs="0" maxOccurs="1" type="gml:FeaturePropertyType">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content type="aatams:genus">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="GENUS_ID" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="species_ref" minOccurs="0" maxOccurs="1" type="gml:FeaturePropertyType">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content type="aatams:species">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="SPECIES_ID" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
                                  <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
@@ -3597,7 +3630,7 @@
    <xsd:element name="detection" substitutionGroup="gml:_Feature" type="aatams:detection_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DETECTION</deegreewfs:table>
+            <deegreewfs:table>DETECTION_MAX</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detection.">
                <deegreewfs:MappingField field="DETECTION_ID" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>

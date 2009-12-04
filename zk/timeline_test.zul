@@ -1,0 +1,30 @@
+<?page id="timeline" title="Timeline Test" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window  id="window" title="Tag Detections Timeline" border="none" 
+use="au.org.emii.aatams.zk.timeline.TimelineTestPageComposer">
+	<timeline id="timelineplot" height="500px" width="100%">
+		<bandinfo width="10%" id="bmonths" intervalUnit="month" intervalPixels="100"
+			syncWith="b1" trackHeight="0.5" trackGap="0.2" showEventText="false">
+		</bandinfo>
+		<bandinfo width="10%" id="bdays" intervalUnit="day" intervalPixels="200"
+			 syncWith="b1" trackHeight="0.5" trackGap="0.2" showEventText="false">
+		</bandinfo>	
+		<bandinfo width="10%" id="b1" intervalUnit="hour" intervalPixels="200" >
+		</bandinfo>
+		<bandinfo width="10%" id="b2" intervalUnit="hour" intervalPixels="200" syncWith="b1" >
+		</bandinfo>	
+		<bandinfo width="10%" id="b3" intervalUnit="hour" intervalPixels="200" syncWith="b1" >
+		</bandinfo>	
+		<bandinfo width="10%" id="b4" intervalUnit="hour" intervalPixels="200" syncWith="b1" >
+		</bandinfo>	
+		<bandinfo width="10%" id="b5" intervalUnit="hour" intervalPixels="200" syncWith="b1" >
+		</bandinfo>	
+		<bandinfo width="10%" id="b6" intervalUnit="hour" intervalPixels="200" syncWith="b1" >
+		</bandinfo>	
+		<bandinfo width="10%" id="b7" intervalUnit="hour" intervalPixels="200" syncWith="b1" >
+		</bandinfo>	
+		<bandinfo width="10%" id="b8" intervalUnit="hour" intervalPixels="200" syncWith="b1" >
+		</bandinfo>	
+	</timeline>
+</window>
+</zk>

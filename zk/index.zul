@@ -1,32 +1,30 @@
-<?page title="AATAMS"?>
+<?page title="Australian Acoustic Monitoring and Tracking System (AATAMS) Website"?>
 
-<window id="window" border="normal" width="100%" height="100%"
-	use="au.org.emii.aatams.zk.AATAMSHomePageComposer">
+<window id="window" width="100%" height="100%" border="none"
+	sclass="black" use="au.org.emii.aatams.zk.AATAMSHomePageComposer">
 	<style>
-	.header {
-        background-image:url('img/header_background.jpg');
-        background-repeat:repeat-x; 
-        border-bottom:solid 1px gray; }
-    .header-right {
-    	float:right;
-    	width:600px;
-    	height:80px;
-        background-image:url('img/fish-school_1.jpg');
-        background-repeat:no-repeat;
-        /*background-position:0px -100px;*/
-    }    
+		.header { background-image:url('img/header_background.jpg');
+		background-repeat:repeat-x; border-bottom:solid 1px gray;
+		border-bottom:solid 2px #F95700; border-top:solid 2px black;}
+		.header-right { float:right; width:600px; height:80px;
+		background-image:url('img/fish-school_1.jpg');
+		background-repeat:no-repeat; /*background-position:0px -100px;*/
+		}
 	</style>
 	<borderlayout width="100%" height="100%">
 		<north size="80px" border="0" sclass="header">
 			<div>
 				<div sclass="header-right">
 					<!--  <textbox sclass="demo-search-inp" />
-					<separator orient="vertical" />
-					<button label="Search Site" /> -->
+						<separator orient="vertical" />
+						<button label="Search Site" /> -->
 				</div>
 				<label
 					style="position:absolute; top:30px; left:70px; font-size:24px;color:white;font-weight:bold;"
 					value="Australian Acoustic Tracking and Monitoring System" />
+				<label
+					style="position:absolute; top:50px; left:70px; font-size:24px;color:red;font-weight:bold;"
+					value="(Under Development)" />
 			</div>
 		</north>
 		<!--  north size="80px" border="0" >
@@ -40,21 +38,26 @@
 			</north-->
 		<!-- Sidebar -->
 		<west width="300px" border="0" flex="true" splittable="true"
-			margins="5,5,0,0" style="background:##DBF0F7;">
+			margins="5,5,0,0" style="background:#B2B2B2;">
 
 			<tabbox id="tb" width="300px" mold="accordion-lite">
 				<tabs>
-					<tab label="Data Entry" />
-					<tab label="Data Search" />
-					<tab label="Tools" />
-					<tab label="Links" />
+					<tab label="Home" id="home" />
+					<tab label="Data Entry" id="data_entry" />
+					<tab label="Data Search" id="data_search" />
+					<tab label="Tools" id="tools" />
+					<tab label="Map" id="map" />
+					<tab label="Links" id="links" />
+					<tab label="Help" id="help" />
 				</tabs>
 				<tabpanels>
-					<tabpanel>
+					<tabpanel
+						style="padding:0px;margin:0px;border:0px;" />
+					<tabpanel
+						style="padding:0px;margin:0px;border:0px;">
 						<menubar id="data_entry_menu" width="100%"
 							orient="vertical">
-							<menu label="Devices"
-								src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
+							<menu label="Devices">
 								<menupopup>
 									<menuitem label="Add Tag Device"
 										id="AddTagDevice" />
@@ -65,7 +68,7 @@
 								</menupopup>
 							</menu>
 							<menu label="Receiver Deployments"
-								src="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+								>
 								<menupopup>
 									<menuitem label="Add Deployment"
 										id="AddDeployment" />
@@ -73,8 +76,7 @@
 										id="ModifyDeployment" />
 								</menupopup>
 							</menu>
-							<menu label="Deployment Recovery/Download"
-								src="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+							<menu label="Deployment Recovery/Download">
 								<menupopup>
 									<menuitem label="Add Recovery"
 										id="AddRecovery" />
@@ -82,17 +84,17 @@
 										id="AddDownload" />
 								</menupopup>
 							</menu>
-							<menu label="Tag Releases"
-								src="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+							<menu label="Tag Releases">
 								<menupopup>
 									<menuitem label="Add Tag Release"
 										id="AddTagRelease" />
 									<menuitem
 										label="Add Surgery Details" id="AddSurgery" />
+									<menuitem label="Add Animal"
+										id="AddAnimal" />
 								</menupopup>
 							</menu>
-							<menu label="Other"
-								src="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+							<menu label="Other">
 								<menupopup>
 									<menu label="Installations">
 										<menupopup>
@@ -102,7 +104,8 @@
 												id="ModifyInstallation" />
 										</menupopup>
 									</menu>
-									<menu label="Installation Stations">
+									<menu
+										label="Installation Stations">
 										<menupopup>
 											<menuitem label="Add"
 												id="AddStation" />
@@ -140,15 +143,38 @@
 							</menu>
 						</menubar>
 					</tabpanel>
-					<tabpanel>
+					<tabpanel
+						style="padding:0px;margin:0px;border:0px;">
 						<menubar id="data_search_menu" width="100%"
 							orient="vertical">
 							<menu label="Advanced Search"
-								src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png"
 								id="AdvancedSearch">
+								<menupopup>
+									<menuitem label="Receiver Deployments"
+										id="ReceiverDeploymentsAdvancedSearch" />
+									<menuitem label="Tag Releases"
+										id="TagReleasesAdvancedSearch" />
+									<menuitem label="Receivers"
+										id="ReceiversAdvancedSearch" />
+									<menuitem label="Tags"
+										id="TagsAdvancedSearch" />
+									<menuitem label="Detections"
+										id="DetectionsAdvancedSearch" />
+								</menupopup>
 							</menu>
-							<menu label="Detections Summaries"
-								src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
+							<menu label="Detections">
+								<menupopup>
+									<menuitem
+										label="Receiver Deployment View"
+										id="DeploymentDetectionTreeView" />
+									<menuitem label="Tag View"
+										id="TagDetectionTreeView" />
+									<menuitem
+										label="Classification View"
+										id="ClassificationDetectionTreeView" />
+								</menupopup>
+							</menu>
+							<menu label="Detections Summaries">
 								<menupopup>
 									<menuitem label="By Installation"
 										id="ViewDetectionSummaryByInstallation" />
@@ -161,8 +187,7 @@
 										id="ViewDetectionSummaryByLocation" />
 								</menupopup>
 							</menu>
-							<menu label="Devices"
-								src="/img/Centigrade-Widget-Icons/Briefcase-16x16.png">
+							<menu label="Devices">
 								<menupopup>
 									<menuitem label="Tag Devices"
 										id="ViewTagDevices" />
@@ -172,21 +197,19 @@
 										id="ViewDeviceModels" />
 								</menupopup>
 							</menu>
-							<menu label="Receiver Deployments"
-								src="/img/Centigrade-Widget-Icons/QuestionmarkButton-16x16.png">
+							<menu label="Receiver Deployments">
 								<menupopup>
 									<menuitem label="By Project"
 										id="ViewDeploymentsByProject" />
 									<menuitem label="By Organisation"
 										id="ViewDeploymentsByOrganisation" />
 									<menuitem label="By Person"
-										id="ViewDeploymentsbyPerson" />
+										id="ViewDeploymentsByPerson" />
 									<menuitem label="All"
 										id="ViewDeployments" />
 								</menupopup>
 							</menu>
-							<menu label="Receiver Retrievals/Downloads"
-								src="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+							<menu label="Receiver Retrievals/Downloads">
 								<menupopup>
 									<menuitem label="By Deployment"
 										id="ViewRetrievalsDownloadsByDeployment" />
@@ -198,8 +221,7 @@
 										id="ViewRetrievalsDownloads" />
 								</menupopup>
 							</menu>
-							<menu label="Tag Releases"
-								src="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+							<menu label="Tag Releases">
 								<menupopup>
 									<menuitem label="By Species"
 										id="TagReleasesBySpecies" />
@@ -207,8 +229,7 @@
 										id="TagReleasesByLocation" />
 								</menupopup>
 							</menu>
-							<menu label="Other"
-								src="/img/Centigrade-Widget-Icons/Spyglass-16x16.png">
+							<menu label="Other">
 								<menupopup>
 									<menuitem label="Installations"
 										id="ViewInstallations" />
@@ -223,68 +244,23 @@
 						</menubar>
 
 					</tabpanel>
-					<tabpanel>
+					<!-- Tools-->
+					<tabpanel
+						style="padding:0px;margin:0px;border:0px;">
 						<groupbox id="timeline_plot" width="100%"
-							open="false" >
+							open="false">
 							<caption
 								image="img/SimileTimeline-24x24.png" label="Timeline Plot" />
-							<tree id="timeline_tree" width="300px"
-								rows="6" checkmark="true" multiple="true">
-								<treechildren>
-									<treeitem>
-										<treerow>
-											<treecell
-												label="Installation 1" />
-										</treerow>
-									</treeitem>
-									<treeitem open="false">
-										<treerow>
-											<treecell
-												label="Installation 2" />
-										</treerow>
-										<treechildren>
-											<treeitem open="false">
-												<treerow>
-													<treecell
-														label="Station 1" />
-												</treerow>
-												<treechildren>
-													<treeitem>
-														<treerow>
-															<treecell
-																label="Deployment 1" />
-														</treerow>
-													</treeitem>
-													<treeitem>
-														<treerow>
-															<treecell
-																label="Deployment 2" />
-														</treerow>
-													</treeitem>
-												</treechildren>
-											</treeitem>
-											<treeitem>
-												<treerow>
-													<treecell
-														label="Station 2" />
-												</treerow>
-												<treechildren>
-													<treeitem>
-														<treerow>
-															<treecell
-																label="Deployment 1" />
-														</treerow>
-													</treeitem>
-												</treechildren>
-											</treeitem>
-										</treechildren>
-									</treeitem>
-									<treeitem label="Installation 3" />
-								</treechildren>
-							</tree>
+							<zscript>
+	import au.org.emii.aatams.zk.tree.*;
+	DetectionsTree mdl = new DetectionsTree(new RootNode(DetectionsTreeMode.DEPLOYMENTS));
+	DetectionsTreeMenuRenderer rdr = new DetectionsTreeMenuRenderer();
+</zscript>
+							<tree id="timeline_tree" model="${mdl}"
+								treeitemRenderer="${rdr}" />
 						</groupbox>
 						<groupbox id="timeseries_plot" width="100%"
-							open="false" >
+							open="false">
 							<caption
 								image="img/SimileTimeplot-24x24.png" label="Timeseries Plot" />
 							<tree id="timeseries_tree" width="100%"
@@ -343,65 +319,58 @@
 						<groupbox id="worksheets" width="100%"
 							open="false">
 							<caption
-								image="img/SimileTimeplot-24x24.png" label="Generate Worksheets" />
-						</groupbox>						
+								image="img/SimileTimeplot-24x24.png"
+								label="Generate Worksheets" />
+						</groupbox>
 					</tabpanel>
-					<tabpanel>
-						<html>
-							&lt;ul&gt; &lt;li&gt;&lt;a
-							href="http://imos.aodn.org.au/webportal/"&gt;IMOS
-							Ocean Portal&lt;/a&gt;&lt;/li&gt;
-							&lt;/ul&gt;
-						</html>
+					<!-- Map -->
+					<tabpanel
+						style="padding:0px;margin:0px;border:0px;">
+					</tabpanel>
+					<!-- Links-->
+					<tabpanel
+						style="padding:0px;margin:0px;border:0px;">
+					</tabpanel>
+					<!-- Help -->
+					<tabpanel
+						style="padding:0px;margin:0px;border:0px;">
 					</tabpanel>
 				</tabpanels>
 			</tabbox>
 		</west>
 		<center flex="true" margins="5,0,5,0">
-			<!--  iframe id="iframe" src="http://imos.org.au/aatams.html" width="500px" height="500px" scrolling="auto"
-				style="border: 1px solid gray" /-->
-				<window id="test" src="test1.zul"/>
+			<include id="centerInclude" src="home.zul" />
 		</center>
 		<south size="40px" border="0" style="background:#0195ff;"
 			splittable="true">
-			<html><![CDATA[             
-			<div style="width:100%;font-size:small;text-align:center;color:white;">
-				<a href="http://www.imos.org.au"
-					title="Integrated Marine Observing System">
-					IMOS
-				</a>
-				is supported by the Australian Government through the
-				<a
-					href="http://www.innovation.gov.au/Section/AboutDIISR/FactSheets/Pages/NationalCollaborativeResearchInfrastructureStrategy%28NCRIS%29FactSheet.aspx">
-					National Collaborative Research Infrastructure
-					Strategy
-				</a>
-				and the Super Science Initiative.
-				<br />
-				You accept all risks and responsibility for losses,
-				damages, costs and other consequences resulting directly
-				or indirectly from using this site and any information
-				or material available from it.
-				<br />
-				Please read our policy regarding the 'Acknowledgement of
-				Use of IMOS Data' at
+			<html>
+
+				
+				<![CDATA[ <div
+				style="width:100%;font-size:small;text-align:center;color:white;">
+				<a href="http://www.imos.org.au" title="Integrated
+				Marine Observing System"> IMOS </a> is supported by the
+				Australian Government through the <a
+				href="http://www.innovation.gov.au/Section/AboutDIISR/FactSheets/Pages/NationalCollaborativeResearchInfrastructureStrategy%28NCRIS%29FactSheet.aspx">
+				National Collaborative Research Infrastructure Strategy
+				</a> and the Super Science Initiative. <br /> You accept
+				all risks and responsibility for losses, damages, costs
+				and other consequences resulting directly or indirectly
+				from using this site and any information or material
+				available from it. <br /> Please read our policy
+				regarding the 'Acknowledgement of Use of IMOS Data' at
 				<a href="http://imos.org.au/datadocpol.html"
-					target="_blank">
-					http://imos.org.au/datadocpol.html
-				</a>
-				<br />
-				<a href="http://imos.org.au/emii.html"
-					title="eMarine Information Infrastructure">
-					Created by eMII
-				</a>
-				<a href="http://www.imos.org.au"
-					title="Integrated Marine Observing System">
-					© IMOS Australia
-				</a>
-				Comments on this site? Contact us at
-				<a href="mailto:info@emii.org.au">info@emii.org.au</a>
-			</div>
-			]]></html>
+				target="_blank"> http://imos.org.au/datadocpol.html </a>
+				<br /> <a href="http://imos.org.au/emii.html"
+				title="eMarine Information Infrastructure"> Created by
+				eMII </a> <a href="http://www.imos.org.au"
+				title="Integrated Marine Observing System"> © IMOS
+				Australia </a> Comments on this site? Contact us at <a
+				href="mailto:info@emii.org.au">info@emii.org.au</a>
+				</div> ]]>
+				
+				
+			</html>
 		</south>
 	</borderlayout>
 </window>

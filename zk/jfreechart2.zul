@@ -1,0 +1,49 @@
+<zk>
+  <imagemap id="myimage">
+  	<attribute name="onClick"><![CDATA[
+  		if (event.getArea() != null) {
+  			alert(self.getFellow(event.getArea()).getTooltiptext());
+  		}
+  	]]></attribute>
+  </imagemap>
+  <zscript><![CDATA[
+import org.zkoss.image.AImage;
+import org.jfree.chart.*;
+import org.jfree.chart.encoders.*;
+import org.jfree.chart.plot.*;
+import org.jfree.chart.entity.*;
+import org.jfree.data.general.DefaultPieDataset;
+import java.io.ByteArrayOutputStream;
+import java.awt.image.BufferedImage;
+
+DefaultPieDataset pieDataset = new DefaultPieDataset();
+pieDataset.setValue("C/C++", new Double(17.5));
+pieDataset.setValue("PHP", new Double(32.5));
+pieDataset.setValue("Java", new Double(43.2));
+pieDataset.setValue("Visual Basic", new Double(10));
+
+JFreeChart chart = ChartFactory.createPieChart3D("Sample Pie Chart 3D II", pieDataset, true, true, true);
+PiePlot plot = (PiePlot) chart.getPlot();
+plot.setForegroundAlpha(0.5f);
+
+ChartRenderingInfo info = new ChartRenderingInfo();
+BufferedImage bi = chart.createBufferedImage(500, 300, BufferedImage.TRANSLUCENT , info);
+
+for(Iterator it=info.getEntityCollection().getEntities().iterator();it.hasNext();) {
+	ChartEntity ce = ( ChartEntity ) it.next();
+	if (ce instanceof PieSectionEntity) {
+		Area area = new Area();
+		area.setParent(myimage);
+	 	area.setCoords(ce.getShapeCoords());
+	 	area.setShape(ce.getShapeType());
+	    area.setId(myimage.getId()+'_'+((PieSectionEntity)ce).getSectionIndex());
+	    area.setTooltiptext(ce.getSectionKey().toString());
+	 }
+}
+
+byte[] bytes = EncoderUtil.encode(bi, ImageFormat.PNG, true);
+
+AImage image = new AImage("Pie Chart", bytes);
+myimage.setContent(image);
+  ]]></zscript>
+</zk>

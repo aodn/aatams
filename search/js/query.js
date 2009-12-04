@@ -11,6 +11,7 @@
       var help_open = false; //for ToggleHelp()
       var query_max = true; //for ToggleQuery()
       var citation_open = true; //for ToggleCitation()
+      var show_filter = true; //for testing;
 
       /**
       Initialisation, called on body onload event
@@ -212,13 +213,13 @@
             uri += "&typename=aatams:receiver_deployment" + GetDeploymentsFilter();
             break;
          case "tag_releases":
-            uri += "&typename=aatams:tag_release" + GetTagReleasesFilter();
+            uri += "&typename=aatams:display_tag_release" + GetTagReleasesFilter();
             break;
          case "tags":
-            uri += "&typename=aatams:transmitter_device" + GetTagsFilter();
+            uri += "&typename=aatams:device" + GetTagsFilter();
             break;
          case "receivers":
-            uri += "&typename=aatams:receiver_device" + GetReceiversFilter();
+            uri += "&typename=aatams:device" + GetReceiversFilter();
             break;
          case "detections":
             uri += "&typename=aatams:detection" + GetDetectionsFilter();
@@ -282,17 +283,13 @@
             "<tr><td class='param_name'>Installation Station:</td><td>" + OperatorList('=','installation_station_id_operator') + 
                " " + InstallationStationsSelectList(false) + "</td></tr>" +
             "<tr><td class='param_name'>Receiver Deployment FID:</td><td>" + OperatorList('=','deployment_id_operator') + 
-               "<span class='fid_prefix'>aatams.receiver_deployment.</span><input id='deployment_id' type='text' size='10' onblur='Reset()'/></td></tr>" +            
-            //"<tr><td class='param_name'>Installation Date:</td><td>" + OperatorList('>=|>','start_date_operator') + " " + DateSelect('start_date') + " and " +
-            //    OperatorList('<=|<','end_date_operator') + " " + DateSelect('end_date') + "</td></tr>" +
-            //"<tr><td class='param_name'>Detected Species:</td><td>"  + OperatorList('=','species_id_operator') +
-            //   " " + SpeciesSelectList() + "</td></tr>" +
+               "<span class='fid_prefix'>aatams.receiver_deployment.</span><input id='deployment_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
             "<tr><td class='param_name'>Receiver FID: </td><td>" + OperatorList('=|<=|>=|<|>','receiver_id_operator') +
                "<span class='fid_prefix'>aatams.device.</span><input id='receiver_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
-            "<tr><td class='param_name'>Receiver Model:</td><td class='last_row'>" + OperatorList('=','receiver_model_id_operator') +
+            "<tr><td class='param_name'>Receiver Model:</td><td class='last_row'>" + OperatorList('=','receiver_model_name_operator') +
                " " + ReceiverModelSelectList() + "</td></tr>" +
-            "<tr><td class='param_name'>Receiver Code Name:</td><td>" + OperatorList('=','receiver_name_operator') +
-               " <input id='receiver_name' type='text' size='20'/></td></tr>" +
+            "<tr><td class='param_name'>Receiver Code Name:</td><td>" + OperatorList('=','receiver_code_name_operator') +
+               " <input id='receiver_code_name' type='text' size='20'/></td></tr>" +
             "<tr><td class='param_name last_row'>Location Bounding Box: </td><td class='last_row'>" + LocationBoundingBox() + "</td></tr>" +
             "</tbody></table>";
       }
@@ -328,20 +325,43 @@
       Inserts detections search parameters markup
        */
       function SetDetectionsFilterParametersHtml(){
-         params_div.innerHTML = "<table class='params'><tbody>" +  
+         params_div.innerHTML = "<table class='params'><tbody>" +
+	    //installation   	 
             "<tr><td class='param_name'>Installation Name:</td><td>" + OperatorList('=','installation_id_operator') + 
                " " + InstallationsSelectList() + "</td></tr>" +	
             "<tr><td class='param_name'>Installation Station:</td><td>" + OperatorList('=','installation_station_id_operator') + 
-               " " + InstallationStationsSelectList(false) + "</td></tr>" +	       
+               " " + InstallationStationsSelectList(false) + "</td></tr>" +	      
+            //receiver
             "<tr><td class='param_name'>Receiver Deployment FID:</td><td>" + OperatorList('=|<=|>=|<|>','deployment_id_operator') +
                "<span class='fid_prefix'>aatams.receiver_deployment.</span><input id='deployment_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
+	    "<tr><td class='param_name'>Receiver FID:</td><td>" + OperatorList('=|<=|>=|<|>','receiver_id_operator') +
+               "<span class='fid_prefix'>aatams.receiver_device.</span><input id='receiver_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
+	    "<tr><td class='param_name'>Receiver Code Name:</td><td>" + OperatorList('=|<=|>=|<|>','receiver_name_operator') +
+               " <input id='receiver_name' type='text' size='10' onblur='Reset()'/></td></tr>" +
+            //tag
             "<tr><td class='param_name'>Tag FID: </td><td>" + OperatorList('=|<=|>=|<|>','tag_id_operator') +
                "<span class='fid_prefix'>aatams.transmitter_device.</span><input id='tag_id' type='text' size='10' onblur='Reset()' onblur='Reset()'/></td></tr>" +
+            "<tr><td class='param_name'>Tag Code Name: </td><td>" + OperatorList('=|<=|>=|<|>','tag_name_operator') +
+               " <input id='tag_name' type='text' size='10' onblur='Reset()' onblur='Reset()'/></td></tr>" +
+	    //release   
+            "<tr><td class='param_name'>Tag Release FID:</td><td>" + OperatorList('=|<=|>=|<|>','release_id_operator') +
+               "<span class='fid_prefix'>aatams.tag_release.</span><input id='release_id' type='text' size='10' onblur='Reset()'/></td></tr>" +    
+            "<tr><td class='param_name'>Release UTC DateTime:</td><td>" + OperatorList('>=|>','release_start_date_operator') + " " + DateSelect('release_start_date') + " and <br/>" +
+                OperatorList('<=|<','release_end_date_operator') + " " + DateSelect('release_end_date') + "</td></tr>" + 
+            "<tr><td class='param_name'>Release Location Bounding Box: </td><td>" + LocationBoundingBox('release') + "</td></tr>" +
+            //classification	    
+            "<tr><td class='param_name'>Family:</td><td>" + OperatorList('=','family_id_operator') +
+            " " + FamilySelectList() + "</td></tr>" +
+            "<tr><td class='param_name'>Genus:</td><td>" + OperatorList('=','genus_id_operator') +
+            " " + GenusSelectList(true) + "</td></tr>" +
+            "<tr><td class='param_name'>Species:</td><td>" + OperatorList('=','species_id_operator') +
+            " " + SpeciesSelectList(true) + "</td></tr>" +
+            //detection
             "<tr><td class='param_name'>Detection FID:</td><td>" + OperatorList('=|<=|>=|<|>','detection_id_operator') +
-               "<span class='fid_prefix'>aatams.detection.</span><input id='detection_id' type='text' size='10' onblur='Reset()'/></td></tr>" +            
-            "<tr><td class='param_name'>Detection UTC DateTime:</td><td>" + OperatorList('>=|>','start_date_operator') + " " + DateSelect('start_date') + " and <br/>" +
-                OperatorList('<=|<','end_date_operator') + " " + DateSelect('end_date') + "</td></tr>" +
-            "<tr><td class='param_name last_row'>Location Bounding Box: </td><td class='last_row'>" + LocationBoundingBox() + "</td></tr>" +
+               "<span class='fid_prefix'>aatams.detection.</span><input id='detection_id' type='text' size='10' onblur='Reset()'/></td></tr>" +    
+            "<tr><td class='param_name'>Detection UTC DateTime:</td><td>" + OperatorList('>=|>','detection_start_date_operator') + " " + DateSelect('detection_start_date') + " and <br/>" +
+                OperatorList('<=|<','detection_end_date_operator') + " " + DateSelect('detection_end_date') + "</td></tr>" + 
+            "<tr><td class='param_name last_row'>Detection Location Bounding Box: </td><td class='last_row'>" + LocationBoundingBox('detection') + "</td></tr>" +
             "</tbody></table>";      
       }
 
@@ -395,20 +415,16 @@
        */
       function SetTagReleasesFilterParametersHtml(){
          params_div.innerHTML = "<table class='params'><tbody>" +
-            //"<tr><td class='param_name'>Genus:</td><td>"  + OperatorList('=','genus_id_operator') +
-            //   " " + GenusSelectList() + "</td></tr>" +
             "<tr><td class='param_name'>Family:</td><td>" + OperatorList('=','family_id_operator') +
             " " + FamilySelectList() + "</td></tr>" +
             "<tr><td class='param_name'>Genus:</td><td>" + OperatorList('=','genus_id_operator') +
-            " " + GenusSelectList() + "</td></tr>" +
+            " " + GenusSelectList(true) + "</td></tr>" +
             "<tr><td class='param_name'>Species:</td><td>" + OperatorList('=','species_id_operator') +
-            " " + SpeciesSelectList() + "</td></tr>" +	    
+            " " + SpeciesSelectList(true) + "</td></tr>" +	    
             "<tr><td class='param_name'>Tag FID: </td><td>" + OperatorList('=|<=|>=|<|>','tag_id_operator') +
                " <span class='fid_prefix'>aatams.transmitter_device.</span><input id='tag_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
             "<tr><td class='param_name'>Tag Code Name:</td><td>" + OperatorList('=','tag_name_operator') +
                " <input id='tag_name' type='text' size='20'/></td></tr>" +
-            "<tr><td class='param_name'>Receiver Id: </td><td>" + OperatorList('=|<=|>=|<|>','receiver_id_operator') +
-               " <input id='receiver_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
             "<tr><td class='param_name'>Release UTC DateTime:</td><td>" + OperatorList('>=|>','start_date_operator') + " " + DateSelect('start_date') + " and <br/>" +
                 OperatorList('<=|<','end_date_operator') + " " + DateSelect('end_date') + "</td></tr>" +
             "<tr><td class='param_name last_row'>Location Bounding Box: </td><td class='last_row'>" + LocationBoundingBox() + "</td></tr>" +
@@ -514,8 +530,14 @@
       function SetTagsFilterParametersHtml(){
 
                 params_div.innerHTML = "<table class='params'><tbody>" +
-            "<tr><td class='param_name'>Device Id:</td><td>" + OperatorList('=|<=|>=|<|>','device_id_operator') +
-               " <input id='device_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
+	    //project
+            "<tr><td class='param_name'>Project:</td><td>" + OperatorList('=','project_id_operator') +
+               " " + ProjectsSelectList() + "</td></tr>" +
+            "<tr><td class='param_name'>Person(Role):</td><td>" + OperatorList('=','project_person_id_operator') +
+               " " + ProjectPersonsSelectList() + "</td></tr>" +
+	    //device
+            "<tr><td class='param_name'>Device FID:</td><td>" + OperatorList('=|<=|>=|<|>','device_id_operator') +
+               "<span class='fid_prefix'>aatams.device.</span><input id='device_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
             "<tr><td class='param_name'>Device Name:</td><td>" + OperatorList('=','device_name_operator') +
                " <input id='device_name' type='text' size='20'/></td></tr>" +
             "<tr><td class='param_name last_row'>Model:</td><td class='last_row'>" + OperatorList('=','model_id_operator') +
@@ -557,14 +579,20 @@
       Inserts receivers search parameters markup
       */
       function SetReceiversFilterParametersHtml(){
-         params_div.innerHTML = "<table class='params'><tbody>" +
-            "<tr><td class='param_name'>Device Id:</td><td>" + OperatorList('=|<=|>=|<|>','device_id_operator') +
-               " <input id='device_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
-            "<tr><td class='param_name'>Device Name:</td><td>" + OperatorList('=|<=|>=|<|>','device_name_operator') +
-               " <input id='device_name' type='text' size='20'/></td></tr>" +   
+           params_div.innerHTML = "<table class='params'><tbody>" +
+	    //project
+            "<tr><td class='param_name'>Project:</td><td>" + OperatorList('=','project_id_operator') +
+               " " + ProjectsSelectList() + "</td></tr>" +
+            "<tr><td class='param_name'>Person(Role):</td><td>" + OperatorList('=','project_person_id_operator') +
+               " " + ProjectPersonsSelectList() + "</td></tr>" +
+	    //device
+            "<tr><td class='param_name'>Device FID:</td><td>" + OperatorList('=|<=|>=|<|>','device_id_operator') +
+               "<span class='fid_prefix'>aatams.device.</span><input id='device_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
+            "<tr><td class='param_name'>Device Name:</td><td>" + OperatorList('=','device_name_operator') +
+               " <input id='device_name' type='text' size='20'/></td></tr>" +
             "<tr><td class='param_name last_row'>Model:</td><td class='last_row'>" + OperatorList('=','model_id_operator') +
                " " + ReceiverModelSelectList() + "</td></tr>" +
-            "</tbody></table>";
+               "</tbody></table>";
       }
 
       /**
@@ -647,6 +675,40 @@
             return 7;
          return operator;
        }
+
+      /**
+      Inserts an Projects list
+      */
+      function ProjectsSelectList(){
+         var tmp = "<select id='project_id' onblur='Reset()'  onchange='ResetProjectPersons(this.value)'>" + 
+            "<option value=''></option>" 
+         for(var i=0; i<project_list.length;i++){
+            tmp += "<option value="+project_list[i][0]+">"+project_list[i][1]+"</option>";
+         }
+         return tmp += "</select>";
+      }
+
+      /**
+      Inserts an PersonRoles list
+      */
+      function ProjectPersonsSelectList(){
+          return "<select id='project_person_id' onblur='Reset()'>" + 
+            "<option value=''></option></select>";
+      }
+
+      /**
+       Resets the ProjectPersons List to be those in a particular Project
+       */
+      function ResetProjectPersons(project){
+	 var person_roles = document.getElementById('project_person_id');
+         person_roles.options.length = 0;
+	 person_roles.options[0] = new Option('','');
+         for(var i=0; i<project_person_list.length; i++){
+            if(project_person_list[i][2]==project){
+               person_roles.options[person_roles.options.length] = new Option(project_person_list[i][1], project_person_list[i][0]);
+	    }
+         }
+      }
  
       /**
       Inserts an Receivers list
@@ -741,6 +803,7 @@
                genera.options[genera.options.length] = new Option(genus_list[i][1], genus_list[i][0]);
 	    }
          }
+	 ResetSpeciesSelectList('');
       }
 
       /**
@@ -795,8 +858,8 @@
       function TagModelSelectList(){
          var tmp = "<select id='tag_model_id' onblur='Reset()'>" + 
             "<option value=''></option>" 
-         for(var i=0; i<tag_model_list.length;i++){
-            tmp += "<option value="+tag_model_list[i][0]+">"+tag_model_list[i][1]+"</option>";
+         for(var i=0; i<transmitter_model_list.length;i++){
+            tmp += "<option value="+transmitter_model_list[i][0]+">"+transmitter_model_list[i][1]+"</option>";
          }
          return tmp += "</select>";
       }
@@ -807,9 +870,9 @@
       function GetTagModelId(name){
          if(name){
             name = name.toUpperCase();
-            for(var i=0; i<tag_model_list.length; i++){
-               if(tag_model_list[i][1].toUpperCase() === name){
-                  return tag_model_list[i][0];
+            for(var i=0; i<transmitter_model_list.length; i++){
+               if(transmitter_model_list[i][1].toUpperCase() === name){
+                  return transmitter_model_list[i][0];
                }
             }
             return "";
@@ -823,10 +886,10 @@
       Inserts an Receiver Model list
       */
       function ReceiverModelSelectList(){
-         var tmp = "<select id='receiver_model_id' onblur='Reset()'>" + 
+         var tmp = "<select id='receiver_model_name' onblur='Reset()'>" + 
             "<option value=''></option>" 
          for(var i=0; i<receiver_model_list.length;i++){
-            tmp += "<option value="+receiver_model_list[i][0]+">"+receiver_model_list[i][1]+"</option>";
+            tmp += "<option value="+receiver_model_list[i][1]+">"+receiver_model_list[i][1]+"</option>";
          }
          return tmp += "</select>";
       }
@@ -853,9 +916,7 @@
       */   
       function DateSelect(id){
          return "<span class='date_group'>" + YearSelectList(id) + "-" + MonthSelectList(id) + "-" + DaySelectList(id) + "&#160;&#160;" + Hour24SelectList(id) + ":" +
-                MinutesSelectList(id) + ":" + SecondsSelectList(id) + "</span>";
-           
-         //"<input id='"+id+"' width='13' alt='Enter Date/Time'/><div id='"+id+"_div'/><img  id='"+id+"_img' class='calendar' src='js/calendar/calendar.png' width='18' height='18' border='0'>";          
+                MinutesSelectList(id) + ":" + SecondsSelectList(id) + "</span>";     
       }
 
 
@@ -926,7 +987,7 @@
             "<option value='2006'>2006</option>" +
             "<option value='2007'>2007</option>" +
             "<option value='2008'>2008</option>" +
-            "<option value='2008'>2009</option>" +           
+            "<option value='2009'>2009</option>" +           
             "</select>";
       }   
       /**
@@ -1157,25 +1218,27 @@
       /**
       Makes lat/long bounding box inputs
       */
-      function LocationBoundingBox(){ 
+      function LocationBoundingBox(id){ 
+	 if(id == null) id = "";
          return "<table class='lon_lat'>" + 
-            "<tr><td>Long.</td><td><input id='lon_1' type='text' size='6' onblur='ValidateLongitude(this);Reset();'/></td>" + 
-            "<td><input id='lon_2' type='text' size='6' onblur='ValidateLongitude(this);Reset();'/></td></tr>" +
-            "<tr><td>Lat.</td><td><input id='lat_1' type='text' size='6' onblur='ValidateLatitude(this);Reset();'/></td>" + 
-            "<td><input id='lat_2' type='text' size='6' onblur='ValidateLatitude(this);Reset();'/></td></tr>" +
+            "<tr><td>Long.</td><td><input id='" + id + "lon_1' type='text' size='6' onblur='ValidateLongitude(this);Reset();'/></td>" + 
+            "<td><input id='" + id + "lon_2' type='text' size='6' onblur='ValidateLongitude(this);Reset();'/></td></tr>" +
+            "<tr><td>Lat.</td><td><input id='" + id + "lat_1' type='text' size='6' onblur='ValidateLatitude(this);Reset();'/></td>" + 
+            "<td><input id='" + id + "lat_2' type='text' size='6' onblur='ValidateLatitude(this);Reset();'/></td></tr>" +
             "</table><span id='location_status_message'/>";
       }
 
       /**
       Sets lat/long bounding box inputs
       */
-      function SetLocationBoundingBox(value){ 
+      function SetLocationBoundingBox(value, id){
          var values = value.split(',');
+	 if(id == null) id = "";
          if(values.length==4){
-            document.getElementById('lon_1').value = values[0];
-            document.getElementById('lat_1').value = values[1];
-            document.getElementById('lon_2').value = values[2];
-            document.getElementById('lat_2').value = values[3];
+            document.getElementById(id+'lon_1').value = values[0];
+            document.getElementById(id+'lat_1').value = values[1];
+            document.getElementById(id+'lon_2').value = values[2];
+            document.getElementById(id+'lat_2').value = values[3];
          }
          else
             throw new Error("bbox parameter must have the format 'bbox=min_longitude,min_latitude,max_longitude,max_latitude'")
@@ -1226,42 +1289,32 @@
             var value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
                filter += Comparison('aatams:installation_ref/aatams:installation/@gml:id',
-                            document.getElementById('installation_id_operator').value, value);   
+                            document.getElementById('installation_id_operator').value, value.replace('aatams.installation.',''));   
+         }
+	 if(element = document.getElementById('installation_station_id')){
+            var value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:station_ref/aatams:station/@gml:id', document.getElementById('installation_station_id_operator').value, value.replace('aatams.installation_station.',''));
          }
          if(element = document.getElementById('deployment_id')){
             var value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
                filter += Comparison('@gml:id', document.getElementById('deployment_id_operator').value, value);
          }
-         /**if(element = document.getElementById('start_date')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:detection_timestamp', document.getElementById('start_date_operator').value, value);   
-         }
-         if(element = document.getElementById('end_date')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:detection_timestamp', document.getElementById('end_date_operator').value, value);   
-         }
-         if(element = document.getElementById('species_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:species_id', document.getElementById('species_id_operator').value, value);   
-         }
-         if(element = document.getElementById('tag_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:tag_id', document.getElementById('tag_id_operator').value, value);   
-         }*/
          if(element = document.getElementById('receiver_id')){
             value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
                filter += Comparison('aatams:receiver_device_ref/aatams:receiver_device/@gml:id', document.getElementById('receiver_id_operator').value, value);   
          }
-         if(element = document.getElementById('receiver_name')){
+	 if(element = document.getElementById('receiver_model_name')){
             value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:receiver_device_ref/aatams:receiver_device/aatams:model_name', document.getElementById('receiver_model_id_operator').value, value);   
+               filter += Comparison('aatams:receiver_device_ref/aatams:receiver_device/aatams:model_name', document.getElementById('receiver_model_name_operator').value, value);   
+         }
+         if(element = document.getElementById('receiver_code_name')){
+            value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:receiver_device_ref/aatams:receiver_device/aatams:code_name', document.getElementById('receiver_code_name_operator').value, value);  
          }	 
          if(bbox = GetBoundingBoxFilter('aatams:location')){
             filter += bbox;   
@@ -1273,13 +1326,80 @@
          var element;
          var bbox;
          var filter = "";
+	 //installation
+	 if(element = document.getElementById('installation_id')){
+            var value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:installation_id',
+                            document.getElementById('installation_id_operator').value, value.replace('aatams.installation.',''));   
+         }
+	 if(element = document.getElementById('installation_station_id')){
+            var value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:station_id', document.getElementById('installation_station_id_operator').value,
+			       value.replace('aatams.installation_station.',''));
+         }
+	 //receiver deployment
          if(element = document.getElementById('deployment_id')){
             var value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:detector/aatams:Deployment/aatams:deploymentId',
-                            document.getElementById('deployment_id_operator').value, value);   
+               filter += Comparison('aatams:deployment_id', document.getElementById('deployment_id_operator').value, value);
          }
-         if(element = document.getElementById('detection_id')){
+         if(element = document.getElementById('receiver_id')){
+            value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:receiver_id', document.getElementById('receiver_id_operator').value, value);   
+         }
+	 if(element = document.getElementById('receiver_code_name')){
+            value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:receiver_name', document.getElementById('receiver_name_operator').value, value);   
+         }
+	 //tag
+	 if(element = document.getElementById('tag_id')){
+            value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:tag_id', document.getElementById('tag_id_operator').value, value);   
+         }
+	 if(element = document.getElementById('tag_code_name')){
+            value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:tag_name', document.getElementById('tag_name_operator').value, value);   
+         }
+	 //release
+         if(element = document.getElementById('start_date')){
+            var value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:release_timetamp', document.getElementById('release_start_date_operator').value, DateTimeFormat(value));   
+         }
+         if(element = document.getElementById('end_date')){
+            var value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:release_timestamp', document.getElementById('release_end_date_operator').value, DateTimeFormat(value));   
+         }
+         if(bbox = GetBoundingBoxFilter('aatams:release_location','release')){
+            filter += bbox;   
+         }
+	 //classification
+	 var classification_filter = ""
+         if(element = document.getElementById('species_id')){
+            value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               classification_filter = Comparison('aatams:species_id', document.getElementById('species_id_operator').value, value.replace('aatams.species.',''));   
+         }
+	 if(classification_filter == "" && (element = document.getElementById('genus_id'))){
+            value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               classification_filter = Comparison('aatams:genus_id', document.getElementById('genus_id_operator').value, value.replace('aatams.genus.',''));
+         }
+	 if(classification_filter == "" && (element = document.getElementById('family_id'))){
+            value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               classification_filter = Comparison('aatams:family_id', document.getElementById('family_id_operator').value, value.replace('aatams.family.',''));
+         }
+	 filter += classification_filter;
+	 //detection
+	 if(element = document.getElementById('detection_id')){
             var value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
                filter += Comparison('aatams:detectionId', document.getElementById('detection_id_operator').value, value);
@@ -1294,22 +1414,7 @@
             if(value != "")
                filter += Comparison('aatams:detectionUtcTimeStamp', document.getElementById('end_date_operator').value, DateTimeFormat(value));   
          }
-         if(element = document.getElementById('tag_id')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:detected/aatams:Device/aatams:deviceId', document.getElementById('tag_id_operator').value, value);   
-         }
-         if(element = document.getElementById('tag_name')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:detected/aatams:Device/aatams:deviceId', document.getElementById('tag_name_operator').value, value);   
-         }
-         if(element = document.getElementById('receiver_name')){
-            var value = element.value.replace(/^\s+|\s+$/g, '');
-            if(value != "")
-               filter += Comparison('aatams:detected/aatams:Device/aatams:deviceId', document.getElementById('receiver_name_operator').value, value);   
-         }
-         if(bbox = GetBoundingBoxFilter('aatams:detector/aatams:Deployment/aatams:location')){
+         if(bbox = GetBoundingBoxFilter('aatams:detection/aatams:location','detection')){
             filter += bbox;   
          }
          return BuildFilterKVP(filter);
@@ -1323,30 +1428,30 @@
          if(element = document.getElementById('species_id')){
             value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:speciesId', document.getElementById('species_id_operator').value, value);   
+               filter = Comparison('aatams:species_ref/aatams:species/@gml:id', document.getElementById('species_id_operator').value, value.replace('aatams.species.',''));   
          }
-	 else if(element = document.getElementById('genus_id')){
+	 if(filter == "" && (element = document.getElementById('genus_id'))){
             value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:genusId', document.getElementById('genus_id_operator').value, value);
+               filter = Comparison('aatams:genus_ref/aatams:genus/@gml:id', document.getElementById('genus_id_operator').value, value.replace('aatams.genus.',''));
          }
-	 else if(element = document.getElementById('family_id')){
+	 if(filter == "" && (element = document.getElementById('family_id'))){
             value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:familyId', document.getElementById('family_id_operator').value, value);
+               filter = Comparison('aatams:family_ref/aatams:family/@gml:id', document.getElementById('family_id_operator').value, value.replace('aatams.family.',''));
          }
          if(element = document.getElementById('tag_name')){
             value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:tagName', document.getElementById('tag_name_operator').value, value);   
+               filter += Comparison('aatams:transmitter_device_ref/aatams:transmitter_device/aatams:code_name', document.getElementById('tag_name_operator').value, value);   
          }
          if(value = GetDateTimeFilter('start_date')){
             if(value != "")
-               filter += Comparison('aatams:detectionUtcTimeStamp', document.getElementById('start_date_operator').value, DateTimeFormat(value));   
+               filter += Comparison('aatams:release_timestamp', document.getElementById('start_date_operator').value, DateTimeFormat(value));   
          }
          if(value = GetDateTimeFilter('end_date')){
             if(value != "")
-               filter += Comparison('aatams:detectionUtcTimeStamp', document.getElementById('end_date_operator').value, DateTimeFormat(value));   
+               filter += Comparison('aatams:release_timestamp', document.getElementById('end_date_operator').value, DateTimeFormat(value));   
          }
          if(bbox = GetBoundingBoxFilter('aatams:location')){
             filter += bbox;   
@@ -1355,52 +1460,74 @@
       }
 
       function GetTagsFilter(){
-         var filter = Comparison('aatams:deviceType', 1, 'TRANSMITTER');
+         var filter =Comparison('aatams:device_type_ref/aatams:device_type/aatams:name', 1, 'TRANSMITTER');
+         if(element = document.getElementById('project_id')){
+            var value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:project_person_ref/aatams:project_person/aatams:project_fid', document.getElementById('project_id_operator').value, value);
+         }
+         if(element = document.getElementById('project_person_id')){
+            var value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:project_person_ref/aatams:project_person/@gml:id', document.getElementById('project_person_id_operator').value, value.replace('aatams.project_person.',''));
+         }
          if(element = document.getElementById('device_id')){
             var value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:deviceId', document.getElementById('device_id_operator').value, value);   
+               filter += Comparison('@gml:id', document.getElementById('device_id_operator').value, value);
          }
          if(element = document.getElementById('tag_model_id')){
             var value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:specification/aatams:Model/aatams:modelId', document.getElementById('model_id_operator').value, value);
+               filter += Comparison('aatams:device_model_ref/aatams:device_model/@gml:id', document.getElementById('model_id_operator').value, value.replace('aatams.transmitter_model.',''));
          }
          if(element = document.getElementById('device_name')){
             var value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:name', document.getElementById('device_name_operator').value, value);
+               filter += Comparison('aatams:code_name', document.getElementById('device_name_operator').value, value);
          }
          return BuildFilterKVP(filter);
       }
 
       function GetReceiversFilter(){
-         var filter = Comparison('aatams:deviceType', 1, 'RECEIVER');
+         var filter =Comparison('aatams:device_type_ref/aatams:device_type/aatams:name', 1, 'RECEIVER');
+         if(element = document.getElementById('project_id')){
+            var value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:project_person_ref/aatams:project_person/aatams:project_fid', document.getElementById('project_id_operator').value, value);
+         }
+         if(element = document.getElementById('project_person_id')){
+            var value = element.value.replace(/^\s+|\s+$/g, '');
+            if(value != "")
+               filter += Comparison('aatams:project_person_ref/aatams:project_person/@gml:id', document.getElementById('project_person_id_operator').value, value.replace('aatams.project_person.',''));
+         }
          if(element = document.getElementById('device_id')){
             var value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:deviceId',
-                            document.getElementById('device_id_operator').value, value);   
+               filter += Comparison('@gml:id', document.getElementById('device_id_operator').value, value);
          }
-         if(element = document.getElementById('receiver_model_id')){
+         if(element = document.getElementById('tag_model_id')){
             var value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:specification/aatams:Model/aatams:modelId', document.getElementById('model_id_operator').value, value);
+               filter += Comparison('aatams:device_model_ref/aatams:device_model/@gml:id', document.getElementById('model_id_operator').value, value.replace('aatams.receiver_model.',''));
          }
          if(element = document.getElementById('device_name')){
             var value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:name', document.getElementById('device_name_operator').value, value);
+               filter += Comparison('aatams:code_name', document.getElementById('device_name_operator').value, value);
          }
          return BuildFilterKVP(filter);
       }
 
+      /**
+      Constructs the OGC Filter KVP for restricting the features returned
+      */
       function BuildFilterKVP(filter){
          if(filter != null && filter.match(/\S/g)){
             if(predicate_count > 1)
                                    filter = "<ogc:And>" + filter + "</ogc:And>";
             filter = "&filter=<ogc:Filter xmlns:ogc='http://www.opengis.net/ogc' xmlns:aatams='http://www.imos.org.au/aatams' xmlns:gml='http://www.opengis.net/gml'>" + filter + "</ogc:Filter>";
-	    //alert(filter);
+	    if(show_filter){ alert(filter); }
             return filter.replace(/\s/g, '%20');
          }
          else
@@ -1451,28 +1578,29 @@
       /**
       Generates an OGC Bounding Box filter clause
        */
-      function GetBoundingBoxFilter(name){
+      function GetBoundingBoxFilter(name, prefix){
          var element;
          var lat_1 = '';
          var lat_2 = '';
          var lon_1 = '';
          var lon_2 = '';
-         if(element = document.getElementById('lat_1'))
+	 prefix = (prefix) ? prefix : "";
+         if(element = document.getElementById(prefix+'lat_1'))
             lat_1 = element.value;
          else
-            throw new Error('lat_1 element not found');
-         if(element = document.getElementById('lat_2'))
+            throw new Error(prefix+'lat_1 element not found');
+         if(element = document.getElementById(prefix+'lat_2'))
             lat_2 = element.value;
          else
-            throw new Error('lat_2 element not found');
-         if(element = document.getElementById('lon_1'))
+            throw new Error(prefix+'lat_2 element not found');
+         if(element = document.getElementById(prefix+'lon_1'))
             lon_1 = element.value;
          else
-            throw new Error('lon_1 element not found');
-         if(element = document.getElementById('lon_2'))
+            throw new Error(prefix+'lon_1 element not found');
+         if(element = document.getElementById(prefix+'lon_2'))
             lon_2 = element.value;
          else
-            throw new Error('lon_2 element not found');
+            throw new Error(prefix+'lon_2 element not found');
          //are any values set?
          if(lat_1.match(/\S/g) || lat_2.match(/\S/g) || lon_1.match(/\S/g) || lon_2.match(/\S/g) ){
             //are all values set?

@@ -1148,7 +1148,7 @@
     
     <view name="DISPLAY_TAG_RELEASE">
       <column name="RELEASE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="FAMILY_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="GENUS_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="SPECIES_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
@@ -1173,7 +1173,7 @@
         <reference local="DISPLAYED_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
       </foreign-key>
       <foreign-key foreignTable="TRANSMITTER_DEVICE" name="DISPLAY_TAG_RELEASE_FK04">
-        <reference local="DEVICE_ID" foreign="DEVICE_ID"/>
+        <reference local="TAG_ID" foreign="DEVICE_ID"/>
       </foreign-key>
       <foreign-key foreignTable="IMPLANT_TYPE" name="DISPLAY_TAG_RELEASE_FK05">
         <reference local="IMPLANT_TYPE_ID" foreign="IMPLANT_TYPE_ID"/>

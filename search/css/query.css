@@ -3,11 +3,11 @@ div#main { position:relative; width:96%; margin-left:2%; margin-top:10px; z-inde
 input#wfs_uri { width:300px; border: inset 1px gray;  }
 th { font-weight:bold; font-size:1.5em; }
 table.search { margin:0px; width:100%; border-spacing:0px; }
-table.search td { font-size:1.2em; padding:10px 10px 10px 0px; vertical-align:top;  }
+table.search td { padding:10px 10px 10px 0px; vertical-align:top; }
 th#features_header { width:200px; text-align:left; padding-left:0px;}
 div.features { height:100px; width:100%; overflow:auto; border:inset 2px #999999; background-color:white; }
-td#params_header { width:100%; text-align:center; padding-left:15px; }  
-div#params {width: 100%; border:groove 3px #CCCCCC; padding:4px; display:none; }
+td#params_header { width:100%; text-align:center; padding-left:15px; background-color:lightgray; border:outset 1px gray; font-weight:bold;}  
+div#params {width: 100%; border:groove 2px #CCCCCC; padding:4px; display:none; }
 table.params { border-collapse:collapse; border-spacing:0px;}
 table.params td  { font-size:1.0em; padding:3px 10px 3px 10px; vertical-align:top;  border-bottom:solid 1px #CCCCCC; white-space: nowrap;}
 table.params td.last_row  { border-bottom:solid 0px gray; }
@@ -43,3 +43,4 @@ div#citation_toggle_button {float:right; clear:right; margin-right:20px; cursor:
 div#citation_toggle_button img {cursor:pointer; margin-right:5px;}
 div#citation_main { font-size:0.5em; background-color:#66BBDD; padding:3px; cursor:pointer; color:#333333; text-align:justify; }
 div#citation_header { width:50%; float:left; background-color:black; color:white; text-align:center;}
+span.fid_prefix { font-size:0.75em; font-family: Verdana, sans-serif; font-weight:normal; font-style:underline; margin-left:5px; background-color:#D8F3C9 }

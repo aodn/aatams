@@ -3466,7 +3466,7 @@
                         <deegreewfs:Content type="aatams:transmitter_device">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
                                  <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>

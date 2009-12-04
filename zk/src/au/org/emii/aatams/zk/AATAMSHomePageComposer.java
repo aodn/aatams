@@ -3,13 +3,13 @@ package au.org.emii.aatams.zk;
 import org.apache.log4j.Logger;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Components;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.ext.AfterCompose;
 import org.zkoss.zk.ui.util.Composer;
 import org.zkoss.zul.Window;
 import org.zkoss.zk.ui.event.*;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Tab;
-
 
 /**
  * This composer will automatically autowire and autoforward your composers.
@@ -30,6 +30,8 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 	private Tab data_search;
 	private Tab tools;
 	private Tab links;
+	private Tab map;
+	private Tab help;
 	private Tab forms;
 
 	private static final long serialVersionUID = 1L;
@@ -59,26 +61,54 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 
 		// auto forward
 		Components.addForwards(this, this);
+
+		// set an opening page
+		String tab = Executions.getCurrent().getParameter("tab");
+		if (tab == null) {
+			onClick$home(null);
+		} else if (tab.matches("home")) {
+			onClick$help(null);
+		} else if (tab.matches("data_entry")) {
+			onClick$data_entry(null);
+		} else if (tab.matches("data_search")) {
+			onClick$data_search(null);
+		} else if (tab.matches("tools")) {
+			onClick$tools(null);
+		} else if (tab.matches("map")) {
+			onClick$map(null);
+		} else if (tab.matches("links")) {
+			onClick$links(null);
+		} else if (tab.matches("forms")) {
+			centerInclude.setSrc("index.xml");
+		}
 	}
-	
+
 	public void onClick$home(Event event) {
 		centerInclude.setSrc("home.zul");
 	}
-	
+
 	public void onClick$data_entry(Event event) {
 		centerInclude.setSrc("data_entry.zul");
 	}
-	
+
 	public void onClick$data_search(Event event) {
 		centerInclude.setSrc("data_search.zul");
 	}
-	
+
 	public void onClick$tools(Event event) {
 		centerInclude.setSrc("tools.zul");
 	}
-	
+
+	public void onClick$map(Event event) {
+		centerInclude.setSrc("wms.zul");
+	}
+
 	public void onClick$links(Event event) {
 		centerInclude.setSrc("links.zul");
+	}
+
+	public void onClick$help(Event event) {
+		centerInclude.setSrc("help.html");
 	}
 
 	public void onClick$AddTagDevice(Event event) {
@@ -99,9 +129,9 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 
 	public void onClick$ModifyDeployment(Event event) {
 		centerInclude.setSrc("not_implemented.zul");
-		//centerInclude.setSrc("xform.zul?form=forms/modify_receiver_deployment.xml");
+		// centerInclude.setSrc("xform.zul?form=forms/modify_receiver_deployment.xml");
 	}
-	
+
 	public void onClick$AddRecovery(Event event) {
 		centerInclude.setSrc("xform.zul?form=forms/create_deployment_recovery.xml");
 	}
@@ -109,7 +139,7 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 	public void onClick$AddDownload(Event event) {
 		centerInclude.setSrc("xform.zul?form=forms/create_deployment_download_1.xml");
 	}
-	
+
 	public void onClick$AddTagRelease(Event event) {
 		centerInclude.setSrc("xform.zul?form=forms/create_tag_release.xml");
 	}
@@ -125,16 +155,16 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 
 	public void onClick$ModifyInstallation(Event event) {
 		centerInclude.setSrc("not_implemented.zul");
-		//centerInclude.setSrc("xform.zul?form=forms/update_installation.xml");
+		// centerInclude.setSrc("xform.zul?form=forms/update_installation.xml");
 	}
-	
+
 	public void onClick$AddStation(Event event) {
 		centerInclude.setSrc("xform.zul?form=forms/create_installation_station.xml");
 	}
 
 	public void onClick$ModifyStation(Event event) {
 		centerInclude.setSrc("not_implemented.zul");
-		//centerInclude.setSrc("xform.zul?form=forms/update_installation_station.xml");
+		// centerInclude.setSrc("xform.zul?form=forms/update_installation_station.xml");
 	}
 
 	public void onClick$AddOrganisation(Event event) {
@@ -143,7 +173,7 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 
 	public void onClick$ModifyOrganisation(Event event) {
 		centerInclude.setSrc("not_implemented.zul");
-		//centerInclude.setSrc("xform.zul?form=forms/update_organisation.xml");
+		// centerInclude.setSrc("xform.zul?form=forms/update_organisation.xml");
 	}
 
 	public void onClick$AddPerson(Event event) {
@@ -152,7 +182,7 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 
 	public void onClick$ModifyPerson(Event event) {
 		centerInclude.setSrc("not_implemented.zul");
-		//centerInclude.setSrc("xform.zul?form=forms/update_person.xml");
+		// centerInclude.setSrc("xform.zul?form=forms/update_person.xml");
 	}
 
 	public void onClick$AddProject(Event event) {
@@ -161,7 +191,7 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 
 	public void onClick$ModifyProject(Event event) {
 		centerInclude.setSrc("not_implemented.zul");
-		//centerInclude.setSrc("xform.zul?form=forms/update_project.xml");
+		// centerInclude.setSrc("xform.zul?form=forms/update_project.xml");
 	}
 
 	public void onClick$AddProjectPerson(Event event) {
@@ -169,10 +199,127 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 	}
 
 	public void onOpen$timeline_plot(Event event) {
-		centerInclude.setSrc("timeline.zul");
+		centerInclude.setSrc("not_implemented.zul");
 	}
 
 	public void onOpen$timeseries_plot(Event event) {
-		centerInclude.setSrc("timeseries.zul");
+		centerInclude.setSrc("not_implemented.zul");
 	}
+
+	public void onClick$ReceiverDeploymentsAdvancedSearch(Event event) {
+		centerInclude.setSrc("xform.zul?form=search/search.html?_dataset=deployments");
+	}
+	
+	public void onClick$TagReleasesAdvancedSearch(Event event) {
+		centerInclude.setSrc("xform.zul?form=search/search.html?_dataset=tag_releases");
+	}
+	
+	public void onClick$ReceiversAdvancedSearch(Event event) {
+		centerInclude.setSrc("xform.zul?form=search/search.html?_dataset=receivers");
+	}
+	
+	public void onClick$TagsAdvancedSearch(Event event) {
+		centerInclude.setSrc("xform.zul?form=search/search.html?_dataset=tags");
+	}
+	
+	public void onClick$DetectionsAdvancedSearch(Event event) {
+		centerInclude.setSrc("xform.zul?form=search/search.html?_dataset=detections");
+	}
+	
+	public void onClick$ViewDetectionSummaryByInstallation(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+
+	public void onClick$ViewDetectionSummaryByClassification(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+
+	public void onClick$ViewDetectionSummaryBytagDevice(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+
+	public void onClick$ViewDetectionSummaryByLocation(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+	
+	public void onClick$DeploymentDetectionTreeView(Event event) {
+		centerInclude.setSrc("deployment_detections_tree.zul");
+	}
+	
+	public void onClick$TagDetectionTreeView(Event event) {
+		centerInclude.setSrc("tag_detections_tree.zul");
+	}
+	
+	public void onClick$ClassificationDetectionTreeView(Event event) {
+		centerInclude.setSrc("classification_detections_tree.zul");
+	}
+
+	public void onClick$ViewTagDevices(Event event) {
+		centerInclude.setSrc("xform.zul?form=forms/view_all_tags.html");
+	}
+
+	public void onClick$ViewReceiverDevices(Event event) {
+		centerInclude.setSrc("xform.zul?form=forms/view_all_receivers.html");
+	}
+
+	public void onClick$ViewDeviceModels(Event event) {
+		centerInclude.setSrc("xform.zul?form=forms/view_all_device_models.html");
+	}
+
+	public void onClick$ViewDeploymentsByProject(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+
+	public void onClick$ViewDeploymentsByOrganisation(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+
+	public void onClick$ViewDeploymentsbyPerson(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+
+	public void onClick$ViewDeployments(Event event) {
+		centerInclude.setSrc("xform.zul?form=forms/view_all_receiver_deployments.html");
+	}
+
+	public void onClick$ViewRetrievalsDownloadsByDeployment(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+
+	public void onClick$ViewRetrievalsDownloadsByReceiver(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+
+	public void onClick$ViewRetrievalsDownloadsByLocation(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+
+	public void onClick$ViewRetrievalsDownloads(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+
+	public void onClick$TagReleasesBySpecies(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+
+	public void onClick$TagReleasesByLocation(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+
+	public void onClick$ViewInstallations(Event event) {
+		centerInclude.setSrc("xform.zul?form=forms/view_all_installations.html");
+	}
+
+	public void onClick$ViewOrganisations(Event event) {
+		centerInclude.setSrc("xform.zul?form=forms/view_all_organisations.html");
+	}
+
+	public void onClick$ViewPeople(Event event) {
+		centerInclude.setSrc("xform.zul?form=forms/view_all_people.html");
+	}
+
+	public void onClick$ViewProjects(Event event) {
+		centerInclude.setSrc("xform.zul?form=forms/view_all_projects.html");
+	}
+
 }

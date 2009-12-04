@@ -1205,7 +1205,9 @@
        <column name="RECEIVER_NAME" primaryKey="false" required="true" type="VARCHAR" size="20" autoIncrement="false"/>
        <column name="RELEASE_LONGITUDE" primaryKey="false" required="false" type="DECIMAL" size="10" autoIncrement="false"/>
        <column name="RELEASE_LATITUDE" primaryKey="false" required="false" type="DECIMAL" size="10" autoIncrement="false"/>
-       <column name="CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="CLASSIFICATION" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
+       <column name="RELEASE_TIMESTAMP" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="FAMILY_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="GENUS_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="SPECIES_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
     </view>
   </database>

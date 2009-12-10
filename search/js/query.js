@@ -57,7 +57,7 @@
          }
          //find _dataset, _max, _count, _format
          is_count = false;
-         SelectFormat(1);
+         SelectFormat(0);
          var params = new Array();
          for(i=0; i<pairs.length; i++){
             if(pairs[i][0]=="_dataset"){

@@ -1236,7 +1236,7 @@
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
     </view>
     
-    <view name="DETECTIONS_BY_CLASSIFICATION_2">
+    <view name="DETECTIONS_BY_CLASSTN_TAG_2">
        <column name="FAMILY" primaryKey="FALSE" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="GENUS" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="SPECIES" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>

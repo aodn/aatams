@@ -3814,7 +3814,8 @@
          <xsd:appinfo>
             <deegreewfs:table>DETECTIONS_BY_INSTLN_STATION_2</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detections_by_instln_station.">
-               <deegreewfs:MappingField field="" type=""/>
+               <deegreewfs:MappingField field="INSTALLATION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -4026,11 +4027,11 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="detections_by_classification" substitutionGroup="gml:_Feature"
-                type="aatams:detections_by_classification_type">
+   <xsd:element name="detections_by_classification_tag" substitutionGroup="gml:_Feature"
+                type="aatams:detections_by_classification_tag_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DETECTIONS_BY_CLASSIFICATION_2</deegreewfs:table>
+            <deegreewfs:table>DETECTIONS_BY_CLASSTN_TAG_2</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detections_by_classification.">
                <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -4040,7 +4041,7 @@
          </xsd:appinfo>
       </xsd:annotation>
    </xsd:element>
-   <xsd:complexType name="detections_by_classification_type">
+   <xsd:complexType name="detections_by_classification_tag_type">
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>

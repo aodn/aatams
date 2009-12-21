@@ -312,7 +312,7 @@ from installation_station;
 --  DDL for View TAG_RELEASE_MIN
 --------------------------------------------------------
 
-  CREATE OR REPLACE VIEW "TAG_RELEASE_MIN" ("RELEASE_ID", "PROJECT_ID", "PROJECT_NAME", "DEVICE_ID", "CODE_NAME", "FAMILY", "GENUS", "SPECIES", "RELEASE_LONGITUDE", "RELEASE_LATITUDE", "RELEASE_TIMESTAMP") AS 
+  CREATE OR REPLACE VIEW "TAG_RELEASE_MIN" ("RELEASE_ID", "PROJECT_ID", "PROJECT_NAME", "TAG_ID", "CODE_NAME", "FAMILY", "GENUS", "SPECIES", "RELEASE_LONGITUDE", "RELEASE_LATITUDE", "RELEASE_TIMESTAMP") AS 
   select display_tag_release.release_id, project.project_id, project.name as project_name, device.device_id, device.code_name,
 family.name as family, genus.name as genus, species.name as species,
 display_tag_release.release_longitude, display_tag_release.release_latitude, display_tag_release.release_timestamp

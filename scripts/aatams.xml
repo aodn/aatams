@@ -1230,35 +1230,35 @@
     </view>
     
     <!-- SUMMARY VIEWS -->
-    <view name="DETECTIONS_BY_INSTLN_STATION_2">
+    <view name="DETECTIONS_BY_INSTLN_STATION">
        <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="INSTALLATION_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-       <column name="STATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="STATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="STATION_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
        <column name="LONGITUDE" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="LATITUDE" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
     </view>
     
-    <view name="DETECTIONS_BY_STATION_TAG_2">
+    <view name="DETECTIONS_BY_STATION_TAG">
        <column name="STATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="TAG_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="TAG_NAME" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
     </view>
     
     <view name="DETECTIONS_BY_PROJECT_TAG">
        <column name="PROJECT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="TAG_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="TAG_NAME" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
     </view>
     
-    <view name="DETECTIONS_BY_CLASSTN_TAG_2">
-       <column name="FAMILY" primaryKey="FALSE" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+    <view name="DETECTIONS_BY_CLASSTN_TAG">
+       <column name="FAMILY" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="GENUS" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="SPECIES" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-       <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="TAG_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="TAG_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
     </view>

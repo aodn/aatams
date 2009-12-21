@@ -1,31 +1,173 @@
 --------------------------------------------------------
---  File created - Tuesday-December-01-2009   
+--  File created - Monday-December-21-2009   
 --------------------------------------------------------
 --------------------------------------------------------
 --  DDL for View CLASSIFICATION_HIERARCHY
 --------------------------------------------------------
 
-  CREATE OR REPLACE VIEW "CLASSIFICATION_HIERARCHY" ("SPECIES_ID", "SPECIES_NAME", "CLASSIFICATION_ID", "SPECIES_COMMON_NAME", "GENUS_ID", "GENUS_NAME", "GENUS_COMMON_NAME", "FAMILY_ID", "FAMILY_NAME", "FAMILY_COMMON_NAME", "FAMILY_LEVEL_ID", "GENUS_LEVEL_ID", "SPECIES_LEVEL_ID") AS 
-  select s.classification_id as species_id, s.name as species_name, f.classification_id, s.common_name as species_common_name,
+  CREATE OR REPLACE VIEW "CLASSIFICATION_HIERARCHY" ("SPECIES_ID", "SPECIES_NAME", "SPECIES_COMMON_NAME", "GENUS_ID", "GENUS_NAME", "GENUS_COMMON_NAME", "FAMILY_ID", "FAMILY_NAME", "FAMILY_COMMON_NAME", "FAMILY_LEVEL_ID", "GENUS_LEVEL_ID", "SPECIES_LEVEL_ID") AS 
+  select s.classification_id as species_id, s.name as species_name, s.common_name as species_common_name,
 g.classification_id as genus_id, g.name as genus_name, g.common_name as genus_common_name,
 f.classification_id as family_id, f.name as family_name, f.common_name as family_common_name,
 10 as family_level_id, 11 as genus_level_id, 12 as species_level_id
 from classification s left outer join classification g on g.classification_id = s.parent_classification_id 
 left outer join classification f on f.classification_id = g.parent_classification_id
-where s.classification_level_id = 12;
+where s.classification_level_id = 12
+order by family_name, genus_name, species_name;
+--------------------------------------------------------
+--  DDL for View DETECTIONS_BY_CLASSTN_TAG
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTIONS_BY_CLASSTN_TAG" ("TAG_ID", "TAG_NAME", "FAMILY", "GENUS", "SPECIES", "COUNT") AS 
+  select display_tag_release.tag_id,
+device.code_name as tag_name,
+(select name from classification where classification_id = display_tag_release.family_id) as family,
+(select name from classification where classification_id = display_tag_release.genus_id) as genus,
+(select name from classification where classification_id = display_tag_release.species_id) as species,
+detections_by_tag_2.count
+from device, display_tag_release, detections_by_tag_2
+where display_tag_release.tag_id = device.device_id 
+and display_tag_release.tag_id = detections_by_tag_2.tag_id
+order by family, genus, species;
+--------------------------------------------------------
+--  DDL for View DETECTIONS_BY_DEPLOYMENT
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTIONS_BY_DEPLOYMENT" ("DEPLOYMENT_ID", "COUNT") AS 
+  select receiver_deployment.deployment_id, sum(detection_count) as count
+from receiver_deployment, deployment_download, download_tag_summary
+where deployment_download.deployment_id = receiver_deployment.deployment_id
+and download_tag_summary.download_id = deployment_download.download_id
+group by receiver_deployment.deployment_id;
+--------------------------------------------------------
+--  DDL for View DETECTIONS_BY_DEPLOYMENT_B
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTIONS_BY_DEPLOYMENT_B" ("DEPLOYMENT_ID", "COUNT") AS 
+  select deployment_id, count(*) as count from detection group by deployment_id;
+--------------------------------------------------------
+--  DDL for View DETECTIONS_BY_INSTLN_STATION
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTIONS_BY_INSTLN_STATION" ("INSTALLATION_ID", "INSTALLATION_NAME", "STATION_ID", "STATION_NAME", "LONGITUDE", "LATITUDE", "COUNT") AS 
+  select installation.installation_id,
+installation.name as installation_name,
+installation_station.station_id,
+installation_station.name as station_name,
+installation_station.longitude,
+installation_station.latitude,
+detections_by_station.count
+from installation, installation_station, detections_by_station
+where installation_station.installation_id = installation.installation_id 
+and detections_by_station.station_id = installation_station.station_id
+order by installation_name, station_name;
+--------------------------------------------------------
+--  DDL for View DETECTIONS_BY_INSTLN_STATION_B
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTIONS_BY_INSTLN_STATION_B" ("INSTALLATION_ID", "INSTALLATION_NAME", "STATION_ID", "STATION_NAME", "LONGITUDE", "LATITUDE", "COUNT") AS 
+  select installation.installation_id,
+installation.name as installation_name,
+installation_station.station_id,
+installation_station.name as station_name,
+installation_station.longitude,
+installation_station.latitude,
+detections_by_station.count
+from installation, installation_station, detections_by_station
+where installation_station.installation_id = installation.installation_id and
+detections_by_station.station_id = installation_station.station_id
+order by installation_name, station_name;
+--------------------------------------------------------
+--  DDL for View DETECTIONS_BY_PROJECT_TAG
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTIONS_BY_PROJECT_TAG" ("PROJECT_ID", "TAG_ID", "TAG_NAME", "COUNT") AS 
+  select project_tag.project_id, project_tag.device_id, device.code_name, project_tag.count
+from (select project_role_person.project_id,
+detection.tag_id as device_id,  
+count(*) as count
+from project_role_person, device, detection
+where project_role_person.project_role_person_id = device.project_role_person_id
+and detection.tag_id = device.device_id
+group by  project_role_person.project_id, detection.tag_id ) project_tag, device
+where device.device_id = project_tag.device_id
+order by project_id, code_name;
+--------------------------------------------------------
+--  DDL for View DETECTIONS_BY_STATION
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTIONS_BY_STATION" ("STATION_ID", "COUNT") AS 
+  select installation_station.station_id,
+sum(download_tag_summary.detection_count) as count
+from installation_station, receiver_deployment, download_tag_summary
+where receiver_deployment.station_id = installation_station.station_id
+and download_tag_summary.deployment_id = receiver_deployment.deployment_id
+group by installation_station.station_id;
+--------------------------------------------------------
+--  DDL for View DETECTIONS_BY_STATION_B
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTIONS_BY_STATION_B" ("STATION_ID", "COUNT") AS 
+  select installation_station.station_id, sum(count) as count from detections_by_deployment, installation_station, receiver_deployment
+where detections_by_deployment.deployment_id = receiver_deployment.deployment_id
+and receiver_deployment.station_id = installation_station.station_id
+group by installation_station.station_id;
+--------------------------------------------------------
+--  DDL for View DETECTIONS_BY_STATION_TAG
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTIONS_BY_STATION_TAG" ("STATION_ID", "TAG_ID", "TAG_NAME", "COUNT") AS 
+  select station_tag.station_id, station_tag.device_id, device.code_name, station_tag.count
+from (select installation_station.station_id,
+download_tag_summary.device_id as device_id,  
+sum(download_tag_summary.detection_count) as count
+from installation_station, receiver_deployment, download_tag_summary
+where receiver_deployment.station_id = installation_station.station_id
+and download_tag_summary.deployment_id = receiver_deployment.deployment_id
+group by installation_station.station_id, download_tag_summary.device_id) station_tag, device
+where device.device_id = station_tag.device_id
+order by station_id, code_name;
+--------------------------------------------------------
+--  DDL for View DETECTIONS_BY_STATION_TAG_B
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTIONS_BY_STATION_TAG_B" ("STATION_ID", "TAG_ID", "TAG_NAME", "COUNT") AS 
+  select station_tag.station_id, station_tag.device_id, device.code_name, station_tag.count
+from (select installation_station.station_id,
+detection.tag_id as device_id,  
+count(*) as count
+from installation_station, receiver_deployment, detection
+where receiver_deployment.station_id = installation_station.station_id
+and detection.deployment_id = receiver_deployment.deployment_id
+group by installation_station.station_id, detection.tag_id ) station_tag, device
+where device.device_id = station_tag.device_id
+order by station_id, code_name;
+--------------------------------------------------------
+--  DDL for View DETECTIONS_BY_TAG
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTIONS_BY_TAG" ("TAG_ID", "COUNT") AS 
+  select tag_id, count(*) as count from detection group by tag_id;
+--------------------------------------------------------
+--  DDL for View DETECTIONS_BY_TAG_2
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "DETECTIONS_BY_TAG_2" ("TAG_ID", "COUNT") AS 
+  select device_id as tag_id, sum(detection_count) as count
+from download_tag_summary
+group by device_id;
 --------------------------------------------------------
 --  DDL for View DETECTION_MAX
 --------------------------------------------------------
 
-  CREATE OR REPLACE VIEW "DETECTION_MAX" ("INSTALLATION_ID", "STATION_ID", "DEPLOYMENT_ID", "DETECTION_ID", "DETECTION_TIMESTAMP", "LONGITUDE", "LATITUDE", "TAG_ID", "TAG_NAME", "RECEIVER_ID", "RECEIVER_NAME", "RELEASE_LONGITUDE", "RELEASE_LATITUDE", "RELEASE_TIMESTAMP", "CLASSIFICATION_ID", "CLASSIFICATION") AS 
+  CREATE OR REPLACE VIEW "DETECTION_MAX" ("INSTALLATION_ID", "STATION_ID", "DEPLOYMENT_ID", "DETECTION_ID", "DETECTION_TIMESTAMP", "LONGITUDE", "LATITUDE", "TAG_ID", "TAG_NAME", "RECEIVER_ID", "RECEIVER_NAME", "RELEASE_LONGITUDE", "RELEASE_LATITUDE", "RELEASE_TIMESTAMP", "FAMILY_ID", "GENUS_ID", "SPECIES_ID") AS 
   select
-rd.installation_id, rd.station_id, rd.deployment_id, d.detection_id, d.detection_timestamp, rd.longitude, rd.latitude, d.tag_id, t.code_name, rd.device_id, r.code_name, tr.release_longitude, tr.release_latitude, tr.release_timestamp, c.classification_id, c.name
+rd.installation_id, rd.station_id, rd.deployment_id, d.detection_id, d.detection_timestamp, rd.longitude, rd.latitude, d.tag_id, t.code_name, rd.device_id, r.code_name, dtr.release_longitude, dtr.release_latitude, dtr.release_timestamp, dtr.family_id, dtr.genus_id, dtr.species_id
 from detection d 
 inner join receiver_deployment rd on rd.deployment_id = d.deployment_id
 inner join tag_device t on t.device_id = d.tag_id
 inner join receiver_device r on r.device_id = rd.device_id
-left outer join tag_release tr on tr.device_id = d.tag_id
-left outer join classification c on c.classification_id = tr.classification_id;
+left outer join display_tag_release dtr on dtr.tag_id = d.tag_id;
 --------------------------------------------------------
 --  DDL for View DETECTION_MIN
 --------------------------------------------------------
@@ -38,28 +180,15 @@ where rd.deployment_id = d.deployment_id
 and d.tag_id = t.device_id
 and rd.device_id = r.device_id;
 --------------------------------------------------------
---  DDL for View DISPLAY_CLASSIFICATION
---------------------------------------------------------
-
-  CREATE OR REPLACE VIEW "DISPLAY_CLASSIFICATION" ("TRUE_CLASSIFICATION_ID", "CLASSIFICATION_ID", "NAME", "COMMON_NAME", "CLASSIFICATION_LEVEL_ID", "CLASSIFICATION_LEVEL_NAME") AS 
-  select species_id as true_classification_id,
-case when classification_level_id = 10 then family_id when classification_level_id = 11 then genus_id else species_id end as classification_id,
-case when classification_level_id = 10 then family_name when classification_level_id = 11 then genus_name else species_name end as name,
-case when classification_level_id = 10 then family_common_name when classification_level_id = 11 then genus_common_name else species_common_name end as common_name,
-classification_level_id as classification_level_id, 
-name as classification_level_name 
-from classification_hierarchy , classification_level
-where classification_hierarchy.species_level_id = classification_level_id or
-classification_hierarchy.genus_level_id = classification_level_id or
-classification_hierarchy.family_level_id = classification_level_id;
---------------------------------------------------------
 --  DDL for View DISPLAY_TAG_RELEASE
 --------------------------------------------------------
 
-  CREATE OR REPLACE VIEW "DISPLAY_TAG_RELEASE" ("RELEASE_ID", "DEVICE_ID", "CLASSIFICATION_ID", "PROJECT_ROLE_PERSON_ID", "SURGERY_ID", "RELEASE_LONGITUDE", "RELEASE_LATITUDE", "RELEASE_GEOGRAPHIC_AREA_ID", "RELEASE_TIMESTAMP", "CAPTURE_LONGITUDE", "CAPTURE_LATITUDE", "CAPTURE_GEOGRAPHIC_AREA_ID", "CAPTURE_TIMESTAMP", "TETHER_TYPE_ID", "IMPLANT_TYPE_ID") AS 
+  CREATE OR REPLACE VIEW "DISPLAY_TAG_RELEASE" ("RELEASE_ID", "TAG_ID", "FAMILY_ID", "GENUS_ID", "SPECIES_ID", "PROJECT_ROLE_PERSON_ID", "SURGERY_ID", "RELEASE_LONGITUDE", "RELEASE_LATITUDE", "RELEASE_GEOGRAPHIC_AREA_ID", "RELEASE_TIMESTAMP", "CAPTURE_LONGITUDE", "CAPTURE_LATITUDE", "CAPTURE_GEOGRAPHIC_AREA_ID", "CAPTURE_TIMESTAMP", "TETHER_TYPE_ID", "IMPLANT_TYPE_ID") AS 
   select tr.RELEASE_ID,
-tr.DEVICE_ID,
-dc.CLASSIFICATION_ID,
+tr.DEVICE_ID as TAG_ID,
+ch.family_id,
+case when tr.displayed_level_id > 10 then ch.genus_id else null end as genus_id,
+case when tr.displayed_level_id > 11 then ch.species_id else null end as species_id,
 tr.PROJECT_ROLE_PERSON_ID,
 tr.SURGERY_ID,
 tr.RELEASE_LONGITUDE,
@@ -71,9 +200,8 @@ tr.CAPTURE_LATITUDE,
 tr.CAPTURE_GEOGRAPHIC_AREA_ID,
 tr.CAPTURE_TIMESTAMP,
 tr.TETHER_TYPE_ID,
-tr.IMPLANT_TYPE_ID from tag_release tr, display_classification dc
-where tr.classification_id = dc.true_classification_id and
-tr.displayed_level_id = dc.classification_level_id;
+tr.IMPLANT_TYPE_ID from tag_release tr, classification_hierarchy ch
+where tr.classification_id = ch.species_id;
 --------------------------------------------------------
 --  DDL for View FAMILY
 --------------------------------------------------------
@@ -180,6 +308,22 @@ from installation_station;
 
   CREATE OR REPLACE VIEW "TAG_DEVICE" ("DEVICE_ID", "CODE_NAME", "DEVICE_TYPE_ID", "MODEL_ID", "SERIAL_NUMBER", "STATUS_ID", "PROJECT_ROLE_PERSON_ID", "DISABLED", "CREATED", "MODIFIED") AS 
   select "DEVICE_ID","CODE_NAME","DEVICE_TYPE_ID","MODEL_ID","SERIAL_NUMBER","STATUS_ID","PROJECT_ROLE_PERSON_ID","DISABLED","CREATED","MODIFIED" from device where device_type_id = 2;
+--------------------------------------------------------
+--  DDL for View TAG_RELEASE_MIN
+--------------------------------------------------------
+
+  CREATE OR REPLACE VIEW "TAG_RELEASE_MIN" ("RELEASE_ID", "PROJECT_ID", "PROJECT_NAME", "DEVICE_ID", "CODE_NAME", "FAMILY", "GENUS", "SPECIES", "RELEASE_LONGITUDE", "RELEASE_LATITUDE", "RELEASE_TIMESTAMP") AS 
+  select display_tag_release.release_id, project.project_id, project.name as project_name, device.device_id, device.code_name,
+family.name as family, genus.name as genus, species.name as species,
+display_tag_release.release_longitude, display_tag_release.release_latitude, display_tag_release.release_timestamp
+from display_tag_release inner join project_role_person 
+on project_role_person.project_role_person_id = display_tag_release.project_role_person_id
+inner join project on project.project_id = project_role_person.project_id
+inner join device on device.device_id = display_tag_release.tag_id
+left outer join family on display_tag_release.family_id = family.classification_id
+left outer join genus on display_tag_release.genus_id = genus.classification_id
+left outer join species on display_tag_release.species_id = species.classification_id
+order by family, genus, species;
 --------------------------------------------------------
 --  DDL for View TRANSMITTER_DEVICE
 --------------------------------------------------------

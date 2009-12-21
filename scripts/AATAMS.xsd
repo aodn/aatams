@@ -3930,13 +3930,13 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="detections_by_instln_station_2" substitutionGroup="gml:_Feature"
-                type="aatams:detections_by_instln_station_2_type">
+   <xsd:element name="detections_by_instln_station" substitutionGroup="gml:_Feature"
+                type="aatams:detections_by_instln_station_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DETECTIONS_BY_INSTLN_STATION_2</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.detections_by_instln_station_2.">
-               <deegreewfs:MappingField field="" type=""/>
+            <deegreewfs:table>DETECTIONS_BY_INSTLN_STATION</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.detections_by_instln_station.">
+               <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3944,7 +3944,7 @@
          </xsd:appinfo>
       </xsd:annotation>
    </xsd:element>
-   <xsd:complexType name="detections_by_instln_station_2_type">
+   <xsd:complexType name="detections_by_instln_station_type">
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
@@ -3964,16 +3964,6 @@
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="INSTALLATION_NAME" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="station" minOccurs="1" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4022,13 +4012,13 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="detections_by_station_tag_2" substitutionGroup="gml:_Feature"
-                type="aatams:detections_by_station_tag_2_type">
+   <xsd:element name="detections_by_station_tag" substitutionGroup="gml:_Feature"
+                type="aatams:detections_by_station_tag_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DETECTIONS_BY_STATION_TAG_2</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.detections_by_station_tag_2.">
-               <deegreewfs:MappingField field="" type=""/>
+            <deegreewfs:table>DETECTIONS_BY_STATION_TAG</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.detections_by_station_tag.">
+               <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -4036,7 +4026,7 @@
          </xsd:appinfo>
       </xsd:annotation>
    </xsd:element>
-   <xsd:complexType name="detections_by_station_tag_2_type">
+   <xsd:complexType name="detections_by_station_tag_type">
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
@@ -4046,16 +4036,6 @@
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="tag" minOccurs="1" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4090,7 +4070,7 @@
          <xsd:appinfo>
             <deegreewfs:table>DETECTIONS_BY_PROJECT_TAG</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detections_by_project_tag.">
-               <deegreewfs:MappingField field="" type=""/>
+               <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -4108,16 +4088,6 @@
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="PROJECT_ID" type="INTEGER"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="tag" minOccurs="1" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4146,13 +4116,13 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="detections_by_classtn_tag_2" substitutionGroup="gml:_Feature"
-                type="aatams:detections_by_classtn_tag_2_type">
+   <xsd:element name="detections_by_classtn_tag" substitutionGroup="gml:_Feature"
+                type="aatams:detections_by_classtn_tag_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DETECTIONS_BY_CLASSTN_TAG_2</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.detections_by_classtn_tag_2.">
-               <deegreewfs:MappingField field="" type=""/>
+            <deegreewfs:table>DETECTIONS_BY_CLASSTN_TAG</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.detections_by_classtn_tag.">
+               <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -4160,7 +4130,7 @@
          </xsd:appinfo>
       </xsd:annotation>
    </xsd:element>
-   <xsd:complexType name="detections_by_classtn_tag_2_type">
+   <xsd:complexType name="detections_by_classtn_tag_type">
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
@@ -4190,16 +4160,6 @@
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="SPECIES" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="tag" minOccurs="1" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>

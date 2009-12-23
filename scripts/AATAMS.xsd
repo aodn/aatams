@@ -4259,13 +4259,13 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-  <xsd:element name="deployment_download_tag" substitutionGroup="gml:_Feature"
+   <xsd:element name="deployment_download_tag" substitutionGroup="gml:_Feature"
                 type="aatams:deployment_download_tag_type">
       <xsd:annotation>
          <xsd:appinfo>
             <deegreewfs:table>DEPLOYMENT_DOWNLOAD_TAG</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.deployment_download_tag.">
-               <deegreewfs:MappingField field="PKEY" type="VARCHAR"/>
+               <deegreewfs:MappingField field="PKEY" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -4277,16 +4277,6 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="pkey" minOccurs="1" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PKEY" type="INTEGER"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
                <xsd:element name="tag_fid" minOccurs="1" maxOccurs="1" type="xsd:integer">
                   <xsd:annotation>
                      <xsd:appinfo>
@@ -4307,7 +4297,17 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="release_fid" minOccurs="1" maxOccurs="1" type="xsd:string">
+               <xsd:element name="detection_count" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="DETECTION_COUNT" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="release_fid" minOccurs="0" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -4332,7 +4332,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="GENIS" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="GENUS" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>

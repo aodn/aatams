@@ -11,7 +11,7 @@
       var help_open = false; //for ToggleHelp()
       var query_max = true; //for ToggleQuery()
       var citation_open = true; //for ToggleCitation()
-      var show_filter = true; //for testing;
+      var show_filter = false; //for testing;
 
       /**
       Initialisation, called on body onload event
@@ -19,7 +19,7 @@
       function Init(){
          try{
             document.getElementById('wfs_uri').value = wfs;
-	    document.getElementById('access_date').innerHTML = new Date().format("d MMM yyyy");
+	    //document.getElementById('access_date').innerHTML = new Date().format("d MMM yyyy");
             params_div = document.getElementById('params');
             if(!params_div)
                throw new Error("initialisation failed to find 'params' div element");

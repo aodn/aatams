@@ -41,13 +41,6 @@
 									<th>Member Count</th>
 								</tr>
 							</xsl:when>
-							<xsl:when test="gml:featureMember[1]/aatams:installation">
-								<tr>
-									<th>Installation FID</th>
-									<th>Name</th>
-									<th>Installation type</th>
-								</tr>
-							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:receiver_deployment">
 								<tr>
 									<th colspan="1" rowspan="2">Deployment FID</th>
@@ -283,6 +276,70 @@
 									<th colspan="1" rowspan="1">Detection Count</th>
 								</tr>
 							</xsl:when>
+							<xsl:when test="gml:featureMember[1]/aatams:installation">
+								<tr>
+									<th>ID</th>
+									<th>Name</th>
+									<th>Configuration Type</th>
+								</tr>
+							</xsl:when>
+							<xsl:when test="gml:featureMember[1]/aatams:project">
+								<tr>
+									<th>ID</th>
+									<th>Name</th>
+								</tr>
+							</xsl:when>
+							<xsl:when test="gml:featureMember[1]/aatams:person">
+								<tr>
+									<th colspan="1" rowspan="2">ID</th>
+									<th colspan="1" rowspan="2">Name</th>
+									<th colspan="1" rowspan="2">Personal Mobile Number</th>
+									<th colspan="1" rowspan="2">Home Phone Number</th>
+									<th colspan="1" rowspan="2">email</hr>
+									<th colspan="5" rowspan="1">Home Physical Address</th>
+									<th colspan="5" rowspan="1">Home Postal Address</th>
+								</tr>
+								<tr>
+									<th colspan="1" rowspan="1">Address 1</th>
+									<th colspan="1" rowspan="1">Address 2</th>
+									<th colspan="1" rowspan="1">State</th>
+									<th colspan="1" rowspan="1">Country</th>
+									<th colspan="1" rowspan="1">Postcode</th>
+								</tr>
+								<tr>
+									<th colspan="1" rowspan="1">Address 1</th>
+									<th colspan="1" rowspan="1">Address 2</th>
+									<th colspan="1" rowspan="1">State</th>
+									<th colspan="1" rowspan="1">Country</th>
+									<th colspan="1" rowspan="1">Postcode</th>
+								</tr>
+							</xsl:when>
+							<xsl:when test="gml:featureMember[1]/aatams:organisation">
+								<tr>
+									<th colspan="1" rowspan="2">ID</th>
+									<th colspan="1" rowspan="2">Name</th>
+									<th colspan="1" rowspan="2">Personal Mobile Number</th>
+									<th colspan="1" rowspan="2">Home Phone Number</th>
+									<th colspan="1" rowspan="2">email</hr>
+									<th colspan="5" rowspan="1">Home Physical Address</th>
+									<th colspan="5" rowspan="1">Home Postal Address</th>
+								</tr>
+								<tr>
+									<th colspan="1" rowspan="1">Address 1</th>
+									<th colspan="1" rowspan="1">Address 2</th>
+									<th colspan="1" rowspan="1">State</th>
+									<th colspan="1" rowspan="1">Country</th>
+									<th colspan="1" rowspan="1">Postcode</th>
+								</tr>
+								<tr>
+									<th colspan="1" rowspan="1">Address 1</th>
+									<th colspan="1" rowspan="1">Address 2</th>
+									<th colspan="1" rowspan="1">State</th>
+									<th colspan="1" rowspan="1">Country</th>
+									<th colspan="1" rowspan="1">Postcode</th>
+								</tr>
+							</xsl:when>
+
 						</xsl:choose>
 					</thead>
 					<tbody>

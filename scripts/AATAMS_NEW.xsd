@@ -366,23 +366,6 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="deployment_download_tag_ref" minOccurs="0" maxOccurs="unbounded" type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:deployment_download_tag">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DOWNLOAD_ID" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DOWNLOAD_ID" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>
@@ -884,7 +867,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="scheduled_recovery_date" minOccurs="0" maxOccurs="1" type="xsd:date">
+               <xsd:element name="scheduled_recovery_date" minOccurs="1" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -938,42 +921,6 @@
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="COMMENTS" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-                 <xsd:element name="deployment_recovery_ref" minOccurs="0" maxOccurs="unbounded"
-                            type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:deployment_recovery">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>             
-                 <xsd:element name="deployment_download_ref" minOccurs="0" maxOccurs="unbounded"
-                            type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:deployment_download">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1315,24 +1262,6 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="installation_station_ref" minOccurs="0" maxOccurs="unbounded"
-                            type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:installation_station">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="INSTALLATION_ID" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="INSTALLATION_ID" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-	       </xsd:element>
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>
@@ -1393,7 +1322,7 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <!--xsd:element name="installation_ref" minOccurs="1" maxOccurs="1"
+               <xsd:element name="installation_ref" minOccurs="1" maxOccurs="1"
                             type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
@@ -1410,7 +1339,7 @@
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
-               </xsd:element-->
+               </xsd:element>
                <xsd:element name="curtain_position" minOccurs="0" maxOccurs="1" type="xsd:integer">
                   <xsd:annotation>
                      <xsd:appinfo>
@@ -4011,12 +3940,12 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="detections_by_installation_station" substitutionGroup="gml:_Feature"
-                type="aatams:detections_by_installation_station_type">
+   <xsd:element name="detections_by_instln_station" substitutionGroup="gml:_Feature"
+                type="aatams:detections_by_instln_station_type">
       <xsd:annotation>
          <xsd:appinfo>
             <deegreewfs:table>DETECTIONS_BY_INSTLN_STATION</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.detections_by_installation_station.">
+            <deegreewfs:gmlId prefix="aatams.detections_by_instln_station.">
                <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -4025,7 +3954,7 @@
          </xsd:appinfo>
       </xsd:annotation>
    </xsd:element>
-   <xsd:complexType name="detections_by_installation_station_type">
+   <xsd:complexType name="detections_by_instln_station_type">
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
@@ -4085,24 +4014,6 @@
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="COUNT" type="INTEGER"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="detections_by_station_tag_ref" minOccurs="1" maxOccurs="1"
-                            type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:detections_by_station_tag">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4215,12 +4126,12 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="detections_by_classification_tag" substitutionGroup="gml:_Feature"
-                type="aatams:detections_by_classification_tag_type">
+   <xsd:element name="detections_by_classtn_tag" substitutionGroup="gml:_Feature"
+                type="aatams:detections_by_classtn_tag_type">
       <xsd:annotation>
          <xsd:appinfo>
             <deegreewfs:table>DETECTIONS_BY_CLASSTN_TAG</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.detections_by_classification_tag.">
+            <deegreewfs:gmlId prefix="aatams.detections_by_classtn_tag.">
                <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -4229,7 +4140,7 @@
          </xsd:appinfo>
       </xsd:annotation>
    </xsd:element>
-   <xsd:complexType name="detections_by_classification_tag_type">
+   <xsd:complexType name="detections_by_classtn_tag_type">
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>

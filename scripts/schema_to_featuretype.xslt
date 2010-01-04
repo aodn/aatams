@@ -232,6 +232,9 @@
 							<xsl:when test="@type = 'TIMESTAMP'">
 								<xsl:text>xsd:dateTime</xsl:text>
 							</xsl:when>
+							<xsl:when test="@type = 'DATE'">
+								<xsl:text>xsd:date</xsl:text>
+							</xsl:when>
 							<xsl:when test="@type = 'LONGVARCHAR'">
 								<xsl:text>xsd:string</xsl:text>
 							</xsl:when>

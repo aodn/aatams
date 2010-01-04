@@ -96,6 +96,7 @@
 								mode="binding" />
 							<xf:bind id="error_message"
 								nodeset="instance('inst_response')//ServiceException"
+								calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
 								type="xsd:string" />
 							<xf:bind id="success_message"
 								nodeset="instance('inst_response')//ogc:FeatureId/@fid"

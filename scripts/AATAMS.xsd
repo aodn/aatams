@@ -932,42 +932,6 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-                 <xsd:element name="deployment_recovery_ref" minOccurs="0" maxOccurs="unbounded"
-                            type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:deployment_recovery">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>             
-                 <xsd:element name="deployment_download_ref" minOccurs="0" maxOccurs="unbounded"
-                            type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:deployment_download">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>

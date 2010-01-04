@@ -46,7 +46,7 @@
 					<tab label="Data Entry" id="data_entry" />
 					<tab label="Data Search" id="data_search" />
 					<tab label="Tools" id="tools" />
-					<tab label="Map" id="map" />
+					<!--tab label="Map" id="map" /-->
 					<tab label="Links" id="links" />
 					<tab label="Help" id="help" />
 				</tabs>
@@ -201,10 +201,10 @@
 								<menupopup>
 									<menuitem label="By Project"
 										id="ViewDeploymentsByProject" />
-									<menuitem label="By Organisation"
+									<!--menuitem label="By Organisation"
 										id="ViewDeploymentsByOrganisation" />
 									<menuitem label="By Person"
-										id="ViewDeploymentsByPerson" />
+										id="ViewDeploymentsByPerson" /-->
 									<menuitem label="All"
 										id="ViewDeployments" />
 								</menupopup>
@@ -212,13 +212,13 @@
 							<menu label="Receiver Retrievals/Downloads">
 								<menupopup>
 									<menuitem label="By Deployment"
-										id="ViewRetrievalsDownloadsByDeployment" />
-									<menuitem label="By Receiver Device"
+										id="ViewDownloadsByDeployment" />
+									<!--menuitem label="By Receiver Device"
 										id="ViewRetrievalsDownloadsByReceiver" />
 									<menuitem label="By Location"
 										id="ViewRetrievalsDownloadsByLocation" />
 									<menuitem label="All"
-										id="ViewRetrievalsDownloads" />
+										id="ViewRetrievalsDownloads" /-->
 								</menupopup>
 							</menu>
 							<menu label="Tag Releases">
@@ -242,91 +242,30 @@
 								</menupopup>
 							</menu>
 						</menubar>
-
 					</tabpanel>
 					<!-- Tools-->
 					<tabpanel
 						style="padding:0px;margin:0px;border:0px;">
-						<groupbox id="timeline_plot" width="100%"
-							open="false">
-							<caption
-								image="img/SimileTimeline-24x24.png" label="Timeline Plot" />
-							<zscript>
-	import au.org.emii.aatams.zk.tree.*;
-	DetectionsTree mdl = new DetectionsTree(new RootNode(DetectionsTreeMode.DEPLOYMENTS));
-	DetectionsTreeMenuRenderer rdr = new DetectionsTreeMenuRenderer();
-</zscript>
-							<tree id="timeline_tree" model="${mdl}"
-								treeitemRenderer="${rdr}" />
-						</groupbox>
-						<groupbox id="timeseries_plot" width="100%"
-							open="false">
-							<caption
-								image="img/SimileTimeplot-24x24.png" label="Timeseries Plot" />
-							<tree id="timeseries_tree" width="100%"
-								rows="6" checkmark="true" multiple="true">
-								<treechildren>
-									<treeitem>
-										<treerow>
-											<treecell label="Item 1" />
-										</treerow>
-									</treeitem>
-									<treeitem open="false">
-										<treerow>
-											<treecell label="Item 2" />
-										</treerow>
-										<treechildren>
-											<treeitem>
-												<treerow>
-													<treecell
-														label="Item 2.1" />
-												</treerow>
-												<treechildren>
-													<treeitem>
-														<treerow>
-															<treecell
-																label="Item 2.1.1" />
-														</treerow>
-													</treeitem>
-													<treeitem>
-														<treerow>
-															<treecell
-																label="Item 2.1.2" />
-														</treerow>
-													</treeitem>
-												</treechildren>
-											</treeitem>
-											<treeitem>
-												<treerow>
-													<treecell
-														label="Item 2.2" />
-												</treerow>
-												<treechildren>
-													<treeitem>
-														<treerow>
-															<treecell
-																label="Item 2.2.1" />
-														</treerow>
-													</treeitem>
-												</treechildren>
-											</treeitem>
-										</treechildren>
-									</treeitem>
-									<treeitem label="Item 3" />
-								</treechildren>
-							</tree>
-						</groupbox>
-						<groupbox id="worksheets" width="100%"
-							open="false">
-							<caption
-								image="img/SimileTimeplot-24x24.png"
-								label="Generate Worksheets" />
-						</groupbox>
+						<menubar id="tools_menu" width="100%"
+							orient="vertical">
+							<menu label="Worksheets" id="Worksheets">
+								<menupopup>
+									<menu label="Receiver Deployments" id="ReceiverDeploymentWorksheets">
+										<menupopup>
+											<menuitem label="Retrievals"
+												id="DeploymentRetrievalWorksheets" />
+											<menuitem label="Data Downloads"
+												id="DeploymentDataDownloadWorksheets" />
+										</menupopup>
+									</menu>
+								</menupopup>
+							</menu>
+						</menubar>
 					</tabpanel>
 					<!-- Map -->
-					<tabpanel
+					<!--tabpanel
 						style="padding:0px;margin:0px;border:0px;">
-					</tabpanel>
+					</tabpanel-->
 					<!-- Links-->
 					<tabpanel
 						style="padding:0px;margin:0px;border:0px;">

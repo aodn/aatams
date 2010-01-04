@@ -1,0 +1,12 @@
+/* 
+
+IMOS css 
+
+/fileadmin/www_files/imos_nf.css
+
+additional style to hide main navigation on node/facility pages
+
+
+*/
+
+div#navcontainer { display:none; }

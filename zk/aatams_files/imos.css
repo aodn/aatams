@@ -1,0 +1,284 @@
+/* <style>
+
+/* IMOS css */
+
+/* --------------------------------- */
+/* 			GENERAL SETUP */
+/* --------------------------------- */
+* { margin:0; padding:0; }
+h1,h2,h3,h4,h5,h6,p,blockquote,form,label,ul,ol,dl,fieldset,address{ margin:0.5em 0; }
+ul{ margin-left:2em; }
+fieldset{ padding:.5em; }
+body{ font-size:80%; font-family:"Lucida Sans Unicode",Verdana,Arial,Helvetica,sans-serif; line-height:1.3em; margin:0; }
+
+body { /* background:url(img/bluewater_tile02-.jpg) */
+}
+a {color: #36C; text-decoration:none; }
+a:hover {color: #c6bb14;}
+
+/* IMAGE CAPTION */
+dd.csc-textpic-caption { color:#444; font-style:normal; font-size:10px; text-align:left; /* border-bottom:1px solid #ddd; */ }
+
+/* SPECIAL FOOTNOTE */
+#imos-footnote { 
+    position:absolute; 
+    bottom:5px; 
+    padding-left:10px; 
+    font-size:12px;
+    color:#487493;
+    }
+
+/* --------------------------------- */
+/* 			HEADINGS */
+/* --------------------------------- */
+h1,h2,h3,h4,h5,h6 {color: #367EA6; padding-top: 6px;}
+h1 {font-size: 1.4em;margin-bottom: 5px;}
+h2 {font-size: 1.2em;}
+h3 {font-size: 1.1em;}
+
+/* --------------------------------- */
+/* 			LAYOUT */
+/* --------------------------------- */
+#wrap{ border:1px solid #999; height:100% !Important; height:1%; }
+
+body { text-align:center; /*center hack*/ }
+#wrap { width:909px; text-align:left; margin:0 auto; /*center hack*/ }
+#header { text-align:left; background:url(img/header2.gif); width:909px; height:199px; }
+#footer { clear:both; padding:2px; text-align:center; }
+#footer span { vertical-align:bottom; }
+
+/* 3-column (UNUSED)
+	#main-body { float:left; width:75%; } 
+	#sidebar-2 { float:right; width:25%; overflow:hidden; margin-left:-3px; } 
+	#content { float:right; width:66.5%; overflow:hidden; } 
+	#sidebar { float:left; width:33.5%; overflow:hidden; }
+*/
+
+/* 2-column */
+#main-body { float:left; width:100%; }
+#sidebar-2 { display:none; }
+#content { float:right; width:75%; overflow:hidden; position:relative; } /* position:relative; ADDED 4/5/09 */
+#sidebar { float:left; width:25%; overflow:hidden; }
+
+.inside { padding:10px; }
+
+
+/* --------------------------------- */
+/* 			BREADCRUMBS */
+/* --------------------------------- */
+.breadcrumb-class { color:#aaa;  }
+.breadcrumb-class a {  } /* font-weight:bold;  color:#0a0; */
+
+
+/* --------------------------------- */
+/* 			NAVIGATION */
+/* --------------------------------- 
+#navcontainer h1 { margin:0px; }
+*/
+
+
+/* see suckerfish below
+			#navcontainer ul { background:#ddd; margin:0; }
+
+			#navcontainer li { background:transparent; list-style:none; padding:5px; }
+			#navcontainer li:hover { background:#d6cb24; }
+
+			#navcontainer a { display:block; width:100%; height:100%; }
+			#navcontainer a:hover { background:#d6cb24; color:#fff; }
+*/
+
+
+/* --------------------------------- */
+/* 			SECOND NAVIGATION */
+/* --------------------------------- 
+#navcontainer2 h1 { margin:0px; }
+*/
+
+/* 
+
+using suckerfish instead?
+
+
+#navcontainer2 { clear:both; }
+
+#navcontainer2 ul { background:#eee; margin:0; }
+
+#navcontainer2 li { background:transparent; list-style:none; padding:5px; }
+#navcontainer2 li:hover { background:#d6cb24; } 
+
+#navcontainer2 a { display:block; width:100%; height:100%; }
+#navcontainer2 a:hover { background:#d6cb24; color:#f8f; }
+*/
+
+
+
+/* ---------------------------------============================================        */
+/* 			SUCKERFISH TEST 7/11/07        */
+/* ---------------------------------===========================================       
+	from http://snippets.dzone.com/posts/show/2150
+
+	
+	
+      imos colours
+light blue .. .. .. 6BC7F0
+darker blue . .. .. 51BDEC
+darkest blue  .. .. 396E90
+darkest bluer .. .. 194e70
+yellow  .. .. .. .. D7CC25
+
+
+*/
+
+/* Level 1 suckerfish ------------------------------------ */
+
+#nav, #nav UL,#nav2, #nav2 UL { 
+	padding:0; 
+	margin:0; 
+	list-style:none;
+}
+
+#nav, #nav2 { margin-left:0px; } /* this IS REQUIRED, even though it seems to repeat the above */
+
+
+#nav LI,#nav2 LI { 
+	float:left; 
+	background:#e8f0ff; 
+	border-top:4px solid #fafaff; 
+	border-bottom:4px solid #fafaff; /* 41aDdC */
+	padding:5px 12px 3px 21px; /* padding:5px 21px 3px 21px; */
+	width:13em; list-style:none; /* added */
+}
+	
+#nav LI.last,#nav2 LI.last { 
+	background-image:0;
+}
+#nav LI A,#nav2 LI A { 
+	display:block; 
+	color:#194e70;  
+	font-size:13px; 
+/*	font-weight:bold;  */
+	letter-spacing:1px;
+}
+#nav LI:hover , #nav LI.sfhover,#nav2 LI:hover , #nav2 LI.sfhover { 
+	background:0; 
+	background:#E4E7E5; 
+	border-top-color:#fafaff; 
+	border-bottom-color:#D6CB24;
+	position: static; /* IE7 fix added 7/11/07 */
+	}
+#nav LI.act,#nav2 LI.act { 
+	background:0; 
+	background-color:#e4e7e5; 
+	border-top-color:#e4e7e5; 
+	border-bottom-color:#e4e7e5;
+}
+#nav LI.act A,#nav2 LI.act A { 
+	color:#396E90;
+}
+
+/* Level 2 suckerfish ------------------------------------ */
+
+#nav LI UL,#nav2 LI UL { 
+	position:absolute; 
+	width:30em; 
+	left:-999em; 
+	margin:7px 0 0 30px; /* was margin:7px 0 0 -21px; */
+	}
+HTML>BODY #nav LI UL,HTML>BODY #nav2 LI UL { 
+	margin-left:60px; /* was margin-left:0px; */
+}
+#nav LI UL LI,#nav2 LI UL LI { 
+	width:30em; 
+	background:#FFF; 
+	border:1px solid #E0E1DB; 
+	border-width:0 1px 1px 1px; 
+	padding:0 0 0 7px;
+	list-style:none; /* added */
+	}
+#nav LI:hover UL LI A, #nav LI.sfhover UL LI A,#nav2 LI:hover UL LI A, #nav2 LI.sfhover UL LI A { 
+	text-transform:none; 
+	letter-spacing:normal; 
+	font-weight:normal; 
+	color:#396E90; 
+	padding:4px 2px 4px 2px;
+}
+#nav LI UL LI:hover, #nav LI UL LI.sfhover,#nav2 LI UL LI:hover, #nav2 LI UL LI.sfhover { 
+	background:#f1f3f2; /* url(img/bg_nav_arrt-.gif) no-repeat right 8px; */
+	border-bottom-color:#E0E1DB;
+}
+#nav LI UL LI.act2,#nav2 LI UL LI.act2 { background-color:#f1f3f2; }
+
+#nav LI:hover UL, #nav LI.sfhover UL,#nav2 LI:hover UL, #nav2 LI.sfhover UL { left:auto;}
+#nav A,#nav2 A { text-decoration:none;}
+#nav A:hover,#nav2 A:hover { text-decoration:none;}
+
+#navcontainer2 h3 a { color:#367ea6; }
+#navcontainer2 h3 a:hover { color:#c6bb14; }
+/* --------------------------------- */
+/* 			FE LOGIN FORM */
+/* --------------------------------- */
+table.csc-loginform p { color:#396E90; }
+table.csc-loginform input { width:100px; }
+
+/* --------------------------------- */
+/* 			SITE MAP */
+/* --------------------------------- */
+.csc-sitemap ul { margin-left:3px; padding-left:20px; }
+.csc-sitemap ul li { font-weight:bold; font-size:110%; }
+.csc-sitemap ul ul li { font-weight:bold; font-size:95%; }
+.csc-sitemap ul ul ul li { font-weight:normal; font-size:95%; }
+
+/* --------------------------------- */
+/* 			TT_NEWS */
+/* --------------------------------- */
+hr.clearer { border:1px solid #f9e5ff; }
+
+.news-list-container { background-color:transparent; border:0; }
+.news-list-item { background-color:transparent; border:0; }
+.news-list-item h3 { background-color:#51BDEC; border:0; }
+.news-list-date { background-color:#E4ECEB; } /* e0f0ff */
+.news-list-morelink {}
+.news-list-item {}
+
+.news-single-item { background-color:transparent; border:0; }
+.news-single-item h2 { color:#396E90; }
+.news-single-item h3 {}
+.news-single-timedata {}
+.news-single-category {}
+.news-single-author {}
+.news-single-backlink {}
+
+.news-latest-container{ background-color:transparent; border:1px solid #ddd; padding-bottom:20px; margin-bottom:20px; }
+.news-latest-container h2{ display:none; }
+.news-latest-item{ background-color:transparent; border:0; }
+.news-latest-date{ float:left; padding-top:3px; padding-right:10px;}
+.news-latest-item h3 { font-weight:normal; display:inline; float:left; margin:0; padding:0; width:550px; }
+.news-latest-morelink{ display:none; }
+.news-latest-gotoarchive{ display:none; }
+.news-latest-container HR.clearer{ border:0; }
+.news-latest-container p.bodytext{ display:none; }
+
+/* --------------------------------- */
+/* 			PUBLICATIONS             */
+/* --------------------------------- */
+.pubcat { color:#888; font-size:smaller; background-color:#eee; white-space:nowrap; }
+
+/* --------------------------------- */
+/* 			TABLES (table element for Marian 18/12/07 - set to use class "general" */
+/* --------------------------------- */
+table.general { width:100%; }
+table.general tr.tr-0 td { font-weight:bold }
+/* table.general tr.tr-odd { background-color:#f0f0f0; } */
+table.general td { padding-right:4px; }
+
+/* --------------------------------- */
+/* 			OTHER */
+/* --------------------------------- */
+
+#wrap { background-color:#fafaff; }
+#header { background-color:#ccc; }
+#main-body { background-color:#fafaff; }
+#sidebar-2 { background-color:#cdd; }
+#content { background:url(img/imos_footer.gif) no-repeat bottom right #fff;  padding-bottom:130px; }
+#sidebar { background-color:#fafaff; }
+

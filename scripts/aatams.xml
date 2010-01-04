@@ -279,6 +279,7 @@
       <column name="LONGITUDE" primaryKey="false" required="true" type="DECIMAL" size="8,5" autoIncrement="false"/>
       <column name="LATITUDE" primaryKey="false" required="true" type="DECIMAL" size="7,5" autoIncrement="false"/>
       <column name="DEPLOYMENT_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
+      <column name="SCHEDULED_RECOVERY_DATE" primaryKey="false" required="true" type="DATE" size="23,3" autoIncrement="false"/>
       <column name="ACOUSTIC_RELEASE_ID" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="MOORING_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="BOTTOM_DEPTH" primaryKey="false" required="true"  type="DECIMAL" size="5,2" autoIncrement="false"/>

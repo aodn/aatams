@@ -35,6 +35,9 @@
                            <aatams:implant_type_ref>
                               <aatams:implant_type/>
                            </aatams:implant_type_ref>
+                           <aatams:classification_level_ref>
+                              <aatams:classification_level/>
+                           </aatams:classification_level_ref>
                         </aatams:tag_release>
                      </gml:featureMember>
                   </wfs:FeatureCollection>
@@ -44,6 +47,7 @@
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
                <classification_id/>
+               <classification_level_id/>
                <transmitter_device_id/>
                <implant_type_id/>
                <project_id/>
@@ -52,6 +56,8 @@
          </xf:instance>
          <xf:instance id="inst_classification"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:classification"/>
+         <xf:instance id="inst_classification_level"
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:classification_level"/>
          <xf:instance id="inst_transmitter_device"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:transmitter_device"/>
          <xf:instance id="inst_implant_type"
@@ -114,7 +120,12 @@
          <xf:bind id="implant_type" nodeset="instance('inst_subfeatures')//implant_type_id"
                   type="xsd:string"
                   required="false()"/>
+         <xf:bind id="classification_level"
+                  nodeset="instance('inst_subfeatures')//classification_level_id"
+                  type="xsd:string"
+                  required="false()"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
+                  calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
                   type="xsd:string"/>
          <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
                   type="xsd:string"/>
@@ -129,6 +140,10 @@
                <xf:insert nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification"
                           origin="instance('inst_classification')//aatams:classification[@gml:id=instance('inst_subfeatures')/classification_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification"
+                          at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:classification_level_ref/aatams:classification_level"
+                          origin="instance('inst_classification_level')//aatams:classification_level[@gml:id=instance('inst_subfeatures')/classification_level_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:classification_level_ref/aatams:classification_level"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:transmitter_device_ref/aatams:transmitter_device"
                           origin="instance('inst_transmitter_device')//aatams:transmitter_device[@gml:id=instance('inst_subfeatures')/transmitter_device_id]"/>
@@ -151,6 +166,8 @@
          <xf:action ev:event="set-selected">
             <xf:setvalue ref="instance('inst_subfeatures')//classification_id"
                          value="instance('inst_classification')//aatams:classification[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//classification_level_id"
+                         value="instance('inst_classification_level')//aatams:classification_level[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')//transmitter_device_id"
                          value="instance('inst_transmitter_device')//aatams:transmitter_device[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')//implant_type_id"
@@ -220,6 +237,13 @@
             <xf:select1 bind="implant_type" appearance="minimal" incremental="true()">
                <xf:label>Implant Type</xf:label>
                <xf:itemset nodeset="instance('inst_implant_type')//aatams:implant_type">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:name"/>
+               </xf:itemset>
+            </xf:select1>
+            <xf:select1 bind="classification_level" appearance="minimal" incremental="true()">
+               <xf:label>Displayed Level</xf:label>
+               <xf:itemset nodeset="instance('inst_classification_level')//aatams:classification_level">
                   <xf:value ref="@gml:id"/>
                   <xf:label ref="aatams:name"/>
                </xf:itemset>

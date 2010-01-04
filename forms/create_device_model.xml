@@ -62,6 +62,7 @@
          <xf:bind id="name" nodeset="instance('inst_data')//aatams:name" type="xsd:string"
                   required="true()"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
+                  calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
                   type="xsd:string"/>
          <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
                   type="xsd:string"/>

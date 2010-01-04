@@ -32,6 +32,7 @@
                            <aatams:longitude/>
                            <aatams:latitude/>
                            <aatams:deployment_timestamp/>
+                           <aatams:scheduled_recovery_date/>
                            <aatams:acoustic_release/>
                            <aatams:mooring_type_ref>
                               <aatams:mooring_type/>
@@ -109,6 +110,10 @@
                   nodeset="instance('inst_data')//aatams:deployment_timestamp"
                   type="xsd:dateTime"
                   required="true()"/>
+         <xf:bind id="scheduled_recovery_date"
+                  nodeset="instance('inst_data')//aatams:scheduled_recovery_date"
+                  type="xsd:date"
+                  required="true()"/>
          <xf:bind id="acoustic_release" nodeset="instance('inst_data')//aatams:acoustic_release"
                   type="xsd:string"
                   required="false()"/>
@@ -122,6 +127,7 @@
                   type="xsd:string"
                   required="false()"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
+                  calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
                   type="xsd:string"/>
          <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
                   type="xsd:string"/>
@@ -234,6 +240,9 @@
             </xf:input>
             <xf:input bind="deployment_timestamp" incremental="true()">
                <xf:label>Deployment Timestamp</xf:label>
+            </xf:input>
+            <xf:input bind="scheduled_recovery_date" incremental="true()">
+               <xf:label>Scheduled Recovery Date</xf:label>
             </xf:input>
             <xf:input bind="acoustic_release" incremental="true()">
                <xf:label>Acoustic Release</xf:label>

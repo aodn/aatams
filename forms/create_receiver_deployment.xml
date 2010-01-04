@@ -113,7 +113,7 @@
          <xf:bind id="scheduled_recovery_date"
                   nodeset="instance('inst_data')//aatams:scheduled_recovery_date"
                   type="xsd:date"
-                  required="true()"/>
+                  required="false()"/>
          <xf:bind id="acoustic_release" nodeset="instance('inst_data')//aatams:acoustic_release"
                   type="xsd:string"
                   required="false()"/>

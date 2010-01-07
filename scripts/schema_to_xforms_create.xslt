@@ -510,8 +510,7 @@
 				</xsl:attribute>
 				<xf:label>
 					<xsl:call-template name="proper-case">
-						<xsl:with-param name="toconvert"
-							select="translate(replace(@name,'_ID',''),'_',' ')" />
+						<xsl:with-param name="toconvert" select="translate(replace(@name,'_ID',''),'_',' ')" />
 					</xsl:call-template>
 				</xf:label>
 				<xsl:call-template name="help">

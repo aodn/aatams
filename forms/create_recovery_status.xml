@@ -62,21 +62,27 @@
       </xf:model>
    </head>
    <body><!--Debug--><div class="form">
-         <legend>ADD RECOVERY STATUS</legend>
+         <label>ADD RECOVERY STATUS</label>
          <div class="form-contents">
-            <xf:input bind="name" incremental="true()">
-               <xf:label>Name</xf:label>
-            </xf:input>
-            <xf:submit submission="s01">
-               <xf:label>Save</xf:label>
-            </xf:submit>
-            <xf:trigger>
-               <xf:label>Reset</xf:label>
-               <xf:reset ev:event="DOMActivate"/>
-               <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
-               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
-               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
-            </xf:trigger>
+            <div class="xfinput">
+               <xf:input bind="name" incremental="true()">
+                  <xf:label>Name</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfsubmit">
+               <xf:submit submission="s01">
+                  <xf:label>Save</xf:label>
+               </xf:submit>
+            </div>
+            <div class="xftrigger" style="clear:none;">
+               <xf:trigger>
+                  <xf:label>Reset</xf:label>
+                  <xf:reset ev:event="DOMActivate"/>
+                  <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
+                  <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
+                  <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
+               </xf:trigger>
+            </div>
             <xf:group>
                <xf:output bind="error_message" class="error">
                   <xf:label>Error:</xf:label>

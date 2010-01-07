@@ -125,60 +125,92 @@
       </xf:model>
    </head>
    <body><!--Debug--><div class="form">
-         <legend>ADD PERSON</legend>
+         <label>ADD PERSON</label>
          <div class="form-contents">
-            <xf:input bind="name" incremental="true()">
-               <xf:label>Name</xf:label>
-            </xf:input>
-            <xf:input bind="personal_mobile_number" incremental="true()">
-               <xf:label>Personal Mobile Number</xf:label>
-            </xf:input>
-            <xf:input bind="home_phone_number" incremental="true()">
-               <xf:label>Home Phone Number</xf:label>
-            </xf:input>
-            <xf:input bind="email" incremental="true()">
-               <xf:label>Email</xf:label>
-            </xf:input>
-            <xf:input bind="home_physical_address_1" incremental="true()">
-               <xf:label>Home Physical Address 1</xf:label>
-            </xf:input>
-            <xf:input bind="home_physical_address_2" incremental="true()">
-               <xf:label>Home Physical Address 2</xf:label>
-            </xf:input>
-            <xf:input bind="home_physical_address_state" incremental="true()">
-               <xf:label>Home Physical Address State</xf:label>
-            </xf:input>
-            <xf:input bind="home_physical_address_country" incremental="true()">
-               <xf:label>Home Physical Address Country</xf:label>
-            </xf:input>
-            <xf:input bind="home_physical_address_postcode" incremental="true()">
-               <xf:label>Home Physical Address Postcode</xf:label>
-            </xf:input>
-            <xf:input bind="home_postal_address_1" incremental="true()">
-               <xf:label>Home Postal Address 1</xf:label>
-            </xf:input>
-            <xf:input bind="home_postal_address_2" incremental="true()">
-               <xf:label>Home Postal Address 2</xf:label>
-            </xf:input>
-            <xf:input bind="home_postal_address_state" incremental="true()">
-               <xf:label>Home Postal Address State</xf:label>
-            </xf:input>
-            <xf:input bind="home_postal_address_country" incremental="true()">
-               <xf:label>Home Postal Address Country</xf:label>
-            </xf:input>
-            <xf:input bind="home_postal_address_postcode" incremental="true()">
-               <xf:label>Home Postal Address Postcode</xf:label>
-            </xf:input>
-            <xf:submit submission="s01">
-               <xf:label>Save</xf:label>
-            </xf:submit>
-            <xf:trigger>
-               <xf:label>Reset</xf:label>
-               <xf:reset ev:event="DOMActivate"/>
-               <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
-               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
-               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
-            </xf:trigger>
+            <div class="xfinput">
+               <xf:input bind="name" incremental="true()">
+                  <xf:label>Name</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="personal_mobile_number" incremental="true()">
+                  <xf:label>Personal Mobile Number</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="home_phone_number" incremental="true()">
+                  <xf:label>Home Phone Number</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="email" incremental="true()">
+                  <xf:label>Email</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="home_physical_address_1" incremental="true()">
+                  <xf:label>Home Physical Address 1</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="home_physical_address_2" incremental="true()">
+                  <xf:label>Home Physical Address 2</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="home_physical_address_state" incremental="true()">
+                  <xf:label>Home Physical Address State</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="home_physical_address_country" incremental="true()">
+                  <xf:label>Home Physical Address Country</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="home_physical_address_postcode" incremental="true()">
+                  <xf:label>Home Physical Address Postcode</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="home_postal_address_1" incremental="true()">
+                  <xf:label>Home Postal Address 1</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="home_postal_address_2" incremental="true()">
+                  <xf:label>Home Postal Address 2</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="home_postal_address_state" incremental="true()">
+                  <xf:label>Home Postal Address State</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="home_postal_address_country" incremental="true()">
+                  <xf:label>Home Postal Address Country</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="home_postal_address_postcode" incremental="true()">
+                  <xf:label>Home Postal Address Postcode</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfsubmit">
+               <xf:submit submission="s01">
+                  <xf:label>Save</xf:label>
+               </xf:submit>
+            </div>
+            <div class="xftrigger" style="clear:none;">
+               <xf:trigger>
+                  <xf:label>Reset</xf:label>
+                  <xf:reset ev:event="DOMActivate"/>
+                  <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
+                  <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
+                  <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
+               </xf:trigger>
+            </div>
             <xf:group>
                <xf:output bind="error_message" class="error">
                   <xf:label>Error:</xf:label>

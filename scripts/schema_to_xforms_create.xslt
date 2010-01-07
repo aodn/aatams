@@ -463,26 +463,30 @@
 	</xsl:template>
 	<xsl:template name="form">
 		<div class="form">
-			<legend>
+			<label>
 				<xsl:text>ADD </xsl:text>
 				<xsl:value-of
 					select="translate(upper-case(@name),'_',' ')" />
-			</legend>
+			</label>
 			<div class="form-contents">
 				<xsl:apply-templates select="column" mode="form" />
-				<xf:submit submission="s01">
-					<xf:label>Save</xf:label>
-				</xf:submit>
-				<xf:trigger>
-					<xf:label>Reset</xf:label>
-					<xf:reset ev:event="DOMActivate" />
-					<xf:dispatch ev:event="DOMActivate"
-						name="set-selected" target="model1" />
-					<xf:delete ev:event="DOMActivate"
-						nodeset="instance('inst_response')//ServiceException" />
-					<xf:delete ev:event="DOMActivate"
-						nodeset="instance('inst_response')//ogc:FeatureId/@fid" />
-				</xf:trigger>
+				<div class="xfsubmit">
+					<xf:submit submission="s01">
+						<xf:label>Save</xf:label>
+					</xf:submit>
+				</div>
+				<div class="xftrigger" style="clear:none;">
+					<xf:trigger>
+						<xf:label>Reset</xf:label>
+						<xf:reset ev:event="DOMActivate" />
+						<xf:dispatch ev:event="DOMActivate"
+							name="set-selected" target="model1" />
+						<xf:delete ev:event="DOMActivate"
+							nodeset="instance('inst_response')//ServiceException" />
+						<xf:delete ev:event="DOMActivate"
+							nodeset="instance('inst_response')//ogc:FeatureId/@fid" />
+					</xf:trigger>
+				</div>
 				<xf:group>
 					<xf:output bind="error_message" class="error">
 						<xf:label>Error:</xf:label>
@@ -495,26 +499,28 @@
 		</div>
 	</xsl:template>
 	<xsl:template match="column" mode="form">
-		<xsl:element name="xf:input">
-			<xsl:attribute name="bind">
-				<xsl:value-of
-					select="lower-case(replace(@name,'_ID',''))" />
-			</xsl:attribute>
-			<xsl:attribute name="incremental">
-				<xsl:text>true()</xsl:text>
-			</xsl:attribute>
-			<xf:label>
-				<xsl:call-template name="proper-case">
-					<xsl:with-param name="toconvert"
-						select="translate(replace(@name,'_ID',''),'_',' ')" />
+		<div class="xfinput">
+			<xsl:element name="xf:input">
+				<xsl:attribute name="bind">
+					<xsl:value-of
+						select="lower-case(replace(@name,'_ID',''))" />
+				</xsl:attribute>
+				<xsl:attribute name="incremental">
+					<xsl:text>true()</xsl:text>
+				</xsl:attribute>
+				<xf:label>
+					<xsl:call-template name="proper-case">
+						<xsl:with-param name="toconvert"
+							select="translate(replace(@name,'_ID',''),'_',' ')" />
+					</xsl:call-template>
+				</xf:label>
+				<xsl:call-template name="help">
+					<xsl:with-param name="key">
+						<xsl:value-of select="@name" />
+					</xsl:with-param>
 				</xsl:call-template>
-			</xf:label>
-			<xsl:call-template name="help">
-				<xsl:with-param name="key">
-					<xsl:value-of select="@name" />
-				</xsl:with-param>
-			</xsl:call-template>
-		</xsl:element>
+			</xsl:element>
+		</div>
 	</xsl:template>
 	<xsl:template
 		match="column[@name = 'STATUS_ID' or @primaryKey = 'true']"
@@ -524,6 +530,7 @@
 	<xsl:template
 		match="column[@name = 'COMMENTS' or @name = 'CC_EMAIL_ADDRESSES']"
 		mode="form">
+		<div class="xftextarea">
 		<xsl:element name="xf:textarea">
 			<xsl:attribute name="bind">
 				<xsl:value-of select="lower-case(@name)" />
@@ -540,19 +547,23 @@
 				</xsl:with-param>
 			</xsl:call-template>
 		</xsl:element>
+		</div>
 	</xsl:template>
 	<xsl:template
 		match="column[../foreign-key[reference/@local=current()/@name]]"
 		mode="form" priority="3">
-		<xsl:call-template name="select1-from-foreign-key">
-			<xsl:with-param name="fk_node"
-				select="../foreign-key[reference/@local=current()/@name]" />
-		</xsl:call-template>
+		<div class="xfselect1">
+			<xsl:call-template name="select1-from-foreign-key">
+				<xsl:with-param name="fk_node"
+					select="../foreign-key[reference/@local=current()/@name]" />
+			</xsl:call-template>
+		</div>
 	</xsl:template>
 	<xsl:template match="column[@name = 'PROJECT_ROLE_PERSON_ID']"
 		mode="form" priority="4">
 		<!-- convert to project and person_role -->
 		<div class="dependant-selects">
+			<div class="xfselect1">
 			<xf:select1 bind="project" appearance="minimal"
 				incremental="true()">
 				<xf:label>Project</xf:label>
@@ -571,6 +582,8 @@
 					</xsl:with-param>
 				</xsl:call-template>
 			</xf:select1>
+			</div>
+			<div class="xfselect1">
 			<xf:select1 bind="project_person" appearance="minimal"
 				incremental="true()">
 				<xf:label>Person(Role)</xf:label>
@@ -585,45 +598,50 @@
 					</xsl:with-param>
 				</xsl:call-template>
 			</xf:select1>
+			</div>
 		</div>
 	</xsl:template>
 	<xsl:template match="column[@name = 'DEPLOYMENT_ID']" mode="form"
 		priority="4">
 		<!-- convert to project and person_role -->
 		<div class="dependant-selects">
-			<xf:select1 bind="installation" appearance="minimal"
-				incremental="true()">
-				<xf:label>Installation</xf:label>
-				<xf:itemset
-					nodeset="instance('inst_installation')//aatams:installation">
-					<xf:value ref="@gml:id" />
-					<xf:label ref="aatams:name" />
-				</xf:itemset>
-				<xf:action ev:event="xforms-value-changed">
-					<xf:setvalue
-						ref="instance('inst_subfeatures')//installation_deployment_id"
-						value="" />
-				</xf:action>
-				<xsl:call-template name="help">
-					<xsl:with-param name="key">
-						<xsl:value-of select="@name" />
-					</xsl:with-param>
-				</xsl:call-template>
-			</xf:select1>
-			<xf:select1 bind="installation_deployment"
-				appearance="minimal" incremental="true()">
-				<xf:label>Deployment</xf:label>
-				<xf:itemset
-					nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
-					<xf:value ref="@gml:id" />
-					<xf:label ref="aatams:name" />
-				</xf:itemset>
-				<xsl:call-template name="help">
-					<xsl:with-param name="key">
-						<xsl:value-of select="@name" />
-					</xsl:with-param>
-				</xsl:call-template>
-			</xf:select1>
+			<div class="xfselect1">
+				<xf:select1 bind="installation" appearance="minimal"
+					incremental="true()">
+					<xf:label>Installation</xf:label>
+					<xf:itemset
+						nodeset="instance('inst_installation')//aatams:installation">
+						<xf:value ref="@gml:id" />
+						<xf:label ref="aatams:name" />
+					</xf:itemset>
+					<xf:action ev:event="xforms-value-changed">
+						<xf:setvalue
+							ref="instance('inst_subfeatures')//installation_deployment_id"
+							value="" />
+					</xf:action>
+					<xsl:call-template name="help">
+						<xsl:with-param name="key">
+							<xsl:value-of select="@name" />
+						</xsl:with-param>
+					</xsl:call-template>
+				</xf:select1>
+			</div>
+			<div class="xfselect1">
+				<xf:select1 bind="installation_deployment"
+					appearance="minimal" incremental="true()">
+					<xf:label>Deployment</xf:label>
+					<xf:itemset
+						nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
+						<xf:value ref="@gml:id" />
+						<xf:label ref="aatams:name" />
+					</xf:itemset>
+					<xsl:call-template name="help">
+						<xsl:with-param name="key">
+							<xsl:value-of select="@name" />
+						</xsl:with-param>
+					</xsl:call-template>
+				</xf:select1>
+			</div>
 		</div>
 	</xsl:template>
 	<xsl:template
@@ -631,36 +649,40 @@
 		mode="form" priority="4">
 		<!-- convert to installation and station -->
 		<div class="dependant-selects">
-			<xf:select1 bind="installation" appearance="minimal"
-				incremental="true()">
-				<xf:label>Installation</xf:label>
-				<xf:itemset
-					nodeset="instance('inst_installation')//aatams:installation">
-					<xf:value ref="@gml:id" />
-					<xf:label ref="aatams:name" />
-				</xf:itemset>
-				<xf:action ev:event="xforms-value-changed">
-					<xf:setvalue
-						ref="instance('inst_subfeatures')/station_id" value="" />
-				</xf:action>
-			</xf:select1>
-			<xf:select1 bind="station" appearance="minimal"
-				incremental="true()">
-				<xf:label>Station</xf:label>
-				<xf:itemset
-					nodeset="instance('inst_station')//aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
-					<xf:value ref="@gml:id" />
-					<xf:label ref="aatams:name" />
-				</xf:itemset>
-				<xf:action ev:event="xforms-value-changed">
-					<xf:setvalue
-						ref="instance('inst_data')//aatams:longitude"
-						value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:longitude" />
-					<xf:setvalue
-						ref="instance('inst_data')//aatams:latitude"
-						value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude" />
-				</xf:action>
-			</xf:select1>
+			<div class="xfselect1">
+				<xf:select1 bind="installation" appearance="minimal"
+					incremental="true()">
+					<xf:label>Installation</xf:label>
+					<xf:itemset
+						nodeset="instance('inst_installation')//aatams:installation">
+						<xf:value ref="@gml:id" />
+						<xf:label ref="aatams:name" />
+					</xf:itemset>
+					<xf:action ev:event="xforms-value-changed">
+						<xf:setvalue
+							ref="instance('inst_subfeatures')/station_id" value="" />
+					</xf:action>
+				</xf:select1>
+			</div>
+			<div class="xfselect1">
+				<xf:select1 bind="station" appearance="minimal"
+					incremental="true()">
+					<xf:label>Station</xf:label>
+					<xf:itemset
+						nodeset="instance('inst_station')//aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
+						<xf:value ref="@gml:id" />
+						<xf:label ref="aatams:name" />
+					</xf:itemset>
+					<xf:action ev:event="xforms-value-changed">
+						<xf:setvalue
+							ref="instance('inst_data')//aatams:longitude"
+							value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:longitude" />
+						<xf:setvalue
+							ref="instance('inst_data')//aatams:latitude"
+							value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude" />
+					</xf:action>
+				</xf:select1>
+			</div>
 		</div>
 	</xsl:template>
 	<xsl:template

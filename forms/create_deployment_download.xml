@@ -136,67 +136,95 @@
       </xf:model>
    </head>
    <body><!--Debug--><div class="form">
-         <legend>ADD DEPLOYMENT DOWNLOAD</legend>
+         <label>ADD DEPLOYMENT DOWNLOAD</label>
          <div class="form-contents">
             <div class="dependant-selects">
-               <xf:select1 bind="installation" appearance="minimal" incremental="true()">
-                  <xf:label>Installation</xf:label>
-                  <xf:itemset nodeset="instance('inst_installation')//aatams:installation">
-                     <xf:value ref="@gml:id"/>
-                     <xf:label ref="aatams:name"/>
-                  </xf:itemset>
-                  <xf:action ev:event="xforms-value-changed">
-                     <xf:setvalue ref="instance('inst_subfeatures')//installation_deployment_id" value=""/>
-                  </xf:action>
-               </xf:select1>
-               <xf:select1 bind="installation_deployment" appearance="minimal" incremental="true()">
-                  <xf:label>Deployment</xf:label>
-                  <xf:itemset nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
-                     <xf:value ref="@gml:id"/>
-                     <xf:label ref="aatams:name"/>
-                  </xf:itemset>
-               </xf:select1>
+               <div class="xfselect1">
+                  <xf:select1 bind="installation" appearance="minimal" incremental="true()">
+                     <xf:label>Installation</xf:label>
+                     <xf:itemset nodeset="instance('inst_installation')//aatams:installation">
+                        <xf:value ref="@gml:id"/>
+                        <xf:label ref="aatams:name"/>
+                     </xf:itemset>
+                     <xf:action ev:event="xforms-value-changed">
+                        <xf:setvalue ref="instance('inst_subfeatures')//installation_deployment_id" value=""/>
+                     </xf:action>
+                  </xf:select1>
+               </div>
+               <div class="xfselect1">
+                  <xf:select1 bind="installation_deployment" appearance="minimal" incremental="true()">
+                     <xf:label>Deployment</xf:label>
+                     <xf:itemset nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
+                        <xf:value ref="@gml:id"/>
+                        <xf:label ref="aatams:name"/>
+                     </xf:itemset>
+                  </xf:select1>
+               </div>
             </div>
-            <xf:input bind="recovery_timestamp" incremental="true()">
-               <xf:label>Recovery Timestamp</xf:label>
-            </xf:input>
-            <xf:input bind="download_timestamp" incremental="true()">
-               <xf:label>Download Timestamp</xf:label>
-            </xf:input>
-            <xf:input bind="time_correction_start" incremental="true()">
-               <xf:label>Time Correction Start</xf:label>
-            </xf:input>
-            <xf:input bind="time_correction_end" incremental="true()">
-               <xf:label>Time Correction End</xf:label>
-            </xf:input>
-            <xf:input bind="time_correction_type" incremental="true()">
-               <xf:label>Time Correction Type</xf:label>
-            </xf:input>
-            <xf:input bind="clock_drift" incremental="true()">
-               <xf:label>Clock Drift</xf:label>
-            </xf:input>
-            <xf:input bind="pings" incremental="true()">
-               <xf:label>Pings</xf:label>
-            </xf:input>
-            <xf:input bind="detections" incremental="true()">
-               <xf:label>Detections</xf:label>
-            </xf:input>
-            <xf:textarea bind="cc_email_addresses">
-               <xf:label>Cc Email Addresses</xf:label>
-            </xf:textarea>
-            <xf:textarea bind="comments">
-               <xf:label>Comments</xf:label>
-            </xf:textarea>
-            <xf:submit submission="s01">
-               <xf:label>Save</xf:label>
-            </xf:submit>
-            <xf:trigger>
-               <xf:label>Reset</xf:label>
-               <xf:reset ev:event="DOMActivate"/>
-               <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
-               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
-               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
-            </xf:trigger>
+            <div class="xfinput">
+               <xf:input bind="recovery_timestamp" incremental="true()">
+                  <xf:label>Recovery Timestamp</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="download_timestamp" incremental="true()">
+                  <xf:label>Download Timestamp</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="time_correction_start" incremental="true()">
+                  <xf:label>Time Correction Start</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="time_correction_end" incremental="true()">
+                  <xf:label>Time Correction End</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="time_correction_type" incremental="true()">
+                  <xf:label>Time Correction Type</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="clock_drift" incremental="true()">
+                  <xf:label>Clock Drift</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="pings" incremental="true()">
+                  <xf:label>Pings</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="detections" incremental="true()">
+                  <xf:label>Detections</xf:label>
+               </xf:input>
+            </div>
+            <div class="xftextarea">
+               <xf:textarea bind="cc_email_addresses">
+                  <xf:label>Cc Email Addresses</xf:label>
+               </xf:textarea>
+            </div>
+            <div class="xftextarea">
+               <xf:textarea bind="comments">
+                  <xf:label>Comments</xf:label>
+               </xf:textarea>
+            </div>
+            <div class="xfsubmit">
+               <xf:submit submission="s01">
+                  <xf:label>Save</xf:label>
+               </xf:submit>
+            </div>
+            <div class="xftrigger" style="clear:none;">
+               <xf:trigger>
+                  <xf:label>Reset</xf:label>
+                  <xf:reset ev:event="DOMActivate"/>
+                  <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
+                  <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
+                  <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
+               </xf:trigger>
+            </div>
             <xf:group>
                <xf:output bind="error_message" class="error">
                   <xf:label>Error:</xf:label>

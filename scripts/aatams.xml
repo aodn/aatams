@@ -1053,6 +1053,7 @@
       </unique>
     </view>
 
+    <!--  FLAT VIEW ACROSS THE INSTALLATION, INSTALLATION_STATION & RECEIVER_DEPLOYMENT TABLES -->
     <view name="INSTALLATION_DEPLOYMENT">
       <column name="DEPLOYMENT_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="INSTALLATION_FID" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1064,6 +1065,9 @@
       <column name="DEPLOYMENT_FID" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="DEPLOYMENT_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="50" autoIncrement="false"/>
+      <column name="SCHEDULED_RECOVERY_DATE" primaryKey="false" required="false" type="DATE" size="50" autoIncrement="false"/>
+      <column name="LONGITUDE" primaryKey="false" required="true" type="DECIMAL" size="8,5" autoIncrement="false"/>
+      <column name="LATITUDE" primaryKey="false" required="true" type="DECIMAL" size="7,5" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	  <unique-column name="INSTALLATION_NAME"/>
 	  <unique-column name="NAME"/>

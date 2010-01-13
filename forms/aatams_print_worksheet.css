@@ -1,6 +1,6 @@
-body { width:100%; background-color:#b2b2b2;  font-family: Arial, Helvetica, sans-serif; margin:0%; padding:0%; }
+body { background-color:#b2b2b2;  font-family: Arial, Helvetica, sans-serif; margin:0%; padding:0%; }
 label { font-weight: bold; }
-div.form { border:outset 2px gray; padding:20px; float:left; background-color:#DBF0F7; width:auto; }
+div.form { border:outset 2px gray; padding:20px; float:left; background-color:#DBF0F7;}
 div.form-contents { width:100%; margin-top:10px; }
 div.xfinput, div.xfselect1, div.xfoutput, div.xftextarea, div.xftrigger, div.xfsubmit {float:left; clear:left;}
 span.xforms-control > span { display:table; }
@@ -13,7 +13,6 @@ div.dependant-selects { float:left; clear:left; width:100%; border:dashed 1px gr
 div#buttons { float:left;clear:left; }
 div#messages { float:left;clear:left; }
 div#success-message span.xforms-output > span > span > span.value { color:blue; border:none; width:400pt; font-weight: bold; }
-div#error-message { color:red; }
 div#error-message span.xforms-output > span > span > span.value { color:red; border:none; width:400pt; font-weight: bold; }
 span.xforms-output > span > span > span.value { color:blue; }
 div#console {float:left; clear:left; display:none;}
@@ -23,6 +22,8 @@ div.worksheet-section { width:100%; float:left; clear:left; margin-bottom:20pt; 
 div.worksheet-contents span.xforms-control > span { margin-bottom:3pt; }
 div.worksheet-contents span.xforms-control > span > span > span {  padding:1pt; }
 div.worksheet-contents span.xforms-output > span > span > span.value { color:black; border:dashed 1px black; width:370pt; font-weight: bold; }
+div.worksheet-contents span.xforms-input > span > span > span.value { border:dashed 1px black; }
 div.narrow span.xforms-output > span > span > span.value {  width:90pt; }
 div.medium span.xforms-output > span > span > span.value {  width:180pt; }
-div.worksheet-contents label.xforms-label { width: 160pt; text-align:left; }
+div.worksheet-contents label.xforms-label { width: 150pt; text-align:left; }
+#toggle_select_deployment, #buttons { display:none; }

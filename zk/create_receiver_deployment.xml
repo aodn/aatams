@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="forms/xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams"
+      xmlns:xf="http://www.w3.org/2002/xforms"
+      xmlns:ev="http://www.w3.org/2001/xml-events"
+      xmlns:wfs="http://www.opengis.net/wfs"
+      xmlns:ogc="http://www.opengis.net/ogc"
+      xmlns:ows="http://www.opengis.net/ows"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:gml="http://www.opengis.net/gml">
+   <head>
+      <title>AATAMS Web Interface</title>
+      <link href="forms/aatams.css" rel="stylesheet" type="text/css"/>
+      <xf:model id="model1">
+         <xf:instance id="inst_data">
+            <wfs:Transaction version="1.1.0" service="WFS">
+               <wfs:Insert>
+                  <wfs:FeatureCollection>
+                     <gml:featureMember>
+                        <aatams:receiver_deployment>
+                           <aatams:receiver_device_ref>
+                              <aatams:receiver_device/>
+                           </aatams:receiver_device_ref>
+                           <aatams:installation_ref>
+                              <aatams:installation/>
+                           </aatams:installation_ref>
+                           <aatams:station_ref>
+                              <aatams:station/>
+                           </aatams:station_ref>
+                           <aatams:project_person_ref>
+                              <aatams:project_person/>
+                           </aatams:project_person_ref>
+                           <aatams:longitude/>
+                           <aatams:latitude/>
+                           <aatams:deployment_timestamp/>
+                           <aatams:scheduled_recovery_date/>
+                           <aatams:acoustic_release/>
+                           <aatams:mooring_type_ref>
+                              <aatams:mooring_type/>
+                           </aatams:mooring_type_ref>
+                           <aatams:bottom_depth/>
+                           <aatams:comments/>
+                        </aatams:receiver_deployment>
+                     </gml:featureMember>
+                  </wfs:FeatureCollection>
+               </wfs:Insert>
+            </wfs:Transaction>
+         </xf:instance>
+         <xf:instance id="inst_subfeatures">
+            <data xmlns="">
+               <receiver_device_id/>
+               <installation_id/>
+               <station_id/>
+               <mooring_type_id/>
+               <project_id/>
+               <project_person_id/>
+            </data>
+         </xf:instance>
+         <xf:instance id="inst_receiver_device"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:receiver_device"/>
+         <xf:instance id="inst_installation"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation"/>
+         <xf:instance id="inst_station"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:station"/>
+         <xf:instance id="inst_mooring_type"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:mooring_type"/>
+         <xf:instance id="inst_project_person"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person"/>
+         <xf:instance id="inst_project"
+                      src="../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project"/>
+         <xf:instance id="inst_response">
+            <dummy xmlns="">
+               <ows:Exception/>
+               <wfs:TransactionResponse>
+                  <wfs:InsertResults>
+                     <wfs:Feature>
+                        <ogc:FeatureId/>
+                     </wfs:Feature>
+                  </wfs:InsertResults>
+               </wfs:TransactionResponse>
+            </dummy>
+         </xf:instance>
+         <xf:bind id="receiver_device" nodeset="instance('inst_subfeatures')//receiver_device_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="installation" nodeset="instance('inst_subfeatures')//installation_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="installation_station"
+                  nodeset="instance('inst_subfeatures')//installation_station_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="station" nodeset="instance('inst_subfeatures')//station_id"
+                  type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="project" nodeset="instance('inst_subfeatures')//project_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="project_person" nodeset="instance('inst_subfeatures')//project_person_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="longitude" nodeset="instance('inst_data')//aatams:longitude"
+                  type="xsd:decimal"
+                  required="true()"
+                  constraint=". &gt;= -180 and . &lt;= 180"/>
+         <xf:bind id="latitude" nodeset="instance('inst_data')//aatams:latitude"
+                  type="xsd:decimal"
+                  required="true()"
+                  constraint=". &gt;= -90 and . &lt;= 90"/>
+         <xf:bind id="deployment_timestamp"
+                  nodeset="instance('inst_data')//aatams:deployment_timestamp"
+                  type="xsd:dateTime"
+                  required="true()"/>
+         <xf:bind id="scheduled_recovery_date"
+                  nodeset="instance('inst_data')//aatams:scheduled_recovery_date"
+                  type="xsd:date"
+                  required="false()"/>
+         <xf:bind id="acoustic_release" nodeset="instance('inst_data')//aatams:acoustic_release"
+                  type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="mooring_type" nodeset="instance('inst_subfeatures')//mooring_type_id"
+                  type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="bottom_depth" nodeset="instance('inst_data')//aatams:bottom_depth"
+                  type="xsd:decimal"
+                  required="true()"/>
+         <xf:bind id="comments" nodeset="instance('inst_data')//aatams:comments"
+                  type="xsd:string"
+                  required="false()"/>
+         <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
+                  calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
+                  type="xsd:string"/>
+         <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
+                  type="xsd:string"/>
+         <xf:submission id="s01" ref="instance('inst_data')" method="post"
+                        action="../../deegree-wfs/services"
+                        replace="instance"
+                        instance="inst_response">
+            <xf:action ev:event="xforms-submit">
+               <xf:insert nodeset="instance('inst_data')//aatams:receiver_device_ref/aatams:receiver_device"
+                          origin="instance('inst_receiver_device')//aatams:receiver_device[@gml:id=instance('inst_subfeatures')/receiver_device_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:receiver_device_ref/aatams:receiver_device"
+                          at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:installation_ref/aatams:installation"
+                          origin="instance('inst_installation')//aatams:installation[@gml:id=instance('inst_subfeatures')/installation_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:installation_ref/aatams:installation"
+                          at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:station_ref/aatams:station"
+                          origin="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:station_ref/aatams:station" at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:mooring_type_ref/aatams:mooring_type"
+                          origin="instance('inst_mooring_type')//aatams:mooring_type[@gml:id=instance('inst_subfeatures')/mooring_type_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:mooring_type_ref/aatams:mooring_type"
+                          at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
+                          origin="instance('inst_project_person')//aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
+                          at="1"/>
+            </xf:action>
+            <xf:message level="modeless" ev:event="xforms-submit-error">
+									Submit error.
+								</xf:message>
+         </xf:submission>
+         <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
+         <xf:action ev:event="set-selected">
+            <xf:setvalue ref="instance('inst_subfeatures')//receiver_device_id"
+                         value="instance('inst_receiver_device')//aatams:receiver_device[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//installation_id"
+                         value="instance('inst_installation')//aatams:installation[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//station_id"
+                         value="instance('inst_station')//aatams:station[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//mooring_type_id"
+                         value="instance('inst_mooring_type')//aatams:mooring_type[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//project_id"
+                         value="instance('inst_project')//aatams:project[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')//project_person_id"
+                         value="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
+            <xf:dispatch name="xforms-revalidate" target="model1"/>
+         </xf:action>
+      </xf:model>
+   </head>
+   <body><!--Debug--><div class="form">
+         <legend>ADD RECEIVER DEPLOYMENT</legend>
+         <div class="form-contents">
+            <xf:select1 bind="receiver_device" appearance="minimal" incremental="true()">
+               <xf:label>Device</xf:label>
+               <xf:itemset nodeset="instance('inst_receiver_device')//aatams:receiver_device">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:name"/>
+               </xf:itemset>
+            </xf:select1>
+            <div class="dependant-selects">
+               <xf:select1 bind="installation" appearance="minimal" incremental="true()">
+                  <xf:label>Installation</xf:label>
+                  <xf:itemset nodeset="instance('inst_installation')//aatams:installation">
+                     <xf:value ref="@gml:id"/>
+                     <xf:label ref="aatams:name"/>
+                  </xf:itemset>
+                  <xf:action ev:event="xforms-value-changed">
+                     <xf:setvalue ref="instance('inst_subfeatures')/station_id" value=""/>
+                  </xf:action>
+               </xf:select1>
+               <xf:select1 bind="station" appearance="minimal" incremental="true()">
+                  <xf:label>Station</xf:label>
+                  <xf:itemset nodeset="instance('inst_station')//aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
+                     <xf:value ref="@gml:id"/>
+                     <xf:label ref="aatams:name"/>
+                  </xf:itemset>
+                  <xf:action ev:event="xforms-value-changed">
+                     <xf:setvalue ref="instance('inst_data')//aatams:longitude"
+                                  value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:longitude"/>
+                     <xf:setvalue ref="instance('inst_data')//aatams:latitude"
+                                  value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude"/>
+                  </xf:action>
+               </xf:select1>
+            </div>
+            <div class="dependant-selects">
+               <xf:select1 bind="project" appearance="minimal" incremental="true()">
+                  <xf:label>Project</xf:label>
+                  <xf:itemset nodeset="instance('inst_project')//aatams:project">
+                     <xf:value ref="@gml:id"/>
+                     <xf:label ref="aatams:name"/>
+                  </xf:itemset>
+                  <xf:action ev:event="xforms-value-changed">
+                     <xf:setvalue ref="instance('inst_subfeatures')//project_person_id" value=""/>
+                  </xf:action>
+               </xf:select1>
+               <xf:select1 bind="project_person" appearance="minimal" incremental="true()">
+                  <xf:label>Person(Role)</xf:label>
+                  <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
+                     <xf:value ref="@gml:id"/>
+                     <xf:label ref="aatams:person_role"/>
+                  </xf:itemset>
+               </xf:select1>
+            </div>
+            <xf:input bind="longitude" incremental="true()">
+               <xf:label>Longitude</xf:label>
+            </xf:input>
+            <xf:input bind="latitude" incremental="true()">
+               <xf:label>Latitude</xf:label>
+            </xf:input>
+            <xf:input bind="deployment_timestamp" incremental="true()">
+               <xf:label>Deployment Timestamp</xf:label>
+            </xf:input>
+            <xf:input bind="scheduled_recovery_date" incremental="true()">
+               <xf:label>Scheduled Recovery Date</xf:label>
+            </xf:input>
+            <xf:input bind="acoustic_release" incremental="true()">
+               <xf:label>Acoustic Release</xf:label>
+            </xf:input>
+            <xf:select1 bind="mooring_type" appearance="minimal" incremental="true()">
+               <xf:label>Mooring Type</xf:label>
+               <xf:itemset nodeset="instance('inst_mooring_type')//aatams:mooring_type">
+                  <xf:value ref="@gml:id"/>
+                  <xf:label ref="aatams:name"/>
+               </xf:itemset>
+            </xf:select1>
+            <xf:input bind="bottom_depth" incremental="true()">
+               <xf:label>Bottom Depth</xf:label>
+            </xf:input>
+            <xf:textarea bind="comments">
+               <xf:label>Comments</xf:label>
+            </xf:textarea>
+            <xf:submit submission="s01">
+               <xf:label>Save</xf:label>
+            </xf:submit>
+            <xf:trigger>
+               <xf:label>Reset</xf:label>
+               <xf:reset ev:event="DOMActivate"/>
+               <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
+               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
+               <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
+            </xf:trigger>
+            <xf:group>
+               <xf:output bind="error_message" class="error">
+                  <xf:label>Error:</xf:label>
+               </xf:output>
+               <xf:output bind="success_message">
+                  <xf:label>New Record Id:</xf:label>
+               </xf:output>
+            </xf:group>
+         </div>
+      </div>
+      <br/>
+      <div id="console"/>
+   </body>
+</html>

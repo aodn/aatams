@@ -88,10 +88,10 @@
 								<menupopup>
 									<menuitem label="Add Tag Release"
 										id="AddTagRelease" />
-									<menuitem
+									<!--menuitem
 										label="Add Surgery Details" id="AddSurgery" />
 									<menuitem label="Add Animal"
-										id="AddAnimal" />
+										id="AddAnimal" /-->
 								</menupopup>
 							</menu>
 							<menu label="Other">

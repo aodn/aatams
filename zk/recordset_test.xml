@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="forms/xsltforms/xsltforms.xsl" type="text/xsl"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+	<head>
+		<xf:model id="m1">
+			<xf:instance id="data">
+				<data xmlns="">
+					<item id="A" name="item 1">
+						<p1>1-1</p1>
+						<p2>1-2</p2>
+						<p3>1-3</p3>
+					</item>
+					<item id="B"  name="item 2">
+						<p1>2-1</p1>
+						<p2>2-2</p2>
+						<p3>2-3</p3>
+					</item>
+					<item id="C"  name="item 3">
+						<p1>3-1</p1>
+						<p2>3-2</p2>
+						<p3>3-3</p3>
+					</item>
+					<item id="D"  name="item 4">
+						<p1>4-1</p1>
+						<p2>4-2</p2>
+						<p3>4-3</p3>
+					</item>
+					<item id="E"  name="item 5">
+						<p1>5-1</p1>
+						<p2>5-2</p2>
+						<p3>5-3</p3>
+					</item>
+					<item id="F" name="item 6">
+						<p1>6-1</p1>
+						<p2>6-2</p2>
+						<p3>6-3</p3>
+					</item>
+					<item id="G"  name="item 7">
+						<p1>7-1</p1>
+						<p2>7-2</p2>
+						<p3>7-3</p3>
+					</item>
+					<item id="H"  name="item 8">
+						<p1>8-1</p1>
+						<p2>8-2</p2>
+						<p3>8-3</p3>
+					</item>
+					<item id="I"  name="item 9">
+						<p1>9-1</p1>
+						<p2>9-2</p2>
+						<p3>9-3</p3>
+					</item>
+					<item id="J"  name="item 10">
+						<p1>10-1</p1>
+						<p2>10-2</p2>
+						<p3>10-3</p3>
+					</item>
+				</data>
+			</xf:instance>
+			<xf:instance id="temp">
+				<data xmlns="" id="" position="0" min="0" max="0"  />
+			</xf:instance>
+			<xf:action ev:event="xforms-model-construct-done">
+				<xf:setvalue ref="instance('temp')/@id" value="instance('data')/item[1]/@id" />
+				<xf:setvalue ref="instance('temp')/@min" value="if(count(instance('data')/item)&gt;0,1,0)" />
+				<xf:setvalue ref="instance('temp')/@max" value="count(instance('data')/item)" />
+				<xf:setvalue ref="instance('temp')/@position" value="if(../@max&gt;0,1,0)" />
+			</xf:action>
+		</xf:model>
+	</head>
+	<body>
+		<xf:select1 ref="instance('temp')/@id">
+			<xf:itemset nodeset="instance('data')/item">
+				<xf:value ref="@id" />
+				<xf:label ref="@name" />
+			</xf:itemset>
+			<xf:setvalue ev:event="xforms-value-changed" ref="../@position" value="count(instance('data')/item[@id=instance('temp')/@id]/preceding-sibling::item)+1"/>
+			<!--xf:setvalue ev:event="xforms-value-changed" ref="../@position" value="instance('data')/item[@id=instance('temp')/@id]/current()/position()"--> 
+		</xf:select1>
+		<xf:trigger>
+			<xf:label>|&lt;</xf:label>
+			<xf:setvalue ev:event="DOMActivate" ref="instance('temp')/@position" value="../@min"/>
+			<xf:setvalue ev:event="DOMActivate" ref="instance('temp')/@id" value="instance('data')/item[position()=current()/../@position]/@id"/>
+		</xf:trigger>
+		<xf:trigger>
+			<xf:label>&lt;</xf:label>
+			<xf:setvalue ev:event="DOMActivate" ref="instance('temp')/@position" value="if(.=../@min,.,.-1)"/>
+			<xf:setvalue ev:event="DOMActivate" ref="instance('temp')/@id" value="instance('data')/item[position()=current()/../@position]/@id"/>
+        	</xf:trigger>
+		<xf:trigger>
+			<xf:label>&gt;</xf:label>
+			<xf:setvalue ev:event="DOMActivate" ref="instance('temp')/@position" value="if(.=../@max,.,.+1)"/>
+			<xf:setvalue ev:event="DOMActivate" ref="instance('temp')/@id" value="instance('data')/item[position()=current()/../@position]/@id"/>
+		</xf:trigger>
+		<xf:trigger>
+			<xf:label>&gt;|</xf:label>
+			<xf:setvalue ev:event="DOMActivate" ref="instance('temp')/@position" value="../@max"/>
+			<xf:setvalue ev:event="DOMActivate" ref="instance('temp')/@id" value="instance('data')/item[position()=current()/../@position]/@id"/>
+		</xf:trigger>
+		<xf:group ref="instance('temp')">
+			<xf:output ref="./@position"/>
+			<xf:output ref="if(./@min&gt;0,' of ','')"/>
+			<xf:output ref="./@max"/>
+		</xf:group>
+		<xf:group ref="instance('data')/item[@id = instance('temp')/@id]">
+			<br />
+			<xf:output ref="p1">
+				<xf:label>Property 1 = </xf:label>
+			</xf:output>
+			<br />
+			<xf:output ref="p2">
+				<xf:label>Property 2 = </xf:label>
+			</xf:output>
+			<br />
+			<xf:output ref="p3">
+				<xf:label>Property 3 = </xf:label>
+			</xf:output>
+		</xf:group>
+		<br />
+		<div id="console" style="display:block;top:100px;" />
+	</body>
+</html>

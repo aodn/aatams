@@ -201,6 +201,26 @@
 </wfs:FeatureType>
 
 <wfs:FeatureType>
+<wfs:Name>aatams:device_model</wfs:Name>
+<wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) Device Model Data</wfs:Title>
+<wfs:Abstract></wfs:Abstract>
+<ows:Keywords>
+</ows:Keywords>
+<wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
+<wfs:OutputFormats >
+	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
+</wfs:OutputFormats>
+<ows:WGS84BoundingBox>
+<ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
+<ows:UpperCorner>180.0 90.0</ows:UpperCorner>
+</ows:WGS84BoundingBox>
+</wfs:FeatureType>
+
+<wfs:FeatureType>
 <wfs:Name>aatams:transmitter_model</wfs:Name>
 <wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) Transmitter (Tag) Model Data</wfs:Title>
 <wfs:Abstract></wfs:Abstract>

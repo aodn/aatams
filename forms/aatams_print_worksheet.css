@@ -10,8 +10,8 @@ span.xforms-output > span > span > span.value { color:blue; }
 label.xforms-label { display:block; width: 300px; text-align:right; padding-right:10px; font-weight: bold; }
 textarea { height:50px; width: 300px; }
 div.dependant-selects { float:left; clear:left; width:100%; border:dashed 1px gray; margin-bottom:1px; }
-div#buttons { float:left;clear:left; }
-div#messages { float:left;clear:left; }
+div.buttons { float:left;clear:left; }
+div.messages { float:left;clear:left; }
 div#success-message span.xforms-output > span > span > span.value { color:blue; border:none; width:400pt; font-weight: bold; }
 div#error-message span.xforms-output > span > span > span.value { color:red; border:none; width:400pt; font-weight: bold; }
 span.xforms-output > span > span > span.value { color:blue; }

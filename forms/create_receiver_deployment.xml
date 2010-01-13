@@ -79,23 +79,23 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
-         <xf:bind id="receiver_device" nodeset="instance('inst_subfeatures')//receiver_device_id"
+         <xf:bind id="receiver_device" nodeset="instance('inst_subfeatures')/receiver_device_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="installation" nodeset="instance('inst_subfeatures')//installation_id"
+         <xf:bind id="installation" nodeset="instance('inst_subfeatures')/installation_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="installation_station"
-                  nodeset="instance('inst_subfeatures')//installation_station_id"
+                  nodeset="instance('inst_subfeatures')/installation_station_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="station" nodeset="instance('inst_subfeatures')//station_id"
+         <xf:bind id="station" nodeset="instance('inst_subfeatures')/station_id"
                   type="xsd:string"
                   required="false()"/>
-         <xf:bind id="project" nodeset="instance('inst_subfeatures')//project_id"
+         <xf:bind id="project" nodeset="instance('inst_subfeatures')/project_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="project_person" nodeset="instance('inst_subfeatures')//project_person_id"
+         <xf:bind id="project_person" nodeset="instance('inst_subfeatures')/project_person_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="longitude" nodeset="instance('inst_data')//aatams:longitude"
@@ -117,7 +117,7 @@
          <xf:bind id="acoustic_release" nodeset="instance('inst_data')//aatams:acoustic_release"
                   type="xsd:string"
                   required="false()"/>
-         <xf:bind id="mooring_type" nodeset="instance('inst_subfeatures')//mooring_type_id"
+         <xf:bind id="mooring_type" nodeset="instance('inst_subfeatures')/mooring_type_id"
                   type="xsd:string"
                   required="false()"/>
          <xf:bind id="bottom_depth" nodeset="instance('inst_data')//aatams:bottom_depth"
@@ -137,22 +137,22 @@
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
                <xf:insert nodeset="instance('inst_data')//aatams:receiver_device_ref/aatams:receiver_device"
-                          origin="instance('inst_receiver_device')//aatams:receiver_device[@gml:id=instance('inst_subfeatures')/receiver_device_id]"/>
+                          origin="instance('inst_receiver_device')/gml:featureMember/aatams:receiver_device[@gml:id=instance('inst_subfeatures')/receiver_device_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:receiver_device_ref/aatams:receiver_device"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:installation_ref/aatams:installation"
-                          origin="instance('inst_installation')//aatams:installation[@gml:id=instance('inst_subfeatures')/installation_id]"/>
+                          origin="instance('inst_installation')/gml:featureMember/aatams:installation[@gml:id=instance('inst_subfeatures')/installation_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:installation_ref/aatams:installation"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:station_ref/aatams:station"
-                          origin="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]"/>
+                          origin="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:station_ref/aatams:station" at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:mooring_type_ref/aatams:mooring_type"
-                          origin="instance('inst_mooring_type')//aatams:mooring_type[@gml:id=instance('inst_subfeatures')/mooring_type_id]"/>
+                          origin="instance('inst_mooring_type')/gml:featureMember/aatams:mooring_type[@gml:id=instance('inst_subfeatures')/mooring_type_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:mooring_type_ref/aatams:mooring_type"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
-                          origin="instance('inst_project_person')//aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
+                          origin="instance('inst_project_person')/gml:featureMember/aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
                           at="1"/>
             </xf:action>
@@ -162,29 +162,30 @@
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
          <xf:action ev:event="set-selected">
-            <xf:setvalue ref="instance('inst_subfeatures')//receiver_device_id"
-                         value="instance('inst_receiver_device')//aatams:receiver_device[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//installation_id"
-                         value="instance('inst_installation')//aatams:installation[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//station_id"
-                         value="instance('inst_station')//aatams:station[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//mooring_type_id"
-                         value="instance('inst_mooring_type')//aatams:mooring_type[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//project_id"
-                         value="instance('inst_project')//aatams:project[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//project_person_id"
-                         value="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/receiver_device_id"
+                         value="instance('inst_receiver_device')/gml:featureMember/aatams:receiver_device[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/installation_id"
+                         value="instance('inst_installation')/gml:featureMember/aatams:installation[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/station_id"
+                         value="instance('inst_station')/gml:featureMember/aatams:station[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/mooring_type_id"
+                         value="instance('inst_mooring_type')/gml:featureMember/aatams:mooring_type[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/project_id"
+                         value="instance('inst_project')/gml:featureMember/aatams:project[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/project_person_id"
+                         value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>
-   <body><!--Debug--><div class="form">
+   <body>
+      <div class="form">
          <label>ADD RECEIVER DEPLOYMENT</label>
          <div class="form-contents">
             <div class="xfselect1">
                <xf:select1 bind="receiver_device" appearance="minimal" incremental="true()">
                   <xf:label>Device</xf:label>
-                  <xf:itemset nodeset="instance('inst_receiver_device')//aatams:receiver_device">
+                  <xf:itemset nodeset="instance('inst_receiver_device')/gml:featureMember/aatams:receiver_device">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>
@@ -194,7 +195,7 @@
                <div class="xfselect1">
                   <xf:select1 bind="installation" appearance="minimal" incremental="true()">
                      <xf:label>Installation</xf:label>
-                     <xf:itemset nodeset="instance('inst_installation')//aatams:installation">
+                     <xf:itemset nodeset="instance('inst_installation')/gml:featureMember/aatams:installation">
                         <xf:value ref="@gml:id"/>
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
@@ -206,15 +207,15 @@
                <div class="xfselect1">
                   <xf:select1 bind="station" appearance="minimal" incremental="true()">
                      <xf:label>Station</xf:label>
-                     <xf:itemset nodeset="instance('inst_station')//aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
+                     <xf:itemset nodeset="instance('inst_station')/gml:featureMember/aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
                         <xf:value ref="@gml:id"/>
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
                      <xf:action ev:event="xforms-value-changed">
                         <xf:setvalue ref="instance('inst_data')//aatams:longitude"
-                                     value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:longitude"/>
+                                     value="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:longitude"/>
                         <xf:setvalue ref="instance('inst_data')//aatams:latitude"
-                                     value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude"/>
+                                     value="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude"/>
                      </xf:action>
                   </xf:select1>
                </div>
@@ -223,19 +224,19 @@
                <div class="xfselect1">
                   <xf:select1 bind="project" appearance="minimal" incremental="true()">
                      <xf:label>Project</xf:label>
-                     <xf:itemset nodeset="instance('inst_project')//aatams:project">
+                     <xf:itemset nodeset="instance('inst_project')/gml:featureMember/aatams:project">
                         <xf:value ref="@gml:id"/>
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
                      <xf:action ev:event="xforms-value-changed">
-                        <xf:setvalue ref="instance('inst_subfeatures')//project_person_id" value=""/>
+                        <xf:setvalue ref="instance('inst_subfeatures')/project_person_id" value=""/>
                      </xf:action>
                   </xf:select1>
                </div>
                <div class="xfselect1">
                   <xf:select1 bind="project_person" appearance="minimal" incremental="true()">
                      <xf:label>Person(Role)</xf:label>
-                     <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
+                     <xf:itemset nodeset="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
                         <xf:value ref="@gml:id"/>
                         <xf:label ref="aatams:person_role"/>
                      </xf:itemset>
@@ -270,7 +271,7 @@
             <div class="xfselect1">
                <xf:select1 bind="mooring_type" appearance="minimal" incremental="true()">
                   <xf:label>Mooring Type</xf:label>
-                  <xf:itemset nodeset="instance('inst_mooring_type')//aatams:mooring_type">
+                  <xf:itemset nodeset="instance('inst_mooring_type')/gml:featureMember/aatams:mooring_type">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>

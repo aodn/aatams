@@ -69,7 +69,8 @@
          </xf:action>
       </xf:model>
    </head>
-   <body><!--Debug--><div class="form">
+   <body>
+      <div class="form">
          <label>ADD GEOGRAPHIC AREA</label>
          <div class="form-contents">
             <div class="xfinput">

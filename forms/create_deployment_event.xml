@@ -56,15 +56,15 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
-         <xf:bind id="installation" nodeset="instance('inst_subfeatures')//installation_id"
+         <xf:bind id="installation" nodeset="instance('inst_subfeatures')/installation_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="installation_deployment"
-                  nodeset="instance('inst_subfeatures')//installation_deployment_id"
+                  nodeset="instance('inst_subfeatures')/installation_deployment_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="deployment_event_type"
-                  nodeset="instance('inst_subfeatures')//deployment_event_type_id"
+                  nodeset="instance('inst_subfeatures')/deployment_event_type_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="event_timestamp" nodeset="instance('inst_data')//aatams:event_timestamp"
@@ -84,11 +84,11 @@
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
                <xf:insert nodeset="instance('inst_data')//aatams:deployment_event_type_ref/aatams:deployment_event_type"
-                          origin="instance('inst_deployment_event_type')//aatams:deployment_event_type[@gml:id=instance('inst_subfeatures')/deployment_event_type_id]"/>
+                          origin="instance('inst_deployment_event_type')/gml:featureMember/aatams:deployment_event_type[@gml:id=instance('inst_subfeatures')/deployment_event_type_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:deployment_event_type_ref/aatams:deployment_event_type"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
-                          origin="instance('inst_installation_deployment')//aatams:installation_deployment[@gml:id=instance('inst_subfeatures')/installation_deployment_id]"/>
+                          origin="instance('inst_installation_deployment')/gml:featureMember/aatams:installation_deployment[@gml:id=instance('inst_subfeatures')/installation_deployment_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
                           at="1"/>
             </xf:action>
@@ -98,36 +98,37 @@
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
          <xf:action ev:event="set-selected">
-            <xf:setvalue ref="instance('inst_subfeatures')//deployment_event_type_id"
-                         value="instance('inst_deployment_event_type')//aatams:deployment_event_type[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//installation_id"
-                         value="instance('inst_installation')//aatams:installation[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//installation_deployment_id"
-                         value="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/deployment_event_type_id"
+                         value="instance('inst_deployment_event_type')/gml:featureMember/aatams:deployment_event_type[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/installation_id"
+                         value="instance('inst_installation')/gml:featureMember/aatams:installation[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/installation_deployment_id"
+                         value="instance('inst_installation_deployment')/gml:featureMember/aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>
-   <body><!--Debug--><div class="form">
+   <body>
+      <div class="form">
          <label>ADD DEPLOYMENT EVENT</label>
          <div class="form-contents">
             <div class="dependant-selects">
                <div class="xfselect1">
                   <xf:select1 bind="installation" appearance="minimal" incremental="true()">
                      <xf:label>Installation</xf:label>
-                     <xf:itemset nodeset="instance('inst_installation')//aatams:installation">
+                     <xf:itemset nodeset="instance('inst_installation')/gml:featureMember/aatams:installation">
                         <xf:value ref="@gml:id"/>
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
                      <xf:action ev:event="xforms-value-changed">
-                        <xf:setvalue ref="instance('inst_subfeatures')//installation_deployment_id" value=""/>
+                        <xf:setvalue ref="instance('inst_subfeatures')/installation_deployment_id" value=""/>
                      </xf:action>
                   </xf:select1>
                </div>
                <div class="xfselect1">
                   <xf:select1 bind="installation_deployment" appearance="minimal" incremental="true()">
                      <xf:label>Deployment</xf:label>
-                     <xf:itemset nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
+                     <xf:itemset nodeset="instance('inst_installation_deployment')/gml:featureMember/aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
                         <xf:value ref="@gml:id"/>
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
@@ -137,7 +138,7 @@
             <div class="xfselect1">
                <xf:select1 bind="deployment_event_type" appearance="minimal" incremental="true()">
                   <xf:label>Event Type</xf:label>
-                  <xf:itemset nodeset="instance('inst_deployment_event_type')//aatams:deployment_event_type">
+                  <xf:itemset nodeset="instance('inst_deployment_event_type')/gml:featureMember/aatams:deployment_event_type">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>

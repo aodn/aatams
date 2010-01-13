@@ -79,16 +79,16 @@
             </dummy>
          </xf:instance>
          <xf:bind id="transmitter_device"
-                  nodeset="instance('inst_subfeatures')//transmitter_device_id"
+                  nodeset="instance('inst_subfeatures')/transmitter_device_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="classification" nodeset="instance('inst_subfeatures')//classification_id"
+         <xf:bind id="classification" nodeset="instance('inst_subfeatures')/classification_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="project" nodeset="instance('inst_subfeatures')//project_id"
+         <xf:bind id="project" nodeset="instance('inst_subfeatures')/project_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="project_person" nodeset="instance('inst_subfeatures')//project_person_id"
+         <xf:bind id="project_person" nodeset="instance('inst_subfeatures')/project_person_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="release_longitude"
@@ -117,11 +117,11 @@
                   nodeset="instance('inst_data')//aatams:capture_timestamp"
                   type="xsd:dateTime"
                   required="false()"/>
-         <xf:bind id="implant_type" nodeset="instance('inst_subfeatures')//implant_type_id"
+         <xf:bind id="implant_type" nodeset="instance('inst_subfeatures')/implant_type_id"
                   type="xsd:string"
                   required="false()"/>
          <xf:bind id="classification_level"
-                  nodeset="instance('inst_subfeatures')//classification_level_id"
+                  nodeset="instance('inst_subfeatures')/classification_level_id"
                   type="xsd:string"
                   required="false()"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
@@ -138,23 +138,23 @@
                <xf:delete nodeset="instance('inst_data')//aatams:capture_latitude[.='']"/>
                <xf:delete nodeset="instance('inst_data')//aatams:capture_timestamp[.='']"/>
                <xf:insert nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification"
-                          origin="instance('inst_classification')//aatams:classification[@gml:id=instance('inst_subfeatures')/classification_id]"/>
+                          origin="instance('inst_classification')/gml:featureMember/aatams:classification[@gml:id=instance('inst_subfeatures')/classification_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:classification_level_ref/aatams:classification_level"
-                          origin="instance('inst_classification_level')//aatams:classification_level[@gml:id=instance('inst_subfeatures')/classification_level_id]"/>
+                          origin="instance('inst_classification_level')/gml:featureMember/aatams:classification_level[@gml:id=instance('inst_subfeatures')/classification_level_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:classification_level_ref/aatams:classification_level"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:transmitter_device_ref/aatams:transmitter_device"
-                          origin="instance('inst_transmitter_device')//aatams:transmitter_device[@gml:id=instance('inst_subfeatures')/transmitter_device_id]"/>
+                          origin="instance('inst_transmitter_device')/gml:featureMember/aatams:transmitter_device[@gml:id=instance('inst_subfeatures')/transmitter_device_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:transmitter_device_ref/aatams:transmitter_device"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:implant_type_ref/aatams:implant_type"
-                          origin="instance('inst_implant_type')//aatams:implant_type[@gml:id=instance('inst_subfeatures')/implant_type_id]"/>
+                          origin="instance('inst_implant_type')/gml:featureMember/aatams:implant_type[@gml:id=instance('inst_subfeatures')/implant_type_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:implant_type_ref/aatams:implant_type"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
-                          origin="instance('inst_project_person')//aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
+                          origin="instance('inst_project_person')/gml:featureMember/aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
                           at="1"/>
             </xf:action>
@@ -164,29 +164,30 @@
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
          <xf:action ev:event="set-selected">
-            <xf:setvalue ref="instance('inst_subfeatures')//classification_id"
-                         value="instance('inst_classification')//aatams:classification[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//classification_level_id"
-                         value="instance('inst_classification_level')//aatams:classification_level[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//transmitter_device_id"
-                         value="instance('inst_transmitter_device')//aatams:transmitter_device[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//implant_type_id"
-                         value="instance('inst_implant_type')//aatams:implant_type[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//project_id"
-                         value="instance('inst_project')//aatams:project[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//project_person_id"
-                         value="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/classification_id"
+                         value="instance('inst_classification')/gml:featureMember/aatams:classification[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/classification_level_id"
+                         value="instance('inst_classification_level')/gml:featureMember/aatams:classification_level[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/transmitter_device_id"
+                         value="instance('inst_transmitter_device')/gml:featureMember/aatams:transmitter_device[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/implant_type_id"
+                         value="instance('inst_implant_type')/gml:featureMember/aatams:implant_type[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/project_id"
+                         value="instance('inst_project')/gml:featureMember/aatams:project[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/project_person_id"
+                         value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>
-   <body><!--Debug--><div class="form">
+   <body>
+      <div class="form">
          <label>ADD TAG RELEASE</label>
          <div class="form-contents">
             <div class="xfselect1">
                <xf:select1 bind="transmitter_device" appearance="minimal" incremental="true()">
                   <xf:label>Device</xf:label>
-                  <xf:itemset nodeset="instance('inst_transmitter_device')//aatams:transmitter_device">
+                  <xf:itemset nodeset="instance('inst_transmitter_device')/gml:featureMember/aatams:transmitter_device">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>
@@ -195,7 +196,7 @@
             <div class="xfselect1">
                <xf:select1 bind="classification" appearance="minimal" incremental="true()">
                   <xf:label>Classification</xf:label>
-                  <xf:itemset nodeset="instance('inst_classification')//aatams:classification">
+                  <xf:itemset nodeset="instance('inst_classification')/gml:featureMember/aatams:classification">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>
@@ -205,19 +206,19 @@
                <div class="xfselect1">
                   <xf:select1 bind="project" appearance="minimal" incremental="true()">
                      <xf:label>Project</xf:label>
-                     <xf:itemset nodeset="instance('inst_project')//aatams:project">
+                     <xf:itemset nodeset="instance('inst_project')/gml:featureMember/aatams:project">
                         <xf:value ref="@gml:id"/>
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
                      <xf:action ev:event="xforms-value-changed">
-                        <xf:setvalue ref="instance('inst_subfeatures')//project_person_id" value=""/>
+                        <xf:setvalue ref="instance('inst_subfeatures')/project_person_id" value=""/>
                      </xf:action>
                   </xf:select1>
                </div>
                <div class="xfselect1">
                   <xf:select1 bind="project_person" appearance="minimal" incremental="true()">
                      <xf:label>Person(Role)</xf:label>
-                     <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
+                     <xf:itemset nodeset="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
                         <xf:value ref="@gml:id"/>
                         <xf:label ref="aatams:person_role"/>
                      </xf:itemset>
@@ -257,7 +258,7 @@
             <div class="xfselect1">
                <xf:select1 bind="implant_type" appearance="minimal" incremental="true()">
                   <xf:label>Implant Type</xf:label>
-                  <xf:itemset nodeset="instance('inst_implant_type')//aatams:implant_type">
+                  <xf:itemset nodeset="instance('inst_implant_type')/gml:featureMember/aatams:implant_type">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>
@@ -266,7 +267,7 @@
             <div class="xfselect1">
                <xf:select1 bind="classification_level" appearance="minimal" incremental="true()">
                   <xf:label>Displayed Level</xf:label>
-                  <xf:itemset nodeset="instance('inst_classification_level')//aatams:classification_level">
+                  <xf:itemset nodeset="instance('inst_classification_level')/gml:featureMember/aatams:classification_level">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>

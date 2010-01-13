@@ -57,12 +57,12 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
-         <xf:bind id="project" nodeset="instance('inst_subfeatures')//project_id"
+         <xf:bind id="project" nodeset="instance('inst_subfeatures')/project_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="role" nodeset="instance('inst_subfeatures')//role_id" type="xsd:string"
+         <xf:bind id="role" nodeset="instance('inst_subfeatures')/role_id" type="xsd:string"
                   required="true()"/>
-         <xf:bind id="person" nodeset="instance('inst_subfeatures')//person_id" type="xsd:string"
+         <xf:bind id="person" nodeset="instance('inst_subfeatures')/person_id" type="xsd:string"
                   required="true()"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
                   calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
@@ -75,13 +75,13 @@
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
                <xf:insert nodeset="instance('inst_data')//aatams:person_ref/aatams:person"
-                          origin="instance('inst_person')//aatams:person[@gml:id=instance('inst_subfeatures')/person_id]"/>
+                          origin="instance('inst_person')/gml:featureMember/aatams:person[@gml:id=instance('inst_subfeatures')/person_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:person_ref/aatams:person" at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:project_ref/aatams:project"
-                          origin="instance('inst_project')//aatams:project[@gml:id=instance('inst_subfeatures')/project_id]"/>
+                          origin="instance('inst_project')/gml:featureMember/aatams:project[@gml:id=instance('inst_subfeatures')/project_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:project_ref/aatams:project" at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:role_ref/aatams:role"
-                          origin="instance('inst_role')//aatams:role[@gml:id=instance('inst_subfeatures')/role_id]"/>
+                          origin="instance('inst_role')/gml:featureMember/aatams:role[@gml:id=instance('inst_subfeatures')/role_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:role_ref/aatams:role" at="1"/>
             </xf:action>
             <xf:message level="modeless" ev:event="xforms-submit-error">
@@ -90,23 +90,24 @@
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
          <xf:action ev:event="set-selected">
-            <xf:setvalue ref="instance('inst_subfeatures')//person_id"
-                         value="instance('inst_person')//aatams:person[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//project_id"
-                         value="instance('inst_project')//aatams:project[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//role_id"
-                         value="instance('inst_role')//aatams:role[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/person_id"
+                         value="instance('inst_person')/gml:featureMember/aatams:person[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/project_id"
+                         value="instance('inst_project')/gml:featureMember/aatams:project[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/role_id"
+                         value="instance('inst_role')/gml:featureMember/aatams:role[1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>
-   <body><!--Debug--><div class="form">
+   <body>
+      <div class="form">
          <label>ADD PROJECT ROLE PERSON</label>
          <div class="form-contents">
             <div class="xfselect1">
                <xf:select1 bind="project" appearance="minimal" incremental="true()">
                   <xf:label>Project</xf:label>
-                  <xf:itemset nodeset="instance('inst_project')//aatams:project">
+                  <xf:itemset nodeset="instance('inst_project')/gml:featureMember/aatams:project">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>
@@ -115,7 +116,7 @@
             <div class="xfselect1">
                <xf:select1 bind="role" appearance="minimal" incremental="true()">
                   <xf:label>Role</xf:label>
-                  <xf:itemset nodeset="instance('inst_role')//aatams:role">
+                  <xf:itemset nodeset="instance('inst_role')/gml:featureMember/aatams:role">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>
@@ -124,7 +125,7 @@
             <div class="xfselect1">
                <xf:select1 bind="person" appearance="minimal" incremental="true()">
                   <xf:label>Person</xf:label>
-                  <xf:itemset nodeset="instance('inst_person')//aatams:person">
+                  <xf:itemset nodeset="instance('inst_person')/gml:featureMember/aatams:person">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>

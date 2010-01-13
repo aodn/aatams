@@ -52,11 +52,11 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
-         <xf:bind id="device_type" nodeset="instance('inst_subfeatures')//device_type_id"
+         <xf:bind id="device_type" nodeset="instance('inst_subfeatures')/device_type_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="device_manufacturer"
-                  nodeset="instance('inst_subfeatures')//device_manufacturer_id"
+                  nodeset="instance('inst_subfeatures')/device_manufacturer_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="name" nodeset="instance('inst_data')//aatams:name" type="xsd:string"
@@ -72,11 +72,11 @@
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
                <xf:insert nodeset="instance('inst_data')//aatams:device_manufacturer_ref/aatams:device_manufacturer"
-                          origin="instance('inst_device_manufacturer')//aatams:device_manufacturer[@gml:id=instance('inst_subfeatures')/device_manufacturer_id]"/>
+                          origin="instance('inst_device_manufacturer')/gml:featureMember/aatams:device_manufacturer[@gml:id=instance('inst_subfeatures')/device_manufacturer_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:device_manufacturer_ref/aatams:device_manufacturer"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:device_type_ref/aatams:device_type"
-                          origin="instance('inst_device_type')//aatams:device_type[@gml:id=instance('inst_subfeatures')/device_type_id]"/>
+                          origin="instance('inst_device_type')/gml:featureMember/aatams:device_type[@gml:id=instance('inst_subfeatures')/device_type_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:device_type_ref/aatams:device_type"
                           at="1"/>
             </xf:action>
@@ -86,21 +86,22 @@
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
          <xf:action ev:event="set-selected">
-            <xf:setvalue ref="instance('inst_subfeatures')//device_manufacturer_id"
-                         value="instance('inst_device_manufacturer')//aatams:device_manufacturer[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//device_type_id"
-                         value="instance('inst_device_type')//aatams:device_type[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/device_manufacturer_id"
+                         value="instance('inst_device_manufacturer')/gml:featureMember/aatams:device_manufacturer[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/device_type_id"
+                         value="instance('inst_device_type')/gml:featureMember/aatams:device_type[1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>
-   <body><!--Debug--><div class="form">
+   <body>
+      <div class="form">
          <label>ADD DEVICE MODEL</label>
          <div class="form-contents">
             <div class="xfselect1">
                <xf:select1 bind="device_type" appearance="minimal" incremental="true()">
                   <xf:label>Device Type</xf:label>
-                  <xf:itemset nodeset="instance('inst_device_type')//aatams:device_type">
+                  <xf:itemset nodeset="instance('inst_device_type')/gml:featureMember/aatams:device_type">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>
@@ -109,7 +110,7 @@
             <div class="xfselect1">
                <xf:select1 bind="device_manufacturer" appearance="minimal" incremental="true()">
                   <xf:label>Manufacturer</xf:label>
-                  <xf:itemset nodeset="instance('inst_device_manufacturer')//aatams:device_manufacturer">
+                  <xf:itemset nodeset="instance('inst_device_manufacturer')/gml:featureMember/aatams:device_manufacturer">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>

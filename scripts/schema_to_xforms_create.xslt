@@ -128,8 +128,7 @@
 						</xf:model>
 					</head>
 					<body>
-						<xsl:comment>
-							<!-- debugging checkbox for events display -->
+						<!--xsl:comment>
 							<div id="xformControl">
 								<span>
 									<input type="checkbox"
@@ -138,7 +137,7 @@
 									<xsl:text>Debug</xsl:text>
 								</span>
 							</div>
-						</xsl:comment>
+						</xsl:comment-->
 						<xsl:call-template name="form" />
 						<br />
 						<div id="console" />
@@ -265,7 +264,7 @@
 		mode="binding" priority="4">
 		<xsl:element name="xf:bind">
 			<xsl:attribute name="id">project</xsl:attribute>
-			<xsl:attribute name="nodeset">instance('inst_subfeatures')//project_id</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_subfeatures')/project_id</xsl:attribute>
 			<xsl:attribute name="type">xsd:string</xsl:attribute>
 			<xsl:attribute name="required">
 				<xsl:apply-templates select="@required" />
@@ -273,7 +272,7 @@
 		</xsl:element>
 		<xsl:element name="xf:bind">
 			<xsl:attribute name="id">project_person</xsl:attribute>
-			<xsl:attribute name="nodeset">instance('inst_subfeatures')//project_person_id</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_subfeatures')/project_person_id</xsl:attribute>
 			<xsl:attribute name="type">xsd:string</xsl:attribute>
 			<xsl:attribute name="required">
 				<xsl:apply-templates select="@required" />
@@ -284,7 +283,7 @@
 		mode="binding" priority="4">
 		<xsl:element name="xf:bind">
 			<xsl:attribute name="id">installation</xsl:attribute>
-			<xsl:attribute name="nodeset">instance('inst_subfeatures')//installation_id</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_subfeatures')/installation_id</xsl:attribute>
 			<xsl:attribute name="type">xsd:string</xsl:attribute>
 			<xsl:attribute name="required">
 				<xsl:apply-templates select="@required" />
@@ -292,7 +291,7 @@
 		</xsl:element>
 		<xsl:element name="xf:bind">
 			<xsl:attribute name="id">installation_station</xsl:attribute>
-			<xsl:attribute name="nodeset">instance('inst_subfeatures')//installation_station_id</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_subfeatures')/installation_station_id</xsl:attribute>
 			<xsl:attribute name="type">xsd:string</xsl:attribute>
 			<xsl:attribute name="required">
 				<xsl:apply-templates select="@required" />
@@ -303,7 +302,7 @@
 		priority="4">
 		<xsl:element name="xf:bind">
 			<xsl:attribute name="id">installation</xsl:attribute>
-			<xsl:attribute name="nodeset">instance('inst_subfeatures')//installation_id</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_subfeatures')/installation_id</xsl:attribute>
 			<xsl:attribute name="type">xsd:string</xsl:attribute>
 			<xsl:attribute name="required">
 				<xsl:apply-templates select="@required" />
@@ -311,7 +310,7 @@
 		</xsl:element>
 		<xsl:element name="xf:bind">
 			<xsl:attribute name="id">installation_deployment</xsl:attribute>
-			<xsl:attribute name="nodeset">instance('inst_subfeatures')//installation_deployment_id</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_subfeatures')/installation_deployment_id</xsl:attribute>
 			<xsl:attribute name="type">xsd:string</xsl:attribute>
 			<xsl:attribute name="required">
 				<xsl:apply-templates select="@required" />
@@ -342,7 +341,7 @@
 				<xsl:value-of select="lower-case(@foreignTable)" />
 			</xsl:attribute>
 			<xsl:attribute name="nodeset">
-				<xsl:text>instance('inst_subfeatures')//</xsl:text>
+				<xsl:text>instance('inst_subfeatures')/</xsl:text>
 				<xsl:value-of select="lower-case(@foreignTable)" />
 				<xsl:text>_id</xsl:text>
 			</xsl:attribute>
@@ -383,14 +382,14 @@
 				<xsl:value-of select="lower-case(@foreignTable)" />
 			</xsl:variable>
 			<xsl:attribute name="ref">
-				<xsl:text>instance('inst_subfeatures')//</xsl:text>
+				<xsl:text>instance('inst_subfeatures')/</xsl:text>
 				<xsl:value-of select="$feature" />
 				<xsl:text>_id</xsl:text>
 			</xsl:attribute>
 			<xsl:attribute name="value">
 				<xsl:text>instance('inst_</xsl:text>
 				<xsl:value-of select="$feature" />
-				<xsl:text>')//aatams:</xsl:text>
+				<xsl:text>')/gml:featureMember/aatams:</xsl:text>
 				<xsl:value-of select="$feature" />
 				<xsl:text>[1]/@gml:id</xsl:text>
 			</xsl:attribute>
@@ -400,20 +399,20 @@
 	<xsl:template match="foreign-key[@foreignTable = 'PROJECT_PERSON']"
 		mode="default-value">
 		<!-- convert to project and person_role -->
-		<xf:setvalue ref="instance('inst_subfeatures')//project_id"
-			value="instance('inst_project')//aatams:project[1]/@gml:id" />
+		<xf:setvalue ref="instance('inst_subfeatures')/project_id"
+			value="instance('inst_project')/gml:featureMember/aatams:project[1]/@gml:id" />
 		<xf:setvalue
-			ref="instance('inst_subfeatures')//project_person_id"
-			value="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id" />
+			ref="instance('inst_subfeatures')/project_person_id"
+			value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id" />
 	</xsl:template>
 	<xsl:template
 		match="foreign-key[@foreignTable = 'INSTALLATION_DEPLOYMENT']"
 		mode="default-value">
-		<xf:setvalue ref="instance('inst_subfeatures')//installation_id"
-			value="instance('inst_installation')//aatams:installation[1]/@gml:id" />
+		<xf:setvalue ref="instance('inst_subfeatures')/installation_id"
+			value="instance('inst_installation')/gml:featureMember/aatams:installation[1]/@gml:id" />
 		<xf:setvalue
-			ref="instance('inst_subfeatures')//installation_deployment_id"
-			value="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id" />
+			ref="instance('inst_subfeatures')/installation_deployment_id"
+			value="instance('inst_installation_deployment')/gml:featureMember/aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id" />
 	</xsl:template>
 	<!-- remove any non-mandatory numeric fields if no value -->
 	<xsl:template
@@ -443,7 +442,7 @@
 			<xsl:attribute name="origin">
 				<xsl:text>instance('inst_</xsl:text>
 				<xsl:value-of select="$feature" />
-				<xsl:text>')//aatams:</xsl:text>
+				<xsl:text>')/gml:featureMember/aatams:</xsl:text>
 				<xsl:value-of select="$feature" />
 				<xsl:text>[@gml:id=instance('inst_subfeatures')/</xsl:text>
 				<xsl:value-of select="$feature" />
@@ -573,13 +572,13 @@
 				incremental="true()">
 				<xf:label>Project</xf:label>
 				<xf:itemset
-					nodeset="instance('inst_project')//aatams:project">
+					nodeset="instance('inst_project')/gml:featureMember/aatams:project">
 					<xf:value ref="@gml:id" />
 					<xf:label ref="aatams:name" />
 				</xf:itemset>
 				<xf:action ev:event="xforms-value-changed">
 					<xf:setvalue
-						ref="instance('inst_subfeatures')//project_person_id" value="" />
+						ref="instance('inst_subfeatures')/project_person_id" value="" />
 				</xf:action>
 				<xsl:call-template name="help">
 					<xsl:with-param name="key">
@@ -593,7 +592,7 @@
 				incremental="true()">
 				<xf:label>Person(Role)</xf:label>
 				<xf:itemset
-					nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
+					nodeset="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
 					<xf:value ref="@gml:id" />
 					<xf:label ref="aatams:person_role" />
 				</xf:itemset>
@@ -615,13 +614,13 @@
 					incremental="true()">
 					<xf:label>Installation</xf:label>
 					<xf:itemset
-						nodeset="instance('inst_installation')//aatams:installation">
+						nodeset="instance('inst_installation')/gml:featureMember/aatams:installation">
 						<xf:value ref="@gml:id" />
 						<xf:label ref="aatams:name" />
 					</xf:itemset>
 					<xf:action ev:event="xforms-value-changed">
 						<xf:setvalue
-							ref="instance('inst_subfeatures')//installation_deployment_id"
+							ref="instance('inst_subfeatures')/installation_deployment_id"
 							value="" />
 					</xf:action>
 					<xsl:call-template name="help">
@@ -636,7 +635,7 @@
 					appearance="minimal" incremental="true()">
 					<xf:label>Deployment</xf:label>
 					<xf:itemset
-						nodeset="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
+						nodeset="instance('inst_installation_deployment')/gml:featureMember/aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
 						<xf:value ref="@gml:id" />
 						<xf:label ref="aatams:name" />
 					</xf:itemset>
@@ -659,7 +658,7 @@
 					incremental="true()">
 					<xf:label>Installation</xf:label>
 					<xf:itemset
-						nodeset="instance('inst_installation')//aatams:installation">
+						nodeset="instance('inst_installation')/gml:featureMember/aatams:installation">
 						<xf:value ref="@gml:id" />
 						<xf:label ref="aatams:name" />
 					</xf:itemset>
@@ -674,17 +673,17 @@
 					incremental="true()">
 					<xf:label>Station</xf:label>
 					<xf:itemset
-						nodeset="instance('inst_station')//aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
+						nodeset="instance('inst_station')/gml:featureMember/aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
 						<xf:value ref="@gml:id" />
 						<xf:label ref="aatams:name" />
 					</xf:itemset>
 					<xf:action ev:event="xforms-value-changed">
 						<xf:setvalue
 							ref="instance('inst_data')//aatams:longitude"
-							value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:longitude" />
+							value="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:longitude" />
 						<xf:setvalue
 							ref="instance('inst_data')//aatams:latitude"
-							value="instance('inst_station')//aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude" />
+							value="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude" />
 					</xf:action>
 				</xf:select1>
 			</div>
@@ -747,7 +746,7 @@
 					<xsl:text>instance('inst_</xsl:text>
 					<xsl:value-of
 						select="lower-case($fk_node[1]/@foreignTable)" />
-					<xsl:text>')//aatams:</xsl:text>
+					<xsl:text>')/gml:featureMember/aatams:</xsl:text>
 					<xsl:value-of
 						select="lower-case($fk_node[1]/@foreignTable)" />
 				</xsl:attribute>

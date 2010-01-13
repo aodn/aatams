@@ -65,16 +65,16 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
-         <xf:bind id="treatment_type" nodeset="instance('inst_subfeatures')//treatment_type_id"
+         <xf:bind id="treatment_type" nodeset="instance('inst_subfeatures')/treatment_type_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="project" nodeset="instance('inst_subfeatures')//project_id"
+         <xf:bind id="project" nodeset="instance('inst_subfeatures')/project_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="project_person" nodeset="instance('inst_subfeatures')//project_person_id"
+         <xf:bind id="project_person" nodeset="instance('inst_subfeatures')/project_person_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="animal" nodeset="instance('inst_subfeatures')//animal_id" type="xsd:string"
+         <xf:bind id="animal" nodeset="instance('inst_subfeatures')/animal_id" type="xsd:string"
                   required="true()"/>
          <xf:bind id="stock" nodeset="instance('inst_data')//aatams:stock" type="xsd:string"
                   required="false()"/>
@@ -100,14 +100,14 @@
             <xf:action ev:event="xforms-submit">
                <xf:delete nodeset="instance('inst_data')//aatams:stock_id[.='']"/>
                <xf:insert nodeset="instance('inst_data')//aatams:animal_ref/aatams:animal"
-                          origin="instance('inst_animal')//aatams:animal[@gml:id=instance('inst_subfeatures')/animal_id]"/>
+                          origin="instance('inst_animal')/gml:featureMember/aatams:animal[@gml:id=instance('inst_subfeatures')/animal_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:animal_ref/aatams:animal" at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:treatment_type_ref/aatams:treatment_type"
-                          origin="instance('inst_treatment_type')//aatams:treatment_type[@gml:id=instance('inst_subfeatures')/treatment_type_id]"/>
+                          origin="instance('inst_treatment_type')/gml:featureMember/aatams:treatment_type[@gml:id=instance('inst_subfeatures')/treatment_type_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:treatment_type_ref/aatams:treatment_type"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
-                          origin="instance('inst_project_person')//aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
+                          origin="instance('inst_project_person')/gml:featureMember/aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
                           at="1"/>
             </xf:action>
@@ -117,25 +117,26 @@
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
          <xf:action ev:event="set-selected">
-            <xf:setvalue ref="instance('inst_subfeatures')//animal_id"
-                         value="instance('inst_animal')//aatams:animal[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//treatment_type_id"
-                         value="instance('inst_treatment_type')//aatams:treatment_type[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//project_id"
-                         value="instance('inst_project')//aatams:project[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//project_person_id"
-                         value="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/animal_id"
+                         value="instance('inst_animal')/gml:featureMember/aatams:animal[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/treatment_type_id"
+                         value="instance('inst_treatment_type')/gml:featureMember/aatams:treatment_type[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/project_id"
+                         value="instance('inst_project')/gml:featureMember/aatams:project[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/project_person_id"
+                         value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>
-   <body><!--Debug--><div class="form">
+   <body>
+      <div class="form">
          <label>ADD SURGERY</label>
          <div class="form-contents">
             <div class="xfselect1">
                <xf:select1 bind="treatment_type" appearance="minimal" incremental="true()">
                   <xf:label>Treatment Type</xf:label>
-                  <xf:itemset nodeset="instance('inst_treatment_type')//aatams:treatment_type">
+                  <xf:itemset nodeset="instance('inst_treatment_type')/gml:featureMember/aatams:treatment_type">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>
@@ -145,19 +146,19 @@
                <div class="xfselect1">
                   <xf:select1 bind="project" appearance="minimal" incremental="true()">
                      <xf:label>Project</xf:label>
-                     <xf:itemset nodeset="instance('inst_project')//aatams:project">
+                     <xf:itemset nodeset="instance('inst_project')/gml:featureMember/aatams:project">
                         <xf:value ref="@gml:id"/>
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
                      <xf:action ev:event="xforms-value-changed">
-                        <xf:setvalue ref="instance('inst_subfeatures')//project_person_id" value=""/>
+                        <xf:setvalue ref="instance('inst_subfeatures')/project_person_id" value=""/>
                      </xf:action>
                   </xf:select1>
                </div>
                <div class="xfselect1">
                   <xf:select1 bind="project_person" appearance="minimal" incremental="true()">
                      <xf:label>Person(Role)</xf:label>
-                     <xf:itemset nodeset="instance('inst_project_person')//aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
+                     <xf:itemset nodeset="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
                         <xf:value ref="@gml:id"/>
                         <xf:label ref="aatams:person_role"/>
                      </xf:itemset>
@@ -167,7 +168,7 @@
             <div class="xfselect1">
                <xf:select1 bind="animal" appearance="minimal" incremental="true()">
                   <xf:label>Animal</xf:label>
-                  <xf:itemset nodeset="instance('inst_animal')//aatams:animal">
+                  <xf:itemset nodeset="instance('inst_animal')/gml:featureMember/aatams:animal">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>

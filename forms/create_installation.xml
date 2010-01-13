@@ -50,7 +50,7 @@
             </dummy>
          </xf:instance>
          <xf:bind id="installation_conf"
-                  nodeset="instance('inst_subfeatures')//installation_conf_id"
+                  nodeset="instance('inst_subfeatures')/installation_conf_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="name" nodeset="instance('inst_data')//aatams:name" type="xsd:string"
@@ -66,11 +66,11 @@
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
                <xf:insert nodeset="instance('inst_data')//aatams:geographic_area_ref/aatams:geographic_area"
-                          origin="instance('inst_geographic_area')//aatams:geographic_area[@gml:id=instance('inst_subfeatures')/geographic_area_id]"/>
+                          origin="instance('inst_geographic_area')/gml:featureMember/aatams:geographic_area[@gml:id=instance('inst_subfeatures')/geographic_area_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:geographic_area_ref/aatams:geographic_area"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:installation_conf_ref/aatams:installation_conf"
-                          origin="instance('inst_installation_conf')//aatams:installation_conf[@gml:id=instance('inst_subfeatures')/installation_conf_id]"/>
+                          origin="instance('inst_installation_conf')/gml:featureMember/aatams:installation_conf[@gml:id=instance('inst_subfeatures')/installation_conf_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:installation_conf_ref/aatams:installation_conf"
                           at="1"/>
             </xf:action>
@@ -80,21 +80,22 @@
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
          <xf:action ev:event="set-selected">
-            <xf:setvalue ref="instance('inst_subfeatures')//geographic_area_id"
-                         value="instance('inst_geographic_area')//aatams:geographic_area[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')//installation_conf_id"
-                         value="instance('inst_installation_conf')//aatams:installation_conf[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/geographic_area_id"
+                         value="instance('inst_geographic_area')/gml:featureMember/aatams:geographic_area[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/installation_conf_id"
+                         value="instance('inst_installation_conf')/gml:featureMember/aatams:installation_conf[1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>
-   <body><!--Debug--><div class="form">
+   <body>
+      <div class="form">
          <label>ADD INSTALLATION</label>
          <div class="form-contents">
             <div class="xfselect1">
                <xf:select1 bind="installation_conf" appearance="minimal" incremental="true()">
                   <xf:label>Configuration Type</xf:label>
-                  <xf:itemset nodeset="instance('inst_installation_conf')//aatams:installation_conf">
+                  <xf:itemset nodeset="instance('inst_installation_conf')/gml:featureMember/aatams:installation_conf">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>

@@ -46,7 +46,7 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
-         <xf:bind id="organisation" nodeset="instance('inst_subfeatures')//organisation_id"
+         <xf:bind id="organisation" nodeset="instance('inst_subfeatures')/organisation_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="name" nodeset="instance('inst_data')//aatams:name" type="xsd:string"
@@ -62,7 +62,7 @@
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
                <xf:insert nodeset="instance('inst_data')//aatams:organisation_ref/aatams:organisation"
-                          origin="instance('inst_organisation')//aatams:organisation[@gml:id=instance('inst_subfeatures')/organisation_id]"/>
+                          origin="instance('inst_organisation')/gml:featureMember/aatams:organisation[@gml:id=instance('inst_subfeatures')/organisation_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:organisation_ref/aatams:organisation"
                           at="1"/>
             </xf:action>
@@ -72,19 +72,20 @@
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
          <xf:action ev:event="set-selected">
-            <xf:setvalue ref="instance('inst_subfeatures')//organisation_id"
-                         value="instance('inst_organisation')//aatams:organisation[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/organisation_id"
+                         value="instance('inst_organisation')/gml:featureMember/aatams:organisation[1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>
-   <body><!--Debug--><div class="form">
+   <body>
+      <div class="form">
          <label>ADD PROJECT</label>
          <div class="form-contents">
             <div class="xfselect1">
                <xf:select1 bind="organisation" appearance="minimal" incremental="true()">
                   <xf:label>Organisation</xf:label>
-                  <xf:itemset nodeset="instance('inst_organisation')//aatams:organisation">
+                  <xf:itemset nodeset="instance('inst_organisation')/gml:featureMember/aatams:organisation">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>

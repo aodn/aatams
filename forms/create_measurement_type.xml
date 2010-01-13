@@ -47,7 +47,7 @@
             </dummy>
          </xf:instance>
          <xf:bind id="measurement_unit_type"
-                  nodeset="instance('inst_subfeatures')//measurement_unit_type_id"
+                  nodeset="instance('inst_subfeatures')/measurement_unit_type_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="name" nodeset="instance('inst_data')//aatams:name" type="xsd:string"
@@ -63,7 +63,7 @@
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
                <xf:insert nodeset="instance('inst_data')//aatams:measurement_unit_type_ref/aatams:measurement_unit_type"
-                          origin="instance('inst_measurement_unit_type')//aatams:measurement_unit_type[@gml:id=instance('inst_subfeatures')/measurement_unit_type_id]"/>
+                          origin="instance('inst_measurement_unit_type')/gml:featureMember/aatams:measurement_unit_type[@gml:id=instance('inst_subfeatures')/measurement_unit_type_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:measurement_unit_type_ref/aatams:measurement_unit_type"
                           at="1"/>
             </xf:action>
@@ -73,19 +73,20 @@
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
          <xf:action ev:event="set-selected">
-            <xf:setvalue ref="instance('inst_subfeatures')//measurement_unit_type_id"
-                         value="instance('inst_measurement_unit_type')//aatams:measurement_unit_type[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/measurement_unit_type_id"
+                         value="instance('inst_measurement_unit_type')/gml:featureMember/aatams:measurement_unit_type[1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>
-   <body><!--Debug--><div class="form">
+   <body>
+      <div class="form">
          <label>ADD MEASUREMENT TYPE</label>
          <div class="form-contents">
             <div class="xfselect1">
                <xf:select1 bind="measurement_unit_type" appearance="minimal" incremental="true()">
                   <xf:label>Measurement Units</xf:label>
-                  <xf:itemset nodeset="instance('inst_measurement_unit_type')//aatams:measurement_unit_type">
+                  <xf:itemset nodeset="instance('inst_measurement_unit_type')/gml:featureMember/aatams:measurement_unit_type">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>

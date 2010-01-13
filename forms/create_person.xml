@@ -213,15 +213,17 @@
                   </xf:trigger>
                </div>
             </div>
-            <div class="messages">
-               <xf:group>
-                  <xf:output bind="error_message" class="error">
+            <div id="messages">
+               <div id="error-message">
+                  <xf:output bind="error_message">
                      <xf:label>Error:</xf:label>
                   </xf:output>
+               </div>
+               <div id="success-message">
                   <xf:output bind="success_message">
                      <xf:label>New Record Id:</xf:label>
                   </xf:output>
-               </xf:group>
+               </div>
             </div>
          </div>
       </div>

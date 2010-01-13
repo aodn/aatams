@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?>
+<html xmlns:gml="http://www.opengis.net/gml" xmlns:wfs="http://www.opengis.net/wfs" xmlns:aatams="http://www.imos.org.au/aatams" xmlns="http://www.w3.org/1999/xhtml" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ows="http://www.opengis.net/ows" xmlns:ogc="http://www.opengis.net/ogc" wfs:dummy="dummy" gml:dummy="dummy" aatams:dummy="dummy" ows:dummy="dummy">
+	<head>
+		<title>PRINT DOWNLOAD WORKSHEET</title>
+		<link href="aatams.css" rel="stylesheet" type="text/css" media="screen" />
+		<link href="aatams_print_worksheet.css" rel="stylesheet" type="text/css" media="print" />
+		<xf:model id="deployment_model">
+			<xf:instance id="inst_installations" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation" />
+			<xf:instance id="inst_installation_deployments" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment" />
+			<xf:instance id="inst_selected">
+				<data xmlns="">
+					<installation_fid />
+					<deployment_fid />
+				</data>
+			</xf:instance>
+			<xf:bind id="selected_installation_fid" nodeset="instance('inst_selected')/installation_fid" />
+			<xf:bind id="selected_deployment_fid" nodeset="instance('inst_selected')/deployment_fid" />
+			<xf:dispatch ev:event="xforms-ready" name="set-selected" target="deployment_model" />
+			<xf:action ev:event="set-selected">
+				<xf:setvalue ref="instance('inst_selected')/installation_fid" value="instance('inst_installations')//aatams:installation[1]/@gml:id" />
+				<xf:setvalue ref="instance('inst_selected')/deployment_fid" value="instance('inst_installation_deployments')//aatams:installation_deployment[aatams:installation_fid=instance('inst_selected')/installation_fid and aatams:scheduled_recovery_date &gt;= local-date()][1]/aatams:deployment_fid" />
+			</xf:action>
+			<xf:instance id="inst_request">
+				<wfs:GetFeature xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" outputFormat="text/xml; subtype=gml/3.1.1">
+					<wfs:Query typeName="pre3:receiver_deployment">
+						<ogc:Filter>
+							<ogc:GmlObjectId gml:id="" />
+						</ogc:Filter>
+					</wfs:Query>
+					<aatams:dummy />
+				</wfs:GetFeature>
+			</xf:instance>
+			<xf:instance id="inst_deployment">
+				<wfs:FeatureCollection />
+			</xf:instance>
+			<xf:submission id="get_deployment" method="post" action="../../deegree-wfs/services" ref="instance('inst_request')" replace="instance" instance="inst_deployment">
+				<xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+			</xf:submission>
+		</xf:model>
+		<xf:model id="download_model">
+			<xf:instance id="inst_data">
+				<wfs:Transaction version="1.1.0" service="WFS">
+					<wfs:Insert>
+						<wfs:FeatureCollection>
+							<gml:featureMember>
+								<aatams:deployment_download>
+									<aatams:installation_deployment_ref>
+										<aatams:installation_deployment />
+									</aatams:installation_deployment_ref>
+									<aatams:recovery_timestamp />
+									<aatams:recovery_timestamp />
+									<aatams:time_correction_start />
+									<aatams:time_correction_end />
+									<aatams:time_correction_type />
+									<aatams:clock_drift />
+									<aatams:pings />
+									<aatams:detections />
+									<aatams:cc_email_addresses />
+									<aatams:comments />
+								</aatams:deployment_download>
+							</gml:featureMember>
+						</wfs:FeatureCollection>
+					</wfs:Insert>
+				</wfs:Transaction>
+			</xf:instance>
+			<xf:instance id="inst_subfeatures">
+				<data xmlns="">
+					<installation_id />
+					<installation_deployment_id />
+				</data>
+			</xf:instance>
+			<xf:instance id="inst_installation" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation" />
+			<xf:instance id="inst_installation_deployment" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment" />
+			<xf:instance id="inst_response">
+				<dummy xmlns="">
+					<ows:Exception />
+					<wfs:TransactionResponse>
+						<wfs:InsertResults>
+							<wfs:Feature>
+								<ogc:FeatureId />
+							</wfs:Feature>
+						</wfs:InsertResults>
+					</wfs:TransactionResponse>
+				</dummy>
+			</xf:instance>
+			<xf:bind id="installation" nodeset="instance('inst_subfeatures')//installation_id" type="xsd:string" required="true()" />
+			<xf:bind id="installation_deployment" nodeset="instance('inst_subfeatures')//installation_deployment_id" type="xsd:string" required="true()" />
+			<xf:bind id="download_timestamp" nodeset="instance('inst_data')//aatams:download_timestamp" type="xsd:dateTime" required="false()" />
+			<xf:bind id="recovery_timestamp" nodeset="instance('inst_data')//aatams:recovery_timestamp" type="xsd:dateTime" required="true()" />
+			<xf:bind id="time_correction_start" nodeset="instance('inst_data')//aatams:time_correction_start" type="xsd:dateTime" required="false()" />
+			<xf:bind id="time_correction_end" nodeset="instance('inst_data')//aatams:time_correction_end" type="xsd:dateTime" required="false()" />
+			<xf:bind id="time_correction_type" nodeset="instance('inst_data')//aatams:time_correction_type" type="xsd:string" required="false()" />
+			<xf:bind id="clock_drift" nodeset="instance('inst_data')//aatams:clock_drift" type="xsd:integer" required="false()" />
+			<xf:bind id="pings" nodeset="instance('inst_data')//aatams:pings" type="xsd:integer" required="false()" />
+			<xf:bind id="detections" nodeset="instance('inst_data')//aatams:detections" type="xsd:integer" required="false()" />
+			<xf:bind id="cc_email_addresses" nodeset="instance('inst_data')//aatams:cc_email_addresses" type="xsd:string" required="false()" />
+			<xf:bind id="comments" nodeset="instance('inst_data')//aatams:comments" type="xsd:string" required="false()" />
+			<xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException" calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)" type="xsd:string" />
+			<xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid" type="xsd:string" />
+			<xf:submission id="s01" ref="instance('inst_data')" method="post" action="../../deegree-wfs/services" replace="instance" instance="inst_response">
+				<xf:action ev:event="xforms-submit">
+					<xf:delete nodeset="instance('inst_data')//aatams:recovery_timestamp[.='']" />
+					<xf:delete nodeset="instance('inst_data')//aatams:time_correction_start[.='']" />
+					<xf:delete nodeset="instance('inst_data')//aatams:time_correction_end[.='']" />
+					<xf:delete nodeset="instance('inst_data')//aatams:clock_drift[.='']" />
+					<xf:delete nodeset="instance('inst_data')//aatams:pings[.='']" />
+					<xf:delete nodeset="instance('inst_data')//aatams:detections[.='']" />
+					<xf:insert nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment" origin="instance('inst_installation_deployment')//aatams:installation_deployment[@gml:id=instance('inst_subfeatures')/installation_deployment_id]" />
+					<xf:delete nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment" at="1" />
+				</xf:action>
+				<xf:message level="modeless" ev:event="xforms-submit-error">Submit Error!</xf:message>
+			</xf:submission>
+			<xf:dispatch ev:event="xforms-ready" name="set-selected" target="download_model" />
+			<xf:action ev:event="set-selected">
+				<xf:setvalue ref="instance('inst_subfeatures')//installation_id" value="instance('inst_installation')//aatams:installation[1]/@gml:id" />
+				<xf:setvalue ref="instance('inst_subfeatures')//installation_deployment_id" value="instance('inst_installation_deployment')//aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id" />
+				<xf:dispatch name="xforms-revalidate" target="model1" />
+			</xf:action>
+		</xf:model>
+	</head>
+	<body>
+		<xf:switch>
+			<xf:case id="select_deployment" seleted="true">
+				<div class="form">
+					<label>PRINT DOWNLOAD WORKSHEET</label>
+					<div class="form-contents">
+						<div class="dependant-selects">
+							<div class="xfselect1">
+								<xf:select1 bind="selected_installation_fid" appearance="minimal" incremental="true()">
+									<xf:label>Installation</xf:label>
+									<xf:itemset nodeset="instance('inst_installations')/gml:featureMember/aatams:installation">
+										<xf:value ref="@gml:id" />
+										<xf:label ref="aatams:name" />
+									</xf:itemset>
+									<xf:action ev:event="xforms-value-changed">
+										<xf:setvalue ref="instance('inst_selected')/deployment_fid" value="instance('inst_installation_deployments')//aatams:installation_deployment[aatams:installation_fid=instance('inst_selected')/installation_fid and aatams:scheduled_recovery_date &gt;= local-date()][1]/aatams:deployment_fid" />
+									</xf:action>
+								</xf:select1>
+							</div>
+							<div class="xfselect1">
+								<xf:select1 bind="selected_deployment_fid" appearance="minimal" incremental="true()">
+									<xf:label>Receiver Deployment</xf:label>
+									<xf:itemset nodeset="instance('inst_installation_deployments')/gml:featureMember/aatams:installation_deployment[aatams:installation_fid=instance('inst_selected')/installation_fid and aatams:scheduled_recovery_date &gt;= local-date()]">
+										<xf:value ref="aatams:deployment_fid" />
+										<xf:label ref="aatams:name" />
+									</xf:itemset>
+								</xf:select1>
+							</div>
+						</div>
+						<xf:group ref="instance('inst_installation_deployments')/gml:featureMember/aatams:installation_deployment[aatams:deployment_fid = instance('inst_selected')/deployment_fid]">
+							<div class="xfoutput">
+								<xf:output ref="translate(aatams:deployment_timestamp,'T',' ')">
+									<xf:label>Deployment Date-Time:</xf:label>
+								</xf:output>
+							</div>
+							<div class="xfoutput">
+								<xf:output ref="substring-before(aatams:scheduled_recovery_date,'T00:00:00')">
+									<xf:label>Scheduled Recovery Date:</xf:label>
+								</xf:output>
+							</div>
+							<div class="xfoutput">
+								<xf:output ref="aatams:station_name">
+									<xf:label>Station:</xf:label>
+								</xf:output>
+							</div>
+							<div class="xfoutput">
+								<xf:output ref="aatams:longitude">
+									<xf:label>Longitude:</xf:label>
+								</xf:output>
+							</div>
+							<div class="xfoutput">
+								<xf:output ref="aatams:latitude">
+									<xf:label>Latitude:</xf:label>
+								</xf:output>
+							</div>
+						</xf:group>
+						<div class="xftrigger">
+							<xf:trigger>
+								<xf:label>Show Worksheet</xf:label>
+								<xf:action ev:event="DOMActivate">
+									<xf:setvalue ref="instance('inst_request')/wfs:Query/ogc:Filter/ogc:GmlObjectId/@gml:id" value="instance('inst_selected')/deployment_fid" />
+									<xf:send submission="get_deployment" />
+									<xf:toggle case="show_worksheet" />
+								</xf:action>
+							</xf:trigger>
+						</div>
+					</div>
+				</div>
+			</xf:case>
+			<xf:case id="show_worksheet">
+				<div id="toggle_select_deployment" class="xftrigger" style="padding:5px;background-color:orange;">
+					<xf:trigger >
+						<xf:label>Select New Deployment</xf:label>
+						<xf:toggle case="select_deployment" ev:event="DOMActivate" />
+					</xf:trigger>
+					<input type="button" onclick="javascript:window.print();" value="Print"/>
+				</div>
+				<div class="worksheet">
+					<h3>AATAMS RECEIVER DEPLOYMENT DOWNLOAD WORKSHEET</h3>
+					<div class="worksheet-section">
+						<h4>DEPLOYMENT DETAILS</h4>
+						<div class="worksheet-contents">
+							<xf:group ref="instance('inst_deployment')/gml:featureMember/aatams:receiver_deployment">
+								<div class="xfoutput">
+									<xf:output ref="//aatams:project_person/aatams:project_name">
+										<xf:label>Project:</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfoutput">
+									<xf:output ref="//aatams:project_person/aatams:person_name">
+										<xf:label>Person(Role):</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfoutput">
+									<xf:output ref="//aatams:installation/aatams:name">
+										<xf:label>Installation:</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfoutput">
+									<xf:output ref="//aatams:station/aatams:name">
+										<xf:label>Station:</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfoutput">
+									<xf:output ref="//aatams:receiver_device/aatams:name">
+										<xf:label>Receiver Device:</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfoutput">
+									<xf:output ref="aatams:longitude">
+										<xf:label>Longitude:</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfoutput">
+									<xf:output ref="aatams:latitude">
+										<xf:label>Latitude:</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfoutput">
+									<xf:output ref="translate(aatams:deployment_timestamp,'T',' ')">
+										<xf:label>Deployment Date-Time:</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfoutput narrow">
+									<xf:output ref="substring-before(aatams:scheduled_recovery_date,'T00:00:00')">
+										<xf:label>Scheduled Recovery Date:</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfoutput narrow" style="float:right;clear:right;">
+									<xf:output ref="aatams:acoustic_release">
+										<xf:label>Acoustic Release:</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfoutput narrow" >
+									<xf:output ref="//aatams:mooring_type/aatams:name">
+										<xf:label>Mooring Type:</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfoutput narrow" style="float:right;clear:right;" >
+									<xf:output ref="aatams:bottom_depth">
+										<xf:label>Bottom Depth:</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfoutput">
+									<xf:output ref="aatams:comments">
+										<xf:label>Comments:</xf:label>
+									</xf:output>
+								</div>
+							</xf:group>
+						</div>
+					</div>
+					<div class="worksheet-section">
+						<h4>DOWNLOAD DETAILS</h4>
+						<div class="worksheet-contents">
+							<div class="xfinput">
+								<xf:input bind="download_timestamp" incremental="true()">
+									<xf:label>Download Timestamp</xf:label>
+								</xf:input>
+							</div>
+							<div class="xfinput">
+								<xf:input bind="time_correction_start" incremental="true()">
+									<xf:label>Time Correction Start</xf:label>
+								</xf:input>
+							</div>
+							<div class="xfinput">
+								<xf:input bind="time_correction_end" incremental="true()">
+									<xf:label>Time Correction End</xf:label>
+								</xf:input>
+							</div>
+							<div class="xfinput">
+								<xf:input bind="time_correction_type" incremental="true()">
+									<xf:label>Time Correction Type</xf:label>
+								</xf:input>
+							</div>
+							<div class="xfinput">
+								<xf:input bind="clock_drift" incremental="true()">
+									<xf:label>Clock Drift</xf:label>
+								</xf:input>
+							</div>
+							<div class="xfinput">
+								<xf:input bind="pings" incremental="true()">
+									<xf:label>Pings</xf:label>
+								</xf:input>
+							</div>
+							<div class="xfinput">
+								<xf:input bind="detections" incremental="true()">
+									<xf:label>Detections</xf:label>
+								</xf:input>
+							</div>
+							<!--div class="xftextarea">
+								<xf:textarea bind="cc_email_addresses">
+									<xf:label>Cc Email Addresses</xf:label>
+								</xf:textarea>
+							</div-->
+							<div class="xftextarea">
+								<xf:textarea bind="comments">
+									<xf:label>Comments</xf:label>
+								</xf:textarea>
+							</div>
+							<div class="buttons" style="display:none;">
+								<div class="xfsubmit">
+									<xf:submit submission="s01">
+										<xf:label>Save</xf:label>
+									</xf:submit>
+								</div>
+								<div class="xftrigger" style="clear:none;">
+									<xf:trigger>
+										<xf:label>Reset</xf:label>
+										<xf:reset ev:event="DOMActivate" />
+										<xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1" />
+										<xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException" />
+										<xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid" />
+									</xf:trigger>
+								</div>
+							</div>
+							<div id="messages">
+								<div id="error-message">
+									<xf:output bind="error_message">
+										<xf:label>Error:</xf:label>
+									</xf:output>
+								</div>
+								<div id="success-message">
+									<xf:output bind="success_message">
+										<xf:label>New Record Id:</xf:label>
+									</xf:output>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</xf:case>
+		</xf:switch>
+		<br />
+		<div id="console" />
+	</body>
+</html>

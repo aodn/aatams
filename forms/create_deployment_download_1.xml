@@ -268,7 +268,7 @@
 						</xf:trigger>
 					</div>
 				</div>
-				<div class="messages">
+				<div id="messages">
 					<div id="error-message">
 						<xf:output bind="error_message">
 							<xf:label>Error:</xf:label>

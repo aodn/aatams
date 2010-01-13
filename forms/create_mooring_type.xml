@@ -78,28 +78,32 @@
                   <xf:label>Description</xf:label>
                </xf:input>
             </div>
-            <div class="xfsubmit">
-               <xf:submit submission="s01">
-                  <xf:label>Save</xf:label>
-               </xf:submit>
+            <div class="buttons">
+               <div class="xfsubmit">
+                  <xf:submit submission="s01">
+                     <xf:label>Save</xf:label>
+                  </xf:submit>
+               </div>
+               <div class="xftrigger" style="clear:none;">
+                  <xf:trigger>
+                     <xf:label>Reset</xf:label>
+                     <xf:reset ev:event="DOMActivate"/>
+                     <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
+                     <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
+                     <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
+                  </xf:trigger>
+               </div>
             </div>
-            <div class="xftrigger" style="clear:none;">
-               <xf:trigger>
-                  <xf:label>Reset</xf:label>
-                  <xf:reset ev:event="DOMActivate"/>
-                  <xf:dispatch ev:event="DOMActivate" name="set-selected" target="model1"/>
-                  <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ServiceException"/>
-                  <xf:delete ev:event="DOMActivate" nodeset="instance('inst_response')//ogc:FeatureId/@fid"/>
-               </xf:trigger>
+            <div class="messages">
+               <xf:group>
+                  <xf:output bind="error_message" class="error">
+                     <xf:label>Error:</xf:label>
+                  </xf:output>
+                  <xf:output bind="success_message">
+                     <xf:label>New Record Id:</xf:label>
+                  </xf:output>
+               </xf:group>
             </div>
-            <xf:group>
-               <xf:output bind="error_message" class="error">
-                  <xf:label>Error:</xf:label>
-               </xf:output>
-               <xf:output bind="success_message">
-                  <xf:label>New Record Id:</xf:label>
-               </xf:output>
-            </xf:group>
          </div>
       </div>
       <br/>

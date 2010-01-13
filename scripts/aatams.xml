@@ -141,7 +141,7 @@
       <column name="RECOVERY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="RECOVERY_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="RECOVERY_STATUS_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+      <column name="RECOVERY_STATUS_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="COMMENTS" primaryKey="false" required="false" type="LONGVARCHAR" size="4000" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	 <unique-column name="DEPLOYMENT_ID"/>

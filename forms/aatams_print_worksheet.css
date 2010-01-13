@@ -22,7 +22,7 @@ div.worksheet-section { width:100%; float:left; clear:left; margin-bottom:20pt; 
 div.worksheet-contents span.xforms-control > span { margin-bottom:3pt; }
 div.worksheet-contents span.xforms-control > span > span > span {  padding:1pt; }
 div.worksheet-contents span.xforms-output > span > span > span.value { color:black; border:dashed 1px black; width:370pt; font-weight: bold; }
-div.worksheet-contents span.xforms-input > span > span > span.value { border:dashed 1px black; }
+div.worksheet-contents span.xforms-control > span > span > span.value { border:dashed 1px black; }
 div.narrow span.xforms-output > span > span > span.value {  width:90pt; }
 div.medium span.xforms-output > span > span > span.value {  width:180pt; }
 div.worksheet-contents label.xforms-label { width: 150pt; text-align:left; }

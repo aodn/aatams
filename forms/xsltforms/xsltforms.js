@@ -1,6 +1,6 @@
 /*
 
-Copyright (C) 2008-2010 <agenceXML> - Alain COUTHURES
+Copyright (C) 2008-2009 <agenceXML> - Alain COUTHURES
 Contact at : <info@agencexml.com>
 
 Copyright (C) 2006 AJAXForms S.L.
@@ -146,7 +146,8 @@ var Core = {
         }
 
 				properties.setDoc(req.responseText);
-				properties.doc.documentElement = properties.doc.getElementsByTagName("properties")[0];
+				properties.srcXML = Writer.toString(properties.doc.getElementsByTagName("properties")[0]);
+				properties.setDoc(properties.srcXML);
 				//XMLEvents.dispatch(properties.model, "xforms-rebuild");
 				//xforms.refresh();
     },
@@ -179,28 +180,38 @@ var Core = {
         if (content) { el.appendChild(document.createTextNode(content)); }
         return el;
     },
+
+		
+
     getWindowSize : function() {
-				var myWidth = 0, myHeight = 0;
+				var myWidth = 0, myHeight = 0, myOffsetX = 0, myOffsetY = 0, myScrollX = 0, myScrollY = 0;
 				if( typeof( window.innerWidth ) == 'number' ) {
 					//Non-IE
-					myWidth = window.innerWidth;
+					myWidth = document.documentElement.clientWidth;
 					myHeight = window.innerHeight;
+					myOffsetX = document.body ? Math.max(document.documentElement.clientWidth, document.body.clientWidth) : document.documentElement.clientWidth; // body margins ?
+					myOffsetY = document.body ? Math.max(document.documentElement.clientHeight, document.body.clientHeight) : document.documentElement.clientHeight; // body margins ?
+					myScrollX = window.scrollX;
+					myScrollY = window.scrollY;
 				} else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
 					//IE 6+ in 'standards compliant mode'
 					myWidth = document.documentElement.clientWidth;
 					myHeight = document.documentElement.clientHeight;
-				} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
-					//IE 4 compatible
-					myWidth = document.body.clientWidth;
-					myHeight = document.body.clientHeight;
+					myOffsetX = Math.max(document.documentElement.clientWidth, document.body.clientWidth); // body margins ?
+					myOffsetY = Math.max(document.documentElement.clientHeight, document.body.clientHeight); // body margins ?
+					myScrollX = document.body.parentNode.scrollLeft;
+					myScrollY = document.body.parentNode.scrollTop;
 				}
         return {
             height : myHeight,
-            width : myWidth
+            width : myWidth,
+						offsetX : myOffsetX,
+						offsetY : myOffsetY,
+						scrollX : myScrollX,
+						scrollY : myScrollY
         };
     }
 };
-
 
 		
 
@@ -280,15 +291,13 @@ var Dialog = {
 
     show : function(div, parent, modal) {
 				if (modal) {
-					var surround = $('xsf-dialog-surround');
+					var surround = $('xforms-dialog-surround');
 					surround.style.display = "block";
 					surround.style.zIndex = (this.depth+this.initzindex)*2;
 					this.depth++;
-					if (Core.isIE6) {
-						var size = Core.getWindowSize();
-						surround.style.height = size.height;
-						surround.style.width = size.width;
-					}
+					var size = Core.getWindowSize();
+					surround.style.height = size.offsetY+"px";
+					surround.style.width = size.offsetX+"px";
 				}
 
 				if (typeof div != "string") {
@@ -307,9 +316,8 @@ var Dialog = {
             Core.setPos(div, absPos.x, (absPos.y + parent.offsetHeight));
         } else {        
 					var size = Core.getWindowSize();
-					var h = (size.height - div.offsetHeight) / 2;
-							Core.setPos(div, (size.width - div.offsetWidth) / 2,
-									h > 0? h : 100);
+					var h = size.scrollY + (size.height - div.offsetHeight) / 2;
+					Core.setPos(div, (size.width - div.offsetWidth) / 2, h > 0 ? h : 100);
         }
 
         this.showSelects(div, false, modal);
@@ -325,9 +333,9 @@ var Dialog = {
 				if (modal) {
 					this.depth--;
 					if (this.depth == 0) {
-						$('xsf-dialog-surround').style.display = "none";
+						$('xforms-dialog-surround').style.display = "none";
 					} else {
-						$('xsf-dialog-surround').style.zIndex = (this.depth+this.initzindex)*2-2;
+						$('xforms-dialog-surround').style.zIndex = (this.depth+this.initzindex)*2-2;
 					}
 				}
         this.showSelects(div, true, modal);
@@ -497,39 +505,43 @@ if (Core.isIE) {
 var I8N = {
     messages : null,
     lang : null,
-    langs : ["cz", "de", "en_uk", "es", "fr" , "gl", "it", "ja", "nb_no", "nl", "nn_no", "pt", "ro", "ru", "si", "sk"],
+    langs : ["cz", "de", "en", "en_us", "es", "fr" , "gl", "it", "ja", "nb_no", "nl", "nn_no", "pt", "ro", "ru", "si", "sk"],
 
 		
 
     get : function(key) {
-				var properties = $("xf-instance-config").xfElement;
-				if (properties.doc) {
-					if (Language == "navigator" || Language != properties.doc.documentElement.getElementsByTagName("language")[0].firstChild.nodeValue) {
-						var lan = Language == "navigator" ? (navigator.language || navigator.userLanguage) : properties.doc.documentElement.getElementsByTagName("language")[0].firstChild.nodeValue;
-						lan = lan.replace("-", "_").toLowerCase();
-						var finded = inArray(lan, I8N.langs);
-						if (!finded) {
-							ind = lan.indexOf("_");
-							if (ind != -1) {
-									lan = lan.substring(0, ind);
-							}
-							finded = inArray(lan, I8N.langs);
-						}
-						if (finded) {
-							var filename = "config_" + lan + ".xsl";
-							Core.loadProperties(properties, filename);
-							Language = properties.doc.documentElement.getElementsByTagName("language")[0].firstChild.nodeValue;
-						} else {
-							Language = "default";
-						}
+			var properties = $("xf-instance-config").xfElement;
+			if (!properties.doc) {
+				properties.setDoc(properties.srcXML);
+			}
+			if (Language == "navigator" || Language != properties.doc.documentElement.getElementsByTagName("language")[0].firstChild.nodeValue) {
+				var lan = Language == "navigator" ? (navigator.language || navigator.userLanguage) : properties.doc.documentElement.getElementsByTagName("language")[0].firstChild.nodeValue;
+				lan = lan.replace("-", "_").toLowerCase();
+				var finded = inArray(lan, I8N.langs);
+				if (!finded) {
+					ind = lan.indexOf("_");
+					if (ind != -1) {
+							lan = lan.substring(0, ind);
 					}
-					properties = properties.doc.documentElement.getElementsByTagName(key);
-					if (properties.length != 0) {
-						return properties[0].firstChild.nodeValue;
-					}
-					return "";
+					finded = inArray(lan, I8N.langs);
 				}
-				return key == "status" ? LoadingMsg : "";
+				if (finded) {
+					var filename = "config_" + lan + ".xsl";
+					Core.loadProperties(properties, filename);
+					Language = properties.doc.documentElement.getElementsByTagName("language")[0].firstChild.nodeValue;
+				} else {
+					Language = "default";
+				}
+			}
+			properties = properties.doc.documentElement.getElementsByTagName(key);
+			if (properties.length != 0) {
+				return properties[0].firstChild.nodeValue;
+			}
+			return "";
+			/*
+			}
+			return key == "status" ? LoadingMsg : "";
+			*/
     },
 
 		
@@ -2716,6 +2728,59 @@ AJXTree.prototype.refresh = function() {
 		
 		
 		
+function XFAVT(id, attrs) {
+	this.init(id);
+	this.attrs = attrs;
+	this.bindings = [];
+	for (var i = 0; i < attrs.length; i++) {
+		
+	}
+	this.hasBinding = true;
+	this.isOutput = true;
+}
+
+XFAVT.prototype = new XFControl();
+
+
+		
+
+XFAVT.prototype.clone = function(id) { 
+	return new XFAVT(id, this.attrs);
+};
+
+
+		
+
+XFAVT.prototype.dispose = function() {
+	this.attrs = null;
+	XFControl.prototype.dispose.call(this);
+};
+
+
+		
+
+XFAVT.prototype.setValue = function(value) {
+	var node = this.element.node;
+	var element = this.valueElement;
+
+    if (element.nodeName.toLowerCase() == "span") {
+			if (this.mediatype == "application/xhtml+xml") {
+				while (element.firstChild) {
+					element.removeChild(element.firstChild);
+				}
+				XDocument.parse(value, element);
+			} else {
+        setValue(element, value);
+			}
+    } else {
+        element.src = value;
+    }
+};
+
+	
+		
+		
+		
 function XFElement() {
 }
 
@@ -3525,7 +3590,7 @@ XFItemset.prototype.refresh = function() {
 	var parent = this.element.parentNode;
 	var i;
 	for (i = 0; parent.childNodes[i] != this.element; i++);
-	for (var j = 0; j < this.nodes.length || j == 1; j++) {
+	for (var j = 0; j < this.nodes.length || j == 0; j++) {
 		Core.setClass(parent.childNodes[i+j], "xforms-disabled", this.nodes.length === 0);
 	}
 };
@@ -4252,8 +4317,8 @@ function Calendar() {
 //SC
 		//cal.input.value = I8N.format(date);
 		cal.input.value = I8N.format(date,null,true);
-//end SC		
-	    } else {
+//end SC;
+            } else {
                 cal.input.value = I8N.formatDate(date);
             }
 
@@ -4958,7 +5023,7 @@ TypeDefs.Default = {
 //SC
 			//return I8N.format(I8N.parse(value), "yyyy-MM-ddThh:mm:ss");
 			return I8N.format(I8N.parse(value), "yyyy-MM-ddThh:mm:ss", true);
-//end SC
+//end SC;
 		}
 	},
 
@@ -6028,8 +6093,14 @@ XMLEvents.define("xforms-binding-exception",     true, false);
 XMLEvents.define("ajx-start", true,  true, function(evt) { evt.target.xfElement.start(); });
 XMLEvents.define("ajx-stop",  true,  true, function(evt) { evt.target.xfElement.stop(); });
 XMLEvents.define("ajx-time",  true,  true);
-XMLEvents.define("xsf-show",  true,  true, function(evt) { Dialog.show(evt.target, null, true); });
-XMLEvents.define("xsf-hide",  true,  true, function(evt) { Dialog.hide(evt.target, true); });
+
+		
+
+XMLEvents.define("xforms-dialog-open",  true,  true, function(evt) { Dialog.show(evt.target, null, true); });
+
+		
+
+XMLEvents.define("xforms-dialog-close",  true,  true, function(evt) { Dialog.hide(evt.target, true); });
     
 	
 	
@@ -6386,13 +6457,14 @@ XNode.recycle = function(node) {
 		
 
 XNode.create = function(type, ns, name, value, owner) {
-    if (XNode.unused_.length > 0) {
-        var node = XNode.unused_.pop();
-        XNode.init.call(node, type, ns, name, value, owner);
-        return node;
-    } else {
-        return new XNode(type, ns, name, value, owner);
-    }
+	while (XNode.unused_.length > 0) {
+		var node = XNode.unused_.pop();
+		if (!node.clear) {
+			XNode.init.call(node, type, ns, name, value, owner);
+			return node;
+		}
+	}
+	return new XNode(type, ns, name, value, owner);
 };
     
 	
@@ -6797,6 +6869,25 @@ var XMLWriter = {
 		
 		
 		
+function ArrayExpr(exprs) {
+  this.exprs = exprs;
+}
+
+
+		
+
+ArrayExpr.prototype.evaluate = function(ctx) {
+	var nodes = [];
+	for (var i = 0; i < this.exprs.length; i++) {
+		nodes[i] = this.exprs[i].evaluate(ctx);
+	}
+  return nodes;
+};
+
+	
+		
+		
+		
 function BinaryExpr(expr1, op, expr2) {
     this.expr1 = expr1;
     this.expr2 = expr2;
@@ -6809,8 +6900,34 @@ function BinaryExpr(expr1, op, expr2) {
 BinaryExpr.prototype.evaluate = function(ctx) {
     var v1 = this.expr1.evaluate(ctx);
     var v2 = this.expr2.evaluate(ctx);
-    var n1 = numberValue(v1);
-    var n2 = numberValue(v2);
+		var n1;
+		var n2;
+		if ((((typeof v1) == "object" && v1.length > 1) || ((typeof v2) == "object" && v2.length > 1)) && 
+		    (this.op == "=" || this.op == "!=" || this.op == "<" || this.op == "<=" || this.op == ">" || this.op == ">=")) {
+			for (var i = 0; i < v1.length; i++) {
+				n1 = numberValue([v1[i]]);
+				if (isNaN(n1)) {
+						n1 = stringValue([v1[i]]);
+				}
+				for (var j = 0; j <v2.length; j++) {
+					n2 = numberValue([v2[j]]);
+					if (isNaN(n2)) {
+							n2 = stringValue([v2[j]]);
+					}
+					switch (this.op) {
+						case '='   : if (n1 == n2) return true; break;
+						case '!='  : if (n1 != n2) return true; break;
+						case '<'   : if (n1 < n2) return true; break;
+						case '<='  : if (n1 <= n2) return true; break;
+						case '>'   : if (n1 > n2) return true; break;
+						case '>='  : if (n1 >= n2) return true; break;
+					}
+				}
+			}
+			return false;
+		}
+    n1 = numberValue(v1);
+    n2 = numberValue(v2);
     
     if (isNaN(n1) || isNaN(n2)) {
         n1 = stringValue(v1);
@@ -7524,7 +7641,7 @@ function stringSplit(s, c) {
 		
 		
 		
-function XPath(expression, compiled) {
+function XPath(expression, compiled, ns) {
 	this.expression = expression;
 	if (typeof compiled == "string") {
 		alert("XSLTForms Exception\n--------------------------\n\nError parsing the following XPath expression :\n\n"+expression+"\n\n"+compiled);
@@ -7535,9 +7652,9 @@ function XPath(expression, compiled) {
 	this.nsresolver = new NSResolver();
 	XPath.expressions[expression] = this;
 
-	if (arguments.length > 2)  {
-		for (var i = 2; i < arguments.length; i += 2) {
-			this.nsresolver.register(arguments[i], arguments[i + 1]);
+	if (ns.length > 0)  {
+		for (var i = 0; i < ns.length; i += 2) {
+			this.nsresolver.register(ns[i], ns[i + 1]);
 		}
 	} else {
 		this.nsresolver.register("", "http://www.w3.org/1999/xhtml");
@@ -7579,7 +7696,22 @@ XPath.notfound = false;
 XPath.get = function(str) {
 	return XPath.expressions[str];
 };
-    
+
+		
+
+XPath.create = function(expression, compiled) {
+	if (XPath.get(expression) != null) {
+		delete compiled;
+	} else {
+		var ns = [];
+		for (var i = 2; i < arguments.length; i += 2) {
+			ns[i-2] = arguments[i];
+			ns[i-1] = arguments[i+1];
+		}
+		new XPath(expression, compiled, ns);
+	}
+};
+
 		
 
 XPath.registerNS = function(prefix, uri) {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
-Copyright (C) 2008-2010 agenceXML - Alain COUTHURES
+Copyright (C) 2008-2009 agenceXML - Alain COUTHURES
 Contact at : info@agencexml.com
 
 Copyright (C) 2006 AJAXForms S.L.
@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		</msxsl:script>
 		<xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="confignodes"><xsl:call-template name="config"/></xsl:variable>
 		<xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="config" select="exslt:node-set($confignodes)"/>
-		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsf="http://www.agencexml.com/xsltforms" match="xhtml:html | html">
+		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="xhtml:html | html">
 			<!-- figure out what directory the XSL is loaded from and use it for everything else -->
 			<xsl:variable name="pivalue" select="translate(normalize-space(/processing-instruction('xml-stylesheet')[1]), ' ', '')"/>
 			<xsl:variable name="hrefquote" select="substring(substring-after($pivalue, 'href='), 1, 1)"/>
@@ -141,6 +141,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 									<xsl:sort select="."/>
 									<xsl:value-of select="string-length(.)"/>.<xsl:value-of select="."/>
 								</xsl:for-each>
+								<xsl:for-each select="//@*[contains(.,'{') and contains(substring-after(.,'{'),'}')]">
+									<xsl:sort select="."/>
+									<xsl:call-template name="avt2xexpr">
+										<xsl:with-param name="a" select="."/>
+									</xsl:call-template>
+								</xsl:for-each>
 								<xsl:if test="//xforms:bind[not(@nodeset)]">4.*[1]</xsl:if>
 						</xsl:variable>
 						<xsl:call-template name="xps">
@@ -198,8 +204,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				<body onload="init();if (window.xf_user_init) xf_user_init();{$initdebug}{xhtml:body/@onload}{body/@onload}">
 					<xsl:copy-of select="xhtml:body/@*[name() != 'onload'] | body/@*[name() != 'onload']"/>
 					<xsl:apply-templates select=".//xforms:message|.//ajx:confirm"/>
-					<xsl:if test="//xsf:dialog">
-						<div id="xsf-dialog-surround"/>
+					<xsl:if test="//xforms:dialog">
+						<div id="xforms-dialog-surround"/>
 					</xsl:if>
 					<xsl:if test="$displaydebug = 'true'">
 						<div id="xformControl">
@@ -217,10 +223,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		</xsl:template>
 	
 		
-		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsf="http://www.agencexml.com/xsltforms" match="xsf:dialog">
+		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="*[@*[contains(.,'{') and contains(substring-after(.,'{'),'}')] and not(@id)]">
+			<xsl:copy>
+				<xsl:call-template name="genid"/>
+				<xsl:apply-templates select="@* | node()"/>
+			</xsl:copy>
+		</xsl:template>
+	
+		
+		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="xforms:dialog">
 			<div>
 				<xsl:call-template name="style">
-					<xsl:with-param name="class">xsf-dialog</xsl:with-param>
+					<xsl:with-param name="class">xforms-dialog</xsl:with-param>
 				</xsl:call-template>
 				<xsl:apply-templates>
 					<xsl:with-param name="appearance" select="'groupTitle'"/>
@@ -236,7 +250,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		
 		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="xforms:setvalue|xforms:insert|xforms:delete|xforms:action|xforms:toggle|xforms:send|xforms:setfocus"/>
 		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="xforms:reset|xforms:refresh|xforms:rebuild|xforms:recalculate|xforms:revalidate"/>
-		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="ajx:show|ajx:hide|ajx:start|ajx:stop"/>
+		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="xforms:show|xforms:hide"/>
+		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="ajx:start|ajx:stop"/>
 		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="xhtml:br"><xsl:element name="br"/></xsl:template>
 	
 		
@@ -981,7 +996,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 				<xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
 			</xsl:if>
 			<xsl:choose>
-				<xsl:when test="contains(concat(' ',$class, ' '), ' xforms-label ') or contains(concat(' ',$class, ' '), ' xforms-item-label ') or contains(concat(' ',$class, ' '), ' xforms-case ') or contains(concat(' ',$class, ' '), ' ajx-tab ') or contains(concat(' ',$class, ' '), ' ajx-tabs ') or contains(concat(' ',$class, ' '), ' xsf-dialog ')">
+				<xsl:when test="contains(concat(' ',$class, ' '), ' xforms-label ') or contains(concat(' ',$class, ' '), ' xforms-item-label ') or contains(concat(' ',$class, ' '), ' xforms-case ') or contains(concat(' ',$class, ' '), ' ajx-tab ') or contains(concat(' ',$class, ' '), ' ajx-tabs ') or contains(concat(' ',$class, ' '), ' xforms-dialog ')">
 					<xsl:attribute name="class"><xsl:value-of select="normalize-space(concat(@class, ' ', $class))"/></xsl:attribute>
 				</xsl:when>
 				<xsl:otherwise>
@@ -1066,7 +1081,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					<xsl:otherwise>"Unrecognized expression '<xsl:value-of select="$xp"/>'"</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
-			<xsl:variable name="result">new XPath("<xsl:call-template name="toXPathExpr"><xsl:with-param name="p" select="$xp"/></xsl:call-template>",<xsl:value-of select="$xp2jsres2"/><xsl:call-template name="js2ns"><xsl:with-param name="js" select="$xp2jsres"/></xsl:call-template>);</xsl:variable>
+			<xsl:variable name="result">XPath.create("<xsl:call-template name="toXPathExpr"><xsl:with-param name="p" select="$xp"/></xsl:call-template>",<xsl:value-of select="$xp2jsres2"/><xsl:call-template name="js2ns"><xsl:with-param name="js" select="$xp2jsres"/></xsl:call-template>);</xsl:variable>
 			<xsl:value-of select="$result"/><xsl:text>
 </xsl:text>
 	  </xsl:template>
@@ -1271,6 +1286,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		</xsl:template>
 	
 		
+		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="avt2xexpr">
+			<xsl:param name="a"/>
+			<xsl:variable name="avt" select="substring-before(substring-after($a,'{'),'}')"/>
+			<xsl:if test="$avt != ''">
+				<xsl:value-of select="string-length($avt)"/>.<xsl:value-of select="$avt"/>
+				<xsl:call-template name="avt2xexpr">
+					<xsl:with-param name="a" select="substring-after($a,'}')"/>
+				</xsl:call-template>
+			</xsl:if>
+		</xsl:template>
+	
+		
 		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="closepar">
 			<xsl:param name="s"/>
 			<xsl:param name="args"/>
@@ -1432,16 +1459,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 			<xsl:choose>
 				<xsl:when test="$s = ''"><xsl:value-of select="concat($l,'.',$r)"/></xsl:when>
 				<xsl:otherwise>
-					<xsl:variable name="c" select="substring($s,1,1)"/>
+					<xsl:variable name="axis">
+						<xsl:if test="contains($s, '::') and contains('.ancestor-or-self.ancestor.attribute.child.descendant-or-self.descendant.following-sibling.following.namespace.parent.preceding-sibling.preceding.self.',concat('.',substring-before($s,'::'),'.')) and not(contains(substring-before($s,'::'),'.'))">
+							<xsl:value-of select="substring-before($s,'::')"/>
+						</xsl:if>
+					</xsl:variable>
+					<xsl:variable name="s2">
+						<xsl:choose>
+							<xsl:when test="$axis != ''">
+								<xsl:value-of select="substring-after($s,'::')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$s"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+					<xsl:variable name="axis2">
+						<xsl:choose>
+							<xsl:when test="$axis != ''">
+								<xsl:value-of select="$axis"/>
+							</xsl:when>
+							<xsl:otherwise>child</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+					<xsl:variable name="axislength">
+						<xsl:choose>
+							<xsl:when test="$axis != ''">
+								<xsl:value-of select="string-length($axis)+2"/>
+							</xsl:when>
+							<xsl:otherwise>0</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+					<xsl:variable name="c" select="substring($s2,1,1)"/>
 					<xsl:variable name="i">
 						<xsl:choose>
-							<xsl:when test="starts-with($s,'//')">2.,new StepExpr('descendant-or-self',new NodeTestAny()</xsl:when>
-							<xsl:when test="starts-with($s,'../')">3.,new StepExpr('parent',new NodeTestAny()</xsl:when>
-							<xsl:when test="starts-with($s,'..')">2.,new StepExpr('parent',new NodeTestAny()</xsl:when>
-							<xsl:when test="$c = '*' and substring($s,2,1) != ':'">1.,new StepExpr('child',new NodeTestAny()</xsl:when>
+							<xsl:when test="starts-with($s2,'//')">2.,new StepExpr('descendant-or-self',new NodeTestAny()</xsl:when>
+							<xsl:when test="starts-with($s2,'../')">3.,new StepExpr('parent',new NodeTestAny()</xsl:when>
+							<xsl:when test="starts-with($s2,'..')">2.,new StepExpr('parent',new NodeTestAny()</xsl:when>
+							<xsl:when test="$c = '*' and substring($s2,2,1) != ':'"><xsl:value-of select="$axislength + 1"/>.,new StepExpr('<xsl:value-of select="$axis2"/>',new NodeTestAny()</xsl:when>
 							<xsl:when test="$c = '/'">1.</xsl:when>
 							<xsl:when test="$c = '@'">
-								<xsl:variable name="t"><xsl:call-template name="getName"><xsl:with-param name="s" select="substring($s,2)"/></xsl:call-template></xsl:variable>
+								<xsl:variable name="t"><xsl:call-template name="getName"><xsl:with-param name="s" select="substring($s2,2)"/></xsl:call-template></xsl:variable>
 								<xsl:choose>
 									<xsl:when test="$t != ''">
 										<xsl:variable name="pt"><xsl:if test="not(contains($t,':'))">:</xsl:if><xsl:value-of select="$t"/></xsl:variable>
@@ -1454,17 +1512,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 								</xsl:choose>
 							</xsl:when>
 							<xsl:when test="$c = '.'">1.,new StepExpr('self',new NodeTestAny()</xsl:when>
-							<xsl:when test="starts-with($s,'self::node()')">12.,new StepExpr('self',new NodeTestAny()</xsl:when>
+							<xsl:when test="starts-with($s2,'node()')"><xsl:value-of select="$axislength + 6"/>.,new StepExpr('<xsl:value-of select="$axis2"/>',new NodeTestAny()</xsl:when>
 							<xsl:when test="contains('_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',$c)">
-								<xsl:variable name="t"><xsl:call-template name="getName"><xsl:with-param name="s" select="$s"/></xsl:call-template></xsl:variable>
+								<xsl:variable name="t"><xsl:call-template name="getName"><xsl:with-param name="s" select="$s2"/></xsl:call-template></xsl:variable>
 								<xsl:variable name="pt"><xsl:if test="not(contains($t,':'))">:</xsl:if><xsl:value-of select="$t"/></xsl:variable>
-								<xsl:value-of select="string-length($t)"/>.,new StepExpr('child',new NodeTestName('<xsl:value-of select="substring-before($pt,':')"/>','<xsl:value-of select="substring-after($pt,':')"/><xsl:text>')</xsl:text>
+								<xsl:value-of select="$axislength + string-length($t)"/>.,new StepExpr('<xsl:value-of select="$axis2"/>',new NodeTestName('<xsl:value-of select="substring-before($pt,':')"/>','<xsl:value-of select="substring-after($pt,':')"/><xsl:text>')</xsl:text>
 							</xsl:when>
-							<xsl:when test="starts-with($s,'*:') and contains('_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',substring($s,3,1))">
-								<xsl:variable name="t"><xsl:call-template name="getName"><xsl:with-param name="s" select="substring($s,3)"/></xsl:call-template></xsl:variable>
+							<xsl:when test="starts-with($s2,'*:') and contains('_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',substring($s2,3,1))">
+								<xsl:variable name="t"><xsl:call-template name="getName"><xsl:with-param name="s" select="substring($s2,3)"/></xsl:call-template></xsl:variable>
 								<xsl:choose>
 									<xsl:when test="not(contains($t,':'))">
-										<xsl:value-of select="string-length($t)+2"/>.,new StepExpr('child',new NodeTestName('*','<xsl:value-of select="$t"/><xsl:text>')</xsl:text>
+										<xsl:value-of select="$axislength + 2 + string-length($t)"/>.,new StepExpr('<xsl:value-of select="$axis2"/>',new NodeTestName('*','<xsl:value-of select="$t"/><xsl:text>')</xsl:text>
 									</xsl:when>
 									<xsl:otherwise>
 										<xsl:variable name="msg">"~~~~Two prefixes at '<xsl:value-of select="$s"/>'~#~#"</xsl:variable>
@@ -1478,11 +1536,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					<xsl:choose>
 						<xsl:when test="$i = '0'"><xsl:value-of select="concat($l,'.',$r)"/></xsl:when>
 						<xsl:otherwise>
-							<xsl:variable name="s2" select="substring($s,number(substring-before($i,'.'))+1)"/>
+							<xsl:variable name="s3" select="substring($s2,number(substring-before($i,'.'))+1)"/>
 							<xsl:variable name="p">
 								<xsl:choose>
-									<xsl:when test="substring($s2,1,1) = '['">
-										<xsl:variable name="t"><xsl:call-template name="getPredicates"><xsl:with-param name="s" select="substring($s2,2)"/></xsl:call-template></xsl:variable>
+									<xsl:when test="substring($s3,1,1) = '['">
+										<xsl:variable name="t"><xsl:call-template name="getPredicates"><xsl:with-param name="s" select="substring($s3,2)"/></xsl:call-template></xsl:variable>
 										<xsl:value-of select="concat(substring-before($t,'.'),'.',substring-after($t,'.'),')')"/>
 									</xsl:when>
 									<xsl:when test="substring-after($i,'.') = ''">0.</xsl:when>
@@ -1490,7 +1548,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 								</xsl:choose>
 							</xsl:variable>
 							<xsl:call-template name="getLocationPath">
-								<xsl:with-param name="s" select="substring($s2,number(substring-before($p,'.'))+1)"/>
+								<xsl:with-param name="s" select="substring($s3,number(substring-before($p,'.'))+1)"/>
 								<xsl:with-param name="r" select="concat($r,substring-after($i,'.'),substring-after($p,'.'))"/>
 								<xsl:with-param name="l" select="$l+number(substring-before($i,'.'))+number(substring-before($p,'.'))"/>
 							</xsl:call-template>
@@ -2520,15 +2578,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		</xsl:template>
 	
 		
-		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsf="http://www.agencexml.com/xsltforms" match="xsf:show | xsf:hide" mode="script" priority="1">
-			<xsl:variable name="name" select="name()"/>
-			<xsl:variable name="iddispatch" select="count(preceding::*[name()=$name]|ancestor::*[name()=$name])"/>
+		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" match="xforms:show | xforms:hide" mode="script" priority="1">
+			<xsl:variable name="lname" select="local-name()"/>
+			<xsl:variable name="iddispatch" select="count(preceding::xforms:*[local-name()=$lname]|ancestor::xforms:*[local-name()=$lname])"/>
 			<xsl:text>var xf_</xsl:text>
 			<xsl:value-of select="local-name()"/>
 			<xsl:text>_</xsl:text>
 			<xsl:value-of select="$iddispatch"/>
-			<xsl:text> = new XFDispatch('xsf-</xsl:text>
-			<xsl:value-of select="local-name()"/>
+			<xsl:text> = new XFDispatch('xforms-dialog-</xsl:text>
+			<xsl:choose>
+				<xsl:when test="local-name() = 'show'">open</xsl:when>
+				<xsl:otherwise>close</xsl:otherwise>
+			</xsl:choose>
 			<xsl:text>',</xsl:text>
 			<xsl:call-template name="toScriptParam"><xsl:with-param name="p" select="@dialog"/></xsl:call-template>
 			<xsl:text>,null,null);
@@ -2765,7 +2826,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 	
 		
 		
-		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsf="http://www.agencexml.com/xsltforms" name="listeners">
+		<xsl:template xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="listeners">
 			<xsl:param name="current"/>
 			<xsl:variable name="lname" select="local-name()"/>
 			<xsl:variable name="idlist" select="count(preceding::xforms:*[local-name()=$lname]|ancestor::xforms:*[local-name()=$lname])"/>
@@ -2780,7 +2841,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
-			<xsl:for-each select="xforms:setvalue|xforms:insert|xforms:load|xforms:delete|xforms:action|xforms:toggle|xforms:send|xforms:setfocus|xforms:dispatch|xforms:message|xsf:show|xsf:hide">
+			<xsl:for-each select="xforms:setvalue|xforms:insert|xforms:load|xforms:delete|xforms:action|xforms:toggle|xforms:send|xforms:setfocus|xforms:dispatch|xforms:message|xforms:show|xforms:hide">
 				<xsl:text>new Listener($("</xsl:text>
 				<xsl:value-of select="$rid"/>
 				<xsl:text>"),</xsl:text>

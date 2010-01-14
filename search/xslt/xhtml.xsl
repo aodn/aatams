@@ -295,7 +295,7 @@
 									<th colspan="1" rowspan="2">Name</th>
 									<th colspan="1" rowspan="2">Personal Mobile Number</th>
 									<th colspan="1" rowspan="2">Home Phone Number</th>
-									<th colspan="1" rowspan="2">email</hr>
+									<th colspan="1" rowspan="2">email</th>
 									<th colspan="5" rowspan="1">Home Physical Address</th>
 									<th colspan="5" rowspan="1">Home Postal Address</th>
 								</tr>
@@ -320,7 +320,7 @@
 									<th colspan="1" rowspan="2">Name</th>
 									<th colspan="1" rowspan="2">Personal Mobile Number</th>
 									<th colspan="1" rowspan="2">Home Phone Number</th>
-									<th colspan="1" rowspan="2">email</hr>
+									<th colspan="1" rowspan="2">email</th>
 									<th colspan="5" rowspan="1">Home Physical Address</th>
 									<th colspan="5" rowspan="1">Home Postal Address</th>
 								</tr>

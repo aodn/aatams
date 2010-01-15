@@ -11,24 +11,37 @@
     </xsl:template>
     <xsl:template match="gml:featureMember">
         <xsl:choose>
-            <xsl:when test="aatams:installation_station">
-		    <xsl:text>["</xsl:text><xsl:value-of select="*/@gml:id"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:name"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:installation_ref/aatams:installation/@gml:id"/><xsl:text>"]</xsl:text>
-	    </xsl:when>
+            <xsl:when test="aatams:installation">
+		    <xsl:text>["</xsl:text><xsl:value-of select="*/@gml:id"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:name"/><xsl:text>",[</xsl:text><xsl:apply-templates select="*/aatams:installation_station_ref"/><xsl:text>]]</xsl:text>
+            </xsl:when>
             <xsl:when test="aatams:genus">
-		    <xsl:text>["</xsl:text><xsl:value-of select="*/@gml:id"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:name"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:family_ref/aatams:family/@gml:id"/><xsl:text>"]</xsl:text>
-	    </xsl:when>
+                  <xsl:text>["</xsl:text><xsl:value-of select="*/@gml:id"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:name"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:family_ref/aatams:family/@gml:id"/><xsl:text>"]</xsl:text>
+            </xsl:when>
             <xsl:when test="aatams:species">
-		    <xsl:text>["</xsl:text><xsl:value-of select="*/@gml:id"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:name"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:genus_ref/aatams:genus/@gml:id"/><xsl:text>"]</xsl:text>
-	    </xsl:when>
+                  <xsl:text>["</xsl:text><xsl:value-of select="*/@gml:id"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:name"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:genus_ref/aatams:genus/@gml:id"/><xsl:text>"]</xsl:text>
+            </xsl:when>
             <xsl:when test="aatams:project_person">
-		    <xsl:text>["</xsl:text><xsl:value-of select="*/@gml:id"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:person_role"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:project_fid"/><xsl:text>"]</xsl:text>
-	    </xsl:when>
-	    <xsl:otherwise>
+                  <xsl:text>["</xsl:text><xsl:value-of select="*/@gml:id"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:person_role"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:project_fid"/><xsl:text>"]</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
                <xsl:text>["</xsl:text><xsl:value-of select="*/@gml:id"/><xsl:text>","</xsl:text><xsl:value-of select="*/aatams:name"/><xsl:text>"]</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="position()!=last()">
             <xsl:text>,&#013;</xsl:text>
         </xsl:if>
+    </xsl:template>
+    <!-- installation_stations within installations -->
+    <xsl:template match="aatams:installation_station_ref">
+	 <xsl:if test="position()=1">
+               <xsl:text>&#013;</xsl:text>
+         </xsl:if>   
+         <xsl:text>["</xsl:text><xsl:value-of select="aatams:installation_station/@gml:id"/><xsl:text>","</xsl:text><xsl:value-of select="aatams:installation_station/aatams:name"/><xsl:text>"]</xsl:text>
+         <xsl:if test="position()!=last()">
+               <xsl:text>,&#013;</xsl:text>
+         </xsl:if>
+         <xsl:if test="position()=last()">
+               <xsl:text>&#013;</xsl:text>
+         </xsl:if>
     </xsl:template>
 </xsl:stylesheet>

@@ -609,7 +609,7 @@
 	<xsl:template match="aatams:detection">
 		<tr>
 			<td>
-				<xsl:value-of select="aatams:detection_id" />
+				<xsl:value-of select="substring-after(@gml:id,'aatams.detection.')" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:installation_id" />

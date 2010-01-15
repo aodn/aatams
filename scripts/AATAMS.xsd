@@ -3863,7 +3863,7 @@
    <xsd:element name="detection" substitutionGroup="gml:_Feature" type="aatams:detection_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DETECTION</deegreewfs:table>
+            <deegreewfs:table>DETECTION_MAX</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detection.">
                <deegreewfs:MappingField field="DETECTION_ID" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3877,7 +3877,7 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="installation" minOccurs="1" maxOccurs="1" type="xsd:integer">
+               <xsd:element name="installation_id" minOccurs="1" maxOccurs="1" type="xsd:integer">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3887,7 +3887,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="station" minOccurs="1" maxOccurs="1" type="xsd:string">
+               <xsd:element name="station_id" minOccurs="1" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3897,7 +3897,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="deployment" minOccurs="1" maxOccurs="1" type="xsd:integer">
+               <xsd:element name="deployment_id" minOccurs="1" maxOccurs="1" type="xsd:integer">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3937,7 +3937,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="tag" minOccurs="1" maxOccurs="1" type="xsd:integer">
+               <xsd:element name="tag_id" minOccurs="1" maxOccurs="1" type="xsd:integer">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3957,7 +3957,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="receiver" minOccurs="1" maxOccurs="1" type="xsd:integer">
+               <xsd:element name="receiver_id" minOccurs="1" maxOccurs="1" type="xsd:integer">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -4007,7 +4007,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="family" minOccurs="0" maxOccurs="1" type="xsd:integer">
+               <xsd:element name="family_id" minOccurs="0" maxOccurs="1" type="xsd:integer">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -4017,7 +4017,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="genus" minOccurs="0" maxOccurs="1" type="xsd:integer">
+               <xsd:element name="genus_id" minOccurs="0" maxOccurs="1" type="xsd:integer">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -4027,7 +4027,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="species" minOccurs="0" maxOccurs="1" type="xsd:integer">
+               <xsd:element name="species_id" minOccurs="0" maxOccurs="1" type="xsd:integer">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>

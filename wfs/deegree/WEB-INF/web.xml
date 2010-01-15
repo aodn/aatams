@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+  <display-name>deegree 2.1 - WMS</display-name>
+  <description>deegree 2.1 OWS</description>
+  <servlet>
+    <servlet-name>owservice</servlet-name>
+    <servlet-class>org.deegree.enterprise.servlet.OGCServletController</servlet-class>
+
+    <init-param>
+      <param-name>services</param-name>
+      <param-value>wms,wfs</param-value>
+      <description>
+        list of supported services, e.g.: wfs,wms (comma separated) allways use lowercase
+      </description>
+    </init-param>
+
+    <!-- WMS INITIALIZING PARAMETERS -->
+    <init-param>
+      <param-name>wms.handler</param-name>
+      <param-value>org.deegree.enterprise.servlet.WMSHandler</param-value>
+    </init-param>
+    <init-param>
+      <param-name>wms.config</param-name>
+      <param-value>WEB-INF/conf/wms/wms_configuration.xml</param-value>
+    </init-param>
+
+    <!-- WFS INITIALIZING PARAMETERS -->
+    <init-param>
+      <param-name>wfs.handler</param-name>
+      <param-value>org.deegree.enterprise.servlet.WFSHandler</param-value>
+    </init-param>
+    <init-param>
+      <param-name>wfs.config</param-name>
+      <param-value>WEB-INF/conf/wfs/wfs_capabilities.xml</param-value>
+    </init-param>
+
+    <!-- WSS INITIALIZING PARAMETERS -->
+    <!--
+    <init-param>
+      <param-name>wss.handler</param-name>
+      <param-value>org.deegree.enterprise.servlet.WASSHandler</param-value>
+    </init-param>
+    <init-param>
+      <param-name>wss.config</param-name>
+      <param-value>WEB-INF/conf/wass/wss/example_wss_capabilities.xml</param-value>
+    </init-param>
+    -->
+    <!-- WAS INITIALIZING PARAMETERS -->
+    <!--
+    <init-param>
+      <param-name>was.handler</param-name>
+      <param-value>org.deegree.enterprise.servlet.WASSHandler</param-value>
+    </init-param>
+    <init-param>
+      <param-name>was.config</param-name>
+      <param-value>WEB-INF/conf/wass/was/example_was_capabilities.xml</param-value>
+    </init-param>
+    -->
+    <!-- WCS INITIALIZING PARAMETERS -->
+    <!--
+    <init-param>
+      <param-name>wcs.handler</param-name>
+      <param-value>org.deegree.enterprise.servlet.WCSHandler</param-value>
+    </init-param>
+    <init-param>
+      <param-name>wcs.config</param-name>
+      <param-value>WEB-INF/conf/wcs/LOCALWCS_capabilities.xml</param-value>
+    </init-param>
+    -->
+    <!-- CSW INITIALIZING PARAMETERS -->
+    <!--
+    <init-param>
+      <param-name>csw.handler</param-name>
+      <param-value>org.deegree.enterprise.servlet.CSWHandler</param-value>
+    </init-param>
+    <init-param>
+      <param-name>csw.config</param-name>
+      <param-value>WEB-INF/conf/csw/example_csw_configuration.xml</param-value>
+    </init-param>
+    -->
+    <!-- SOS INITIALIZING PARAMETERS -->
+    <!--
+    <init-param>
+      <param-name>sos.handler</param-name>
+      <param-value>org.deegree.enterprise.servlet.SOSHandler</param-value>
+    </init-param>
+    <init-param>
+      <param-name>sos.config</param-name>
+      <param-value>WEB-INF/conf/sos/example_sos_capabilities.xml</param-value>
+    </init-param>
+    -->
+    <!-- WPVS INITIALIZING PARAMETERS -->
+    <!-- <init-param>
+      <param-name>wpvs.handler</param-name>
+      <param-value>org.deegree.enterprise.servlet.WPVSHandler</param-value>
+    </init-param>
+    <init-param>
+      <param-name>wpvs.config</param-name>
+      <param-value>WEB-INF/conf/wpvs/example_wpvs_configuration.xml</param-value>
+    </init-param>
+    -->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <!--
+  AATAMS Download Filters section.
+  -->
+  <filter>
+      <filter-name>ZipFilter</filter-name>
+      
+<filter-class>au.org.emii.aatams.DownloadFilters.ZipDownloadFilter</filter-class>
+  </filter>
+
+  <!-- put this filter in front of the servlet with url-pattern 
+/services/zip -->
+  <filter-mapping>
+      <filter-name>ZipFilter</filter-name>
+      <url-pattern>/services/zip</url-pattern>
+  </filter-mapping>
+
+  <filter>
+      <filter-name>TextFilter</filter-name>
+      
+<filter-class>au.org.emii.aatams.DownloadFilters.TextDownloadFilter</filter-class>
+  </filter>
+
+  <!-- put this filter in front of the servlet with url-pattern 
+/services/text -->
+  <filter-mapping>
+      <filter-name>TextFilter</filter-name>
+      <url-pattern>/services/text</url-pattern>
+  </filter-mapping>
+
+  <!-- and these are the two servlets being filtered -->
+  <servlet-mapping>
+    <servlet-name>owservice</servlet-name>
+    <url-pattern>/services/zip</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>owservice</servlet-name>
+    <url-pattern>/services/text</url-pattern>
+  </servlet-mapping>
+
+  <!-- end AATAMS Download Filters section -->
+
+  <!--
+  AATAMS XSLT files (for client based transformation) section.
+ 
+  The same files are used for a server and a client side transformation
+  so to make use of only one version of each such file, present them
+  via a servlet.
+  -->
+   <servlet>
+        <servlet-name>XHTMLTransformFileServlet</servlet-name>
+        <servlet-class>au.org.emii.FileServlet</servlet-class>
+        <init-param>
+            <param-name>file-path</param-name>
+            
+<param-value>/WEB-INF/conf/wfs/xslt/outfilter_xhtml.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>content-type</param-name>
+            <param-value>text/xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>content-disposition</param-name>
+            <param-value>inline</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>XHTMLTransformFileServlet</servlet-name>
+        <url-pattern>/services/xslt/xhtml</url-pattern>
+   </servlet-mapping>
+   <servlet>
+        <servlet-name>CsvTransformFileServlet</servlet-name>
+        <servlet-class>au.org.emii.FileServlet</servlet-class>
+        <init-param>
+            <param-name>file-path</param-name>
+            
+<param-value>/WEB-INF/conf/wfs/xslt/outfilter_html_csv.xsl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>content-type</param-name>
+            <param-value>text/xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>content-disposition</param-name>
+            <param-value>inline</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CsvTransformFileServlet</servlet-name>
+        <url-pattern>/services/xslt/csv</url-pattern>
+   </servlet-mapping>
+   <!-- end AATAMS XSLT files section -->
+  <servlet-mapping>
+    <servlet-name>owservice</servlet-name>
+    <url-pattern>/services</url-pattern>
+  </servlet-mapping>
+
+  <welcome-file-list>
+    <welcome-file>/index.jsp</welcome-file>
+  </welcome-file-list>
+
+  <error-page>
+    <error-code>500</error-code>
+    <location>/error.jsp</location>
+  </error-page>
+
+  <error-page>
+    <exception-type>org.deegree.ogcwebservices.OGCWebServiceException</exception-type>
+    <location>/error.jsp</location>
+  </error-page>
+
+</web-app>

@@ -153,7 +153,8 @@
 				var binding = document.getElementById('success_message').xfElement.binding;
 				var result = binding.evaluate(model1.getInstanceDocument('inst_response'));
 				if(result.length > 0){
-					document.getElementById("iframe").src="../upload.zul?fid="+result[0].nodeValue;
+					//document.getElementById("iframe").src="../upload.zul?fid="+result[0].nodeValue;
+					document.location="../upload.zul?fid="+result[0].nodeValue;
 				}else{ 
 					alert("error: no new feature id could be obtained");
 				} 
@@ -280,11 +281,11 @@
 						</xf:output>
 					</div>
 				</div>
-				<xf:group
+				<!--xf:group
 					ref="instance('inst_response')//ogc:FeatureId/@fid">
 					<iframe id="iframe" src=""
 						style="width:100%;height:250px;border:none;overflow:hidden;" />
-				</xf:group>
+				</xf:group-->
 			</div>
 		</div>
 		<br />

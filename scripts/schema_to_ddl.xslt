@@ -4,35 +4,41 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:output method="text" />
 	<xsl:template match="/database">
-		<xsl:for-each select="table">
-			<xsl:text>&#13;</xsl:text>
-			<xsl:text>CREATE SEQUENCE AATAMS.</xsl:text>
-			<xsl:value-of select="@name" />
-			<xsl:text>_SERIAL;&#13;</xsl:text>
-			<xsl:text>CREATE TABLE AATAMS.</xsl:text>
-			<xsl:value-of select="@name" />
-			<xsl:text>(&#13;</xsl:text>
-			<xsl:apply-templates select="column" />
-			<xsl:call-template name="default-fields" />
-			<xsl:text>);&#13;</xsl:text>
-		</xsl:for-each>
+		<xsl:apply-templates select="table" />
 		<xsl:apply-templates select="table/foreign-key" />
+	</xsl:template>
+	<xsl:template match="table">
+		<xsl:text>&#13;</xsl:text>
+		<xsl:text>CREATE SEQUENCE aatams.</xsl:text>
+		<xsl:value-of select="lower-case(@name)" />
+		<xsl:text>_serial;&#13;</xsl:text>
+		<xsl:text>CREATE TABLE aatams.</xsl:text>
+		<xsl:value-of select="lower-case(@name)" />
+		<xsl:text>(&#13;</xsl:text>
+		<xsl:apply-templates select="column" />
+		<xsl:call-template name="default-fields" />
+		<xsl:text>);&#13;</xsl:text>
+		<xsl:if test="column[@name='LONGITUDE']">
+			<xsl:text>select addgeometrycolumn('aatams',</xsl:text>
+			<xsl:value-of select="lower-case(@name)"/>
+			<xsl:text>', 'position', 4326, 'POINT', 2);&#13;</xsl:text>
+		</xsl:if>
 	</xsl:template>
 	<xsl:template match="column">
 		<xsl:variable name="name">
-			<xsl:value-of select="@name" />
+			<xsl:value-of select="lower-case(@name)" />
 		</xsl:variable>
 		<xsl:value-of select="$name" />
 		<xsl:text> </xsl:text>
 		<xsl:choose>
 			<xsl:when
 				test="@type = 'VARCHAR' or @type = 'LONGVARCHAR'">
-				<xsl:text>VARCHAR2(</xsl:text>
+				<xsl:text>VARCHAR(</xsl:text>
 				<xsl:value-of select="@size" />
 				<xsl:text>)</xsl:text>
 			</xsl:when>
 			<xsl:when test="@type = 'DECIMAL'">
-				<xsl:text>NUMBER(</xsl:text>
+				<xsl:text>NUMERIC(</xsl:text>
 				<xsl:value-of select="@size" />
 				<xsl:text>)</xsl:text>
 			</xsl:when>
@@ -46,29 +52,31 @@
 		<xsl:if test="@required = 'true'">
 			<xsl:text> NOT NULL</xsl:text>
 		</xsl:if>
-		<xsl:text>,
-</xsl:text>
+		<xsl:text>,&#013;</xsl:text>
+	</xsl:template>
+	<xsl:template match="column[@name='LONGITUDE' or @name='LATITUDE']">
+		<!-- SEE NAMED GEOMETRY TEMPLATE -->
 	</xsl:template>
 	<xsl:template match="foreign-key">
 		<xsl:text></xsl:text>
-		<xsl:text>&#13;ALTER TABLE AATAMS.</xsl:text>
-		<xsl:value-of select="../@name" />
+		<xsl:text>&#13;ALTER TABLE aatams.</xsl:text>
+		<xsl:value-of select="lower-case(../@name)" />
 		<xsl:text>&#13;</xsl:text>
 		<xsl:text>ADD CONSTRAINT </xsl:text>
-		<xsl:value-of select="@name" />
+		<xsl:value-of select="lower-case(@name)" />
 		<xsl:text>&#13;</xsl:text>
 		<xsl:text>FOREIGN KEY(</xsl:text>
-		<xsl:value-of select="reference/@local" />
+		<xsl:value-of select="lower-case(reference/@local)" />
 		<xsl:text>)&#13;</xsl:text>
-		<xsl:text>REFERENCES AATAMS.</xsl:text>
-		<xsl:value-of select="@foreignTable" />
+		<xsl:text>REFERENCES aatams.</xsl:text>
+		<xsl:value-of select="lower-case(@foreignTable)" />
 		<xsl:text>(</xsl:text>
-		<xsl:value-of select="reference/@foreign" />
+		<xsl:value-of select="lower-case(reference/@foreign)" />
 		<xsl:text>);&#13;</xsl:text>
 	</xsl:template>
 	<xsl:template name="default-fields">
-		<xsl:text>DISABLED CHAR(1) DEFAULT 'N' NOT NULL CHECK(DISABLED IN('Y','N')),&#13;</xsl:text>
-		<xsl:text>CREATED TIMESTAMP DEFAULT LOCALTIMESTAMP NOT NULL,&#13;</xsl:text>
-		<xsl:text>MODIFIED TIMESTAMP DEFAULT LOCALTIMESTAMP NOT NULL&#13;</xsl:text>
+		<xsl:text>disabled CHAR(1) DEFAULT 'N' NOT NULL CHECK(disabled IN('Y','N')),&#13;</xsl:text>
+		<xsl:text>created TIMESTAMP DEFAULT LOCALTIMESTAMP NOT NULL,&#13;</xsl:text>
+		<xsl:text>modified TIMESTAMP DEFAULT LOCALTIMESTAMP NOT NULL&#13;</xsl:text>
 	</xsl:template>
 </xsl:stylesheet>

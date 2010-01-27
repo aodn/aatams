@@ -20,10 +20,10 @@
          <deegreewfs:DefaultSRS>EPSG:4326</deegreewfs:DefaultSRS>
          <deegreewfs:SuppressXLinkOutput>true</deegreewfs:SuppressXLinkOutput>
          <JDBCConnection xmlns="http://www.deegree.org/jdbc">
-            <Driver>oracle.jdbc.driver.OracleDriver</Driver>
-            <Url>jdbc:oracle:thin:@obsidian.bluenet.utas.edu.au:1521:orcl</Url>
-            <User>AATAMS</User>
-            <Password>boomerSIMS</Password>
+            <Driver>org.postgresql.Driver</Driver>
+            <Url>jdbc:postgresql://obsidian.bluenet.utas.edu.au:5432/aatams</Url>
+            <User>steve</User>
+            <Password>66CoStHo</Password>
             <SecurityConstraints/>
             <Encoding>iso-8859-1</Encoding>
          </JDBCConnection>
@@ -451,6 +451,77 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
+   <xsd:element name="download_tag_summary" substitutionGroup="gml:_Feature"
+                type="aatams:download_tag_summary_type">
+      <xsd:annotation>
+         <xsd:appinfo>
+            <deegreewfs:table>download_tag_summary</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.download_tag_summary.">
+               <deegreewfs:MappingField field="download_id" type="INTEGER"/>
+               <deegreewfs:IdGenerator type="DB_SEQ">
+                  <deegreewfs:param name="sequence">download_tag_summary_serial</deegreewfs:param>
+               </deegreewfs:IdGenerator>
+               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+            </deegreewfs:gmlId>
+            <deegreewfs:visible>true</deegreewfs:visible>
+            <deegreewfs:transaction update="true" delete="true" insert="true"/>
+         </xsd:appinfo>
+      </xsd:annotation>
+   </xsd:element>
+   <xsd:complexType name="download_tag_summary_type">
+      <xsd:complexContent>
+         <xsd:extension base="gml:AbstractFeatureType">
+            <xsd:sequence>
+               <xsd:element name="installation_deployment_ref" minOccurs="1" maxOccurs="1"
+                            type="gml:FeaturePropertyType">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content type="aatams:installation_deployment">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="tag_device_ref" minOccurs="1" maxOccurs="1"
+                            type="gml:FeaturePropertyType">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
+                        <deegreewfs:Content type="aatams:tag_device">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="device_id" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="device_id" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="detection_count" minOccurs="0" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="detection_count" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
    <xsd:element name="deployment_event_type" substitutionGroup="gml:_Feature"
                 type="aatams:deployment_event_type_type">
       <xsd:annotation>
@@ -594,6 +665,78 @@
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="name" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <xsd:element name="detection" substitutionGroup="gml:_Feature" type="aatams:detection_type">
+      <xsd:annotation>
+         <xsd:appinfo>
+            <deegreewfs:table>detection</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.detection.">
+               <deegreewfs:MappingField field="detection_id" type="INTEGER"/>
+               <deegreewfs:IdGenerator type="DB_SEQ">
+                  <deegreewfs:param name="sequence">detection_serial</deegreewfs:param>
+               </deegreewfs:IdGenerator>
+               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+            </deegreewfs:gmlId>
+            <deegreewfs:visible>true</deegreewfs:visible>
+            <deegreewfs:transaction update="true" delete="true" insert="true"/>
+         </xsd:appinfo>
+      </xsd:annotation>
+   </xsd:element>
+   <xsd:complexType name="detection_type">
+      <xsd:complexContent>
+         <xsd:extension base="gml:AbstractFeatureType">
+            <xsd:sequence>
+               <xsd:element name="installation_deployment_ref" minOccurs="1" maxOccurs="1"
+                            type="gml:FeaturePropertyType">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
+                        <deegreewfs:Content type="aatams:installation_deployment">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="download" minOccurs="0" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="download_id" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="tag" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="detection_timestamp" minOccurs="1" maxOccurs="1" type="xsd:dateTime">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="detection_timestamp" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -837,22 +980,13 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="longitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
+               <xsd:element name="location" minOccurs="1" maxOccurs="1" type="gml:GeometryPropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="longitude" type="DECIMAL"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="latitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="latitude" type="DECIMAL"/>
+                           <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
+                           <deegreewfs:MappingField field="LOCATION" type="GEOMETRY" srs="4326"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -921,6 +1055,41 @@
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="comments" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <xsd:element name="device_type" substitutionGroup="gml:_Feature"
+                type="aatams:device_type_type">
+      <xsd:annotation>
+         <xsd:appinfo>
+            <deegreewfs:table>device_type</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.device_type.">
+               <deegreewfs:MappingField field="device_type_id" type="INTEGER"/>
+               <deegreewfs:IdGenerator type="DB_SEQ">
+                  <deegreewfs:param name="sequence">device_type_serial</deegreewfs:param>
+               </deegreewfs:IdGenerator>
+               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+            </deegreewfs:gmlId>
+            <deegreewfs:visible>true</deegreewfs:visible>
+            <deegreewfs:transaction update="true" delete="true" insert="true"/>
+         </xsd:appinfo>
+      </xsd:annotation>
+   </xsd:element>
+   <xsd:complexType name="device_type_type">
+      <xsd:complexContent>
+         <xsd:extension base="gml:AbstractFeatureType">
+            <xsd:sequence>
+               <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1360,22 +1529,13 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="longitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
+               <xsd:element name="location" minOccurs="1" maxOccurs="1" type="gml:GeometryPropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="longitude" type="DECIMAL"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="latitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="latitude" type="DECIMAL"/>
+                           <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
+                           <deegreewfs:MappingField field="LOCATION" type="GEOMETRY" srs="4326"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2552,22 +2712,14 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="release_longitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
+               <xsd:element name="release_location" minOccurs="1" maxOccurs="1"
+                            type="gml:GeometryPropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="release_longitude" type="DECIMAL"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="release_latitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="release_latitude" type="DECIMAL"/>
+                           <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
+                           <deegreewfs:MappingField field="RELEASE_LOCATION" type="GEOMETRY" srs="4326"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2582,22 +2734,14 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="capture_longitude" minOccurs="0" maxOccurs="1" type="xsd:decimal">
+               <xsd:element name="capture_location" minOccurs="0" maxOccurs="1"
+                            type="gml:GeometryPropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="capture_longitude" type="DECIMAL"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="capture_latitude" minOccurs="0" maxOccurs="1" type="xsd:decimal">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="capture_latitude" type="DECIMAL"/>
+                           <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
+                           <deegreewfs:MappingField field="CAPTURE_LOCATION" type="GEOMETRY" srs="4326"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3009,22 +3153,13 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="longitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
+               <xsd:element name="location" minOccurs="1" maxOccurs="1" type="gml:GeometryPropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="longitude" type="DECIMAL"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="latitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="latitude" type="DECIMAL"/>
+                           <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
+                           <deegreewfs:MappingField field="LOCATION" type="GEOMETRY" srs="4326"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3151,22 +3286,13 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="longitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
+               <xsd:element name="location" minOccurs="1" maxOccurs="1" type="gml:GeometryPropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="longitude" type="DECIMAL"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="latitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="latitude" type="DECIMAL"/>
+                           <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
+                           <deegreewfs:MappingField field="LOCATION" type="GEOMETRY" srs="4326"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3585,22 +3711,12 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="release_longitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
+               <xsd:element name="release_location" minOccurs="1" maxOccurs="1" type="xsd:decimal">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="release_longitude" type="DECIMAL"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="release_latitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="release_latitude" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="release_location" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3615,22 +3731,14 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="capture_longitude" minOccurs="0" maxOccurs="1" type="xsd:decimal">
+               <xsd:element name="capture_location" minOccurs="0" maxOccurs="1"
+                            type="gml:GeometryPropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="capture_longitude" type="DECIMAL"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="capture_latitude" minOccurs="0" maxOccurs="1" type="xsd:decimal">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="capture_latitude" type="DECIMAL"/>
+                           <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
+                           <deegreewfs:MappingField field="CAPTURE_LOCATION" type="GEOMETRY" srs="4326"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3755,22 +3863,14 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="release_longitude" minOccurs="0" maxOccurs="1" type="xsd:decimal">
+               <xsd:element name="release_location" minOccurs="0" maxOccurs="1"
+                            type="gml:GeometryPropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="release_longitude" type="DECIMAL"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="release_latitude" minOccurs="0" maxOccurs="1" type="xsd:decimal">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="release_latitude" type="DECIMAL"/>
+                           <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
+                           <deegreewfs:MappingField field="RELEASE_LOCATION" type="GEOMETRY" srs="4326"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3846,22 +3946,13 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="longitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
+               <xsd:element name="location" minOccurs="1" maxOccurs="1" type="gml:GeometryPropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="longitude" type="DECIMAL"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="latitude" minOccurs="1" maxOccurs="1" type="xsd:decimal">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="latitude" type="DECIMAL"/>
+                           <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
+                           <deegreewfs:MappingField field="LOCATION" type="GEOMETRY" srs="4326"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3906,22 +3997,14 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="release_longitude" minOccurs="0" maxOccurs="1" type="xsd:decimal">
+               <xsd:element name="release_location" minOccurs="0" maxOccurs="1"
+                            type="gml:GeometryPropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="release_longitude" type="DECIMAL"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="release_latitude" minOccurs="0" maxOccurs="1" type="xsd:decimal">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="release_latitude" type="DECIMAL"/>
+                           <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
+                           <deegreewfs:MappingField field="RELEASE_LOCATION" type="GEOMETRY" srs="4326"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4018,22 +4101,13 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="longitude" minOccurs="1" maxOccurs="1" type="xsd:integer">
+               <xsd:element name="location" minOccurs="1" maxOccurs="1" type="gml:GeometryPropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="longitude" type="INTEGER"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="latitude" minOccurs="1" maxOccurs="1" type="xsd:integer">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="latitude" type="INTEGER"/>
+                           <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
+                           <deegreewfs:MappingField field="LOCATION" type="GEOMETRY" srs="4326"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>

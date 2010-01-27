@@ -294,8 +294,7 @@
       <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="STATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PROJECT_ROLE_PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="LONGITUDE" primaryKey="false" required="true" type="DECIMAL" size="8,5" autoIncrement="false"/>
-      <column name="LATITUDE" primaryKey="false" required="true" type="DECIMAL" size="7,5" autoIncrement="false"/>
+      <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="8,5" autoIncrement="false"/>
       <column name="DEPLOYMENT_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
       <column name="SCHEDULED_RECOVERY_DATE" primaryKey="false" required="false" type="DATE" size="23,3" autoIncrement="false"/>
       <column name="ACOUSTIC_RELEASE_ID" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -513,8 +512,7 @@
       <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="CURTAIN_POSITION" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="LONGITUDE" primaryKey="false" required="true" type="DECIMAL" size="8,5" default="0" autoIncrement="false"/>
-      <column name="LATITUDE" primaryKey="false" required="true" type="DECIMAL" size="7,5" default="0" autoIncrement="false"/>
+      <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="8,5" default="0" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
         <unique-column name="NAME"/>
       </unique>
@@ -920,12 +918,10 @@
       <column name="CLASSIFICATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PROJECT_ROLE_PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <!--column name="SURGERY_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
-      <column name="RELEASE_LONGITUDE" primaryKey="false" required="true" type="DECIMAL" size="8,5" autoIncrement="false"/>
-      <column name="RELEASE_LATITUDE" primaryKey="false" required="true" type="DECIMAL" size="7,5" autoIncrement="false"/>
+      <column name="RELEASE_LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="8,5" autoIncrement="false"/>
       <!--column name="RELEASE_GEOGRAPHIC_AREA_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
       <column name="RELEASE_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="CAPTURE_LONGITUDE" primaryKey="false" required="false" type="DECIMAL" size="8,5" autoIncrement="false"/>
-      <column name="CAPTURE_LATITUDE" primaryKey="false" required="false" type="DECIMAL" size="7,5" autoIncrement="false"/>
+      <column name="CAPTURE_LOCATION" primaryKey="false" required="false" type="GEOMETRY" size="8,5" autoIncrement="false"/>
       <!--column name="CAPTURE_GEOGRAPHIC_AREA_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
       <column name="CAPTURE_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
       <!--column name="TETHER_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
@@ -1077,8 +1073,7 @@
       <column name="STATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="INSTALLATION_FID" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="LONGITUDE" primaryKey="false" required="true" type="DECIMAL" size="8,5" autoIncrement="false"/>
-      <column name="LATITUDE" primaryKey="false" required="true" type="DECIMAL" size="7,5" autoIncrement="false"/>
+      <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="8,5" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	  <unique-column name="NAME"/>
       </unique>
@@ -1097,8 +1092,7 @@
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="DEPLOYMENT_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="50" autoIncrement="false"/>
       <column name="SCHEDULED_RECOVERY_DATE" primaryKey="false" required="false" type="DATE" size="50" autoIncrement="false"/>
-      <column name="LONGITUDE" primaryKey="false" required="true" type="DECIMAL" size="8,5" autoIncrement="false"/>
-      <column name="LATITUDE" primaryKey="false" required="true" type="DECIMAL" size="7,5" autoIncrement="false"/>
+      <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="8,5" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	  <unique-column name="INSTALLATION_NAME"/>
 	  <unique-column name="NAME"/>
@@ -1170,11 +1164,9 @@
       <column name="GENUS_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="SPECIES_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PROJECT_ROLE_PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="RELEASE_LONGITUDE" primaryKey="false" required="true" type="DECIMAL" size="8,5" autoIncrement="false"/>
-      <column name="RELEASE_LATITUDE" primaryKey="false" required="true" type="DECIMAL" size="7,5" autoIncrement="false"/>
+      <column name="RELEASE_LOCATION" primaryKey="false" required="true" type="DECIMAL" size="8,5" autoIncrement="false"/>
       <column name="RELEASE_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="CAPTURE_LONGITUDE" primaryKey="false" required="false" type="DECIMAL" size="8,5" autoIncrement="false"/>
-      <column name="CAPTURE_LATITUDE" primaryKey="false" required="false" type="DECIMAL" size="7,5" autoIncrement="false"/>
+      <column name="CAPTURE_LOCATION" primaryKey="false" required="false" type="GEOMETRY" size="8,5" autoIncrement="false"/>
       <column name="CAPTURE_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
       <column name="IMPLANT_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <foreign-key foreignTable="FAMILY" name="DISPLAY_TAG_RELEASE_FK00">
@@ -1212,8 +1204,7 @@
       <column name="FAMILY" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
       <column name="GENUS" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
       <column name="SPECIES" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-      <column name="RELEASE_LONGITUDE" primaryKey="false" required="false" type="DECIMAL" size="8,5" autoIncrement="false"/>
-      <column name="RELEASE_LATITUDE" primaryKey="false" required="false" type="DECIMAL" size="7,5" autoIncrement="false"/>
+      <column name="RELEASE_LOCATION" primaryKey="false" required="false" type="GEOMETRY" size="8,5" autoIncrement="false"/>
       <column name="RELEASE_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
     </view>
     
@@ -1232,14 +1223,12 @@
        <column name="STATION_ID" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
        <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="DETECTION_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="10" autoIncrement="false"/>
-       <column name="LONGITUDE" primaryKey="false" required="true" type="DECIMAL" size="10" autoIncrement="false"/>
-       <column name="LATITUDE" primaryKey="false" required="true" type="DECIMAL" size="10" autoIncrement="false"/>
+       <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="10" autoIncrement="false"/>
        <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="TAG_NAME" primaryKey="false" required="true" type="VARCHAR" size="20" autoIncrement="false"/>
        <column name="RECEIVER_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="RECEIVER_NAME" primaryKey="false" required="true" type="VARCHAR" size="20" autoIncrement="false"/>
-       <column name="RELEASE_LONGITUDE" primaryKey="false" required="false" type="DECIMAL" size="10" autoIncrement="false"/>
-       <column name="RELEASE_LATITUDE" primaryKey="false" required="false" type="DECIMAL" size="10" autoIncrement="false"/>
+       <column name="RELEASE_LOCATION" primaryKey="false" required="false" type="GEOMETRY" size="10" autoIncrement="false"/>
        <column name="RELEASE_TIMESTAMP" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="FAMILY_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="GENUS_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
@@ -1252,8 +1241,7 @@
        <column name="INSTALLATION_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
        <column name="STATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="STATION_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-       <column name="LONGITUDE" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="LATITUDE" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="10" autoIncrement="false"/>
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
     </view>
     

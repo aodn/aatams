@@ -12,14 +12,22 @@
 					<deegreewfs:Backend>ORACLE</deegreewfs:Backend>
 					<deegreewfs:DefaultSRS>EPSG:4326</deegreewfs:DefaultSRS>
 				    <deegreewfs:SuppressXLinkOutput>true</deegreewfs:SuppressXLinkOutput>
-					<JDBCConnection xmlns="http://www.deegree.org/jdbc">
+				    <JDBCConnection xmlns="http://www.deegree.org/jdbc">
+						<Driver>org.postgresql.Driver</Driver>
+						<Url>jdbc:postgresql://obsidian.bluenet.utas.edu.au:5432/aatams</Url>
+						<User>steve</User>
+						<Password>66CoStHo</Password>
+						<SecurityConstraints />
+						<Encoding>iso-8859-1</Encoding>
+					</JDBCConnection>
+					<!-- JDBCConnection xmlns="http://www.deegree.org/jdbc">
 						<Driver>oracle.jdbc.driver.OracleDriver</Driver>
 						<Url>jdbc:oracle:thin:@obsidian.bluenet.utas.edu.au:1521:orcl</Url>
 						<User>AATAMS</User>
 						<Password>boomerSIMS</Password>
 						<SecurityConstraints />
 						<Encoding>iso-8859-1</Encoding>
-					</JDBCConnection>
+					</JDBCConnection-->
 				</xsd:appinfo>
 			</xsd:annotation>
 			<xsl:for-each select="//table">
@@ -223,6 +231,10 @@
 								<!-- foreign-key, so a subfeature -->
 								<xsl:text>gml:FeaturePropertyType</xsl:text>
 							</xsl:when>
+							<xsl:when test="@type = 'GEOMETRY'">
+								<!-- foreign-key, so a subfeature -->
+								<xsl:text>gml:GeometryPropertyType</xsl:text>
+							</xsl:when>
 							<xsl:when test="@type = 'INTEGER'">
 								<xsl:text>xsd:integer</xsl:text>
 							</xsl:when>
@@ -284,6 +296,12 @@
 											</deegreewfs:To>
 										</deegreewfs:Relation>
 									</xsl:element>
+								</xsl:when>
+								<xsl:when test="@type='GEOMETRY'">
+									<deegreewfs:Content>
+                                        <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
+                                        <deegreewfs:MappingField field="{@name}" type="GEOMETRY" srs="4326"/>
+									</deegreewfs:Content>
 								</xsl:when>
 								<xsl:otherwise>
 									<deegreewfs:Content>

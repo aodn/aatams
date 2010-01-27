@@ -18,11 +18,13 @@
 		<xsl:apply-templates select="column" />
 		<xsl:call-template name="default-fields" />
 		<xsl:text>);&#13;</xsl:text>
-		<xsl:if test="column[@name='LONGITUDE']">
-			<xsl:text>select addgeometrycolumn('aatams',</xsl:text>
+		<xsl:for-each select="column[@type='GEOMETRY']">
+			<xsl:text>select addgeometrycolumn('aatams', '</xsl:text>
+			<xsl:value-of select="lower-case(../@name)"/>
+			<xsl:text>', '</xsl:text>
 			<xsl:value-of select="lower-case(@name)"/>
-			<xsl:text>', 'position', 4326, 'POINT', 2);&#13;</xsl:text>
-		</xsl:if>
+			<xsl:text>', 4326, 'POINT', 2);&#13;</xsl:text>
+		</xsl:for-each>
 	</xsl:template>
 	<xsl:template match="column">
 		<xsl:variable name="name">
@@ -54,8 +56,8 @@
 		</xsl:if>
 		<xsl:text>,&#013;</xsl:text>
 	</xsl:template>
-	<xsl:template match="column[@name='LONGITUDE' or @name='LATITUDE']">
-		<!-- SEE NAMED GEOMETRY TEMPLATE -->
+	<xsl:template match="column[@type='GEOMETRY']">
+		<!-- SEE NAMED GEOMETRY TEMPLATE - DON'T NEED COLUMN IN CREATE TABLE -->
 	</xsl:template>
 	<xsl:template match="foreign-key">
 		<xsl:text></xsl:text>

@@ -127,6 +127,24 @@
         <index-column name="EVENT_TYPE_ID"/>
       </index>
     </table>
+    
+    <table name="DOWNLOAD_TAG_SUMMARY">
+      <column name="DOWNLOAD_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+      <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="DETECTION_COUNT" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <unique name="UNIQUE_INDEX">
+	 	<unique-column name="DOWNLOAD_ID"/>
+	 	<unique-column name="DEVICE_ID"/>
+      </unique>
+      <foreign-key foreignTable="INSTALLATION_DEPLOYMENT" name="DOWNLOAD_TAG_SUMMARY_FK00">
+        <reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID"/>
+      </foreign-key>
+      <foreign-key foreignTable="TAG_DEVICE" name="DOWNLOAD_TAG_SUMMARY_FK01">
+        <reference local="DEVICE_ID" foreign="DEVICE_ID"/>
+      </foreign-key>
+    </table>
+    
     <table name="DEPLOYMENT_EVENT_TYPE">
       <column name="EVENT_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -180,7 +198,7 @@
         <index-column name="RECOVERY_STATUS_ID"/>
       </index>
     </table>
-    <!--table name="DETECTION">
+    <table name="DETECTION">
       <column name="DETECTION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="DOWNLOAD_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -206,7 +224,7 @@
       <index name="TAG_ID">
         <index-column name="TAG_ID"/>
       </index>
-    </table-->
+    </table>
     <table name="DEVICE">
       <column name="DEVICE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -340,6 +358,18 @@
         <index-column name="MOORING_TYPE_ID"/>
       </index>
     </table>
+    
+    <table name="DEVICE_TYPE">
+      <column name="DEVICE_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <unique name="UNIQUE_INDEX">
+        <unique-column name="NAME"/>
+      </unique>
+      <index name="DEVICE_TYPE_ID">
+        <index-column name="DEVICE_TYPE_ID"/>
+      </index>
+    </table>
+    
     <table name="DEVICE_MANUFACTURER">
       <column name="MANUFACTURER_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -350,6 +380,7 @@
         <index-column name="MANUFACTURER_ID"/>
       </index>
     </table>
+    
     <table name="DEVICE_MODEL">
       <column name="MODEL_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEVICE_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>

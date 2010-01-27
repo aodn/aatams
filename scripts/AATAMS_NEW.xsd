@@ -32,11 +32,11 @@
    <xsd:element name="animal" substitutionGroup="gml:_Feature" type="aatams:animal_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>ANIMAL</deegreewfs:table>
+            <deegreewfs:table>animal</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.animal.">
-               <deegreewfs:MappingField field="ANIMAL_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="animal_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">ANIMAL_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">animal_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -57,10 +57,10 @@
                         <deegreewfs:Content type="aatams:classification">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -72,7 +72,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -82,7 +82,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DISPLAY_LEVEL_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="display_level_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -92,7 +92,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DISPLAY_START_DATE" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="display_start_date" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -102,7 +102,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COMMENTS" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="comments" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -115,11 +115,11 @@
                 type="aatams:classification_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>CLASSIFICATION</deegreewfs:table>
+            <deegreewfs:table>classification</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.classification.">
-               <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">CLASSIFICATION_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">classification_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -140,10 +140,10 @@
                         <deegreewfs:Content type="aatams:parent_classification">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="parent_classification_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -158,10 +158,10 @@
                         <deegreewfs:Content type="aatams:classification_level">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="CLASSIFICATION_LEVEL_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_level_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="CLASSIFICATION_LEVEL_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_level_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -173,7 +173,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -183,7 +183,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COMMON_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="common_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -196,11 +196,11 @@
                 type="aatams:classification_level_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>CLASSIFICATION_LEVEL</deegreewfs:table>
+            <deegreewfs:table>classification_level</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.classification_level.">
-               <deegreewfs:MappingField field="CLASSIFICATION_LEVEL_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="classification_level_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">CLASSIFICATION_LEVEL_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">classification_level_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -218,7 +218,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -231,11 +231,11 @@
                 type="aatams:deployment_download_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DEPLOYMENT_DOWNLOAD</deegreewfs:table>
+            <deegreewfs:table>deployment_download</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.deployment_download.">
-               <deegreewfs:MappingField field="DOWNLOAD_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="download_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">DEPLOYMENT_DOWNLOAD_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">deployment_download_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -256,10 +256,10 @@
                         <deegreewfs:Content type="aatams:installation_deployment">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -271,7 +271,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RECOVERY_TIMESTAMP" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="recovery_timestamp" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -281,7 +281,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DOWNLOAD_TIMESTAMP" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="download_timestamp" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -291,7 +291,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TIME_CORRECTION_START" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="time_correction_start" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -301,7 +301,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TIME_CORRECTION_END" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="time_correction_end" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -311,7 +311,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TIME_CORRECTION_TYPE_ID" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="time_correction_type_id" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -321,7 +321,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CLOCK_DRIFT" type="INTEGER"/>
+                           <deegreewfs:MappingField field="clock_drift" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -331,7 +331,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PINGS" type="INTEGER"/>
+                           <deegreewfs:MappingField field="pings" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -341,7 +341,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DETECTIONS" type="INTEGER"/>
+                           <deegreewfs:MappingField field="detections" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -351,7 +351,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CC_EMAIL_ADDRESSES" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="cc_email_addresses" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -361,7 +361,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COMMENTS" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="comments" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -374,11 +374,11 @@
                 type="aatams:deployment_event_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DEPLOYMENT_EVENT</deegreewfs:table>
+            <deegreewfs:table>deployment_event</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.deployment_event.">
-               <deegreewfs:MappingField field="DEPLOYMENT_EVENT_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="deployment_event_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">DEPLOYMENT_EVENT_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">deployment_event_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -399,10 +399,10 @@
                         <deegreewfs:Content type="aatams:installation_deployment">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -417,10 +417,10 @@
                         <deegreewfs:Content type="aatams:deployment_event_type">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="EVENT_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="event_type_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="EVENT_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="event_type_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -432,7 +432,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="EVENT_TIMESTAMP" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="event_timestamp" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -442,7 +442,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COMMENTS" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="comments" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -455,11 +455,11 @@
                 type="aatams:deployment_event_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DEPLOYMENT_EVENT_TYPE</deegreewfs:table>
+            <deegreewfs:table>deployment_event_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.deployment_event_type.">
-               <deegreewfs:MappingField field="EVENT_TYPE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="event_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">DEPLOYMENT_EVENT_TYPE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">deployment_event_type_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -477,7 +477,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -490,11 +490,11 @@
                 type="aatams:deployment_recovery_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DEPLOYMENT_RECOVERY</deegreewfs:table>
+            <deegreewfs:table>deployment_recovery</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.deployment_recovery.">
-               <deegreewfs:MappingField field="RECOVERY_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="recovery_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">DEPLOYMENT_RECOVERY_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">deployment_recovery_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -515,10 +515,10 @@
                         <deegreewfs:Content type="aatams:installation_deployment">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -530,12 +530,12 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RECOVERY_TIMESTAMP" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="recovery_timestamp" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="recovery_status_ref" minOccurs="0" maxOccurs="1"
+               <xsd:element name="recovery_status_ref" minOccurs="1" maxOccurs="1"
                             type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
@@ -543,10 +543,10 @@
                         <deegreewfs:Content type="aatams:recovery_status">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="RECOVERY_STATUS_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="recovery_status_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="RECOVERY_STATUS_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="recovery_status_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -558,7 +558,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COMMENTS" type="LONGVARCHAR"/>
+                           <deegreewfs:MappingField field="comments" type="LONGVARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -571,11 +571,11 @@
                 type="aatams:recovery_status_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>RECOVERY_STATUS</deegreewfs:table>
+            <deegreewfs:table>recovery_status</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.recovery_status.">
-               <deegreewfs:MappingField field="RECOVERY_STATUS_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="recovery_status_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">RECOVERY_STATUS_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">recovery_status_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -593,7 +593,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -605,11 +605,11 @@
    <xsd:element name="device" substitutionGroup="gml:_Feature" type="aatams:device_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DEVICE</deegreewfs:table>
+            <deegreewfs:table>device</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.device.">
-               <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="device_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">DEVICE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">device_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -627,7 +627,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CODE_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="code_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -640,10 +640,10 @@
                         <deegreewfs:Content type="aatams:device_type">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEVICE_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="device_type_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEVICE_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="device_type_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -658,10 +658,10 @@
                         <deegreewfs:Content type="aatams:device_model">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="MODEL_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="model_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="MODEL_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="model_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -673,7 +673,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="SERIAL_NUMBER" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="serial_number" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -686,10 +686,10 @@
                         <deegreewfs:Content type="aatams:project_person">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -704,11 +704,11 @@
                 type="aatams:device_deployer_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DEVICE_DEPLOYER</deegreewfs:table>
+            <deegreewfs:table>device_deployer</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.device_deployer.">
-               <deegreewfs:MappingField field="DEVICE_DEPLOYER_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="device_deployer_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">DEVICE_DEPLOYER_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">device_deployer_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -726,7 +726,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -736,7 +736,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PERSON_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="person_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -749,11 +749,11 @@
                 type="aatams:receiver_deployment_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>RECEIVER_DEPLOYMENT</deegreewfs:table>
+            <deegreewfs:table>receiver_deployment</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.receiver_deployment.">
-               <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">RECEIVER_DEPLOYMENT_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">receiver_deployment_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -774,10 +774,10 @@
                         <deegreewfs:Content type="aatams:receiver_device">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="device_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="device_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -792,10 +792,10 @@
                         <deegreewfs:Content type="aatams:installation">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="INSTALLATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="INSTALLATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -809,10 +809,10 @@
                         <deegreewfs:Content type="aatams:station">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="station_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="station_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -827,10 +827,10 @@
                         <deegreewfs:Content type="aatams:project_person">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -842,7 +842,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="LONGITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="longitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -852,7 +852,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="LATITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="latitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -862,7 +862,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DEPLOYMENT_TIMESTAMP" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="deployment_timestamp" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -872,7 +872,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="SCHEDULED_RECOVERY_DATE" type="DATE"/>
+                           <deegreewfs:MappingField field="scheduled_recovery_date" type="DATE"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -882,7 +882,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="ACOUSTIC_RELEASE_ID" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="acoustic_release_id" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -895,10 +895,10 @@
                         <deegreewfs:Content type="aatams:mooring_type">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="MOORING_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="mooring_type_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="MOORING_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="mooring_type_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -910,7 +910,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="BOTTOM_DEPTH" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="bottom_depth" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -920,7 +920,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COMMENTS" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="comments" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -933,11 +933,11 @@
                 type="aatams:device_manufacturer_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DEVICE_MANUFACTURER</deegreewfs:table>
+            <deegreewfs:table>device_manufacturer</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.device_manufacturer.">
-               <deegreewfs:MappingField field="MANUFACTURER_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="manufacturer_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">DEVICE_MANUFACTURER_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">device_manufacturer_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -955,7 +955,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -968,11 +968,11 @@
                 type="aatams:device_model_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DEVICE_MODEL</deegreewfs:table>
+            <deegreewfs:table>device_model</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.device_model.">
-               <deegreewfs:MappingField field="MODEL_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="model_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">DEVICE_MODEL_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">device_model_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -993,10 +993,10 @@
                         <deegreewfs:Content type="aatams:device_type">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEVICE_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="device_type_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEVICE_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="device_type_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -1011,10 +1011,10 @@
                         <deegreewfs:Content type="aatams:device_manufacturer">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="MANUFACTURER_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="manufacturer_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="MANUFACTURER_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="manufacturer_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -1026,7 +1026,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1039,11 +1039,11 @@
                 type="aatams:device_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DEVICE_TYPE</deegreewfs:table>
+            <deegreewfs:table>device_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.device_type.">
-               <deegreewfs:MappingField field="DEVICE_TYPE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="device_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">DEVICE_TYPE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">device_type_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1061,7 +1061,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1074,11 +1074,11 @@
                 type="aatams:download_file_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DOWNLOAD_FILE</deegreewfs:table>
+            <deegreewfs:table>download_file</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.download_file.">
-               <deegreewfs:MappingField field="DOWNLOAD_FILE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="download_file_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">DOWNLOAD_FILE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">download_file_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1099,10 +1099,10 @@
                         <deegreewfs:Content type="aatams:deployment_download">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DOWNLOAD_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="download_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DOWNLOAD_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="download_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -1114,7 +1114,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="FILE_REFERENCE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="file_reference" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1127,11 +1127,11 @@
                 type="aatams:geographic_area_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>GEOGRAPHIC_AREA</deegreewfs:table>
+            <deegreewfs:table>geographic_area</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.geographic_area.">
-               <deegreewfs:MappingField field="GEOGRAPHIC_AREA_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="geographic_area_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">GEOGRAPHIC_AREA_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">geographic_area_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1149,7 +1149,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1159,7 +1159,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="BOUNDARY_POINTS" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="boundary_points" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1169,7 +1169,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DESCRIPTION" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="description" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1182,11 +1182,11 @@
                 type="aatams:implant_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>IMPLANT_TYPE</deegreewfs:table>
+            <deegreewfs:table>implant_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.implant_type.">
-               <deegreewfs:MappingField field="IMPLANT_TYPE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="implant_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">IMPLANT_TYPE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">implant_type_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1204,7 +1204,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1217,11 +1217,11 @@
                 type="aatams:installation_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>INSTALLATION</deegreewfs:table>
+            <deegreewfs:table>installation</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.installation.">
-               <deegreewfs:MappingField field="INSTALLATION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">INSTALLATION_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">installation_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1242,10 +1242,10 @@
                         <deegreewfs:Content type="aatams:installation_conf">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="CONFIGURATION_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="configuration_type_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="CONFIGURATION_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="configuration_type_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -1257,7 +1257,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1270,11 +1270,11 @@
                 type="aatams:installation_conf_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>INSTALLATION_CONF</deegreewfs:table>
+            <deegreewfs:table>installation_conf</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.installation_conf.">
-               <deegreewfs:MappingField field="CONFIGURATION_TYPE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="configuration_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">INSTALLATION_CONF_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">installation_conf_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1292,7 +1292,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1305,11 +1305,11 @@
                 type="aatams:installation_station_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>INSTALLATION_STATION</deegreewfs:table>
+            <deegreewfs:table>installation_station</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.installation_station.">
-               <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="station_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">INSTALLATION_STATION_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">installation_station_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1330,10 +1330,10 @@
                         <deegreewfs:Content type="aatams:installation">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="INSTALLATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="INSTALLATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -1345,7 +1345,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CURTAIN_POSITION" type="INTEGER"/>
+                           <deegreewfs:MappingField field="curtain_position" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1355,7 +1355,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1365,7 +1365,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="LONGITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="longitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1375,7 +1375,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="LATITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="latitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1388,11 +1388,11 @@
                 type="aatams:measurement_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>MEASUREMENT</deegreewfs:table>
+            <deegreewfs:table>measurement</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.measurement.">
-               <deegreewfs:MappingField field="MEASUREMENT_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="measurement_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">MEASUREMENT_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">measurement_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1412,10 +1412,10 @@
                         <deegreewfs:Content type="aatams:surgery">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="SURGERY_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="SURGERY_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -1430,10 +1430,10 @@
                         <deegreewfs:Content type="aatams:measurement_type">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="MEASUREMENT_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="measurement_type_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="MEASUREMENT_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="measurement_type_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -1445,7 +1445,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="VALUE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="value" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1455,7 +1455,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COMMENTS" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="comments" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1468,11 +1468,11 @@
                 type="aatams:measurement_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>MEASUREMENT_TYPE</deegreewfs:table>
+            <deegreewfs:table>measurement_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.measurement_type.">
-               <deegreewfs:MappingField field="MEASUREMENT_TYPE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="measurement_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">MEASUREMENT_TYPE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">measurement_type_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1493,10 +1493,10 @@
                         <deegreewfs:Content type="aatams:measurement_unit_type">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="MEASUREMENT_UNITS_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="measurement_units_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="MEASUREMENT_UNIT_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="measurement_unit_type_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -1508,7 +1508,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1521,11 +1521,11 @@
                 type="aatams:measurement_unit_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>MEASUREMENT_UNIT_TYPE</deegreewfs:table>
+            <deegreewfs:table>measurement_unit_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.measurement_unit_type.">
-               <deegreewfs:MappingField field="MEASUREMENT_UNIT_TYPE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="measurement_unit_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">MEASUREMENT_UNIT_TYPE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">measurement_unit_type_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1543,7 +1543,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1556,11 +1556,11 @@
                 type="aatams:mooring_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>MOORING_TYPE</deegreewfs:table>
+            <deegreewfs:table>mooring_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.mooring_type.">
-               <deegreewfs:MappingField field="MOORING_TYPE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="mooring_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">MOORING_TYPE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">mooring_type_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1578,7 +1578,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1588,7 +1588,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DESCRIPTION" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="description" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1601,11 +1601,11 @@
                 type="aatams:organisation_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>ORGANISATION</deegreewfs:table>
+            <deegreewfs:table>organisation</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.organisation.">
-               <deegreewfs:MappingField field="ORGANISATION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="organisation_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">ORGANISATION_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">organisation_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1623,7 +1623,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1633,7 +1633,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PHONE_NUMBER" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="phone_number" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1643,7 +1643,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="FAX_NUMBER" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="fax_number" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1653,7 +1653,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PHYSICAL_ADDRESS_1" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="physical_address_1" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1663,7 +1663,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PHYSICAL_ADDRESS_2" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="physical_address_2" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1673,7 +1673,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PHYSICAL_ADDRESS_STATE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="physical_address_state" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1683,7 +1683,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PHYSICAL_ADDRESS_COUNTRY" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="physical_address_country" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1693,7 +1693,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PHYSICAL_ADDRESS_POSTCODE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="physical_address_postcode" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1703,7 +1703,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="POSTAL_ADDRESS_1" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="postal_address_1" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1713,7 +1713,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="POSTAL_ADDRESS_2" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="postal_address_2" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1723,7 +1723,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="POSTAL_ADDRESS_STATE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="postal_address_state" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1733,7 +1733,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="POSTAL_ADDRESS_COUNTRY" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="postal_address_country" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1743,7 +1743,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="POSTAL_ADDRESS_POSTCODE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="postal_address_postcode" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1756,11 +1756,11 @@
                 type="aatams:organisation_animal_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>ORGANISATION_ANIMAL</deegreewfs:table>
+            <deegreewfs:table>organisation_animal</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.organisation_animal.">
-               <deegreewfs:MappingField field="ORGANISATION_ANIMAL_ID" type="VARCHAR"/>
+               <deegreewfs:MappingField field="organisation_animal_id" type="VARCHAR"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">ORGANISATION_ANIMAL_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">organisation_animal_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1778,7 +1778,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="ORGANISATION_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="organisation_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1788,7 +1788,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="ANIMAL_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="animal_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1801,11 +1801,11 @@
                 type="aatams:organisation_person_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>ORGANISATION_PERSON</deegreewfs:table>
+            <deegreewfs:table>organisation_person</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.organisation_person.">
-               <deegreewfs:MappingField field="ORGANISATION_PERSON_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="organisation_person_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">ORGANISATION_PERSON_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">organisation_person_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1823,7 +1823,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PERSON_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="person_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1833,7 +1833,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="ORGANISATION_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="organisation_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1843,7 +1843,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="POSITION" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="position" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1853,7 +1853,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PHONE_NUMBER" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="phone_number" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1863,7 +1863,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="FAX_NUMBER" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="fax_number" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1873,7 +1873,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="MOBILE_NUMBER" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="mobile_number" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1883,7 +1883,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="EMAIL_ADDRESS" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="email_address" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1895,11 +1895,11 @@
    <xsd:element name="person" substitutionGroup="gml:_Feature" type="aatams:person_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>PERSON</deegreewfs:table>
+            <deegreewfs:table>person</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.person.">
-               <deegreewfs:MappingField field="PERSON_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="person_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">PERSON_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">person_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1917,7 +1917,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1927,7 +1927,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PERSONAL_MOBILE_NUMBER" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="personal_mobile_number" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1937,7 +1937,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="HOME_PHONE_NUMBER" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="home_phone_number" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1947,7 +1947,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="EMAIL" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="email" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1957,7 +1957,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="HOME_PHYSICAL_ADDRESS_1" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="home_physical_address_1" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1967,7 +1967,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="HOME_PHYSICAL_ADDRESS_2" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="home_physical_address_2" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1978,7 +1978,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="HOME_PHYSICAL_ADDRESS_STATE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="home_physical_address_state" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -1989,7 +1989,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="HOME_PHYSICAL_ADDRESS_COUNTRY" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="home_physical_address_country" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2000,7 +2000,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="HOME_PHYSICAL_ADDRESS_POSTCODE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="home_physical_address_postcode" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2010,7 +2010,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="HOME_POSTAL_ADDRESS_1" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="home_postal_address_1" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2020,7 +2020,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="HOME_POSTAL_ADDRESS_2" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="home_postal_address_2" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2030,7 +2030,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="HOME_POSTAL_ADDRESS_STATE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="home_postal_address_state" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2041,7 +2041,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="HOME_POSTAL_ADDRESS_COUNTRY" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="home_postal_address_country" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2052,7 +2052,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="HOME_POSTAL_ADDRESS_POSTCODE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="home_postal_address_postcode" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2064,11 +2064,11 @@
    <xsd:element name="project" substitutionGroup="gml:_Feature" type="aatams:project_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>PROJECT</deegreewfs:table>
+            <deegreewfs:table>project</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.project.">
-               <deegreewfs:MappingField field="PROJECT_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="project_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">PROJECT_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">project_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -2089,10 +2089,10 @@
                         <deegreewfs:Content type="aatams:organisation">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="ORGANISATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="organisation_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="ORGANISATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="organisation_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2104,7 +2104,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2117,11 +2117,11 @@
                 type="aatams:project_role_person_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>PROJECT_ROLE_PERSON</deegreewfs:table>
+            <deegreewfs:table>project_role_person</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.project_role_person.">
-               <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">PROJECT_ROLE_PERSON_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">project_role_person_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -2141,10 +2141,10 @@
                         <deegreewfs:Content type="aatams:project">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="PROJECT_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="PROJECT_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2158,10 +2158,10 @@
                         <deegreewfs:Content type="aatams:role">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="ROLE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="role_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="ROLE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="role_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2175,10 +2175,10 @@
                         <deegreewfs:Content type="aatams:person">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="person_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="person_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2192,11 +2192,11 @@
    <xsd:element name="role" substitutionGroup="gml:_Feature" type="aatams:role_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>ROLE</deegreewfs:table>
+            <deegreewfs:table>role</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.role.">
-               <deegreewfs:MappingField field="ROLE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="role_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">ROLE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">role_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -2214,7 +2214,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2226,11 +2226,11 @@
    <xsd:element name="status" substitutionGroup="gml:_Feature" type="aatams:status_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>STATUS</deegreewfs:table>
+            <deegreewfs:table>status</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.status.">
-               <deegreewfs:MappingField field="STATUS_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="status_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">STATUS_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">status_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -2248,7 +2248,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2260,11 +2260,11 @@
    <xsd:element name="stock" substitutionGroup="gml:_Feature" type="aatams:stock_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>STOCK</deegreewfs:table>
+            <deegreewfs:table>stock</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.stock.">
-               <deegreewfs:MappingField field="STOCK_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="stock_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">STOCK_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">stock_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -2282,7 +2282,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2294,11 +2294,11 @@
    <xsd:element name="surgery" substitutionGroup="gml:_Feature" type="aatams:surgery_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>SURGERY</deegreewfs:table>
+            <deegreewfs:table>surgery</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.surgery.">
-               <deegreewfs:MappingField field="SURGERY_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">SURGERY_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">surgery_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -2319,10 +2319,10 @@
                         <deegreewfs:Content type="aatams:treatment_type">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="TREATMENT_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="treatment_type_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="TREATMENT_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="treatment_type_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2337,10 +2337,10 @@
                         <deegreewfs:Content type="aatams:project_person">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2354,10 +2354,10 @@
                         <deegreewfs:Content type="aatams:animal">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="ANIMAL_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="animal_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="ANIMAL_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="animal_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2369,7 +2369,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="STOCK_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="stock_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2379,7 +2379,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="UTC_DATETIME" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="utc_datetime" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2389,7 +2389,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COMMENTS" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="comments" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2399,7 +2399,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="UNIT" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="unit" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2409,7 +2409,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="MEASURE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="measure" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2422,11 +2422,11 @@
                 type="aatams:surgery_person_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>SURGERY_PERSON</deegreewfs:table>
+            <deegreewfs:table>surgery_person</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.surgery_person.">
-               <deegreewfs:MappingField field="SURGERY_PERSON_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="surgery_person_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">SURGERY_PERSON_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">surgery_person_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -2446,10 +2446,10 @@
                         <deegreewfs:Content type="aatams:surgery">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="SURGERY_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="SURGERY_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2463,10 +2463,10 @@
                         <deegreewfs:Content type="aatams:person">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="person_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="person_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2481,11 +2481,11 @@
                 type="aatams:tag_release_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>TAG_RELEASE</deegreewfs:table>
+            <deegreewfs:table>tag_release</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.tag_release.">
-               <deegreewfs:MappingField field="RELEASE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="release_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">TAG_RELEASE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">tag_release_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -2506,10 +2506,10 @@
                         <deegreewfs:Content type="aatams:transmitter_device">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="device_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="device_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2524,10 +2524,10 @@
                         <deegreewfs:Content type="aatams:classification">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2542,10 +2542,10 @@
                         <deegreewfs:Content type="aatams:project_person">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2557,7 +2557,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_LONGITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="release_longitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2567,7 +2567,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_LATITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="release_latitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2577,7 +2577,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_TIMESTAMP" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="release_timestamp" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2587,7 +2587,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CAPTURE_LONGITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="capture_longitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2597,7 +2597,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CAPTURE_LATITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="capture_latitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2607,7 +2607,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CAPTURE_TIMESTAMP" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="capture_timestamp" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2620,10 +2620,10 @@
                         <deegreewfs:Content type="aatams:implant_type">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="IMPLANT_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="implant_type_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="IMPLANT_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="implant_type_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2638,10 +2638,10 @@
                         <deegreewfs:Content type="aatams:classification_level">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="DISPLAYED_LEVEL_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="displayed_level_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="CLASSIFICATION_LEVEL_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_level_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2655,11 +2655,11 @@
    <xsd:element name="tag_type" substitutionGroup="gml:_Feature" type="aatams:tag_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>TAG_TYPE</deegreewfs:table>
+            <deegreewfs:table>tag_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.tag_type.">
-               <deegreewfs:MappingField field="TAG_TYPE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="tag_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">TAG_TYPE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">tag_type_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -2677,7 +2677,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="MANUFACTURER_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="manufacturer_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2687,7 +2687,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2700,11 +2700,11 @@
                 type="aatams:tether_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>TETHER_TYPE</deegreewfs:table>
+            <deegreewfs:table>tether_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.tether_type.">
-               <deegreewfs:MappingField field="TETHER_TYPE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="tether_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">TETHER_TYPE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">tether_type_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -2722,7 +2722,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2732,7 +2732,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DESCRIPTION" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="description" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2742,7 +2742,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PICTURE_REFERENCE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="picture_reference" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2755,11 +2755,11 @@
                 type="aatams:treatment_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>TREATMENT_TYPE</deegreewfs:table>
+            <deegreewfs:table>treatment_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.treatment_type.">
-               <deegreewfs:MappingField field="TREATMENT_TYPE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="treatment_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">TREATMENT_TYPE_SERIAL</deegreewfs:param>
+                  <deegreewfs:param name="sequence">treatment_type_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -2777,7 +2777,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2792,7 +2792,7 @@
          <xsd:appinfo>
             <deegreewfs:table>PROJECT_PERSON</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.project_person.">
-               <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -2809,7 +2809,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PROJECT_FID" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="project_fid" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2819,7 +2819,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PROJECT_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="project_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2829,7 +2829,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PERSON_FID" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="person_fid" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2839,7 +2839,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PERSON_ROLE" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="person_role" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2854,7 +2854,7 @@
          <xsd:appinfo>
             <deegreewfs:table>RECEIVER_DEVICE</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.receiver_device.">
-               <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="device_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -2871,7 +2871,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2881,7 +2881,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CODE_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="code_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2891,7 +2891,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="MODEL_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="model_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2901,7 +2901,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="MANUFACTURER_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="manufacturer_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2916,7 +2916,7 @@
          <xsd:appinfo>
             <deegreewfs:table>TRANSMITTER_DEVICE</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.transmitter_device.">
-               <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="device_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -2933,7 +2933,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2943,7 +2943,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CODE_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="code_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2953,7 +2953,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="MODEL_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="model_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2963,7 +2963,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="MANUFACTURER_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="manufacturer_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2977,7 +2977,7 @@
          <xsd:appinfo>
             <deegreewfs:table>STATION</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.station.">
-               <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="station_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -2994,7 +2994,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="INSTALLATION_FID" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="installation_fid" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3004,7 +3004,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3014,7 +3014,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="LONGITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="longitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3024,7 +3024,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="LATITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="latitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3039,7 +3039,7 @@
          <xsd:appinfo>
             <deegreewfs:table>INSTALLATION_DEPLOYMENT</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.installation_deployment.">
-               <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3056,7 +3056,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="INSTALLATION_FID" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="installation_fid" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3066,7 +3066,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="INSTALLATION_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="installation_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3076,7 +3076,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="STATION_FID" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="station_fid" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3086,7 +3086,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="STATION_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="station_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3096,7 +3096,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DEVICE_FID" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="device_fid" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3106,7 +3106,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DEVICE_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="device_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3116,7 +3116,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DEPLOYMENT_FID" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="deployment_fid" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3126,7 +3126,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3136,7 +3136,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DEPLOYMENT_TIMESTAMP" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="deployment_timestamp" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3146,7 +3146,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="SCHEDULED_RECOVERY_DATE" type="DATE"/>
+                           <deegreewfs:MappingField field="scheduled_recovery_date" type="DATE"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3156,7 +3156,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="LONGITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="longitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3166,7 +3166,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="LATITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="latitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3181,7 +3181,7 @@
          <xsd:appinfo>
             <deegreewfs:table>TRANSMITTER_MODEL</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.transmitter_model.">
-               <deegreewfs:MappingField field="MODEL_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="model_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3198,7 +3198,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3213,7 +3213,7 @@
          <xsd:appinfo>
             <deegreewfs:table>RECEIVER_MODEL</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.receiver_model.">
-               <deegreewfs:MappingField field="MODEL_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="model_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3230,7 +3230,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3245,7 +3245,7 @@
          <xsd:appinfo>
             <deegreewfs:table>PARENT_CLASSIFICATION</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.parent_classification.">
-               <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3262,7 +3262,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CLASSIFICATION_LEVEL_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="classification_level_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3272,7 +3272,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3282,7 +3282,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COMMON_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="common_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3296,7 +3296,7 @@
          <xsd:appinfo>
             <deegreewfs:table>FAMILY</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.family.">
-               <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3313,7 +3313,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="parent_classification_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3323,7 +3323,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3337,7 +3337,7 @@
          <xsd:appinfo>
             <deegreewfs:table>GENUS</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.genus.">
-               <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3356,10 +3356,10 @@
                         <deegreewfs:Content type="aatams:family">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="parent_classification_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -3371,7 +3371,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3385,7 +3385,7 @@
          <xsd:appinfo>
             <deegreewfs:table>SPECIES</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.species.">
-               <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3404,10 +3404,10 @@
                         <deegreewfs:Content type="aatams:genus">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="PARENT_CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="parent_classification_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -3419,7 +3419,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3434,7 +3434,7 @@
          <xsd:appinfo>
             <deegreewfs:table>DISPLAY_CLASSIFICATION</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.display_classification.">
-               <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3451,7 +3451,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CLASSIFICATION_LEVEL_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="classification_level_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3461,7 +3461,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3471,7 +3471,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COMMON_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="common_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3486,7 +3486,7 @@
          <xsd:appinfo>
             <deegreewfs:table>DISPLAY_TAG_RELEASE</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.display_tag_release.">
-               <deegreewfs:MappingField field="RELEASE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="release_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3506,10 +3506,10 @@
                         <deegreewfs:Content type="aatams:transmitter_device">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="DEVICE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="device_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -3523,10 +3523,10 @@
                         <deegreewfs:Content type="aatams:family">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="FAMILY_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="family_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -3540,10 +3540,10 @@
                         <deegreewfs:Content type="aatams:genus">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="GENUS_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="genus_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -3557,10 +3557,10 @@
                         <deegreewfs:Content type="aatams:species">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="SPECIES_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="species_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="CLASSIFICATION_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -3575,10 +3575,10 @@
                         <deegreewfs:Content type="aatams:project_person">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -3590,7 +3590,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_LONGITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="release_longitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3600,7 +3600,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_LATITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="release_latitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3610,7 +3610,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_TIMESTAMP" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="release_timestamp" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3620,7 +3620,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CAPTURE_LONGITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="capture_longitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3630,7 +3630,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CAPTURE_LATITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="capture_latitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3640,7 +3640,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CAPTURE_TIMESTAMP" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="capture_timestamp" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3653,10 +3653,10 @@
                         <deegreewfs:Content type="aatams:implant_type">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="IMPLANT_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="implant_type_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="IMPLANT_TYPE_ID" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="implant_type_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -3673,7 +3673,7 @@
          <xsd:appinfo>
             <deegreewfs:table>TAG_RELEASE_MIN</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.tag_release_min.">
-               <deegreewfs:MappingField field="RELEASE_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="release_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3690,7 +3690,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PROJECT_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="project_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3700,7 +3700,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PROJECT_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="project_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3710,7 +3710,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3720,7 +3720,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CODE_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="code_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3730,7 +3730,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="FAMILY" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="family" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3740,7 +3740,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="GENUS" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="genus" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3750,7 +3750,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="SPECIES" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="species" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3760,7 +3760,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_LONGITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="release_longitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3770,7 +3770,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_LATITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="release_latitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3780,7 +3780,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_TIMESTAMP" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="release_timestamp" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3794,7 +3794,7 @@
          <xsd:appinfo>
             <deegreewfs:table>DETECTION</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detection.">
-               <deegreewfs:MappingField field="DETECTION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="detection_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3811,7 +3811,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="INSTALLATION_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3821,7 +3821,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="STATION_ID" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="station_id" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3831,7 +3831,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DEPLOYMENT_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3841,7 +3841,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DETECTION_TIMESTAMP" type="TIMESTAMP"/>
+                           <deegreewfs:MappingField field="detection_timestamp" type="TIMESTAMP"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3851,7 +3851,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="LONGITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="longitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3861,7 +3861,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="LATITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="latitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3871,7 +3871,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3881,7 +3881,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TAG_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="tag_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3891,7 +3891,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RECEIVER_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="receiver_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3901,7 +3901,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RECEIVER_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="receiver_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3911,7 +3911,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_LONGITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="release_longitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3921,7 +3921,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_LATITUDE" type="DECIMAL"/>
+                           <deegreewfs:MappingField field="release_latitude" type="DECIMAL"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3931,7 +3931,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_TIMESTAMP" type="INTEGER"/>
+                           <deegreewfs:MappingField field="release_timestamp" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3941,7 +3941,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="FAMILY_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="family_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3951,7 +3951,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="GENUS_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="genus_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3961,7 +3961,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="SPECIES_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="species_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3976,7 +3976,7 @@
          <xsd:appinfo>
             <deegreewfs:table>DETECTIONS_BY_INSTLN_STATION</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detections_by_instln_station.">
-               <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="station_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3993,7 +3993,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="INSTALLATION_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4003,7 +4003,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="INSTALLATION_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="installation_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4013,7 +4013,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="STATION_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="station_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4023,7 +4023,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="LONGITUDE" type="INTEGER"/>
+                           <deegreewfs:MappingField field="longitude" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4033,7 +4033,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="LATITUDE" type="INTEGER"/>
+                           <deegreewfs:MappingField field="latitude" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4043,7 +4043,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COUNT" type="INTEGER"/>
+                           <deegreewfs:MappingField field="count" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4058,7 +4058,7 @@
          <xsd:appinfo>
             <deegreewfs:table>DETECTIONS_BY_STATION_TAG</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detections_by_station_tag.">
-               <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -4075,7 +4075,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="STATION_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="station_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4085,7 +4085,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TAG_NAME" type="INTEGER"/>
+                           <deegreewfs:MappingField field="tag_name" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4095,7 +4095,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COUNT" type="INTEGER"/>
+                           <deegreewfs:MappingField field="count" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4110,7 +4110,7 @@
          <xsd:appinfo>
             <deegreewfs:table>DETECTIONS_BY_PROJECT_TAG</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detections_by_project_tag.">
-               <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -4127,7 +4127,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="PROJECT_ID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="project_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4137,7 +4137,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TAG_NAME" type="INTEGER"/>
+                           <deegreewfs:MappingField field="tag_name" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4147,7 +4147,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COUNT" type="INTEGER"/>
+                           <deegreewfs:MappingField field="count" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4162,7 +4162,7 @@
          <xsd:appinfo>
             <deegreewfs:table>DETECTIONS_BY_CLASSTN_TAG</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detections_by_classtn_tag.">
-               <deegreewfs:MappingField field="TAG_ID" type="INTEGER"/>
+               <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -4179,7 +4179,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="FAMILY" type="INTEGER"/>
+                           <deegreewfs:MappingField field="family" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4189,7 +4189,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="GENUS" type="INTEGER"/>
+                           <deegreewfs:MappingField field="genus" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4199,7 +4199,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="SPECIES" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="species" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4209,7 +4209,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TAG_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="tag_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4219,7 +4219,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="COUNT" type="INTEGER"/>
+                           <deegreewfs:MappingField field="count" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4234,7 +4234,7 @@
          <xsd:appinfo>
             <deegreewfs:table>DEPLOYMENT_DOWNLOAD_TAG</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.deployment_download_tag.">
-               <deegreewfs:MappingField field="PKEY" type="INTEGER"/>
+               <deegreewfs:MappingField field="pkey" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -4251,7 +4251,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="TAG_FID" type="INTEGER"/>
+                           <deegreewfs:MappingField field="tag_fid" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4261,7 +4261,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="CODE_NAME" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="code_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4271,7 +4271,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="DETECTION_COUNT" type="INTEGER"/>
+                           <deegreewfs:MappingField field="detection_count" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4281,7 +4281,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="RELEASE_FID" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="release_fid" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4291,7 +4291,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="FAMILY" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="family" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4301,7 +4301,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="GENUS" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="genus" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4311,7 +4311,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="SPECIES" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="species" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>

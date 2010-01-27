@@ -36,7 +36,7 @@
 					<xsd:annotation>
 						<xsd:appinfo>
 							<deegreewfs:table>
-								<xsl:value-of select="@name" />
+								<xsl:value-of select="lower-case(@name)" />
 							</deegreewfs:table>
 							<xsl:element name="deegreewfs:gmlId">
 								<xsl:attribute name="prefix">
@@ -46,7 +46,7 @@
 								</xsl:attribute>
 								<xsl:element name="deegreewfs:MappingField">
 									<xsl:attribute name="field">
-										<xsl:value-of select="column[@primaryKey='true']/@name" />
+										<xsl:value-of select="lower-case(column[@primaryKey='true']/@name)" />
 									</xsl:attribute>
 									<xsl:attribute name="type">
 										<xsl:value-of select="column[@primaryKey='true']/@type" />
@@ -54,8 +54,8 @@
 								</xsl:element>
 								<deegreewfs:IdGenerator type="DB_SEQ">
 									<deegreewfs:param name="sequence">
-										<xsl:value-of select="@name" />
-										<xsl:text>_SERIAL</xsl:text>
+										<xsl:value-of select="lower-case(@name)" />
+										<xsl:text>_serial</xsl:text>
 									</deegreewfs:param>
 								</deegreewfs:IdGenerator>
 								<deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -104,7 +104,7 @@
 								</xsl:attribute>
 								<xsl:element name="deegreewfs:MappingField">
 									<xsl:attribute name="field">
-										<xsl:value-of select="column[@primaryKey='true']/@name" />
+										<xsl:value-of select="lower-case(column[@primaryKey='true']/@name)" />
 									</xsl:attribute>
 									<xsl:attribute name="type">
 										<xsl:value-of select="column[@primaryKey='true']/@type" />
@@ -176,14 +176,14 @@
 									<deegreewfs:From fk="true">
 										<xsl:element name="deegreewfs:MappingField">
 											<xsl:attribute name="field">
-												<xsl:value-of select="@name" />
+												<xsl:value-of select="lower-case(@name)" />
 											</xsl:attribute>
 											<xsl:attribute name="type">INTEGER</xsl:attribute>
 										</xsl:element>
 									</deegreewfs:From>
 									<deegreewfs:To>
 										<xsl:element name="deegreewfs:MappingField">
-											<xsl:attribute name="field">PROJECT_ROLE_PERSON_ID</xsl:attribute>
+											<xsl:attribute name="field">project_role_person_id</xsl:attribute>
 											<xsl:attribute name="type">INTEGER</xsl:attribute>
 										</xsl:element>
 									</deegreewfs:To>
@@ -269,7 +269,7 @@
 											<deegreewfs:From fk="true">
 												<xsl:element name="deegreewfs:MappingField">
 													<xsl:attribute name="field">
-														<xsl:value-of select="@name" />
+														<xsl:value-of select="lower-case(@name)" />
 													</xsl:attribute>
 													<xsl:attribute name="type">INTEGER</xsl:attribute>
 												</xsl:element>
@@ -277,7 +277,7 @@
 											<deegreewfs:To>
 												<xsl:element name="deegreewfs:MappingField">
 													<xsl:attribute name="field">
-														<xsl:value-of select="../foreign-key[reference/@local=current()/@name][1]/reference/@foreign" />
+														<xsl:value-of select="lower-case(../foreign-key[reference/@local=current()/@name][1]/reference/@foreign)" />
 													</xsl:attribute>
 													<xsl:attribute name="type">INTEGER</xsl:attribute>
 												</xsl:element>
@@ -289,7 +289,7 @@
 									<deegreewfs:Content>
 										<xsl:element name="deegreewfs:MappingField">
 											<xsl:attribute name="field">
-												<xsl:value-of select="@name" />
+												<xsl:value-of select="lower-case(@name)" />
 											</xsl:attribute>
 											<xsl:attribute name="type">
 												<xsl:value-of select="@type" />
@@ -311,7 +311,7 @@
 				<xsd:appinfo>
 					<deegreewfs:table>PROJECT_PERSON</deegreewfs:table>
 					<deegreewfs:gmlId prefix="aatams.project_person.">
-						<deegreewfs:MappingField field="PROJECT_ROLE_PERSON_ID" type="INTEGER" />
+						<deegreewfs:MappingField field="project_role_person_id" type="INTEGER" />
 						<deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
 					</deegreewfs:gmlId>
 					<deegreewfs:visible>true</deegreewfs:visible>
@@ -328,7 +328,7 @@
 								<xsd:appinfo>
 									<deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
 									<deegreewfs:Content>
-										<deegreewfs:MappingField field="PROJECT_FID" type="VARCHAR" />
+										<deegreewfs:MappingField field="project_fid" type="VARCHAR" />
 									</deegreewfs:Content>
 								</xsd:appinfo>
 							</xsd:annotation>
@@ -338,7 +338,7 @@
 								<xsd:appinfo>
 									<deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
 									<deegreewfs:Content>
-										<deegreewfs:MappingField field="PROJECT_NAME" type="VARCHAR" />
+										<deegreewfs:MappingField field="project_name" type="VARCHAR" />
 									</deegreewfs:Content>
 								</xsd:appinfo>
 							</xsd:annotation>
@@ -348,7 +348,7 @@
 								<xsd:appinfo>
 									<deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
 									<deegreewfs:Content>
-										<deegreewfs:MappingField field="PROJECT_FID" type="VARCHAR" />
+										<deegreewfs:MappingField field="project_fid" type="VARCHAR" />
 									</deegreewfs:Content>
 								</xsd:appinfo>
 							</xsd:annotation>
@@ -358,7 +358,7 @@
 								<xsd:appinfo>
 									<deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
 									<deegreewfs:Content>
-										<deegreewfs:MappingField field="PERSON_ROLE" type="VARCHAR" />
+										<deegreewfs:MappingField field="person_role" type="VARCHAR" />
 									</deegreewfs:Content>
 								</xsd:appinfo>
 							</xsd:annotation>

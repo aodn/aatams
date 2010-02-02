@@ -172,7 +172,7 @@ FROM aatams.classification
 WHERE classification_level_id = 12
 ORDER BY name;
 
-CREATE OR REPLACE VIEW aatams.stations  AS 
+CREATE OR REPLACE VIEW aatams.station  AS 
 select
 'aatams.installation.' || installation_id as installation_fid,
 station_id,

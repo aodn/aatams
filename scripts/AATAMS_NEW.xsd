@@ -16,7 +16,7 @@
    <xsd:annotation>
       <xsd:appinfo>
          <deegreewfs:Prefix>aatams</deegreewfs:Prefix>
-         <deegreewfs:Backend>ORACLE</deegreewfs:Backend>
+         <deegreewfs:Backend>POSTGIS</deegreewfs:Backend>
          <deegreewfs:DefaultSRS>EPSG:4326</deegreewfs:DefaultSRS>
          <deegreewfs:SuppressXLinkOutput>true</deegreewfs:SuppressXLinkOutput>
          <JDBCConnection xmlns="http://www.deegree.org/jdbc">
@@ -32,7 +32,7 @@
    <xsd:element name="animal" substitutionGroup="gml:_Feature" type="aatams:animal_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>animal</deegreewfs:table>
+            <deegreewfs:table>aatams.animal</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.animal.">
                <deegreewfs:MappingField field="animal_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -115,7 +115,7 @@
                 type="aatams:classification_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>classification</deegreewfs:table>
+            <deegreewfs:table>aatams.classification</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.classification.">
                <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -196,7 +196,7 @@
                 type="aatams:classification_level_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>classification_level</deegreewfs:table>
+            <deegreewfs:table>aatams.classification_level</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.classification_level.">
                <deegreewfs:MappingField field="classification_level_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -231,7 +231,7 @@
                 type="aatams:deployment_download_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>deployment_download</deegreewfs:table>
+            <deegreewfs:table>aatams.deployment_download</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.deployment_download.">
                <deegreewfs:MappingField field="download_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -374,7 +374,7 @@
                 type="aatams:deployment_event_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>deployment_event</deegreewfs:table>
+            <deegreewfs:table>aatams.deployment_event</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.deployment_event.">
                <deegreewfs:MappingField field="deployment_event_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -455,9 +455,9 @@
                 type="aatams:download_tag_summary_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>download_tag_summary</deegreewfs:table>
+            <deegreewfs:table>aatams.download_tag_summary</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.download_tag_summary.">
-               <deegreewfs:MappingField field="download_id" type="INTEGER"/>
+               <deegreewfs:MappingField field="download_tag_summary_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
                   <deegreewfs:param name="sequence">download_tag_summary_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
@@ -472,6 +472,16 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
+               <xsd:element name="download" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="download_id" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
                <xsd:element name="installation_deployment_ref" minOccurs="1" maxOccurs="1"
                             type="gml:FeaturePropertyType">
                   <xsd:annotation>
@@ -526,7 +536,7 @@
                 type="aatams:deployment_event_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>deployment_event_type</deegreewfs:table>
+            <deegreewfs:table>aatams.deployment_event_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.deployment_event_type.">
                <deegreewfs:MappingField field="event_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -561,7 +571,7 @@
                 type="aatams:deployment_recovery_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>deployment_recovery</deegreewfs:table>
+            <deegreewfs:table>aatams.deployment_recovery</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.deployment_recovery.">
                <deegreewfs:MappingField field="recovery_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -642,7 +652,7 @@
                 type="aatams:recovery_status_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>recovery_status</deegreewfs:table>
+            <deegreewfs:table>aatams.recovery_status</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.recovery_status.">
                <deegreewfs:MappingField field="recovery_status_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -676,7 +686,7 @@
    <xsd:element name="detection" substitutionGroup="gml:_Feature" type="aatams:detection_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>detection</deegreewfs:table>
+            <deegreewfs:table>aatams.detection</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detection.">
                <deegreewfs:MappingField field="detection_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -748,7 +758,7 @@
    <xsd:element name="device" substitutionGroup="gml:_Feature" type="aatams:device_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>device</deegreewfs:table>
+            <deegreewfs:table>aatams.device</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.device.">
                <deegreewfs:MappingField field="device_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -847,7 +857,7 @@
                 type="aatams:device_deployer_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>device_deployer</deegreewfs:table>
+            <deegreewfs:table>aatams.device_deployer</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.device_deployer.">
                <deegreewfs:MappingField field="device_deployer_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -892,7 +902,7 @@
                 type="aatams:receiver_deployment_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>receiver_deployment</deegreewfs:table>
+            <deegreewfs:table>aatams.receiver_deployment</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.receiver_deployment.">
                <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1067,7 +1077,7 @@
                 type="aatams:device_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>device_type</deegreewfs:table>
+            <deegreewfs:table>aatams.device_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.device_type.">
                <deegreewfs:MappingField field="device_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1102,7 +1112,7 @@
                 type="aatams:device_manufacturer_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>device_manufacturer</deegreewfs:table>
+            <deegreewfs:table>aatams.device_manufacturer</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.device_manufacturer.">
                <deegreewfs:MappingField field="manufacturer_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1137,7 +1147,7 @@
                 type="aatams:device_model_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>device_model</deegreewfs:table>
+            <deegreewfs:table>aatams.device_model</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.device_model.">
                <deegreewfs:MappingField field="model_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1208,7 +1218,7 @@
                 type="aatams:device_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>device_type</deegreewfs:table>
+            <deegreewfs:table>aatams.device_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.device_type.">
                <deegreewfs:MappingField field="device_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1243,7 +1253,7 @@
                 type="aatams:download_file_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>download_file</deegreewfs:table>
+            <deegreewfs:table>aatams.download_file</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.download_file.">
                <deegreewfs:MappingField field="download_file_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1296,7 +1306,7 @@
                 type="aatams:geographic_area_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>geographic_area</deegreewfs:table>
+            <deegreewfs:table>aatams.geographic_area</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.geographic_area.">
                <deegreewfs:MappingField field="geographic_area_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1351,7 +1361,7 @@
                 type="aatams:implant_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>implant_type</deegreewfs:table>
+            <deegreewfs:table>aatams.implant_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.implant_type.">
                <deegreewfs:MappingField field="implant_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1386,7 +1396,7 @@
                 type="aatams:installation_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>installation</deegreewfs:table>
+            <deegreewfs:table>aatams.installation</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.installation.">
                <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1439,7 +1449,7 @@
                 type="aatams:installation_conf_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>installation_conf</deegreewfs:table>
+            <deegreewfs:table>aatams.installation_conf</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.installation_conf.">
                <deegreewfs:MappingField field="configuration_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1474,7 +1484,7 @@
                 type="aatams:installation_station_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>installation_station</deegreewfs:table>
+            <deegreewfs:table>aatams.installation_station</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.installation_station.">
                <deegreewfs:MappingField field="station_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1548,7 +1558,7 @@
                 type="aatams:measurement_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>measurement</deegreewfs:table>
+            <deegreewfs:table>aatams.measurement</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.measurement.">
                <deegreewfs:MappingField field="measurement_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1628,7 +1638,7 @@
                 type="aatams:measurement_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>measurement_type</deegreewfs:table>
+            <deegreewfs:table>aatams.measurement_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.measurement_type.">
                <deegreewfs:MappingField field="measurement_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1681,7 +1691,7 @@
                 type="aatams:measurement_unit_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>measurement_unit_type</deegreewfs:table>
+            <deegreewfs:table>aatams.measurement_unit_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.measurement_unit_type.">
                <deegreewfs:MappingField field="measurement_unit_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1716,7 +1726,7 @@
                 type="aatams:mooring_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>mooring_type</deegreewfs:table>
+            <deegreewfs:table>aatams.mooring_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.mooring_type.">
                <deegreewfs:MappingField field="mooring_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1761,7 +1771,7 @@
                 type="aatams:organisation_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>organisation</deegreewfs:table>
+            <deegreewfs:table>aatams.organisation</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.organisation.">
                <deegreewfs:MappingField field="organisation_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1916,7 +1926,7 @@
                 type="aatams:organisation_animal_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>organisation_animal</deegreewfs:table>
+            <deegreewfs:table>aatams.organisation_animal</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.organisation_animal.">
                <deegreewfs:MappingField field="organisation_animal_id" type="VARCHAR"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -1961,7 +1971,7 @@
                 type="aatams:organisation_person_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>organisation_person</deegreewfs:table>
+            <deegreewfs:table>aatams.organisation_person</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.organisation_person.">
                <deegreewfs:MappingField field="organisation_person_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2055,7 +2065,7 @@
    <xsd:element name="person" substitutionGroup="gml:_Feature" type="aatams:person_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>person</deegreewfs:table>
+            <deegreewfs:table>aatams.person</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.person.">
                <deegreewfs:MappingField field="person_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2224,7 +2234,7 @@
    <xsd:element name="project" substitutionGroup="gml:_Feature" type="aatams:project_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>project</deegreewfs:table>
+            <deegreewfs:table>aatams.project</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.project.">
                <deegreewfs:MappingField field="project_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2277,7 +2287,7 @@
                 type="aatams:project_role_person_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>project_role_person</deegreewfs:table>
+            <deegreewfs:table>aatams.project_role_person</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.project_role_person.">
                <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2352,7 +2362,7 @@
    <xsd:element name="role" substitutionGroup="gml:_Feature" type="aatams:role_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>role</deegreewfs:table>
+            <deegreewfs:table>aatams.role</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.role.">
                <deegreewfs:MappingField field="role_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2386,7 +2396,7 @@
    <xsd:element name="status" substitutionGroup="gml:_Feature" type="aatams:status_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>status</deegreewfs:table>
+            <deegreewfs:table>aatams.status</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.status.">
                <deegreewfs:MappingField field="status_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2420,7 +2430,7 @@
    <xsd:element name="stock" substitutionGroup="gml:_Feature" type="aatams:stock_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>stock</deegreewfs:table>
+            <deegreewfs:table>aatams.stock</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.stock.">
                <deegreewfs:MappingField field="stock_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2454,7 +2464,7 @@
    <xsd:element name="surgery" substitutionGroup="gml:_Feature" type="aatams:surgery_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>surgery</deegreewfs:table>
+            <deegreewfs:table>aatams.surgery</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.surgery.">
                <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2582,7 +2592,7 @@
                 type="aatams:surgery_person_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>surgery_person</deegreewfs:table>
+            <deegreewfs:table>aatams.surgery_person</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.surgery_person.">
                <deegreewfs:MappingField field="surgery_person_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2641,7 +2651,7 @@
                 type="aatams:tag_release_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>tag_release</deegreewfs:table>
+            <deegreewfs:table>aatams.tag_release</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.tag_release.">
                <deegreewfs:MappingField field="release_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2658,12 +2668,12 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="transmitter_device_ref" minOccurs="1" maxOccurs="1"
+               <xsd:element name="tag_device_ref" minOccurs="1" maxOccurs="1"
                             type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:transmitter_device">
+                        <deegreewfs:Content type="aatams:tag_device">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
                                  <deegreewfs:MappingField field="device_id" type="INTEGER"/>
@@ -2799,7 +2809,7 @@
    <xsd:element name="tag_type" substitutionGroup="gml:_Feature" type="aatams:tag_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>tag_type</deegreewfs:table>
+            <deegreewfs:table>aatams.tag_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.tag_type.">
                <deegreewfs:MappingField field="tag_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2844,7 +2854,7 @@
                 type="aatams:tether_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>tether_type</deegreewfs:table>
+            <deegreewfs:table>aatams.tether_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.tether_type.">
                <deegreewfs:MappingField field="tether_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2899,7 +2909,7 @@
                 type="aatams:treatment_type_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>treatment_type</deegreewfs:table>
+            <deegreewfs:table>aatams.treatment_type</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.treatment_type.">
                <deegreewfs:MappingField field="treatment_type_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
@@ -2934,7 +2944,7 @@
                 type="aatams:project_person_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>PROJECT_PERSON</deegreewfs:table>
+            <deegreewfs:table>aatams.project_person</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.project_person.">
                <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -2996,7 +3006,7 @@
                 type="aatams:receiver_device_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>RECEIVER_DEVICE</deegreewfs:table>
+            <deegreewfs:table>aatams.receiver_device</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.receiver_device.">
                <deegreewfs:MappingField field="device_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3054,12 +3064,12 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="transmitter_device" substitutionGroup="gml:_Feature"
-                type="aatams:transmitter_device_type">
+   <xsd:element name="tag_device" substitutionGroup="gml:_Feature"
+                type="aatams:tag_device_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>TRANSMITTER_DEVICE</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.transmitter_device.">
+            <deegreewfs:table>aatams.tag_device</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.tag_device.">
                <deegreewfs:MappingField field="device_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -3068,7 +3078,7 @@
          </xsd:appinfo>
       </xsd:annotation>
    </xsd:element>
-   <xsd:complexType name="transmitter_device_type">
+   <xsd:complexType name="tag_device_type">
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
@@ -3119,7 +3129,7 @@
    <xsd:element name="station" substitutionGroup="gml:_Feature" type="aatams:station_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>STATION</deegreewfs:table>
+            <deegreewfs:table>aatams.station</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.station.">
                <deegreewfs:MappingField field="station_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3172,7 +3182,7 @@
                 type="aatams:installation_deployment_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>INSTALLATION_DEPLOYMENT</deegreewfs:table>
+            <deegreewfs:table>aatams.installation_deployment</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.installation_deployment.">
                <deegreewfs:MappingField field="deployment_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3305,7 +3315,7 @@
                 type="aatams:transmitter_model_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>TRANSMITTER_MODEL</deegreewfs:table>
+            <deegreewfs:table>aatams.transmitter_model</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.transmitter_model.">
                <deegreewfs:MappingField field="model_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3337,7 +3347,7 @@
                 type="aatams:receiver_model_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>RECEIVER_MODEL</deegreewfs:table>
+            <deegreewfs:table>aatams.receiver_model</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.receiver_model.">
                <deegreewfs:MappingField field="model_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3369,7 +3379,7 @@
                 type="aatams:parent_classification_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>PARENT_CLASSIFICATION</deegreewfs:table>
+            <deegreewfs:table>aatams.parent_classification</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.parent_classification.">
                <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3420,7 +3430,7 @@
    <xsd:element name="family" substitutionGroup="gml:_Feature" type="aatams:family_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>FAMILY</deegreewfs:table>
+            <deegreewfs:table>aatams.family</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.family.">
                <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3461,7 +3471,7 @@
    <xsd:element name="genus" substitutionGroup="gml:_Feature" type="aatams:genus_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>GENUS</deegreewfs:table>
+            <deegreewfs:table>aatams.genus</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.genus.">
                <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3509,7 +3519,7 @@
    <xsd:element name="species" substitutionGroup="gml:_Feature" type="aatams:species_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>SPECIES</deegreewfs:table>
+            <deegreewfs:table>aatams.species</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.species.">
                <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3558,7 +3568,7 @@
                 type="aatams:display_classification_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DISPLAY_CLASSIFICATION</deegreewfs:table>
+            <deegreewfs:table>aatams.display_classification</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.display_classification.">
                <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3610,7 +3620,7 @@
                 type="aatams:display_tag_release_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DISPLAY_TAG_RELEASE</deegreewfs:table>
+            <deegreewfs:table>aatams.display_tag_release</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.display_tag_release.">
                <deegreewfs:MappingField field="release_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3624,12 +3634,12 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="transmitter_device_ref" minOccurs="1" maxOccurs="1"
+               <xsd:element name="tag_device_ref" minOccurs="1" maxOccurs="1"
                             type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:transmitter_device">
+                        <deegreewfs:Content type="aatams:tag_device">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
                                  <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
@@ -3779,7 +3789,7 @@
                 type="aatams:tag_release_min_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>TAG_RELEASE_MIN</deegreewfs:table>
+            <deegreewfs:table>aatams.tag_release_min</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.tag_release_min.">
                <deegreewfs:MappingField field="release_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3892,7 +3902,7 @@
    <xsd:element name="detection" substitutionGroup="gml:_Feature" type="aatams:detection_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DETECTION</deegreewfs:table>
+            <deegreewfs:table>aatams.detection</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detection.">
                <deegreewfs:MappingField field="detection_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -4057,7 +4067,7 @@
                 type="aatams:detections_by_instln_station_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DETECTIONS_BY_INSTLN_STATION</deegreewfs:table>
+            <deegreewfs:table>aatams.detections_by_instln_station</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detections_by_instln_station.">
                <deegreewfs:MappingField field="station_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -4130,7 +4140,7 @@
                 type="aatams:detections_by_station_tag_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DETECTIONS_BY_STATION_TAG</deegreewfs:table>
+            <deegreewfs:table>aatams.detections_by_station_tag</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detections_by_station_tag.">
                <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -4182,7 +4192,7 @@
                 type="aatams:detections_by_project_tag_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DETECTIONS_BY_PROJECT_TAG</deegreewfs:table>
+            <deegreewfs:table>aatams.detections_by_project_tag</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detections_by_project_tag.">
                <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -4234,7 +4244,7 @@
                 type="aatams:detections_by_classtn_tag_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DETECTIONS_BY_CLASSTN_TAG</deegreewfs:table>
+            <deegreewfs:table>aatams.detections_by_classtn_tag</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.detections_by_classtn_tag.">
                <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -4306,7 +4316,7 @@
                 type="aatams:deployment_download_tag_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>DEPLOYMENT_DOWNLOAD_TAG</deegreewfs:table>
+            <deegreewfs:table>aatams.deployment_download_tag</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.deployment_download_tag.">
                <deegreewfs:MappingField field="pkey" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>

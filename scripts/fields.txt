@@ -1,0 +1,283 @@
+
+    ANIMALanimal_id, classification_id, name, display_level_id, display_start_date, comments?,?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setString(3,rsOut.getString(3));psIn.setInt(4,rsOut.getInt(4));psIn.setTimestamp(5,rsOut.getTimestamp(5));psIn.setString(6,rsOut.getString(6));
+    CLASSIFICATIONclassification_id, parent_classification_id, classification_level_id, name, common_name?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));psIn.setString(4,rsOut.getString(4));psIn.setString(5,rsOut.getString(5));
+    CLASSIFICATION_LEVELclassification_level_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+    DEPLOYMENT_DOWNLOADdownload_id, deployment_id, recovery_timestamp, download_timestamp, time_correction_start, time_correction_end, time_correction_type_id, clock_drift, pings, detections, cc_email_addresses, comments?,?,?,?,?,?,?,?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setTimestamp(3,rsOut.getTimestamp(3));psIn.setTimestamp(4,rsOut.getTimestamp(4));psIn.setTimestamp(5,rsOut.getTimestamp(5));psIn.setTimestamp(6,rsOut.getTimestamp(6));psIn.setString(7,rsOut.getString(7));psIn.setInt(8,rsOut.getInt(8));psIn.setInt(9,rsOut.getInt(9));psIn.setInt(10,rsOut.getInt(10));psIn.setString(11,rsOut.getString(11));psIn.setString(12,rsOut.getString(12));
+    DEPLOYMENT_EVENTdeployment_event_id, deployment_id, event_type_id, event_timestamp, comments?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));psIn.setString(4,rsOut.getString(4));psIn.setString(5,rsOut.getString(5));
+    
+    DOWNLOAD_TAG_SUMMARYdownload_id, deployment_id, device_id, detection_count?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));psIn.setInt(4,rsOut.getInt(4));
+    
+    DEPLOYMENT_EVENT_TYPEevent_type_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+    DEPLOYMENT_RECOVERYrecovery_id, deployment_id, recovery_timestamp, recovery_status_id, comments?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setTimestamp(3,rsOut.getTimestamp(3));psIn.setInt(4,rsOut.getInt(4));psIn.set(5,rsOut.get(5));
+
+    RECOVERY_STATUSrecovery_status_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+    DETECTIONdetection_id, deployment_id, download_id, tag_id, detection_timestamp?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));psIn.setInt(4,rsOut.getInt(4));psIn.setTimestamp(5,rsOut.getTimestamp(5));
+    DEVICEdevice_id, code_name, device_type_id, model_id, serial_number, project_role_person_id?,?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));psIn.setInt(3,rsOut.getInt(3));psIn.setInt(4,rsOut.getInt(4));psIn.setString(5,rsOut.getString(5));psIn.setInt(6,rsOut.getInt(6));
+    DEVICE_DEPLOYERdevice_deployer_id, deployment_id, person_id?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));
+    RECEIVER_DEPLOYMENTdeployment_id, device_id, installation_id, station_id, project_role_person_id, location, deployment_timestamp, scheduled_recovery_date, acoustic_release_id, mooring_type_id, bottom_depth, comments?,?,?,?,?,?,?,?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));psIn.setInt(4,rsOut.getInt(4));psIn.setInt(5,rsOut.getInt(5));psIn.set(6,rsOut.get(6));psIn.setTimestamp(7,rsOut.getTimestamp(7));psIn.set(8,rsOut.get(8));psIn.setString(9,rsOut.getString(9));psIn.setInt(10,rsOut.getInt(10));psIn.set(11,rsOut.get(11));psIn.setString(12,rsOut.getString(12));
+    
+    DEVICE_TYPEdevice_type_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+    
+    DEVICE_MANUFACTURERmanufacturer_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+    
+    DEVICE_MODELmodel_id, device_type_id, manufacturer_id, name?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));psIn.setString(4,rsOut.getString(4));
+    DEVICE_TYPEdevice_type_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+    DOWNLOAD_FILEdownload_file_id, download_id, file_reference?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setString(3,rsOut.getString(3));
+    GEOGRAPHIC_AREAgeographic_area_id, name, boundary_points, description?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));psIn.setString(3,rsOut.getString(3));psIn.setString(4,rsOut.getString(4));
+    IMPLANT_TYPEimplant_type_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+    INSTALLATIONinstallation_id, configuration_type_id, name?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setString(3,rsOut.getString(3));
+    INSTALLATION_CONFconfiguration_type_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+    INSTALLATION_STATIONstation_id, installation_id, curtain_position, name, location?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));psIn.setString(4,rsOut.getString(4));psIn.set(5,rsOut.get(5));
+    MEASUREMENTmeasurement_id, surgery_id, measurement_type_id, value, comments?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));psIn.setString(4,rsOut.getString(4));psIn.setString(5,rsOut.getString(5));
+    MEASUREMENT_TYPEmeasurement_type_id, measurement_units_id, name?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setString(3,rsOut.getString(3));
+    MEASUREMENT_UNIT_TYPEmeasurement_unit_type_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+    MOORING_TYPEmooring_type_id, name, description?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));psIn.setString(3,rsOut.getString(3));
+    ORGANISATIONorganisation_id, name, phone_number, fax_number, physical_address_1, physical_address_2, physical_address_state, physical_address_country, physical_address_postcode, postal_address_1, postal_address_2, postal_address_state, postal_address_country, postal_address_postcode?,?,?,?,?,?,?,?,?,?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));psIn.setString(3,rsOut.getString(3));psIn.setString(4,rsOut.getString(4));psIn.setString(5,rsOut.getString(5));psIn.setString(6,rsOut.getString(6));psIn.setString(7,rsOut.getString(7));psIn.setString(8,rsOut.getString(8));psIn.setString(9,rsOut.getString(9));psIn.setString(10,rsOut.getString(10));psIn.setString(11,rsOut.getString(11));psIn.setString(12,rsOut.getString(12));psIn.setString(13,rsOut.getString(13));psIn.setString(14,rsOut.getString(14));
+    ORGANISATION_ANIMALorganisation_animal_id, organisation_id, animal_id?,?,?psIn.setString(1,rsOut.getString(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));
+    ORGANISATION_PERSONorganisation_person_id, person_id, organisation_id, position, phone_number, fax_number, mobile_number, email_address?,?,?,?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));psIn.setString(4,rsOut.getString(4));psIn.setString(5,rsOut.getString(5));psIn.setString(6,rsOut.getString(6));psIn.setString(7,rsOut.getString(7));psIn.setString(8,rsOut.getString(8));
+    PERSONperson_id, name, personal_mobile_number, home_phone_number, email, home_physical_address_1, home_physical_address_2, home_physical_address_state, home_physical_address_country, home_physical_address_postcode, home_postal_address_1, home_postal_address_2, home_postal_address_state, home_postal_address_country, home_postal_address_postcode?,?,?,?,?,?,?,?,?,?,?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));psIn.setString(3,rsOut.getString(3));psIn.setString(4,rsOut.getString(4));psIn.setString(5,rsOut.getString(5));psIn.setString(6,rsOut.getString(6));psIn.setString(7,rsOut.getString(7));psIn.setString(8,rsOut.getString(8));psIn.setString(9,rsOut.getString(9));psIn.setString(10,rsOut.getString(10));psIn.setString(11,rsOut.getString(11));psIn.setString(12,rsOut.getString(12));psIn.setString(13,rsOut.getString(13));psIn.setString(14,rsOut.getString(14));psIn.setString(15,rsOut.getString(15));
+    PROJECTproject_id, organisation_id, name?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setString(3,rsOut.getString(3));
+    PROJECT_ROLE_PERSONproject_role_person_id, project_id, role_id, person_id?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));psIn.setInt(4,rsOut.getInt(4));
+    ROLErole_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+    STATUSstatus_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+    STOCKstock_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+    SURGERYsurgery_id, treatment_type_id, project_role_person_id, animal_id, stock_id, utc_datetime, comments, unit, measure?,?,?,?,?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));psIn.setInt(4,rsOut.getInt(4));psIn.setInt(5,rsOut.getInt(5));psIn.setTimestamp(6,rsOut.getTimestamp(6));psIn.setString(7,rsOut.getString(7));psIn.setString(8,rsOut.getString(8));psIn.setString(9,rsOut.getString(9));
+    SURGERY_PERSONsurgery_person_id, surgery_id, person_id?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));
+    
+    TAG_RELEASErelease_id, device_id, classification_id, project_role_person_id, release_location, release_timestamp, capture_location, capture_timestamp, implant_type_id, displayed_level_id?,?,?,?,?,?,?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setInt(3,rsOut.getInt(3));psIn.setInt(4,rsOut.getInt(4));psIn.set(5,rsOut.get(5));psIn.setTimestamp(6,rsOut.getTimestamp(6));psIn.set(7,rsOut.get(7));psIn.setTimestamp(8,rsOut.getTimestamp(8));psIn.setInt(9,rsOut.getInt(9));psIn.setInt(10,rsOut.getInt(10));
+    TAG_TYPEtag_type_id, manufacturer_id, name?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setInt(2,rsOut.getInt(2));psIn.setString(3,rsOut.getString(3));
+    TETHER_TYPEtether_type_id, name, description, picture_reference?,?,?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));psIn.setString(3,rsOut.getString(3));psIn.setString(4,rsOut.getString(4));
+    TREATMENT_TYPEtreatment_type_id, name?,?psIn.setInt(1,rsOut.getInt(1));psIn.setString(2,rsOut.getString(2));
+
+    
+      
+      
+      
+      
+      
+      
+	    
+	    
+      
+    
+
+    
+      
+      
+      
+      
+      
+      
+	  
+      
+    
+
+     
+      
+      
+      
+      
+      
+      
+	  
+      
+       
+
+    
+      
+      
+      
+      
+      
+	  
+      
+    
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+	  
+	  
+      
+    
+    
+    
+      
+      
+    
+   
+    
+      
+      
+    
+    
+    
+     
+     
+      
+      
+      
+      
+    
+    
+    
+      
+      
+      
+    
+    
+    
+      
+      
+      
+      
+        
+      
+    
+    
+    
+      
+      
+      
+      
+        
+      
+    
+    
+    
+    
+      
+      
+      
+      
+      
+        
+      
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+      
+        
+      
+      
+        
+      
+       
+        
+      
+      
+        
+      
+      
+        
+      
+      
+        
+      
+    
+    
+    
+     -->
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    
+    
+       
+    
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+    
+    
+    
+    
+       
+       
+       
+       
+       
+             
+    
+    
+    
+       
+       
+       
+             
+    
+    
+    
+       
+       
+       
+             
+    
+    
+    
+       
+       
+       
+       
+       
+       
+    
+    
+    
+       
+       
+       
+       
+       
+       
+       
+       
+    
+    
+  

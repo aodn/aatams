@@ -9,7 +9,7 @@
 			<xsd:annotation>
 				<xsd:appinfo>
 					<deegreewfs:Prefix>aatams</deegreewfs:Prefix>
-					<deegreewfs:Backend>ORACLE</deegreewfs:Backend>
+					<deegreewfs:Backend>POSTGIS</deegreewfs:Backend>
 					<deegreewfs:DefaultSRS>EPSG:4326</deegreewfs:DefaultSRS>
 				    <deegreewfs:SuppressXLinkOutput>true</deegreewfs:SuppressXLinkOutput>
 				    <JDBCConnection xmlns="http://www.deegree.org/jdbc">
@@ -44,7 +44,7 @@
 					<xsd:annotation>
 						<xsd:appinfo>
 							<deegreewfs:table>
-								<xsl:value-of select="lower-case(@name)" />
+								<xsl:text>aatams.</xsl:text><xsl:value-of select="lower-case(@name)"/>
 							</deegreewfs:table>
 							<xsl:element name="deegreewfs:gmlId">
 								<xsl:attribute name="prefix">
@@ -102,7 +102,7 @@
 					<xsd:annotation>
 						<xsd:appinfo>
 							<deegreewfs:table>
-								<xsl:value-of select="@name" />
+								<xsl:text>aatams.</xsl:text><xsl:value-of select="lower-case(@name)" />
 							</deegreewfs:table>
 							<xsl:element name="deegreewfs:gmlId">
 								<xsl:attribute name="prefix">

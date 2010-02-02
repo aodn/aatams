@@ -5,7 +5,7 @@ FROM aatams.classification WHERE classification_level_id < 12
 ORDER BY classification_level_id, name;
 
 CREATE OR REPLACE VIEW aatams.classification_hierarchy AS
-select s.classification_id as species_id, s.name as species_name, s._name as species_common_name,
+select s.classification_id as species_id, s.name as species_name, s.common_name as species_common_name,
 g.classification_id as genus_id, g.name as genus_name, g.common_name as genus_common_name,
 f.classification_id as family_id, f.name as family_name, f.common_name as family_common_name,
 10 as family_level_id, 11 as genus_level_id, 12 as species_level_id
@@ -44,7 +44,7 @@ where installation_station.installation_id = installation.installation_id
 and detections_by_station.station_id = installation_station.station_id
 order by installation_name, station_name;
 
-insert into geometry_columns values ('', 'aatams', 'detections_by_instln_station', 'location',2, 4326, 'POINT');
+insert into geometry_columns values ('', 'aatams', 'detections_by_instln_station', 'location', 2, 4326, 'POINT');
 
 CREATE OR REPLACE VIEW aatams.detections_by_instln_station_b AS 
 select installation.installation_id,

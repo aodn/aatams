@@ -129,7 +129,8 @@
     </table>
     
     <table name="DOWNLOAD_TAG_SUMMARY">
-      <column name="DOWNLOAD_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+      <column name="DOWNLOAD_TAG_SUMMARY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+      <column name="DOWNLOAD_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="DETECTION_COUNT" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
@@ -358,16 +359,6 @@
       </index>
     </table>
     
-    <table name="DEVICE_TYPE">
-      <column name="DEVICE_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="DEVICE_TYPE_ID">
-        <index-column name="DEVICE_TYPE_ID"/>
-      </index>
-    </table>
     
     <table name="DEVICE_MANUFACTURER">
       <column name="MANUFACTURER_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
@@ -691,7 +682,7 @@
     <table name="PROJECT">
       <column name="PROJECT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="ORGANISATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="200" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
         <unique-column name="NAME"/>
       </unique>
@@ -937,7 +928,7 @@
        <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="TAG_RELEASE_FK01">
         <reference local="DISPLAYED_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
       </foreign-key>
-      <foreign-key foreignTable="TRANSMITTER_DEVICE" name="TAG_RELEASE_FK02">
+      <foreign-key foreignTable="TAG_DEVICE" name="TAG_RELEASE_FK02">
         <reference local="DEVICE_ID" foreign="DEVICE_ID"/>
       </foreign-key>
       <foreign-key foreignTable="IMPLANT_TYPE" name="TAG_RELEASE_FK03">
@@ -1058,7 +1049,7 @@
       </unique>
     </view>
 
-     <view name="TRANSMITTER_DEVICE">
+     <view name="TAG_DEVICE">
       <column name="DEVICE_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1181,7 +1172,7 @@
        <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="DISPLAY_TAG_RELEASE_FK03">
         <reference local="DISPLAYED_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
       </foreign-key>
-      <foreign-key foreignTable="TRANSMITTER_DEVICE" name="DISPLAY_TAG_RELEASE_FK04">
+      <foreign-key foreignTable="TAG_DEVICE" name="DISPLAY_TAG_RELEASE_FK04">
         <reference local="TAG_ID" foreign="DEVICE_ID"/>
       </foreign-key>
       <foreign-key foreignTable="IMPLANT_TYPE" name="DISPLAY_TAG_RELEASE_FK05">

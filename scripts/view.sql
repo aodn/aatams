@@ -225,7 +225,7 @@ order by family, genus, species;
 CREATE OR REPLACE VIEW aatams.detection_max AS 
 select
 rd.installation_id, rd.station_id, rd.deployment_id, d.detection_id, d.detection_timestamp, rd.location,
-d.tag_id, t.code_name as tag_code_name, rd.device_id, r.code_name as receiver_code_name, dtr.release_location,
+d.tag_id, t.code_name as tag_code_name, rd.device_id as receiver_id, r.code_name as receiver_code_name, dtr.release_location,
 dtr.release_timestamp, dtr.family_id, dtr.genus_id, dtr.species_id
 from aatams.detection d 
 inner join aatams.receiver_deployment rd on rd.deployment_id = d.deployment_id
@@ -238,7 +238,7 @@ insert into geometry_columns values ('', 'aatams', 'detection_max', 'location', 
 CREATE OR REPLACE VIEW aatams.detection_min  AS 
 select
 rd.installation_id, rd.station_id, rd.deployment_id, d.detection_id, d.detection_timestamp, rd.location, 
-d.tag_id, t.code_name as tag_code_name, rd.device_id, r.code_name as receiver_code_name
+d.tag_id, t.code_name as tag_code_name, rd.device_id as receiver_id, r.code_name as receiver_code_name
 from aatams.detection d, aatams.receiver_deployment rd, aatams.device t, aatams.device r 
 where rd.deployment_id = d.deployment_id
 and d.tag_id = t.device_id

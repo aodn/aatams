@@ -1040,7 +1040,6 @@
 
     <view name="RECEIVER_DEVICE">
       <column name="DEVICE_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="MODEL_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="MANUFACTURER_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1051,7 +1050,6 @@
 
      <view name="TAG_DEVICE">
       <column name="DEVICE_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="MODEL_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="MANUFACTURER_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>

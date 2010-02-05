@@ -3956,12 +3956,12 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="detections_by_instln_station" substitutionGroup="gml:_Feature"
-                type="aatams:detections_by_instln_station_type">
+   <xsd:element name="detections_by_installation_station" substitutionGroup="gml:_Feature"
+                type="aatams:detections_by_installation_station_type">
       <xsd:annotation>
          <xsd:appinfo>
             <deegreewfs:table>aatams.detections_by_instln_station</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.detections_by_instln_station.">
+            <deegreewfs:gmlId prefix="aatams.detections_by_installation_station.">
                <deegreewfs:MappingField field="station_id" type="INTEGER"/>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -3970,7 +3970,7 @@
          </xsd:appinfo>
       </xsd:annotation>
    </xsd:element>
-   <xsd:complexType name="detections_by_instln_station_type">
+   <xsd:complexType name="detections_by_installation_station_type">
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
@@ -4133,8 +4133,8 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="detections_by_classtn_tag" substitutionGroup="gml:_Feature"
-                type="aatams:detections_by_classtn_tag_type">
+   <xsd:element name="detections_by_classification_tag" substitutionGroup="gml:_Feature"
+                type="aatams:detections_by_classification_tag_type">
       <xsd:annotation>
          <xsd:appinfo>
             <deegreewfs:table>aatams.detections_by_classtn_tag</deegreewfs:table>
@@ -4147,7 +4147,7 @@
          </xsd:appinfo>
       </xsd:annotation>
    </xsd:element>
-   <xsd:complexType name="detections_by_classtn_tag_type">
+   <xsd:complexType name="detections_by_classification_tag_type">
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>

@@ -1073,41 +1073,6 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="device_type" substitutionGroup="gml:_Feature"
-                type="aatams:device_type_type">
-      <xsd:annotation>
-         <xsd:appinfo>
-            <deegreewfs:table>aatams.device_type</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.device_type.">
-               <deegreewfs:MappingField field="device_type_id" type="INTEGER"/>
-               <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">device_type_serial</deegreewfs:param>
-               </deegreewfs:IdGenerator>
-               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-            </deegreewfs:gmlId>
-            <deegreewfs:visible>true</deegreewfs:visible>
-            <deegreewfs:transaction update="true" delete="true" insert="true"/>
-         </xsd:appinfo>
-      </xsd:annotation>
-   </xsd:element>
-   <xsd:complexType name="device_type_type">
-      <xsd:complexContent>
-         <xsd:extension base="gml:AbstractFeatureType">
-            <xsd:sequence>
-               <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-            </xsd:sequence>
-         </xsd:extension>
-      </xsd:complexContent>
-   </xsd:complexType>
    <xsd:element name="device_manufacturer" substitutionGroup="gml:_Feature"
                 type="aatams:device_manufacturer_type">
       <xsd:annotation>
@@ -3020,16 +2985,6 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="name" minOccurs="0" maxOccurs="1" type="xsd:string">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
                <xsd:element name="code_name" minOccurs="1" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
@@ -3082,16 +3037,6 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="name" minOccurs="0" maxOccurs="1" type="xsd:string">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="name" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
                <xsd:element name="code_name" minOccurs="1" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>

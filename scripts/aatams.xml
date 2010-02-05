@@ -1206,7 +1206,8 @@
  
     WE DON'T WANT TO LINK THIS TO ANY SUBFEATURES, RATHER TO USE THE INDEXING
     ON THE DETECTIONS TABLE TO EFFICIENTLY EXTRACT SUBSETS OF DETECTIONS DATA -->   
-    <view name="DETECTION">
+    <view name="DETECTION_MAX">
+       <!-- rename this to detection instead of using detection table directly -->
        <column name="DETECTION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="STATION_ID" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1214,11 +1215,11 @@
        <column name="DETECTION_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="10" autoIncrement="false"/>
        <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="10" autoIncrement="false"/>
        <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="TAG_NAME" primaryKey="false" required="true" type="VARCHAR" size="20" autoIncrement="false"/>
+       <column name="TAG_CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="20" autoIncrement="false"/>
        <column name="RECEIVER_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="RECEIVER_NAME" primaryKey="false" required="true" type="VARCHAR" size="20" autoIncrement="false"/>
+       <column name="RECEIVER_CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="20" autoIncrement="false"/>
        <column name="RELEASE_LOCATION" primaryKey="false" required="false" type="GEOMETRY" size="10" autoIncrement="false"/>
-       <column name="RELEASE_TIMESTAMP" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="RELEASE_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="10" autoIncrement="false"/>
        <column name="FAMILY_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="GENUS_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="SPECIES_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>

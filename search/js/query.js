@@ -18,6 +18,10 @@
       */
       function Init(){
          try{
+            //see if required json lists are available from the WFS server
+            if(project_person_list == null){
+                setTimeout('Init()',1000);
+            } 
             document.getElementById('wfs_uri').value = wfs;
             //document.getElementById('access_date').innerHTML = new Date().format("d MMM yyyy");
             params_div = document.getElementById('params');
@@ -30,7 +34,10 @@
             if(parent.location.search.match(/\?/)){
                SetPageFromSearch();
                Reset();
-               DisplayData(parent.location.search.match(/count=true/i));   
+               //only load data if filtered
+               if(parent.location.search.match(/\&/)){
+                  DisplayData(parent.location.search.match(/count=true/i));
+               }
             }
             else{
                SelectType(0);

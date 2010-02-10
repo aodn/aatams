@@ -9,7 +9,6 @@ public class FamilyNode extends DetectionsTreeBaseNode {
 		this.type = DetectionsTree.NodeType.FAMILY;
 	}
 
-
 	@Override
 	protected void init() {
 		try {
@@ -17,7 +16,7 @@ public class FamilyNode extends DetectionsTreeBaseNode {
 			stmt = conn.createStatement();
 			if(this.getName().equals("UNKNOWN FAMILY")){
 				//find genus with unknown family
-				rs = stmt.executeQuery("select classification_id, name from classification\n"
+				rs = stmt.executeQuery("select classification_id, name from aatams.classification\n"
 						+ "where classification_level_id = 11 and parent_classification_id = 0 order by name");
 				while(rs.next()) {
 					this.addChild(new GenusNode(this, this.mode, rs.getLong(1), rs.getString(2)));
@@ -26,7 +25,7 @@ public class FamilyNode extends DetectionsTreeBaseNode {
 				//any species with unknown genus and tags with no tag_release
 				this.addChild(new GenusNode(this, this.mode, 0, "UNKNOWN GENUS"));
 			}else{
-				rs = stmt.executeQuery("select classification_id, name from classification\n"
+				rs = stmt.executeQuery("select classification_id, name from aatams.classification\n"
 						+ "where classification_level_id = 11 and parent_classification_id = " + this.getId() + " order by name");
 				while(rs.next()) {
 					this.addChild(new GenusNode(this, this.mode, rs.getLong(1), rs.getString(2)));

@@ -20,7 +20,7 @@ public class AllClassificationsNode extends DetectionsTreeBaseNode {
 			conn = this.getDataSource().getConnection();
 			stmt = conn.createStatement();
 			//Families
-			rs = stmt.executeQuery("select classification_id, name from classification\n"
+			rs = stmt.executeQuery("select classification_id, name from aatams.classification\n"
 					+ "where classification_level_id = 10 order by name");
 			while(rs.next()) {
 				this.addChild(new FamilyNode(this, this.mode, rs.getLong(1), rs.getString(2)));

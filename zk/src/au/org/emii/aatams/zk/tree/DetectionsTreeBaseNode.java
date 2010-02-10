@@ -19,6 +19,7 @@ public abstract class DetectionsTreeBaseNode{
 	protected ResultSet rs = null;
 	protected DetectionsTreeMode mode;
 	protected DetectionsTree.NodeType type = null;
+	protected Integer detection_count = null;
 	
 	public DetectionsTreeBaseNode(DetectionsTreeBaseNode parent, DetectionsTreeMode mode, long identifier, String name) {
 		this.parent = parent;
@@ -77,7 +78,7 @@ public abstract class DetectionsTreeBaseNode{
 	}
 	
 	public boolean isLeaf() {
-		return false;
+		return (this.getChildCount() == 0);
 	}
 
 	protected DetectionsTreeBaseNode addChild(DetectionsTreeBaseNode node) {

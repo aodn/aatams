@@ -15,8 +15,8 @@ public  class StationNode extends DetectionsTreeBaseNode {
 			conn = this.getDataSource().getConnection();
 			stmt = conn.createStatement();
 			// find all receiver deployments assigned to this station
-			rs = stmt.executeQuery("select deployment_id, concat(concat(device.code_name,'-'),to_char(receiver_deployment.deployment_timestamp,'YYYYMMDD')) as name\n"
-							+ "from receiver_deployment, device\n"
+			rs = stmt.executeQuery("select deployment_id, device.code_name || '-' || to_char(receiver_deployment.deployment_timestamp,'YYYYMMDD') as name\n"
+							+ "from aatams.receiver_deployment, aatams.device\n"
 							+ "where receiver_deployment.device_id = device.device_id and receiver_deployment.station_id = "
 							+ this.getId() + "\n"
 							+ "order by device.code_name");

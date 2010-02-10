@@ -23,7 +23,7 @@ public class TagDetectionsViewComposer
 
 	Tree tree;
 	DetectionsTree model= new DetectionsTree(new RootNode(DetectionsTreeMode.TAGS));
-	DetectionsTreeMenuRenderer renderer = new DetectionsTreeMenuRenderer();
+	DetectionsTreeMenuRenderer renderer = new DetectionsTreeMenuRenderer(DetectionsTreeMode.TAGS);
 	DownloadEventListener listener;
 
 	private static final long serialVersionUID = 1L;

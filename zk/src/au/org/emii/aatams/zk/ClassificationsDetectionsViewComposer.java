@@ -25,7 +25,7 @@ public class ClassificationsDetectionsViewComposer
 
 	Tree tree;
 	DetectionsTree model= new DetectionsTree(new RootNode(DetectionsTreeMode.CLASSIFICATIONS));
-	DetectionsTreeMenuRenderer renderer = new DetectionsTreeMenuRenderer();
+	DetectionsTreeMenuRenderer renderer = new DetectionsTreeMenuRenderer(DetectionsTreeMode.CLASSIFICATIONS);
 	DownloadEventListener listener;
 
 	private static final long serialVersionUID = 1L;
@@ -82,22 +82,22 @@ public class ClassificationsDetectionsViewComposer
 					ResultSet rs;
 					switch(node.getNodeType()){
 					case FAMILY:
-						qry = "select display_tag_release.device_id, device.code_name from display_tag_release, device\n"
-								+ "where tag_release.device_id = device.device_id\n" 
+						qry = "select display_tag_release.tag_id, device.code_name from aatams.display_tag_release, aatams.device\n"
+								+ "where display_tag_release.tag_id = device.device_id\n" 
 								+ "and family_id = " + node.getId(); 
 						break;
 					case GENUS:
-						qry = "select display_tag_release.device_id, device.code_name from display_tag_release, device\n"
-								+ "where display_tag_release.device_id = device.device_id\n"  
+						qry = "select display_tag_release.tag_id, device.code_name from aatams.display_tag_release, aatams.device\n"
+								+ "where display_tag_release.tag_id = device.device_id\n"  
 								+ "and genus_id = " + node.getId();
 						break;
 					case SPECIES:
-						qry = "select display_tag_release.device_id, device.code_name from display_tag_release, device\n"
-							+ "where display_tag_release.device_id = device.device_id\n"  
+						qry = "select display_tag_release.tag_id, device.code_name from aatams.display_tag_release, aatams.device\n"
+							+ "where display_tag_release.tag_id = device.device_id\n"  
 							+ "and species_id = " + node.getId(); //species
 						break;
 					case TAG:
-						qry = "select device.device_id, device.code_name from device\n"
+						qry = "select device.device_id, device.code_name from aatams.device\n"
 							+ "where device_id = " + node.getId(); //tag
 						break;
 					}

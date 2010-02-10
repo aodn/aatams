@@ -19,7 +19,7 @@ public class AllInstallationsNode extends DetectionsTreeBaseNode {
 		try {
 			conn = this.getDataSource().getConnection();
 			stmt = conn.createStatement();
-			rs = stmt.executeQuery("select installation_id, name from installation order by name");
+			rs = stmt.executeQuery("select installation_id, name from aatams.installation order by name");
 			while (rs.next()) {
 				this.addChild(new InstallationNode(this, this.mode, rs.getLong(1), rs.getString(2)));
 			}

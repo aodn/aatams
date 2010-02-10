@@ -23,7 +23,7 @@ public class DeploymentDetectionsViewComposer
 
 	Tree tree;
 	DetectionsTree model= new DetectionsTree(new RootNode(DetectionsTreeMode.DEPLOYMENTS));
-	DetectionsTreeMenuRenderer renderer = new DetectionsTreeMenuRenderer();
+	DetectionsTreeMenuRenderer renderer = new DetectionsTreeMenuRenderer(DetectionsTreeMode.DEPLOYMENTS);
 	DownloadEventListener listener;
 
 	private static final long serialVersionUID = 1L;

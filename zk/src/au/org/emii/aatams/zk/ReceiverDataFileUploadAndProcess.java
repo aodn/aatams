@@ -139,6 +139,7 @@ public class ReceiverDataFileUploadAndProcess extends Window implements AfterCom
 			String zip_file = null;
 			String csv_file = null;
 			String vrl_file = null;
+			String rld_file = null;
 			messages.appendChild(new Listitem("Upload and process files for deployment download id:" + download_id));
 			try {
 				// set 5 as the max number of files to upload
@@ -198,12 +199,6 @@ public class ReceiverDataFileUploadAndProcess extends Window implements AfterCom
 							if (filename.toLowerCase().endsWith(".zip")) {
 								zip_file = this.DATA_FILE_UPLOADS_HOME_DIR + "/" + download_id + "/" + filename;
 							}
-							//if (filename.toLowerCase().endsWith(".csv")) {
-							//	csv_file = this.DATA_FILE_UPLOADS_HOME_DIR + "/" + download_id + "/" + filename;
-							//}
-							//if (filename.toLowerCase().endsWith(".vrl")) {
-							//	vrl_file = this.DATA_FILE_UPLOADS_HOME_DIR + "/" + download_id + "/" + filename;
-							//}
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -246,6 +241,9 @@ public class ReceiverDataFileUploadAndProcess extends Window implements AfterCom
 						if (entryName.toLowerCase().endsWith(".vrl")) {
 							vrl_file = this.DATA_FILE_UPLOADS_HOME_DIR + "/" + download_id + "/" + entryName;
 						}
+						if (entryName.toLowerCase().endsWith(".rld")) {
+							rld_file = this.DATA_FILE_UPLOADS_HOME_DIR + "/" + download_id + "/" + entryName;
+						}
 						while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
 							fileoutputstream.write(buf, 0, n);
 						}
@@ -261,7 +259,9 @@ public class ReceiverDataFileUploadAndProcess extends Window implements AfterCom
 				messages.appendChild(new Listitem("The file uploaded must have a filename ending in '.zip'"));
 				return;
 			}
-			if (csv_file != null && vrl_file != null) {
+			if (csv_file != null &&
+				vrl_file != null &&
+				rld_file != null) {
 				try {
 					AcousticReceiverFileProcessor processor = new AcousticReceiverFileProcessor(DEPLOYMENT_DOWNLOAD_FID_PREFIX, REPORT_SENDER_NAME,
 							REPORT_SENDER_EMAIL, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, HOME_URI);
@@ -279,7 +279,10 @@ public class ReceiverDataFileUploadAndProcess extends Window implements AfterCom
 				}
 			} else {
 				messages.appendChild(new Listitem(
-						"One of the files uploaded must be a csv file with filename ending in '.csv' and another a vrl file with filename ending in '.vrl'"));
+						"The detection data zip archive uploaded must contain the following files:\n" +
+						"  a csv file with filename ending in '.csv'\n"+
+						"  a vrl file with filename ending in '.vrl'\n"+
+						"  a rld file with filename ending in '.rld'"));
 			}
 		} else {
 			logger.error("download 'fid' param not found or configuration is incorrect");

@@ -18,6 +18,12 @@ public class ReceiverDeploymentNode extends DetectionsTreeBaseNode {
 		super(parent, mode, identifier, name);
 		this.type = DetectionsTree.NodeType.DEPLOYMENT;
 	}
+	
+	public ReceiverDeploymentNode(TagNode parent, DetectionsTreeMode mode, long identifier, String name, int detections) {
+		super(parent, mode, identifier, name);
+		this.type = DetectionsTree.NodeType.DEPLOYMENT;
+		this.detection_count = detections;
+	}
 
 	protected void init() {
 		switch(this.mode){
@@ -26,14 +32,13 @@ public class ReceiverDeploymentNode extends DetectionsTreeBaseNode {
 				conn = this.getDataSource().getConnection();
 				stmt = conn.createStatement();
 				// find all distinct tags detected for deployment.
-				rs = stmt.executeQuery("select device.device_id, device.code_name from deployment_download, download_tag_summary, device where " +
-						"deployment_download.deployment_id = " + this.getId() + " and " + 
-						"download_tag_summary.download_id = deployment_download.download_id and " +
+				rs = stmt.executeQuery("select device.device_id, device.code_name, sum(download_tag_summary.detection_count) from aatams.download_tag_summary, aatams.device where " +
+						"download_tag_summary.deployment_id = " + this.getId() + " and " + 
 						"device.device_id = download_tag_summary.device_id " +
 						"group by device.device_id, device.code_name " +
 						"order by device.code_name");
 				while (rs.next()) {
-					this.addChild(new TagNode(this, this.mode, rs.getLong(1), rs.getString(2)));
+					this.addChild(new TagNode(this, this.mode, rs.getLong(1), rs.getString(2), rs.getInt(3)));
 				}
 				rs.close();
 				stmt.close();

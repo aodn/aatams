@@ -19,7 +19,7 @@ public class AllTagsNode extends DetectionsTreeBaseNode {
 		try {
 			conn = this.getDataSource().getConnection();
 			stmt = conn.createStatement();
-			rs = stmt.executeQuery("select device_id, code_name from tag_device order by code_name");
+			rs = stmt.executeQuery("select device_id, code_name from aatams.tag_device order by code_name");
 			while (rs.next()) {
 				this.addChild(new TagNode(this, this.mode, rs.getLong(1), rs.getString(2)));
 			}

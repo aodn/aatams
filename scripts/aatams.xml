@@ -419,10 +419,10 @@
     <table name="DOWNLOAD_FILE">
       <column name="DOWNLOAD_FILE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DOWNLOAD_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="FILE_REFERENCE" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="FILE_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
-	<unique-column name="DOWNLOAD_ID"/>
-        <unique-column name="FILE_REFERENCE"/>
+	    <unique-column name="DOWNLOAD_ID"/>
+        <unique-column name="FILE_NAME"/>
       </unique>
       <foreign-key foreignTable="DEPLOYMENT_DOWNLOAD" name="DOWNLOAD_FILE_FK00">
         <reference local="DOWNLOAD_ID" foreign="DOWNLOAD_ID"/>

@@ -1242,14 +1242,16 @@
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
     </view>
     
+    
     <view name="DETECTIONS_BY_PROJECT_TAG">
        <column name="PROJECT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="PROJECT_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
        <column name="TAG_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="TAG_NAME" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
     </view>
     
-    <view name="DETECTIONS_BY_CLASSTN_TAG">
+    <view name="DETECTIONS_BY_CLASSN_TAG">
        <column name="FAMILY" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="GENUS" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="SPECIES" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>

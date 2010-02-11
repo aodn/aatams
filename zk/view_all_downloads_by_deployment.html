@@ -16,7 +16,7 @@
 
 		function displayResult()
 		{
-			xml=loadXMLDoc("../deegree-wfs/services?service=WFS&version=1.1.0&request=GetFeature&namespace=xmlns(aatams=http://www.imos.org.au/aatams)&typename=aatams:deployment_download");
+			xml=loadXMLDoc("../../deegree-wfs/services?service=WFS&version=1.1.0&request=GetFeature&namespace=xmlns(aatams=http://www.imos.org.au/aatams)&typename=aatams:deployment_download");
 			xsl=loadXMLDoc("view_all_downloads_by_deployment.xsl");
 			//codeforIE
 			if(window.ActiveXObject){

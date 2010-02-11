@@ -137,12 +137,12 @@
 								</xf:output>
 							</div>
 							<div class="xfoutput">
-								<xf:output ref="aatams:longitude">
+                                <xf:output ref="substring-before(aatams:location/gml:Point/gml:pos,' ')">
 									<xf:label>Longitude:</xf:label>
 								</xf:output>
 							</div>
 							<div class="xfoutput">
-								<xf:output ref="aatams:latitude">
+								<xf:output ref="substring-after(aatams:location/gml:Point/gml:pos,' ')">
 									<xf:label>Latitude:</xf:label>
 								</xf:output>
 							</div>
@@ -200,12 +200,12 @@
 									</xf:output>
 								</div>
 								<div class="xfoutput">
-									<xf:output ref="aatams:longitude">
+                                    <xf:output ref="substring-before(aatams:location/gml:Point/gml:pos,' ')">
 										<xf:label>Longitude:</xf:label>
 									</xf:output>
 								</div>
 								<div class="xfoutput">
-									<xf:output ref="aatams:latitude">
+									<xf:output ref="substring-after(aatams:location/gml:Point/gml:pos,' ')">
 										<xf:label>Latitude:</xf:label>
 									</xf:output>
 								</div>

@@ -58,10 +58,10 @@
 								<xsl:value-of select="aatams:installation_deployment_ref/aatams:installation_deployment/aatams:deployment_timestamp" />
 							</td>
 							<td>
-								<xsl:value-of select="aatams:installation_deployment_ref/aatams:installation_deployment/aatams:longitude" />
+                                <xsl:value-of select="substring-before(aatams:installation_deployment_ref/aatams:installation_deployment/aatams:location/gml:Point/gml:pos,' ')" />
 							</td>
 							<td>
-								<xsl:value-of select="aatams:installation_deployment_ref/aatams:installation_deployment/aatams:latitude" />
+                                <xsl:value-of select="substring-after(aatams:installation_deployment_ref/aatams:installation_deployment/aatams:location/gml:Point/gml:pos,' ')" />
 							</td>
 							<td>
 								<xsl:value-of select="substring-after(@gml:id,'aatams.deployment_download.')" />

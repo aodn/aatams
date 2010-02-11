@@ -3964,17 +3964,17 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="code_name" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="project_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-                <xsd:element name="tag_id" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                <xsd:element name="tag" minOccurs="1" maxOccurs="1" type="xsd:integer">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="device_id" type="INTEGER"/>
+                           <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3984,7 +3984,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="code_name" type="VARCHAR"/>
+                           <deegreewfs:MappingField field="tag_name" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3994,7 +3994,7 @@
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
-                           <deegreewfs:MappingField field="count" type="INTEGER"/>
+                           <deegreewfs:MappingField field="detection_count" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>

@@ -228,10 +228,10 @@
 									<th colspan="1" rowspan="1">Modified</th>
 								</tr>
 							</xsl:when>
-							<xsl:when test="gml:featureMember[1]/aatams:display_tag_release">
+							<xsl:when test="gml:featureMember[1]/aatams:tag_release">
 								<tr>
-									<th colspan="1" rowspan="2">Tag Release FID</th>
-									<th colspan="1" rowspan="2">Project FID</th>
+									<th colspan="1" rowspan="2">Tag Release ID</th>
+									<th colspan="1" rowspan="2">Project</th>
 									<th colspan="2" rowspan="1">Tag Device</th>
 									<th colspan="1" rowspan="2">Animal Classification</th>
 									<th colspan="2" rowspan="1">Capture Location</th>
@@ -241,7 +241,7 @@
 									<th colspan="1" rowspan="2">Implant Type</th>
 								</tr>
 								<tr>
-									<th colspan="1" rowspan="1">Device FID</th>
+									<th colspan="1" rowspan="1">Device ID</th>
 									<th colspan="1" rowspan="1">Code Name</th>
 									<th colspan="1" rowspan="1">Longitude</th>
 									<th colspan="1" rowspan="1">Latitude</th>
@@ -284,11 +284,13 @@
 							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:detections_by_project_tag">
 								<tr>
-									<th colspan="1" rowspan="2">Project</th>
+									<th colspan="2" rowspan="1">Project</th>
 									<th colspan="3" rowspan="1">Tag</th>
 								</tr>
 								<tr>
-									<th colspan="1" rowspan="1">ID</th>
+                                    <th colspan="1" rowspan="1">ID</th>
+                                    <th colspan="1" rowspan="1">Name</th>
+                                    <th colspan="1" rowspan="1">ID</th>
 									<th colspan="1" rowspan="1">Code Name</th>
 									<th colspan="1" rowspan="1">Detection Count</th>
 								</tr>
@@ -454,13 +456,13 @@
 				<xsl:value-of select="aatams:receiver_device_ref/aatams:receiver_device/aatams:code_name" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:longitude" />
+                <xsl:value-of select="substring-before(aatams:location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:latitude" />
+				<xsl:value-of select="substring-after(aatams:location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:deployment_timestamp" />
+				<xsl:value-of select="translate(aatams:deployment_timestamp,'T',' ')" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:mooring_type_ref/aatams:mooring_type/aatams:name" />
@@ -473,29 +475,19 @@
 			</td>
 		</tr>
 	</xsl:template>
-	<xsl:template match="gml:Point">
+	<xsl:template match="aatams:tag_release">
 		<tr>
 			<td>
-				<xsl:value-of select="substring-before(gml:coordinates,',')" />
+				<xsl:value-of select="substring-after(@gml:id,'aatams.tag_release.')" />
 			</td>
 			<td>
-				<xsl:value-of select="substring-after(gml:coordinates,',')" />
-			</td>
-		</tr>
-	</xsl:template>
-	<xsl:template match="aatams:display_tag_release">
-		<tr>
-			<td>
-				<xsl:value-of select="@gml:id" />
+				<xsl:value-of select="aatams:project_person_ref/aatams:project_person/aatams:project_name" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:project_person_ref/aatams:project_person/aatams:project_fid" />
+				<xsl:value-of select="substring-after(aatams:tag_device_ref/aatams:tag_device/@gml:id,'aatams.tag_device.')" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:transmitter_device_ref/aatams:transmitter_device/@gml:id" />
-			</td>
-			<td>
-				<xsl:value-of select="aatams:transmitter_device_ref/aatams:transmitter_device/aatams:code_name" />
+				<xsl:value-of select="aatams:tag_device_ref/aatams:tag_device/aatams:code_name" />
 			</td>
 			<td>
 				<xsl:choose>
@@ -511,22 +503,22 @@
 				</xsl:choose>
 			</td>
 			<td>
-				<xsl:value-of select="aatams:capture_longitude" />
+                <xsl:value-of select="substring-before(aatams:capture_location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:capture_latitude" />
+				<xsl:value-of select="substring-after(aatams:capture_location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:capture_timestamp" />
+				<xsl:value-of select="translate(aatams:capture_timestamp,'T',' ')" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:release_longitude" />
+                <xsl:value-of select="substring-before(aatams:release_location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:release_latitude" />
+				<xsl:value-of select="substring-after(aatams:release_location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:release_timestamp" />
+				<xsl:value-of select="translate(aatams:release_timestamp,'T',' ')" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:implant_type_ref/aatams:implant_type/aatams:name" />
@@ -648,7 +640,7 @@
 				<xsl:value-of select="aatams:latitude" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:detection_timestamp" />
+				<xsl:value-of select="translate(aatams:detection_timestamp,'T',' ')" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:release_longitude" />
@@ -657,7 +649,7 @@
 				<xsl:value-of select="aatams:release_latitude" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:release_timestamp" />
+				<xsl:value-of select="translate(aatams:release_timestamp,'T',' ')" />
 			</td>
 		</tr>
 	</xsl:template>
@@ -679,19 +671,19 @@
 				<xsl:value-of select="aatams:station_name" />
 			</td>
 			<td rowspan="{$tag_row_count}" colspan="1">
-				<xsl:value-of select="aatams:longitude" />
+                <xsl:value-of select="substring-before(aatams:location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td rowspan="{$tag_row_count}" colspan="1">
-				<xsl:value-of select="aatams:latitude" />
+				<xsl:value-of select="substring-after(aatams:location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td rowspan="{$tag_row_count}" colspan="1">
 				<xsl:value-of select="aatams:count" />
 			</td>
 			<td rowspan="1" colspan="1">
-				<xsl:value-of select="aatams:detections_by_station_tag_ref[1]/aatams:detections_by_station_tag/aatams:tag" />
+				<xsl:value-of select="aatams:detections_by_station_tag_ref[1]/aatams:detections_by_station_tag/aatams:tag_id" />
 			</td>
 			<td rowspan="1" colspan="1">
-				<xsl:value-of select="aatams:detections_by_station_tag_ref[1]/aatams:detections_by_station_tag/aatams:tag_name" />
+				<xsl:value-of select="aatams:detections_by_station_tag_ref[1]/aatams:detections_by_station_tag/aatams:tag_code_name" />
 			</td>
 			<td rowspan="1" colspan="1">
 				<xsl:value-of select="aatams:detections_by_station_tag_ref[1]/aatams:detections_by_station_tag/aatams:count" />
@@ -700,10 +692,10 @@
 		<xsl:for-each select="aatams:detections_by_station_tag_ref[position()&gt;1]">
 			<tr>
 				<td rowspan="1" colspan="1">
-					<xsl:value-of select="aatams:detections_by_station_tag/aatams:tag" />
+					<xsl:value-of select="aatams:detections_by_station_tag/aatams:tag_id" />
 				</td>
 				<td rowspan="1" colspan="1">
-					<xsl:value-of select="aatams:detections_by_station_tag/aatams:tag_name" />
+					<xsl:value-of select="aatams:detections_by_station_tag/aatams:tag_code_name" />
 				</td>
 				<td rowspan="1" colspan="1">
 					<xsl:value-of select="aatams:detections_by_station_tag/aatams:count" />
@@ -715,6 +707,9 @@
 		<tr>
 			<td>
 				<xsl:value-of select="aatams:project" />
+            </td>
+            <td>
+				<xsl:value-of select="aatams:project_name" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:tag" />
@@ -903,7 +898,7 @@
 				<xsl:value-of select="aatams:release_latitude" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:release_timestamp" />
+				<xsl:value-of select="translate(aatams:release_timestamp,'T',' ')" />
 			</td>
 		</tr>
 	</xsl:template>

@@ -4005,6 +4005,24 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
+                <xsd:element name="detections_by_station_tag_ref" minOccurs="1" maxOccurs="unbounded"
+                            type="gml:FeaturePropertyType">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content type="aatams:detections_by_station_tag">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="station_id" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="station_id" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>

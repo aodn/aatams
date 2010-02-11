@@ -201,6 +201,27 @@
 </wfs:FeatureType>
 
 <wfs:FeatureType>
+<wfs:Name>aatams:device</wfs:Name>
+<wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) Devices (Transmitters, Receivers, etc) Data</wfs:Title>
+<wfs:Abstract></wfs:Abstract>
+<ows:Keywords>
+</ows:Keywords>
+<wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
+<wfs:OutputFormats >
+	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
+</wfs:OutputFormats>
+<ows:WGS84BoundingBox>
+<ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
+<ows:UpperCorner>180.0 90.0</ows:UpperCorner>
+</ows:WGS84BoundingBox>
+</wfs:FeatureType>
+
+<wfs:FeatureType>
 <wfs:Name>aatams:device_model</wfs:Name>
 <wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) Device Model Data</wfs:Title>
 <wfs:Abstract></wfs:Abstract>
@@ -255,7 +276,7 @@
 </wfs:FeatureType>
 
 <wfs:FeatureType>
-<wfs:Name>aatams:display_tag_release</wfs:Name>
+<wfs:Name>aatams:tag_release</wfs:Name>
 <wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) Tag Release (Animal tagging) Dataset</wfs:Title>
 <wfs:Abstract></wfs:Abstract>
 <ows:Keywords>
@@ -293,8 +314,8 @@
 </wfs:FeatureType>
 
 <wfs:FeatureType>
-<wfs:Name>aatams:device</wfs:Name>
-<wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) Device (Transmitters and Receivers) data</wfs:Title>
+<wfs:Name>aatams:tag_device</wfs:Name>
+<wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) Tag Device (Transmitters) data</wfs:Title>
 <wfs:Abstract></wfs:Abstract>
 <ows:Keywords>
 </ows:Keywords>
@@ -316,25 +337,6 @@
 <wfs:FeatureType>
 <wfs:Name>aatams:receiver_device</wfs:Name>
 <wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) Receiver Device data</wfs:Title>
-<wfs:Abstract></wfs:Abstract>
-<ows:Keywords>
-</ows:Keywords>
-<wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
-<wfs:OutputFormats >
-	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
-</wfs:OutputFormats>
-<ows:WGS84BoundingBox>
-<ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
-<ows:UpperCorner>180.0 90.0</ows:UpperCorner>
-</ows:WGS84BoundingBox>
-</wfs:FeatureType>
-
-<wfs:FeatureType>
-<wfs:Name>aatams:transmitter_device</wfs:Name>
-<wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) Transmitters Device data</wfs:Title>
 <wfs:Abstract></wfs:Abstract>
 <ows:Keywords>
 </ows:Keywords>
@@ -536,7 +538,7 @@
 </ows:WGS84BoundingBox>
 </wfs:FeatureType>
 
-<wfs:FeatureType>
+<!--wfs:FeatureType>
 <wfs:Name>aatams:detections_by_station_tag</wfs:Name>
 <wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) Detection Counts by Station and Tag</wfs:Title>
 <wfs:Abstract></wfs:Abstract>
@@ -551,7 +553,7 @@
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
 <ows:UpperCorner>180.0 90.0</ows:UpperCorner>
 </ows:WGS84BoundingBox>
-</wfs:FeatureType>
+</wfs:FeatureType-->
 
 <wfs:FeatureType>
 <wfs:Name>aatams:detections_by_project_tag</wfs:Name>
@@ -587,67 +589,6 @@
 </ows:WGS84BoundingBox>
 </wfs:FeatureType>
 
-<!--
-<wfs:FeatureType>
-<wfs:Name>aatams:Animal</wfs:Name>
-<wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) Animal Data</wfs:Title>
-<wfs:Abstract></wfs:Abstract>
-<ows:Keywords>
-</ows:Keywords>
-<wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
-<wfs:OutputFormats >
-	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-		<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
-</wfs:OutputFormats>
-<ows:WGS84BoundingBox>
-<ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
-<ows:UpperCorner>180.0 90.0</ows:UpperCorner>
-</ows:WGS84BoundingBox>
-</wfs:FeatureType>
-
-<wfs:FeatureType>
-<wfs:Name>aatams:Species</wfs:Name>
-<wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) Species Data</wfs:Title>
-<wfs:Abstract></wfs:Abstract>
-<ows:Keywords>
-</ows:Keywords>
-<wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
-<wfs:OutputFormats >
-	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
-</wfs:OutputFormats>
-<ows:WGS84BoundingBox>
-<ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
-<ows:UpperCorner>180.0 90.0</ows:UpperCorner>
-</ows:WGS84BoundingBox>
-</wfs:FeatureType>
-
-<wfs:FeatureType>
-<wfs:Name>aatams:DetectionDeploymentAnimalSpecies</wfs:Name>
-<wfs:Title>Australian Acoustic Tracking And Monitoring System (AATAMS) - A view linking Detections to Species via Tag, Surgery and Animal</wfs:Title>
-<wfs:Abstract></wfs:Abstract>
-<ows:Keywords>
-</ows:Keywords>
-<wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
-<wfs:OutputFormats >
-	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
-</wfs:OutputFormats>
-<ows:WGS84BoundingBox>
-<ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
-<ows:UpperCorner>180.0 90.0</ows:UpperCorner>
-</ows:WGS84BoundingBox>
-</wfs:FeatureType>
--->
   </wfs:FeatureTypeList>
   <!-- ================================================================== -->
   <!-- FILTER CAPABILITIES SECTION                                        -->

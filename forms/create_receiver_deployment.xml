@@ -187,7 +187,7 @@
                   <xf:label>Device</xf:label>
                   <xf:itemset nodeset="instance('inst_receiver_device')/gml:featureMember/aatams:receiver_device">
                      <xf:value ref="@gml:id"/>
-                     <xf:label ref="aatams:name"/>
+                     <xf:label ref="aatams:code_name"/>
                   </xf:itemset>
                </xf:select1>
             </div>
@@ -213,9 +213,9 @@
                      </xf:itemset>
                      <xf:action ev:event="xforms-value-changed">
                         <xf:setvalue ref="instance('inst_data')//aatams:longitude"
-                                     value="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:longitude"/>
+                            value="substring-before(instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:location/gml:Point/gml:pos,' ')"/>
                         <xf:setvalue ref="instance('inst_data')//aatams:latitude"
-                                     value="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude"/>
+                                     value="substring-after(instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:location/gml:Point/gml:pos,' ')"/>
                      </xf:action>
                   </xf:select1>
                </div>

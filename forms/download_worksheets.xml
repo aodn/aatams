@@ -20,7 +20,7 @@
 			<xf:dispatch ev:event="xforms-ready" name="set-selected" target="deployment_model" />
 			<xf:action ev:event="set-selected">
 				<xf:setvalue ref="instance('inst_selected')/installation_fid" value="instance('inst_installations')//aatams:installation[1]/@gml:id" />
-				<xf:setvalue ref="instance('inst_selected')/deployment_fid" value="instance('inst_installation_deployments')//aatams:installation_deployment[aatams:installation_fid=instance('inst_selected')/installation_fid and aatams:scheduled_recovery_date &gt;= local-date()][1]/aatams:deployment_fid" />
+				<xf:setvalue ref="instance('inst_selected')/deployment_fid" value="instance('inst_installation_deployments')//aatams:installation_deployment[aatams:installation_fid=instance('inst_selected')/installation_fid][1]/aatams:deployment_fid" />
 			</xf:action>
 			<xf:instance id="inst_request">
 				<wfs:GetFeature xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" outputFormat="text/xml; subtype=gml/3.1.1">
@@ -135,14 +135,14 @@
 										<xf:label ref="aatams:name" />
 									</xf:itemset>
 									<xf:action ev:event="xforms-value-changed">
-										<xf:setvalue ref="instance('inst_selected')/deployment_fid" value="instance('inst_installation_deployments')//aatams:installation_deployment[aatams:installation_fid=instance('inst_selected')/installation_fid and aatams:scheduled_recovery_date &gt;= local-date()][1]/aatams:deployment_fid" />
+										<xf:setvalue ref="instance('inst_selected')/deployment_fid" value="instance('inst_installation_deployments')//aatams:installation_deployment[aatams:installation_fid=instance('inst_selected')/installation_fid][1]/aatams:deployment_fid" />
 									</xf:action>
 								</xf:select1>
 							</div>
 							<div class="xfselect1">
 								<xf:select1 bind="selected_deployment_fid" appearance="minimal" incremental="true()">
 									<xf:label>Receiver Deployment</xf:label>
-									<xf:itemset nodeset="instance('inst_installation_deployments')/gml:featureMember/aatams:installation_deployment[aatams:installation_fid=instance('inst_selected')/installation_fid and aatams:scheduled_recovery_date &gt;= local-date()]">
+									<xf:itemset nodeset="instance('inst_installation_deployments')/gml:featureMember/aatams:installation_deployment[aatams:installation_fid=instance('inst_selected')/installation_fid]">
 										<xf:value ref="aatams:deployment_fid" />
 										<xf:label ref="aatams:name" />
 									</xf:itemset>

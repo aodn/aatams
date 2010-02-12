@@ -920,7 +920,6 @@
       <column name="DISPLAYED_LEVEL_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
          <unique-column name="DEVICE_ID"/>
-         <unique-column name="RELEASE_TIMESTAMP"/>
       </unique>
       <foreign-key foreignTable="CLASSIFICATION" name="TAG_RELEASE_FK00">
         <reference local="CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
@@ -936,6 +935,9 @@
       </foreign-key>
       <foreign-key foreignTable="PROJECT_PERSON" name="TAG_RELEASE_FK04">
         <reference local="PROJECT_ROLE_PERSON_ID" foreign="PROJECT_ROLE_PERSON_ID"/>
+      </foreign-key>
+      <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="TAG_RELEASE_FK05">
+        <reference local="DISPLAYED_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
       </foreign-key>
       <!--foreign-key foreignTable="SURGERY" name="TAG_RELEASE_FK06">
         <reference local="SURGERY_ID" foreign="SURGERY_ID"/>

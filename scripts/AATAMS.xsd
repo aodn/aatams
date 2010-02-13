@@ -1351,6 +1351,24 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
+               <xsd:element name="installation_station_ref" minOccurs="1" maxOccurs="unbounded"
+                            type="gml:FeaturePropertyType">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content type="aatams:installation_station">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From >
+                                 <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To fk="true">
+                                 <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>
@@ -1400,7 +1418,7 @@
                <deegreewfs:IdGenerator type="DB_SEQ">
                   <deegreewfs:param name="sequence">aatams.installation_station_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
-               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+               <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
             <deegreewfs:transaction update="true" delete="true" insert="true"/>
@@ -1411,24 +1429,6 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="installation_ref" minOccurs="1" maxOccurs="1"
-                            type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:installation">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
                <xsd:element name="curtain_position" minOccurs="0" maxOccurs="1" type="xsd:integer">
                   <xsd:annotation>
                      <xsd:appinfo>

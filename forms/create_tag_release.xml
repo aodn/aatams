@@ -23,27 +23,27 @@
                            <aatams:species_ref>
                               <aatams:species/>
                            </aatams:species_ref>
+                           <aatams:displayed_classification_level_ref>
+                              <aatams:classification_level/>
+                           </aatams:displayed_classification_level_ref>
                            <aatams:project_person_ref>
                               <aatams:project_person/>
                            </aatams:project_person_ref>
                            <aatams:capture_location>
-                               <gml:Point>
-                                   <gml:pos/>
-                               </gml:Point>
-                           </aatams:capture_location>
+                              <gml:Point>
+                                 <gml:pos/>
+                              </gml:Point>
+                          </aatams:capture_location>
                            <aatams:capture_timestamp/>
                            <aatams:release_location>
-                               <gml:Point>
-                                   <gml:pos/>
-                               </gml:Point>
+                              <gml:Point>
+                                 <gml:pos/>
+                              </gml:Point>
                            </aatams:release_location>
                            <aatams:release_timestamp/>
                            <aatams:implant_type_ref>
                               <aatams:implant_type/>
                            </aatams:implant_type_ref>
-                           <aatams:displayed_classification_level_ref>
-                              <aatams:classification_level/>
-                           </aatams:displayed_classification_level_ref>
                         </aatams:tag_release_t>
                      </gml:featureMember>
                   </wfs:FeatureCollection>
@@ -53,20 +53,20 @@
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
                <species_id/>
-               <classification_level_id/>
+               <classification_level_id>aatams.classification_level.12</classification_level_id>
                <tag_device_id/>
                <implant_type_id/>
                <project_id/>
                <project_person_id/>
             </data>
-        </xf:instance>
-        <xf:instance id="inst_capture_location">
+         </xf:instance>
+         <xf:instance id="inst_capture_location">
             <data xmlns="">
                <longitude/>
                <latitude/>
             </data>
-        </xf:instance>
-        <xf:instance id="inst_release_location">
+         </xf:instance>
+         <xf:instance id="inst_release_location">
             <data xmlns="">
                <longitude/>
                <latitude/>
@@ -96,8 +96,7 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
-         <xf:bind id="tag_device"
-                  nodeset="instance('inst_subfeatures')/tag_device_id"
+         <xf:bind id="tag_device" nodeset="instance('inst_subfeatures')/tag_device_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="species" nodeset="instance('inst_subfeatures')/species_id"
@@ -109,12 +108,27 @@
          <xf:bind id="project_person" nodeset="instance('inst_subfeatures')/project_person_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="release_longitude"
+         <xf:bind id="capture_location_longitude"
+                  nodeset="instance('inst_capture_location')/longitude"
+                  type="xsd:decimal"
+                  required="true()"
+                  constraint=". &gt;= -180 and . &lt;= 180"/>
+         <xf:bind id="capture_location_latitude"
+                  nodeset="instance('inst_capture_location')/latitude"
+                  type="xsd:decimal"
+                  required="true()"
+                  constraint=". &gt;= -90 and . &lt;= 90"/>
+         <xf:bind id="capture_timestamp"
+                  nodeset="instance('inst_data')//aatams:capture_timestamp"
+                  type="xsd:dateTime"
+                  required="true()"/>
+         <xf:bind id="release_location_longitude"
                   nodeset="instance('inst_release_location')/longitude"
                   type="xsd:decimal"
                   required="true()"
                   constraint=". &gt;= -180 and . &lt;= 180"/>
-         <xf:bind id="release_latitude" nodeset="instance('inst_release_location')/latitude"
+         <xf:bind id="release_location_latitude"
+                  nodeset="instance('inst_release_location')/latitude"
                   type="xsd:decimal"
                   required="true()"
                   constraint=". &gt;= -90 and . &lt;= 90"/>
@@ -122,19 +136,6 @@
                   nodeset="instance('inst_data')//aatams:release_timestamp"
                   type="xsd:dateTime"
                   required="true()"/>
-         <xf:bind id="capture_longitude"
-                  nodeset="instance('inst_capture_location')/longitude"
-                  type="xsd:decimal"
-                  required="false()"
-                  constraint=". &gt;= -180 and . &lt;= 180"/>
-         <xf:bind id="capture_latitude" nodeset="instance('inst_capture_location')/latitude"
-                  type="xsd:decimal"
-                  required="false()"
-                  constraint=". &gt;= -90 and . &lt;= 90"/>
-         <xf:bind id="capture_timestamp"
-                  nodeset="instance('inst_data')//aatams:capture_timestamp"
-                  type="xsd:dateTime"
-                  required="false()"/>
          <xf:bind id="implant_type" nodeset="instance('inst_subfeatures')/implant_type_id"
                   type="xsd:string"
                   required="false()"/>
@@ -152,21 +153,20 @@
                         replace="instance"
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
-               <xf:delete nodeset="instance('inst_data')//aatams:capture_longitude[.='']"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:capture_latitude[.='']"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:capture_timestamp[.='']"/>
+               <xf:setvalue ref="instance('inst_data')//aatams:capture_location/gml:Point/gml:pos"
+                            value="concat(instance('inst_capture_location')/longitude,' ',instance('inst_capture_location')/latitude)"/>
+               <xf:setvalue ref="instance('inst_data')//aatams:release_location/gml:Point/gml:pos"
+                            value="concat(instance('inst_release_location')/longitude,' ',instance('inst_release_location')/latitude)"/>
                <xf:insert nodeset="instance('inst_data')//aatams:species_ref/aatams:species"
                           origin="instance('inst_species')/gml:featureMember/aatams:species[@gml:id=instance('inst_subfeatures')/species_id]"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:species_ref/aatams:species"
-                          at="1"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:species_ref/aatams:species" at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:displayed_classification_level_ref/aatams:classification_level"
                           origin="instance('inst_classification_level')/gml:featureMember/aatams:classification_level[@gml:id=instance('inst_subfeatures')/classification_level_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:displayed_classification_level_ref/aatams:classification_level"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:tag_device_ref/aatams:tag_device"
                           origin="instance('inst_tag_device')/gml:featureMember/aatams:tag_device[@gml:id=instance('inst_subfeatures')/tag_device_id]"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:tag_device_ref/aatams:tag_device"
-                          at="1"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:tag_device_ref/aatams:tag_device" at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:implant_type_ref/aatams:implant_type"
                           origin="instance('inst_implant_type')/gml:featureMember/aatams:implant_type[@gml:id=instance('inst_subfeatures')/implant_type_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:implant_type_ref/aatams:implant_type"
@@ -174,13 +174,7 @@
                <xf:insert nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
                           origin="instance('inst_project_person')/gml:featureMember/aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
-                   at="1"/>
-               <xf:message><xf:output ref="concat(instance('inst_capture_location')/longitude,' ',instance('inst_capture_location')/latitude)"/></xf:message>
-               <xf:message><xf:output ref="concat(instance('inst_release_location')/longitude,' ',instance('inst_release_location')/latitude)"/></xf:message>
-               <xf:setvalue ref="instance('inst_data')//aatams:capture_location/gml:Point/gml:pos"
-                        value="concat(instance('inst_capture_location')/longitude,' ',instance('inst_capture_location')/latitude)"/>
-               <xf:setvalue ref="instance('inst_data')//aatams:release_location/gml:Point/gml:pos"
-                        value="concat(instance('inst_release_location')/longitude,' ',instance('inst_release_location')/latitude)"/>
+                          at="1"/>
             </xf:action>
             <xf:message level="modeless" ev:event="xforms-submit-error">
 									Submit error.
@@ -190,8 +184,6 @@
          <xf:action ev:event="set-selected">
             <xf:setvalue ref="instance('inst_subfeatures')/species_id"
                          value="instance('inst_species')/gml:featureMember/aatams:species[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')/classification_level_id"
-                         value="instance('inst_classification_level')/gml:featureMember/aatams:classification_level[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')/tag_device_id"
                          value="instance('inst_tag_device')/gml:featureMember/aatams:tag_device[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')/implant_type_id"
@@ -226,6 +218,15 @@
                   </xf:itemset>
                </xf:select1>
             </div>
+            <div class="xfselect1">
+               <xf:select1 bind="classification_level" appearance="minimal" incremental="true()">
+                  <xf:label>Display Classification Level</xf:label>
+                  <xf:itemset nodeset="instance('inst_classification_level')/gml:featureMember/aatams:classification_level[not(aatams:name = 'UNDEFINED')]">
+                     <xf:value ref="@gml:id"/>
+                     <xf:label ref="aatams:name"/>
+                  </xf:itemset>
+               </xf:select1>
+            </div>
             <div class="dependant-selects">
                <div class="xfselect1">
                   <xf:select1 bind="project" appearance="minimal" incremental="true()">
@@ -250,28 +251,13 @@
                </div>
             </div>
             <div class="xfinput">
-               <xf:input bind="release_longitude" incremental="true()">
-                  <xf:label>Release Longitude</xf:label>
+               <xf:input bind="capture_location_longitude" incremental="true()">
+                  <xf:label>Capture Location Longitude</xf:label>
                </xf:input>
             </div>
             <div class="xfinput">
-               <xf:input bind="release_latitude" incremental="true()">
-                  <xf:label>Release Latitude</xf:label>
-               </xf:input>
-            </div>
-            <div class="xfinput">
-               <xf:input bind="release_timestamp" incremental="true()">
-                  <xf:label>Release Timestamp</xf:label>
-               </xf:input>
-            </div>
-            <div class="xfinput">
-               <xf:input bind="capture_longitude" incremental="true()">
-                  <xf:label>Capture Longitude</xf:label>
-               </xf:input>
-            </div>
-            <div class="xfinput">
-               <xf:input bind="capture_latitude" incremental="true()">
-                  <xf:label>Capture Latitude</xf:label>
+               <xf:input bind="capture_location_latitude" incremental="true()">
+                  <xf:label>Capture Location Latitude</xf:label>
                </xf:input>
             </div>
             <div class="xfinput">
@@ -279,19 +265,25 @@
                   <xf:label>Capture Timestamp</xf:label>
                </xf:input>
             </div>
+            <div class="xfinput">
+               <xf:input bind="release_location_longitude" incremental="true()">
+                  <xf:label>Release Location Longitude</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="release_location_latitude" incremental="true()">
+                  <xf:label>Release Location Latitude</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="release_timestamp" incremental="true()">
+                  <xf:label>Release Timestamp</xf:label>
+               </xf:input>
+            </div>
             <div class="xfselect1">
                <xf:select1 bind="implant_type" appearance="minimal" incremental="true()">
                   <xf:label>Implant Type</xf:label>
                   <xf:itemset nodeset="instance('inst_implant_type')/gml:featureMember/aatams:implant_type">
-                     <xf:value ref="@gml:id"/>
-                     <xf:label ref="aatams:name"/>
-                  </xf:itemset>
-               </xf:select1>
-            </div>
-            <div class="xfselect1">
-               <xf:select1 bind="classification_level" appearance="minimal" incremental="true()">
-                  <xf:label>Displayed Level</xf:label>
-                  <xf:itemset nodeset="instance('inst_classification_level')/gml:featureMember/aatams:classification_level">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>

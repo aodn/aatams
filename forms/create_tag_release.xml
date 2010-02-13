@@ -16,29 +16,35 @@
                <wfs:Insert>
                   <wfs:FeatureCollection>
                      <gml:featureMember>
-                        <aatams:tag_release>
-                           <aatams:transmitter_device_ref>
-                              <aatams:transmitter_device/>
-                           </aatams:transmitter_device_ref>
-                           <aatams:classification_ref>
-                              <aatams:classification/>
-                           </aatams:classification_ref>
+                        <aatams:tag_release_t>
+                           <aatams:tag_device_ref>
+                              <aatams:tag_device/>
+                           </aatams:tag_device_ref>
+                           <aatams:species_ref>
+                              <aatams:species/>
+                           </aatams:species_ref>
                            <aatams:project_person_ref>
                               <aatams:project_person/>
                            </aatams:project_person_ref>
-                           <aatams:release_longitude/>
-                           <aatams:release_latitude/>
-                           <aatams:release_timestamp/>
-                           <aatams:capture_longitude/>
-                           <aatams:capture_latitude/>
+                           <aatams:capture_location>
+                               <gml:Point>
+                                   <gml:pos/>
+                               </gml:Point>
+                           </aatams:capture_location>
                            <aatams:capture_timestamp/>
+                           <aatams:release_location>
+                               <gml:Point>
+                                   <gml:pos/>
+                               </gml:Point>
+                           </aatams:release_location>
+                           <aatams:release_timestamp/>
                            <aatams:implant_type_ref>
                               <aatams:implant_type/>
                            </aatams:implant_type_ref>
-                           <aatams:classification_level_ref>
+                           <aatams:displayed_classification_level_ref>
                               <aatams:classification_level/>
-                           </aatams:classification_level_ref>
-                        </aatams:tag_release>
+                           </aatams:displayed_classification_level_ref>
+                        </aatams:tag_release_t>
                      </gml:featureMember>
                   </wfs:FeatureCollection>
                </wfs:Insert>
@@ -46,20 +52,32 @@
          </xf:instance>
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
-               <classification_id/>
+               <species_id/>
                <classification_level_id/>
-               <transmitter_device_id/>
+               <tag_device_id/>
                <implant_type_id/>
                <project_id/>
                <project_person_id/>
             </data>
+        </xf:instance>
+        <xf:instance id="inst_capture_location">
+            <data xmlns="">
+               <longitude/>
+               <latitude/>
+            </data>
+        </xf:instance>
+        <xf:instance id="inst_release_location">
+            <data xmlns="">
+               <longitude/>
+               <latitude/>
+            </data>
          </xf:instance>
-         <xf:instance id="inst_classification"
-                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:classification"/>
+         <xf:instance id="inst_species"
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:species"/>
          <xf:instance id="inst_classification_level"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:classification_level"/>
-         <xf:instance id="inst_transmitter_device"
-                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:transmitter_device"/>
+         <xf:instance id="inst_tag_device"
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:tag_device"/>
          <xf:instance id="inst_implant_type"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:implant_type"/>
          <xf:instance id="inst_project_person"
@@ -78,11 +96,11 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
-         <xf:bind id="transmitter_device"
-                  nodeset="instance('inst_subfeatures')/transmitter_device_id"
+         <xf:bind id="tag_device"
+                  nodeset="instance('inst_subfeatures')/tag_device_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="classification" nodeset="instance('inst_subfeatures')/classification_id"
+         <xf:bind id="species" nodeset="instance('inst_subfeatures')/species_id"
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="project" nodeset="instance('inst_subfeatures')/project_id"
@@ -92,11 +110,11 @@
                   type="xsd:string"
                   required="true()"/>
          <xf:bind id="release_longitude"
-                  nodeset="instance('inst_data')//aatams:release_longitude"
+                  nodeset="instance('inst_release_location')/longitude"
                   type="xsd:decimal"
                   required="true()"
                   constraint=". &gt;= -180 and . &lt;= 180"/>
-         <xf:bind id="release_latitude" nodeset="instance('inst_data')//aatams:release_latitude"
+         <xf:bind id="release_latitude" nodeset="instance('inst_release_location')/latitude"
                   type="xsd:decimal"
                   required="true()"
                   constraint=". &gt;= -90 and . &lt;= 90"/>
@@ -105,11 +123,11 @@
                   type="xsd:dateTime"
                   required="true()"/>
          <xf:bind id="capture_longitude"
-                  nodeset="instance('inst_data')//aatams:capture_longitude"
+                  nodeset="instance('inst_capture_location')/longitude"
                   type="xsd:decimal"
                   required="false()"
                   constraint=". &gt;= -180 and . &lt;= 180"/>
-         <xf:bind id="capture_latitude" nodeset="instance('inst_data')//aatams:capture_latitude"
+         <xf:bind id="capture_latitude" nodeset="instance('inst_capture_location')/latitude"
                   type="xsd:decimal"
                   required="false()"
                   constraint=". &gt;= -90 and . &lt;= 90"/>
@@ -137,17 +155,17 @@
                <xf:delete nodeset="instance('inst_data')//aatams:capture_longitude[.='']"/>
                <xf:delete nodeset="instance('inst_data')//aatams:capture_latitude[.='']"/>
                <xf:delete nodeset="instance('inst_data')//aatams:capture_timestamp[.='']"/>
-               <xf:insert nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification"
-                          origin="instance('inst_classification')/gml:featureMember/aatams:classification[@gml:id=instance('inst_subfeatures')/classification_id]"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification"
+               <xf:insert nodeset="instance('inst_data')//aatams:species_ref/aatams:species"
+                          origin="instance('inst_species')/gml:featureMember/aatams:species[@gml:id=instance('inst_subfeatures')/species_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:species_ref/aatams:species"
                           at="1"/>
-               <xf:insert nodeset="instance('inst_data')//aatams:classification_level_ref/aatams:classification_level"
+               <xf:insert nodeset="instance('inst_data')//aatams:displayed_classification_level_ref/aatams:classification_level"
                           origin="instance('inst_classification_level')/gml:featureMember/aatams:classification_level[@gml:id=instance('inst_subfeatures')/classification_level_id]"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:classification_level_ref/aatams:classification_level"
+               <xf:delete nodeset="instance('inst_data')//aatams:displayed_classification_level_ref/aatams:classification_level"
                           at="1"/>
-               <xf:insert nodeset="instance('inst_data')//aatams:transmitter_device_ref/aatams:transmitter_device"
-                          origin="instance('inst_transmitter_device')/gml:featureMember/aatams:transmitter_device[@gml:id=instance('inst_subfeatures')/transmitter_device_id]"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:transmitter_device_ref/aatams:transmitter_device"
+               <xf:insert nodeset="instance('inst_data')//aatams:tag_device_ref/aatams:tag_device"
+                          origin="instance('inst_tag_device')/gml:featureMember/aatams:tag_device[@gml:id=instance('inst_subfeatures')/tag_device_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:tag_device_ref/aatams:tag_device"
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:implant_type_ref/aatams:implant_type"
                           origin="instance('inst_implant_type')/gml:featureMember/aatams:implant_type[@gml:id=instance('inst_subfeatures')/implant_type_id]"/>
@@ -156,7 +174,13 @@
                <xf:insert nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
                           origin="instance('inst_project_person')/gml:featureMember/aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person"
-                          at="1"/>
+                   at="1"/>
+               <xf:message><xf:output ref="concat(instance('inst_capture_location')/longitude,' ',instance('inst_capture_location')/latitude)"/></xf:message>
+               <xf:message><xf:output ref="concat(instance('inst_release_location')/longitude,' ',instance('inst_release_location')/latitude)"/></xf:message>
+               <xf:setvalue ref="instance('inst_data')//aatams:capture_location/gml:Point/gml:pos"
+                        value="concat(instance('inst_capture_location')/longitude,' ',instance('inst_capture_location')/latitude)"/>
+               <xf:setvalue ref="instance('inst_data')//aatams:release_location/gml:Point/gml:pos"
+                        value="concat(instance('inst_release_location')/longitude,' ',instance('inst_release_location')/latitude)"/>
             </xf:action>
             <xf:message level="modeless" ev:event="xforms-submit-error">
 									Submit error.
@@ -164,12 +188,12 @@
          </xf:submission>
          <xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1"/>
          <xf:action ev:event="set-selected">
-            <xf:setvalue ref="instance('inst_subfeatures')/classification_id"
-                         value="instance('inst_classification')/gml:featureMember/aatams:classification[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/species_id"
+                         value="instance('inst_species')/gml:featureMember/aatams:species[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')/classification_level_id"
                          value="instance('inst_classification_level')/gml:featureMember/aatams:classification_level[1]/@gml:id"/>
-            <xf:setvalue ref="instance('inst_subfeatures')/transmitter_device_id"
-                         value="instance('inst_transmitter_device')/gml:featureMember/aatams:transmitter_device[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/tag_device_id"
+                         value="instance('inst_tag_device')/gml:featureMember/aatams:tag_device[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')/implant_type_id"
                          value="instance('inst_implant_type')/gml:featureMember/aatams:implant_type[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')/project_id"
@@ -185,18 +209,18 @@
          <label>ADD TAG RELEASE</label>
          <div class="form-contents">
             <div class="xfselect1">
-               <xf:select1 bind="transmitter_device" appearance="minimal" incremental="true()">
+               <xf:select1 bind="tag_device" appearance="minimal" incremental="true()">
                   <xf:label>Device</xf:label>
-                  <xf:itemset nodeset="instance('inst_transmitter_device')/gml:featureMember/aatams:transmitter_device">
+                  <xf:itemset nodeset="instance('inst_tag_device')/gml:featureMember/aatams:tag_device">
                      <xf:value ref="@gml:id"/>
-                     <xf:label ref="aatams:name"/>
+                     <xf:label ref="aatams:code_name"/>
                   </xf:itemset>
                </xf:select1>
             </div>
             <div class="xfselect1">
-               <xf:select1 bind="classification" appearance="minimal" incremental="true()">
+               <xf:select1 bind="species" appearance="minimal" incremental="true()">
                   <xf:label>Classification</xf:label>
-                  <xf:itemset nodeset="instance('inst_classification')/gml:featureMember/aatams:classification">
+                  <xf:itemset nodeset="instance('inst_species')/gml:featureMember/aatams:species">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>

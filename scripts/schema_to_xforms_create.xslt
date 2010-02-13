@@ -75,6 +75,19 @@
 									</xsl:for-each>
 								</data>
 							</xf:instance>
+							<!-- instances to hold longitudes and latitudes-->
+							<xsl:for-each
+								select="column[ends-with(@name,'LOCATION')]">
+								<xf:instance>
+									<xsl:attribute name="id">inst_<xsl:value-of
+											select="lower-case(@name)" />
+									</xsl:attribute>
+									<data xmlns="">
+										<longitude />
+										<latitude />
+									</data>
+								</xf:instance>
+							</xsl:for-each>
 							<!-- instances for subfeature lists -->
 							<xsl:apply-templates select="foreign-key"
 								mode="instance" />
@@ -130,14 +143,14 @@
 					<body>
 						<!--xsl:comment>
 							<div id="xformControl">
-								<span>
-									<input type="checkbox"
-										onclick="$('console').style.display = this.checked? 'block' : 'none';"
-										checked="checked" />
-									<xsl:text>Debug</xsl:text>
-								</span>
+							<span>
+							<input type="checkbox"
+							onclick="$('console').style.display = this.checked? 'block' : 'none';"
+							checked="checked" />
+							<xsl:text>Debug</xsl:text>
+							</span>
 							</div>
-						</xsl:comment-->
+							</xsl:comment-->
 						<xsl:call-template name="form" />
 						<br />
 						<div id="console" />
@@ -167,6 +180,15 @@
 		priority="4">
 		<xsl:element name="aatams:installation_deployment_ref">
 			<xsl:element name="aatams:installation_deployment" />
+		</xsl:element>
+	</xsl:template>
+	<!-- special case , location is a gml:Point -->
+	<xsl:template match="column[ends-with(@name,'LOCATION')]"
+		mode="instance" priority="4">
+		<xsl:element name="aatams:{lower-case(@name)}">
+			<gml:Point>
+				<gml:pos />
+			</gml:Point>
 		</xsl:element>
 	</xsl:template>
 	<!-- columns that are foreign keys are subfeatures -->
@@ -255,6 +277,36 @@
 			<xsl:apply-templates select="." mode="constraint" />
 		</xsl:element>
 	</xsl:template>
+	<!--  location longitude and latitude bindings -->
+	<xsl:template match="column[ends-with(@name,'LOCATION')]"
+		mode="binding" priority="5">
+		<xsl:variable name="name">
+			<xsl:value-of select="lower-case(@name)" />
+		</xsl:variable>
+		<xsl:element name="xf:bind">
+			<xsl:attribute name="id"><xsl:value-of select="$name" />_longitude</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_<xsl:value-of
+					select="$name" />')/longitude</xsl:attribute>
+			<xsl:attribute name="type">xsd:decimal</xsl:attribute>
+			<xsl:attribute name="required">
+				<xsl:apply-templates select="@required" />
+			</xsl:attribute>
+			<xsl:attribute name="constraint"><xsl:text>. &gt;= -180 and . &lt;= 180</xsl:text>
+			</xsl:attribute>
+		</xsl:element>
+		<xsl:element name="xf:bind">
+			<xsl:attribute name="id"><xsl:value-of select="$name" />_latitude</xsl:attribute>
+			<xsl:attribute name="nodeset">instance('inst_<xsl:value-of
+					select="$name" />')/latitude</xsl:attribute>
+			<xsl:attribute name="type">xsd:decimal</xsl:attribute>
+			<xsl:attribute name="required">
+				<xsl:apply-templates select="@required" />
+			</xsl:attribute>
+			<xsl:attribute name="constraint"><xsl:text>. &gt;= -90 and . &lt;= 90</xsl:text>
+			</xsl:attribute>
+		</xsl:element>
+	</xsl:template>
+	<!--  not interested in status field -->
 	<xsl:template
 		match="column[@name = 'STATUS_ID' or @primaryKey = 'true']"
 		mode="binding" priority="5">
@@ -414,9 +466,9 @@
 			ref="instance('inst_subfeatures')/installation_deployment_id"
 			value="instance('inst_installation_deployment')/gml:featureMember/aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id" />
 	</xsl:template>
-	<!-- remove any non-mandatory numeric fields if no value -->
+	<!-- remove any non-mandatory numeric fields if no value entered -->
 	<xsl:template
-		match="column[@required='false' and not(../foreign-key[reference/@local=current()/@name]) and matches(@type,'INTEGER|DECIMAL|TIMESTAMP')]"
+		match="column[@required='false' and not(../foreign-key[reference/@local=current()/@name]) and matches(@type,'INTEGER|DECIMAL|TIMESTAMP|DATE')]"
 		mode="submission">
 		<xsl:element name="xf:delete">
 			<xsl:attribute name="nodeset">
@@ -426,6 +478,7 @@
 			</xsl:attribute>
 		</xsl:element>
 	</xsl:template>
+	<!--  insert the selected subfeatures -->
 	<xsl:template match="foreign-key" mode="submission">
 		<xsl:element name="xf:insert">
 			<!-- where to put it -->
@@ -460,6 +513,30 @@
 			<xsl:attribute name="at">1</xsl:attribute>
 		</xsl:element>
 	</xsl:template>
+	<!-- set and longitude and latitudes -->
+	<xsl:template match="column[ends-with(@name,'LOCATION')]"
+		mode="submission">
+		<xsl:variable name="name">
+			<xsl:value-of select="lower-case(@name)" />
+		</xsl:variable>
+		<xsl:element name="xf:setvalue">
+			<!-- where to put it -->
+			<xsl:attribute name="ref">
+				<xsl:text>instance('inst_data')//aatams:</xsl:text>
+				<xsl:value-of select="$name" />
+				<xsl:text>/gml:Point/gml:pos</xsl:text>
+			</xsl:attribute>
+			<!-- what to put there, a concatenation of the entered longitude and latitude -->
+			<xsl:attribute name="value">
+				<xsl:text>concat(instance('inst_</xsl:text>
+				<xsl:value-of select="$name" />
+				<xsl:text>')/longitude,' ',instance('inst_</xsl:text>
+				<xsl:value-of select="$name" />
+				<xsl:text>')/latitude)</xsl:text>
+			</xsl:attribute>
+		</xsl:element>
+	</xsl:template>
+	<!-- create the form and its controls -->
 	<xsl:template name="form">
 		<div class="form">
 			<label>
@@ -515,7 +592,8 @@
 				</xsl:attribute>
 				<xf:label>
 					<xsl:call-template name="proper-case">
-						<xsl:with-param name="toconvert" select="translate(replace(@name,'_ID',''),'_',' ')" />
+						<xsl:with-param name="toconvert"
+							select="translate(replace(@name,'_ID',''),'_',' ')" />
 					</xsl:call-template>
 				</xf:label>
 				<xsl:call-template name="help">
@@ -535,22 +613,22 @@
 		match="column[@name = 'COMMENTS' or @name = 'CC_EMAIL_ADDRESSES']"
 		mode="form">
 		<div class="xftextarea">
-		<xsl:element name="xf:textarea">
-			<xsl:attribute name="bind">
+			<xsl:element name="xf:textarea">
+				<xsl:attribute name="bind">
 				<xsl:value-of select="lower-case(@name)" />
 			</xsl:attribute>
-			<xf:label>
-				<xsl:call-template name="proper-case">
-					<xsl:with-param name="toconvert"
-						select="translate(@name,'_',' ')" />
+				<xf:label>
+					<xsl:call-template name="proper-case">
+						<xsl:with-param name="toconvert"
+							select="translate(@name,'_',' ')" />
+					</xsl:call-template>
+				</xf:label>
+				<xsl:call-template name="help">
+					<xsl:with-param name="key">
+						<xsl:value-of select="@name" />
+					</xsl:with-param>
 				</xsl:call-template>
-			</xf:label>
-			<xsl:call-template name="help">
-				<xsl:with-param name="key">
-					<xsl:value-of select="@name" />
-				</xsl:with-param>
-			</xsl:call-template>
-		</xsl:element>
+			</xsl:element>
 		</div>
 	</xsl:template>
 	<xsl:template
@@ -568,40 +646,40 @@
 		<!-- convert to project and person_role -->
 		<div class="dependant-selects">
 			<div class="xfselect1">
-			<xf:select1 bind="project" appearance="minimal"
-				incremental="true()">
-				<xf:label>Project</xf:label>
-				<xf:itemset
-					nodeset="instance('inst_project')/gml:featureMember/aatams:project">
-					<xf:value ref="@gml:id" />
-					<xf:label ref="aatams:name" />
-				</xf:itemset>
-				<xf:action ev:event="xforms-value-changed">
-					<xf:setvalue
-						ref="instance('inst_subfeatures')/project_person_id" value="" />
-				</xf:action>
-				<xsl:call-template name="help">
-					<xsl:with-param name="key">
-						<xsl:value-of select="@name" />
-					</xsl:with-param>
-				</xsl:call-template>
-			</xf:select1>
+				<xf:select1 bind="project" appearance="minimal"
+					incremental="true()">
+					<xf:label>Project</xf:label>
+					<xf:itemset
+						nodeset="instance('inst_project')/gml:featureMember/aatams:project">
+						<xf:value ref="@gml:id" />
+						<xf:label ref="aatams:name" />
+					</xf:itemset>
+					<xf:action ev:event="xforms-value-changed">
+						<xf:setvalue
+							ref="instance('inst_subfeatures')/project_person_id" value="" />
+					</xf:action>
+					<xsl:call-template name="help">
+						<xsl:with-param name="key">
+							<xsl:value-of select="@name" />
+						</xsl:with-param>
+					</xsl:call-template>
+				</xf:select1>
 			</div>
 			<div class="xfselect1">
-			<xf:select1 bind="project_person" appearance="minimal"
-				incremental="true()">
-				<xf:label>Person(Role)</xf:label>
-				<xf:itemset
-					nodeset="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
-					<xf:value ref="@gml:id" />
-					<xf:label ref="aatams:person_role" />
-				</xf:itemset>
-				<xsl:call-template name="help">
-					<xsl:with-param name="key">
-						<xsl:value-of select="@name" />
-					</xsl:with-param>
-				</xsl:call-template>
-			</xf:select1>
+				<xf:select1 bind="project_person" appearance="minimal"
+					incremental="true()">
+					<xf:label>Person(Role)</xf:label>
+					<xf:itemset
+						nodeset="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
+						<xf:value ref="@gml:id" />
+						<xf:label ref="aatams:person_role" />
+					</xf:itemset>
+					<xsl:call-template name="help">
+						<xsl:with-param name="key">
+							<xsl:value-of select="@name" />
+						</xsl:with-param>
+					</xsl:call-template>
+				</xf:select1>
 			</div>
 		</div>
 	</xsl:template>
@@ -694,6 +772,62 @@
 		mode="form" priority="4">
 		<!-- included in previous installation -->
 	</xsl:template>
+	<!--  latitude and longitude -->
+	<xsl:template match="column[ends-with(@name,'LOCATION')]"
+		mode="form" priority="4">
+		<div class="xfinput">
+			<xsl:element name="xf:input">
+				<xsl:attribute name="bind">
+					<xsl:value-of select="lower-case(@name)" />
+					<xsl:text>_longitude</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="incremental">
+					<xsl:text>true()</xsl:text>
+				</xsl:attribute>
+				<xf:label>
+					<xsl:if test="not(@name = 'LOCATION')">
+						<xsl:call-template name="proper-case">
+							<xsl:with-param name="toconvert"
+								select="replace(@name,'_',' ')" />
+						</xsl:call-template>
+						<xsl:text> </xsl:text>
+					</xsl:if>
+					<xsl:text>Longitude</xsl:text>
+				</xf:label>
+				<xsl:call-template name="help">
+					<xsl:with-param name="key">
+						<xsl:value-of select="@name" />
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:element>
+		</div>
+		<div class="xfinput">
+			<xsl:element name="xf:input">
+				<xsl:attribute name="bind">
+					<xsl:value-of select="lower-case(@name)" />
+					<xsl:text>_latitude</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="incremental">
+					<xsl:text>true()</xsl:text>
+				</xsl:attribute>
+				<xf:label>
+					<xsl:if test="not(@name = 'LOCATION')">
+						<xsl:call-template name="proper-case">
+							<xsl:with-param name="toconvert"
+								select="replace(@name,'_',' ')" />
+						</xsl:call-template>
+						<xsl:text> </xsl:text>
+					</xsl:if>
+					<xsl:text>Latitude</xsl:text>
+				</xf:label>
+				<xsl:call-template name="help">
+					<xsl:with-param name="key">
+						<xsl:value-of select="@name" />
+					</xsl:with-param>
+				</xsl:call-template>
+			</xsl:element>
+		</div>
+	</xsl:template>
 	<xsl:template name="proper-case">
 		<xsl:param name="toconvert" />
 		<xsl:if test="string-length($toconvert) &gt; 0">
@@ -716,6 +850,7 @@
 			</xsl:choose>
 		</xsl:if>
 	</xsl:template>
+
 	<xsl:template name="select1-from-foreign-key">
 		<xsl:param name="fk_node" />
 		<xsl:element name="xf:select1">

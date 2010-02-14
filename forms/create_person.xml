@@ -62,7 +62,7 @@
                   nodeset="instance('inst_data')//aatams:home_phone_number"
                   type="xsd:string"
                   required="false()"/>
-         <xf:bind id="email" nodeset="instance('inst_data')//aatams:email" type="xsd:string"
+         <xf:bind id="email" nodeset="instance('inst_data')//aatams:email" type="xf:email"
                   required="true()"/>
          <xf:bind id="home_physical_address_1"
                   nodeset="instance('inst_data')//aatams:home_physical_address_1"

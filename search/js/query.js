@@ -11,7 +11,7 @@
       var help_open = false; //for ToggleHelp()
       var query_max = true; //for ToggleQuery()
       var citation_open = true; //for ToggleCitation()
-      var show_filter = true; //for testing;
+      var show_filter = false; //for testing;
 
       /**
       Initialisation, called on body onload event
@@ -220,7 +220,7 @@
             uri += "&typename=aatams:receiver_deployment" + GetDeploymentsFilter();
             break;
          case "tag_releases":
-            uri += "&typename=aatams:display_tag_release" + GetTagReleasesFilter();
+            uri += "&typename=aatams:tag_release" + GetTagReleasesFilter();
             break;
          case "tags":
             uri += "&typename=aatams:device" + GetTagsFilter();
@@ -335,7 +335,7 @@
          params_div.innerHTML = "<table class='params'><tbody>" +
             //installation            
             "<tr><td class='param_name'>Installation Name:</td><td>" + OperatorList('=','installation_id_operator') + 
-               " " + InstallationsSelectList() + "</td></tr>" +        
+               " " + InstallationsSelectList(true) + "</td></tr>" +        
             "<tr><td class='param_name'>Installation Station:</td><td>" + OperatorList('=','installation_station_id_operator') + 
                " " + InstallationStationsSelectList(false) + "</td></tr>" +              
             //receiver
@@ -745,9 +745,11 @@
       /**
       Inserts an Installations list
       */
-      function InstallationsSelectList(){
-         var tmp = "<select id='installation_id' onblur='Reset()' onchange='ResetStations(this.value)'>" + 
-            "<option value=''></option>" 
+      function InstallationsSelectList(skip_blank){
+         var tmp = "<select id='installation_id' onblur='Reset()' onchange='ResetStations(this.value)'>";
+         if(!skip_blank){
+           tmp += "<option value=''></option>" 
+         }
          for(var i=0; i<installation_list.length;i++){
             tmp += "<option value="+installation_list[i][0]+">"+installation_list[i][1]+"</option>";
          }

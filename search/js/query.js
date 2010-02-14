@@ -289,10 +289,10 @@
                " " + InstallationsSelectList() + "</td></tr>" +
             "<tr><td class='param_name'>Installation Station:</td><td>" + OperatorList('=','installation_station_id_operator') + 
                " " + InstallationStationsSelectList(false) + "</td></tr>" +
-            "<tr><td class='param_name'>Receiver Deployment FID:</td><td>" + OperatorList('=','deployment_id_operator') + 
-               "<span class='fid_prefix'>aatams.receiver_deployment.</span><input id='deployment_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
-            "<tr><td class='param_name'>Receiver FID: </td><td>" + OperatorList('=|<=|>=|<|>','receiver_id_operator') +
-               "<span class='fid_prefix'>aatams.device.</span><input id='receiver_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
+            "<tr><td class='param_name'>Receiver Deployment ID:</td><td>" + OperatorList('=','deployment_id_operator') + 
+               " <input id='deployment_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
+            "<tr><td class='param_name'>Receiver ID: </td><td>" + OperatorList('=|<=|>=|<|>','receiver_id_operator') +
+               " <input id='receiver_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
             "<tr><td class='param_name'>Receiver Model:</td><td class='last_row'>" + OperatorList('=','receiver_model_name_operator') +
                " " + ReceiverModelSelectList() + "</td></tr>" +
             "<tr><td class='param_name'>Receiver Code Name:</td><td>" + OperatorList('=','receiver_code_name_operator') +
@@ -339,20 +339,20 @@
             "<tr><td class='param_name'>Installation Station:</td><td>" + OperatorList('=','installation_station_id_operator') + 
                " " + InstallationStationsSelectList(false) + "</td></tr>" +              
             //receiver
-            "<tr><td class='param_name'>Receiver Deployment FID:</td><td>" + OperatorList('=|<=|>=|<|>','deployment_id_operator') +
-               "<span class='fid_prefix'>aatams.receiver_deployment.</span><input id='deployment_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
-            "<tr><td class='param_name'>Receiver FID:</td><td>" + OperatorList('=|<=|>=|<|>','receiver_id_operator') +
-               "<span class='fid_prefix'>aatams.receiver_device.</span><input id='receiver_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
+            "<tr><td class='param_name'>Receiver Deployment ID:</td><td>" + OperatorList('=|<=|>=|<|>','deployment_id_operator') +
+               " <input id='deployment_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
+            "<tr><td class='param_name'>Receiver ID:</td><td>" + OperatorList('=|<=|>=|<|>','receiver_id_operator') +
+               " <input id='receiver_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
             "<tr><td class='param_name'>Receiver Code Name:</td><td>" + OperatorList('=|<=|>=|<|>','receiver_name_operator') +
                " <input id='receiver_name' type='text' size='10' onblur='Reset()'/></td></tr>" +
             //tag
-            "<tr><td class='param_name'>Tag FID: </td><td>" + OperatorList('=|<=|>=|<|>','tag_id_operator') +
-               "<span class='fid_prefix'>aatams.transmitter_device.</span><input id='tag_id' type='text' size='10' onblur='Reset()' onblur='Reset()'/></td></tr>" +
+            "<tr><td class='param_name'>Tag ID: </td><td>" + OperatorList('=|<=|>=|<|>','tag_id_operator') +
+               " <input id='tag_id' type='text' size='10' onblur='Reset()' onblur='Reset()'/></td></tr>" +
             "<tr><td class='param_name'>Tag Code Name: </td><td>" + OperatorList('=|<=|>=|<|>','tag_name_operator') +
                " <input id='tag_name' type='text' size='10' onblur='Reset()' onblur='Reset()'/></td></tr>" +
             //release   
-            "<tr><td class='param_name'>Tag Release FID:</td><td>" + OperatorList('=|<=|>=|<|>','release_id_operator') +
-               "<span class='fid_prefix'>aatams.tag_release.</span><input id='release_id' type='text' size='10' onblur='Reset()'/></td></tr>" +    
+            "<tr><td class='param_name'>Tag Release ID:</td><td>" + OperatorList('=|<=|>=|<|>','release_id_operator') +
+               " <input id='release_id' type='text' size='10' onblur='Reset()'/></td></tr>" +    
             "<tr><td class='param_name'>Release UTC DateTime:</td><td>" + OperatorList('>=|>','release_start_date_operator') + " " + DateSelect('release_start_date') + " and <br/>" +
                 OperatorList('<=|<','release_end_date_operator') + " " + DateSelect('release_end_date') + "</td></tr>" + 
             "<tr><td class='param_name'>Release Location Bounding Box: </td><td>" + LocationBoundingBox('release') + "</td></tr>" +
@@ -364,8 +364,8 @@
             "<tr><td class='param_name'>Species:</td><td>" + OperatorList('=','species_id_operator') +
             " " + SpeciesSelectList(true) + "</td></tr>" +
             //detection
-            "<tr><td class='param_name'>Detection FID:</td><td>" + OperatorList('=|<=|>=|<|>','detection_id_operator') +
-               "<span class='fid_prefix'>aatams.detection.</span><input id='detection_id' type='text' size='10' onblur='Reset()'/></td></tr>" +    
+            "<tr><td class='param_name'>Detection ID:</td><td>" + OperatorList('=|<=|>=|<|>','detection_id_operator') +
+               " <input id='detection_id' type='text' size='10' onblur='Reset()'/></td></tr>" +    
             "<tr><td class='param_name'>Detection UTC DateTime:</td><td>" + OperatorList('>=|>','detection_start_date_operator') + " " + DateSelect('detection_start_date') + " and <br/>" +
                 OperatorList('<=|<','detection_end_date_operator') + " " + DateSelect('detection_end_date') + "</td></tr>" + 
             "<tr><td class='param_name last_row'>Detection Location Bounding Box: </td><td class='last_row'>" + LocationBoundingBox('detection') + "</td></tr>" +
@@ -428,8 +428,8 @@
             " " + GenusSelectList(true) + "</td></tr>" +
             "<tr><td class='param_name'>Species:</td><td>" + OperatorList('=','species_id_operator') +
             " " + SpeciesSelectList(true) + "</td></tr>" +            
-            "<tr><td class='param_name'>Tag FID: </td><td>" + OperatorList('=|<=|>=|<|>','tag_id_operator') +
-               " <span class='fid_prefix'>aatams.transmitter_device.</span><input id='tag_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
+            "<tr><td class='param_name'>Tag ID: </td><td>" + OperatorList('=|<=|>=|<|>','tag_id_operator') +
+               " <input id='tag_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
             "<tr><td class='param_name'>Tag Code Name:</td><td>" + OperatorList('=','tag_name_operator') +
                " <input id='tag_name' type='text' size='20'/></td></tr>" +
             "<tr><td class='param_name'>Release UTC DateTime:</td><td>" + OperatorList('>=|>','start_date_operator') + " " + DateSelect('start_date') + " and <br/>" +
@@ -543,8 +543,8 @@
             "<tr><td class='param_name'>Person(Role):</td><td>" + OperatorList('=','project_person_id_operator') +
                " " + ProjectPersonsSelectList() + "</td></tr>" +
             //device
-            "<tr><td class='param_name'>Device FID:</td><td>" + OperatorList('=|<=|>=|<|>','device_id_operator') +
-               "<span class='fid_prefix'>aatams.device.</span><input id='device_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
+            "<tr><td class='param_name'>Device ID:</td><td>" + OperatorList('=|<=|>=|<|>','device_id_operator') +
+               " <input id='device_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
             "<tr><td class='param_name'>Device Name:</td><td>" + OperatorList('=','device_name_operator') +
                " <input id='device_name' type='text' size='20'/></td></tr>" +
             "<tr><td class='param_name last_row'>Model:</td><td class='last_row'>" + OperatorList('=','model_id_operator') +
@@ -593,8 +593,8 @@
             "<tr><td class='param_name'>Person(Role):</td><td>" + OperatorList('=','project_person_id_operator') +
                " " + ProjectPersonsSelectList() + "</td></tr>" +
             //device
-            "<tr><td class='param_name'>Device FID:</td><td>" + OperatorList('=|<=|>=|<|>','device_id_operator') +
-               "<span class='fid_prefix'>aatams.device.</span><input id='device_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
+            "<tr><td class='param_name'>Device ID:</td><td>" + OperatorList('=|<=|>=|<|>','device_id_operator') +
+               " <input id='device_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
             "<tr><td class='param_name'>Device Name:</td><td>" + OperatorList('=','device_name_operator') +
                " <input id='device_name' type='text' size='20'/></td></tr>" +
             "<tr><td class='param_name last_row'>Model:</td><td class='last_row'>" + OperatorList('=','model_id_operator') +

@@ -1,7 +1,6 @@
 <?page title="Australian Acoustic Monitoring and Tracking System (AATAMS) Website"?>
-
-<window id="window" width="100%" height="100%" border="none"
-	sclass="black" use="au.org.emii.aatams.zk.AATAMSHomePageComposer">
+<!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
+<window id="window" width="100%" height="100%" border="none" sclass="black" use="au.org.emii.aatams.zk.AATAMSHomePageComposer">
 	<style>
 		.header { background-image:url('img/header_background.jpg');
 		background-repeat:repeat-x; border-bottom:solid 1px gray;
@@ -19,12 +18,8 @@
 						<separator orient="vertical" />
 						<button label="Search Site" /> -->
 				</div>
-				<label
-					style="position:absolute; top:30px; left:70px; font-size:24px;color:white;font-weight:bold;"
-					value="Australian Acoustic Tracking and Monitoring System" />
-				<label
-					style="position:absolute; top:50px; left:70px; font-size:24px;color:red;font-weight:bold;"
-					value="(Under Development)" />
+				<label style="position:absolute; top:30px; left:70px; font-size:24px;color:white;font-weight:bold;" value="Australian Acoustic Tracking and Monitoring System" />
+				<label style="position:absolute; top:50px; left:70px; font-size:24px;color:red;font-weight:bold;" value="(Under Development)" />
 			</div>
 		</north>
 		<!--  north size="80px" border="0" >
@@ -37,9 +32,7 @@
 			value="Australian Acoustic Tracking and Monitoring System"/>
 			</north-->
 		<!-- Sidebar -->
-		<west width="300px" border="0" flex="true" splittable="true"
-			margins="5,5,0,0" style="background:#B2B2B2;">
-
+		<west width="300px" border="0" flex="true" splittable="true" margins="5,5,0,0" style="background:#B2B2B2;">
 			<tabbox id="tb" width="300px" mold="accordion-lite">
 				<tabs>
 					<tab label="Home" id="home" />
@@ -51,211 +44,173 @@
 					<tab label="Help" id="help" />
 				</tabs>
 				<tabpanels>
-					<tabpanel
-						style="padding:0px;margin:0px;border:0px;" />
-					<tabpanel
-						style="padding:0px;margin:0px;border:0px;">
-						<menubar id="data_entry_menu" width="100%"
-							orient="vertical">
-							<menu label="Devices">
+					<tabpanel style="padding:0px;margin:0px;border:0px;" />
+					<tabpanel style="padding:0px;margin:0px;border:0px;">
+						<menubar id="data_entry_menu" width="100%" orient="vertical">
+							<menu label="Tags">
 								<menupopup>
-									<menuitem label="Add Tag Device"
-										id="AddTagDevice" />
-									<menuitem
-										label="Add Receiver Device" id="AddReceiverDevice" />
-									<menuitem label="Add Device Model"
-										id="AddDeviceModel" />
+									<menu label="Tag Devices">
+										<menupopup>
+											<menuitem label="Add" id="AddTagDevice" />
+											<menuitem label="Modify" id="ModifyTagDevice" />
+											<menuitem label="Detele" id="DeleteTagDevice" />
+										</menupopup>
+									</menu>
+									<menu label="Tag Releases">
+										<menupopup>
+											<menuitem label="Add" id="AddTagRelease" />
+											<menuitem label="Modify" id="ModifyTagRelease" />
+											<menuitem label="Delete" id="DeleteTagRelease" />
+										</menupopup>
+									</menu>
 								</menupopup>
 							</menu>
-							<menu label="Receiver Deployments"
-								>
+							<menu label="Receivers">
 								<menupopup>
-									<menuitem label="Add Deployment"
-										id="AddDeployment" />
-									<menuitem label="Modify Deployment"
-										id="ModifyDeployment" />
-								</menupopup>
-							</menu>
-							<menu label="Deployment Recovery/Download">
-								<menupopup>
-									<menuitem label="Add Recovery"
-										id="AddRecovery" />
-									<menuitem label="Add Download"
-										id="AddDownload" />
-								</menupopup>
-							</menu>
-							<menu label="Tag Releases">
-								<menupopup>
-									<menuitem label="Add Tag Release"
-										id="AddTagRelease" />
-									<!--menuitem
-										label="Add Surgery Details" id="AddSurgery" />
-									<menuitem label="Add Animal"
-										id="AddAnimal" /-->
+									<menu label="Receiver Devices">
+										<menupopup>
+											<menuitem label="Add" id="AddReceiverDevice" />
+											<menuitem label="Modify" id="ModifyReceiverDevice" />
+											<menuitem label="Detele" id="DeleteReceiverDevice" />
+										</menupopup>
+									</menu>
+									<menu label="Receiver Deployments">
+										<menupopup>
+											<menuitem label="Add" id="AddDeployment" />
+											<menuitem label="Modify" id="ModifyDeployment" />
+											<menuitem label="Delete" id="DeleteDeployment" />
+										</menupopup>
+									</menu>
+									<menu label="Deployment Recovery">
+										<menupopup>
+											<menuitem label="Add" id="AddRecovery" />
+											<menuitem label="Modify" id="ModifyRecovery" />
+											<menuitem label="Delete" id="DeleteRecovery" />
+										</menupopup>
+									</menu>
+									<menuitem label="Upload Detection Data Files" id="AddDownload" />
 								</menupopup>
 							</menu>
 							<menu label="Other">
 								<menupopup>
 									<menu label="Installations">
 										<menupopup>
-											<menuitem label="Add"
-												id="AddInstallation" />
-											<menuitem label="Modify"
-												id="ModifyInstallation" />
+											<menuitem label="Add" id="AddInstallation" />
+											<menuitem label="Modify" id="ModifyInstallation" />
 										</menupopup>
 									</menu>
-									<menu
-										label="Installation Stations">
+									<menu label="Installation Stations">
 										<menupopup>
-											<menuitem label="Add"
-												id="AddStation" />
-											<menuitem label="Modify"
-												id="ModifyStation" />
+											<menuitem label="Add" id="AddStation" />
+											<menuitem label="Modify" id="ModifyStation" />
 										</menupopup>
 									</menu>
 									<menu label="Organisations">
 										<menupopup>
-											<menuitem label="Add"
-												id="AddOrganisation" />
-											<menuitem label="Modify"
-												id="ModifyOrganisation" />
+											<menuitem label="Add" id="AddOrganisation" />
+											<menuitem label="Modify" id="ModifyOrganisation" />
 										</menupopup>
 									</menu>
 									<menu label="People">
 										<menupopup>
-											<menuitem label="Add"
-												id="AddPerson" />
-											<menuitem label="Modify"
-												id="ModifyPeople" />
+											<menuitem label="Add" id="AddPerson" />
+											<menuitem label="Modify" id="ModifyPeople" />
 										</menupopup>
 									</menu>
 									<menu label="Projects">
 										<menupopup>
-											<menuitem label="Add"
-												id="AddProject" />
-											<menuitem label="Modify"
-												id="ModifyProject" />
-											<menuitem
-												label="Link Person" id="AddProjectPerson" />
+											<menuitem label="Add" id="AddProject" />
+											<menuitem label="Modify" id="ModifyProject" />
+											<menuitem label="Link Person" id="AddProjectPerson" />
+										</menupopup>
+									</menu>
+									<menu label="Device Models">
+										<menupopup>
+											<menuitem label="Add" id="AddDeviceModel" />
 										</menupopup>
 									</menu>
 								</menupopup>
 							</menu>
 						</menubar>
 					</tabpanel>
-					<tabpanel
-						style="padding:0px;margin:0px;border:0px;">
-						<menubar id="data_search_menu" width="100%"
-							orient="vertical">
-							<menu label="Advanced Search"
-								id="AdvancedSearch">
+					<tabpanel style="padding:0px;margin:0px;border:0px;">
+						<menubar id="data_search_menu" width="100%" orient="vertical">
+							<menu label="Tags &amp; Tag Releases" id="TagReleases">
 								<menupopup>
-									<menuitem label="Receiver Deployments"
-										id="ReceiverDeploymentsAdvancedSearch" />
-									<menuitem label="Tag Releases"
-										id="TagReleasesAdvancedSearch" />
-									<menuitem label="Receivers"
-										id="ReceiversAdvancedSearch" />
-									<menuitem label="Tags"
-										id="TagsAdvancedSearch" />
-									<menuitem label="Detections"
-										id="DetectionsAdvancedSearch" />
+									<menuitem label="Tags" id="ViewTagDevices" />
+									<menu label="Tag Release Summaries">
+										<menupopup>
+											<menuitem label="By Species" id="TagReleasesBySpecies" />
+											<menuitem label="By Location" id="TagReleasesByLocation" />
+										</menupopup>
+									</menu>
 								</menupopup>
 							</menu>
-							<menu label="Detections">
+							<menu label="Tag Detections" id="TagDetections">
 								<menupopup>
-									<menuitem
-										label="Receiver Deployment View"
-										id="DeploymentDetectionTreeView" />
-									<menuitem label="Tag View"
-										id="TagDetectionTreeView" />
-									<menuitem
-										label="Classification View"
-										id="ClassificationDetectionTreeView" />
+									<menu label="Summaries">
+										<menupopup>
+											<menuitem label="By Deployment Download" id="ViewDownloadsByDeployment" />
+											<menuitem label="By Installation" id="ViewDetectionSummaryByInstallation" />
+											<menuitem label="By Animal Classification" id="ViewDetectionSummaryByClassification" />
+											<menuitem label="By Tag Device" id="ViewDetectionSummaryBytagDevice" />
+											<menuitem label="By Location" id="ViewDetectionSummaryByLocation" />
+										</menupopup>
+									</menu>
+									<menu label="Detection Data Download">
+										<menupopup>
+											<menuitem label="Receiver Deployment View" id="DeploymentDetectionTreeView" />
+											<menuitem label="Tag View" id="TagDetectionTreeView" />
+											<menuitem label="Classification View" id="ClassificationDetectionTreeView" />
+										</menupopup>
+									</menu>
+									<menuitem label="Custom Search and Download" id="DetectionsAdvancedSearch" />
 								</menupopup>
 							</menu>
-							<menu label="Detections Summaries">
+							<menu label="Receivers" id="Receivers">
 								<menupopup>
-									<menuitem label="By Installation"
-										id="ViewDetectionSummaryByInstallation" />
-									<menuitem
-										label="By Animal Classification"
-										id="ViewDetectionSummaryByClassification" />
-									<menuitem label="By Tag Device"
-										id="ViewDetectionSummaryBytagDevice" />
-									<menuitem label="By Location"
-										id="ViewDetectionSummaryByLocation" />
+									<menuitem label="Receiver Devices" id="ViewReceiverDevices" />
+									<menu label="Deployment Summaries">
+										<menupopup>
+											<menuitem label="All" id="ViewDeployments" />
+											<menuitem label="By Project" id="ViewDeploymentsByProject" />
+											<!--menuitem label="By Organisation" id="ViewDeploymentsByOrganisation" />
+											<menuitem label="By Person" id="ViewDeploymentsByPerson" /-->
+											<menuitem label="By Location" id="ViewDeploymentsByLocation" />
+										</menupopup>
+									</menu>
 								</menupopup>
 							</menu>
-							<menu label="Devices">
+							<menu label="Custom Searches">
 								<menupopup>
-									<menuitem label="Tag Devices"
-										id="ViewTagDevices" />
-									<menuitem label="Receiver Devices"
-										id="ViewReceiverDevices" />
-									<menuitem label="Device Model"
-										id="ViewDeviceModels" />
+									<menuitem label="Receiver Deployments" id="ReceiverDeploymentsAdvancedSearch" />
+									<menuitem label="Tag Releases" id="TagReleasesAdvancedSearch" />
+									<menuitem label="Receivers" id="ReceiversAdvancedSearch" />
+									<menuitem label="Tags" id="TagsAdvancedSearch" />
+									<menuitem label="Detections" id="DetectionsAdvancedSearch1" />
 								</menupopup>
 							</menu>
-							<menu label="Receiver Deployments">
+							<menu label="Other Data">
 								<menupopup>
-									<menuitem label="By Project"
-										id="ViewDeploymentsByProject" />
-									<!--menuitem label="By Organisation"
-										id="ViewDeploymentsByOrganisation" />
-									<menuitem label="By Person"
-										id="ViewDeploymentsByPerson" /-->
-									<menuitem label="All"
-										id="ViewDeployments" />
-								</menupopup>
-							</menu>
-							<menu label="Receiver Retrievals/Downloads">
-								<menupopup>
-									<menuitem label="By Deployment"
-										id="ViewDownloadsByDeployment" />
-									<!--menuitem label="By Receiver Device"
-										id="ViewRetrievalsDownloadsByReceiver" />
-									<menuitem label="By Location"
-										id="ViewRetrievalsDownloadsByLocation" />
-									<menuitem label="All"
-										id="ViewRetrievalsDownloads" /-->
-								</menupopup>
-							</menu>
-							<menu label="Tag Releases">
-								<menupopup>
-									<menuitem label="By Species"
-										id="TagReleasesBySpecies" />
-									<menuitem label="Location"
-										id="TagReleasesByLocation" />
-								</menupopup>
-							</menu>
-							<menu label="Other">
-								<menupopup>
-									<menuitem label="Installations"
-										id="ViewInstallations" />
-									<menuitem label="Organisations"
-										id="ViewOrganisations" />
-									<menuitem label="People"
-										id="ViewPeople" />
-									<menuitem label="Projects"
-										id="ViewProjects" />
+									<menuitem label="Installations" id="ViewInstallations" />
+									<menuitem label="Organisations" id="ViewOrganisations" />
+									<menuitem label="Projects" id="ViewProjects" />
+									<menuitem label="People" id="ViewPeople" />
+									<menuitem label="Person-Roles" id="ViewProjectRolePerson" />
+									<menuitem label="Classifications" id="ViewClassifications" />
 								</menupopup>
 							</menu>
 						</menubar>
 					</tabpanel>
 					<!-- Tools-->
-					<tabpanel
-						style="padding:0px;margin:0px;border:0px;">
-						<menubar id="tools_menu" width="100%"
-							orient="vertical">
+					<tabpanel style="padding:0px;margin:0px;border:0px;">
+						<menubar id="tools_menu" width="100%" orient="vertical">
 							<menu label="Worksheets" id="Worksheets">
 								<menupopup>
 									<menu label="Receiver Deployments" id="ReceiverDeploymentWorksheets">
 										<menupopup>
-											<menuitem label="Retrievals"
-												id="DeploymentRetrievalWorksheets" />
-											<menuitem label="Data Downloads"
-												id="DeploymentDataDownloadWorksheets" />
+											<menuitem label="Retrievals" id="DeploymentRetrievalWorksheets" />
+											<menuitem label="Data Downloads" id="DeploymentDataDownloadWorksheets" />
 										</menupopup>
 									</menu>
 								</menupopup>
@@ -267,12 +222,10 @@
 						style="padding:0px;margin:0px;border:0px;">
 					</tabpanel-->
 					<!-- Links-->
-					<tabpanel
-						style="padding:0px;margin:0px;border:0px;">
+					<tabpanel style="padding:0px;margin:0px;border:0px;">
 					</tabpanel>
 					<!-- Help -->
-					<tabpanel
-						style="padding:0px;margin:0px;border:0px;">
+					<tabpanel style="padding:0px;margin:0px;border:0px;">
 					</tabpanel>
 				</tabpanels>
 			</tabbox>
@@ -280,12 +233,8 @@
 		<center flex="true" margins="5,0,5,0">
 			<include id="centerInclude" src="home.zul" />
 		</center>
-		<south size="40px" border="0" style="background:#0195ff;"
-			splittable="true">
-			<html>
-
-				
-				<![CDATA[ <div
+		<south size="40px" border="0" style="background:#0195ff;" splittable="true">
+			<html><![CDATA[ <div
 				style="width:100%;font-size:small;text-align:center;color:white;">
 				<a href="http://www.imos.org.au" title="Integrated
 				Marine Observing System"> IMOS </a> is supported by the
@@ -306,10 +255,7 @@
 				title="Integrated Marine Observing System"> © IMOS
 				Australia </a> Comments on this site? Contact us at <a
 				href="mailto:info@emii.org.au">info@emii.org.au</a>
-				</div> ]]>
-				
-				
-			</html>
+				</div> ]]></html>
 		</south>
 	</borderlayout>
 </window>

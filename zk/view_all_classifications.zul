@@ -1,0 +1,8 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="" border="none" height="100%" width="100%">
+<iframe id="iframe" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:classification&amp;outputformat=text/xml;%20subtype=xhtml_cb"
+				width="100%" height="100%" scrolling="auto"
+				style="border: 1px solid gray" />
+</window>
+</zk>

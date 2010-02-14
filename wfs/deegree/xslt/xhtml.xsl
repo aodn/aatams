@@ -184,7 +184,7 @@
 									<th colspan="1" rowspan="1">Person(Role)</th>
 								</tr>
 							</xsl:when>
-							<xsl:when test="gml:featureMember[1]/aatams:transmitter_device or gml:featureMember[1]/aatams:receiver_device">
+							<xsl:when test="gml:featureMember[1]/aatams:tag_device or gml:featureMember[1]/aatams:receiver_device">
 								<tr>
 									<th colspan="1" rowspan="1">ID</th>
 									<th colspan="1" rowspan="1">Code Name</th>
@@ -198,8 +198,20 @@
 									<th colspan="1" rowspan="1">Name</th>
 									<th colspan="1" rowspan="1">Manufacturer</th>
 								</tr>
+                            </xsl:when>
+							<xsl:when test="gml:featureMember[1]/aatams:project_person">
+								<tr>
+									<th colspan="2" rowspan="1">Project</th>
+									<th colspan="2" rowspan="1">Person</th>
+                                </tr>
+                                <tr>
+									<th colspan="1" rowspan="1">ID</th>
+									<th colspan="1" rowspan="1">Name</th>
+									<th colspan="1" rowspan="1">Person ID</th>
+									<th colspan="1" rowspan="1">Name(Role)</th>
+								</tr>
 							</xsl:when>
-							<xsl:when test="gml:featureMember[1]/aatams:animal">
+                            <xsl:when test="gml:featureMember[1]/aatams:animal">
 								<tr>
 									<th colspan="1" rowspan="2">Animal FID</th>
 									<th colspan="1" rowspan="2">Name</th>
@@ -226,6 +238,14 @@
 									<th colspan="1" rowspan="1">Disabled</th>
 									<th colspan="1" rowspan="1">Created</th>
 									<th colspan="1" rowspan="1">Modified</th>
+								</tr>
+                            </xsl:when>
+							<xsl:when test="gml:featureMember[1]/aatams:classification">
+								<tr>
+                                    <th colspan="1" rowspan="1">ID</th>
+                                    <th colspan="1" rowspan="1">Level</th>
+									<th colspan="1" rowspan="1">Name</th>
+									<th colspan="1" rowspan="1">Common Name</th>
 								</tr>
 							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:tag_release">
@@ -556,10 +576,10 @@
 			</td>
 		</tr>
 	</xsl:template>
-	<xsl:template match="aatams:transmitter_device">
+	<xsl:template match="aatams:tag_device">
 		<tr>
 			<td>
-				<xsl:value-of select="substring-after(@gml:id,'aatams.transmitter_device.')" />
+				<xsl:value-of select="substring-after(@gml:id,'aatams.tag_device.')" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:code_name" />
@@ -613,7 +633,7 @@
 				<xsl:value-of select="aatams:tag_id" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:tag_name" />
+				<xsl:value-of select="aatams:tag_code_name" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:family_id" />
@@ -631,22 +651,22 @@
 				<xsl:value-of select="aatams:receiver_id" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:receiver_name" />
+				<xsl:value-of select="aatams:receiver_code_name" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:longitude" />
+                <xsl:value-of select="substring-before(aatams:location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:latitude" />
+				<xsl:value-of select="substring-after(aatams:location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
 				<xsl:value-of select="translate(aatams:detection_timestamp,'T',' ')" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:release_longitude" />
+				<xsl:value-of select="substring-before(aatams:release_location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:release_latitude" />
+				<xsl:value-of select="substring-after(aatams:release_location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
 				<xsl:value-of select="translate(aatams:release_timestamp,'T',' ')" />
@@ -902,10 +922,36 @@
 			</td>
 		</tr>
 	</xsl:template>
-
-
-
-
-
-
+	<xsl:template match="aatams:classification">
+		<tr>
+			<td>
+				<xsl:value-of select="substring-after(@gml:id,'aatams.classification.')" />
+			</td>
+			<td>
+                <xsl:value-of select="aatams:classification_level_ref/aatams:classification_level/aatams:name" />
+			</td>
+			<td>
+				<xsl:value-of select="aatams:name" />
+			</td>
+			<td>
+				<xsl:value-of select="aatams:common_name" />
+			</td>
+		</tr>
+    </xsl:template>
+	<xsl:template match="aatams:project_person">
+		<tr>
+			<td>
+				<xsl:value-of select="substring-after(aatams:project_fid,'aatams.project.')" />
+			</td>
+			<td>
+                <xsl:value-of select="aatams:project_name" />
+			</td>
+			<td>
+				<xsl:value-of select="substring-after(aatams:person_fid,'aatams.person.')" />
+			</td>
+			<td>
+				<xsl:value-of select="aatams:person_role" />
+			</td>
+		</tr>
+	</xsl:template>
 </xsl:stylesheet>

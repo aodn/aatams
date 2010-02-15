@@ -1,5 +1,5 @@
       //global variables
-      var wfs = 'http://localhost:8080/deegree-wfs/services';
+      var wfs = '../../deegree-wfs/services';
       var feature_type = null;
       var params_div = null;
       var params_header_div = null;

@@ -58,10 +58,10 @@
 								<xsl:value-of select="aatams:receiver_device_ref/aatams:receiver_device/aatams:code_name" />
 							</td>
 							<td>
-								<xsl:value-of select="substring-before(aatams:location/gml:Point/gml:pos,' ')" />
+                                <xsl:value-of select="substring-before(aatams:location/gml:Point/gml:pos,' ')" />
 							</td>
 							<td>
-								<xsl:value-of select="substring-after(aatams:location/gml:Point/gml:pos,' ')" />
+								<xsl:value-of select="substring-after(aatams:location/gml:Point/gml:pos,' ')"/>
 							</td>
 							<td>
 								<xsl:value-of select="aatams:deployment_timestamp" />

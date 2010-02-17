@@ -128,11 +128,6 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 		centerInclude.setSrc("xform.zul?form=forms/create_receiver_deployment.xml");
 	}
 
-	public void onClick$ModifyDeployment(Event event) {
-		centerInclude.setSrc("not_implemented.zul");
-		// centerInclude.setSrc("xform.zul?form=forms/modify_receiver_deployment.xml");
-	}
-
 	public void onClick$AddRecovery(Event event) {
 		centerInclude.setSrc("xform.zul?form=forms/create_deployment_recovery.xml");
 	}
@@ -224,6 +219,10 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 	}
 	
 	public void onClick$DetectionsAdvancedSearch(Event event) {
+		centerInclude.setSrc("xform.zul?form=search/search.html?_dataset=detections");
+	}
+	
+	public void onClick$DetectionsAdvancedSearch1(Event event) {
 		centerInclude.setSrc("xform.zul?form=search/search.html?_dataset=detections");
 	}
 	
@@ -342,5 +341,59 @@ public class AATAMSHomePageComposer extends Window implements AfterCompose, Comp
 		centerInclude.setSrc("xform.zul?form=forms/download_worksheets.xml");
 	}
 	
+	public void onClick$ModifyTagDevice(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+	
+	public void onClick$DeleteTagDevice(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+	
+	public void onClick$ModifyTagRelease(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+	
+	public void onClick$DeleteTagRelease(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+	
+	public void onClick$ModifyReceiverDevice(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+	
+	public void onClick$DeleteReceiverDevice(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+	
+	public void onClick$ModifyDeployment(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+	
+	public void onClick$DeleteDeployment(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+	
+	public void onClick$ModifyRecovery(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+	
+	public void onClick$DeleteRecovery(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
 
+	public void onClick$ModifyPeople(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+	
+	public void onClick$ViewDeploymentsByLocation(Event event) {
+		centerInclude.setSrc("not_implemented.zul");
+	}
+	
+	public void onClick$ViewProjectRolePerson(Event event) {
+		centerInclude.setSrc("view_all_project_persons.zul");
+	}
+	
+	public void onClick$ViewClassifications(Event event) {
+		centerInclude.setSrc("view_all_classifications.zul");
+	}
 }

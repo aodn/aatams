@@ -36,13 +36,19 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
-import javax.sql.DataSource;
 import java.sql.DriverManager;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import org.postgis.*;
+
 
 /**
  * Processes an uploaded CSV export file from the AATAMS website.
+ * 
+ * This file contains the detections for a single receiver and represents a single 
+ * download from that receiver. As such this class looks for a pre-existing
+ * 'deployment_download' record to associate with the processing.
+ * 
+ * The file processing is performed by the <code>doProcessing()</code> method.
  * 
  * Reads and validates the file, sending feedback to the user.
  * 
@@ -82,8 +88,8 @@ public final class AcousticReceiverFileProcessor {
 	private int receiverDeploymentId = 0;
 	private int deploymentDownloadId = 0;
 	private Timestamp deploymentDownloadTimestamp = null;
-	private float deploymentLatitude;
-	private float deploymentLongitude;
+	private double deploymentLatitude;
+	private double deploymentLongitude;
 	private String ccEmailAddresses = null;
 	private File file;
 	
@@ -293,7 +299,7 @@ public final class AcousticReceiverFileProcessor {
 					// extract this to be used for any new tags added.
 					rset = smt.executeQuery("SELECT DEVICE.CODE_NAME, RECEIVER_DEPLOYMENT.DEPLOYMENT_ID, RECEIVER_DEPLOYMENT.PROJECT_ROLE_PERSON_ID, "
 							+ "RECEIVER_DEPLOYMENT.INSTALLATION_ID, RECEIVER_DEPLOYMENT.STATION_ID, " 
-							+ "RECEIVER_DEPLOYMENT.LONGITUDE, RECEIVER_DEPLOYMENT.LATITUDE, " 
+							+ "RECEIVER_DEPLOYMENT.LOCATION, " 
 							+ "DEPLOYMENT_DOWNLOAD.DOWNLOAD_TIMESTAMP, DEPLOYMENT_DOWNLOAD.CC_EMAIL_ADDRESSES "
 							+ "FROM AATAMS.DEPLOYMENT_DOWNLOAD, AATAMS.RECEIVER_DEPLOYMENT, AATAMS.DEVICE WHERE "
 							+ "DEPLOYMENT_DOWNLOAD.DEPLOYMENT_ID = RECEIVER_DEPLOYMENT.DEPLOYMENT_ID AND "
@@ -306,10 +312,11 @@ public final class AcousticReceiverFileProcessor {
 								projectRolePersonId = rset.getInt(3);
 								installationId = rset.getInt(4);
 								installationStationId = rset.getInt(5);
-								deploymentLongitude = rset.getFloat(6);
-								deploymentLatitude =  rset.getFloat(7);
-								deploymentDownloadTimestamp = rset.getTimestamp(8);
-								ccEmailAddresses = rset.getString(9);
+								PGgeometry geom = (PGgeometry)rset.getObject(6);
+								deploymentLongitude =  ((Point)geom.getGeometry()).getX();
+								deploymentLatitude = ((Point)geom.getGeometry()).getY();
+								deploymentDownloadTimestamp = rset.getTimestamp(7);
+								ccEmailAddresses = rset.getString(8);
 								if (projectRolePersonId == 0) {
 									logger.info("could not find a project_role_person record id to use for adding unknown tags to database");
 								}
@@ -343,7 +350,7 @@ public final class AcousticReceiverFileProcessor {
 			// 4. Find or create new tag records in the database.
 			// make MODEL_ID = 0 which links to the 'UNKNOWN TAG MODEL' model.
 			pst = conn.prepareStatement("INSERT INTO AATAMS.DEVICE (DEVICE_ID,DEVICE_TYPE_ID,MODEL_ID,CODE_NAME,PROJECT_ROLE_PERSON_ID)"
-					+ " VALUES (DEVICE_SERIAL.NEXTVAL,2,0,?,?)", Statement.RETURN_GENERATED_KEYS);
+					+ " VALUES (nextval('aatams.device_serial'),2,0,?,?)", Statement.RETURN_GENERATED_KEYS);
 			first = true;
 			for (Iterator<Entry<String, Tag>> i = tags.entrySet().iterator(); i.hasNext();) {
 				Tag tag = i.next().getValue();
@@ -360,15 +367,8 @@ public final class AcousticReceiverFileProcessor {
 					rset = pst.getGeneratedKeys();
 					if (rset != null) {
 						if (rset.next()) {
-							smt = conn.createStatement();
-							ResultSet rowId = smt.executeQuery("SELECT DEVICE_ID FROM AATAMS.DEVICE WHERE ROWID = '" + rset.getString(1) + "'");
-							if (rowId != null && rowId.next()) {
-								tag.id = Integer.valueOf(rowId.getInt(1));
-								messages.add("FID = aatams.device." + tag.id + ", code_name = " + tag.name);
-							} else {
-								throw new Exception("could not retrieve id of new tag device just created");
-							}
-							rowId.close();
+							tag.id = Integer.valueOf(rset.getInt(1));
+							messages.add("FID = aatams.device." + tag.id + ", code_name = " + tag.name);
 						}
 					}
 					rset.close();
@@ -516,7 +516,7 @@ public final class AcousticReceiverFileProcessor {
 			logger.info("inserting detection records");
 			try {
 				pst = conn.prepareStatement("INSERT INTO AATAMS.DETECTION (DETECTION_ID, DEPLOYMENT_ID, DOWNLOAD_ID, TAG_ID, DETECTION_TIMESTAMP)"
-						+ " VALUES (nextval(AATAMS.DETECTION_SERIAL)," + receiverDeploymentId + "," + deploymentDownloadId + ",?,?)");
+						+ " VALUES (nextval('AATAMS.DETECTION_SERIAL')," + receiverDeploymentId + "," + deploymentDownloadId + ",?,?)");
 				for (Iterator<Detection> i = detections.iterator(); i.hasNext();) {
 					Detection detection = i.next();
 					pst.setInt(1, detection.tag.id);
@@ -611,14 +611,14 @@ public final class AcousticReceiverFileProcessor {
 				BufferedWriter buffer = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
 				buffer.append("RECEIVER DOWNLOAD FILE PROCESSING REPORT\n\n");
 				buffer.append(String.format("%-20s %s%n","Processing file:",file.getName()));
-				buffer.append(String.format("%-20s %s%n","Installation:", installationName + " (FID*=aatams.installation." + installationId  + ")"));
-				buffer.append(String.format("%-20s %s%n","Station:", installationStationName + " (FID*=aatams.installation_station." + installationStationId  + ")"));
-				buffer.append(String.format("%-20s %s%n","Receiver Deployment:", receiverDeploymentName +  " (FID*=aatams.receiver_deployment." + receiverDeploymentId + ")" ));
+				buffer.append(String.format("%-20s %s%n","Installation:", installationName + " (ID*=" + installationId  + ")"));
+				buffer.append(String.format("%-20s %s%n","Station:", installationStationName + " (ID*=" + installationStationId  + ")"));
+				buffer.append(String.format("%-20s %s%n","Receiver Deployment:", receiverDeploymentName +  " (ID" + receiverDeploymentId + ")" ));
 				buffer.append(String.format("%-20s %s%n","Longitude:", deploymentLongitude));
 				buffer.append(String.format("%-20s %s%n","Latitude:", deploymentLatitude));
 				buffer.append(String.format("%-20s %s%n","Download Timestamp: ", (new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(deploymentDownloadTimestamp)) ));
-				buffer.append(String.format("%-20s %s%n%n","Deployment Owner: ", responsiblePersonNameAndRole + " (FID*=aatams.project_role_person." + projectRolePersonId + ")"));
-				buffer.append("* FID=Feature Identifier, This id code can be used in the AATAMS web site to retrieve specific features (records) of interest.\n");
+				buffer.append(String.format("%-20s %s%n%n","Deployment Owner: ", responsiblePersonNameAndRole + " (ID*=" + projectRolePersonId + ")"));
+				buffer.append("* = This id code can be used in the AATAMS web site to retrieve specific records of interest.\n");
 				buffer.append("Please see the help documentation on the website for more details (" + aatamsWebsiteUri + "?tab=help)\n\n");
 				// add the known tags table
 				if (tags.size() > newTags.size()) {
@@ -653,7 +653,7 @@ public final class AcousticReceiverFileProcessor {
 					long total = 0;
 					ArrayList<Long> deviceIds = new ArrayList<Long>();
 					if (detections.size() > 0) {
-						pst = conn.prepareStatement("INSERT INTO AATAMS.DOWNLOAD_TAG_SUMMARY(DOWNLOAD_ID,DEVICE_ID,DETECTION_COUNT)VALUES(?,?,?)");
+						pst = conn.prepareStatement("INSERT INTO AATAMS.DOWNLOAD_TAG_SUMMARY(DOWNLOAD_ID,DEVICE_ID,DETECTION_COUNT,DEPLOYMENT_ID)VALUES(?,?,?,?)");
 						smt = conn.createStatement();
 						rset = smt.executeQuery("SELECT DEVICE.DEVICE_ID, DEVICE.CODE_NAME, COUNT(*) AS COUNT "
 								+ "FROM AATAMS.DETECTION INNER JOIN AATAMS.DEVICE ON DETECTION.TAG_ID = DEVICE.DEVICE_ID " + "WHERE DETECTION.DOWNLOAD_ID = "
@@ -672,6 +672,7 @@ public final class AcousticReceiverFileProcessor {
 								pst.setLong(1, deploymentDownloadId);
 								pst.setLong(2, rset.getLong(1));
 								pst.setLong(3, rset.getLong(3));
+								pst.setLong(4, receiverDeploymentId);
 								pst.execute();
 							}
 							buffer.append("----------------------------------------\n");

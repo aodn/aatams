@@ -113,6 +113,8 @@
 					<xf:delete
 						nodeset="instance('inst_data')//aatams:time_correction_end[.='']" />
 					<xf:delete
+						nodeset="instance('inst_data')//aatams:time_correction_type[.='']" />
+                    <xf:delete
 						nodeset="instance('inst_data')//aatams:clock_drift[.='']" />
 					<xf:delete
 						nodeset="instance('inst_data')//aatams:pings[.='']" />
@@ -219,12 +221,12 @@
 						<xf:label>Time Correction End</xf:label>
 					</xf:input>
 				</div>
-				<div class="xfinput">
+				<!--div class="xfinput">
 					<xf:input bind="time_correction_type"
 						incremental="true()">
 						<xf:label>Time Correction Type</xf:label>
 					</xf:input>
-				</div>
+				</div-->
 				<div class="xfinput">
 					<xf:input bind="clock_drift" incremental="true()">
 						<xf:label>Clock Drift</xf:label>

@@ -69,6 +69,8 @@
       <column name="CLOCK_DRIFT" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PINGS" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="DETECTIONS" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+      <column name="LAST_DETECTION_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
+      <column name="FIRST_DETECTION_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
       <column name="CC_EMAIL_ADDRESSES" primaryKey="false" required="false" type="VARCHAR" size="500" autoIncrement="false"/>
       <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -231,7 +233,7 @@
       <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="DEVICE_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="MODEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="SERIAL_NUMBER" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+      <column name="SERIAL_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="PROJECT_ROLE_PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
 	     <unique-column name="CODE_NAME"/>
@@ -1269,6 +1271,24 @@
        <column name="FAMILY" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
        <column name="GENUS" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
        <column name="SPECIES" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
+    </view>
+   
+   <!--  a subfeature of deployment_summary --> 
+   <view name="DEPLOYMENT_TAG">
+       <column name="PKEY" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
+       <column name="RELEASE_ID" primaryKey="false" required="false" type="VARCHAR" size="10" autoIncrement="false"/>
+       <column name="FAMILY" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
+       <column name="GENUS" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
+       <column name="SPECIES" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
+       <foreign-key foreignTable="RECEIVER_DEPLOYMENT" name="DEPLOYMENT_TAG_FK00">
+        <reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID"/>
+       </foreign-key>
+       <foreign-key foreignTable="TAG_DEVICE" name="DEPLOYMENT_TAG_FK01">
+        <reference local="TAG_ID" foreign="DEVICE_ID"/>
+       </foreign-key>
     </view>
     
   </database>

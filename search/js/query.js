@@ -1455,7 +1455,7 @@
          if(element = document.getElementById('tag_name')){
             value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:transmitter_device_ref/aatams:transmitter_device/aatams:code_name', document.getElementById('tag_name_operator').value, value);   
+               filter += Comparison('aatams:tag_device_ref/aatams:tag_device/aatams:code_name', document.getElementById('tag_name_operator').value, value);   
          }
          if(value = GetDateTimeFilter('start_date')){
             if(value != "")

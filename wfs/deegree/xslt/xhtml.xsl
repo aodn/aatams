@@ -167,19 +167,19 @@
 							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:device">
 								<tr>
-									<th colspan="1" rowspan="2">Device FID</th>
+									<th colspan="1" rowspan="2">Device ID</th>
 									<th colspan="1" rowspan="2">Name</th>
 									<th colspan="4" rowspan="1">Model</th>
 									<th colspan="3" rowspan="1">Project</th>
 								</tr>
 								<tr>
 									<!-- Model -->
-									<th colspan="1" rowspan="1">Model FID</th>
+									<th colspan="1" rowspan="1">Model ID</th>
 									<th colspan="1" rowspan="1">Name</th>
 									<th colspan="1" rowspan="1">Manufacturer</th>
 									<th colspan="1" rowspan="1">Device Type</th>
 									<!-- Project -->
-									<th colspan="1" rowspan="1">Project FID</th>
+									<th colspan="1" rowspan="1">Project ID</th>
 									<th colspan="1" rowspan="1">Name</th>
 									<th colspan="1" rowspan="1">Person(Role)</th>
 								</tr>
@@ -548,13 +548,13 @@
 	<xsl:template match="aatams:device">
 		<tr>
 			<td>
-				<xsl:value-of select="@gml:id" />
+				<xsl:value-of select="substring-after(@gml:id,'aatams.device.')" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:code_name" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:device_model_ref/aatams:device_model/@gml:id" />
+				<xsl:value-of select="substring-after(aatams:device_model_ref/aatams:device_model/@gml:id,'aatams.device_model.')" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:device_model_ref/aatams:device_model/aatams:name" />
@@ -566,7 +566,7 @@
 				<xsl:value-of select="aatams:device_model_ref/aatams:device_model/aatams:device_type_ref/aatams:device_type/aatams:name" />
 			</td>
 			<td>
-				<xsl:value-of select="aatams:project_person_ref/aatams:project_person/aatams:project_fid" />
+				<xsl:value-of select="substring-after(aatams:project_person_ref/aatams:project_person/aatams:project_fid,'aatams.project.')" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:project_person_ref/aatams:project_person/aatams:project_name" />

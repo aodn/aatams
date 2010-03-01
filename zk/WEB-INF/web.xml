@@ -1,55 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
-  <display-name>zktest</display-name>
-   <context-param>
-    <param-name>downloads_path</param-name>
-    <param-value>c:/temp</param-value>
-  </context-param>	
-  <listener>
-  	<description>
-  	Used to cleanup when a session is destroyed</description>
-  	<display-name>
-  	ZK Session cleaner</display-name>
-  	<listener-class>org.zkoss.zk.ui.http.HttpSessionListener</listener-class>
-  </listener>
-  <servlet>
-  	<description>
-  	The ZK loader for ZUML pages</description>
-  	<servlet-name>zkLoader</servlet-name>
-  	<servlet-class>
-  	org.zkoss.zk.ui.http.DHtmlLayoutServlet</servlet-class>
-  	<init-param>
-  		<param-name>update-uri</param-name>
-  		<param-value>/zkau</param-value>
-  	</init-param>
-  	<load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet>
-  	<description>
-  	The asynchronous update engine for ZK</description>
-  	<servlet-name>auEngine</servlet-name>
-  	<servlet-class>
-  	org.zkoss.zk.au.http.DHtmlUpdateServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>zkLoader</servlet-name>
-  	<url-pattern>*.zul</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>zkLoader</servlet-name>
-  	<url-pattern>*.zhtml</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-  	<servlet-name>auEngine</servlet-name>
-  	<url-pattern>/zkau/*</url-pattern>
-  </servlet-mapping>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-    <welcome-file>index.zul</welcome-file>
-  </welcome-file-list>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<resource-ref>
+		<res-ref-name>jdbc/aatams</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
+	<display-name>zktest</display-name>
+	<context-param>
+		<param-name>DATA_FILE_UPLOADS_HOME_DIR</param-name>
+		<!-- param-value>/usr/local/emii/data/aatams/uploads</param-value -->
+		<param-value>c:/temp</param-value>
+	</context-param>
+	<context-param>
+		<param-name>DEPLOYMENT_DOWNLOAD_FID_PREFIX</param-name>
+		<param-value>aatams.deployment_download.</param-value>
+	</context-param>
+	<context-param>
+		<param-name>REPORT_SENDER_NAME</param-name>
+		<param-value>eMarine Information Infrastructure</param-value>
+	</context-param>
+	<context-param>
+		<param-name>REPORT_SENDER_EMAIL</param-name>
+		<param-value>data@emii.org.au</param-value>
+	</context-param>
+	<context-param>
+		<param-name>SMTP_HOST</param-name>
+		<param-value>postoffice.utas.edu.au</param-value>
+	</context-param>
+	<context-param>
+		<param-name>SMTP_PORT</param-name>
+		<param-value>25</param-value>
+	</context-param>
+	<context-param>
+		<param-name>SMTP_USER</param-name>
+		<param-value>sc04</param-value>
+	</context-param>
+	<context-param>
+		<param-name>SMTP_PASSWORD</param-name>
+		<param-value>66CoStHo</param-value>
+	</context-param>
+	<context-param>
+		<param-name>HOME_URI</param-name>
+		<param-value>http://test.emii.org.au/aatams</param-value>
+	</context-param>
+	<listener>
+		<description>
+			Used to cleanup when a session is destroyed
+		</description>
+		<display-name>ZK Session cleaner</display-name>
+		<listener-class>
+			org.zkoss.zk.ui.http.HttpSessionListener
+		</listener-class>
+	</listener>
+	<servlet>
+		<description>The ZK loader for ZUML pages</description>
+		<servlet-name>zkLoader</servlet-name>
+		<servlet-class>
+			org.zkoss.zk.ui.http.DHtmlLayoutServlet
+		</servlet-class>
+		<init-param>
+			<param-name>update-uri</param-name>
+			<param-value>/zkau</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>The asynchronous update engine for ZK</description>
+		<servlet-name>auEngine</servlet-name>
+		<servlet-class>
+			org.zkoss.zk.au.http.DHtmlUpdateServlet
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>zkLoader</servlet-name>
+		<url-pattern>*.zul</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>zkLoader</servlet-name>
+		<url-pattern>*.zhtml</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>auEngine</servlet-name>
+		<url-pattern>/zkau/*</url-pattern>
+    </servlet-mapping>
+
+
+   <security-constraint>
+      <display-name>Security Constraint</display-name>
+      <web-resource-collection>
+         <web-resource-name>Protected Area</web-resource-name>
+	    <!-- Define the context-relative URL(s) to be protected -->
+        <url-pattern>/*.zul</url-pattern>
+        <url-pattern>/*.xml</url-pattern>
+        <url-pattern>/forms/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <!-- Anyone with one of the listed roles may access this area -->
+         <role-name>aatams</role-name>
+      </auth-constraint>
+    </security-constraint>
+    <!-- Default login configuration uses form-based authentication -->
+    <login-config>
+      <auth-method>FORM</auth-method>
+      <realm-name>User Login Required</realm-name>
+      <form-login-config>
+          <form-login-page>/login.html</form-login-page>
+          <form-error-page>/error.html</form-error-page>
+      </form-login-config>
+    </login-config>
+    <!-- Security roles referenced by this web application -->
+    <security-role>
+      <role-name>aatams</role-name>
+    </security-role>
+
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+		<welcome-file>index.zul</welcome-file>
+    </welcome-file-list>
+
+
+
+
+
 </web-app>

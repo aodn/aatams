@@ -9,6 +9,7 @@
 		background-image:url('img/fish-school_1.jpg');
 		background-repeat:no-repeat; /*background-position:0px -100px;*/
 		}
+		.logout {position:absolute; bottom:10px; right:10px; font-size:0.75em; font-weight:bold; color:white; cursor:pointer;}
 	</style>
 	<borderlayout width="100%" height="100%">
 		<north size="80px" border="0" sclass="header">
@@ -17,9 +18,10 @@
 					<!--  <textbox sclass="demo-search-inp" />
 						<separator orient="vertical" />
 						<button label="Search Site" /> -->
+					<html><![CDATA[<div class="logout" onclick="javascript:document.location='logout.jsp';">LOG OUT</div>]]></html>
 				</div>
 				<label style="position:absolute; top:30px; left:70px; font-size:24px;color:white;font-weight:bold;" value="Australian Acoustic Tracking and Monitoring System" />
-				<label style="position:absolute; top:50px; left:70px; font-size:24px;color:red;font-weight:bold;" value="(Under Development)" />
+				<!--  label style="position:absolute; top:50px; left:70px; font-size:24px;color:red;font-weight:bold;" value="(Under Development)" /-->
 			</div>
 		</north>
 		<!--  north size="80px" border="0" >
@@ -53,7 +55,7 @@
 										<menupopup>
 											<menuitem label="Add" id="AddTagDevice" />
 											<menuitem label="Modify" id="ModifyTagDevice" />
-											<menuitem label="Detele" id="DeleteTagDevice" />
+											<menuitem label="Delete" id="DeleteTagDevice" />
 										</menupopup>
 									</menu>
 									<menu label="Tag Releases">

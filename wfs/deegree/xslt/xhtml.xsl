@@ -380,7 +380,8 @@
 								</tr>
 							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:tag_release_min">
-								<tr>
+                                <tr>
+                                    <th colspan="1" rowspan="2">Release ID</th>
 									<th colspan="3" rowspan="1">Classification</th>
 									<th colspan="2" rowspan="1">Project</th>
 									<th colspan="2" rowspan="1">Tag</th>
@@ -889,7 +890,10 @@
 		</tr>
 	</xsl:template>
 	<xsl:template match="aatams:tag_release_min">
-		<tr>
+        <tr>
+            <td>
+				<xsl:value-of select="substring-after(@gml:id,'aatams.tag_release_min.')" />
+			</td>
 			<td>
 				<xsl:value-of select="aatams:family" />
 			</td>

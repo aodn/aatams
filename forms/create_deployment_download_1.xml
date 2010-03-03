@@ -98,6 +98,7 @@
 				required="false()" />
 			<xf:bind id="error_message"
 				nodeset="instance('inst_response')//ServiceException"
+				calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
 				type="xsd:string" />
 			<xf:bind id="success_message"
 				nodeset="instance('inst_response')//ogc:FeatureId/@fid"
@@ -114,7 +115,7 @@
 						nodeset="instance('inst_data')//aatams:time_correction_end[.='']" />
 					<xf:delete
 						nodeset="instance('inst_data')//aatams:time_correction_type[.='']" />
-                    <xf:delete
+					<xf:delete
 						nodeset="instance('inst_data')//aatams:clock_drift[.='']" />
 					<xf:delete
 						nodeset="instance('inst_data')//aatams:pings[.='']" />
@@ -150,17 +151,16 @@
 			</xf:action>
 		</xf:model>
 		<script type="text/javascript">
-			function upload(){ 
-				var model1 = document.getElementById('model1').xfElement; 
-				var binding = document.getElementById('success_message').xfElement.binding;
-				var result = binding.evaluate(model1.getInstanceDocument('inst_response'));
-				if(result.length > 0){
-					//document.getElementById("iframe").src="../upload.zul?fid="+result[0].nodeValue;
-					document.location="../upload.zul?fid="+result[0].nodeValue;
-				}else{ 
-					alert("error: no new feature id could be obtained");
-				} 
-			}
+			function upload(){ var model1 =
+			document.getElementById('model1').xfElement; var binding =
+			document.getElementById('success_message').xfElement.binding;
+			var result =
+			binding.evaluate(model1.getInstanceDocument('inst_response'));
+			if(result.length > 0){
+			//document.getElementById("iframe").src="../upload.zul?fid="+result[0].nodeValue;
+			document.location="../upload.zul?fid="+result[0].nodeValue;
+			}else{ alert("error: no new feature id could be obtained");
+			} }
 		</script>
 	</head>
 	<body>
@@ -223,10 +223,10 @@
 				</div>
 				<!--div class="xfinput">
 					<xf:input bind="time_correction_type"
-						incremental="true()">
-						<xf:label>Time Correction Type</xf:label>
+					incremental="true()">
+					<xf:label>Time Correction Type</xf:label>
 					</xf:input>
-				</div-->
+					</div-->
 				<div class="xfinput">
 					<xf:input bind="clock_drift" incremental="true()">
 						<xf:label>Clock Drift</xf:label>
@@ -286,8 +286,8 @@
 				<!--xf:group
 					ref="instance('inst_response')//ogc:FeatureId/@fid">
 					<iframe id="iframe" src=""
-						style="width:100%;height:250px;border:none;overflow:hidden;" />
-				</xf:group-->
+					style="width:100%;height:250px;border:none;overflow:hidden;" />
+					</xf:group-->
 			</div>
 		</div>
 		<br />

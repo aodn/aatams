@@ -303,8 +303,8 @@
                " <input id='receiver_id' type='text' size='10' onblur='Reset()'/></td></tr>" +
             "<tr><td class='param_name'>Receiver Model:</td><td class='last_row'>" + OperatorList('=','receiver_model_name_operator') +
                " " + ReceiverModelSelectList() + "</td></tr>" +
-            "<tr><td class='param_name'>Receiver Code Name:</td><td>" + OperatorList('=','receiver_code_name_operator') +
-               " <input id='receiver_code_name' type='text' size='20'/></td></tr>" +
+            "<tr><td class='param_name'>Receiver Code Name:</td><td>" + OperatorList('=','receiver_name_operator') +
+               " <input id='receiver_name' type='text' size='20'/></td></tr>" +
             "<tr><td class='param_name last_row'>Location Bounding Box: </td><td class='last_row'>" + LocationBoundingBox() + "</td></tr>" +
             "</tbody></table>";
       }
@@ -1331,10 +1331,10 @@
             if(value != "")
                filter += Comparison('aatams:receiver_device_ref/aatams:receiver_device/aatams:model_name', document.getElementById('receiver_model_name_operator').value, value);   
          }
-         if(element = document.getElementById('receiver_code_name')){
+         if(element = document.getElementById('receiver_name')){
             value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:receiver_device_ref/aatams:receiver_device/aatams:code_name', document.getElementById('receiver_code_name_operator').value, value);  
+               filter += Comparison('aatams:receiver_device_ref/aatams:receiver_device/aatams:code_name', document.getElementById('receiver_name_operator').value, value);  
          }         
          if(bbox = GetBoundingBoxFilter('aatams:location')){
             filter += bbox;   
@@ -1370,10 +1370,10 @@
             if(value != "")
                filter += Comparison('aatams:receiver_id', document.getElementById('receiver_id_operator').value, value);   
          }
-         if(element = document.getElementById('receiver_code_name')){
+         if(element = document.getElementById('receiver_name')){
             value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:receiver_name', document.getElementById('receiver_name_operator').value, value);   
+               filter += Comparison('aatams:receiver_code_name', document.getElementById('receiver_name_operator').value, value);   
          }
          //tag
          if(element = document.getElementById('tag_id')){
@@ -1384,7 +1384,7 @@
          if(element = document.getElementById('tag_code_name')){
             value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
-               filter += Comparison('aatams:tag_name', document.getElementById('tag_name_operator').value, value);   
+               filter += Comparison('aatams:tag_code_name', document.getElementById('tag_name_operator').value, value);   
          }
          //release
          if(element = document.getElementById('start_date')){

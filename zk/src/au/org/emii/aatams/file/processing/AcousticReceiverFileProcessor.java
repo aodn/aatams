@@ -3,6 +3,7 @@
  */
 package au.org.emii.aatams.file.processing;
 
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,14 +19,12 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
 import javax.mail.Message.RecipientType;
-import javax.mail.search.RecipientTerm;
 import javax.activation.FileDataSource;
 import org.codemonkey.vesijama.Email;
 import org.codemonkey.vesijama.Mailer;
@@ -77,9 +76,9 @@ public final class AcousticReceiverFileProcessor {
 	private String aatamsWebsiteUri = null;
 	private Logger logger = Logger.getLogger(this.getClass());
 	private Connection conn = null;
-	private TreeMap<String, Tag> tags = new TreeMap<String, Tag>();
-	private TreeMap<String, Tag> newTags = new TreeMap<String, Tag>();
-	private ArrayList<Detection> detections = new ArrayList<Detection>();
+	private Map<String, Tag> tags = new TreeMap<String, Tag>();
+	private Map<String, Tag> newTags = new TreeMap<String, Tag>();
+	private List<Detection> detections = new ArrayList<Detection>();
 	private String receiverName = null;
 	private String downloadFid = null;
 	private int installationId = 0;
@@ -145,6 +144,31 @@ public final class AcousticReceiverFileProcessor {
 		//configure logging
 		BasicConfigurator.configure();
 	}
+	
+	/**
+	 * Processes a list of detections and a map of Tags for those detections. This method 
+	 * is used by the <class>BulkArchiveFileProcessor</class>.
+	 * 
+	 * @param database - database connection
+	 * @param downloadFid - the Feature Identifier (gml:id) for the deployment download
+	 * @param tags - A Map of Tags found in the detections data
+	 * @param messages - array for message addition to return to user
+	 */
+	public void doProcessing(Connection connection, String downloadFid, Map<String, Tag> tags,
+			List<Detection> detections, List<String> messages) throws IllegalArgumentException {
+		if(tags == null){
+			throw new IllegalArgumentException("tags map argument cannot be null");
+		}else{
+			this.tags = tags;
+		}
+		if(detections == null){
+			throw new IllegalArgumentException("detections list argument cannot be null");
+		}else{
+			this.detections = detections;
+		}
+		//remove any previously found new tags
+		this.newTags.clear();
+	}
 
 	/**
 	 * Processes an uploaded CSV export file from the AATAMS website. 
@@ -155,7 +179,7 @@ public final class AcousticReceiverFileProcessor {
 	 * @param messages - array for message addition to return to user
 	 */
 	public void doProcessing(Connection connection, String downloadFid, String filePath, 
-			ArrayList<String> messages) throws IllegalArgumentException {
+			List<String> messages) throws IllegalArgumentException {
 		//validate parameters
 		if(connection == null){
 			throw new IllegalArgumentException("database connection argument cannot be null");
@@ -182,7 +206,6 @@ public final class AcousticReceiverFileProcessor {
 		if(messages == null){
 			throw new IllegalArgumentException("messages argument cannot be null");
 		}
-		boolean success = false;
 
 		try {
 			conn.setAutoCommit(false); //want to rollback if error!
@@ -256,7 +279,25 @@ public final class AcousticReceiverFileProcessor {
 				throw new Exception("exiting, could not read datafile", e);
 			} catch (Exception e) {
 				throw new Exception("exiting, could not process datafile", e);
-			}
+			}	
+			//process data for a single deployment
+			this.processDeploymentDownload(messages);
+		}catch(Exception e){
+			
+		}
+	}
+		
+	/**
+	 * Common single deployment detection data processing pathway method
+	 * 
+	 * 
+	 * @param messages
+	 */
+	private void processDeploymentDownload(List<String> messages){
+			
+		boolean success = false;
+		
+		try{
 			//if no detections?
 			if(detections.size()==0){
 				messages.add("No detection records found in file, file processing completed");
@@ -279,7 +320,7 @@ public final class AcousticReceiverFileProcessor {
 							first = false;
 						}
 						tag.id = rset.getInt(1);
-						messages.add("FID = aatams.device." + tag.id + ", code-name = " + tag.name );
+						messages.add("ID = " + tag.id + ", code-name = " + tag.name );
 					}
 				}
 				rset.close();
@@ -321,7 +362,7 @@ public final class AcousticReceiverFileProcessor {
 									logger.info("could not find a project_role_person record id to use for adding unknown tags to database");
 								}
 							}else{
-								String msg = "The receiver code name read from the csv file does not match that associatd with deployment download FID='" + downloadFid + "'";
+								String msg = "The receiver code name read from the csv file does not match that associated with deployment download ID='" + downloadFid.replace("aatams.deployment_download.", "") + "'";
 								messages.add(msg);
 								throw new Exception(msg);
 							}
@@ -343,7 +384,7 @@ public final class AcousticReceiverFileProcessor {
 			rset = smt.executeQuery("SELECT DOWNLOAD_ID FROM AATAMS.DEPLOYMENT_DOWNLOAD\n" +
 					"WHERE UPPER(FILENAME) = '" + file.getName().toUpperCase() + "'");
 			if(rset.next()){
-				throw new Exception("A download file with the same name is associated with another deployment download FID=aatams.deployment_download."+rset.getLong(1));
+				throw new Exception("A download file with the same name is associated with another deployment download ID="+rset.getLong(1));
 			}
 			rset.close();
 			smt.close();
@@ -368,7 +409,7 @@ public final class AcousticReceiverFileProcessor {
 					if (rset != null) {
 						if (rset.next()) {
 							tag.id = Integer.valueOf(rset.getInt(1));
-							messages.add("FID = aatams.device." + tag.id + ", code_name = " + tag.name);
+							messages.add("ID = " + tag.id + ", code_name = " + tag.name);
 						}
 					}
 					rset.close();
@@ -486,6 +527,10 @@ public final class AcousticReceiverFileProcessor {
 			this.timestamp = detectionDatetime;
 		}
 	}
+	
+	public Detection createDetection(Tag tag, Timestamp detectionDatetime){
+		return new Detection(tag, detectionDatetime);
+	}
 
 	private class Tag {
 
@@ -496,6 +541,10 @@ public final class AcousticReceiverFileProcessor {
 		public Tag(String tagName) {
 			this.name = tagName;
 		}
+	}
+	
+	public Tag createTag(String tagName){
+		return new Tag(tagName);
 	}
 
 	private class DetectionsInserterAndReportGenerator extends Thread {
@@ -624,13 +673,13 @@ public final class AcousticReceiverFileProcessor {
 				if (tags.size() > newTags.size()) {
 					buffer.append("KNOWN TAGS\n");
 					buffer.append("----------------------------------------\n");
-					buffer.append("TAG CODE NAME            TAG DEVICE FID*\n");
+					buffer.append("TAG CODE NAME                   TAG ID*\n");
 					buffer.append("----------------------------------------\n");
 					for (Iterator<Entry<String, Tag>> i = tags.entrySet().iterator(); i.hasNext();) {
 						Entry<String, Tag> entry = i.next();
 						if (!newTags.containsKey(entry.getKey())) {
 							Tag tag = entry.getValue();
-							buffer.append(String.format("%-20s%20s%n", tag.name, "aatams.device." + tag.id));
+							buffer.append(String.format("%-20s%20s%n", tag.name,  tag.id));
 						}
 					}
 					buffer.append("----------------------------------------\n\n");
@@ -639,11 +688,11 @@ public final class AcousticReceiverFileProcessor {
 				if (newTags.size() > 0) {
 					buffer.append("UNKNOWN(NEW)TAGS\n");
 					buffer.append("----------------------------------------\n");
-					buffer.append("TAG CODE NAME            TAG DEVICE FID*\n");
+					buffer.append("TAG CODE NAME                   TAG ID*\n");
 					buffer.append("----------------------------------------\n");
 					for (Iterator<Entry<String, Tag>> i = newTags.entrySet().iterator(); i.hasNext();) {
 						Tag tag = i.next().getValue();
-						buffer.append(String.format("%-20s%20s%n", tag.name, "aatams.device." + tag.id));
+						buffer.append(String.format("%-20s%20s%n", tag.name,  tag.id));
 					}
 					buffer.append("----------------------------------------\n\n");
 				}
@@ -718,7 +767,7 @@ public final class AcousticReceiverFileProcessor {
 									if (rset.isFirst()) {
 										buffer.append("AVAILABLE RELEASE INFORMATION SUMMARY FOR TAGS DETECTED\n");
 										buffer.append("-----------------------------------------------------------------------------------\n");
-										buffer.append("TAG CODE NAME     TAG RELEASE FID*          ANIMAL CLASSIFICATION                  \n");
+										buffer.append("TAG CODE NAME               TAG ID*          ANIMAL CLASSIFICATION                  \n");
 										buffer.append("-----------------------------------------------------------------------------------\n");
 									}
 									buffer.append(String.format("%-18s%-26s%-36s%n", rset.getString(2), "aatams.tag_release." + rset.getString(1), rset
@@ -770,7 +819,7 @@ public final class AcousticReceiverFileProcessor {
 					if(validator.isValid(projectAddressTo)){
 						email.addRecipient(projectPersonName, projectAddressTo, RecipientType.TO);
 						email.addRecipient(reportSenderName, reportSenderEmailAddress, RecipientType.BCC);
-						email.setSubject("AATAMS Deployment Download Processing Report (FID=aatams.deployment_download." + deploymentDownloadId + ")");
+						email.setSubject("AATAMS Deployment Download Processing Report (ID=" + deploymentDownloadId + ")");
 						email.setText("Please find attached a report with details of a Receiver Deployment Download just processed");
 						email.addAttachment(reportName, new FileDataSource(reportFolder + "/" + reportName));
 						if(ccEmailAddresses != null){
@@ -825,7 +874,7 @@ public final class AcousticReceiverFileProcessor {
 							email.setText("The following tags, having a tag release under your name, have been found "
 									+ "in another person's deployment download: \n" + entry.getValue().toString() + "\n\n"
 									+ "Please contact the responsible person (carbon-copied this email) or obtain more"
-									+ "information via the deployment download record FID=aatams.deployment_download." + deploymentDownloadId
+									+ "information via the deployment download record ID=" + deploymentDownloadId
 									+ " viewable at the AATAMS web site (" + aatamsWebsiteUri + ").");
 							if(ccEmailAddresses != null ){
 								String[] addresses = ccEmailAddresses.split(";\\s*|,\\s*|\\s+");

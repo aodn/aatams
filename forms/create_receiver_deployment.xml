@@ -199,7 +199,7 @@
                   <xf:label>Device</xf:label>
                   <xf:itemset nodeset="instance('inst_receiver_device')/gml:featureMember/aatams:receiver_device">
                      <xf:value ref="@gml:id"/>
-                     <xf:label ref="aatams:name"/>
+                     <xf:label ref="aatams:code_name"/>
                   </xf:itemset>
                </xf:select1>
             </div>
@@ -241,7 +241,8 @@
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
                      <xf:action ev:event="xforms-value-changed">
-                        <xf:setvalue ref="instance('inst_subfeatures')/project_person_id" value=""/>
+                        <xf:setvalue ref="instance('inst_subfeatures')/project_person_id"
+                                     value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
                      </xf:action>
                   </xf:select1>
                </div>

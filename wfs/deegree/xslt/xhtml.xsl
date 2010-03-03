@@ -6,17 +6,19 @@
 		<html>
 			<head>
 				<style type="text/css">
-                			th{ border: 1px solid #6699CC;
+                	th{ border: 1px solid #6699CC;
 					border-collapse: collapse;
 					background-color: #BEC8D1;
 					font-family: Verdana;
 					font-weight: bold;
 					font-size: 11px;
 					color: /*#404040*/ black; padding: 5px; }
-               	 			tr{ vertical-align:top; }
+               	 	tr{ vertical-align:top; }
 					td{ border: 1px solid #9CF;
-					border-collapse: collapse;font-family: Verdana, sans-serif, Arial;
-					padding:0px 10px;
+                    border-collapse: collapse;
+                    font-family: Verdana, sans-serif, Arial;
+                    padding:0px 10px;
+                    text-align:right;
 					font-weight: normal;
 					font-size: 11px;
 					color: /*#404040*/ black;
@@ -30,7 +32,8 @@
 					background-color: #fafafa;
 					border: 1px #6699CC solid;
 					border-collapse: collapse;
-					border-spacing: 0px; }
+                    border-spacing: 0px; }
+                    .text {text-align:left;}
 				</style>
 			</head>
 			<body>
@@ -455,16 +458,16 @@
 			<td>
 				<xsl:value-of select="substring-after(aatams:installation_ref/aatams:installation/@gml:id,'aatams.installation.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:installation_ref/aatams:installation/aatams:name" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:installation_ref/aatams:installation/aatams:installation_conf_ref/aatams:installation_conf/aatams:name" />
 			</td>
 			<td>
 				<xsl:value-of select="substring-after(aatams:station_ref/aatams:station/@gml:id,'aatams.station.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:station_ref/aatams:station/aatams:name" />
 			</td>
 			<td>
@@ -473,7 +476,7 @@
 			<td>
 				<xsl:value-of select="substring-after(aatams:receiver_device_ref/aatams:receiver_device/@gml:id,'aatams.receiver_device.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:receiver_device_ref/aatams:receiver_device/aatams:code_name" />
 			</td>
 			<td>
@@ -485,13 +488,13 @@
 			<td>
 				<xsl:value-of select="translate(aatams:deployment_timestamp,'T',' ')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:mooring_type_ref/aatams:mooring_type/aatams:name" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:bottom_depth" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:comments" />
 			</td>
 		</tr>
@@ -501,16 +504,16 @@
 			<td>
 				<xsl:value-of select="substring-after(@gml:id,'aatams.tag_release.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:project_person_ref/aatams:project_person/aatams:project_name" />
 			</td>
 			<td>
 				<xsl:value-of select="substring-after(aatams:tag_device_ref/aatams:tag_device/@gml:id,'aatams.tag_device.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:tag_device_ref/aatams:tag_device/aatams:code_name" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:choose>
 					<xsl:when test="aatams:species_ref">
 						<xsl:value-of select="aatams:species_ref/aatams:species/aatams:name" />
@@ -541,7 +544,7 @@
 			<td>
 				<xsl:value-of select="translate(aatams:release_timestamp,'T',' ')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:implant_type_ref/aatams:implant_type/aatams:name" />
 			</td>
 		</tr>
@@ -551,28 +554,28 @@
 			<td>
 				<xsl:value-of select="substring-after(@gml:id,'aatams.device.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:code_name" />
 			</td>
 			<td>
 				<xsl:value-of select="substring-after(aatams:device_model_ref/aatams:device_model/@gml:id,'aatams.device_model.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:device_model_ref/aatams:device_model/aatams:name" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:device_model_ref/aatams:device_model/aatams:device_manufacturer_ref/aatams:device_manufacturer/aatams:name" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:device_model_ref/aatams:device_model/aatams:device_type_ref/aatams:device_type/aatams:name" />
 			</td>
 			<td>
 				<xsl:value-of select="substring-after(aatams:project_person_ref/aatams:project_person/aatams:project_fid,'aatams.project.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:project_person_ref/aatams:project_person/aatams:project_name" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:project_person_ref/aatams:project_person/aatams:person_role" />
 			</td>
 		</tr>
@@ -582,10 +585,10 @@
 			<td>
 				<xsl:value-of select="substring-after(@gml:id,'aatams.tag_device.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:code_name" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:model_name" />
 			</td>
 		</tr>
@@ -595,10 +598,10 @@
 			<td>
 				<xsl:value-of select="substring-after(@gml:id,'aatams.receiver_device.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:code_name" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:model_name" />
 			</td>
 		</tr>
@@ -608,13 +611,13 @@
 			<td>
 				<xsl:value-of select="substring-after(@gml:id,'aatams.device_model.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:device_type_ref/aatams:device_type/aatams:name" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:name" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:device_manufacturer_ref/aatams:device_manufacturer/aatams:name" />
 			</td>
 		</tr>
@@ -633,7 +636,7 @@
 			<td>
 				<xsl:value-of select="aatams:tag_id" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:tag_code_name" />
 			</td>
 			<td>
@@ -651,7 +654,7 @@
 			<td>
 				<xsl:value-of select="aatams:receiver_id" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:receiver_code_name" />
 			</td>
 			<td>
@@ -682,13 +685,13 @@
 			<td rowspan="{$tag_row_count}" colspan="1">
 				<xsl:value-of select="aatams:installation" />
 			</td>
-			<td rowspan="{$tag_row_count}" colspan="1">
+			<td rowspan="{$tag_row_count}" colspan="1"  class="text">
 				<xsl:value-of select="aatams:installation_name" />
 			</td>
 			<td rowspan="{$tag_row_count}" colspan="1">
 				<xsl:value-of select="aatams:station" />
 			</td>
-			<td rowspan="{$tag_row_count}" colspan="1">
+			<td rowspan="{$tag_row_count}" colspan="1"  class="text">
 				<xsl:value-of select="aatams:station_name" />
 			</td>
 			<td rowspan="{$tag_row_count}" colspan="1">
@@ -703,7 +706,7 @@
 			<td rowspan="1" colspan="1">
 				<xsl:value-of select="aatams:detections_by_station_tag_ref[1]/aatams:detections_by_station_tag/aatams:tag_id" />
 			</td>
-			<td rowspan="1" colspan="1">
+			<td rowspan="1" colspan="1" class="text">
 				<xsl:value-of select="aatams:detections_by_station_tag_ref[1]/aatams:detections_by_station_tag/aatams:tag_code_name" />
 			</td>
 			<td rowspan="1" colspan="1">
@@ -715,7 +718,7 @@
 				<td rowspan="1" colspan="1">
 					<xsl:value-of select="aatams:detections_by_station_tag/aatams:tag_id" />
 				</td>
-				<td rowspan="1" colspan="1">
+				<td rowspan="1" colspan="1" class="text">
 					<xsl:value-of select="aatams:detections_by_station_tag/aatams:tag_code_name" />
 				</td>
 				<td rowspan="1" colspan="1">
@@ -729,13 +732,13 @@
 			<td>
 				<xsl:value-of select="aatams:project" />
             </td>
-            <td>
+            <td class="text">
 				<xsl:value-of select="aatams:project_name" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:tag" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:tag_name" />
 			</td>
 			<td>
@@ -757,7 +760,7 @@
 			<td>
 				<xsl:value-of select="aatams:tag" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:tag_name" />
 			</td>
 			<td>
@@ -770,10 +773,10 @@
 			<td>
 				<xsl:value-of select="substring-after(@gml:id,'aatams.installation.')"/>
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:name" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:installation_conf_ref/aatams:installation_conf/aatams:name" />
 			</td>
 		</tr>
@@ -783,13 +786,13 @@
 			<td>
 				<xsl:value-of select="substring-after(@gml:id,'aatams.project.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:name" />
 			</td>
 			<td>
 				<xsl:value-of select="substring-after(aatams:organisation_ref/aatams:organisation/@gml:id,'aatams.organisation.')"/>
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:organisation_ref/aatams:organisation/aatams:name" />
 			</td>
 		</tr>
@@ -799,7 +802,7 @@
 			<td>
 				<xsl:value-of select="substring-after(@gml:id,'aatams.person.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:name" />
 			</td>
 			<td>
@@ -808,34 +811,34 @@
 			<td>
 				<xsl:value-of select="aatams:home_phone_number" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:email"/>
 			</td>
-			<td>
+			<td class="text"> 
 				<xsl:value-of select="aatams:home_physical_address_1" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:home_physical_address_2" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:home_physical_address_state" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:home_physical_address_country" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:home_physical_address_postcode" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:home_postal_address_1" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:home_postal_address_2" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:home_postal_address_state" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:home_postal_address_country" />
 			</td>
 			<td>
@@ -848,7 +851,7 @@
 			<td>
 				<xsl:value-of select="substring-after(@gml:id,'aatams.organisation.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:name" />
 			</td>
 			<td>
@@ -857,34 +860,34 @@
 			<td>
 				<xsl:value-of select="aatams:fax_number" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:physical_address_1" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:physical_address_2" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:physical_address_state" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:physical_address_country" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:physical_address_postcode" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:postal_address_1" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:postal_address_2" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:postal_address_state" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:postal_address_country" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:postal_address_postcode" />
 			</td>
 		</tr>
@@ -894,25 +897,25 @@
             <td>
 				<xsl:value-of select="substring-after(@gml:id,'aatams.tag_release_min.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:family" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:genus" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:species" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:project" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:project_name" />
 			</td>
 			<td>
 				<xsl:value-of select="aatams:tag" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:code_name" />
 			</td>
 			<td>
@@ -934,10 +937,10 @@
 			<td>
                 <xsl:value-of select="aatams:classification_level_ref/aatams:classification_level/aatams:name" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:name" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:common_name" />
 			</td>
 		</tr>
@@ -947,13 +950,13 @@
 			<td>
 				<xsl:value-of select="substring-after(aatams:project_fid,'aatams.project.')" />
 			</td>
-			<td>
+			<td class="text">
                 <xsl:value-of select="aatams:project_name" />
 			</td>
 			<td>
 				<xsl:value-of select="substring-after(aatams:person_fid,'aatams.person.')" />
 			</td>
-			<td>
+			<td class="text">
 				<xsl:value-of select="aatams:person_role" />
 			</td>
 		</tr>

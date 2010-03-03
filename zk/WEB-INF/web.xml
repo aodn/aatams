@@ -12,8 +12,8 @@
 	<display-name>zktest</display-name>
 	<context-param>
 		<param-name>DATA_FILE_UPLOADS_HOME_DIR</param-name>
-		<!-- param-value>/usr/local/emii/data/aatams/uploads</param-value -->
-		<param-value>c:/temp</param-value>
+		<param-value>/usr/local/emii/data/aatams/uploads</param-value>
+		<!--param-value>c:/temp</param-value-->
 	</context-param>
 	<context-param>
 		<param-name>DEPLOYMENT_DOWNLOAD_FID_PREFIX</param-name>

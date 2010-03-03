@@ -1,4 +1,4 @@
-<?page title="Australian Acoustic Monitoring and Tracking System (AATAMS) Website"?>
+<?page title="Australian Acoustic Tagging and Monitoring System"?>
 <!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
 <window id="window" width="100%" height="100%" border="none" sclass="black" use="au.org.emii.aatams.zk.AATAMSHomePageComposer">
 	<style>

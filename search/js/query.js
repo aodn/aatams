@@ -775,7 +775,7 @@
             if(installation_list[i][0]==installation){
                var tmp = installation_list[i][2];            
                for(var j=0; j<tmp.length; j++){            
-                  stations.options[stations.options.length] = new Option(tmp[j][1], [j][0]);
+                  stations.options[stations.options.length] = new Option(tmp[j][1], tmp[j][0]);
                }   
             }
          }

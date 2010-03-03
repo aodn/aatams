@@ -187,6 +187,10 @@
       Get the dataset from the WFS
        */
       function DisplayData(do_count){
+         if(feature_type == 'detections' && GetDetectionsFilter() == ''){
+            alert("Sorry - You cannot send an unfiltered detections request!");
+            return;
+         }    
          try{
             var uri = document.getElementById('wfs_uri').value + BuildWFSRequest(do_count);
             switch(GetCheckedValue('output_format')){
@@ -277,6 +281,10 @@
       Get the data from server as an attachment
        */ 
       function DownloadData(){
+         if(feature_type == 'detections' && GetDetectionsFilter() == ''){
+            alert("Sorry - You cannot send an unfiltered detections request!");
+            return;
+         } 
          if(pending_download != null){ window.location.href = pending_download; }
       }
 

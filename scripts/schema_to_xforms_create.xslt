@@ -25,7 +25,7 @@
 				</xsl:processing-instruction>
 				<html>
 					<head>
-						<title>AATAMS Web Interface</title>
+						<title>Australian Acoustic Tagging and Monitoring System (AATAMS)</title>
 						<link href="aatams.css" rel="stylesheet"
 							type="text/css" />
 						<!--script type="text/javascript"
@@ -656,7 +656,8 @@
 					</xf:itemset>
 					<xf:action ev:event="xforms-value-changed">
 						<xf:setvalue
-							ref="instance('inst_subfeatures')/project_person_id" value="" />
+							ref="instance('inst_subfeatures')/project_person_id" 
+							value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id" />
 					</xf:action>
 					<xsl:call-template name="help">
 						<xsl:with-param name="key">

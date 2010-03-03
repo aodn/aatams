@@ -33,7 +33,10 @@
 				</xsl:processing-instruction>
 				<html>
 					<head>
-						<title>AATAMS Web Interface</title>
+						<title>
+							Australian Acoustic Tagging and Monitoring
+							System (AATAMS)
+						</title>
 						<link href="aatams.css" rel="stylesheet"
 							type="text/css" />
 						<xsl:call-template name="model" />
@@ -115,7 +118,8 @@
 					<xsl:for-each
 						select="../table[foreign-key/@foreignTable=current()/@name]">
 						<xf:case id="{lower-case(@name)}">
-							<xsl:apply-templates select="." mode="form-case" />
+							<xsl:apply-templates select="."
+								mode="form-case" />
 						</xf:case>
 					</xsl:for-each>
 				</xf:switch>
@@ -129,14 +133,14 @@
 				<!--xf:switch>
 					<xf:case id="{lower-case(@name)}" selected="true">
 					</xf:case-->
-					<!-- add cases for subfeature prototype manipulation -->
-					<!-- xsl:for-each
-						select="../table[foreign-key/@foreignTable=current()/@name]">
-						<xf:case id="{lower-case(@name)}">
-							<xsl:apply-templates mode="form-case" />
-						</xf:case>
+				<!-- add cases for subfeature prototype manipulation -->
+				<!-- xsl:for-each
+					select="../table[foreign-key/@foreignTable=current()/@name]">
+					<xf:case id="{lower-case(@name)}">
+					<xsl:apply-templates mode="form-case" />
+					</xf:case>
 					</xsl:for-each>
-				</xf:switch-->
+					</xf:switch-->
 				<xsl:apply-templates select="column" mode="form" />
 			</xsl:when>
 			<xsl:otherwise>
@@ -225,11 +229,50 @@
 	<xsl:template match="foreign-key" mode="selected-subfeature-ids">
 		<xsl:element name="{lower-case(@foreignTable)}_id" xmlns="" />
 	</xsl:template>
-	
-	
+
 	<!-- 
-		template for adding prototype subfeatures
-	 -->
+		template for adding prototype subfeatures.
+		any foreign keys mean that this feature (potentially) has
+		subfeature children, so create a prototype for adding a new child of
+		a particular subfeature type.
+	-->
+	<xsl:template name="prototypes">
+		<xf:instance id="prototypes">
+			<xsl:for-each
+				select="../table[foreign-key/@foreignTable=current()/@name]">
+				<xsl:element name="aatams:{lower-case(@name)}">
+					<xsl:apply-templates select="column"
+						mode="prototype" />
+				</xsl:element>
+			</xsl:for-each>
+		</xf:instance>
+	</xsl:template>
+
+	<xsl:template match="column" mode="prototype">
+		<xsl:choose>
+			<xsl:when test=""></xsl:when>
+			<xsl:otherwise></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="table" mode="prototype">
+		<xsl:apply-templates select="column" mode="prototype" />
+	</xsl:template>
+
+	<!-- 
+		template for subfeature prototypes
+	-->
+	<xsl:template
+		match="column[../foreign-key[reference/@local=current()/@name]]"
+		mode="prototype" priority="3">
+		<xsl:variable name="foreignTable">
+			<xsl:value-of
+				select="lower-case(../foreign-key[reference/@local=current()/@name][1]/@foreignTable)" />
+		</xsl:variable>
+		<xsl:element name="aatams:{concat($foreignTable,'_ref')}">
+
+		</xsl:element>
+	</xsl:template>
 
 	<!--
 		template to create data bindings
@@ -846,7 +889,8 @@
 					</xf:itemset>
 					<xf:action ev:event="xforms-value-changed">
 						<xf:setvalue
-							ref="instance('subf')/project_person_id" value="" />
+							ref="instance('subf')/project_person_id"
+							value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id" />
 					</xf:action>
 					<xsl:call-template name="help">
 						<xsl:with-param name="key">

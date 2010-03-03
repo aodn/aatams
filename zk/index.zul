@@ -20,7 +20,7 @@
 						<button label="Search Site" /> -->
 					<html><![CDATA[<div class="logout" onclick="javascript:document.location='logout.jsp';">LOG OUT</div>]]></html>
 				</div>
-				<label style="position:absolute; top:30px; left:70px; font-size:24px;color:white;font-weight:bold;" value="Australian Acoustic Tracking and Monitoring System" />
+				<label style="position:absolute; top:30px; left:70px; font-size:24px;color:white;font-weight:bold;" value="Australian Acoustic Tagging and Monitoring System" />
 				<!--  label style="position:absolute; top:50px; left:70px; font-size:24px;color:red;font-weight:bold;" value="(Under Development)" /-->
 			</div>
 		</north>

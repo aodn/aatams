@@ -159,8 +159,7 @@
 			if(result.length > 0){
 			//document.getElementById("iframe").src="../upload.zul?fid="+result[0].nodeValue;
 			document.location="../upload.zul?fid="+result[0].nodeValue;
-			}else{ alert("error: no new feature id could be obtained");
-			} }
+			}
 		</script>
 	</head>
 	<body>

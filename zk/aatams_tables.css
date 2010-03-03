@@ -11,6 +11,7 @@ td{ border: 1px solid #9CF;
      font-family: Verdana, sans-serif, Arial;
      font-weight: normal;
      font-size: 11px;
+     text-align: right;
      color: /*#404040*/ black;
      white-space: nowrap;
      background-color: #fafafa;
@@ -24,3 +25,4 @@ table{ text-align: center;
      border: 1px #6699CC solid;
      border-collapse: collapse;
      border-spacing: 0px; }
+.text {text-align:left;}

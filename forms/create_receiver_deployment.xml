@@ -8,7 +8,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:gml="http://www.opengis.net/gml">
    <head>
-      <title>AATAMS Web Interface</title>
+      <title>Australian Acoustic Tagging and Monitoring System (AATAMS)</title>
       <link href="aatams.css" rel="stylesheet" type="text/css"/>
       <xf:model id="model1">
          <xf:instance id="inst_data">
@@ -146,7 +146,7 @@
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
                <xf:setvalue ref="instance('inst_data')//aatams:location/gml:Point/gml:pos"
-                   value="concat(instance('inst_location')/longitude,' ',instance('inst_location')/latitude)"/>
+                            value="concat(instance('inst_location')/longitude,' ',instance('inst_location')/latitude)"/>
                <xf:delete nodeset="instance('inst_data')//aatams:scheduled_recovery_date[.='']"/>
                <xf:insert nodeset="instance('inst_data')//aatams:receiver_device_ref/aatams:receiver_device"
                           origin="instance('inst_receiver_device')/gml:featureMember/aatams:receiver_device[@gml:id=instance('inst_subfeatures')/receiver_device_id]"/>
@@ -159,7 +159,6 @@
                <xf:insert nodeset="instance('inst_data')//aatams:station_ref/aatams:station"
                           origin="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:station_ref/aatams:station" at="1"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:station_ref[count(./station) = 0]" at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:mooring_type_ref/aatams:mooring_type"
                           origin="instance('inst_mooring_type')/gml:featureMember/aatams:mooring_type[@gml:id=instance('inst_subfeatures')/mooring_type_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:mooring_type_ref/aatams:mooring_type"
@@ -180,23 +179,15 @@
             <xf:setvalue ref="instance('inst_subfeatures')/installation_id"
                          value="instance('inst_installation')/gml:featureMember/aatams:installation[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')/station_id"
-                   value="instance('inst_station')/gml:featureMember/aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id"/>
+                         value="instance('inst_station')/gml:featureMember/aatams:station[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')/mooring_type_id"
                          value="instance('inst_mooring_type')/gml:featureMember/aatams:mooring_type[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')/project_id"
                          value="instance('inst_project')/gml:featureMember/aatams:project[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')/project_person_id"
                          value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
-            <xf:dispatch name="set-location" target="model1"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
-        </xf:action>
-        <!--set the location from the currently selected station -->
-        <xf:action ev:event="set-location">
-            <xf:setvalue ref="instance('inst_location')/longitude"
-                        value="substring-before(instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:location/gml:Point/gml:pos,' ')"/>
-            <xf:setvalue ref="instance('inst_location')/latitude"
-                        value="substring-after(instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:location/gml:Point/gml:pos,' ')"/>
-        </xf:action>
+         </xf:action>
       </xf:model>
    </head>
    <body>
@@ -208,7 +199,7 @@
                   <xf:label>Device</xf:label>
                   <xf:itemset nodeset="instance('inst_receiver_device')/gml:featureMember/aatams:receiver_device">
                      <xf:value ref="@gml:id"/>
-                     <xf:label ref="aatams:code_name"/>
+                     <xf:label ref="aatams:name"/>
                   </xf:itemset>
                </xf:select1>
             </div>
@@ -221,8 +212,7 @@
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
                      <xf:action ev:event="xforms-value-changed">
-                         <xf:setvalue ref="instance('inst_subfeatures')/station_id" 
-                             value="instance('inst_station')/gml:featureMember/aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id"/>
+                        <xf:setvalue ref="instance('inst_subfeatures')/station_id" value=""/>
                      </xf:action>
                   </xf:select1>
                </div>
@@ -233,7 +223,12 @@
                         <xf:value ref="@gml:id"/>
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
-                     <xf:dispatch ev:event="xforms-value-changed" name="set-location" target="model1"/>
+                     <xf:action ev:event="xforms-value-changed">
+                        <xf:setvalue ref="instance('inst_data')//aatams:longitude"
+                                     value="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:longitude"/>
+                        <xf:setvalue ref="instance('inst_data')//aatams:latitude"
+                                     value="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude"/>
+                     </xf:action>
                   </xf:select1>
                </div>
             </div>

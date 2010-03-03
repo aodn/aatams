@@ -16,18 +16,16 @@
                <wfs:Insert>
                   <wfs:FeatureCollection>
                      <gml:featureMember>
-                        <aatams:installation_station>
-                           <aatams:installation_ref>
-                              <aatams:installation/>
-                           </aatams:installation_ref>
-                           <aatams:curtain_position/>
-                           <aatams:name/>
-                           <aatams:location>
-                              <gml:Point>
-                                 <gml:pos/>
-                              </gml:Point>
-                           </aatams:location>
-                        </aatams:installation_station>
+                        <aatams:download_tag_summary>
+                           <aatams:download/>
+                           <aatams:installation_deployment_ref>
+                              <aatams:installation_deployment/>
+                           </aatams:installation_deployment_ref>
+                           <aatams:tag_device_ref>
+                              <aatams:tag_device/>
+                           </aatams:tag_device_ref>
+                           <aatams:detection_count/>
+                        </aatams:download_tag_summary>
                      </gml:featureMember>
                   </wfs:FeatureCollection>
                </wfs:Insert>
@@ -36,16 +34,16 @@
          <xf:instance id="inst_subfeatures">
             <data xmlns="">
                <installation_id/>
-            </data>
-         </xf:instance>
-         <xf:instance id="inst_location">
-            <data xmlns="">
-               <longitude/>
-               <latitude/>
+               <installation_deployment_id/>
+               <tag_device_id/>
             </data>
          </xf:instance>
          <xf:instance id="inst_installation"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation"/>
+         <xf:instance id="inst_installation_deployment"
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment"/>
+         <xf:instance id="inst_tag_device"
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:tag_device"/>
          <xf:instance id="inst_response">
             <dummy xmlns="">
                <ows:Exception/>
@@ -58,26 +56,22 @@
                </wfs:TransactionResponse>
             </dummy>
          </xf:instance>
+         <xf:bind id="download" nodeset="instance('inst_data')//aatams:download"
+                  type="xsd:string"
+                  required="true()"/>
          <xf:bind id="installation" nodeset="instance('inst_subfeatures')/installation_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="installation_station"
-                  nodeset="instance('inst_subfeatures')/installation_station_id"
+         <xf:bind id="installation_deployment"
+                  nodeset="instance('inst_subfeatures')/installation_deployment_id"
                   type="xsd:string"
                   required="true()"/>
-         <xf:bind id="curtain_position" nodeset="instance('inst_data')//aatams:curtain_position"
+         <xf:bind id="tag_device" nodeset="instance('inst_subfeatures')/tag_device_id"
+                  type="xsd:string"
+                  required="true()"/>
+         <xf:bind id="detection_count" nodeset="instance('inst_data')//aatams:detection_count"
                   type="xsd:integer"
                   required="false()"/>
-         <xf:bind id="name" nodeset="instance('inst_data')//aatams:name" type="xsd:string"
-                  required="true()"/>
-         <xf:bind id="location_longitude" nodeset="instance('inst_location')/longitude"
-                  type="xsd:decimal"
-                  required="true()"
-                  constraint=". &gt;= -180 and . &lt;= 180"/>
-         <xf:bind id="location_latitude" nodeset="instance('inst_location')/latitude"
-                  type="xsd:decimal"
-                  required="true()"
-                  constraint=". &gt;= -90 and . &lt;= 90"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
                   calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
                   type="xsd:string"/>
@@ -88,13 +82,14 @@
                         replace="instance"
                         instance="inst_response">
             <xf:action ev:event="xforms-submit">
-               <xf:delete nodeset="instance('inst_data')//aatams:curtain_position[.='']"/>
-               <xf:setvalue ref="instance('inst_data')//aatams:location/gml:Point/gml:pos"
-                            value="concat(instance('inst_location')/longitude,' ',instance('inst_location')/latitude)"/>
-               <xf:insert nodeset="instance('inst_data')//aatams:installation_ref/aatams:installation"
-                          origin="instance('inst_installation')/gml:featureMember/aatams:installation[@gml:id=instance('inst_subfeatures')/installation_id]"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:installation_ref/aatams:installation"
+               <xf:delete nodeset="instance('inst_data')//aatams:detection_count[.='']"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
+                          origin="instance('inst_installation_deployment')/gml:featureMember/aatams:installation_deployment[@gml:id=instance('inst_subfeatures')/installation_deployment_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
                           at="1"/>
+               <xf:insert nodeset="instance('inst_data')//aatams:tag_device_ref/aatams:tag_device"
+                          origin="instance('inst_tag_device')/gml:featureMember/aatams:tag_device[@gml:id=instance('inst_subfeatures')/tag_device_id]"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:tag_device_ref/aatams:tag_device" at="1"/>
             </xf:action>
             <xf:message level="modeless" ev:event="xforms-submit-error">
 									Submit error.
@@ -104,41 +99,58 @@
          <xf:action ev:event="set-selected">
             <xf:setvalue ref="instance('inst_subfeatures')/installation_id"
                          value="instance('inst_installation')/gml:featureMember/aatams:installation[1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/installation_deployment_id"
+                         value="instance('inst_installation_deployment')/gml:featureMember/aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id"/>
+            <xf:setvalue ref="instance('inst_subfeatures')/tag_device_id"
+                         value="instance('inst_tag_device')/gml:featureMember/aatams:tag_device[1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
       </xf:model>
    </head>
    <body>
       <div class="form">
-         <label>ADD INSTALLATION STATION</label>
+         <label>ADD DOWNLOAD TAG SUMMARY</label>
          <div class="form-contents">
+            <div class="xfinput">
+               <xf:input bind="download" incremental="true()">
+                  <xf:label>Download</xf:label>
+               </xf:input>
+            </div>
+            <div class="dependant-selects">
+               <div class="xfselect1">
+                  <xf:select1 bind="installation" appearance="minimal" incremental="true()">
+                     <xf:label>Installation</xf:label>
+                     <xf:itemset nodeset="instance('inst_installation')/gml:featureMember/aatams:installation">
+                        <xf:value ref="@gml:id"/>
+                        <xf:label ref="aatams:name"/>
+                     </xf:itemset>
+                     <xf:action ev:event="xforms-value-changed">
+                        <xf:setvalue ref="instance('inst_subfeatures')/installation_deployment_id" value=""/>
+                     </xf:action>
+                  </xf:select1>
+               </div>
+               <div class="xfselect1">
+                  <xf:select1 bind="installation_deployment" appearance="minimal" incremental="true()">
+                     <xf:label>Deployment</xf:label>
+                     <xf:itemset nodeset="instance('inst_installation_deployment')/gml:featureMember/aatams:installation_deployment[aatams:installation_fid=instance('inst_subfeatures')/installation_id]">
+                        <xf:value ref="@gml:id"/>
+                        <xf:label ref="aatams:name"/>
+                     </xf:itemset>
+                  </xf:select1>
+               </div>
+            </div>
             <div class="xfselect1">
-               <xf:select1 bind="installation" appearance="minimal" incremental="true()">
-                  <xf:label>Installation</xf:label>
-                  <xf:itemset nodeset="instance('inst_installation')/gml:featureMember/aatams:installation">
+               <xf:select1 bind="tag_device" appearance="minimal" incremental="true()">
+                  <xf:label>Device</xf:label>
+                  <xf:itemset nodeset="instance('inst_tag_device')/gml:featureMember/aatams:tag_device">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>
                </xf:select1>
             </div>
             <div class="xfinput">
-               <xf:input bind="curtain_position" incremental="true()">
-                  <xf:label>Curtain Position</xf:label>
-               </xf:input>
-            </div>
-            <div class="xfinput">
-               <xf:input bind="name" incremental="true()">
-                  <xf:label>Name</xf:label>
-               </xf:input>
-            </div>
-            <div class="xfinput">
-               <xf:input bind="location_longitude" incremental="true()">
-                  <xf:label>Longitude</xf:label>
-               </xf:input>
-            </div>
-            <div class="xfinput">
-               <xf:input bind="location_latitude" incremental="true()">
-                  <xf:label>Latitude</xf:label>
+               <xf:input bind="detection_count" incremental="true()">
+                  <xf:label>Detection Count</xf:label>
                </xf:input>
             </div>
             <div class="buttons">

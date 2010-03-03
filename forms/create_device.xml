@@ -8,7 +8,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:gml="http://www.opengis.net/gml">
    <head>
-      <title>AATAMS Web Interface</title>
+      <title>Australian Acoustic Tagging and Monitoring System (AATAMS)</title>
       <link href="aatams.css" rel="stylesheet" type="text/css"/>
       <xf:model id="model1">
          <xf:instance id="inst_data">
@@ -73,7 +73,7 @@
                   required="true()"/>
          <xf:bind id="serial_number" nodeset="instance('inst_data')//aatams:serial_number"
                   type="xsd:string"
-                  required="true()"/>
+                  required="false()"/>
          <xf:bind id="project" nodeset="instance('inst_subfeatures')/project_id"
                   type="xsd:string"
                   required="true()"/>

@@ -45,9 +45,9 @@
 				</data>
 			</xf:instance>
 			<xf:instance id="inst_installation"
-				src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation" />
+				src="../../wfs-test/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation" />
 			<xf:instance id="inst_installation_deployment"
-				src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment" />
+				src="../../wfs-test/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation_deployment" />
 			<xf:instance id="inst_response">
 				<dummy xmlns="">
 					<ows:Exception />
@@ -103,7 +103,7 @@
 				nodeset="instance('inst_response')//ogc:FeatureId/@fid"
 				type="xsd:string" />
 			<xf:submission id="s01" ref="instance('inst_data')"
-				method="post" action="../../deegree-wfs/services" replace="instance"
+				method="post" action="../../wfs-test/services" replace="instance"
 				instance="inst_response">
 				<xf:action ev:event="xforms-submit">
 					<xf:delete

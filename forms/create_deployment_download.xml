@@ -8,7 +8,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:gml="http://www.opengis.net/gml">
    <head>
-      <title>AATAMS Web Interface</title>
+      <title>Australian Acoustic Tagging and Monitoring System (AATAMS)</title>
       <link href="aatams.css" rel="stylesheet" type="text/css"/>
       <xf:model id="model1">
          <xf:instance id="inst_data">
@@ -28,6 +28,8 @@
                            <aatams:clock_drift/>
                            <aatams:pings/>
                            <aatams:detections/>
+                           <aatams:last_detection_timestamp/>
+                           <aatams:first_detection_timestamp/>
                            <aatams:cc_email_addresses/>
                            <aatams:comments/>
                         </aatams:deployment_download>
@@ -93,6 +95,14 @@
          <xf:bind id="detections" nodeset="instance('inst_data')//aatams:detections"
                   type="xsd:integer"
                   required="false()"/>
+         <xf:bind id="last_detection_timestamp"
+                  nodeset="instance('inst_data')//aatams:last_detection_timestamp"
+                  type="xsd:dateTime"
+                  required="false()"/>
+         <xf:bind id="first_detection_timestamp"
+                  nodeset="instance('inst_data')//aatams:first_detection_timestamp"
+                  type="xsd:dateTime"
+                  required="false()"/>
          <xf:bind id="cc_email_addresses"
                   nodeset="instance('inst_data')//aatams:cc_email_addresses"
                   type="xsd:string"
@@ -116,6 +126,8 @@
                <xf:delete nodeset="instance('inst_data')//aatams:clock_drift[.='']"/>
                <xf:delete nodeset="instance('inst_data')//aatams:pings[.='']"/>
                <xf:delete nodeset="instance('inst_data')//aatams:detections[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:last_detection_timestamp[.='']"/>
+               <xf:delete nodeset="instance('inst_data')//aatams:first_detection_timestamp[.='']"/>
                <xf:insert nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
                           origin="instance('inst_installation_deployment')/gml:featureMember/aatams:installation_deployment[@gml:id=instance('inst_subfeatures')/installation_deployment_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:installation_deployment_ref/aatams:installation_deployment"
@@ -200,6 +212,16 @@
             <div class="xfinput">
                <xf:input bind="detections" incremental="true()">
                   <xf:label>Detections</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="last_detection_timestamp" incremental="true()">
+                  <xf:label>Last Detection Timestamp</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="first_detection_timestamp" incremental="true()">
+                  <xf:label>First Detection Timestamp</xf:label>
                </xf:input>
             </div>
             <div class="xftextarea">

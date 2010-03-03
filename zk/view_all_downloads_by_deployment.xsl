@@ -34,7 +34,7 @@
 					<xsl:for-each select="key('downloads_by_receiver',aatams:installation_deployment_ref/aatams:installation_deployment/aatams:device_name)">
 						<xsl:sort select="aatams:installation_deployment_ref/aatams:installation_deployment/aatams:deployment_timestamp"/>
 						<xsl:sort select="aatams:download_timestamp"/>
-						<tr>
+						<tr style="height:2em;vertical-align:middle;">
 							<xsl:if test="position() = 1">
 								<xsl:variable name="rowspan">
 									<xsl:value-of select="count(key('downloads_by_receiver',aatams:installation_deployment_ref/aatams:installation_deployment/aatams:device_name))"/>
@@ -43,7 +43,7 @@
 									<xsl:attribute name="rowspan"><xsl:value-of select="$rowspan"/></xsl:attribute>
 									<xsl:value-of select="substring-after(aatams:installation_deployment_ref/aatams:installation_deployment/aatams:device_fid,'aatams.device.')"/>
 								</td>
-								<td>
+								<td class="text">
 									<xsl:attribute name="rowspan"><xsl:value-of select="$rowspan"/></xsl:attribute>
 									<xsl:value-of select="aatams:installation_deployment_ref/aatams:installation_deployment/aatams:device_name"/>
 								</td>
@@ -55,7 +55,7 @@
 								<xsl:value-of select="substring-after(aatams:installation_deployment_ref/aatams:installation_deployment/aatams:installation_fid,'aatams.installation.')" />
 							</td>
 							<td>
-								<xsl:value-of select="aatams:installation_deployment_ref/aatams:installation_deployment/aatams:deployment_timestamp" />
+								<xsl:value-of select="translate(aatams:installation_deployment_ref/aatams:installation_deployment/aatams:deployment_timestamp,'T',' ')" />
 							</td>
 							<td>
                                 <xsl:value-of select="substring-before(aatams:installation_deployment_ref/aatams:installation_deployment/aatams:location/gml:Point/gml:pos,' ')" />
@@ -67,9 +67,9 @@
 								<xsl:value-of select="substring-after(@gml:id,'aatams.deployment_download.')" />
 							</td>
 							<td>
-								<xsl:value-of select="aatams:download_timestamp" />
+								<xsl:value-of select="translate(aatams:download_timestamp,'T',' ')" />
 							</td>
-							<td>	
+							<td class="text">	
 								<xsl:if test="count(aatams:deployment_download_tag_ref)>0">
 									<div style="width:160px;text-align:left;">
 										<input type="button" onclick="toggle_tags(this.id);" style="display:block;position:relative;left:40px;width:80px;border:solid 2px outset;background-color:#CCCCCC;cursor:pointer;font-family: Verdana, sans-serif, Arial;font-weight: normal;font-size: 11px;">

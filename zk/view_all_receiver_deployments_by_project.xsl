@@ -43,7 +43,7 @@
 									<xsl:attribute name="rowspan"><xsl:value-of select="$rowspan"/></xsl:attribute>
 									<xsl:value-of select="substring-after(aatams:project_person_ref/aatams:project_person/aatams:project_fid,'aatams.project.')"/>
 								</td>
-								<td>
+								<td class="text">
 									<xsl:attribute name="rowspan"><xsl:value-of select="$rowspan"/></xsl:attribute>
 									<xsl:value-of select="aatams:project_person_ref/aatams:project_person/aatams:project_name"/>
 								</td>
@@ -54,7 +54,7 @@
 							<td>
 								<xsl:value-of select="substring-after(aatams:receiver_device_ref/aatams:receiver_device/@gml:id,'aatams.receiver_device.')" />
 							</td>
-							<td>
+							<td class="text">
 								<xsl:value-of select="aatams:receiver_device_ref/aatams:receiver_device/aatams:code_name" />
 							</td>
 							<td>
@@ -66,13 +66,13 @@
 							<td>
 								<xsl:value-of select="aatams:deployment_timestamp" />
 							</td>
-							<td>
+							<td class="text">
 								<xsl:value-of select="aatams:mooring_type_ref/aatams:mooring_type/aatams:name" />
 							</td>
 							<td>
 								<xsl:value-of select="aatams:bottom_depth" />
 							</td>
-							<td>
+							<td class="text">
 								<xsl:value-of select="aatams:comments" />
 							</td>
 						</tr>

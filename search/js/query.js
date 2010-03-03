@@ -1381,7 +1381,7 @@
             if(value != "")
                filter += Comparison('aatams:tag_id', document.getElementById('tag_id_operator').value, value);   
          }
-         if(element = document.getElementById('tag_code_name')){
+         if(element = document.getElementById('tag_name')){
             value = element.value.replace(/^\s+|\s+$/g, '');
             if(value != "")
                filter += Comparison('aatams:tag_code_name', document.getElementById('tag_name_operator').value, value);   

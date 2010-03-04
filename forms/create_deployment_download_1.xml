@@ -159,7 +159,7 @@
 			if(result.length > 0){
 			//document.getElementById("iframe").src="../upload.zul?fid="+result[0].nodeValue;
 			document.location="../upload.zul?fid="+result[0].nodeValue;
-			}
+			}}
 		</script>
 	</head>
 	<body>

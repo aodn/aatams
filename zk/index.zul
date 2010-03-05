@@ -1,4 +1,4 @@
-<?page title="Australian Acoustic Tagging and Monitoring System"?>
+<?page title="Australian Acoustic Monitoring and Tracking System (AATAMS) Website"?>
 <!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
 <window id="window" width="100%" height="100%" border="none" sclass="black" use="au.org.emii.aatams.zk.AATAMSHomePageComposer">
 	<style>
@@ -20,7 +20,7 @@
 						<button label="Search Site" /> -->
 					<html><![CDATA[<div class="logout" onclick="javascript:document.location='logout.jsp';">LOG OUT</div>]]></html>
 				</div>
-				<label style="position:absolute; top:30px; left:70px; font-size:24px;color:white;font-weight:bold;" value="Australian Acoustic Tagging and Monitoring System" />
+				<label style="position:absolute; top:30px; left:70px; font-size:24px;color:white;font-weight:bold;" value="Australian Acoustic Tracking and Monitoring System" />
 				<!--  label style="position:absolute; top:50px; left:70px; font-size:24px;color:red;font-weight:bold;" value="(Under Development)" /-->
 			</div>
 		</north>
@@ -129,6 +129,11 @@
 									<menu label="Device Models">
 										<menupopup>
 											<menuitem label="Add" id="AddDeviceModel" />
+										</menupopup>
+									</menu>
+									<menu label="Animal Classification">
+										<menupopup>
+											<menuitem label="Add" id="AddClassification" />
 										</menupopup>
 									</menu>
 								</menupopup>

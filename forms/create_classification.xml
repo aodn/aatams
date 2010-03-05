@@ -107,23 +107,28 @@
       <div class="form">
          <label>ADD CLASSIFICATION</label>
          <div class="form-contents">
-            <div class="xfselect1">
-               <xf:select1 bind="parent_classification" appearance="minimal" incremental="true()">
-                  <xf:label>Parent Classification</xf:label>
-                  <xf:itemset nodeset="instance('inst_parent_classification')/gml:featureMember/aatams:parent_classification">
-                     <xf:value ref="@gml:id"/>
-                     <xf:label ref="aatams:name"/>
-                  </xf:itemset>
-               </xf:select1>
-            </div>
+             <div class="dependant-selects">
             <div class="xfselect1">
                <xf:select1 bind="classification_level" appearance="minimal" incremental="true()">
-                  <xf:label>Classification Level</xf:label>
-                  <xf:itemset nodeset="instance('inst_classification_level')/gml:featureMember/aatams:classification_level">
+                  <xf:label>Classification Level</xf:label>
+                  <xf:itemset nodeset="instance('inst_classification_level')/gml:featureMember/aatams:classification_level[aatams:name != 'UNDEFINED']">
+                     <xf:value ref="@gml:id"/>
+                     <xf:label ref="aatams:name"/>
+                 </xf:itemset>
+                             <xf:action ev:event="xforms-value-changed">
+                                 <xf:message><xf:output ref="substring-after(.,'aatams.classification_level.')-1"/></xf:message>
+            </xf:action>
+               </xf:select1>
+           </div>
+            <div class="xfselect1">
+               <xf:select1 bind="parent_classification" appearance="minimal" incremental="true()">
+                  <xf:label>Parent Classification</xf:label>
+                  <xf:itemset nodeset="instance('inst_parent_classification')/gml:featureMember/aatams:parent_classification[aatams:classification_level=substring-after(instance('inst_subfeatures')/classification_level_id,'aatams.classification_level.')-1]">
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                   </xf:itemset>
                </xf:select1>
+           </div>
             </div>
             <div class="xfinput">
                <xf:input bind="name" incremental="true()">
@@ -132,12 +137,12 @@
             </div>
             <div class="xfinput">
                <xf:input bind="common_name" incremental="true()">
-                  <xf:label>Common Name</xf:label>
+                  <xf:label>Common Name</xf:label>
                </xf:input>
             </div>
             <div class="xfinput">
                <xf:input bind="caab_code" incremental="true()">
-                  <xf:label>Caab Code</xf:label>
+                  <xf:label>CAAB Code</xf:label>
                </xf:input>
             </div>
             <div class="buttons">

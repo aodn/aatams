@@ -115,9 +115,6 @@
                      <xf:value ref="@gml:id"/>
                      <xf:label ref="aatams:name"/>
                  </xf:itemset>
-                             <xf:action ev:event="xforms-value-changed">
-                                 <xf:message><xf:output ref="substring-after(.,'aatams.classification_level.')-1"/></xf:message>
-            </xf:action>
                </xf:select1>
            </div>
             <div class="xfselect1">

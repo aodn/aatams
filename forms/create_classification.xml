@@ -68,7 +68,7 @@
                   type="xsd:string"
                   required="false()"/>
          <xf:bind id="caab_code" nodeset="instance('inst_data')//aatams:caab_code"
-                  type="xsd:string"
+                  type="xsd:integer"
                   required="true()"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
                   calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"

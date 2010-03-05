@@ -188,6 +188,16 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
+               <xsd:element name="caab_code" minOccurs="1" maxOccurs="1" type="xsd:string">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="caab_code" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>

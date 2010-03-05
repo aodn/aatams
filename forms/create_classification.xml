@@ -25,6 +25,7 @@
                            </aatams:classification_level_ref>
                            <aatams:name/>
                            <aatams:common_name/>
+                           <aatams:caab_code/>
                         </aatams:classification>
                      </gml:featureMember>
                   </wfs:FeatureCollection>
@@ -66,6 +67,9 @@
          <xf:bind id="common_name" nodeset="instance('inst_data')//aatams:common_name"
                   type="xsd:string"
                   required="false()"/>
+         <xf:bind id="caab_code" nodeset="instance('inst_data')//aatams:caab_code"
+                  type="xsd:string"
+                  required="true()"/>
          <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
                   calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
                   type="xsd:string"/>
@@ -129,6 +133,11 @@
             <div class="xfinput">
                <xf:input bind="common_name" incremental="true()">
                   <xf:label>Common Name</xf:label>
+               </xf:input>
+            </div>
+            <div class="xfinput">
+               <xf:input bind="caab_code" incremental="true()">
+                  <xf:label>Caab Code</xf:label>
                </xf:input>
             </div>
             <div class="buttons">

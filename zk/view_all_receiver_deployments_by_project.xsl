@@ -9,7 +9,8 @@
 		<table>
 			<thead>
 				<tr>
-					<th colspan="2" rowspan="1">Project</th>
+                    <th colspan="2" rowspan="1">Project</th>
+                    <th colspan="1" rowspan="2">Installation ID</th>
 					<th colspan="1" rowspan="2">Deployment ID</th>
 					<th colspan="2" rowspan="1">Receiver</th>
 					<th colspan="2" rowspan="1">Location</th>
@@ -47,7 +48,10 @@
 									<xsl:attribute name="rowspan"><xsl:value-of select="$rowspan"/></xsl:attribute>
 									<xsl:value-of select="aatams:project_person_ref/aatams:project_person/aatams:project_name"/>
 								</td>
-							</xsl:if>
+                            </xsl:if>
+                            <td>
+                                <xsl:value-of select="substring-after(aatams:installation_ref/aatams:installation/@gml:id,'aatams.installation.')" />
+							</td>
 							<td>
 								<xsl:value-of select="substring-after(@gml:id,'aatams.receiver_deployment.')" />
 							</td>
@@ -64,7 +68,7 @@
 								<xsl:value-of select="substring-after(aatams:location/gml:Point/gml:pos,' ')"/>
 							</td>
 							<td>
-								<xsl:value-of select="aatams:deployment_timestamp" />
+								<xsl:value-of select="translate(aatams:deployment_timestamp,'T',' ')" />
 							</td>
 							<td class="text">
 								<xsl:value-of select="aatams:mooring_type_ref/aatams:mooring_type/aatams:name" />

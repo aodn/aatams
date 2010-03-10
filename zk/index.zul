@@ -159,6 +159,7 @@
 										<menupopup>
 											<menuitem label="By Deployment Download" id="ViewDownloadsByDeployment" />
 											<menuitem label="By Installation" id="ViewDetectionSummaryByInstallation" />
+	                                        <menuitem label="By Installation Station" id="ViewDetectionSummaryByInstallationStation" />
 											<menuitem label="By Animal Classification" id="ViewDetectionSummaryByClassification" />
 											<menuitem label="By Tag Device" id="ViewDetectionSummaryBytagDevice" />
 											<menuitem label="By Location" id="ViewDetectionSummaryByLocation" />

@@ -208,7 +208,7 @@
 						<xf:label>Download Timestamp</xf:label>
 					</xf:input>
 				</div>
-				<div class="xfinput">
+				<!--div class="xfinput">
 					<xf:input bind="time_correction_start"
 						incremental="true()">
 						<xf:label>Time Correction Start</xf:label>
@@ -219,7 +219,7 @@
 						incremental="true()">
 						<xf:label>Time Correction End</xf:label>
 					</xf:input>
-				</div>
+				</div-->
 				<!--div class="xfinput">
 					<xf:input bind="time_correction_type"
 					incremental="true()">
@@ -228,7 +228,8 @@
 					</div-->
 				<div class="xfinput">
 					<xf:input bind="clock_drift" incremental="true()">
-						<xf:label>Clock Drift</xf:label>
+                        <xf:label>Clock Drift</xf:label>
+                        <xf:help>Time interval as (-)seconds e.g. 2 minutes 30 seconds lost = -150</xf:help>
 					</xf:input>
 				</div>
 				<div class="xfinput">

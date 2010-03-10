@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?><html xmlns:aatams="http://www.imos.org.au/aatams"
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?>
+<html xmlns:aatams="http://www.imos.org.au/aatams"
       xmlns:xf="http://www.w3.org/2002/xforms"
       xmlns:ev="http://www.w3.org/2001/xml-events"
       xmlns:wfs="http://www.opengis.net/wfs"
@@ -101,7 +102,21 @@
                          value="instance('inst_parent_classification')/gml:featureMember/aatams:parent_classification[1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
          </xf:action>
-      </xf:model>
+     </xf:model>
+     <script type="text/javascript">
+        function openCAAB(){ 
+            var model1 = document.getElementById('model1').xfElement;
+            var binding = document.getElementById('name').xfElement.binding;
+            var sciname =  binding.evaluate(model1.getInstanceDocument('inst_data'));
+            if(sciname.length > 0){
+                //window.open( 'http://www.marine.csiro.au/caabsearch/caab_search.search_prepare?scitxt=Thunnus','caab');
+                window.open( 'http://www.marine.csiro.au/caab/caabsearch.htm','caab');
+            }
+            else{
+                window.open( 'http://www.marine.csiro.au/caab/caabsearch.htm','caab');
+            }
+        }
+        </script>
    </head>
    <body>
       <div class="form">
@@ -129,7 +144,7 @@
             </div>
             <div class="xfinput">
                <xf:input bind="name" incremental="true()">
-                  <xf:label>Name</xf:label>
+                  <xf:label>Scientific Name</xf:label>
                </xf:input>
             </div>
             <div class="xfinput">
@@ -142,6 +157,14 @@
                   <xf:label>CAAB Code</xf:label>
                </xf:input>
             </div>
+            <div class="xftrigger" style="clear:none;">
+                  <xf:trigger>
+                      <xf:label>Lookup CAAB Code</xf:label>
+                      <xf:action ev:event="DOMActivate">
+                          <xf:load resource="javascript:openCAAB()" />
+                      </xf:action>
+                  </xf:trigger>
+               </div>
             <div class="buttons">
                <div class="xfsubmit">
                   <xf:submit submission="s01">

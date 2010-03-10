@@ -248,8 +248,9 @@
                                     <th colspan="1" rowspan="1">ID</th>
                                     <th colspan="1" rowspan="1">Level</th>
 									<th colspan="1" rowspan="1">Name</th>
-									<th colspan="1" rowspan="1">Common Name</th>
-								</tr>
+                                    <th colspan="1" rowspan="1">Common Name</th>
+                                    <th colspan="1" rowspan="1"><a href="http://www.marine.csiro.au/caab/">CAAB code</a></th>
+                                </tr>
 							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:tag_release">
 								<tr>
@@ -271,7 +272,21 @@
 									<th colspan="1" rowspan="1">Longitude</th>
 									<th colspan="1" rowspan="1">Latitude</th>
 								</tr>
-							</xsl:when>
+                            </xsl:when>
+                            <xsl:when test="gml:featureMember[1]/aatams:detections_by_installation">
+								<tr>
+									<th colspan="3" rowspan="1">Installation</th>
+									<th colspan="3" rowspan="1">Tag</th>
+								</tr>
+								<tr>
+									<th colspan="1" rowspan="1">ID</th>
+                                    <th colspan="1" rowspan="1">Name</th>
+                                    <th colspan="1" rowspan="1">Detection Count</th>
+									<th colspan="1" rowspan="1">ID</th>
+									<th colspan="1" rowspan="1">Code Name</th>
+									<th colspan="1" rowspan="1">Detection Count</th>
+								</tr>
+                            </xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:detections_by_installation_station">
 								<tr>
 									<th colspan="2" rowspan="1">Installation</th>
@@ -676,6 +691,44 @@
 				<xsl:value-of select="translate(aatams:release_timestamp,'T',' ')" />
 			</td>
 		</tr>
+    </xsl:template>
+    <xsl:template match="aatams:detections_by_installation">
+		<xsl:variable name="tag_row_count">
+			<xsl:value-of select="count(aatams:detections_by_installation_tag_ref)" />
+		</xsl:variable>
+		<tr>
+			<td rowspan="{$tag_row_count}" colspan="1">
+				<xsl:value-of select="substring-after(@gml:id,'aatams.detections_by_installation.')" />
+			</td>
+			<td rowspan="{$tag_row_count}" colspan="1"  class="text">
+				<xsl:value-of select="aatams:installation_name" />
+			</td>
+			<td rowspan="{$tag_row_count}" colspan="1">
+				<xsl:value-of select="aatams:count" />
+			</td>
+			<td rowspan="1" colspan="1">
+				<xsl:value-of select="aatams:detections_by_installation_tag_ref[1]/aatams:detections_by_installation_tag/aatams:tag" />
+			</td>
+			<td rowspan="1" colspan="1" class="text">
+				<xsl:value-of select="aatams:detections_by_installation_tag_ref[1]/aatams:detections_by_installation_tag/aatams:tag_name" />
+			</td>
+			<td rowspan="1" colspan="1">
+				<xsl:value-of select="aatams:detections_by_installation_tag_ref[1]/aatams:detections_by_installation_tag/aatams:count" />
+			</td>
+		</tr>
+		<xsl:for-each select="aatams:detections_by_installation_tag_ref[position()&gt;1]">
+			<tr>
+				<td rowspan="1" colspan="1">
+					<xsl:value-of select="aatams:detections_by_installation_tag/aatams:tag" />
+				</td>
+				<td rowspan="1" colspan="1" class="text">
+					<xsl:value-of select="aatams:detections_by_installation_tag/aatams:tag_name" />
+				</td>
+				<td rowspan="1" colspan="1">
+					<xsl:value-of select="aatams:detections_by_installation_tag/aatams:count" />
+				</td>
+			</tr>
+		</xsl:for-each>
 	</xsl:template>
 	<xsl:template match="aatams:detections_by_installation_station">
 		<xsl:variable name="tag_row_count">
@@ -934,7 +987,7 @@
 			<td>
 				<xsl:value-of select="substring-after(@gml:id,'aatams.classification.')" />
 			</td>
-			<td>
+			<td class="text">
                 <xsl:value-of select="aatams:classification_level_ref/aatams:classification_level/aatams:name" />
 			</td>
 			<td class="text">
@@ -942,7 +995,16 @@
 			</td>
 			<td class="text">
 				<xsl:value-of select="aatams:common_name" />
-			</td>
+            </td>
+            <td class="text">
+                <a>
+                    <xsl:attribute name="href">
+                        <xsl:text>http://www.marine.csiro.au/caabsearch/caab_search.caab_report?spcode=</xsl:text>
+                        <xsl:value-of select="aatams:caab_code" />
+                    </xsl:attribute>
+                    <xsl:value-of select="aatams:caab_code" />
+                </a>
+            </td>
 		</tr>
     </xsl:template>
 	<xsl:template match="aatams:project_person">

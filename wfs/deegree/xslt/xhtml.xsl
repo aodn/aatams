@@ -444,9 +444,9 @@
 									<xsl:when test="gml:featureMember[1]/aatams:receiver_deployment">
 										<xsl:for-each select="gml:featureMember/aatams:receiver_deployment">
 											<xsl:sort select="aatams:installation_ref/aatams:installation/aatams:name" />
-											<xsl:sort select="aatams:installation_station_ref/aatams:installation_station/aatams:curtain_position" data-type="number" />
-											<xsl:sort select="aatams:installation_station_ref/aatams:installation_station/aatams:name" />
-											<xsl:sort select="aatams:deployment_timestamp" />
+											<xsl:sort select="aatams:station_ref/aatams:station/aatams:curtain_position" data-type="number"/>
+											<!--xsl:sort select="aatams:installation_station_ref/aatams:installation_station/aatams:name" />
+											<xsl:sort select="aatams:deployment_timestamp" /-->
 											<xsl:apply-templates select="."/>
 										</xsl:for-each>
 									</xsl:when>

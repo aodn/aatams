@@ -221,7 +221,7 @@
          var uri = "?service=WFS&version=1.0.0&request=GetFeature&namespace=xmlns(aatams=http://www.imos.org.au/aatams)";
          switch(feature_type){
          case "deployments":
-            uri += "&typename=aatams:receiver_deployment&propertyname=aatams:installation_ref/aatams:installation/aatams:name,aatams:station_ref,aatams:mooring_type_ref,aatams:comments" + GetDeploymentsFilter();
+            uri += "&typename=aatams:receiver_deployment&propertyname=aatams:installation_ref/aatams:installation/aatams:name,aatams:station_ref,aatams:mooring_type_ref,aatams:acoustic_release,aatams:comments" + GetDeploymentsFilter();
             break;
          case "tag_releases":
             uri += "&typename=aatams:tag_release" + GetTagReleasesFilter();

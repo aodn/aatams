@@ -224,10 +224,10 @@
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
                      <xf:action ev:event="xforms-value-changed">
-                        <xf:setvalue ref="instance('inst_data')//aatams:longitude"
-                                     value="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:longitude"/>
-                        <xf:setvalue ref="instance('inst_data')//aatams:latitude"
-                                     value="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:latitude"/>
+                        <xf:setvalue ref="instance('inst_location')/longitude"
+                                     value="substring-before(instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:location/gml:Point/gml:pos,' ')"/>
+                        <xf:setvalue ref="instance('inst_location')/latitude"
+                                     value="substring-after(instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:location/gml:Point/gml:pos,' ')"/>
                      </xf:action>
                   </xf:select1>
                </div>

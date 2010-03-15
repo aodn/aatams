@@ -53,7 +53,8 @@
 									<th colspan="1" rowspan="2">Project ID</th>
 									<th colspan="2" rowspan="1">Receiver</th>
 									<th colspan="2" rowspan="1">Location</th>
-									<th colspan="1" rowspan="2">Deployment UTC Date-Time</th>
+                                    <th colspan="1" rowspan="2">Deployment UTC Date-Time</th>
+                                    <th colspan="1" rowspan="2">Acoustic Release ID</th>
 									<th colspan="1" rowspan="2">Mooring Type</th>
 									<th colspan="1" rowspan="2">Bottom Depth</th>
 									<th colspan="1" rowspan="2">Comments</th>
@@ -526,6 +527,9 @@
 			</td>
 			<td>
 				<xsl:value-of select="translate(aatams:deployment_timestamp,'T',' ')" />
+            </td>
+            <td>
+				<xsl:value-of select="aatams:acoustic_release" />
 			</td>
 			<td class="text">
 				<xsl:value-of select="aatams:mooring_type_ref/aatams:mooring_type/aatams:name" />

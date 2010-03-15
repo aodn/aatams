@@ -201,20 +201,20 @@
 									<th colspan="1" rowspan="1">Name</th>
 									<th colspan="1" rowspan="1">Manufacturer</th>
 								</tr>
-                            </xsl:when>
+							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:project_person">
 								<tr>
 									<th colspan="2" rowspan="1">Project</th>
 									<th colspan="2" rowspan="1">Person</th>
-                                </tr>
-                                <tr>
+								</tr>
+								<tr>
 									<th colspan="1" rowspan="1">ID</th>
 									<th colspan="1" rowspan="1">Name</th>
 									<th colspan="1" rowspan="1">Person ID</th>
 									<th colspan="1" rowspan="1">Name(Role)</th>
 								</tr>
 							</xsl:when>
-                            <xsl:when test="gml:featureMember[1]/aatams:animal">
+							<xsl:when test="gml:featureMember[1]/aatams:animal">
 								<tr>
 									<th colspan="1" rowspan="2">Animal FID</th>
 									<th colspan="1" rowspan="2">Name</th>
@@ -242,15 +242,17 @@
 									<th colspan="1" rowspan="1">Created</th>
 									<th colspan="1" rowspan="1">Modified</th>
 								</tr>
-                            </xsl:when>
+							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:classification">
 								<tr>
-                                    <th colspan="1" rowspan="1">ID</th>
-                                    <th colspan="1" rowspan="1">Level</th>
+									<th colspan="1" rowspan="1">ID</th>
+									<th colspan="1" rowspan="1">Level</th>
 									<th colspan="1" rowspan="1">Name</th>
-                                    <th colspan="1" rowspan="1">Common Name</th>
-                                    <th colspan="1" rowspan="1"><a href="http://www.marine.csiro.au/caab/">CAAB code</a></th>
-                                </tr>
+									<th colspan="1" rowspan="1">Common Name</th>
+									<th colspan="1" rowspan="1">
+										<a href="http://www.marine.csiro.au/caab/">CAAB code</a>
+									</th>
+								</tr>
 							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:tag_release">
 								<tr>
@@ -272,21 +274,21 @@
 									<th colspan="1" rowspan="1">Longitude</th>
 									<th colspan="1" rowspan="1">Latitude</th>
 								</tr>
-                            </xsl:when>
-                            <xsl:when test="gml:featureMember[1]/aatams:detections_by_installation">
+							</xsl:when>
+							<xsl:when test="gml:featureMember[1]/aatams:detections_by_installation">
 								<tr>
 									<th colspan="3" rowspan="1">Installation</th>
 									<th colspan="3" rowspan="1">Tag</th>
 								</tr>
 								<tr>
 									<th colspan="1" rowspan="1">ID</th>
-                                    <th colspan="1" rowspan="1">Name</th>
-                                    <th colspan="1" rowspan="1">Detection Count</th>
+									<th colspan="1" rowspan="1">Name</th>
+									<th colspan="1" rowspan="1">Detection Count</th>
 									<th colspan="1" rowspan="1">ID</th>
 									<th colspan="1" rowspan="1">Code Name</th>
 									<th colspan="1" rowspan="1">Detection Count</th>
 								</tr>
-                            </xsl:when>
+							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:detections_by_installation_station">
 								<tr>
 									<th colspan="2" rowspan="1">Installation</th>
@@ -326,18 +328,26 @@
 									<th colspan="3" rowspan="1">Tag</th>
 								</tr>
 								<tr>
-                                    <th colspan="1" rowspan="1">ID</th>
-                                    <th colspan="1" rowspan="1">Name</th>
-                                    <th colspan="1" rowspan="1">ID</th>
+									<th colspan="1" rowspan="1">ID</th>
+									<th colspan="1" rowspan="1">Name</th>
+									<th colspan="1" rowspan="1">ID</th>
 									<th colspan="1" rowspan="1">Code Name</th>
 									<th colspan="1" rowspan="1">Detection Count</th>
 								</tr>
 							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:installation">
 								<tr>
-									<th>ID</th>
-									<th>Name</th>
-									<th>Configuration Type</th>
+									<th colspan="3" rowspan="1">Installation</th>
+									<th colspan="4" rowspan="1">Station</th>
+								</tr>
+								<tr>
+									<th colspan="1" rowspan="1">ID</th>
+									<th colspan="1" rowspan="1">Name</th>
+									<th colspan="1" rowspan="1">Configuration Type</th>
+									<th colspan="1" rowspan="1">ID</th>
+									<th colspan="1" rowspan="1">Name</th>
+									<th colspan="1" rowspan="1">Longitude</th>
+									<th colspan="1" rowspan="1">Latitude</th>
 								</tr>
 							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:project">
@@ -398,8 +408,8 @@
 								</tr>
 							</xsl:when>
 							<xsl:when test="gml:featureMember[1]/aatams:tag_release_min">
-                                <tr>
-                                    <th colspan="1" rowspan="2">Release ID</th>
+								<tr>
+									<th colspan="1" rowspan="2">Release ID</th>
 									<th colspan="3" rowspan="1">Classification</th>
 									<th colspan="2" rowspan="1">Project</th>
 									<th colspan="2" rowspan="1">Tag</th>
@@ -432,29 +442,42 @@
 							<xsl:otherwise>
 								<xsl:choose>
 									<xsl:when test="gml:featureMember[1]/aatams:receiver_deployment">
-										<xsl:for-each select="gml:featureMember">
-											<xsl:sort select="aatams:receiver_deployment/aatams:installation_ref/aatams:installation/aatams:name"/>
-											<xsl:sort select="aatams:receiver_deployment/aatams:station_ref/aatams:station/aatams:name"/>
-											<xsl:sort select="aatams:receiver_deployment/aatams:deployment_timestamp"/>
-											<xsl:apply-templates/>
+										<xsl:for-each select="gml:featureMember/aatams:receiver_deployment">
+											<xsl:sort select="aatams:installation_ref/aatams:installation/aatams:name" />
+											<xsl:sort select="aatams:station_ref/aatams:station/aatams:name" />
+											<xsl:sort select="aatams:deployment_timestamp" />
+											<xsl:apply-templates />
 										</xsl:for-each>
 									</xsl:when>
 									<xsl:when test="gml:featureMember[1]/aatams:device_model">
-										<xsl:for-each select="gml:featureMember">
-											<xsl:sort select="aatams:device_model/aatams:device_type_ref/aatams:device_type/aatams:name"/>
-											<xsl:sort select="aatams:device_model/aatams:name"/>
-											<xsl:apply-templates/>
+										<xsl:for-each select="gml:featureMember/aatams:device_model">
+											<xsl:sort select="aatams:device_type_ref/aatams:device_type/aatams:name" />
+											<xsl:sort select="aatams:name" />
+											<xsl:apply-templates />
+										</xsl:for-each>
+									</xsl:when>
+									<xsl:when test="gml:featureMember[1]/aatams:installation">
+										<xsl:for-each select="gml:featureMember/aatams:installation">
+											<xsl:sort select="aatams:name" />
+											<xsl:choose>
+												<xsl:when test="aatams:installation_conf_ref/aatams:installation_conf/aatams:name = 'CURTAIN' and count(aatams:installation_station_ref)&gt;0">
+													<xsl:call-template name="installation-stations-by-curtain-position" />
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:call-template name="installation-stations-by-name" />
+												</xsl:otherwise>
+											</xsl:choose>
 										</xsl:for-each>
 									</xsl:when>
 									<xsl:when test="gml:featureMember[1]/*/aatams:name">
 										<xsl:for-each select="gml:featureMember">
-											<xsl:sort select="*/aatams:name"/>
-											<xsl:apply-templates/>
+											<xsl:sort select="*/aatams:name" />
+											<xsl:apply-templates />
 										</xsl:for-each>
 									</xsl:when>
 									<xsl:otherwise>
 										<xsl:for-each select="gml:featureMember">
-											<xsl:apply-templates/>
+											<xsl:apply-templates />
 										</xsl:for-each>
 									</xsl:otherwise>
 								</xsl:choose>
@@ -495,7 +518,7 @@
 				<xsl:value-of select="aatams:receiver_device_ref/aatams:receiver_device/aatams:code_name" />
 			</td>
 			<td>
-                <xsl:value-of select="substring-before(aatams:location/gml:Point/gml:pos,' ')" />
+				<xsl:value-of select="substring-before(aatams:location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
 				<xsl:value-of select="substring-after(aatams:location/gml:Point/gml:pos,' ')" />
@@ -542,7 +565,7 @@
 				</xsl:choose>
 			</td>
 			<td>
-                <xsl:value-of select="substring-before(aatams:capture_location/gml:Point/gml:pos,' ')" />
+				<xsl:value-of select="substring-before(aatams:capture_location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
 				<xsl:value-of select="substring-after(aatams:capture_location/gml:Point/gml:pos,' ')" />
@@ -551,7 +574,7 @@
 				<xsl:value-of select="translate(aatams:capture_timestamp,'T',' ')" />
 			</td>
 			<td>
-                <xsl:value-of select="substring-before(aatams:release_location/gml:Point/gml:pos,' ')" />
+				<xsl:value-of select="substring-before(aatams:release_location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
 				<xsl:value-of select="substring-after(aatams:release_location/gml:Point/gml:pos,' ')" />
@@ -673,7 +696,7 @@
 				<xsl:value-of select="aatams:receiver_code_name" />
 			</td>
 			<td>
-                <xsl:value-of select="substring-before(aatams:location/gml:Point/gml:pos,' ')" />
+				<xsl:value-of select="substring-before(aatams:location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td>
 				<xsl:value-of select="substring-after(aatams:location/gml:Point/gml:pos,' ')" />
@@ -691,8 +714,8 @@
 				<xsl:value-of select="translate(aatams:release_timestamp,'T',' ')" />
 			</td>
 		</tr>
-    </xsl:template>
-    <xsl:template match="aatams:detections_by_installation">
+	</xsl:template>
+	<xsl:template match="aatams:detections_by_installation">
 		<xsl:variable name="tag_row_count">
 			<xsl:value-of select="count(aatams:detections_by_installation_tag_ref)" />
 		</xsl:variable>
@@ -700,7 +723,7 @@
 			<td rowspan="{$tag_row_count}" colspan="1">
 				<xsl:value-of select="substring-after(@gml:id,'aatams.detections_by_installation.')" />
 			</td>
-			<td rowspan="{$tag_row_count}" colspan="1"  class="text">
+			<td rowspan="{$tag_row_count}" colspan="1" class="text">
 				<xsl:value-of select="aatams:installation_name" />
 			</td>
 			<td rowspan="{$tag_row_count}" colspan="1">
@@ -738,17 +761,17 @@
 			<td rowspan="{$tag_row_count}" colspan="1">
 				<xsl:value-of select="aatams:installation" />
 			</td>
-			<td rowspan="{$tag_row_count}" colspan="1"  class="text">
+			<td rowspan="{$tag_row_count}" colspan="1" class="text">
 				<xsl:value-of select="aatams:installation_name" />
 			</td>
 			<td rowspan="{$tag_row_count}" colspan="1">
 				<xsl:value-of select="aatams:station" />
 			</td>
-			<td rowspan="{$tag_row_count}" colspan="1"  class="text">
+			<td rowspan="{$tag_row_count}" colspan="1" class="text">
 				<xsl:value-of select="aatams:station_name" />
 			</td>
 			<td rowspan="{$tag_row_count}" colspan="1">
-                <xsl:value-of select="substring-before(aatams:location/gml:Point/gml:pos,' ')" />
+				<xsl:value-of select="substring-before(aatams:location/gml:Point/gml:pos,' ')" />
 			</td>
 			<td rowspan="{$tag_row_count}" colspan="1">
 				<xsl:value-of select="substring-after(aatams:location/gml:Point/gml:pos,' ')" />
@@ -784,8 +807,8 @@
 		<tr>
 			<td>
 				<xsl:value-of select="aatams:project" />
-            </td>
-            <td class="text">
+			</td>
+			<td class="text">
 				<xsl:value-of select="aatams:project_name" />
 			</td>
 			<td>
@@ -821,18 +844,102 @@
 			</td>
 		</tr>
 	</xsl:template>
-	<xsl:template match="aatams:installation">
+	<xsl:template name="installation-stations-by-curtain-position">
+		<xsl:variable name="station_row_count">
+			<xsl:choose>
+				<xsl:when test="count(aatams:installation_station_ref) &gt; 0">
+					<xsl:value-of select="count(aatams:installation_station_ref)" />
+				</xsl:when>
+				<xsl:otherwise>1</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 		<tr>
-			<td>
-				<xsl:value-of select="substring-after(@gml:id,'aatams.installation.')"/>
+			<td rowspan="{$station_row_count}" colspan="1">
+				<xsl:value-of select="substring-after(@gml:id,'aatams.installation.')" />
 			</td>
-			<td class="text">
+			<td rowspan="{$station_row_count}" colspan="1" class="text">
 				<xsl:value-of select="aatams:name" />
 			</td>
-			<td class="text">
+			<td rowspan="{$station_row_count}" colspan="1" class="text">
 				<xsl:value-of select="aatams:installation_conf_ref/aatams:installation_conf/aatams:name" />
 			</td>
+			<xsl:choose>
+				<xsl:when test="aatams:installation_station_ref/aatams:installation_station[aatams:curtain_position='1']">
+					<xsl:apply-templates select="aatams:installation_station_ref/aatams:installation_station[aatams:curtain_position='1']" />
+				</xsl:when>
+				<xsl:otherwise>
+					<td />
+					<td />
+					<td />
+					<td />
+				</xsl:otherwise>
+			</xsl:choose>
 		</tr>
+		<xsl:for-each select="aatams:installation_station_ref/aatams:installation_station[aatams:curtain_position!='1']">
+			<xsl:sort select="aatams:curtain_position" data-type="number"/>
+			<tr>
+				<xsl:apply-templates select="." />
+			</tr>
+		</xsl:for-each>
+	</xsl:template>
+	<xsl:template name="installation-stations-by-name">
+		<xsl:variable name="station_row_count">
+			<xsl:choose>
+				<xsl:when test="count(aatams:installation_station_ref) &gt; 0">
+					<xsl:value-of select="count(aatams:installation_station_ref)" />
+				</xsl:when>
+				<xsl:otherwise>1</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<tr>
+			<td rowspan="{$station_row_count}" colspan="1">
+				<xsl:value-of select="substring-after(@gml:id,'aatams.installation.')" />
+			</td>
+			<td rowspan="{$station_row_count}" colspan="1" class="text">
+				<xsl:value-of select="aatams:name" />
+			</td>
+			<td rowspan="{$station_row_count}" colspan="1" class="text">
+				<xsl:value-of select="aatams:installation_conf_ref/aatams:installation_conf/aatams:name" />
+			</td>
+			<xsl:choose>
+				<xsl:when test="aatams:installation_station_ref">
+					<xsl:for-each select="aatams:installation_station_ref/aatams:installation_station">
+						<xsl:sort select="aatams:name" />
+						<xsl:if test="position()=1">
+							<xsl:apply-templates select="." />
+						</xsl:if>
+					</xsl:for-each>
+				</xsl:when>
+				<xsl:otherwise>
+					<td />
+					<td />
+					<td />
+					<td />
+				</xsl:otherwise>
+			</xsl:choose>
+		</tr>
+		<xsl:for-each select="aatams:installation_station_ref/aatams:installation_station">
+			<xsl:sort select="aatams:name" />
+			<xsl:if test="position()>1">
+				<tr>
+					<xsl:apply-templates select="." />
+				</tr>
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:template>
+	<xsl:template match="aatams:installation_station">
+		<td rowspan="1" colspan="1">
+			<xsl:value-of select="substring-after(@gml:id,'aatams.installation_station.')" />
+		</td>
+		<td rowspan="1" colspan="1" class="text">
+			<xsl:value-of select="aatams:name" />
+		</td>
+		<td rowspan="1" colspan="1">
+			<xsl:value-of select="substring-before(aatams:location/gml:Point/gml:pos,' ')" />
+		</td>
+		<td rowspan="1" colspan="1">
+			<xsl:value-of select="substring-after(aatams:location/gml:Point/gml:pos,' ')" />
+		</td>
 	</xsl:template>
 	<xsl:template match="aatams:project">
 		<tr>
@@ -843,7 +950,7 @@
 				<xsl:value-of select="aatams:name" />
 			</td>
 			<td>
-				<xsl:value-of select="substring-after(aatams:organisation_ref/aatams:organisation/@gml:id,'aatams.organisation.')"/>
+				<xsl:value-of select="substring-after(aatams:organisation_ref/aatams:organisation/@gml:id,'aatams.organisation.')" />
 			</td>
 			<td class="text">
 				<xsl:value-of select="aatams:organisation_ref/aatams:organisation/aatams:name" />
@@ -865,9 +972,9 @@
 				<xsl:value-of select="aatams:home_phone_number" />
 			</td>
 			<td class="text">
-				<xsl:value-of select="aatams:email"/>
+				<xsl:value-of select="aatams:email" />
 			</td>
-			<td class="text"> 
+			<td class="text">
 				<xsl:value-of select="aatams:home_physical_address_1" />
 			</td>
 			<td class="text">
@@ -946,8 +1053,8 @@
 		</tr>
 	</xsl:template>
 	<xsl:template match="aatams:tag_release_min">
-        <tr>
-            <td>
+		<tr>
+			<td>
 				<xsl:value-of select="substring-after(@gml:id,'aatams.tag_release_min.')" />
 			</td>
 			<td class="text">
@@ -988,32 +1095,32 @@
 				<xsl:value-of select="substring-after(@gml:id,'aatams.classification.')" />
 			</td>
 			<td class="text">
-                <xsl:value-of select="aatams:classification_level_ref/aatams:classification_level/aatams:name" />
+				<xsl:value-of select="aatams:classification_level_ref/aatams:classification_level/aatams:name" />
 			</td>
 			<td class="text">
 				<xsl:value-of select="aatams:name" />
 			</td>
 			<td class="text">
 				<xsl:value-of select="aatams:common_name" />
-            </td>
-            <td class="text">
-                <a>
-                    <xsl:attribute name="href">
-                        <xsl:text>http://www.marine.csiro.au/caabsearch/caab_search.caab_report?spcode=</xsl:text>
-                        <xsl:value-of select="aatams:caab_code" />
-                    </xsl:attribute>
-                    <xsl:value-of select="aatams:caab_code" />
-                </a>
-            </td>
+			</td>
+			<td class="text">
+				<a>
+					<xsl:attribute name="href">
+						<xsl:text>http://www.marine.csiro.au/caabsearch/caab_search.caab_report?spcode=</xsl:text>
+						<xsl:value-of select="aatams:caab_code" />
+					</xsl:attribute>
+					<xsl:value-of select="aatams:caab_code" />
+				</a>
+			</td>
 		</tr>
-    </xsl:template>
+	</xsl:template>
 	<xsl:template match="aatams:project_person">
 		<tr>
 			<td>
 				<xsl:value-of select="substring-after(aatams:project_fid,'aatams.project.')" />
 			</td>
 			<td class="text">
-                <xsl:value-of select="aatams:project_name" />
+				<xsl:value-of select="aatams:project_name" />
 			</td>
 			<td>
 				<xsl:value-of select="substring-after(aatams:person_fid,'aatams.person.')" />

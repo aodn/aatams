@@ -444,16 +444,17 @@
 									<xsl:when test="gml:featureMember[1]/aatams:receiver_deployment">
 										<xsl:for-each select="gml:featureMember/aatams:receiver_deployment">
 											<xsl:sort select="aatams:installation_ref/aatams:installation/aatams:name" />
-											<xsl:sort select="aatams:station_ref/aatams:station/aatams:name" />
+											<xsl:sort select="aatams:installation_station_ref/aatams:installation_station/aatams:curtain_position" data-type="number" />
+											<xsl:sort select="aatams:installation_station_ref/aatams:installation_station/aatams:name" />
 											<xsl:sort select="aatams:deployment_timestamp" />
-											<xsl:apply-templates />
+											<xsl:apply-templates select="."/>
 										</xsl:for-each>
 									</xsl:when>
 									<xsl:when test="gml:featureMember[1]/aatams:device_model">
 										<xsl:for-each select="gml:featureMember/aatams:device_model">
 											<xsl:sort select="aatams:device_type_ref/aatams:device_type/aatams:name" />
 											<xsl:sort select="aatams:name" />
-											<xsl:apply-templates />
+											<xsl:apply-templates select="."/>
 										</xsl:for-each>
 									</xsl:when>
 									<xsl:when test="gml:featureMember[1]/aatams:installation">
@@ -472,7 +473,7 @@
 									<xsl:when test="gml:featureMember[1]/*/aatams:name">
 										<xsl:for-each select="gml:featureMember">
 											<xsl:sort select="*/aatams:name" />
-											<xsl:apply-templates />
+											<xsl:apply-templates select="."/>
 										</xsl:for-each>
 									</xsl:when>
 									<xsl:otherwise>

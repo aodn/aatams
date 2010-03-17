@@ -1559,7 +1559,7 @@
                <deegreewfs:IdGenerator type="DB_SEQ">
                   <deegreewfs:param name="sequence">aatams.measurement_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
-               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+               <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
             <deegreewfs:transaction update="true" delete="true" insert="true"/>
@@ -1650,24 +1650,6 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="measurement_unit_type_ref" minOccurs="1" maxOccurs="1"
-                            type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:measurement_unit_type">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="measurement_units_id" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="measurement_unit_type_id" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
                <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
@@ -1682,15 +1664,15 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
-   <xsd:element name="measurement_unit_type" substitutionGroup="gml:_Feature"
-                type="aatams:measurement_unit_type_type">
+   <xsd:element name="measurement_unit" substitutionGroup="gml:_Feature"
+                type="aatams:measurement_unit_type">
       <xsd:annotation>
          <xsd:appinfo>
-            <deegreewfs:table>aatams.measurement_unit_type</deegreewfs:table>
-            <deegreewfs:gmlId prefix="aatams.measurement_unit_type.">
-               <deegreewfs:MappingField field="measurement_unit_type_id" type="INTEGER"/>
+            <deegreewfs:table>aatams.measurement_unit</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.measurement_unit.">
+               <deegreewfs:MappingField field="measurement_unit_id" type="INTEGER"/>
                <deegreewfs:IdGenerator type="DB_SEQ">
-                  <deegreewfs:param name="sequence">aatams.measurement_unit_type_serial</deegreewfs:param>
+                  <deegreewfs:param name="sequence">aatams.measurement_unit_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
@@ -1699,7 +1681,7 @@
          </xsd:appinfo>
       </xsd:annotation>
    </xsd:element>
-   <xsd:complexType name="measurement_unit_type_type">
+   <xsd:complexType name="measurement_unit_type">
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
@@ -1709,6 +1691,16 @@
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="name" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+              </xsd:element>
+               <xsd:element name="symbol" minOccurs="1" maxOccurs="1" type="xsd:string">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="symbol" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2494,24 +2486,6 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="project_person_ref" minOccurs="1" maxOccurs="1"
-                            type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:project_person">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
                <xsd:element name="animal_ref" minOccurs="1" maxOccurs="1" type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
@@ -2529,7 +2503,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="stock" minOccurs="0" maxOccurs="1" type="xsd:integer">
+               <!--xsd:element name="stock" minOccurs="0" maxOccurs="1" type="xsd:integer">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -2538,7 +2512,7 @@
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
-               </xsd:element>
+               </xsd:element-->
                <xsd:element name="utc_datetime" minOccurs="1" maxOccurs="1" type="xsd:dateTime">
                   <xsd:annotation>
                      <xsd:appinfo>
@@ -2559,22 +2533,36 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="unit" minOccurs="1" maxOccurs="1" type="xsd:string">
+			   <xsd:element name="measurement_ref" minOccurs="0" maxOccurs="unbounded" type="gml:FeaturePropertyType">
+					<xsd:annotation>
+						<xsd:appinfo>
+							<deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+							<deegreewfs:Content type="aatams:measurement">
+								<deegreewfs:Relation>
+									<deegreewfs:From>
+										<deegreewfs:MappingField field="surgery_id" type="INTEGER" />
+									</deegreewfs:From>
+									<deegreewfs:To fk="true">
+										<deegreewfs:MappingField field="surgery_id" type="INTEGER" />
+									</deegreewfs:To>
+								</deegreewfs:Relation>
+							</deegreewfs:Content>
+						</xsd:appinfo>
+					</xsd:annotation>
+                </xsd:element>
+                <xsd:element name="surgery_person_ref" minOccurs="1" maxOccurs="unbounded" type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="unit" type="VARCHAR"/>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="measure" minOccurs="1" maxOccurs="1" type="xsd:string">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content>
-                           <deegreewfs:MappingField field="measure" type="VARCHAR"/>
+                        <deegreewfs:Content type="aatams:surgery_person">
+                           <deegreewfs:Relation>
+                               <deegreewfs:From>
+                                 <deegreewfs:MappingField field="surgery_person_id" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To fk="true">
+                                 <deegreewfs:MappingField field="surgery_person_id" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -2593,7 +2581,7 @@
                <deegreewfs:IdGenerator type="DB_SEQ">
                   <deegreewfs:param name="sequence">aatams.surgery_person_serial</deegreewfs:param>
                </deegreewfs:IdGenerator>
-               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+               <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
             <deegreewfs:transaction update="true" delete="true" insert="true"/>
@@ -2604,27 +2592,10 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="surgery_ref" minOccurs="1" maxOccurs="1" type="gml:FeaturePropertyType">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:surgery">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-               </xsd:element>
                <xsd:element name="person_ref" minOccurs="1" maxOccurs="1" type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
-                        <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content type="aatams:person">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
@@ -3259,7 +3230,7 @@
             <deegreewfs:table>aatams.family</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.family.">
                <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
-               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+               <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
             <deegreewfs:transaction update="false" delete="false" insert="false"/>
@@ -3280,7 +3251,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
+               <xsd:element name="name" minOccurs="0" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3300,7 +3271,7 @@
             <deegreewfs:table>aatams.genus</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.genus.">
                <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
-               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+               <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
             <deegreewfs:transaction update="false" delete="false" insert="false"/>
@@ -3328,7 +3299,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
+               <xsd:element name="name" minOccurs="0" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3348,7 +3319,7 @@
             <deegreewfs:table>aatams.species</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.species.">
                <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
-               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+               <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
             <deegreewfs:transaction update="false" delete="false" insert="false"/>
@@ -3376,7 +3347,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="name" minOccurs="1" maxOccurs="1" type="xsd:string">
+               <xsd:element name="name" minOccurs="0" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3496,15 +3467,33 @@
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
-               </xsd:element>
-               <xsd:element name="displayed_classification_level_ref" minOccurs="0" maxOccurs="1"
-                            type="gml:FeaturePropertyType">
+              </xsd:element>
+              <!--xsd:element name="displayed_classification_level" minOccurs="0"  maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
-                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:classification_level">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
+                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                         <deegreewfs:Content>
+                            <deegreewfs:MappingField field="name" type="VARCHAR"/>
+                            <deegreewfs:Relation>
+                                <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="displayed_level_id" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="classification_level_id" type="INTEGER" table="aatams.classification_level"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+              </xsd:element-->
+              <xsd:element name="displayed_classification_level" minOccurs="1"  maxOccurs="1" type="gml:FeaturePropertyType">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                         <deegreewfs:Content type="aatams:classification_level">
+                            <deegreewfs:MappingField field="name" type="VARCHAR"/>
+                            <deegreewfs:Relation>
+                                <deegreewfs:From fk="true">
                                  <deegreewfs:MappingField field="displayed_level_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
@@ -3515,8 +3504,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="project_person_ref" minOccurs="1" maxOccurs="1"
-                            type="gml:FeaturePropertyType">
+               <xsd:element name="project_person_ref" minOccurs="1" maxOccurs="1" type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -3575,6 +3563,25 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
+               <!--xsd:element name="implant_type" minOccurs="0" maxOccurs="1" type="xsd:string">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                        <deegreewfs:MappingField field="name" type="VARCHAR"/>
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="implant_type_id" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="implant_type_id" type="INTEGER" table="aatams.implant_type"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+              </xsd:element-->
+
                <xsd:element name="implant_type_ref" minOccurs="0" maxOccurs="1"
                             type="gml:FeaturePropertyType">
                   <xsd:annotation>
@@ -3587,6 +3594,24 @@
                               </deegreewfs:From>
                               <deegreewfs:To>
                                  <deegreewfs:MappingField field="implant_type_id" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+              </xsd:element>
+               <xsd:element name="surgery_ref" minOccurs="0" maxOccurs="1"
+                            type="gml:FeaturePropertyType">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content type="aatams:surgery">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>

@@ -170,7 +170,7 @@
 					<xf:delete nodeset="instance('inst_data')//aatams:tag_device_ref/aatams:tag_device" at="1" />
 					<xf:insert nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person" origin="instance('inst_project_person')/gml:featureMember/aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]" />
                     <xf:delete nodeset="instance('inst_data')//aatams:project_person_ref/aatams:project_person" at="1" />
-                    <xf:delete nodeset="instance('inst_data')//@gml:id" />
+                    <!--xf:delete nodeset="instance('inst_data')//@gml:id" /-->
 				</xf:action>
 				<xf:message level="modeless" ev:event="xforms-submit-error">
 									Submit error.

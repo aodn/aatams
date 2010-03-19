@@ -2558,10 +2558,10 @@
                         <deegreewfs:Content type="aatams:surgery_person">
                            <deegreewfs:Relation>
                                <deegreewfs:From>
-                                 <deegreewfs:MappingField field="surgery_person_id" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To fk="true">
-                                 <deegreewfs:MappingField field="surgery_person_id" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -3462,11 +3462,11 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="species_ref" minOccurs="0" maxOccurs="1" type="gml:FeaturePropertyType">
+               <xsd:element name="species_ref" minOccurs="1" maxOccurs="1" type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:species">
+                        <deegreewfs:Content type="aatams:classification">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
                                  <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
@@ -3479,24 +3479,6 @@
                      </xsd:appinfo>
                   </xsd:annotation>
               </xsd:element>
-              <!--xsd:element name="displayed_classification_level" minOccurs="0"  maxOccurs="1" type="xsd:string">
-                  <xsd:annotation>
-                     <xsd:appinfo>
-                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                         <deegreewfs:Content>
-                            <deegreewfs:MappingField field="name" type="VARCHAR"/>
-                            <deegreewfs:Relation>
-                                <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="displayed_level_id" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="classification_level_id" type="INTEGER" table="aatams.classification_level"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
-                        </deegreewfs:Content>
-                     </xsd:appinfo>
-                  </xsd:annotation>
-              </xsd:element-->
               <xsd:element name="displayed_classification_level" minOccurs="1"  maxOccurs="1" type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>

@@ -21,6 +21,7 @@
             //see if required json lists are available from the WFS server
             if(project_person_list == null){
                 setTimeout('Init()',1000);
+                return;
             } 
             document.getElementById('wfs_uri').value = wfs;
             //document.getElementById('access_date').innerHTML = new Date().format("d MMM yyyy");

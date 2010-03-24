@@ -151,11 +151,11 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv.xsl">text/xml; subtype=csv</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv_cb.xsl">text/xml; subtype=csv_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/json.xsl">text/xml; subtype=json</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -172,7 +172,7 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/json.xsl">text/xml; subtype=json</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -189,10 +189,10 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv.xsl">text/xml; subtype=csv</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv_cb.xsl">text/xml; subtype=csv_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -209,11 +209,11 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv.xsl">text/xml; subtype=csv</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv_cb.xsl">text/xml; subtype=csv_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/json.xsl">text/xml; subtype=json</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -230,10 +230,10 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv.xsl">text/xml; subtype=csv</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv_cb.xsl">text/xml; subtype=csv_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -250,7 +250,7 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-        <wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
+        <wfs:Format deegree:outFilter="./xslt/json.xsl">text/xml; subtype=json</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -267,7 +267,7 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-        <wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
+        <wfs:Format deegree:outFilter="./xslt/json.xsl">text/xml; subtype=json</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -283,11 +283,12 @@
 </ows:Keywords>
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
-	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
+    <wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
+    <!--wfs:Format deegree:outFilter="./xslt/tag_release.xsl"  deegree:inFilter="./xslt/infilter_tag_release.xsl">text/xml; subtype=gml/3.1.1</wfs:Format-->
+	<wfs:Format deegree:outFilter="./xslt/xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv.xsl">text/xml; subtype=csv</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv_cb.xsl">text/xml; subtype=csv_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -304,8 +305,8 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv_cb.xsl">text/xml; subtype=csv_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -322,11 +323,11 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv.xsl">text/xml; subtype=csv</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv_cb.xsl">text/xml; subtype=csv_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/json.xsl">text/xml; subtype=json</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -343,9 +344,9 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/json.xsl">text/xml; subtype=json</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv_cb.xsl">text/xml; subtype=csv_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -362,7 +363,7 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-        <wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+        <wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -379,7 +380,7 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-        <wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+        <wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -396,11 +397,11 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv.xsl">text/xml; subtype=csv</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv_cb.xsl">text/xml; subtype=csv_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/json.xsl">text/xml; subtype=json</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -417,11 +418,11 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv.xsl">text/xml; subtype=csv</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv_cb.xsl">text/xml; subtype=csv_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/json.xsl">text/xml; subtype=json</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -438,10 +439,10 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv.xsl">text/xml; subtype=csv</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv_cb.xsl">text/xml; subtype=csv_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -458,7 +459,7 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-        <wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
+        <wfs:Format deegree:outFilter="./xslt/json.xsl">text/xml; subtype=json</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -475,7 +476,7 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-        <wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
+        <wfs:Format deegree:outFilter="./xslt/json.xsl">text/xml; subtype=json</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -492,7 +493,7 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-        <wfs:Format deegree:outFilter="./xslt/outfilter_json.xsl">text/xml; subtype=json</wfs:Format>
+        <wfs:Format deegree:outFilter="./xslt/json.xsl">text/xml; subtype=json</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -509,10 +510,10 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv.xsl">text/xml; subtype=csv</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_csv_clientbased.xsl">text/xml; subtype=csv_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml.xsl">text/xml; subtype=xhtml</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv.xsl">text/xml; subtype=csv</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/csv_cb.xsl">text/xml; subtype=csv_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -529,7 +530,7 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -546,7 +547,7 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -563,7 +564,7 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -580,7 +581,7 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
@@ -597,13 +598,15 @@
 <wfs:DefaultSRS>EPSG:4326</wfs:DefaultSRS>
 <wfs:OutputFormats >
 	<wfs:Format>text/xml; subtype=gml/3.1.1</wfs:Format>
-	<wfs:Format deegree:outFilter="./xslt/outfilter_xhtml_clientbased.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
+	<wfs:Format deegree:outFilter="./xslt/xhtml_cb.xsl">text/xml; subtype=xhtml_cb</wfs:Format>
 </wfs:OutputFormats>
 <ows:WGS84BoundingBox>
 <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>
 <ows:UpperCorner>180.0 90.0</ows:UpperCorner>
 </ows:WGS84BoundingBox>
 </wfs:FeatureType>
+
+
 
   </wfs:FeatureTypeList>
   <!-- ================================================================== -->

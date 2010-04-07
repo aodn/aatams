@@ -188,6 +188,16 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
+               <xsd:element name="caab_code" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="caab_code" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>
@@ -842,7 +852,7 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="serial_number" minOccurs="1" maxOccurs="1" type="xsd:string">
+               <xsd:element name="serial_number" minOccurs="0" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
@@ -1590,6 +1600,24 @@
                               </deegreewfs:From>
                               <deegreewfs:To>
                                  <deegreewfs:MappingField field="measurement_type_id" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="measurement_unit_type_ref" minOccurs="1" maxOccurs="1"
+                            type="gml:FeaturePropertyType">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content type="aatams:measurement_unit_type">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="measurement_unit_type_id" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="measurement_unit_type_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2805,6 +2833,23 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
+               <xsd:element name="surgery_ref" minOccurs="0" maxOccurs="1" type="gml:FeaturePropertyType">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content type="aatams:surgery">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="surgery_id" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
             </xsd:sequence>
          </xsd:extension>
       </xsd:complexContent>
@@ -3132,6 +3177,16 @@
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="installation_fid" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="curtain_position" minOccurs="0" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="curtain_position" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4047,6 +4102,58 @@
          </xsd:extension>
       </xsd:complexContent>
    </xsd:complexType>
+   <xsd:element name="detections_by_installation" substitutionGroup="gml:_Feature"
+                type="aatams:detections_by_installation_type">
+      <xsd:annotation>
+         <xsd:appinfo>
+            <deegreewfs:table>aatams.detections_by_installation</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.detections_by_installation.">
+               <deegreewfs:MappingField field="" type=""/>
+               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+            </deegreewfs:gmlId>
+            <deegreewfs:visible>true</deegreewfs:visible>
+            <deegreewfs:transaction update="false" delete="false" insert="false"/>
+         </xsd:appinfo>
+      </xsd:annotation>
+   </xsd:element>
+   <xsd:complexType name="detections_by_installation_type">
+      <xsd:complexContent>
+         <xsd:extension base="gml:AbstractFeatureType">
+            <xsd:sequence>
+               <xsd:element name="installation" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="installation_name" minOccurs="1" maxOccurs="1" type="xsd:string">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="installation_name" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="count" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="count" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
    <xsd:element name="detections_by_instln_station" substitutionGroup="gml:_Feature"
                 type="aatams:detections_by_instln_station_type">
       <xsd:annotation>
@@ -4102,6 +4209,68 @@
                         <deegreewfs:Content>
                            <deegreewfs:SRS>EPSG:4326</deegreewfs:SRS>
                            <deegreewfs:MappingField field="LOCATION" type="GEOMETRY" srs="4326"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="count" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="count" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+            </xsd:sequence>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+   <xsd:element name="detections_by_instln_tag" substitutionGroup="gml:_Feature"
+                type="aatams:detections_by_instln_tag_type">
+      <xsd:annotation>
+         <xsd:appinfo>
+            <deegreewfs:table>aatams.detections_by_instln_tag</deegreewfs:table>
+            <deegreewfs:gmlId prefix="aatams.detections_by_instln_tag.">
+               <deegreewfs:MappingField field="" type=""/>
+               <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+            </deegreewfs:gmlId>
+            <deegreewfs:visible>true</deegreewfs:visible>
+            <deegreewfs:transaction update="false" delete="false" insert="false"/>
+         </xsd:appinfo>
+      </xsd:annotation>
+   </xsd:element>
+   <xsd:complexType name="detections_by_instln_tag_type">
+      <xsd:complexContent>
+         <xsd:extension base="gml:AbstractFeatureType">
+            <xsd:sequence>
+               <xsd:element name="installation" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="installation_id" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="tag" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="tag_id" type="INTEGER"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+               </xsd:element>
+               <xsd:element name="tag_name" minOccurs="1" maxOccurs="1" type="xsd:integer">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="tag_name" type="INTEGER"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -4462,20 +4631,12 @@
                      </xsd:appinfo>
                   </xsd:annotation>
                </xsd:element>
-               <xsd:element name="tag_release_ref" minOccurs="0" maxOccurs="1"
-                            type="gml:FeaturePropertyType">
+               <xsd:element name="release" minOccurs="0" maxOccurs="1" type="xsd:string">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:tag_release">
-                           <deegreewfs:Relation>
-                              <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="release_id" type="INTEGER"/>
-                              </deegreewfs:From>
-                              <deegreewfs:To>
-                                 <deegreewfs:MappingField field="release_id" type="INTEGER"/>
-                              </deegreewfs:To>
-                           </deegreewfs:Relation>
+                        <deegreewfs:Content>
+                           <deegreewfs:MappingField field="release_id" type="VARCHAR"/>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>

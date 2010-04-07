@@ -2469,18 +2469,17 @@
       <xsd:complexContent>
          <xsd:extension base="gml:AbstractFeatureType">
             <xsd:sequence>
-               <xsd:element name="treatment_type_ref" minOccurs="1" maxOccurs="1"
-                            type="gml:FeaturePropertyType">
+               <xsd:element name="project_person_ref" minOccurs="1" maxOccurs="1" type="gml:FeaturePropertyType">
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:treatment_type">
+                        <deegreewfs:Content type="aatams:project_person">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
-                                 <deegreewfs:MappingField field="treatment_type_id" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                               </deegreewfs:From>
                               <deegreewfs:To>
-                                 <deegreewfs:MappingField field="treatment_type_id" type="INTEGER"/>
+                                 <deegreewfs:MappingField field="project_role_person_id" type="INTEGER"/>
                               </deegreewfs:To>
                            </deegreewfs:Relation>
                         </deegreewfs:Content>
@@ -2530,6 +2529,24 @@
                         <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
                         <deegreewfs:Content>
                            <deegreewfs:MappingField field="comments" type="VARCHAR"/>
+                        </deegreewfs:Content>
+                     </xsd:appinfo>
+                  </xsd:annotation>
+              </xsd:element>
+              <xsd:element name="treatment_type_ref" minOccurs="1" maxOccurs="1"
+                            type="gml:FeaturePropertyType">
+                  <xsd:annotation>
+                     <xsd:appinfo>
+                        <deegreewfs:IdentityPart>false</deegreewfs:IdentityPart>
+                        <deegreewfs:Content type="aatams:treatment_type">
+                           <deegreewfs:Relation>
+                              <deegreewfs:From fk="true">
+                                 <deegreewfs:MappingField field="treatment_type_id" type="INTEGER"/>
+                              </deegreewfs:From>
+                              <deegreewfs:To>
+                                 <deegreewfs:MappingField field="treatment_type_id" type="INTEGER"/>
+                              </deegreewfs:To>
+                           </deegreewfs:Relation>
                         </deegreewfs:Content>
                      </xsd:appinfo>
                   </xsd:annotation>
@@ -3329,7 +3346,11 @@
          <xsd:appinfo>
             <deegreewfs:table>aatams.species</deegreewfs:table>
             <deegreewfs:gmlId prefix="aatams.species.">
-               <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
+                <deegreewfs:MappingField field="classification_id" type="INTEGER"/>
+                <!-- actually a view so cannot add a 'species' but needed to avoid run-time error in tag_release_t insert -->
+                <deegreewfs:IdGenerator type="DB_SEQ">
+                    <deegreewfs:param name="sequence">aatams.classification_serial</deegreewfs:param>
+                </deegreewfs:IdGenerator>
                <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
             </deegreewfs:gmlId>
             <deegreewfs:visible>true</deegreewfs:visible>
@@ -3449,7 +3470,7 @@
                   <xsd:annotation>
                      <xsd:appinfo>
                         <deegreewfs:IdentityPart>true</deegreewfs:IdentityPart>
-                        <deegreewfs:Content type="aatams:tag_device">
+                        <deegreewfs:Content type="aatams:device">
                            <deegreewfs:Relation>
                               <deegreewfs:From fk="true">
                                  <deegreewfs:MappingField field="device_id" type="INTEGER"/>

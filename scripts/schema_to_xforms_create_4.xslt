@@ -2,7 +2,6 @@
 <!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
 <!-- 
 	New version including prototypes of subfeatures, 'Add' buttons.
-	
 -->
 
 <xsl:stylesheet version="2.0" xmlns="http://www.w3.org/1999/xhtml"
@@ -48,24 +47,31 @@
 			</xsl:result-document>
 		</xsl:for-each>
 	</xsl:template>
-
 	<!-- 
 		template to build the model 
 	-->
 	<xsl:template name="model">
 		<xf:model id="model1">
+			<!-- add the transaction instance (sent to wfs) -->
 			<xsl:call-template name="wfs-transaction" />
+			<!-- add the subfeature lists needed for select1 controls -->
 			<xsl:call-template name="subfeature-lists" />
+			<!-- add instance to record ids of selected subfeatures -->
 			<xsl:call-template name="selected-subfeatures" />
+			<!-- add the subfeature prototypes -->
 			<xsl:call-template name="prototypes" />
+			<!-- add the model node bindings -->
 			<xsl:call-template name="bindings" />
+			<!-- add the xform submission details -->
 			<xsl:call-template name="submission" />
+			<!-- add an instance to receive server response -->
 			<xsl:call-template name="wfs-response" />
+			<!-- add bindings for submission success or failure messages -->
 			<xsl:call-template name="messages" />
+			<!-- action to select first subfeatures in lists -->
 			<xsl:call-template name="initial-subfeatures" />
 		</xf:model>
 	</xsl:template>
-
 	<!-- 
 		template to build the form
 	-->
@@ -126,7 +132,6 @@
 			</div>
 		</div>
 	</xsl:template>
-
 	<xsl:template match="table" mode="form-case">
 		<xsl:choose>
 			<xsl:when test="foreign-key">
@@ -148,7 +153,6 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-
 	<!--
 		template to create xml base transaction for submission to WFS 
 	-->
@@ -169,7 +173,6 @@
 			</wfs:Transaction>
 		</xf:instance>
 	</xsl:template>
-
 	<!-- 
 		template for simple feature properties
 	-->

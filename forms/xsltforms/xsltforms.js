@@ -3468,20 +3468,27 @@ XFInput.prototype.click = function(target) {
 	} else if (target == this.calendarButton) {
         //SC
 		//Calendar.show(target.previousSibling, this.type["class"] == "datetime"? Calendar.SECONDS : Calendar.ONLY_DATE);
-        if(target.previousSibling.id == ""){
+        var input = target.previousSibling;
+        var id = input.id;
+        if(id == ""){
             //create an guid
-            var id = 'xxxxxxxxxxx'.replace(/x/g, function(c) {
+            id = 'xxxxxxxxxxx'.replace(/x/g, function(c) {
                 var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
                return v.toString(16);
             }).toUpperCase();
-            target.previousSibling.id = id;
+            var now = new Date();
+            var year = now.getYear();
+            var month = now.getMonth();
+            var day = now.getDate();
+            input.value = (year<2000?year+1900:year)+"/"+(month<10?"0":"")+month+"/"+(day<10?"0":"")+day+" 00:00:00";
+            input.id = id;
             if(this.type["class"] == "datetime")
-                AnyTime.widget(id,{format : '%Y-%m-%d %T'});
+                AnyTime.widget(id,{format : '%Y/%m/%d %T', placement: "popup"});
             else
-                AnyTime.widget(id,{format : '%Y-%m-%d'});
+                AnyTime.widget(id,{format : '%Y/%m/%d', placement: "popup"});
         }
         $x(id).focus();
-        //end SC
+        Event.dispatch($x(id),"keydown");
 	}
 };
 		

@@ -4,7 +4,7 @@
 		<options>
 		</options>
 		<properties> <!--  accessible at run time -->
-			<language>navigator</language> <!-- navigator or default -->
+			<language>default</language> <!-- navigator or default -->
 			<calendar.day0>Mon</calendar.day0>
 			<calendar.day1>Tue</calendar.day1>
 			<calendar.day2>Wed</calendar.day2>
@@ -25,8 +25,8 @@
 			<calendar.month9>October</calendar.month9>
 			<calendar.month10>November</calendar.month10>
 			<calendar.month11>December</calendar.month11>
-			<format.date>MM/dd/yyyy</format.date>
-			<format.datetime>yyyy-MM-dd hh:mm:ss</format.datetime>
+			<format.date>yyyy/MM/dd</format.date>
+            <format.datetime>yyyy/MM/dd hh:mm:ss</format.datetime>
 			<format.decimal>.</format.decimal>
 			<status>... Loading ...</status>
         </properties>

@@ -32,9 +32,9 @@
         </properties>
          <!-- HTML elements to be added just after xsltforms.js and xsltforms.css loading -->
          <extensions>
-            <link rel="stylesheet" type="text/css" href="build/anytime.css" />
-            <script type="text/javascript" src="build/jquery.js" xmlns="http://www.w3.org/1999/xhtml">/**/</script>
-            <script type="text/javascript" src="build/anytime.js" xmlns="http://www.w3.org/1999/xhtml">/**/</script>
+            <link rel="stylesheet" type="text/css" href="xsltforms/anytime.css" />
+            <script type="text/javascript" src="xsltforms/jquery.js" xmlns="http://www.w3.org/1999/xhtml">/**/</script>
+            <script type="text/javascript" src="xsltforms/anytime.js" xmlns="http://www.w3.org/1999/xhtml">/**/</script>
             <script type="text/javascript" xmlns="http://www.w3.org/1999/xhtml">
                 function xf_user_init(){
                 AnyTime.widget("AnyTimeDemo");

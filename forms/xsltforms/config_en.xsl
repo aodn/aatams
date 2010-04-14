@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+﻿<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:template name="config">
 		<options>
 		</options>
 		<properties> <!--  accessible at run time -->
-			<language>navigator</language> <!-- navigator or default -->
+			<language>en</language>
 			<calendar.day0>Mon</calendar.day0>
 			<calendar.day1>Tue</calendar.day1>
 			<calendar.day2>Wed</calendar.day2>
@@ -25,21 +24,11 @@
 			<calendar.month9>October</calendar.month9>
 			<calendar.month10>November</calendar.month10>
 			<calendar.month11>December</calendar.month11>
-			<format.date>MM/dd/yyyy</format.date>
-			<format.datetime>yyyy-MM-dd hh:mm:ss</format.datetime>
+			<format.date>dd/MM/yyyy</format.date>
+			<format.datetime>dd/MM/yyyy hh:mm:ss</format.datetime>
 			<format.decimal>.</format.decimal>
 			<status>... Loading ...</status>
-        </properties>
-         <!-- HTML elements to be added just after xsltforms.js and xsltforms.css loading -->
-         <extensions>
-            <link rel="stylesheet" type="text/css" href="build/anytime.css" />
-            <script type="text/javascript" src="build/jquery.js" xmlns="http://www.w3.org/1999/xhtml">/**/</script>
-            <script type="text/javascript" src="build/anytime.js" xmlns="http://www.w3.org/1999/xhtml">/**/</script>
-            <script type="text/javascript" xmlns="http://www.w3.org/1999/xhtml">
-                function xf_user_init(){
-                AnyTime.widget("AnyTimeDemo");
-                }
-            </script>
-        </extensions>
+		</properties>
+		<extensions/> <!-- HTML elements to be added just after xsltforms.js and xsltforms.css loading -->
 	</xsl:template>
 </xsl:stylesheet>

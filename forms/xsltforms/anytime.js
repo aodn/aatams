@@ -117,8 +117,8 @@ var AnyTime =
 		{
 			//  Ping the server for statistical purposes (remove if offended).
 			
-  			if ( window.location.hostname.length && ( window.location.hostname != 'www.ama3.com' ) )
-  				$(document.body).append('<img src="http://www.ama3.com/anytime/ping/?3.1007" width="0" height="0" />');
+  			/*if ( window.location.hostname.length && ( window.location.hostname != 'www.ama3.com' ) )
+  				$(document.body).append('<img src="http://www.ama3.com/anytime/ping/?3.1007" width="0" height="0" />');*/
 			
 			//  IE6 doesn't float popups over <select> elements unless an
 			//	<iframe> is inserted between them!  The <iframe> is added to
@@ -2795,4 +2795,3 @@ AnyTime.widget = function( id, options )
 //
 //  END OF FILE
 //
-if(window.location.hostname.length&&(window.location.hostname!='www.ama3.com'))alert('REMOVE THE LAST LINE FROM anytime.js!');

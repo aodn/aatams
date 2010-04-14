@@ -14,7 +14,9 @@ function loadXMLDoc(dname){
 
 function displayResult(type,stylesheet)
 {
-	xml=loadXMLDoc(service+"&typename="+type);
+    var search = (location.search) ? "&"+location.search.replace(/^\?/,"") : "" ;
+    alert(search);
+	xml=loadXMLDoc(service+"&typename="+type+search);
 	xsl=loadXMLDoc(stylesheet);
 	//codeforIE
 	if(window.ActiveXObject){

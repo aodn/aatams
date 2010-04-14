@@ -12,7 +12,7 @@
 					<th colspan="2" rowspan="1">Receiver</th>
 					<th colspan="5" rowspan="1">Deployment</th>
 					<th colspan="2" rowspan="1">Data Download</th>
-					<th colspan="1" rowspan="1">Detections</th>
+					<th colspan="2" rowspan="1">Detections</th>
 				</tr>
 				<tr>
 					<th colspan="1" rowspan="1">ID</th>
@@ -25,6 +25,7 @@
 					<th colspan="1" rowspan="1">ID</th>
 					<th colspan="1" rowspan="1">UTC Date Time</th>
 					<th colspan="1" rowspan="1">(click to show tags)</th>
+					<th colspan="1" rowspan="1">Download</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -34,6 +35,9 @@
 					<xsl:for-each select="key('downloads_by_receiver',aatams:installation_deployment_ref/aatams:installation_deployment/aatams:device_name)">
 						<xsl:sort select="aatams:installation_deployment_ref/aatams:installation_deployment/aatams:deployment_timestamp"/>
 						<xsl:sort select="aatams:download_timestamp"/>
+						<xsl:variable name="deployment_id">
+							<xsl:value-of select="substring-after(aatams:installation_deployment_ref/aatams:installation_deployment/aatams:deployment_fid,'aatams.receiver_deployment.')" />
+						</xsl:variable>
 						<tr style="height:2em;vertical-align:middle;">
 							<xsl:if test="position() = 1">
 								<xsl:variable name="rowspan">
@@ -49,7 +53,7 @@
 								</td>
 							</xsl:if>
 							<td>
-								<xsl:value-of select="substring-after(aatams:installation_deployment_ref/aatams:installation_deployment/aatams:deployment_fid,'aatams.receiver_deployment.')" />
+								<xsl:value-of select="$deployment_id" />
 							</td>
 							<td>
 								<xsl:value-of select="substring-after(aatams:installation_deployment_ref/aatams:installation_deployment/aatams:installation_fid,'aatams.installation.')" />
@@ -85,6 +89,15 @@
 										</xsl:for-each>
 									</div>
 								</xsl:if>
+							</td>
+							<td style="text-align:center;">
+								<a>
+									<xsl:attribute name="href">
+										<xsl:text>detections?outputformat=csv&amp;deployment=</xsl:text>
+										<xsl:value-of select="$deployment_id"/>
+									</xsl:attribute>
+									<img src="img/zip.png" border="0"/>
+								</a>
 							</td>
 						</tr>
 					</xsl:for-each>

@@ -16,7 +16,7 @@
                <wfs:Insert>
                   <wfs:FeatureCollection>
                      <gml:featureMember>
-                        <aatams:installation_station>
+                        <aatams:installation_station_t>
                            <aatams:installation_ref>
                               <aatams:installation/>
                            </aatams:installation_ref>
@@ -27,7 +27,7 @@
                                  <gml:pos/>
                               </gml:Point>
                            </aatams:location>
-                        </aatams:installation_station>
+                        </aatams:installation_station_t>
                      </gml:featureMember>
                   </wfs:FeatureCollection>
                </wfs:Insert>

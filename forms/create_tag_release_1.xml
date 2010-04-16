@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  started to add select existing tag device for tag_release,
+these will be the ones create automatically when detection files are uploaded -->
+
+
+<!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
+<?xml-stylesheet href="xsltforms/xsltforms.xsl" type="text/xsl"?>
+<?css-conversion no?>
+<html xmlns:aatams="http://www.imos.org.au/aatams" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:ows="http://www.opengis.net/ows" xmlns="http://www.w3.org/1999/xhtml" xmlns:gml="http://www.opengis.net/gml">
+	<head>
+		<title>Australian Acoustic Tagging and Monitoring System (AATAMS)</title>
+		<link href="aatams.css" rel="stylesheet" type="text/css" />
+		<link href="../aatams_tables.css" rel="stylesheet" type="text/css" />
+		<xf:model id="model1">
+			<xf:instance id="inst_data">
+				<wfs:Transaction version="1.1.0" service="WFS">
+					<wfs:Insert>
+						<wfs:FeatureCollection>
+							<gml:featureMember>
+								<aatams:tag_release_t>
+									<aatams:tag_device_ref>
+										<aatams:device>
+											<aatams:code_name />
+											<aatams:device_type_ref>
+												<aatams:device_type>
+													<aatams:name>TRANSMITTER</aatams:name>
+												</aatams:device_type>
+											</aatams:device_type_ref>
+											<aatams:device_model_ref>
+												<aatams:device_model />
+											</aatams:device_model_ref>
+											<aatams:serial_number />
+											<aatams:project_person_ref>
+												<aatams:project_person />
+											</aatams:project_person_ref>
+										</aatams:device>
+									</aatams:tag_device_ref>
+									<aatams:species_ref class_fid="">
+										<aatams:classification />
+									</aatams:species_ref>
+									<aatams:displayed_classification_level>
+										<aatams:classification_level>
+											<aatams:name>SPECIES</aatams:name>
+										</aatams:classification_level>
+									</aatams:displayed_classification_level>
+									<aatams:project_person_ref>
+										<aatams:project_person />
+									</aatams:project_person_ref>
+									<aatams:capture_location>
+										<gml:Point>
+											<gml:pos />
+										</gml:Point>
+									</aatams:capture_location>
+									<aatams:capture_timestamp />
+									<aatams:release_location>
+										<gml:Point>
+											<gml:pos />
+										</gml:Point>
+									</aatams:release_location>
+									<aatams:release_timestamp />
+									<aatams:implant_type_ref>
+										<aatams:implant_type>
+											<aatams:name>INTERNAL</aatams:name>
+										</aatams:implant_type>
+									</aatams:implant_type_ref>
+								</aatams:tag_release_t>
+							</gml:featureMember>
+						</wfs:FeatureCollection>
+					</wfs:Insert>
+				</wfs:Transaction>
+			</xf:instance>
+			<xf:instance id="inst_surgery_prototype">
+				<prototype xmlns="">
+					<aatams:surgery_ref>
+						<aatams:surgery>
+							<aatams:project_person_ref>
+								<aatams:project_person />
+							</aatams:project_person_ref>
+							<aatams:animal_ref>
+								<aatams:animal>
+									<aatams:classification_ref>
+										<aatams:classification />
+									</aatams:classification_ref>
+									<aatams:sex>X</aatams:sex>
+									<aatams:name />
+									<aatams:protected_species_licence />
+									<aatams:comments />
+								</aatams:animal>
+							</aatams:animal_ref>
+							<aatams:utc_datetime />
+							<aatams:comments />
+							<aatams:treatment_type_ref>
+								<aatams:treatment_type>
+									<aatams:name>No Anaesthetic</aatams:name>
+								</aatams:treatment_type>
+							</aatams:treatment_type_ref>
+							<aatams:measurement_ref>
+								<aatams:measurement>
+									<aatams:measurement_type_ref>
+										<aatams:measurement_type>
+											<aatams:name>Length</aatams:name>
+										</aatams:measurement_type>
+									</aatams:measurement_type_ref>
+									<aatams:measurement_unit_ref>
+										<aatams:measurement_unit>
+											<aatams:symbol>cm</aatams:symbol>
+										</aatams:measurement_unit>
+									</aatams:measurement_unit_ref>
+									<aatams:value />
+									<aatams:comments />
+								</aatams:measurement>
+							</aatams:measurement_ref>
+							<aatams:surgery_person_ref>
+								<aatams:surgery_person>
+									<aatams:person_ref person_fid="">
+										<aatams:person />
+									</aatams:person_ref>
+									<aatams:comments />
+								</aatams:surgery_person>
+							</aatams:surgery_person_ref>
+						</aatams:surgery>
+					</aatams:surgery_ref>
+				</prototype>
+			</xf:instance>
+			<xf:instance id="inst_subfeatures">
+				<data xmlns="">
+					<device_model_id />
+					<species_id />
+					<classification_level_id>SPECIES</classification_level_id>
+					<tag_device_id />
+					<implant_type_id />
+					<project_id />
+					<project_person_id />
+					<person_id />
+				</data>
+			</xf:instance>
+			<xf:instance id="inst_capture_location">
+				<data xmlns="">
+					<longitude />
+					<latitude />
+				</data>
+			</xf:instance>
+			<xf:instance id="inst_release_location">
+				<data xmlns="">
+					<longitude />
+					<latitude />
+				</data>
+			</xf:instance>
+			<xf:instance id="inst_device_model" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:device_model&amp;filter=&lt;ogc:Filter xmlns:ogc='http://www.opengis.net/ogc' xmlns:aatams='http://www.imos.org.au/aatams' xmlns:gml='http://www.opengis.net/gml'&gt;&lt;ogc:PropertyIsEqualTo&gt;&lt;ogc:PropertyName&gt;aatams:device_type_ref/aatams:device_type/aatams:name&lt;/ogc:PropertyName&gt;&lt;ogc:Literal&gt;TRANSMITTER&lt;/ogc:Literal&gt;&lt;/ogc:PropertyIsEqualTo&gt;&lt;/ogc:Filter&gt;" />
+			<xf:instance id="inst_species" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:species" />
+			<xf:instance id="inst_classification" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:classification&amp;filter=&lt;ogc:Filter xmlns:ogc='http://www.opengis.net/ogc' xmlns:aatams='http://www.imos.org.au/aatams' xmlns:gml='http://www.opengis.net/gml'&gt;&lt;ogc:PropertyIsEqualTo&gt;&lt;ogc:PropertyName&gt;aatams:classification_level_ref/aatams:classification_level/aatams:name&lt;/ogc:PropertyName&gt;&lt;ogc:Literal&gt;SPECIES&lt;/ogc:Literal&gt;&lt;/ogc:PropertyIsEqualTo&gt;&lt;/ogc:Filter&gt;" />
+			<xf:instance id="inst_implant_type" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:implant_type" />
+			<xf:instance id="inst_project_person" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project_person" />
+			<xf:instance id="inst_person" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:person" />
+			<xf:instance id="inst_project" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project" />
+			<xf:instance id="inst_measurement_type" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:measurement_type" />
+			<xf:instance id="inst_measurement_unit" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:measurement_unit" />
+			<xf:instance id="inst_response">
+				<dummy xmlns="">
+					<ows:Exception />
+					<wfs:TransactionResponse>
+						<wfs:InsertResults>
+							<wfs:Feature>
+								<ogc:FeatureId />
+							</wfs:Feature>
+						</wfs:InsertResults>
+					</wfs:TransactionResponse>
+				</dummy>
+			</xf:instance>
+			<xf:bind id="code_name" nodeset="instance('inst_data')//aatams:code_name" type="xsd:string" required="true()" />
+			<xf:bind id="device_model" nodeset="instance('inst_subfeatures')/device_model_id" type="xsd:string" required="true()" />
+			<xf:bind id="serial_number" nodeset="instance('inst_data')//aatams:serial_number" type="xsd:string" required="true()" />
+			<xf:bind id="species" nodeset="instance('inst_data')//aatams:species_ref/@class_fid" type="xsd:string" required="true()" />
+			<xf:bind id="project" nodeset="instance('inst_subfeatures')/project_id" type="xsd:string" required="true()" />
+			<xf:bind id="project_person" nodeset="instance('inst_subfeatures')/project_person_id" type="xsd:string" required="true()" />
+			<xf:bind id="capture_location_longitude" nodeset="instance('inst_capture_location')/longitude" type="xsd:decimal" required="false()" constraint=". &gt;= -180 and . &lt;= 180" />
+			<xf:bind id="capture_location_latitude" nodeset="instance('inst_capture_location')/latitude" type="xsd:decimal" required="false()" constraint=". &gt;= -90 and . &lt;= 90" />
+			<xf:bind id="capture_timestamp" nodeset="instance('inst_data')//aatams:capture_timestamp" type="xsd:dateTime" required="false()"/>
+			<xf:bind id="release_location_longitude" nodeset="instance('inst_release_location')/longitude" type="xsd:decimal" required="true()" constraint=". &gt;= -180 and . &lt;= 180" />
+			<xf:bind id="release_location_latitude" nodeset="instance('inst_release_location')/latitude" type="xsd:decimal" required="true()" constraint=". &gt;= -90 and . &lt;= 90" />
+			<xf:bind id="release_timestamp" nodeset="instance('inst_data')//aatams:release_timestamp" type="xsd:dateTime" required="true()" />
+			<xf:bind id="implant_type" nodeset="instance('inst_data')//aatams:implant_type_ref/aatams:implant_type/aatams:name" type="xsd:string" required="false()" />
+			<xf:bind id="classification_level" nodeset="instance('inst_data')//aatams:displayed_classification_level/aatams:classification_level/aatams:name" type="xsd:string" required="true()" />
+			<xf:bind id="surgery" nodeset="instance('inst_data')//aatams:surgery_ref/aatams:surgery" required="false()" />
+			<xf:bind id="surgery_datetime" nodeset="instance('inst_data')//aatams:surgery/aatams:utc_datetime" type="xsd:dateTime" required="true()" />
+			<xf:bind id="animal_sex" nodeset="instance('inst_data')//aatams:animal/aatams:sex" type="xsd:string" required="true()" />
+			<xf:bind id="measurement_value" nodeset="instance('inst_data')//aatams:measurement/aatams:value" type="xsd:decimal" required="true()" />
+			<xf:bind id="measurement_comment" nodeset="instance('inst_data')//aatams:measurement/aatams:comments" type="xsd:string" />
+			<xf:bind id="personnel_person" nodeset="instance('inst_data')//aatams:surgery_person/aatams:person_ref/aatams:person" type="xsd:string" />
+			<xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException" calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)" type="xsd:string" />
+			<xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid" type="xsd:string" />
+			<xf:submission id="s01" ref="instance('inst_data')" method="post" action="../../deegree-wfs/services" replace="instance" instance="inst_response">
+				<xf:action ev:event="xforms-submit">
+					<xf:setvalue ref="instance('inst_data')//aatams:capture_location/gml:Point/gml:pos" value="concat(instance('inst_capture_location')/longitude,' ',instance('inst_capture_location')/latitude)" />
+					<xf:setvalue ref="instance('inst_data')//aatams:release_location/gml:Point/gml:pos" value="concat(instance('inst_release_location')/longitude,' ',instance('inst_release_location')/latitude)" />
+					<xf:insert nodeset="instance('inst_data')//aatams:tag_release_t/aatams:project_person_ref/aatams:project_person" origin="instance('inst_project_person')/gml:featureMember/aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]" />
+					<xf:delete nodeset="instance('inst_data')//aatams:tag_release_t/aatams:project_person_ref/aatams:project_person" at="1" />
+					<xf:insert nodeset="instance('inst_data')//aatams:device/aatams:project_person_ref/aatams:project_person" origin="instance('inst_project_person')/gml:featureMember/aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]" />
+					<xf:delete nodeset="instance('inst_data')//aatams:device/aatams:project_person_ref/aatams:project_person" at="1" />
+                    <xf:insert nodeset="instance('inst_data')//aatams:surgery/aatams:project_person_ref/aatams:project_person" origin="instance('inst_project_person')/gml:featureMember/aatams:project_person[@gml:id=instance('inst_subfeatures')/project_person_id]" if="count(instance('inst_data')//aatams:surgery)=1"/>
+					<xf:delete nodeset="instance('inst_data')//aatams:surgery/aatams:project_person_ref/aatams:project_person" at="1" />
+					<xf:insert nodeset="instance('inst_data')//aatams:device/aatams:device_model_ref/aatams:device_model" origin="instance('inst_device_model')/gml:featureMember/aatams:device_model[@gml:id=instance('inst_subfeatures')/device_model_id]" />
+					<xf:delete nodeset="instance('inst_data')//aatams:device/aatams:device_model_ref/aatams:device_model" at="1" />
+					<xf:delete nodeset="instance('inst_data')//@gml:id" />
+				</xf:action>
+				<xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+			</xf:submission>
+			<xf:dispatch ev:event="xforms-ready" name="set-selected" target="model1" />
+			<xf:action ev:event="set-selected">
+				<xf:setvalue ref="instance('inst_subfeatures')/device_model_id" value="instance('inst_device_model')/gml:featureMember/aatams:device_model[1]/@gml:id" />
+				<xf:setvalue ref="instance('inst_data')//aatams:species_ref/@class_fid" value="instance('inst_species')/gml:featureMember/aatams:species[1]/@gml:id" />
+				<xf:setvalue ref="instance('inst_subfeatures')/implant_type_id" value="instance('inst_implant_type')/gml:featureMember/aatams:implant_type[1]/@gml:id" />
+				<xf:setvalue ref="instance('inst_subfeatures')/project_id" value="instance('inst_project')/gml:featureMember/aatams:project[1]/@gml:id" />
+				<xf:setvalue ref="instance('inst_subfeatures')/project_person_id" value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id" />
+				<xf:setvalue ref="instance('inst_subfeatures')/person_id" value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/aatams:person_fid" />
+				<xf:dispatch name="set-tag-release-classification" target="model1" />
+				<xf:dispatch name="xforms-revalidate" target="model1" />
+			</xf:action>
+			<xf:action ev:event="set-tag-release-classification">
+				<xf:insert nodeset="instance('inst_data')//aatams:species_ref/aatams:classification" origin="instance('inst_classification')/gml:featureMember/aatams:classification[@gml:id=concat('aatams.classification',substring-after(instance('inst_data')//aatams:species_ref/@class_fid,'aatams.species'))]" />
+				<xf:delete nodeset="instance('inst_data')//aatams:species_ref/aatams:classification" at="1" />
+			</xf:action>
+			<xf:action ev:event="set-animal-classification" if="instance('inst_data')//aatams:classification_ref/aatams:classification">
+				<xf:insert nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification" origin="instance('inst_classification')/gml:featureMember/aatams:classification[@gml:id=concat('aatams.classification',substring-after(instance('inst_data')//aatams:species_ref/@class_fid,'aatams.species'))]" />
+				<xf:delete nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification" at="1" />
+            </xf:action>
+            <!-- find all tags in selected project with no current tag-release -->
+            <xf:action ev:event="find-tags">
+				<xf:setvalue ref="instance('inst_subfeatures')/device_model_id" value="instance('inst_device_model')/gml:featureMember/aatams:device_model[1]/@gml:id" />
+
+			</xf:action>
+		</xf:model>
+	</head>
+	<body>
+		<div class="form">
+			<xf:switch>
+				<xf:case id="select-project" selected="true">
+					<label>SELECT TAG RELEASE PROJECT &amp;  OWNER</label>
+					<div class="form-contents">
+						<div class="dependant-selects">
+							<div class="xfselect1">
+								<xf:select1 bind="project" appearance="minimal" incremental="true()">
+									<xf:label>Project</xf:label>
+									<xf:help>The project to which the tag device, tag release and (optionally) surgery records created will belong.</xf:help>
+									<xf:itemset nodeset="instance('inst_project')/gml:featureMember/aatams:project">
+										<xf:value ref="@gml:id" />
+										<xf:label ref="aatams:name" />
+									</xf:itemset>
+									<xf:action ev:event="xforms-value-changed">
+										<xf:setvalue ref="instance('inst_subfeatures')/project_person_id" value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id" />
+									</xf:action>
+								</xf:select1>
+							</div>
+							<div class="xfselect1">
+								<xf:select1 bind="project_person" appearance="minimal" incremental="true()">
+									<xf:label>Responsible Person(Role)</xf:label>
+									<xf:help>The person (+ role) to which the tag device, tag release and surgery records created will belong. This is the person that will be alerted automatically by email if the released tag is found in uploaded detection data files.</xf:help>
+									<xf:itemset nodeset="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
+										<xf:value ref="@gml:id" />
+										<xf:label ref="aatams:person_role" />
+									</xf:itemset>
+									<xf:action ev:event="xforms-value-changed">
+										<xf:setvalue ref="instance('inst_subfeatures')/person_id" value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/aatams:person_fid" />
+									</xf:action>
+								</xf:select1>
+							</div>
+						</div>
+						<div class="xftrigger">
+							<xf:trigger>
+                                <xf:label>Create Tag ></xf:label>
+								<xf:action ev:event="DOMActivate">
+									<xf:toggle case="create-tag-device" />
+								</xf:action>
+							</xf:trigger>
+                        </div>
+                        <div class="xftrigger" style="clear:none;">
+							<xf:trigger>
+                                <xf:label>Select Tag ></xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:dispatch name="find-tags" target="model1" />
+									<xf:toggle case="select-tag-device" />
+								</xf:action>
+							</xf:trigger>
+						</div>
+					</div>
+				</xf:case>
+				<xf:case id="create-tag-device">
+					<label>CREATE TAG</label>
+					<div class="form-contents">
+						<xf:group ref="instance('inst_data')//aatams:tag_device_ref/aatams:device">
+							<div class="xfinput">
+								<xf:input ref="aatams:code_name" incremental="true()">
+									<xf:label>Code Name</xf:label>
+									<xf:help>This is the unique code-name that will be used to cross-reference to tag detection events in uploaded detection data files. It should consit of the hyphenated tag code-space and the tag id (e.g. A69-1303-12345).</xf:help>
+								</xf:input>
+							</div>
+							<div class="xfselect1">
+								<xf:select1 bind="device_model" appearance="minimal" incremental="true()">
+									<xf:label>Model</xf:label>
+									<xf:help>Manufacturer's tag model code.</xf:help>
+									<xf:itemset nodeset="instance('inst_device_model')/gml:featureMember/aatams:device_model">
+										<xf:value ref="@gml:id" />
+										<xf:label ref="aatams:name" />
+									</xf:itemset>
+								</xf:select1>
+							</div>
+							<div class="xfinput">
+								<xf:input ref="aatams:serial_number" incremental="true()">
+									<xf:label>Serial Number</xf:label>
+									<xf:help>Manufacturer's tag serial number.</xf:help>
+								</xf:input>
+							</div>
+							<div class="xftrigger">
+								<xf:trigger>
+									<xf:label> &lt; Select Project</xf:label>
+									<xf:action ev:event="DOMActivate">
+										<xf:toggle case="select-project" />
+									</xf:action>
+								</xf:trigger>
+							</div>
+							<div class="xftrigger" style="clear:none;">
+								<xf:trigger>
+                                    <xf:label>Create Tag Release ></xf:label>
+									<xf:action ev:event="DOMActivate">
+										<xf:toggle case="create-tag-release" if="context()/aatams:code_name != '' and context()/aatams:serial_number != ''" />
+										<xf:message if="context()/aatams:code_name = '' or context()/aatams:serial_number = ''">Please complete mandatory input fields first!</xf:message>
+									</xf:action>
+								</xf:trigger>
+							</div>
+						</xf:group>
+					</div>
+                </xf:case>
+				<xf:case id="select-tag-device">
+                    <label>SELECT TAG</label>
+					<div class="form-contents">
+						<xf:group ref="instance('inst_data')//aatams:tag_device_ref/aatams:device">
+							<div class="xfinput">
+								<xf:input ref="aatams:code_name" incremental="true()">
+									<xf:label>Code Name</xf:label>
+									<xf:help>This is the unique code-name that will be used to cross-reference to tag detection events in uploaded detection data files. It should consit of the hyphenated tag code-space and the tag id (e.g. A69-1303-12345).</xf:help>
+								</xf:input>
+							</div>
+							<div class="xfselect1">
+								<xf:select1 bind="device_model" appearance="minimal" incremental="true()">
+									<xf:label>Model</xf:label>
+									<xf:help>Manufacturer's tag model code.</xf:help>
+									<xf:itemset nodeset="instance('inst_device_model')/gml:featureMember/aatams:device_model">
+										<xf:value ref="@gml:id" />
+										<xf:label ref="aatams:name" />
+									</xf:itemset>
+								</xf:select1>
+							</div>
+							<div class="xfinput">
+								<xf:input ref="aatams:serial_number" incremental="true()">
+									<xf:label>Serial Number</xf:label>
+									<xf:help>Manufacturer's tag serial number.</xf:help>
+								</xf:input>
+							</div>
+							<div class="xftrigger">
+								<xf:trigger>
+									<xf:label> &lt; Select Project</xf:label>
+									<xf:action ev:event="DOMActivate">
+										<xf:toggle case="select-project" />
+									</xf:action>
+								</xf:trigger>
+							</div>
+							<div class="xftrigger" style="clear:none;">
+								<xf:trigger>
+                                    <xf:label>Create Tag Release ></xf:label>
+									<xf:action ev:event="DOMActivate">
+										<xf:toggle case="create-tag-release" if="context()/aatams:code_name != '' and context()/aatams:serial_number != ''" />
+										<xf:message if="context()/aatams:code_name = '' or context()/aatams:serial_number = ''">Please complete mandatory input fields first!</xf:message>
+									</xf:action>
+								</xf:trigger>
+							</div>
+						</xf:group>
+					</div>
+				</xf:case>
+				<xf:case id="create-tag-release">
+					<label>CREATE TAG RELEASE</label>
+					<div class="form-contents">
+						<div class="xfselect1">
+							<xf:select1 bind="species" appearance="minimal" incremental="true()">
+								<xf:label>Species Classification</xf:label>
+								<xf:help>The species classification of the animal tagged. This information will be publicly displayed at either species, genus or family level of specificity depending on the 'Display Classification Level' selected next</xf:help>
+								<xf:itemset nodeset="instance('inst_species')/gml:featureMember/aatams:species">
+									<xf:value ref="@gml:id" />
+									<xf:label ref="aatams:name" />
+								</xf:itemset>
+								<xf:action ev:event="xforms-value-changed">
+									<xf:dispatch name="set-tag-release-classification" target="model1" />
+									<xf:dispatch name="set-animal-classification" target="model1" />
+								</xf:action>
+							</xf:select1>
+						</div>
+						<div class="xfselect1">
+							<xf:select1 bind="classification_level" appearance="minimal" incremental="true()">
+								<xf:label>Display Classification Level</xf:label>
+								<xf:help>Classification level to use for display of data in public access and download (for detection data etc.)</xf:help>
+								<xf:item>
+									<xf:label>Family</xf:label>
+									<xf:value>FAMILY</xf:value>
+								</xf:item>
+								<xf:item>
+									<xf:label>Genus</xf:label>
+									<xf:value>GENUS</xf:value>
+								</xf:item>
+								<xf:item>
+									<xf:label>Species</xf:label>
+									<xf:value>SPECIES</xf:value>
+								</xf:item>
+							</xf:select1>
+						</div>
+						<div class="xfinput">
+							<xf:input bind="capture_location_longitude" incremental="true()">
+								<xf:label>Capture Location Longitude</xf:label>
+							</xf:input>
+						</div>
+						<div class="xfinput">
+							<xf:input bind="capture_location_latitude" incremental="true()">
+								<xf:label>Capture Location Latitude</xf:label>
+							</xf:input>
+						</div>
+						<div class="xfinput">
+							<xf:input bind="capture_timestamp" incremental="true()">
+								<xf:label>Capture UTC Date &amp; Time</xf:label>
+							</xf:input>
+						</div>
+						<div class="xfinput">
+							<xf:input bind="release_location_longitude" incremental="true()">
+								<xf:label>Release Location Longitude</xf:label>
+							</xf:input>
+						</div>
+						<div class="xfinput">
+							<xf:input bind="release_location_latitude" incremental="true()">
+								<xf:label>Release Location Latitude</xf:label>
+							</xf:input>
+						</div>
+						<div class="xfinput">
+							<xf:input bind="release_timestamp" incremental="true()">
+								<xf:label>Release UTC Date &amp; Time</xf:label>
+							</xf:input>
+						</div>
+						<div class="xfselect1">
+							<xf:select1 bind="implant_type" appearance="minimal" incremental="true()">
+								<xf:label>Implant Type</xf:label>
+								<xf:item>
+									<xf:label>Internal</xf:label>
+									<xf:value>INTERNAL</xf:value>
+								</xf:item>
+								<xf:item>
+									<xf:label>External</xf:label>
+									<xf:value>EXTERNAL</xf:value>
+								</xf:item>
+								<xf:item>
+									<xf:label>Unknown</xf:label>
+									<xf:value>UNKNOWN</xf:value>
+								</xf:item>
+							</xf:select1>
+						</div>
+						<!-- SURGERY -->
+						<xf:switch>
+							<xf:case id="add-surgery" selected="true">
+								<div class="xftrigger" style="margin:5px 0px 5px 317px;">
+									<xf:trigger>
+										<xf:label>Add Animal/Surgery Details</xf:label>
+										<xf:action ev:event="DOMActivate">
+											<xf:insert nodeset="instance('inst_data')//aatams:tag_release_t/*" origin="instance('inst_surgery_prototype')/aatams:surgery_ref" at="9" />
+											<xf:dispatch name="set-animal-classification" target="model1" />
+											<xf:insert nodeset="instance('inst_data')//aatams:surgery_person/aatams:person_ref/aatams:person" origin="instance('inst_person')/gml:featureMember/aatams:person[@gml:id=instance('inst_subfeatures')/person_id]" />
+											<xf:delete nodeset="instance('inst_data')//aatams:surgery_person/aatams:person_ref/aatams:person" at="1" />
+											<xf:toggle case="remove-surgery" />
+										</xf:action>
+									</xf:trigger>
+								</div>
+							</xf:case>
+							<xf:case id="remove-surgery">
+								<div class="xftrigger" style="margin:5px 0px 5px 317px;">
+									<xf:trigger>
+										<xf:label>Remove Animal/Surgery Details</xf:label>
+										<xf:action ev:event="DOMActivate">
+											<xf:delete nodeset="instance('inst_data')//aatams:tag_release_t/aatams:surgery_ref" />
+											<xf:toggle case="add-surgery" />
+										</xf:action>
+									</xf:trigger>
+								</div>
+							</xf:case>
+						</xf:switch>
+						<xf:group bind="surgery">
+							<xf:group ref="aatams:animal_ref/aatams:animal">
+								<label style="font-size:0.8em;">ANIMAL DETAILS</label>
+								<div class="xfoutput">
+									<xf:output ref="aatams:classification_ref/aatams:classification/aatams:name">
+										<xf:label>Scientific Classification</xf:label>
+									</xf:output>
+								</div>
+								<div class="xfselect1">
+									<xf:select1 ref="aatams:sex">
+										<xf:label>Sex</xf:label>
+										<xf:item>
+											<xf:label>Male</xf:label>
+											<xf:value>M</xf:value>
+										</xf:item>
+										<xf:item>
+											<xf:label>Female</xf:label>
+											<xf:value>F</xf:value>
+										</xf:item>
+										<xf:item>
+											<xf:label>Unknown</xf:label>
+											<xf:value>X</xf:value>
+										</xf:item>
+									</xf:select1>
+								</div>
+								<div class="xfinput">
+									<xf:input ref="aatams:name">
+										<xf:label>Code Name</xf:label>
+									</xf:input>
+								</div>
+								<div class="xfinput">
+									<xf:input ref="aatams:protected_species_licence">
+										<xf:label>Protected Species Lic.</xf:label>
+										<xf:help>Licence number for capture and release of an endangered or protected species. Provide further information in comments field as appropriate</xf:help>
+									</xf:input>
+								</div>
+								<div class="xftextarea">
+									<xf:textarea ref="aatams:comments">
+										<xf:label>Comments</xf:label>
+										<xf:help>Additional comments or qualifications of information entered above for this animal</xf:help>
+									</xf:textarea>
+								</div>
+							</xf:group>
+							<label style="font-size:0.8em;">SURGERY DETAILS</label>
+							<div class="xfinput">
+								<xf:input ref="aatams:utc_datetime" type="xsd:timestamp">
+									<xf:label>Surgery UTC Date &amp; Time</xf:label>
+								</xf:input>
+							</div>
+							<div class="xfselect1">
+								<xf:select1 ref="aatams:treatment_type_ref/aatams:treatment_type/aatams:name">
+									<xf:label>Treatment Type:</xf:label>
+									<xf:item>
+										<xf:label>Anaesthetic</xf:label>
+										<xf:value>Anaesthetic</xf:value>
+									</xf:item>
+									<xf:item>
+										<xf:label>No Anaesthetic</xf:label>
+										<xf:value>No Anaesthetic</xf:value>
+									</xf:item>
+									<xf:item>
+										<xf:label>Unknown</xf:label>
+										<xf:value>Unknown</xf:value>
+									</xf:item>
+								</xf:select1>
+							</div>
+							<div class="xftextarea">
+								<xf:textarea ref="aatams:comments">
+									<xf:label>Comments</xf:label>
+								</xf:textarea>
+							</div>
+							<label style="font-size:0.8em;">MEASUREMENTS</label>
+							<table style="float:left;clear:left;border:solid 1px gray;">
+								<thead>
+									<tr>
+										<th>Type</th>
+										<th>Units</th>
+										<th>Value</th>
+										<th>Comments</th>
+										<th>Remove</th>
+									</tr>
+								</thead>
+								<tbody>
+									<xf:repeat id="measurements" nodeset="aatams:measurement_ref">
+										<tr>
+											<td>
+												<xf:select1 ref="aatams:measurement/aatams:measurement_type_ref/aatams:measurement_type/aatams:name">
+													<xf:help>Animals property measured</xf:help>
+													<xf:itemset nodeset="instance('inst_measurement_type')/gml:featureMember/aatams:measurement_type">
+														<xf:value ref="aatams:name" />
+														<xf:label ref="aatams:name" />
+													</xf:itemset>
+												</xf:select1>
+											</td>
+											<td>
+												<xf:select1 ref="aatams:measurement/aatams:measurement_unit_ref/aatams:measurement_unit/aatams:symbol">
+													<xf:help>Units applying to the measurement value</xf:help>
+													<xf:itemset nodeset="instance('inst_measurement_unit')/gml:featureMember/aatams:measurement_unit">
+														<xf:value ref="aatams:symbol" />
+														<xf:label ref="aatams:name" />
+													</xf:itemset>
+												</xf:select1>
+											</td>
+											<td>
+												<xf:input ref="aatams:measurement/aatams:value">
+													<xf:help>Measurement value</xf:help>
+												</xf:input>
+											</td>
+											<td>
+												<xf:input ref="aatams:measurement/aatams:comments">
+													<xf:help>Qualifications of the measurement value</xf:help>
+												</xf:input>
+											</td>
+											<td style="text-align:center;">
+												<xf:trigger>
+													<xf:label>X</xf:label>
+													<xf:delete nodeset="." at="1" if="count(../aatams:measurement_ref) &gt; 1" ev:event="DOMActivate" />
+												</xf:trigger>
+											</td>
+										</tr>
+									</xf:repeat>
+								</tbody>
+							</table>
+							<div class="xftrigger" style="margin-bottom:20px;">
+								<xf:trigger>
+									<xf:label>Add Measurement</xf:label>
+									<xf:insert nodeset="aatams:measurement_ref" at="1" position="before" ev:event="DOMActivate" />
+								</xf:trigger>
+							</div>
+							<label style="font-size:0.8em;">PERSONNEL</label>
+							<table style="float:left;clear:left;border:solid 1px gray;">
+								<thead>
+									<tr>
+										<th>Person</th>
+										<th>Comments</th>
+										<th>Remove</th>
+									</tr>
+								</thead>
+								<tbody>
+									<xf:repeat id="personnel" nodeset="aatams:surgery_person_ref">
+										<tr>
+											<td>
+												<xf:select1 ref="aatams:surgery_person/aatams:person_ref/@person_fid">
+													<xf:itemset nodeset="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id]">
+														<xf:value ref="aatams:person_fid" />
+														<xf:label ref="aatams:person_role" />
+													</xf:itemset>
+													<xf:action ev:event="xforms-value-changed">
+														<xf:insert nodeset="context()/../aatams:person[1]" origin="instance('inst_person')/gml:featureMember/aatams:person[@gml:id=current()]" />
+														<xf:delete nodeset="context()/../aatams:person[1]" />
+													</xf:action>
+												</xf:select1>
+											</td>
+											<td>
+												<xf:input ref="aatams:surgery_person/aatams:comments">
+												</xf:input>
+											</td>
+											<td style="text-align:center;">
+												<xf:trigger>
+													<xf:label>X</xf:label>
+													<xf:action ev:event="DOMActivate">
+														<xf:delete nodeset="." at="1" if="count(../aatams:surgery_person_ref) &gt; 1" />
+													</xf:action>
+												</xf:trigger>
+											</td>
+										</tr>
+									</xf:repeat>
+								</tbody>
+							</table>
+							<div class="xftrigger" style="margin-bottom:20px;">
+								<xf:trigger>
+									<xf:label>Add Person</xf:label>
+									<xf:insert nodeset="aatams:surgery_person_ref" at="1" position="before" ev:event="DOMActivate" />
+								</xf:trigger>
+							</div>
+						</xf:group>
+						<!-- END SURGERY -->
+						<div class="buttons" style="margin-top:10px;">
+							<div class="xftrigger">
+								<xf:trigger>
+                                    <xf:label>&lt; Create Tag Device</xf:label>
+									<xf:action ev:event="DOMActivate">
+										<xf:toggle case="create-tag-device" />
+									</xf:action>
+								</xf:trigger>
+							</div>
+							<div class="xfsubmit" style="clear:none;">
+								<xf:submit submission="s01">
+									<xf:label>Save</xf:label>
+								</xf:submit>
+							</div>
+						</div>
+						<div id="messages">
+							<div id="error-message">
+								<xf:output bind="error_message">
+									<xf:label>Error:</xf:label>
+								</xf:output>
+							</div>
+							<div id="success-message">
+								<xf:output bind="success_message">
+									<xf:label>New Record Id:</xf:label>
+								</xf:output>
+							</div>
+						</div>
+					</div>
+				</xf:case>
+			</xf:switch>
+		</div>
+		<br />
+		<div id="console" />
+	</body>
+</html>

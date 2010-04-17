@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
   <database name="AATAMS">
-    <table name="ANIMAL">
+    <table codeTable='false' name="ANIMAL" >
       <column name="ANIMAL_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="CLASSIFICATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -21,7 +21,7 @@
         <index-column name="CLASSIFICATION_ID"/>
       </index>
     </table>
-    <table name="CLASSIFICATION">
+    <table codeTable='true' name="CLASSIFICATION" >
       <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -47,7 +47,7 @@
         <index-column name="PARENT_ID"/>
       </index>
     </table>
-    <table name="CLASSIFICATION_LEVEL">
+    <table codeTable='true' name="CLASSIFICATION_LEVEL" >
       <column name="CLASSIFICATION_LEVEL_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -60,7 +60,7 @@
         <index-column name="CLASSIFICATION_LEVEL_ID"/>
       </index>
     </table>
-    <table name="DEPLOYMENT_DOWNLOAD">
+    <table codeTable='false' name="DEPLOYMENT_DOWNLOAD">
       <column name="DOWNLOAD_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="RECOVERY_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
@@ -98,7 +98,7 @@
         <index-column name="TIME_CORRECTION_TYPE_ID"/>
       </index>
     </table>
-    <table name="DEPLOYMENT_EVENT">
+    <table codeTable='false' name="DEPLOYMENT_EVENT">
       <column name="DEPLOYMENT_EVENT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="EVENT_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -132,7 +132,7 @@
       </index>
     </table>
     
-    <table name="DOWNLOAD_TAG_SUMMARY">
+    <table codeTable='false' name="DOWNLOAD_TAG_SUMMARY">
       <column name="DOWNLOAD_TAG_SUMMARY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DOWNLOAD_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -150,7 +150,7 @@
       </foreign-key>
     </table>
     
-    <table name="DEPLOYMENT_EVENT_TYPE">
+    <table codeTable='false' name="DEPLOYMENT_EVENT_TYPE">
       <column name="EVENT_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -160,15 +160,15 @@
         <index-column name="EVENT_TYPE_ID"/>
       </index>
     </table>
-    <table name="DEPLOYMENT_RECOVERY">
+    <table codeTable='false' name="DEPLOYMENT_RECOVERY">
       <column name="RECOVERY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="RECOVERY_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
       <column name="RECOVERY_STATUS_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="COMMENTS" primaryKey="false" required="false" type="LONGVARCHAR" size="4000" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
-	 <unique-column name="DEPLOYMENT_ID"/>
-	 <unique-column name="RECOVERY_TIMESTAMP"/>
+	 	<unique-column name="DEPLOYMENT_ID"/>
+	 	<unique-column name="RECOVERY_TIMESTAMP"/>
       </unique>
       <foreign-key foreignTable="INSTALLATION_DEPLOYMENT" name="DEPLOYMENT_RECOVERY_FK00">
         <reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID"/>
@@ -193,7 +193,7 @@
       </index>
     </table>
 
-    <table name="RECOVERY_STATUS">
+    <table codeTable='true' name="RECOVERY_STATUS">
       <column name="RECOVERY_STATUS_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -203,7 +203,7 @@
         <index-column name="RECOVERY_STATUS_ID"/>
       </index>
     </table>
-    <table name="DETECTION">
+    <table codeTable='false' name="DETECTION">
       <column name="DETECTION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="DOWNLOAD_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -230,7 +230,7 @@
         <index-column name="TAG_ID"/>
       </index>
     </table>
-    <table name="DEVICE">
+    <table codeTable='false' name="DEVICE">
       <column name="DEVICE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="DEVICE_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -275,7 +275,7 @@
         <index-column name="STATUS_ID"/>
       </index>
     </table>
-    <table name="DEVICE_DEPLOYER">
+    <table codeTable='false' name="DEVICE_DEPLOYER">
       <column name="DEVICE_DEPLOYER_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -293,7 +293,7 @@
         <index-column name="PERSON_ID"/>
       </index>
     </table>
-    <table name="RECEIVER_DEPLOYMENT">
+    <table codeTable='false' name="RECEIVER_DEPLOYMENT">
       <column name="DEPLOYMENT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -363,8 +363,7 @@
       </index>
     </table>
     
-    
-    <table name="DEVICE_MANUFACTURER">
+    <table codeTable='true' name="DEVICE_MANUFACTURER">
       <column name="MANUFACTURER_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -375,7 +374,7 @@
       </index>
     </table>
     
-    <table name="DEVICE_MODEL">
+    <table codeTable='true' name="DEVICE_MODEL">
       <column name="MODEL_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEVICE_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="MANUFACTURER_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -410,7 +409,7 @@
         <index-column name="NAME"/>
       </index>
     </table>
-    <table name="DEVICE_TYPE">
+    <table codeTable='false' name="DEVICE_TYPE">
       <column name="DEVICE_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -420,7 +419,7 @@
         <index-column name="DEVICE_TYPE_ID"/>
       </index>
     </table>
-    <table name="DOWNLOAD_FILE">
+    <table codeTable='false' name="DOWNLOAD_FILE">
       <column name="DOWNLOAD_FILE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DOWNLOAD_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="FILE_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
@@ -438,7 +437,7 @@
         <index-column name="DOWNLOAD_ID"/>
       </index>
     </table>
-    <table name="GEOGRAPHIC_AREA">
+    <table codeTable='false' name="GEOGRAPHIC_AREA">
       <column name="GEOGRAPHIC_AREA_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="BOUNDARY_POINTS" primaryKey="false" required="false" type="VARCHAR" size="500" autoIncrement="false"/>
@@ -450,7 +449,7 @@
         <index-column name="GEOGRAPHIC_AREA_ID"/>
       </index>
     </table>
-    <table name="IMPLANT_TYPE">
+    <table codeTable='false' name="IMPLANT_TYPE">
       <column name="IMPLANT_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -460,7 +459,7 @@
         <index-column name="IMPLANT_TYPE_ID"/>
       </index>
     </table>
-    <table name="INSTALLATION">
+    <table codeTable='false' name="INSTALLATION">
       <column name="INSTALLATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="CONFIGURATION_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <!--column name="LATITUDE" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
@@ -492,7 +491,7 @@
         <index-column name="INSTALLATION_ID"/>
       </index>
     </table>
-    <table name="INSTALLATION_CONF">
+    <table codeTable='false' name="INSTALLATION_CONF">
       <column name="CONFIGURATION_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -502,7 +501,7 @@
         <index-column name="CONFIGURATION_TYPE_ID"/>
       </index>
     </table>
-    <table name="INSTALLATION_STATION">
+    <table codeTable='false' name="INSTALLATION_STATION">
       <column name="STATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="CURTAIN_POSITION" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -524,7 +523,7 @@
         <index-column name="STATION_ID"/>
       </index>
     </table>
-    <table name="MEASUREMENT">
+    <table codeTable='false' name="MEASUREMENT">
       <column name="MEASUREMENT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="SURGERY_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="MEASUREMENT_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -556,7 +555,7 @@
         <index-column name="SURGERY_ID"/>
       </index>
     </table>
-    <table name="MEASUREMENT_TYPE">
+    <table codeTable='false' name="MEASUREMENT_TYPE">
       <column name="MEASUREMENT_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="MEASUREMENT_UNITS_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -576,7 +575,7 @@
         <index-column name="MEASUREMENT_UNITS_ID"/>
       </index>
     </table>
-    <table name="MEASUREMENT_UNIT">
+    <table codeTable='false' name="MEASUREMENT_UNIT">
       <column name="MEASUREMENT_UNIT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -586,7 +585,7 @@
         <index-column name="MEASUREMENT_UNIT_ID"/>
       </index>
     </table>
-    <table name="MOORING_TYPE">
+    <table codeTable='false' name="MOORING_TYPE">
       <column name="MOORING_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="DESCRIPTION" primaryKey="false" required="false" type="VARCHAR" size="500" autoIncrement="false"/>
@@ -597,7 +596,7 @@
         <index-column name="MOORING_TYPE_ID"/>
       </index>
     </table>
-    <table name="ORGANISATION">
+    <table codeTable='false' name="ORGANISATION">
       <column name="ORGANISATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="200" autoIncrement="false"/>
       <column name="PHONE_NUMBER" primaryKey="false" required="true" type="VARCHAR" size="20" autoIncrement="false"/>
@@ -628,7 +627,7 @@
         <index-column name="POSTAL_ADDRESS_POSTCODE"/>
       </index>
     </table>
-    <table name="ORGANISATION_ANIMAL">
+    <table codeTable='false' name="ORGANISATION_ANIMAL">
       <column name="ORGANISATION_ANIMAL_ID" primaryKey="true" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="ORGANISATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="ANIMAL_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -643,7 +642,7 @@
         <index-column name="ORGANIZATION_ID"/>
       </index>
     </table>
-    <table name="ORGANISATION_PERSON">
+    <table codeTable='false' name="ORGANISATION_PERSON">
       <column name="ORGANISATION_PERSON_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="ORGANISATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -658,7 +657,7 @@
         <unique-column name="POSITION"/>
       </unique>
     </table>
-    <table name="PERSON">
+    <table codeTable='false' name="PERSON">
       <column name="PERSON_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="200" autoIncrement="false"/>
       <column name="PERSONAL_MOBILE_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
@@ -687,7 +686,7 @@
         <index-column name="PERSON_ID"/>
       </index>
     </table>
-    <table name="PROJECT">
+    <table codeTable='false' name="PROJECT">
       <column name="PROJECT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="ORGANISATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="200" autoIncrement="false"/>
@@ -707,7 +706,7 @@
         <index-column name="PROJECT_ID"/>
       </index>
     </table>
-    <table name="PROJECT_ROLE_PERSON">
+    <table codeTable='false' name="PROJECT_ROLE_PERSON">
       <column name="PROJECT_ROLE_PERSON_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="PROJECT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="ROLE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -748,7 +747,7 @@
         <index-column name="ROLE_ID"/>
       </index>
     </table>
-    <table name="ROLE">
+    <table codeTable='false' name="ROLE">
       <column name="ROLE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -758,7 +757,7 @@
         <index-column name="ROLE_ID"/>
       </index>
     </table>
-    <table name="STATUS">
+    <table codeTable='false' name="STATUS">
       <column name="STATUS_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -768,7 +767,7 @@
         <index-column name="STATUS_ID"/>
       </index>
     </table>
-    <table name="STOCK">
+    <table codeTable='false' name="STOCK">
       <column name="STOCK_ID" primaryKey="true" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -778,7 +777,7 @@
         <index-column name="STOCK_ID"/>
       </index>
     </table>
-    <table name="SURGERY">
+    <table codeTable='false' name="SURGERY">
       <column name="SURGERY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="TREATMENT_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="PROJECT_ROLE_PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
@@ -817,7 +816,7 @@
         <index-column name="TREATMENT_TYPE_ID"/>
       </index>
     </table>
-    <table name="SURGERY_PERSON">
+    <table codeTable='false' name="SURGERY_PERSON">
       <column name="SURGERY_PERSON_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="SURGERY_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -850,7 +849,7 @@
         <index-column name="DEVICE_ID"/>
       </index>
     </table>
-    <table name="TAG_FAMILY">
+    <table codeTable='false' name="TAG_FAMILY">
       <column name="TAG_FAMILY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="MANUFACTURER_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false" />
@@ -864,7 +863,7 @@
         <index-column name="TAG_FAMILY_ID"/>
       </index>
     </table>
-    <table name="TAG_MODEL">
+    <table codeTable='false' name="TAG_MODEL">
       <column name="MODEL_ID" primaryKey="true" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="TAG_FAMILY_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="VUE_CODING" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -909,7 +908,7 @@
         <index-column name="TAG_TYPE_ID"/>
       </index>
     </table-->
-    <table name="TAG_RELEASE">
+    <table codeTable='false' name="TAG_RELEASE">
       <column name="RELEASE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="CLASSIFICATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -995,7 +994,7 @@
         <index-column name="TETHER_TYPE_ID"/>
       </index>
     </table>
-    <table name="TAG_TYPE">
+    <table codeTable='false' name="TAG_TYPE">
       <column name="TAG_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="MANUFACTURER_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="10" autoIncrement="false"/>
@@ -1009,7 +1008,7 @@
         <index-column name="TAG_TYPE_ID"/>
       </index>
     </table>
-    <table name="TETHER_TYPE">
+    <table codeTable='false' name="TETHER_TYPE">
       <column name="TETHER_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="DESCRIPTION" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1021,7 +1020,7 @@
         <index-column name="TETHER_TYPE_ID"/>
       </index>
     </table>
-    <table name="TREATMENT_TYPE">
+    <table codeTable='false' name="TREATMENT_TYPE">
       <column name="TREATMENT_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <unique name="UNIQUE_INDEX">
@@ -1032,7 +1031,7 @@
       </index>
     </table>
 
-    <view name="PROJECT_PERSON">
+    <view codeTable='false' name="PROJECT_PERSON">
       <column name="PROJECT_ROLE_PERSON_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PROJECT_FID" primaryKey="false" required="false" type="VARCHAR" size="55" autoIncrement="false"/>
       <column name="PROJECT_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1044,7 +1043,7 @@
       </unique>
     </view>
 
-    <view name="RECEIVER_DEVICE">
+    <view codeTable='false' name="RECEIVER_DEVICE">
       <column name="DEVICE_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="MODEL_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1055,7 +1054,7 @@
       </unique>
     </view>
 
-     <view name="TAG_DEVICE">
+     <view codeTable='false' name="TAG_DEVICE">
       <column name="DEVICE_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="MODEL_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1066,7 +1065,7 @@
       </unique>
     </view>   
 
-    <view name="STATION">
+    <view codeTable='false' name="STATION">
       <column name="STATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="INSTALLATION_FID" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="CURTAIN_POSITION" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
@@ -1078,7 +1077,7 @@
     </view>
 
     <!--  FLAT VIEW ACROSS THE INSTALLATION, INSTALLATION_STATION & RECEIVER_DEPLOYMENT TABLES -->
-    <view name="INSTALLATION_DEPLOYMENT">
+    <view codeTable='false' name="INSTALLATION_DEPLOYMENT">
       <column name="DEPLOYMENT_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="INSTALLATION_FID" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="INSTALLATION_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1097,12 +1096,12 @@
       </unique>
     </view>
     
-    <view name="TRANSMITTER_MODEL">
+    <view codeTable='false' name="TRANSMITTER_MODEL">
       <column name="MODEL_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
     </view>
    
-    <view name="RECEIVER_MODEL">
+    <view codeTable='false' name="RECEIVER_MODEL">
       <column name="MODEL_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
     </view>
@@ -1112,20 +1111,20 @@
      SEE CLASSIFICATION TABLE.
      -->
      
-     <view name="PARENT_CLASSIFICATION">
+    <view codeTable='true' name="PARENT_CLASSIFICATION">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
       <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
       <column name="COMMON_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
     </view>
     
-    <view name="FAMILY">
+    <view codeTable='true' name="FAMILY">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
     </view>
     
-    <view name="GENUS">
+    <view codeTable='true' name="GENUS">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1134,7 +1133,7 @@
       </foreign-key>
     </view>
     
-    <view name="SPECIES">
+    <view codeTable='true' name="SPECIES">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1145,7 +1144,7 @@
     
     <!-- experiment to see if visibility of tag release classification can be different to what was
     created via this view -->
-    <view name="DISPLAY_CLASSIFICATION">
+    <view codeTable='true' name="DISPLAY_CLASSIFICATION">
       <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1155,7 +1154,7 @@
       </unique>
     </view>
     
-    <view name="DISPLAY_TAG_RELEASE">
+    <view codeTable='true' name="DISPLAY_TAG_RELEASE">
       <column name="RELEASE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="FAMILY_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -1193,7 +1192,7 @@
     <!-- 
     	VIEW USED FOR TAG_RELEASE BY CLASSIFICATION REPORT -->
      -->
-    <view name="TAG_RELEASE_MIN">
+    <view codeTable='true' name="TAG_RELEASE_MIN">
       <column name="RELEASE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
       <column name="PROJECT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
       <column name="PROJECT_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
@@ -1215,7 +1214,7 @@
  
     WE DON'T WANT TO LINK THIS TO ANY SUBFEATURES, RATHER TO USE THE INDEXING
     ON THE DETECTIONS TABLE TO EFFICIENTLY EXTRACT SUBSETS OF DETECTIONS DATA -->   
-    <view name="DETECTION_MAX">
+    <view codeTable='true' name="DETECTION_MAX">
        <!-- rename this to detection instead of using detection table directly -->
        <column name="DETECTION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -1235,13 +1234,13 @@
     </view>
     
     <!-- SUMMARY VIEWS -->
-    <view name="DETECTIONS_BY_INSTALLATION">
+    <view codeTable='true' name="DETECTIONS_BY_INSTALLATION">
        <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="INSTALLATION_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
     </view>
     
-    <view name="DETECTIONS_BY_INSTLN_STATION">
+    <view codeTable='true' name="DETECTIONS_BY_INSTLN_STATION">
        <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="INSTALLATION_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
        <column name="STATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -1250,14 +1249,14 @@
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
     </view>
     
-    <view name="DETECTIONS_BY_INSTLN_TAG">
+    <view codeTable='true' name="DETECTIONS_BY_INSTLN_TAG">
        <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="TAG_NAME" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
     </view>
     
-    <view name="DETECTIONS_BY_STATION_TAG">
+    <view codeTable='true' name="DETECTIONS_BY_STATION_TAG">
        <column name="STATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="TAG_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="TAG_NAME" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -1265,7 +1264,7 @@
     </view>
     
     
-    <view name="DETECTIONS_BY_PROJECT_TAG">
+    <view codeTable='true' name="DETECTIONS_BY_PROJECT_TAG">
        <column name="PROJECT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="PROJECT_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
        <column name="TAG_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
@@ -1273,7 +1272,7 @@
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
     </view>
     
-    <view name="DETECTIONS_BY_CLASSN_TAG">
+    <view codeTable='true' name="DETECTIONS_BY_CLASSN_TAG">
        <column name="FAMILY" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="GENUS" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="SPECIES" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1282,7 +1281,7 @@
        <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
     </view>
     
-    <view name="DEPLOYMENT_DOWNLOAD_TAG">
+    <view codeTable='true' name="DEPLOYMENT_DOWNLOAD_TAG">
        <column name="PKEY" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="TAG_FID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
@@ -1294,7 +1293,7 @@
     </view>
    
    <!--  a subfeature of deployment_summary --> 
-   <view name="DEPLOYMENT_TAG">
+   <view codeTable='true' name="DEPLOYMENT_TAG">
        <column name="PKEY" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
        <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>

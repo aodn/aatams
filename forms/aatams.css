@@ -5,11 +5,6 @@ div.form-contents {  margin-top:10px; }
 span.xforms-control  span {display:inline-block; white-space:nowrap; }
 label.xforms-label { display:inline-block; width:300px; text-align:right; margin-right:4px;}
 span.xforms-input,span.xforms-select1,span.xforms-textarea,span.xforms-output {display:block; margin:2px; }
-/*span.xforms-control > span { display:table; }
-span.xforms-control > span > span { display:table-row; }
-span.xforms-control > span > span > span { display:table-cell; padding:2px; vertical-align:top; }
-span.xforms-output > span > span > span.value { color:blue; }
-label.xforms-label { display:block; width: 300px; text-align:right; padding-right:10px; font-weight: bold; }*/
 td label.xforms-label { display:none;}
 textarea { height:50px; width: 300px; }
 div.dependant-selects { float:left; clear:left; width:100%; border:dashed 1px gray; margin-bottom:1px; }

@@ -1,13 +1,15 @@
 body { width:100%; background-color:#b2b2b2;  font-family: Arial, Helvetica, sans-serif; margin:0%; padding:0%; }
-label { font-weight: bold; float:left; clear:left; }
-div.form { border:outset 2px gray; padding:20px; float:left; background-color:#DBF0F7; width:auto; }
-div.form-contents { width:100%; margin-top:10px; }
-div.xfinput, div.xfselect1, div.xfoutput, div.xftextarea, div.xftrigger, div.xfsubmit {float:left; clear:left;}
-span.xforms-control > span { display:table; }
+label { font-weight: bold; }
+div.form { float:left; border:outset 2px gray; padding:20px; background-color:#DBF0F7; width:auto; }
+div.form-contents {  margin-top:10px; border:solid 1px gray; }
+span.xforms-control  span {display:inline-block; white-space:nowrap; }
+label.xforms-label { display:inline-block; width:300px; text-align:right; margin-right:4px;}
+span.xforms-input,span.xforms-select1,span.xforms-textarea,span.xforms-output {display:block;}
+/*span.xforms-control > span { display:table; }
 span.xforms-control > span > span { display:table-row; }
 span.xforms-control > span > span > span { display:table-cell; padding:2px; vertical-align:top; }
 span.xforms-output > span > span > span.value { color:blue; }
-label.xforms-label { display:block; width: 300px; text-align:right; padding-right:10px; font-weight: bold; }
+label.xforms-label { display:block; width: 300px; text-align:right; padding-right:10px; font-weight: bold; }*/
 td label.xforms-label { display:none;}
 textarea { height:50px; width: 300px; }
 div.dependant-selects { float:left; clear:left; width:100%; border:dashed 1px gray; margin-bottom:1px; }

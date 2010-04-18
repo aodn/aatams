@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 		/*global ActiveXObject, NumberList, XPathAxis, XPathCoreFunctions, */
 		/*global escape */
 		
-		
+//SC changed '$() to $x() globally	
 		
 function $x(id) {
 	return document.getElementById(id);
@@ -1620,6 +1620,9 @@ XFInstance.prototype.dispose = function() {
 XFInstance.prototype.construct = function() {
 	if (!xforms.ready) {
 		if (this.src) {
+           //SC
+           this.src = this.src.replace(/&amp;/gi,"&").replace(/&lt;/gi,"<").replace(/&gt;/gi,">").replace(/&apos;/gi,"'");
+           //end SC             
 			var cross = false;
 			if (this.src.match(/^[a-zA-Z0-9+.-]+:\/\//)) {
 				var domain = /^([a-zA-Z0-9+.-]+:\/\/[^\/]*)/;

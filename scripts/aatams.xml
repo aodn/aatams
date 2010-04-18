@@ -1,1313 +1,1779 @@
 <?xml version="1.0"?>
-  <database name="AATAMS">
-    <table codeTable='false' name="ANIMAL" >
-      <column name="ANIMAL_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="CLASSIFICATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="SEX" primaryKey="false" required="true" type="CHAR" size="1" autoIncrement="false"/>
-      <column name="DISPLAY_LEVEL_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="DISPLAY_START_DATE" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
-      <foreign-key foreignTable="CLASSIFICATION" name="ANIMAL_FK00">
-        <reference local="CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
-      </foreign-key>
-      <index name="ANIMAL_ID">
-        <index-column name="ANIMAL_ID"/>
-      </index>
-      <index name="CLASSIFICATION_ID">
-        <index-column name="CLASSIFICATION_ID"/>
-      </index>
-      <index name="CLASSIFICATIONANIMAL">
-        <index-column name="CLASSIFICATION_ID"/>
-      </index>
-    </table>
-    <table codeTable='true' name="CLASSIFICATION" >
-      <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="COMMON_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="CAAB_CODE" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="CLASSIFICATION_FK00">
-        <reference local="CLASSIFICATION_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="PARENT_CLASSIFICATION" name="CLASSIFICATION_FK01">
-        <reference local="PARENT_CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
-      </foreign-key>   
-      <index name="CLASSIFICATION_ID">
-        <index-column name="CLASSIFICATION_ID"/>
-      </index>
-      <index name="CLASSIFICATION_LEVEL_ID">
-        <index-column name="CLASSIFICATION_LEVEL"/>
-      </index>
-      <index name="PARENT_ID">
-        <index-column name="PARENT_ID"/>
-      </index>
-    </table>
-    <table codeTable='true' name="CLASSIFICATION_LEVEL" >
-      <column name="CLASSIFICATION_LEVEL_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="CLASSIFICATION_ID">
-        <index-column name="CLASSIFICATION_ID"/>
-      </index>
-      <index name="CLASSIFICATION_LEVEL_ID">
-        <index-column name="CLASSIFICATION_LEVEL_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="DEPLOYMENT_DOWNLOAD">
-      <column name="DOWNLOAD_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="RECOVERY_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="DOWNLOAD_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="TIME_CORRECTION_START" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="TIME_CORRECTION_END" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="TIME_CORRECTION_TYPE_ID" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="CLOCK_DRIFT" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="PINGS" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="DETECTIONS" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="LAST_DETECTION_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="FIRST_DETECTION_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="CC_EMAIL_ADDRESSES" primaryKey="false" required="false" type="VARCHAR" size="500" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	 <unique-column name="DEPLOYMENT_ID"/>
-	 <unique-column name="DOWNLOAD_TIMESTAMP"/>
-      </unique>
-      <foreign-key foreignTable="INSTALLATION_DEPLOYMENT" name="DEPLOYMENT_DOWNLOAD_FK00">
-        <reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID"/>
-      </foreign-key>
-      <index name="DEPLOYMENT_DOWNLOAD_ID">
-        <index-column name="DOWNLOAD_ID"/>
-      </index>
-      <index name="DEPLOYMENT_ID">
-        <index-column name="DEPLOYMENT_ID"/>
-      </index>
-      <index name="RECEIVER_DEPLOYMENTDEPLOYMENT_DOWNLOAD">
-        <index-column name="DEPLOYMENT_ID"/>
-      </index>
-      <index name="STATUS_ID">
-        <index-column name="STATUS_ID"/>
-      </index>
-      <index name="TIME_CORRECTION_TYPE_ID">
-        <index-column name="TIME_CORRECTION_TYPE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="DEPLOYMENT_EVENT">
-      <column name="DEPLOYMENT_EVENT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="EVENT_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="EVENT_TIMESTAMP" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	 <unique-column name="DEPLOYMENT_ID"/>
-	 <unique-column name="EVENT_TYPE_ID"/>
-	 <unique-column name="EVENT_TIMESTAMP"/>
-      </unique>
-      <foreign-key foreignTable="DEPLOYMENT_EVENT_TYPE" name="DEPLOYMENT_EVENT_FK00">
-        <reference local="EVENT_TYPE_ID" foreign="EVENT_TYPE_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="INSTALLATION_DEPLOYMENT" name="DEPLOYMENT_EVENT_FK01">
-        <reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID"/>
-      </foreign-key>
-      <index name="DEPLOYMENT_EVENT_ID">
-        <index-column name="DEPLOYMENT_EVENT_ID"/>
-      </index>
-      <index name="DEPLOYMENT_EVENT_TYPEDEPLOYMENT_EVENT">
-        <index-column name="EVENT_TYPE_ID"/>
-      </index>
-      <index name="DEPLOYMENT_ID">
-        <index-column name="DEPLOYMENT_ID"/>
-      </index>
-      <index name="RECEIVER_DEPLOYMENTDEPLOYMENT_EVENT">
-        <index-column name="DEPLOYMENT_ID"/>
-      </index>
-      <index name="EVENT_TYPE_ID">
-        <index-column name="EVENT_TYPE_ID"/>
-      </index>
-    </table>
-    
-    <table codeTable='false' name="DOWNLOAD_TAG_SUMMARY">
-      <column name="DOWNLOAD_TAG_SUMMARY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DOWNLOAD_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="DETECTION_COUNT" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	 	<unique-column name="DOWNLOAD_ID"/>
-	 	<unique-column name="DEVICE_ID"/>
-      </unique>
-      <foreign-key foreignTable="INSTALLATION_DEPLOYMENT" name="DOWNLOAD_TAG_SUMMARY_FK00">
-        <reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="TAG_DEVICE" name="DOWNLOAD_TAG_SUMMARY_FK01">
-        <reference local="DEVICE_ID" foreign="DEVICE_ID"/>
-      </foreign-key>
-    </table>
-    
-    <table codeTable='false' name="DEPLOYMENT_EVENT_TYPE">
-      <column name="EVENT_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="DEPLOYMENT_EVENT_ID">
-        <index-column name="EVENT_TYPE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="DEPLOYMENT_RECOVERY">
-      <column name="RECOVERY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="RECOVERY_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="RECOVERY_STATUS_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="LONGVARCHAR" size="4000" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	 	<unique-column name="DEPLOYMENT_ID"/>
-	 	<unique-column name="RECOVERY_TIMESTAMP"/>
-      </unique>
-      <foreign-key foreignTable="INSTALLATION_DEPLOYMENT" name="DEPLOYMENT_RECOVERY_FK00">
-        <reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="RECOVERY_STATUS" name="DEPLOYMENT_RECOVERY_FK01">
-        <reference local="RECOVERY_STATUS_ID" foreign="RECOVERY_STATUS_ID"/>
-      </foreign-key>
-      <index name="DEPLOYMENT_ID">
-        <index-column name="DEPLOYMENT_ID"/>
-      </index>
-      <index name="RECEIVER_DEPLOYMENTDEPLOYMENT_RECOVERY">
-        <index-column name="DEPLOYMENT_ID"/>
-      </index>
-      <index name="RECOVERY_ID">
-        <index-column name="RECOVERY_ID"/>
-      </index>
-      <index name="RECOVERY_STATUS_ID">
-        <index-column name="RECOVERY_STATUS_ID"/>
-      </index>
-      <index name="RECOVERY_STATUSDEPLOYMENT_RECOVERY">
-        <index-column name="RECOVERY_STATUS_ID"/>
-      </index>
-    </table>
+<database name="AATAMS">
+	<table codeTable='false' name="ANIMAL">
+		<column name="ANIMAL_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="CLASSIFICATION_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="SEX" primaryKey="false" required="true"
+			type="CHAR" size="1" autoIncrement="false" />
+		<column name="DISPLAY_LEVEL_ID" primaryKey="false"
+			required="false" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="DISPLAY_START_DATE" primaryKey="false"
+			required="false" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="COMMENTS" primaryKey="false" required="false"
+			type="VARCHAR" size="4000" autoIncrement="false" />
+		<foreign-key foreignTable="CLASSIFICATION" name="ANIMAL_FK00">
+			<reference local="CLASSIFICATION_ID"
+				foreign="CLASSIFICATION_ID" />
+		</foreign-key>
+		<index name="ANIMAL_ID">
+			<index-column name="ANIMAL_ID" />
+		</index>
+		<index name="CLASSIFICATION_ID">
+			<index-column name="CLASSIFICATION_ID" />
+		</index>
+		<index name="CLASSIFICATIONANIMAL">
+			<index-column name="CLASSIFICATION_ID" />
+		</index>
+	</table>
+	<table codeTable='true' name="CLASSIFICATION">
+		<column name="CLASSIFICATION_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="PARENT_CLASSIFICATION_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="CLASSIFICATION_LEVEL_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="COMMON_NAME" primaryKey="false" required="false"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="CAAB_CODE" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<foreign-key foreignTable="CLASSIFICATION_LEVEL"
+			name="CLASSIFICATION_FK00">
+			<reference local="CLASSIFICATION_LEVEL_ID"
+				foreign="CLASSIFICATION_LEVEL_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="PARENT_CLASSIFICATION"
+			name="CLASSIFICATION_FK01">
+			<reference local="PARENT_CLASSIFICATION_ID"
+				foreign="CLASSIFICATION_ID" />
+		</foreign-key>
+		<index name="CLASSIFICATION_ID">
+			<index-column name="CLASSIFICATION_ID" />
+		</index>
+		<index name="CLASSIFICATION_LEVEL_ID">
+			<index-column name="CLASSIFICATION_LEVEL" />
+		</index>
+		<index name="PARENT_ID">
+			<index-column name="PARENT_ID" />
+		</index>
+	</table>
+	<table codeTable='true' name="CLASSIFICATION_LEVEL">
+		<column name="CLASSIFICATION_LEVEL_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="CLASSIFICATION_ID">
+			<index-column name="CLASSIFICATION_ID" />
+		</index>
+		<index name="CLASSIFICATION_LEVEL_ID">
+			<index-column name="CLASSIFICATION_LEVEL_ID" />
+		</index>
+	</table>
+	<table codeTable='false' name="DEPLOYMENT_DOWNLOAD">
+		<column name="DOWNLOAD_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="DEPLOYMENT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="RECOVERY_TIMESTAMP" primaryKey="false"
+			required="false" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="DOWNLOAD_TIMESTAMP" primaryKey="false"
+			required="true" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="TIME_CORRECTION_START" primaryKey="false"
+			required="false" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="TIME_CORRECTION_END" primaryKey="false"
+			required="false" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="TIME_CORRECTION_TYPE_ID" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="CLOCK_DRIFT" primaryKey="false" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="PINGS" primaryKey="false" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="DETECTIONS" primaryKey="false" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="LAST_DETECTION_TIMESTAMP" primaryKey="false"
+			required="false" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="FIRST_DETECTION_TIMESTAMP" primaryKey="false"
+			required="false" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="CC_EMAIL_ADDRESSES" primaryKey="false"
+			required="false" type="VARCHAR" size="500" autoIncrement="false" />
+		<column name="COMMENTS" primaryKey="false" required="false"
+			type="VARCHAR" size="4000" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="DEPLOYMENT_ID" />
+			<column name="DOWNLOAD_TIMESTAMP" />
+		</unique>
+		<foreign-key foreignTable="INSTALLATION_DEPLOYMENT"
+			name="DEPLOYMENT_DOWNLOAD_FK00">
+			<reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID" />
+		</foreign-key>
+		<index name="DEPLOYMENT_DOWNLOAD_ID">
+			<index-column name="DOWNLOAD_ID" />
+		</index>
+		<index name="DEPLOYMENT_ID">
+			<index-column name="DEPLOYMENT_ID" />
+		</index>
+		<index name="RECEIVER_DEPLOYMENTDEPLOYMENT_DOWNLOAD">
+			<index-column name="DEPLOYMENT_ID" />
+		</index>
+		<index name="STATUS_ID">
+			<index-column name="STATUS_ID" />
+		</index>
+		<index name="TIME_CORRECTION_TYPE_ID">
+			<index-column name="TIME_CORRECTION_TYPE_ID" />
+		</index>
+	</table>
+	
+	<!-- table codeTable='false' name="DEPLOYMENT_EVENT">
+		<column name="DEPLOYMENT_EVENT_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="DEPLOYMENT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="EVENT_TYPE_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="EVENT_TIMESTAMP" primaryKey="false"
+			required="true" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="COMMENTS" primaryKey="false" required="false"
+			type="VARCHAR" size="4000" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="DEPLOYMENT_ID" />
+			<column name="EVENT_TYPE_ID" />
+			<column name="EVENT_TIMESTAMP" />
+		</unique>
+		<foreign-key foreignTable="DEPLOYMENT_EVENT_TYPE"
+			name="DEPLOYMENT_EVENT_FK00">
+			<reference local="EVENT_TYPE_ID" foreign="EVENT_TYPE_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="INSTALLATION_DEPLOYMENT"
+			name="DEPLOYMENT_EVENT_FK01">
+			<reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID" />
+		</foreign-key>
+		<index name="DEPLOYMENT_EVENT_ID">
+			<index-column name="DEPLOYMENT_EVENT_ID" />
+		</index>
+		<index name="DEPLOYMENT_EVENT_TYPEDEPLOYMENT_EVENT">
+			<index-column name="EVENT_TYPE_ID" />
+		</index>
+		<index name="DEPLOYMENT_ID">
+			<index-column name="DEPLOYMENT_ID" />
+		</index>
+		<index name="RECEIVER_DEPLOYMENTDEPLOYMENT_EVENT">
+			<index-column name="DEPLOYMENT_ID" />
+		</index>
+		<index name="EVENT_TYPE_ID">
+			<index-column name="EVENT_TYPE_ID" />
+		</index>
+	</table>-->
 
-    <table codeTable='true' name="RECOVERY_STATUS">
-      <column name="RECOVERY_STATUS_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="RECOVERY_STATUS_ID">
-        <index-column name="RECOVERY_STATUS_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="DETECTION">
-      <column name="DETECTION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="DOWNLOAD_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="DETECTION_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	 <unique-column name="DEPLOYMENT_ID"/>
-	 <unique-column name="TAG_ID"/>
-	 <unique-column name="DETECTION_TIMESTAMP"/>
-      </unique>
-      <foreign-key foreignTable="INSTALLATION_DEPLOYMENT" name="DETECTION_FK00">
-        <reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID"/>
-      </foreign-key>
-      <index name="DEPLOYMENT_ID">
-        <index-column name="DEPLOYMENT_ID"/>
-      </index>
-      <index name="DETECTION_ID">
-        <index-column name="DETECTION_ID"/>
-      </index>
-      <index name="RECEIVER_DEPLOYMENTDETECTION">
-        <index-column name="DEPLOYMENT_ID"/>
-      </index>
-      <index name="TAG_ID">
-        <index-column name="TAG_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="DEVICE">
-      <column name="DEVICE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="DEVICE_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="MODEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="SERIAL_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="PROJECT_ROLE_PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	     <unique-column name="CODE_NAME"/>
-	     <unique-column name="DEVICE_TYPE_ID"/>
-      </unique>
-      <foreign-key foreignTable="DEVICE_MODEL" name="DEVICE_FK00">
-        <reference local="MODEL_ID" foreign="MODEL_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="DEVICE_TYPE" name="DEVICE_FK01">
-        <reference local="DEVICE_TYPE_ID" foreign="DEVICE_TYPE_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="PROJECT_PERSON" name="DEVICE_FK02">
-        <reference local="PROJECT_ROLE_PERSON_ID" foreign="PROJECT_ROLE_PERSON_ID"/>
-      </foreign-key>
-      <index name="device_id">
-        <index-column name="DEVICE_ID"/>
-      </index>
-      <index name="DEVICE_MODELDEVICE">
-        <index-column name="MODEL_ID"/>
-      </index>
-      <index name="device_type_id">
-        <index-column name="DEVICE_TYPE_ID"/>
-      </index>
-      <index name="DEVICE_TYPEDEVICE">
-        <index-column name="DEVICE_TYPE_ID"/>
-      </index>
-      <index name="MODEL_ID">
-        <index-column name="MODEL_ID"/>
-      </index>
-      <index name="PROJECT_ROLE_PERSON_ID">
-        <index-column name="PROJECT_ROLE_PERSON_ID"/>
-      </index>
-      <index name="PROJECT_ROLE_PERSONDEVICE">
-        <index-column name="PROJECT_ROLE_PERSON_ID"/>
-      </index>
-      <index name="STATUS_ID">
-        <index-column name="STATUS_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="DEVICE_DEPLOYER">
-      <column name="DEVICE_DEPLOYER_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	 <unique-column name="DEPLOYMENT_ID"/>
-	 <unique-column name="PERSON_ID"/>
-      </unique>
-      <index name="DEPLOYMENT_ID">
-        <index-column name="DEPLOYMENT_ID"/>
-      </index>
-      <index name="DEVICE_DEPLOYER_ID">
-        <index-column name="DEVICE_DEPLOYER_ID"/>
-      </index>
-      <index name="PERSON_ID">
-        <index-column name="PERSON_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="RECEIVER_DEPLOYMENT">
-      <column name="DEPLOYMENT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="STATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="PROJECT_ROLE_PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="8,5" autoIncrement="false"/>
-      <column name="DEPLOYMENT_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="SCHEDULED_RECOVERY_DATE" primaryKey="false" required="false" type="DATE" size="23,3" autoIncrement="false"/>
-      <column name="ACOUSTIC_RELEASE_ID" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="MOORING_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="BOTTOM_DEPTH" primaryKey="false" required="true"  type="DECIMAL" size="5,2" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	    <unique-column name="DEVICE_ID"/>
-	    <unique-column name="DEPLOYMENT_TIMESTAMP"/>
-      </unique>     
-      <foreign-key foreignTable="RECEIVER_DEVICE" name="RECEIVER_DEPLOYMENT_FK00">
-        <reference local="DEVICE_ID" foreign="DEVICE_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="INSTALLATION" name="RECEIVER_DEPLOYMENT_FK02">
-        <reference local="INSTALLATION_ID" foreign="INSTALLATION_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="STATION" name="RECEIVER_DEPLOYMENT_FK01">
-        <reference local="STATION_ID" foreign="STATION_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="MOORING_TYPE" name="RECEIVER_DEPLOYMENT_FK03">
-        <reference local="MOORING_TYPE_ID" foreign="MOORING_TYPE_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="PROJECT_PERSON" name="RECEIVER_DEPLOYMENT_FK04">
-        <reference local="PROJECT_ROLE_PERSON_ID" foreign="PROJECT_ROLE_PERSON_ID"/>
-      </foreign-key>
-      <index name="DEPLOYMENT_ID">
-        <index-column name="DEPLOYMENT_ID"/>
-      </index>
-      <index name="DEVICE_ID">
-        <index-column name="DEVICE_ID"/>
-      </index>
-      <index name="DEVICERECEIVER_DEPLOYMENT">
-        <index-column name="DEVICE_ID"/>
-      </index>
-      <index name="INSTALLATION_ID">
-        <index-column name="INSTALLATION_ID"/>
-      </index>
-      <index name="INSTALLATION_STATIONRECEIVER_DEPLOYMENT">
-        <index-column name="STATION_ID"/>
-      </index>
-      <index name="INSTALLATIONRECEIVER_DEPLOYMENT">
-        <index-column name="INSTALLATION_ID"/>
-      </index>
-      <index name="MOORING_TYPERECEIVER_DEPLOYMENT">
-        <index-column name="MOORING_TYPE_ID"/>
-      </index>
-      <index name="PROJECT_ROLE_PERSON_ID">
-        <index-column name="PROJECT_ROLE_PERSON_ID"/>
-      </index>
-      <index name="PROJECT_ROLE_PERSONRECEIVER_DEPLOYMENT">
-        <index-column name="PROJECT_ROLE_PERSON_ID"/>
-      </index>
-      <index name="STATION_ID">
-        <index-column name="STATION_ID"/>
-      </index>
-      <index name="STATUS_ID">
-        <index-column name="STATUS_ID"/>
-      </index>
-      <index name="TETHER_TYPE_ID">
-        <index-column name="MOORING_TYPE_ID"/>
-      </index>
-    </table>
-    
-    <table codeTable='true' name="DEVICE_MANUFACTURER">
-      <column name="MANUFACTURER_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="MANUFACTURER_ID">
-        <index-column name="MANUFACTURER_ID"/>
-      </index>
-    </table>
-    
-    <table codeTable='true' name="DEVICE_MODEL">
-      <column name="MODEL_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DEVICE_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="MANUFACTURER_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-        <unique-column name="DEVICE_TYPE_ID"/>
-        <unique-column name="MANUFACTURER_ID"/>
-      </unique>
-      <foreign-key foreignTable="DEVICE_MANUFACTURER" name="DEVICE_MODEL_FK00">
-        <reference local="MANUFACTURER_ID" foreign="MANUFACTURER_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="DEVICE_TYPE" name="DEVICE_MODEL_FK01">
-        <reference local="DEVICE_TYPE_ID" foreign="DEVICE_TYPE_ID"/>
-      </foreign-key>
-      <index name="DEVICE_MANUFACTURERDEVICE_MODEL">
-        <index-column name="MANUFACTURER_ID"/>
-      </index>
-      <index name="DEVICE_TYPE_ID">
-        <index-column name="DEVICE_TYPE_ID"/>
-      </index>
-      <index name="DEVICE_TYPEDEVICE_MODEL">
-        <index-column name="DEVICE_TYPE_ID"/>
-      </index>
-      <index name="MANUFACTURER_ID">
-        <index-column name="MANUFACTURER_ID"/>
-      </index>
-      <index name="MODEL_ID">
-        <index-column name="MODEL_ID"/>
-      </index>
-      <index name="NAME">
-        <index-column name="NAME"/>
-      </index>
-    </table>
-    <table codeTable='false' name="DEVICE_TYPE">
-      <column name="DEVICE_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="DEVICE_TYPE_ID">
-        <index-column name="DEVICE_TYPE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="DOWNLOAD_FILE">
-      <column name="DOWNLOAD_FILE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DOWNLOAD_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="FILE_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	    <unique-column name="DOWNLOAD_ID"/>
-        <unique-column name="FILE_NAME"/>
-      </unique>
-      <foreign-key foreignTable="DEPLOYMENT_DOWNLOAD" name="DOWNLOAD_FILE_FK00">
-        <reference local="DOWNLOAD_ID" foreign="DOWNLOAD_ID"/>
-      </foreign-key>
-      <index name="DEPLOYMENT_DOWNLOADDOWNLOAD_FILE">
-        <index-column name="DOWNLOAD_ID"/>
-      </index>
-      <index name="DOWNLOAD_ID">
-        <index-column name="DOWNLOAD_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="GEOGRAPHIC_AREA">
-      <column name="GEOGRAPHIC_AREA_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="BOUNDARY_POINTS" primaryKey="false" required="false" type="VARCHAR" size="500" autoIncrement="false"/>
-      <column name="DESCRIPTION" primaryKey="false" required="true" type="VARCHAR" size="500" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="GEOGRAPHIC_AREA_ID">
-        <index-column name="GEOGRAPHIC_AREA_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="IMPLANT_TYPE">
-      <column name="IMPLANT_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="IMPLANT_TYPE_ID">
-        <index-column name="IMPLANT_TYPE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="INSTALLATION">
-      <column name="INSTALLATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="CONFIGURATION_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <!--column name="LATITUDE" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="LONGITUDE" primaryKey="false" required="false" type="DECIMAL" size="18" autoIncrement="false"/>
-      <column name="GEOGRAPHIC_AREA_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <foreign-key foreignTable="GEOGRAPHIC_AREA" name="INSTALLATION_FK00">
-        <reference local="GEOGRAPHIC_AREA_ID" foreign="GEOGRAPHIC_AREA_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="INSTALLATION_CONF" name="INSTALLATION_FK01">
-        <reference local="CONFIGURATION_TYPE_ID" foreign="CONFIGURATION_TYPE_ID"/>
-      </foreign-key>
-      <index name="CONFIGURATION_TYPE_ID">
-        <index-column name="CONFIGURATION_TYPE_ID"/>
-      </index>
-      <index name="GEOGRAPHIC_AREA_ID">
-        <index-column name="GEOGRAPHIC_AREA_ID"/>
-      </index>
-      <index name="GEOGRAPHIC_AREAINSTALLATION">
-        <index-column name="GEOGRAPHIC_AREA_ID"/>
-      </index>
-      <index name="INSTALLATION_CONFINSTALLATION">
-        <index-column name="CONFIGURATION_TYPE_ID"/>
-      </index>
-      <index name="INSTALLATION_ID">
-        <index-column name="INSTALLATION_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="INSTALLATION_CONF">
-      <column name="CONFIGURATION_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="CNFIGURATION_TYPE_ID">
-        <index-column name="CONFIGURATION_TYPE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="INSTALLATION_STATION">
-      <column name="STATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="CURTAIN_POSITION" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="8,5" default="0" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <foreign-key foreignTable="INSTALLATION" name="INSTALLATION_STATION_FK00">
-        <reference local="INSTALLATION_ID" foreign="INSTALLATION_ID"/>
-      </foreign-key>
-      <index name="INSTALLATION_ID">
-        <index-column name="INSTALLATION_ID"/>
-      </index>
-      <index name="INSTALLATIONINSTALLATION_STATION">
-        <index-column name="INSTALLATION_ID"/>
-      </index>
-      <index name="STATION_ID">
-        <index-column name="STATION_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="MEASUREMENT">
-      <column name="MEASUREMENT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="SURGERY_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="MEASUREMENT_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="MEASUREMENT_UNIT_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>      
-      <column name="VALUE" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
-      <foreign-key foreignTable="MEASUREMENT_TYPE" name="MEASUREMENT_FK00">
-        <reference local="MEASUREMENT_TYPE_ID" foreign="MEASUREMENT_TYPE_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="MEASUREMENT_UNIT_TYPE" name="MEASUREMENT_FK01">
-        <reference local="MEASUREMENT_UNIT_TYPE_ID" foreign="MEASUREMENT_UNIT_TYPE_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="SURGERY" name="MEASUREMENT_FK02">
-        <reference local="SURGERY_ID" foreign="SURGERY_ID"/>
-      </foreign-key>
-      <index name="MEASUREMENT_ID">
-        <index-column name="MEASUREMENT_ID"/>
-      </index>
-      <index name="MEASUREMENT_TYPE_ID">
-        <index-column name="MEASUREMENT_TYPE_ID"/>
-      </index>
-      <index name="MEASUREMENT_TYPEMEASUREMENT">
-        <index-column name="MEASUREMENT_TYPE_ID"/>
-      </index>
-      <index name="SURGERY_ID">
-        <index-column name="SURGERY_ID"/>
-      </index>
-      <index name="SURGERYMEASUREMENT">
-        <index-column name="SURGERY_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="MEASUREMENT_TYPE">
-      <column name="MEASUREMENT_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="MEASUREMENT_UNITS_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <foreign-key foreignTable="MEASUREMENT_UNIT_TYPE" name="MEASUREMENT_TYPE_FK00">
-        <reference local="MEASUREMENT_UNITS_ID" foreign="MEASUREMENT_UNIT_TYPE_ID"/>
-      </foreign-key>
-      <index name="MEASUREMENT_TYPE_ID">
-        <index-column name="MEASUREMENT_TYPE_ID"/>
-      </index>
-      <index name="MEASUREMENT_UNITMEASUREMENT_TYPE">
-        <index-column name="MEASUREMENT_UNITS_ID"/>
-      </index>
-      <index name="MEASUREMENT_UNITS_ID">
-        <index-column name="MEASUREMENT_UNITS_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="MEASUREMENT_UNIT">
-      <column name="MEASUREMENT_UNIT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="MEASUEMENT_UNITS_ID">
-        <index-column name="MEASUREMENT_UNIT_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="MOORING_TYPE">
-      <column name="MOORING_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="DESCRIPTION" primaryKey="false" required="false" type="VARCHAR" size="500" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="MOORING_TYPE_ID">
-        <index-column name="MOORING_TYPE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="ORGANISATION">
-      <column name="ORGANISATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="200" autoIncrement="false"/>
-      <column name="PHONE_NUMBER" primaryKey="false" required="true" type="VARCHAR" size="20" autoIncrement="false"/>
-       <column name="FAX_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="20" autoIncrement="false"/>
-      <column name="PHYSICAL_ADDRESS_1" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
-      <column name="PHYSICAL_ADDRESS_2" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
-      <column name="PHYSICAL_ADDRESS_STATE" primaryKey="false" required="false" type="VARCHAR" size="20" autoIncrement="false"/>
-      <column name="PHYSICAL_ADDRESS_COUNTRY" primaryKey="false" required="false" type="VARCHAR" size="30" autoIncrement="false"/>
-      <column name="PHYSICAL_ADDRESS_POSTCODE" primaryKey="false" required="false" type="VARCHAR" size="6" autoIncrement="false"/>
-      <column name="POSTAL_ADDRESS_1" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
-      <column name="POSTAL_ADDRESS_2" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
-      <column name="POSTAL_ADDRESS_STATE" primaryKey="false" required="false" type="VARCHAR" size="20" autoIncrement="false"/>
-      <column name="POSTAL_ADDRESS_COUNTRY" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="POSTAL_ADDRESS_POSTCODE" primaryKey="false" required="false" type="VARCHAR" size="6" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="ADDRESS_POSTCODE">
-        <index-column name="PHYSICAL_ADDRESS_COUNTRY"/>
-      </index>
-      <index name="ORGANISATION_ID">
-        <index-column name="ORGANISATION_ID"/>
-      </index>
-      <index name="PHYSICAL_ADDRESS_POSTCODE">
-        <index-column name="PHYSICAL_ADDRESS_POSTCODE"/>
-      </index>
-      <index name="POSTAL_POSTCODE">
-        <index-column name="POSTAL_ADDRESS_POSTCODE"/>
-      </index>
-    </table>
-    <table codeTable='false' name="ORGANISATION_ANIMAL">
-      <column name="ORGANISATION_ANIMAL_ID" primaryKey="true" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="ORGANISATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="ANIMAL_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <unique name="ANIMAL_ID">
-	<unique-column name="ORGANISATION_ID"/>
-        <unique-column name="ANIMAL_ID"/>
-      </unique>
-      <index name="ORGANIZATION_ANIMAL_ID">
-        <index-column name="ORGANIZATION_ANIMAL_ID"/>
-      </index>
-      <index name="ORGANIZATION_ID">
-        <index-column name="ORGANIZATION_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="ORGANISATION_PERSON">
-      <column name="ORGANISATION_PERSON_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="ORGANISATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="POSITION" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="PHONE_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
-      <column name="FAX_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
-      <column name="MOBILE_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
-      <column name="EMAIL_ADDRESS" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="PERSON_ID"/>
-        <unique-column name="ORGANISATION_ID"/>
-        <unique-column name="POSITION"/>
-      </unique>
-    </table>
-    <table codeTable='false' name="PERSON">
-      <column name="PERSON_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="200" autoIncrement="false"/>
-      <column name="PERSONAL_MOBILE_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
-      <column name="HOME_PHONE_NUMBER" primaryKey="false" required="false" type="VARCHAR" size="15" autoIncrement="false"/>
-      <column name="EMAIL" primaryKey="false" required="true" type="VARCHAR" size="30" autoIncrement="false"/>
-      <column name="HOME_PHYSICAL_ADDRESS_1" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="HOME_PHYSICAL_ADDRESS_2" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="HOME_PHYSICAL_ADDRESS_STATE" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="HOME_PHYSICAL_ADDRESS_COUNTRY" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="HOME_PHYSICAL_ADDRESS_POSTCODE" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="HOME_POSTAL_ADDRESS_1" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="HOME_POSTAL_ADDRESS_2" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="HOME_POSTAL_ADDRESS_STATE" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="HOME_POSTAL_ADDRESS_COUNTRY" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="HOME_POSTAL_ADDRESS_POSTCODE" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="HOME_PHYSICAL_POSTCODE">
-        <index-column name="HOME_PHYSICAL_ADDRESS_POSTCODE"/>
-      </index>
-      <index name="HOME_POSTAL_ADDRESS_POSTCODE">
-        <index-column name="HOME_POSTAL_ADDRESS_POSTCODE"/>
-      </index>
-      <index name="PERSON_ID">
-        <index-column name="PERSON_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="PROJECT">
-      <column name="PROJECT_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="ORGANISATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="200" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <foreign-key foreignTable="ORGANISATION" name="PROJECT_FK00">
-        <reference local="ORGANISATION_ID" foreign="ORGANISATION_ID"/>
-      </foreign-key>
-      <index name="ORGANISATIONPROJECT">
-        <index-column name="ORGANISATION_ID"/>
-      </index>
-      <index name="ORGANIZATION_ID">
-        <index-column name="ORGANISATION_ID"/>
-      </index>
-      <index name="PROJECT_ID">
-        <index-column name="PROJECT_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="PROJECT_ROLE_PERSON">
-      <column name="PROJECT_ROLE_PERSON_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="PROJECT_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="ROLE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <foreign-key foreignTable="PERSON" name="PROJECT_ROLE_PERSON_FK00">
-        <reference local="PERSON_ID" foreign="PERSON_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="PROJECT" name="PROJECT_ROLE_PERSON_FK01">
-        <reference local="PROJECT_ID" foreign="PROJECT_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="ROLE" name="PROJECT_ROLE_PERSON_FK02">
-        <reference local="ROLE_ID" foreign="ROLE_ID"/>
-      </foreign-key>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="PROJECT_ID"/>
-        <unique-column name="ROLE_ID"/>
-        <unique-column name="PERSON_ID"/>
-      </unique>
-      <index name="PERSON_ID">
-        <index-column name="PERSON_ID"/>
-      </index>
-      <index name="PERSONPROJECT_ROLE_PERSON">
-        <index-column name="PERSON_ID"/>
-      </index>
-      <index name="PROJECT_ID">
-        <index-column name="PROJECT_ID"/>
-      </index>
-      <index name="PROJECT_ROLE_PERSON_ID">
-        <index-column name="PROJECT_ROLE_PERSON_ID"/>
-      </index>
-      <index name="PROJECTPROJECT_ROLE_PERSON">
-        <index-column name="PROJECT_ID"/>
-      </index>
-      <index name="ROLE_ID">
-        <index-column name="ROLE_ID"/>
-      </index>
-      <index name="ROLEPROJECT_ROLE_PERSON">
-        <index-column name="ROLE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="ROLE">
-      <column name="ROLE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="ROLE_ID">
-        <index-column name="ROLE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="STATUS">
-      <column name="STATUS_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="STATUS_ID">
-        <index-column name="STATUS_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="STOCK">
-      <column name="STOCK_ID" primaryKey="true" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="STOCK_ID">
-        <index-column name="STOCK_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="SURGERY">
-      <column name="SURGERY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="TREATMENT_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="PROJECT_ROLE_PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="ANIMAL_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="STOCK_ID" primaryKey="false" required="false" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="UTC_DATETIME" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="COMMENTS" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
-      <foreign-key foreignTable="ANIMAL" name="SURGERY_FK00">
-        <reference local="ANIMAL_ID" foreign="ANIMAL_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="TREATMENT_TYPE" name="SURGERY_FK01">
-        <reference local="TREATMENT_TYPE_ID" foreign="TREATMENT_TYPE_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="PROJECT_PERSON" name="SURGERY_FK02">
-        <reference local="PROJECT_ROLE_PERSON_ID" foreign="PROJECT_ROLE_PERSON_ID"/>
-      </foreign-key>
-      <index name="ANIMAL_ID">
-        <index-column name="ANIMAL_ID"/>
-      </index>
-      <index name="ANIMALSURGERY">
-        <index-column name="ANIMAL_ID"/>
-      </index>
-      <index name="PERSON_ID">
-        <index-column name="PROJECT_ROLE_PERSON_ID"/>
-      </index>
-      <index name="STOCK_ID">
-        <index-column name="STOCK_ID"/>
-      </index>
-      <index name="SURGERY_ID">
-        <index-column name="SURGERY_ID"/>
-      </index>
-      <index name="TREATMENT_TYPE_ID">
-        <index-column name="TREATMENT_TYPE_ID"/>
-      </index>
-      <index name="TREATMENT_TYPESURGERY">
-        <index-column name="TREATMENT_TYPE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="SURGERY_PERSON">
-      <column name="SURGERY_PERSON_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="SURGERY_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <foreign-key foreignTable="PERSON" name="SURGERY_PERSON_FK00">
-        <reference local="PERSON_ID" foreign="PERSON_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="SURGERY" name="SURGERY_PERSON_FK01">
-        <reference local="SURGERY_ID" foreign="SURGERY_ID"/>
-      </foreign-key>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="SURGERY_ID"/>
-        <unique-column name="PERSON_ID"/>
-      </unique>
-      <index name="PERSON_ID">
-        <index-column name="PERSON_ID"/>
-      </index>
-      <index name="PERSONSURGERY_PERSON">
-        <index-column name="PERSON_ID"/>
-      </index>
-      <index name="SURGERY_ID">
-        <index-column name="SURGERY_ID"/>
-      </index>
-      <index name="SURGERYSURGERY_PERSON">
-        <index-column name="SURGERY_ID"/>
-      </index>
-    </table>
-    <!--table name="TAG_DEVICE">
-      <column name="DEVICE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <index name="DEVICE_ID">
-        <index-column name="DEVICE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="TAG_FAMILY">
-      <column name="TAG_FAMILY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="MANUFACTURER_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false" />
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="MANUFACTURER_ID">
-        <index-column name="MANUFACTURER_ID"/>
-      </index>
-      <index name="TAG_TYPE_ID">
-        <index-column name="TAG_FAMILY_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="TAG_MODEL">
-      <column name="MODEL_ID" primaryKey="true" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="TAG_FAMILY_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="VUE_CODING" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="TAG_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="FREQUENCY" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="SYNC" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="BIN" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="MIN" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="MAX" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-         <unique-column name="FREQUENCY"/>
-         <unique-column name="SYNC"/>
-         <unique-column name="BIN"/>
-         <unique-column name="MIN"/>
-         <unique-column name="MAX"/>
-      </unique>
-      <foreign-key foreignTable="DEVICE_MODEL" name="TAG_MODEL_FK00">
-        <reference local="MODEL_ID" foreign="MODEL_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="TAG_FAMILY" name="TAG_MODEL_FK01">
-        <reference local="TAG_FAMILY_ID" foreign="TAG_FAMILY_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="TAG_TYPE" name="TAG_MODEL_FK02">
-        <reference local="TAG_TYPE_ID" foreign="TAG_TYPE_ID"/>
-      </foreign-key>
-      <index name="DEVICE_MODELTAG_MODEL">
-        <index-column name="MODEL_ID"/>
-      </index>
-      <index name="MODEL_ID">
-        <index-column name="MODEL_ID"/>
-      </index>
-      <index name="TAG_FAMILY_ID">
-        <index-column name="TAG_FAMILY_ID"/>
-      </index>
-      <index name="TAG_FAMILYTAG_MODEL">
-        <index-column name="TAG_FAMILY_ID"/>
-      </index>
-      <index name="TAG_TYPE_ID">
-        <index-column name="TAG_TYPE_ID"/>
-      </index>
-      <index name="TAG_TYPETAG_MODEL">
-        <index-column name="TAG_TYPE_ID"/>
-      </index>
-    </table-->
-    <table codeTable='false' name="TAG_RELEASE">
-      <column name="RELEASE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="DEVICE_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="CLASSIFICATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="DISPLAYED_LEVEL_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>     
-      <column name="PROJECT_ROLE_PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="CAPTURE_LOCATION" primaryKey="false" required="false" type="GEOMETRY" size="8,5" autoIncrement="false"/>
-      <!--column name="CAPTURE_GEOGRAPHIC_AREA_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
-      <column name="CAPTURE_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="RELEASE_LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="8,5" autoIncrement="false"/>
-      <!--column name="RELEASE_GEOGRAPHIC_AREA_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
-      <column name="RELEASE_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <!--column name="TETHER_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
-      <column name="IMPLANT_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="DISPLAYED_LEVEL_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="SURGERY_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-         <unique-column name="DEVICE_ID"/>
-      </unique>
-      <foreign-key foreignTable="SPECIES" name="TAG_RELEASE_FK00">
-        <reference local="CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
-      </foreign-key>
-       <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="TAG_RELEASE_FK01">
-        <reference local="DISPLAYED_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="TAG_DEVICE" name="TAG_RELEASE_FK02">
-        <reference local="DEVICE_ID" foreign="DEVICE_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="IMPLANT_TYPE" name="TAG_RELEASE_FK03">
-        <reference local="IMPLANT_TYPE_ID" foreign="IMPLANT_TYPE_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="PROJECT_PERSON" name="TAG_RELEASE_FK04">
-        <reference local="PROJECT_ROLE_PERSON_ID" foreign="PROJECT_ROLE_PERSON_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="SURGERY" name="TAG_RELEASE_FK06">
-        <reference local="SURGERY_ID" foreign="SURGERY_ID"/>
-      </foreign-key>
-      <!--  foreign-key foreignTable="TETHER_TYPE" name="TAG_RELEASE_FK07">
-        <reference local="TETHER_TYPE_ID" foreign="TETHER_TYPE_ID"/>
-      </foreign-key>
-      <index name="CAPTURE_GEOGRAPHIC_AREA_ID">
-        <index-column name="CAPTURE_GEOGRAPHIC_AREA_ID"/>
-      </index-->
-      <index name="CLASSIFICATION_ID">
-        <index-column name="CLASSIFICATION_ID"/>
-      </index>
-      <index name="CLASSIFICATIONTAG_RELEASE">
-        <index-column name="CLASSIFICATION_ID"/>
-      </index>
-      <index name="DEVICE_ATTACH_TYPE_ID">
-        <index-column name="TETHER_TYPE_ID"/>
-      </index>
-      <index name="DEVICE_ID">
-        <index-column name="DEVICE_ID"/>
-      </index>
-      <index name="DEVICE_IMPLANT_TYPE_ID">
-        <index-column name="IMPLANT_TYPE_ID"/>
-      </index>
-      <index name="DEVICETAG_RELEASE">
-        <index-column name="DEVICE_ID"/>
-      </index>
-      <!--index name="GEOGRAPHIC_AREA_ID">
-        <index-column name="RELEASE_GEOGRAPHIC_AREA_ID"/>
-      </index-->
-      <index name="IMPLANT_TYPETAG_RELEASE">
-        <index-column name="IMPLANT_TYPE_ID"/>
-      </index>
-      <index name="IMPLANT_TYPETAG_RELEASE1">
-        <index-column name="IMPLANT_TYPE_ID"/>
-      </index>
-      <index name="PROJECT_ROLE_PERSON_ID">
-        <index-column name="PROJECT_ROLE_PERSON_ID"/>
-      </index>
-      <index name="PROJECT_ROLE_PERSONTAG_RELEASE">
-        <index-column name="PROJECT_ROLE_PERSON_ID"/>
-      </index>
-      <index name="STATUS_ID">
-        <index-column name="STATUS_ID"/>
-      </index>
-      <index name="SURGERY_ID">
-        <index-column name="SURGERY_ID"/>
-      </index>
-      <index name="TETHER_TYPETAG_RELEASE">
-        <index-column name="TETHER_TYPE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="TAG_TYPE">
-      <column name="TAG_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="MANUFACTURER_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="10" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="MANUFACTURER_ID">
-        <index-column name="MANUFACTURER_ID"/>
-      </index>
-      <index name="TAG_TYPE_ID">
-        <index-column name="TAG_TYPE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="TETHER_TYPE">
-      <column name="TETHER_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="DESCRIPTION" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="PICTURE_REFERENCE" primaryKey="false" required="false" type="VARCHAR" size="4000" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="TETHER_TYPE_ID">
-        <index-column name="TETHER_TYPE_ID"/>
-      </index>
-    </table>
-    <table codeTable='false' name="TREATMENT_TYPE">
-      <column name="TREATMENT_TYPE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-      <index name="TREATMENT_TYPE_ID">
-        <index-column name="TREATMENT_TYPE_ID"/>
-      </index>
-    </table>
+	<table codeTable='false' name="DOWNLOAD_TAG_SUMMARY">
+		<column name="DOWNLOAD_TAG_SUMMARY_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="DOWNLOAD_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="DEPLOYMENT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="DEVICE_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="DETECTION_COUNT" primaryKey="false"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="DOWNLOAD_ID" />
+			<column name="DEVICE_ID" />
+		</unique>
+		<foreign-key foreignTable="INSTALLATION_DEPLOYMENT"
+			name="DOWNLOAD_TAG_SUMMARY_FK00">
+			<reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="TAG_DEVICE"
+			name="DOWNLOAD_TAG_SUMMARY_FK01">
+			<reference local="DEVICE_ID" foreign="DEVICE_ID" />
+		</foreign-key>
+	</table>
 
-    <view codeTable='false' name="PROJECT_PERSON">
-      <column name="PROJECT_ROLE_PERSON_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="PROJECT_FID" primaryKey="false" required="false" type="VARCHAR" size="55" autoIncrement="false"/>
-      <column name="PROJECT_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="PERSON_FID" primaryKey="false" required="false" type="VARCHAR" size="54" autoIncrement="false"/>
-      <column name="PERSON_ROLE" primaryKey="false" required="true" type="VARCHAR" size="150" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	    <unique-column name="PROJECT_NAME"/>
-	    <unique-column name="PERSON_ROLE"/>
-      </unique>
-    </view>
+	<!--table codeTable='true' name="DEPLOYMENT_EVENT_TYPE">
+		<column name="EVENT_TYPE_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="DEPLOYMENT_EVENT_ID">
+			<index-column name="EVENT_TYPE_ID" />
+		</index>
+	</table-->
+	
+	<table codeTable='false' name="DEPLOYMENT_RECOVERY">
+		<column name="RECOVERY_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="DEPLOYMENT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="RECOVERY_TIMESTAMP" primaryKey="false"
+			required="true" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="RECOVERY_STATUS_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="COMMENTS" primaryKey="false" required="false"
+			type="LONGVARCHAR" size="4000" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="DEPLOYMENT_ID" />
+			<column name="RECOVERY_TIMESTAMP" />
+		</unique>
+		<foreign-key foreignTable="INSTALLATION_DEPLOYMENT"
+			name="DEPLOYMENT_RECOVERY_FK00">
+			<reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="RECOVERY_STATUS"
+			name="DEPLOYMENT_RECOVERY_FK01">
+			<reference local="RECOVERY_STATUS_ID"
+				foreign="RECOVERY_STATUS_ID" />
+		</foreign-key>
+		<index name="DEPLOYMENT_ID">
+			<index-column name="DEPLOYMENT_ID" />
+		</index>
+		<index name="RECEIVER_DEPLOYMENTDEPLOYMENT_RECOVERY">
+			<index-column name="DEPLOYMENT_ID" />
+		</index>
+		<index name="RECOVERY_ID">
+			<index-column name="RECOVERY_ID" />
+		</index>
+		<index name="RECOVERY_STATUS_ID">
+			<index-column name="RECOVERY_STATUS_ID" />
+		</index>
+		<index name="RECOVERY_STATUSDEPLOYMENT_RECOVERY">
+			<index-column name="RECOVERY_STATUS_ID" />
+		</index>
+	</table>
 
-    <view codeTable='false' name="RECEIVER_DEVICE">
-      <column name="DEVICE_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="MODEL_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="MANUFACTURER_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="PROJECT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	  <unique-column name="NAME"/>
-      </unique>
-    </view>
+	<table codeTable='true' name="RECOVERY_STATUS">
+		<column name="RECOVERY_STATUS_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="RECOVERY_STATUS_ID">
+			<index-column name="RECOVERY_STATUS_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='false' name="DETECTION">
+		<column name="DETECTION_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="DEPLOYMENT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="DOWNLOAD_ID" primaryKey="false" required="false"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="TAG_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="DETECTION_TIMESTAMP" primaryKey="false"
+			required="true" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="DEPLOYMENT_ID" />
+			<column name="TAG_ID" />
+			<column name="DETECTION_TIMESTAMP" />
+		</unique>
+		<foreign-key foreignTable="INSTALLATION_DEPLOYMENT"
+			name="DETECTION_FK00">
+			<reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID" />
+		</foreign-key>
+		<index name="DEPLOYMENT_ID">
+			<index-column name="DEPLOYMENT_ID" />
+		</index>
+		<index name="DETECTION_ID">
+			<index-column name="DETECTION_ID" />
+		</index>
+		<index name="RECEIVER_DEPLOYMENTDETECTION">
+			<index-column name="DEPLOYMENT_ID" />
+		</index>
+		<index name="TAG_ID">
+			<index-column name="TAG_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='false' name="DEVICE">
+		<column name="DEVICE_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="CODE_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="DEVICE_TYPE_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="MODEL_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="SERIAL_NUMBER" primaryKey="false" required="false"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="PROJECT_ROLE_PERSON_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="CODE_NAME" />
+			<column name="DEVICE_TYPE_ID" />
+		</unique>
+		<foreign-key foreignTable="DEVICE_MODEL" name="DEVICE_FK00">
+			<reference local="MODEL_ID" foreign="MODEL_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="DEVICE_TYPE" name="DEVICE_FK01">
+			<reference local="DEVICE_TYPE_ID" foreign="DEVICE_TYPE_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="PROJECT_PERSON" name="DEVICE_FK02">
+			<reference local="PROJECT_ROLE_PERSON_ID"
+				foreign="PROJECT_ROLE_PERSON_ID" />
+		</foreign-key>
+		<index name="device_id">
+			<index-column name="DEVICE_ID" />
+		</index>
+		<index name="DEVICE_MODELDEVICE">
+			<index-column name="MODEL_ID" />
+		</index>
+		<index name="device_type_id">
+			<index-column name="DEVICE_TYPE_ID" />
+		</index>
+		<index name="DEVICE_TYPEDEVICE">
+			<index-column name="DEVICE_TYPE_ID" />
+		</index>
+		<index name="MODEL_ID">
+			<index-column name="MODEL_ID" />
+		</index>
+		<index name="PROJECT_ROLE_PERSON_ID">
+			<index-column name="PROJECT_ROLE_PERSON_ID" />
+		</index>
+		<index name="PROJECT_ROLE_PERSONDEVICE">
+			<index-column name="PROJECT_ROLE_PERSON_ID" />
+		</index>
+		<index name="STATUS_ID">
+			<index-column name="STATUS_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='false' name="DEVICE_DEPLOYER">
+		<column name="DEVICE_DEPLOYER_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="DEPLOYMENT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="PERSON_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="DEPLOYMENT_ID" />
+			<column name="PERSON_ID" />
+		</unique>
+		<index name="DEPLOYMENT_ID">
+			<index-column name="DEPLOYMENT_ID" />
+		</index>
+		<index name="DEVICE_DEPLOYER_ID">
+			<index-column name="DEVICE_DEPLOYER_ID" />
+		</index>
+		<index name="PERSON_ID">
+			<index-column name="PERSON_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='false' name="RECEIVER_DEPLOYMENT">
+		<column name="DEPLOYMENT_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="DEVICE_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="INSTALLATION_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="STATION_ID" primaryKey="false" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="PROJECT_ROLE_PERSON_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="LOCATION" primaryKey="false" required="true"
+			type="GEOMETRY" size="8,5" autoIncrement="false" />
+		<column name="DEPLOYMENT_TIMESTAMP" primaryKey="false"
+			required="true" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="SCHEDULED_RECOVERY_DATE" primaryKey="false"
+			required="false" type="DATE" size="23,3" autoIncrement="false" />
+		<column name="ACOUSTIC_RELEASE_ID" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="MOORING_TYPE_ID" primaryKey="false"
+			required="false" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="BOTTOM_DEPTH" primaryKey="false" required="true"
+			type="DECIMAL" size="5,2" autoIncrement="false" />
+		<column name="COMMENTS" primaryKey="false" required="false"
+			type="VARCHAR" size="4000" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="DEVICE_ID" />
+			<column name="DEPLOYMENT_TIMESTAMP" />
+		</unique>
+		<foreign-key foreignTable="RECEIVER_DEVICE"
+			name="RECEIVER_DEPLOYMENT_FK00">
+			<reference local="DEVICE_ID" foreign="DEVICE_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="INSTALLATION"
+			name="RECEIVER_DEPLOYMENT_FK02">
+			<reference local="INSTALLATION_ID"
+				foreign="INSTALLATION_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="STATION"
+			name="RECEIVER_DEPLOYMENT_FK01">
+			<reference local="STATION_ID" foreign="STATION_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="MOORING_TYPE"
+			name="RECEIVER_DEPLOYMENT_FK03">
+			<reference local="MOORING_TYPE_ID"
+				foreign="MOORING_TYPE_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="PROJECT_PERSON"
+			name="RECEIVER_DEPLOYMENT_FK04">
+			<reference local="PROJECT_ROLE_PERSON_ID"
+				foreign="PROJECT_ROLE_PERSON_ID" />
+		</foreign-key>
+		<index name="DEPLOYMENT_ID">
+			<index-column name="DEPLOYMENT_ID" />
+		</index>
+		<index name="DEVICE_ID">
+			<index-column name="DEVICE_ID" />
+		</index>
+		<index name="DEVICERECEIVER_DEPLOYMENT">
+			<index-column name="DEVICE_ID" />
+		</index>
+		<index name="INSTALLATION_ID">
+			<index-column name="INSTALLATION_ID" />
+		</index>
+		<index name="INSTALLATION_STATIONRECEIVER_DEPLOYMENT">
+			<index-column name="STATION_ID" />
+		</index>
+		<index name="INSTALLATIONRECEIVER_DEPLOYMENT">
+			<index-column name="INSTALLATION_ID" />
+		</index>
+		<index name="MOORING_TYPERECEIVER_DEPLOYMENT">
+			<index-column name="MOORING_TYPE_ID" />
+		</index>
+		<index name="PROJECT_ROLE_PERSON_ID">
+			<index-column name="PROJECT_ROLE_PERSON_ID" />
+		</index>
+		<index name="PROJECT_ROLE_PERSONRECEIVER_DEPLOYMENT">
+			<index-column name="PROJECT_ROLE_PERSON_ID" />
+		</index>
+		<index name="STATION_ID">
+			<index-column name="STATION_ID" />
+		</index>
+		<index name="STATUS_ID">
+			<index-column name="STATUS_ID" />
+		</index>
+		<index name="TETHER_TYPE_ID">
+			<index-column name="MOORING_TYPE_ID" />
+		</index>
+	</table>
 
-     <view codeTable='false' name="TAG_DEVICE">
-      <column name="DEVICE_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="MODEL_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="MANUFACTURER_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="PROJECT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	  <unique-column name="NAME"/>
-      </unique>
-    </view>   
+	<table codeTable='true' name="DEVICE_MANUFACTURER">
+		<column name="MANUFACTURER_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="MANUFACTURER_ID">
+			<index-column name="MANUFACTURER_ID" />
+		</index>
+	</table>
 
-    <view codeTable='false' name="STATION">
-      <column name="STATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="INSTALLATION_FID" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="CURTAIN_POSITION" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="8,5" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	  <unique-column name="NAME"/>
-      </unique>
-    </view>
+	<table codeTable='true' name="DEVICE_MODEL">
+		<column name="MODEL_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="DEVICE_TYPE_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="MANUFACTURER_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+			<column name="DEVICE_TYPE_ID" />
+			<column name="MANUFACTURER_ID" />
+		</unique>
+		<foreign-key foreignTable="DEVICE_MANUFACTURER"
+			name="DEVICE_MODEL_FK00">
+			<reference local="MANUFACTURER_ID"
+				foreign="MANUFACTURER_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="DEVICE_TYPE"
+			name="DEVICE_MODEL_FK01">
+			<reference local="DEVICE_TYPE_ID" foreign="DEVICE_TYPE_ID" />
+		</foreign-key>
+		<index name="DEVICE_MANUFACTURERDEVICE_MODEL">
+			<index-column name="MANUFACTURER_ID" />
+		</index>
+		<index name="DEVICE_TYPE_ID">
+			<index-column name="DEVICE_TYPE_ID" />
+		</index>
+		<index name="DEVICE_TYPEDEVICE_MODEL">
+			<index-column name="DEVICE_TYPE_ID" />
+		</index>
+		<index name="MANUFACTURER_ID">
+			<index-column name="MANUFACTURER_ID" />
+		</index>
+		<index name="MODEL_ID">
+			<index-column name="MODEL_ID" />
+		</index>
+		<index name="NAME">
+			<index-column name="NAME" />
+		</index>
+	</table>
+	
+	<table codeTable='true' name="DEVICE_TYPE">
+		<column name="DEVICE_TYPE_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="DEVICE_TYPE_ID">
+			<index-column name="DEVICE_TYPE_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='false' name="DOWNLOAD_FILE">
+		<column name="DOWNLOAD_FILE_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="DOWNLOAD_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="FILE_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="100" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="DOWNLOAD_ID" />
+			<column name="FILE_NAME" />
+		</unique>
+		<foreign-key foreignTable="DEPLOYMENT_DOWNLOAD"
+			name="DOWNLOAD_FILE_FK00">
+			<reference local="DOWNLOAD_ID" foreign="DOWNLOAD_ID" />
+		</foreign-key>
+		<index name="DEPLOYMENT_DOWNLOADDOWNLOAD_FILE">
+			<index-column name="DOWNLOAD_ID" />
+		</index>
+		<index name="DOWNLOAD_ID">
+			<index-column name="DOWNLOAD_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='true' name="GEOGRAPHIC_AREA">
+		<column name="GEOGRAPHIC_AREA_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="BOUNDARY_POINTS" primaryKey="false"
+			required="false" type="VARCHAR" size="500" autoIncrement="false" />
+		<column name="DESCRIPTION" primaryKey="false" required="true"
+			type="VARCHAR" size="500" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="GEOGRAPHIC_AREA_ID">
+			<index-column name="GEOGRAPHIC_AREA_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='true' name="IMPLANT_TYPE">
+		<column name="IMPLANT_TYPE_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="IMPLANT_TYPE_ID">
+			<index-column name="IMPLANT_TYPE_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='false' name="INSTALLATION">
+		<column name="INSTALLATION_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="CONFIGURATION_TYPE_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<!--column name="LATITUDE" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
+			<column name="LONGITUDE" primaryKey="false" required="false" type="DECIMAL" size="18" autoIncrement="false"/>
+			<column name="GEOGRAPHIC_AREA_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<foreign-key foreignTable="GEOGRAPHIC_AREA"
+			name="INSTALLATION_FK00">
+			<reference local="GEOGRAPHIC_AREA_ID"
+				foreign="GEOGRAPHIC_AREA_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="INSTALLATION_CONF"
+			name="INSTALLATION_FK01">
+			<reference local="CONFIGURATION_TYPE_ID"
+				foreign="CONFIGURATION_TYPE_ID" />
+		</foreign-key>
+		<index name="CONFIGURATION_TYPE_ID">
+			<index-column name="CONFIGURATION_TYPE_ID" />
+		</index>
+		<index name="GEOGRAPHIC_AREA_ID">
+			<index-column name="GEOGRAPHIC_AREA_ID" />
+		</index>
+		<index name="GEOGRAPHIC_AREAINSTALLATION">
+			<index-column name="GEOGRAPHIC_AREA_ID" />
+		</index>
+		<index name="INSTALLATION_CONFINSTALLATION">
+			<index-column name="CONFIGURATION_TYPE_ID" />
+		</index>
+		<index name="INSTALLATION_ID">
+			<index-column name="INSTALLATION_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='true' name="INSTALLATION_CONF">
+		<column name="CONFIGURATION_TYPE_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="CNFIGURATION_TYPE_ID">
+			<index-column name="CONFIGURATION_TYPE_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='false' name="INSTALLATION_STATION">
+		<column name="STATION_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="INSTALLATION_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="CURTAIN_POSITION" primaryKey="false"
+			required="false" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="LOCATION" primaryKey="false" required="true"
+			type="GEOMETRY" size="8,5" default="0" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<foreign-key foreignTable="INSTALLATION"
+			name="INSTALLATION_STATION_FK00">
+			<reference local="INSTALLATION_ID"
+				foreign="INSTALLATION_ID" />
+		</foreign-key>
+		<index name="INSTALLATION_ID">
+			<index-column name="INSTALLATION_ID" />
+		</index>
+		<index name="INSTALLATIONINSTALLATION_STATION">
+			<index-column name="INSTALLATION_ID" />
+		</index>
+		<index name="STATION_ID">
+			<index-column name="STATION_ID" />
+		</index>
+	</table>
 
-    <!--  FLAT VIEW ACROSS THE INSTALLATION, INSTALLATION_STATION & RECEIVER_DEPLOYMENT TABLES -->
-    <view codeTable='false' name="INSTALLATION_DEPLOYMENT">
-      <column name="DEPLOYMENT_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="INSTALLATION_FID" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="INSTALLATION_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="STATION_FID" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="STATION_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="DEVICE_FID" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="DEVICE_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="DEPLOYMENT_FID" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="DEPLOYMENT_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="50" autoIncrement="false"/>
-      <column name="SCHEDULED_RECOVERY_DATE" primaryKey="false" required="false" type="DATE" size="50" autoIncrement="false"/>
-      <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="8,5" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-	  <unique-column name="INSTALLATION_NAME"/>
-	  <unique-column name="NAME"/>
-      </unique>
-    </view>
-    
-    <view codeTable='false' name="TRANSMITTER_MODEL">
-      <column name="MODEL_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-    </view>
-   
-    <view codeTable='false' name="RECEIVER_MODEL">
-      <column name="MODEL_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-    </view>
-    
-    <!-- 
-     NEED THESE 4 VIEWS TO AVOID "CANNOT EXPORT CYCLIC FEATURES IF SUPPRESSXLINK=TRUE" ERROR IN DEEGREE 
-     SEE CLASSIFICATION TABLE.
-     -->
-     
-    <view codeTable='true' name="PARENT_CLASSIFICATION">
-      <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
-      <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="COMMON_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-    </view>
-    
-    <view codeTable='true' name="FAMILY">
-      <column name="CLASSIFICATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-    </view>
-    
-    <view codeTable='true' name="GENUS">
-      <column name="CLASSIFICATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <foreign-key foreignTable="FAMILY" name="GENUS_FK01">
-        <reference local="PARENT_CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
-      </foreign-key>
-    </view>
-    
-    <view codeTable='true' name="SPECIES">
-      <column name="CLASSIFICATION_ID" primaryKey="true" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="PARENT_CLASSIFICATION_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <foreign-key foreignTable="GENUS" name="SPECIES_FK01">
-        <reference local="PARENT_CLASSIFICATION_ID" foreign="CLASSIFICATION_ID"/>
-      </foreign-key>
-    </view>
-    
-    <!-- experiment to see if visibility of tag release classification can be different to what was
-    created via this view -->
-    <view codeTable='true' name="DISPLAY_CLASSIFICATION">
-      <column name="CLASSIFICATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="CLASSIFICATION_LEVEL_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-      <column name="COMMON_NAME" primaryKey="false" required="false" type="VARCHAR" size="50" autoIncrement="false"/>
-      <unique name="UNIQUE_INDEX">
-        <unique-column name="NAME"/>
-      </unique>
-    </view>
-    
-    <view codeTable='true' name="DISPLAY_TAG_RELEASE">
-      <column name="RELEASE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="FAMILY_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="GENUS_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="SPECIES_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="PROJECT_ROLE_PERSON_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="RELEASE_LOCATION" primaryKey="false" required="true" type="DECIMAL" size="8,5" autoIncrement="false"/>
-      <column name="RELEASE_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="CAPTURE_LOCATION" primaryKey="false" required="false" type="GEOMETRY" size="8,5" autoIncrement="false"/>
-      <column name="CAPTURE_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-      <column name="IMPLANT_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <foreign-key foreignTable="FAMILY" name="DISPLAY_TAG_RELEASE_FK00">
-        <reference local="FAMILY_ID" foreign="CLASSIFICATION_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="GENUS" name="DISPLAY_TAG_RELEASE_FK01">
-        <reference local="GENUS_ID" foreign="CLASSIFICATION_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="SPECIES" name="DISPLAY_TAG_RELEASE_FK02">
-        <reference local="SPECIES_ID" foreign="CLASSIFICATION_ID"/>
-      </foreign-key>
-       <foreign-key foreignTable="CLASSIFICATION_LEVEL" name="DISPLAY_TAG_RELEASE_FK03">
-        <reference local="DISPLAYED_LEVEL_ID" foreign="CLASSIFICATION_LEVEL_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="TAG_DEVICE" name="DISPLAY_TAG_RELEASE_FK04">
-        <reference local="TAG_ID" foreign="DEVICE_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="IMPLANT_TYPE" name="DISPLAY_TAG_RELEASE_FK05">
-        <reference local="IMPLANT_TYPE_ID" foreign="IMPLANT_TYPE_ID"/>
-      </foreign-key>
-      <foreign-key foreignTable="PROJECT_PERSON" name="DISPLAY_TAG_RELEASE_FK06">
-        <reference local="PROJECT_ROLE_PERSON_ID" foreign="PROJECT_ROLE_PERSON_ID"/>
-      </foreign-key>
-    </view>
-    
-    <!-- 
-    	VIEW USED FOR TAG_RELEASE BY CLASSIFICATION REPORT -->
-     -->
-    <view codeTable='true' name="TAG_RELEASE_MIN">
-      <column name="RELEASE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
-      <column name="PROJECT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="PROJECT_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-      <column name="TAG_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-      <column name="CODE_NAME" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
-      <column name="FAMILY" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-      <column name="GENUS" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-      <column name="SPECIES" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-      <column name="RELEASE_LOCATION" primaryKey="false" required="false" type="GEOMETRY" size="8,5" autoIncrement="false"/>
-      <column name="RELEASE_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="23,3" autoIncrement="false"/>
-    </view>
-    
-    <!--  THIS IS THE VIEW USED FOR DETECTIONS ADVANCED SEARCH
- 
-    DOWNLOADING DETECTIONS DATA USING THIS VIEW IS NOT THAT EFFICIENT (DUE TO WFS SERVER LIMITATIONS)
-    RATHER IT PROVIDES A MECHANISM TO FILTER THE DETECTIONS DATA VIA A WFS BASED
-    INTERFACE, GETTING COUNTS OF DETECTIONS FOR UNUSUAL FILTER CRITERIA FOR
-    EXAMPLE.
- 
-    WE DON'T WANT TO LINK THIS TO ANY SUBFEATURES, RATHER TO USE THE INDEXING
-    ON THE DETECTIONS TABLE TO EFFICIENTLY EXTRACT SUBSETS OF DETECTIONS DATA -->   
-    <view codeTable='true' name="DETECTION_MAX">
-       <!-- rename this to detection instead of using detection table directly -->
-       <column name="DETECTION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="STATION_ID" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="DETECTION_TIMESTAMP" primaryKey="false" required="true" type="TIMESTAMP" size="10" autoIncrement="false"/>
-       <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="10" autoIncrement="false"/>
-       <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="TAG_CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="20" autoIncrement="false"/>
-       <column name="RECEIVER_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="RECEIVER_CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="20" autoIncrement="false"/>
-       <column name="RELEASE_LOCATION" primaryKey="false" required="false" type="GEOMETRY" size="10" autoIncrement="false"/>
-       <column name="RELEASE_TIMESTAMP" primaryKey="false" required="false" type="TIMESTAMP" size="10" autoIncrement="false"/>
-       <column name="FAMILY_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="GENUS_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="SPECIES_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/>
-    </view>
-    
-    <!-- SUMMARY VIEWS -->
-    <view codeTable='true' name="DETECTIONS_BY_INSTALLATION">
-       <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="INSTALLATION_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-       <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
-    </view>
-    
-    <view codeTable='true' name="DETECTIONS_BY_INSTLN_STATION">
-       <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="INSTALLATION_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-       <column name="STATION_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="STATION_NAME" primaryKey="false" required="true" type="VARCHAR" size="100" autoIncrement="false"/>
-       <column name="LOCATION" primaryKey="false" required="true" type="GEOMETRY" size="10" autoIncrement="false"/>
-       <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
-    </view>
-    
-    <view codeTable='true' name="DETECTIONS_BY_INSTLN_TAG">
-       <column name="INSTALLATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="TAG_NAME" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
-    </view>
-    
-    <view codeTable='true' name="DETECTIONS_BY_STATION_TAG">
-       <column name="STATION_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="TAG_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="TAG_NAME" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
-    </view>
-    
-    
-    <view codeTable='true' name="DETECTIONS_BY_PROJECT_TAG">
-       <column name="PROJECT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="PROJECT_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-       <column name="TAG_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="TAG_NAME" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>      
-    </view>
-    
-    <view codeTable='true' name="DETECTIONS_BY_CLASSN_TAG">
-       <column name="FAMILY" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="GENUS" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="SPECIES" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-       <column name="TAG_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="TAG_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-       <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-    </view>
-    
-    <view codeTable='true' name="DEPLOYMENT_DOWNLOAD_TAG">
-       <column name="PKEY" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="TAG_FID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="CODE_NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
-       <column name="DETECTION_COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="RELEASE_FID" primaryKey="false" required="false" type="VARCHAR" size="10" autoIncrement="false"/>
-       <column name="FAMILY" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
-       <column name="GENUS" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
-       <column name="SPECIES" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
-    </view>
-   
-   <!--  a subfeature of deployment_summary --> 
-   <view codeTable='true' name="DEPLOYMENT_TAG">
-       <column name="PKEY" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="DEPLOYMENT_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="TAG_ID" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="COUNT" primaryKey="false" required="true" type="INTEGER" size="10" autoIncrement="false"/>
-       <column name="RELEASE_ID" primaryKey="false" required="false" type="VARCHAR" size="10" autoIncrement="false"/>
-       <column name="FAMILY" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
-       <column name="GENUS" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
-       <column name="SPECIES" primaryKey="false" required="false" type="VARCHAR" size="100" autoIncrement="false"/>
-       <foreign-key foreignTable="RECEIVER_DEPLOYMENT" name="DEPLOYMENT_TAG_FK00">
-        <reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID"/>
-       </foreign-key>
-       <foreign-key foreignTable="TAG_DEVICE" name="DEPLOYMENT_TAG_FK01">
-        <reference local="TAG_ID" foreign="DEVICE_ID"/>
-       </foreign-key>
-    </view>
-    
-  </database>
+	<table codeTable='false' name="MEASUREMENT">
+		<column name="MEASUREMENT_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="SURGERY_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="MEASUREMENT_TYPE_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="MEASUREMENT_UNIT_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="VALUE" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="COMMENTS" primaryKey="false" required="false"
+			type="VARCHAR" size="4000" autoIncrement="false" />
+		<foreign-key foreignTable="MEASUREMENT_TYPE"
+			name="MEASUREMENT_FK00">
+			<reference local="MEASUREMENT_TYPE_ID"
+				foreign="MEASUREMENT_TYPE_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="MEASUREMENT_UNIT"
+			name="MEASUREMENT_FK01">
+			<reference local="MEASUREMENT_UNIT_ID"
+				foreign="MEASUREMENT_UNIT_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="SURGERY" name="MEASUREMENT_FK02">
+			<reference local="SURGERY_ID" foreign="SURGERY_ID" />
+		</foreign-key>
+		<index name="MEASUREMENT_ID">
+			<index-column name="MEASUREMENT_ID" />
+		</index>
+		<index name="MEASUREMENT_TYPE_ID">
+			<index-column name="MEASUREMENT_TYPE_ID" />
+		</index>
+		<index name="MEASUREMENT_TYPEMEASUREMENT">
+			<index-column name="MEASUREMENT_TYPE_ID" />
+		</index>
+		<index name="SURGERY_ID">
+			<index-column name="SURGERY_ID" />
+		</index>
+		<index name="SURGERYMEASUREMENT">
+			<index-column name="SURGERY_ID" />
+		</index>
+	</table>
+
+	<table codeTable='true' name="MEASUREMENT_TYPE">
+		<column name="MEASUREMENT_TYPE_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="MEASUREMENT_UNIT_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<foreign-key foreignTable="MEASUREMENT_UNIT"
+			name="MEASUREMENT_TYPE_FK00">
+			<reference local="MEASUREMENT_UNIT_ID"
+				foreign="MEASUREMENT_UNIT_ID" />
+		</foreign-key>
+		<index name="MEASUREMENT_TYPE_ID">
+			<index-column name="MEASUREMENT_TYPE_ID" />
+		</index>
+		<index name="MEASUREMENT_UNITMEASUREMENT_TYPE">
+			<index-column name="MEASUREMENT_UNIT_ID" />
+		</index>
+		<index name="MEASUREMENT_UNIT_ID">
+			<index-column name="MEASUREMENT_UNIT_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='true' name="MEASUREMENT_UNIT">
+		<column name="MEASUREMENT_UNIT_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="MEASUEMENT_UNIT_ID">
+			<index-column name="MEASUREMENT_UNIT_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='true' name="MOORING_TYPE">
+		<column name="MOORING_TYPE_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="DESCRIPTION" primaryKey="false" required="false"
+			type="VARCHAR" size="500" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="MOORING_TYPE_ID">
+			<index-column name="MOORING_TYPE_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='true' name="ORGANISATION">
+		<column name="ORGANISATION_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="200" autoIncrement="false" />
+		<column name="PHONE_NUMBER" primaryKey="false" required="true"
+			type="VARCHAR" size="20" autoIncrement="false" />
+		<column name="FAX_NUMBER" primaryKey="false" required="false"
+			type="VARCHAR" size="20" autoIncrement="false" />
+		<column name="PHYSICAL_ADDRESS_1" primaryKey="false"
+			required="false" type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="PHYSICAL_ADDRESS_2" primaryKey="false"
+			required="false" type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="PHYSICAL_ADDRESS_STATE" primaryKey="false"
+			required="false" type="VARCHAR" size="20" autoIncrement="false" />
+		<column name="PHYSICAL_ADDRESS_COUNTRY" primaryKey="false"
+			required="false" type="VARCHAR" size="30" autoIncrement="false" />
+		<column name="PHYSICAL_ADDRESS_POSTCODE" primaryKey="false"
+			required="false" type="VARCHAR" size="6" autoIncrement="false" />
+		<column name="POSTAL_ADDRESS_1" primaryKey="false"
+			required="false" type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="POSTAL_ADDRESS_2" primaryKey="false"
+			required="false" type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="POSTAL_ADDRESS_STATE" primaryKey="false"
+			required="false" type="VARCHAR" size="20" autoIncrement="false" />
+		<column name="POSTAL_ADDRESS_COUNTRY" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="POSTAL_ADDRESS_POSTCODE" primaryKey="false"
+			required="false" type="VARCHAR" size="6" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="ADDRESS_POSTCODE">
+			<index-column name="PHYSICAL_ADDRESS_COUNTRY" />
+		</index>
+		<index name="ORGANISATION_ID">
+			<index-column name="ORGANISATION_ID" />
+		</index>
+		<index name="PHYSICAL_ADDRESS_POSTCODE">
+			<index-column name="PHYSICAL_ADDRESS_POSTCODE" />
+		</index>
+		<index name="POSTAL_POSTCODE">
+			<index-column name="POSTAL_ADDRESS_POSTCODE" />
+		</index>
+	</table>
+	
+	<table codeTable='false' name="ORGANISATION_ANIMAL">
+		<column name="ORGANISATION_ANIMAL_ID" primaryKey="true"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="ORGANISATION_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="ANIMAL_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<unique name="ANIMAL_ID">
+			<column name="ORGANISATION_ID" />
+			<column name="ANIMAL_ID" />
+		</unique>
+		<index name="ORGANIZATION_ANIMAL_ID">
+			<index-column name="ORGANIZATION_ANIMAL_ID" />
+		</index>
+		<index name="ORGANIZATION_ID">
+			<index-column name="ORGANIZATION_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='false' name="ORGANISATION_PERSON">
+		<column name="ORGANISATION_PERSON_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="PERSON_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="ORGANISATION_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="POSITION" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="PHONE_NUMBER" primaryKey="false" required="false"
+			type="VARCHAR" size="15" autoIncrement="false" />
+		<column name="FAX_NUMBER" primaryKey="false" required="false"
+			type="VARCHAR" size="15" autoIncrement="false" />
+		<column name="MOBILE_NUMBER" primaryKey="false" required="false"
+			type="VARCHAR" size="15" autoIncrement="false" />
+		<column name="EMAIL_ADDRESS" primaryKey="false" required="false"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="PERSON_ID" />
+			<column name="ORGANISATION_ID" />
+			<column name="POSITION" />
+		</unique>
+	</table>
+	
+	<table codeTable='true' name="PERSON">
+		<column name="PERSON_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="200" autoIncrement="false" />
+		<column name="PERSONAL_MOBILE_NUMBER" primaryKey="false"
+			required="false" type="VARCHAR" size="15" autoIncrement="false" />
+		<column name="HOME_PHONE_NUMBER" primaryKey="false"
+			required="false" type="VARCHAR" size="15" autoIncrement="false" />
+		<column name="EMAIL" primaryKey="false" required="true"
+			type="VARCHAR" size="30" autoIncrement="false" />
+		<column name="HOME_PHYSICAL_ADDRESS_1" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="HOME_PHYSICAL_ADDRESS_2" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="HOME_PHYSICAL_ADDRESS_STATE" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="HOME_PHYSICAL_ADDRESS_COUNTRY" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="HOME_PHYSICAL_ADDRESS_POSTCODE" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="HOME_POSTAL_ADDRESS_1" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="HOME_POSTAL_ADDRESS_2" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="HOME_POSTAL_ADDRESS_STATE" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="HOME_POSTAL_ADDRESS_COUNTRY" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="HOME_POSTAL_ADDRESS_POSTCODE" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="HOME_PHYSICAL_POSTCODE">
+			<index-column name="HOME_PHYSICAL_ADDRESS_POSTCODE" />
+		</index>
+		<index name="HOME_POSTAL_ADDRESS_POSTCODE">
+			<index-column name="HOME_POSTAL_ADDRESS_POSTCODE" />
+		</index>
+		<index name="PERSON_ID">
+			<index-column name="PERSON_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='true' name="PROJECT">
+		<column name="PROJECT_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="ORGANISATION_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="200" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<foreign-key foreignTable="ORGANISATION" name="PROJECT_FK00">
+			<reference local="ORGANISATION_ID"
+				foreign="ORGANISATION_ID" />
+		</foreign-key>
+		<index name="ORGANISATIONPROJECT">
+			<index-column name="ORGANISATION_ID" />
+		</index>
+		<index name="ORGANIZATION_ID">
+			<index-column name="ORGANISATION_ID" />
+		</index>
+		<index name="PROJECT_ID">
+			<index-column name="PROJECT_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='false' name="PROJECT_ROLE_PERSON">
+		<column name="PROJECT_ROLE_PERSON_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="PROJECT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="ROLE_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="PERSON_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<foreign-key foreignTable="PERSON"
+			name="PROJECT_ROLE_PERSON_FK00">
+			<reference local="PERSON_ID" foreign="PERSON_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="PROJECT"
+			name="PROJECT_ROLE_PERSON_FK01">
+			<reference local="PROJECT_ID" foreign="PROJECT_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="ROLE"
+			name="PROJECT_ROLE_PERSON_FK02">
+			<reference local="ROLE_ID" foreign="ROLE_ID" />
+		</foreign-key>
+		<unique name="UNIQUE_INDEX">
+			<column name="PROJECT_ID" />
+			<column name="ROLE_ID" />
+			<column name="PERSON_ID" />
+		</unique>
+		<index name="PERSON_ID">
+			<index-column name="PERSON_ID" />
+		</index>
+		<index name="PERSONPROJECT_ROLE_PERSON">
+			<index-column name="PERSON_ID" />
+		</index>
+		<index name="PROJECT_ID">
+			<index-column name="PROJECT_ID" />
+		</index>
+		<index name="PROJECT_ROLE_PERSON_ID">
+			<index-column name="PROJECT_ROLE_PERSON_ID" />
+		</index>
+		<index name="PROJECTPROJECT_ROLE_PERSON">
+			<index-column name="PROJECT_ID" />
+		</index>
+		<index name="ROLE_ID">
+			<index-column name="ROLE_ID" />
+		</index>
+		<index name="ROLEPROJECT_ROLE_PERSON">
+			<index-column name="ROLE_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='true' name="ROLE">
+		<column name="ROLE_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="ROLE_ID">
+			<index-column name="ROLE_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='true' name="STATUS">
+		<column name="STATUS_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="STATUS_ID">
+			<index-column name="STATUS_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='true' name="STOCK">
+		<column name="STOCK_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="STOCK_ID">
+			<index-column name="STOCK_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='false' name="SURGERY">
+		<column name="SURGERY_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="TREATMENT_TYPE_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="PROJECT_ROLE_PERSON_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="ANIMAL_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="STOCK_ID" primaryKey="false" required="false"
+			type="INTEGER" size="10" default="0" autoIncrement="false" />
+		<column name="UTC_DATETIME" primaryKey="false" required="true"
+			type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="COMMENTS" primaryKey="false" required="false"
+			type="VARCHAR" size="4000" autoIncrement="false" />
+		<foreign-key foreignTable="ANIMAL" name="SURGERY_FK00">
+			<reference local="ANIMAL_ID" foreign="ANIMAL_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="TREATMENT_TYPE"
+			name="SURGERY_FK01">
+			<reference local="TREATMENT_TYPE_ID"
+				foreign="TREATMENT_TYPE_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="PROJECT_PERSON"
+			name="SURGERY_FK02">
+			<reference local="PROJECT_ROLE_PERSON_ID"
+				foreign="PROJECT_ROLE_PERSON_ID" />
+		</foreign-key>
+		<index name="ANIMAL_ID">
+			<index-column name="ANIMAL_ID" />
+		</index>
+		<index name="ANIMALSURGERY">
+			<index-column name="ANIMAL_ID" />
+		</index>
+		<index name="PERSON_ID">
+			<index-column name="PROJECT_ROLE_PERSON_ID" />
+		</index>
+		<index name="STOCK_ID">
+			<index-column name="STOCK_ID" />
+		</index>
+		<index name="SURGERY_ID">
+			<index-column name="SURGERY_ID" />
+		</index>
+		<index name="TREATMENT_TYPE_ID">
+			<index-column name="TREATMENT_TYPE_ID" />
+		</index>
+		<index name="TREATMENT_TYPESURGERY">
+			<index-column name="TREATMENT_TYPE_ID" />
+		</index>
+	</table>
+	
+	<table codeTable='false' name="SURGERY_PERSON">
+		<column name="SURGERY_PERSON_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="SURGERY_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="PERSON_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<foreign-key foreignTable="PERSON" name="SURGERY_PERSON_FK00">
+			<reference local="PERSON_ID" foreign="PERSON_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="SURGERY"
+			name="SURGERY_PERSON_FK01">
+			<reference local="SURGERY_ID" foreign="SURGERY_ID" />
+		</foreign-key>
+		<unique name="UNIQUE_INDEX">
+			<column name="SURGERY_ID" />
+			<column name="PERSON_ID" />
+		</unique>
+		<index name="PERSON_ID">
+			<index-column name="PERSON_ID" />
+		</index>
+		<index name="PERSONSURGERY_PERSON">
+			<index-column name="PERSON_ID" />
+		</index>
+		<index name="SURGERY_ID">
+			<index-column name="SURGERY_ID" />
+		</index>
+		<index name="SURGERYSURGERY_PERSON">
+			<index-column name="SURGERY_ID" />
+		</index>
+	</table>
+	<!--table name="TAG_DEVICE">
+		<column name="DEVICE_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+		<index name="DEVICE_ID">
+		<index-column name="DEVICE_ID"/>
+		</index>
+		</table>
+		<table codeTable='false' name="TAG_FAMILY">
+		<column name="TAG_FAMILY_ID" primaryKey="true" required="true" type="INTEGER" size="10" autoIncrement="true"/>
+		<column name="MANUFACTURER_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+		<column name="NAME" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+		<column name="NAME"/>
+		</unique>
+		<index name="MANUFACTURER_ID">
+		<index-column name="MANUFACTURER_ID"/>
+		</index>
+		<index name="TAG_TYPE_ID">
+		<index-column name="TAG_FAMILY_ID"/>
+		</index>
+		</table>
+		<table codeTable='false' name="TAG_MODEL">
+		<column name="MODEL_ID" primaryKey="true" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+		<column name="TAG_FAMILY_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+		<column name="VUE_CODING" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+		<column name="TAG_TYPE_ID" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+		<column name="FREQUENCY" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+		<column name="SYNC" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+		<column name="BIN" primaryKey="false" required="true" type="VARCHAR" size="50" autoIncrement="false"/>
+		<column name="MIN" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+		<column name="MAX" primaryKey="false" required="true" type="INTEGER" size="10" default="0" autoIncrement="false"/>
+		<unique name="UNIQUE_INDEX">
+		<column name="FREQUENCY"/>
+		<column name="SYNC"/>
+		<column name="BIN"/>
+		<column name="MIN"/>
+		<column name="MAX"/>
+		</unique>
+		<foreign-key foreignTable="DEVICE_MODEL" name="TAG_MODEL_FK00">
+		<reference local="MODEL_ID" foreign="MODEL_ID"/>
+		</foreign-key>
+		<foreign-key foreignTable="TAG_FAMILY" name="TAG_MODEL_FK01">
+		<reference local="TAG_FAMILY_ID" foreign="TAG_FAMILY_ID"/>
+		</foreign-key>
+		<foreign-key foreignTable="TAG_TYPE" name="TAG_MODEL_FK02">
+		<reference local="TAG_TYPE_ID" foreign="TAG_TYPE_ID"/>
+		</foreign-key>
+		<index name="DEVICE_MODELTAG_MODEL">
+		<index-column name="MODEL_ID"/>
+		</index>
+		<index name="MODEL_ID">
+		<index-column name="MODEL_ID"/>
+		</index>
+		<index name="TAG_FAMILY_ID">
+		<index-column name="TAG_FAMILY_ID"/>
+		</index>
+		<index name="TAG_FAMILYTAG_MODEL">
+		<index-column name="TAG_FAMILY_ID"/>
+		</index>
+		<index name="TAG_TYPE_ID">
+		<index-column name="TAG_TYPE_ID"/>
+		</index>
+		<index name="TAG_TYPETAG_MODEL">
+		<index-column name="TAG_TYPE_ID"/>
+		</index>
+		</table-->
+	<table codeTable='false' name="TAG_RELEASE">
+		<column name="RELEASE_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="DEVICE_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="CLASSIFICATION_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="DISPLAYED_LEVEL_ID" primaryKey="false"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="PROJECT_ROLE_PERSON_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="CAPTURE_LOCATION" primaryKey="false"
+			required="false" type="GEOMETRY" size="8,5" autoIncrement="false" />
+		<!--column name="CAPTURE_GEOGRAPHIC_AREA_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
+		<column name="CAPTURE_TIMESTAMP" primaryKey="false"
+			required="false" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="RELEASE_LOCATION" primaryKey="false"
+			required="true" type="GEOMETRY" size="8,5" autoIncrement="false" />
+		<!--column name="RELEASE_GEOGRAPHIC_AREA_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
+		<column name="RELEASE_TIMESTAMP" primaryKey="false"
+			required="true" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<!--column name="TETHER_TYPE_ID" primaryKey="false" required="false" type="INTEGER" size="10" autoIncrement="false"/-->
+		<column name="IMPLANT_TYPE_ID" primaryKey="false"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="DISPLAYED_LEVEL_ID" primaryKey="false"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="SURGERY_ID" primaryKey="false" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="DEVICE_ID" />
+		</unique>
+		<foreign-key foreignTable="SPECIES" name="TAG_RELEASE_FK00">
+			<reference local="CLASSIFICATION_ID"
+				foreign="CLASSIFICATION_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="CLASSIFICATION_LEVEL"
+			name="TAG_RELEASE_FK01">
+			<reference local="DISPLAYED_LEVEL_ID"
+				foreign="CLASSIFICATION_LEVEL_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="TAG_DEVICE"
+			name="TAG_RELEASE_FK02">
+			<reference local="DEVICE_ID" foreign="DEVICE_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="IMPLANT_TYPE"
+			name="TAG_RELEASE_FK03">
+			<reference local="IMPLANT_TYPE_ID"
+				foreign="IMPLANT_TYPE_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="PROJECT_PERSON"
+			name="TAG_RELEASE_FK04">
+			<reference local="PROJECT_ROLE_PERSON_ID"
+				foreign="PROJECT_ROLE_PERSON_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="SURGERY" name="TAG_RELEASE_FK06">
+			<reference local="SURGERY_ID" foreign="SURGERY_ID" />
+		</foreign-key>
+		<!--  foreign-key foreignTable="TETHER_TYPE" name="TAG_RELEASE_FK07">
+			<reference local="TETHER_TYPE_ID" foreign="TETHER_TYPE_ID"/>
+			</foreign-key>
+			<index name="CAPTURE_GEOGRAPHIC_AREA_ID">
+			<index-column name="CAPTURE_GEOGRAPHIC_AREA_ID"/>
+			</index-->
+		<index name="CLASSIFICATION_ID">
+			<index-column name="CLASSIFICATION_ID" />
+		</index>
+		<index name="CLASSIFICATIONTAG_RELEASE">
+			<index-column name="CLASSIFICATION_ID" />
+		</index>
+		<index name="DEVICE_ATTACH_TYPE_ID">
+			<index-column name="TETHER_TYPE_ID" />
+		</index>
+		<index name="DEVICE_ID">
+			<index-column name="DEVICE_ID" />
+		</index>
+		<index name="DEVICE_IMPLANT_TYPE_ID">
+			<index-column name="IMPLANT_TYPE_ID" />
+		</index>
+		<index name="DEVICETAG_RELEASE">
+			<index-column name="DEVICE_ID" />
+		</index>
+		<!--index name="GEOGRAPHIC_AREA_ID">
+			<index-column name="RELEASE_GEOGRAPHIC_AREA_ID"/>
+			</index-->
+		<index name="IMPLANT_TYPETAG_RELEASE">
+			<index-column name="IMPLANT_TYPE_ID" />
+		</index>
+		<index name="IMPLANT_TYPETAG_RELEASE1">
+			<index-column name="IMPLANT_TYPE_ID" />
+		</index>
+		<index name="PROJECT_ROLE_PERSON_ID">
+			<index-column name="PROJECT_ROLE_PERSON_ID" />
+		</index>
+		<index name="PROJECT_ROLE_PERSONTAG_RELEASE">
+			<index-column name="PROJECT_ROLE_PERSON_ID" />
+		</index>
+		<index name="STATUS_ID">
+			<index-column name="STATUS_ID" />
+		</index>
+		<index name="SURGERY_ID">
+			<index-column name="SURGERY_ID" />
+		</index>
+		<index name="TETHER_TYPETAG_RELEASE">
+			<index-column name="TETHER_TYPE_ID" />
+		</index>
+	</table>
+	<table codeTable='true' name="TAG_TYPE">
+		<column name="TAG_TYPE_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="MANUFACTURER_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="10" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="MANUFACTURER_ID">
+			<index-column name="MANUFACTURER_ID" />
+		</index>
+		<index name="TAG_TYPE_ID">
+			<index-column name="TAG_TYPE_ID" />
+		</index>
+	</table>
+	<table codeTable='true' name="TETHER_TYPE">
+		<column name="TETHER_TYPE_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="DESCRIPTION" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="PICTURE_REFERENCE" primaryKey="false"
+			required="false" type="VARCHAR" size="4000" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="TETHER_TYPE_ID">
+			<index-column name="TETHER_TYPE_ID" />
+		</index>
+	</table>
+	<table codeTable='true' name="TREATMENT_TYPE">
+		<column name="TREATMENT_TYPE_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<index name="TREATMENT_TYPE_ID">
+			<index-column name="TREATMENT_TYPE_ID" />
+		</index>
+	</table>
+
+	<view codeTable='true' name="PROJECT_PERSON">
+		<column name="PROJECT_ROLE_PERSON_ID" primaryKey="true"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="PROJECT_FID" primaryKey="false" required="false"
+			type="VARCHAR" size="55" autoIncrement="false" />
+		<column name="PROJECT_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="PERSON_FID" primaryKey="false" required="false"
+			type="VARCHAR" size="54" autoIncrement="false" />
+		<column name="PERSON_ROLE" primaryKey="false" required="true"
+			type="VARCHAR" size="150" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="PROJECT_NAME" />
+			<column name="PERSON_ROLE" />
+		</unique>
+	</view>
+
+	<view codeTable='true' name="RECEIVER_DEVICE">
+		<column name="DEVICE_ID" primaryKey="true" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="CODE_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="MODEL_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="MANUFACTURER_NAME" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="PROJECT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+	</view>
+
+	<view codeTable='true' name="TAG_DEVICE">
+		<column name="DEVICE_ID" primaryKey="true" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="CODE_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="MODEL_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="MANUFACTURER_NAME" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="PROJECT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+	</view>
+
+	<view codeTable='true' name="STATION">
+		<column name="STATION_ID" primaryKey="true" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="INSTALLATION_FID" primaryKey="false"
+			required="true" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="CURTAIN_POSITION" primaryKey="false"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="LOCATION" primaryKey="false" required="true"
+			type="GEOMETRY" size="8,5" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+	</view>
+
+	<!--  FLAT VIEW ACROSS THE INSTALLATION, INSTALLATION_STATION & RECEIVER_DEPLOYMENT TABLES -->
+	<view codeTable='true' name="INSTALLATION_DEPLOYMENT">
+		<column name="DEPLOYMENT_ID" primaryKey="true" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="INSTALLATION_FID" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="INSTALLATION_NAME" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="STATION_FID" primaryKey="false" required="false"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="STATION_NAME" primaryKey="false" required="false"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="DEVICE_FID" primaryKey="false" required="false"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="DEVICE_NAME" primaryKey="false" required="false"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="DEPLOYMENT_FID" primaryKey="false"
+			required="false" type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="DEPLOYMENT_TIMESTAMP" primaryKey="false"
+			required="false" type="TIMESTAMP" size="50" autoIncrement="false" />
+		<column name="SCHEDULED_RECOVERY_DATE" primaryKey="false"
+			required="false" type="DATE" size="50" autoIncrement="false" />
+		<column name="LOCATION" primaryKey="false" required="true"
+			type="GEOMETRY" size="8,5" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="INSTALLATION_NAME" />
+			<column name="NAME" />
+		</unique>
+	</view>
+
+	<view codeTable='true' name="TRANSMITTER_MODEL">
+		<column name="MODEL_ID" primaryKey="true" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+	</view>
+
+	<view codeTable='true' name="RECEIVER_MODEL">
+		<column name="MODEL_ID" primaryKey="true" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+	</view>
+
+	<!-- 
+		NEED THESE 4 VIEWS TO AVOID "CANNOT EXPORT CYCLIC FEATURES IF SUPPRESSXLINK=TRUE" ERROR IN DEEGREE 
+		SEE CLASSIFICATION TABLE.
+	-->
+
+	<view codeTable='true' name="PARENT_CLASSIFICATION">
+		<column name="CLASSIFICATION_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" default="0"
+			autoIncrement="false" />
+		<column name="CLASSIFICATION_LEVEL_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="COMMON_NAME" primaryKey="false" required="false"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+	</view>
+
+	<view codeTable='true' name="FAMILY">
+		<column name="CLASSIFICATION_ID" primaryKey="true"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="PARENT_CLASSIFICATION_ID" primaryKey="false"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+					<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+	</view>
+
+	<view codeTable='true' name="GENUS">
+		<column name="CLASSIFICATION_ID" primaryKey="true"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="PARENT_CLASSIFICATION_ID" primaryKey="false"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<foreign-key foreignTable="FAMILY" name="GENUS_FK01">
+			<reference local="PARENT_CLASSIFICATION_ID"
+				foreign="CLASSIFICATION_ID" />
+		</foreign-key>
+	</view>
+
+	<view codeTable='true' name="SPECIES">
+		<column name="CLASSIFICATION_ID" primaryKey="true"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="PARENT_CLASSIFICATION_ID" primaryKey="false"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+		<foreign-key foreignTable="GENUS" name="SPECIES_FK01">
+			<reference local="PARENT_CLASSIFICATION_ID"
+				foreign="CLASSIFICATION_ID" />
+		</foreign-key>
+	</view>
+
+	<!-- experiment to see if visibility of tag release classification can be different to what was
+		created via this view -->
+	<view codeTable='true' name="DISPLAY_CLASSIFICATION">
+		<column name="CLASSIFICATION_ID" primaryKey="true"
+			required="true" type="INTEGER" size="10" autoIncrement="true" />
+		<column name="CLASSIFICATION_LEVEL_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="COMMON_NAME" primaryKey="false" required="false"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<unique name="UNIQUE_INDEX">
+			<column name="NAME" />
+		</unique>
+	</view>
+
+	<view codeTable='false' name="DISPLAY_TAG_RELEASE">
+		<column name="RELEASE_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="TAG_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="FAMILY_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="GENUS_ID" primaryKey="false" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="SPECIES_ID" primaryKey="false" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="PROJECT_ROLE_PERSON_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="RELEASE_LOCATION" primaryKey="false"
+			required="true" type="DECIMAL" size="8,5" autoIncrement="false" />
+		<column name="RELEASE_TIMESTAMP" primaryKey="false"
+			required="true" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="CAPTURE_LOCATION" primaryKey="false"
+			required="false" type="GEOMETRY" size="8,5" autoIncrement="false" />
+		<column name="CAPTURE_TIMESTAMP" primaryKey="false"
+			required="false" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+		<column name="IMPLANT_TYPE_ID" primaryKey="false"
+			required="false" type="INTEGER" size="10" autoIncrement="false" />
+		<foreign-key foreignTable="FAMILY"
+			name="DISPLAY_TAG_RELEASE_FK00">
+			<reference local="FAMILY_ID" foreign="CLASSIFICATION_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="GENUS"
+			name="DISPLAY_TAG_RELEASE_FK01">
+			<reference local="GENUS_ID" foreign="CLASSIFICATION_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="SPECIES"
+			name="DISPLAY_TAG_RELEASE_FK02">
+			<reference local="SPECIES_ID" foreign="CLASSIFICATION_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="CLASSIFICATION_LEVEL"
+			name="DISPLAY_TAG_RELEASE_FK03">
+			<reference local="DISPLAYED_LEVEL_ID"
+				foreign="CLASSIFICATION_LEVEL_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="TAG_DEVICE"
+			name="DISPLAY_TAG_RELEASE_FK04">
+			<reference local="TAG_ID" foreign="DEVICE_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="IMPLANT_TYPE"
+			name="DISPLAY_TAG_RELEASE_FK05">
+			<reference local="IMPLANT_TYPE_ID"
+				foreign="IMPLANT_TYPE_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="PROJECT_PERSON"
+			name="DISPLAY_TAG_RELEASE_FK06">
+			<reference local="PROJECT_ROLE_PERSON_ID"
+				foreign="PROJECT_ROLE_PERSON_ID" />
+		</foreign-key>
+	</view>
+
+	<!-- 
+		VIEW USED FOR TAG_RELEASE BY CLASSIFICATION REPORT -->
+	-->
+	<view codeTable='false' name="TAG_RELEASE_MIN">
+		<column name="RELEASE_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="true" />
+		<column name="PROJECT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="PROJECT_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="TAG_ID" primaryKey="false" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="CODE_NAME" primaryKey="false" required="false"
+			type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="FAMILY" primaryKey="false" required="true"
+			type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="GENUS" primaryKey="false" required="true"
+			type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="SPECIES" primaryKey="false" required="true"
+			type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="RELEASE_LOCATION" primaryKey="false"
+			required="false" type="GEOMETRY" size="8,5" autoIncrement="false" />
+		<column name="RELEASE_TIMESTAMP" primaryKey="false"
+			required="false" type="TIMESTAMP" size="23,3" autoIncrement="false" />
+	</view>
+
+	<!--  THIS IS THE VIEW USED FOR DETECTIONS ADVANCED SEARCH
+		
+		DOWNLOADING DETECTIONS DATA USING THIS VIEW IS NOT THAT EFFICIENT (DUE TO WFS SERVER LIMITATIONS)
+		RATHER IT PROVIDES A MECHANISM TO FILTER THE DETECTIONS DATA VIA A WFS BASED
+		INTERFACE, GETTING COUNTS OF DETECTIONS FOR UNUSUAL FILTER CRITERIA FOR
+		EXAMPLE.
+		
+		WE DON'T WANT TO LINK THIS TO ANY SUBFEATURES, RATHER TO USE THE INDEXING
+		ON THE DETECTIONS TABLE TO EFFICIENTLY EXTRACT SUBSETS OF DETECTIONS DATA -->
+	<view codeTable='false' name="DETECTION_MAX">
+		<!-- rename this to detection instead of using detection table directly -->
+		<column name="DETECTION_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="INSTALLATION_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="STATION_ID" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="DEPLOYMENT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="DETECTION_TIMESTAMP" primaryKey="false"
+			required="true" type="TIMESTAMP" size="10" autoIncrement="false" />
+		<column name="LOCATION" primaryKey="false" required="true"
+			type="GEOMETRY" size="10" autoIncrement="false" />
+		<column name="TAG_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="TAG_CODE_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="20" autoIncrement="false" />
+		<column name="RECEIVER_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="RECEIVER_CODE_NAME" primaryKey="false"
+			required="true" type="VARCHAR" size="20" autoIncrement="false" />
+		<column name="RELEASE_LOCATION" primaryKey="false"
+			required="false" type="GEOMETRY" size="10" autoIncrement="false" />
+		<column name="RELEASE_TIMESTAMP" primaryKey="false"
+			required="false" type="TIMESTAMP" size="10" autoIncrement="false" />
+		<column name="FAMILY_ID" primaryKey="false" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="GENUS_ID" primaryKey="false" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="SPECIES_ID" primaryKey="false" required="false"
+			type="INTEGER" size="10" autoIncrement="false" />
+	</view>
+
+	<!-- SUMMARY VIEWS -->
+	<view codeTable='false' name="DETECTIONS_BY_INSTALLATION">
+		<column name="INSTALLATION_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="INSTALLATION_NAME" primaryKey="false"
+			required="true" type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="COUNT" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+	</view>
+
+	<view codeTable='false' name="DETECTIONS_BY_INSTLN_STATION">
+		<column name="INSTALLATION_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="INSTALLATION_NAME" primaryKey="false"
+			required="true" type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="STATION_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="STATION_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="LOCATION" primaryKey="false" required="true"
+			type="GEOMETRY" size="10" autoIncrement="false" />
+		<column name="COUNT" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+	</view>
+
+	<view codeTable='false' name="DETECTIONS_BY_INSTLN_TAG">
+		<column name="INSTALLATION_ID" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="TAG_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="TAG_NAME" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="COUNT" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+	</view>
+
+	<view codeTable='false' name="DETECTIONS_BY_STATION_TAG">
+		<column name="STATION_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="TAG_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="TAG_NAME" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="COUNT" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+	</view>
+
+
+	<view codeTable='false' name="DETECTIONS_BY_PROJECT_TAG">
+		<column name="PROJECT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="PROJECT_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="TAG_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="TAG_NAME" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="COUNT" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+	</view>
+
+	<view codeTable='false' name="DETECTIONS_BY_CLASSN_TAG">
+		<column name="FAMILY" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="GENUS" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="SPECIES" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="TAG_ID" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="TAG_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="COUNT" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+	</view>
+
+	<view codeTable='false' name="DEPLOYMENT_DOWNLOAD_TAG">
+		<column name="PKEY" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="TAG_FID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="CODE_NAME" primaryKey="false" required="true"
+			type="VARCHAR" size="50" autoIncrement="false" />
+		<column name="DETECTION_COUNT" primaryKey="false"
+			required="true" type="INTEGER" size="10" autoIncrement="false" />
+		<column name="RELEASE_FID" primaryKey="false" required="false"
+			type="VARCHAR" size="10" autoIncrement="false" />
+		<column name="FAMILY" primaryKey="false" required="false"
+			type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="GENUS" primaryKey="false" required="false"
+			type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="SPECIES" primaryKey="false" required="false"
+			type="VARCHAR" size="100" autoIncrement="false" />
+	</view>
+
+	<!--  a subfeature of deployment_summary -->
+	<view codeTable='false' name="DEPLOYMENT_TAG">
+		<column name="PKEY" primaryKey="true" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="DEPLOYMENT_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="TAG_ID" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="COUNT" primaryKey="false" required="true"
+			type="INTEGER" size="10" autoIncrement="false" />
+		<column name="RELEASE_ID" primaryKey="false" required="false"
+			type="VARCHAR" size="10" autoIncrement="false" />
+		<column name="FAMILY" primaryKey="false" required="false"
+			type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="GENUS" primaryKey="false" required="false"
+			type="VARCHAR" size="100" autoIncrement="false" />
+		<column name="SPECIES" primaryKey="false" required="false"
+			type="VARCHAR" size="100" autoIncrement="false" />
+		<foreign-key foreignTable="RECEIVER_DEPLOYMENT"
+			name="DEPLOYMENT_TAG_FK00">
+			<reference local="DEPLOYMENT_ID" foreign="DEPLOYMENT_ID" />
+		</foreign-key>
+		<foreign-key foreignTable="TAG_DEVICE"
+			name="DEPLOYMENT_TAG_FK01">
+			<reference local="TAG_ID" foreign="DEVICE_ID" />
+		</foreign-key>
+	</view>
+
+</database>

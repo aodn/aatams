@@ -2,8 +2,26 @@
 <!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
 <!-- 
 	Reverse the means of adding subfeatures.
-	In this case subfeatures are added to their parent feature by looking for foreign-keys on other tables
+	In this case subfeatures are added to their 'parent' feature by looking for foreign-keys on other tables that
+	have the current table as thier 'foreingTable. This creates the xml hierarchy where a parent owns a set of 
+	subfeatures of a particular type, for example:
 	
+	(a) personel involved in doing some task, the task may own some 'person-tasks', each owning some person.
+	(b) a task involves making 0-N measurements, so each task owns 0 or more measurements subfeatures.
+	
+	Foreign-key fields within tables will either refer to a code table or non-code table. If the former we ideally
+	want replace the primary-key integer with a 'code' string in the xml feature, however currently this is not
+	possible in deegree 2.3 and we have to make it a sub-feature. 
+	
+	If the later we definitely want to embed the subfeature into the parent feature, either by selecting an 
+	existing one or creating a new one. This is most likely to be the case of a 1-1 relationship but which sometimes
+	might be 1-many, for example: 
+	
+	(a) a tag-release has a child tag but potentially a tag might be recovered and released again, so the db relation
+	is tag has 0-N tag_releases.  However, tag_release is the primary feature and tags the secondary we aren't going
+	to be interested presenting via XML tag_releases within tags.
+	
+	So for the time being these  
 -->
 
 <xsl:stylesheet version="2.0" xmlns="http://www.w3.org/1999/xhtml"
@@ -22,7 +40,7 @@
 		<xsl:text>../../deegree-wfs/services</xsl:text>
 	</xsl:variable>
 	<!-- add a variable to limit number of recursions when adding subfeatures -->
-	<xsl:variable name="max_depth">2</xsl:variable>
+	<xsl:variable name="max_depth">5</xsl:variable>
 	<xsl:template match="/">
 		<xsl:for-each select="//table">
 			<xsl:variable name="feature-name">
@@ -76,78 +94,7 @@
 			<xsl:call-template name="initial-subfeatures" />
 		</xf:model>
 	</xsl:template>
-	<!-- 
-		template to build the form
-	-->
-	<xsl:template name="form">
-		<div class="form">
-			<label>
-				<xsl:text>ADD </xsl:text>
-				<xsl:value-of
-					select="translate(upper-case(@name),'_',' ')" />
-			</label>
-			<div class="form-contents">
-				<xf:switch>
-					<xf:case id="{lower-case(@name)}" selected="true">
-						<xsl:apply-templates select="column"
-							mode="form" />
-						<xf:submit submission="s01">
-							<xf:label>Save</xf:label>
-						</xf:submit>
-						<xf:trigger>
-							<xf:label>Reset</xf:label>
-							<xf:reset ev:event="DOMActivate" />
-							<xf:dispatch ev:event="DOMActivate"
-								name="set-selected" target="model1" />
-							<xf:delete ev:event="DOMActivate"
-								nodeset="instance('resp')//ServiceException" />
-							<xf:delete ev:event="DOMActivate"
-								nodeset="instance('resp')//ogc:FeatureId/@fid" />
-						</xf:trigger>
-						<div id="error-message">
-							<xf:output bind="_error_message">
-								<xf:label>Error:</xf:label>
-							</xf:output>
-						</div>
-						<div id="success-message">
-							<xf:output bind="_success_message">
-								<xf:label>New Record Id:</xf:label>
-							</xf:output>
-						</div>
-					</xf:case>
-					<!-- add cases for subfeature prototype manipulation -->
-					<xsl:for-each
-						select="../table[foreign-key/@foreignTable=current()/@name]">
-						<xf:case id="{lower-case(@name)}">
-							<xsl:apply-templates select="."
-								mode="form-case" />
-						</xf:case>
-					</xsl:for-each>
-				</xf:switch>
-			</div>
-		</div>
-	</xsl:template>
-	<xsl:template match="table" mode="form-case">
-		<xsl:choose>
-			<xsl:when test="foreign-key">
-				<!--xf:switch>
-					<xf:case id="{lower-case(@name)}" selected="true">
-					</xf:case-->
-				<!-- add cases for subfeature prototype manipulation -->
-				<!-- xsl:for-each
-					select="../table[foreign-key/@foreignTable=current()/@name]">
-					<xf:case id="{lower-case(@name)}">
-					<xsl:apply-templates mode="form-case" />
-					</xf:case>
-					</xsl:for-each>
-					</xf:switch-->
-				<xsl:apply-templates select="column" mode="form" />
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:apply-templates select="column" mode="form" />
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
+
 	<!--
 		template to create xml base transaction for submission to WFS 
 	-->
@@ -169,60 +116,170 @@
 		</xf:instance>
 	</xsl:template>
 
-	<!-- recursive routine to add features and subfeatures and .. -->
+	<!-- 
+		recursive routine to add features and subfeatures and ..
+	-->
 	<xsl:template name="feature">
+		<xsl:param name="parent_table_name" />
 		<xsl:param name="table" />
 		<xsl:param name="depth" />
-		<xsl:if test="$depth &lt;= $max_depth">
-			<xsl:element name="aatams:{lower-case($table/@name)}">
-				<!-- handle each column -->
-				<xsl:for-each select="$table/column">
+		<!--xsl:comment>
+			<xsl:value-of select="concat('feature:',$depth)"/>
+			</xsl:comment-->
+		<xsl:choose>
+			<xsl:when test="$depth > $max_depth">
+				<xsl:element
+					name="{concat('aatams:',lower-case($table/@name))}" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:element name="aatams:{lower-case($table/@name)}">
+					<!-- handle each column -->
+					<xsl:for-each select="$table/column">
+						<xsl:choose>
+							<!-- is it a foreign-key -->
+							<xsl:when
+								test="../foreign-key[reference/@local=current()/@name]">
+								<xsl:variable name="foreign_table_name"
+									select="../foreign-key[reference/@local=current()/@name][1]/@foreignTable" />
+								<xsl:choose>
+									<xsl:when
+										test="$foreign_table_name = $parent_table_name">
+										<!-- do nothing as we've just come from there  -->
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:element
+											name="{concat('aatams:', lower-case($foreign_table_name), '_ref')}">
+											<xsl:call-template
+												name="subfeature">
+												<xsl:with-param
+													name="parent_table_name" select="$table/@name" />
+												<xsl:with-param
+													name="table_name" select="$foreign_table_name" />
+												<xsl:with-param
+													name="depth" select="number($depth) + 1" />
+											</xsl:call-template>
+										</xsl:element>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+							<xsl:when
+								test="@primaryKey='true' and count(../column[@primaryKey='true'])=1 and
+							@type='INTEGER'">
+								<!-- exclude simple numeric primary keys a present in @gml:id -->
+							</xsl:when>
+							<xsl:otherwise>
+								<!-- simple non-foreign-key -->
+								<xsl:element
+									name="aatams:{lower-case(@name)}" />
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:for-each>
+					<!-- add maxOccurs="unbounded" subfeatures by looking for foreign keys on other tables -->
+					<!-- not interested if a code table -->
+					<xsl:if
+						test="$table/@codeTable = 'false' and $depth &lt; $max_depth">
+						<xsl:for-each
+							select="/database/table[not(@name=$parent_table_name) and foreign-key/@foreignTable=$table/@name and not(@codeTable='true')]">
+							<xsl:element
+								name="{concat('aatams:', lower-case(./@name), '_ref')}">
+								<xsl:call-template name="feature">
+									<xsl:with-param
+										name="parent_table_name" select="$table/@name" />
+									<xsl:with-param name="table"
+										select="." />
+									<xsl:with-param name="depth"
+										select="$max_depth" />
+								</xsl:call-template>
+							</xsl:element>
+						</xsl:for-each>
+					</xsl:if>
+				</xsl:element>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!-- 
+		template for foreign-key columns/properties
+		
+		we need to differentiate between two types of foreign keys
+		(1) one referencing a code table (or view) - add a subfeature
+		(2) one referencing a non-code table (or view) - add the subfeature
+		and it can be manually removed if not needed) 
+	-->
+	<xsl:template name="subfeature">
+		<xsl:param name="parent_table_name" />
+		<xsl:param name="table_name" />
+		<xsl:param name="depth" />
+		<xsl:choose>
+			<xsl:when
+				test="/database/table[@name=$table_name and @codeTable='true']">
+				<xsl:call-template name="code-subfeature">
+					<xsl:with-param name="table"
+						select="/database/table[@name=$table_name and @codeTable='true'][1]" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when
+				test="/database/view[@name=$table_name and @codeTable='true']">
+				<xsl:call-template name="code-subfeature">
+					<xsl:with-param name="table"
+						select="/database/view[@name=$table_name][1]" />
+				</xsl:call-template>
+			</xsl:when>
+			<!-- not a code table so handle as for normal feature -->
+			<xsl:when test="/database/table[@name=$table_name]">
+				<xsl:call-template name="feature">
+					<xsl:with-param name="parent_table_name"
+						select="$parent_table_name" />
+					<xsl:with-param name="table"
+						select="/database/table[@name=$table_name][1]" />
+					<xsl:with-param name="depth" select="$depth" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:call-template name="feature">
+					<xsl:with-param name="parent_table_name"
+						select="$parent_table_name" />
+					<xsl:with-param name="table"
+						select="/database/view[@name=$table_name][1]" />
+					<xsl:with-param name="depth" select="$depth" />
+				</xsl:call-template>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!--
+		recursive routine to add 'code' sub-features 
+		we are only interested in distinguishing columns or subfeatures
+	-->
+	<xsl:template name="code-subfeature">
+		<xsl:param name="table" />
+		<xsl:element name="aatams:{lower-case($table/@name)}">
+			<!-- handle each column -->
+			<xsl:for-each select="$table/column">
+				<!-- is it a distinguishing column -->
+				<xsl:if
+					test="$table/unique[@name='UNIQUE_INDEX']/column[@name=current()/@name]">
 					<xsl:choose>
-						<!-- is it a foreign-key -->
+						<!-- is it a foreign-key we will only allow one level of distinguishing subfeatures
+							so depth is $max_depth -->
 						<xsl:when
 							test="../foreign-key[reference/@local=current()/@name]">
-							<!-- 
-								template for foreign-key columns properties
-								
-								we need to differentiate between two types of foreign keys
-								(1) one referencing a code table - add a subfeature
-								(2) one referencing a non-code table - add just the simple 'id' property
-								as this feature is will be added as a subfeature of the foreign table feature (see *1) 
-							-->
-							<xsl:variable name="foreignTableName"
+							<xsl:variable name="foreign_table_name"
 								select="../foreign-key[reference/@local=current()/@name][1]/@foreignTable" />
-							<xsl:choose>
-								<xsl:when
-									test="/database/table[@name=$foreignTableName and @codeTable='true']">
-									<xsl:element
-										name="{concat('aatams:', lower-case($foreignTableName), '_ref')}">
-										<xsl:call-template
-											name="feature">
-											<xsl:with-param name="table"
-												select="/database/table[@name=$foreignTableName and @codeTable='true'][1]" />
-											<xsl:with-param name="depth"
-												select="$max_depth" />
-										</xsl:call-template>
-									</xsl:element>
-								</xsl:when>
-								<xsl:when
-									test="/database/view[@name=$foreignTableName and @codeTable='true']">
-									<xsl:element
-										name="{concat('aatams:', lower-case($foreignTableName), '_ref')}">
-										<xsl:call-template
-											name="feature">
-											<xsl:with-param name="table"
-												select="/database/view[@name=$foreignTableName and @codeTable='true'][1]" />
-											<xsl:with-param name="depth"
-												select="$max_depth" />
-										</xsl:call-template>
-									</xsl:element>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:element
-										name="aatams:{lower-case(@name)}" />
-								</xsl:otherwise>
-							</xsl:choose>
+							<xsl:element
+								name="{concat('aatams:', lower-case($foreign_table_name), '_ref')}">
+								<xsl:call-template name="subfeature">
+									<xsl:with-param name="table_name"
+										select="$foreign_table_name" />
+									<xsl:with-param name="depth"
+										select="$max_depth" />
+								</xsl:call-template>
+							</xsl:element>
+						</xsl:when>
+						<xsl:when
+							test="@primaryKey='true' and count(../column[@primaryKey='true'])=1 and
+							@type='INTEGER'">
+							<!-- exclude simple numeric primary keys a present in @gml:id -->
 						</xsl:when>
 						<xsl:otherwise>
 							<!-- simple non-foreign-key -->
@@ -230,24 +287,9 @@
 								name="aatams:{lower-case(@name)}" />
 						</xsl:otherwise>
 					</xsl:choose>
-				</xsl:for-each>
-				<!-- add maxOccurs="unbounded" subfeatures by looking for foreign keys on other tables -->
-				<!-- not interested if a code table -->
-				<xsl:if test="$table/@codeTable = 'false' and $depth &lt; $max_depth">
-					<xsl:for-each
-						select="/database/table[foreign-key/@foreignTable=$table/@name and not(@codeTable='true')]">
-						<xsl:element
-							name="{concat('aatams:', lower-case(./@name), '_ref')}">
-							<xsl:call-template name="feature">
-								<xsl:with-param name="table" select="." />
-								<xsl:with-param name="depth"
-									select="number($depth) + 1" />
-							</xsl:call-template>
-						</xsl:element>
-					</xsl:for-each>
 				</xsl:if>
-			</xsl:element>
-		</xsl:if>
+			</xsl:for-each>
+		</xsl:element>
 	</xsl:template>
 
 	<!-- 
@@ -257,7 +299,9 @@
 		<xsl:apply-templates select="foreign-key" mode="wfs-t" />
 	</xsl:template>
 
-	<!-- template to create subfeature list instance from foreign-key -->
+	<!-- 
+		template to create subfeature list instance from foreign-key
+	-->
 	<xsl:template match="foreign-key" mode="wfs-t">
 		<xf:instance>
 			<xsl:attribute name="id">
@@ -349,7 +393,7 @@
 				<xsl:value-of select="lower-case(@name)" />
 			</xsl:attribute>
 			<xsl:attribute name="nodeset">
-				<xsl:text>instance('wfst')//aatams:</xsl:text>
+				<xsl:text>instance('wfs-t')//aatams:</xsl:text>
 				<xsl:value-of select="lower-case(@name)" />
 			</xsl:attribute>
 			<xsl:attribute name="type">
@@ -436,7 +480,7 @@
 		template to create form submission
 	-->
 	<xsl:template name="submission">
-		<xf:submission id="s01" ref="instance('wfst')" method="post"
+		<xf:submission id="s01" ref="instance('wfs-t')" method="post"
 			action="{$wfs-url}" replace="instance" instance="resp">
 			<xf:action ev:event="xforms-submit">
 				<xsl:apply-templates select="column" mode="submission" />
@@ -461,7 +505,7 @@
 				<xsl:value-of select="lower-case(@foreignTable)" />
 			</xsl:variable>
 			<xsl:attribute name="nodeset">
-				<xsl:text>instance('wfst')//aatams:</xsl:text>
+				<xsl:text>instance('wfs-t')//aatams:</xsl:text>
 				<xsl:value-of select="$feature" />
 				<xsl:text>_ref/aatams:</xsl:text>
 				<xsl:value-of select="$feature" />
@@ -480,7 +524,7 @@
 		<!-- delete the dummy one -->
 		<xsl:element name="xf:delete">
 			<xsl:attribute name="nodeset">
-				<xsl:text>instance('wfst')//aatams:</xsl:text>
+				<xsl:text>instance('wfs-t')//aatams:</xsl:text>
 				<xsl:value-of select="lower-case(@foreignTable)" />
 				<xsl:text>_ref/aatams:</xsl:text>
 				<xsl:value-of select="lower-case(@foreignTable)" />
@@ -553,6 +597,58 @@
 				<xsl:text>[1]/@gml:id</xsl:text>
 			</xsl:attribute>
 		</xsl:element>
+	</xsl:template>
+
+	<!-- 
+		template to build the form
+	-->
+	<xsl:template name="form">
+		<div class="form">
+			<label>
+				<xsl:text>ADD </xsl:text>
+				<xsl:value-of
+					select="translate(upper-case(@name),'_',' ')" />
+			</label>
+			<div class="form-contents">
+				<xf:switch>
+					<xf:case id="{lower-case(@name)}" selected="true">
+						<xsl:apply-templates select="column"
+							mode="form" />
+						<xf:submit submission="s01">
+							<xf:label>Save</xf:label>
+						</xf:submit>
+						<xf:trigger>
+							<xf:label>Reset</xf:label>
+							<xf:reset ev:event="DOMActivate" />
+							<xf:dispatch ev:event="DOMActivate"
+								name="set-selected" target="model1" />
+							<xf:delete ev:event="DOMActivate"
+								nodeset="instance('resp')//ServiceException" />
+							<xf:delete ev:event="DOMActivate"
+								nodeset="instance('resp')//ogc:FeatureId/@fid" />
+						</xf:trigger>
+						<div id="error-message">
+							<xf:output bind="_error_message">
+								<xf:label>Error:</xf:label>
+							</xf:output>
+						</div>
+						<div id="success-message">
+							<xf:output bind="_success_message">
+								<xf:label>New Record Id:</xf:label>
+							</xf:output>
+						</div>
+					</xf:case>
+					<!-- add cases for subfeature prototype manipulation -->
+					<xsl:for-each
+						select="../table[foreign-key/@foreignTable=current()/@name]">
+						<xf:case id="{lower-case(@name)}">
+							<xsl:apply-templates select="."
+								mode="form-case" />
+						</xf:case>
+					</xsl:for-each>
+				</xf:switch>
+			</div>
+		</div>
 	</xsl:template>
 
 
@@ -861,7 +957,7 @@
 		mode="submission">
 		<xsl:element name="xf:delete">
 			<xsl:attribute name="nodeset">
-				<xsl:text>instance('wfst')//aatams:</xsl:text>
+				<xsl:text>instance('wfs-t')//aatams:</xsl:text>
 				<xsl:value-of select="lower-case(@name)" />
 				<xsl:text>[.='']</xsl:text>
 			</xsl:attribute>
@@ -877,7 +973,7 @@
 		<xsl:element name="xf:setvalue">
 			<!-- where to put it -->
 			<xsl:attribute name="ref">
-				<xsl:text>instance('wfst')//aatams:</xsl:text>
+				<xsl:text>instance('wfs-t')//aatams:</xsl:text>
 				<xsl:value-of select="$name" />
 				<xsl:text>/gml:Point/gml:pos</xsl:text>
 			</xsl:attribute>
@@ -1023,9 +1119,10 @@
 				</xf:itemset>
 				<xf:action ev:event="xforms-value-changed">
 					<xf:setvalue
-						ref="instance('wfst')//aatams:longitude"
+						ref="instance('wfs-t')//aatams:longitude"
 						value="instance('station')/gml:featureMember/aatams:station[@gml:id=instance('subf')/station_id]/aatams:longitude" />
-					<xf:setvalue ref="instance('wfst')//aatams:latitude"
+					<xf:setvalue
+						ref="instance('wfs-t')//aatams:latitude"
 						value="instance('station')/gml:featureMember/aatams:station[@gml:id=instance('subf')/station_id]/aatams:latitude" />
 				</xf:action>
 			</xf:select1>
@@ -1087,6 +1184,28 @@
 				</xsl:with-param>
 			</xsl:call-template>
 		</xsl:element>
+	</xsl:template>
+	
+	<xsl:template match="table" mode="form-case">
+		<xsl:choose>
+			<xsl:when test="foreign-key">
+				<!--xf:switch>
+					<xf:case id="{lower-case(@name)}" selected="true">
+					</xf:case-->
+				<!-- add cases for subfeature prototype manipulation -->
+				<!-- xsl:for-each
+					select="../table[foreign-key/@foreignTable=current()/@name]">
+					<xf:case id="{lower-case(@name)}">
+					<xsl:apply-templates mode="form-case" />
+					</xf:case>
+					</xsl:for-each>
+					</xf:switch-->
+				<xsl:apply-templates select="column" mode="form" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates select="column" mode="form" />
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 </xsl:stylesheet>

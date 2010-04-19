@@ -120,7 +120,7 @@
 	</xsl:template>
 
 	<!-- 
-		recursive routine to add features and subfeatures and ..
+		recursive routine to add features (and subfeatures) to model
 	-->
 	<xsl:template name="model-feature">
 		<xsl:param name="parent_table_name" />
@@ -257,7 +257,7 @@
 
 	<!--
 		recursive routine to add 'code' sub-features 
-		we are only interested in distinguishing columns or subfeatures
+		where are only interested in distinguishing columns or subfeatures
 	-->
 	<xsl:template name="model-code-subfeature">
 		<xsl:param name="table" />
@@ -269,7 +269,7 @@
 				<xsl:if
 					test="$table/unique[@name='UNIQUE_INDEX']/column[@name=current()/@name]">
 					<xsl:choose>
-						<!-- is it a foreign-key we will only allow one level of distinguishing subfeatures
+						<!-- if a foreign-key we will only allow one level of distinguishing subfeatures
 							so depth is $max_depth -->
 						<xsl:when
 							test="../foreign-key[reference/@local=current()/@name]">
@@ -286,13 +286,13 @@
 								</xsl:call-template>
 							</xsl:element>
 						</xsl:when>
+						<!-- exclude simple numeric primary keys a present in @gml:id -->
 						<xsl:when
 							test="@primaryKey='true' and count(../column[@primaryKey='true'])=1 and
 							@type='INTEGER'">
-							<!-- exclude simple numeric primary keys a present in @gml:id -->
 						</xsl:when>
+						<!-- simple non-foreign-key -->
 						<xsl:otherwise>
-							<!-- simple non-foreign-key -->
 							<xsl:element
 								name="{concat($namespace,lower-case(@name))}" />
 						</xsl:otherwise>
@@ -416,7 +416,7 @@
 									<xsl:with-param
 										name="parent_table_name" select="$table/@name" />
 									<xsl:with-param name="path"
-										select="concat(&quot;instance('wfs-t')&quot;,'/wfs:Insert/wfs:FeatureCollection/gml:featureMember/',$namespace,lower-case(@name))" />
+										select="concat($path,'/',$namespace,lower-case($foreign_table_name),'_ref')" />
 									<xsl:with-param name="table_name"
 										select="$foreign_table_name" />
 									<xsl:with-param name="parent_id"
@@ -455,19 +455,27 @@
 		<xsl:param name="table_name" />
 		<xsl:param name="parent_id" />
 		<xsl:param name="depth" />
-				<xsl:choose>
+		<xsl:choose>
 			<xsl:when
 				test="/database/table[@name=$table_name and @codeTable='true']">
 				<xsl:call-template name="binding-code-subfeature">
+					<xsl:with-param name="path"
+						select="concat($path,'/',$namespace,lower-case($table_name),'_ref')" />
 					<xsl:with-param name="table"
 						select="/database/table[@name=$table_name and @codeTable='true'][1]" />
+					<xsl:with-param name="parent_id"
+						select="$parent_id" />
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:when
 				test="/database/view[@name=$table_name and @codeTable='true']">
 				<xsl:call-template name="binding-code-subfeature">
+					<xsl:with-param name="path"
+						select="concat($path,'/',$namespace,lower-case($table_name),'_ref')" />
 					<xsl:with-param name="table"
 						select="/database/view[@name=$table_name and @codeTable='true'][1]" />
+					<xsl:with-param name="parent_id"
+						select="$parent_id" />
 				</xsl:call-template>
 			</xsl:when>
 			<!-- not a code table so handle as for normal feature -->
@@ -478,7 +486,7 @@
 					<xsl:with-param name="table"
 						select="/database/table[@name=$table_name]" />
 					<xsl:with-param name="parent_id"
-						select="concat($parent_id,'_',lower-case($table_name))" />
+						select="$parent_id" />
 					<xsl:with-param name="depth" select="$depth+1" />
 				</xsl:call-template>
 			</xsl:when>
@@ -489,7 +497,7 @@
 					<xsl:with-param name="table"
 						select="/database/view[@name=$table_name]" />
 					<xsl:with-param name="parent_id"
-						select="concat($parent_id,'_',lower-case($table_name))" />
+						select="$parent_id" />
 					<xsl:with-param name="depth" select="$depth+1" />
 				</xsl:call-template>
 			</xsl:otherwise>
@@ -501,46 +509,64 @@
 		we are only interested in distinguishing columns or subfeatures
 	-->
 	<xsl:template name="binding-code-subfeature">
+		<xsl:param name="path" />
 		<xsl:param name="table" />
-		<xsl:element name="aatams:{lower-case($table/@name)}">
-			<xsl:attribute name="gml:id" />
-			<!-- handle each column -->
-			<xsl:for-each select="$table/column">
-				<!-- is it a distinguishing column -->
-				<xsl:if
-					test="$table/unique[@name='UNIQUE_INDEX']/column[@name=current()/@name]">
-					<xsl:choose>
-						<!-- is it a foreign-key we will only allow one level of distinguishing subfeatures
-							so depth is $max_depth -->
-						<xsl:when
-							test="../foreign-key[reference/@local=current()/@name]">
-							<xsl:variable name="foreign_table_name"
-								select="../foreign-key[reference/@local=current()/@name][1]/@foreignTable" />
-							<xsl:element
-								name="{concat($namespace, lower-case($foreign_table_name), '_ref')}">
-								<xsl:call-template
-									name="model-subfeature">
-									<xsl:with-param name="table_name"
-										select="$foreign_table_name" />
-									<xsl:with-param name="depth"
-										select="$max_depth" />
-								</xsl:call-template>
-							</xsl:element>
-						</xsl:when>
-						<xsl:when
-							test="@primaryKey='true' and count(../column[@primaryKey='true'])=1 and
+		<xsl:param name="parent_id" />
+		<xsl:variable name="id_root">
+			<xsl:choose>
+				<xsl:when test="$parent_id = ''">
+					<xsl:text></xsl:text>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="concat($parent_id,'/')" />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<!-- handle each column -->
+		<xsl:for-each select="$table/column">
+			<!-- is it a distinguishing column -->
+			<xsl:if
+				test="$table/unique[@name='UNIQUE_INDEX']/column[@name=current()/@name]">
+				<xsl:choose>
+					<!-- is it a foreign-key we will only allow one level of distinguishing subfeatures
+						so depth is $max_depth -->
+					<xsl:when
+						test="../foreign-key[reference/@local=current()/@name]">
+						<xsl:variable name="foreign_table_name"
+							select="../foreign-key[reference/@local=current()/@name][1]/@foreignTable" />
+						<xsl:call-template name="binding-subfeature">
+							<xsl:with-param name="parent_table_name"
+								select="$table/@name" />
+							<xsl:with-param name="path"
+								select="concat($path,'/',$namespace,lower-case($table/@name),'_ref')" />
+							<xsl:with-param name="table_name"
+								select="$foreign_table_name" />
+							<xsl:with-param name="parent_id"
+								select="concat($id_root,lower-case($table/@name))" />
+							<xsl:with-param name="depth"
+								select="$max_depth" />
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:when
+						test="@primaryKey='true' and count(../column[@primaryKey='true'])=1 and
 							@type='INTEGER'">
-							<!-- exclude simple numeric primary keys a present in @gml:id -->
-						</xsl:when>
-						<xsl:otherwise>
-							<!-- simple non-foreign-key -->
-							<xsl:element
-								name="{concat($namespace,lower-case(@name))}" />
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
-			</xsl:for-each>
-		</xsl:element>
+						<!-- exclude simple numeric primary keys a present in @gml:id -->
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:element name="xf:bind">
+							<xsl:attribute name="id">
+							        <xsl:value-of
+									select="concat($id_root,lower-case(@name))" />
+						        </xsl:attribute>
+							<xsl:attribute name="nodeset">
+							        <xsl:value-of
+									select="concat($path,'/',$namespace,lower-case(@name))" />
+						        </xsl:attribute>
+						</xsl:element>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:if>
+		</xsl:for-each>
 	</xsl:template>
 
 	<!--

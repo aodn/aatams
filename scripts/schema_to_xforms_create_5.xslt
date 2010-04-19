@@ -391,11 +391,11 @@
 		<xsl:if test="$depth &lt;= $max_depth">
 			<xsl:variable name="id_root">
 				<xsl:choose>
-					<xsl:when test="$parent_id = ''">
+					<xsl:when test="string-length($parent_id) = 0">
 						<xsl:text></xsl:text>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="concat($parent_id,'/')" />
+						<xsl:value-of select="concat($parent_id,'_')" />
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
@@ -408,7 +408,7 @@
 						<xsl:choose>
 							<xsl:when
 								test="$foreign_table_name = $parent_table_name">
-								<!-- do nothing as we've just come from there  -->
+								<!-- do nothing as we've just come from there!  -->
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:call-template
@@ -420,7 +420,7 @@
 									<xsl:with-param name="table_name"
 										select="$foreign_table_name" />
 									<xsl:with-param name="parent_id"
-										select="$id_root" />
+										select="concat($id_root,lower-case($foreign_table_name))" />
 									<xsl:with-param name="depth"
 										select="$depth+1" />
 								</xsl:call-template>
@@ -437,11 +437,11 @@
 							<xsl:attribute name="id">
 							<xsl:value-of
 									select="concat($id_root,lower-case(@name))" />
-						</xsl:attribute>
+							</xsl:attribute>
 							<xsl:attribute name="nodeset">
 							<xsl:value-of
 									select="concat($path,'/',$namespace,lower-case(@name))" />
-						</xsl:attribute>
+							</xsl:attribute>
 						</xsl:element>
 					</xsl:otherwise>
 				</xsl:choose>
@@ -460,7 +460,7 @@
 				test="/database/table[@name=$table_name and @codeTable='true']">
 				<xsl:call-template name="binding-code-subfeature">
 					<xsl:with-param name="path"
-						select="concat($path,'/',$namespace,lower-case($table_name),'_ref')" />
+						select="concat($path,'/',$namespace,lower-case($table_name))" />
 					<xsl:with-param name="table"
 						select="/database/table[@name=$table_name and @codeTable='true'][1]" />
 					<xsl:with-param name="parent_id"
@@ -471,7 +471,7 @@
 				test="/database/view[@name=$table_name and @codeTable='true']">
 				<xsl:call-template name="binding-code-subfeature">
 					<xsl:with-param name="path"
-						select="concat($path,'/',$namespace,lower-case($table_name),'_ref')" />
+						select="concat($path,'/',$namespace,lower-case($table_name))" />
 					<xsl:with-param name="table"
 						select="/database/view[@name=$table_name and @codeTable='true'][1]" />
 					<xsl:with-param name="parent_id"
@@ -482,7 +482,7 @@
 			<xsl:when test="/database/table[@name=$table_name]">
 				<xsl:call-template name="binding-feature">
 					<xsl:with-param name="path"
-						select="concat($path,'/',$namespace,lower-case($table_name),'_ref')" />
+						select="concat($path,'/',$namespace,lower-case($table_name))" />
 					<xsl:with-param name="table"
 						select="/database/table[@name=$table_name]" />
 					<xsl:with-param name="parent_id"
@@ -493,7 +493,7 @@
 			<xsl:otherwise>
 				<xsl:call-template name="binding-feature">
 					<xsl:with-param name="path"
-						select="concat($path,'/',$namespace,lower-case($table_name),'_ref')" />
+						select="concat($path,'/',$namespace,lower-case($table_name))" />
 					<xsl:with-param name="table"
 						select="/database/view[@name=$table_name]" />
 					<xsl:with-param name="parent_id"
@@ -514,11 +514,11 @@
 		<xsl:param name="parent_id" />
 		<xsl:variable name="id_root">
 			<xsl:choose>
-				<xsl:when test="$parent_id = ''">
+				<xsl:when test="string-length($parent_id) = 0">
 					<xsl:text></xsl:text>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:value-of select="concat($parent_id,'/')" />
+					<xsl:value-of select="concat($parent_id,'_')" />
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>

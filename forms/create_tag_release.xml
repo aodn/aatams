@@ -6,7 +6,8 @@
 	<head>
 		<title>Australian Acoustic Tagging and Monitoring System (AATAMS)</title>
 		<link href="aatams.css" rel="stylesheet" type="text/css" />
-		<link href="../aatams_tables.css" rel="stylesheet" type="text/css" />
+        <link href="../aatams_tables.css" rel="stylesheet" type="text/css" />
+        <script src="QueryString.js" type="text/javascript">//</script>
 		<xf:model id="model1">
 			<xf:instance id="inst_data">
 				<wfs:Transaction version="1.1.0" service="WFS">
@@ -150,7 +151,7 @@
 			<xf:instance id="inst_person" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:person" />
 			<xf:instance id="inst_project" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:project" />
 			<xf:instance id="inst_measurement_type" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:measurement_type" />
-			<xf:instance id="inst_measurement_unit" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:measurement_unit" />
+            <xf:instance id="inst_measurement_unit" src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:measurement_unit" />
 			<xf:instance id="inst_response">
 				<dummy xmlns="">
 					<ows:Exception />
@@ -163,15 +164,16 @@
 					</wfs:TransactionResponse>
 				</dummy>
 			</xf:instance>
-			<xf:bind id="code_name" nodeset="instance('inst_data')//aatams:code_name" type="xsd:string" required="true()" />
+            <xf:bind id="code_name" nodeset="instance('inst_data')//aatams:code_name" type="xsd:string" required="true()" />
+            <xf:bind id="tag_device" nodeset="instance('inst_subfeatures')/tag_device_id" type="xsd:string" required="false()" />
 			<xf:bind id="device_model" nodeset="instance('inst_subfeatures')/device_model_id" type="xsd:string" required="true()" />
 			<xf:bind id="serial_number" nodeset="instance('inst_data')//aatams:serial_number" type="xsd:string" required="true()" />
 			<xf:bind id="species" nodeset="instance('inst_data')//aatams:species_ref/@class_fid" type="xsd:string" required="true()" />
 			<xf:bind id="project" nodeset="instance('inst_subfeatures')/project_id" type="xsd:string" required="true()" />
 			<xf:bind id="project_person" nodeset="instance('inst_subfeatures')/project_person_id" type="xsd:string" required="true()" />
-			<xf:bind id="capture_location_longitude" nodeset="instance('inst_capture_location')/longitude" type="xsd:decimal" required="true()" constraint=". &gt;= -180 and . &lt;= 180" />
-			<xf:bind id="capture_location_latitude" nodeset="instance('inst_capture_location')/latitude" type="xsd:decimal" required="true()" constraint=". &gt;= -90 and . &lt;= 90" />
-			<xf:bind id="capture_timestamp" nodeset="instance('inst_data')//aatams:capture_timestamp" type="xsd:dateTime" required="true()"/>
+			<xf:bind id="capture_location_longitude" nodeset="instance('inst_capture_location')/longitude" type="xsd:decimal" required="false()" constraint=". &gt;= -180 and . &lt;= 180" />
+			<xf:bind id="capture_location_latitude" nodeset="instance('inst_capture_location')/latitude" type="xsd:decimal" required="false()" constraint=". &gt;= -90 and . &lt;= 90" />
+			<xf:bind id="capture_timestamp" nodeset="instance('inst_data')//aatams:capture_timestamp" type="xsd:dateTime" required="false()"/>
 			<xf:bind id="release_location_longitude" nodeset="instance('inst_release_location')/longitude" type="xsd:decimal" required="true()" constraint=". &gt;= -180 and . &lt;= 180" />
 			<xf:bind id="release_location_latitude" nodeset="instance('inst_release_location')/latitude" type="xsd:decimal" required="true()" constraint=". &gt;= -90 and . &lt;= 90" />
 			<xf:bind id="release_timestamp" nodeset="instance('inst_data')//aatams:release_timestamp" type="xsd:dateTime" required="true()" />
@@ -184,7 +186,51 @@
 			<xf:bind id="measurement_comment" nodeset="instance('inst_data')//aatams:measurement/aatams:comments" type="xsd:string" />
 			<xf:bind id="personnel_person" nodeset="instance('inst_data')//aatams:surgery_person/aatams:person_ref/aatams:person" type="xsd:string" />
 			<xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException" calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)" type="xsd:string" />
-			<xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid" type="xsd:string" />
+            <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid" type="xsd:string" />
+            <xf:instance id="tags-request">
+				<wfs:GetFeature xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" outputFormat="text/xml; subtype=gml/3.1.1">
+					<wfs:Query typeName="tag_device">
+						<ogc:Filter>
+                            <ogc:PropertyIsEqualTo>
+                                <ogc:PropertyName>aatams:project_fid</ogc:PropertyName>
+                                <ogc:Literal/>
+                            </ogc:PropertyIsEqualTo>
+						</ogc:Filter>
+					</wfs:Query>
+				</wfs:GetFeature>
+            </xf:instance>
+            <xf:instance id="project-tags">
+			    <dummy xmlns=""/>
+            </xf:instance>
+            <xf:action ev:event="get-tag">
+				<xf:setvalue ref="instance('inst_subfeatures')/device_model_id" value="instance('inst_device_model')/gml:featureMember/aatams:device_model[1]/@gml:id" />
+			</xf:action>
+            <xf:instance id="tag-request">
+                <wfs:GetFeature xmlns:wfs="http://www.opengis.net/wfs"   xmlns:gml="http://www.opengis.net/gml"
+                    xmlns:ogc="http://www.opengis.net/ogc" xmlns:aatams="http://www.imos.org.au/aatams" outputFormat="text/xml; subtype=gml/3.1.1">
+					<wfs:Query typeName="device">
+						<ogc:Filter>
+                            <ogc:GmlObjectId gml:id=""/>
+						</ogc:Filter>
+					</wfs:Query>
+				</wfs:GetFeature>
+            </xf:instance>
+			<xf:instance id="tag">
+				<wfs:FeatureCollection />
+			</xf:instance>
+			<xf:submission id="s3" method="post" action="../../deegree-wfs/services" ref="instance('tag-request')" replace="instance" instance="tag">
+                <xf:message level="modeless" ev:event="xforms-submit-error">Submit error.</xf:message>
+                <xf:action ev:event="xforms-submit">
+                    <xf:message>start</xf:message>
+                    <xf:setvalue ref="instance('tag-request')//ogc:GmlObjectId/@gml:id" value="concat('aatams.device.',substring-after(instance('inst_subfeatures')/tag_device_id,'aatams.tag_device.'))" />
+                </xf:action>
+                <xf:action ev:event="xforms-submit-done">
+                    <xf:insert nodeset="instance('inst_data')//aatams:tag_device_ref/aatams:device" origin="instance('tag')/gml:featureMember/aatams:device" />
+                    <xf:delete nodeset="instance('inst_data')//aatams:tag_device_ref/aatams:device" at="1" />
+                    <xf:message>finish</xf:message>
+                </xf:action>
+			</xf:submission>        
+            <xf:submission id="s2" action="../../deegree-wfs/services" ref="instance('tags-request')" replace="instance" instance="project-tags" method="post" separator="&amp;" /> 
 			<xf:submission id="s01" ref="instance('inst_data')" method="post" action="../../deegree-wfs/services" replace="instance" instance="inst_response">
 				<xf:action ev:event="xforms-submit">
 					<xf:setvalue ref="instance('inst_data')//aatams:capture_location/gml:Point/gml:pos" value="concat(instance('inst_capture_location')/longitude,' ',instance('inst_capture_location')/latitude)" />
@@ -219,14 +265,14 @@
 			<xf:action ev:event="set-animal-classification" if="instance('inst_data')//aatams:classification_ref/aatams:classification">
 				<xf:insert nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification" origin="instance('inst_classification')/gml:featureMember/aatams:classification[@gml:id=concat('aatams.classification',substring-after(instance('inst_data')//aatams:species_ref/@class_fid,'aatams.species'))]" />
 				<xf:delete nodeset="instance('inst_data')//aatams:classification_ref/aatams:classification" at="1" />
-			</xf:action>
-		</xf:model>
+            </xf:action>
+        </xf:model>
 	</head>
 	<body>
 		<div class="form">
 			<xf:switch>
 				<xf:case id="select-project" selected="true">
-					<label>1. SELECT TAG RELEASE PROJECT &amp;  OWNER</label>
+					<label>SELECT TAG RELEASE PROJECT &amp;  OWNER</label>
 					<div class="form-contents">
 						<div class="dependant-selects">
 							<div class="xfselect1">
@@ -238,10 +284,11 @@
 										<xf:label ref="aatams:name" />
 									</xf:itemset>
 									<xf:action ev:event="xforms-value-changed">
-										<xf:setvalue ref="instance('inst_subfeatures')/project_person_id" value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id" />
+                                        <xf:setvalue ref="instance('inst_subfeatures')/project_person_id" value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id" />
+                                        <xf:setvalue ref="instance('tags-request')//ogc:Literal" value="instance('inst_subfeatures')/project_id"/>
 									</xf:action>
 								</xf:select1>
-							</div>
+                            </div>
 							<div class="xfselect1">
 								<xf:select1 bind="project_person" appearance="minimal" incremental="true()">
 									<xf:label>Responsible Person(Role)</xf:label>
@@ -258,16 +305,26 @@
 						</div>
 						<div class="xftrigger">
 							<xf:trigger>
-								<xf:label>2. Create Tag Device</xf:label>
+                                <xf:label>Create Tag ></xf:label>
 								<xf:action ev:event="DOMActivate">
-									<xf:toggle case="tag-device" />
+									<xf:toggle case="create-tag-device" />
+								</xf:action>
+							</xf:trigger>
+                        </div>
+                        <div class="xftrigger" style="clear:none;">
+							<xf:trigger>
+                                <xf:label>Select Tag ></xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:send submission="s2" />
+                                    <xf:message><xf:output ref="count(instance('project-tags')/gml:featureMember)"/></xf:message>
+									<xf:toggle case="select-tag-device" />
 								</xf:action>
 							</xf:trigger>
 						</div>
 					</div>
 				</xf:case>
-				<xf:case id="tag-device">
-					<label>2. CREATE TAG DEVICE</label>
+				<xf:case id="create-tag-device">
+					<label>CREATE TAG</label>
 					<div class="form-contents">
 						<xf:group ref="instance('inst_data')//aatams:tag_device_ref/aatams:device">
 							<div class="xfinput">
@@ -294,7 +351,7 @@
 							</div>
 							<div class="xftrigger">
 								<xf:trigger>
-									<xf:label>Back</xf:label>
+									<xf:label> &lt; Select Project</xf:label>
 									<xf:action ev:event="DOMActivate">
 										<xf:toggle case="select-project" />
 									</xf:action>
@@ -302,7 +359,7 @@
 							</div>
 							<div class="xftrigger" style="clear:none;">
 								<xf:trigger>
-									<xf:label>3. Create Tag Release</xf:label>
+                                    <xf:label>Create Tag Release ></xf:label>
 									<xf:action ev:event="DOMActivate">
 										<xf:toggle case="create-tag-release" if="context()/aatams:code_name != '' and context()/aatams:serial_number != ''" />
 										<xf:message if="context()/aatams:code_name = '' or context()/aatams:serial_number = ''">Please complete mandatory input fields first!</xf:message>
@@ -311,9 +368,42 @@
 							</div>
 						</xf:group>
 					</div>
+                </xf:case>
+				<xf:case id="select-tag-device">
+                    <label>SELECT TAG</label>
+					<div class="form-contents">
+						<div class="xfselect1">
+							<xf:select1 bind="tag_device" appearance="minimal" incremental="true()">
+								<xf:label>Tag Code Name</xf:label>
+								<xf:help>The combined Tag code-space and code-number</xf:help>
+								<xf:itemset nodeset="instance('project-tags')/gml:featureMember/aatams:tag_device">
+									<xf:value ref="@gml:id" />
+									<xf:label ref="aatams:code_name" />
+                                </xf:itemset>
+							</xf:select1>
+						</div>
+						<div class="xftrigger">
+							<xf:trigger>
+								<xf:label> &lt; Select Project</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:setvalue ref="instance('inst_subfeatures')/tag_device_id" value=""/>
+                                    <xf:toggle case="select-project" />
+								</xf:action>
+							</xf:trigger>
+						</div>
+						<div class="xftrigger" style="clear:none;">
+							<xf:trigger>
+                                <xf:label>Create Tag Release ></xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:send submission="s3"/>
+									<xf:toggle case="create-tag-release"/>
+								</xf:action>
+							</xf:trigger>
+						</div>
+					</div>
 				</xf:case>
 				<xf:case id="create-tag-release">
-					<label>3. CREATE TAG RELEASE</label>
+					<label>CREATE TAG RELEASE</label>
 					<div class="form-contents">
 						<div class="xfselect1">
 							<xf:select1 bind="species" appearance="minimal" incremental="true()">
@@ -602,9 +692,9 @@
 						<div class="buttons" style="margin-top:10px;">
 							<div class="xftrigger">
 								<xf:trigger>
-									<xf:label>Back</xf:label>
+                                    <xf:label>&lt; Create Tag Device</xf:label>
 									<xf:action ev:event="DOMActivate">
-										<xf:toggle case="tag-device" />
+										<xf:toggle case="create-tag-device" />
 									</xf:action>
 								</xf:trigger>
 							</div>

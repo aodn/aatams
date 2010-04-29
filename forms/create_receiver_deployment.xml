@@ -67,7 +67,7 @@
          <xf:instance id="inst_receiver_device"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:receiver_device"/>
          <xf:instance id="inst_installation"
-                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation"/>
+                      src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:installation&amp;propertyname=aatams:name"/>
          <xf:instance id="inst_station"
                       src="../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:station"/>
          <xf:instance id="inst_mooring_type"
@@ -135,7 +135,7 @@
          <xf:bind id="comments" nodeset="instance('inst_data')//aatams:comments"
                   type="xsd:string"
                   required="false()"/>
-         <xf:bind id="error_message" nodeset="instance('inst_response')//ServiceException"
+         <xf:bind id="error_message" nodeset="instance('inst_response')//ows:ExceptionText"
                   calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
                   type="xsd:string"/>
          <xf:bind id="success_message" nodeset="instance('inst_response')//ogc:FeatureId/@fid"
@@ -179,7 +179,8 @@
             <xf:setvalue ref="instance('inst_subfeatures')/installation_id"
                          value="instance('inst_installation')/gml:featureMember/aatams:installation[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')/station_id"
-                         value="instance('inst_station')/gml:featureMember/aatams:station[1]/@gml:id"/>
+                value="instance('inst_station')/gml:featureMember/aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id"/>
+            <xf:dispatch name="set-location-from-station" target="model1"/>
             <xf:setvalue ref="instance('inst_subfeatures')/mooring_type_id"
                          value="instance('inst_mooring_type')/gml:featureMember/aatams:mooring_type[1]/@gml:id"/>
             <xf:setvalue ref="instance('inst_subfeatures')/project_id"
@@ -187,7 +188,14 @@
             <xf:setvalue ref="instance('inst_subfeatures')/project_person_id"
                          value="instance('inst_project_person')/gml:featureMember/aatams:project_person[aatams:project_fid=instance('inst_subfeatures')/project_id][1]/@gml:id"/>
             <xf:dispatch name="xforms-revalidate" target="model1"/>
-         </xf:action>
+        </xf:action>
+        <xf:action ev:event="set-location-from-station">
+            <xf:message>hello</xf:message>
+            <xf:setvalue ref="instance('inst_location')/longitude"
+                value="substring-before(instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:location/gml:Point/gml:pos,' ')"/>
+            <xf:setvalue ref="instance('inst_location')/latitude"
+                value="substring-after(instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:location/gml:Point/gml:pos,' ')"/>
+        </xf:action>
       </xf:model>
    </head>
    <body>
@@ -212,7 +220,7 @@
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
                      <xf:action ev:event="xforms-value-changed">
-                        <xf:setvalue ref="instance('inst_subfeatures')/station_id" value=""/>
+                         <xf:setvalue ref="instance('inst_subfeatures')/station_id" value="instance('inst_station')/gml:featureMember/aatams:station[aatams:installation_fid=instance('inst_subfeatures')/installation_id][1]/@gml:id"/>
                      </xf:action>
                   </xf:select1>
                </div>
@@ -224,10 +232,7 @@
                         <xf:label ref="aatams:name"/>
                      </xf:itemset>
                      <xf:action ev:event="xforms-value-changed">
-                        <xf:setvalue ref="instance('inst_location')/longitude"
-                                     value="substring-before(instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:location/gml:Point/gml:pos,' ')"/>
-                        <xf:setvalue ref="instance('inst_location')/latitude"
-                                     value="substring-after(instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:location/gml:Point/gml:pos,' ')"/>
+                        <xf:dispatch name="set-location-from-station" target="model1"/>
                      </xf:action>
                   </xf:select1>
                </div>

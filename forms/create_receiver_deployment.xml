@@ -158,7 +158,7 @@
                           at="1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:station_ref/aatams:station"
                           origin="instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]"/>
-               <xf:delete nodeset="instance('inst_data')//aatams:station_ref/aatams:station" at="1"/>
+                      <xf:delete nodeset="instance('inst_data')//aatams:station_ref" if="count(instance('inst_data')//aatams:station_ref/aatams:station)=1"/>
                <xf:insert nodeset="instance('inst_data')//aatams:mooring_type_ref/aatams:mooring_type"
                           origin="instance('inst_mooring_type')/gml:featureMember/aatams:mooring_type[@gml:id=instance('inst_subfeatures')/mooring_type_id]"/>
                <xf:delete nodeset="instance('inst_data')//aatams:mooring_type_ref/aatams:mooring_type"
@@ -190,7 +190,6 @@
             <xf:dispatch name="xforms-revalidate" target="model1"/>
         </xf:action>
         <xf:action ev:event="set-location-from-station">
-            <xf:message>hello</xf:message>
             <xf:setvalue ref="instance('inst_location')/longitude"
                 value="substring-before(instance('inst_station')/gml:featureMember/aatams:station[@gml:id=instance('inst_subfeatures')/station_id]/aatams:location/gml:Point/gml:pos,' ')"/>
             <xf:setvalue ref="instance('inst_location')/latitude"

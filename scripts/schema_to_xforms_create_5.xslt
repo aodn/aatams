@@ -27,7 +27,7 @@
 <xsl:stylesheet version="2.0" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:aatams="http://www.imos.org.au/aatams"
+	xmlns:emii="http://www.imos.org.au/emii"
 	xmlns:xf="http://www.w3.org/2002/xforms"
 	xmlns:ev="http://www.w3.org/2001/xml-events"
 	xmlns:wfs="http://www.opengis.net/wfs"
@@ -35,35 +35,28 @@
 	xmlns:ows="http://www.opengis.net/ows"
 	xmlns:gml="http://www.opengis.net/gml">
 	<xsl:output name="xml" method="xml" encoding="UTF-8" indent="yes" />
-	<xsl:include href="help.xslt" />
-	<xsl:variable name="wfs_url">
-		<xsl:text>../../deegree-wfs/services</xsl:text>
-	</xsl:variable>
-	<xsl:variable name="get_feature_url">
-		<xsl:text>../../deegree-wfs/services?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=</xsl:text>
-	</xsl:variable>
-	<!-- add a variable to limit number of recursions when adding subfeatures -->
-	<xsl:variable name="max_depth">5</xsl:variable>
-	<xsl:variable name="namespace">aatams:</xsl:variable>
+    <xsl:include href="help.xslt" />
+    <xsl:include href="globals.xslt" />
 	<xsl:template match="/">
 		<xsl:for-each select="//table">
 			<xsl:variable name="feature-name">
 				<xsl:value-of select="lower-case(@name)" />
 			</xsl:variable>
 			<xsl:result-document
-				href="{concat('file:///C:/eclipse_workspace/aatams/forms5/create_',lower-case(@name),'.xml')}"
-				format="xml">
-				<xsl:processing-instruction name="xml-stylesheet">
-					<xsl:text>href="xsltforms/xsltforms.xsl" type="text/xsl"</xsl:text>
-				</xsl:processing-instruction>
+                href="{concat('file:///',$output_path,'/create_',lower-case(@name),'.xml')}"
+                format="xml">
+                <xsl:if test="$is_xsltforms='true'">
+                    <xsl:processing-instruction name="xml-stylesheet">
+                        <xsl:text>href="</xsl:text>
+                        <xsl:value-of select="$xsltforms_path"/>
+                        <xsl:text>" type="text/xsl"</xsl:text>
+                    </xsl:processing-instruction>
+                </xsl:if>
 				<html>
 					<head>
 						<title>
-							<xsl:text>Australian Acoustic Tagging and Monitoring </xsl:text>
-							<xsl:text>System (AATAMS)</xsl:text>
-						</title>
-						<link href="aatams.css" rel="stylesheet"
-							type="text/css" />
+                            <xsl:value-of select="$title"/>
+                        </title>
 						<xsl:call-template name="model" />
 					</head>
 					<body>
@@ -139,7 +132,7 @@
 				</xsl:element>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:element name="aatams:{lower-case($table/@name)}">
+				<xsl:element name="{concat($namespace,lower-case($table/@name))}">
 					<xsl:attribute name="gml:id" />
 					<!-- handle each column -->
 					<xsl:for-each select="$table/column">
@@ -156,7 +149,7 @@
 									</xsl:when>
 									<xsl:otherwise>
 										<xsl:element
-											name="{concat($namespace, lower-case($foreign_table_name), '_ref')}">
+											name="{concat($namespace, lower-case(replace(@name,'_id','')), '_ref')}">
 											<xsl:call-template
 												name="model-subfeature">
 												<xsl:with-param
@@ -171,14 +164,12 @@
 								</xsl:choose>
 							</xsl:when>
 							<xsl:when
-								test="@primaryKey='true' and count(../column[@primaryKey='true'])=1 and
-							@type='INTEGER'">
-								<!-- exclude simple numeric primary keys a present in @gml:id -->
+								test="@primaryKey='true' and $include_pkeys_in_form = 'false'">
 							</xsl:when>
 							<xsl:otherwise>
 								<!-- simple non-foreign-key -->
 								<xsl:element
-									name="aatams:{lower-case(@name)}" />
+                                    name="{concat($namespace,lower-case(@name))}" />
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:for-each>
@@ -261,7 +252,7 @@
 	-->
 	<xsl:template name="model-code-subfeature">
 		<xsl:param name="table" />
-		<xsl:element name="aatams:{lower-case($table/@name)}">
+		<xsl:element name="{concat($namespace,lower-case($table/@name))}">
 			<xsl:attribute name="gml:id" />
 			<!-- handle each column -->
 			<xsl:for-each select="$table/column">
@@ -276,7 +267,7 @@
 							<xsl:variable name="foreign_table_name"
 								select="../foreign-key[reference/@local=current()/@name][1]/@foreignTable" />
 							<xsl:element
-								name="{concat($namespace, lower-case($foreign_table_name), '_ref')}">
+								name="{concat($namespace, lower-case(replace(@name,'_id','')), '_ref')}">
 								<xsl:call-template
 									name="model-subfeature">
 									<xsl:with-param name="table_name"
@@ -310,18 +301,21 @@
 	</xsl:template>
 
 	<!-- 
-		template to create subfeature list instance from foreign-key
+    template to create subfeature list instance from foreign-key.
+    don't add it twice if same foreign table is referenced more than once.
 	-->
-	<xsl:template match="foreign-key" mode="wfs-t">
-		<xf:instance>
-			<xsl:attribute name="id">
-				<xsl:value-of select="lower-case(@foreignTable)" />
-			</xsl:attribute>
-			<xsl:attribute name="src">
-				<xsl:value-of select="$wfs_url" /><xsl:text>?service=WFS&amp;version=1.1.0&amp;request=GetFeature&amp;namespace=xmlns(aatams=http://www.imos.org.au/aatams)&amp;typename=aatams:</xsl:text>
-				<xsl:value-of select="lower-case(@foreignTable)" />
-			</xsl:attribute>
-		</xf:instance>
+    <xsl:template match="foreign-key" mode="wfs-t">
+        <xsl:if test="count(preceding-sibling::foreign-key[@foreignTable=current()/@foreignTable])=0">
+		    <xf:instance>
+			    <xsl:attribute name="id">
+				    <xsl:value-of select="lower-case(@foreignTable)" />
+			    </xsl:attribute>
+			    <xsl:attribute name="src">
+				    <xsl:value-of select="$get_feature_url" />
+				    <xsl:value-of select="concat($namespace,lower-case(@foreignTable))" />
+			    </xsl:attribute>
+            </xf:instance>
+        </xsl:if>
 	</xsl:template>
 
 	<!-- 
@@ -335,7 +329,7 @@
 			<xsl:for-each
 				select="../table[foreign-key/@foreignTable=current()/@name]">
 				<xsl:element
-					name="aatams:{concat($namespace,lower-case(@name))}">
+					name="{concat($namespace,lower-case(@name))}">
 					<xsl:apply-templates select="column"
 						mode="prototype" />
 				</xsl:element>
@@ -364,7 +358,7 @@
 			<xsl:value-of
 				select="lower-case(../foreign-key[reference/@local=current()/@name][1]/@foreignTable)" />
 		</xsl:variable>
-		<xsl:element name="aatams:{concat($foreignTable,'_ref')}">
+		<xsl:element name="{concat($namespace,$foreignTable,'_ref')}">
 
 		</xsl:element>
 	</xsl:template>
@@ -513,9 +507,6 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-
-
-
 	<!--
 		recursive routine to add 'code' sub-features 
 		we are only interested in distinguishing columns or subfeatures
@@ -841,8 +832,8 @@
 			<xsl:attribute name="value">
 				<xsl:text>instance('</xsl:text>
 				<xsl:value-of select="$feature" />
-				<xsl:text>')/gml:featureMember/aatams:</xsl:text>
-				<xsl:value-of select="$feature" />
+				<xsl:text>')/gml:featureMember/</xsl:text>
+				<xsl:value-of select="concat($namespace,$feature)" />
 				<xsl:text>[1]/@gml:id</xsl:text>
 			</xsl:attribute>
 		</xsl:element>
@@ -969,7 +960,8 @@
 	<!--  
 		template to insert an xform input control
 	-->
-	<xsl:template match="column" mode="form">
+    <xsl:template match="column" mode="form">
+        <xsl:if test="@primaryKey = 'false' or $include_pkeys_in_form = 'true'">
 		<xsl:element name="xf:input">
 			<xsl:attribute name="ref">
 					<xsl:value-of
@@ -978,8 +970,8 @@
 			<xsl:attribute name="incremental">
 					<xsl:text>true()</xsl:text>
 				</xsl:attribute>
-			<xf:label>
-				<xsl:call-template name="proper-case">
+                <xf:label>
+                <xsl:call-template name="proper-case">
 					<xsl:with-param name="toconvert"
 						select="replace(@name,'_',' ')" />
 				</xsl:call-template>
@@ -989,8 +981,9 @@
 					<xsl:value-of select="@name" />
 				</xsl:with-param>
 			</xsl:call-template>
-		</xsl:element>
-	</xsl:template>
+        </xsl:element>
+        </xsl:if>
+    </xsl:template>
 
 	<!--  
 		template to insert an xform select1 control 
@@ -1029,7 +1022,7 @@
 			<xsl:element name="xf:itemset">
 				<xsl:attribute name="nodeset">
 					<xsl:value-of
-						select="concat(&quot;instance('&quot;, $feature_name, &quot;')/gml:featureMember/aatams:&quot;, $feature_name)" />
+						select="concat(&quot;instance('&quot;, $feature_name, &quot;')/gml:featureMember/&quot;,$namespace,$feature_name)" />
 				</xsl:attribute>
 				<xsl:element name="xf:value">
 					<xsl:attribute name="ref">
@@ -1037,8 +1030,9 @@
 					</xsl:attribute>
 				</xsl:element>
 				<xsl:element name="xf:label">
-					<xsl:attribute name="ref">
-						<xsl:text>aatams:name</xsl:text>
+                    <xsl:attribute name="ref">
+                        <xsl:value-of select="$namespace" />
+						<xsl:text>name</xsl:text>
 					</xsl:attribute>
 				</xsl:element>
 			</xsl:element>

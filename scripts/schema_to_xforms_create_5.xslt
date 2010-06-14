@@ -60,7 +60,8 @@
 						<xsl:call-template name="model" />
 					</head>
 					<body>
-						<xsl:call-template name="form" />
+                        <xsl:call-template name="form" />
+                        <div id="console"/>
 					</body>
 				</html>
 			</xsl:result-document>
@@ -73,7 +74,9 @@
 	<xsl:template name="model">
 		<xf:model id="model1">
 			<!-- add the transaction instance (sent to wfs) -->
-			<xsl:call-template name="wfs-transaction" />
+            <xsl:call-template name="wfs-transaction" />
+			<!-- add the subfeature prototypes -->
+				<xsl:call-template name="prototypes" />
 			<!-- add the subfeature lists needed for select1 controls -->
 			<xsl:call-template name="wfs-response" />
 			<!-- add bindings for submission success or failure messages -->
@@ -82,8 +85,6 @@
 			<xsl:call-template name="bindings" />
 			<!-- add an instance to receive server response -->
 			<xsl:call-template name="messages" />
-			<!-- add the subfeature prototypes >
-				<xsl:call-template name="prototypes" /-->
 			<!-- add the xform submission details -->
 			<xsl:call-template name="submission" />
 			<!-- action to select first subfeatures in lists -->
@@ -317,7 +318,6 @@
             </xf:instance>
         </xsl:if>
 	</xsl:template>
-
 	<!-- 
 		template for adding prototype subfeatures.
 		any foreign keys mean that this feature (potentially) has
@@ -325,15 +325,16 @@
 		a particular subfeature type.
 	-->
 	<xsl:template name="prototypes">
-		<xf:instance id="prototypes">
-			<xsl:for-each
-				select="../table[foreign-key/@foreignTable=current()/@name]">
-				<xsl:element
-					name="{concat($namespace,lower-case(@name))}">
-					<xsl:apply-templates select="column"
-						mode="prototype" />
-				</xsl:element>
-			</xsl:for-each>
+        <xf:instance id="_prototypes">
+            <dummy xmlns="">
+			    <xsl:for-each select="foreign-key">
+                    <xsl:call-template name="model-feature">
+                        <xsl:with-param name="table" select="//table[@name=current()/@foreignTable]" />
+					    <xsl:with-param name="depth"
+									select="$max_depth" />
+				    </xsl:call-template>
+                </xsl:for-each>
+            </dummy>
 		</xf:instance>
 	</xsl:template>
 
@@ -617,8 +618,9 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-
-	<!-- bindings for subfeatures -->
+    <!--
+        bindings for subfeatures 
+    -->
 	<xsl:template
 		match="column[../foreign-key[reference/@local=current()/@name]]"
 		mode="binding" priority="3">
@@ -626,7 +628,6 @@
 			select="../foreign-key[reference/@local=current()/@name]"
 			mode="binding" />
 	</xsl:template>
-
 	<!-- 
 		bindings for subfeature ids
 	-->
@@ -838,7 +839,6 @@
 			</xsl:attribute>
 		</xsl:element>
 	</xsl:template>
-
 	<!-- 
 		template to build the form
 	-->
@@ -883,17 +883,28 @@
 					</xf:case>
 					<!-- add cases for subfeature prototype manipulation -->
 					<xsl:for-each
-						select="../table[foreign-key/@foreignTable=current()/@name]">
-						<xf:case id="{lower-case(@name)}">
-							<xsl:apply-templates select="."
-								mode="form-case" />
+						select="foreign-key">
+                        <xf:case id="{concat('new_',lower-case(@foreignTable))}">
+                            <xsl:call-template name="form-new-subfeature">
+                                <xsl:with-param name="table" select="//table[@name=current()/@foreignTable]" />
+							    <xsl:with-param name="depth"
+                                    select="$max_depth - 1" />
+						    </xsl:call-template>
+                            <xf:trigger>
+                                 <xf:label>Save</xf:label>
+                                 <xf:action ev:event="DOMActivate">
+                                 </xf:action>
+                            </xf:trigger>
+                            <xf:trigger>
+                                <xf:label>Back</xf:label>
+                                <xf:toggle ev:event="DOMActivate" case="{lower-case(../@name)}"/>
+                            </xf:trigger>
 						</xf:case>
 					</xsl:for-each>
 				</xf:switch>
 			</div>
 		</div>
 	</xsl:template>
-
 	<!--
 		Creates an xform:group for the current table (feature) and processes the columns
 	-->
@@ -950,13 +961,11 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-
 	<!--  
 		NOTE: The following xform control generating templates are 
 		overidable with more specific content templates by selecting
 		on the column name.
 	-->
-
 	<!--  
 		template to insert an xform input control
 	-->
@@ -984,7 +993,6 @@
         </xsl:element>
         </xsl:if>
     </xsl:template>
-
 	<!--  
 		template to insert an xform select1 control 
 	-->
@@ -996,7 +1004,6 @@
 				select="../foreign-key[reference/@local=current()/@name]" />
 		</xsl:call-template>
 	</xsl:template>
-
 	<!-- 
 		template to build an xforms select1 control
 	-->
@@ -1005,7 +1012,8 @@
 		<!-- the feature name is the name of the foreign table -->
 		<xsl:variable name="feature_name">
 			<xsl:value-of select="lower-case($fk_node/@foreignTable)" />
-		</xsl:variable>
+        </xsl:variable>
+        <div style="display:block;">
 		<xsl:element name="xf:select1">
 			<xsl:attribute name="ref">
 				<xsl:value-of
@@ -1076,14 +1084,36 @@
 					<xsl:attribute name="at">1</xsl:attribute>
 				</xsl:element>
             </xsl:element>
-            <!-- add an 'Add' button to create a new feature in this list -->
-			<xf:trigger>
-				<xf:label>Add</xf:label>
-				<xf:action ev:event="DOMActivate">
-					<xf:toggle case="new_device_type"/>
-				</xf:action>
-			</xf:trigger>
-		</xsl:element>
+        </xsl:element>
+        <!-- add an 'Add' button to create a new feature in this select1 list -->
+		<xf:trigger>
+			<xf:label>+</xf:label>
+			<xf:action ev:event="DOMActivate">
+                <xf:toggle case="{concat('new_',$feature_name)}"/>
+			</xf:action>
+        </xf:trigger>
+        </div>
+    </xsl:template>
+	<!--
+		form case to build a new subfeature for adding to a select1 list
+	-->
+	<xsl:template name="form-new-subfeature">
+		<xsl:param name="table" />
+		<xsl:param name="depth" />
+		<xsl:choose>
+			<xsl:when test="$depth > $max_depth">
+			</xsl:when>
+			<xsl:otherwise>
+				<!--  add an xform group to reference the feature root node in model -->
+				<xsl:element name="xf:group">
+                    <xsl:attribute name="ref">
+                        <xsl:value-of select="concat(&quot;instance('_prototypes')/&quot;,$namespace,lower-case($table/@name))"/>
+					</xsl:attribute>
+                    <!-- handle each column -->
+                    <xsl:apply-templates select="$table/column" mode="form" />
+				</xsl:element>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<!-- 
@@ -1111,6 +1141,5 @@
 			</xsl:choose>
 		</xsl:if>
 	</xsl:template>
-
 
 </xsl:stylesheet>

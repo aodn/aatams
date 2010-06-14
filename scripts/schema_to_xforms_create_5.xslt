@@ -149,7 +149,7 @@
 									</xsl:when>
 									<xsl:otherwise>
 										<xsl:element
-											name="{concat($namespace, lower-case(replace(@name,'_id','')), '_ref')}">
+											name="{concat($namespace, replace(lower-case(@name),'_id$',''), '_ref')}">
 											<xsl:call-template
 												name="model-subfeature">
 												<xsl:with-param
@@ -180,7 +180,7 @@
 						<xsl:for-each
 							select="/database/table[not(@name=$parent_table_name) and foreign-key/@foreignTable=$table/@name and not(@codeTable='true')]">
 							<xsl:element
-								name="{concat($namespace, lower-case(./@name), '_ref')}">
+								name="{concat($namespace, replace(lower-case(./@name),'_id$',''), '_ref')}">
 								<xsl:call-template
 									name="model-feature">
 									<xsl:with-param
@@ -267,7 +267,7 @@
 							<xsl:variable name="foreign_table_name"
 								select="../foreign-key[reference/@local=current()/@name][1]/@foreignTable" />
 							<xsl:element
-								name="{concat($namespace, lower-case(replace(@name,'_id','')), '_ref')}">
+								name="{concat($namespace, replace(lower-case(@name),'_id$',''), '_ref')}">
 								<xsl:call-template
 									name="model-subfeature">
 									<xsl:with-param name="table_name"
@@ -351,7 +351,7 @@
 	<!-- 
 		template for subfeature prototypes
 	-->
-	<xsl:template
+	<!--xsl:template
 		match="column[../foreign-key[reference/@local=current()/@name]]"
 		mode="prototype" priority="3">
 		<xsl:variable name="foreignTable">
@@ -361,7 +361,7 @@
 		<xsl:element name="{concat($namespace,$foreignTable,'_ref')}">
 
 		</xsl:element>
-	</xsl:template>
+	</xsl:template-->
 
 	<!--
 		template to create data bindings
@@ -411,7 +411,7 @@
 									<xsl:with-param
 										name="parent_table_name" select="$table/@name" />
 									<xsl:with-param name="path"
-										select="concat($path,'/',$namespace,lower-case($foreign_table_name),'_ref')" />
+										select="concat($path,'/',$namespace,replace(lower-case(@name),'_id$',''),'_ref')" />
 									<xsl:with-param name="table_name"
 										select="$foreign_table_name" />
 									<xsl:with-param name="parent_id"
@@ -541,7 +541,7 @@
 							<xsl:with-param name="parent_table_name"
 								select="$table/@name" />
 							<xsl:with-param name="path"
-								select="concat($path,'/',$namespace,lower-case($table/@name),'_ref')" />
+								select="concat($path,'/',$namespace,replace(lower-case($table/@name),'_id$',''),'_ref')" />
 							<xsl:with-param name="table_name"
 								select="$foreign_table_name" />
 							<xsl:with-param name="parent_id"
@@ -706,7 +706,7 @@
 			<xsl:for-each select="foreign-key">
 				<xsl:call-template name="initialise-subfeature">
 					<xsl:with-param name="path"
-						select="concat(&quot;instance('wfs-t')&quot;,'/wfs:Insert/wfs:FeatureCollection/gml:featureMember/',$namespace,lower-case(../@name),'/',$namespace,lower-case(@foreignTable),'_ref')" />
+                        select="concat(&quot;instance('wfs-t')&quot;,'/wfs:Insert/wfs:FeatureCollection/gml:featureMember/',$namespace,lower-case(../@name),'/',$namespace,replace(lower-case(reference/@local),'_id$',''),'_ref')" />
 					<xsl:with-param name="foreign-key" select="." />
 					<xsl:with-param name="depth" select="number(1)" />
 				</xsl:call-template>
@@ -738,7 +738,7 @@
 				<!-- what to put there -->
 				<xsl:attribute name="origin">
 						<xsl:value-of
-						select="concat(&quot;instance('&quot;, lower-case($foreign_table_name), &quot;')/gml:featureMember/&quot;, $namespace, lower-case($foreign_table_name), '[1]')" />
+						select="concat(&quot;instance('&quot;, lower-case($foreign_table_name), &quot;')/gml:featureMember[1]/&quot;, $namespace, lower-case($foreign_table_name))" />
 					</xsl:attribute>
 			</xsl:element>
 			<!-- delete the dummy one -->
@@ -1009,7 +1009,7 @@
 		<xsl:element name="xf:select1">
 			<xsl:attribute name="ref">
 				<xsl:value-of
-					select="concat($namespace,$feature_name,'_ref/',$namespace,$feature_name,'/@gml:id')" />
+                    select="concat($namespace,replace(lower-case($fk_node/reference/@local),'_id$',''),'_ref/',$namespace,$feature_name,'/@gml:id')" />
 			</xsl:attribute>
 			<xsl:attribute name="appearance">minimal</xsl:attribute>
 			<xsl:attribute name="incremental">true()</xsl:attribute>
@@ -1032,7 +1032,13 @@
 				<xsl:element name="xf:label">
                     <xsl:attribute name="ref">
                         <xsl:value-of select="$namespace" />
-						<xsl:text>name</xsl:text>
+                        <!-- find the displayed property from the unique index of the foreign table-->
+                        <xsl:choose>
+                            <xsl:when test="/database/table[@name=$fk_node/@foreignTable]/unique[@name='UNIQUE_INDEX']">
+                                <xsl:value-of select="/database/table[@name=$fk_node/@foreignTable]/unique[@name='UNIQUE_INDEX']/column[1]/@name"/>
+                            </xsl:when>
+                            <xsl:otherwise>name</xsl:otherwise>
+                        </xsl:choose>
 					</xsl:attribute>
 				</xsl:element>
 			</xsl:element>
@@ -1059,7 +1065,7 @@
 					<!-- what to put there -->
 					<xsl:attribute name="origin">
 						<xsl:value-of
-							select="concat(&quot;instance('&quot;, $feature_name, &quot;')/gml:featureMember/&quot;, $feature_name, '[@gml:id=current()]')" />
+							select="concat(&quot;instance('&quot;, $feature_name, &quot;')/gml:featureMember/&quot;,$namespace,$feature_name,'[@gml:id=current()]')" />
 					</xsl:attribute>
 				</xsl:element>
 				<!-- delete the dummy one -->
@@ -1069,7 +1075,14 @@
 					</xsl:attribute>
 					<xsl:attribute name="at">1</xsl:attribute>
 				</xsl:element>
-			</xsl:element>
+            </xsl:element>
+            <!-- add an 'Add' button to create a new feature in this list -->
+			<xf:trigger>
+				<xf:label>Add</xf:label>
+				<xf:action ev:event="DOMActivate">
+					<xf:toggle case="new_device_type"/>
+				</xf:action>
+			</xf:trigger>
 		</xsl:element>
 	</xsl:template>
 

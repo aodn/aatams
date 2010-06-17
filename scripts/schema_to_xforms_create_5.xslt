@@ -23,7 +23,6 @@
 	
 	So for the time being these  
 -->
-
 <xsl:stylesheet version="2.0" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -57,7 +56,7 @@
 						<title>
                             <xsl:value-of select="$title"/>
                         </title>
-						<xsl:call-template name="model" />
+						<xsl:call-template name="models" />
 					</head>
 					<body>
                         <xsl:call-template name="form" />
@@ -67,16 +66,29 @@
 			</xsl:result-document>
 		</xsl:for-each>
 	</xsl:template>
-
 	<!-- 
-		template to build the model 
+		template to build the models 
 	-->
-	<xsl:template name="model">
-		<xf:model id="model1">
+    <xsl:template name="models">
+        <!-- add the primary model -->
+        <xsl:call-template name="model">
+            <xsl:with-param name="model-number" select="number(1)"/>
+        </xsl:call-template>    
+        <!-- add the subfeature prototypes as separate models -->
+        <xsl:for-each select="/database/table[@codeTable = 'true' and @name=current()/foreign-key/@foreignTable]">
+            <xsl:call-template name="model">
+                <xsl:with-param name="model-number" select="position()+1"/>
+            </xsl:call-template>
+        </xsl:for-each>
+    </xsl:template>
+	<!-- 
+		template to build a model from a table 
+    -->
+    <xsl:template name="model">
+        <xsl:param name="model-number" />
+        <xf:model id="{concat('model',$model-number)}">
 			<!-- add the transaction instance (sent to wfs) -->
             <xsl:call-template name="wfs-transaction" />
-			<!-- add the subfeature prototypes -->
-				<xsl:call-template name="prototypes" />
 			<!-- add the subfeature lists needed for select1 controls -->
 			<xsl:call-template name="wfs-response" />
 			<!-- add bindings for submission success or failure messages -->
@@ -90,13 +102,12 @@
 			<!-- action to select first subfeatures in lists -->
 			<xsl:call-template name="initialise-subfeatures" />
 		</xf:model>
-	</xsl:template>
-
+    </xsl:template>    
 	<!--
 		template to create xml base transaction for submission to WFS 
 	-->
 	<xsl:template name="wfs-transaction">
-		<xf:instance id="wfs-t">
+        <xf:instance id="{concat(lower-case(@name),'_wfs-t')}">
 			<wfs:Transaction version="1.1.0" service="WFS">
 				<wfs:Insert>
 					<wfs:FeatureCollection>
@@ -112,7 +123,6 @@
 			</wfs:Transaction>
 		</xf:instance>
 	</xsl:template>
-
 	<!-- 
 		recursive routine to add features (and subfeatures) to model
 	-->
@@ -198,7 +208,6 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-
 	<!-- 
 		template for foreign-key columns/properties.
 		we need to differentiate between two types of foreign keys:
@@ -246,7 +255,6 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-
 	<!--
 		recursive routine to add 'code' sub-features 
 		where are only interested in distinguishing columns or subfeatures
@@ -293,14 +301,12 @@
 			</xsl:for-each>
 		</xsl:element>
 	</xsl:template>
-
 	<!-- 
 		template to create instances containing lists of subfeatures obtained from WFS 	
 	-->
 	<xsl:template name="subfeature-lists">
 		<xsl:apply-templates select="foreign-key" mode="wfs-t" />
 	</xsl:template>
-
 	<!-- 
     template to create subfeature list instance from foreign-key.
     don't add it twice if same foreign table is referenced more than once.
@@ -318,52 +324,6 @@
             </xf:instance>
         </xsl:if>
 	</xsl:template>
-	<!-- 
-		template for adding prototype subfeatures.
-		any foreign keys mean that this feature (potentially) has
-		subfeature children, so create a prototype for adding a new child of
-		a particular subfeature type.
-	-->
-	<xsl:template name="prototypes">
-        <xf:instance id="_prototypes">
-            <dummy xmlns="">
-			    <xsl:for-each select="foreign-key">
-                    <xsl:call-template name="model-feature">
-                        <xsl:with-param name="table" select="//table[@name=current()/@foreignTable]" />
-					    <xsl:with-param name="depth"
-									select="$max_depth" />
-				    </xsl:call-template>
-                </xsl:for-each>
-            </dummy>
-		</xf:instance>
-	</xsl:template>
-
-	<xsl:template match="column" mode="prototype">
-		<!--xsl:choose>
-			<xsl:when test=""></xsl:when>
-			<xsl:otherwise></xsl:otherwise>
-			</xsl:choose-->
-	</xsl:template>
-
-	<xsl:template match="table" mode="prototype">
-		<xsl:apply-templates select="column" mode="prototype" />
-	</xsl:template>
-
-	<!-- 
-		template for subfeature prototypes
-	-->
-	<!--xsl:template
-		match="column[../foreign-key[reference/@local=current()/@name]]"
-		mode="prototype" priority="3">
-		<xsl:variable name="foreignTable">
-			<xsl:value-of
-				select="lower-case(../foreign-key[reference/@local=current()/@name][1]/@foreignTable)" />
-		</xsl:variable>
-		<xsl:element name="{concat($namespace,$foreignTable,'_ref')}">
-
-		</xsl:element>
-	</xsl:template-->
-
 	<!--
 		template to create data bindings
 	-->
@@ -452,8 +412,9 @@
 			</xsl:for-each>
 		</xsl:if>
 	</xsl:template>
-
-	<!-- differentiates between tables (code and non-code) and views -->
+    <!-- 
+    differentiates between tables (code and non-code) and view
+    -->
 	<xsl:template name="binding-subfeature">
 		<xsl:param name="parent_table_name" />
 		<xsl:param name="path" />
@@ -578,7 +539,6 @@
 			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
-
 	<!--
 		converts db type to xsd type 
 	-->
@@ -657,25 +617,18 @@
 			</xsl:attribute>
 		</xsl:element>
 	</xsl:template>
-
 	<!--
 		template to create form submission
 	-->
 	<xsl:template name="submission">
 		<xf:submission id="s01" ref="instance('wfs-t')" method="post"
 			action="{$wfs_url}" replace="instance" instance="resp">
-			<!-- xf:action ev:event="xforms-submit">
-				<xsl:apply-templates select="column" mode="submission" />
-				<xsl:apply-templates select="foreign-key"
-				mode="submission" />
-				</xf:action-->
 			<xf:message level="modeless"
 				ev:event="xforms-submit-error">
 				Submit error.
 			</xf:message>
-		</xf:submission>
+        </xf:submission>
 	</xsl:template>
-
 	<!--
 		template to create submission response instance
 	-->
@@ -684,7 +637,6 @@
 			<dummy xmlns="" />
 		</xf:instance>
 	</xsl:template>
-
 	<!--
 		template to create post submission messages
 	-->
@@ -696,7 +648,6 @@
 		<xf:bind id="_success_message"
 			nodeset="instance('resp')//ogc:FeatureId/@fid" type="xsd:string" />
 	</xsl:template>
-
 	<!-- 
 		template to set initial 'selected' subfeature to be the first in list
 	-->
@@ -715,7 +666,6 @@
 			<xf:dispatch name="xforms-revalidate" target="model1" />
 		</xf:action>
 	</xsl:template>
-
 	<!--
 		set @gml:id of subfeatures recursively
 	-->
@@ -1107,7 +1057,7 @@
 				<!--  add an xform group to reference the feature root node in model -->
 				<xsl:element name="xf:group">
                     <xsl:attribute name="ref">
-                        <xsl:value-of select="concat(&quot;instance('_prototypes')/&quot;,$namespace,lower-case($table/@name))"/>
+                        <xsl:value-of select="concat(&quot;instance('prototypes')/&quot;,$namespace,lower-case($table/@name))"/>
 					</xsl:attribute>
                     <!-- handle each column -->
                     <xsl:apply-templates select="$table/column" mode="form" />
@@ -1129,7 +1079,7 @@
 				<xsl:when test="contains($s,' ')">
 					<xsl:value-of
 						select="lower-case(substring-before($s,' '))" />
-					<xsl:text>&#160;</xsl:text>
+					<xsl:text> </xsl:text>
 					<xsl:call-template name="proper-case">
 						<xsl:with-param name="toconvert"
 							select="substring-after($s,' ')" />

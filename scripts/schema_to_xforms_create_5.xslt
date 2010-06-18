@@ -82,34 +82,50 @@
         </xsl:for-each>
     </xsl:template>
 	<!-- 
-		template to build a model from a table 
+    template to build a model from a <table> 
     -->
     <xsl:template name="model">
         <xsl:param name="model-number" />
         <xf:model id="{concat('model',$model-number)}">
 			<!-- add the transaction instance (sent to wfs) -->
-            <xsl:call-template name="wfs-transaction" />
-			<!-- add the subfeature lists needed for select1 controls -->
-			<xsl:call-template name="wfs-response" />
-			<!-- add bindings for submission success or failure messages -->
-			<xsl:call-template name="subfeature-lists" />
+            <xsl:call-template name="wfs-transaction">
+                <xsl:with-param name="model-number" select="$model-number"/>
+            </xsl:call-template>
+            <!-- add an instance to receive server response -->
+            <xsl:call-template name="wfs-response">
+                <xsl:with-param name="model-number" select="$model-number"/>
+            </xsl:call-template>
+            <!-- add the subfeature lists needed for select1 controls -->
+			<xsl:call-template name="subfeature-lists"/>
 			<!-- add the model node bindings -->
 			<xsl:call-template name="bindings" />
-			<!-- add an instance to receive server response -->
-			<xsl:call-template name="messages" />
+            <!-- add processing of submission success or failure -->
+            <xsl:choose>
+                <xsl:when test="$model-number=1">
+                    <xsl:call-template name="messages" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="process-response">
+                        <xsl:with-param name="model-number" select="$model-number"/>
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
 			<!-- add the xform submission details -->
-			<xsl:call-template name="submission" />
+            <xsl:call-template name="submission" >
+                <xsl:with-param name="model-number" select="$model-number"/>
+            </xsl:call-template>
 			<!-- action to select first subfeatures in lists -->
-			<xsl:call-template name="initialise-subfeatures" />
+			<xsl:call-template name="initialise-subfeatures"/>
 		</xf:model>
     </xsl:template>    
 	<!--
 		template to create xml base transaction for submission to WFS 
 	-->
-	<xsl:template name="wfs-transaction">
-        <xf:instance id="{concat(lower-case(@name),'_wfs-t')}">
+    <xsl:template name="wfs-transaction">
+        <xsl:param name="model-number" />
+        <xf:instance id="{concat('trans',$model-number)}">
 			<wfs:Transaction version="1.1.0" service="WFS">
-				<wfs:Insert>
+                <wfs:Insert>
 					<wfs:FeatureCollection>
 						<gml:featureMember>
 							<xsl:call-template name="model-feature">
@@ -330,7 +346,7 @@
 	<xsl:template name="bindings">
 		<xsl:call-template name="binding-feature">
 			<xsl:with-param name="path"
-				select="concat(&quot;instance('wfs-t')&quot;,'/wfs:Insert/wfs:FeatureCollection/gml:featureMember/',$namespace,lower-case(@name))" />
+				select="concat('wfs:Insert/wfs:FeatureCollection/gml:featureMember/',$namespace,lower-case(@name))" />
 			<xsl:with-param name="table" select="." />
 			<xsl:with-param name="parent_id" select="''" />
 			<xsl:with-param name="depth" select="number(1)" />
@@ -620,33 +636,62 @@
 	<!--
 		template to create form submission
 	-->
-	<xsl:template name="submission">
-		<xf:submission id="s01" ref="instance('wfs-t')" method="post"
-			action="{$wfs_url}" replace="instance" instance="resp">
+    <xsl:template name="submission">
+        <xsl:param name="model-number"/>
+        <xf:submission id="{concat('s',$model-number)}" method="post"
+			action="{$wfs_url}" replace="instance" instance="{concat('resp',$model-number)}">
 			<xf:message level="modeless"
 				ev:event="xforms-submit-error">
 				Submit error.
-			</xf:message>
+            </xf:message>
+            <!-- a successful submission of a new subfeature must trigger an insert of the new
+             subfeature into the relevant instance -->
+             <xsl:if test="$model-number > 1">
+                <xf:dispatch ev:event="xforms-submit" name="clear-response" target="{concat('model',$model-number)}" />
+                <xf:dispatch ev:event="xforms-submit-done" name="process-response" target="{concat('model',$model-number)}" />
+            </xsl:if>
         </xf:submission>
 	</xsl:template>
 	<!--
 		template to create submission response instance
 	-->
-	<xsl:template name="wfs-response">
-		<xf:instance id="resp">
+    <xsl:template name="wfs-response">
+        <xsl:param name="model-number"/>
+        <xf:instance id="{concat('resp',$model-number)}">
 			<dummy xmlns="" />
 		</xf:instance>
 	</xsl:template>
 	<!--
 		template to create post submission messages
 	-->
-	<xsl:template name="messages">
-		<xf:bind id="_error_message"
-			nodeset="instance('resp')//ServiceException"
+    <xsl:template name="messages">
+		<xf:bind id="error_message"
+			nodeset="instance('resp1')//ServiceException"
 			calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
 			type="xsd:string" />
-		<xf:bind id="_success_message"
-			nodeset="instance('resp')//ogc:FeatureId/@fid" type="xsd:string" />
+		<xf:bind id="success_message"
+			nodeset="instance('resp1')//ogc:FeatureId/@fid" type="xsd:string" />
+    </xsl:template>
+	<!--
+		template to process submission result
+	-->
+    <xsl:template name="process-response">
+        <xsl:param name="model-number"/>
+        <xsl:variable name="table-name" select="lower-case(@name)"/>
+        <xsl:variable name="fid" select="concat('instance(',&quot;'resp&quot;,$model-number,&quot;')//ogc:FeatureId/@fid&quot;)"/>
+        <xsl:variable name="nodeset" select="concat(&quot;instance('&quot;,$table-name,&quot;')/gml:featureMember/&quot;,$namespace,$table-name)"/> 
+        <xsl:variable name="origin" select="concat('instance(',&quot;'trans&quot;,$model-number,&quot;')/wfs:Insert/wfs:FeatureCollection/gml:featureMember/&quot;,$namespace,$table-name)"/>    
+        <xf:action ev:event="clear-response">
+            <xf:delete nodeset="{$fid}"/>
+        </xf:action>
+        <!-- copies the current subfeature (just created) to the instance on which select1 itemset is built -->
+        <xf:action ev:event="process-response" if="{$fid}">
+            <xf:setvalue ref="{concat($origin,'/@gml:id')}" value="{$fid}"/>
+            <xf:insert nodeset="{$nodeset}" origin="{$origin}"/>
+            <xf:setvalue ref="{concat(&quot;instance('trans1')//&quot;,$namespace,$table-name,'/@gml:id')}" value="{$fid}"/>
+            <xf:dispatch name="xforms-revalidate" target="model1" />
+            <xf:toggle case="home" />
+        </xf:action>
 	</xsl:template>
 	<!-- 
 		template to set initial 'selected' subfeature to be the first in list
@@ -658,7 +703,7 @@
 			<xsl:for-each select="foreign-key">
 				<xsl:call-template name="initialise-subfeature">
 					<xsl:with-param name="path"
-                        select="concat(&quot;instance('wfs-t')&quot;,'/wfs:Insert/wfs:FeatureCollection/gml:featureMember/',$namespace,lower-case(../@name),'/',$namespace,replace(lower-case(reference/@local),'_id$',''),'_ref')" />
+                        select="concat('wfs:Insert/wfs:FeatureCollection/gml:featureMember/',$namespace,lower-case(../@name),'/',$namespace,replace(lower-case(reference/@local),'_id$',''),'_ref')" />
 					<xsl:with-param name="foreign-key" select="." />
 					<xsl:with-param name="depth" select="number(1)" />
 				</xsl:call-template>
@@ -793,66 +838,68 @@
 		template to build the form
 	-->
 	<xsl:template name="form">
-		<div class="form">
-			<label>
-				<xsl:text>ADD </xsl:text>
-				<xsl:value-of
-					select="translate(upper-case(@name),'_',' ')" />
-			</label>
-			<div class="form-contents">
-				<xf:switch>
-					<xf:case id="{lower-case(@name)}" selected="true">
-						<xsl:call-template name="form-feature">
-							<xsl:with-param name="table" select="." />
-							<xsl:with-param name="depth"
-								select="number(1)" />
-						</xsl:call-template>
-						<xf:submit submission="s01">
-							<xf:label>Save</xf:label>
-						</xf:submit>
-						<xf:trigger>
-							<xf:label>Reset</xf:label>
-							<xf:reset ev:event="DOMActivate" />
-							<xf:dispatch ev:event="DOMActivate"
-								name="set-selected" target="model1" />
-							<xf:delete ev:event="DOMActivate"
-								nodeset="instance('resp')//ServiceException" />
-							<xf:delete ev:event="DOMActivate"
-								nodeset="instance('resp')//ogc:FeatureId/@fid" />
-						</xf:trigger>
-						<div id="error-message">
-							<xf:output bind="_error_message">
-								<xf:label>Error:</xf:label>
-							</xf:output>
-						</div>
-						<div id="success-message">
-							<xf:output bind="_success_message">
-								<xf:label>New Record Id:</xf:label>
-							</xf:output>
-						</div>
-					</xf:case>
-					<!-- add cases for subfeature prototype manipulation -->
-					<xsl:for-each
-						select="foreign-key">
-                        <xf:case id="{concat('new_',lower-case(@foreignTable))}">
-                            <xsl:call-template name="form-new-subfeature">
-                                <xsl:with-param name="table" select="//table[@name=current()/@foreignTable]" />
+        <div class="form">
+            <xsl:variable name="home"><xsl:value-of select="'home'"/></xsl:variable>
+			<xf:switch>
+                <xf:case id="{$home}" selected="true">
+                    <label><xsl:text>ADD </xsl:text><xsl:value-of select="translate(upper-case(@name),'_',' ')" /></label>
+			            <div class="form-contents">
+						    <xsl:call-template name="form-feature">
+							    <xsl:with-param name="table" select="." />
 							    <xsl:with-param name="depth"
-                                    select="$max_depth - 1" />
+								select="number(1)" />
 						    </xsl:call-template>
-                            <xf:trigger>
-                                 <xf:label>Save</xf:label>
-                                 <xf:action ev:event="DOMActivate">
-                                 </xf:action>
-                            </xf:trigger>
-                            <xf:trigger>
-                                <xf:label>Back</xf:label>
-                                <xf:toggle ev:event="DOMActivate" case="{lower-case(../@name)}"/>
-                            </xf:trigger>
+						    <xf:submit submission="s1">
+							    <xf:label>Save</xf:label>
+						    </xf:submit>
+						    <xf:trigger>
+							    <xf:label>Reset</xf:label>
+							    <xf:reset ev:event="DOMActivate" />
+							    <xf:dispatch ev:event="DOMActivate"
+								name="set-selected" target="model1" />
+							    <xf:delete ev:event="DOMActivate"
+								nodeset="instance('resp')//ServiceException" />
+							    <xf:delete ev:event="DOMActivate"
+								nodeset="instance('resp')//ogc:FeatureId/@fid" />
+						    </xf:trigger>
+						    <div class="error">
+							    <xf:output bind="error_message">
+								    <xf:label>Error:</xf:label>
+							    </xf:output>
+						    </div>
+						    <div class="success">
+							    <xf:output bind="success_message">
+                                    <xf:label>New Record Id:</xf:label>
+							    </xf:output>
+                            </div>
+                        </div>
+					</xf:case>
+					<!-- add cases for new subfeature generation -->
+                    <xsl:for-each select="/database/table[@codeTable = 'true' and @name=current()/foreign-key/@foreignTable]">
+                        <xf:case id="{concat('new_',lower-case(@name))}">
+                            <label><xsl:text>ADD </xsl:text><xsl:value-of select="translate(upper-case(@name),'_',' ')" /></label>
+			                <div class="form-contents">
+				                <xsl:element name="xf:group">
+                                    <xsl:attribute name="ref">
+                                        <xsl:value-of select="concat('wfs:Insert/wfs:FeatureCollection/gml:featureMember/',$namespace,lower-case(@name))"/>
+                                    </xsl:attribute>
+                                    <xsl:attribute name="model">
+                                        <xsl:value-of select="concat('model',position()+1)"/>
+					                </xsl:attribute>
+                                    <!-- handle each column -->
+                                    <xsl:apply-templates select="column" mode="form" />
+                                </xsl:element>
+                                <xf:submit submission="{concat('s',position()+1)}">
+							        <xf:label>Save</xf:label>
+						        </xf:submit>
+                                <xf:trigger>
+                                    <xf:label>Back</xf:label>
+                                    <xf:toggle ev:event="DOMActivate" case="{$home}"/>
+                                </xf:trigger>
+                            </div>
 						</xf:case>
 					</xsl:for-each>
 				</xf:switch>
-			</div>
 		</div>
 	</xsl:template>
 	<!--
@@ -861,55 +908,27 @@
 	<xsl:template name="form-feature">
 		<xsl:param name="table" />
 		<xsl:param name="depth" />
-		<xsl:choose>
-			<xsl:when test="$depth > $max_depth">
-				<!-- just add a select list for this feature -->
-				<!--  xsl:element
-					name="{concat($namespace,lower-case($table/@name))}">
-					<xsl:attribute name="gml:id" />
-					</xsl:element-->
-			</xsl:when>
-			<xsl:otherwise>
-				<!--  add an xform group to reference the feature root node in model -->
-				<xsl:element name="xf:group">
-					<xsl:attribute name="ref">
-						<xsl:choose>
-							<xsl:when test="$depth = 1">
-								<xsl:text>instance('wfs-t')/wfs:Insert/wfs:FeatureCollection/gml:featureMember/</xsl:text>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of
+        <xsl:if test="$depth &lt;= $max_depth">
+			<xsl:element name="xf:group">
+				<xsl:attribute name="ref">
+					<xsl:choose>
+						<xsl:when test="$depth = 1">
+							<xsl:text>wfs:Insert/wfs:FeatureCollection/gml:featureMember/</xsl:text>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of
 									select="concat($namespace,lower-case($table/@name),'_ref')" />
-							</xsl:otherwise>
-						</xsl:choose>
-						<xsl:value-of
-							select="concat($namespace,lower-case($table/@name))" />
-					</xsl:attribute>
-					<!-- handle each column -->
-					<xsl:apply-templates select="column" mode="form" />
-					<!-- add maxOccurs="unbounded" subfeatures by looking for foreign keys on other tables -->
-					<!-- not interested if a code table -->
-					<!-- xsl:if
-						test="$table/@codeTable = 'false' and $depth &lt; $max_depth">
-						<xsl:for-each
-						select="/database/table[not(@name=$parent_table_name) and foreign-key/@foreignTable=$table/@name and not(@codeTable='true')]">
-						<xsl:element
-						name="{concat($namespace, lower-case(./@name), '_ref')}">
-						<xsl:call-template
-						name="model-feature">
-						<xsl:with-param
-						name="parent_table_name" select="$table/@name" />
-						<xsl:with-param name="table"
-						select="." />
-						<xsl:with-param name="depth"
-						select="$max_depth" />
-						</xsl:call-template>
-						</xsl:element>
-						</xsl:for-each>
-						</xsl:if-->
-				</xsl:element>
-			</xsl:otherwise>
-		</xsl:choose>
+						</xsl:otherwise>
+					</xsl:choose>
+					<xsl:value-of select="concat($namespace,lower-case($table/@name))" />
+                </xsl:attribute>
+                <xsl:if test="$depth=1">
+                   <xsl:attribute name="model">model1</xsl:attribute>
+                </xsl:if>
+				<!-- handle each column -->
+		    	<xsl:apply-templates select="column" mode="form" />
+			</xsl:element>
+		</xsl:if>
 	</xsl:template>
 	<!--  
 		NOTE: The following xform control generating templates are 
@@ -963,7 +982,7 @@
 		<xsl:variable name="feature_name">
 			<xsl:value-of select="lower-case($fk_node/@foreignTable)" />
         </xsl:variable>
-        <div style="display:block;">
+        <div class="select1-group">
 		<xsl:element name="xf:select1">
 			<xsl:attribute name="ref">
 				<xsl:value-of
@@ -1018,18 +1037,18 @@
 				<xsl:element name="xf:insert">
 					<!-- where to put it -->
 					<xsl:attribute name="nodeset">
-						<xsl:value-of select="'context()/../*'" />
+                        <xsl:value-of select="'context()/../../*'" />
 					</xsl:attribute>
 					<!-- what to put there -->
 					<xsl:attribute name="origin">
 						<xsl:value-of
-							select="concat(&quot;instance('&quot;, $feature_name, &quot;')/gml:featureMember/&quot;,$namespace,$feature_name,'[@gml:id=current()]')" />
+							select="concat(&quot;instance('&quot;,$feature_name,&quot;')/gml:featureMember/&quot;,$namespace,$feature_name,'[@gml:id=current()]')" />
 					</xsl:attribute>
 				</xsl:element>
 				<!-- delete the dummy one -->
 				<xsl:element name="xf:delete">
 					<xsl:attribute name="nodeset">
-						<xsl:value-of select="'context()/../*'" />
+                        <xsl:value-of select="'context()/../../*'" />
 					</xsl:attribute>
 					<xsl:attribute name="at">1</xsl:attribute>
 				</xsl:element>
@@ -1044,28 +1063,6 @@
         </xf:trigger>
         </div>
     </xsl:template>
-	<!--
-		form case to build a new subfeature for adding to a select1 list
-	-->
-	<xsl:template name="form-new-subfeature">
-		<xsl:param name="table" />
-		<xsl:param name="depth" />
-		<xsl:choose>
-			<xsl:when test="$depth > $max_depth">
-			</xsl:when>
-			<xsl:otherwise>
-				<!--  add an xform group to reference the feature root node in model -->
-				<xsl:element name="xf:group">
-                    <xsl:attribute name="ref">
-                        <xsl:value-of select="concat(&quot;instance('prototypes')/&quot;,$namespace,lower-case($table/@name))"/>
-					</xsl:attribute>
-                    <!-- handle each column -->
-                    <xsl:apply-templates select="$table/column" mode="form" />
-				</xsl:element>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
 	<!-- 
 		template to convert control labels to proper-case
 	-->

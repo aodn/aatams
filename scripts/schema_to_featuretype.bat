@@ -1,1 +1,1 @@
-saxon aatams.xml schema_to_featuretype.xslt AATAMS_NEW.xsd
+saxon schema.xml schema_to_featuretype.xslt features.xsd

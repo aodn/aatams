@@ -96,7 +96,9 @@
                 <xsl:with-param name="model-number" select="$model-number"/>
             </xsl:call-template>
             <!-- add the subfeature lists needed for select1 controls -->
-			<xsl:call-template name="subfeature-lists"/>
+            <xsl:if test="$model-number=1">
+                <xsl:call-template name="subfeature-lists"/>
+            </xsl:if>    
 			<!-- add the model node bindings -->
 			<xsl:call-template name="bindings" />
             <!-- add processing of submission success or failure -->
@@ -115,7 +117,9 @@
                 <xsl:with-param name="model-number" select="$model-number"/>
             </xsl:call-template>
 			<!-- action to select first subfeatures in lists -->
-			<xsl:call-template name="initialise-subfeatures"/>
+            <xsl:call-template name="initialise">
+                <xsl:with-param name="model-number" select="$model-number"/>
+            </xsl:call-template>
 		</xf:model>
     </xsl:template>    
 	<!--
@@ -321,7 +325,12 @@
 		template to create instances containing lists of subfeatures obtained from WFS 	
 	-->
 	<xsl:template name="subfeature-lists">
-		<xsl:apply-templates select="foreign-key" mode="wfs-t" />
+        <xsl:apply-templates select="foreign-key" mode="wfs-t" />
+        <!-- include any subfeatures of those subfeatures as well -->
+        <xsl:comment>subfeatures of subfeatures</xsl:comment>
+        <xsl:for-each select="foreign-key">
+            <xsl:apply-templates select="//table[@name=current()/@foreignTable]/foreign-key" mode="wfs-t" />
+        </xsl:for-each>    
 	</xsl:template>
 	<!-- 
     template to create subfeature list instance from foreign-key.
@@ -577,6 +586,9 @@
 			</xsl:when>
 			<xsl:when test=". = 'LONGVARCHAR'">
 				<xsl:text>xsd:string</xsl:text>
+            </xsl:when>
+			<xsl:when test=". = 'BOOLEAN'">
+				<xsl:text>xsd:boolean</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:text>xsd:string</xsl:text>
@@ -665,11 +677,11 @@
 		template to create post submission messages
 	-->
     <xsl:template name="messages">
-		<xf:bind id="error_message"
-			nodeset="instance('resp1')//ServiceException"
+		<xf:bind id="error1"
+			nodeset="instance('resp1')//ows:ExceptionText"
 			calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
 			type="xsd:string" />
-		<xf:bind id="success_message"
+		<xf:bind id="success1"
 			nodeset="instance('resp1')//ogc:FeatureId/@fid" type="xsd:string" />
     </xsl:template>
 	<!--
@@ -680,7 +692,11 @@
         <xsl:variable name="table-name" select="lower-case(@name)"/>
         <xsl:variable name="fid" select="concat('instance(',&quot;'resp&quot;,$model-number,&quot;')//ogc:FeatureId/@fid&quot;)"/>
         <xsl:variable name="nodeset" select="concat(&quot;instance('&quot;,$table-name,&quot;')/gml:featureMember/&quot;,$namespace,$table-name)"/> 
-        <xsl:variable name="origin" select="concat('instance(',&quot;'trans&quot;,$model-number,&quot;')/wfs:Insert/wfs:FeatureCollection/gml:featureMember/&quot;,$namespace,$table-name)"/>    
+        <xsl:variable name="origin" select="concat('instance(',&quot;'trans&quot;,$model-number,&quot;')/wfs:Insert/wfs:FeatureCollection/gml:featureMember/&quot;,$namespace,$table-name)"/>
+        <xf:bind id="{concat('error',$model-number)}"
+            nodeset="{concat(&quot;instance('&quot;,'resp',$model-number,&quot;')//ows:ExceptionText&quot;)}"
+			calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)"
+			type="xsd:string" />    
         <xf:action ev:event="clear-response">
             <xf:delete nodeset="{$fid}"/>
         </xf:action>
@@ -694,21 +710,27 @@
         </xf:action>
 	</xsl:template>
 	<!-- 
-		template to set initial 'selected' subfeature to be the first in list
+    template to set initial 'selected' subfeature to be the first in list
+    also sets boolean fields to false
 	-->
-	<xsl:template name="initialise-subfeatures">
+    <xsl:template name="initialise">
+        <xsl:param name="model-number"/>
+        <xsl:variable name="path" select="concat(&quot;instance('trans&quot;,$model-number,&quot;')/wfs:Insert/wfs:FeatureCollection/gml:featureMember/&quot;)"/>
 		<xf:dispatch ev:event="xforms-ready" name="set-selected"
-			target="model1" />
-		<xf:action ev:event="set-selected">
+            target="{concat('model',$model-number)}" />
+        <xf:action ev:event="set-selected">
 			<xsl:for-each select="foreign-key">
 				<xsl:call-template name="initialise-subfeature">
 					<xsl:with-param name="path"
-                        select="concat('wfs:Insert/wfs:FeatureCollection/gml:featureMember/',$namespace,lower-case(../@name),'/',$namespace,replace(lower-case(reference/@local),'_id$',''),'_ref')" />
+                        select="concat($path,$namespace,lower-case(../@name),'/',$namespace,replace(lower-case(reference/@local),'_id$',''),'_ref')" />
 					<xsl:with-param name="foreign-key" select="." />
 					<xsl:with-param name="depth" select="number(1)" />
 				</xsl:call-template>
+            </xsl:for-each>
+            <xsl:for-each select="column[@type='BOOLEAN']">
+                <xf:setvalue ref="{concat($path,$namespace,lower-case(../@name),'/',$namespace,lower-case(@name))}" value="false()"/>
 			</xsl:for-each>
-			<xf:dispatch name="xforms-revalidate" target="model1" />
+			<xf:dispatch name="xforms-revalidate" target="{concat('model',$model-number)}" />
 		</xf:action>
 	</xsl:template>
 	<!--
@@ -746,7 +768,7 @@
 				<xsl:attribute name="at">1</xsl:attribute>
 			</xsl:element>
 			<!-- go to foreign table/view and look for more foreign-keys -->
-			<xsl:for-each
+			<!--xsl:for-each
 				select="/database/table[@name=$foreign_table_name and @codeTable='true']/foreign-key">
 				<xsl:call-template name="initialise-code-subfeature">
 					<xsl:with-param name="path"
@@ -779,7 +801,7 @@
 					<xsl:with-param name="foreign-key" select="." />
 					<xsl:with-param name="depth" select="$depth+1" />
 				</xsl:call-template>
-			</xsl:for-each>
+			</xsl:for-each-->
 		</xsl:if>
 	</xsl:template>
 	<!--
@@ -853,22 +875,21 @@
 							    <xf:label>Save</xf:label>
 						    </xf:submit>
 						    <xf:trigger>
-							    <xf:label>Reset</xf:label>
-							    <xf:reset ev:event="DOMActivate" />
-							    <xf:dispatch ev:event="DOMActivate"
-								name="set-selected" target="model1" />
-							    <xf:delete ev:event="DOMActivate"
-								nodeset="instance('resp')//ServiceException" />
-							    <xf:delete ev:event="DOMActivate"
-								nodeset="instance('resp')//ogc:FeatureId/@fid" />
+                                <xf:label>Reset</xf:label>
+                                <xf:action ev:event="DOMActivate">
+							        <xf:reset/>
+							        <xf:delete nodeset="instance('resp1')/ows:Exception" />
+                                    <xf:delete nodeset="instance('resp1')//ogc:FeatureId/@fid" />
+                                    <xf:dispatch name="set-selected" target="model1" />
+                                </xf:action>
 						    </xf:trigger>
 						    <div class="error">
-							    <xf:output bind="error_message">
+							    <xf:output bind="error1">
 								    <xf:label>Error:</xf:label>
 							    </xf:output>
 						    </div>
 						    <div class="success">
-							    <xf:output bind="success_message">
+							    <xf:output bind="success1">
                                     <xf:label>New Record Id:</xf:label>
 							    </xf:output>
                             </div>
@@ -896,6 +917,11 @@
                                     <xf:label>Back</xf:label>
                                     <xf:toggle ev:event="DOMActivate" case="{$home}"/>
                                 </xf:trigger>
+                                <div class="error">
+                                    <xf:output bind="{concat('error',position()+1)}">
+								        <xf:label>Error:</xf:label>
+							        </xf:output>
+						        </div>
                             </div>
 						</xf:case>
 					</xsl:for-each>
@@ -907,7 +933,7 @@
 	-->
 	<xsl:template name="form-feature">
 		<xsl:param name="table" />
-		<xsl:param name="depth" />
+        <xsl:param name="depth" />
         <xsl:if test="$depth &lt;= $max_depth">
 			<xsl:element name="xf:group">
 				<xsl:attribute name="ref">
@@ -942,16 +968,16 @@
         <xsl:if test="@primaryKey = 'false' or $include_pkeys_in_form = 'true'">
 		<xsl:element name="xf:input">
 			<xsl:attribute name="ref">
-					<xsl:value-of
+				<xsl:value-of
 					select="concat($namespace,lower-case(@name))" />
-				</xsl:attribute>
+			</xsl:attribute>
 			<xsl:attribute name="incremental">
-					<xsl:text>true()</xsl:text>
-				</xsl:attribute>
-                <xf:label>
+				<xsl:text>true()</xsl:text>
+			</xsl:attribute>
+            <xf:label>
                 <xsl:call-template name="proper-case">
 					<xsl:with-param name="toconvert"
-						select="replace(@name,'_',' ')" />
+						select="replace(replace(lower-case(@name),'_id$',''),'_',' ')" />
 				</xsl:call-template>
 			</xf:label>
 			<xsl:call-template name="help">
@@ -967,7 +993,7 @@
 	-->
 	<xsl:template
 		match="column[../foreign-key[reference/@local=current()/@name]]"
-		mode="form" priority="3">
+        mode="form" priority="3">
 		<xsl:call-template name="select1-from-foreign-key">
 			<xsl:with-param name="fk_node"
 				select="../foreign-key[reference/@local=current()/@name]" />
@@ -976,13 +1002,13 @@
 	<!-- 
 		template to build an xforms select1 control
 	-->
-	<xsl:template name="select1-from-foreign-key">
+	<xsl:template name="select1-from-foreign-key"> 
 		<xsl:param name="fk_node" />
 		<!-- the feature name is the name of the foreign table -->
 		<xsl:variable name="feature_name">
 			<xsl:value-of select="lower-case($fk_node/@foreignTable)" />
         </xsl:variable>
-        <div class="select1-group">
+        <div class="select1-group">   
 		<xsl:element name="xf:select1">
 			<xsl:attribute name="ref">
 				<xsl:value-of
@@ -993,7 +1019,7 @@
 			<xf:label>
 				<xsl:call-template name="proper-case">
 					<xsl:with-param name="toconvert"
-						select="translate($fk_node[1]/reference/@local,'_',' ')" />
+						select="replace(lower-case(translate($fk_node[1]/reference/@local,'_',' ')),' id','')" />
 				</xsl:call-template>
 			</xf:label>
 			<xsl:element name="xf:itemset">
@@ -1012,7 +1038,7 @@
                         <!-- find the displayed property from the unique index of the foreign table-->
                         <xsl:choose>
                             <xsl:when test="/database/table[@name=$fk_node/@foreignTable]/unique[@name='UNIQUE_INDEX']">
-                                <xsl:value-of select="/database/table[@name=$fk_node/@foreignTable]/unique[@name='UNIQUE_INDEX']/column[1]/@name"/>
+                                <xsl:value-of select="/database/table[@name=$fk_node/@foreignTable]/unique[@name='UNIQUE_INDEX']/unique-column[1]/@name"/>
                             </xsl:when>
                             <xsl:otherwise>name</xsl:otherwise>
                         </xsl:choose>

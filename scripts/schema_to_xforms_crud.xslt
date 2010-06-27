@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
-<xsl:stylesheet version="2.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:emii="http://www.imos.org.au/emii" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml">
+<xsl:stylesheet version="2.0" xmlns="http://www.w3.org/1999/xhtml"
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns:emii="http://www.imos.org.au/emii"
+xmlns:xf="http://www.w3.org/2002/xforms"
+xmlns:ev="http://www.w3.org/2001/xml-events" 
+xmlns:wfs="http://www.opengis.net/wfs" 
+xmlns:ogc="http://www.opengis.net/ogc"
+xmlns:ows="http://www.opengis.net/ows" 
+xmlns:gml="http://www.opengis.net/gml"
+xmlns:fn="http://www.imos.org.au/functions">
 	<xsl:output name="xml" method="xml" encoding="UTF-8" indent="yes" />
 	<xsl:include href="help.xslt" />
 	<xsl:include href="globals.xslt" />
@@ -83,10 +93,12 @@
 								</xf:case>
 								<xf:case id="edit">
 									<div class="tab-content">
+										<xsl:call-template name="edit" />
 									</div>
 								</xf:case>
 								<xf:case id="delete">
 									<div class="tab-content">
+										<xsl:call-template name="delete" />
 									</div>
 								</xf:case>
 							</xf:switch>
@@ -111,15 +123,17 @@
 						<xsl:with-param name="depth" select="number(1)" />
 					</xsl:call-template>
 				</xsl:variable>
+				<!-- find how many heading rows needed -->
+				<xsl:variable name="max_depth" select="max($headings/descendant-or-self::*/count(ancestor-or-self::*))" />
 				<!-- build the table from the nodeset -->
-				<xsl:variable name="max_depth">5</xsl:variable>
 				<xsl:for-each select="2 to $max_depth">
 					<tr>
 						<xsl:if test=". = 2">
-							<th rowspan="{$max_depth}" colspan="1">No.</th>
+							<th colspan="1" rowspan="{$max_depth - 1}">No.</th>
 						</xsl:if>
 						<xsl:call-template name="display_view_all_table_column_headings">
 							<xsl:with-param name="heading" select="$headings" />
+							<xsl:with-param name="max_depth" select="$max_depth" />
 							<xsl:with-param name="target_depth" select="." />
 							<xsl:with-param name="depth" select="number(1)" />
 						</xsl:call-template>
@@ -207,8 +221,29 @@
 	<!--
 		recursive template to display all column headings
 	-->
+	<xsl:template name="find_depths">
+		<xsl:param name="headings" />
+		<xsl:param name="depth" />
+		<xsl:choose>
+			<xsl:when test="count($headings/child::*)=0">
+				<xsl:sequence select="$depth" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:for-each select="$headings/child::*">
+					<xsl:call-template name="find_depths">
+						<xsl:with-param name="headings" select="." />
+						<xsl:with-param name="depth" select="$depth + 1" />
+					</xsl:call-template>
+				</xsl:for-each>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!--
+		recursive template to display all column headings
+	-->
 	<xsl:template name="display_view_all_table_column_headings">
 		<xsl:param name="heading" />
+		<xsl:param name="max_depth" />
 		<xsl:param name="target_depth" />
 		<xsl:param name="depth" />
 		<xsl:choose>
@@ -216,6 +251,7 @@
 				<xsl:for-each select="$heading/*[count(child::*)&gt;0]">
 					<xsl:call-template name="display_view_all_table_column_headings">
 						<xsl:with-param name="heading" select="." />
+						<xsl:with-param name="max_depth" select="$max_depth" />
 						<xsl:with-param name="target_depth" select="$target_depth" />
 						<xsl:with-param name="depth" select="$depth + 1" />
 					</xsl:call-template>
@@ -240,7 +276,7 @@
 									<xsl:text>1</xsl:text>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:value-of select="$max_depth - $depth" />
+									<xsl:value-of select="$max_depth - $depth + 1" />
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:attribute>
@@ -290,12 +326,22 @@
 									<!--xsl:if test="../unique[@name='UNIQUE_INDEX']/unique-column[@name=current()/@name]"-->
 									<xsl:if test="@required = 'true'">
 										<td>
+											<xsl:attribute name="class">
+												<xsl:choose>
+													<xsl:when test="@type = 'VARCHAR'">
+														text
+                                                    </xsl:when>
+													<xsl:otherwise>
+														numeric
+                                                    </xsl:otherwise>
+												</xsl:choose>
+											</xsl:attribute>
 											<xf:output ref="{concat($path,$namespace,lower-case(@name))}" />
 										</td>
 									</xsl:if>
 								</xsl:otherwise>
 							</xsl:choose>
-						</xsl:if>	
+						</xsl:if>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:for-each>
@@ -315,9 +361,13 @@
 				<xsl:with-param name="model-number" select="position()+1" />
 			</xsl:call-template>
 		</xsl:for-each>
+		<!-- add the feature edit model -->
+		<xsl:call-template name="edit_model" />
+		<!-- add the feature deletion model -->
+		<xsl:call-template name="delete_model" />
 	</xsl:template>
 	<!-- 
-    template to build a model from a <table> 
+    	template to build a model from a <table> 
     -->
 	<xsl:template name="model">
 		<xsl:param name="model-number" />
@@ -369,6 +419,120 @@
 				</wfs:Insert>
 			</wfs:Transaction>
 		</xf:instance>
+	</xsl:template>
+	<!-- 
+    	template to build an feature editing model> 
+    -->
+	<xsl:template name="edit_model">
+		<xsl:variable name="feature_name" select="concat($namespace,lower-case(@name))" />
+		<xf:model id="edit_model">
+			<xf:instance id="id1">
+				<dummy xmlns="">
+					<id />
+				</dummy>
+			</xf:instance>
+			<xf:instance id="find1">
+				<wfs:GetFeature>
+					<wfs:Query typeName="{$feature_name}">
+						<ogc:Filter>
+							<ogc:GmlObjectId gml:id="" />
+						</ogc:Filter>
+					</wfs:Query>
+				</wfs:GetFeature>
+			</xf:instance>
+			<xf:instance id="view1">
+				<wfs:FeatureCollection>
+					<gml:featureMember>
+						<xsl:element name="{$feature_name}" />
+					</gml:featureMember>
+				</wfs:FeatureCollection>
+			</xf:instance>
+			<xf:instance id="edit1">
+				<wfs:Transaction version="1.1.0" service="WFS">
+					<wfs:Update typeName="{$feature_name}">
+						<wfs:Property>
+							<wfs:Name/>
+							<wfs:Value fid=""/>
+						</wfs:Property>
+						<ogc:Filter>
+							<ogc:GmlObjectId gml:id="" />
+						</ogc:Filter>
+					</wfs:Update>
+				</wfs:Transaction>
+			</xf:instance>
+			<xf:instance id="edit_save">
+				<dummy xmlns="" >
+					<wfs:Update/>
+				</dummy>
+			</xf:instance>
+			<xf:instance id="edit_resp">
+				<dummy xmlns="" />
+			</xf:instance>
+			<xf:bind id="edit_error" nodeset="instance('edit_resp')//ows:ExceptionText" calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)" type="xsd:string" />
+			<xf:bind id="edit_success" nodeset="instance('edit_resp')//ogc:FeatureId/@fid" type="xsd:string" />
+			<xf:action ev:event="clear-response">
+				<xf:delete nodeset="instance('edit_resp')//ogc:FeatureId/@fid" />
+			</xf:action>
+			<xf:action ev:event="process-response" if="instance('edit_resp')//ogc:FeatureId/@fid">
+			</xf:action>
+			<xf:submission id="edit_submit1" ref="instance('find1')" method="post" action="../services" replace="instance" instance="view1">
+				<xf:setvalue ev:event="xforms-submit" ref="instance('find1')//ogc:GmlObjectId/@gml:id" value="{concat(&quot;concat('&quot;,lower-case(@name),&quot;.',instance('id1')//id)&quot;)}" />
+				<xf:setvalue ev:event="xforms-submit" ref="instance('edit1')//ogc:GmlObjectId/@gml:id" value="{concat(&quot;concat('&quot;,lower-case(@name),&quot;.',instance('id1')//id)&quot;)}" /> 
+				<xf:action ev:event="xforms-submit-done" if="instance('view1')/gml:featureMember">
+					<xf:toggle case="do_edit" />
+				</xf:action>
+			</xf:submission>
+			<xf:submission id="edit_submit2" ref="instance('edit1')" method="post" action="../services" replace="instance" instance="edit_resp">
+				<xf:action ev:event="xforms-submit">
+	                 <xf:dispatch name="clear-response" target="edit_model"/>
+	                 <xf:insert nodeset="instance('edit_save')/wfs:Update" origin="instance('edit1')/wfs:Update"/>
+	                 <xf:delete nodeset="instance('edit_save')/wfs:Update" at="1"/>
+	                 <xf:delete nodeset="instance('edit1')//@fid"/>
+	                 <xf:delete nodeset="instance('edit1')//wfs:Property[wfs:Name = '']"/>
+	             </xf:action>    
+	            <xf:message level="modeless" ev:event="xforms-submit-error">
+					Submit error.
+	            </xf:message>
+	            <xf:action ev:event="xforms-submit-done">
+	                <xf:insert nodeset="instance('edit1')/wfs:Update" origin="instance('edit_save')/wfs:Update" />
+	                <xf:delete nodeset="instance('edit1')/wfs:Update" at="1" />
+	                <xf:dispatch name="process-response" target="edit_model"/>
+	             </xf:action>
+			</xf:submission>
+		</xf:model>
+	</xsl:template>
+	<!--
+    	template to build a model for editing feature 
+    -->
+	<xsl:template name="delete_model">
+		<xf:model id="delete_model">
+			<xf:instance id="delete1">
+				<wfs:Transaction version="1.1.0" service="WFS">
+					<wfs:Delete typeName="{concat($namespace,lower-case(@name))}">
+						<ogc:Filter>
+							<ogc:GmlObjectId gml:id="" />
+						</ogc:Filter>
+					</wfs:Delete>
+				</wfs:Transaction>
+			</xf:instance>
+			<xf:instance id="delete_resp">
+				<dummy xmlns="" />
+			</xf:instance>
+			<xf:bind id="delete_error" nodeset="instance('delete_resp')//ows:ExceptionText" calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)" type="xsd:string" />
+			<xf:bind id="delete_success" nodeset="instance('delete_resp')//ogc:FeatureId/@fid" type="xsd:string" />
+			<xf:action ev:event="clear-response">
+				<xf:delete nodeset="instance('delete_resp')//ogc:FeatureId/@fid" />
+			</xf:action>
+			<xf:action ev:event="process-response" if="instance('delete_resp')//ogc:FeatureId/@fid">
+			</xf:action>
+			<xf:submission id="delete_submit" method="post" action="../services" replace="instance" instance="delete_resp">
+				<xf:message level="modeless" ev:event="xforms-submit-error">
+					Submit error.
+            	</xf:message>
+				<xf:dispatch ev:event="xforms-submit" name="clear-response" target="delete_model" />
+				<xf:dispatch ev:event="xforms-submit-done" name="process-response" target="delete_model" />
+			</xf:submission>
+		</xf:model>
 	</xsl:template>
 	<!-- 
 		recursive routine to add features (and subfeatures) to model
@@ -525,34 +689,48 @@
 				<xsl:value-of select="concat($namespace,lower-case(@name))" />
 			</xsl:attribute>
 		</xf:instance>
-		<xsl:apply-templates select="foreign-key" mode="wfs-t" />
-		<!-- include any subfeatures of those subfeatures as well -->
-		<xsl:if test="//table[@name=current()/foreign-key/@foreignTable]/foreign-key">
-			<xsl:comment>subfeatures of subfeatures</xsl:comment>
-			<xsl:for-each select="foreign-key">
-				<xsl:apply-templates select="//table[@name=current()/@foreignTable]/foreign-key" mode="wfs-t" />
-			</xsl:for-each>
-		</xsl:if>
+		<!-- find a list of foreign-keys recursively -->
+		<xsl:variable name="foreign-keys">
+			<xsl:call-template name="find_foreign_keys">
+				<xsl:with-param name="table" select="." />
+				<xsl:with-param name="depth" select="number(1)" />
+			</xsl:call-template>
+		</xsl:variable>
+		<!-- add in the subfeature instances -->
+		<xsl:for-each select="$foreign-keys/*">
+			<xsl:sort select="@foreignTable" />
+			<xsl:if test="not(./preceding-sibling::*/@foreignTable = ./@foreignTable)">
+				<xf:instance>
+					<xsl:attribute name="id">
+						<xsl:value-of select="lower-case(@foreignTable)" />
+					</xsl:attribute>
+					<xsl:attribute name="src">
+						<xsl:value-of select="$get_feature_url" />
+						<xsl:value-of select="concat($namespace,lower-case(@foreignTable))" />
+					</xsl:attribute>
+				</xf:instance>
+			</xsl:if>
+		</xsl:for-each>
 		<!-- add grid instance -->
 		<xf:instance id="grid1">
 			<xf:data pos="0" stride="30" />
 		</xf:instance>
 	</xsl:template>
 	<!-- 
-    template to create subfeature list instance from foreign-key.
-    don't add it twice if same foreign table is referenced more than once.
+    	search for all needed foreign-keys
 	-->
-	<xsl:template match="foreign-key" mode="wfs-t">
-		<xsl:if test="count(preceding-sibling::foreign-key[@foreignTable=current()/@foreignTable])=0">
-			<xf:instance>
-				<xsl:attribute name="id">
-					<xsl:value-of select="lower-case(@foreignTable)" />
-				</xsl:attribute>
-				<xsl:attribute name="src">
-					<xsl:value-of select="$get_feature_url" />
-					<xsl:value-of select="concat($namespace,lower-case(@foreignTable))" />
-				</xsl:attribute>
-			</xf:instance>
+	<xsl:template name="find_foreign_keys">
+		<xsl:param name="table" />
+		<xsl:param name="depth" />
+		<xsl:copy-of select="$table/foreign-key" />
+		<xsl:if test="$depth &lt;= $max_depth">
+			<xsl:value-of select="$table/foreign-key" />
+			<xsl:for-each select="//table[@name=$table/foreign-key/@foreignTable]">
+				<xsl:call-template name="find_foreign_keys">
+					<xsl:with-param name="table" select="." />
+					<xsl:with-param name="depth" select="$depth + 1" />
+				</xsl:call-template>
+			</xsl:for-each>
 		</xsl:if>
 	</xsl:template>
 	<!--
@@ -566,6 +744,9 @@
 			<xsl:with-param name="depth" select="number(1)" />
 		</xsl:call-template>
 	</xsl:template>
+	<!--
+		
+	-->
 	<xsl:template name="binding-feature">
 		<xsl:param name="parent_table_name" />
 		<xsl:param name="path" />
@@ -621,6 +802,15 @@
 							<xsl:attribute name="type">
 								<xsl:apply-templates select="@type" />
 							</xsl:attribute>
+							<xsl:if test="@type = 'VARCHAR'">
+								<xsl:attribute name="constraint">
+									<xsl:text>string-length(.) &lt;= </xsl:text>
+									<xsl:value-of select="@size" />
+								</xsl:attribute>
+							</xsl:if>
+							<xsl:attribute name="type">
+								<xsl:apply-templates select="@type" />
+							</xsl:attribute>
 						</xsl:element>
 					</xsl:otherwise>
 				</xsl:choose>
@@ -628,7 +818,7 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- 
-    differentiates between tables (code and non-code) and view
+    	differentiates between tables (code and non-code) and view
     -->
 	<xsl:template name="binding-subfeature">
 		<xsl:param name="parent_table_name" />
@@ -760,6 +950,9 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	<!--
+	
+	-->
 	<xsl:template match="@required">
 		<xsl:choose>
 			<xsl:when test="current()='true'">
@@ -861,8 +1054,8 @@
 		</xf:action>
 	</xsl:template>
 	<!-- 
-    template to set initial 'selected' subfeature to be the first in list
-    also sets boolean fields to false
+    	template to set initial 'selected' subfeature to be the first in list
+    	also sets boolean fields to false
 	-->
 	<xsl:template name="initialise">
 		<xsl:param name="model-number" />
@@ -1078,6 +1271,179 @@
 			</xf:switch>
 		</div>
 	</xsl:template>
+	<!-- 
+		template to build the edit form
+	-->
+	<xsl:template name="edit">
+		<div class="form">
+			<xf:switch>
+				<xf:case id="select_edit">
+					<xf:input ref="instance('id1')/id">
+						<xf:label>
+							<xsl:call-template name="proper-case">
+								<xsl:with-param name="toconvert" select="concat('ENTER ' ,replace(@name,'_',' ') ,' ID')" />
+							</xsl:call-template>
+						</xf:label>
+					</xf:input>
+					<xf:submit submission="edit_submit1">
+						<xf:label>Find</xf:label>
+					</xf:submit>
+				</xf:case>
+				<xf:case id="do_edit">
+					<xf:group ref="{concat(&quot;instance('view1')/gml:featureMember/&quot;,$namespace,lower-case(@name))}">
+						<label>
+							<xsl:text>EDIT </xsl:text>
+							<xsl:value-of select="translate(upper-case(@name),'_',' ')" />
+						</label>
+						<table class="edit">
+							<tbody>
+								<xsl:for-each select="column[not(@primaryKey = 'true')]">
+									<tr>
+										<td>
+											<xsl:apply-templates select="." mode="display" />
+										</td>
+										<td>
+											<xf:trigger>
+												<xf:label>Edit</xf:label>
+												<xf:action ev:event="DOMActivate">
+													<xf:insert nodeset="instance('edit1')/wfs:Update/wfs:Property" if="{concat(&quot;count(instance('edit1')/wfs:Update/wfs:Property[wfs:Name = '&quot;,fn:property-name(@name),&quot;']) = 0&quot;)}" at="1" position="before" />
+													<xf:setvalue ref="instance('edit1')/wfs:Update/wfs:Property[position()=1]/wfs:Name" value="{concat(&quot;'&quot;,fn:property-name(@name),&quot;'&quot;)}"/>
+												</xf:action>
+											</xf:trigger>
+										</td>
+										<td>
+											<xsl:apply-templates select="." mode="edit" />
+										</td>
+									</tr>
+								</xsl:for-each>
+							</tbody>
+						</table>
+						<xf:submit submission="edit_submit2">
+							<xf:label>Save</xf:label>
+						</xf:submit>
+						<xf:trigger>
+							<xf:label>Reset</xf:label>
+							<xf:action ev:event="DOMActivate">
+								<xf:reset model="edit_model"/>
+								<xf:delete nodeset="instance('edit_resp')/ows:Exception" />
+								<xf:delete nodeset="instance('edit_resp')//ogc:FeatureId/@fid" />
+							</xf:action>
+						</xf:trigger>
+						<div class="error">
+							<xf:output bind="edit_error">
+								<xf:label>Error:</xf:label>
+							</xf:output>
+						</div>
+						<div class="success">
+							<xf:output bind="edit_success">
+								<xf:label>
+								</xf:label>
+							</xf:output>
+						</div>
+					</xf:group>
+				</xf:case>
+			</xf:switch>
+		</div>
+	</xsl:template>
+	<!-- 
+		template to display property value as xf:output
+	-->
+	<xsl:template match="column" mode="display">
+		<xsl:choose>
+			<xsl:when test="../foreign-key[reference/@local=current()/@name]">
+				<xsl:variable name="foreign-table" select="//database/table[@name=current()/../foreign-key[reference/@local=current()/@name]/@foreignTable]" />
+				<xsl:variable name="foreign-table-field" select="$foreign-table/unique[@name='UNIQUE_INDEX']/unique-column[1]/@name" />
+				<xf:output ref="{concat($namespace,replace(lower-case(@name),'_id$',''),'_ref/',$namespace,lower-case($foreign-table/@name),'/',$namespace,lower-case($foreign-table-field))}" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xf:output ref="{concat($namespace,lower-case(@name))}">
+					<xf:label>
+						<xsl:call-template name="proper-case">
+							<xsl:with-param name="toconvert" select="replace(replace(lower-case(@name),'_id$',''),'_',' ')" />
+						</xsl:call-template>
+					</xf:label>
+				</xf:output>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- 
+		template to create xf:input for changing property value
+	-->
+	<xsl:template match="column" mode="edit">
+		<xsl:choose>
+			<xsl:when test="../foreign-key[reference/@local=current()/@name]">
+				<xsl:variable name="fk_node" select="../foreign-key[reference/@local=current()/@name]" />
+				<xsl:call-template name="select1-from-foreign-key">
+					<xsl:with-param name="fk_node" select="$fk_node" />
+					<xsl:with-param name="ref" select="concat(&quot;instance('edit1')/wfs:Update/wfs:Property[wfs:Name='&quot;,fn:property-name(@name),&quot;']/wfs:Value/@fid&quot;)" />
+					<xsl:with-param name="include_label" select="'false'" />
+					<xsl:with-param name="include_add" select="'false'" />
+					<xsl:with-param name="include_action" select="'false'" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xf:input ref="{concat(&quot;instance('edit1')/wfs:Update/wfs:Property[wfs:Name='&quot;,fn:property-name(@name),&quot;']/wfs:Value&quot;)}">
+				</xf:input>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- 
+		template to build the edit form
+	-->
+	<xsl:template name="delete">
+		<xf:group ref="{concat(&quot;instance('delete1')/gml:featureMember/&quot;,$namespace,lower-case(@name))}">
+			<div class="form">
+				<label>
+					<xsl:text>EDIT </xsl:text>
+					<xsl:value-of select="translate(upper-case(@name),'_',' ')" />
+				</label>
+				<table class="edit">
+					<tbody>
+						<xsl:for-each select="column">
+							<tr>
+								<td>
+									<xsl:apply-templates select="." mode="display" />
+								</td>
+								<td>
+									<xf:trigger>
+										<xf:label>Edit</xf:label>
+										<xf:action ev:event="DOMActivate">
+											<xf:insert nodeset="" origin="" if="" />
+										</xf:action>
+									</xf:trigger>
+								</td>
+								<td>
+									<xsl:apply-templates select="." mode="edit" />
+								</td>
+							</tr>
+						</xsl:for-each>
+					</tbody>
+				</table>
+				<xf:submit submission="edit_submit">
+					<xf:label>Save</xf:label>
+				</xf:submit>
+				<xf:trigger>
+					<xf:label>Reset</xf:label>
+					<xf:action ev:event="DOMActivate">
+						<xf:reset model="delete_model"/>
+						<xf:delete nodeset="instance('edit_submit')/ows:Exception" />
+						<xf:delete nodeset="instance('edit_submit')//ogc:FeatureId/@fid" />
+					</xf:action>
+				</xf:trigger>
+				<div class="error">
+					<xf:output bind="edit_error">
+						<xf:label>Error:</xf:label>
+					</xf:output>
+				</div>
+				<div class="success">
+					<xf:output bind="edit_success">
+						<xf:label>
+						</xf:label>
+					</xf:output>
+				</div>
+			</div>
+		</xf:group>
+	</xsl:template>
 	<!--
 		Creates an xform:group for the current table (feature) and processes the columns
 	-->
@@ -1115,7 +1481,7 @@
 	-->
 	<xsl:template match="column" mode="form">
 		<xsl:if test="@primaryKey = 'false' or $include_pkeys_in_form = 'true'">
-			<xsl:element name="xf:input">
+			<xsl:element name="{if(not(@type = 'VARCHAR') or @size &lt;= 20) then 'xf:input' else 'xf:textarea'}">
 				<xsl:attribute name="ref">
 					<xsl:value-of select="concat($namespace,lower-case(@name))" />
 				</xsl:attribute>
@@ -1132,6 +1498,9 @@
 						<xsl:value-of select="@name" />
 					</xsl:with-param>
 				</xsl:call-template>
+				<xsl:if test="@type = 'VARCHAR'">
+					<xf:message ev:event="xforms-invalid" level="modal">maximum length is <xsl:value-of select="@size" /> characters</xf:message>
+				</xsl:if>
 			</xsl:element>
 		</xsl:if>
 	</xsl:template>
@@ -1139,8 +1508,10 @@
 		template to insert an xform select1 control 
 	-->
 	<xsl:template match="column[../foreign-key[reference/@local=current()/@name]]" mode="form" priority="3">
+		<xsl:variable name="fk_node" select="../foreign-key[reference/@local=current()/@name]" />
 		<xsl:call-template name="select1-from-foreign-key">
-			<xsl:with-param name="fk_node" select="../foreign-key[reference/@local=current()/@name]" />
+			<xsl:with-param name="fk_node" select="$fk_node" />
+			<xsl:with-param name="ref" select="concat($namespace,replace(lower-case($fk_node/reference/@local),'_id$',''),'_ref/',$namespace,lower-case($fk_node/@foreignTable),'/@gml:id')" />
 		</xsl:call-template>
 	</xsl:template>
 	<!-- 
@@ -1148,22 +1519,29 @@
 	-->
 	<xsl:template name="select1-from-foreign-key">
 		<xsl:param name="fk_node" />
+		<xsl:param name="ref" />
+		<xsl:param name="include_label">true</xsl:param>
+		<xsl:param name="include_add">true</xsl:param>
+		<xsl:param name="include_action">true</xsl:param>
 		<!-- the feature name is the name of the foreign table -->
 		<xsl:variable name="feature_name">
 			<xsl:value-of select="lower-case($fk_node/@foreignTable)" />
 		</xsl:variable>
+		<xf:group ref="{$ref}">
 		<div class="select1-group">
 			<xsl:element name="xf:select1">
 				<xsl:attribute name="ref">
-					<xsl:value-of select="concat($namespace,replace(lower-case($fk_node/reference/@local),'_id$',''),'_ref/',$namespace,$feature_name,'/@gml:id')" />
+					<xsl:value-of select="'.'" />
 				</xsl:attribute>
 				<xsl:attribute name="appearance">minimal</xsl:attribute>
 				<xsl:attribute name="incremental">true()</xsl:attribute>
-				<xf:label>
-					<xsl:call-template name="proper-case">
-						<xsl:with-param name="toconvert" select="replace(lower-case(translate($fk_node[1]/reference/@local,'_',' ')),' id','')" />
-					</xsl:call-template>
-				</xf:label>
+				<xsl:if test="$include_label = 'true'">
+					<xf:label>
+						<xsl:call-template name="proper-case">
+							<xsl:with-param name="toconvert" select="replace(lower-case(translate($fk_node[1]/reference/@local,'_',' ')),' id','')" />
+						</xsl:call-template>
+					</xf:label>
+				</xsl:if>
 				<xsl:element name="xf:itemset">
 					<xsl:attribute name="nodeset">
 						<xsl:value-of select="concat(&quot;instance('&quot;, $feature_name, &quot;')/gml:featureMember/&quot;,$namespace,$feature_name)" />
@@ -1194,40 +1572,45 @@
 				<!-- when the selected value changes replace the relevant
 				subfeature in the transaction by inserting a new one
 				and then deleting the current one -->
-				<xsl:element name="xf:action">
-					<xsl:attribute name="ev:event">
-						<xsl:text>xforms-value-changed</xsl:text>
-					</xsl:attribute>
-					<!--  
-					copy selected subfeature into submission
-				-->
-					<xsl:element name="xf:insert">
-						<!-- where to put it -->
-						<xsl:attribute name="nodeset">
-							<xsl:value-of select="'context()/../../*'" />
+				<xsl:if test="$include_action = 'true'">
+					<xsl:element name="xf:action">
+						<xsl:attribute name="ev:event">
+							<xsl:text>xforms-value-changed</xsl:text>
 						</xsl:attribute>
-						<!-- what to put there -->
-						<xsl:attribute name="origin">
-							<xsl:value-of select="concat(&quot;instance('&quot;,$feature_name,&quot;')/gml:featureMember/&quot;,$namespace,$feature_name,'[@gml:id=current()]')" />
-						</xsl:attribute>
+						<!--  
+						copy selected subfeature into submission
+					-->
+						<xsl:element name="xf:insert">
+							<!-- where to put it -->
+							<xsl:attribute name="nodeset">
+								<xsl:value-of select="'context()/../../*'" />
+							</xsl:attribute>
+							<!-- what to put there -->
+							<xsl:attribute name="origin">
+								<xsl:value-of select="concat(&quot;instance('&quot;,$feature_name,&quot;')/gml:featureMember/&quot;,$namespace,$feature_name,'[@gml:id=current()]')" />
+							</xsl:attribute>
+						</xsl:element>
+						<!-- delete the dummy one -->
+						<xsl:element name="xf:delete">
+							<xsl:attribute name="nodeset">
+								<xsl:value-of select="'context()/../../*'" />
+							</xsl:attribute>
+							<xsl:attribute name="at">1</xsl:attribute>
+						</xsl:element>
 					</xsl:element>
-					<!-- delete the dummy one -->
-					<xsl:element name="xf:delete">
-						<xsl:attribute name="nodeset">
-							<xsl:value-of select="'context()/../../*'" />
-						</xsl:attribute>
-						<xsl:attribute name="at">1</xsl:attribute>
-					</xsl:element>
-				</xsl:element>
+				</xsl:if>
 			</xsl:element>
 			<!-- add an 'Add' button to create a new feature in this select1 list -->
-			<xf:trigger>
-				<xf:label>+</xf:label>
-				<xf:action ev:event="DOMActivate">
-					<xf:toggle case="{concat('new_',$feature_name)}" />
-				</xf:action>
-			</xf:trigger>
+			<xsl:if test="$include_add = 'true'">
+				<xf:trigger>
+					<xf:label>+</xf:label>
+					<xf:action ev:event="DOMActivate">
+						<xf:toggle case="{concat('new_',$feature_name)}" />
+					</xf:action>
+				</xf:trigger>
+			</xsl:if>
 		</div>
+		</xf:group>	
 	</xsl:template>
 	<!-- 
 		template to convert control labels to proper-case
@@ -1241,7 +1624,8 @@
 			<xsl:choose>
 				<xsl:when test="contains($s,' ')">
 					<xsl:value-of select="lower-case(substring-before($s,' '))" />
-					<xsl:text> </xsl:text>
+					<xsl:text>
+					</xsl:text>
 					<xsl:call-template name="proper-case">
 						<xsl:with-param name="toconvert" select="substring-after($s,' ')" />
 					</xsl:call-template>
@@ -1252,4 +1636,11 @@
 			</xsl:choose>
 		</xsl:if>
 	</xsl:template>
+	
+	<xsl:function name="fn:property-name" as="xsd:string">
+  		<xsl:param name="name" as="xsd:string"/>
+  		<xsl:sequence  select="concat($namespace,replace(lower-case($name),'_id$','_ref'))" />    
+	</xsl:function>
+
+	
 </xsl:stylesheet>

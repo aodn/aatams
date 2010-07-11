@@ -3,7 +3,7 @@
 <xsl:stylesheet version="2.0" xmlns="http://www.w3.org/1999/xhtml"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
-xmlns:emii="http://www.imos.org.au/emii"
+xmlns:aatams="http://www.imos.org.au/aatams"
 xmlns:xf="http://www.w3.org/2002/xforms"
 xmlns:ev="http://www.w3.org/2001/xml-events" 
 xmlns:wfs="http://www.opengis.net/wfs" 
@@ -449,10 +449,11 @@ xmlns:fn="http://www.imos.org.au/functions">
 			</xf:instance>
 			<xf:instance id="edit1">
 				<wfs:Transaction version="1.1.0" service="WFS">
-					<wfs:Update typeName="{$feature_name}">
+					<!--  leave of the feature namespace and let deegree guess, due to xsltforms issue -->
+					<wfs:Update typeName="{lower-case(@name)}">
 						<wfs:Property>
 							<wfs:Name/>
-							<wfs:Value fid=""/>
+							<wfs:Value fid=""><dummy xmlns=""/></wfs:Value>
 						</wfs:Property>
 						<ogc:Filter>
 							<ogc:GmlObjectId gml:id="" />
@@ -1378,7 +1379,8 @@ xmlns:fn="http://www.imos.org.au/functions">
 					<xsl:with-param name="ref" select="concat(&quot;instance('edit1')/wfs:Update/wfs:Property[wfs:Name='&quot;,fn:property-name(@name),&quot;']/wfs:Value/@fid&quot;)" />
 					<xsl:with-param name="include_label" select="'false'" />
 					<xsl:with-param name="include_add" select="'false'" />
-					<xsl:with-param name="include_action" select="'false'" />
+					<xsl:with-param name="action_nodeset">context()/../*</xsl:with-param>
+					<xsl:with-param name="action_origin" select="concat(&quot;instance('&quot;,lower-case($fk_node/@foreignTable),&quot;')/gml:featureMember/&quot;,$namespace,lower-case($fk_node/@foreignTable),'[@gml:id=current()]')"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
@@ -1512,6 +1514,8 @@ xmlns:fn="http://www.imos.org.au/functions">
 		<xsl:call-template name="select1-from-foreign-key">
 			<xsl:with-param name="fk_node" select="$fk_node" />
 			<xsl:with-param name="ref" select="concat($namespace,replace(lower-case($fk_node/reference/@local),'_id$',''),'_ref/',$namespace,lower-case($fk_node/@foreignTable),'/@gml:id')" />
+			<xsl:with-param name="action_nodeset" >context()/../../*</xsl:with-param>
+			<xsl:with-param name="action_origin" select="concat(&quot;instance('&quot;,lower-case($fk_node/@foreignTable),&quot;')/gml:featureMember/&quot;,$namespace,lower-case($fk_node/@foreignTable),'[@gml:id=current()]')"/>
 		</xsl:call-template>
 	</xsl:template>
 	<!-- 
@@ -1522,7 +1526,8 @@ xmlns:fn="http://www.imos.org.au/functions">
 		<xsl:param name="ref" />
 		<xsl:param name="include_label">true</xsl:param>
 		<xsl:param name="include_add">true</xsl:param>
-		<xsl:param name="include_action">true</xsl:param>
+		<xsl:param name="action_nodeset" />
+		<xsl:param name="action_origin" />
 		<!-- the feature name is the name of the foreign table -->
 		<xsl:variable name="feature_name">
 			<xsl:value-of select="lower-case($fk_node/@foreignTable)" />
@@ -1572,7 +1577,7 @@ xmlns:fn="http://www.imos.org.au/functions">
 				<!-- when the selected value changes replace the relevant
 				subfeature in the transaction by inserting a new one
 				and then deleting the current one -->
-				<xsl:if test="$include_action = 'true'">
+				<xsl:if test="not($action_nodeset = '')">
 					<xsl:element name="xf:action">
 						<xsl:attribute name="ev:event">
 							<xsl:text>xforms-value-changed</xsl:text>
@@ -1583,17 +1588,17 @@ xmlns:fn="http://www.imos.org.au/functions">
 						<xsl:element name="xf:insert">
 							<!-- where to put it -->
 							<xsl:attribute name="nodeset">
-								<xsl:value-of select="'context()/../../*'" />
+								<xsl:value-of select="$action_nodeset" />
 							</xsl:attribute>
 							<!-- what to put there -->
 							<xsl:attribute name="origin">
-								<xsl:value-of select="concat(&quot;instance('&quot;,$feature_name,&quot;')/gml:featureMember/&quot;,$namespace,$feature_name,'[@gml:id=current()]')" />
+								<xsl:value-of select="$action_origin" />
 							</xsl:attribute>
 						</xsl:element>
 						<!-- delete the dummy one -->
 						<xsl:element name="xf:delete">
 							<xsl:attribute name="nodeset">
-								<xsl:value-of select="'context()/../../*'" />
+								<xsl:value-of select="$action_nodeset" />
 							</xsl:attribute>
 							<xsl:attribute name="at">1</xsl:attribute>
 						</xsl:element>
@@ -1612,6 +1617,7 @@ xmlns:fn="http://www.imos.org.au/functions">
 		</div>
 		</xf:group>	
 	</xsl:template>
+	
 	<!-- 
 		template to convert control labels to proper-case
 	-->
@@ -1624,8 +1630,7 @@ xmlns:fn="http://www.imos.org.au/functions">
 			<xsl:choose>
 				<xsl:when test="contains($s,' ')">
 					<xsl:value-of select="lower-case(substring-before($s,' '))" />
-					<xsl:text>
-					</xsl:text>
+					<xsl:text> </xsl:text>
 					<xsl:call-template name="proper-case">
 						<xsl:with-param name="toconvert" select="substring-after($s,' ')" />
 					</xsl:call-template>

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
-<xsl:stylesheet version="2.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:emii="http://www.imos.org.au/emii" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml" xmlns:fn="http://www.imos.org.au/functions">
+<xsl:stylesheet version="2.0" xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:aatams="http://www.imos.org.au/aatams" xmlns:emii="http://www.imos.org.au/emii" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:ows="http://www.opengis.net/ows" xmlns:gml="http://www.opengis.net/gml" xmlns:fn="http://www.imos.org.au/functions">
 	<xsl:output name="xml" method="xml" encoding="UTF-8" indent="yes" />
 	<xsl:include href="help.xslt" />
-	<xsl:include href="globals.xslt" />
-	<xsl:template match="/">
+    <xsl:include href="globals.xslt" />
+	<xsl:include href="over-rides.xslt" />
+    <xsl:template match="/">
 		<xsl:for-each select="//table">
-			<xsl:variable name="feature-name">
+            <xsl:variable name="feature-name">
 				<xsl:value-of select="lower-case(@name)" />
 			</xsl:variable>
 			<xsl:variable name="feature-title">
@@ -311,7 +312,7 @@
                                     <td>
                                         <xsl:attribute name="class">
 												<xsl:choose>
-													<xsl:when test="@type = 'VARCHAR'">text</xsl:when>
+													<xsl:when test="contains(upper-case(@type),'CHAR')">text</xsl:when>
 													<xsl:otherwise>numeric</xsl:otherwise>
 												</xsl:choose>
 											</xsl:attribute>
@@ -324,7 +325,7 @@
 										<td>
 											<xsl:attribute name="class">
 												<xsl:choose>
-													<xsl:when test="@type = 'VARCHAR'">text</xsl:when>
+													<xsl:when test="contains(upper-case(@type),'CHAR')">text</xsl:when>
 													<xsl:otherwise>numeric</xsl:otherwise>
 												</xsl:choose>
 											</xsl:attribute>
@@ -414,9 +415,9 @@
 				<xsl:with-param name="model-number" select="$model-number" />
 			</xsl:call-template>
 			<!-- action to select first subfeatures in lists -->
-			<xsl:call-template name="initialise">
+			<!--xsl:call-template name="initialise">
 				<xsl:with-param name="model-number" select="$model-number" />
-			</xsl:call-template>
+			</xsl:call-template-->
 		</xf:model>
 	</xsl:template>
 	<xsl:template name="n_child_model">
@@ -537,7 +538,7 @@
 						<ogc:Filter>
 							<ogc:GmlObjectId gml:id="" />
                         </ogc:Filter>
-                        <emii:dummy/>
+                        <xsl:element name="{$namespace}dummy"/>
 					</wfs:Query>
 				</wfs:GetFeature>
 			</xf:instance>
@@ -559,7 +560,7 @@
 						<ogc:Filter>
 							<ogc:GmlObjectId gml:id="" />
                         </ogc:Filter>
-                        <emii:dummy/>
+                        <xsl:element name="{$namespace}dummy"/>
 					</wfs:Update>
 				</wfs:Transaction>
 			</xf:instance>
@@ -619,7 +620,7 @@
 						<ogc:Filter>
 							<ogc:GmlObjectId gml:id="" />
                         </ogc:Filter>
-                        <emii:dummy/>
+                        <xsl:element name="{$namespace}dummy"/>
 					</wfs:Query>
 				</wfs:GetFeature>
 			</xf:instance>
@@ -636,7 +637,7 @@
 						<ogc:Filter>
 							<ogc:GmlObjectId gml:id="" />
                         </ogc:Filter>
-                        <emii:dummy/>
+                        <xsl:element name="{$namespace}dummy"/>
                     </wfs:Delete>
 				</wfs:Transaction>
 			</xf:instance>
@@ -690,13 +691,13 @@
 			<xsl:when test="$depth &gt; $max_depth">
 				<xsl:element name="{concat($namespace,lower-case($table/@name))}">
 					<xsl:if test="$depth &gt; 1">
-						<xsl:attribute name="gml:id" />
+                        <xsl:attribute name="gml:id">NULL</xsl:attribute>
 					</xsl:if>
 				</xsl:element>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:element name="{concat($namespace,lower-case($table/@name))}">
-					<xsl:attribute name="gml:id" />
+					<xsl:attribute name="gml:id">NULL</xsl:attribute>
 					<!-- handle each column -->
 					<xsl:for-each select="$table/column">
 						<xsl:choose>
@@ -789,7 +790,7 @@
 	<xsl:template name="model-code-subfeature">
 		<xsl:param name="table" />
 		<xsl:element name="{concat($namespace,lower-case($table/@name))}">
-			<xsl:attribute name="gml:id" />
+			<xsl:attribute name="gml:id">NULL</xsl:attribute>
 			<!-- handle each column -->
 			<xsl:for-each select="$table/column">
 				<!-- is it a distinguishing column -->
@@ -887,7 +888,8 @@
 		</xsl:call-template>
 	</xsl:template>
 	<!--
-		
+    TODO this was set up orginally before we used separate models for subfeatures so 
+    the recursive aspect is  redundant    
 	-->
 	<xsl:template name="binding-feature">
 		<xsl:param name="parent_table_name" />
@@ -920,7 +922,8 @@
 									<xsl:with-param name="path" select="concat($path,'/',$namespace,replace(lower-case(@name),'_id$',''),'_ref')" />
 									<xsl:with-param name="table_name" select="$foreign_table_name" />
 									<xsl:with-param name="parent_id" select="concat($id_root,lower-case($foreign_table_name))" />
-									<xsl:with-param name="depth" select="$depth+1" />
+                                    <xsl:with-param name="depth" select="$depth+1" />
+                                    <xsl:with-param name="required" select="@required" />
 								</xsl:call-template>
 							</xsl:otherwise>
 						</xsl:choose>
@@ -967,20 +970,23 @@
 		<xsl:param name="path" />
 		<xsl:param name="table_name" />
 		<xsl:param name="parent_id" />
-		<xsl:param name="depth" />
+        <xsl:param name="depth" />
+        <xsl:param name="required" />
 		<xsl:choose>
 			<xsl:when test="/database/table[@name=$table_name and @codeTable='true']">
 				<xsl:call-template name="binding-code-subfeature">
 					<xsl:with-param name="path" select="concat($path,'/',$namespace,lower-case($table_name))" />
 					<xsl:with-param name="table" select="/database/table[@name=$table_name and @codeTable='true'][1]" />
-					<xsl:with-param name="parent_id" select="$parent_id" />
+                    <xsl:with-param name="parent_id" select="$parent_id" />
+                    <xsl:with-param name="required" select="$required" />
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:when test="/database/view[@name=$table_name and @codeTable='true']">
 				<xsl:call-template name="binding-code-subfeature">
 					<xsl:with-param name="path" select="concat($path,'/',$namespace,lower-case($table_name))" />
 					<xsl:with-param name="table" select="/database/view[@name=$table_name and @codeTable='true'][1]" />
-					<xsl:with-param name="parent_id" select="$parent_id" />
+                    <xsl:with-param name="parent_id" select="$parent_id" />
+                    <xsl:with-param name="required" select="$required" />
 				</xsl:call-template>
 			</xsl:when>
 			<!-- not a code table so handle as for normal feature -->
@@ -1009,7 +1015,8 @@
 	<xsl:template name="binding-code-subfeature">
 		<xsl:param name="path" />
 		<xsl:param name="table" />
-		<xsl:param name="parent_id" />
+        <xsl:param name="parent_id" />
+        <xsl:param name="required" />
 		<xsl:variable name="id_root">
 			<xsl:choose>
 				<xsl:when test="string-length($parent_id) = 0">
@@ -1022,9 +1029,10 @@
 			</xsl:choose>
 		</xsl:variable>
 		<!-- handle each column -->
-		<xsl:for-each select="$table/column">
-			<!-- is it a distinguishing column -->
-			<xsl:if test="$table/unique[@name='UNIQUE_INDEX']/column[@name=current()/@name]">
+        <xsl:for-each select="$table/column">
+
+            <!--xsl:if test="$table/unique[@name='UNIQUE_INDEX']/column[@name=current()/@name]"-->
+
 				<xsl:choose>
 					<!-- is it a foreign-key we will only allow one level of distinguishing subfeatures
 						so depth is $max_depth -->
@@ -1038,11 +1046,28 @@
 							<xsl:with-param name="depth" select="$max_depth" />
 						</xsl:call-template>
 					</xsl:when>
-					<xsl:when test="@primaryKey='true' and count(../column[@primaryKey='true'])=1 and @type='INTEGER'">
-						<!-- exclude simple numeric primary keys a present in @gml:id -->
-					</xsl:when>
-					<xsl:otherwise>
+					<xsl:when test="@primaryKey='true' and $required = 'true'">
+                        <!-- primary key of a mandatory subfeature so enforce by making gml:id not = 'NULL' -->
 						<xsl:element name="xf:bind">
+							<xsl:attribute name="id">
+								<xsl:value-of select="concat($id_root,lower-case(@name))" />
+							</xsl:attribute>
+							<xsl:attribute name="nodeset">
+								<xsl:value-of select="concat($path,'/@gml:id')" />
+							</xsl:attribute>
+							<xsl:attribute name="type">
+								<xsl:text>xsd:string</xsl:text>
+                            </xsl:attribute>
+                            <xsl:attribute name="required">
+								<xsl:text>true()</xsl:text>
+							</xsl:attribute>
+							<xsl:attribute name="constraint">
+                                <xsl:text>not(.='NULL')</xsl:text>
+							</xsl:attribute>
+						</xsl:element>
+                    </xsl:when>
+					<xsl:otherwise>
+						<!--xsl:element name="xf:bind">
 							<xsl:attribute name="id">
 								<xsl:value-of select="concat($id_root,lower-case(@name))" />
 							</xsl:attribute>
@@ -1055,10 +1080,10 @@
 							<xsl:attribute name="type">
 								<xsl:apply-templates select="@type" />
 							</xsl:attribute>
-						</xsl:element>
+						</xsl:element-->
 					</xsl:otherwise>
 				</xsl:choose>
-			</xsl:if>
+			<!--/xsl:if-->
 		</xsl:for-each>
 	</xsl:template>
 	<!--
@@ -1151,6 +1176,10 @@
                     <xf:action ev:event="xforms-submit">
                         <xf:insert nodeset="instance('temp1')/{$feature_name}" origin="instance('trans1')/wfs:Insert/wfs:FeatureCollection/gml:featureMember/{$feature_name}" />
                         <xf:delete nodeset="instance('temp1')/{$feature_name}" at="1" />
+                        <!-- delete any references to optional subfeatures that have not been selected -->
+                        <xf:delete nodeset="instance('trans1')//gml:featureMember/{$feature_name}/descendant::*[child::*[@gml:id='NULL']]" />
+                        <!-- remove all gml:id so the WFS server doesn't reject a transaction with two subfeatures having the same id
+                        also does a comparison of new with existing to prevent duplications (using existing if present) --> 
                         <xf:delete nodeset="instance('trans1')//@gml:id" />
                         <xf:dispatch name="clear-response" target="model1" />
                     </xf:action>
@@ -1225,13 +1254,13 @@
 		<xsl:variable name="path" select="concat(&quot;instance('trans&quot;,$model-number,&quot;')/wfs:Insert/wfs:FeatureCollection/gml:featureMember/&quot;)" />
 		<xf:dispatch ev:event="xforms-ready" name="set-selected" target="{concat('model',$model-number)}" />
 		<xf:action ev:event="set-selected">
-			<xsl:for-each select="foreign-key">
+			<!--xsl:for-each select="foreign-key">
 				<xsl:call-template name="initialise-subfeature">
 					<xsl:with-param name="path" select="concat($path,$namespace,lower-case(../@name),'/',$namespace,replace(lower-case(reference/@local),'_id$',''),'_ref')" />
 					<xsl:with-param name="foreign-key" select="." />
 					<xsl:with-param name="depth" select="number(1)" />
 				</xsl:call-template>
-			</xsl:for-each>
+			</xsl:for-each-->
 			<xsl:for-each select="column[@type='BOOLEAN']">
 				<xf:setvalue ref="{concat($path,$namespace,lower-case(../@name),'/',$namespace,lower-case(@name))}" value="false()" />
 			</xsl:for-each>
@@ -1734,7 +1763,7 @@
                         </xf:label>
 						<xf:itemset nodeset="{concat(&quot;instance('&quot;,lower-case($referenced_table/@name),&quot;')/gml:featureMember/&quot;,$ref_name)}">
 							<xf:value ref="@gml:id" />
-							<xf:label ref="emii:name" />
+                            <xf:label ref="{$namespace}name" />
 						</xf:itemset>
 						<xf:action ev:event="xforms-value-changed">
 							<xf:insert nodeset="{concat('context()/../',$link_name,'_ref/',$link_name,'/',$ref_name,'_ref/',$ref_name)}" origin="{concat(&quot;instance('&quot;,lower-case($referenced_table/@name),&quot;')/gml:featureMember/&quot;,$ref_name,'[@gml:id=current()]')}" />
@@ -1861,7 +1890,7 @@
 										<td>
 											<xsl:attribute name="class">
 												<xsl:choose>
-													<xsl:when test="@type = 'VARCHAR'">text</xsl:when>
+													<xsl:when test="contains(upper-case(@type),'CHAR')">text</xsl:when>
 													<xsl:otherwise>numeric</xsl:otherwise>
 												</xsl:choose>
 											</xsl:attribute>
@@ -1957,7 +1986,10 @@
 								<xsl:with-param name="toconvert" select="replace(lower-case(translate($fk_node[1]/reference/@local,'_',' ')),' id','')" />
 							</xsl:call-template>
 						</xf:label>
-					</xsl:if>
+                    </xsl:if>
+                    <xf:item>
+                        <xf:value>NULL</xf:value>
+                    </xf:item>    
 					<xsl:element name="xf:itemset">
 						<xsl:attribute name="nodeset">
 							<xsl:value-of select="concat(&quot;instance('&quot;, $feature_name, &quot;')/gml:featureMember/&quot;,$namespace,$feature_name)" />
@@ -1992,6 +2024,10 @@
 						<xsl:element name="xf:action">
 							<xsl:attribute name="ev:event">
 								<xsl:text>xforms-value-changed</xsl:text>
+                            </xsl:attribute>
+                            <!-- only if action will select something -->
+                            <xsl:attribute name="if">
+								<xsl:text>not(.='NULL')</xsl:text>
 							</xsl:attribute>
 							<!--  
 						copy selected subfeature into submission
@@ -2055,118 +2091,5 @@
 		<xsl:param name="name" as="xsd:string" />
 		<xsl:sequence select="concat('pre4:',replace(lower-case($name),'_id$','_ref'))" />
 	</xsl:function>
-
-
-
-	<!--  
-		template to insert an xform select1 control 
-	-->
-	<xsl:template match="column[@name='node_id' or @name='facility_id']" mode="form" priority="5">
-        <xsl:variable name="fk_node" select="../foreign-key[reference/@local=current()/@name]" />
-		<xsl:call-template name="select1-from-foreign-key">
-			<xsl:with-param name="fk_node" select="$fk_node" />
-			<xsl:with-param name="ref" select="concat($namespace,replace(lower-case($fk_node/reference/@local),'_id$',''),'_ref/',$namespace,lower-case($fk_node/@foreignTable),'/@gml:id')" />
-			<xsl:with-param name="action_nodeset">context()/../../*</xsl:with-param>
-            <xsl:with-param name="action_origin" select="concat(&quot;instance('&quot;,lower-case($fk_node/@foreignTable),&quot;')/gml:featureMember/&quot;,$namespace,lower-case($fk_node/@foreignTable),'[@gml:id=current()]')" />
-            <xsl:with-param name="include_add">false</xsl:with-param>
-		</xsl:call-template>
-    </xsl:template>
-
-    <xsl:template match="@type[parent::column/@name = 'email_address']">xf:email</xsl:template>
-
-    	<!--  
-		template to insert an xform select1 control 
-	-->
-    <xsl:template match="column[@name='conf_date_month']" mode="form" priority="5">
-        <div class="select1-group">
-            <xf:select1 ref="emii:conf_date_month" appearance="minimal" incremental="true()">
-                <xf:label>Month</xf:label>
-                    <xf:item>
-                        <xf:value>January</xf:value>
-                        <xf:label>January</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>February</xf:value>
-                        <xf:label>February</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>March</xf:value>
-                        <xf:label>March</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>April</xf:value>
-                        <xf:label>April</xf:label>
-                    </xf:item>  
-                    <xf:item>
-                        <xf:value>May</xf:value>
-                        <xf:label>May</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>June</xf:value>
-                        <xf:label>June</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>July</xf:value>
-                        <xf:label>July</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>August</xf:value>
-                        <xf:label>August</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>September</xf:value>
-                        <xf:label>September</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>October</xf:value>
-                        <xf:label>October</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>November</xf:value>
-                        <xf:label>November</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>December</xf:value>
-                        <xf:label>December</xf:label>
-                    </xf:item>
-            </xf:select1>
-        </div>
-    </xsl:template>
-
-	<xsl:template match="column[@name='conf_date_year']" mode="form" priority="5">
-        <div class="select1-group">
-            <xf:select1 ref="emii:conf_date_year" appearance="minimal" incremental="true()">
-                <xf:label>Year</xf:label>
-                    <xf:item>
-                        <xf:value>2007</xf:value>
-                        <xf:label>2007</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>2008</xf:value>
-                        <xf:label>2008</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>2009</xf:value>
-                        <xf:label>2009</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>2010</xf:value>
-                        <xf:label>2010</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>2011</xf:value>
-                        <xf:label>2011</xf:label>
-                    </xf:item>  
-                    <xf:item>
-                        <xf:value>2012</xf:value>
-                        <xf:label>2012</xf:label>
-                    </xf:item>
-                    <xf:item>
-                        <xf:value>2013</xf:value>
-                        <xf:label>2013</xf:label>
-                    </xf:item>       
-            </xf:select1>
-        </div>
-    </xsl:template>
 
 </xsl:stylesheet>    

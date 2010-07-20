@@ -470,8 +470,8 @@
 				<xsl:variable name="fid" select="concat('instance(',&quot;'resp&quot;,$model-number,&quot;')//ogc:FeatureId/@fid&quot;)" />
 				<xsl:variable name="nodeset" select="concat(&quot;instance('&quot;,lower-case($referenced_table/@name),&quot;')/gml:featureMember/&quot;,$feature-name)" />
 				<xsl:variable name="origin" select="concat('instance(',&quot;'trans&quot;,$model-number,&quot;')/wfs:Insert/wfs:FeatureCollection/gml:featureMember/&quot;,$feature-name)" />
-				<xf:bind id="{concat('error',$model-number)}" nodeset="{concat('instance(',&quot;'resp&quot;,$model-number,&quot;')//ows:ExceptionText&quot;)}" calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)" type="xsd:string" />
-				<xf:bind id="{concat('success',$model-number)}" nodeset="{$fid}" type="xsd:string" />
+				<xf:bind id="{concat('error',$model-number)}" nodeset="{concat('instance(',&quot;'resp&quot;,$model-number,&quot;')//ows:ExceptionText&quot;)}" calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)" type="xf:string" />
+				<xf:bind id="{concat('success',$model-number)}" nodeset="{$fid}" type="xf:string" />
 				<xf:action ev:event="clear-response">
 					<xf:delete nodeset="{$fid}" />
 				</xf:action>
@@ -578,7 +578,7 @@
             <xf:bind id="edit_success"
                   nodeset="instance('edit_msg')/@message"
                   calculate="choose(instance('edit_resp')/wfs:TransactionSummary/wfs:totalUpdated=0,'NO RECORD UPDATED','')"
-                  type="xsd:string"/>
+                  type="xf:string"/>
 			<xf:action ev:event="clear-response">
 				<xf:delete nodeset="instance('edit_resp')/*" />
 			</xf:action>
@@ -655,7 +655,7 @@
             <xf:bind id="delete_success"
                   nodeset="instance('delete_msg')/@message"
                   calculate="choose(instance('delete_resp')//wfs:TransactionSummary/wfs:totalDeleted=0,'NO RECORD DELETED','')"
-                  type="xsd:string"/>
+                  type="xf:string"/>
 			<xf:submission id="delete_submit1" ref ="instance('delete_find1')" method="post" action="../services" replace="instance" instance="delete_view1">
 				<xf:setvalue ev:event="xforms-submit" ref ="instance('delete_find1')//ogc:GmlObjectId/@gml:id" value="{concat(&quot;concat('&quot;,lower-case(@name),&quot;.',instance('delete_id1')//id)&quot;)}" />
 				<xf:setvalue ev:event="xforms-submit" ref ="instance('delete1')//ogc:GmlObjectId/@gml:id" value="{concat(&quot;concat('&quot;,lower-case(@name),&quot;.',instance('delete_id1')//id)&quot;)}" />
@@ -1056,7 +1056,7 @@
 								<xsl:value-of select="concat($path,'/@gml:id')" />
 							</xsl:attribute>
 							<xsl:attribute name="type">
-								<xsl:text>xsd:string</xsl:text>
+								<xsl:text>xf:string</xsl:text>
                             </xsl:attribute>
                             <xsl:attribute name="required">
 								<xsl:text>true()</xsl:text>
@@ -1089,32 +1089,32 @@
 	<!--
 		converts db type to xsd type 
 	-->
-	<xsl:template match="@type">
+    <xsl:template match="@type">
 		<xsl:choose>
 			<xsl:when test=". = 'INTEGER'">
-				<xsl:text>xsd:integer</xsl:text>
+				<xsl:text>xf:integer</xsl:text>
 			</xsl:when>
-			<xsl:when test=". = 'DECIMAL'">
-				<xsl:text>xsd:decimal</xsl:text>
-			</xsl:when>
-			<xsl:when test=". = 'VARCHAR'">
-				<xsl:text>xsd:string</xsl:text>
-			</xsl:when>
-			<xsl:when test=". = 'DATE'">
-				<xsl:text>xsd:date</xsl:text>
-			</xsl:when>
-			<xsl:when test=". = 'TIMESTAMP'">
-				<xsl:text>xsd:dateTime</xsl:text>
-			</xsl:when>
-			<xsl:when test=". = 'LONGVARCHAR'">
-				<xsl:text>xsd:string</xsl:text>
-			</xsl:when>
-			<xsl:when test=". = 'BOOLEAN'">
-				<xsl:text>xsd:boolean</xsl:text>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:text>xsd:string</xsl:text>
-			</xsl:otherwise>
+			 <xsl:when test=". = 'DECIMAL'">
+		       <xsl:text>xf:decimal</xsl:text>
+		     </xsl:when>
+			  <xsl:when test=". = 'VARCHAR'">
+			       <xsl:text>xf:string</xsl:text>
+		    </xsl:when>
+			   <xsl:when test=". = 'DATE'">
+			       <xsl:text>xf:date</xsl:text>
+		      </xsl:when>
+		    <xsl:when test=". = 'TIMESTAMP'">
+			       <xsl:text>xf:dateTime</xsl:text>
+			   </xsl:when>
+		    <xsl:when test=". = 'LONGVARCHAR'">
+		        <xsl:text>xf:string</xsl:text>
+		      </xsl:when>
+		      <xsl:when test=". = 'BOOLEAN'">
+			     <xsl:text>xf:boolean</xsl:text>
+			  </xsl:when>
+			  <xsl:otherwise>
+			     <xsl:text>xf:string</xsl:text>
+			  </xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	<!--
@@ -1150,7 +1150,7 @@
 				<xsl:value-of select="lower-case(@foreignTable)" />
 				<xsl:text>_id</xsl:text>
 			</xsl:attribute>
-			<xsl:attribute name="type">xsd:string</xsl:attribute>
+			<xsl:attribute name="type">xf:string</xsl:attribute>
 			<xsl:attribute name="required">
 				<xsl:choose>
 					<!-- see if the fk field is required="true"-->
@@ -1188,9 +1188,11 @@
                         <xf:delete nodeset="instance('trans1')/wfs:Insert/wfs:FeatureCollection/gml:featureMember/{$feature_name}" at="1" />
                         <xf:dispatch name="process-response" target="model1" />
                     </xf:action>
-                    <xf:message level="modeless" ev:event="xforms-submit-error">
-				    Submit error.
-                    </xf:message>
+                    <xf:action ev:event="xforms-submit-error">
+                        <xf:insert nodeset="instance('trans1')/wfs:Insert/wfs:FeatureCollection/gml:featureMember/{$feature_name}" origin="instance('temp1')/{$feature_name}"/>
+                        <xf:delete nodeset="instance('trans1')/wfs:Insert/wfs:FeatureCollection/gml:featureMember/{$feature_name}" at="1" />
+                        <xf:message level="modeless">Submit error</xf:message>
+                    </xf:action>
                 </xsl:when>
                 <xsl:otherwise>
 			        <xf:message level="modeless" ev:event="xforms-submit-error">
@@ -1217,8 +1219,8 @@
 		template to create post submission messages
 	-->
 	<xsl:template name="messages">
-		<xf:bind id="error1" nodeset="instance('resp1')//ows:ExceptionText" calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)" type="xsd:string" />
-		<xf:bind id="success1" nodeset="instance('resp1')//ogc:FeatureId/@fid" type="xsd:string" />
+		<xf:bind id="error1" nodeset="instance('resp1')//ows:ExceptionText" calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)" type="xf:string" />
+		<xf:bind id="success1" nodeset="instance('resp1')//ogc:FeatureId/@fid" type="xf:string" />
 	</xsl:template>
 	<!--
 		template to process submission result
@@ -1229,8 +1231,8 @@
 		<xsl:variable name="fid" select="concat('instance(',&quot;'resp&quot;,$model-number,&quot;')//ogc:FeatureId/@fid&quot;)" />
 		<xsl:variable name="nodeset" select="concat(&quot;instance('&quot;,$table-name,&quot;')/gml:featureMember/&quot;,$namespace,$table-name)" />
 		<xsl:variable name="origin" select="concat('instance(',&quot;'trans&quot;,$model-number,&quot;')/wfs:Insert/wfs:FeatureCollection/gml:featureMember/&quot;,$namespace,$table-name)" />
-		<xf:bind id="{concat('error',$model-number)}" nodeset="{concat('instance(',&quot;'resp&quot;,$model-number,&quot;')//ows:ExceptionText&quot;)}" calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)" type="xsd:string" />
-		<xf:bind id="{concat('success',$model-number)}" nodeset="{$fid}" type="xsd:string" />
+		<xf:bind id="{concat('error',$model-number)}" nodeset="{concat('instance(',&quot;'resp&quot;,$model-number,&quot;')//ows:ExceptionText&quot;)}" calculate="choose(contains(.,'Equal feature'),substring-after(.,'. '),.)" type="xf:string" />
+		<xf:bind id="{concat('success',$model-number)}" nodeset="{$fid}" type="xf:string" />
 		<xf:action ev:event="clear-response">
 			<xf:delete nodeset="{$fid}" />
 		</xf:action>
@@ -1772,7 +1774,7 @@
 						</xf:action>
 					</xf:select1>
 					<xf:trigger>
-						<xf:label>+</xf:label>
+                        <xf:label><img src="plus.jpg"/></xf:label>
 						<xf:action ev:event="DOMActivate">
 							<xf:toggle case="{concat('new_',lower-case($referenced_table/@name))}" />
 						</xf:action>
@@ -2055,7 +2057,7 @@
 				<!-- add an 'Add' button to create a new feature in this select1 list -->
 				<xsl:if test="$include_add = 'true'">
 					<xf:trigger>
-						<xf:label>+</xf:label>
+                        <xf:label><img src="plus.jpg"/></xf:label>
 						<xf:action ev:event="DOMActivate">
 							<xf:toggle case="{concat('new_',$feature_name)}" />
 						</xf:action>

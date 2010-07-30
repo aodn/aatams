@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Liquid XML Studio - FREE Community Edition 7.0.4.795 (http://www.liquid-technologies.com) -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:emii="http://www.imos.org.au/emii" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:deegreewfs="http://www.deegree.org/wfs">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:aatams="http://www.imos.org.au/aatams" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:deegreewfs="http://www.deegree.org/wfs">
     <xsl:output method="xml" encoding="UTF-8" indent="yes" />
     <xsl:include href="globals.xslt" />
     <xsl:template match="/">
@@ -16,14 +16,14 @@
 					<deegreewfs:Backend>POSTGIS</deegreewfs:Backend>
 					<deegreewfs:DefaultSRS>EPSG:4326</deegreewfs:DefaultSRS>
 				    <deegreewfs:SuppressXLinkOutput>true</deegreewfs:SuppressXLinkOutput>
-				    <JDBCConnection xmlns="http://www.deegree.org/jdbc">
-						<Driver>org.postgresql.Driver</Driver>
-						<Url>jdbc:postgresql://obsidian.bluenet.utas.edu.au:5432/steve</Url>
-						<User>steve</User>
-						<Password>66CoStHo</Password>
-						<SecurityConstraints />
-						<Encoding>iso-8859-1</Encoding>
-					</JDBCConnection>
+                    <JDBCConnection xmlns="http://www.deegree.org/jdbc">
+                        <Driver>org.postgresql.Driver</Driver>
+                        <Url>jdbc:postgresql://emii3.its.utas.edu.au:5432/maplayers</Url>
+                        <User>steve</User>
+                        <Password>66CoStHo</Password>
+                        <SecurityConstraints/>
+                        <Encoding>iso-8859-1</Encoding>
+                    </JDBCConnection>
 				</xsd:appinfo>
 			</xsd:annotation>
 			<xsl:for-each select="//table">
@@ -84,7 +84,10 @@
 					<xsd:complexContent>
 						<xsd:extension base="gml:AbstractFeatureType">
 							<xsd:sequence>
-								<xsl:apply-templates select="column" />
+                                <xsl:apply-templates select="column" />
+                                <xsl:if test="@codeTable='false'">
+                                    <xsl:apply-templates select="//foreign-key[@foreignTable = current()/@name]"/>
+                                </xsl:if>
 							</xsd:sequence>
 						</xsd:extension>
 					</xsd:complexContent>
@@ -136,7 +139,7 @@
 					<xsd:complexContent>
 						<xsd:extension base="gml:AbstractFeatureType">
 							<xsd:sequence>
-								<xsl:apply-templates select="column" />
+                                <xsl:apply-templates select="column" />
 							</xsd:sequence>
 						</xsd:extension>
 					</xsd:complexContent>
@@ -156,6 +159,9 @@
 		<xsl:choose>
 			<xsl:when test="@primaryKey='true'">
 				<!-- don't want the primary key as that is in the gml:Id attribute -->
+            </xsl:when>
+            <xsl:when test="/database/table[@name=current()/../foreign-key[reference/@local=current()/@name and @codeTable = 'false']/@foreignTable]">
+				<!-- don't want non-code foreign tables -->
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:element name="xsd:element">
@@ -163,10 +169,11 @@
 					<xsl:attribute name="name">
 						<xsl:choose>
 							<xsl:when test="../foreign-key[reference/@local=current()/@name]">
-								<xsl:value-of select="concat(lower-case(../foreign-key[reference/@local=current()/@name][1]/@foreignTable),'_ref')" />
+                                <!--xsl:value-of select="concat(lower-case(../foreign-key[reference/@local=current()/@name][1]/@foreignTable),'_ref')" /-->
+                                <xsl:value-of select="concat(replace(lower-case(@name),'_id$',''),'_ref')" />
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="lower-case(replace(@name,'_ID',''))" />
+								<xsl:value-of select="replace(lower-case(@name),'_id$','')" />
                             </xsl:otherwise>
                         </xsl:choose>
 					</xsl:attribute>
@@ -182,9 +189,8 @@
 					</xsl:attribute>
 					<xsl:attribute name="maxOccurs">1</xsl:attribute>
 					<xsl:attribute name="type">
-						<xsl:choose>
-							<xsl:when test="../foreign-key[reference/@local=current()/@name]">
-								<!-- foreign-key, so a subfeature -->
+                        <xsl:choose>
+                            <xsl:when test="../foreign-key[reference/@local=current()/@name]">
 								<xsl:text>gml:FeaturePropertyType</xsl:text>
 							</xsl:when>
 							<xsl:when test="@type = 'GEOMETRY'">
@@ -277,5 +283,51 @@
 				</xsl:element>
 			</xsl:otherwise>
 		</xsl:choose>
+    </xsl:template>
+	<xsl:template match="foreign-key">
+				<xsl:element name="xsd:element">
+					<!-- assume anything ending in _ID is refering to a subfeature or a code-list so drop the _ID and add _ref -->
+					<xsl:attribute name="name">
+                        <xsl:value-of select="concat(lower-case(../@name),'_ref')" />
+					</xsl:attribute>
+					<xsl:attribute name="minOccurs">
+						<xsl:text>1</xsl:text>
+					</xsl:attribute>
+					<xsl:attribute name="maxOccurs">unbounded</xsl:attribute>
+					<xsl:attribute name="type">
+						<xsl:text>gml:FeaturePropertyType</xsl:text>
+					</xsl:attribute>
+					<xsd:annotation>
+						<xsd:appinfo>
+							<deegreewfs:IdentityPart>
+								<xsl:text>false</xsl:text>
+							</deegreewfs:IdentityPart>
+							<xsl:element name="deegreewfs:Content">
+								<xsl:attribute name="type">
+									<xsl:value-of select="$namespace"/>
+                                    <xsl:value-of select="lower-case(../@name)" />
+								</xsl:attribute>
+								<deegreewfs:Relation>
+									<deegreewfs:From fk="true">
+										<xsl:element name="deegreewfs:MappingField">
+											<xsl:attribute name="field">
+                                                <xsl:value-of select="lower-case(reference/@local)" />
+											</xsl:attribute>
+											<xsl:attribute name="type">INTEGER</xsl:attribute>
+										</xsl:element>
+									</deegreewfs:From>
+									<deegreewfs:To>
+										<xsl:element name="deegreewfs:MappingField">
+											<xsl:attribute name="field">
+												<xsl:value-of select="lower-case(reference/@foreign)" />
+											</xsl:attribute>
+											<xsl:attribute name="type">INTEGER</xsl:attribute>
+										</xsl:element>
+									</deegreewfs:To>
+								</deegreewfs:Relation>
+							</xsl:element>
+						</xsd:appinfo>
+					</xsd:annotation>
+				</xsl:element>
 	</xsl:template>
 </xsl:stylesheet>

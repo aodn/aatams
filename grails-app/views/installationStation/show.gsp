@@ -44,6 +44,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="installationStation.location.label" default="Location" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: installationStationInstance, field: "location")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="installationStation.name.label" default="Name" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: installationStationInstance, field: "name")}</td>

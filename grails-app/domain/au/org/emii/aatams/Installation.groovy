@@ -16,11 +16,12 @@ class Installation
     /**
      * Maximum longitudinal offset used to scramble data for visualisations.
      */
-    Float longOffset
+    Float lonOffset
     
     /**
      * Maximum latitudinal offset used to scramble data for visualisations.
      */
+    Float latOffset
      
     String toString()
     {

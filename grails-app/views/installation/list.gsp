@@ -26,7 +26,9 @@
                         
                             <th><g:message code="installation.configuration.label" default="Configuration" /></th>
                         
-                            <g:sortableColumn property="longOffset" title="${message(code: 'installation.longOffset.label', default: 'Long Offset')}" />
+                            <g:sortableColumn property="latOffset" title="${message(code: 'installation.latOffset.label', default: 'Lat Offset')}" />
+                        
+                            <g:sortableColumn property="lonOffset" title="${message(code: 'installation.lonOffset.label', default: 'Lon Offset')}" />
                         
                             <g:sortableColumn property="name" title="${message(code: 'installation.name.label', default: 'Name')}" />
                         
@@ -42,7 +44,9 @@
                         
                             <td>${fieldValue(bean: installationInstance, field: "configuration")}</td>
                         
-                            <td>${fieldValue(bean: installationInstance, field: "longOffset")}</td>
+                            <td>${fieldValue(bean: installationInstance, field: "latOffset")}</td>
+                        
+                            <td>${fieldValue(bean: installationInstance, field: "lonOffset")}</td>
                         
                             <td>${fieldValue(bean: installationInstance, field: "name")}</td>
                         

@@ -42,10 +42,19 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="longOffset"><g:message code="installation.longOffset.label" default="Long Offset" /></label>
+                                  <label for="latOffset"><g:message code="installation.latOffset.label" default="Lat Offset" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'longOffset', 'errors')}">
-                                    <g:textField name="longOffset" value="${fieldValue(bean: installationInstance, field: 'longOffset')}" />
+                                <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'latOffset', 'errors')}">
+                                    <g:textField name="latOffset" value="${fieldValue(bean: installationInstance, field: 'latOffset')}" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="lonOffset"><g:message code="installation.lonOffset.label" default="Lon Offset" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'lonOffset', 'errors')}">
+                                    <g:textField name="lonOffset" value="${fieldValue(bean: installationInstance, field: 'lonOffset')}" />
                                 </td>
                             </tr>
                         

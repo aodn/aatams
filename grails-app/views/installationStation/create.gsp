@@ -48,6 +48,15 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                    <label for="location"><g:message code="installationStation.location.label" default="Location" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'location', 'errors')}">
+                                    <g:textField name="location" value="${fieldValue(bean: installationStationInstance, field: 'location')}" /> 
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                     <label for="name"><g:message code="installationStation.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'name', 'errors')}">

@@ -28,6 +28,8 @@
                         
                             <th><g:message code="installationStation.installation.label" default="Installation" /></th>
                         
+                            <g:sortableColumn property="location" title="${message(code: 'installationStation.location.label', default: 'Location')}" />
+                        
                             <g:sortableColumn property="name" title="${message(code: 'installationStation.name.label', default: 'Name')}" />
                         
                         </tr>
@@ -41,6 +43,8 @@
                             <td>${fieldValue(bean: installationStationInstance, field: "curtainPosition")}</td>
                         
                             <td>${fieldValue(bean: installationStationInstance, field: "installation")}</td>
+                        
+                            <td>${fieldValue(bean: installationStationInstance, field: "location")}</td>
                         
                             <td>${fieldValue(bean: installationStationInstance, field: "name")}</td>
                         

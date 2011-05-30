@@ -8,6 +8,7 @@ class Organisation
     String phoneNumber
     String faxNumber
     String postalAddress
+    EntityStatus status
     
     static constraints =
     {
@@ -15,6 +16,7 @@ class Organisation
         phoneNumber()
         faxNumber()
         postalAddress()
+        status()    // Default to PENDING
     }
     
     String toString()

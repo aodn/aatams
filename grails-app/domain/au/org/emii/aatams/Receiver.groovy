@@ -8,5 +8,12 @@ class Receiver extends Device
 {
     static belongsTo = [station:InstallationStation]
     
-    // There are no extra properties for receiver.
+    /**
+     * TODO: units?
+     */
+    Float batteryLife
+    
+    Float batteryVoltage
+    
+
 }

@@ -7,11 +7,17 @@ class Project
     
     String name
     String description
+
+    /**
+     * Each project must have one and only one principal investigator.
+     */
+    ProjectRole principalInvestator;
     
     static constraints = 
     {
         name(blank:false)
         description()
+        principalInvestator()
     }
     
     String toString()

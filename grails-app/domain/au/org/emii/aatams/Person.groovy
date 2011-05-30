@@ -2,7 +2,7 @@ package au.org.emii.aatams
 
 class Person 
 {
-    static hasMany = [projectRoles:ProjectRole]
+    static hasMany = [projectRoles:ProjectRole, systemRoles:SystemRole]
     
     String firstName;
     String lastName;

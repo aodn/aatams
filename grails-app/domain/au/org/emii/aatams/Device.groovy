@@ -6,13 +6,16 @@ package au.org.emii.aatams
 abstract class Device 
 {
     String codeName
-    DeviceModel model
+    
+    DeviceModel model       
     String serialNumber
-    Project project
+    static belongsTo = [project: Project]
     
     /**
      * Date when data from this device is no longer embargoed (may be null to
      * indicate that no embargo exists).
+     * 
+     * Note: this field is not actually used in any business logic.
      */
     Date embargoDate
     DeviceStatus status
@@ -24,6 +27,14 @@ abstract class Device
     
     String toString()
     {
-        return model.toString() + ": " + serialNumber
+        return getID()
+    }
+    
+    /**
+     * The ID dynamically constructed from Device's properties.
+     */
+    String getID()
+    {
+        return model.toString() + " - " + serialNumber
     }
 }

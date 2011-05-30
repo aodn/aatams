@@ -74,6 +74,15 @@
                                 </td>
                             </tr>
                         
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="systemRoles"><g:message code="person.systemRoles.label" default="System Roles" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'systemRoles', 'errors')}">
+                                    <g:select name="systemRoles" from="${au.org.emii.aatams.SystemRole.list()}" multiple="yes" optionKey="id" size="5" value="${personInstance?.systemRoles*.id}" />
+                                </td>
+                            </tr>
+                        
                         </tbody>
                     </table>
                 </div>

@@ -3,7 +3,8 @@ package au.org.emii.aatams
 class Project 
 {
     static hasMany = [organisationProjects:OrganisationProject, 
-                      projectRoles:ProjectRole]
+                      projectRoles:ProjectRole,
+                      devices:Device]
     
     String name
     String description
@@ -11,7 +12,7 @@ class Project
     /**
      * Each project must have one and only one principal investigator.
      */
-    ProjectRole principalInvestator;
+    ProjectRole principalInvestator
     
     static constraints = 
     {

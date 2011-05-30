@@ -12,7 +12,8 @@ import com.vividsolutions.jts.geom.Point
 class Detection 
 {
     Date timestamp
-    Receiver receiver
+    
+    static belongsTo = [receiver: Receiver]
     
     /**
      * This is modelled as a one-to-many relationship, due to the fact that tags

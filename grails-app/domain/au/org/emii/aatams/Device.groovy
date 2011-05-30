@@ -2,8 +2,10 @@ package au.org.emii.aatams
 
 /**
  * Common base class for receivers and tags.
+ * TODO: this should be abstract but this is causing "unmapped" exceptions
+ * with hibernate.
  */
-abstract class Device 
+class Device 
 {
     String codeName
     
@@ -20,20 +22,17 @@ abstract class Device
     Date embargoDate
     DeviceStatus status
     
-    static constraints = 
-    {
-        
-    }
+    static transients = ['deviceID']
     
     String toString()
     {
-        return getID()
+        return getDeviceID()
     }
     
     /**
      * The ID dynamically constructed from Device's properties.
      */
-    String getID()
+    String getDeviceID()
     {
         return model.toString() + " - " + serialNumber
     }

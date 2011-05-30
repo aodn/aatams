@@ -28,6 +28,8 @@
                         
                             <g:sortableColumn property="description" title="${message(code: 'project.description.label', default: 'Description')}" />
                         
+                            <th><g:message code="project.principalInvestator.label" default="Principal Investator" /></th>
+                        
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +41,8 @@
                             <td>${fieldValue(bean: projectInstance, field: "name")}</td>
                         
                             <td>${fieldValue(bean: projectInstance, field: "description")}</td>
+                        
+                            <td>${fieldValue(bean: projectInstance, field: "principalInvestator")}</td>
                         
                         </tr>
                     </g:each>

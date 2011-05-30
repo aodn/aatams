@@ -24,15 +24,15 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'receiver.id.label', default: 'Id')}" />
                         
+                            <g:sortableColumn property="batteryLife" title="${message(code: 'receiver.batteryLife.label', default: 'Battery Life')}" />
+                        
+                            <g:sortableColumn property="batteryVoltage" title="${message(code: 'receiver.batteryVoltage.label', default: 'Battery Voltage')}" />
+                        
                             <g:sortableColumn property="codeName" title="${message(code: 'receiver.codeName.label', default: 'Code Name')}" />
                         
                             <g:sortableColumn property="embargoDate" title="${message(code: 'receiver.embargoDate.label', default: 'Embargo Date')}" />
                         
                             <th><g:message code="receiver.model.label" default="Model" /></th>
-                        
-                            <th><g:message code="receiver.project.label" default="Project" /></th>
-                        
-                            <g:sortableColumn property="serialNumber" title="${message(code: 'receiver.serialNumber.label', default: 'Serial Number')}" />
                         
                         </tr>
                     </thead>
@@ -42,15 +42,15 @@
                         
                             <td><g:link action="show" id="${receiverInstance.id}">${fieldValue(bean: receiverInstance, field: "id")}</g:link></td>
                         
+                            <td>${fieldValue(bean: receiverInstance, field: "batteryLife")}</td>
+                        
+                            <td>${fieldValue(bean: receiverInstance, field: "batteryVoltage")}</td>
+                        
                             <td>${fieldValue(bean: receiverInstance, field: "codeName")}</td>
                         
                             <td><g:formatDate date="${receiverInstance.embargoDate}" /></td>
                         
                             <td>${fieldValue(bean: receiverInstance, field: "model")}</td>
-                        
-                            <td>${fieldValue(bean: receiverInstance, field: "project")}</td>
-                        
-                            <td>${fieldValue(bean: receiverInstance, field: "serialNumber")}</td>
                         
                         </tr>
                     </g:each>

@@ -44,6 +44,26 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="project.principalInvestator.label" default="Principal Investator" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="projectRole" action="show" id="${projectInstance?.principalInvestator?.id}">${projectInstance?.principalInvestator?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="project.devices.label" default="Devices" /></td>
+                            
+                            <td valign="top" style="text-align: left;" class="value">
+                                <ul>
+                                <g:each in="${projectInstance.devices}" var="d">
+                                    <li><g:link controller="device" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
+                                </g:each>
+                                </ul>
+                            </td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="project.organisationProjects.label" default="Organisation Projects" /></td>
                             
                             <td valign="top" style="text-align: left;" class="value">

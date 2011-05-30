@@ -87,4 +87,8 @@ log4j = {
            'net.sf.ehcache.hibernate'
 
     warn   'org.mortbay.log'
+    
+//    debug  'org.springframework',
+//           'org.hibernate',
+//           'org.codehaus.groovy.grails.orm.hibernate'
 }

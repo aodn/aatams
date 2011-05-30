@@ -51,6 +51,31 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                  <label for="principalInvestator"><g:message code="project.principalInvestator.label" default="Principal Investator" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'principalInvestator', 'errors')}">
+                                    <g:select name="principalInvestator.id" from="${au.org.emii.aatams.ProjectRole.list()}" optionKey="id" value="${projectInstance?.principalInvestator?.id}"  />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="devices"><g:message code="project.devices.label" default="Devices" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'devices', 'errors')}">
+                                    
+<ul>
+<g:each in="${projectInstance?.devices?}" var="d">
+    <li><g:link controller="device" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
+</g:each>
+</ul>
+<g:link controller="device" action="create" params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'device.label', default: 'Device')])}</g:link>
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="organisationProjects"><g:message code="project.organisationProjects.label" default="Organisation Projects" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'organisationProjects', 'errors')}">

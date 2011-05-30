@@ -24,15 +24,15 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'tag.id.label', default: 'Id')}" />
                         
+                            <g:sortableColumn property="codeMap" title="${message(code: 'tag.codeMap.label', default: 'Code Map')}" />
+                        
                             <g:sortableColumn property="codeName" title="${message(code: 'tag.codeName.label', default: 'Code Name')}" />
                         
                             <g:sortableColumn property="embargoDate" title="${message(code: 'tag.embargoDate.label', default: 'Embargo Date')}" />
                         
                             <th><g:message code="tag.model.label" default="Model" /></th>
                         
-                            <th><g:message code="tag.project.label" default="Project" /></th>
-                        
-                            <g:sortableColumn property="serialNumber" title="${message(code: 'tag.serialNumber.label', default: 'Serial Number')}" />
+                            <g:sortableColumn property="pingCode" title="${message(code: 'tag.pingCode.label', default: 'Ping Code')}" />
                         
                         </tr>
                     </thead>
@@ -42,15 +42,15 @@
                         
                             <td><g:link action="show" id="${tagInstance.id}">${fieldValue(bean: tagInstance, field: "id")}</g:link></td>
                         
+                            <td>${fieldValue(bean: tagInstance, field: "codeMap")}</td>
+                        
                             <td>${fieldValue(bean: tagInstance, field: "codeName")}</td>
                         
                             <td><g:formatDate date="${tagInstance.embargoDate}" /></td>
                         
                             <td>${fieldValue(bean: tagInstance, field: "model")}</td>
                         
-                            <td>${fieldValue(bean: tagInstance, field: "project")}</td>
-                        
-                            <td>${fieldValue(bean: tagInstance, field: "serialNumber")}</td>
+                            <td>${fieldValue(bean: tagInstance, field: "pingCode")}</td>
                         
                         </tr>
                     </g:each>

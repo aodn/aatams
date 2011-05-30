@@ -32,6 +32,8 @@
                         
                             <g:sortableColumn property="postalAddress" title="${message(code: 'organisation.postalAddress.label', default: 'Postal Address')}" />
                         
+                            <g:sortableColumn property="status" title="${message(code: 'organisation.status.label', default: 'Status')}" />
+                        
                         </tr>
                     </thead>
                     <tbody>
@@ -47,6 +49,8 @@
                             <td>${fieldValue(bean: organisationInstance, field: "faxNumber")}</td>
                         
                             <td>${fieldValue(bean: organisationInstance, field: "postalAddress")}</td>
+                        
+                            <td>${fieldValue(bean: organisationInstance, field: "status")}</td>
                         
                         </tr>
                     </g:each>

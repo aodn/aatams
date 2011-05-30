@@ -30,6 +30,20 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiver.batteryLife.label" default="Battery Life" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "batteryLife")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiver.batteryVoltage.label" default="Battery Voltage" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "batteryVoltage")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiver.codeName.label" default="Code Name" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "codeName")}</td>

@@ -30,6 +30,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="detection.location.label" default="Location" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "location")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.receiver.label" default="Receiver" /></td>
                             
                             <td valign="top" class="value"><g:link controller="receiver" action="show" id="${detectionInstance?.receiver?.id}">${detectionInstance?.receiver?.encodeAsHTML()}</g:link></td>
@@ -37,9 +44,22 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="detection.tag.label" default="Tag" /></td>
+                            <td valign="top" class="name"><g:message code="detection.stationName.label" default="Station Name" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="tag" action="show" id="${detectionInstance?.tag?.id}">${detectionInstance?.tag?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "stationName")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="detection.tags.label" default="Tags" /></td>
+                            
+                            <td valign="top" style="text-align: left;" class="value">
+                                <ul>
+                                <g:each in="${detectionInstance.tags}" var="t">
+                                    <li><g:link controller="tag" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></li>
+                                </g:each>
+                                </ul>
+                            </td>
                             
                         </tr>
                     

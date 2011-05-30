@@ -64,6 +64,15 @@
                                 </td>
                             </tr>
                         
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="status"><g:message code="organisation.status.label" default="Status" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'status', 'errors')}">
+                                    <g:select name="status" from="${au.org.emii.aatams.EntityStatus?.values()}" keys="${au.org.emii.aatams.EntityStatus?.values()*.name()}" value="${organisationInstance?.status?.name()}"  />
+                                </td>
+                            </tr>
+                        
                         </tbody>
                     </table>
                 </div>

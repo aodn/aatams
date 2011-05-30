@@ -54,7 +54,7 @@
                                   <label for="location"><g:message code="installationStation.location.label" default="Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'location', 'errors')}">
-                                    
+                                    <g:textField name="location" value="${fieldValue(bean: installationStationInstance, field: 'location')}" />
                                 </td>
                             </tr>
                         

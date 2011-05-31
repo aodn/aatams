@@ -13,6 +13,12 @@ class ReceiverDownloadFile
      */
     URL path
     
+    static constraints =
+    {
+        type()
+        path()
+    }
+    
     String toString()
     {
         return path.getFile()

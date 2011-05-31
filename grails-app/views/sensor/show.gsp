@@ -30,6 +30,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="sensor.tag.label" default="Tag" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="tag" action="show" id="${sensorInstance?.tag?.id}">${sensorInstance?.tag?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.codeMap.label" default="Code Map" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "codeMap")}</td>
@@ -37,30 +44,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="sensor.intercept.label" default="Intercept" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "intercept")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.pingCode.label" default="Ping Code" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "pingCode")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="sensor.slope.label" default="Slope" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "slope")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="sensor.tag.label" default="Tag" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="tag" action="show" id="${sensorInstance?.tag?.id}">${sensorInstance?.tag?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -75,6 +61,20 @@
                             <td valign="top" class="name"><g:message code="sensor.unit.label" default="Unit" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "unit")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="sensor.slope.label" default="Slope" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "slope")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="sensor.intercept.label" default="Intercept" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "intercept")}</td>
                             
                         </tr>
                     

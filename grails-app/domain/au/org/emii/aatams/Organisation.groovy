@@ -8,15 +8,16 @@ class Organisation
     String phoneNumber
     String faxNumber
     String postalAddress
-    EntityStatus status
+    EntityStatus status = EntityStatus.PENDING
     
     static constraints =
     {
-        name(blank:false)
-        phoneNumber()
+        name(blank:false, unique:true)
+        phoneNumber(blank:false)
         faxNumber()
-        postalAddress()
+        postalAddress(blank:false)
         status()    // Default to PENDING
+        organisationProjects()
     }
     
     String toString()

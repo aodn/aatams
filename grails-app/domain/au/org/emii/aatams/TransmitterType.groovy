@@ -7,6 +7,11 @@ class TransmitterType
 {
     String transmitterTypeName
     
+    static constraints =
+    {
+        transmitterTypeName(blank:false, unique:true)
+    }
+    
     String toString()
     {
         return transmitterTypeName

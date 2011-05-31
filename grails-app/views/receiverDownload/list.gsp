@@ -24,13 +24,13 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'receiverDownload.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="batteryDays" title="${message(code: 'receiverDownload.batteryDays.label', default: 'Battery Days')}" />
+                            <th><g:message code="receiverDownload.receiverRecovery.label" default="Receiver Recovery" /></th>
                         
-                            <g:sortableColumn property="batteryVoltage" title="${message(code: 'receiverDownload.batteryVoltage.label', default: 'Battery Voltage')}" />
+                            <g:sortableColumn property="downloadDate" title="${message(code: 'receiverDownload.downloadDate.label', default: 'Download Date')}" />
                         
                             <g:sortableColumn property="clockDrift" title="${message(code: 'receiverDownload.clockDrift.label', default: 'Clock Drift')}" />
                         
-                            <g:sortableColumn property="comments" title="${message(code: 'receiverDownload.comments.label', default: 'Comments')}" />
+                            <g:sortableColumn property="pingCount" title="${message(code: 'receiverDownload.pingCount.label', default: 'Ping Count')}" />
                         
                             <g:sortableColumn property="detectionCount" title="${message(code: 'receiverDownload.detectionCount.label', default: 'Detection Count')}" />
                         
@@ -42,13 +42,13 @@
                         
                             <td><g:link action="show" id="${receiverDownloadInstance.id}">${fieldValue(bean: receiverDownloadInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: receiverDownloadInstance, field: "batteryDays")}</td>
+                            <td>${fieldValue(bean: receiverDownloadInstance, field: "receiverRecovery")}</td>
                         
-                            <td>${fieldValue(bean: receiverDownloadInstance, field: "batteryVoltage")}</td>
+                            <td><g:formatDate date="${receiverDownloadInstance.downloadDate}" /></td>
                         
                             <td>${fieldValue(bean: receiverDownloadInstance, field: "clockDrift")}</td>
                         
-                            <td>${fieldValue(bean: receiverDownloadInstance, field: "comments")}</td>
+                            <td>${fieldValue(bean: receiverDownloadInstance, field: "pingCount")}</td>
                         
                             <td>${fieldValue(bean: receiverDownloadInstance, field: "detectionCount")}</td>
                         

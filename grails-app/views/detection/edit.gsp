@@ -33,10 +33,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="location"><g:message code="detection.location.label" default="Location" /></label>
+                                  <label for="timestamp"><g:message code="detection.timestamp.label" default="Timestamp" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'location', 'errors')}">
-                                    <g:textField name="location" value="${detectionInstance?.location}" />
+                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'timestamp', 'errors')}">
+                                    <g:datePicker name="timestamp" precision="day" value="${detectionInstance?.timestamp}"  />
 
                                 </td>
                             </tr>
@@ -53,6 +53,16 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                  <label for="transmitterName"><g:message code="detection.transmitterName.label" default="Transmitter Name" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'transmitterName', 'errors')}">
+                                    <g:textField name="transmitterName" value="${detectionInstance?.transmitterName}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="stationName"><g:message code="detection.stationName.label" default="Station Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'stationName', 'errors')}">
@@ -63,30 +73,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                  <label for="location"><g:message code="detection.location.label" default="Location" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'location', 'errors')}">
+                                    <g:textField name="location" value="${detectionInstance?.location}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="tags"><g:message code="detection.tags.label" default="Tags" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'tags', 'errors')}">
                                     <g:select name="tags" from="${au.org.emii.aatams.Tag.list()}" multiple="yes" optionKey="id" size="5" value="${detectionInstance?.tags*.id}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="timestamp"><g:message code="detection.timestamp.label" default="Timestamp" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'timestamp', 'errors')}">
-                                    <g:datePicker name="timestamp" precision="day" value="${detectionInstance?.timestamp}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="transmitterName"><g:message code="detection.transmitterName.label" default="Transmitter Name" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'transmitterName', 'errors')}">
-                                    <g:textField name="transmitterName" value="${detectionInstance?.transmitterName}" />
 
                                 </td>
                             </tr>

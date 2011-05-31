@@ -33,10 +33,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="location"><g:message code="sensorDetection.location.label" default="Location" /></label>
+                                  <label for="timestamp"><g:message code="sensorDetection.timestamp.label" default="Timestamp" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'location', 'errors')}">
-                                    <g:textField name="location" value="${sensorDetectionInstance?.location}" />
+                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'timestamp', 'errors')}">
+                                    <g:datePicker name="timestamp" precision="day" value="${sensorDetectionInstance?.timestamp}"  />
 
                                 </td>
                             </tr>
@@ -53,10 +53,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="sensor"><g:message code="sensorDetection.sensor.label" default="Sensor" /></label>
+                                  <label for="transmitterName"><g:message code="sensorDetection.transmitterName.label" default="Transmitter Name" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'sensor', 'errors')}">
-                                    <g:select name="sensor.id" from="${au.org.emii.aatams.Sensor.list()}" optionKey="id" value="${sensorDetectionInstance?.sensor?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'transmitterName', 'errors')}">
+                                    <g:textField name="transmitterName" value="${sensorDetectionInstance?.transmitterName}" />
 
                                 </td>
                             </tr>
@@ -73,30 +73,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="tags"><g:message code="sensorDetection.tags.label" default="Tags" /></label>
+                                  <label for="location"><g:message code="sensorDetection.location.label" default="Location" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'tags', 'errors')}">
-                                    <g:select name="tags" from="${au.org.emii.aatams.Tag.list()}" multiple="yes" optionKey="id" size="5" value="${sensorDetectionInstance?.tags*.id}" />
+                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'location', 'errors')}">
+                                    <g:textField name="location" value="${sensorDetectionInstance?.location}" />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="timestamp"><g:message code="sensorDetection.timestamp.label" default="Timestamp" /></label>
+                                  <label for="sensor"><g:message code="sensorDetection.sensor.label" default="Sensor" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'timestamp', 'errors')}">
-                                    <g:datePicker name="timestamp" precision="day" value="${sensorDetectionInstance?.timestamp}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="transmitterName"><g:message code="sensorDetection.transmitterName.label" default="Transmitter Name" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'transmitterName', 'errors')}">
-                                    <g:textField name="transmitterName" value="${sensorDetectionInstance?.transmitterName}" />
+                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'sensor', 'errors')}">
+                                    <g:select name="sensor.id" from="${au.org.emii.aatams.Sensor.list()}" optionKey="id" value="${sensorDetectionInstance?.sensor?.id}"  />
 
                                 </td>
                             </tr>
@@ -107,6 +97,16 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'uncalibratedValue', 'errors')}">
                                     <g:textField name="uncalibratedValue" value="${fieldValue(bean: sensorDetectionInstance, field: 'uncalibratedValue')}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="tags"><g:message code="sensorDetection.tags.label" default="Tags" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'tags', 'errors')}">
+                                    <g:select name="tags" from="${au.org.emii.aatams.Tag.list()}" multiple="yes" optionKey="id" size="5" value="${sensorDetectionInstance?.tags*.id}" />
 
                                 </td>
                             </tr>

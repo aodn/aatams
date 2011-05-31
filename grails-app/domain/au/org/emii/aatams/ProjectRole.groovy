@@ -11,4 +11,9 @@ class ProjectRole
     static belongsTo = [project:Project, person:Person]
     
     ProjectRoleType roleType;
+    
+    String toString()
+    {
+        return String.valueOf(project) + " - " + String.valueOf(roleType) + ": " + String.valueOf(person)
+    }
 }

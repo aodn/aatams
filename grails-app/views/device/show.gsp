@@ -37,6 +37,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="device.serialNumber.label" default="Serial Number" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: deviceInstance, field: "serialNumber")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="device.embargoDate.label" default="Embargo Date" /></td>
                             
                             <td valign="top" class="value"><g:formatDate date="${deviceInstance?.embargoDate}" /></td>
@@ -54,13 +61,6 @@
                             <td valign="top" class="name"><g:message code="device.project.label" default="Project" /></td>
                             
                             <td valign="top" class="value"><g:link controller="project" action="show" id="${deviceInstance?.project?.id}">${deviceInstance?.project?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="device.serialNumber.label" default="Serial Number" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: deviceInstance, field: "serialNumber")}</td>
                             
                         </tr>
                     

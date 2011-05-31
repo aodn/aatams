@@ -24,9 +24,9 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'receiverDownloadFile.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="path" title="${message(code: 'receiverDownloadFile.path.label', default: 'Path')}" />
-                        
                             <g:sortableColumn property="type" title="${message(code: 'receiverDownloadFile.type.label', default: 'Type')}" />
+                        
+                            <g:sortableColumn property="path" title="${message(code: 'receiverDownloadFile.path.label', default: 'Path')}" />
                         
                         </tr>
                     </thead>
@@ -36,9 +36,9 @@
                         
                             <td><g:link action="show" id="${receiverDownloadFileInstance.id}">${fieldValue(bean: receiverDownloadFileInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: receiverDownloadFileInstance, field: "path")}</td>
-                        
                             <td>${fieldValue(bean: receiverDownloadFileInstance, field: "type")}</td>
+                        
+                            <td>${fieldValue(bean: receiverDownloadFileInstance, field: "path")}</td>
                         
                         </tr>
                     </g:each>

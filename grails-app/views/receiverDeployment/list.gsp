@@ -24,15 +24,15 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'receiverDeployment.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="acousticReleaseID" title="${message(code: 'receiverDeployment.acousticReleaseID.label', default: 'Acoustic Release ID')}" />
+                            <th><g:message code="receiverDeployment.receiver.label" default="Receiver" /></th>
                         
-                            <g:sortableColumn property="bottomDepthM" title="${message(code: 'receiverDeployment.bottomDepthM.label', default: 'Bottom Depth M')}" />
+                            <th><g:message code="receiverDeployment.station.label" default="Station" /></th>
                         
-                            <g:sortableColumn property="comments" title="${message(code: 'receiverDeployment.comments.label', default: 'Comments')}" />
+                            <g:sortableColumn property="deploymentNumber" title="${message(code: 'receiverDeployment.deploymentNumber.label', default: 'Deployment Number')}" />
                         
                             <g:sortableColumn property="deploymentDate" title="${message(code: 'receiverDeployment.deploymentDate.label', default: 'Deployment Date')}" />
                         
-                            <g:sortableColumn property="deploymentNumber" title="${message(code: 'receiverDeployment.deploymentNumber.label', default: 'Deployment Number')}" />
+                            <g:sortableColumn property="recoveryDate" title="${message(code: 'receiverDeployment.recoveryDate.label', default: 'Recovery Date')}" />
                         
                         </tr>
                     </thead>
@@ -42,15 +42,15 @@
                         
                             <td><g:link action="show" id="${receiverDeploymentInstance.id}">${fieldValue(bean: receiverDeploymentInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: receiverDeploymentInstance, field: "acousticReleaseID")}</td>
+                            <td>${fieldValue(bean: receiverDeploymentInstance, field: "receiver")}</td>
                         
-                            <td>${fieldValue(bean: receiverDeploymentInstance, field: "bottomDepthM")}</td>
+                            <td>${fieldValue(bean: receiverDeploymentInstance, field: "station")}</td>
                         
-                            <td>${fieldValue(bean: receiverDeploymentInstance, field: "comments")}</td>
+                            <td>${fieldValue(bean: receiverDeploymentInstance, field: "deploymentNumber")}</td>
                         
                             <td><g:formatDate date="${receiverDeploymentInstance.deploymentDate}" /></td>
                         
-                            <td>${fieldValue(bean: receiverDeploymentInstance, field: "deploymentNumber")}</td>
+                            <td><g:formatDate date="${receiverDeploymentInstance.recoveryDate}" /></td>
                         
                         </tr>
                     </g:each>

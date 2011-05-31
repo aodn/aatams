@@ -24,15 +24,15 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'surgery.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="comments" title="${message(code: 'surgery.comments.label', default: 'Comments')}" />
+                            <g:sortableColumn property="timestamp" title="${message(code: 'surgery.timestamp.label', default: 'Timestamp')}" />
                         
                             <th><g:message code="surgery.release.label" default="Release" /></th>
                         
-                            <th><g:message code="surgery.surgeon.label" default="Surgeon" /></th>
+                            <th><g:message code="surgery.tag.label" default="Tag" /></th>
                         
                             <g:sortableColumn property="sutures" title="${message(code: 'surgery.sutures.label', default: 'Sutures')}" />
                         
-                            <th><g:message code="surgery.tag.label" default="Tag" /></th>
+                            <th><g:message code="surgery.treatmentType.label" default="Treatment Type" /></th>
                         
                         </tr>
                     </thead>
@@ -42,15 +42,15 @@
                         
                             <td><g:link action="show" id="${surgeryInstance.id}">${fieldValue(bean: surgeryInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: surgeryInstance, field: "comments")}</td>
+                            <td><g:formatDate date="${surgeryInstance.timestamp}" /></td>
                         
                             <td>${fieldValue(bean: surgeryInstance, field: "release")}</td>
                         
-                            <td>${fieldValue(bean: surgeryInstance, field: "surgeon")}</td>
+                            <td>${fieldValue(bean: surgeryInstance, field: "tag")}</td>
                         
                             <td><g:formatBoolean boolean="${surgeryInstance.sutures}" /></td>
                         
-                            <td>${fieldValue(bean: surgeryInstance, field: "tag")}</td>
+                            <td>${fieldValue(bean: surgeryInstance, field: "treatmentType")}</td>
                         
                         </tr>
                     </g:each>

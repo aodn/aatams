@@ -30,23 +30,16 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalMeasurement.comments.label" default="Comments" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: animalMeasurementInstance, field: "comments")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></td>
-                            
-                            <td valign="top" class="value"><g:formatBoolean boolean="${animalMeasurementInstance?.estimate}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalMeasurement.type.label" default="Type" /></td>
                             
                             <td valign="top" class="value"><g:link controller="animalMeasurementType" action="show" id="${animalMeasurementInstance?.type?.id}">${animalMeasurementInstance?.type?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="animalMeasurement.value.label" default="Value" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: animalMeasurementInstance, field: "value")}</td>
                             
                         </tr>
                     
@@ -58,9 +51,16 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalMeasurement.value.label" default="Value" /></td>
+                            <td valign="top" class="name"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: animalMeasurementInstance, field: "value")}</td>
+                            <td valign="top" class="value"><g:formatBoolean boolean="${animalMeasurementInstance?.estimate}" /></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="animalMeasurement.comments.label" default="Comments" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: animalMeasurementInstance, field: "comments")}</td>
                             
                         </tr>
                     

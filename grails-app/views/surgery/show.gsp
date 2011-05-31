@@ -30,9 +30,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="surgery.comments.label" default="Comments" /></td>
+                            <td valign="top" class="name"><g:message code="surgery.timestamp.label" default="Timestamp" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: surgeryInstance, field: "comments")}</td>
+                            <td valign="top" class="value"><g:formatDate date="${surgeryInstance?.timestamp}" /></td>
                             
                         </tr>
                     
@@ -44,9 +44,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="surgery.surgeon.label" default="Surgeon" /></td>
+                            <td valign="top" class="name"><g:message code="surgery.tag.label" default="Tag" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="person" action="show" id="${surgeryInstance?.surgeon?.id}">${surgeryInstance?.surgeon?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value"><g:link controller="tag" action="show" id="${surgeryInstance?.tag?.id}">${surgeryInstance?.tag?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -58,23 +58,23 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="surgery.tag.label" default="Tag" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="tag" action="show" id="${surgeryInstance?.tag?.id}">${surgeryInstance?.tag?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="surgery.timestamp.label" default="Timestamp" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${surgeryInstance?.timestamp}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="surgery.treatmentType.label" default="Treatment Type" /></td>
                             
                             <td valign="top" class="value"><g:link controller="surgeryTreatmentType" action="show" id="${surgeryInstance?.treatmentType?.id}">${surgeryInstance?.treatmentType?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="surgery.surgeon.label" default="Surgeon" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="person" action="show" id="${surgeryInstance?.surgeon?.id}">${surgeryInstance?.surgeon?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="surgery.comments.label" default="Comments" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: surgeryInstance, field: "comments")}</td>
                             
                         </tr>
                     

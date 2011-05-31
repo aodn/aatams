@@ -30,20 +30,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="curtainPosition"><g:message code="installationStation.curtainPosition.label" default="Curtain Position" /></label>
+                                    <label for="name"><g:message code="installationStation.name.label" default="Name" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'curtainPosition', 'errors')}">
-                                    <g:textField name="curtainPosition" value="${fieldValue(bean: installationStationInstance, field: 'curtainPosition')}" />
+                                <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'name', 'errors')}">
+                                    <g:textField name="name" value="${installationStationInstance?.name}" />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="installation"><g:message code="installationStation.installation.label" default="Installation" /></label>
+                                    <label for="curtainPosition"><g:message code="installationStation.curtainPosition.label" default="Curtain Position" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'installation', 'errors')}">
-                                    <g:select name="installation.id" from="${au.org.emii.aatams.Installation.list()}" optionKey="id" value="${installationStationInstance?.installation?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'curtainPosition', 'errors')}">
+                                    <g:textField name="curtainPosition" value="${fieldValue(bean: installationStationInstance, field: 'curtainPosition')}" />
 
                                 </td>
                             </tr>
@@ -60,10 +60,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="name"><g:message code="installationStation.name.label" default="Name" /></label>
+                                    <label for="installation"><g:message code="installationStation.installation.label" default="Installation" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'name', 'errors')}">
-                                    <g:textField name="name" value="${installationStationInstance?.name}" />
+                                <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'installation', 'errors')}">
+                                    <g:select name="installation.id" from="${au.org.emii.aatams.Installation.list()}" optionKey="id" value="${installationStationInstance?.installation?.id}"  />
 
                                 </td>
                             </tr>

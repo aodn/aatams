@@ -33,20 +33,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="animal"><g:message code="animalRelease.animal.label" default="Animal" /></label>
+                                  <label for="project"><g:message code="animalRelease.project.label" default="Project" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'animal', 'errors')}">
-                                    <g:select name="animal.id" from="${au.org.emii.aatams.Animal.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'project', 'errors')}">
+                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${animalReleaseInstance?.project?.id}"  />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="captureDateTime"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></label>
+                                  <label for="animal"><g:message code="animalRelease.animal.label" default="Animal" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureDateTime', 'errors')}">
-                                    <g:datePicker name="captureDateTime" precision="day" value="${animalReleaseInstance?.captureDateTime}"  />
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'animal', 'errors')}">
+                                    <g:select name="animal.id" from="${au.org.emii.aatams.Animal.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.id}"  />
 
                                 </td>
                             </tr>
@@ -73,40 +73,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="comments"><g:message code="animalRelease.comments.label" default="Comments" /></label>
+                                  <label for="captureDateTime"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'comments', 'errors')}">
-                                    <g:textField name="comments" value="${animalReleaseInstance?.comments}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="measurements"><g:message code="animalRelease.measurements.label" default="Measurements" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'measurements', 'errors')}">
-                                    <g:select name="measurements" from="${au.org.emii.aatams.AnimalMeasurement.list()}" multiple="yes" optionKey="id" size="5" value="${animalReleaseInstance?.measurements*.id}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="project"><g:message code="animalRelease.project.label" default="Project" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${animalReleaseInstance?.project?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="releaseDateTime"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseDateTime', 'errors')}">
-                                    <g:datePicker name="releaseDateTime" precision="day" value="${animalReleaseInstance?.releaseDateTime}"  />
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureDateTime', 'errors')}">
+                                    <g:datePicker name="captureDateTime" precision="day" value="${animalReleaseInstance?.captureDateTime}"  />
 
                                 </td>
                             </tr>
@@ -127,6 +97,36 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseLocation', 'errors')}">
                                     <g:textField name="releaseLocation" value="${animalReleaseInstance?.releaseLocation}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="releaseDateTime"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseDateTime', 'errors')}">
+                                    <g:datePicker name="releaseDateTime" precision="day" value="${animalReleaseInstance?.releaseDateTime}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="comments"><g:message code="animalRelease.comments.label" default="Comments" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'comments', 'errors')}">
+                                    <g:textField name="comments" value="${animalReleaseInstance?.comments}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="measurements"><g:message code="animalRelease.measurements.label" default="Measurements" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'measurements', 'errors')}">
+                                    <g:select name="measurements" from="${au.org.emii.aatams.AnimalMeasurement.list()}" multiple="yes" optionKey="id" size="5" value="${animalReleaseInstance?.measurements*.id}" />
 
                                 </td>
                             </tr>

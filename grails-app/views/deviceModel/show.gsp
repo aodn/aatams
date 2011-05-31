@@ -30,16 +30,16 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="deviceModel.manufacturer.label" default="Manufacturer" /></td>
+                            <td valign="top" class="name"><g:message code="deviceModel.modelName.label" default="Model Name" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="deviceManufacturer" action="show" id="${deviceModelInstance?.manufacturer?.id}">${deviceModelInstance?.manufacturer?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${fieldValue(bean: deviceModelInstance, field: "modelName")}</td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="deviceModel.modelName.label" default="Model Name" /></td>
+                            <td valign="top" class="name"><g:message code="deviceModel.manufacturer.label" default="Manufacturer" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: deviceModelInstance, field: "modelName")}</td>
+                            <td valign="top" class="value"><g:link controller="deviceManufacturer" action="show" id="${deviceModelInstance?.manufacturer?.id}">${deviceModelInstance?.manufacturer?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     

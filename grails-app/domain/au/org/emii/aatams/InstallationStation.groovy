@@ -33,6 +33,13 @@ class InstallationStation
      */
     Point location
     
+    static constraints =
+    {
+        name(blank:false)
+        curtainPosition(min:0)
+        location()
+    }
+    
     String toString()
     {
         return name

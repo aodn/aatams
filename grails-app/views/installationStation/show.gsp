@@ -30,16 +30,16 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="installationStation.curtainPosition.label" default="Curtain Position" /></td>
+                            <td valign="top" class="name"><g:message code="installationStation.name.label" default="Name" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: installationStationInstance, field: "curtainPosition")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: installationStationInstance, field: "name")}</td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="installationStation.installation.label" default="Installation" /></td>
+                            <td valign="top" class="name"><g:message code="installationStation.curtainPosition.label" default="Curtain Position" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="installation" action="show" id="${installationStationInstance?.installation?.id}">${installationStationInstance?.installation?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${fieldValue(bean: installationStationInstance, field: "curtainPosition")}</td>
                             
                         </tr>
                     
@@ -51,9 +51,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="installationStation.name.label" default="Name" /></td>
+                            <td valign="top" class="name"><g:message code="installationStation.installation.label" default="Installation" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: installationStationInstance, field: "name")}</td>
+                            <td valign="top" class="value"><g:link controller="installation" action="show" id="${installationStationInstance?.installation?.id}">${installationStationInstance?.installation?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     

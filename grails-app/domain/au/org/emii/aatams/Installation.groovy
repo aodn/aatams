@@ -22,6 +22,15 @@ class Installation
      * Maximum latitudinal offset used to scramble data for visualisations.
      */
     Float latOffset
+    
+    static constraints =
+    {
+        name(blank:false)
+        configuration()
+        project()
+        lonOffset(min:0F)
+        latOffset(min:0F)
+    }
      
     String toString()
     {

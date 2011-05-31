@@ -30,16 +30,16 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalRelease.animal.label" default="Animal" /></td>
+                            <td valign="top" class="name"><g:message code="animalRelease.project.label" default="Project" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="animal" action="show" id="${animalReleaseInstance?.animal?.id}">${animalReleaseInstance?.animal?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value"><g:link controller="project" action="show" id="${animalReleaseInstance?.project?.id}">${animalReleaseInstance?.project?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></td>
+                            <td valign="top" class="name"><g:message code="animalRelease.animal.label" default="Animal" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${animalReleaseInstance?.captureDateTime}" /></td>
+                            <td valign="top" class="value"><g:link controller="animal" action="show" id="${animalReleaseInstance?.animal?.id}">${animalReleaseInstance?.animal?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -54,6 +54,34 @@
                             <td valign="top" class="name"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "captureLocation")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></td>
+                            
+                            <td valign="top" class="value"><g:formatDate date="${animalReleaseInstance?.captureDateTime}" /></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="animalRelease.releaseLocality.label" default="Release Locality" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "releaseLocality")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "releaseLocation")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></td>
+                            
+                            <td valign="top" class="value"><g:formatDate date="${animalReleaseInstance?.releaseDateTime}" /></td>
                             
                         </tr>
                     
@@ -74,34 +102,6 @@
                                 </g:each>
                                 </ul>
                             </td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalRelease.project.label" default="Project" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="project" action="show" id="${animalReleaseInstance?.project?.id}">${animalReleaseInstance?.project?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${animalReleaseInstance?.releaseDateTime}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalRelease.releaseLocality.label" default="Release Locality" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "releaseLocality")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "releaseLocation")}</td>
                             
                         </tr>
                     

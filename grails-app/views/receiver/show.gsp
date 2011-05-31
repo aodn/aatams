@@ -30,23 +30,30 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.batteryLife.label" default="Battery Life" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "batteryLife")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.batteryVoltage.label" default="Battery Voltage" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "batteryVoltage")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiver.codeName.label" default="Code Name" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "codeName")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiver.serialNumber.label" default="Serial Number" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "serialNumber")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiver.embargoDate.label" default="Embargo Date" /></td>
+                            
+                            <td valign="top" class="value"><g:formatDate date="${receiverInstance?.embargoDate}" /></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiver.status.label" default="Status" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${receiverInstance?.status?.id}">${receiverInstance?.status?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -64,13 +71,6 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.embargoDate.label" default="Embargo Date" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${receiverInstance?.embargoDate}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiver.model.label" default="Model" /></td>
                             
                             <td valign="top" class="value"><g:link controller="deviceModel" action="show" id="${receiverInstance?.model?.id}">${receiverInstance?.model?.encodeAsHTML()}</g:link></td>
@@ -81,27 +81,6 @@
                             <td valign="top" class="name"><g:message code="receiver.project.label" default="Project" /></td>
                             
                             <td valign="top" class="value"><g:link controller="project" action="show" id="${receiverInstance?.project?.id}">${receiverInstance?.project?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.serialNumber.label" default="Serial Number" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "serialNumber")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.station.label" default="Station" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="installationStation" action="show" id="${receiverInstance?.station?.id}">${receiverInstance?.station?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.status.label" default="Status" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${receiverInstance?.status?.id}">${receiverInstance?.status?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     

@@ -30,9 +30,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="detection.location.label" default="Location" /></td>
+                            <td valign="top" class="name"><g:message code="detection.timestamp.label" default="Timestamp" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "location")}</td>
+                            <td valign="top" class="value"><g:formatDate date="${detectionInstance?.timestamp}" /></td>
                             
                         </tr>
                     
@@ -44,9 +44,23 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="detection.transmitterName.label" default="Transmitter Name" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "transmitterName")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.stationName.label" default="Station Name" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "stationName")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="detection.location.label" default="Location" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "location")}</td>
                             
                         </tr>
                     
@@ -60,20 +74,6 @@
                                 </g:each>
                                 </ul>
                             </td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="detection.timestamp.label" default="Timestamp" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${detectionInstance?.timestamp}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="detection.transmitterName.label" default="Transmitter Name" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "transmitterName")}</td>
                             
                         </tr>
                     

@@ -12,4 +12,13 @@ class AnimalMeasurement
     Boolean estimate
     
     String comments
+    
+    static constraints =
+    {
+        type()
+        value()
+        unit()
+        estimate()
+        comments()
+    }
 }

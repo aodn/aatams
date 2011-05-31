@@ -40,6 +40,15 @@ class Detection
      */
     Point location;
     
+    static constraints = 
+    {
+        timestamp(max:new Date())
+        receiver()
+        transmitterName(blank:true)
+        stationName(blank:true)
+        location()
+    }
+    
     String toString()
     {
         return timestamp.toString() + " " + receiver.toString()

@@ -24,15 +24,15 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'animalRelease.id.label', default: 'Id')}" />
                         
-                            <th><g:message code="animalRelease.animal.label" default="Animal" /></th>
+                            <th><g:message code="animalRelease.project.label" default="Project" /></th>
                         
-                            <g:sortableColumn property="captureDateTime" title="${message(code: 'animalRelease.captureDateTime.label', default: 'Capture Date Time')}" />
+                            <th><g:message code="animalRelease.animal.label" default="Animal" /></th>
                         
                             <g:sortableColumn property="captureLocality" title="${message(code: 'animalRelease.captureLocality.label', default: 'Capture Locality')}" />
                         
                             <g:sortableColumn property="captureLocation" title="${message(code: 'animalRelease.captureLocation.label', default: 'Capture Location')}" />
                         
-                            <g:sortableColumn property="comments" title="${message(code: 'animalRelease.comments.label', default: 'Comments')}" />
+                            <g:sortableColumn property="captureDateTime" title="${message(code: 'animalRelease.captureDateTime.label', default: 'Capture Date Time')}" />
                         
                         </tr>
                     </thead>
@@ -42,15 +42,15 @@
                         
                             <td><g:link action="show" id="${animalReleaseInstance.id}">${fieldValue(bean: animalReleaseInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: animalReleaseInstance, field: "animal")}</td>
+                            <td>${fieldValue(bean: animalReleaseInstance, field: "project")}</td>
                         
-                            <td><g:formatDate date="${animalReleaseInstance.captureDateTime}" /></td>
+                            <td>${fieldValue(bean: animalReleaseInstance, field: "animal")}</td>
                         
                             <td>${fieldValue(bean: animalReleaseInstance, field: "captureLocality")}</td>
                         
                             <td>${fieldValue(bean: animalReleaseInstance, field: "captureLocation")}</td>
                         
-                            <td>${fieldValue(bean: animalReleaseInstance, field: "comments")}</td>
+                            <td><g:formatDate date="${animalReleaseInstance.captureDateTime}" /></td>
                         
                         </tr>
                     </g:each>

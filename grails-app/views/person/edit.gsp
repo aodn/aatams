@@ -33,20 +33,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="lastName"><g:message code="person.lastName.label" default="Last Name" /></label>
+                                  <label for="name"><g:message code="person.name.label" default="Name" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'lastName', 'errors')}">
-                                    <g:textField name="lastName" value="${personInstance?.lastName}" />
+                                <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'name', 'errors')}">
+                                    <g:textField name="name" value="${personInstance?.name}" />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="firstName"><g:message code="person.firstName.label" default="First Name" /></label>
+                                  <label for="phoneNumber"><g:message code="person.phoneNumber.label" default="Phone Number" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'firstName', 'errors')}">
-                                    <g:textField name="firstName" value="${personInstance?.firstName}" />
+                                <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'phoneNumber', 'errors')}">
+                                    <g:textField name="phoneNumber" value="${personInstance?.phoneNumber}" />
 
                                 </td>
                             </tr>

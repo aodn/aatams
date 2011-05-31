@@ -14,7 +14,7 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
+//            dbCreate = "update" // one of 'create', 'create-drop','update'
 //            url = "jdbc:hsqldb:file:devDB;shutdown=true"
 //            url = "jdbc:hsqldb:mem:devDB"
             url = "jdbc:postgresql://localhost:5432/aatams"
@@ -25,13 +25,13 @@ environments {
     }
     test {
         dataSource {
-            dbCreate = "update"
+//            dbCreate = "update"
             url = "jdbc:hsqldb:mem:testDb"
         }
     }
     production {
         dataSource {
-            dbCreate = "update"
+//            dbCreate = "update"
             url = "jdbc:hsqldb:file:prodDb;shutdown=true"
         }
     }

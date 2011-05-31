@@ -30,10 +30,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="comments"><g:message code="surgery.comments.label" default="Comments" /></label>
+                                    <label for="timestamp"><g:message code="surgery.timestamp.label" default="Timestamp" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'comments', 'errors')}">
-                                    <g:textField name="comments" value="${surgeryInstance?.comments}" />
+                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'timestamp', 'errors')}">
+                                    <g:datePicker name="timestamp" precision="day" value="${surgeryInstance?.timestamp}"  />
 
                                 </td>
                             </tr>
@@ -50,10 +50,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="surgeon"><g:message code="surgery.surgeon.label" default="Surgeon" /></label>
+                                    <label for="tag"><g:message code="surgery.tag.label" default="Tag" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'surgeon', 'errors')}">
-                                    <g:select name="surgeon.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${surgeryInstance?.surgeon?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'tag', 'errors')}">
+                                    <g:select name="tag.id" from="${au.org.emii.aatams.Tag.list()}" optionKey="id" value="${surgeryInstance?.tag?.id}"  />
 
                                 </td>
                             </tr>
@@ -70,30 +70,30 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="tag"><g:message code="surgery.tag.label" default="Tag" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'tag', 'errors')}">
-                                    <g:select name="tag.id" from="${au.org.emii.aatams.Tag.list()}" optionKey="id" value="${surgeryInstance?.tag?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="timestamp"><g:message code="surgery.timestamp.label" default="Timestamp" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'timestamp', 'errors')}">
-                                    <g:datePicker name="timestamp" precision="day" value="${surgeryInstance?.timestamp}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                     <label for="treatmentType"><g:message code="surgery.treatmentType.label" default="Treatment Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'treatmentType', 'errors')}">
                                     <g:select name="treatmentType.id" from="${au.org.emii.aatams.SurgeryTreatmentType.list()}" optionKey="id" value="${surgeryInstance?.treatmentType?.id}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="surgeon"><g:message code="surgery.surgeon.label" default="Surgeon" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'surgeon', 'errors')}">
+                                    <g:select name="surgeon.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${surgeryInstance?.surgeon?.id}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="comments"><g:message code="surgery.comments.label" default="Comments" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'comments', 'errors')}">
+                                    <g:textField name="comments" value="${surgeryInstance?.comments}" />
 
                                 </td>
                             </tr>

@@ -6,19 +6,8 @@ package au.org.emii.aatams
  */
 class Receiver extends Device
 {
-    static belongsTo = [station:InstallationStation]
-    
     /**
      * Detection recorded at the receiver (may also include SensorDetections).
      */
     static hasMany = [detections: Detection]
-    
-    /**
-     * TODO: units?
-     */
-    Float batteryLife
-    
-    Float batteryVoltage
-    
-
 }

@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalInstance, field: 'classification', 'errors')}">
                                     <g:textField name="classification" value="${animalInstance?.classification}" />
+
                                 </td>
                             </tr>
                         
@@ -43,6 +44,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalInstance, field: 'sex', 'errors')}">
                                     <g:select name="sex.id" from="${au.org.emii.aatams.Sex.list()}" optionKey="id" value="${animalInstance?.sex?.id}"  />
+
                                 </td>
                             </tr>
                         

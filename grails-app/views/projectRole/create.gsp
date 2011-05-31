@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'person', 'errors')}">
                                     <g:select name="person.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${projectRoleInstance?.person?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -43,6 +44,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${projectRoleInstance?.project?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -52,6 +54,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'roleType', 'errors')}">
                                     <g:select name="roleType.id" from="${au.org.emii.aatams.ProjectRoleType.list()}" optionKey="id" value="${projectRoleInstance?.roleType?.id}"  />
+
                                 </td>
                             </tr>
                         

@@ -68,6 +68,16 @@
                                 </td>
                             </tr>
                         
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="transmitterName"><g:message code="detection.transmitterName.label" default="Transmitter Name" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'transmitterName', 'errors')}">
+                                    <g:textField name="transmitterName" value="${detectionInstance?.transmitterName}" />
+
+                                </td>
+                            </tr>
+                        
                         </tbody>
                     </table>
                 </div>

@@ -32,6 +32,8 @@
                         
                             <g:sortableColumn property="timestamp" title="${message(code: 'detection.timestamp.label', default: 'Timestamp')}" />
                         
+                            <g:sortableColumn property="transmitterName" title="${message(code: 'detection.transmitterName.label', default: 'Transmitter Name')}" />
+                        
                         </tr>
                     </thead>
                     <tbody>
@@ -47,6 +49,8 @@
                             <td>${fieldValue(bean: detectionInstance, field: "stationName")}</td>
                         
                             <td><g:formatDate date="${detectionInstance.timestamp}" /></td>
+                        
+                            <td>${fieldValue(bean: detectionInstance, field: "transmitterName")}</td>
                         
                         </tr>
                     </g:each>

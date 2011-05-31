@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationConfigurationInstance, field: 'type', 'errors')}">
                                     <g:textField name="type" value="${installationConfigurationInstance?.type}" />
+
                                 </td>
                             </tr>
                         

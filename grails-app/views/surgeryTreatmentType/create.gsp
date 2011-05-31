@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryTreatmentTypeInstance, field: 'type', 'errors')}">
                                     <g:textField name="type" value="${surgeryTreatmentTypeInstance?.type}" />
+
                                 </td>
                             </tr>
                         

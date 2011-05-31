@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'path', 'errors')}">
                                     <g:textField name="path" value="${receiverDownloadFileInstance?.path}" />
+
                                 </td>
                             </tr>
                         
@@ -43,6 +44,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'type', 'errors')}">
                                     <g:select name="type" from="${au.org.emii.aatams.ReceiverDownloadFileType?.values()}" keys="${au.org.emii.aatams.ReceiverDownloadFileType?.values()*.name()}" value="${receiverDownloadFileInstance?.type?.name()}"  />
+
                                 </td>
                             </tr>
                         

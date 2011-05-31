@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'comments', 'errors')}">
                                     <g:textField name="comments" value="${surgeryInstance?.comments}" />
+
                                 </td>
                             </tr>
                         
@@ -43,6 +44,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'release', 'errors')}">
                                     <g:select name="release.id" from="${au.org.emii.aatams.AnimalRelease.list()}" optionKey="id" value="${surgeryInstance?.release?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -52,6 +54,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'surgeon', 'errors')}">
                                     <g:select name="surgeon.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${surgeryInstance?.surgeon?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -61,6 +64,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'sutures', 'errors')}">
                                     <g:checkBox name="sutures" value="${surgeryInstance?.sutures}" />
+
                                 </td>
                             </tr>
                         
@@ -70,6 +74,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'tag', 'errors')}">
                                     <g:select name="tag.id" from="${au.org.emii.aatams.Tag.list()}" optionKey="id" value="${surgeryInstance?.tag?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -79,6 +84,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'timestamp', 'errors')}">
                                     <g:datePicker name="timestamp" precision="day" value="${surgeryInstance?.timestamp}"  />
+
                                 </td>
                             </tr>
                         
@@ -88,6 +94,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'treatmentType', 'errors')}">
                                     <g:select name="treatmentType.id" from="${au.org.emii.aatams.SurgeryTreatmentType.list()}" optionKey="id" value="${surgeryInstance?.treatmentType?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -97,6 +104,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'type', 'errors')}">
                                     <g:select name="type.id" from="${au.org.emii.aatams.SurgeryType.list()}" optionKey="id" value="${surgeryInstance?.type?.id}"  />
+
                                 </td>
                             </tr>
                         

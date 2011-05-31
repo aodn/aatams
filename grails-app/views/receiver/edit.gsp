@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'batteryLife', 'errors')}">
                                     <g:textField name="batteryLife" value="${fieldValue(bean: receiverInstance, field: 'batteryLife')}" />
+
                                 </td>
                             </tr>
                         
@@ -46,6 +47,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'batteryVoltage', 'errors')}">
                                     <g:textField name="batteryVoltage" value="${fieldValue(bean: receiverInstance, field: 'batteryVoltage')}" />
+
                                 </td>
                             </tr>
                         
@@ -55,6 +57,24 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'codeName', 'errors')}">
                                     <g:textField name="codeName" value="${receiverInstance?.codeName}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="detections"><g:message code="receiver.detections.label" default="Detections" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'detections', 'errors')}">
+                                    
+<ul>
+<g:each in="${receiverInstance?.detections?}" var="d">
+    <li><g:link controller="detection" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
+</g:each>
+</ul>
+<g:link controller="detection" action="create" params="['receiver.id': receiverInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'detection.label', default: 'Detection')])}</g:link>
+
+
                                 </td>
                             </tr>
                         
@@ -64,6 +84,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'embargoDate', 'errors')}">
                                     <g:datePicker name="embargoDate" precision="day" value="${receiverInstance?.embargoDate}"  />
+
                                 </td>
                             </tr>
                         
@@ -73,6 +94,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'model', 'errors')}">
                                     <g:select name="model.id" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" value="${receiverInstance?.model?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -82,6 +104,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${receiverInstance?.project?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -91,6 +114,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'serialNumber', 'errors')}">
                                     <g:textField name="serialNumber" value="${receiverInstance?.serialNumber}" />
+
                                 </td>
                             </tr>
                         
@@ -100,6 +124,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'station', 'errors')}">
                                     <g:select name="station.id" from="${au.org.emii.aatams.InstallationStation.list()}" optionKey="id" value="${receiverInstance?.station?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -109,6 +134,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverInstance?.status?.id}"  />
+
                                 </td>
                             </tr>
                         

@@ -92,3 +92,16 @@ log4j = {
 //           'org.hibernate',
 //           'org.codehaus.groovy.grails.orm.hibernate'
 }
+
+//
+//  File uploader configuration.
+//
+fileuploader
+{
+    detectionUpload
+    {
+        //  maxSize = ???
+        allowedExtensions = ["csv", "vrl", "rld"]
+        path = "/Users/jburgess/Documents/aatams/test_uploads"
+    }
+}

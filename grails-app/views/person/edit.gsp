@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'lastName', 'errors')}">
                                     <g:textField name="lastName" value="${personInstance?.lastName}" />
+
                                 </td>
                             </tr>
                         
@@ -46,6 +47,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'firstName', 'errors')}">
                                     <g:textField name="firstName" value="${personInstance?.firstName}" />
+
                                 </td>
                             </tr>
                         
@@ -55,6 +57,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'emailAddress', 'errors')}">
                                     <g:textField name="emailAddress" value="${personInstance?.emailAddress}" />
+
                                 </td>
                             </tr>
                         
@@ -71,6 +74,7 @@
 </ul>
 <g:link controller="projectRole" action="create" params="['person.id': personInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'projectRole.label', default: 'ProjectRole')])}</g:link>
 
+
                                 </td>
                             </tr>
                         
@@ -80,6 +84,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'systemRoles', 'errors')}">
                                     <g:select name="systemRoles" from="${au.org.emii.aatams.SystemRole.list()}" multiple="yes" optionKey="id" size="5" value="${personInstance?.systemRoles*.id}" />
+
                                 </td>
                             </tr>
                         

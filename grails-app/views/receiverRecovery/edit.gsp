@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'deployment', 'errors')}">
                                     <g:select name="deployment.id" from="${au.org.emii.aatams.ReceiverDeployment.list()}" optionKey="id" value="${receiverRecoveryInstance?.deployment?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -46,6 +47,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'download', 'errors')}">
                                     <g:select name="download.id" from="${au.org.emii.aatams.ReceiverDownload.list()}" optionKey="id" value="${receiverRecoveryInstance?.download?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -55,6 +57,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'location', 'errors')}">
                                     <g:textField name="location" value="${receiverRecoveryInstance?.location}" />
+
                                 </td>
                             </tr>
                         
@@ -64,6 +67,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDate', 'errors')}">
                                     <g:datePicker name="recoveryDate" precision="day" value="${receiverRecoveryInstance?.recoveryDate}"  />
+
                                 </td>
                             </tr>
                         
@@ -73,6 +77,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverRecoveryInstance?.status?.id}"  />
+
                                 </td>
                             </tr>
                         

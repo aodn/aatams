@@ -51,6 +51,19 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiver.detections.label" default="Detections" /></td>
+                            
+                            <td valign="top" style="text-align: left;" class="value">
+                                <ul>
+                                <g:each in="${receiverInstance.detections}" var="d">
+                                    <li><g:link controller="detection" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
+                                </g:each>
+                                </ul>
+                            </td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiver.embargoDate.label" default="Embargo Date" /></td>
                             
                             <td valign="top" class="value"><g:formatDate date="${receiverInstance?.embargoDate}" /></td>

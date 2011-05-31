@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${projectInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -46,6 +47,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${projectInstance?.description}" />
+
                                 </td>
                             </tr>
                         
@@ -55,6 +57,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'principalInvestator', 'errors')}">
                                     <g:select name="principalInvestator.id" from="${au.org.emii.aatams.ProjectRole.list()}" optionKey="id" value="${projectInstance?.principalInvestator?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -70,6 +73,7 @@
 </g:each>
 </ul>
 <g:link controller="device" action="create" params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'device.label', default: 'Device')])}</g:link>
+
 
                                 </td>
                             </tr>
@@ -87,6 +91,7 @@
 </ul>
 <g:link controller="organisationProject" action="create" params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'OrganisationProject')])}</g:link>
 
+
                                 </td>
                             </tr>
                         
@@ -102,6 +107,7 @@
 </g:each>
 </ul>
 <g:link controller="projectRole" action="create" params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'projectRole.label', default: 'ProjectRole')])}</g:link>
+
 
                                 </td>
                             </tr>

@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'curtainPosition', 'errors')}">
                                     <g:textField name="curtainPosition" value="${fieldValue(bean: installationStationInstance, field: 'curtainPosition')}" />
+
                                 </td>
                             </tr>
                         
@@ -43,6 +44,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'installation', 'errors')}">
                                     <g:select name="installation.id" from="${au.org.emii.aatams.Installation.list()}" optionKey="id" value="${installationStationInstance?.installation?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -51,7 +53,8 @@
                                     <label for="location"><g:message code="installationStation.location.label" default="Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'location', 'errors')}">
-                                    <g:textField name="location" value="${fieldValue(bean: installationStationInstance, field: 'location')}" />
+                                    <g:textField name="location" value="${installationStationInstance?.location}" />
+
                                 </td>
                             </tr>
                         
@@ -61,6 +64,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${installationStationInstance?.name}" />
+
                                 </td>
                             </tr>
                         

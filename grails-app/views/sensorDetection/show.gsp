@@ -30,9 +30,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="sensorDetection.location.label" default="Location" /></td>
+                            <td valign="top" class="name"><g:message code="sensorDetection.timestamp.label" default="Timestamp" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: sensorDetectionInstance, field: "location")}</td>
+                            <td valign="top" class="value"><g:formatDate date="${sensorDetectionInstance?.timestamp}" /></td>
                             
                         </tr>
                     
@@ -44,9 +44,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="sensorDetection.sensor.label" default="Sensor" /></td>
+                            <td valign="top" class="name"><g:message code="sensorDetection.transmitterName.label" default="Transmitter Name" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="sensor" action="show" id="${sensorDetectionInstance?.sensor?.id}">${sensorDetectionInstance?.sensor?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${fieldValue(bean: sensorDetectionInstance, field: "transmitterName")}</td>
                             
                         </tr>
                     
@@ -54,6 +54,27 @@
                             <td valign="top" class="name"><g:message code="sensorDetection.stationName.label" default="Station Name" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: sensorDetectionInstance, field: "stationName")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="sensorDetection.location.label" default="Location" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: sensorDetectionInstance, field: "location")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="sensorDetection.sensor.label" default="Sensor" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="sensor" action="show" id="${sensorDetectionInstance?.sensor?.id}">${sensorDetectionInstance?.sensor?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="sensorDetection.uncalibratedValue.label" default="Uncalibrated Value" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: sensorDetectionInstance, field: "uncalibratedValue")}</td>
                             
                         </tr>
                     
@@ -67,27 +88,6 @@
                                 </g:each>
                                 </ul>
                             </td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="sensorDetection.timestamp.label" default="Timestamp" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${sensorDetectionInstance?.timestamp}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="sensorDetection.transmitterName.label" default="Transmitter Name" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: sensorDetectionInstance, field: "transmitterName")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="sensorDetection.uncalibratedValue.label" default="Uncalibrated Value" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: sensorDetectionInstance, field: "uncalibratedValue")}</td>
                             
                         </tr>
                     

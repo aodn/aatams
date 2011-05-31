@@ -30,50 +30,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="batteryDays"><g:message code="receiverDownload.batteryDays.label" default="Battery Days" /></label>
+                                    <label for="receiverRecovery"><g:message code="receiverDownload.receiverRecovery.label" default="Receiver Recovery" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'batteryDays', 'errors')}">
-                                    <g:textField name="batteryDays" value="${fieldValue(bean: receiverDownloadInstance, field: 'batteryDays')}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="batteryVoltage"><g:message code="receiverDownload.batteryVoltage.label" default="Battery Voltage" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'batteryVoltage', 'errors')}">
-                                    <g:textField name="batteryVoltage" value="${fieldValue(bean: receiverDownloadInstance, field: 'batteryVoltage')}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="clockDrift"><g:message code="receiverDownload.clockDrift.label" default="Clock Drift" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'clockDrift', 'errors')}">
-                                    <g:textField name="clockDrift" value="${fieldValue(bean: receiverDownloadInstance, field: 'clockDrift')}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="comments"><g:message code="receiverDownload.comments.label" default="Comments" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'comments', 'errors')}">
-                                    <g:textField name="comments" value="${receiverDownloadInstance?.comments}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="detectionCount"><g:message code="receiverDownload.detectionCount.label" default="Detection Count" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'detectionCount', 'errors')}">
-                                    <g:textField name="detectionCount" value="${fieldValue(bean: receiverDownloadInstance, field: 'detectionCount')}" />
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'receiverRecovery', 'errors')}">
+                                    <g:select name="receiverRecovery.id" from="${au.org.emii.aatams.ReceiverRecovery.list()}" optionKey="id" value="${receiverDownloadInstance?.receiverRecovery?.id}"  />
 
                                 </td>
                             </tr>
@@ -90,10 +50,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="downloader"><g:message code="receiverDownload.downloader.label" default="Downloader" /></label>
+                                    <label for="clockDrift"><g:message code="receiverDownload.clockDrift.label" default="Clock Drift" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'downloader', 'errors')}">
-                                    <g:select name="downloader.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${receiverDownloadInstance?.downloader?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'clockDrift', 'errors')}">
+                                    <g:textField name="clockDrift" value="${fieldValue(bean: receiverDownloadInstance, field: 'clockDrift')}" />
 
                                 </td>
                             </tr>
@@ -110,10 +70,50 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="receiverRecovery"><g:message code="receiverDownload.receiverRecovery.label" default="Receiver Recovery" /></label>
+                                    <label for="detectionCount"><g:message code="receiverDownload.detectionCount.label" default="Detection Count" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'receiverRecovery', 'errors')}">
-                                    <g:select name="receiverRecovery.id" from="${au.org.emii.aatams.ReceiverRecovery.list()}" optionKey="id" value="${receiverDownloadInstance?.receiverRecovery?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'detectionCount', 'errors')}">
+                                    <g:textField name="detectionCount" value="${fieldValue(bean: receiverDownloadInstance, field: 'detectionCount')}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="comments"><g:message code="receiverDownload.comments.label" default="Comments" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'comments', 'errors')}">
+                                    <g:textField name="comments" value="${receiverDownloadInstance?.comments}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="downloader"><g:message code="receiverDownload.downloader.label" default="Downloader" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'downloader', 'errors')}">
+                                    <g:select name="downloader.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${receiverDownloadInstance?.downloader?.id}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="batteryVoltage"><g:message code="receiverDownload.batteryVoltage.label" default="Battery Voltage" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'batteryVoltage', 'errors')}">
+                                    <g:textField name="batteryVoltage" value="${fieldValue(bean: receiverDownloadInstance, field: 'batteryVoltage')}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="batteryDays"><g:message code="receiverDownload.batteryDays.label" default="Battery Days" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'batteryDays', 'errors')}">
+                                    <g:textField name="batteryDays" value="${fieldValue(bean: receiverDownloadInstance, field: 'batteryDays')}" />
 
                                 </td>
                             </tr>

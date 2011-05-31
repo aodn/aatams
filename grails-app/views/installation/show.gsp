@@ -30,6 +30,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="installation.name.label" default="Name" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: installationInstance, field: "name")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="installation.configuration.label" default="Configuration" /></td>
                             
                             <td valign="top" class="value"><g:link controller="installationConfiguration" action="show" id="${installationInstance?.configuration?.id}">${installationInstance?.configuration?.encodeAsHTML()}</g:link></td>
@@ -37,9 +44,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="installation.latOffset.label" default="Lat Offset" /></td>
+                            <td valign="top" class="name"><g:message code="installation.project.label" default="Project" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: installationInstance, field: "latOffset")}</td>
+                            <td valign="top" class="value"><g:link controller="project" action="show" id="${installationInstance?.project?.id}">${installationInstance?.project?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -51,16 +58,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="installation.name.label" default="Name" /></td>
+                            <td valign="top" class="name"><g:message code="installation.latOffset.label" default="Lat Offset" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: installationInstance, field: "name")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="installation.project.label" default="Project" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="project" action="show" id="${installationInstance?.project?.id}">${installationInstance?.project?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${fieldValue(bean: installationInstance, field: "latOffset")}</td>
                             
                         </tr>
                     

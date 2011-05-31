@@ -24,15 +24,15 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'installation.id.label', default: 'Id')}" />
                         
+                            <g:sortableColumn property="name" title="${message(code: 'installation.name.label', default: 'Name')}" />
+                        
                             <th><g:message code="installation.configuration.label" default="Configuration" /></th>
                         
-                            <g:sortableColumn property="latOffset" title="${message(code: 'installation.latOffset.label', default: 'Lat Offset')}" />
+                            <th><g:message code="installation.project.label" default="Project" /></th>
                         
                             <g:sortableColumn property="lonOffset" title="${message(code: 'installation.lonOffset.label', default: 'Lon Offset')}" />
                         
-                            <g:sortableColumn property="name" title="${message(code: 'installation.name.label', default: 'Name')}" />
-                        
-                            <th><g:message code="installation.project.label" default="Project" /></th>
+                            <g:sortableColumn property="latOffset" title="${message(code: 'installation.latOffset.label', default: 'Lat Offset')}" />
                         
                         </tr>
                     </thead>
@@ -42,15 +42,15 @@
                         
                             <td><g:link action="show" id="${installationInstance.id}">${fieldValue(bean: installationInstance, field: "id")}</g:link></td>
                         
+                            <td>${fieldValue(bean: installationInstance, field: "name")}</td>
+                        
                             <td>${fieldValue(bean: installationInstance, field: "configuration")}</td>
                         
-                            <td>${fieldValue(bean: installationInstance, field: "latOffset")}</td>
+                            <td>${fieldValue(bean: installationInstance, field: "project")}</td>
                         
                             <td>${fieldValue(bean: installationInstance, field: "lonOffset")}</td>
                         
-                            <td>${fieldValue(bean: installationInstance, field: "name")}</td>
-                        
-                            <td>${fieldValue(bean: installationInstance, field: "project")}</td>
+                            <td>${fieldValue(bean: installationInstance, field: "latOffset")}</td>
                         
                         </tr>
                     </g:each>

@@ -20,6 +20,24 @@ class ReceiverRecovery
      */
     ReceiverDeployment deployment
     
+    /**
+     * Battery life/voltage at the time the receiver was recovered.
+     */
+    Float batteryLife
+    
+    Float batteryVoltage
+
+    static constraints =
+    {
+        recoveryDate(max:new Date())
+        location()
+        status()
+        download(nullable:true)
+        deployment()
+        batteryLife(min:0F, nullable:true)
+        batteryVoltage(min:0F, nullable:true)
+    }
+    
     String toString()
     {
         return String.valueOf(deployment.receiver) + " recovered on "

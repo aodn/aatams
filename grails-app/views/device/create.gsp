@@ -40,10 +40,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                    <label for="serialNumber"><g:message code="device.serialNumber.label" default="Serial Number" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'serialNumber', 'errors')}">
+                                    <g:textField name="serialNumber" value="${deviceInstance?.serialNumber}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                     <label for="embargoDate"><g:message code="device.embargoDate.label" default="Embargo Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'embargoDate', 'errors')}">
-                                    <g:datePicker name="embargoDate" precision="day" value="${deviceInstance?.embargoDate}"  />
+                                    <g:datePicker name="embargoDate" precision="day" value="${deviceInstance?.embargoDate}" default="none" noSelection="['': '']" />
 
                                 </td>
                             </tr>
@@ -64,16 +74,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${deviceInstance?.project?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="serialNumber"><g:message code="device.serialNumber.label" default="Serial Number" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'serialNumber', 'errors')}">
-                                    <g:textField name="serialNumber" value="${deviceInstance?.serialNumber}" />
 
                                 </td>
                             </tr>

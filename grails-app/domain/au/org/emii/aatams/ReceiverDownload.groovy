@@ -33,4 +33,17 @@ class ReceiverDownload
     
     Float batteryVoltage
     Integer batteryDays
+    
+    static constraints = 
+    {
+        receiverRecovery()
+        downloadDate(max:new Date())
+        clockDrift()
+        pingCount(min:0)
+        detectionCount(min:0)
+        comments(blank:true)
+        downloader()
+        batteryVoltage(min:0F)
+        batteryDays(min:0)
+    }
 }

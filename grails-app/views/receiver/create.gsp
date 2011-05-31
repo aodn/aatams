@@ -30,26 +30,6 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="batteryLife"><g:message code="receiver.batteryLife.label" default="Battery Life" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'batteryLife', 'errors')}">
-                                    <g:textField name="batteryLife" value="${fieldValue(bean: receiverInstance, field: 'batteryLife')}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="batteryVoltage"><g:message code="receiver.batteryVoltage.label" default="Battery Voltage" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'batteryVoltage', 'errors')}">
-                                    <g:textField name="batteryVoltage" value="${fieldValue(bean: receiverInstance, field: 'batteryVoltage')}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                     <label for="codeName"><g:message code="receiver.codeName.label" default="Code Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'codeName', 'errors')}">
@@ -60,10 +40,30 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                    <label for="serialNumber"><g:message code="receiver.serialNumber.label" default="Serial Number" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'serialNumber', 'errors')}">
+                                    <g:textField name="serialNumber" value="${receiverInstance?.serialNumber}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                     <label for="embargoDate"><g:message code="receiver.embargoDate.label" default="Embargo Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'embargoDate', 'errors')}">
-                                    <g:datePicker name="embargoDate" precision="day" value="${receiverInstance?.embargoDate}"  />
+                                    <g:datePicker name="embargoDate" precision="day" value="${receiverInstance?.embargoDate}" default="none" noSelection="['': '']" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="status"><g:message code="receiver.status.label" default="Status" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'status', 'errors')}">
+                                    <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverInstance?.status?.id}"  />
 
                                 </td>
                             </tr>
@@ -84,36 +84,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${receiverInstance?.project?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="serialNumber"><g:message code="receiver.serialNumber.label" default="Serial Number" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'serialNumber', 'errors')}">
-                                    <g:textField name="serialNumber" value="${receiverInstance?.serialNumber}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="station"><g:message code="receiver.station.label" default="Station" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'station', 'errors')}">
-                                    <g:select name="station.id" from="${au.org.emii.aatams.InstallationStation.list()}" optionKey="id" value="${receiverInstance?.station?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="status"><g:message code="receiver.status.label" default="Status" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'status', 'errors')}">
-                                    <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverInstance?.status?.id}"  />
 
                                 </td>
                             </tr>

@@ -2,8 +2,14 @@ package au.org.emii.aatams
 
 class DeviceModel 
 {
+    static belongsTo = [manufacturer:DeviceManufacturer]
     String modelName;
-    DeviceManufacturer manufacturer;
+    
+    static constraints =
+    {
+        modelName(blank:false, unique:true)
+        manufacturer()
+    }
     
     String toString()
     {

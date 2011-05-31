@@ -7,4 +7,24 @@ class Tag extends Device
     String codeMap
     Integer pingCode
 
+    static constraints =
+    {
+        codeMap(blank:false)
+        pingCode()
+    }
+    
+    static transients = ['codeMapPingCode']
+    
+    String toString()
+    {
+        return getCodeMapPingCode()
+    }
+    
+    /**
+     * The ID dynamically constructed from Device's properties.
+     */
+    String getCodeMapPingCode()
+    {
+        return codeMap + " - " + String.valueOf(pingCode)
+    }
 }

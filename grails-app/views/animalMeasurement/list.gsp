@@ -24,15 +24,15 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'animalMeasurement.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="comments" title="${message(code: 'animalMeasurement.comments.label', default: 'Comments')}" />
-                        
-                            <g:sortableColumn property="estimate" title="${message(code: 'animalMeasurement.estimate.label', default: 'Estimate')}" />
-                        
                             <th><g:message code="animalMeasurement.type.label" default="Type" /></th>
+                        
+                            <g:sortableColumn property="value" title="${message(code: 'animalMeasurement.value.label', default: 'Value')}" />
                         
                             <th><g:message code="animalMeasurement.unit.label" default="Unit" /></th>
                         
-                            <g:sortableColumn property="value" title="${message(code: 'animalMeasurement.value.label', default: 'Value')}" />
+                            <g:sortableColumn property="estimate" title="${message(code: 'animalMeasurement.estimate.label', default: 'Estimate')}" />
+                        
+                            <g:sortableColumn property="comments" title="${message(code: 'animalMeasurement.comments.label', default: 'Comments')}" />
                         
                         </tr>
                     </thead>
@@ -42,15 +42,15 @@
                         
                             <td><g:link action="show" id="${animalMeasurementInstance.id}">${fieldValue(bean: animalMeasurementInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: animalMeasurementInstance, field: "comments")}</td>
-                        
-                            <td><g:formatBoolean boolean="${animalMeasurementInstance.estimate}" /></td>
-                        
                             <td>${fieldValue(bean: animalMeasurementInstance, field: "type")}</td>
+                        
+                            <td>${fieldValue(bean: animalMeasurementInstance, field: "value")}</td>
                         
                             <td>${fieldValue(bean: animalMeasurementInstance, field: "unit")}</td>
                         
-                            <td>${fieldValue(bean: animalMeasurementInstance, field: "value")}</td>
+                            <td><g:formatBoolean boolean="${animalMeasurementInstance.estimate}" /></td>
+                        
+                            <td>${fieldValue(bean: animalMeasurementInstance, field: "comments")}</td>
                         
                         </tr>
                     </g:each>

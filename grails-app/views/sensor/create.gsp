@@ -30,6 +30,16 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                    <label for="tag"><g:message code="sensor.tag.label" default="Tag" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'tag', 'errors')}">
+                                    <g:select name="tag.id" from="${au.org.emii.aatams.Tag.list()}" optionKey="id" value="${sensorInstance?.tag?.id}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                     <label for="codeMap"><g:message code="sensor.codeMap.label" default="Code Map" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'codeMap', 'errors')}">
@@ -40,40 +50,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="intercept"><g:message code="sensor.intercept.label" default="Intercept" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'intercept', 'errors')}">
-                                    <g:textField name="intercept" value="${fieldValue(bean: sensorInstance, field: 'intercept')}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                     <label for="pingCode"><g:message code="sensor.pingCode.label" default="Ping Code" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'pingCode', 'errors')}">
                                     <g:textField name="pingCode" value="${fieldValue(bean: sensorInstance, field: 'pingCode')}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="slope"><g:message code="sensor.slope.label" default="Slope" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'slope', 'errors')}">
-                                    <g:textField name="slope" value="${fieldValue(bean: sensorInstance, field: 'slope')}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="tag"><g:message code="sensor.tag.label" default="Tag" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'tag', 'errors')}">
-                                    <g:select name="tag.id" from="${au.org.emii.aatams.Tag.list()}" optionKey="id" value="${sensorInstance?.tag?.id}"  />
 
                                 </td>
                             </tr>
@@ -94,6 +74,26 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'unit', 'errors')}">
                                     <g:textField name="unit" value="${sensorInstance?.unit}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="slope"><g:message code="sensor.slope.label" default="Slope" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'slope', 'errors')}">
+                                    <g:textField name="slope" value="${fieldValue(bean: sensorInstance, field: 'slope')}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="intercept"><g:message code="sensor.intercept.label" default="Intercept" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'intercept', 'errors')}">
+                                    <g:textField name="intercept" value="${fieldValue(bean: sensorInstance, field: 'intercept')}" />
 
                                 </td>
                             </tr>

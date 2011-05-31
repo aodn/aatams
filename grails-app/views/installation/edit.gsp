@@ -33,6 +33,16 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                  <label for="name"><g:message code="installation.name.label" default="Name" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'name', 'errors')}">
+                                    <g:textField name="name" value="${installationInstance?.name}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="configuration"><g:message code="installation.configuration.label" default="Configuration" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'configuration', 'errors')}">
@@ -43,10 +53,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="latOffset"><g:message code="installation.latOffset.label" default="Lat Offset" /></label>
+                                  <label for="project"><g:message code="installation.project.label" default="Project" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'latOffset', 'errors')}">
-                                    <g:textField name="latOffset" value="${fieldValue(bean: installationInstance, field: 'latOffset')}" />
+                                <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'project', 'errors')}">
+                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${installationInstance?.project?.id}"  />
 
                                 </td>
                             </tr>
@@ -63,20 +73,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="name"><g:message code="installation.name.label" default="Name" /></label>
+                                  <label for="latOffset"><g:message code="installation.latOffset.label" default="Lat Offset" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'name', 'errors')}">
-                                    <g:textField name="name" value="${installationInstance?.name}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="project"><g:message code="installation.project.label" default="Project" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${installationInstance?.project?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'latOffset', 'errors')}">
+                                    <g:textField name="latOffset" value="${fieldValue(bean: installationInstance, field: 'latOffset')}" />
 
                                 </td>
                             </tr>

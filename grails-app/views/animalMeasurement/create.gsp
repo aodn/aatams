@@ -30,30 +30,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="comments"><g:message code="animalMeasurement.comments.label" default="Comments" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'comments', 'errors')}">
-                                    <g:textField name="comments" value="${animalMeasurementInstance?.comments}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="estimate"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'estimate', 'errors')}">
-                                    <g:checkBox name="estimate" value="${animalMeasurementInstance?.estimate}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                     <label for="type"><g:message code="animalMeasurement.type.label" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'type', 'errors')}">
                                     <g:select name="type.id" from="${au.org.emii.aatams.AnimalMeasurementType.list()}" optionKey="id" value="${animalMeasurementInstance?.type?.id}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="value"><g:message code="animalMeasurement.value.label" default="Value" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'value', 'errors')}">
+                                    <g:textField name="value" value="${fieldValue(bean: animalMeasurementInstance, field: 'value')}" />
 
                                 </td>
                             </tr>
@@ -70,10 +60,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="value"><g:message code="animalMeasurement.value.label" default="Value" /></label>
+                                    <label for="estimate"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'value', 'errors')}">
-                                    <g:textField name="value" value="${fieldValue(bean: animalMeasurementInstance, field: 'value')}" />
+                                <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'estimate', 'errors')}">
+                                    <g:checkBox name="estimate" value="${animalMeasurementInstance?.estimate}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="comments"><g:message code="animalMeasurement.comments.label" default="Comments" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'comments', 'errors')}">
+                                    <g:textField name="comments" value="${animalMeasurementInstance?.comments}" />
 
                                 </td>
                             </tr>

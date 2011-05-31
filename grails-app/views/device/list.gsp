@@ -26,13 +26,13 @@
                         
                             <g:sortableColumn property="codeName" title="${message(code: 'device.codeName.label', default: 'Code Name')}" />
                         
+                            <g:sortableColumn property="serialNumber" title="${message(code: 'device.serialNumber.label', default: 'Serial Number')}" />
+                        
                             <g:sortableColumn property="embargoDate" title="${message(code: 'device.embargoDate.label', default: 'Embargo Date')}" />
                         
                             <th><g:message code="device.model.label" default="Model" /></th>
                         
                             <th><g:message code="device.project.label" default="Project" /></th>
-                        
-                            <g:sortableColumn property="serialNumber" title="${message(code: 'device.serialNumber.label', default: 'Serial Number')}" />
                         
                         </tr>
                     </thead>
@@ -44,13 +44,13 @@
                         
                             <td>${fieldValue(bean: deviceInstance, field: "codeName")}</td>
                         
+                            <td>${fieldValue(bean: deviceInstance, field: "serialNumber")}</td>
+                        
                             <td><g:formatDate date="${deviceInstance.embargoDate}" /></td>
                         
                             <td>${fieldValue(bean: deviceInstance, field: "model")}</td>
                         
                             <td>${fieldValue(bean: deviceInstance, field: "project")}</td>
-                        
-                            <td>${fieldValue(bean: deviceInstance, field: "serialNumber")}</td>
                         
                         </tr>
                     </g:each>

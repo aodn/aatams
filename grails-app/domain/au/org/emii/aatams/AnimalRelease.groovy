@@ -29,4 +29,18 @@ class AnimalRelease
     Date releaseDateTime
 
     String comments
+    
+    static constraints =
+    {
+        project()
+        animal()
+        captureLocality()
+        captureLocation()
+        captureDateTime(max:new Date())
+        releaseLocality()
+        releaseLocation()
+        releaseDateTime(max:new Date())
+        comments()
+        
+    }
 }

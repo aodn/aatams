@@ -30,16 +30,16 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownload.batteryDays.label" default="Battery Days" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDownload.receiverRecovery.label" default="Receiver Recovery" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadInstance, field: "batteryDays")}</td>
+                            <td valign="top" class="value"><g:link controller="receiverRecovery" action="show" id="${receiverDownloadInstance?.receiverRecovery?.id}">${receiverDownloadInstance?.receiverRecovery?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownload.batteryVoltage.label" default="Battery Voltage" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDownload.downloadDate.label" default="Download Date" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadInstance, field: "batteryVoltage")}</td>
+                            <td valign="top" class="value"><g:formatDate date="${receiverDownloadInstance?.downloadDate}" /></td>
                             
                         </tr>
                     
@@ -51,9 +51,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownload.comments.label" default="Comments" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDownload.pingCount.label" default="Ping Count" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadInstance, field: "comments")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadInstance, field: "pingCount")}</td>
                             
                         </tr>
                     
@@ -65,9 +65,30 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownload.downloadDate.label" default="Download Date" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDownload.comments.label" default="Comments" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${receiverDownloadInstance?.downloadDate}" /></td>
+                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadInstance, field: "comments")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDownload.downloader.label" default="Downloader" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="person" action="show" id="${receiverDownloadInstance?.downloader?.id}">${receiverDownloadInstance?.downloader?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDownload.batteryVoltage.label" default="Battery Voltage" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadInstance, field: "batteryVoltage")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDownload.batteryDays.label" default="Battery Days" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadInstance, field: "batteryDays")}</td>
                             
                         </tr>
                     
@@ -81,27 +102,6 @@
                                 </g:each>
                                 </ul>
                             </td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownload.downloader.label" default="Downloader" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="person" action="show" id="${receiverDownloadInstance?.downloader?.id}">${receiverDownloadInstance?.downloader?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownload.pingCount.label" default="Ping Count" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadInstance, field: "pingCount")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownload.receiverRecovery.label" default="Receiver Recovery" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="receiverRecovery" action="show" id="${receiverDownloadInstance?.receiverRecovery?.id}">${receiverDownloadInstance?.receiverRecovery?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     

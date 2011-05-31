@@ -30,20 +30,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="path"><g:message code="receiverDownloadFile.path.label" default="Path" /></label>
+                                    <label for="type"><g:message code="receiverDownloadFile.type.label" default="Type" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'path', 'errors')}">
-                                    <g:textField name="path" value="${receiverDownloadFileInstance?.path}" />
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'type', 'errors')}">
+                                    <g:select name="type" from="${au.org.emii.aatams.ReceiverDownloadFileType?.values()}" keys="${au.org.emii.aatams.ReceiverDownloadFileType?.values()*.name()}" value="${receiverDownloadFileInstance?.type?.name()}"  />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="type"><g:message code="receiverDownloadFile.type.label" default="Type" /></label>
+                                    <label for="path"><g:message code="receiverDownloadFile.path.label" default="Path" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'type', 'errors')}">
-                                    <g:select name="type" from="${au.org.emii.aatams.ReceiverDownloadFileType?.values()}" keys="${au.org.emii.aatams.ReceiverDownloadFileType?.values()*.name()}" value="${receiverDownloadFileInstance?.type?.name()}"  />
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'path', 'errors')}">
+                                    <g:textField name="path" value="${receiverDownloadFileInstance?.path}" />
 
                                 </td>
                             </tr>

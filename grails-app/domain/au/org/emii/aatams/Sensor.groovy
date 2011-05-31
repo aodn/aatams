@@ -26,5 +26,20 @@ class Sensor
      * Calibration intercept.
      */
     Integer intercept
+
+    static constraints =
+    {
+        tag()
+        codeMap(blank:false)
+        pingCode(min:0)
+        transmitterType()
+        unit(blank:false)
+        slope()
+        intercept()
+    }
     
+    String toString()
+    {
+        return codeMap + " - " + String.valueOf(pingCode)
+    }
 }

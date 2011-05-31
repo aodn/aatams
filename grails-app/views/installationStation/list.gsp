@@ -24,13 +24,13 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'installationStation.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="curtainPosition" title="${message(code: 'installationStation.curtainPosition.label', default: 'Curtain Position')}" />
+                            <g:sortableColumn property="name" title="${message(code: 'installationStation.name.label', default: 'Name')}" />
                         
-                            <th><g:message code="installationStation.installation.label" default="Installation" /></th>
+                            <g:sortableColumn property="curtainPosition" title="${message(code: 'installationStation.curtainPosition.label', default: 'Curtain Position')}" />
                         
                             <g:sortableColumn property="location" title="${message(code: 'installationStation.location.label', default: 'Location')}" />
                         
-                            <g:sortableColumn property="name" title="${message(code: 'installationStation.name.label', default: 'Name')}" />
+                            <th><g:message code="installationStation.installation.label" default="Installation" /></th>
                         
                         </tr>
                     </thead>
@@ -40,13 +40,13 @@
                         
                             <td><g:link action="show" id="${installationStationInstance.id}">${fieldValue(bean: installationStationInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: installationStationInstance, field: "curtainPosition")}</td>
+                            <td>${fieldValue(bean: installationStationInstance, field: "name")}</td>
                         
-                            <td>${fieldValue(bean: installationStationInstance, field: "installation")}</td>
+                            <td>${fieldValue(bean: installationStationInstance, field: "curtainPosition")}</td>
                         
                             <td>${fieldValue(bean: installationStationInstance, field: "location")}</td>
                         
-                            <td>${fieldValue(bean: installationStationInstance, field: "name")}</td>
+                            <td>${fieldValue(bean: installationStationInstance, field: "installation")}</td>
                         
                         </tr>
                     </g:each>

@@ -22,6 +22,14 @@ class Device
     Date embargoDate
     DeviceStatus status
     
+    static constraints =
+    {
+        codeName(blank:false)
+        serialNumber(blank:false)
+        embargoDate(nullable:true)
+        status()
+    }
+    
     static transients = ['deviceID']
     
     String toString()

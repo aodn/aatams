@@ -30,16 +30,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverRecovery.deployment.label" default="Deployment" /></td>
+                            <td valign="top" class="name"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="receiverDeployment" action="show" id="${receiverRecoveryInstance?.deployment?.id}">${receiverRecoveryInstance?.deployment?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverRecovery.download.label" default="Download" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="receiverDownload" action="show" id="${receiverRecoveryInstance?.download?.id}">${receiverRecoveryInstance?.download?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value"><g:formatDate date="${receiverRecoveryInstance?.recoveryDate}" /></td>
                             
                         </tr>
                     
@@ -51,16 +44,37 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></td>
+                            <td valign="top" class="name"><g:message code="receiverRecovery.status.label" default="Status" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${receiverRecoveryInstance?.recoveryDate}" /></td>
+                            <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${receiverRecoveryInstance?.status?.id}">${receiverRecoveryInstance?.status?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverRecovery.status.label" default="Status" /></td>
+                            <td valign="top" class="name"><g:message code="receiverRecovery.download.label" default="Download" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${receiverRecoveryInstance?.status?.id}">${receiverRecoveryInstance?.status?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value"><g:link controller="receiverDownload" action="show" id="${receiverRecoveryInstance?.download?.id}">${receiverRecoveryInstance?.download?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverRecovery.deployment.label" default="Deployment" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="receiverDeployment" action="show" id="${receiverRecoveryInstance?.deployment?.id}">${receiverRecoveryInstance?.deployment?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverRecovery.batteryLife.label" default="Battery Life" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "batteryLife")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverRecovery.batteryVoltage.label" default="Battery Voltage" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "batteryVoltage")}</td>
                             
                         </tr>
                     

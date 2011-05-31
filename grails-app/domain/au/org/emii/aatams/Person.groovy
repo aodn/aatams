@@ -4,19 +4,19 @@ class Person
 {
     static hasMany = [projectRoles:ProjectRole, systemRoles:SystemRole]
     
-    String firstName;
-    String lastName;
-    String emailAddress;    // TODO: validate
+    String name;
+    String emailAddress;
+    String phoneNumber;
     
     static constraints = 
     {
-        lastName(blank:false)
-        firstName()
-        emailAddress(blank:false)
+        name(blank:false)
+        phoneNumber(blank:true)
+        emailAddress(email:true)
     }
     
     String toString()
     {
-        return lastName + ", " + firstName
+        return name
     }
 }

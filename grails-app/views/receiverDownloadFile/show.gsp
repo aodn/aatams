@@ -30,16 +30,16 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownloadFile.path.label" default="Path" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDownloadFile.type.label" default="Type" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadFileInstance, field: "path")}</td>
+                            <td valign="top" class="value">${receiverDownloadFileInstance?.type?.encodeAsHTML()}</td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownloadFile.type.label" default="Type" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDownloadFile.path.label" default="Path" /></td>
                             
-                            <td valign="top" class="value">${receiverDownloadFileInstance?.type?.encodeAsHTML()}</td>
+                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadFileInstance, field: "path")}</td>
                             
                         </tr>
                     

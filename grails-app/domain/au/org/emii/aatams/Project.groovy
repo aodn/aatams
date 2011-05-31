@@ -16,9 +16,9 @@ class Project
     
     static constraints = 
     {
-        name(blank:false)
-        description()
-        principalInvestator()
+        name(blank:false, unique:true)
+        description(blank:true)
+        principalInvestator(nullable:true)
     }
     
     String toString()

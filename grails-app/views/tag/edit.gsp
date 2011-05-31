@@ -33,16 +33,6 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="codeMap"><g:message code="tag.codeMap.label" default="Code Map" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeMap', 'errors')}">
-                                    <g:textField name="codeMap" value="${tagInstance?.codeMap}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                   <label for="codeName"><g:message code="tag.codeName.label" default="Code Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeName', 'errors')}">
@@ -53,20 +43,30 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="embargoDate"><g:message code="tag.embargoDate.label" default="Embargo Date" /></label>
+                                  <label for="serialNumber"><g:message code="tag.serialNumber.label" default="Serial Number" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'embargoDate', 'errors')}">
-                                    <g:datePicker name="embargoDate" precision="day" value="${tagInstance?.embargoDate}"  />
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'serialNumber', 'errors')}">
+                                    <g:textField name="serialNumber" value="${tagInstance?.serialNumber}" />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="model"><g:message code="tag.model.label" default="Model" /></label>
+                                  <label for="embargoDate"><g:message code="tag.embargoDate.label" default="Embargo Date" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'model', 'errors')}">
-                                    <g:select name="model.id" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" value="${tagInstance?.model?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'embargoDate', 'errors')}">
+                                    <g:datePicker name="embargoDate" precision="day" value="${tagInstance?.embargoDate}" default="none" noSelection="['': '']" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="codeMap"><g:message code="tag.codeMap.label" default="Code Map" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeMap', 'errors')}">
+                                    <g:textField name="codeMap" value="${tagInstance?.codeMap}" />
 
                                 </td>
                             </tr>
@@ -77,6 +77,16 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'pingCode', 'errors')}">
                                     <g:textField name="pingCode" value="${fieldValue(bean: tagInstance, field: 'pingCode')}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="model"><g:message code="tag.model.label" default="Model" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'model', 'errors')}">
+                                    <g:select name="model.id" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" value="${tagInstance?.model?.id}"  />
 
                                 </td>
                             </tr>
@@ -104,16 +114,6 @@
 </ul>
 <g:link controller="sensor" action="create" params="['tag.id': tagInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'sensor.label', default: 'Sensor')])}</g:link>
 
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="serialNumber"><g:message code="tag.serialNumber.label" default="Serial Number" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'serialNumber', 'errors')}">
-                                    <g:textField name="serialNumber" value="${tagInstance?.serialNumber}" />
 
                                 </td>
                             </tr>

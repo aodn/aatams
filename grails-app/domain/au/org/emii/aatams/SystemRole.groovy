@@ -15,4 +15,9 @@ package au.org.emii.aatams
 class SystemRole 
 {
     SystemRoleType roleType
+    
+    String toString()
+    {
+        return String.valueOf(roleType)
+    }
 }

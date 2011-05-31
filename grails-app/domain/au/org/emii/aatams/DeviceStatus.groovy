@@ -11,6 +11,11 @@ class DeviceStatus
 {
     String status
     
+    static constraints =
+    {
+        status(blank:false, unique:true)
+    }
+    
     String toString()
     {
         return status

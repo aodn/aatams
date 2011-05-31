@@ -24,15 +24,15 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'sensorDetection.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="location" title="${message(code: 'sensorDetection.location.label', default: 'Location')}" />
+                            <g:sortableColumn property="timestamp" title="${message(code: 'sensorDetection.timestamp.label', default: 'Timestamp')}" />
                         
                             <th><g:message code="sensorDetection.receiver.label" default="Receiver" /></th>
                         
-                            <th><g:message code="sensorDetection.sensor.label" default="Sensor" /></th>
+                            <g:sortableColumn property="transmitterName" title="${message(code: 'sensorDetection.transmitterName.label', default: 'Transmitter Name')}" />
                         
                             <g:sortableColumn property="stationName" title="${message(code: 'sensorDetection.stationName.label', default: 'Station Name')}" />
                         
-                            <g:sortableColumn property="timestamp" title="${message(code: 'sensorDetection.timestamp.label', default: 'Timestamp')}" />
+                            <g:sortableColumn property="location" title="${message(code: 'sensorDetection.location.label', default: 'Location')}" />
                         
                         </tr>
                     </thead>
@@ -42,15 +42,15 @@
                         
                             <td><g:link action="show" id="${sensorDetectionInstance.id}">${fieldValue(bean: sensorDetectionInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: sensorDetectionInstance, field: "location")}</td>
+                            <td><g:formatDate date="${sensorDetectionInstance.timestamp}" /></td>
                         
                             <td>${fieldValue(bean: sensorDetectionInstance, field: "receiver")}</td>
                         
-                            <td>${fieldValue(bean: sensorDetectionInstance, field: "sensor")}</td>
+                            <td>${fieldValue(bean: sensorDetectionInstance, field: "transmitterName")}</td>
                         
                             <td>${fieldValue(bean: sensorDetectionInstance, field: "stationName")}</td>
                         
-                            <td><g:formatDate date="${sensorDetectionInstance.timestamp}" /></td>
+                            <td>${fieldValue(bean: sensorDetectionInstance, field: "location")}</td>
                         
                         </tr>
                     </g:each>

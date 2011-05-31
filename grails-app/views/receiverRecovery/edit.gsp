@@ -33,20 +33,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="deployment"><g:message code="receiverRecovery.deployment.label" default="Deployment" /></label>
+                                  <label for="recoveryDate"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'deployment', 'errors')}">
-                                    <g:select name="deployment.id" from="${au.org.emii.aatams.ReceiverDeployment.list()}" optionKey="id" value="${receiverRecoveryInstance?.deployment?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="download"><g:message code="receiverRecovery.download.label" default="Download" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'download', 'errors')}">
-                                    <g:select name="download.id" from="${au.org.emii.aatams.ReceiverDownload.list()}" optionKey="id" value="${receiverRecoveryInstance?.download?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDate', 'errors')}">
+                                    <g:datePicker name="recoveryDate" precision="day" value="${receiverRecoveryInstance?.recoveryDate}"  />
 
                                 </td>
                             </tr>
@@ -63,20 +53,50 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="recoveryDate"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></label>
+                                  <label for="status"><g:message code="receiverRecovery.status.label" default="Status" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDate', 'errors')}">
-                                    <g:datePicker name="recoveryDate" precision="day" value="${receiverRecoveryInstance?.recoveryDate}"  />
+                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'status', 'errors')}">
+                                    <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverRecoveryInstance?.status?.id}"  />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="status"><g:message code="receiverRecovery.status.label" default="Status" /></label>
+                                  <label for="download"><g:message code="receiverRecovery.download.label" default="Download" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'status', 'errors')}">
-                                    <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverRecoveryInstance?.status?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'download', 'errors')}">
+                                    <g:select name="download.id" from="${au.org.emii.aatams.ReceiverDownload.list()}" optionKey="id" value="${receiverRecoveryInstance?.download?.id}" noSelection="['null': '']" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="deployment"><g:message code="receiverRecovery.deployment.label" default="Deployment" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'deployment', 'errors')}">
+                                    <g:select name="deployment.id" from="${au.org.emii.aatams.ReceiverDeployment.list()}" optionKey="id" value="${receiverRecoveryInstance?.deployment?.id}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="batteryLife"><g:message code="receiverRecovery.batteryLife.label" default="Battery Life" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'batteryLife', 'errors')}">
+                                    <g:textField name="batteryLife" value="${fieldValue(bean: receiverRecoveryInstance, field: 'batteryLife')}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="batteryVoltage"><g:message code="receiverRecovery.batteryVoltage.label" default="Battery Voltage" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'batteryVoltage', 'errors')}">
+                                    <g:textField name="batteryVoltage" value="${fieldValue(bean: receiverRecoveryInstance, field: 'batteryVoltage')}" />
 
                                 </td>
                             </tr>

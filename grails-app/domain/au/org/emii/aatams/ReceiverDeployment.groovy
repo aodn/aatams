@@ -48,6 +48,22 @@ class ReceiverDeployment
     
     String comments
     
+    static constraints =
+    {
+        receiver()
+        station()
+        deploymentNumber(min:0)
+        deploymentDate(max:new Date())
+        recoveryDate(max:new Date()) //, min:deploymentDate)
+        acousticReleaseID()
+        mooringType()
+        bottomDepthM(min:0F)
+        depthBelowSurfaceM(min:0F)
+        receiverOrientation()
+        location()
+        comments()
+    }
+    
     String toString()
     {
         return String.valueOf(receiver) + " - " + String.valueOf(deploymentDate)

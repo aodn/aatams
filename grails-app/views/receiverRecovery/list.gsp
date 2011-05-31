@@ -24,15 +24,15 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'receiverRecovery.id.label', default: 'Id')}" />
                         
-                            <th><g:message code="receiverRecovery.deployment.label" default="Deployment" /></th>
-                        
-                            <th><g:message code="receiverRecovery.download.label" default="Download" /></th>
+                            <g:sortableColumn property="recoveryDate" title="${message(code: 'receiverRecovery.recoveryDate.label', default: 'Recovery Date')}" />
                         
                             <g:sortableColumn property="location" title="${message(code: 'receiverRecovery.location.label', default: 'Location')}" />
                         
-                            <g:sortableColumn property="recoveryDate" title="${message(code: 'receiverRecovery.recoveryDate.label', default: 'Recovery Date')}" />
-                        
                             <th><g:message code="receiverRecovery.status.label" default="Status" /></th>
+                        
+                            <th><g:message code="receiverRecovery.download.label" default="Download" /></th>
+                        
+                            <th><g:message code="receiverRecovery.deployment.label" default="Deployment" /></th>
                         
                         </tr>
                     </thead>
@@ -42,15 +42,15 @@
                         
                             <td><g:link action="show" id="${receiverRecoveryInstance.id}">${fieldValue(bean: receiverRecoveryInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: receiverRecoveryInstance, field: "deployment")}</td>
-                        
-                            <td>${fieldValue(bean: receiverRecoveryInstance, field: "download")}</td>
+                            <td><g:formatDate date="${receiverRecoveryInstance.recoveryDate}" /></td>
                         
                             <td>${fieldValue(bean: receiverRecoveryInstance, field: "location")}</td>
                         
-                            <td><g:formatDate date="${receiverRecoveryInstance.recoveryDate}" /></td>
-                        
                             <td>${fieldValue(bean: receiverRecoveryInstance, field: "status")}</td>
+                        
+                            <td>${fieldValue(bean: receiverRecoveryInstance, field: "download")}</td>
+                        
+                            <td>${fieldValue(bean: receiverRecoveryInstance, field: "deployment")}</td>
                         
                         </tr>
                     </g:each>

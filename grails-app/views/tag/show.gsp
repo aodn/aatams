@@ -30,16 +30,16 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="tag.codeMap.label" default="Code Map" /></td>
+                            <td valign="top" class="name"><g:message code="tag.codeName.label" default="Code Name" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: tagInstance, field: "codeMap")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: tagInstance, field: "codeName")}</td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="tag.codeName.label" default="Code Name" /></td>
+                            <td valign="top" class="name"><g:message code="tag.serialNumber.label" default="Serial Number" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: tagInstance, field: "codeName")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: tagInstance, field: "serialNumber")}</td>
                             
                         </tr>
                     
@@ -51,9 +51,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="tag.model.label" default="Model" /></td>
+                            <td valign="top" class="name"><g:message code="tag.codeMap.label" default="Code Map" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="deviceModel" action="show" id="${tagInstance?.model?.id}">${tagInstance?.model?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${fieldValue(bean: tagInstance, field: "codeMap")}</td>
                             
                         </tr>
                     
@@ -61,6 +61,13 @@
                             <td valign="top" class="name"><g:message code="tag.pingCode.label" default="Ping Code" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: tagInstance, field: "pingCode")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="tag.model.label" default="Model" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="deviceModel" action="show" id="${tagInstance?.model?.id}">${tagInstance?.model?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -81,13 +88,6 @@
                                 </g:each>
                                 </ul>
                             </td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="tag.serialNumber.label" default="Serial Number" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: tagInstance, field: "serialNumber")}</td>
                             
                         </tr>
                     

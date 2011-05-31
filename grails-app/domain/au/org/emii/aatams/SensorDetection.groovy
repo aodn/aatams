@@ -15,6 +15,12 @@ class SensorDetection extends Detection
     
     Float uncalibratedValue
     
+    static constraints =
+    {
+        sensor()
+        uncalibratedValue()
+    }
+    
     String toString()
     {
         return super.toString() + ", " + String.valueOf(uncalibratedValue) 

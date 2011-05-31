@@ -22,7 +22,7 @@ class Detection
      * be one-to-one.
      */
     static hasMany = [tags:Tag]
-
+    
     /**
      * Station name, as recorded in VUE database (this should match 
      * this.receiver.station.name, but *may* be different, so it is 
@@ -31,7 +31,12 @@ class Detection
     String stationName;
     
     /**
-     * As with station name.
+     * May be different (as with station name above).
+     */
+    String transmitterName;
+    
+    /**
+     * May be different (as with station name above).
      */
     Point location;
     

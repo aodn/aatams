@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'codeName', 'errors')}">
                                     <g:textField name="codeName" value="${deviceInstance?.codeName}" />
+
                                 </td>
                             </tr>
                         
@@ -46,6 +47,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'embargoDate', 'errors')}">
                                     <g:datePicker name="embargoDate" precision="day" value="${deviceInstance?.embargoDate}"  />
+
                                 </td>
                             </tr>
                         
@@ -55,6 +57,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'model', 'errors')}">
                                     <g:select name="model.id" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" value="${deviceInstance?.model?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -64,6 +67,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${deviceInstance?.project?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -73,6 +77,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'serialNumber', 'errors')}">
                                     <g:textField name="serialNumber" value="${deviceInstance?.serialNumber}" />
+
                                 </td>
                             </tr>
                         
@@ -82,6 +87,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${deviceInstance?.status?.id}"  />
+
                                 </td>
                             </tr>
                         

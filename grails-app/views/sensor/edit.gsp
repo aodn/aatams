@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'codeMap', 'errors')}">
                                     <g:textField name="codeMap" value="${sensorInstance?.codeMap}" />
+
                                 </td>
                             </tr>
                         
@@ -46,6 +47,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'intercept', 'errors')}">
                                     <g:textField name="intercept" value="${fieldValue(bean: sensorInstance, field: 'intercept')}" />
+
                                 </td>
                             </tr>
                         
@@ -55,6 +57,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'pingCode', 'errors')}">
                                     <g:textField name="pingCode" value="${fieldValue(bean: sensorInstance, field: 'pingCode')}" />
+
                                 </td>
                             </tr>
                         
@@ -64,6 +67,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'slope', 'errors')}">
                                     <g:textField name="slope" value="${fieldValue(bean: sensorInstance, field: 'slope')}" />
+
                                 </td>
                             </tr>
                         
@@ -73,6 +77,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'tag', 'errors')}">
                                     <g:select name="tag.id" from="${au.org.emii.aatams.Tag.list()}" optionKey="id" value="${sensorInstance?.tag?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -82,6 +87,17 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
                                     <g:select name="transmitterType.id" from="${au.org.emii.aatams.TransmitterType.list()}" optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="unit"><g:message code="sensor.unit.label" default="Unit" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'unit', 'errors')}">
+                                    <g:textField name="unit" value="${sensorInstance?.unit}" />
+
                                 </td>
                             </tr>
                         

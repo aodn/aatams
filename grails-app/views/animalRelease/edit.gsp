@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'animal', 'errors')}">
                                     <g:select name="animal.id" from="${au.org.emii.aatams.Animal.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -46,6 +47,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureDateTime', 'errors')}">
                                     <g:datePicker name="captureDateTime" precision="day" value="${animalReleaseInstance?.captureDateTime}"  />
+
                                 </td>
                             </tr>
                         
@@ -55,6 +57,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureLocality', 'errors')}">
                                     <g:textField name="captureLocality" value="${animalReleaseInstance?.captureLocality}" />
+
                                 </td>
                             </tr>
                         
@@ -64,6 +67,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureLocation', 'errors')}">
                                     <g:textField name="captureLocation" value="${animalReleaseInstance?.captureLocation}" />
+
                                 </td>
                             </tr>
                         
@@ -73,6 +77,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'comments', 'errors')}">
                                     <g:textField name="comments" value="${animalReleaseInstance?.comments}" />
+
                                 </td>
                             </tr>
                         
@@ -82,6 +87,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'measurements', 'errors')}">
                                     <g:select name="measurements" from="${au.org.emii.aatams.AnimalMeasurement.list()}" multiple="yes" optionKey="id" size="5" value="${animalReleaseInstance?.measurements*.id}" />
+
                                 </td>
                             </tr>
                         
@@ -91,6 +97,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${animalReleaseInstance?.project?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -100,6 +107,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseDateTime', 'errors')}">
                                     <g:datePicker name="releaseDateTime" precision="day" value="${animalReleaseInstance?.releaseDateTime}"  />
+
                                 </td>
                             </tr>
                         
@@ -109,6 +117,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseLocality', 'errors')}">
                                     <g:textField name="releaseLocality" value="${animalReleaseInstance?.releaseLocality}" />
+
                                 </td>
                             </tr>
                         
@@ -118,6 +127,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseLocation', 'errors')}">
                                     <g:textField name="releaseLocation" value="${animalReleaseInstance?.releaseLocation}" />
+
                                 </td>
                             </tr>
                         
@@ -133,6 +143,7 @@
 </g:each>
 </ul>
 <g:link controller="surgery" action="create" params="['animalRelease.id': animalReleaseInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'surgery.label', default: 'Surgery')])}</g:link>
+
 
                                 </td>
                             </tr>

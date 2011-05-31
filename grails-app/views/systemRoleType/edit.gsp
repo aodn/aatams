@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: systemRoleTypeInstance, field: 'displayName', 'errors')}">
                                     <g:textField name="displayName" value="${systemRoleTypeInstance?.displayName}" />
+
                                 </td>
                             </tr>
                         

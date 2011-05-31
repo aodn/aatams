@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: mooringTypeInstance, field: 'type', 'errors')}">
                                     <g:textField name="type" value="${mooringTypeInstance?.type}" />
+
                                 </td>
                             </tr>
                         

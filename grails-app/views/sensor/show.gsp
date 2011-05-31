@@ -71,6 +71,13 @@
                             
                         </tr>
                     
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="sensor.unit.label" default="Unit" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "unit")}</td>
+                            
+                        </tr>
+                    
                     </tbody>
                 </table>
             </div>

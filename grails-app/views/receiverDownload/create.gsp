@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'batteryDays', 'errors')}">
                                     <g:textField name="batteryDays" value="${fieldValue(bean: receiverDownloadInstance, field: 'batteryDays')}" />
+
                                 </td>
                             </tr>
                         
@@ -43,6 +44,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'batteryVoltage', 'errors')}">
                                     <g:textField name="batteryVoltage" value="${fieldValue(bean: receiverDownloadInstance, field: 'batteryVoltage')}" />
+
                                 </td>
                             </tr>
                         
@@ -52,6 +54,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'clockDrift', 'errors')}">
                                     <g:textField name="clockDrift" value="${fieldValue(bean: receiverDownloadInstance, field: 'clockDrift')}" />
+
                                 </td>
                             </tr>
                         
@@ -61,6 +64,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'comments', 'errors')}">
                                     <g:textField name="comments" value="${receiverDownloadInstance?.comments}" />
+
                                 </td>
                             </tr>
                         
@@ -70,6 +74,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'detectionCount', 'errors')}">
                                     <g:textField name="detectionCount" value="${fieldValue(bean: receiverDownloadInstance, field: 'detectionCount')}" />
+
                                 </td>
                             </tr>
                         
@@ -79,6 +84,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'downloadDate', 'errors')}">
                                     <g:datePicker name="downloadDate" precision="day" value="${receiverDownloadInstance?.downloadDate}"  />
+
                                 </td>
                             </tr>
                         
@@ -88,6 +94,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'downloader', 'errors')}">
                                     <g:select name="downloader.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${receiverDownloadInstance?.downloader?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -97,6 +104,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'pingCount', 'errors')}">
                                     <g:textField name="pingCount" value="${fieldValue(bean: receiverDownloadInstance, field: 'pingCount')}" />
+
                                 </td>
                             </tr>
                         
@@ -106,6 +114,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'receiverRecovery', 'errors')}">
                                     <g:select name="receiverRecovery.id" from="${au.org.emii.aatams.ReceiverRecovery.list()}" optionKey="id" value="${receiverDownloadInstance?.receiverRecovery?.id}"  />
+
                                 </td>
                             </tr>
                         

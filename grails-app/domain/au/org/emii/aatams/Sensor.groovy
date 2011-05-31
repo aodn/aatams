@@ -13,6 +13,11 @@ class Sensor
     TransmitterType transmitterType
     
     /**
+     * Sensor units.
+     */
+    String unit
+    
+    /**
      * Calibration slope.
      */
     Integer slope

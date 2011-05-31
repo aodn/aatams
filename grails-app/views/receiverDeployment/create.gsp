@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'acousticReleaseID', 'errors')}">
                                     <g:textField name="acousticReleaseID" value="${receiverDeploymentInstance?.acousticReleaseID}" />
+
                                 </td>
                             </tr>
                         
@@ -43,6 +44,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'bottomDepthM', 'errors')}">
                                     <g:textField name="bottomDepthM" value="${fieldValue(bean: receiverDeploymentInstance, field: 'bottomDepthM')}" />
+
                                 </td>
                             </tr>
                         
@@ -52,6 +54,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'comments', 'errors')}">
                                     <g:textField name="comments" value="${receiverDeploymentInstance?.comments}" />
+
                                 </td>
                             </tr>
                         
@@ -61,6 +64,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'deploymentDate', 'errors')}">
                                     <g:datePicker name="deploymentDate" precision="day" value="${receiverDeploymentInstance?.deploymentDate}"  />
+
                                 </td>
                             </tr>
                         
@@ -70,6 +74,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'deploymentNumber', 'errors')}">
                                     <g:textField name="deploymentNumber" value="${fieldValue(bean: receiverDeploymentInstance, field: 'deploymentNumber')}" />
+
                                 </td>
                             </tr>
                         
@@ -79,6 +84,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'depthBelowSurfaceM', 'errors')}">
                                     <g:textField name="depthBelowSurfaceM" value="${fieldValue(bean: receiverDeploymentInstance, field: 'depthBelowSurfaceM')}" />
+
                                 </td>
                             </tr>
                         
@@ -88,6 +94,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'location', 'errors')}">
                                     <g:textField name="location" value="${receiverDeploymentInstance?.location}" />
+
                                 </td>
                             </tr>
                         
@@ -97,6 +104,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'mooringType', 'errors')}">
                                     <g:select name="mooringType.id" from="${au.org.emii.aatams.MooringType.list()}" optionKey="id" value="${receiverDeploymentInstance?.mooringType?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -106,6 +114,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'receiver', 'errors')}">
                                     <g:select name="receiver.id" from="${au.org.emii.aatams.Receiver.list()}" optionKey="id" value="${receiverDeploymentInstance?.receiver?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -115,6 +124,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'receiverOrientation', 'errors')}">
                                     <g:textField name="receiverOrientation" value="${receiverDeploymentInstance?.receiverOrientation}" />
+
                                 </td>
                             </tr>
                         
@@ -124,6 +134,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'recoveryDate', 'errors')}">
                                     <g:datePicker name="recoveryDate" precision="day" value="${receiverDeploymentInstance?.recoveryDate}"  />
+
                                 </td>
                             </tr>
                         
@@ -133,6 +144,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'station', 'errors')}">
                                     <g:select name="station.id" from="${au.org.emii.aatams.InstallationStation.list()}" optionKey="id" value="${receiverDeploymentInstance?.station?.id}"  />
+
                                 </td>
                             </tr>
                         

@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: systemRoleInstance, field: 'roleType', 'errors')}">
                                     <g:select name="roleType.id" from="${au.org.emii.aatams.SystemRoleType.list()}" optionKey="id" value="${systemRoleInstance?.roleType?.id}"  />
+
                                 </td>
                             </tr>
                         

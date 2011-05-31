@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationPersonInstance, field: 'organisation', 'errors')}">
                                     <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${organisationPersonInstance?.organisation?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -43,6 +44,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationPersonInstance, field: 'person', 'errors')}">
                                     <g:select name="person.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${organisationPersonInstance?.person?.id}"  />
+
                                 </td>
                             </tr>
                         

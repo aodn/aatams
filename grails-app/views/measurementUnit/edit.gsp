@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: measurementUnitInstance, field: 'unit', 'errors')}">
                                     <g:textField name="unit" value="${measurementUnitInstance?.unit}" />
+
                                 </td>
                             </tr>
                         

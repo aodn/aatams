@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${projectInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -43,6 +44,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${projectInstance?.description}" />
+
                                 </td>
                             </tr>
                         
@@ -52,6 +54,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'principalInvestator', 'errors')}">
                                     <g:select name="principalInvestator.id" from="${au.org.emii.aatams.ProjectRole.list()}" optionKey="id" value="${projectInstance?.principalInvestator?.id}"  />
+
                                 </td>
                             </tr>
                         

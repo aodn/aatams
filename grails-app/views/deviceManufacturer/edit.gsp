@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceManufacturerInstance, field: 'manufacturerName', 'errors')}">
                                     <g:textField name="manufacturerName" value="${deviceManufacturerInstance?.manufacturerName}" />
+
                                 </td>
                             </tr>
                         

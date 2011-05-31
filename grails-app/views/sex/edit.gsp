@@ -37,6 +37,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sexInstance, field: 'sex', 'errors')}">
                                     <g:textField name="sex" value="${sexInstance?.sex}" />
+
                                 </td>
                             </tr>
                         

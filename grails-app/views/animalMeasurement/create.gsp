@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'comments', 'errors')}">
                                     <g:textField name="comments" value="${animalMeasurementInstance?.comments}" />
+
                                 </td>
                             </tr>
                         
@@ -43,6 +44,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'estimate', 'errors')}">
                                     <g:checkBox name="estimate" value="${animalMeasurementInstance?.estimate}" />
+
                                 </td>
                             </tr>
                         
@@ -52,6 +54,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'type', 'errors')}">
                                     <g:select name="type.id" from="${au.org.emii.aatams.AnimalMeasurementType.list()}" optionKey="id" value="${animalMeasurementInstance?.type?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -61,6 +64,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'unit', 'errors')}">
                                     <g:select name="unit.id" from="${au.org.emii.aatams.MeasurementUnit.list()}" optionKey="id" value="${animalMeasurementInstance?.unit?.id}"  />
+
                                 </td>
                             </tr>
                         
@@ -70,6 +74,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'value', 'errors')}">
                                     <g:textField name="value" value="${fieldValue(bean: animalMeasurementInstance, field: 'value')}" />
+
                                 </td>
                             </tr>
                         

@@ -70,6 +70,13 @@
                             
                         </tr>
                     
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="detection.transmitterName.label" default="Transmitter Name" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "transmitterName")}</td>
+                            
+                        </tr>
+                    
                     </tbody>
                 </table>
             </div>

@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${organisationInstance?.name}" />
+
                                 </td>
                             </tr>
                         
@@ -43,6 +44,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'phoneNumber', 'errors')}">
                                     <g:textField name="phoneNumber" value="${organisationInstance?.phoneNumber}" />
+
                                 </td>
                             </tr>
                         
@@ -52,6 +54,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'faxNumber', 'errors')}">
                                     <g:textField name="faxNumber" value="${organisationInstance?.faxNumber}" />
+
                                 </td>
                             </tr>
                         
@@ -61,6 +64,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'postalAddress', 'errors')}">
                                     <g:textField name="postalAddress" value="${organisationInstance?.postalAddress}" />
+
                                 </td>
                             </tr>
                         
@@ -70,6 +74,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'status', 'errors')}">
                                     <g:select name="status" from="${au.org.emii.aatams.EntityStatus?.values()}" keys="${au.org.emii.aatams.EntityStatus?.values()*.name()}" value="${organisationInstance?.status?.name()}"  />
+
                                 </td>
                             </tr>
                         

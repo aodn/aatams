@@ -4,10 +4,10 @@ import com.lucastex.grails.fileuploader.UFile
 
 class DetectionUploadController 
 {
-
+    def fileProcessorService
+    
     def index = 
     { 
-        log.debug "Uploaded file with id=${params.ufileId}"
         [files: UFile.list(), params:params]
     }
     
@@ -16,5 +16,25 @@ class DetectionUploadController
         def ufile = UFile.get(params.id)
         ufile.delete()
         redirect action:index
+    }
+    
+    def startProcessing =
+    {
+        log.info "Processing file with id=${params.ufileId}..."
+        def fileId = "${params.ufileId}"
+        
+        // Kick off processing here.
+        runAsync
+        {
+            fileProcessorService.process(fileId)
+        }
+        
+        redirect(action: "index", params: params)
+    }
+    
+    def error =
+    {
+        log.error "Error uploading file."
+        redirect(action: "index", params: params)
     }
 }

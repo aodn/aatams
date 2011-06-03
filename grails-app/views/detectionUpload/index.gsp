@@ -9,9 +9,9 @@
     <h1 style="margin-left:20px;">Grails File-Uploader Plugin Docs Demo</h1>
     <p style="margin-left:20px;width:80%">
       <fileuploader:form  upload="detectionUpload" 
-                          successAction="index"
+                          successAction="startProcessing"
                           successController="detectionUpload"
-                          errorAction="index"
+                          errorAction="error"
                           errorController="detectionUpload"/>
     </p>
     <br /><br />

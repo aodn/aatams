@@ -70,9 +70,10 @@ log4j = {
     // Example of changing the log pattern for the default console
     // appender:
     //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+    appenders {
+//        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+        console name:'stdout', layout:pattern(conversionPattern: '%d [%t] %-5p %c - %m%n')
+    }
 
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
            'org.codehaus.groovy.grails.web.pages', //  GSP
@@ -91,6 +92,9 @@ log4j = {
 //    debug  'org.springframework',
 //           'org.hibernate',
 //           'org.codehaus.groovy.grails.orm.hibernate'
+
+    debug   "grails.app.controller.au.org.emii",
+            "grails.app.service.au.org.emii"
 }
 
 //

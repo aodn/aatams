@@ -54,7 +54,7 @@ grails.exceptionresolver.params.exclude = ['password']
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
-        grails.serverURL = "http://www.changeme.com"
+        grails.serverURL = "http://preview.emii.org.au/${appName}"
     }
     development {
         grails.serverURL = "http://localhost:8080/${appName}"
@@ -102,6 +102,6 @@ fileuploader
     {
         //  maxSize = ???
         allowedExtensions = ["csv", "vrl", "rld"]
-        path = "/Users/jburgess/Documents/aatams/test_uploads"
+        path = "/tmp/aatams/test_uploads"
     }
 }

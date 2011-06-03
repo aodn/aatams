@@ -1,6 +1,6 @@
 dataSource {
     pooled = true
-    driverClassName = "org.hsqldb.jdbcDriver"
+//    driverClassName = "org.hsqldb.jdbcDriver"
     username = "sa"
     password = ""
 }
@@ -17,6 +17,7 @@ environments {
 //            dbCreate = "update" // one of 'create', 'create-drop','update'
 //            url = "jdbc:hsqldb:file:devDB;shutdown=true"
 //            url = "jdbc:hsqldb:mem:devDB"
+            driverClassName = "org.postgresql.Driver"
             url = "jdbc:postgresql://localhost:5432/aatams"
             username = "aatams"
             password = "aatams"
@@ -26,13 +27,14 @@ environments {
     test {
         dataSource {
 //            dbCreate = "update"
-            url = "jdbc:hsqldb:mem:testDb"
+            url = "jdbc:comp/env/jdbc/aatams_dev"
         }
     }
     production {
         dataSource {
 //            dbCreate = "update"
-            url = "jdbc:hsqldb:file:prodDb;shutdown=true"
+            jndiName = "java:comp/env/jdbc/aatams_dev"
+//            driverClassName = "org.postgresql.Driver"
         }
     }
 }

@@ -14,6 +14,11 @@ class ProcessedUploadFile
     
     String errMsg
     
+    static constraints = 
+    {
+        errMsg(nullable:true)
+    }
+
     String toString()
     {
         return super.toString + ", status: " + String.valueOf(status)

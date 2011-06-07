@@ -56,18 +56,20 @@ class DetectionFactoryService
         if (tags.size() == 0)
         {
             // No matching tag - it must be a "SensorDetection"
+            SensorDetection sensorDetection = new SensorDetection()
+
             def sensors = Sensor.findAllByCodeMapAndPingCode(codeMapBuilder.toString(), pingIDBuilder.toString())
             sensors.each
             {
-                tags.add(${it}.tag)
+                tags.add(it.tag)
+                sensorDetection.addToSensors(it)
             }
             assert (sensors.size() > 0) : "Detection must belong to at least one tag or sensor"
             
             Float sensorValue = detectionParams[SENSOR_VALUE_COLUMN]?: Float.parseFloat(detectionParams[SENSOR_VALUE_COLUMN])
+            sensorDetection.uncalibratedValue = sensorValue
             String sensorUnit = detectionParams[SENSOR_UNIT_COLUMN]
             
-            SensorDetection sensorDetection = new SensorDetection()
-            sensorDetection.addToSensors(sensors)
             retDetection = sensorDetection
         }
         else if (tags.size() == 1)
@@ -80,6 +82,12 @@ class DetectionFactoryService
             // Extremely unlikely - but possible.
             log.warn("Multplie tags match identifier: " + transmitterID)
             retDetection = new Detection()
+        }
+        
+        // Add the tag(s) to detection (there may be none if it's a SensorDetection).
+        tags.each
+        {
+            retDetection.addToTags(it)
         }
         
         log.debug("Parsing date string: " + detectionParams[DATE_AND_TIME_COLUMN])

@@ -30,11 +30,14 @@ environments {
             url = "jdbc:comp/env/jdbc/aatams_dev"
         }
     }
-    production {
-        dataSource {
-//            dbCreate = "update"
+    
+    production 
+    {
+        // Problems with connecting to database in test/production? 
+        // Make *sure* you've got Grails Environment set to "production"!!
+        dataSource 
+        {
             jndiName = "java:comp/env/jdbc/aatams_dev"
-//            driverClassName = "org.postgresql.Driver"
         }
     }
 }

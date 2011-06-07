@@ -42,6 +42,6 @@ class Device
      */
     String getDeviceID()
     {
-        return model.toString() + " - " + serialNumber
+        return codeName
     }
 }

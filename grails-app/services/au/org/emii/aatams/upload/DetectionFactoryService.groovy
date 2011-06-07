@@ -27,7 +27,7 @@ class DetectionFactoryService
     static final String LONGITUDE_COLUMN = "Longitude"
     
     static final String TRANSMITTER_ID_DELIM = "-"
-    static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
+    static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
     
     /**
      * Creates a detection given a map of parameters (which originate from a line
@@ -90,8 +90,9 @@ class DetectionFactoryService
             retDetection.addToTags(it)
         }
         
-        log.debug("Parsing date string: " + detectionParams[DATE_AND_TIME_COLUMN])
-        Date detectionDate = new Date().parse(DATE_FORMAT, detectionParams[DATE_AND_TIME_COLUMN])
+        String dateString = detectionParams[DATE_AND_TIME_COLUMN] + " " + "UTC"
+        log.debug("Parsing date string: " + dateString)
+        Date detectionDate = new Date().parse(DATE_FORMAT, dateString)
         retDetection.timestamp = detectionDate
         
         Receiver receiver = Receiver.findByCodeName(detectionParams[RECEIVER_COLUMN])

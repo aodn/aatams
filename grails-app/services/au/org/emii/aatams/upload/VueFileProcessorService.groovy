@@ -58,7 +58,7 @@ class VueFileProcessorService extends AbstractFileProcessorService
             
             log.debug("Processing record number: " + String.valueOf(i))
             
-            Detection detection = detectionFactoryService.newDetection(map)
+            Detection detection = detectionFactoryService.newDetection(map).save(failOnError: true)
             
             log.debug("Successfully processed record number: " + String.valueOf(i))
         }

@@ -46,10 +46,10 @@ class Detection
     {
         timestamp(max:new Date())
         receiver()
-        transmitterName(blank:true)
-        transmitterSerialNumber(blank:true)
-        stationName(blank:true)
-        location()
+        transmitterName(nullable:true, blank:true)
+        transmitterSerialNumber(nullable:true, blank:true)
+        stationName(nullable:true, blank:true)
+        location(nullable:true)
     }
     
     String toString()

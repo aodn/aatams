@@ -15,7 +15,7 @@ class DetectionFactoryService
 
     static transactional = true
 
-    static final String DATE_AND_TIME_COLUMN = "ÔªøDate and Time (UTC)"
+    static final String DATE_AND_TIME_COLUMN = "\uFEFFDate and Time (UTC)"  // \uFEFF is a zero-width non-breaking space.
     static final String RECEIVER_COLUMN = "Receiver"
     static final String TRANSMITTER_COLUMN = "Transmitter"
     static final String TRANSMITTER_NAME_COLUMN = "Transmitter Name"
@@ -27,6 +27,7 @@ class DetectionFactoryService
     static final String LONGITUDE_COLUMN = "Longitude"
     
     static final String TRANSMITTER_ID_DELIM = "-"
+    static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"
     
     /**
      * Creates a detection given a map of parameters (which originate from a line
@@ -46,7 +47,9 @@ class DetectionFactoryService
         StringBuilder pingIDBuilder = new StringBuilder()
         parseCodeMapAndPingID(transmitterID, codeMapBuilder, pingIDBuilder)
 
+        log.debug("Searching for tags with codeMap = " + codeMapBuilder.toString() + " and ping ID = " + pingIDBuilder.toString() + "...")
         def tags = Tag.findAllByCodeMapAndPingCode(codeMapBuilder.toString(), pingIDBuilder.toString())
+        log.debug("Number of tags found: " + String.valueOf(tags.size()))
 
         Detection retDetection = null
         
@@ -79,7 +82,8 @@ class DetectionFactoryService
             retDetection = new Detection()
         }
         
-        Date detectionDate = new Date().parse("d/M/yy H:m", detectionParams[DATE_AND_TIME_COLUMN])
+        log.debug("Parsing date string: " + detectionParams[DATE_AND_TIME_COLUMN])
+        Date detectionDate = new Date().parse(DATE_FORMAT, detectionParams[DATE_AND_TIME_COLUMN])
         retDetection.timestamp = detectionDate
         
         Receiver receiver = Receiver.findByCodeName(detectionParams[RECEIVER_COLUMN])
@@ -99,12 +103,18 @@ class DetectionFactoryService
 
         Float lat = detectionParams[LATITUDE_COLUMN]
         Float lon = detectionParams[LONGITUDE_COLUMN]
-        Point location = new GeometryFactory().createPoint(new Coordinate(lon, lat))
-        location.setSRID(4326)
-        retDetection.location = location
+        log.debug("Detection co-ordinates, lon: " + String.valueOf(lon) + ", lat: " + String.valueOf(lat))
         
-        // Warn if not same as related installation station location.
-        // TODO
+        // Latitude and longitude are optional.
+        if ((lat != null) && (lon != null))
+        {
+            Point location = new GeometryFactory().createPoint(new Coordinate(lon, lat))
+            location.setSRID(4326)
+            retDetection.location = location
+            
+            // Warn if not same as related installation station location.
+            // TODO
+        }
         
         return retDetection
     }
@@ -126,8 +136,10 @@ class DetectionFactoryService
             {
                 found = true
             }
-            
-            index--;
+            else
+            {
+                index--;
+            }
         }
         
         if (!found)

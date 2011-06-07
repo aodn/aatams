@@ -35,6 +35,8 @@ class Detection
      */
     String transmitterName;
     
+    String transmitterSerialNumber;
+    
     /**
      * May be different (as with station name above).
      */
@@ -45,6 +47,7 @@ class Detection
         timestamp(max:new Date())
         receiver()
         transmitterName(blank:true)
+        transmitterSerialNumber(blank:true)
         stationName(blank:true)
         location()
     }

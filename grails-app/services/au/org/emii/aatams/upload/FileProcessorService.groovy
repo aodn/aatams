@@ -50,6 +50,9 @@ class FileProcessorService extends AbstractFileProcessorService
         {
             log.error("Error processing file", e)
             processedFile.status = FileProcessingStatus.ERROR
+            processedFile.errMsg = String.valueOf(e)
+            processedFile.save()
+            
             throw e
         }
     }

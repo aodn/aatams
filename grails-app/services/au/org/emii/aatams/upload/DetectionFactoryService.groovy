@@ -64,7 +64,11 @@ class DetectionFactoryService
                 tags.add(it.tag)
                 sensorDetection.addToSensors(it)
             }
-            assert (sensors.size() > 0) : "Detection must belong to at least one tag or sensor"
+            //assert (sensors.size() > 0) : "Detection must belong to at least one tag or sensor"
+            if (sensors.size() == 0)
+            {
+                throw new FileProcessingException("Detection must belong to at least one tag or sensor")
+            }
             
             Float sensorValue = detectionParams[SENSOR_VALUE_COLUMN]?: Float.parseFloat(detectionParams[SENSOR_VALUE_COLUMN])
             sensorDetection.uncalibratedValue = sensorValue
@@ -97,7 +101,7 @@ class DetectionFactoryService
         
         Receiver receiver = Receiver.findByCodeName(detectionParams[RECEIVER_COLUMN])
         String errMsg = "Unknown receiver name: " + detectionParams[RECEIVER_COLUMN]
-        assert(receiver != null): errMsg
+        //assert(receiver != null): errMsg
         if (receiver == null)
         {
             throw new FileProcessingException(errMsg)

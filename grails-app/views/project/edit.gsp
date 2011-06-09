@@ -53,10 +53,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="principalInvestator"><g:message code="project.principalInvestator.label" default="Principal Investator" /></label>
+                                  <label for="principalInvestigator"><g:message code="project.principalInvestigator.label" default="Principal Investigator" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'principalInvestator', 'errors')}">
-                                    <g:select name="principalInvestator.id" from="${au.org.emii.aatams.ProjectRole.list()}" optionKey="id" value="${projectInstance?.principalInvestator?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'principalInvestigator', 'errors')}">
+                                    <g:select name="principalInvestigator.id" from="${au.org.emii.aatams.ProjectRole.list()}" optionKey="id" value="${projectInstance?.principalInvestigator?.id}"  />
 
                                 </td>
                             </tr>

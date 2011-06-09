@@ -44,9 +44,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="project.principalInvestator.label" default="Principal Investator" /></td>
+                            <td valign="top" class="name"><g:message code="project.principalInvestigator.label" default="Principal Investigator" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="projectRole" action="show" id="${projectInstance?.principalInvestator?.id}">${projectInstance?.principalInvestator?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value"><g:link controller="projectRole" action="show" id="${projectInstance?.principalInvestigator?.id}">${projectInstance?.principalInvestigator?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     

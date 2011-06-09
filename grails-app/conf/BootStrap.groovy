@@ -12,13 +12,22 @@ class BootStrap
             development
             {
                 //
+                // Addresses.
+                //
+                Address csiroAddress =
+                    new Address(streetAddress:'12 Smith Street',
+                                suburbTown:'Hobart',
+                                state:'TAS',
+                                postcode:7000).save(failOnError:true)
+                
                 // Organisations.
                 //
                 Organisation csiroOrg = 
                     new Organisation(name:'CSIRO', 
                                      phoneNumber:'1234',
                                      faxNumber:'1234',
-                                     postalAddress:'12 asdf road',
+                                     streetAddress:csiroAddress,
+                                     postalAddress:csiroAddress,
                                      status:EntityStatus.ACTIVE).save(failOnError: true)
                                  
                 //

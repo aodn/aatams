@@ -32,7 +32,7 @@
 
                             <g:sortableColumn property="people" title="${message(code: 'project.people.label', default: 'People')}" />
 
-                            </tr>
+                        </tr>
                     </thead>
                     <tbody>
                     <g:each in="${projectInstanceList}" status="i" var="projectInstance">

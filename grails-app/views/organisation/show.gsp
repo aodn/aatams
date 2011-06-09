@@ -65,12 +65,12 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="organisation.organisationProjects.label" default="Organisation Projects" /></td>
+                            <td valign="top" class="name"><g:message code="organisation.organisationProjects.label" default="Projects" /></td>
                             
                             <td valign="top" style="text-align: left;" class="value">
                                 <ul>
                                 <g:each in="${organisationInstance.organisationProjects}" var="o">
-                                    <li><g:link controller="organisationProject" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
+                                    <li><g:link controller="project" action="show" id="${o.project.id}">${o?.project?.encodeAsHTML()}</g:link></li>
                                 </g:each>
                                 </ul>
                             </td>

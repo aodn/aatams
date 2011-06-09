@@ -31,6 +31,10 @@ class BootStrap
                 Project tunaProject =
                     new Project(name:'Tuna',
                                 description:'Counting tuna').save(failOnError: true)
+                            
+                Project whaleProject =
+                    new Project(name:'Whale',
+                                description:'Whale counting').save(failOnError: true)
 
                 OrganisationProject csiroSeals =
                     new OrganisationProject(organisation:csiroOrg,

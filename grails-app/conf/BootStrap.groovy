@@ -11,6 +11,9 @@ class BootStrap
         {
             development
             {
+                //
+                // Organisations.
+                //
                 Organisation csiroOrg = 
                     new Organisation(name:'CSIRO', 
                                      phoneNumber:'1234',
@@ -18,6 +21,9 @@ class BootStrap
                                      postalAddress:'12 asdf road',
                                      status:EntityStatus.ACTIVE).save(failOnError: true)
                                  
+                //
+                // Projects.
+                //
                 Project sealCountProject =
                     new Project(name:'Seal Count',
                                 description:'Counting seals').save(failOnError: true)
@@ -34,6 +40,9 @@ class BootStrap
                     new OrganisationProject(organisation:csiroOrg,
                                             project:tunaProject).save(failOnError: true)
 
+                //
+                // People.
+                //
                 Person joeBloggs =
                     new Person(name:'Joe Bloggs',
                                phoneNumber:'1234',
@@ -43,11 +52,37 @@ class BootStrap
                     new Person(name:'John Citizen',
                                phoneNumber:'5678',
                                emailAddress:'jcitizen@csiro.au').save(failOnError: true)
+                   
+                //
+                // Roles.
+                //
+                ProjectRoleType principalInvestigator =
+                    new ProjectRoleType(displayName:'Principal Investigator').save(failOnError: true)
+                ProjectRoleType administrator =
+                    new ProjectRoleType(displayName:'Administrator').save(failOnError: true)
+                    
+                ProjectRole sealProjectInvestigator =
+                    new ProjectRole(project:sealCountProject,
+                                    person: joeBloggs,
+                                    roleType: principalInvestigator).save(failOnError: true)
+                sealCountProject.setPrincipalInvestigator(sealProjectInvestigator)
+                sealCountProject.save(failOnError: true)
+                                
+                ProjectRole sealAdmin =
+                    new ProjectRole(project:sealCountProject,
+                                    person: johnCitizen,
+                                    roleType: administrator).save(failOnError: true)
 
                 OrganisationPerson csiroJohnCitizen =
                     new OrganisationPerson(organisation:csiroOrg,
                                            person:johnCitizen).save(failOnError: true)
-                       
+                OrganisationPerson csiroJoeBloggs =
+                    new OrganisationPerson(organisation:csiroOrg,
+                                           person:joeBloggs).save(failOnError: true)
+                
+                //
+                // Devices.
+                //
                 DeviceManufacturer seimens = 
                     new DeviceManufacturer(manufacturerName:'Seimens').save(failOnError: true)
                     

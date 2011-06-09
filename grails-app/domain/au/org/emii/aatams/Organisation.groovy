@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.util.ListUtils
+
 class Organisation 
 {
     static hasMany = [organisationProjects:OrganisationProject,
@@ -31,27 +33,11 @@ class Organisation
     
     String getProjects()
     {
-        def retString = ""
-        organisationProjects.each
-        {
-            retString += String.valueOf(it.project) + ", "
-        }
-
-        // Remove the trailing ','
-        retString = retString.substring(0, retString.length() - 2)
-        return retString
+        return ListUtils.fold(organisationProjects, "project")
     }
     
     String getPeople()
     {
-        def retString = ""
-        organisationPeople.each
-        {
-            retString += String.valueOf(it.person) + ", "
-        }
-
-        // Remove the trailing ", ".
-        retString = retString.substring(0, retString.length() - 2)
-        return retString
+        return ListUtils.fold(organisationPeople, "person")
     }
 }

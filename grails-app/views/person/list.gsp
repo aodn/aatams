@@ -22,13 +22,16 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'person.id.label', default: 'Id')}" />
-                        
                             <g:sortableColumn property="name" title="${message(code: 'person.name.label', default: 'Name')}" />
                         
                             <g:sortableColumn property="phoneNumber" title="${message(code: 'person.phoneNumber.label', default: 'Phone Number')}" />
                         
                             <g:sortableColumn property="emailAddress" title="${message(code: 'person.emailAddress.label', default: 'Email Address')}" />
+                            
+                            <g:sortableColumn property="organisations" title="${message(code: 'person.organisations.label', default: 'Organisations')}" />
+
+                            <g:sortableColumn property="projects" title="${message(code: 'person.projects.label', default: 'Projects')}" />
+                            
                         
                         </tr>
                     </thead>
@@ -36,15 +39,17 @@
                     <g:each in="${personInstanceList}" status="i" var="personInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${personInstance.id}">${fieldValue(bean: personInstance, field: "id")}</g:link></td>
-                        
-                            <td>${fieldValue(bean: personInstance, field: "name")}</td>
+                            <td><g:link action="show" id="${personInstance.id}">${fieldValue(bean: personInstance, field: "name")}</g:link></td>
                         
                             <td>${fieldValue(bean: personInstance, field: "phoneNumber")}</td>
                         
                             <td>${fieldValue(bean: personInstance, field: "emailAddress")}</td>
                         
-                        </tr>
+                            <td>${fieldValue(bean: personInstance, field: "organisations")}</td>
+                        
+                            <td>${fieldValue(bean: personInstance, field: "projects")}</td>
+
+                            </tr>
                     </g:each>
                     </tbody>
                 </table>

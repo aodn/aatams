@@ -1,12 +1,14 @@
 
 
 <%@ page import="au.org.emii.aatams.Organisation" %>
+<%@ page import="au.org.emii.aatams.Project" %>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'organisation.label', default: 'Organisation')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta name="layout" content="main" />
+      <g:set var="entityName" value="${message(code: 'organisation.label', default: 'Organisation')}" />
+      <title><g:message code="default.edit.label" args="[entityName]" /></title>
+
     </head>
     <body>
         <div class="nav">
@@ -82,22 +84,47 @@
                             </tr>
                         
                             <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="organisationProjects"><g:message code="organisation.organisationProjects.label" default="Organisation Projects" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'organisationProjects', 'errors')}">
-                                    
-<ul>
-<g:each in="${organisationInstance?.organisationProjects?}" var="o">
-    <li><g:link controller="organisationProject" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="organisationProject" action="create" params="['organisation.id': organisationInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'OrganisationProject')])}</g:link>
+                              <td valign="top" class="name">
+                                <label for="organisationProjects"><g:message code="organisation.organisationProjects.label" default="Organisation Projects" /></label>
+                              </td>
+                              <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'organisationProjects', 'errors')}">
 
-
-                                </td>
+                                <ul>
+                                  <g:each in="${organisationInstance?.organisationProjects?}" var="o">
+                                    <li><g:link controller="organisationProject" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
+                                  </g:each>
+                                </ul>
+                                <g:link controller="organisationProject" action="create" params="['organisation.id': organisationInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'OrganisationProject')])}</g:link>
+                              </td>
                             </tr>
-                        
+                            
+                            <tr>
+                              <td valign="top" class="name">
+                                <label for="organisationProjects"><g:message code="organisation.organisationProjects.label" default="Projects" /></label>
+                              </td>
+                              <td>
+
+                                <select id="languages" class="multiselect" multiple="multiple" name="languages[]" title="- Please select -"> 
+                                  <g:each in="${Project.list()}" var="o">
+                                    <option value="${o.id}">${o?.encodeAsHTML()}</option> 
+                                    
+<!--                                    <li><g:link controller="organisationProject" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>-->
+                                  </g:each>
+                                  
+<!--                                  <option value="Czech">Czech</option> 
+                                  <option value="Dutch">Dutch</option> 
+                                  <option value="German">German</option> 
+                                  <option value="English">English</option> 
+                                  <option value="Klingon">Klingon</option> 
+                                  <option value="Polish">Polish</option> 
+                                  <option value="Portuguese">Portuguese</option> 
+                                  <option value="Russian">Russian</option> 
+                                  <option value="Swedish">Swedish</option> -->
+                                </select>
+
+                              </td>
+                            </tr>
+
                         </tbody>
                     </table>
                 </div>

@@ -12,7 +12,8 @@ class Organisation
     String name
     String phoneNumber
     String faxNumber
-    String postalAddress
+    Address streetAddress
+    Address postalAddress
     EntityStatus status = EntityStatus.PENDING
     
     static constraints =
@@ -20,7 +21,8 @@ class Organisation
         name(blank:false, unique:true)
         phoneNumber(blank:false)
         faxNumber()
-        postalAddress(blank:false)
+        streetAddress()
+        postalAddress(nullable:true)
         status()    // Default to PENDING
         organisationProjects()
         organisationPeople()

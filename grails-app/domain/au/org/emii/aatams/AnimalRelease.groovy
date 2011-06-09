@@ -41,6 +41,5 @@ class AnimalRelease
         releaseLocation()
         releaseDateTime(max:new Date())
         comments()
-        
     }
 }

@@ -7,6 +7,7 @@
         <g:set var="entityName" value="${message(code: 'organisation.label', default: 'Organisation')}" />
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
+
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
@@ -22,7 +23,7 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'organisation.id.label', default: 'Id')}" />
+<!--                            <g:sortableColumn property="id" title="${message(code: 'organisation.id.label', default: 'Id')}" />-->
                         
                             <g:sortableColumn property="name" title="${message(code: 'organisation.name.label', default: 'Name')}" />
                         
@@ -34,26 +35,35 @@
                         
                             <g:sortableColumn property="status" title="${message(code: 'organisation.status.label', default: 'Status')}" />
                         
-                        </tr>
+                            <g:sortableColumn property="projects" title="${message(code: 'organisation.projects.label', default: 'Projects')}" />
+
+                            <g:sortableColumn property="people" title="${message(code: 'organisation.people.label', default: 'People')}" />
+
+                            </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${organisationInstanceList}" status="i" var="organisationInstance">
-                        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-                        
-                            <td><g:link action="show" id="${organisationInstance.id}">${fieldValue(bean: organisationInstance, field: "id")}</g:link></td>
-                        
-                            <td>${fieldValue(bean: organisationInstance, field: "name")}</td>
-                        
-                            <td>${fieldValue(bean: organisationInstance, field: "phoneNumber")}</td>
-                        
-                            <td>${fieldValue(bean: organisationInstance, field: "faxNumber")}</td>
-                        
-                            <td>${fieldValue(bean: organisationInstance, field: "postalAddress")}</td>
-                        
-                            <td>${fieldValue(bean: organisationInstance, field: "status")}</td>
-                        
-                        </tr>
-                    </g:each>
+                      <g:each in="${organisationInstanceList}" status="i" var="organisationInstance">
+                          <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+
+  <!--                            <td><g:link action="show" id="${organisationInstance.id}">${fieldValue(bean: organisationInstance, field: "id")}</g:link></td>-->
+  <!--                            <td>${fieldValue(bean: organisationInstance, field: "name")}</td>-->
+
+                              <td><g:link action="show" id="${organisationInstance.id}">${fieldValue(bean: organisationInstance, field: "name")}</g:link></td>
+
+                              <td>${fieldValue(bean: organisationInstance, field: "phoneNumber")}</td>
+
+                              <td>${fieldValue(bean: organisationInstance, field: "faxNumber")}</td>
+
+                              <td>${fieldValue(bean: organisationInstance, field: "postalAddress")}</td>
+
+                              <td>${fieldValue(bean: organisationInstance, field: "status")}</td>
+
+                              <td>${fieldValue(bean: organisationInstance, field: "projects")}</td>
+
+                              <td>${fieldValue(bean: organisationInstance, field: "people")}</td>
+
+                          </tr>
+                      </g:each>
                     </tbody>
                 </table>
             </div>
@@ -62,4 +72,5 @@
             </div>
         </div>
     </body>
+
 </html>

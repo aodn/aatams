@@ -22,18 +22,31 @@ class BootStrap
                     new Project(name:'Seal Count',
                                 description:'Counting seals').save(failOnError: true)
                             
+                Project tunaProject =
+                    new Project(name:'Tuna',
+                                description:'Counting tuna').save(failOnError: true)
+
                 OrganisationProject csiroSeals =
                     new OrganisationProject(organisation:csiroOrg,
                                             project:sealCountProject).save(failOnError: true)
                             
+                OrganisationProject csiroTuna =
+                    new OrganisationProject(organisation:csiroOrg,
+                                            project:tunaProject).save(failOnError: true)
+
                 Person joeBloggs =
                     new Person(name:'Joe Bloggs',
                                phoneNumber:'1234',
                                emailAddress:'jbloggs@csiro.au').save(failOnError: true)
                            
-                OrganisationPerson csiroJoeBloggs =
+                Person johnCitizen =
+                    new Person(name:'John Citizen',
+                               phoneNumber:'5678',
+                               emailAddress:'jcitizen@csiro.au').save(failOnError: true)
+
+                OrganisationPerson csiroJohnCitizen =
                     new OrganisationPerson(organisation:csiroOrg,
-                                           person:joeBloggs).save(failOnError: true)
+                                           person:johnCitizen).save(failOnError: true)
                        
                 DeviceManufacturer seimens = 
                     new DeviceManufacturer(manufacturerName:'Seimens').save(failOnError: true)

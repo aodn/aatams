@@ -51,6 +51,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="organisation.streetAddress.label" default="Street Address" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: organisationInstance, field: "streetAddress")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="organisation.postalAddress.label" default="Postal Address" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: organisationInstance, field: "postalAddress")}</td>

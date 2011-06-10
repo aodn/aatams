@@ -30,6 +30,8 @@
                         
                             <g:sortableColumn property="faxNumber" title="${message(code: 'organisation.faxNumber.label', default: 'Fax Number')}" />
                         
+                            <g:sortableColumn property="streetAddress" title="${message(code: 'organisation.streetAddress.label', default: 'Street Address')}" />
+
                             <g:sortableColumn property="postalAddress" title="${message(code: 'organisation.postalAddress.label', default: 'Postal Address')}" />
                         
                             <g:sortableColumn property="status" title="${message(code: 'organisation.status.label', default: 'Status')}" />
@@ -49,6 +51,8 @@
                               <td>${fieldValue(bean: organisationInstance, field: "phoneNumber")}</td>
 
                               <td>${fieldValue(bean: organisationInstance, field: "faxNumber")}</td>
+
+                              <td>${fieldValue(bean: organisationInstance, field: "streetAddress")}</td>
 
                               <td>${fieldValue(bean: organisationInstance, field: "postalAddress")}</td>
 

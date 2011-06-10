@@ -19,9 +19,18 @@ class OrganisationController {
         return [organisationInstance: organisationInstance]
     }
 
-    def save = {
-        def organisationInstance = new Organisation(params)
-        if (organisationInstance.save(flush: true)) {
+    def save = 
+    {
+        def streetAddress = new Address(params['streetAddress'])
+        def postalAddress = new Address(params['postalAddress'])
+
+        def organisationInstance = 
+            new Organisation(params['organisation'])
+        organisationInstance.streetAddress = streetAddress
+        organisationInstance.postalAddress = postalAddress
+        
+        if (organisationInstance.save(flush: true)) 
+        {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.id])}"
             redirect(action: "show", id: organisationInstance.id)
         }

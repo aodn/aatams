@@ -18,7 +18,8 @@ class BootStrap
                     new Address(streetAddress:'12 Smith Street',
                                 suburbTown:'Hobart',
                                 state:'TAS',
-                                postcode:7000).save(failOnError:true)
+                                country:'Australia',
+                                postcode:'7000')
                 
                 // Organisations.
                 //

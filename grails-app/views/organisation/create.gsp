@@ -33,7 +33,7 @@
                                     <label for="name"><g:message code="organisation.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'name', 'errors')}">
-                                    <g:textField name="name" value="${organisationInstance?.name}" />
+                                    <g:textField name="organisation.name" value="${organisationInstance?.name}" />
 
                                 </td>
                             </tr>
@@ -43,7 +43,7 @@
                                     <label for="phoneNumber"><g:message code="organisation.phoneNumber.label" default="Phone Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'phoneNumber', 'errors')}">
-                                    <g:textField name="phoneNumber" value="${organisationInstance?.phoneNumber}" />
+                                    <g:textField name="organisation.phoneNumber" value="${organisationInstance?.phoneNumber}" />
 
                                 </td>
                             </tr>
@@ -53,32 +53,33 @@
                                     <label for="faxNumber"><g:message code="organisation.faxNumber.label" default="Fax Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'faxNumber', 'errors')}">
-                                    <g:textField name="faxNumber" value="${organisationInstance?.faxNumber}" />
+                                    <g:textField name="organisation.faxNumber" value="${organisationInstance?.faxNumber}" />
 
                                 </td>
                             </tr>
                         
+                            
+                            <!-- Street address. -->
                             <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="postalAddress"><g:message code="organisation.postalAddress.label" default="Postal Address" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'postalAddress', 'errors')}">
-                                    <g:textField name="postalAddress" value="${organisationInstance?.postalAddress}" />
-
-                                </td>
+                              <td valign="top" class="name">
+                                  <label for="streetAddress"><g:message code="organisation.streetAddress.label" default="Street Address" /></label>
+                              </td>
+                              <td>
+                                <g:render template="/address/addressTemplate" bean="${organisationInstance?.streetAddress}" model="['name':'streetAddress']"/>
+                              </td>  
                             </tr>
-                        
+                            
+                            <!-- Postal address. -->
                             <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="status"><g:message code="organisation.status.label" default="Status" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'status', 'errors')}">
-                                    <g:select name="status" from="${au.org.emii.aatams.EntityStatus?.values()}" keys="${au.org.emii.aatams.EntityStatus?.values()*.name()}" value="${organisationInstance?.status?.name()}"  />
-
-                                </td>
+                              <td valign="top" class="name">
+                                  <label for="postalAddress"><g:message code="organisation.streetAddress.label" default="Postal Address" /></label>
+                              </td>
+                              <td>
+                                <g:render template="/address/addressTemplate" bean="${organisationInstance?.postalAddress}" model="['name':'postalAddress']"/>
+                              </td>  
                             </tr>
-                        
-                        </tbody>
+
+                          </tbody>
                     </table>
                 </div>
                 <div class="buttons">

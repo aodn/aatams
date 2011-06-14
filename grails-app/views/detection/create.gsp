@@ -60,6 +60,16 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                    <label for="transmitterSerialNumber"><g:message code="detection.transmitterSerialNumber.label" default="Transmitter Serial Number" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'transmitterSerialNumber', 'errors')}">
+                                    <g:textField name="transmitterSerialNumber" value="${detectionInstance?.transmitterSerialNumber}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                     <label for="stationName"><g:message code="detection.stationName.label" default="Station Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'stationName', 'errors')}">

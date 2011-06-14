@@ -51,6 +51,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="detection.transmitterSerialNumber.label" default="Transmitter Serial Number" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "transmitterSerialNumber")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.stationName.label" default="Station Name" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "stationName")}</td>

@@ -30,9 +30,9 @@
                         
                             <g:sortableColumn property="transmitterName" title="${message(code: 'detection.transmitterName.label', default: 'Transmitter Name')}" />
                         
-                            <g:sortableColumn property="stationName" title="${message(code: 'detection.stationName.label', default: 'Station Name')}" />
+                            <g:sortableColumn property="transmitterSerialNumber" title="${message(code: 'detection.transmitterSerialNumber.label', default: 'Transmitter Serial Number')}" />
                         
-                            <g:sortableColumn property="location" title="${message(code: 'detection.location.label', default: 'Location')}" />
+                            <g:sortableColumn property="stationName" title="${message(code: 'detection.stationName.label', default: 'Station Name')}" />
                         
                         </tr>
                     </thead>
@@ -48,9 +48,9 @@
                         
                             <td>${fieldValue(bean: detectionInstance, field: "transmitterName")}</td>
                         
-                            <td>${fieldValue(bean: detectionInstance, field: "stationName")}</td>
+                            <td>${fieldValue(bean: detectionInstance, field: "transmitterSerialNumber")}</td>
                         
-                            <td>${fieldValue(bean: detectionInstance, field: "location")}</td>
+                            <td>${fieldValue(bean: detectionInstance, field: "stationName")}</td>
                         
                         </tr>
                     </g:each>

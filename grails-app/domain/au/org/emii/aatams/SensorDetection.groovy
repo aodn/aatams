@@ -10,10 +10,16 @@ class SensorDetection extends Detection
     static hasMany = [sensors: Sensor]
     
     Float uncalibratedValue
+    String sensorUnit
     
     static constraints =
     {
-        sensors()
+        timestamp(max:new Date())
+        receiver()
+        transmitterName(nullable:true, blank:true)
+        transmitterSerialNumber(nullable:true, blank:true)
+        stationName(nullable:true, blank:true)
+        location(nullable:true)
         uncalibratedValue()
     }
     

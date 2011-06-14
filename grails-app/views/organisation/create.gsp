@@ -65,7 +65,7 @@
                                   <label for="streetAddress"><g:message code="organisation.streetAddress.label" default="Street Address" /></label>
                               </td>
                               <td>
-                                <g:render template="/address/addressTemplate" bean="${organisationInstance?.streetAddress}" model="['name':'streetAddress']"/>
+                                <g:addressDetail addressName='streetAddress'/>
                               </td>  
                             </tr>
                             
@@ -75,7 +75,7 @@
                                   <label for="postalAddress"><g:message code="organisation.streetAddress.label" default="Postal Address" /></label>
                               </td>
                               <td>
-                                <g:render template="/address/addressTemplate" bean="${organisationInstance?.postalAddress}" model="['name':'postalAddress']"/>
+                                <g:addressDetail addressName='postalAddress'/>
                               </td>  
                             </tr>
 

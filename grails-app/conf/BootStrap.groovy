@@ -14,21 +14,29 @@ class BootStrap
                 //
                 // Addresses.
                 //
-                Address csiroAddress =
+                Address csiroStreetAddress =
                     new Address(streetAddress:'12 Smith Street',
                                 suburbTown:'Hobart',
                                 state:'TAS',
                                 country:'Australia',
                                 postcode:'7000')
                 
+                Address csiroPostalAddress =
+                    new Address(streetAddress:'34 Queen Street',
+                                suburbTown:'Melbourne',
+                                state:'VIC',
+                                country:'Australia',
+                                postcode:'3000')
+                            
+                //
                 // Organisations.
                 //
                 Organisation csiroOrg = 
                     new Organisation(name:'CSIRO', 
                                      phoneNumber:'1234',
                                      faxNumber:'1234',
-                                     streetAddress:csiroAddress,
-                                     postalAddress:csiroAddress,
+                                     streetAddress:csiroStreetAddress,
+                                     postalAddress:csiroPostalAddress,
                                      status:EntityStatus.ACTIVE).save(failOnError: true)
                                  
                 //

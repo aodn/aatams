@@ -23,13 +23,6 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="project.id.label" default="Id" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: projectInstance, field: "id")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="project.name.label" default="Name" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: projectInstance, field: "name")}</td>
@@ -44,35 +37,22 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="project.organisationProjects.label" default="Organisations" /></td>
+                            
+                            <td valign="top" style="text-align: left;" class="value">
+                                <ul>
+                                <g:each in="${projectInstance.organisationProjects?.organisation}" var="o">
+                                    <li><g:link controller="organisation" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
+                                </g:each>
+                                </ul>
+                            </td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="project.principalInvestigator.label" default="Principal Investigator" /></td>
                             
                             <td valign="top" class="value"><g:link controller="projectRole" action="show" id="${projectInstance?.principalInvestigator?.id}">${projectInstance?.principalInvestigator?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="project.devices.label" default="Devices" /></td>
-                            
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${projectInstance.devices}" var="d">
-                                    <li><g:link controller="device" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="project.organisationProjects.label" default="Organisation Projects" /></td>
-                            
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${projectInstance.organisationProjects}" var="o">
-                                    <li><g:link controller="organisationProject" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
                             
                         </tr>
                     
@@ -83,6 +63,19 @@
                                 <ul>
                                 <g:each in="${projectInstance.projectRoles}" var="p">
                                     <li><g:link controller="projectRole" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
+                                </g:each>
+                                </ul>
+                            </td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="project.devices.label" default="Devices" /></td>
+                            
+                            <td valign="top" style="text-align: left;" class="value">
+                                <ul>
+                                <g:each in="${projectInstance.devices}" var="d">
+                                    <li><g:link controller="device" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
                                 </g:each>
                                 </ul>
                             </td>

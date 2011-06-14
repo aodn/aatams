@@ -50,7 +50,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="clockDrift"><g:message code="receiverDownload.clockDrift.label" default="Clock Drift" /></label>
+                                    <label for="clockDrift"><g:message code="receiverDownload.clockDrift.label" default="Clock Drift (s)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'clockDrift', 'errors')}">
                                     <g:textField name="clockDrift" value="${fieldValue(bean: receiverDownloadInstance, field: 'clockDrift')}" />

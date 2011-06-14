@@ -60,6 +60,16 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                    <label for="transmitterSerialNumber"><g:message code="sensorDetection.transmitterSerialNumber.label" default="Transmitter Serial Number" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'transmitterSerialNumber', 'errors')}">
+                                    <g:textField name="transmitterSerialNumber" value="${sensorDetectionInstance?.transmitterSerialNumber}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                     <label for="stationName"><g:message code="sensorDetection.stationName.label" default="Station Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'stationName', 'errors')}">
@@ -80,20 +90,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="sensor"><g:message code="sensorDetection.sensor.label" default="Sensor" /></label>
+                                    <label for="uncalibratedValue"><g:message code="sensorDetection.uncalibratedValue.label" default="Uncalibrated Value" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'sensor', 'errors')}">
-                                    <g:select name="sensor.id" from="${au.org.emii.aatams.Sensor.list()}" optionKey="id" value="${sensorDetectionInstance?.sensor?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'uncalibratedValue', 'errors')}">
+                                    <g:textField name="uncalibratedValue" value="${fieldValue(bean: sensorDetectionInstance, field: 'uncalibratedValue')}" />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="uncalibratedValue"><g:message code="sensorDetection.uncalibratedValue.label" default="Uncalibrated Value" /></label>
+                                    <label for="sensorUnit"><g:message code="sensorDetection.sensorUnit.label" default="Sensor Unit" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'uncalibratedValue', 'errors')}">
-                                    <g:textField name="uncalibratedValue" value="${fieldValue(bean: sensorDetectionInstance, field: 'uncalibratedValue')}" />
+                                <td valign="top" class="value ${hasErrors(bean: sensorDetectionInstance, field: 'sensorUnit', 'errors')}">
+                                    <g:textField name="sensorUnit" value="${sensorDetectionInstance?.sensorUnit}" />
 
                                 </td>
                             </tr>

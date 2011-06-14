@@ -67,12 +67,13 @@ class DetectionFactoryService
             //assert (sensors.size() > 0) : "Detection must belong to at least one tag or sensor"
             if (sensors.size() == 0)
             {
-                throw new FileProcessingException("Detection must belong to at least one tag or sensor")
+                log.warn("Detection does not belong to either a tag or sensor")
             }
             
             Float sensorValue = detectionParams[SENSOR_VALUE_COLUMN]?: Float.parseFloat(detectionParams[SENSOR_VALUE_COLUMN])
             sensorDetection.uncalibratedValue = sensorValue
             String sensorUnit = detectionParams[SENSOR_UNIT_COLUMN]
+            sensorDetection.sensorUnit = sensorUnit
             
             retDetection = sensorDetection
         }
@@ -84,7 +85,7 @@ class DetectionFactoryService
         else
         {
             // Extremely unlikely - but possible.
-            log.warn("Multplie tags match identifier: " + transmitterID)
+            log.warn("Multiple tags match identifier: " + transmitterID)
             retDetection = new Detection()
         }
         

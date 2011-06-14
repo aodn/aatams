@@ -10,6 +10,9 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.highlight.js')}"></script>
 
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.selectlist.js')}"></script>
+
+    <script type="text/javascript" src="${resource(dir:'js',file:'addorganisationtoproject.js')}"></script>
+
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui-lightness/jquery-ui-1.8.10.custom.css')}"/>
     <link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
@@ -30,7 +33,8 @@
     </script>
 
     <g:layoutHead />
-    <g:javascript library="application" />
+<!--    <g:javascript library="application" />-->
+    <g:javascript library="jquery" />
     <g:javascript library="main_extras" />
 
     <g:setProvider library="jquery"/>

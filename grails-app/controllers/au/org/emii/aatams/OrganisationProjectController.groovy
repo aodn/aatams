@@ -19,6 +19,13 @@ class OrganisationProjectController {
         return [organisationProjectInstance: organisationProjectInstance]
     }
     
+    def createOrganisationToProject =
+    {
+        def organisationProjectInstance = new OrganisationProject()
+        organisationProjectInstance.properties = params
+        return [organisationProjectInstance: organisationProjectInstance]
+    }
+    
     def createProjectToOrganisation =
     {
         def organisationProjectInstance = new OrganisationProject()
@@ -37,6 +44,19 @@ class OrganisationProjectController {
         }
     }
     
+    def saveOrganisationToProject = {
+        def organisationProjectInstance = new OrganisationProject(params)
+        if (organisationProjectInstance.save(flush: true)) {
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), organisationProjectInstance.id])}"
+            
+            // Redirect back to project edit.
+            redirect(controller:"project", action: "edit", id: organisationProjectInstance.project.id)
+        }
+        else {
+            render(view: "createOrganisationToProject", model: [organisationProjectInstance: organisationProjectInstance])
+        }
+    }
+
     def saveProjectToOrganisation = {
         def organisationProjectInstance = new OrganisationProject(params)
         if (organisationProjectInstance.save(flush: true)) {
@@ -46,7 +66,7 @@ class OrganisationProjectController {
             redirect(controller:"organisation", action: "edit", id: organisationProjectInstance.organisation.id)
         }
         else {
-            render(view: "createProjectToOrganisation", model: [organisationProjectInstance: organisationProjectInstance])
+            render(view: "createOrganisationToProject", model: [organisationProjectInstance: organisationProjectInstance])
         }
     }
 

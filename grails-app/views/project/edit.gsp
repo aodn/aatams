@@ -53,44 +53,30 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                  <label for="organisationProjects"><g:message code="project.organisationProjects.label" default="Organisations" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'organisationProjects', 'errors')}">
+                                    
+                                  <ul>
+                                    <g:each in="${projectInstance?.organisationProjects?.organisation}" var="o">
+                                        <li><g:link controller="organisation" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
+                                    </g:each>
+                                    <br/>
+<!--                                    <g:link controller="organisationProject" 
+                                            action="createOrganisationToProject" 
+                                            params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</g:link>-->
+                                    <a href="#" id='add_organisation_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</a>
+                                  </ul>
+                                </td>
+                            </tr>
+                        
+
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="principalInvestigator"><g:message code="project.principalInvestigator.label" default="Principal Investigator" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'principalInvestigator', 'errors')}">
                                     <g:select name="principalInvestigator.id" from="${au.org.emii.aatams.ProjectRole.list()}" optionKey="id" value="${projectInstance?.principalInvestigator?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="devices"><g:message code="project.devices.label" default="Devices" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'devices', 'errors')}">
-                                    
-<ul>
-<g:each in="${projectInstance?.devices?}" var="d">
-    <li><g:link controller="device" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="device" action="create" params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'device.label', default: 'Device')])}</g:link>
-
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="organisationProjects"><g:message code="project.organisationProjects.label" default="Organisation Projects" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'organisationProjects', 'errors')}">
-                                    
-<ul>
-<g:each in="${projectInstance?.organisationProjects?}" var="o">
-    <li><g:link controller="organisationProject" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="organisationProject" action="create" params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'OrganisationProject')])}</g:link>
-
 
                                 </td>
                             </tr>
@@ -112,6 +98,23 @@
                                 </td>
                             </tr>
                         
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="devices"><g:message code="project.devices.label" default="Devices" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'devices', 'errors')}">
+                                    
+<ul>
+<g:each in="${projectInstance?.devices?}" var="d">
+    <li><g:link controller="device" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
+</g:each>
+</ul>
+<g:link controller="device" action="create" params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'device.label', default: 'Device')])}</g:link>
+
+
+                                </td>
+                            </tr>
+                        
                         </tbody>
                     </table>
                 </div>
@@ -121,5 +124,41 @@
                 </div>
             </g:form>
         </div>
+      
+      <div id="dialog-form" title="Add Organisation to Project">
+            <g:form action="save" >
+                <div class="dialog">
+                    <table>
+                        <tbody>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="project"><g:message code="organisationProject.project.label" default="Project" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: organisationProjectInstance, field: 'project', 'errors')}">
+                                  <g:textField name="duration" value="${fieldValue(bean: organisationProjectInstance, field: 'project')}"/>
+                                </td>
+                                <g:hiddenField name="project.id" value="${organisationProjectInstance?.project?.id}" />
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="organisation"><g:message code="organisationProject.organisation.label" default="Organisation" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: organisationProjectInstance, field: 'organisation', 'errors')}">
+                                    <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${organisationProjectInstance?.organisation?.id}"  />
+
+                                </td>
+                            </tr>
+                        
+                        </tbody>
+                    </table>
+                </div>
+                <div class="buttons">
+                    <span class="button"><g:submitButton name="saveOrganisationToProject" class="saveOrganisationToProject" value="${message(code: 'default.button.create.label', default: 'Add')}" /></span>
+                </div>
+            </g:form>
+      </div>
+      
     </body>
 </html>

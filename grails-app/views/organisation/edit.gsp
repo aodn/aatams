@@ -95,46 +95,38 @@
                         
                             <tr class="prop">
                               <td valign="top" class="name">
-                                <label for="organisationProjects"><g:message code="organisation.organisationProjects.label" default="Organisation Projects" /></label>
+                                <label for="organisationProjects"><g:message code="organisation.organisationProjects.label" default="Projects" /></label>
                               </td>
                               <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'organisationProjects', 'errors')}">
-
                                 <ul>
                                   <g:each in="${organisationInstance?.organisationProjects?}" var="o">
-                                    <li><g:link controller="organisationProject" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
+                                    <li><g:link controller="organisationProject" action="show" id="${o.id}">${o?.project}</g:link></li>
                                   </g:each>
+                                  <br/>
+                                  <g:link controller="organisationProject" 
+                                          action="createProjectToOrganisation" 
+                                          params="['organisation.id': organisationInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Project...')])}</g:link>
                                 </ul>
-                                <g:link controller="organisationProject" action="create" params="['organisation.id': organisationInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'OrganisationProject')])}</g:link>
+                              </td>
+                            </tr>
+
+                            <tr class="prop">
+                              <td valign="top" class="name">
+                                <label for="organisationPeople"><g:message code="organisation.organisationPeople.label" default="People" /></label>
+                              </td>
+                              <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'organisationPeople', 'errors')}">
+                                <ul>
+                                  <g:each in="${organisationInstance?.organisationPeople?}" var="o">
+                                    <li><g:link controller="organisationPerson" action="show" id="${o.id}">${o?.person}</g:link></li>
+                                  </g:each>
+                                  <br/>
+                                  <g:link controller="organisationPerson" 
+                                          action="createPersonToOrganisation" 
+                                          params="['organisation.id': organisationInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'organisationPerson.label', default: 'People...')])}</g:link>
+                                </ul>
                               </td>
                             </tr>
                             
-                            <tr>
-                              <td valign="top" class="name">
-                                <label for="organisationProjects"><g:message code="organisation.organisationProjects.label" default="Projects" /></label>
-                              </td>
-                              <td>
-
-                                <select id="languages" class="multiselect" multiple="multiple" name="languages[]" title="- Please select -"> 
-                                  <g:each in="${Project.list()}" var="o">
-                                    <option value="${o.id}">${o?.encodeAsHTML()}</option> 
-                                    
-<!--                                    <li><g:link controller="organisationProject" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>-->
-                                  </g:each>
-                                  
-<!--                                  <option value="Czech">Czech</option> 
-                                  <option value="Dutch">Dutch</option> 
-                                  <option value="German">German</option> 
-                                  <option value="English">English</option> 
-                                  <option value="Klingon">Klingon</option> 
-                                  <option value="Polish">Polish</option> 
-                                  <option value="Portuguese">Portuguese</option> 
-                                  <option value="Russian">Russian</option> 
-                                  <option value="Swedish">Swedish</option> -->
-                                </select>
-
-                              </td>
-                            </tr>
-
                         </tbody>
                     </table>
                 </div>

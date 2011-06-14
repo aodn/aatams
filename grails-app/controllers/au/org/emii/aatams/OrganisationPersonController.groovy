@@ -19,6 +19,12 @@ class OrganisationPersonController {
         return [organisationPersonInstance: organisationPersonInstance]
     }
 
+    def createPersonToOrganisation = {
+        def organisationPersonInstance = new OrganisationPerson()
+        organisationPersonInstance.properties = params
+        return [organisationPersonInstance: organisationPersonInstance]
+    }
+
     def save = {
         def organisationPersonInstance = new OrganisationPerson(params)
         if (organisationPersonInstance.save(flush: true)) {
@@ -30,6 +36,17 @@ class OrganisationPersonController {
         }
     }
 
+    def savePersonToOrganisation = {
+        def organisationPersonInstance = new OrganisationPerson(params)
+        if (organisationPersonInstance.save(flush: true)) {
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'organisationPerson.label', default: 'OrganisationPerson'), organisationPersonInstance.id])}"
+            redirect(controller:"organisation", action: "edit", id: organisationPersonInstance.organisation.id)
+        }
+        else {
+            render(view: "createPersonToOrganisation", model: [organisationPersonInstance: organisationPersonInstance])
+        }
+    }
+    
     def show = {
         def organisationPersonInstance = OrganisationPerson.get(params.id)
         if (!organisationPersonInstance) {

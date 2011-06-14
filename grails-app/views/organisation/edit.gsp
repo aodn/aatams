@@ -63,14 +63,24 @@
                                 </td>
                             </tr>
                         
+                            <!-- Street address. -->
                             <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="postalAddress"><g:message code="organisation.postalAddress.label" default="Postal Address" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'postalAddress', 'errors')}">
-                                    <g:textField name="postalAddress" value="${organisationInstance?.postalAddress}" />
-
-                                </td>
+                              <td valign="top" class="name">
+                                  <label for="streetAddress"><g:message code="organisation.streetAddress.label" default="Street Address" /></label>
+                              </td>
+                              <td>
+                                <g:addressDetail addressName='streetAddress' address='${organisationInstance?.streetAddress}'/>
+                              </td>  
+                            </tr>
+                            
+                            <!-- Postal address. -->
+                            <tr class="prop">
+                              <td valign="top" class="name">
+                                  <label for="postalAddress"><g:message code="organisation.streetAddress.label" default="Postal Address" /></label>
+                              </td>
+                              <td>
+                                <g:addressDetail addressName='postalAddress' address='${organisationInstance?.postalAddress}'/>
+                              </td>  
                             </tr>
                         
                             <tr class="prop">

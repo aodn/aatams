@@ -9,11 +9,17 @@ package au.org.emii.aatams
 class ProjectRole 
 {
     static belongsTo = [project:Project, person:Person]
+    static transients = ['projectAndRole']
     
     ProjectRoleType roleType;
     
     String toString()
     {
-        return String.valueOf(project) + " - " + String.valueOf(roleType) + ": " + String.valueOf(person)
+        return getProjectAndRole() + ": " + String.valueOf(person)
+    }
+    
+    String getProjectAndRole()
+    {
+        return String.valueOf(project) + " - " + String.valueOf(roleType)
     }
 }

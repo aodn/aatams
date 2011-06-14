@@ -23,13 +23,6 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="person.id.label" default="Id" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: personInstance, field: "id")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="person.name.label" default="Name" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: personInstance, field: "name")}</td>
@@ -55,8 +48,8 @@
                             
                             <td valign="top" style="text-align: left;" class="value">
                                 <ul>
-                                <g:each in="${personInstance.organisationPeople}" var="p">
-                                    <li><g:link controller="organisationPeople" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
+                                <g:each in="${personInstance.organisationPeople?.organisation}" var="p">
+                                    <li><g:link controller="organisation" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
                                 </g:each>
                                 </ul>
                             </td>
@@ -64,18 +57,18 @@
                         </tr>
 
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="person.projectRoles.label" default="Project Roles" /></td>
+                            <td valign="top" class="name"><g:message code="person.projectRoles.label" default="Projects" /></td>
                             
                             <td valign="top" style="text-align: left;" class="value">
                                 <ul>
-                                <g:each in="${personInstance.projectRoles}" var="p">
-                                    <li><g:link controller="projectRole" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
+                                <g:each in="${personInstance.projectRoles?.project}" var="p">
+                                  <li><g:link controller="project" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
                                 </g:each>
                                 </ul>
                             </td>
                             
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="person.systemRoles.label" default="System Roles" /></td>
                             

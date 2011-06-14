@@ -83,6 +83,10 @@ class BootStrap
                 ProjectRoleType administrator =
                     new ProjectRoleType(displayName:'Administrator').save(failOnError: true)
                     
+                ProjectRole tunaAdmin =
+                    new ProjectRole(project:tunaProject,
+                                    person: joeBloggs,
+                                    roleType: administrator).save(failOnError: true)
                 ProjectRole sealProjectInvestigator =
                     new ProjectRole(project:sealCountProject,
                                     person: joeBloggs,

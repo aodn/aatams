@@ -60,24 +60,7 @@
 
                                 </td>
                             </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="projectRoles"><g:message code="person.projectRoles.label" default="Project Roles" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'projectRoles', 'errors')}">
-                                    
-<ul>
-<g:each in="${personInstance?.projectRoles?}" var="p">
-    <li><g:link controller="projectRole" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="projectRole" action="create" params="['person.id': personInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'projectRole.label', default: 'ProjectRole')])}</g:link>
-
-
-                                </td>
-                            </tr>
-                        
+                        <!--
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="systemRoles"><g:message code="person.systemRoles.label" default="System Roles" /></label>
@@ -87,7 +70,7 @@
 
                                 </td>
                             </tr>
-                        
+                        -->
                         </tbody>
                     </table>
                 </div>

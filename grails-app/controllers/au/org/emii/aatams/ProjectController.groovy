@@ -30,14 +30,16 @@ class ProjectController {
         }
     }
 
+    
     def show = {
         def projectInstance = Project.get(params.id)
         if (!projectInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), params.id])}"
             redirect(action: "list")
         }
-        else {
-            [projectInstance: projectInstance]
+        else 
+        {
+            [projectInstance: projectInstance, unrelatedOrganisations: projectInstance.unrelatedOrganisations()]
         }
     }
 
@@ -48,7 +50,8 @@ class ProjectController {
             redirect(action: "list")
         }
         else {
-            return [projectInstance: projectInstance]
+            return [projectInstance: projectInstance, 
+                    unrelatedOrganisations: projectInstance.unrelatedOrganisations()]
         }
     }
 

@@ -146,16 +146,13 @@
                                     <label for="organisationId"><g:message code="organisationProject.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationProjectInstance, field: 'organisation', 'errors')}">
-                                    <g:select name="organisationId" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${organisationProjectInstance?.organisation?.id}"  />
+                                  <g:select name="organisationId" from="${unrelatedOrganisations}" optionKey="id"/>
                                 </td>
                             </tr>
                         
                         </tbody>
                     </table>
                 </div>
-<!--                <div class="buttons">
-                    <span class="button"><g:submitButton name="saveOrganisationToProject" class="saveOrganisationToProject" value="${message(code: 'default.button.create.label', default: 'Add')}" /></span>
-                </div>-->
             </g:form>
       </div>
       

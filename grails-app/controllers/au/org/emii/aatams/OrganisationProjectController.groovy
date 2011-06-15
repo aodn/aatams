@@ -1,8 +1,10 @@
 package au.org.emii.aatams
 
+import grails.converters.deep.JSON
+
 class OrganisationProjectController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [saveOrganisationToProject: "POST", save: "POST", update: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
@@ -44,15 +46,16 @@ class OrganisationProjectController {
         }
     }
     
-    def saveOrganisationToProject = {
+    def saveOrganisationToProject = 
+    {
         def organisationProjectInstance = new OrganisationProject(params)
-        if (organisationProjectInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), organisationProjectInstance.id])}"
-            
-            // Redirect back to project edit.
-            redirect(controller:"project", action: "edit", id: organisationProjectInstance.project.id)
+
+        if (organisationProjectInstance.save(flush: true)) 
+        {
+            render organisationProjectInstance as JSON
         }
-        else {
+        else 
+        {
             render(view: "createOrganisationToProject", model: [organisationProjectInstance: organisationProjectInstance])
         }
     }

@@ -37,6 +37,7 @@ environments {
         // Make *sure* you've got Grails Environment set to "production"!!
         dataSource 
         {
+//            dbCreate = "create" // one of 'create', 'create-drop','update'
             jndiName = "java:comp/env/jdbc/aatams_dev"
         }
     }

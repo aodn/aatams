@@ -2,9 +2,9 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.0.2
+-- Dumped from database version 8.4.8
 -- Dumped by pg_dump version 9.0.1
--- Started on 2011-06-07 13:51:51 EST
+-- Started on 2011-06-15 15:11:17 EST
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -15,10 +15,8 @@ SET escape_string_warning = off;
 
 SET SESSION AUTHORIZATION 'aatams';
 
-DROP SCHEMA aatams CASCADE;
-
 --
--- TOC entry 7 (class 2615 OID 125950)
+-- TOC entry 7 (class 2615 OID 1634998)
 -- Name: aatams; Type: SCHEMA; Schema: -; Owner: aatams
 --
 
@@ -32,7 +30,24 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 2456 (class 1259 OID 154413)
+-- TOC entry 2321 (class 1259 OID 1636339)
+-- Dependencies: 7
+-- Name: address; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
+--
+
+CREATE TABLE address (
+    id bigint NOT NULL,
+    version bigint NOT NULL,
+    country character varying(255) NOT NULL,
+    postcode character varying(255) NOT NULL,
+    state character varying(255) NOT NULL,
+    street_address character varying(255) NOT NULL,
+    suburb_town character varying(255) NOT NULL
+);
+
+
+--
+-- TOC entry 2322 (class 1259 OID 1636347)
 -- Dependencies: 7
 -- Name: animal; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -46,7 +61,7 @@ CREATE TABLE animal (
 
 
 --
--- TOC entry 2457 (class 1259 OID 154418)
+-- TOC entry 2323 (class 1259 OID 1636352)
 -- Dependencies: 7
 -- Name: animal_measurement; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -63,7 +78,7 @@ CREATE TABLE animal_measurement (
 
 
 --
--- TOC entry 2458 (class 1259 OID 154423)
+-- TOC entry 2324 (class 1259 OID 1636357)
 -- Dependencies: 7
 -- Name: animal_measurement_type; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -76,7 +91,7 @@ CREATE TABLE animal_measurement_type (
 
 
 --
--- TOC entry 2459 (class 1259 OID 154430)
+-- TOC entry 2325 (class 1259 OID 1636364)
 -- Dependencies: 7
 -- Name: animal_release; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -97,7 +112,7 @@ CREATE TABLE animal_release (
 
 
 --
--- TOC entry 2460 (class 1259 OID 154438)
+-- TOC entry 2326 (class 1259 OID 1636372)
 -- Dependencies: 7
 -- Name: animal_release_animal_measurement; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -109,7 +124,7 @@ CREATE TABLE animal_release_animal_measurement (
 
 
 --
--- TOC entry 2461 (class 1259 OID 154441)
+-- TOC entry 2327 (class 1259 OID 1636375)
 -- Dependencies: 7
 -- Name: detection; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -124,12 +139,13 @@ CREATE TABLE detection (
     transmitter_name character varying(255),
     transmitter_serial_number character varying(255),
     class character varying(255) NOT NULL,
+    sensor_unit character varying(255),
     uncalibrated_value real
 );
 
 
 --
--- TOC entry 2462 (class 1259 OID 154449)
+-- TOC entry 2328 (class 1259 OID 1636383)
 -- Dependencies: 7
 -- Name: detection_tag; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -141,7 +157,7 @@ CREATE TABLE detection_tag (
 
 
 --
--- TOC entry 2463 (class 1259 OID 154452)
+-- TOC entry 2329 (class 1259 OID 1636386)
 -- Dependencies: 7
 -- Name: device; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -162,7 +178,7 @@ CREATE TABLE device (
 
 
 --
--- TOC entry 2464 (class 1259 OID 154460)
+-- TOC entry 2330 (class 1259 OID 1636394)
 -- Dependencies: 7
 -- Name: device_manufacturer; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -175,7 +191,7 @@ CREATE TABLE device_manufacturer (
 
 
 --
--- TOC entry 2465 (class 1259 OID 154467)
+-- TOC entry 2331 (class 1259 OID 1636401)
 -- Dependencies: 7
 -- Name: device_model; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -189,7 +205,7 @@ CREATE TABLE device_model (
 
 
 --
--- TOC entry 2466 (class 1259 OID 154474)
+-- TOC entry 2332 (class 1259 OID 1636408)
 -- Dependencies: 7
 -- Name: device_status; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -202,7 +218,7 @@ CREATE TABLE device_status (
 
 
 --
--- TOC entry 2497 (class 1259 OID 154920)
+-- TOC entry 2363 (class 1259 OID 1636864)
 -- Dependencies: 7
 -- Name: hibernate_sequence; Type: SEQUENCE; Schema: aatams; Owner: aatams
 --
@@ -216,7 +232,7 @@ CREATE SEQUENCE hibernate_sequence
 
 
 --
--- TOC entry 2467 (class 1259 OID 154481)
+-- TOC entry 2333 (class 1259 OID 1636415)
 -- Dependencies: 7
 -- Name: installation; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -233,7 +249,7 @@ CREATE TABLE installation (
 
 
 --
--- TOC entry 2468 (class 1259 OID 154486)
+-- TOC entry 2334 (class 1259 OID 1636420)
 -- Dependencies: 7
 -- Name: installation_configuration; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -246,8 +262,8 @@ CREATE TABLE installation_configuration (
 
 
 --
--- TOC entry 2469 (class 1259 OID 154493)
--- Dependencies: 1161 7
+-- TOC entry 2335 (class 1259 OID 1636427)
+-- Dependencies: 7 980
 -- Name: installation_station; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -262,7 +278,7 @@ CREATE TABLE installation_station (
 
 
 --
--- TOC entry 2470 (class 1259 OID 154501)
+-- TOC entry 2336 (class 1259 OID 1636435)
 -- Dependencies: 7
 -- Name: installation_station_receiver; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -274,7 +290,7 @@ CREATE TABLE installation_station_receiver (
 
 
 --
--- TOC entry 2471 (class 1259 OID 154504)
+-- TOC entry 2337 (class 1259 OID 1636438)
 -- Dependencies: 7
 -- Name: measurement_unit; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -287,7 +303,7 @@ CREATE TABLE measurement_unit (
 
 
 --
--- TOC entry 2472 (class 1259 OID 154511)
+-- TOC entry 2338 (class 1259 OID 1636445)
 -- Dependencies: 7
 -- Name: mooring_type; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -300,7 +316,7 @@ CREATE TABLE mooring_type (
 
 
 --
--- TOC entry 2473 (class 1259 OID 154518)
+-- TOC entry 2339 (class 1259 OID 1636452)
 -- Dependencies: 7
 -- Name: organisation; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -311,13 +327,14 @@ CREATE TABLE organisation (
     fax_number character varying(255) NOT NULL,
     name character varying(255) NOT NULL,
     phone_number character varying(255) NOT NULL,
-    postal_address character varying(255) NOT NULL,
-    status character varying(255) NOT NULL
+    postal_address_id bigint,
+    status character varying(255) NOT NULL,
+    street_address_id bigint NOT NULL
 );
 
 
 --
--- TOC entry 2474 (class 1259 OID 154528)
+-- TOC entry 2340 (class 1259 OID 1636462)
 -- Dependencies: 7
 -- Name: organisation_person; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -331,7 +348,7 @@ CREATE TABLE organisation_person (
 
 
 --
--- TOC entry 2475 (class 1259 OID 154533)
+-- TOC entry 2341 (class 1259 OID 1636467)
 -- Dependencies: 7
 -- Name: organisation_project; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -345,7 +362,7 @@ CREATE TABLE organisation_project (
 
 
 --
--- TOC entry 2476 (class 1259 OID 154538)
+-- TOC entry 2342 (class 1259 OID 1636472)
 -- Dependencies: 7
 -- Name: person; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -360,7 +377,7 @@ CREATE TABLE person (
 
 
 --
--- TOC entry 2477 (class 1259 OID 154546)
+-- TOC entry 2343 (class 1259 OID 1636480)
 -- Dependencies: 7
 -- Name: person_system_role; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -372,7 +389,7 @@ CREATE TABLE person_system_role (
 
 
 --
--- TOC entry 2478 (class 1259 OID 154549)
+-- TOC entry 2344 (class 1259 OID 1636483)
 -- Dependencies: 7
 -- Name: processed_upload_file; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -387,7 +404,7 @@ CREATE TABLE processed_upload_file (
 
 
 --
--- TOC entry 2479 (class 1259 OID 154557)
+-- TOC entry 2345 (class 1259 OID 1636491)
 -- Dependencies: 7
 -- Name: project; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -397,12 +414,12 @@ CREATE TABLE project (
     version bigint NOT NULL,
     description character varying(255) NOT NULL,
     name character varying(255) NOT NULL,
-    principal_investator_id bigint
+    principal_investigator_id bigint
 );
 
 
 --
--- TOC entry 2480 (class 1259 OID 154567)
+-- TOC entry 2346 (class 1259 OID 1636501)
 -- Dependencies: 7
 -- Name: project_role; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -417,7 +434,7 @@ CREATE TABLE project_role (
 
 
 --
--- TOC entry 2481 (class 1259 OID 154572)
+-- TOC entry 2347 (class 1259 OID 1636506)
 -- Dependencies: 7
 -- Name: project_role_type; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -430,7 +447,7 @@ CREATE TABLE project_role_type (
 
 
 --
--- TOC entry 2482 (class 1259 OID 154579)
+-- TOC entry 2348 (class 1259 OID 1636513)
 -- Dependencies: 7
 -- Name: receiver_deployment; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -454,7 +471,7 @@ CREATE TABLE receiver_deployment (
 
 
 --
--- TOC entry 2483 (class 1259 OID 154587)
+-- TOC entry 2349 (class 1259 OID 1636521)
 -- Dependencies: 7
 -- Name: receiver_download; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -474,7 +491,7 @@ CREATE TABLE receiver_download (
 
 
 --
--- TOC entry 2484 (class 1259 OID 154592)
+-- TOC entry 2350 (class 1259 OID 1636526)
 -- Dependencies: 7
 -- Name: receiver_download_file; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -488,7 +505,7 @@ CREATE TABLE receiver_download_file (
 
 
 --
--- TOC entry 2485 (class 1259 OID 154600)
+-- TOC entry 2351 (class 1259 OID 1636534)
 -- Dependencies: 7
 -- Name: receiver_download_receiver_download_file; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -500,7 +517,7 @@ CREATE TABLE receiver_download_receiver_download_file (
 
 
 --
--- TOC entry 2486 (class 1259 OID 154603)
+-- TOC entry 2352 (class 1259 OID 1636537)
 -- Dependencies: 7
 -- Name: receiver_recovery; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -519,7 +536,7 @@ CREATE TABLE receiver_recovery (
 
 
 --
--- TOC entry 2487 (class 1259 OID 154611)
+-- TOC entry 2353 (class 1259 OID 1636545)
 -- Dependencies: 7
 -- Name: sensor; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -538,7 +555,7 @@ CREATE TABLE sensor (
 
 
 --
--- TOC entry 2488 (class 1259 OID 154619)
+-- TOC entry 2354 (class 1259 OID 1636553)
 -- Dependencies: 7
 -- Name: sensor_detection_sensor; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -550,7 +567,7 @@ CREATE TABLE sensor_detection_sensor (
 
 
 --
--- TOC entry 2489 (class 1259 OID 154622)
+-- TOC entry 2355 (class 1259 OID 1636556)
 -- Dependencies: 7
 -- Name: sex; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -563,7 +580,7 @@ CREATE TABLE sex (
 
 
 --
--- TOC entry 2490 (class 1259 OID 154629)
+-- TOC entry 2356 (class 1259 OID 1636563)
 -- Dependencies: 7
 -- Name: surgery; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -583,7 +600,7 @@ CREATE TABLE surgery (
 
 
 --
--- TOC entry 2491 (class 1259 OID 154634)
+-- TOC entry 2357 (class 1259 OID 1636568)
 -- Dependencies: 7
 -- Name: surgery_treatment_type; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -596,7 +613,7 @@ CREATE TABLE surgery_treatment_type (
 
 
 --
--- TOC entry 2492 (class 1259 OID 154641)
+-- TOC entry 2358 (class 1259 OID 1636575)
 -- Dependencies: 7
 -- Name: surgery_type; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -609,7 +626,7 @@ CREATE TABLE surgery_type (
 
 
 --
--- TOC entry 2493 (class 1259 OID 154648)
+-- TOC entry 2359 (class 1259 OID 1636582)
 -- Dependencies: 7
 -- Name: system_role; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -622,7 +639,7 @@ CREATE TABLE system_role (
 
 
 --
--- TOC entry 2494 (class 1259 OID 154653)
+-- TOC entry 2360 (class 1259 OID 1636587)
 -- Dependencies: 7
 -- Name: system_role_type; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -635,7 +652,7 @@ CREATE TABLE system_role_type (
 
 
 --
--- TOC entry 2495 (class 1259 OID 154660)
+-- TOC entry 2361 (class 1259 OID 1636594)
 -- Dependencies: 7
 -- Name: transmitter_type; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -648,7 +665,7 @@ CREATE TABLE transmitter_type (
 
 
 --
--- TOC entry 2496 (class 1259 OID 154667)
+-- TOC entry 2362 (class 1259 OID 1636601)
 -- Dependencies: 7
 -- Name: ufile; Type: TABLE; Schema: aatams; Owner: aatams; Tablespace: 
 --
@@ -666,8 +683,18 @@ CREATE TABLE ufile (
 
 
 --
--- TOC entry 2798 (class 2606 OID 154422)
--- Dependencies: 2457 2457
+-- TOC entry 2655 (class 2606 OID 1636346)
+-- Dependencies: 2321 2321
+-- Name: address_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
+--
+
+ALTER TABLE ONLY address
+    ADD CONSTRAINT address_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2659 (class 2606 OID 1636356)
+-- Dependencies: 2323 2323
 -- Name: animal_measurement_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -676,8 +703,8 @@ ALTER TABLE ONLY animal_measurement
 
 
 --
--- TOC entry 2800 (class 2606 OID 154427)
--- Dependencies: 2458 2458
+-- TOC entry 2661 (class 2606 OID 1636361)
+-- Dependencies: 2324 2324
 -- Name: animal_measurement_type_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -686,8 +713,8 @@ ALTER TABLE ONLY animal_measurement_type
 
 
 --
--- TOC entry 2802 (class 2606 OID 154429)
--- Dependencies: 2458 2458
+-- TOC entry 2663 (class 2606 OID 1636363)
+-- Dependencies: 2324 2324
 -- Name: animal_measurement_type_type_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -696,8 +723,8 @@ ALTER TABLE ONLY animal_measurement_type
 
 
 --
--- TOC entry 2796 (class 2606 OID 154417)
--- Dependencies: 2456 2456
+-- TOC entry 2657 (class 2606 OID 1636351)
+-- Dependencies: 2322 2322
 -- Name: animal_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -706,8 +733,8 @@ ALTER TABLE ONLY animal
 
 
 --
--- TOC entry 2804 (class 2606 OID 154437)
--- Dependencies: 2459 2459
+-- TOC entry 2665 (class 2606 OID 1636371)
+-- Dependencies: 2325 2325
 -- Name: animal_release_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -716,8 +743,8 @@ ALTER TABLE ONLY animal_release
 
 
 --
--- TOC entry 2806 (class 2606 OID 154448)
--- Dependencies: 2461 2461
+-- TOC entry 2667 (class 2606 OID 1636382)
+-- Dependencies: 2327 2327
 -- Name: detection_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -726,8 +753,8 @@ ALTER TABLE ONLY detection
 
 
 --
--- TOC entry 2810 (class 2606 OID 154466)
--- Dependencies: 2464 2464
+-- TOC entry 2671 (class 2606 OID 1636400)
+-- Dependencies: 2330 2330
 -- Name: device_manufacturer_manufacturer_name_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -736,8 +763,8 @@ ALTER TABLE ONLY device_manufacturer
 
 
 --
--- TOC entry 2812 (class 2606 OID 154464)
--- Dependencies: 2464 2464
+-- TOC entry 2673 (class 2606 OID 1636398)
+-- Dependencies: 2330 2330
 -- Name: device_manufacturer_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -746,8 +773,8 @@ ALTER TABLE ONLY device_manufacturer
 
 
 --
--- TOC entry 2814 (class 2606 OID 154473)
--- Dependencies: 2465 2465
+-- TOC entry 2675 (class 2606 OID 1636407)
+-- Dependencies: 2331 2331
 -- Name: device_model_model_name_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -756,8 +783,8 @@ ALTER TABLE ONLY device_model
 
 
 --
--- TOC entry 2816 (class 2606 OID 154471)
--- Dependencies: 2465 2465
+-- TOC entry 2677 (class 2606 OID 1636405)
+-- Dependencies: 2331 2331
 -- Name: device_model_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -766,8 +793,8 @@ ALTER TABLE ONLY device_model
 
 
 --
--- TOC entry 2808 (class 2606 OID 154459)
--- Dependencies: 2463 2463
+-- TOC entry 2669 (class 2606 OID 1636393)
+-- Dependencies: 2329 2329
 -- Name: device_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -776,8 +803,8 @@ ALTER TABLE ONLY device
 
 
 --
--- TOC entry 2818 (class 2606 OID 154478)
--- Dependencies: 2466 2466
+-- TOC entry 2679 (class 2606 OID 1636412)
+-- Dependencies: 2332 2332
 -- Name: device_status_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -786,8 +813,8 @@ ALTER TABLE ONLY device_status
 
 
 --
--- TOC entry 2820 (class 2606 OID 154480)
--- Dependencies: 2466 2466
+-- TOC entry 2681 (class 2606 OID 1636414)
+-- Dependencies: 2332 2332
 -- Name: device_status_status_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -796,8 +823,8 @@ ALTER TABLE ONLY device_status
 
 
 --
--- TOC entry 2824 (class 2606 OID 154490)
--- Dependencies: 2468 2468
+-- TOC entry 2685 (class 2606 OID 1636424)
+-- Dependencies: 2334 2334
 -- Name: installation_configuration_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -806,8 +833,8 @@ ALTER TABLE ONLY installation_configuration
 
 
 --
--- TOC entry 2826 (class 2606 OID 154492)
--- Dependencies: 2468 2468
+-- TOC entry 2687 (class 2606 OID 1636426)
+-- Dependencies: 2334 2334
 -- Name: installation_configuration_type_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -816,8 +843,8 @@ ALTER TABLE ONLY installation_configuration
 
 
 --
--- TOC entry 2822 (class 2606 OID 154485)
--- Dependencies: 2467 2467
+-- TOC entry 2683 (class 2606 OID 1636419)
+-- Dependencies: 2333 2333
 -- Name: installation_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -826,8 +853,8 @@ ALTER TABLE ONLY installation
 
 
 --
--- TOC entry 2828 (class 2606 OID 154500)
--- Dependencies: 2469 2469
+-- TOC entry 2689 (class 2606 OID 1636434)
+-- Dependencies: 2335 2335
 -- Name: installation_station_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -836,8 +863,8 @@ ALTER TABLE ONLY installation_station
 
 
 --
--- TOC entry 2830 (class 2606 OID 154508)
--- Dependencies: 2471 2471
+-- TOC entry 2691 (class 2606 OID 1636442)
+-- Dependencies: 2337 2337
 -- Name: measurement_unit_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -846,8 +873,8 @@ ALTER TABLE ONLY measurement_unit
 
 
 --
--- TOC entry 2832 (class 2606 OID 154510)
--- Dependencies: 2471 2471
+-- TOC entry 2693 (class 2606 OID 1636444)
+-- Dependencies: 2337 2337
 -- Name: measurement_unit_unit_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -856,8 +883,8 @@ ALTER TABLE ONLY measurement_unit
 
 
 --
--- TOC entry 2834 (class 2606 OID 154515)
--- Dependencies: 2472 2472
+-- TOC entry 2695 (class 2606 OID 1636449)
+-- Dependencies: 2338 2338
 -- Name: mooring_type_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -866,8 +893,8 @@ ALTER TABLE ONLY mooring_type
 
 
 --
--- TOC entry 2836 (class 2606 OID 154517)
--- Dependencies: 2472 2472
+-- TOC entry 2697 (class 2606 OID 1636451)
+-- Dependencies: 2338 2338
 -- Name: mooring_type_type_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -876,8 +903,8 @@ ALTER TABLE ONLY mooring_type
 
 
 --
--- TOC entry 2838 (class 2606 OID 154527)
--- Dependencies: 2473 2473
+-- TOC entry 2699 (class 2606 OID 1636461)
+-- Dependencies: 2339 2339
 -- Name: organisation_name_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -886,8 +913,8 @@ ALTER TABLE ONLY organisation
 
 
 --
--- TOC entry 2842 (class 2606 OID 154532)
--- Dependencies: 2474 2474
+-- TOC entry 2703 (class 2606 OID 1636466)
+-- Dependencies: 2340 2340
 -- Name: organisation_person_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -896,8 +923,8 @@ ALTER TABLE ONLY organisation_person
 
 
 --
--- TOC entry 2840 (class 2606 OID 154525)
--- Dependencies: 2473 2473
+-- TOC entry 2701 (class 2606 OID 1636459)
+-- Dependencies: 2339 2339
 -- Name: organisation_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -906,8 +933,8 @@ ALTER TABLE ONLY organisation
 
 
 --
--- TOC entry 2844 (class 2606 OID 154537)
--- Dependencies: 2475 2475
+-- TOC entry 2705 (class 2606 OID 1636471)
+-- Dependencies: 2341 2341
 -- Name: organisation_project_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -916,8 +943,8 @@ ALTER TABLE ONLY organisation_project
 
 
 --
--- TOC entry 2846 (class 2606 OID 154545)
--- Dependencies: 2476 2476
+-- TOC entry 2707 (class 2606 OID 1636479)
+-- Dependencies: 2342 2342
 -- Name: person_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -926,8 +953,8 @@ ALTER TABLE ONLY person
 
 
 --
--- TOC entry 2848 (class 2606 OID 154556)
--- Dependencies: 2478 2478
+-- TOC entry 2709 (class 2606 OID 1636490)
+-- Dependencies: 2344 2344
 -- Name: processed_upload_file_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -936,8 +963,8 @@ ALTER TABLE ONLY processed_upload_file
 
 
 --
--- TOC entry 2850 (class 2606 OID 154566)
--- Dependencies: 2479 2479
+-- TOC entry 2711 (class 2606 OID 1636500)
+-- Dependencies: 2345 2345
 -- Name: project_name_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -946,8 +973,8 @@ ALTER TABLE ONLY project
 
 
 --
--- TOC entry 2852 (class 2606 OID 154564)
--- Dependencies: 2479 2479
+-- TOC entry 2713 (class 2606 OID 1636498)
+-- Dependencies: 2345 2345
 -- Name: project_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -956,8 +983,8 @@ ALTER TABLE ONLY project
 
 
 --
--- TOC entry 2854 (class 2606 OID 154571)
--- Dependencies: 2480 2480
+-- TOC entry 2715 (class 2606 OID 1636505)
+-- Dependencies: 2346 2346
 -- Name: project_role_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -966,8 +993,8 @@ ALTER TABLE ONLY project_role
 
 
 --
--- TOC entry 2856 (class 2606 OID 154578)
--- Dependencies: 2481 2481
+-- TOC entry 2717 (class 2606 OID 1636512)
+-- Dependencies: 2347 2347
 -- Name: project_role_type_display_name_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -976,8 +1003,8 @@ ALTER TABLE ONLY project_role_type
 
 
 --
--- TOC entry 2858 (class 2606 OID 154576)
--- Dependencies: 2481 2481
+-- TOC entry 2719 (class 2606 OID 1636510)
+-- Dependencies: 2347 2347
 -- Name: project_role_type_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -986,8 +1013,8 @@ ALTER TABLE ONLY project_role_type
 
 
 --
--- TOC entry 2860 (class 2606 OID 154586)
--- Dependencies: 2482 2482
+-- TOC entry 2721 (class 2606 OID 1636520)
+-- Dependencies: 2348 2348
 -- Name: receiver_deployment_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -996,8 +1023,8 @@ ALTER TABLE ONLY receiver_deployment
 
 
 --
--- TOC entry 2864 (class 2606 OID 154599)
--- Dependencies: 2484 2484
+-- TOC entry 2725 (class 2606 OID 1636533)
+-- Dependencies: 2350 2350
 -- Name: receiver_download_file_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1006,8 +1033,8 @@ ALTER TABLE ONLY receiver_download_file
 
 
 --
--- TOC entry 2862 (class 2606 OID 154591)
--- Dependencies: 2483 2483
+-- TOC entry 2723 (class 2606 OID 1636525)
+-- Dependencies: 2349 2349
 -- Name: receiver_download_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1016,8 +1043,8 @@ ALTER TABLE ONLY receiver_download
 
 
 --
--- TOC entry 2866 (class 2606 OID 154610)
--- Dependencies: 2486 2486
+-- TOC entry 2727 (class 2606 OID 1636544)
+-- Dependencies: 2352 2352
 -- Name: receiver_recovery_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1026,8 +1053,8 @@ ALTER TABLE ONLY receiver_recovery
 
 
 --
--- TOC entry 2868 (class 2606 OID 154618)
--- Dependencies: 2487 2487
+-- TOC entry 2729 (class 2606 OID 1636552)
+-- Dependencies: 2353 2353
 -- Name: sensor_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1036,8 +1063,8 @@ ALTER TABLE ONLY sensor
 
 
 --
--- TOC entry 2870 (class 2606 OID 154626)
--- Dependencies: 2489 2489
+-- TOC entry 2731 (class 2606 OID 1636560)
+-- Dependencies: 2355 2355
 -- Name: sex_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1046,8 +1073,8 @@ ALTER TABLE ONLY sex
 
 
 --
--- TOC entry 2872 (class 2606 OID 154628)
--- Dependencies: 2489 2489
+-- TOC entry 2733 (class 2606 OID 1636562)
+-- Dependencies: 2355 2355
 -- Name: sex_sex_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1056,8 +1083,8 @@ ALTER TABLE ONLY sex
 
 
 --
--- TOC entry 2874 (class 2606 OID 154633)
--- Dependencies: 2490 2490
+-- TOC entry 2735 (class 2606 OID 1636567)
+-- Dependencies: 2356 2356
 -- Name: surgery_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1066,8 +1093,8 @@ ALTER TABLE ONLY surgery
 
 
 --
--- TOC entry 2876 (class 2606 OID 154638)
--- Dependencies: 2491 2491
+-- TOC entry 2737 (class 2606 OID 1636572)
+-- Dependencies: 2357 2357
 -- Name: surgery_treatment_type_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1076,8 +1103,8 @@ ALTER TABLE ONLY surgery_treatment_type
 
 
 --
--- TOC entry 2878 (class 2606 OID 154640)
--- Dependencies: 2491 2491
+-- TOC entry 2739 (class 2606 OID 1636574)
+-- Dependencies: 2357 2357
 -- Name: surgery_treatment_type_type_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1086,8 +1113,8 @@ ALTER TABLE ONLY surgery_treatment_type
 
 
 --
--- TOC entry 2880 (class 2606 OID 154645)
--- Dependencies: 2492 2492
+-- TOC entry 2741 (class 2606 OID 1636579)
+-- Dependencies: 2358 2358
 -- Name: surgery_type_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1096,8 +1123,8 @@ ALTER TABLE ONLY surgery_type
 
 
 --
--- TOC entry 2882 (class 2606 OID 154647)
--- Dependencies: 2492 2492
+-- TOC entry 2743 (class 2606 OID 1636581)
+-- Dependencies: 2358 2358
 -- Name: surgery_type_type_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1106,8 +1133,8 @@ ALTER TABLE ONLY surgery_type
 
 
 --
--- TOC entry 2884 (class 2606 OID 154652)
--- Dependencies: 2493 2493
+-- TOC entry 2745 (class 2606 OID 1636586)
+-- Dependencies: 2359 2359
 -- Name: system_role_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1116,8 +1143,8 @@ ALTER TABLE ONLY system_role
 
 
 --
--- TOC entry 2886 (class 2606 OID 154659)
--- Dependencies: 2494 2494
+-- TOC entry 2747 (class 2606 OID 1636593)
+-- Dependencies: 2360 2360
 -- Name: system_role_type_display_name_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1126,8 +1153,8 @@ ALTER TABLE ONLY system_role_type
 
 
 --
--- TOC entry 2888 (class 2606 OID 154657)
--- Dependencies: 2494 2494
+-- TOC entry 2749 (class 2606 OID 1636591)
+-- Dependencies: 2360 2360
 -- Name: system_role_type_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1136,8 +1163,8 @@ ALTER TABLE ONLY system_role_type
 
 
 --
--- TOC entry 2890 (class 2606 OID 154664)
--- Dependencies: 2495 2495
+-- TOC entry 2751 (class 2606 OID 1636598)
+-- Dependencies: 2361 2361
 -- Name: transmitter_type_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1146,8 +1173,8 @@ ALTER TABLE ONLY transmitter_type
 
 
 --
--- TOC entry 2892 (class 2606 OID 154666)
--- Dependencies: 2495 2495
+-- TOC entry 2753 (class 2606 OID 1636600)
+-- Dependencies: 2361 2361
 -- Name: transmitter_type_transmitter_type_name_key; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1156,8 +1183,8 @@ ALTER TABLE ONLY transmitter_type
 
 
 --
--- TOC entry 2894 (class 2606 OID 154674)
--- Dependencies: 2496 2496
+-- TOC entry 2755 (class 2606 OID 1636608)
+-- Dependencies: 2362 2362
 -- Name: ufile_pkey; Type: CONSTRAINT; Schema: aatams; Owner: aatams; Tablespace: 
 --
 
@@ -1166,8 +1193,8 @@ ALTER TABLE ONLY ufile
 
 
 --
--- TOC entry 2913 (class 2606 OID 154765)
--- Dependencies: 2470 2469 2827
+-- TOC entry 2774 (class 2606 OID 1636699)
+-- Dependencies: 2335 2336 2688
 -- Name: fk2f7233ffd6ed9307; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1176,8 +1203,8 @@ ALTER TABLE ONLY installation_station_receiver
 
 
 --
--- TOC entry 2912 (class 2606 OID 154760)
--- Dependencies: 2463 2807 2470
+-- TOC entry 2773 (class 2606 OID 1636694)
+-- Dependencies: 2329 2668 2336
 -- Name: fk2f7233fff0bb6d33; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1186,8 +1213,8 @@ ALTER TABLE ONLY installation_station_receiver
 
 
 --
--- TOC entry 2924 (class 2606 OID 154820)
--- Dependencies: 2480 2481 2857
+-- TOC entry 2787 (class 2606 OID 1636764)
+-- Dependencies: 2346 2718 2347
 -- Name: fk37fff5dc51218487; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1196,8 +1223,8 @@ ALTER TABLE ONLY project_role
 
 
 --
--- TOC entry 2922 (class 2606 OID 154810)
--- Dependencies: 2851 2480 2479
+-- TOC entry 2785 (class 2606 OID 1636754)
+-- Dependencies: 2712 2346 2345
 -- Name: fk37fff5dcbf505a21; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1206,8 +1233,8 @@ ALTER TABLE ONLY project_role
 
 
 --
--- TOC entry 2923 (class 2606 OID 154815)
--- Dependencies: 2480 2476 2845
+-- TOC entry 2786 (class 2606 OID 1636759)
+-- Dependencies: 2706 2342 2346
 -- Name: fk37fff5dce985cdb3; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1216,8 +1243,28 @@ ALTER TABLE ONLY project_role
 
 
 --
--- TOC entry 2910 (class 2606 OID 154750)
--- Dependencies: 2823 2468 2467
+-- TOC entry 2775 (class 2606 OID 1636704)
+-- Dependencies: 2654 2321 2339
+-- Name: fk3a5300dabc5dddfd; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
+--
+
+ALTER TABLE ONLY organisation
+    ADD CONSTRAINT fk3a5300dabc5dddfd FOREIGN KEY (street_address_id) REFERENCES address(id);
+
+
+--
+-- TOC entry 2776 (class 2606 OID 1636709)
+-- Dependencies: 2321 2339 2654
+-- Name: fk3a5300dac7e435; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
+--
+
+ALTER TABLE ONLY organisation
+    ADD CONSTRAINT fk3a5300dac7e435 FOREIGN KEY (postal_address_id) REFERENCES address(id);
+
+
+--
+-- TOC entry 2771 (class 2606 OID 1636684)
+-- Dependencies: 2684 2334 2333
 -- Name: fk796d5e3a18d65d27; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1226,8 +1273,8 @@ ALTER TABLE ONLY installation
 
 
 --
--- TOC entry 2909 (class 2606 OID 154745)
--- Dependencies: 2467 2479 2851
+-- TOC entry 2770 (class 2606 OID 1636679)
+-- Dependencies: 2712 2345 2333
 -- Name: fk796d5e3abf505a21; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1236,8 +1283,8 @@ ALTER TABLE ONLY installation
 
 
 --
--- TOC entry 2928 (class 2606 OID 154840)
--- Dependencies: 2845 2483 2476
+-- TOC entry 2791 (class 2606 OID 1636784)
+-- Dependencies: 2706 2342 2349
 -- Name: fk79accd8b8e509d3; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1246,8 +1293,8 @@ ALTER TABLE ONLY receiver_download
 
 
 --
--- TOC entry 2937 (class 2606 OID 154885)
--- Dependencies: 2461 2488 2805
+-- TOC entry 2800 (class 2606 OID 1636829)
+-- Dependencies: 2666 2354 2327
 -- Name: fk8165509916b1b072; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1256,8 +1303,8 @@ ALTER TABLE ONLY sensor_detection_sensor
 
 
 --
--- TOC entry 2936 (class 2606 OID 154880)
--- Dependencies: 2487 2488 2867
+-- TOC entry 2799 (class 2606 OID 1636824)
+-- Dependencies: 2728 2353 2354
 -- Name: fk81655099d7d8b793; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1266,8 +1313,8 @@ ALTER TABLE ONLY sensor_detection_sensor
 
 
 --
--- TOC entry 2932 (class 2606 OID 154860)
--- Dependencies: 2466 2486 2817
+-- TOC entry 2795 (class 2606 OID 1636804)
+-- Dependencies: 2678 2352 2332
 -- Name: fk82de83e56b73e7c9; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1276,8 +1323,8 @@ ALTER TABLE ONLY receiver_recovery
 
 
 --
--- TOC entry 2933 (class 2606 OID 154865)
--- Dependencies: 2482 2486 2859
+-- TOC entry 2796 (class 2606 OID 1636809)
+-- Dependencies: 2348 2352 2720
 -- Name: fk82de83e579a96182; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1286,8 +1333,8 @@ ALTER TABLE ONLY receiver_recovery
 
 
 --
--- TOC entry 2931 (class 2606 OID 154855)
--- Dependencies: 2483 2486 2861
+-- TOC entry 2794 (class 2606 OID 1636799)
+-- Dependencies: 2352 2722 2349
 -- Name: fk82de83e593fa40a2; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1296,8 +1343,8 @@ ALTER TABLE ONLY receiver_recovery
 
 
 --
--- TOC entry 2926 (class 2606 OID 154830)
--- Dependencies: 2472 2833 2482
+-- TOC entry 2789 (class 2606 OID 1636774)
+-- Dependencies: 2338 2348 2694
 -- Name: fk862aeb1531eebdc; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1306,8 +1353,8 @@ ALTER TABLE ONLY receiver_deployment
 
 
 --
--- TOC entry 2927 (class 2606 OID 154835)
--- Dependencies: 2482 2469 2827
+-- TOC entry 2790 (class 2606 OID 1636779)
+-- Dependencies: 2348 2688 2335
 -- Name: fk862aeb15cdaf3227; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1316,8 +1363,8 @@ ALTER TABLE ONLY receiver_deployment
 
 
 --
--- TOC entry 2925 (class 2606 OID 154825)
--- Dependencies: 2807 2463 2482
+-- TOC entry 2788 (class 2606 OID 1636769)
+-- Dependencies: 2329 2348 2668
 -- Name: fk862aeb15f0bb6d33; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1326,8 +1373,8 @@ ALTER TABLE ONLY receiver_deployment
 
 
 --
--- TOC entry 2898 (class 2606 OID 154690)
--- Dependencies: 2459 2851 2479
+-- TOC entry 2759 (class 2606 OID 1636624)
+-- Dependencies: 2712 2345 2325
 -- Name: fk88d6a0c4bf505a21; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1336,8 +1383,8 @@ ALTER TABLE ONLY animal_release
 
 
 --
--- TOC entry 2899 (class 2606 OID 154695)
--- Dependencies: 2456 2795 2459
+-- TOC entry 2760 (class 2606 OID 1636629)
+-- Dependencies: 2656 2325 2322
 -- Name: fk88d6a0c4e0347853; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1346,8 +1393,8 @@ ALTER TABLE ONLY animal_release
 
 
 --
--- TOC entry 2919 (class 2606 OID 154795)
--- Dependencies: 2477 2845 2476
+-- TOC entry 2782 (class 2606 OID 1636739)
+-- Dependencies: 2706 2343 2342
 -- Name: fk8e3f6e9c244fac71; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1356,8 +1403,8 @@ ALTER TABLE ONLY person_system_role
 
 
 --
--- TOC entry 2918 (class 2606 OID 154790)
--- Dependencies: 2883 2493 2477
+-- TOC entry 2781 (class 2606 OID 1636734)
+-- Dependencies: 2359 2744 2343
 -- Name: fk8e3f6e9cbba8aa52; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1366,8 +1413,8 @@ ALTER TABLE ONLY person_system_role
 
 
 --
--- TOC entry 2897 (class 2606 OID 154685)
--- Dependencies: 2457 2799 2458
+-- TOC entry 2758 (class 2606 OID 1636619)
+-- Dependencies: 2323 2324 2660
 -- Name: fk8eb3adf914018681; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1376,8 +1423,8 @@ ALTER TABLE ONLY animal_measurement
 
 
 --
--- TOC entry 2896 (class 2606 OID 154680)
--- Dependencies: 2829 2457 2471
+-- TOC entry 2757 (class 2606 OID 1636614)
+-- Dependencies: 2323 2690 2337
 -- Name: fk8eb3adf9e6ea591d; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1386,8 +1433,8 @@ ALTER TABLE ONLY animal_measurement
 
 
 --
--- TOC entry 2911 (class 2606 OID 154755)
--- Dependencies: 2821 2467 2469
+-- TOC entry 2772 (class 2606 OID 1636689)
+-- Dependencies: 2333 2335 2682
 -- Name: fk902c2c2f35e870d3; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1396,8 +1443,8 @@ ALTER TABLE ONLY installation_station
 
 
 --
--- TOC entry 2902 (class 2606 OID 154710)
--- Dependencies: 2807 2461 2463
+-- TOC entry 2763 (class 2606 OID 1636644)
+-- Dependencies: 2327 2668 2329
 -- Name: fk90e7ca85f0bb6d33; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1406,8 +1453,8 @@ ALTER TABLE ONLY detection
 
 
 --
--- TOC entry 2939 (class 2606 OID 154895)
--- Dependencies: 2491 2490 2875
+-- TOC entry 2802 (class 2606 OID 1636839)
+-- Dependencies: 2356 2357 2736
 -- Name: fk918a71f54f2dd3af; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1416,8 +1463,8 @@ ALTER TABLE ONLY surgery
 
 
 --
--- TOC entry 2941 (class 2606 OID 154905)
--- Dependencies: 2879 2492 2490
+-- TOC entry 2804 (class 2606 OID 1636849)
+-- Dependencies: 2740 2356 2358
 -- Name: fk918a71f56d95e296; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1426,8 +1473,8 @@ ALTER TABLE ONLY surgery
 
 
 --
--- TOC entry 2938 (class 2606 OID 154890)
--- Dependencies: 2845 2490 2476
+-- TOC entry 2801 (class 2606 OID 1636834)
+-- Dependencies: 2356 2342 2706
 -- Name: fk918a71f57480ac7b; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1436,8 +1483,8 @@ ALTER TABLE ONLY surgery
 
 
 --
--- TOC entry 2940 (class 2606 OID 154900)
--- Dependencies: 2803 2490 2459
+-- TOC entry 2803 (class 2606 OID 1636844)
+-- Dependencies: 2325 2356 2664
 -- Name: fk918a71f5b5c10085; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1446,8 +1493,8 @@ ALTER TABLE ONLY surgery
 
 
 --
--- TOC entry 2942 (class 2606 OID 154910)
--- Dependencies: 2807 2490 2463
+-- TOC entry 2805 (class 2606 OID 1636854)
+-- Dependencies: 2356 2329 2668
 -- Name: fk918a71f5ceab1a01; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1456,8 +1503,8 @@ ALTER TABLE ONLY surgery
 
 
 --
--- TOC entry 2900 (class 2606 OID 154700)
--- Dependencies: 2460 2803 2459
+-- TOC entry 2761 (class 2606 OID 1636634)
+-- Dependencies: 2325 2664 2326
 -- Name: fka3b75543290ccda; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1466,8 +1513,8 @@ ALTER TABLE ONLY animal_release_animal_measurement
 
 
 --
--- TOC entry 2901 (class 2606 OID 154705)
--- Dependencies: 2460 2457 2797
+-- TOC entry 2762 (class 2606 OID 1636639)
+-- Dependencies: 2326 2658 2323
 -- Name: fka3b7554af520388; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1476,8 +1523,8 @@ ALTER TABLE ONLY animal_release_animal_measurement
 
 
 --
--- TOC entry 2943 (class 2606 OID 154915)
--- Dependencies: 2887 2493 2494
+-- TOC entry 2806 (class 2606 OID 1636859)
+-- Dependencies: 2360 2748 2359
 -- Name: fka47ecc86d06730af; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1486,8 +1533,8 @@ ALTER TABLE ONLY system_role
 
 
 --
--- TOC entry 2895 (class 2606 OID 154675)
--- Dependencies: 2456 2869 2489
+-- TOC entry 2756 (class 2606 OID 1636609)
+-- Dependencies: 2730 2355 2322
 -- Name: fkabc58dfccd365681; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1496,8 +1543,8 @@ ALTER TABLE ONLY animal
 
 
 --
--- TOC entry 2930 (class 2606 OID 154850)
--- Dependencies: 2484 2485 2863
+-- TOC entry 2793 (class 2606 OID 1636794)
+-- Dependencies: 2351 2350 2724
 -- Name: fkadfe47ca50da4c63; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1506,8 +1553,8 @@ ALTER TABLE ONLY receiver_download_receiver_download_file
 
 
 --
--- TOC entry 2929 (class 2606 OID 154845)
--- Dependencies: 2483 2485 2861
+-- TOC entry 2792 (class 2606 OID 1636789)
+-- Dependencies: 2722 2349 2351
 -- Name: fkadfe47cafa360683; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1516,8 +1563,8 @@ ALTER TABLE ONLY receiver_download_receiver_download_file
 
 
 --
--- TOC entry 2907 (class 2606 OID 154735)
--- Dependencies: 2463 2465 2815
+-- TOC entry 2768 (class 2606 OID 1636669)
+-- Dependencies: 2676 2331 2329
 -- Name: fkb06b1e561c043beb; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1526,8 +1573,8 @@ ALTER TABLE ONLY device
 
 
 --
--- TOC entry 2906 (class 2606 OID 154730)
--- Dependencies: 2817 2466 2463
+-- TOC entry 2767 (class 2606 OID 1636664)
+-- Dependencies: 2329 2678 2332
 -- Name: fkb06b1e566b73e7c9; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1536,8 +1583,8 @@ ALTER TABLE ONLY device
 
 
 --
--- TOC entry 2905 (class 2606 OID 154725)
--- Dependencies: 2851 2479 2463
+-- TOC entry 2766 (class 2606 OID 1636659)
+-- Dependencies: 2345 2329 2712
 -- Name: fkb06b1e56bf505a21; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1546,8 +1593,8 @@ ALTER TABLE ONLY device
 
 
 --
--- TOC entry 2920 (class 2606 OID 154800)
--- Dependencies: 2893 2478 2496
+-- TOC entry 2783 (class 2606 OID 1636744)
+-- Dependencies: 2754 2344 2362
 -- Name: fkc1735d892224770f; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1556,8 +1603,8 @@ ALTER TABLE ONLY processed_upload_file
 
 
 --
--- TOC entry 2934 (class 2606 OID 154870)
--- Dependencies: 2495 2487 2889
+-- TOC entry 2797 (class 2606 OID 1636814)
+-- Dependencies: 2353 2750 2361
 -- Name: fkca0053ba4b0c3bc4; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1566,8 +1613,8 @@ ALTER TABLE ONLY sensor
 
 
 --
--- TOC entry 2935 (class 2606 OID 154875)
--- Dependencies: 2463 2487 2807
+-- TOC entry 2798 (class 2606 OID 1636819)
+-- Dependencies: 2353 2668 2329
 -- Name: fkca0053baceab1a01; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1576,8 +1623,8 @@ ALTER TABLE ONLY sensor
 
 
 --
--- TOC entry 2908 (class 2606 OID 154740)
--- Dependencies: 2465 2464 2811
+-- TOC entry 2769 (class 2606 OID 1636674)
+-- Dependencies: 2672 2331 2330
 -- Name: fkdcc4e40025f67029; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1586,8 +1633,8 @@ ALTER TABLE ONLY device_model
 
 
 --
--- TOC entry 2903 (class 2606 OID 154715)
--- Dependencies: 2461 2462 2805
+-- TOC entry 2764 (class 2606 OID 1636649)
+-- Dependencies: 2328 2327 2666
 -- Name: fkeb71eee0ac39c713; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1596,8 +1643,8 @@ ALTER TABLE ONLY detection_tag
 
 
 --
--- TOC entry 2904 (class 2606 OID 154720)
--- Dependencies: 2462 2463 2807
+-- TOC entry 2765 (class 2606 OID 1636654)
+-- Dependencies: 2328 2668 2329
 -- Name: fkeb71eee0ceab1a01; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1606,18 +1653,18 @@ ALTER TABLE ONLY detection_tag
 
 
 --
--- TOC entry 2921 (class 2606 OID 154805)
--- Dependencies: 2480 2479 2853
--- Name: fked904b19c34cf774; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
+-- TOC entry 2784 (class 2606 OID 1636749)
+-- Dependencies: 2346 2714 2345
+-- Name: fked904b19ab94ee16; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
 ALTER TABLE ONLY project
-    ADD CONSTRAINT fked904b19c34cf774 FOREIGN KEY (principal_investator_id) REFERENCES project_role(id);
+    ADD CONSTRAINT fked904b19ab94ee16 FOREIGN KEY (principal_investigator_id) REFERENCES project_role(id);
 
 
 --
--- TOC entry 2915 (class 2606 OID 154775)
--- Dependencies: 2474 2839 2473
+-- TOC entry 2778 (class 2606 OID 1636719)
+-- Dependencies: 2339 2340 2700
 -- Name: fkee60ce5a99b5ecd3; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1626,8 +1673,8 @@ ALTER TABLE ONLY organisation_person
 
 
 --
--- TOC entry 2914 (class 2606 OID 154770)
--- Dependencies: 2474 2845 2476
+-- TOC entry 2777 (class 2606 OID 1636714)
+-- Dependencies: 2706 2340 2342
 -- Name: fkee60ce5ae985cdb3; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1636,8 +1683,8 @@ ALTER TABLE ONLY organisation_person
 
 
 --
--- TOC entry 2917 (class 2606 OID 154785)
--- Dependencies: 2839 2475 2473
+-- TOC entry 2780 (class 2606 OID 1636729)
+-- Dependencies: 2339 2341 2700
 -- Name: fkf3b978b499b5ecd3; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1646,8 +1693,8 @@ ALTER TABLE ONLY organisation_project
 
 
 --
--- TOC entry 2916 (class 2606 OID 154780)
--- Dependencies: 2475 2479 2851
+-- TOC entry 2779 (class 2606 OID 1636724)
+-- Dependencies: 2341 2712 2345
 -- Name: fkf3b978b4bf505a21; Type: FK CONSTRAINT; Schema: aatams; Owner: aatams
 --
 
@@ -1655,7 +1702,7 @@ ALTER TABLE ONLY organisation_project
     ADD CONSTRAINT fkf3b978b4bf505a21 FOREIGN KEY (project_id) REFERENCES project(id);
 
 
--- Completed on 2011-06-07 13:51:51 EST
+-- Completed on 2011-06-15 15:11:24 EST
 
 --
 -- PostgreSQL database dump complete

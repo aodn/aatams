@@ -57,15 +57,14 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'organisationProjects', 'errors')}">
                                     
-                                  <ul>
+                                  <ul id="organisation_list">
                                     <g:each in="${projectInstance?.organisationProjects?.organisation}" var="o">
                                         <li><g:link controller="organisation" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
                                     </g:each>
-                                    <br/>
-<!--                                    <g:link controller="organisationProject" 
-                                            action="createOrganisationToProject" 
-                                            params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</g:link>-->
-                                    <a href="#" id='add_organisation_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</a>
+                                    <li><br/></li>
+                                    <li>
+                                      <a href="#" 
+                                         id='add_organisation_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</a></li>
                                   </ul>
                                 </td>
                             </tr>
@@ -133,30 +132,30 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="project"><g:message code="organisationProject.project.label" default="Project" /></label>
+                                    <label for="projectId"><g:message code="organisationProject.project.label" default="Project" /></label>
+                                    <g:hiddenField name="projectId" value="${projectInstance?.id}" />
+
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationProjectInstance, field: 'project', 'errors')}">
-                                  <g:textField name="duration" value="${fieldValue(bean: organisationProjectInstance, field: 'project')}"/>
+                                  <label id="project">${projectInstance}</label>
                                 </td>
-                                <g:hiddenField name="project.id" value="${organisationProjectInstance?.project?.id}" />
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="organisation"><g:message code="organisationProject.organisation.label" default="Organisation" /></label>
+                                    <label for="organisationId"><g:message code="organisationProject.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationProjectInstance, field: 'organisation', 'errors')}">
-                                    <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${organisationProjectInstance?.organisation?.id}"  />
-
+                                    <g:select name="organisationId" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${organisationProjectInstance?.organisation?.id}"  />
                                 </td>
                             </tr>
                         
                         </tbody>
                     </table>
                 </div>
-                <div class="buttons">
+<!--                <div class="buttons">
                     <span class="button"><g:submitButton name="saveOrganisationToProject" class="saveOrganisationToProject" value="${message(code: 'default.button.create.label', default: 'Add')}" /></span>
-                </div>
+                </div>-->
             </g:form>
       </div>
       

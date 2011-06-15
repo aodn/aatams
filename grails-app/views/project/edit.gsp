@@ -58,7 +58,7 @@
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'organisationProjects', 'errors')}">
                                     
                                   <ul id="organisation_list">
-                                    <g:each in="${projectInstance?.organisationProjects?.organisation}" var="o">
+                                    <g:each in="${projectInstance?.organisationProjects?.organisation.sort{it?.name}}" var="o">
                                         <li><g:link controller="organisation" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
                                     </g:each>
                                     <li><br/></li>

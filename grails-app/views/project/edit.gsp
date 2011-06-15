@@ -39,6 +39,7 @@
                                     <g:textField name="name" value="${projectInstance?.name}" />
 
                                 </td>
+                                <td></td>
                             </tr>
                         
                             <tr class="prop">
@@ -49,6 +50,7 @@
                                     <g:textField name="description" value="${projectInstance?.description}" />
 
                                 </td>
+                                <td></td>
                             </tr>
                         
                             <tr class="prop">
@@ -64,12 +66,14 @@
                                     <li><br/></li>
                                     <li>
                                       <a href="#" 
-                                         id='add_organisation_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</a></li>
+                                         id='add_organisation_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</a>
+                                    </li>
                                   </ul>
                                 </td>
+                                <td></td>
                             </tr>
                         
-
+<!--
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="principalInvestigator"><g:message code="project.principalInvestigator.label" default="Principal Investigator" /></label>
@@ -78,40 +82,55 @@
                                     <g:select name="principalInvestigator.id" from="${au.org.emii.aatams.ProjectRole.list()}" optionKey="id" value="${projectInstance?.principalInvestigator?.id}"  />
 
                                 </td>
+                                <td></td>
                             </tr>
-                        
+-->                        
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="projectRoles"><g:message code="project.projectRoles.label" default="Project Roles" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'projectRoles', 'errors')}">
                                     
-<ul>
-<g:each in="${projectInstance?.projectRoles?}" var="p">
-    <li><g:link controller="projectRole" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="projectRole" action="create" params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'projectRole.label', default: 'ProjectRole')])}</g:link>
-
-
+                                  <ul id="person_list">
+                                    <g:each in="${projectInstance?.projectRoles?}" var="p">
+                                        <li><g:link controller="projectRole" action="show" id="${p.id}">${p?.person?.encodeAsHTML()}</g:link></li>
+                                    </g:each>
+                                    <li><br/></li>
+                                    <li>
+                                      <a href="#" 
+                                         id='add_role'>${message(code: 'default.add.label', args: [message(code: 'person.label', default: 'Person...')])}</a>
+                                    </li>
+                                    
+                                  </ul>
+<!--                                  <g:link controller="projectRole" action="create" params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'projectRole.label', default: 'ProjectRole')])}</g:link>-->
+                                </td>
+<!--                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'projectRoles', 'errors')}">-->
+                                <td valign="top" class="value asdf">
+                                    
+                                  <ul id="person_list">
+                                    <g:each in="${projectInstance?.projectRoles?}" var="p">
+                                        ${p?.roleType?.encodeAsHTML()}
+                                    </g:each>
+                                  </ul>
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="devices"><g:message code="project.devices.label" default="Devices" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'devices', 'errors')}">
-                                    
-<ul>
-<g:each in="${projectInstance?.devices?}" var="d">
-    <li><g:link controller="device" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="device" action="create" params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'device.label', default: 'Device')])}</g:link>
+
+                                  <ul>
+                                  <g:each in="${projectInstance?.devices?}" var="d">
+                                      <li><g:link controller="device" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
+                                  </g:each>
+                                  </ul>
+                                  <g:link controller="device" action="create" params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'device.label', default: 'Device')])}</g:link>
 
 
                                 </td>
+                                <td></td>
                             </tr>
                         
                         </tbody>
@@ -124,6 +143,10 @@
             </g:form>
         </div>
       
+      <!--
+            Dialog presented when adding organisation to project.
+            TODO: get this on demand (i.e. with AJAX)
+      -->
       <div id="dialog-form" title="Add Organisation to Project">
             <g:form action="save" >
                 <div class="dialog">

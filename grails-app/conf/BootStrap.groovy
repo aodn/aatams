@@ -61,6 +61,29 @@ class BootStrap
                                      postalAddress:imosPostalAddress,
                                      status:EntityStatus.PENDING).save(failOnError: true)
                                  
+                Address imosStreetAddress2 =
+                    new Address(streetAddress:'12 Smith Street',
+                                suburbTown:'Hobart',
+                                state:'TAS',
+                                country:'Australia',
+                                postcode:'7000')
+                
+                Address imosPostalAddress2 =
+                    new Address(streetAddress:'34 Queen Street',
+                                suburbTown:'Melbourne',
+                                state:'VIC',
+                                country:'Australia',
+                                postcode:'3000')
+                            
+                Organisation imosOrg2 = 
+                    new Organisation(name:'IMOS 2', 
+                                     phoneNumber:'5678',
+                                     faxNumber:'5678',
+                                     streetAddress:imosStreetAddress2,
+                                     postalAddress:imosPostalAddress2,
+                                     status:EntityStatus.PENDING).save(failOnError: true)
+                                 
+                
                 //
                 // Projects.
                 //

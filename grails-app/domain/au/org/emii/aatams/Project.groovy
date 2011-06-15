@@ -39,4 +39,28 @@ class Project
     {
         return ListUtils.fold(projectRoles, "person")
     }
+    
+    /**
+     * Convenience method to return a collection of organisations not related
+     * to this project.
+     */
+    def unrelatedOrganisations()
+    {
+        // We also want to get a list of organisations which aren't 
+        // associated with this project (so that when "adding organisation",
+        // those already associated with project aren't shown).
+        def organisations = Organisation.list(sort:"name")
+
+        // Relates this project to any oranisations...
+        def organisationProjects = OrganisationProject.findAllByProject(this)
+        organisationProjects.each 
+        {
+            organisations.remove(it.organisation)
+        }
+
+        log.debug("unrelated organisations: " + organisations)
+        
+        return organisations
+    }
+
 }

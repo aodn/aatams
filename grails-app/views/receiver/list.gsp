@@ -22,17 +22,17 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'receiver.id.label', default: 'Id')}" />
-                        
                             <g:sortableColumn property="codeName" title="${message(code: 'receiver.codeName.label', default: 'Code Name')}" />
+                        
+                            <th><g:message code="receiver.model.label" default="Model" /></th>
                         
                             <g:sortableColumn property="serialNumber" title="${message(code: 'receiver.serialNumber.label', default: 'Serial Number')}" />
                         
-                            <g:sortableColumn property="embargoDate" title="${message(code: 'receiver.embargoDate.label', default: 'Embargo Date')}" />
+                            <g:sortableColumn property="project" title="${message(code: 'device.project.label', default: 'Project')}" />
                         
-                            <th><g:message code="receiver.status.label" default="Status" /></th>
+                            <g:sortableColumn property="status" title="${message(code: 'receiver.status.label', default: 'Status')}" />
                         
-                            <th><g:message code="receiver.model.label" default="Model" /></th>
+                            <th><g:message code="receiver.embargoDate.label" default="Embargo Date" /></th>
                         
                         </tr>
                     </thead>
@@ -40,17 +40,17 @@
                     <g:each in="${receiverInstanceList}" status="i" var="receiverInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${receiverInstance.id}">${fieldValue(bean: receiverInstance, field: "id")}</g:link></td>
+                            <td><g:link action="show" id="${receiverInstance.id}">${fieldValue(bean: receiverInstance, field: "codeName")}</g:link></td>
                         
-                            <td>${fieldValue(bean: receiverInstance, field: "codeName")}</td>
+                            <td>${fieldValue(bean: receiverInstance, field: "model")}</td>
                         
                             <td>${fieldValue(bean: receiverInstance, field: "serialNumber")}</td>
                         
-                            <td><g:formatDate date="${receiverInstance.embargoDate}" /></td>
-                        
+                            <td><g:link controller="project" action="show" id="${receiverInstance?.project?.id}">${fieldValue(bean: receiverInstance?.project, field: "name")}</g:link></td>
+
                             <td>${fieldValue(bean: receiverInstance, field: "status")}</td>
                         
-                            <td>${fieldValue(bean: receiverInstance, field: "model")}</td>
+                            <td><g:formatDate date="${receiverInstance.embargoDate}" /></td>
                         
                         </tr>
                     </g:each>

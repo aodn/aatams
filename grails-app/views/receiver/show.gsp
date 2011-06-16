@@ -23,16 +23,16 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.id.label" default="Id" /></td>
+                            <td valign="top" class="name"><g:message code="receiver.codeName.label" default="Code Name" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "id")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "codeName")}</td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.codeName.label" default="Code Name" /></td>
+                            <td valign="top" class="name"><g:message code="receiver.model.label" default="Model" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "codeName")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "model")}</td>
                             
                         </tr>
                     
@@ -44,43 +44,23 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.embargoDate.label" default="Embargo Date" /></td>
+                            <td valign="top" class="name"><g:message code="receiver.project.label" default="Project" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${receiverInstance?.embargoDate}" /></td>
+                            <td valign="top" class="value"><g:link controller="project" action="show" id="${receiverInstance?.project?.id}">${receiverInstance?.project?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiver.status.label" default="Status" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${receiverInstance?.status?.id}">${receiverInstance?.status?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${receiverInstance?.status?.encodeAsHTML()}</td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.detections.label" default="Detections" /></td>
+                            <td valign="top" class="name"><g:message code="receiver.embargoDate.label" default="Embargo Date" /></td>
                             
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${receiverInstance.detections}" var="d">
-                                    <li><g:link controller="detection" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.model.label" default="Model" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="deviceModel" action="show" id="${receiverInstance?.model?.id}">${receiverInstance?.model?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.project.label" default="Project" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="project" action="show" id="${receiverInstance?.project?.id}">${receiverInstance?.project?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value"><g:formatDate date="${receiverInstance?.embargoDate}" /></td>
                             
                         </tr>
                     

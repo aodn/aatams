@@ -1,6 +1,10 @@
 import au.org.emii.aatams.*
 import grails.converters.deep.JSON
 
+import com.vividsolutions.jts.geom.Point
+import com.vividsolutions.jts.io.ParseException
+import com.vividsolutions.jts.io.WKTReader
+
 class BootStrap 
 {
 
@@ -205,7 +209,42 @@ class BootStrap
                             model:seimensXyz,
                             project:sealCountProject,
                             status:deployedStatus).save(failOnError: true)
-                            
+                        
+                
+                //
+                // Installation data.
+                //
+                InstallationConfiguration array =
+                    new InstallationConfiguration(type:'ARRAY').save(failOnError:true)
+                InstallationConfiguration curtain =
+                    new InstallationConfiguration(type:'CURTAIN').save(failOnError:true)
+                    
+                Installation bondiLine =
+                    new Installation(name:'Bondi Line',
+                                     configuration:array,
+                                     project:sealCountProject,
+                                     lonOffset:15f,
+                                     latOffset:30f).save(failOnError:true)
+
+                WKTReader reader = new WKTReader();
+                
+                InstallationStation bondiSW1 = 
+                    new InstallationStation(installation:bondiLine,
+                                            name:'Bondi SW1',
+                                            curtainPosition:1,
+                                            location:(Point)reader.read("POINT(10 10)")).save(failOnError:true)
+
+                InstallationStation bondiSW2 = 
+                    new InstallationStation(installation:bondiLine,
+                                            name:'Bondi SW2',
+                                            curtainPosition:2,
+                                            location:(Point)reader.read("POINT(20 20)")).save(failOnError:true)
+
+                InstallationStation bondiSW3 = 
+                    new InstallationStation(installation:bondiLine,
+                                            name:'Bondi SW3',
+                                            curtainPosition:3,
+                                            location:(Point)reader.read("POINT(30 30)")).save(failOnError:true)
             }
         }
     }

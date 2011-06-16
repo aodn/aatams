@@ -23,13 +23,6 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="installation.id.label" default="Id" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: installationInstance, field: "id")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="installation.name.label" default="Name" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: installationInstance, field: "name")}</td>
@@ -61,19 +54,6 @@
                             <td valign="top" class="name"><g:message code="installation.latOffset.label" default="Lat Offset" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: installationInstance, field: "latOffset")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="installation.stations.label" default="Stations" /></td>
-                            
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${installationInstance.stations}" var="s">
-                                    <li><g:link controller="installationStation" action="show" id="${s.id}">${s?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
                             
                         </tr>
                     

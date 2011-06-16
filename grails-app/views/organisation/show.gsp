@@ -63,7 +63,7 @@
                             <td valign="top" class="value">${organisationInstance?.status?.encodeAsHTML()}</td>
                             
                         </tr>
-                    
+<!--                    
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="organisation.organisationProjects.label" default="Projects" /></td>
                             <td valign="top" style="text-align: left;" class="value">
@@ -85,7 +85,7 @@
                                 </ul>
                             </td>
                         </tr>
-                        
+                        -->
                     </tbody>
                 </table>
             </div>

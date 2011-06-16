@@ -50,26 +50,31 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="project.principalInvestigator.label" default="Principal Investigator" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="projectRole" action="show" id="${projectInstance?.principalInvestigator?.id}">${projectInstance?.principalInvestigator?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="project.projectRoles.label" default="Project Roles" /></td>
-                            
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${projectInstance.projectRoles}" var="p">
-                                    <li><g:link controller="projectRole" action="show" id="${p.id}">${p?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
+                            <td valign="top" class="name">
+                              <label for="projectRoles"><g:message code="project.projectRoles.people.label" default="People" /></label>
                             </td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
+
+                            <td >
+
+                              <table class="nested">
+                                <tbody>
+                                  <g:each in="${projectInstance?.projectRoles?}" var="p">
+                                    <tr>
+                                      <td>
+                                        <g:link controller="person" action="show" id="${p?.person?.id}">${p?.person?.encodeAsHTML()}</g:link>
+                                      </td>
+                                      <td>${p?.roleType}</td>
+                                      <td>${p?.access}</td>
+                                    </tr>
+
+                                  </g:each>
+                                </tbody>
+                              </table>
+
+                            </td>  
+                         </tr>
+
+<!--                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="project.devices.label" default="Devices" /></td>
                             
                             <td valign="top" style="text-align: left;" class="value">
@@ -80,7 +85,7 @@
                                 </ul>
                             </td>
                             
-                        </tr>
+                        </tr>-->
                     
                     </tbody>
                 </table>

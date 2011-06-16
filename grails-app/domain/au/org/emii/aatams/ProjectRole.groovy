@@ -11,11 +11,13 @@ class ProjectRole
     static belongsTo = [project:Project, person:Person]
     static transients = ['projectAndRole']
     
-    ProjectRoleType roleType;
+    ProjectRoleType roleType
+    
+    ProjectAccess access
     
     String toString()
     {
-        return getProjectAndRole() + ": " + String.valueOf(person)
+        return getProjectAndRole() + ": " + String.valueOf(person) + ": " + String.valueOf(access)
     }
     
     String getProjectAndRole()

@@ -264,6 +264,16 @@ td.errors textarea {
 
 /* TABLES */
 
+
+table.nested td, table.nested th {
+    font: 11px verdana, arial, helvetica, sans-serif;
+    line-height: 12px;
+    padding: 0px;
+    text-align: left;
+    vertical-align: top;
+    width:0%;
+}
+
 table {
     border: 1px solid #ccc;
     width: 100%;
@@ -307,9 +317,6 @@ th.asc a {
 th.desc a {
     background-image: url(../images/skin/sorted_desc.gif);
 }
-
-
-
 
 .odd {
     background: #f7f7f7;
@@ -389,7 +396,8 @@ th.desc a {
 }
 .prop .value {
     text-align: left;
-    width: 85%;
+    width: 80%;
+    white-space: nowrap;
 }
 
 /* ACTION BUTTONS */
@@ -524,4 +532,3 @@ div.results {
 div.paging a {
     margin-left: 4px;
 }
-

@@ -1,6 +1,6 @@
 $(function() {
 
-    $('#dialog-form').dialog({
+    $('#dialog-form-add-organisation').dialog({
         autoOpen: false,
         height: 300,
         width: 350,
@@ -37,6 +37,6 @@ $(function() {
     });
     
     $('#add_organisation_to_project').click(function() {
-        $('#dialog-form').dialog('open');
+        $('#dialog-form-add-organisation').dialog('open');
     });
 });

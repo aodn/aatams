@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import grails.converters.deep.JSON
+
 class ProjectRoleController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -19,13 +21,15 @@ class ProjectRoleController {
         return [projectRoleInstance: projectRoleInstance]
     }
 
-    def save = {
+    def save = 
+    {
         def projectRoleInstance = new ProjectRole(params)
-        if (projectRoleInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), projectRoleInstance.id])}"
-            redirect(action: "show", id: projectRoleInstance.id)
+        if (projectRoleInstance.save(flush: true)) 
+        {
+            render projectRoleInstance as JSON
         }
-        else {
+        else 
+        {
             render(view: "create", model: [projectRoleInstance: projectRoleInstance])
         }
     }

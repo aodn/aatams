@@ -23,13 +23,6 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="installationStation.id.label" default="Id" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: installationStationInstance, field: "id")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="installationStation.name.label" default="Name" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: installationStationInstance, field: "name")}</td>
@@ -54,6 +47,13 @@
                             <td valign="top" class="name"><g:message code="installationStation.installation.label" default="Installation" /></td>
                             
                             <td valign="top" class="value"><g:link controller="installation" action="show" id="${installationStationInstance?.installation?.id}">${installationStationInstance?.installation?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="installationStation.installation.project.label" default="Project" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="project" action="show" id="${installationStationInstance?.installation?.project?.id}">${installationStationInstance?.installation?.project?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     

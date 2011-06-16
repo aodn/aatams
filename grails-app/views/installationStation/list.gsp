@@ -22,32 +22,32 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'installationStation.id.label', default: 'Id')}" />
-                        
                             <g:sortableColumn property="name" title="${message(code: 'installationStation.name.label', default: 'Name')}" />
                         
                             <g:sortableColumn property="curtainPosition" title="${message(code: 'installationStation.curtainPosition.label', default: 'Curtain Position')}" />
                         
-                            <g:sortableColumn property="location" title="${message(code: 'installationStation.location.label', default: 'Location')}" />
+                            <th><g:message code="installationStation.location.label" default="Location" /></th>
                         
-                            <th><g:message code="installationStation.installation.label" default="Installation" /></th>
+                            <g:sortableColumn property="installation" title="${message(code: 'installationStation.installation.label', default: 'Installation')}" />
                         
+                            <g:sortableColumn property="installation.project" title="${message(code: 'installationStation.installation.project.label', default: 'Project')}" />
+
                         </tr>
                     </thead>
                     <tbody>
                     <g:each in="${installationStationInstanceList}" status="i" var="installationStationInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${installationStationInstance.id}">${fieldValue(bean: installationStationInstance, field: "id")}</g:link></td>
-                        
-                            <td>${fieldValue(bean: installationStationInstance, field: "name")}</td>
+                            <td><g:link action="show" id="${installationStationInstance.id}">${fieldValue(bean: installationStationInstance, field: "name")}</g:link></td>
                         
                             <td>${fieldValue(bean: installationStationInstance, field: "curtainPosition")}</td>
                         
                             <td>${fieldValue(bean: installationStationInstance, field: "location")}</td>
                         
-                            <td>${fieldValue(bean: installationStationInstance, field: "installation")}</td>
-                        
+                            <td><g:link controller="installation" action="show" id="${installationStationInstance?.installation?.id}">${fieldValue(bean: installationStationInstance?.installation, field: "name")}</g:link></td>
+
+                            <td><g:link controller="project" action="show" id="${installationStationInstance?.installation?.project?.id}">${fieldValue(bean: installationStationInstance?.installation?.project, field: "name")}</g:link></td>
+                    
                         </tr>
                     </g:each>
                     </tbody>

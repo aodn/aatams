@@ -92,7 +92,7 @@
 
                                 </td>
                             </tr>
-                        
+<!--                        
                             <tr class="prop">
                               <td valign="top" class="name">
                                 <label for="organisationProjects"><g:message code="organisation.organisationProjects.label" default="Projects" /></label>
@@ -126,7 +126,7 @@
                                 </ul>
                               </td>
                             </tr>
-                            
+                            -->
                         </tbody>
                     </table>
                 </div>

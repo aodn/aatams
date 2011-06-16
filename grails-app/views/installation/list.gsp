@@ -22,17 +22,19 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'installation.id.label', default: 'Id')}" />
-                        
                             <g:sortableColumn property="name" title="${message(code: 'installation.name.label', default: 'Name')}" />
                         
                             <th><g:message code="installation.configuration.label" default="Configuration" /></th>
                         
-                            <th><g:message code="installation.project.label" default="Project" /></th>
+                            <g:sortableColumn property="project" title="${message(code: 'installation.project.label', default: 'Project')}" />
                         
-                            <g:sortableColumn property="lonOffset" title="${message(code: 'installation.lonOffset.label', default: 'Lon Offset')}" />
+                            <th><g:message code="installation.stationCount.label" default="No. Stations" /></th>
+                            
+                            <th><g:message code="installation.stations.label" default="Stations" /></th>
+
+                            <th><g:message code="installation.lonOffset.label" default="Lon Offset" /></th>
                         
-                            <g:sortableColumn property="latOffset" title="${message(code: 'installation.latOffset.label', default: 'Lat Offset')}" />
+                            <th><g:message code="installation.latOffset.label" default="Lat Offset" /></th>
                         
                         </tr>
                     </thead>
@@ -40,14 +42,16 @@
                     <g:each in="${installationInstanceList}" status="i" var="installationInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${installationInstance.id}">${fieldValue(bean: installationInstance, field: "id")}</g:link></td>
-                        
-                            <td>${fieldValue(bean: installationInstance, field: "name")}</td>
+                            <td><g:link action="show" id="${installationInstance.id}">${fieldValue(bean: installationInstance, field: "name")}</g:link></td>
                         
                             <td>${fieldValue(bean: installationInstance, field: "configuration")}</td>
                         
                             <td>${fieldValue(bean: installationInstance, field: "project")}</td>
                         
+                            <td>${installationInstance?.stations.size()}</td>
+                            
+                            <td>${installationInstance?.stations}</td>
+
                             <td>${fieldValue(bean: installationInstance, field: "lonOffset")}</td>
                         
                             <td>${fieldValue(bean: installationInstance, field: "latOffset")}</td>

@@ -81,23 +81,6 @@
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="stations"><g:message code="installation.stations.label" default="Stations" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'stations', 'errors')}">
-                                    
-<ul>
-<g:each in="${installationInstance?.stations?}" var="s">
-    <li><g:link controller="installationStation" action="show" id="${s.id}">${s?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="installationStation" action="create" params="['installation.id': installationInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'installationStation.label', default: 'InstallationStation')])}</g:link>
-
-
-                                </td>
-                            </tr>
-                        
                         </tbody>
                     </table>
                 </div>

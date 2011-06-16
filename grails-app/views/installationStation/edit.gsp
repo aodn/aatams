@@ -70,7 +70,7 @@
 
                                 </td>
                             </tr>
-                        
+<!--                        
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="receivers"><g:message code="installationStation.receivers.label" default="Receivers" /></label>
@@ -87,7 +87,7 @@
 
                                 </td>
                             </tr>
-                        
+                        -->
                         </tbody>
                     </table>
                 </div>

@@ -30,6 +30,16 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                    <label for="access"><g:message code="projectRole.access.label" default="Access" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'access', 'errors')}">
+                                    <g:select name="access" from="${au.org.emii.aatams.ProjectAccess?.values()}" keys="${au.org.emii.aatams.ProjectAccess?.values()*.name()}" value="${projectRoleInstance?.access?.name()}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                     <label for="person"><g:message code="projectRole.person.label" default="Person" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'person', 'errors')}">

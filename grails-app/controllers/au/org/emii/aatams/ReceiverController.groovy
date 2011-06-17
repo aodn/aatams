@@ -21,6 +21,10 @@ class ReceiverController {
 
     def save = {
         def receiverInstance = new Receiver(params)
+        
+        String codeName = Receiver.constructCodeName(params)
+        receiverInstance.codeName = codeName
+        
         if (receiverInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.id])}"
             redirect(action: "show", id: receiverInstance.id)
@@ -65,6 +69,10 @@ class ReceiverController {
                 }
             }
             receiverInstance.properties = params
+
+            String codeName = Receiver.constructCodeName(params)
+            receiverInstance.codeName = codeName
+        
             if (!receiverInstance.hasErrors() && receiverInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.id])}"
                 redirect(action: "show", id: receiverInstance.id)

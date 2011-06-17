@@ -183,13 +183,18 @@ class BootStrap
                 DeviceStatus deployedStatus = new DeviceStatus(status:'DEPLOYED').save(failOnError: true)
                 
                 Receiver rx1 =
-                    new Receiver(codeName:'VR2W-101336',
+                    new Receiver(codeName:String.valueOf(seimensXyz) + " - " + '12345678',
                                  serialNumber:'12345678',
                                  embargoDate:null,
                                  status:deployedStatus,
                                  model:seimensXyz,
                                  project:sealCountProject).save(failOnError: true)
-                             
+                   
+                //
+                // Tags.
+                //
+                TransmitterType pinger =
+                    new TransmitterType(transmitterTypeName:"PINGER").save(failOnError:true)
                 Tag tag1 =
                     new Tag(codeName:'A69-1303-62339',
                             serialNumber:'12345678',
@@ -198,7 +203,8 @@ class BootStrap
                             pingCode:'62339',
                             model:seimensXyz,
                             project:sealCountProject,
-                            status:deployedStatus).save(failOnError: true)
+                            status:newStatus,
+                            transmitterType:pinger).save(failOnError: true)
                             
                 Tag tag2 =
                     new Tag(codeName:'A69-1303-46601',
@@ -208,8 +214,43 @@ class BootStrap
                             pingCode:'46601',
                             model:seimensXyz,
                             project:sealCountProject,
-                            status:deployedStatus).save(failOnError: true)
+                            status:deployedStatus,
+                            transmitterType:pinger).save(failOnError: true)
                         
+                TransmitterType depth =
+                    new TransmitterType(transmitterTypeName:"DEPTH").save(failOnError:true)
+                TransmitterType temp =
+                    new TransmitterType(transmitterTypeName:"TEMP").save(failOnError:true)
+                
+                Sensor sensor1 =
+                    new Sensor(codeName:'A69-1400-64000',
+                            serialNumber:'5678',
+                            embargoDate:null,
+                            codeMap:'A69-1400',
+                            pingCode:'64000',
+                            model:seimensXyz,
+                            project:sealCountProject,
+                            status:newStatus,
+                            tag:tag1,
+                            transmitterType:depth,
+                            unit:'m',
+                            slope:1,
+                            intercept:0).save(failOnError: true)
+
+                Sensor sensor2 =
+                    new Sensor(codeName:'A69-1500-65000',
+                            serialNumber:'6789',
+                            embargoDate:null,
+                            codeMap:'A69-1500',
+                            pingCode:'65000',
+                            model:seimensXyz,
+                            project:sealCountProject,
+                            status:newStatus,
+                            tag:tag1,
+                            transmitterType:temp,
+                            unit:'k',
+                            slope:1,
+                            intercept:0).save(failOnError: true)
                 
                 //
                 // Installation data.

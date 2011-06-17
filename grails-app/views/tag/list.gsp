@@ -22,17 +22,23 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'tag.id.label', default: 'Id')}" />
+                            <g:sortableColumn property="codeName" title="${message(code: 'tag.codeName.label', default: 'ID')}" />
                         
-                            <g:sortableColumn property="codeName" title="${message(code: 'tag.codeName.label', default: 'Code Name')}" />
+                            <g:sortableColumn property="model" title="${message(code: 'tag.model.label', default: 'Model')}" />
                         
                             <g:sortableColumn property="serialNumber" title="${message(code: 'tag.serialNumber.label', default: 'Serial Number')}" />
                         
-                            <g:sortableColumn property="embargoDate" title="${message(code: 'tag.embargoDate.label', default: 'Embargo Date')}" />
-                        
+                            <g:sortableColumn property="project" title="${message(code: 'device.project.label', default: 'Project')}" />
+
+                            <g:sortableColumn property="transmitterType" title="${message(code: 'tag.transmitterType.label', default: 'Type')}" />
+
                             <g:sortableColumn property="codeMap" title="${message(code: 'tag.codeMap.label', default: 'Code Map')}" />
                         
                             <g:sortableColumn property="pingCode" title="${message(code: 'tag.pingCode.label', default: 'Ping Code')}" />
+                        
+                            <g:sortableColumn property="status" title="${message(code: 'tag.status.label', default: 'Status')}" />
+                            
+                            <th><g:message code="tag.embargoDate.label" default="Embargo Date" /></th>
                         
                         </tr>
                     </thead>
@@ -40,17 +46,29 @@
                     <g:each in="${tagInstanceList}" status="i" var="tagInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${tagInstance.id}">${fieldValue(bean: tagInstance, field: "id")}</g:link></td>
-                        
-                            <td>${fieldValue(bean: tagInstance, field: "codeName")}</td>
-                        
+                            <td>
+                              <g:if test="${tagInstance instanceof au.org.emii.aatams.Sensor}">
+                                <g:link controller="sensor" action="show" id="${tagInstance.id}">${fieldValue(bean: tagInstance, field: "codeName")}</g:link>
+                              </g:if>
+                              <g:else>
+                                <g:link action="show" id="${tagInstance.id}">${fieldValue(bean: tagInstance, field: "codeName")}</g:link>
+                              </g:else>
+                            </td>
+                            <td>${fieldValue(bean: tagInstance, field: "model")}</td>
+
                             <td>${fieldValue(bean: tagInstance, field: "serialNumber")}</td>
                         
-                            <td><g:formatDate date="${tagInstance.embargoDate}" /></td>
-                        
+                            <td><g:link controller="project" action="show" id="${tagInstance?.project?.id}">${fieldValue(bean: tagInstance, field: "project")}</g:link></td>
+
+                            <td>${tagInstance?.transmitterType?.transmitterTypeName}</td>
+
                             <td>${fieldValue(bean: tagInstance, field: "codeMap")}</td>
                         
                             <td>${fieldValue(bean: tagInstance, field: "pingCode")}</td>
+                        
+                            <td>${fieldValue(bean: tagInstance, field: "status")}</td>
+
+                            <td><g:formatDate date="${tagInstance.embargoDate}" /></td>
                         
                         </tr>
                     </g:each>

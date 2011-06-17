@@ -24,15 +24,15 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'sensor.id.label', default: 'Id')}" />
                         
-                            <th><g:message code="sensor.tag.label" default="Tag" /></th>
+                            <g:sortableColumn property="codeName" title="${message(code: 'sensor.codeName.label', default: 'Code Name')}" />
+                        
+                            <g:sortableColumn property="serialNumber" title="${message(code: 'sensor.serialNumber.label', default: 'Serial Number')}" />
+                        
+                            <g:sortableColumn property="embargoDate" title="${message(code: 'sensor.embargoDate.label', default: 'Embargo Date')}" />
+                        
+                            <th><g:message code="sensor.status.label" default="Status" /></th>
                         
                             <g:sortableColumn property="codeMap" title="${message(code: 'sensor.codeMap.label', default: 'Code Map')}" />
-                        
-                            <g:sortableColumn property="pingCode" title="${message(code: 'sensor.pingCode.label', default: 'Ping Code')}" />
-                        
-                            <th><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></th>
-                        
-                            <g:sortableColumn property="unit" title="${message(code: 'sensor.unit.label', default: 'Unit')}" />
                         
                         </tr>
                     </thead>
@@ -42,15 +42,15 @@
                         
                             <td><g:link action="show" id="${sensorInstance.id}">${fieldValue(bean: sensorInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: sensorInstance, field: "tag")}</td>
+                            <td>${fieldValue(bean: sensorInstance, field: "codeName")}</td>
+                        
+                            <td>${fieldValue(bean: sensorInstance, field: "serialNumber")}</td>
+                        
+                            <td><g:formatDate date="${sensorInstance.embargoDate}" /></td>
+                        
+                            <td>${fieldValue(bean: sensorInstance, field: "status")}</td>
                         
                             <td>${fieldValue(bean: sensorInstance, field: "codeMap")}</td>
-                        
-                            <td>${fieldValue(bean: sensorInstance, field: "pingCode")}</td>
-                        
-                            <td>${fieldValue(bean: sensorInstance, field: "transmitterType")}</td>
-                        
-                            <td>${fieldValue(bean: sensorInstance, field: "unit")}</td>
                         
                         </tr>
                     </g:each>

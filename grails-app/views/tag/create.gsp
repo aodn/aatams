@@ -30,10 +30,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="codeName"><g:message code="tag.codeName.label" default="Code Name" /></label>
+                                    <label for="project"><g:message code="tag.project.label" default="Project" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeName', 'errors')}">
-                                    <g:textField name="codeName" value="${tagInstance?.codeName}" />
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'project', 'errors')}">
+                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${tagInstance?.project?.id}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="model"><g:message code="tag.model.label" default="Model" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'model', 'errors')}">
+                                    <g:select name="model.id" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" value="${tagInstance?.model?.id}"  />
 
                                 </td>
                             </tr>
@@ -44,16 +54,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'serialNumber', 'errors')}">
                                     <g:textField name="serialNumber" value="${tagInstance?.serialNumber}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="embargoDate"><g:message code="tag.embargoDate.label" default="Embargo Date" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'embargoDate', 'errors')}">
-                                    <g:datePicker name="embargoDate" precision="day" value="${tagInstance?.embargoDate}" default="none" noSelection="['': '']" />
 
                                 </td>
                             </tr>
@@ -80,20 +80,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="model"><g:message code="tag.model.label" default="Model" /></label>
+                                    <label for="embargoDate"><g:message code="tag.embargoDate.label" default="Embargo Date" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'model', 'errors')}">
-                                    <g:select name="model.id" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" value="${tagInstance?.model?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="project"><g:message code="tag.project.label" default="Project" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${tagInstance?.project?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'embargoDate', 'errors')}">
+                                    <g:datePicker name="embargoDate" precision="day" value="${tagInstance?.embargoDate}" default="none" noSelection="['': '']" />
 
                                 </td>
                             </tr>

@@ -33,10 +33,17 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="codeName"><g:message code="receiver.codeName.label" default="Code Name" /></label>
+                                  <label for="codeName"><g:message code="receiver.codeName.label" default="ID" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'codeName', 'errors')}">
-                                    <g:textField name="codeName" value="${receiverInstance?.codeName}" />
+                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'codeName', 'errors')}">${receiverInstance?.codeName}</td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="project"><g:message code="receiver.project.label" default="Project" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'project', 'errors')}">
+                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${receiverInstance?.project?.id}"  />
 
                                 </td>
                             </tr>
@@ -63,30 +70,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="project"><g:message code="receiver.project.label" default="Project" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${receiverInstance?.project?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                   <label for="status"><g:message code="receiver.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverInstance?.status?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="embargoDate"><g:message code="receiver.embargoDate.label" default="Embargo Date" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'embargoDate', 'errors')}">
-                                    <g:datePicker name="embargoDate" precision="day" value="${receiverInstance?.embargoDate}" default="none" noSelection="['': '']" />
 
                                 </td>
                             </tr>

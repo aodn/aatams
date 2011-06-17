@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import grails.converters.deep.JSON
+
 class SensorController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -21,11 +23,22 @@ class SensorController {
 
     def save = {
         def sensorInstance = new Sensor(params)
-        if (sensorInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance.id])}"
-            redirect(action: "show", id: sensorInstance.id)
+        
+        // We need to get some additional parameters from the owning Tag.
+        Tag owningTag = Tag.get(params.tag.id)
+        sensorInstance.codeMap = owningTag.codeMap
+        sensorInstance.codeName = owningTag.codeName
+        sensorInstance.model = owningTag.model
+        sensorInstance.project = owningTag.project
+        sensorInstance.serialNumber = owningTag.serialNumber
+        
+        if (sensorInstance.save(flush: true)) 
+        {
+            render sensorInstance as JSON
         }
-        else {
+        else 
+        {
+            log.error(sensorInstance.errors)
             render(view: "create", model: [sensorInstance: sensorInstance])
         }
     }

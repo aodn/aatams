@@ -23,9 +23,9 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDeployment.id.label" default="Id" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDeployment.station.label" default="Station" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "id")}</td>
+                            <td valign="top" class="value"><g:link controller="installationStation" action="show" id="${receiverDeploymentInstance?.station?.id}">${receiverDeploymentInstance?.station?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -37,20 +37,6 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDeployment.station.label" default="Station" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="installationStation" action="show" id="${receiverDeploymentInstance?.station?.id}">${receiverDeploymentInstance?.station?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDeployment.deploymentNumber.label" default="Deployment Number" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "deploymentNumber")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDate.label" default="Deployment Date" /></td>
                             
                             <td valign="top" class="value"><g:formatDate date="${receiverDeploymentInstance?.deploymentDate}" /></td>
@@ -58,7 +44,14 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDeployment.recoveryDate.label" default="Recovery Date" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDeployment.location.label" default="Location" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "location")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDeployment.recoveryDate.label" default="Scheduled Recovery Date" /></td>
                             
                             <td valign="top" class="value"><g:formatDate date="${receiverDeploymentInstance?.recoveryDate}" /></td>
                             
@@ -74,42 +67,21 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDeployment.mooringType.label" default="Mooring Type" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="mooringType" action="show" id="${receiverDeploymentInstance?.mooringType?.id}">${receiverDeploymentInstance?.mooringType?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${receiverDeploymentInstance?.mooringType?.encodeAsHTML()}</td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDeployment.bottomDepthM.label" default="Bottom Depth M" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDeployment.bottomDepthM.label" default="Bottom Depth (m)" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "bottomDepthM")}</td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDeployment.depthBelowSurfaceM.label" default="Depth Below Surface M" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDeployment.depthBelowSurfaceM.label" default="Depth Below Surface (m)" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "depthBelowSurfaceM")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDeployment.receiverOrientation.label" default="Receiver Orientation" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "receiverOrientation")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDeployment.location.label" default="Location" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "location")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDeployment.comments.label" default="Comments" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "comments")}</td>
                             
                         </tr>
                     

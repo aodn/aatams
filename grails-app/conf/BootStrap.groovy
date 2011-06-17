@@ -188,6 +188,14 @@ class BootStrap
                                  model:seimensXyz,
                                  project:sealCountProject).save(failOnError: true)
                    
+                Receiver rx2 =
+                    new Receiver(codeName:String.valueOf(seimensXyz) + " - " + '87654321',
+                                 serialNumber:'87654321',
+                                 embargoDate:null,
+                                 status:deployedStatus,
+                                 model:seimensXyz,
+                                 project:tunaProject).save(failOnError: true)
+                             
                 //
                 // Tags.
                 //
@@ -284,6 +292,31 @@ class BootStrap
                                             name:'Bondi SW3',
                                             curtainPosition:3,
                                             location:(Point)reader.read("POINT(30 30)")).save(failOnError:true)
+                                        
+                //
+                //  Receiver Deployments.
+                //
+                MooringType concreteMooring = new MooringType(type:'CONCRETE BLOCK').save(failOnError:true)
+                
+                ReceiverDeployment rx1Bondi =
+                    new ReceiverDeployment(station:bondiSW1,
+                                           receiver:rx1,
+                                           deploymentDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 12:34:56"),
+                                           acousticReleaseID:"asdf",
+                                           mooringType:concreteMooring,
+                                           bottomDepthM:12f,
+                                           depthBelowSurfaceM:5f,
+                                           location:(Point)reader.read("POINT(10 10)")).save(failOnError:true)
+                                       
+                ReceiverDeployment rx2Bondi =
+                    new ReceiverDeployment(station:bondiSW2,
+                                           receiver:rx2,
+                                           deploymentDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:12:00"),
+                                           acousticReleaseID:"asdf",
+                                           mooringType:concreteMooring,
+                                           bottomDepthM:16f,
+                                           depthBelowSurfaceM:7.4f,
+                                           location:(Point)reader.read("POINT(20 20)")).save(failOnError:true)
             }
         }
     }

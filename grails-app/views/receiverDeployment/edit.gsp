@@ -33,16 +33,6 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="receiver"><g:message code="receiverDeployment.receiver.label" default="Receiver" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'receiver', 'errors')}">
-                                    <g:select name="receiver.id" from="${au.org.emii.aatams.Receiver.list()}" optionKey="id" value="${receiverDeploymentInstance?.receiver?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                   <label for="station"><g:message code="receiverDeployment.station.label" default="Station" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'station', 'errors')}">
@@ -53,10 +43,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="deploymentNumber"><g:message code="receiverDeployment.deploymentNumber.label" default="Deployment Number" /></label>
+                                  <label for="receiver"><g:message code="receiverDeployment.receiver.label" default="Receiver" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'deploymentNumber', 'errors')}">
-                                    <g:textField name="deploymentNumber" value="${fieldValue(bean: receiverDeploymentInstance, field: 'deploymentNumber')}" />
+                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'receiver', 'errors')}">
+                                    <g:select name="receiver.id" from="${au.org.emii.aatams.Receiver.list()}" optionKey="id" value="${receiverDeploymentInstance?.receiver?.id}"  />
 
                                 </td>
                             </tr>
@@ -73,7 +63,17 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="recoveryDate"><g:message code="receiverDeployment.recoveryDate.label" default="Recovery Date" /></label>
+                                  <label for="location"><g:message code="receiverDeployment.location.label" default="Location" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'location', 'errors')}">
+                                    <g:textField name="location" value="${receiverDeploymentInstance?.location}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="recoveryDate"><g:message code="receiverDeployment.recoveryDate.label" default="Scheduled Recovery Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'recoveryDate', 'errors')}">
                                     <g:datePicker name="recoveryDate" precision="day" value="${receiverDeploymentInstance?.recoveryDate}"  />
@@ -103,7 +103,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="bottomDepthM"><g:message code="receiverDeployment.bottomDepthM.label" default="Bottom Depth M" /></label>
+                                  <label for="bottomDepthM"><g:message code="receiverDeployment.bottomDepthM.label" default="Bottom Depth (m)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'bottomDepthM', 'errors')}">
                                     <g:textField name="bottomDepthM" value="${fieldValue(bean: receiverDeploymentInstance, field: 'bottomDepthM')}" />
@@ -113,40 +113,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="depthBelowSurfaceM"><g:message code="receiverDeployment.depthBelowSurfaceM.label" default="Depth Below Surface M" /></label>
+                                  <label for="depthBelowSurfaceM"><g:message code="receiverDeployment.depthBelowSurfaceM.label" default="Depth Below Surface (m)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'depthBelowSurfaceM', 'errors')}">
                                     <g:textField name="depthBelowSurfaceM" value="${fieldValue(bean: receiverDeploymentInstance, field: 'depthBelowSurfaceM')}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="receiverOrientation"><g:message code="receiverDeployment.receiverOrientation.label" default="Receiver Orientation" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'receiverOrientation', 'errors')}">
-                                    <g:textField name="receiverOrientation" value="${receiverDeploymentInstance?.receiverOrientation}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="location"><g:message code="receiverDeployment.location.label" default="Location" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'location', 'errors')}">
-                                    <g:textField name="location" value="${receiverDeploymentInstance?.location}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="comments"><g:message code="receiverDeployment.comments.label" default="Comments" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'comments', 'errors')}">
-                                    <g:textField name="comments" value="${receiverDeploymentInstance?.comments}" />
 
                                 </td>
                             </tr>

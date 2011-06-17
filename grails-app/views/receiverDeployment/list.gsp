@@ -22,13 +22,13 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'receiverDeployment.id.label', default: 'Id')}" />
+                            <g:sortableColumn property="installation" title="${message(code: 'receiverDeployment.installation.label', default: 'Installation')}" />
                         
-                            <th><g:message code="receiverDeployment.receiver.label" default="Receiver" /></th>
+                            <g:sortableColumn property="station" title="${message(code: 'receiverDeployment.station.label', default: 'Station')}" />
                         
-                            <th><g:message code="receiverDeployment.station.label" default="Station" /></th>
+                            <g:sortableColumn property="receiver" title="${message(code: 'receiverDeployment.receiver.label', default: 'Receiver')}" />
                         
-                            <g:sortableColumn property="deploymentNumber" title="${message(code: 'receiverDeployment.deploymentNumber.label', default: 'Deployment Number')}" />
+                            <g:sortableColumn property="project" title="${message(code: 'receiverDeployment.project.label', default: 'Project')}" />
                         
                             <g:sortableColumn property="deploymentDate" title="${message(code: 'receiverDeployment.deploymentDate.label', default: 'Deployment Date')}" />
                         
@@ -40,13 +40,13 @@
                     <g:each in="${receiverDeploymentInstanceList}" status="i" var="receiverDeploymentInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${receiverDeploymentInstance.id}">${fieldValue(bean: receiverDeploymentInstance, field: "id")}</g:link></td>
+                            <td><g:link action="show" id="${receiverDeploymentInstance.id}">${receiverDeploymentInstance?.station?.installation}</g:link></td>
+
+                            <td><g:link controller="installationStation" action="show" id="${receiverDeploymentInstance?.station?.id}">${receiverDeploymentInstance?.station}</g:link></td>
                         
-                            <td>${fieldValue(bean: receiverDeploymentInstance, field: "receiver")}</td>
+                            <td><g:link action="receiver" controller="receiver" action="show" id="${receiverDeploymentInstance?.receiver?.id}">${receiverDeploymentInstance?.receiver}</g:link></td>
                         
-                            <td>${fieldValue(bean: receiverDeploymentInstance, field: "station")}</td>
-                        
-                            <td>${fieldValue(bean: receiverDeploymentInstance, field: "deploymentNumber")}</td>
+                            <td><g:link controller="project" action="show" id="${receiverDeploymentInstance?.station?.installation?.project?.id}">${receiverDeploymentInstance?.station?.installation?.project}</g:link></td>
                         
                             <td><g:formatDate date="${receiverDeploymentInstance.deploymentDate}" /></td>
                         

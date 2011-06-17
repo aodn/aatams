@@ -317,6 +317,73 @@ class BootStrap
                                            bottomDepthM:16f,
                                            depthBelowSurfaceM:7.4f,
                                            location:(Point)reader.read("POINT(20 20)")).save(failOnError:true)
+                                       
+                //
+                // Animals and Animal Releases etc.
+                //
+                Species whiteShark = new Species(name:'White Shark').save(failOnError:true)
+                Species blueFinTuna = new Species(name:'Blue Fin Tuna').save(failOnError:true)
+                Species blueEyeTrevalla = new Species(name:'Blue Eye Trevalla').save(failOnError:true)
+                
+                Sex male = new Sex(sex:'MALE').save(failOnError:true)
+                Sex female = new Sex(sex:'FEMALE').save(failOnError:true)
+                
+                Animal whiteShark1 = new Animal(species:whiteShark,
+                                                sex:male).save(failOnError:true)
+                Animal blueFinTuna1 = new Animal(species:blueFinTuna,
+                                                 sex:female).save(failOnError:true)
+                                             
+                AnimalMeasurementType length = new AnimalMeasurementType(type:'LENGTH').save(failOnError:true)
+                AnimalMeasurementType weight = new AnimalMeasurementType(type:'WEIGHT').save(failOnError:true)
+                MeasurementUnit metres = new MeasurementUnit(unit:'m').save(failOnError:true)
+                MeasurementUnit kg = new MeasurementUnit(unit:'kg').save(failOnError:true)
+                
+                AnimalMeasurement whiteShark1Length = 
+                    new AnimalMeasurement(type:length,
+                                          value:2.5f,
+                                          unit:metres,
+                                          estimate:false).save(failOnError:true)
+                AnimalMeasurement whiteShark1Weight = 
+                    new AnimalMeasurement(type:weight,
+                                          value:200f,
+                                          unit:kg,
+                                          estimate:true).save(failOnError:true)
+                                      
+                SurgeryTreatmentType antibiotic = new SurgeryTreatmentType(type:'ANTIBIOTIC').save(failOnError:true)
+                SurgeryType external = new SurgeryType(type:'EXTERNAL').save(failOnError:true)
+                
+                
+                AnimalRelease whiteShark1Release =
+                    new AnimalRelease(project:tunaProject,
+                                      surgeries:[],
+                                      measurements:[whiteShark1Length, whiteShark1Weight],
+                                      animal:whiteShark1,
+                                      captureLocality:'Neptune Islands',
+                                      captureLocation:(Point)reader.read("POINT(20 20)"),
+                                      captureDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:10:00"),
+                                      releaseLocality:'Neptune Islands',
+                                      releaseLocation:(Point)reader.read("POINT(20 20)"),
+                                      releaseDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:15:00")).save(failOnError:true)
+                                      
+                                      
+                Surgery surgery1 = 
+                    new Surgery(release:whiteShark1Release,
+                                tag:tag1,
+                                timestamp:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:12:00"),
+                                type:external,
+                                sutures:false,
+                                treatmentType:antibiotic,
+                                surgeon:joeBloggs).save(failOnError:true)
+                            
+                Surgery surgery2 = 
+                    new Surgery(release:whiteShark1Release,
+                                tag:tag2,
+                                timestamp:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:13:00"),
+                                type:external,
+                                sutures:false,
+                                treatmentType:antibiotic,
+                                surgeon:joeBloggs).save(failOnError:true)
+                
             }
         }
     }

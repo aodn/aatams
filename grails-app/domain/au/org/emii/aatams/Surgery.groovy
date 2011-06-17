@@ -24,7 +24,7 @@ class Surgery
         sutures()
         treatmentType()
         surgeon()
-        comments(blank:true)
+        comments(nullable:true, blank:true)
     }
     
     String toString()

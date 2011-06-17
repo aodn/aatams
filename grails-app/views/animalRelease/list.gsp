@@ -22,17 +22,17 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'animalRelease.id.label', default: 'Id')}" />
+                            <g:sortableColumn property="id" title="${message(code: 'animalRelease.id.label', default: 'Tag(s)')}" />
                         
-                            <th><g:message code="animalRelease.project.label" default="Project" /></th>
+                            <g:sortableColumn property="animalRelease.animal.species" title="${message(code: 'animalRelease.animal.species.label', default: 'Species')}" />
+
+                            <g:sortableColumn property="releaseDateTime" title="${message(code: 'animalRelease.releaseDateTime.label', default: 'Release Date Time')}" />
                         
-                            <th><g:message code="animalRelease.animal.label" default="Animal" /></th>
+                            <g:sortableColumn property="releaseLocality" title="${message(code: 'animalRelease.releaseLocality.label', default: 'Release Locality')}" />
                         
-                            <g:sortableColumn property="captureLocality" title="${message(code: 'animalRelease.captureLocality.label', default: 'Capture Locality')}" />
+                            <g:sortableColumn property="releaseLocation" title="${message(code: 'animalRelease.releaseLocation.label', default: 'Release Location')}" />
                         
-                            <g:sortableColumn property="captureLocation" title="${message(code: 'animalRelease.captureLocation.label', default: 'Capture Location')}" />
-                        
-                            <g:sortableColumn property="captureDateTime" title="${message(code: 'animalRelease.captureDateTime.label', default: 'Capture Date Time')}" />
+                            <g:sortableColumn property="project" title="${message(code: 'animalRelease.project.label', default: 'Project')}" />
                         
                         </tr>
                     </thead>
@@ -40,17 +40,17 @@
                     <g:each in="${animalReleaseInstanceList}" status="i" var="animalReleaseInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${animalReleaseInstance.id}">${fieldValue(bean: animalReleaseInstance, field: "id")}</g:link></td>
+                            <td><g:link action="show" id="${animalReleaseInstance.id}">${animalReleaseInstance.tags}</g:link></td>
                         
-                            <td>${fieldValue(bean: animalReleaseInstance, field: "project")}</td>
+                            <td>${fieldValue(bean: animalReleaseInstance, field: "animal.species")}</td>
+
+                            <td><g:formatDate date="${animalReleaseInstance.releaseDateTime}" /></td>
                         
-                            <td>${fieldValue(bean: animalReleaseInstance, field: "animal")}</td>
+                            <td>${fieldValue(bean: animalReleaseInstance, field: "releaseLocality")}</td>
                         
-                            <td>${fieldValue(bean: animalReleaseInstance, field: "captureLocality")}</td>
+                            <td>${fieldValue(bean: animalReleaseInstance, field: "releaseLocation")}</td>
                         
-                            <td>${fieldValue(bean: animalReleaseInstance, field: "captureLocation")}</td>
-                        
-                            <td><g:formatDate date="${animalReleaseInstance.captureDateTime}" /></td>
+                            <td><g:link controller="project" action="show" id="${animalReleaseInstance.project.id}">${animalReleaseInstance.project}</g:link></td>
                         
                         </tr>
                     </g:each>

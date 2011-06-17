@@ -19,6 +19,6 @@ class AnimalMeasurement
         value()
         unit()
         estimate()
-        comments()
+        comments(nullable:true)
     }
 }

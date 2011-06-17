@@ -60,7 +60,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="tag.pingCode.label" default="Ping Code" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: tagInstance, field: "pingCode")}</td>
+                            <td valign="top" class="value">${tagInstance?.pingCode}</td>
                             
                         </tr>
                     

@@ -32,7 +32,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.pingCode.label" default="Ping Code" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "pingCode")}</td>
+                            <td valign="top" class="value">${sensorInstance?.pingCode}</td>
                             
                         </tr>
                     

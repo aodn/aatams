@@ -64,7 +64,7 @@
 
                             <td>${fieldValue(bean: tagInstance, field: "codeMap")}</td>
                         
-                            <td>${fieldValue(bean: tagInstance, field: "pingCode")}</td>
+                            <td>${tagInstance?.pingCode}</td>
                         
                             <td>${fieldValue(bean: tagInstance, field: "status")}</td>
 

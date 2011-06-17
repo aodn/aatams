@@ -23,9 +23,16 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.codeName.label" default="Code Name" /></td>
+                            <td valign="top" class="name"><g:message code="receiver.codeName.label" default="ID" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "codeName")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiver.project.label" default="Project" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="project" action="show" id="${receiverInstance?.project?.id}">${receiverInstance?.project?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -44,23 +51,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.project.label" default="Project" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="project" action="show" id="${receiverInstance?.project?.id}">${receiverInstance?.project?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiver.status.label" default="Status" /></td>
                             
                             <td valign="top" class="value">${receiverInstance?.status?.encodeAsHTML()}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.embargoDate.label" default="Embargo Date" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${receiverInstance?.embargoDate}" /></td>
                             
                         </tr>
                     

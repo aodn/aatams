@@ -33,10 +33,27 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="codeName"><g:message code="tag.codeName.label" default="Code Name" /></label>
+                                  <label for="codeName"><g:message code="tag.codeName.label" default="ID" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeName', 'errors')}">
-                                    <g:textField name="codeName" value="${tagInstance?.codeName}" />
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeName', 'errors')}">${tagInstance?.codeName}</td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="project"><g:message code="tag.project.label" default="Project" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'project', 'errors')}">
+                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${tagInstance?.project?.id}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="model"><g:message code="tag.model.label" default="Model" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'model', 'errors')}">
+                                    <g:select name="model.id" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" value="${tagInstance?.model?.id}"  />
 
                                 </td>
                             </tr>
@@ -47,16 +64,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'serialNumber', 'errors')}">
                                     <g:textField name="serialNumber" value="${tagInstance?.serialNumber}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="embargoDate"><g:message code="tag.embargoDate.label" default="Embargo Date" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'embargoDate', 'errors')}">
-                                    <g:datePicker name="embargoDate" precision="day" value="${tagInstance?.embargoDate}" default="none" noSelection="['': '']" />
 
                                 </td>
                             </tr>
@@ -83,37 +90,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="model"><g:message code="tag.model.label" default="Model" /></label>
+                                  <label for="embargoDate"><g:message code="tag.embargoDate.label" default="Embargo Date" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'model', 'errors')}">
-                                    <g:select name="model.id" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" value="${tagInstance?.model?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="project"><g:message code="tag.project.label" default="Project" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${tagInstance?.project?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="sensors"><g:message code="tag.sensors.label" default="Sensors" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'sensors', 'errors')}">
-                                    
-<ul>
-<g:each in="${tagInstance?.sensors?}" var="s">
-    <li><g:link controller="sensor" action="show" id="${s.id}">${s?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="sensor" action="create" params="['tag.id': tagInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'sensor.label', default: 'Sensor')])}</g:link>
-
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'embargoDate', 'errors')}">
+                                    <g:datePicker name="embargoDate" precision="day" value="${tagInstance?.embargoDate}" default="none" noSelection="['': '']" />
 
                                 </td>
                             </tr>
@@ -128,6 +108,48 @@
                                 </td>
                             </tr>
                         
+                            <tr class="prop">
+                                <td valign="top" class="name"><g:message code="tag.sensors.label" default="Sensors" /></td>
+
+                                <td>
+                                  <table class="nested">
+                                    <thead>
+                                      <tr>
+                                        <th>Tag Type</th>
+                                        <th>Ping Code</th>
+                                        <th>Slope</th>
+                                        <th>Intercept</th>
+                                        <th>Unit</th>
+                                        <th>Status</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="sensor_table_body">
+                                      <g:each in="${tagInstance.sensors}" var="s">
+                                        <tr>
+                                          <td>
+                                            <g:link controller="sensor" action="show" id="${s.id}">${s?.transmitterType}</g:link>
+                                          </td>
+                                          <td>${s?.pingCode}</td>
+                                          <td>${s?.slope}</td>
+                                          <td>${s?.intercept}</td>
+                                          <td>${s?.unit}</td>
+                                          <td>${s?.status}</td>
+                                        </tr>
+
+                                      </g:each>
+                                      <tr><td><br/></td></tr>
+                                      <tr>
+                                        <td>
+                                          <a href="#" 
+                                             id='add_sensor_to_tag'>${message(code: 'default.add.label', args: [message(code: 'sensor.label', default: 'Sensor...')])}</a>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </td>
+
+                            </tr>
+                            
                         </tbody>
                     </table>
                 </div>
@@ -137,5 +159,82 @@
                 </div>
             </g:form>
         </div>
+      
+      <!--
+            Dialog presented when adding sensor to tag.
+            TODO: get this on demand (i.e. with AJAX)
+      -->
+      <div id="dialog-form-add-sensor" title="Add Sensor to Tag">
+        <g:form action="save" >
+            <div class="dialog">
+                <table>
+                    <tbody>
+
+                        <tr class="prop">
+                            <td valign="top" class="name">
+                                <label for="transmitterType"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></label>
+                            </td>
+                            <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
+                                <g:select name="transmitterTypeId" from="${au.org.emii.aatams.TransmitterType.list()}" optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
+
+                            </td>
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name">
+                                <label for="sensorPingCode"><g:message code="sensor.pingCode.label" default="Ping Code" /></label>
+                            </td>
+                            <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'pingCode', 'errors')}">
+                                <g:textField name="sensorPingCode" value="${fieldValue(bean: sensorInstance, field: 'pingCode')}" />
+
+                            </td>
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name">
+                                <label for="slope"><g:message code="sensor.slope.label" default="Slope" /></label>
+                            </td>
+                            <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'slope', 'errors')}">
+                                <g:textField name="slope" value="${fieldValue(bean: sensorInstance, field: 'slope')}" />
+
+                            </td>
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name">
+                                <label for="intercept"><g:message code="sensor.intercept.label" default="Intercept" /></label>
+                            </td>
+                            <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'intercept', 'errors')}">
+                                <g:textField name="intercept" value="${fieldValue(bean: sensorInstance, field: 'intercept')}" />
+
+                            </td>
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name">
+                                <label for="unit"><g:message code="sensor.unit.label" default="Unit" /></label>
+                            </td>
+                            <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'unit', 'errors')}">
+                                <g:textField name="unit" value="${sensorInstance?.unit}" />
+
+                            </td>
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name">
+                                <label for="status"><g:message code="sensor.status.label" default="Status" /></label>
+                            </td>
+                            <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'status', 'errors')}">
+                                <g:select name="statusId" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${sensorInstance?.status?.id}"  />
+
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </g:form>
+      </div>
+
     </body>
 </html>

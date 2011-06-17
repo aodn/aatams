@@ -1,7 +1,7 @@
 package au.org.emii.aatams
 
 /**
- * Ping or Sensor type (e.g. PING, DEPTH, TEMPERATURE, ACCELEROMETER).
+ * Ping or Sensor type (e.g. PINGER, DEPTH, TEMPERATURE, ACCELEROMETER).
  */
 class TransmitterType 
 {

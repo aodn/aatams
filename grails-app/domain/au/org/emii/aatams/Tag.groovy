@@ -7,10 +7,13 @@ class Tag extends Device
     String codeMap
     Integer pingCode
 
+    TransmitterType transmitterType
+
     static constraints =
     {
         codeMap(blank:false)
         pingCode()
+        transmitterType()
     }
     
     static transients = ['codeMapPingCode']
@@ -25,6 +28,11 @@ class Tag extends Device
      */
     String getCodeMapPingCode()
     {
-        return codeMap + " - " + String.valueOf(pingCode)
+        return codeMap + "-" + String.valueOf(pingCode)
+    }
+    
+    static String constructCodeName(params)
+    {
+        return params.codeMap + "-" + params.pingCode
     }
 }

@@ -16,11 +16,21 @@ class TagController {
     def create = {
         def tagInstance = new Tag()
         tagInstance.properties = params
+        
+        // Default to NEW.
+        tagInstance.status = DeviceStatus.findByStatus('NEW')
+        
         return [tagInstance: tagInstance]
     }
 
     def save = {
         def tagInstance = new Tag(params)
+        
+        // codeName is derived from code space and ping code.
+        String codeName = Tag.constructCodeName(params)
+        tagInstance.codeName = codeName
+        tagInstance.transmitterType = TransmitterType.findByTransmitterTypeName('PINGER')
+        
         if (tagInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.id])}"
             redirect(action: "show", id: tagInstance.id)
@@ -65,6 +75,11 @@ class TagController {
                 }
             }
             tagInstance.properties = params
+
+            // codeName is derived from code space and ping code.
+            String codeName = Tag.constructCodeName(params)
+            tagInstance.codeName = codeName
+
             if (!tagInstance.hasErrors() && tagInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.id])}"
                 redirect(action: "show", id: tagInstance.id)

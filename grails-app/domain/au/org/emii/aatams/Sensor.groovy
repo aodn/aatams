@@ -3,14 +3,13 @@ package au.org.emii.aatams
 /**
  * Represents a single sensor belonging to a tag (there can be more than one
  * sensor on each tag).
+ * 
+ * Sensors are themselves modelled as tags, as that's how they appear to users
+ * (i.e. as separate tags) even though they physically belong to a Tag.
  */
-class Sensor 
+class Sensor extends Tag
 {
     static belongsTo = [tag:Tag]
-    
-    String codeMap
-    Integer pingCode
-    TransmitterType transmitterType
     
     /**
      * Sensor units.

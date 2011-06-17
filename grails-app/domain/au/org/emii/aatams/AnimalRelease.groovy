@@ -1,5 +1,6 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.util.ListUtils
 import com.vividsolutions.jts.geom.Point
 
 /**
@@ -14,7 +15,7 @@ class AnimalRelease
 {
     static belongsTo = [project: Project]
     static hasMany = [surgeries: Surgery, measurements: AnimalMeasurement]
-    
+    static transients = ['tags']
     /**
      * Animal that has been captured and released.
      */
@@ -40,6 +41,11 @@ class AnimalRelease
         releaseLocality()
         releaseLocation()
         releaseDateTime(max:new Date())
-        comments()
+        comments(nullable:true)
+    }
+    
+    String getTags()
+    {
+        return ListUtils.fold(surgeries.tag, "codeName")
     }
 }

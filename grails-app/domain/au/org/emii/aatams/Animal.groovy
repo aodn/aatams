@@ -2,13 +2,12 @@ package au.org.emii.aatams
 
 class Animal 
 {
-    // TODO: revisit
-    String classification
+    Species species
     Sex sex
     
     String toString()
     {
-        return String.valueOf(classification) + ", sex: " + String.valueOf(sex)
+        return String.valueOf(species) + ", sex: " + String.valueOf(sex)
     }
     
 }

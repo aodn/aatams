@@ -113,7 +113,7 @@
                                     <label for="comments"><g:message code="animalRelease.comments.label" default="Comments" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'comments', 'errors')}">
-                                    <g:textField name="comments" value="${animalReleaseInstance?.comments}" />
+                                    <g:textArea name="comments" value="${animalReleaseInstance?.comments}" />
 
                                 </td>
                             </tr>

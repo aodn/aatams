@@ -48,16 +48,6 @@
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="principalInvestigator"><g:message code="project.principalInvestator.label" default="Principal Investigator" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'principalInvestator', 'errors')}">
-                                    <g:select name="principalInvestigator.id" from="${au.org.emii.aatams.ProjectRole.list()}" optionKey="id" value="${projectInstance?.principalInvestigator?.id}"  />
-
-                                </td>
-                            </tr>
-                        
                         </tbody>
                     </table>
                 </div>

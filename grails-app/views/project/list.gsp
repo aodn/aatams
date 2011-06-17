@@ -26,10 +26,10 @@
                         
                             <g:sortableColumn property="description" title="${message(code: 'project.description.label', default: 'Description')}" />
                         
-                            <g:sortableColumn property="principalInvestigator" title="${message(code: 'project.principalInvestigator.label', default: 'Principal Investigator')}" />
-                        
                             <g:sortableColumn property="organisations" title="${message(code: 'project.organisations.label', default: 'Organisations')}" />
 
+                            <g:sortableColumn property="principalInvestigator" title="${message(code: 'project.principalInvestigator.label', default: 'Principal Investigator')}" />
+                        
                             <g:sortableColumn property="people" title="${message(code: 'project.people.label', default: 'People')}" />
 
                         </tr>
@@ -42,9 +42,9 @@
                         
                             <td>${fieldValue(bean: projectInstance, field: "description")}</td>
                         
-                            <td>${fieldValue(bean: projectInstance.principalInvestigator, field: "person")}</td>
-
                             <td>${fieldValue(bean: projectInstance, field: "organisations")}</td>
+
+                            <td>${fieldValue(bean: projectInstance, field: "principalInvestigators")}</td>
 
                             <td>${fieldValue(bean: projectInstance, field: "people")}</td>
                             

@@ -46,7 +46,7 @@
                                   <label for="pingCode"><g:message code="sensor.pingCode.label" default="Ping Code" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'pingCode', 'errors')}">
-                                    <g:textField name="pingCode" value="${fieldValue(bean: sensorInstance, field: 'pingCode')}" />
+                                    <g:textField name="pingCode" value="${sensorInstance?.pingCode}" />
 
                                 </td>
                             </tr>

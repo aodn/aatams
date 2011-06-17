@@ -83,8 +83,7 @@
                                   <label for="pingCode"><g:message code="tag.pingCode.label" default="Ping Code" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'pingCode', 'errors')}">
-                                    <g:textField name="pingCode" value="${fieldValue(bean: tagInstance, field: 'pingCode')}" />
-
+                                    <g:textField name="pingCode" value="${tagInstance?.pingCode}" />
                                 </td>
                             </tr>
                         

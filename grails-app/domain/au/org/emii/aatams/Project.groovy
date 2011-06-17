@@ -8,21 +8,15 @@ class Project
                       projectRoles:ProjectRole,
                       devices:Device]
                   
-    static transients = ['organisations', 'people']
+    static transients = ['organisations', 'people', 'principalInvestigators']
     
     String name
     String description
 
-    /**
-     * Each project must have one and only one principal investigator.
-     */
-    ProjectRole principalInvestigator
-    
     static constraints = 
     {
         name(blank:false, unique:true)
         description(blank:true)
-        principalInvestigator(nullable:true)
     }
     
     String toString()
@@ -38,6 +32,15 @@ class Project
     String getPeople()
     {
         return ListUtils.fold(projectRoles, "person")
+    }
+    
+    String getPrincipalInvestigators()
+    {
+        ProjectRoleType piRoleType = ProjectRoleType.findByDisplayName('Principal Investigator');
+        def principalInvestigators = projectRoles.findAll { it.roleType == piRoleType}
+
+        return ListUtils.fold(principalInvestigators,
+                              "person")
     }
     
     /**

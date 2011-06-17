@@ -154,8 +154,6 @@ class BootStrap
                                     person: joeBloggs,
                                     roleType: principalInvestigator,
                                     access: ProjectAccess.READ_WRITE).save(failOnError: true)
-                sealCountProject.setPrincipalInvestigator(sealProjectInvestigator)
-                sealCountProject.save(failOnError: true)
                                 
                 ProjectRole sealAdmin =
                     new ProjectRole(project:sealCountProject,

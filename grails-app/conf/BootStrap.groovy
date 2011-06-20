@@ -338,25 +338,16 @@ class BootStrap
                 MeasurementUnit metres = new MeasurementUnit(unit:'m').save(failOnError:true)
                 MeasurementUnit kg = new MeasurementUnit(unit:'kg').save(failOnError:true)
                 
-                AnimalMeasurement whiteShark1Length = 
-                    new AnimalMeasurement(type:length,
-                                          value:2.5f,
-                                          unit:metres,
-                                          estimate:false).save(failOnError:true)
-                AnimalMeasurement whiteShark1Weight = 
-                    new AnimalMeasurement(type:weight,
-                                          value:200f,
-                                          unit:kg,
-                                          estimate:true).save(failOnError:true)
-                                      
                 SurgeryTreatmentType antibiotic = new SurgeryTreatmentType(type:'ANTIBIOTIC').save(failOnError:true)
+                SurgeryTreatmentType anesthetic = new SurgeryTreatmentType(type:'ANESTHETIC').save(failOnError:true)
+                SurgeryType internal = new SurgeryType(type:'INTERNAL').save(failOnError:true)
                 SurgeryType external = new SurgeryType(type:'EXTERNAL').save(failOnError:true)
                 
                 
                 AnimalRelease whiteShark1Release =
                     new AnimalRelease(project:tunaProject,
                                       surgeries:[],
-                                      measurements:[whiteShark1Length, whiteShark1Weight],
+                                      measurements:[],
                                       animal:whiteShark1,
                                       captureLocality:'Neptune Islands',
                                       captureLocation:(Point)reader.read("POINT(20 20)"),
@@ -364,6 +355,20 @@ class BootStrap
                                       releaseLocality:'Neptune Islands',
                                       releaseLocation:(Point)reader.read("POINT(20 20)"),
                                       releaseDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:15:00")).save(failOnError:true)
+                                      
+                AnimalMeasurement whiteShark1Length = 
+                    new AnimalMeasurement(release:whiteShark1Release,
+                                          type:length,
+                                          value:2.5f,
+                                          unit:metres,
+                                          estimate:false).save(failOnError:true)
+                                      
+                AnimalMeasurement whiteShark1Weight = 
+                    new AnimalMeasurement(release:whiteShark1Release,
+                                          type:weight,
+                                          value:200f,
+                                          unit:kg,
+                                          estimate:true).save(failOnError:true)
                                       
                                       
                 Surgery surgery1 = 

@@ -23,23 +23,17 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalRelease.id.label" default="Id" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "id")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.project.label" default="Project" /></td>
                             
                             <td valign="top" class="value"><g:link controller="project" action="show" id="${animalReleaseInstance?.project?.id}">${animalReleaseInstance?.project?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
+                        
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalRelease.animal.label" default="Animal" /></td>
+                            <td valign="top" class="name"><g:message code="animalRelease.animal.species.label" default="Species" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="animal" action="show" id="${animalReleaseInstance?.animal?.id}">${animalReleaseInstance?.animal?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${animalReleaseInstance?.animal?.species}</td>
                             
                         </tr>
                     
@@ -61,6 +55,95 @@
                             <td valign="top" class="name"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></td>
                             
                             <td valign="top" class="value"><g:formatDate date="${animalReleaseInstance?.captureDateTime}" /></td>
+                            
+                        </tr>
+                    
+                        <tr>
+                            <td valign="top" class="name">
+                              <label for="surgeries"><g:message code="animalRelease.surgeries.label" default="Surgeries" /></label>
+                            </td>
+
+                            <td valign="top" class="value">
+
+                              <table class="nested">
+                                <thead>
+                                  <tr>
+                                    <th>Date/Time</th>
+                                    <th>Tag</th>
+                                    <th>Type</th>
+                                    <th>Sutures</th>
+                                    <th>Treatment</th>
+                                    <th>Person</th>
+                                    <th>Comments</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="surgeries_table_body">
+                                  <g:each in="${animalReleaseInstance?.surgeries?}" var="s">
+                                    <tr>
+
+                                      <td valign="top" class="value">${s?.timestamp?.encodeAsHTML()}</td>
+                                      <td valign="top" class="value">
+                                        <g:link controller="tag" action="show" id="${s?.tag?.id}">${s?.tag}</g:link>
+                                      </td>
+                                      <td valign="top" class="value">${s?.type}</td>
+                                      <td valign="top" class="value">${s?.sutures}</td>
+                                      <td valign="top" class="value">${s?.treatmentType}</td>
+                                      <td valign="top" class="value">
+                                        <g:link controller="person" action="show" id="${s?.surgeon?.id}">${s?.surgeon}</g:link>
+                                      </td>
+                                      <td valign="top" class="value">${s?.comments}</td>
+
+                                    </tr>
+
+                                  </g:each>
+
+                                </tbody>
+                              </table>
+
+                            </td>  
+                        </tr>
+
+                        <tr>
+                            <td valign="top" class="name">
+                              <label for="measurements"><g:message code="animalRelease.measurements.label" default="Measurements" /></label>
+                            </td>
+
+                            <td valign="top" class="value">
+
+                              <table class="nested">
+                                <thead>
+                                  <tr>
+                                    <th>Type</th>
+                                    <th>Value</th>
+                                    <th>Units</th>
+                                    <th>Estimated</th>
+                                    <th>Comments</th>
+                                  </tr>
+                                </thead>
+                                <tbody id="measurements_table_body">
+                                  <g:each in="${animalReleaseInstance?.measurements?}" var="m">
+                                    <tr>
+
+                                      <td valign="top" class="value">${m?.type?.type}</td>
+                                      <td valign="top" class="value">${m?.value}</td>
+                                      <td valign="top" class="value">${m?.unit?.unit}</td>
+                                      <td valign="top" class="value">${m?.estimate}</td>
+                                      <td valign="top" class="value">${m?.comments}</td>
+
+                                    </tr>
+
+                                  </g:each>
+
+                                </tbody>
+                              </table>
+
+                            </td>
+                        </tr>
+                        
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="animalRelease.animal.sex.label" default="Sex" /></td>
+                            
+                            <td valign="top" class="value">${animalReleaseInstance?.animal?.sex}</td>
                             
                         </tr>
                     
@@ -89,32 +172,6 @@
                             <td valign="top" class="name"><g:message code="animalRelease.comments.label" default="Comments" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "comments")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalRelease.measurements.label" default="Measurements" /></td>
-                            
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${animalReleaseInstance.measurements}" var="m">
-                                    <li><g:link controller="animalMeasurement" action="show" id="${m.id}">${m?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalRelease.surgeries.label" default="Surgeries" /></td>
-                            
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${animalReleaseInstance.surgeries}" var="s">
-                                    <li><g:link controller="surgery" action="show" id="${s.id}">${s?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
                             
                         </tr>
                     

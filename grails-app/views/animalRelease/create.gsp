@@ -23,6 +23,11 @@
                 <g:renderErrors bean="${animalReleaseInstance}" as="list" />
             </div>
             </g:hasErrors>
+            <g:hasErrors bean="${animalInstance}">
+            <div class="errors">
+                <g:renderErrors bean="${animalInstance}" as="list" />
+            </div>
+            </g:hasErrors>
             <g:form action="save" >
                 <div class="dialog">
                     <table>
@@ -40,11 +45,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="animal"><g:message code="animalRelease.animal.label" default="Animal" /></label>
+                                    <label for="species"><g:message code="animalRelease.animal.species.label" default="Species" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'animal', 'errors')}">
-                                    <g:select name="animal.id" from="${au.org.emii.aatams.Animal.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.id}"  />
-
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'species', 'errors')}">
+                                    <g:select name="species.id" from="${au.org.emii.aatams.Species.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.species?.id}"  />
                                 </td>
                             </tr>
                         
@@ -78,6 +82,20 @@
                                 </td>
                             </tr>
                         
+                            <!-- TODO: surgeries -->
+                            
+                            <!-- TODO: measurements -->
+                            
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="sex"><g:message code="animalRelease.animal.sex.label" default="Sex" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'sex', 'errors')}">
+                                    <g:select name="sex.id" from="${au.org.emii.aatams.Sex.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.sex?.id}"  />
+                                </td>
+                            </tr>
+                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label for="releaseLocality"><g:message code="animalRelease.releaseLocality.label" default="Release Locality" /></label>

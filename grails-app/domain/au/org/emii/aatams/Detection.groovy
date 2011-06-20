@@ -11,6 +11,9 @@ import com.vividsolutions.jts.geom.Point
  */
 class Detection 
 {
+    /**
+     * UTC timestamp.
+     */
     Date timestamp
     
     static belongsTo = [receiver: Receiver]

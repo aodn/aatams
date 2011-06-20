@@ -11,9 +11,11 @@
 
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.selectlist.js')}"></script>
 
+    <script type="text/javascript" src="${resource(dir:'js',file:'addmeasurementtoanimalrelease.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'addorganisationtoproject.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'addpersontoproject.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'addsensortotag.js')}"></script>
+    <script type="text/javascript" src="${resource(dir:'js',file:'addsurgerytoanimalrelease.js')}"></script>
 
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>
 <!--    <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui-lightness/jquery-ui-1.8.10.custom.css')}"/>-->

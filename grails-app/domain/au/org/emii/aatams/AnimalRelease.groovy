@@ -48,4 +48,9 @@ class AnimalRelease
     {
         return ListUtils.fold(surgeries.tag, "codeName")
     }
+    
+    String toString()
+    {
+        return String.valueOf(project) + " - " + String.valueOf(animal?.species) + " - " + String.valueOf(releaseDateTime)
+    }
 }

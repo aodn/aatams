@@ -30,16 +30,16 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animal.classification.label" default="Classification" /></td>
+                            <td valign="top" class="name"><g:message code="animal.sex.label" default="Sex" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: animalInstance, field: "classification")}</td>
+                            <td valign="top" class="value"><g:link controller="sex" action="show" id="${animalInstance?.sex?.id}">${animalInstance?.sex?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animal.sex.label" default="Sex" /></td>
+                            <td valign="top" class="name"><g:message code="animal.species.label" default="Species" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="sex" action="show" id="${animalInstance?.sex?.id}">${animalInstance?.sex?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value"><g:link controller="species" action="show" id="${animalInstance?.species?.id}">${animalInstance?.species?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     

@@ -2,6 +2,8 @@ package au.org.emii.aatams
 
 class AnimalMeasurement 
 {
+    static belongsTo = [release: AnimalRelease]
+    
     AnimalMeasurementType type
     Float value
     MeasurementUnit unit

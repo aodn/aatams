@@ -30,20 +30,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="classification"><g:message code="animal.classification.label" default="Classification" /></label>
+                                    <label for="sex"><g:message code="animal.sex.label" default="Sex" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalInstance, field: 'classification', 'errors')}">
-                                    <g:textField name="classification" value="${animalInstance?.classification}" />
+                                <td valign="top" class="value ${hasErrors(bean: animalInstance, field: 'sex', 'errors')}">
+                                    <g:select name="sex.id" from="${au.org.emii.aatams.Sex.list()}" optionKey="id" value="${animalInstance?.sex?.id}"  />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="sex"><g:message code="animal.sex.label" default="Sex" /></label>
+                                    <label for="species"><g:message code="animal.species.label" default="Species" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalInstance, field: 'sex', 'errors')}">
-                                    <g:select name="sex.id" from="${au.org.emii.aatams.Sex.list()}" optionKey="id" value="${animalInstance?.sex?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: animalInstance, field: 'species', 'errors')}">
+                                    <g:select name="species.id" from="${au.org.emii.aatams.Species.list()}" optionKey="id" value="${animalInstance?.species?.id}"  />
 
                                 </td>
                             </tr>

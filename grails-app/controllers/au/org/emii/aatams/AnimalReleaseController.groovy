@@ -21,12 +21,33 @@ class AnimalReleaseController {
 
     def save = {
         def animalReleaseInstance = new AnimalRelease(params)
-        if (animalReleaseInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.id])}"
-            redirect(action: "show", id: animalReleaseInstance.id)
+        
+        log.info("params: " + params)
+        
+        // The request does not include an Animal instance as such (just species
+        // and sex) - so we need to create one here.
+        Sex sex = Sex.get(params.sex.id)
+        Species species = Species.get(params.species.id)
+        Animal animalInstance = new Animal(sex:sex, species:species)
+        
+        animalReleaseInstance.animal = animalInstance
+        
+        if (animalInstance.save(flush:true))
+        {
+            if (animalReleaseInstance.save(flush: true)) 
+            {
+                flash.message = "${message(code: 'default.created.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.id])}"
+                redirect(action: "show", id: animalReleaseInstance.id)
+            }
+            else 
+            {
+                render(view: "create", model: [animalReleaseInstance: animalReleaseInstance, animal:animalInstance])
+            }
         }
-        else {
-            render(view: "create", model: [animalReleaseInstance: animalReleaseInstance])
+        else 
+        {
+            log.error("animalInstance.save() error: " + animalInstance.errors)
+            render(view: "create", model: [animalReleaseInstance: animalReleaseInstance, animal:animalInstance])
         }
     }
 

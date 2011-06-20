@@ -1,5 +1,8 @@
 package au.org.emii.aatams
 
+//import grails.converters.deep.JSON
+import grails.converters.JSON
+
 class SurgeryController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -19,13 +22,33 @@ class SurgeryController {
         return [surgeryInstance: surgeryInstance]
     }
 
-    def save = {
+    def save = 
+    {
         def surgeryInstance = new Surgery(params)
-        if (surgeryInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'surgery.label', default: 'Surgery'), surgeryInstance.id])}"
-            redirect(action: "show", id: surgeryInstance.id)
+        if (surgeryInstance.save(flush: true)) 
+        {
+            // Deep rendering of object not working due to geometry type
+            // Need to use custom object marshaller.
+            JSON.registerObjectMarshaller(Surgery.class)
+            {
+                def returnArray = [:]
+                returnArray['id'] = it.id
+                returnArray['timestamp'] = it.timestamp
+                returnArray['tag'] = it.tag
+                returnArray['type'] = it.type
+                returnArray['sutures'] = it.sutures
+                returnArray['treatmentType'] = it.treatmentType
+                returnArray['surgeon'] = it.surgeon
+                returnArray['comments'] = it.comments
+                
+                return returnArray
+            }
+            
+            render surgeryInstance as JSON
         }
-        else {
+        else 
+        {
+            log.error(surgeryInstance.errors)
             render(view: "create", model: [surgeryInstance: surgeryInstance])
         }
     }

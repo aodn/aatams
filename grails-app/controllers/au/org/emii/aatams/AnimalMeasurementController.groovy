@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import grails.converters.JSON
+
 class AnimalMeasurementController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -21,11 +23,27 @@ class AnimalMeasurementController {
 
     def save = {
         def animalMeasurementInstance = new AnimalMeasurement(params)
-        if (animalMeasurementInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.id])}"
-            redirect(action: "show", id: animalMeasurementInstance.id)
+        if (animalMeasurementInstance.save(flush: true)) 
+        {
+            // Deep rendering of object not working due to geometry type
+            // Need to use custom object marshaller.
+            JSON.registerObjectMarshaller(AnimalMeasurement.class)
+            {
+                def returnArray = [:]
+                returnArray['id'] = it.id
+                returnArray['type'] = it.type
+                returnArray['value'] = it.value
+                returnArray['unit'] = it.unit
+                returnArray['estimate'] = it.estimate
+                returnArray['comments'] = it.comments
+                
+                return returnArray
+            }
+            
+            render animalMeasurementInstance as JSON
         }
         else {
+            log.error(animalMeasurementInstance.errors)
             render(view: "create", model: [animalMeasurementInstance: animalMeasurementInstance])
         }
     }

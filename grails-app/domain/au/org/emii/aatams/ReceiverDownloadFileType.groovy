@@ -14,7 +14,7 @@ enum ReceiverDownloadFileType
         this.type = type
     }
     
-    static ReceiverDownloadFile fromPath(String path)
+    static ReceiverDownloadFileType fromPath(String path)
     {
         if (path.endsWith(CSV.type))
         {

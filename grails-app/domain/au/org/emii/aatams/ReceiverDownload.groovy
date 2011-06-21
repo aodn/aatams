@@ -4,7 +4,7 @@ package au.org.emii.aatams
  * Data downloaded from receiver after recovery (hence associated with a 
  * ReceiverRecovery).
  */
-class ReceiverDownload 
+class ReceiverDownload
 {
     static belongsTo = [receiverRecovery: ReceiverRecovery]
     static hasMany = [downloadFiles: ReceiverDownloadFile]
@@ -36,14 +36,13 @@ class ReceiverDownload
     
     static constraints = 
     {
-        receiverRecovery()
-        downloadDate(max:new Date())
-        clockDrift()
-        pingCount(min:0)
-        detectionCount(min:0)
-        comments(blank:true)
-        downloader()
-        batteryVoltage(min:0F)
-        batteryDays(min:0)
+        downloadDate(nullable:true, max:new Date())
+        clockDrift(nullable:true)
+        pingCount(nullable:true, min:0)
+        detectionCount(nullable:true, min:0)
+        comments(nullable:true, blank:true)
+        downloader(nullable:true, )
+        batteryVoltage(nullable:true, min:0F)
+        batteryDays(nullable:true, min:0)
     }
 }

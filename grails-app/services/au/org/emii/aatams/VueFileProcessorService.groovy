@@ -1,14 +1,12 @@
-package au.org.emii.aatams.upload
+package au.org.emii.aatams
 
-import au.org.emii.aatams.Detection
-
-import com.lucastex.grails.fileuploader.UFile
 import org.grails.plugins.csv.CSVMapReader
+import org.springframework.web.multipart.MultipartFile
 
 /**
  * Process a file downloaded from receiver's VUE application.
  */
-class VueFileProcessorService extends AbstractFileProcessorService
+class VueFileProcessorService
 {
     def detectionFactoryService
     
@@ -17,28 +15,27 @@ class VueFileProcessorService extends AbstractFileProcessorService
     /**
      * Determine whether or not the given file is parseable by this processor.
      */
-    boolean isParseable(fileId)
+    boolean isParseable(ReceiverDownloadFile downloadFile)
     {
-        UFile file = getUFile(fileId)
         
         // Just go by file suffix for now (might come up with a better way
         // of doing this.
-        if (file.name.endsWith(".csv"))
+        if (downloadFile.name.endsWith(".csv"))
         {
-            log.debug("File " + file.name + " is parseable")
+            log.debug("File " + downloadFile.name + " is parseable")
             return true
         }
         
-        log.debug("File " + file.name + " is not parseable")
+        log.debug("File " + downloadFile.name + " is not parseable")
         return false
     }
     
-    void process(fileId) throws FileProcessingException
+    void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
     {
-        assert(isParseable(fileId)): "File is not parseable, file ID: " + fileId
-        ProcessedUploadFile file = getFile(fileId)
-        file.status = FileProcessingStatus.PROCESSING
-        file.save()
+        assert(isParseable(downloadFile)): "File is not parseable, downloadFile: " + String.valueOf(downloadFile)
+        
+        downloadFile.status = FileProcessingStatus.PROCESSING
+        downloadFile.save()
         
         //
         // Expects csv files with the following columns (including a header row).
@@ -54,7 +51,7 @@ class VueFileProcessorService extends AbstractFileProcessorService
         //      Latitude	
         //      Longitude
         //
-        new File(file.uFile.path).toCsvMapReader().eachWithIndex{ map, i ->
+        new File(downloadFile.path).toCsvMapReader().eachWithIndex{ map, i ->
             
             log.debug("Processing record number: " + String.valueOf(i))
             
@@ -63,7 +60,7 @@ class VueFileProcessorService extends AbstractFileProcessorService
             log.debug("Successfully processed record number: " + String.valueOf(i))
         }
 
-        file.status = FileProcessingStatus.PROCESSED
-        file.save()
+        downloadFile.status = FileProcessingStatus.PROCESSED
+        downloadFile.save()
     }   
 }

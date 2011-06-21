@@ -101,12 +101,7 @@ log4j = {
 //
 //  File uploader configuration.
 //
-fileuploader
+fileimport
 {
-    detectionUpload
-    {
-        //  maxSize = ???
-        allowedExtensions = ["csv", "vrl", "rld"]
-        path = "/tmp/aatams/test_uploads"
-    }
+    path = "/Users/jburgess/Documents/aatams/test_uploads"
 }

@@ -18,39 +18,74 @@
             <div class="message">${flash.message}</div>
             </g:if>
             <div class="list">
+              
                 <table>
+                    <thead>
+                      <th colspan="6">Deployment Details</th>
+                      <th></th>
+                      <th colspan="4">Recovery Details</th>
+                    </thead>
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'receiverRecovery.id.label', default: 'Id')}" />
+                            <g:sortableColumn property="deploymentDate" title="${message(code: 'receiverDeployment.deploymentDate.label', default: 'Deployment Date')}" />
+
+                            <g:sortableColumn property="installation" title="${message(code: 'receiverDeployment.installation.label', default: 'Installation')}" />
+                        
+                            <g:sortableColumn property="station" title="${message(code: 'receiverDeployment.station.label', default: 'Station')}" />
+                        
+                            <th><g:message code="receiverDeployment.station.location.label" default="Location" /></th>
+                        
+                            <g:sortableColumn property="receiver" title="${message(code: 'receiverDeployment.receiver.label', default: 'Receiver')}" />
+                        
+                            <th><g:message code="receiverDeployment.station.depth.label" default="Depth" /></th>
+                        
+                            <!-- New/edit column -->
+                            <th></th>
+                            
+                            <g:sortableColumn property="recoverer" title="${message(code: 'receiverRecovery.recoverer.label', default: 'Recovered By')}" />
+
+                            <th><g:message code="receiverRecovery.location" default="Location" /></th>
                         
                             <g:sortableColumn property="recoveryDate" title="${message(code: 'receiverRecovery.recoveryDate.label', default: 'Recovery Date')}" />
                         
-                            <g:sortableColumn property="location" title="${message(code: 'receiverRecovery.location.label', default: 'Location')}" />
-                        
-                            <th><g:message code="receiverRecovery.status.label" default="Status" /></th>
-                        
-                            <th><g:message code="receiverRecovery.download.label" default="Download" /></th>
-                        
-                            <th><g:message code="receiverRecovery.deployment.label" default="Deployment" /></th>
+                            <g:sortableColumn property="status" title="${message(code: 'receiverRecovery.status.label', default: 'Status')}" />
                         
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${receiverRecoveryInstanceList}" status="i" var="receiverRecoveryInstance">
+                    <g:each in="${receiverDeploymentInstanceList}" status="i" var="receiverDeployment">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+
+                            <td><g:formatDate date="${receiverDeployment.deploymentDate}" /></td>
                         
-                            <td><g:link action="show" id="${receiverRecoveryInstance.id}">${fieldValue(bean: receiverRecoveryInstance, field: "id")}</g:link></td>
+                            <td><g:link controller="installation" action="show" id="${receiverDeployment?.station?.installation?.id}">${receiverDeployment?.station?.installation}</g:link></td>
+
+                            <td><g:link controller="installationStation" action="show" id="${receiverDeployment?.station?.id}">${receiverDeployment?.station}</g:link></td>
                         
-                            <td><g:formatDate date="${receiverRecoveryInstance.recoveryDate}" /></td>
-                        
-                            <td>${fieldValue(bean: receiverRecoveryInstance, field: "location")}</td>
-                        
-                            <td>${fieldValue(bean: receiverRecoveryInstance, field: "status")}</td>
-                        
-                            <td>${fieldValue(bean: receiverRecoveryInstance, field: "download")}</td>
-                        
-                            <td>${fieldValue(bean: receiverRecoveryInstance, field: "deployment")}</td>
+                            <td>${fieldValue(bean: receiverDeployment?.station, field: "location")}</td>
+                            
+                            <td><g:link action="receiver" controller="receiver" action="show" id="${receiverDeployment?.receiver?.id}">${receiverDeployment?.receiver}</g:link></td>
+
+                            <td>${fieldValue(bean: receiverDeployment, field: "depthBelowSurfaceM")}</td>
+
+                            <td>
+                              <g:if test="${receiverDeployment?.recovery == null}">
+                                <g:link class="create" action="create" params="[deploymentId:receiverDeployment.id]"><g:message code="default.new.label" args="[entityName]" /></g:link>
+                              </g:if>
+                              <g:else>
+                                <g:link action="show" id="${receiverDeployment?.recovery?.id}">Details</g:link>
+                              </g:else>
+                            </td>
+                            
+                            <td>${fieldValue(bean: receiverDeployment?.recovery?.recoverer, field: "person")}</td>
+
+                            <td>${fieldValue(bean: receiverDeployment?.recovery, field: "location")}</td>
+
+                            <td><g:formatDate date="${receiverDeployment?.recovery?.recoveryDate}" /></td>
+
+                            <td>${fieldValue(bean: receiverDeployment?.recovery, field: "status")}</td>
+
                         
                         </tr>
                     </g:each>
@@ -58,7 +93,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${receiverRecoveryInstanceTotal}" />
+                <g:paginate total="${receiverDeploymentInstanceTotal}" />
             </div>
         </div>
     </body>

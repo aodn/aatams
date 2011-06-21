@@ -48,6 +48,14 @@ class ReceiverDeployment
     
     String comments
     
+    /**
+     * Will initially be NULL, until the recovery occurs.  This relationship
+     * is here for the "receiver recovery" list view, which is actually a list
+     * of receiver deployments, including those with and without associated
+     * recoveries.
+     */
+    ReceiverRecovery recovery
+    
     static constraints =
     {
         receiver()
@@ -62,6 +70,7 @@ class ReceiverDeployment
         receiverOrientation(nullable:true)
         location(nullable:true)
         comments(nullable:true)
+        recovery(nullable:true)
     }
     
     String toString()

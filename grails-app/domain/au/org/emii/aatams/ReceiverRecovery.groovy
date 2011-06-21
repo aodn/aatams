@@ -14,18 +14,14 @@ class ReceiverRecovery
     Point location
     DeviceStatus status
     ReceiverDownload download
+    ProjectRole recoverer
     
     /**
-     * Every recovery should have a (chronologically) preceding deployment.
+     * Every recovery must have a (chronologically) preceding deployment.
      */
     ReceiverDeployment deployment
     
-    /**
-     * Battery life/voltage at the time the receiver was recovered.
-     */
-    Float batteryLife
-    
-    Float batteryVoltage
+    String comments
 
     static constraints =
     {
@@ -33,9 +29,9 @@ class ReceiverRecovery
         location()
         status()
         download(nullable:true)
+        recoverer()
         deployment()
-        batteryLife(min:0F, nullable:true)
-        batteryVoltage(min:0F, nullable:true)
+        comments(nullable:true)
     }
     
     String toString()

@@ -179,6 +179,7 @@ class BootStrap
                     
                 DeviceStatus newStatus = new DeviceStatus(status:'NEW').save(failOnError: true)
                 DeviceStatus deployedStatus = new DeviceStatus(status:'DEPLOYED').save(failOnError: true)
+                DeviceStatus recoveredStatus = new DeviceStatus(status:'RECOVERED').save(failOnError: true)
                 
                 Receiver rx1 =
                     new Receiver(codeName:String.valueOf(seimensXyz) + " - " + '12345678',
@@ -388,7 +389,17 @@ class BootStrap
                                 sutures:false,
                                 treatmentType:antibiotic,
                                 surgeon:joeBloggs).save(failOnError:true)
+                            
                 
+                // Receiver Recovery.
+                ReceiverRecovery recovery1 = 
+                    new ReceiverRecovery(recoveryDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-17 12:34:56"),
+                                         location:(Point)reader.read("POINT(10 10)"),
+                                         status:recoveredStatus,
+                                         recoverer:sealProjectInvestigator,
+                                         deployment:rx1Bondi,
+                                         batteryLife:12.5f,
+                                         batteryVoltage:3.7f).save(failOnError:true)
             }
         }
     }

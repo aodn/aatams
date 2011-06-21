@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiverRecovery.label', default: 'ReceiverRecovery')}" />
+        <g:set var="receiverDeploymentInstance" value="${receiverRecoveryInstance?.deployment}"/>
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -29,21 +30,83 @@
                 <g:hiddenField name="version" value="${receiverRecoveryInstance?.version}" />
                 <div class="dialog">
                     <table>
+                      
                         <tbody>
                         
+                            <!-- Deployment details -->
                             <tr class="prop">
+                                <td valign="top" class="name">Deployment Details</td>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDate.label" default="Deployment Date" /></td>
+                                <td valign="top" class="value"><g:formatDate date="${receiverDeploymentInstance?.deploymentDate}" /></td>
+
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.station.installation.label" default="Installation" /></td>
+                                <td valign="top" class="value"><g:link controller="installation" action="show" id="${receiverDeploymentInstance?.station?.installation?.id}">${receiverDeploymentInstance?.station?.installation?.encodeAsHTML()}</g:link></td>
+
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.station.label" default="Station" /></td>
+                                <td valign="top" class="value"><g:link controller="installationStation" action="show" id="${receiverDeploymentInstance?.station?.id}">${receiverDeploymentInstance?.station?.encodeAsHTML()}</g:link></td>
+
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.location.label" default="Location" /></td>
+                                <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "location")}</td>
+
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.receiver.label" default="Receiver" /></td>
+                                <td valign="top" class="value"><g:link controller="receiver" action="show" id="${receiverDeploymentInstance?.receiver?.id}">${receiverDeploymentInstance?.receiver?.encodeAsHTML()}</g:link></td>
+
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.acousticReleaseID.label" default="Acoustic Release ID" /></td>
+                                <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "acousticReleaseID")}</td>
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.mooringType.label" default="Mooring Type" /></td>
+                                <td valign="top" class="value">${receiverDeploymentInstance?.mooringType?.encodeAsHTML()}</td>
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.depthBelowSurfaceM.label" default="Depth Below Surface (m)" /></td>
+                                <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "depthBelowSurfaceM")}</td>
+                            </tr>
+
+                          
+                          
+                            <!-- Recovery -->
+                            <tr><td/></tr>
+                            
+                            <tr class="prop">
+                                <td valign="top" class="name">Recovery Details</td>
                                 <td valign="top" class="name">
-                                  <label for="recoveryDate"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></label>
+                                    <label for="recoverer"><g:message code="receiverRecovery.recoverer.label" default="Recovered By" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDate', 'errors')}">
-                                    <g:datePicker name="recoveryDate" precision="day" value="${receiverRecoveryInstance?.recoveryDate}"  />
+                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoverer', 'errors')}">
+                                    <g:select name="recoverer.id" from="${au.org.emii.aatams.ProjectRole.list()}" optionKey="id" value="${receiverRecoveryInstance?.recoverer?.id}"  />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
+                                <td/>
                                 <td valign="top" class="name">
-                                  <label for="location"><g:message code="receiverRecovery.location.label" default="Location" /></label>
+                                    <label for="location"><g:message code="receiverRecovery.location.label" default="Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'location', 'errors')}">
                                     <g:textField name="location" value="${receiverRecoveryInstance?.location}" />
@@ -52,8 +115,20 @@
                             </tr>
                         
                             <tr class="prop">
+                                <td/>
                                 <td valign="top" class="name">
-                                  <label for="status"><g:message code="receiverRecovery.status.label" default="Status" /></label>
+                                    <label for="recoveryDate"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDate', 'errors')}">
+                                    <g:datePicker name="recoveryDate" precision="day" value="${receiverRecoveryInstance?.recoveryDate}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name">
+                                    <label for="status"><g:message code="receiverRecovery.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverRecoveryInstance?.status?.id}"  />
@@ -62,46 +137,52 @@
                             </tr>
                         
                             <tr class="prop">
+                                <td/>
                                 <td valign="top" class="name">
-                                  <label for="download"><g:message code="receiverRecovery.download.label" default="Download" /></label>
+                                    <label for="comments"><g:message code="receiverRecovery.comments.label" default="Comments" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'download', 'errors')}">
-                                    <g:select name="download.id" from="${au.org.emii.aatams.ReceiverDownload.list()}" optionKey="id" value="${receiverRecoveryInstance?.download?.id}" noSelection="['null': '']" />
+                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'comments', 'errors')}">
+                                    <g:textArea name="comments" value="${fieldValue(bean: receiverRecoveryInstance, field: 'comments')}" />
 
                                 </td>
                             </tr>
                         
+                            <!-- Import data file(s) -->
+<%--                            
+                            <tr><td/></tr>
+                            
                             <tr class="prop">
+                                <td valign="top" class="name">Import Data Files</td>
                                 <td valign="top" class="name">
-                                  <label for="deployment"><g:message code="receiverRecovery.deployment.label" default="Deployment" /></label>
+                                    <label for="import">Import VRL</label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'deployment', 'errors')}">
-                                    <g:select name="deployment.id" from="${au.org.emii.aatams.ReceiverDeployment.list()}" optionKey="id" value="${receiverRecoveryInstance?.deployment?.id}"  />
-
+                                <td>
+                                    <input type="file" name="vrlFile" accept="vrl" />
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
+                                <td/>
                                 <td valign="top" class="name">
-                                  <label for="batteryLife"><g:message code="receiverRecovery.batteryLife.label" default="Battery Life" /></label>
+                                    <label for="import">Import RLD</label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'batteryLife', 'errors')}">
-                                    <g:textField name="batteryLife" value="${fieldValue(bean: receiverRecoveryInstance, field: 'batteryLife')}" />
-
+                                <td>
+                                    <input type="file" name="rldFile" accept="rld" />
                                 </td>
                             </tr>
-                        
+                            
                             <tr class="prop">
+                                <td/>
                                 <td valign="top" class="name">
-                                  <label for="batteryVoltage"><g:message code="receiverRecovery.batteryVoltage.label" default="Battery Voltage" /></label>
+                                    <label for="import">Import CSV</label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'batteryVoltage', 'errors')}">
-                                    <g:textField name="batteryVoltage" value="${fieldValue(bean: receiverRecoveryInstance, field: 'batteryVoltage')}" />
-
+                                <td>
+                                    <input type="file" name="csvFile" accept="csv" />
                                 </td>
                             </tr>
-                        
+--%>                            
                         </tbody>
+
                     </table>
                 </div>
                 <div class="buttons">

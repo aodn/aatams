@@ -4,24 +4,68 @@ class ReceiverRecoveryController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def fileProcessorService
+    
     def index = {
         redirect(action: "list", params: params)
     }
 
     def list = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [receiverRecoveryInstanceList: ReceiverRecovery.list(params), receiverRecoveryInstanceTotal: ReceiverRecovery.count()]
+//        [receiverRecoveryInstanceList: ReceiverRecovery.list(params), receiverRecoveryInstanceTotal: ReceiverRecovery.count()]
+
+        // We actually want to display a list of deployments (some with and some
+        // without associated recoveries).
+        // TODO: sort(hasRecovery, date)
+        def receiverDeploymentList = ReceiverDeployment.list(params)
+                                   
+        [receiverDeploymentInstanceList: receiverDeploymentList, receiverDeploymentInstanceTotal: ReceiverDeployment.count()]
     }
 
-    def create = {
+    def create = 
+    {
+        ReceiverDeployment deployment = ReceiverDeployment.get(params.deploymentId)
+        
         def receiverRecoveryInstance = new ReceiverRecovery()
         receiverRecoveryInstance.properties = params
+        receiverRecoveryInstance.deployment = deployment
+        
         return [receiverRecoveryInstance: receiverRecoveryInstance]
     }
 
-    def save = {
+    def save = 
+    {
+        ReceiverDeployment deployment = ReceiverDeployment.get(params.deploymentId)
+        
         def receiverRecoveryInstance = new ReceiverRecovery(params)
-        if (receiverRecoveryInstance.save(flush: true)) {
+        receiverRecoveryInstance.deployment = deployment
+
+        if (receiverRecoveryInstance.save(flush: true)) 
+        {
+            // Create a new receiver download an associate it with the recovery
+            // TODO: may need some extra controls in view to populate download 
+            // fields.
+            ReceiverDownload download = 
+                new ReceiverDownload()
+                
+            download.receiverRecovery = receiverRecoveryInstance
+            download.downloadDate = new Date()
+            download.save(flush:true, failOnErrors:true)
+            
+            def fileMap = request.getFileMap()
+            
+            for (e in fileMap)
+            {
+                log.debug("key: " + e.key)
+                
+                // Kick off processing here.
+                // TODO: uncomment and fix.
+//                runAsync
+//                {
+//                    fileProcessorService.process(download, e.value)
+//                }
+            }
+
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.id])}"
             redirect(action: "show", id: receiverRecoveryInstance.id)
         }

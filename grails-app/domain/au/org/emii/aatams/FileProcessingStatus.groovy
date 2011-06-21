@@ -1,4 +1,4 @@
-package au.org.emii.aatams.upload
+package au.org.emii.aatams
 
 /**
  *
@@ -6,6 +6,7 @@ package au.org.emii.aatams.upload
  */
 enum FileProcessingStatus 
 {
+    ARCHIVED('Archived'),   // But not processed, as such.
     PENDING('Pending'),
     PROCESSING('Processing'),
     PROCESSED('Processed'),
@@ -20,7 +21,7 @@ enum FileProcessingStatus
     
     static list()
     {
-        [PENDING, PROCESSING, PROCESSED, ERROR]
+        [ARCHIVED, PENDING, PROCESSING, PROCESSED, ERROR]
     }
 }
 

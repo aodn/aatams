@@ -5,6 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiverRecovery.label', default: 'ReceiverRecovery')}" />
+        <g:set var="receiverDeploymentInstance" value="${receiverRecoveryInstance?.deployment}"/>
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -22,62 +23,135 @@
                 <table>
                     <tbody>
                     
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverRecovery.id.label" default="Id" /></td>
+                        <tbody>
+                        
+                            <!-- Deployment details -->
+                            <tr class="prop">
+                                <td valign="top" class="name">Deployment Details</td>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDate.label" default="Deployment Date" /></td>
+                                <td valign="top" class="value"><g:formatDate date="${receiverDeploymentInstance?.deploymentDate}" /></td>
+
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.station.installation.label" default="Installation" /></td>
+                                <td valign="top" class="value">
+                                  <g:link controller="installation" action="show" id="${receiverDeploymentInstance?.station?.installation?.id}">${receiverDeploymentInstance?.station?.installation?.encodeAsHTML()}</g:link>
+                                </td>
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.station.label" default="Station" /></td>
+                                <td valign="top" class="value"><g:link controller="installationStation" action="show" id="${receiverDeploymentInstance?.station?.id}">${receiverDeploymentInstance?.station?.encodeAsHTML()}</g:link></td>
+
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.location.label" default="Location" /></td>
+                                <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "location")}</td>
+
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.receiver.label" default="Receiver" /></td>
+                                <td valign="top" class="value"><g:link controller="receiver" action="show" id="${receiverDeploymentInstance?.receiver?.id}">${receiverDeploymentInstance?.receiver?.encodeAsHTML()}</g:link></td>
+
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.acousticReleaseID.label" default="Acoustic Release ID" /></td>
+                                <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "acousticReleaseID")}</td>
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.mooringType.label" default="Mooring Type" /></td>
+                                <td valign="top" class="value">${receiverDeploymentInstance?.mooringType?.encodeAsHTML()}</td>
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.depthBelowSurfaceM.label" default="Depth Below Surface (m)" /></td>
+                                <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "depthBelowSurfaceM")}</td>
+                            </tr>
+
+                          
+                          
+                            <!-- Recovery -->
+                            <tr><td/></tr>
                             
-                            <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "id")}</td>
+                            <tr class="prop">
+                                <td valign="top" class="name">Recovery Details</td>
+                                <td valign="top" class="name"><g:message code="receiverRecovery.recoverer.label" default="Recovered By" /></td>
+                                <td valign="top" class="value"><g:link controller="person" action="show" id="${receiverRecoveryInstance?.recoverer?.person?.id}">${receiverRecoveryInstance?.recoverer?.person?.encodeAsHTML()}</g:link></td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverRecovery.location.label" default="Location" /></td>
+                                <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "location")}</td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></td>
+                                <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "recoveryDate")}</td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverRecovery.status.label" default="Status" /></td>
+                                <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "status")}</td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name"><g:message code="receiverRecovery.comments.label" default="Comments" /></td>
+                                <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "comments")}</td>
+                            </tr>
+                        
+                            <!-- Import data file(s) -->
+                            <!-- TODO -->
+<%--                            
+                            <tr><td/></tr>
                             
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></td>
+                            <tr class="prop">
+                                <td valign="top" class="name">Import Data Files</td>
+                                <td valign="top" class="name">
+                                    <label for="import">Import VRL</label>
+                                </td>
+                                <td>
+                                    <input type="file" name="vrlFile" accept="vrl" />
+                                </td>
+                            </tr>
+
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name">
+                                    <label for="import">Import RLD</label>
+                                </td>
+                                <td>
+                                    <input type="file" name="rldFile" accept="rld" />
+                                </td>
+                            </tr>
                             
-                            <td valign="top" class="value"><g:formatDate date="${receiverRecoveryInstance?.recoveryDate}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverRecovery.location.label" default="Location" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "location")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverRecovery.status.label" default="Status" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${receiverRecoveryInstance?.status?.id}">${receiverRecoveryInstance?.status?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverRecovery.download.label" default="Download" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="receiverDownload" action="show" id="${receiverRecoveryInstance?.download?.id}">${receiverRecoveryInstance?.download?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverRecovery.deployment.label" default="Deployment" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="receiverDeployment" action="show" id="${receiverRecoveryInstance?.deployment?.id}">${receiverRecoveryInstance?.deployment?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverRecovery.batteryLife.label" default="Battery Life" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "batteryLife")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverRecovery.batteryVoltage.label" default="Battery Voltage" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "batteryVoltage")}</td>
-                            
-                        </tr>
-                    
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name">
+                                    <label for="import">Import CSV</label>
+                                </td>
+                                <td>
+                                    <input type="file" name="csvFile" accept="csv" />
+                                </td>
+                            </tr>
+--%>                            
+                        </tbody>
+                      
                     </tbody>
                 </table>
             </div>

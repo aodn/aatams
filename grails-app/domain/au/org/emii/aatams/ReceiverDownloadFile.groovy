@@ -13,14 +13,28 @@ class ReceiverDownloadFile
      */
     URL path
     
+    String name
+    Date importDate
+    
+    FileProcessingStatus status
+
     static constraints =
     {
         type()
         path()
     }
     
+    ReceiverDownloadFile(String fullPath, String name)
+    {
+        this.importDate = new Date()
+        this.name = name
+        this.path = new URL("file://" + fullPath)
+        this.type = ReceiverDownloadFileType.fromPath(fullPath)
+        this.status = FileProcessingStatus.PENDING
+    }
+    
     String toString()
     {
-        return path.getFile()
+        return String.valueOf(path)
     }
 }

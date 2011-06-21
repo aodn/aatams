@@ -1,10 +1,4 @@
-package au.org.emii.aatams.upload
-
-import au.org.emii.aatams.Detection
-import au.org.emii.aatams.Receiver
-import au.org.emii.aatams.Sensor
-import au.org.emii.aatams.SensorDetection
-import au.org.emii.aatams.Tag
+package au.org.emii.aatams
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;

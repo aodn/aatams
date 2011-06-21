@@ -64,7 +64,7 @@ class DetectionFactoryService
                 log.warn("Detection does not belong to either a tag or sensor")
             }
             
-            Float sensorValue = detectionParams[SENSOR_VALUE_COLUMN]?: Float.parseFloat(detectionParams[SENSOR_VALUE_COLUMN])
+            Float sensorValue = (detectionParams[SENSOR_VALUE_COLUMN] != null) ? Float.parseFloat(detectionParams[SENSOR_VALUE_COLUMN]) : null
             sensorDetection.uncalibratedValue = sensorValue
             String sensorUnit = detectionParams[SENSOR_UNIT_COLUMN]
             sensorDetection.sensorUnit = sensorUnit

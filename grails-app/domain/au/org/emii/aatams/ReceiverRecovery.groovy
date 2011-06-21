@@ -25,7 +25,7 @@ class ReceiverRecovery
 
     static constraints =
     {
-        recoveryDate(max:new Date())
+        recoveryDate()
         location()
         status()
         download(nullable:true)

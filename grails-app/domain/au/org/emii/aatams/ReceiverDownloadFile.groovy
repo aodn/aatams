@@ -11,12 +11,14 @@ class ReceiverDownloadFile
     /**
      * Path (including filename) to file.
      */
-    URL path
+    String path
     
     String name
     Date importDate
     
     FileProcessingStatus status
+    
+    String errMsg
 
     static constraints =
     {
@@ -28,7 +30,7 @@ class ReceiverDownloadFile
     {
         this.importDate = new Date()
         this.name = name
-        this.path = new URL("file://" + fullPath)
+        this.path = fullPath
         this.type = ReceiverDownloadFileType.fromPath(fullPath)
         this.status = FileProcessingStatus.PENDING
     }

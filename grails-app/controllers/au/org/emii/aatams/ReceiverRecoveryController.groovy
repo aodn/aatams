@@ -51,6 +51,7 @@ class ReceiverRecoveryController {
             download.receiverRecovery = receiverRecoveryInstance
             download.downloadDate = new Date()
             download.save(flush:true, failOnErrors:true)
+            assert(download != null): "download cannot be null"
             
             def fileMap = request.getFileMap()
             
@@ -59,10 +60,9 @@ class ReceiverRecoveryController {
                 log.debug("key: " + e.key)
                 
                 // Kick off processing here.
-                // TODO: uncomment and fix.
 //                runAsync
 //                {
-//                    fileProcessorService.process(download, e.value)
+                    fileProcessorService.process(download, e.value)
 //                }
             }
 

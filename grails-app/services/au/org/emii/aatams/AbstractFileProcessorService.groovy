@@ -8,5 +8,5 @@ abstract class AbstractFileProcessorService
 
     abstract boolean isParseable(downloadFile)
     
-    abstract void process(ReceiverDownload receiverDownload, MultipartFile file) throws FileProcessingException
+    abstract void process(receiverDownload, MultipartFile file) throws FileProcessingException
 }

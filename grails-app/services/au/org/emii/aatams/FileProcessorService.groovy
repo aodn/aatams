@@ -9,8 +9,11 @@ class FileProcessorService extends AbstractFileProcessorService
 
     def vueFileProcessorService
 
-    void process(ReceiverDownload receiverDownload, MultipartFile file)
+    void process(receiverDownload, MultipartFile file)
     {
+//        ReceiverDownload receiverDownload = ReceiverDownload.get(receiverDownloadId)
+        assert(receiverDownload != null): "receiverDownload cannot be null"
+        
         if (!file.isEmpty())
         {
             log.info("Processing receiver download, id: " + receiverDownload?.id)
@@ -29,7 +32,7 @@ class FileProcessorService extends AbstractFileProcessorService
 
             // Create a new ReceiverDownloadFile instance and add it to the given
             // ReceiverDownload.
-            ReceiverDownloadFile downloadFile = new ReceiverDownloadFile(fullPath, file.getName())
+            ReceiverDownloadFile downloadFile = new ReceiverDownloadFile(fullPath, file.getOriginalFilename())
             downloadFile.save()
             
             try
@@ -83,7 +86,9 @@ class FileProcessorService extends AbstractFileProcessorService
             path = path + File.separator
         }
         
-        Receiver receiver = download.receiverRecovery.deployment.receiver
+        ReceiverRecovery recovery = download.receiverRecovery
+        ReceiverDeployment deployment = recovery.deployment
+        Receiver receiver = deployment.receiver
         InstallationStation station = download.receiverRecovery.deployment.station
         Installation installation = station.installation
         Project project = installation.project

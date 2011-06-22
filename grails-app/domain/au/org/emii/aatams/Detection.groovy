@@ -47,7 +47,7 @@ class Detection
     
     static constraints = 
     {
-        timestamp(max:new Date())
+        timestamp()
         receiver()
         transmitterName(nullable:true, blank:true)
         transmitterSerialNumber(nullable:true, blank:true)

@@ -36,7 +36,7 @@ class ReceiverDownload
     
     static constraints = 
     {
-        downloadDate(nullable:true, max:new Date())
+        downloadDate(nullable:true)
         clockDrift(nullable:true)
         pingCount(nullable:true, min:0)
         detectionCount(nullable:true, min:0)

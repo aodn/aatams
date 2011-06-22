@@ -25,6 +25,11 @@ class SurgeryController {
     def save = 
     {
         def surgeryInstance = new Surgery(params)
+
+        // Need to update that status of the tag to DEPLOYED.
+        DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
+        surgeryInstance.tag.status = deployedStatus
+            
         if (surgeryInstance.save(flush: true)) 
         {
             // Deep rendering of object not working due to geometry type

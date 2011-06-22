@@ -21,6 +21,11 @@ class ReceiverDeploymentController {
 
     def save = {
         def receiverDeploymentInstance = new ReceiverDeployment(params)
+
+        // Need to update that status of the receiver to DEPLOYED.
+        DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
+        receiverDeploymentInstance.receiver.status = deployedStatus
+
         if (receiverDeploymentInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.id])}"
             redirect(action: "show", id: receiverDeploymentInstance.id)

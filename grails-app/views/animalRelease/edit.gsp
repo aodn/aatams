@@ -7,6 +7,7 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'animalRelease.label', default: 'AnimalRelease')}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <g:javascript src="speciesLookup.js" />
     </head>
     <body>
         <div class="nav">
@@ -46,8 +47,8 @@
                                   <label for="animal"><g:message code="animalRelease.animal.species.label" default="Species" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'species', 'errors')}">
-                                    <g:select name="species.id" from="${au.org.emii.aatams.Species.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.species?.id}"  />
-
+<!--                                    <g:select name="species.id" from="${au.org.emii.aatams.Species.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.species?.id}"  />-->
+                                  <g:textField name="speciesName"  value="${animalReleaseInstance?.animal?.species?.name}" />
                                 </td>
                             </tr>
                         

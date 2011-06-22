@@ -18,7 +18,7 @@ class Surgery
     
     static constraints =
     {
-        timestamp(max:new Date())
+        timestamp()
         release()
         tag()
         sutures()

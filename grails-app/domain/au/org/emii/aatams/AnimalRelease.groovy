@@ -37,10 +37,10 @@ class AnimalRelease
         animal()
         captureLocality()
         captureLocation()
-        captureDateTime(max:new Date())
+        captureDateTime()
         releaseLocality()
         releaseLocation()
-        releaseDateTime(max:new Date())
+        releaseDateTime()
         comments(nullable:true)
     }
     

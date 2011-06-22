@@ -40,6 +40,10 @@ class ReceiverRecoveryController {
         def receiverRecoveryInstance = new ReceiverRecovery(params)
         receiverRecoveryInstance.deployment = deployment
 
+        // Set the receiver's status to that of the recovery's.
+        deployment.receiver.status = receiverRecoveryInstance.status
+        deployment.receiver.save(flush: true)
+        
         if (receiverRecoveryInstance.save(flush: true)) 
         {
             // Create a new receiver download an associate it with the recovery

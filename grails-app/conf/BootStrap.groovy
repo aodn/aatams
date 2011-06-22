@@ -11,6 +11,18 @@ class BootStrap
     { 
         servletContext ->
 
+            // Add "label" property for the jquery autocomplete plugin.
+            JSON.registerObjectMarshaller(Species.class)
+            {
+                def returnArray = [:]
+                returnArray['id'] = it.id
+                returnArray['name'] = it.name
+                returnArray['label'] = it.name
+                
+                return returnArray
+            }
+
+
         // TODO: this is not having any effect.
 //        JSON.registerObjectMarshaller(ProjectAccess.class, 0)
 //        {

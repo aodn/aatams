@@ -27,7 +27,8 @@ class AnimalReleaseController {
         // The request does not include an Animal instance as such (just species
         // and sex) - so we need to create one here.
         Sex sex = Sex.get(params.sex.id)
-        Species species = Species.get(params.species.id)
+        
+        Species species = lookupOrCreateSpecies(params.speciesName)
         Animal animalInstance = new Animal(sex:sex, species:species)
         
         animalReleaseInstance.animal = animalInstance
@@ -86,6 +87,10 @@ class AnimalReleaseController {
                 }
             }
             animalReleaseInstance.properties = params
+            
+            Species species = lookupOrCreateSpecies(params.speciesName)
+            animalReleaseInstance.animal.species = species
+            
             if (!animalReleaseInstance.hasErrors() && animalReleaseInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.id])}"
                 redirect(action: "show", id: animalReleaseInstance.id)
@@ -117,5 +122,17 @@ class AnimalReleaseController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), params.id])}"
             redirect(action: "list")
         }
+    }
+    
+    def lookupOrCreateSpecies(speciesName)
+    {
+        Species species = Species.findByName(speciesName)
+        if (!species)
+        {
+            log.info("Creating new species, name: " + speciesName)
+            species = new Species(name:speciesName).save(flush:true)
+        }
+         
+        return species
     }
 }

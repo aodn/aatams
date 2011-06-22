@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import grails.converters.JSON
+
 class SpeciesController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -96,5 +98,18 @@ class SpeciesController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'species.label', default: 'Species'), params.id])}"
             redirect(action: "list")
         }
+    }
+    
+    /**
+     * Allows auto-complete functionality on front-end.
+     */
+    def lookupByName =
+    {
+        log.debug("Looking up species, name: " + params.term)
+        
+        def species = Species.findAllByNameIlike(params.term + "%", [sort:"name", order:"asc"])
+        
+        log.debug("Returning: " + (species as JSON))
+        render species as JSON
     }
 }

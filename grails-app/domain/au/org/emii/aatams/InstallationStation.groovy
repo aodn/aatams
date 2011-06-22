@@ -25,6 +25,7 @@ class InstallationStation
     
     /**
      * Numeric sequence relating to Station position in the owning Installation.
+     * Not applicable to some installation configurations (e.g. array).
      */
     Integer curtainPosition
     
@@ -36,7 +37,7 @@ class InstallationStation
     static constraints =
     {
         name(blank:false)
-        curtainPosition(min:0)
+        curtainPosition(nullable:true, min:0)
         location()
     }
     

@@ -42,7 +42,7 @@ class BootStrap
             
             development
             {
-                initData()
+//                initData()
                 
             }
         }
@@ -166,11 +166,20 @@ class BootStrap
         //
         // Roles.
         //
-        ProjectRoleType principalInvestigator =
-            new ProjectRoleType(displayName:'Principal Investigator').save(failOnError: true)
-        ProjectRoleType administrator =
-            new ProjectRoleType(displayName:'Administrator').save(failOnError: true)
-
+        ProjectRoleType principalInvestigator = ProjectRoleType.findByDisplayName('Principal Investigator')
+        if (!principalInvestigator)
+        {
+            principalInvestigator =
+                new ProjectRoleType(displayName:'Principal Investigator').save(failOnError: true)
+        }
+        
+        ProjectRoleType administrator = ProjectRoleType.findByDisplayName('Administrator')
+        if (!administrator)
+        {
+            administrator =
+                new ProjectRoleType(displayName:'Administrator').save(failOnError: true)
+        }
+        
         ProjectRole tunaAdmin =
             new ProjectRole(project:tunaProject,
                             person: joeBloggs,

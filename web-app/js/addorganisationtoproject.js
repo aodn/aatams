@@ -2,8 +2,8 @@ $(function() {
 
     $('#dialog-form-add-organisation').dialog({
         autoOpen: false,
-        height: 300,
-        width: 350,
+        height: 200,
+        width: 600,
         modal: true,
         buttons: {
             'Add': function() 

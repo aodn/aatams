@@ -32,9 +32,9 @@ class Sensor extends Tag
         codeMap(blank:false)
         pingCode(min:0)
         transmitterType()
-        unit(blank:false)
-        slope()
-        intercept()
+        unit(nullable:true)
+        slope(nullable:true)
+        intercept(nullable:true)
     }
     
     String toString()

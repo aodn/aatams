@@ -18,25 +18,25 @@ class NavigationMenuController
     
     def backgroundDataControllers = 
     [
-        'Organisation',
-        'Person',
-        'Project'
+        organisation:"Organisation",
+        project:"Projects",
+        person:"People"
     ]
     
     def installationDataControllers =
     [
-        'Installation',
-        'InstallationStation',
-        'Receiver',
-        'Tag'
+        'installation':"Installations",
+        'installationStation':"Stations",
+        'receiver':"Receivers",
+        'tag':"Tags"
     ]
     
     def fieldDataControllers =
     [
-        'AnimalRelease',
-        'Detection',
-        'ReceiverDeployment',
-        'ReceiverRecovery',
+        'animalRelease':"Tag Releases",
+        'detection':"Tag Detections",
+        'receiverDeployment':"Receiver Deployment",
+        'receiverRecovery':"Receiver Recovery"
     ]
     
     def reportControllers =
@@ -47,30 +47,30 @@ class NavigationMenuController
     // Only visible to administrators...
     def adminControllers =
     [
-        'Animal',
-        'AnimalMeasurement',
-        'AnimalMeasurementType',
-        'Detection',
-        'Device',
-        'DeviceModel',
-        'DeviceStatus',
-        'InstallationConfiguration',
-        'MeasurementUnit',
-        'MooringType',
-        'OrganisationPerson',
-        'OrganisationProject',
-        'ProjectRole',
-        'ProjectRoleType',
-        'ReceiverDownload',
-        'ReceiverDownloadFile',
-        'Sensor',
-        'SensorDetection',
-        'Sex',
-        'Surgery',
-        'SurgeryTreatment',
-        'SurgeryType',
-        'SystemRole',
-        'SystemRoleType'
+        'animal',
+        'animalMeasurement',
+        'animalMeasurementType',
+        'detection',
+        'device',
+        'deviceModel',
+        'deviceStatus',
+        'installationConfiguration',
+        'measurementUnit',
+        'mooringType',
+        'organisationPerson',
+        'organisationProject',
+        'projectRole',
+        'projectRoleType',
+        'receiverDownload',
+        'receiverDownloadFile',
+        'sensor',
+        'sensorDetection',
+        'sex',
+        'surgery',
+        'surgeryTreatment',
+        'surgeryType',
+        'systemRole',
+        'systemRoleType'
     ]
         
     def blacklistControllers =

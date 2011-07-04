@@ -13,11 +13,9 @@ class ProjectRole
     
     ProjectRoleType roleType
     
-    ProjectAccess access
-    
     String toString()
     {
-        return getProjectAndRole() + ": " + String.valueOf(person) + ": " + String.valueOf(access)
+        return getProjectAndRole() + ": " + String.valueOf(person)
     }
     
     String getProjectAndRole()

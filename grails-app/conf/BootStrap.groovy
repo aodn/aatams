@@ -5,6 +5,8 @@ import com.vividsolutions.jts.geom.Point
 import com.vividsolutions.jts.io.ParseException
 import com.vividsolutions.jts.io.WKTReader
 
+import org.apache.shiro.crypto.hash.Sha256Hash
+
 class BootStrap 
 {
     def init = 
@@ -42,8 +44,7 @@ class BootStrap
             
             development
             {
-//                initData()
-                
+                initData()
             }
         }
     }
@@ -151,20 +152,40 @@ class BootStrap
                                     project:tunaProject).save(failOnError: true)
 
         //
+        // Security/people.
+        //
+        SecRole sysAdmin = new SecRole(name:"SysAdmin")
+        sysAdmin.addToPermissions("*:*")
+        sysAdmin.save(failOnError: true)
+            
+        //
         // People.
         //
+        Person jonBurgess =
+            new Person(username:'jkburges',
+                       passwordHash:new Sha256Hash("password").toHex(),
+                       name:'Jon Burgess',
+                       phoneNumber:'1234',
+                       emailAddress:'jkburges@utas.edu.au')
+        jonBurgess.addToRoles(sysAdmin)
+        jonBurgess.save(failOnError: true)
+
         Person joeBloggs =
-            new Person(name:'Joe Bloggs',
+            new Person(username:'jbloggs',
+                       passwordHash:new Sha256Hash("password").toHex(),
+                       name:'Joe Bloggs',
                        phoneNumber:'1234',
                        emailAddress:'jbloggs@csiro.au').save(failOnError: true)
 
         Person johnCitizen =
-            new Person(name:'John Citizen',
+            new Person(username:'jcitizen',
+                       passwordHash:new Sha256Hash("password").toHex(),
+                       name:'John Citizen',
                        phoneNumber:'5678',
                        emailAddress:'jcitizen@csiro.au').save(failOnError: true)
 
         //
-        // Roles.
+        // Project Roles.
         //
         ProjectRoleType principalInvestigator = ProjectRoleType.findByDisplayName('Principal Investigator')
         if (!principalInvestigator)
@@ -183,19 +204,18 @@ class BootStrap
         ProjectRole tunaAdmin =
             new ProjectRole(project:tunaProject,
                             person: joeBloggs,
-                            roleType: administrator,
-                            access: ProjectAccess.READ_ONLY).save(failOnError: true)
+                            roleType: administrator).save(failOnError: true)
         ProjectRole sealProjectInvestigator =
             new ProjectRole(project:sealCountProject,
                             person: joeBloggs,
-                            roleType: principalInvestigator,
-                            access: ProjectAccess.READ_WRITE).save(failOnError: true)
+                            roleType: principalInvestigator).save(failOnError: true)
+        joeBloggs.addToPermissions("principalInvestigator:" + sealCountProject.id)
+        joeBloggs.save(failOnError:true)
 
         ProjectRole sealAdmin =
             new ProjectRole(project:sealCountProject,
                             person: johnCitizen,
-                            roleType: administrator,
-                            access: ProjectAccess.READ_WRITE).save(failOnError: true)
+                            roleType: administrator).save(failOnError: true)
 
         OrganisationPerson csiroJohnCitizen =
             new OrganisationPerson(organisation:csiroOrg,

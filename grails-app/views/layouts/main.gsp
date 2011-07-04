@@ -24,6 +24,9 @@
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'custom-theme/jquery-ui-1.8.13.custom.css')}"/>
     <link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
 
+    <!-- Shiro tags, used for security -->
+    <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+    
     <script>
     // important. leave here for main_extras.js
     var grailsServerURL = "${grailsApplication.config.grails.serverURL}";
@@ -128,7 +131,17 @@
         <h1>${message(code: 'default.application.detailedTitle', default: 'AATAMS data entry')}</h1>
 
         <div id="userlogin">
-          <g:link controller='login'>Login</g:link>
+          <!-- Shown if not logged in. -->
+          <shiro:guest>
+              <g:link controller="auth">Login</g:link>
+          </shiro:guest>
+
+          <!-- Shown if logged in. -->
+          <shiro:user>
+            <div id="userlogout">
+              Logged in as <shiro:principal/> (<g:link controller="auth" action="signOut">logout</g:link>)
+            </div>
+          </shiro:user>
         </div>
       </div>
 

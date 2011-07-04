@@ -64,7 +64,6 @@
                                         <g:link controller="person" action="show" id="${p?.person?.id}">${p?.person?.encodeAsHTML()}</g:link>
                                       </td>
                                       <td>${p?.roleType}</td>
-                                      <td>${p?.access}</td>
                                     </tr>
 
                                   </g:each>

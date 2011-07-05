@@ -5,7 +5,7 @@ package au.org.emii.aatams
  * 
  * @author jburgess
  */
-class SecurityUtils 
+class PermissionUtils 
 {
     static Person setPermissions(ProjectRole projectRole)
     {

@@ -28,11 +28,11 @@ class ProjectRole
     def beforeInsert =
     {
         // Add permissions based on role type and access.
-        SecurityUtils.setPermissions(this)
+        PermissionUtils.setPermissions(this)
     }
     
     def beforeDelete =
     {
-        SecurityUtils.removePermissions(this)
+        PermissionUtils.removePermissions(this)
     }
 }

@@ -17,7 +17,7 @@ $(function() {
                 var comments = $("#measurementComments").val();
                 var event = $("#id").val();
 
-                $.post('../animalMeasurement/save',
+                $.post('/aatams/animalMeasurement/save',
                        {
                            'event.id':event,
                            'release.id':animalReleaseId,

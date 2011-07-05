@@ -187,11 +187,11 @@ class BootStrap
         //
         // Project Roles.
         //
-        ProjectRoleType principalInvestigator = ProjectRoleType.findByDisplayName('Principal Investigator')
+        ProjectRoleType principalInvestigator = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINICIPAL_INVESTIGATOR)
         if (!principalInvestigator)
         {
             principalInvestigator =
-                new ProjectRoleType(displayName:'Principal Investigator').save(failOnError: true)
+                new ProjectRoleType(displayName:ProjectRoleType.PRINICIPAL_INVESTIGATOR).save(failOnError: true)
         }
         
         ProjectRoleType administrator = ProjectRoleType.findByDisplayName('Administrator')
@@ -204,18 +204,21 @@ class BootStrap
         ProjectRole tunaAdmin =
             new ProjectRole(project:tunaProject,
                             person: joeBloggs,
-                            roleType: administrator).save(failOnError: true)
+                            roleType: administrator,
+                            access:ProjectAccess.READ_WRITE).save(failOnError: true)
         ProjectRole sealProjectInvestigator =
             new ProjectRole(project:sealCountProject,
                             person: joeBloggs,
-                            roleType: principalInvestigator).save(failOnError: true)
+                            roleType: principalInvestigator,
+                            access:ProjectAccess.READ_WRITE).save(failOnError: true)
         joeBloggs.addToPermissions("principalInvestigator:" + sealCountProject.id)
         joeBloggs.save(failOnError:true)
 
         ProjectRole sealAdmin =
             new ProjectRole(project:sealCountProject,
                             person: johnCitizen,
-                            roleType: administrator).save(failOnError: true)
+                            roleType: administrator,
+                            access:ProjectAccess.READ_ONLY).save(failOnError: true)
 
         OrganisationPerson csiroJohnCitizen =
             new OrganisationPerson(organisation:csiroOrg,

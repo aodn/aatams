@@ -6,10 +6,17 @@ package au.org.emii.aatams
 class Species 
 {
     String name
+
+    /**
+     * Data for sensitive species may be embargoed.
+     */
+    Date embargoDate
+
     
     static constraints = 
     {
         name(blank:false)
+        embargoDate(nullable:true)
     }
     
     String toString()

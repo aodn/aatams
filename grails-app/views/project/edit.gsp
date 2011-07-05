@@ -91,6 +91,7 @@
                                             <g:link controller="person" action="show" id="${p?.person?.id}">${p?.person?.encodeAsHTML()}</g:link>
                                           </td>
                                           <td valign="top" class="value">${p?.roleType}</td>
+                                          <td valign="top" class="value">${p?.access}</td>
                                         </tr>
                                         
                                       </g:each>

@@ -8,8 +8,6 @@ class SecSecurityFilters
     // sys admin.
     def accessibleControllers = 
         ["organisation",
-         "organisationPerson",
-         "organisationProject",
          "project",
          "person",
          "installation",
@@ -61,7 +59,6 @@ class SecSecurityFilters
                     {
                         return true
                     }
-
 
                     // Access control by convention.
                     accessControl()

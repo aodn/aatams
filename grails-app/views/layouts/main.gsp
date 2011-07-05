@@ -10,7 +10,7 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.highlight.js')}"></script>
 
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.selectlist.js')}"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'jquery-custom-file-input.js')}"></script>
+<!--    <script type="text/javascript" src="${resource(dir:'js',file:'jquery-custom-file-input.js')}"></script>-->
 
     <script type="text/javascript" src="${resource(dir:'js',file:'addmeasurementtoanimalrelease.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'addorganisationtoproject.js')}"></script>

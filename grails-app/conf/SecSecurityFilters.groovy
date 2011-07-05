@@ -8,6 +8,8 @@ class SecSecurityFilters
     // sys admin.
     def accessibleControllers = 
         ["organisation",
+         "organisationPerson",
+         "organisationProject",
          "project",
          "person",
          "installation",

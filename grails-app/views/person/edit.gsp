@@ -7,6 +7,8 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'person.label', default: 'Person')}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <script type="text/javascript" src="${resource(dir:'js',file:'changepassword.js')}"></script>
+        
     </head>
     <body>
         <div class="nav">
@@ -43,6 +45,26 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                  <label for="username"><g:message code="secUser.username.label" default="Username" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'username', 'errors')}">
+                                    <g:textField name="username" value="${personInstance?.username}" />
+
+                                </td>
+                            </tr>
+<%--                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="password"><g:message code="secUser.password.label" default="Password" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'password', 'errors')}">
+                                    <g:textField name="password" value="${personInstance?.passwordHash}" />
+                                    
+                                </td>
+                            </tr>
+--%>
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="phoneNumber"><g:message code="person.phoneNumber.label" default="Phone Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'phoneNumber', 'errors')}">
@@ -60,7 +82,7 @@
 
                                 </td>
                             </tr>
-                        <!--
+                        <%--
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="systemRoles"><g:message code="person.systemRoles.label" default="System Roles" /></label>
@@ -70,7 +92,14 @@
 
                                 </td>
                             </tr>
-                        -->
+                        --%>
+                        
+                            <tr>
+                              <td>
+                                <a href="#" 
+                                   id='change_password'>${message(code: 'person.password.change.label', default: 'Change password...')}</a>
+                              </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -80,5 +109,53 @@
                 </div>
             </g:form>
         </div>
+      
+      <!--
+            Dialog presented when changing password.
+            TODO: get this on demand (i.e. with AJAX)
+      -->
+      <div id="dialog-form-change-password" title="Change Password">
+            <g:form action="save" >
+                <div class="dialog">
+                    <table>
+                        <tbody>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="personId"><g:message code="person.label" default="Person" /></label>
+                                    <g:hiddenField name="personId" value="${personInstance?.id}" />
+
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'name', 'errors')}">
+                                  <label id="project">${personInstance?.name}</label>
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="password"><g:message code="secUser.password.label" default="Password" /></label>
+                                </td>
+                                <td valign="top" class="value ">
+                                    <g:textField name="password" />
+
+                                </td>
+                            </tr>
+
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="passwordConfirm"><g:message code="secUser.password.label" default="Password (confirm)" /></label>
+                                </td>
+                                <td valign="top" class="value ">
+                                    <g:textField name="passwordConfirm" />
+
+                                </td>
+                            </tr>
+                        
+                        </tbody>
+                    </table>
+                </div>
+            </g:form>
+      </div>
+      
     </body>
 </html>

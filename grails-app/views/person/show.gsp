@@ -30,6 +30,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="secUser.username.label" default="Username" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: personInstance, field: "username")}</td>
+                            
+                        </tr>
+
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="person.phoneNumber.label" default="Phone Number" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: personInstance, field: "phoneNumber")}</td>
@@ -68,7 +75,7 @@
                             </td>
                             
                         </tr>
-
+<%--
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="person.systemRoles.label" default="System Roles" /></td>
                             
@@ -79,7 +86,7 @@
                                 </g:each>
                                 </ul>
                             </td>
-                            
+--%>                            
                         </tr>
                     
                     </tbody>

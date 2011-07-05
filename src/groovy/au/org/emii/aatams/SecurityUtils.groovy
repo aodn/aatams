@@ -19,7 +19,7 @@ class SecurityUtils
         
         // Principal Investigators have special permissions.
         if (   projectRole.roleType 
-            == ProjectRoleType.findByDisplayName(ProjectRoleType.PRINICIPAL_INVESTIGATOR))
+            == ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR))
         {
             user.addToPermissions(buildPrincipalInvestigatorPermission(projectRole.project.id))
         }
@@ -49,7 +49,7 @@ class SecurityUtils
         }
 
         if (   projectRole.roleType 
-            == ProjectRoleType.findByDisplayName(ProjectRoleType.PRINICIPAL_INVESTIGATOR))
+            == ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR))
         {
             user.removeFromPermissions(buildPrincipalInvestigatorPermission(projectRole.project.id))
         }

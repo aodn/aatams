@@ -187,11 +187,11 @@ class BootStrap
         //
         // Project Roles.
         //
-        ProjectRoleType principalInvestigator = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINICIPAL_INVESTIGATOR)
+        ProjectRoleType principalInvestigator = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
         if (!principalInvestigator)
         {
             principalInvestigator =
-                new ProjectRoleType(displayName:ProjectRoleType.PRINICIPAL_INVESTIGATOR).save(failOnError: true)
+                new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save(failOnError: true)
         }
         
         ProjectRoleType administrator = ProjectRoleType.findByDisplayName('Administrator')

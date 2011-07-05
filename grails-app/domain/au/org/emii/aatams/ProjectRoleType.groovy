@@ -6,7 +6,7 @@ package au.org.emii.aatams
  */
 class ProjectRoleType 
 {
-    public static final String PRINICIPAL_INVESTIGATOR = "Principal Investigator"
+    public static final String PRINCIPAL_INVESTIGATOR = "Principal Investigator"
     
     String displayName
     

@@ -20,7 +20,7 @@ $(function() {
                 var comments = $("#surgeryComments").val();
                 var event = $("#id").val();
                 
-                $.post('../surgery/save',
+                $.post('/aatams/surgery/save',
                        {
                            'event.id':event,
                            'release.id':animalReleaseId,

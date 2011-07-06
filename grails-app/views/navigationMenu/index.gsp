@@ -16,13 +16,13 @@
             <g:if test="${c.value == 'Organisation'}">
               <shiro:hasRole name="SysAdmin">
                 <span class="inline">
-                  <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-circlesmall-plus" >create</g:link>
+                  <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
                 </span>
               </shiro:hasRole>
             </g:if>
             <g:else>
               <span class="inline">
-                <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-circlesmall-plus" >create</g:link>
+                <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
               </span>
             </g:else>
           </li>
@@ -36,7 +36,7 @@
           <li class="installationDataControllers">
             <g:link controller="${c.key}">${c.value}</g:link>
             <span class="inline">
-              <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-circlesmall-plus" >create</g:link>
+              <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
             </span>
           </li>
         </g:each>
@@ -49,7 +49,7 @@
           <li class="fieldDataControllers">
             <g:link controller="${c.key}">${c.value}</g:link>
             <span class="inline">
-              <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-circlesmall-plus" >create</g:link>
+              <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
             </span>
           </li>
         </g:each>
@@ -62,7 +62,7 @@
           <li class="reportControllers">
             <g:link controller="${c.key}">${c.value}</g:link>
             <span class="inline">
-              <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-circlesmall-plus" >create</g:link>
+              <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
             </span>
           </li>
         </g:each>

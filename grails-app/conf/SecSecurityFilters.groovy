@@ -8,21 +8,28 @@ import org.apache.shiro.SecurityUtils
  */
 class SecSecurityFilters 
 {
+    //
     // Any controllers not specified here are only accessible to 
     // sys admin.
+    //
+    // The value in each map entry is the parameter relating to project ID
+    // (for those entities controller by project membership/access).
+    //
+    //
     def accessibleControllers = 
-        ["organisation",
-         "organisationProject",
-         "project",
-         "person",
-         "installation",
-         "installationStation",
-         "receiver",
-         "tag",
-         "animalRelease",
-         "detection",
-         "receiverDeployment",
-         "receiverRecovery"]
+        ["organisation":"",
+         "organisationProject":"project.id",
+         "project":"id",
+         "projectRole":"project.id",
+         "person":"",
+         "installation":"",
+         "installationStation":"",
+         "receiver":"",
+         "tag":"",
+         "animalRelease":"",
+         "detection":"",
+         "receiverDeployment":"",
+         "receiverRecovery":""]
     
     //
     // Anyone can execute the following actions (even if not
@@ -66,7 +73,7 @@ class SecSecurityFilters
                     return true
                 }
                 
-                if (!accessibleControllers.contains(controllerName))
+                if (!accessibleControllers.containsKey(controllerName))
                 {
                     accessControl
                     {
@@ -124,15 +131,6 @@ class SecSecurityFilters
      */
     def getProjectId(params, controllerName)
     {
-        if (controllerName == "project")
-        {
-            return params.id
-        }
-        else if (controllerName == "organisationProject")
-        {
-            return params.project.id
-        }
-        
-        return -1
+        return params[accessibleControllers[controllerName]]
     }
 }

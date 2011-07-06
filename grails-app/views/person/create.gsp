@@ -53,8 +53,7 @@
                                     <label for="password"><g:message code="secUser.password.label" default="Password" /></label>
                                 </td>
                                 <td valign="top" class="value ">
-                                    <g:textField name="password" />
-
+                                    <input type="password" name="password" value="" />
                                 </td>
                             </tr>
 
@@ -63,8 +62,7 @@
                                     <label for="passwordConfirm"><g:message code="secUser.password.label" default="Password (confirm)" /></label>
                                 </td>
                                 <td valign="top" class="value ">
-                                    <g:textField name="passwordConfirm" />
-
+                                    <input type="password" name="passwordConfirm" value="" />
                                 </td>
                             </tr>
 

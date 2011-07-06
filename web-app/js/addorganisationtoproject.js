@@ -12,7 +12,7 @@ $(function() {
                 var organisationId = $("#organisationId option:selected").val();
                 var event = $("#id").val();
                 
-                $.post('/aatams/organisationProject/saveOrganisationToProject', 
+                $.post('/aatams/organisationProject/save', 
                        {'event.id':event, "project.id":projectId, "organisation.id":organisationId},
                        function(data) 
                        {

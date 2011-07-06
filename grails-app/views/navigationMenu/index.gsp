@@ -13,7 +13,7 @@
           <li class="backgroundDataControllers">
             <g:link controller="${c.key}">${c.value}</g:link>
             
-            <g:if test="${c.value == 'Organisation'}">
+            <g:if test="${c.value == 'Organisation' || c.value == 'Projects'}">
               <shiro:hasRole name="SysAdmin">
                 <span class="inline">
                   <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>

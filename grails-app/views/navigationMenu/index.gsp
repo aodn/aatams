@@ -12,9 +12,19 @@
           
           <li class="backgroundDataControllers">
             <g:link controller="${c.key}">${c.value}</g:link>
-            <span class="inline">
-              <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-circlesmall-plus" >create</g:link>
-            </span>
+            
+            <g:if test="${c.value == 'Organisation'}">
+              <shiro:hasRole name="SysAdmin">
+                <span class="inline">
+                  <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-circlesmall-plus" >create</g:link>
+                </span>
+              </shiro:hasRole>
+            </g:if>
+            <g:else>
+              <span class="inline">
+                <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-circlesmall-plus" >create</g:link>
+              </span>
+            </g:else>
           </li>
         </g:each>
       </ul>

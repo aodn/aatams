@@ -90,7 +90,8 @@ class SecSecurityFilters
                 }
                 else
                 {
-                    if (publicActions.contains(actionName))
+                    // null action is equivalent to action of "index"/"list"
+                    if (publicActions.contains(actionName) || (actionName == null))
                     {
                         return true
                     }

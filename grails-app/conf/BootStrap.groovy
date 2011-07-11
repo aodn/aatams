@@ -218,6 +218,11 @@ class BootStrap
                             person: johnCitizen,
                             roleType: administrator,
                             access:ProjectAccess.READ_ONLY).save(failOnError: true)
+        ProjectRole tunaWrite =
+            new ProjectRole(project:tunaProject,
+                            person: johnCitizen,
+                            roleType: administrator,
+                            access:ProjectAccess.READ_WRITE).save(failOnError: true)
 
         OrganisationPerson csiroJohnCitizen =
             new OrganisationPerson(organisation:csiroOrg,

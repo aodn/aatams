@@ -25,13 +25,13 @@ class SecSecurityFilters
          "projectRole":"project.id",
          "person":"",
          "installation":"project.id",
-         "installationStation":"",
-         "receiver":"",
-         "tag":"",
-         "animalRelease":"",
-         "detection":"",
-         "receiverDeployment":"",
-         "receiverRecovery":""]
+         "installationStation":"project.id",
+         "receiver":"project.id",
+         "tag":"project.id",
+         "animalRelease":"project.id",
+         "detection":"project.id",
+         "receiverDeployment":"project.id",
+         "receiverRecovery":"project.id"]
     
     //
     // Anyone can execute the following actions (even if not

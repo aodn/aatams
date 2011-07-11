@@ -2,8 +2,6 @@ package au.org.emii.aatams
 
 class InstallationController {
 
-    def candidateEntitiesService
-    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -19,8 +17,7 @@ class InstallationController {
         def installationInstance = new Installation()
         installationInstance.properties = params
         
-        def candidateProjects = candidateEntitiesService.projects()
-        return [installationInstance: installationInstance, candidateProjects:candidateProjects]
+        return [installationInstance: installationInstance]
     }
 
     def save = {
@@ -51,7 +48,8 @@ class InstallationController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'installation.label', default: 'Installation'), params.id])}"
             redirect(action: "list")
         }
-        else {
+        else 
+        {
             return [installationInstance: installationInstance]
         }
     }

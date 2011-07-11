@@ -56,7 +56,7 @@
                                   <label for="project"><g:message code="installation.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${installationInstance?.project?.id}"  />
+                                    <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${installationInstance?.project?.id}"  />
 
                                 </td>
                             </tr>

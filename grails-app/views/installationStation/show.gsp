@@ -5,6 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'installationStation.label', default: 'InstallationStation')}" />
+        <g:set var="projectId" value="${installationStationInstance?.installation?.project?.id}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -78,7 +79,9 @@
             <div class="buttons">
                 <g:form>
                     <g:hiddenField name="id" value="${installationStationInstance?.id}" />
-                    <shiro:hasPermission permission="project:${installationStationInstance?.installation?.project?.id}:write">
+                    <g:hiddenField name="project.id" value="${projectId}" />
+
+                    <shiro:hasPermission permission="project:${projectId}:write">
                       <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                     </shiro:hasPermission>
                     <shiro:hasRole name="SysAdmin">

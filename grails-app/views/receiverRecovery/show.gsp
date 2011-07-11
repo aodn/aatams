@@ -6,6 +6,7 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiverRecovery.label', default: 'ReceiverRecovery')}" />
         <g:set var="receiverDeploymentInstance" value="${receiverRecoveryInstance?.deployment}"/>
+        <g:set var="projectId" value="${receiverRecoveryInstance?.deployment?.receiver?.project?.id}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -160,7 +161,9 @@
             <div class="buttons">
                 <g:form>
                     <g:hiddenField name="id" value="${receiverRecoveryInstance?.id}" />
-                    <shiro:hasPermission permission="project:${receiverRecoveryInstance?.deployment?.receiver?.project?.id}:write">
+                    <g:hiddenField name="project.id" value="${projectId}" />
+
+                    <shiro:hasPermission permission="project:${projectId}:write">
                       <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                     </shiro:hasPermission>
                     <shiro:hasRole name="SysAdmin">

@@ -7,6 +7,7 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiverRecovery.label', default: 'ReceiverRecovery')}" />
         <g:set var="receiverDeploymentInstance" value="${receiverRecoveryInstance?.deployment}"/>
+        <g:set var="projectId" value="${receiverRecoveryInstance?.deployment?.receiver?.project?.id}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -186,8 +187,11 @@
                     </table>
                 </div>
                 <div class="buttons">
+                    <g:hiddenField name="project.id" value="${projectId}" />
                     <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-                    <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    <shiro:hasRole name="SysAdmin">
+                      <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    </shiro:hasRole>
                 </div>
             </g:form>
         </div>

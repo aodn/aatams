@@ -29,9 +29,12 @@
           
           <li class="installationDataControllers">
             <g:link controller="${c.key}">${c.value}</g:link>
-            <span class="inline">
-              <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
-            </span>
+            
+            <shiro:hasPermission permission="projectWriteAny">
+              <span class="inline">
+                <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
+              </span>
+            </shiro:hasPermission>
           </li>
         </g:each>
       </ul>
@@ -42,9 +45,12 @@
           
           <li class="fieldDataControllers">
             <g:link controller="${c.key}">${c.value}</g:link>
-            <span class="inline">
-              <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
-            </span>
+
+            <shiro:hasPermission permission="projectWriteAny"> 
+              <span class="inline">
+                <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
+              </span>
+            </shiro:hasPermission>
           </li>
         </g:each>
       </ul>

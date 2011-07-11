@@ -8,6 +8,8 @@ package au.org.emii.aatams
  */
 class ProjectRole 
 {
+    def permissionUtilsService
+    
     static belongsTo = [project:Project, person:Person]
     static transients = ['projectAndRole']
     
@@ -28,11 +30,11 @@ class ProjectRole
     def beforeInsert =
     {
         // Add permissions based on role type and access.
-        PermissionUtils.setPermissions(this)
+        permissionUtilsService.setPermissions(this)
     }
     
     def beforeDelete =
     {
-        PermissionUtils.removePermissions(this)
+        permissionUtilsService.removePermissions(this)
     }
 }

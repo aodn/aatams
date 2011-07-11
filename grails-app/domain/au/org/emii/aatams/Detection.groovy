@@ -16,15 +16,18 @@ class Detection
      */
     Date timestamp
     
-    static belongsTo = [receiver: Receiver]
+    static belongsTo = [receiverDeployment: ReceiverDeployment]
     
     /**
      * This is modelled as a one-to-many relationship, due to the fact that tags
      * transmit only code map and ping ID which is not guaranteed to be unique
      * between manufacturers, although in reality the relationship will *usually*
      * be one-to-one.
+     * 
+     * Additionally, the relationship is modelled via surgery, due to the fact
+     * that a tag could potentially be reused on several animals.
      */
-    static hasMany = [tags:Tag]
+    static hasMany = [surgeries:Surgery]
     
     /**
      * Station name, as recorded in VUE database (this should match 
@@ -48,7 +51,7 @@ class Detection
     static constraints = 
     {
         timestamp()
-        receiver()
+        receiverDeployment()
         transmitterName(nullable:true, blank:true)
         transmitterSerialNumber(nullable:true, blank:true)
         stationName(nullable:true, blank:true)

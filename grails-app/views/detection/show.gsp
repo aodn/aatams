@@ -37,9 +37,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="detection.receiver.label" default="Receiver" /></td>
+                            <td valign="top" class="name"><g:message code="detection.receiverDeployment.label" default="Receiver Deployment" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="receiver" action="show" id="${detectionInstance?.receiver?.id}">${detectionInstance?.receiver?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value"><g:link controller="receiverDeployment" action="show" id="${detectionInstance?.receiverDeployment?.id}">${detectionInstance?.receiverDeployment?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -76,8 +76,8 @@
                             
                             <td valign="top" style="text-align: left;" class="value">
                                 <ul>
-                                <g:each in="${detectionInstance.tags}" var="t">
-                                    <li><g:link controller="tag" action="show" id="${t.id}">${t?.encodeAsHTML()}</g:link></li>
+                                <g:each in="${detectionInstance.surgeries}" var="s">
+                                    <li><g:link controller="tag" action="show" id="${s?.tag?.id}">${s?.tag?.encodeAsHTML()}</g:link></li>
                                 </g:each>
                                 </ul>
                             </td>

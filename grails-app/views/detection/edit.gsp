@@ -36,17 +36,17 @@
                                   <label for="timestamp"><g:message code="detection.timestamp.label" default="Timestamp" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'timestamp', 'errors')}">
-                                    <g:datePicker name="timestamp" precision="day" value="${detectionInstance?.timestamp}"  />
+                                    <g:datePicker name="timestamp" precision="minute" value="${detectionInstance?.timestamp}"  />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="receiver"><g:message code="detection.receiver.label" default="Receiver" /></label>
+                                  <label for="receiver"><g:message code="detection.receiverDeployment.label" default="Receiver Deployment" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'receiver', 'errors')}">
-                                    <g:select name="receiver.id" from="${au.org.emii.aatams.Receiver.list()}" optionKey="id" value="${detectionInstance?.receiver?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'receiverDeployment', 'errors')}">
+                                    <g:select name="receiverDeployment.id" from="${au.org.emii.aatams.ReceiverDeployment.list()}" optionKey="id" value="${detectionInstance?.receiverDeployment?.id}"  />
 
                                 </td>
                             </tr>
@@ -93,10 +93,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="tags"><g:message code="detection.tags.label" default="Tags" /></label>
+                                  <label for="tags"><g:message code="detection.surgeries.label" default="Surgeries" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'tags', 'errors')}">
-                                    <g:select name="tags" from="${au.org.emii.aatams.Tag.list()}" multiple="yes" optionKey="id" size="5" value="${detectionInstance?.tags*.id}" />
+                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'surgeries', 'errors')}">
+                                    <g:select name="surgeries" from="${au.org.emii.aatams.Surgery.list()}" multiple="yes" optionKey="id" size="5" value="${detectionInstance?.surgeries*.id}" />
 
                                 </td>
                             </tr>

@@ -15,7 +15,7 @@ class SensorDetection extends Detection
     static constraints =
     {
         timestamp()
-        receiver()
+        receiverDeployment()
         transmitterName(nullable:true, blank:true)
         transmitterSerialNumber(nullable:true, blank:true)
         stationName(nullable:true, blank:true)

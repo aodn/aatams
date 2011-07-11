@@ -22,11 +22,9 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'detection.id.label', default: 'Id')}" />
-                        
                             <g:sortableColumn property="timestamp" title="${message(code: 'detection.timestamp.label', default: 'Timestamp')}" />
                         
-                            <th><g:message code="detection.receiver.label" default="Receiver" /></th>
+                            <g:sortableColumn property="receiverDeployment" title="${message(code: 'detection.receiverDeployment.label', default: 'Receiver Deployment')}" />
                         
                             <g:sortableColumn property="transmitterName" title="${message(code: 'detection.transmitterName.label', default: 'Transmitter Name')}" />
                         
@@ -40,11 +38,9 @@
                     <g:each in="${detectionInstanceList}" status="i" var="detectionInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${detectionInstance.id}">${fieldValue(bean: detectionInstance, field: "id")}</g:link></td>
+                            <td><g:link action="show" id="${detectionInstance.id}"><g:formatDate date="${detectionInstance.timestamp}" /></g:link></td>
                         
-                            <td><g:formatDate date="${detectionInstance.timestamp}" /></td>
-                        
-                            <td>${fieldValue(bean: detectionInstance, field: "receiver")}</td>
+                            <td><g:link controller="receiverDeployment" action="show" id="${detectionInstance?.receiverDeployment?.id}">${fieldValue(bean: detectionInstance, field: "receiverDeployment")}</g:link></td>
                         
                             <td>${fieldValue(bean: detectionInstance, field: "transmitterName")}</td>
                         

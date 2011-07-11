@@ -1,11 +1,11 @@
 
 
-<%@ page import="au.org.emii.aatams.SystemRole" %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'systemRole.label', default: 'SystemRole')}" />
+        <g:set var="entityName" value="${message(code: 'secUser.label', default: 'SecUser')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -18,9 +18,9 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
-            <g:hasErrors bean="${systemRoleInstance}">
+            <g:hasErrors bean="${secUserInstance}">
             <div class="errors">
-                <g:renderErrors bean="${systemRoleInstance}" as="list" />
+                <g:renderErrors bean="${secUserInstance}" as="list" />
             </div>
             </g:hasErrors>
             <g:form action="save" >
@@ -30,10 +30,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="roleType"><g:message code="systemRole.roleType.label" default="Role Type" /></label>
+                                    <label for="username"><g:message code="secUser.username.label" default="Username" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: systemRoleInstance, field: 'roleType', 'errors')}">
-                                    <g:select name="roleType.id" from="${au.org.emii.aatams.SystemRoleType.list()}" optionKey="id" value="${systemRoleInstance?.roleType?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: secUserInstance, field: 'username', 'errors')}">
+                                    <g:textField name="username" value="${secUserInstance?.username}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="passwordHash"><g:message code="secUser.passwordHash.label" default="Password Hash" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: secUserInstance, field: 'passwordHash', 'errors')}">
+                                    <g:textField name="passwordHash" value="${secUserInstance?.passwordHash}" />
 
                                 </td>
                             </tr>

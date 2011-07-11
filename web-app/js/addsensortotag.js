@@ -17,7 +17,7 @@ $(function() {
                 var unit = $("#unit").val();
                 var status = $("#statusId option:selected").val();
                 
-                $.post('../sensor/save', 
+                $.post('/aatams/sensor/save', 
                        {'event.id':event,
                         'tag.id':tagId,
                         'transmitterType.id':transmitterTypeId,

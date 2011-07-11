@@ -24,6 +24,7 @@ class ProjectRoleController {
     def save = 
     {
         def projectRoleInstance = new ProjectRole(params)
+        
         if (projectRoleInstance.save(flush: true)) 
         {
             render projectRoleInstance as JSON
@@ -88,6 +89,10 @@ class ProjectRoleController {
         if (projectRoleInstance) {
             try {
                 projectRoleInstance.delete(flush: true)
+                
+                // Delete permissions from associated user.
+                // TODO:
+                
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), params.id])}"
                 redirect(action: "list")
             }

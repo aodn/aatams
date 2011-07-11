@@ -2,10 +2,9 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.util.ListUtils
 
-class Person 
+class Person extends SecUser
 {
     static hasMany = [projectRoles:ProjectRole, 
-                      systemRoles:SystemRole,
                       organisationPeople:OrganisationPerson]
     
     static transients = ['organisations', 'projects']

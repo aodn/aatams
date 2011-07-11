@@ -1,10 +1,10 @@
 
-<%@ page import="au.org.emii.aatams.SystemRoleType" %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'systemRoleType.label', default: 'SystemRoleType')}" />
+        <g:set var="entityName" value="${message(code: 'secUser.label', default: 'SecUser')}" />
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -22,19 +22,23 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'systemRoleType.id.label', default: 'Id')}" />
+                            <g:sortableColumn property="id" title="${message(code: 'secUser.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="displayName" title="${message(code: 'systemRoleType.displayName.label', default: 'Display Name')}" />
+                            <g:sortableColumn property="username" title="${message(code: 'secUser.username.label', default: 'Username')}" />
+                        
+                            <g:sortableColumn property="passwordHash" title="${message(code: 'secUser.passwordHash.label', default: 'Password Hash')}" />
                         
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${systemRoleTypeInstanceList}" status="i" var="systemRoleTypeInstance">
+                    <g:each in="${secUserInstanceList}" status="i" var="secUserInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${systemRoleTypeInstance.id}">${fieldValue(bean: systemRoleTypeInstance, field: "id")}</g:link></td>
+                            <td><g:link action="show" id="${secUserInstance.id}">${fieldValue(bean: secUserInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: systemRoleTypeInstance, field: "displayName")}</td>
+                            <td>${fieldValue(bean: secUserInstance, field: "username")}</td>
+                        
+                            <td>${fieldValue(bean: secUserInstance, field: "passwordHash")}</td>
                         
                         </tr>
                     </g:each>
@@ -42,7 +46,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${systemRoleTypeInstanceTotal}" />
+                <g:paginate total="${secUserInstanceTotal}" />
             </div>
         </div>
     </body>

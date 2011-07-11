@@ -95,7 +95,8 @@ log4j = {
 
     debug   "grails.app.controller.au.org.emii",
             "grails.app.service.au.org.emii",
-            "grails.app.domain.au.org.emii"
+            "grails.app.domain.au.org.emii",
+            "grails.app.filter"
 }
 
 //

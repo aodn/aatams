@@ -21,58 +21,17 @@ class OrganisationProjectController {
         return [organisationProjectInstance: organisationProjectInstance]
     }
     
-    def createOrganisationToProject =
-    {
-        def organisationProjectInstance = new OrganisationProject()
-        organisationProjectInstance.properties = params
-        return [organisationProjectInstance: organisationProjectInstance]
-    }
-    
-    def createProjectToOrganisation =
-    {
-        def organisationProjectInstance = new OrganisationProject()
-        organisationProjectInstance.properties = params
-        return [organisationProjectInstance: organisationProjectInstance]
-    }
-    
     def save = {
         def organisationProjectInstance = new OrganisationProject(params)
-        if (organisationProjectInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), organisationProjectInstance.id])}"
-            redirect(action: "show", id: organisationProjectInstance.id)
+        if (organisationProjectInstance.save(flush: true)) 
+        {
+            render organisationProjectInstance as JSON
         }
         else {
             render(view: "create", model: [organisationProjectInstance: organisationProjectInstance])
         }
     }
     
-    def saveOrganisationToProject = 
-    {
-        def organisationProjectInstance = new OrganisationProject(params)
-
-        if (organisationProjectInstance.save(flush: true)) 
-        {
-            render organisationProjectInstance as JSON
-        }
-        else 
-        {
-            render(view: "createOrganisationToProject", model: [organisationProjectInstance: organisationProjectInstance])
-        }
-    }
-
-    def saveProjectToOrganisation = {
-        def organisationProjectInstance = new OrganisationProject(params)
-        if (organisationProjectInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), organisationProjectInstance.id])}"
-            
-            // Redirect back to organisation edit.
-            redirect(controller:"organisation", action: "edit", id: organisationProjectInstance.organisation.id)
-        }
-        else {
-            render(view: "createOrganisationToProject", model: [organisationProjectInstance: organisationProjectInstance])
-        }
-    }
-
     def show = {
         def organisationProjectInstance = OrganisationProject.get(params.id)
         if (!organisationProjectInstance) {

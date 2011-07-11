@@ -1,10 +1,10 @@
 
-<%@ page import="au.org.emii.aatams.SystemRole" %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'systemRole.label', default: 'SystemRole')}" />
+        <g:set var="entityName" value="${message(code: 'secRole.label', default: 'SecRole')}" />
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -22,19 +22,19 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'systemRole.id.label', default: 'Id')}" />
+                            <g:sortableColumn property="id" title="${message(code: 'secRole.id.label', default: 'Id')}" />
                         
-                            <th><g:message code="systemRole.roleType.label" default="Role Type" /></th>
+                            <g:sortableColumn property="name" title="${message(code: 'secRole.name.label', default: 'Name')}" />
                         
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${systemRoleInstanceList}" status="i" var="systemRoleInstance">
+                    <g:each in="${secRoleInstanceList}" status="i" var="secRoleInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${systemRoleInstance.id}">${fieldValue(bean: systemRoleInstance, field: "id")}</g:link></td>
+                            <td><g:link action="show" id="${secRoleInstance.id}">${fieldValue(bean: secRoleInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: systemRoleInstance, field: "roleType")}</td>
+                            <td>${fieldValue(bean: secRoleInstance, field: "name")}</td>
                         
                         </tr>
                     </g:each>
@@ -42,7 +42,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${systemRoleInstanceTotal}" />
+                <g:paginate total="${secRoleInstanceTotal}" />
             </div>
         </div>
     </body>

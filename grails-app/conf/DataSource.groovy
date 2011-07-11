@@ -12,29 +12,31 @@ hibernate {
 }
 // environment specific settings
 environments {
-//    development {
-//        dataSource {
-//            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-////            url = "jdbc:hsqldb:file:devDB;shutdown=true"
-////            url = "jdbc:hsqldb:mem:devDB"
-//            driverClassName = "org.postgresql.Driver"
-//            url = "jdbc:postgresql://localhost:5432/aatams"
-//            username = "aatams"
-//            password = "aatams"
-//            
-//        }
-//    }
     development {
         dataSource {
-            dbCreate = "update"
+            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
             driverClassName = "org.postgresql.Driver"
-//            url = "jdbc:postgresql://localhost:5432/aatams3"
-            url = "jdbc:postgresql://localhost:5433/aatams3"
+            url = "jdbc:postgresql://localhost:5432/aatams"
             username = "aatams"
             password = "aatams"
             
         }
     }
+
+    //
+    // data-entry copy
+    //
+//    development {
+//        dataSource {
+//            dbCreate = "update"
+//            driverClassName = "org.postgresql.Driver"
+////            url = "jdbc:postgresql://localhost:5432/aatams3"
+//            url = "jdbc:postgresql://localhost:5433/aatams3"
+//            username = "aatams"
+//            password = "aatams"
+//            
+//        }
+//    }
     test {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'

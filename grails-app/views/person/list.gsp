@@ -10,7 +10,9 @@
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
-            <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
+            <shiro:hasRole name="SysAdmin">
+              <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
+            </shiro:hasRole>
         </div>
         <div class="body">
             <h1><g:message code="default.list.label" args="[entityName]" /></h1>
@@ -24,6 +26,8 @@
                         
                             <g:sortableColumn property="name" title="${message(code: 'person.name.label', default: 'Name')}" />
                         
+                            <g:sortableColumn property="username" title="${message(code: 'secUser.username.label', default: 'Username')}" />
+
                             <g:sortableColumn property="phoneNumber" title="${message(code: 'person.phoneNumber.label', default: 'Phone Number')}" />
                         
                             <g:sortableColumn property="emailAddress" title="${message(code: 'person.emailAddress.label', default: 'Email Address')}" />
@@ -41,6 +45,8 @@
                         
                             <td><g:link action="show" id="${personInstance.id}">${fieldValue(bean: personInstance, field: "name")}</g:link></td>
                         
+                            <td>${fieldValue(bean: personInstance, field: "username")}</td>
+
                             <td>${fieldValue(bean: personInstance, field: "phoneNumber")}</td>
                         
                             <td>${fieldValue(bean: personInstance, field: "emailAddress")}</td>

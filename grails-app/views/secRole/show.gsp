@@ -1,10 +1,10 @@
 
-<%@ page import="au.org.emii.aatams.SystemRoleType" %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'systemRoleType.label', default: 'SystemRoleType')}" />
+        <g:set var="entityName" value="${message(code: 'secRole.label', default: 'SecRole')}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -23,16 +23,36 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="systemRoleType.id.label" default="Id" /></td>
+                            <td valign="top" class="name"><g:message code="secRole.id.label" default="Id" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: systemRoleTypeInstance, field: "id")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: secRoleInstance, field: "id")}</td>
                             
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="systemRoleType.displayName.label" default="Display Name" /></td>
+                            <td valign="top" class="name"><g:message code="secRole.name.label" default="Name" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: systemRoleTypeInstance, field: "displayName")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: secRoleInstance, field: "name")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="secRole.permissions.label" default="Permissions" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: secRoleInstance, field: "permissions")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="secRole.users.label" default="Users" /></td>
+                            
+                            <td valign="top" style="text-align: left;" class="value">
+                                <ul>
+                                <g:each in="${secRoleInstance.users}" var="u">
+                                    <li><g:link controller="secUser" action="show" id="${u.id}">${u?.encodeAsHTML()}</g:link></li>
+                                </g:each>
+                                </ul>
+                            </td>
                             
                         </tr>
                     
@@ -41,7 +61,7 @@
             </div>
             <div class="buttons">
                 <g:form>
-                    <g:hiddenField name="id" value="${systemRoleTypeInstance?.id}" />
+                    <g:hiddenField name="id" value="${secRoleInstance?.id}" />
                     <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                     <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
                 </g:form>

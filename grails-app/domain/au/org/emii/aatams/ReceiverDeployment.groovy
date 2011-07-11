@@ -56,6 +56,13 @@ class ReceiverDeployment
      */
     ReceiverRecovery recovery
     
+    /**
+     * Date when data from this deployment is no longer embargoed (may be null to
+     * indicate that no embargo exists).
+     */
+    Date embargoDate
+
+    
     static constraints =
     {
         receiver()
@@ -71,6 +78,7 @@ class ReceiverDeployment
         location(nullable:true)
         comments(nullable:true)
         recovery(nullable:true)
+        embargoDate(nullable:true)
     }
     
     String toString()

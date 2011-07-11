@@ -11,7 +11,9 @@
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
-            <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
+            <shiro:user>
+              <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
+            </shiro:user>
         </div>
         <div class="body">
             <h1><g:message code="default.list.label" args="[entityName]" /></h1>
@@ -34,8 +36,9 @@
 
                             <g:sortableColumn property="postalAddress" title="${message(code: 'organisation.postalAddress.label', default: 'Postal Address')}" />
                         
-                            <g:sortableColumn property="status" title="${message(code: 'organisation.status.label', default: 'Status')}" />
-                        
+                            <shiro:hasRole name="SysAdmin">
+                              <g:sortableColumn property="status" title="${message(code: 'organisation.status.label', default: 'Status')}" />
+                            </shiro:hasRole>
                             <g:sortableColumn property="projects" title="${message(code: 'organisation.projects.label', default: 'Projects')}" />
 
                             <g:sortableColumn property="people" title="${message(code: 'organisation.people.label', default: 'People')}" />
@@ -56,8 +59,10 @@
 
                               <td>${fieldValue(bean: organisationInstance, field: "postalAddress")}</td>
 
-                              <td>${fieldValue(bean: organisationInstance, field: "status")}</td>
-
+                              <shiro:hasRole name="SysAdmin">
+                                <td>${fieldValue(bean: organisationInstance, field: "status")}</td>
+                              </shiro:hasRole>
+                              
                               <td>${fieldValue(bean: organisationInstance, field: "projects")}</td>
 
                               <td>${fieldValue(bean: organisationInstance, field: "people")}</td>

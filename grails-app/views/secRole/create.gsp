@@ -1,11 +1,11 @@
 
 
-<%@ page import="au.org.emii.aatams.SystemRoleType" %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'systemRoleType.label', default: 'SystemRoleType')}" />
+        <g:set var="entityName" value="${message(code: 'secRole.label', default: 'SecRole')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -18,9 +18,9 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
-            <g:hasErrors bean="${systemRoleTypeInstance}">
+            <g:hasErrors bean="${secRoleInstance}">
             <div class="errors">
-                <g:renderErrors bean="${systemRoleTypeInstance}" as="list" />
+                <g:renderErrors bean="${secRoleInstance}" as="list" />
             </div>
             </g:hasErrors>
             <g:form action="save" >
@@ -30,10 +30,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="displayName"><g:message code="systemRoleType.displayName.label" default="Display Name" /></label>
+                                    <label for="name"><g:message code="secRole.name.label" default="Name" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: systemRoleTypeInstance, field: 'displayName', 'errors')}">
-                                    <g:textField name="displayName" value="${systemRoleTypeInstance?.displayName}" />
+                                <td valign="top" class="value ${hasErrors(bean: secRoleInstance, field: 'name', 'errors')}">
+                                    <g:textField name="name" value="${secRoleInstance?.name}" />
 
                                 </td>
                             </tr>

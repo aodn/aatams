@@ -14,7 +14,7 @@ $(function() {
                 var access = $("#access option:selected").val();
                 var event = $("#id").val();
                 
-                $.post('../projectRole/save', 
+                $.post('/aatams/projectRole/save', 
                        {'event.id':event, 
                         "project.id":projectId, 
                         "person.id":personId,

@@ -17,11 +17,22 @@ class ProjectRole
     
     String toString()
     {
-        return getProjectAndRole() + ": " + String.valueOf(person) + ": " + String.valueOf(access)
+        return getProjectAndRole() + ": " + String.valueOf(person)
     }
     
     String getProjectAndRole()
     {
         return String.valueOf(project) + " - " + String.valueOf(roleType)
+    }
+    
+    def beforeInsert =
+    {
+        // Add permissions based on role type and access.
+        PermissionUtils.setPermissions(this)
+    }
+    
+    def beforeDelete =
+    {
+        PermissionUtils.removePermissions(this)
     }
 }

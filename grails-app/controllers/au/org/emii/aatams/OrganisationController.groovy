@@ -1,16 +1,30 @@
 package au.org.emii.aatams
 
-class OrganisationController {
+import org.apache.shiro.SecurityUtils
 
+class OrganisationController
+{
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
     }
 
-    def list = {
+    def list = 
+    {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [organisationInstanceList: Organisation.list(params), organisationInstanceTotal: Organisation.count()]
+        
+        def organisationList = Organisation.list(params)
+
+        if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
+        {
+            // Filter out PENDING organisations (only sys admin should see these).
+            organisationList = organisationList.findAll{
+                it.status != EntityStatus.PENDING
+            }
+        }
+        
+        [organisationInstanceList: organisationList, organisationInstanceTotal: organisationList.count()]
     }
 
     def create = {

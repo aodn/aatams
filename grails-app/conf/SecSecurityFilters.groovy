@@ -1,4 +1,4 @@
-import au.org.emii.aatams.PermissionUtils
+import au.org.emii.aatams.*
 
 import org.apache.shiro.SecurityUtils
 
@@ -8,6 +8,8 @@ import org.apache.shiro.SecurityUtils
  */
 class SecSecurityFilters 
 {
+    def permissionUtilsService
+    
     //
     // Any controllers not specified here are only accessible to 
     // sys admin.
@@ -22,7 +24,7 @@ class SecSecurityFilters
          "project":"id",
          "projectRole":"project.id",
          "person":"",
-         "installation":"",
+         "installation":"project.id",
          "installationStation":"",
          "receiver":"",
          "tag":"",
@@ -44,13 +46,19 @@ class SecSecurityFilters
          "show"]
     
     //
-    // Only users with write permission on a project can perform these actions.
+    // Only users with write permission on a specific project can perform these actions.
     //
     def projectWriteActions =
-        ["create",
-         "save",
+//        ["create",
+//         "save",
+//         "edit",
+//         "update"]
+        ["save",
          "edit",
          "update"]
+    
+    def projectWriteAnyActions =
+        ["create"]
     
     //
     // Only sys admin role can perform these actions.
@@ -93,9 +101,30 @@ class SecSecurityFilters
                     //
                     if (projectWriteActions.contains(actionName))
                     {
+                        println("params: " + params)
+                        
                         def projectId = getProjectId(params, controllerName)
                         
-                        if (SecurityUtils.subject.isPermitted(PermissionUtils.buildProjectWritePermission(projectId)))
+                        if (SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(projectId)))
+                        {
+                            return true
+                        }
+                        else
+                        {
+                            log.warn("Not permitted, user: " + SecurityUtils.subject
+                                     + ", controller: " + controllerName
+                                     + ", action: " + actionName
+                                     + ", project ID: " + String.valueOf(projectId))
+                            System.out.println("Not permitted, user: " + SecurityUtils.subject
+                                     + ", controller: " + controllerName
+                                     + ", action: " + actionName
+                                     + ", project ID: " + String.valueOf(projectId))
+                        }
+                    }
+
+                    if (projectWriteAnyActions.contains(actionName))
+                    {
+                        if (SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWriteAnyPermission()))
                         {
                             return true
                         }
@@ -109,7 +138,7 @@ class SecSecurityFilters
                                      + ", action: " + actionName)
                         }
                     }
-
+                    
                     if (deleteActions.contains(actionName))
                     {
                         accessControl

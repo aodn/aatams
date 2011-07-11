@@ -29,6 +29,6 @@ class Surgery
     
     String toString()
     {
-        String.valueOf(type) " performed by " + String.valueOf(surgeon)
+        return "Tag (" + String.valueOf(tag) + "): " + String.valueOf(type) + " performed by " + String.valueOf(surgeon)
     }
 }

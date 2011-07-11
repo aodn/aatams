@@ -478,6 +478,36 @@ class BootStrap
                                  deployment:rx1Bondi,
                                  batteryLife:12.5f,
                                  batteryVoltage:3.7f).save(failOnError:true)
+                             
+        ReceiverRecovery recovery2 = 
+            new ReceiverRecovery(recoveryDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-17 12:54:56"),
+                                 location:(Point)reader.read("POINT(20 20)"),
+                                 status:recoveredStatus,
+                                 recoverer:sealProjectInvestigator,
+                                 deployment:rx2Bondi,
+                                 batteryLife:12.5f,
+                                 batteryVoltage:3.7f).save(failOnError:true)
+                             
+        // Detections.
+        Detection detection1 =
+            new Detection(timestamp:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-20 14:10:00"),
+                          receiverDeployment:rx1Bondi,
+                          stationName:'Bondi SW1',
+                          transmitterName:'A69-1303-62339',
+                          transmitterSerialNumber:'12345678',
+                          location:(Point)reader.read("POINT(10 10)"))
+        detection1.addToSurgeries(surgery1)
+        detection1.save(failOnError:true)
+        
+        Detection detection2 =
+            new Detection(timestamp:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-20 15:10:00"),
+                          receiverDeployment:rx2Bondi,
+                          stationName:'Bondi SW2',
+                          transmitterName:'A69-1303-62339',
+                          transmitterSerialNumber:'12345678',
+                          location:(Point)reader.read("POINT(20 20)"))
+        detection2.addToSurgeries(surgery1)
+        detection2.save(failOnError:true)
         
     }
 }

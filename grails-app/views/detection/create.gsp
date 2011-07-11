@@ -33,17 +33,17 @@
                                     <label for="timestamp"><g:message code="detection.timestamp.label" default="Timestamp" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'timestamp', 'errors')}">
-                                    <g:datePicker name="timestamp" precision="day" value="${detectionInstance?.timestamp}"  />
+                                    <g:datePicker name="timestamp" precision="minute" value="${detectionInstance?.timestamp}"  />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="receiver"><g:message code="detection.receiver.label" default="Receiver" /></label>
+                                    <label for="receiverDeployment"><g:message code="detection.receiverDeployment.label" default="Receiver Deployment" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'receiver', 'errors')}">
-                                    <g:select name="receiver.id" from="${au.org.emii.aatams.Receiver.list()}" optionKey="id" value="${detectionInstance?.receiver?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'receiverDeployment', 'errors')}">
+                                    <g:select name="receiverDeployment.id" from="${au.org.emii.aatams.ReceiverDeployment.list()}" optionKey="id" value="${detectionInstance?.receiverDeployment?.id}"  />
 
                                 </td>
                             </tr>

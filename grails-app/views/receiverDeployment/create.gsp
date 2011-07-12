@@ -33,7 +33,7 @@
                                     <label for="station"><g:message code="receiverDeployment.station.label" default="Station" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'station', 'errors')}">
-                                    <g:select name="station.id" from="${au.org.emii.aatams.InstallationStation.list()}" optionKey="id" value="${receiverDeploymentInstance?.station?.id}"  />
+                                    <g:select name="station.id" from="${candidateStations}" optionKey="id" value="${receiverDeploymentInstance?.station?.id}"  />
 
                                 </td>
                             </tr>
@@ -43,7 +43,7 @@
                                     <label for="receiver"><g:message code="receiverDeployment.receiver.label" default="Receiver" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'receiver', 'errors')}">
-                                    <g:select name="receiver.id" from="${au.org.emii.aatams.Receiver.list()}" optionKey="id" value="${receiverDeploymentInstance?.receiver?.id}"  />
+                                    <g:select name="receiver.id" from="${candidateReceivers}" optionKey="id" value="${receiverDeploymentInstance?.receiver?.id}"  />
 
                                 </td>
                             </tr>

@@ -23,11 +23,17 @@ class CandidateEntitiesFilters
                 def candidateInstallations = candidateEntitiesService.installations()
                 model?.candidateInstallations = candidateInstallations
                 
+                def candidateStations = candidateEntitiesService.stations()
+                model?.candidateStations = candidateStations
+                
                 def candidateDeployments = candidateEntitiesService.deployments()
                 model?.candidateDeployments = candidateDeployments
                 
                 def candidateSurgeries = candidateEntitiesService.surgeries()
                 model?.candidateSurgeries = candidateSurgeries
+                
+                def candidateReceivers = candidateEntitiesService.receivers()
+                model?.candidateReceivers = candidateReceivers
                 
                 //
                 // Specific to animal release edit.

@@ -43,7 +43,7 @@
                                     <label for="receiverDeployment"><g:message code="detection.receiverDeployment.label" default="Receiver Deployment" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'receiverDeployment', 'errors')}">
-                                    <g:select name="receiverDeployment.id" from="${au.org.emii.aatams.ReceiverDeployment.list()}" optionKey="id" value="${detectionInstance?.receiverDeployment?.id}"  />
+                                    <g:select name="receiverDeployment.id" from="${candidateDeployments}" optionKey="id" value="${detectionInstance?.receiverDeployment?.id}"  />
 
                                 </td>
                             </tr>

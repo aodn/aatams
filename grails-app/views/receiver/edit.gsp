@@ -43,7 +43,7 @@
                                   <label for="project"><g:message code="receiver.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${receiverInstance?.project?.id}"  />
+                                    <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${receiverInstance?.project?.id}"  />
 
                                 </td>
                             </tr>

@@ -305,6 +305,20 @@ class BootStrap
                     project:sealCountProject,
                     status:newStatus,
                     transmitterType:pinger).save(failOnError: true)
+              
+        // Bug #352 - this tag won't be selectable if animal release project
+        // set to "tuna".
+        Tag tag5 =
+            new Tag(codeName:'A70-1303-33333',
+                    serialNumber:'3333',
+                    embargoDate:null,
+                    codeMap:'A70-1303',
+                    pingCode:'3333',
+                    model:seimensXyz,
+                    project:tunaProject,
+                    status:newStatus,
+                    transmitterType:pinger).save(failOnError: true)
+          
                 
         TransmitterType depth =
             new TransmitterType(transmitterTypeName:"DEPTH").save(failOnError:true)

@@ -27,6 +27,7 @@ class SecSecurityFilters
          "installation":"project.id",
          "installationStation":"project.id",
          "receiver":"project.id",
+         "species":"",
          "tag":"project.id",
          "animalRelease":"project.id",
          "detection":"project.id",
@@ -43,7 +44,8 @@ class SecSecurityFilters
     def publicActions =
         ["index",
          "list",
-         "show"]
+         "show",
+         "lookupByName"]
     
     //
     // Only users with write permission on a specific project can perform these actions.

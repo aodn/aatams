@@ -37,12 +37,23 @@ class CandidateEntitiesService
     def stations =
     {
         def candidateStations = 
-            InstallationStations.list().grep(
+            InstallationStation.list().grep(
             {
                 projects().contains(it?.installation?.project)
             })
         
         return candidateStations
+    }
+    
+    def receivers =
+    {
+        def candidateReceivers =
+            Receiver.list().grep(
+            {
+                projects().contains(it?.project)
+            })
+        
+        return candidateReceivers
     }
     
     def tags(Project project)

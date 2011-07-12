@@ -22,6 +22,21 @@ class CandidateEntitiesFilters
                 
                 def candidateInstallations = candidateEntitiesService.installations()
                 model?.candidateInstallations = candidateInstallations
+                
+                def candidateDeployments = candidateEntitiesService.deployments()
+                model?.candidateDeployments = candidateDeployments
+                
+                def candidateSurgeries = candidateEntitiesService.surgeries()
+                model?.candidateSurgeries = candidateSurgeries
+                
+                //
+                // Specific to animal release edit.
+                //
+                def candidateTags = candidateEntitiesService.tags(model?.animalReleaseInstance?.project)
+                model?.candidateTags = candidateTags
+
+                def candidatePeople = candidateEntitiesService.people(model?.animalReleaseInstance?.project)
+                model?.candidatePeople = candidatePeople
             }
         }
     }

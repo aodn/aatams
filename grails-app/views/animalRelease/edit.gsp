@@ -37,7 +37,7 @@
                                   <label for="project"><g:message code="animalRelease.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${animalReleaseInstance?.project?.id}"  />
+                                    <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${animalReleaseInstance?.project?.id}"  />
 
                                 </td>
                             </tr>
@@ -277,7 +277,7 @@
                                     <label for="tag"><g:message code="surgery.tag.label" default="Tag" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'tag', 'errors')}">
-                                    <g:select name="tagId" from="${au.org.emii.aatams.Tag.list()}" optionKey="id" value="${surgeryInstance?.tag?.id}"  />
+                                    <g:select name="tagId" from="${candidateTags}" optionKey="id" value="${surgeryInstance?.tag?.id}"  />
 
                                 </td>
                             </tr>
@@ -317,7 +317,7 @@
                                     <label for="surgeon"><g:message code="surgery.surgeon.label" default="Person" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'surgeon', 'errors')}">
-                                    <g:select name="surgeonId" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${surgeryInstance?.surgeon?.id}"  />
+                                    <g:select name="surgeonId" from="${candidatePeople}" optionKey="id" value="${surgeryInstance?.surgeon?.id}"  />
 
                                 </td>
                             </tr>

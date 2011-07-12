@@ -161,6 +161,20 @@ class SecSecurityFilters
      */
     def getProjectId(params, controllerName)
     {
+        // Special case for detection.
+        if (controllerName == "detection")
+        {
+            def projectId = params[accessibleControllers[controllerName]]
+            if (projectId != null)
+            {
+                return projectId
+            }
+            else
+            {
+                return ReceiverDeployment.get(params?.receiverDeployment?.id)?.receiver?.project?.id
+            }
+        }
+        
         return params[accessibleControllers[controllerName]]
     }
 }

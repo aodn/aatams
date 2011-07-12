@@ -40,7 +40,7 @@
                                     <label for="project"><g:message code="animalRelease.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${animalReleaseInstance?.project?.id}"  />
+                                    <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${animalReleaseInstance?.project?.id}"  />
 
                                 </td>
                             </tr>

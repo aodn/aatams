@@ -47,7 +47,7 @@
                                   <label for="receiver"><g:message code="detection.receiverDeployment.label" default="Receiver Deployment" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'receiverDeployment', 'errors')}">
-                                    <g:select name="receiverDeployment.id" from="${au.org.emii.aatams.ReceiverDeployment.list()}" optionKey="id" value="${detectionInstance?.receiverDeployment?.id}"  />
+                                    <g:select name="receiverDeployment.id" from="${candidateDeployments}" optionKey="id" value="${detectionInstance?.receiverDeployment?.id}"  />
 
                                 </td>
                             </tr>
@@ -97,7 +97,7 @@
                                   <label for="tags"><g:message code="detection.surgeries.label" default="Surgeries" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'surgeries', 'errors')}">
-                                    <g:select name="surgeries" from="${au.org.emii.aatams.Surgery.list()}" multiple="yes" optionKey="id" size="5" value="${detectionInstance?.surgeries*.id}" />
+                                    <g:select name="surgeries" from="${candidateSurgeries}" multiple="yes" optionKey="id" size="5" value="${detectionInstance?.surgeries*.id}" />
 
                                 </td>
                             </tr>

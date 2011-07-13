@@ -26,13 +26,6 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="detection.id.label" default="Id" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "id")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.timestamp.label" default="Timestamp" /></td>
                             
                             <td valign="top" class="value"><g:formatDate date="${detectionInstance?.timestamp}" /></td>

@@ -234,38 +234,38 @@ class BootStrap
         //
         // Devices.
         //
-        DeviceManufacturer seimens = 
-            new DeviceManufacturer(manufacturerName:'Seimens').save(failOnError: true)
+        DeviceManufacturer vemco = 
+            new DeviceManufacturer(manufacturerName:'Vemco').save(failOnError: true)
 
-        DeviceModel seimensXyz =
-            new DeviceModel(modelName:'XYZ', manufacturer:seimens).save(failOnError: true)
+        DeviceModel vemcoXyz =
+            new DeviceModel(modelName:'XYZ', manufacturer:vemco).save(failOnError: true)
 
         DeviceStatus newStatus = new DeviceStatus(status:'NEW').save(failOnError: true)
         DeviceStatus deployedStatus = new DeviceStatus(status:'DEPLOYED').save(failOnError: true)
         DeviceStatus recoveredStatus = new DeviceStatus(status:'RECOVERED').save(failOnError: true)
 
         Receiver rx1 =
-            new Receiver(codeName:String.valueOf(seimensXyz) + " - " + '12345678',
+            new Receiver(codeName:String.valueOf(vemcoXyz) + " - " + '12345678',
                          serialNumber:'12345678',
                          embargoDate:null,
                          status:deployedStatus,
-                         model:seimensXyz,
+                         model:vemcoXyz,
                          project:sealCountProject).save(failOnError: true)
 
         Receiver rx2 =
-            new Receiver(codeName:String.valueOf(seimensXyz) + " - " + '87654321',
+            new Receiver(codeName:String.valueOf(vemcoXyz) + " - " + '87654321',
                          serialNumber:'87654321',
                          embargoDate:null,
                          status:deployedStatus,
-                         model:seimensXyz,
+                         model:vemcoXyz,
                          project:tunaProject).save(failOnError: true)
 
         Receiver rx3 =
-            new Receiver(codeName:String.valueOf(seimensXyz) + " - " + '1111',
+            new Receiver(codeName:String.valueOf(vemcoXyz) + " - " + '1111',
                          serialNumber:'1111',
                          embargoDate:null,
                          status:newStatus,
-                         model:seimensXyz,
+                         model:vemcoXyz,
                          project:tunaProject).save(failOnError: true)
                      
         //
@@ -279,7 +279,7 @@ class BootStrap
                     embargoDate:null,
                     codeMap:'A69-1303',
                     pingCode:'62339',
-                    model:seimensXyz,
+                    model:vemcoXyz,
                     project:sealCountProject,
                     status:deployedStatus,
                     transmitterType:pinger).save(failOnError: true)
@@ -290,7 +290,7 @@ class BootStrap
                     embargoDate:null,
                     codeMap:'A69-1303',
                     pingCode:'46601',
-                    model:seimensXyz,
+                    model:vemcoXyz,
                     project:sealCountProject,
                     status:deployedStatus,
                     transmitterType:pinger).save(failOnError: true)
@@ -301,7 +301,7 @@ class BootStrap
                     embargoDate:null,
                     codeMap:'A69-1303',
                     pingCode:'11111',
-                    model:seimensXyz,
+                    model:vemcoXyz,
                     project:sealCountProject,
                     status:newStatus,
                     transmitterType:pinger).save(failOnError: true)
@@ -314,7 +314,7 @@ class BootStrap
                     embargoDate:null,
                     codeMap:'A70-1303',
                     pingCode:'3333',
-                    model:seimensXyz,
+                    model:vemcoXyz,
                     project:tunaProject,
                     status:newStatus,
                     transmitterType:pinger).save(failOnError: true)
@@ -331,7 +331,7 @@ class BootStrap
                     embargoDate:null,
                     codeMap:'A69-1400',
                     pingCode:'64000',
-                    model:seimensXyz,
+                    model:vemcoXyz,
                     project:sealCountProject,
                     status:newStatus,
                     tag:tag1,
@@ -346,7 +346,7 @@ class BootStrap
                     embargoDate:null,
                     codeMap:'A69-1500',
                     pingCode:'65000',
-                    model:seimensXyz,
+                    model:vemcoXyz,
                     project:sealCountProject,
                     status:newStatus,
                     tag:tag1,

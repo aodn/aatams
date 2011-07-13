@@ -9,6 +9,8 @@
  */
 class CandidateEntitiesFilters 
 {
+    def dependsOn = [DetectionEmbargoFilter.class]
+    
     def candidateEntitiesService
 
     def filters = 

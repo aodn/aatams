@@ -472,7 +472,8 @@ class BootStrap
                               captureDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:10:00"),
                               releaseLocality:'Neptune Islands',
                               releaseLocation:(Point)reader.read("POINT(20 20)"),
-                              releaseDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:15:00")).save(failOnError:true)
+                              releaseDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:15:00"),
+                              embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2015-05-15 12:34:56")).save(failOnError:true)
 
         AnimalMeasurement whiteShark1Length = 
             new AnimalMeasurement(release:whiteShark1Release,

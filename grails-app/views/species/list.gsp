@@ -26,6 +26,8 @@
                         
                             <g:sortableColumn property="name" title="${message(code: 'species.name.label', default: 'Name')}" />
                         
+                            <g:sortableColumn property="embargoDate" title="${message(code: 'species.embargoDate.label', default: 'Embargo Date')}" />
+
                         </tr>
                     </thead>
                     <tbody>
@@ -35,6 +37,8 @@
                             <td><g:link action="show" id="${speciesInstance.id}">${fieldValue(bean: speciesInstance, field: "id")}</g:link></td>
                         
                             <td>${fieldValue(bean: speciesInstance, field: "name")}</td>
+                        
+                            <td><g:formatDate date="${speciesInstance.embargoDate}" /></td>
                         
                         </tr>
                     </g:each>

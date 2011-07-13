@@ -41,6 +41,16 @@
                                 </td>
                             </tr>
                         
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="embargoDate"><g:message code="species.embargoDate.label" default="Embargo Date" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: speciesInstance, field: 'embargoDate', 'errors')}">
+                                    <g:datePicker name="embargoDate" precision="day" value="${speciesInstance?.embargoDate}" default="none" noSelection="['': '']" />
+
+                                </td>
+                            </tr>
+                        
                         </tbody>
                     </table>
                 </div>

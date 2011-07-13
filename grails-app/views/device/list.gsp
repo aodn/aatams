@@ -46,8 +46,6 @@
                         
                             <td>${fieldValue(bean: deviceInstance, field: "serialNumber")}</td>
                         
-                            <td><g:formatDate date="${deviceInstance.embargoDate}" /></td>
-                        
                             <td>${fieldValue(bean: deviceInstance, field: "model")}</td>
                         
                             <td>${fieldValue(bean: deviceInstance, field: "project")}</td>

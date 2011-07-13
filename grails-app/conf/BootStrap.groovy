@@ -247,7 +247,6 @@ class BootStrap
         Receiver rx1 =
             new Receiver(codeName:String.valueOf(vemcoXyz) + " - " + '12345678',
                          serialNumber:'12345678',
-                         embargoDate:null,
                          status:deployedStatus,
                          model:vemcoXyz,
                          project:sealCountProject).save(failOnError: true)
@@ -255,7 +254,6 @@ class BootStrap
         Receiver rx2 =
             new Receiver(codeName:String.valueOf(vemcoXyz) + " - " + '87654321',
                          serialNumber:'87654321',
-                         embargoDate:null,
                          status:deployedStatus,
                          model:vemcoXyz,
                          project:tunaProject).save(failOnError: true)
@@ -263,7 +261,6 @@ class BootStrap
         Receiver rx3 =
             new Receiver(codeName:String.valueOf(vemcoXyz) + " - " + '1111',
                          serialNumber:'1111',
-                         embargoDate:null,
                          status:newStatus,
                          model:vemcoXyz,
                          project:tunaProject).save(failOnError: true)
@@ -276,7 +273,6 @@ class BootStrap
         Tag tag1 =
             new Tag(codeName:'A69-1303-62339',
                     serialNumber:'12345678',
-                    embargoDate:null,
                     codeMap:'A69-1303',
                     pingCode:'62339',
                     model:vemcoXyz,
@@ -287,7 +283,6 @@ class BootStrap
         Tag tag2 =
             new Tag(codeName:'A69-1303-46601',
                     serialNumber:'12345678',
-                    embargoDate:null,
                     codeMap:'A69-1303',
                     pingCode:'46601',
                     model:vemcoXyz,
@@ -298,7 +293,6 @@ class BootStrap
         Tag tag3 =
             new Tag(codeName:'A69-1303-11111',
                     serialNumber:'1111',
-                    embargoDate:null,
                     codeMap:'A69-1303',
                     pingCode:'11111',
                     model:vemcoXyz,
@@ -311,7 +305,6 @@ class BootStrap
         Tag tag5 =
             new Tag(codeName:'A70-1303-33333',
                     serialNumber:'3333',
-                    embargoDate:null,
                     codeMap:'A70-1303',
                     pingCode:'3333',
                     model:vemcoXyz,
@@ -328,7 +321,6 @@ class BootStrap
         Sensor sensor1 =
             new Sensor(codeName:'A69-1400-64000',
                     serialNumber:'5678',
-                    embargoDate:null,
                     codeMap:'A69-1400',
                     pingCode:'64000',
                     model:vemcoXyz,
@@ -343,7 +335,6 @@ class BootStrap
         Sensor sensor2 =
             new Sensor(codeName:'A69-1500-65000',
                     serialNumber:'6789',
-                    embargoDate:null,
                     codeMap:'A69-1500',
                     pingCode:'65000',
                     model:vemcoXyz,

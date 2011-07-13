@@ -122,6 +122,16 @@
                                 </td>
                             </tr>
                         
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="embargoDate"><g:message code="receiverDeployment.embargoDate.label" default="Embargo Date" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'embargoDate', 'errors')}">
+                                    <g:datePicker name="embargoDate" precision="day" value="${receiverDeploymentInstance?.embargoDate}" default="none" noSelection="['': '']" />
+
+                                </td>
+                            </tr>
+                        
                         </tbody>
                     </table>
                 </div>

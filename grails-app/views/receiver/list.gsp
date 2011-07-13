@@ -35,8 +35,6 @@
                         
                             <g:sortableColumn property="status" title="${message(code: 'receiver.status.label', default: 'Status')}" />
                         
-                            <th><g:message code="receiver.embargoDate.label" default="Embargo Date" /></th>
-                        
                         </tr>
                     </thead>
                     <tbody>
@@ -54,8 +52,6 @@
                             <td><g:link controller="project" action="show" id="${receiverInstance?.project?.id}">${fieldValue(bean: receiverInstance?.project, field: "name")}</g:link></td>
 
                             <td>${fieldValue(bean: receiverInstance, field: "status")}</td>
-                        
-                            <td><g:formatDate date="${receiverInstance.embargoDate}" /></td>
                         
                         </tr>
                     </g:each>

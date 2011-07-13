@@ -88,6 +88,13 @@
                             
                         </tr>
                     
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDeployment.embargoDate.label" default="Embargo Date" /></td>
+                            
+                            <td valign="top" class="value"><g:formatDate date="${receiverDeploymentInstance?.embargoDate}" /></td>
+                            
+                        </tr>
+                    
                     </tbody>
                 </table>
             </div>

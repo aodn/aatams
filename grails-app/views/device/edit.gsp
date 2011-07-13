@@ -53,16 +53,6 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="embargoDate"><g:message code="device.embargoDate.label" default="Embargo Date" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'embargoDate', 'errors')}">
-                                    <g:datePicker name="embargoDate" precision="day" value="${deviceInstance?.embargoDate}" default="none" noSelection="['': '']" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                   <label for="model"><g:message code="device.model.label" default="Model" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'model', 'errors')}">

@@ -60,6 +60,6 @@ class Detection
     
     String toString()
     {
-        return timestamp.toString() + " " + receiver.toString()
+        return timestamp.toString() + " " + String.valueOf(receiverDeployment?.receiver)
     }
 }

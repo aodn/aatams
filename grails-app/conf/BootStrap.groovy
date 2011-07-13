@@ -396,6 +396,19 @@ class BootStrap
                                     name:'Bondi SW3',
                                     curtainPosition:3,
                                     location:(Point)reader.read("POINT(30 30)")).save(failOnError:true)
+                                
+        InstallationStation ningalooS1 = 
+            new InstallationStation(installation:bondiLine,
+                                    name:'Ningaloo S1',
+                                    curtainPosition:1,
+                                    location:(Point)reader.read("POINT(10 10)")).save(failOnError:true)
+
+        InstallationStation ningalooS2 = 
+            new InstallationStation(installation:bondiLine,
+                                    name:'Ningaloo S2',
+                                    curtainPosition:2,
+                                    location:(Point)reader.read("POINT(20 20)")).save(failOnError:true)
+            
 
         //
         //  Receiver Deployments.
@@ -422,6 +435,16 @@ class BootStrap
                                    depthBelowSurfaceM:7.4f,
                                    location:(Point)reader.read("POINT(20 20)")).save(failOnError:true)
 
+        ReceiverDeployment rx3Ningaloo =
+            new ReceiverDeployment(station:ningalooS1,
+                                   receiver:rx3,
+                                   deploymentDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 12:34:56"),
+                                   acousticReleaseID:"asdf",
+                                   mooringType:concreteMooring,
+                                   bottomDepthM:12f,
+                                   depthBelowSurfaceM:5f,
+                                   location:(Point)reader.read("POINT(10 10)")).save(failOnError:true)
+                               
         //
         // Animals and Animal Releases etc.
         //

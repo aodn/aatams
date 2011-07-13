@@ -24,6 +24,8 @@
                     <thead>
                         <tr>
                         
+                            <td/>
+                            
                             <g:sortableColumn property="name" title="${message(code: 'installationStation.name.label', default: 'Name')}" />
                         
                             <g:sortableColumn property="curtainPosition" title="${message(code: 'installationStation.curtainPosition.label', default: 'Curtain Position')}" />
@@ -40,7 +42,9 @@
                     <g:each in="${installationStationInstanceList}" status="i" var="installationStationInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${installationStationInstance.id}">${fieldValue(bean: installationStationInstance, field: "name")}</g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${installationStationInstance.id}"></g:link></td>
+                    
+                            <td>${fieldValue(bean: installationStationInstance, field: "name")}</td>
                         
                             <td>${fieldValue(bean: installationStationInstance, field: "curtainPosition")}</td>
                         

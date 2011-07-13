@@ -24,6 +24,8 @@
                     <thead>
                         <tr>
                         
+                            <td/>
+                            
                             <g:sortableColumn property="timestamp" title="${message(code: 'detection.timestamp.label', default: 'Timestamp')}" />
                         
                             <g:sortableColumn property="receiverDeployment" title="${message(code: 'detection.receiverDeployment.label', default: 'Receiver Deployment')}" />
@@ -40,7 +42,9 @@
                     <g:each in="${detectionInstanceList}" status="i" var="detectionInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${detectionInstance.id}"><g:formatDate date="${detectionInstance.timestamp}" /></g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${detectionInstance.id}"></g:link></td>
+                    
+                            <td><g:formatDate date="${detectionInstance.timestamp}" /></td>
                         
                             <td><g:link controller="receiverDeployment" action="show" id="${detectionInstance?.receiverDeployment?.id}">${fieldValue(bean: detectionInstance, field: "receiverDeployment")}</g:link></td>
                         

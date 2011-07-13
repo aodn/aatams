@@ -24,6 +24,8 @@
                     <thead>
                         <tr>
                         
+                            <td/>
+                            
                             <g:sortableColumn property="name" title="${message(code: 'installation.name.label', default: 'Name')}" />
                         
                             <th><g:message code="installation.configuration.label" default="Configuration" /></th>
@@ -44,7 +46,9 @@
                     <g:each in="${installationInstanceList}" status="i" var="installationInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${installationInstance.id}">${fieldValue(bean: installationInstance, field: "name")}</g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${installationInstance.id}"></g:link></td>
+                    
+                            <td>${fieldValue(bean: installationInstance, field: "name")}</td>
                         
                             <td>${fieldValue(bean: installationInstance, field: "configuration")}</td>
                         

@@ -24,6 +24,8 @@
                     <thead>
                         <tr>
                         
+                            <td/>
+                            
                             <g:sortableColumn property="installation" title="${message(code: 'receiverDeployment.installation.label', default: 'Installation')}" />
                         
                             <g:sortableColumn property="station" title="${message(code: 'receiverDeployment.station.label', default: 'Station')}" />
@@ -42,7 +44,9 @@
                     <g:each in="${receiverDeploymentInstanceList}" status="i" var="receiverDeploymentInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${receiverDeploymentInstance.id}">${receiverDeploymentInstance?.station?.installation}</g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${receiverDeploymentInstance.id}"></g:link></td>
+                    
+                            <td><g:link controller="installation" action="show" id="${receiverDeploymentInstance?.station?.installation?.id}">${receiverDeploymentInstance?.station?.installation}</g:link></td>
 
                             <td><g:link controller="installationStation" action="show" id="${receiverDeploymentInstance?.station?.id}">${receiverDeploymentInstance?.station}</g:link></td>
                         

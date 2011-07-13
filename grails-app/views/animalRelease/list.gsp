@@ -24,6 +24,8 @@
                     <thead>
                         <tr>
                         
+                            <td/>
+                            
                             <g:sortableColumn property="id" title="${message(code: 'animalRelease.id.label', default: 'Tag(s)')}" />
                         
                             <g:sortableColumn property="animalRelease.animal.species" title="${message(code: 'animalRelease.animal.species.label', default: 'Species')}" />
@@ -42,7 +44,9 @@
                     <g:each in="${animalReleaseInstanceList}" status="i" var="animalReleaseInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${animalReleaseInstance.id}">${animalReleaseInstance.tags}</g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${animalReleaseInstance.id}"></g:link></td>
+                    
+                            <td>${animalReleaseInstance.tags}</td>
                         
                             <td>${fieldValue(bean: animalReleaseInstance, field: "animal.species")}</td>
 

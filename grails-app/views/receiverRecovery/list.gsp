@@ -23,13 +23,14 @@
               
                 <table>
                     <thead>
-                      <th colspan="6">Deployment Details</th>
-                      <th></th>
-                      <th colspan="4">Recovery Details</th>
+                      <th colspan="7">Deployment Details</th>
+                      <th colspan="5">Recovery Details</th>
                     </thead>
                     <thead>
                         <tr>
                         
+                            <td/>
+                            
                             <g:sortableColumn property="deploymentDate" title="${message(code: 'receiverDeployment.deploymentDate.label', default: 'Deployment Date')}" />
 
                             <g:sortableColumn property="installation" title="${message(code: 'receiverDeployment.installation.label', default: 'Installation')}" />
@@ -59,6 +60,8 @@
                     <g:each in="${receiverDeploymentInstanceList}" status="i" var="receiverDeployment">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 
+                            <td class="rowButton"><g:link class="show" controller="receiverDeployment" action="show" id="${receiverDeployment.id}"></g:link></td>
+                    
                             <td><g:formatDate date="${receiverDeployment.deploymentDate}" /></td>
                         
                             <td><g:link controller="installation" action="show" id="${receiverDeployment?.station?.installation?.id}">${receiverDeployment?.station?.installation}</g:link></td>
@@ -71,12 +74,12 @@
 
                             <td>${fieldValue(bean: receiverDeployment, field: "depthBelowSurfaceM")}</td>
 
-                            <td>
+                            <td class="rowButton">
                               <g:if test="${receiverDeployment?.recovery == null}">
-                                <g:link class="create" action="create" params="[deploymentId:receiverDeployment.id]"><g:message code="default.new.label" args="[entityName]" /></g:link>
+                                <g:link class="create" action="create" params="[deploymentId:receiverDeployment.id]"></g:link>
                               </g:if>
                               <g:else>
-                                <g:link action="show" id="${receiverDeployment?.recovery?.id}">Details</g:link>
+                                <g:link class="show" action="show" id="${receiverDeployment?.recovery?.id}"></g:link>
                               </g:else>
                             </td>
                             

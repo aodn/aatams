@@ -24,6 +24,8 @@
                     <thead>
                         <tr>
                         
+                            <td/>
+                            
                             <g:sortableColumn property="codeName" title="${message(code: 'tag.codeName.label', default: 'ID')}" />
                         
                             <g:sortableColumn property="model" title="${message(code: 'tag.model.label', default: 'Model')}" />
@@ -48,14 +50,18 @@
                     <g:each in="${tagInstanceList}" status="i" var="tagInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td>
+                            <td class="rowButton">
                               <g:if test="${tagInstance instanceof au.org.emii.aatams.Sensor}">
-                                <g:link controller="sensor" action="show" id="${tagInstance.id}">${fieldValue(bean: tagInstance, field: "codeName")}</g:link>
+                                <g:link class="show" controller="sensor" action="show" id="${tagInstance.id}"></g:link>
                               </g:if>
                               <g:else>
-                                <g:link action="show" id="${tagInstance.id}">${fieldValue(bean: tagInstance, field: "codeName")}</g:link>
+                                <g:link class="show" action="show" id="${tagInstance.id}"></g:link>
                               </g:else>
                             </td>
+                    
+                          
+                            <td>${fieldValue(bean: tagInstance, field: "codeName")}</td>
+                            
                             <td>${fieldValue(bean: tagInstance, field: "model")}</td>
 
                             <td>${fieldValue(bean: tagInstance, field: "serialNumber")}</td>

@@ -80,16 +80,6 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="embargoDate"><g:message code="tag.embargoDate.label" default="Embargo Date" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'embargoDate', 'errors')}">
-                                    <g:datePicker name="embargoDate" precision="day" value="${tagInstance?.embargoDate}" default="none" noSelection="['': '']" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                     <label for="status"><g:message code="tag.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'status', 'errors')}">

@@ -31,6 +31,12 @@ class AnimalRelease
 
     String comments
     
+    /**
+     * Date when data from this release is no longer embargoed (may be null to
+     * indicate that no embargo exists).
+     */
+    Date embargoDate
+
     static constraints =
     {
         project()
@@ -42,6 +48,7 @@ class AnimalRelease
         releaseLocation()
         releaseDateTime()
         comments(nullable:true)
+        embargoDate(nullable:true)
     }
     
     String getTags()

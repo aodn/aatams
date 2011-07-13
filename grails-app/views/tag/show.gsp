@@ -69,13 +69,6 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="tag.embargoDate.label" default="Embargo Date" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${tagInstance?.embargoDate}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="tag.status.label" default="Status" /></td>
                             
                             <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${tagInstance?.status?.id}">${tagInstance?.status?.encodeAsHTML()}</g:link></td>

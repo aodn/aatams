@@ -37,7 +37,9 @@
                             <g:sortableColumn property="releaseLocation" title="${message(code: 'animalRelease.releaseLocation.label', default: 'Release Location')}" />
                         
                             <g:sortableColumn property="project" title="${message(code: 'animalRelease.project.label', default: 'Project')}" />
-                        
+
+                            <g:sortableColumn property="embargoDate" title="${message(code: 'animalRelease.embargoDate.label', default: 'Embargo Date')}" />
+
                         </tr>
                     </thead>
                     <tbody>
@@ -57,6 +59,8 @@
                             <td>${fieldValue(bean: animalReleaseInstance, field: "releaseLocation")}</td>
                         
                             <td><g:link controller="project" action="show" id="${animalReleaseInstance.project.id}">${animalReleaseInstance.project}</g:link></td>
+                        
+                            <td><g:formatDate date="${animalReleaseInstance.embargoDate}" /></td>
                         
                         </tr>
                     </g:each>

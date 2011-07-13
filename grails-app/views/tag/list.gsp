@@ -42,8 +42,6 @@
                         
                             <g:sortableColumn property="status" title="${message(code: 'tag.status.label', default: 'Status')}" />
                             
-                            <th><g:message code="tag.embargoDate.label" default="Embargo Date" /></th>
-                        
                         </tr>
                     </thead>
                     <tbody>
@@ -76,8 +74,6 @@
                         
                             <td>${fieldValue(bean: tagInstance, field: "status")}</td>
 
-                            <td><g:formatDate date="${tagInstance.embargoDate}" /></td>
-                        
                         </tr>
                     </g:each>
                     </tbody>

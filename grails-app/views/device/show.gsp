@@ -44,13 +44,6 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="device.embargoDate.label" default="Embargo Date" /></td>
-                            
-                            <td valign="top" class="value"><g:formatDate date="${deviceInstance?.embargoDate}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="device.model.label" default="Model" /></td>
                             
                             <td valign="top" class="value"><g:link controller="deviceModel" action="show" id="${deviceInstance?.model?.id}">${deviceInstance?.model?.encodeAsHTML()}</g:link></td>

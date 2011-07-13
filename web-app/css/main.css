@@ -225,6 +225,24 @@ input:focus, select:focus, textarea:focus {
     background: url(../images/skin/database_add.png) center left no-repeat;
 }
 
+/* Shown in table views to allow navigation to show/delete page. */
+.rowButton {
+    font-size: 10px;
+    padding: 0 5px;
+    width: 20px;
+}
+.rowButton a {
+    background: url(../images/skin/house.png) center left no-repeat;
+    font-weight: bold;
+    padding: 10px 10px 10px 10px;
+}
+.rowButton a.show {
+    background: url(../images/skin/information.png) center no-repeat;
+}
+.rowButton a.create {
+    background: url(../images/skin/database_add.png) center no-repeat;
+}
+
 /* MESSAGES AND ERRORS */
 
 .message {

@@ -29,6 +29,7 @@ class SecSecurityFilters
          "receiver":"project.id",
          "species":"",
          "tag":"project.id",
+         "sensor":"project.id",
          "animalRelease":"project.id",
          "detection":"project.id",
          "receiverDeployment":"project.id",

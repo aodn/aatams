@@ -374,31 +374,31 @@ class BootStrap
             new InstallationStation(installation:bondiLine,
                                     name:'Bondi SW1',
                                     curtainPosition:1,
-                                    location:(Point)reader.read("POINT(10 10)")).save(failOnError:true)
+                                    location:(Point)reader.read("POINT(30.1234 30.1234)")).save(failOnError:true)
 
         InstallationStation bondiSW2 = 
             new InstallationStation(installation:bondiLine,
                                     name:'Bondi SW2',
                                     curtainPosition:2,
-                                    location:(Point)reader.read("POINT(20 20)")).save(failOnError:true)
+                                    location:(Point)reader.read("POINT(-10.1234 -10.1234)")).save(failOnError:true)
 
         InstallationStation bondiSW3 = 
             new InstallationStation(installation:bondiLine,
                                     name:'Bondi SW3',
                                     curtainPosition:3,
-                                    location:(Point)reader.read("POINT(30 30)")).save(failOnError:true)
+                                    location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
                                 
         InstallationStation ningalooS1 = 
             new InstallationStation(installation:bondiLine,
                                     name:'Ningaloo S1',
                                     curtainPosition:1,
-                                    location:(Point)reader.read("POINT(10 10)")).save(failOnError:true)
+                                    location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
 
         InstallationStation ningalooS2 = 
             new InstallationStation(installation:bondiLine,
                                     name:'Ningaloo S2',
                                     curtainPosition:2,
-                                    location:(Point)reader.read("POINT(20 20)")).save(failOnError:true)
+                                    location:(Point)reader.read("POINT(20.1234 20.1234)")).save(failOnError:true)
             
 
         //
@@ -414,7 +414,7 @@ class BootStrap
                                    mooringType:concreteMooring,
                                    bottomDepthM:12f,
                                    depthBelowSurfaceM:5f,
-                                   location:(Point)reader.read("POINT(10 10)")).save(failOnError:true)
+                                   location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
 
         ReceiverDeployment rx2Bondi =
             new ReceiverDeployment(station:bondiSW2,
@@ -424,7 +424,7 @@ class BootStrap
                                    mooringType:concreteMooring,
                                    bottomDepthM:16f,
                                    depthBelowSurfaceM:7.4f,
-                                   location:(Point)reader.read("POINT(20 20)")).save(failOnError:true)
+                                   location:(Point)reader.read("POINT(20.1234 20.1234)")).save(failOnError:true)
 
         ReceiverDeployment rx3Ningaloo =
             new ReceiverDeployment(station:ningalooS1,
@@ -434,7 +434,7 @@ class BootStrap
                                    mooringType:concreteMooring,
                                    bottomDepthM:12f,
                                    depthBelowSurfaceM:5f,
-                                   location:(Point)reader.read("POINT(10 10)")).save(failOnError:true)
+                                   location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
                                
         //
         // Animals and Animal Releases etc.
@@ -468,10 +468,10 @@ class BootStrap
                               measurements:[],
                               animal:whiteShark1,
                               captureLocality:'Neptune Islands',
-                              captureLocation:(Point)reader.read("POINT(20 20)"),
+                              captureLocation:(Point)reader.read("POINT(20.1234 20.1234)"),
                               captureDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:10:00"),
                               releaseLocality:'Neptune Islands',
-                              releaseLocation:(Point)reader.read("POINT(20 20)"),
+                              releaseLocation:(Point)reader.read("POINT(20.1234 20.1234)"),
                               releaseDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:15:00"),
                               embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2015-05-15 12:34:56")).save(failOnError:true)
 
@@ -511,7 +511,7 @@ class BootStrap
         // Receiver Recovery.
         ReceiverRecovery recovery1 = 
             new ReceiverRecovery(recoveryDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-17 12:34:56"),
-                                 location:(Point)reader.read("POINT(10 10)"),
+                                 location:(Point)reader.read("POINT(10.1234 10.1234)"),
                                  status:recoveredStatus,
                                  recoverer:sealProjectInvestigator,
                                  deployment:rx1Bondi,
@@ -520,7 +520,7 @@ class BootStrap
                              
         ReceiverRecovery recovery2 = 
             new ReceiverRecovery(recoveryDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-17 12:54:56"),
-                                 location:(Point)reader.read("POINT(20 20)"),
+                                 location:(Point)reader.read("POINT(20.1234 20.1234)"),
                                  status:recoveredStatus,
                                  recoverer:sealProjectInvestigator,
                                  deployment:rx2Bondi,
@@ -534,7 +534,7 @@ class BootStrap
                           stationName:'Bondi SW1',
                           transmitterName:'A69-1303-62339',
                           transmitterSerialNumber:'12345678',
-                          location:(Point)reader.read("POINT(10 10)"))
+                          location:(Point)reader.read("POINT(10.1234 10.1234)"))
         detection1.addToSurgeries(surgery1)
         detection1.save(failOnError:true)
         
@@ -544,7 +544,7 @@ class BootStrap
                           stationName:'Bondi SW2',
                           transmitterName:'A69-1303-62339',
                           transmitterSerialNumber:'12345678',
-                          location:(Point)reader.read("POINT(20 20)"))
+                          location:(Point)reader.read("POINT(20.1234 20.1234)"))
         detection2.addToSurgeries(surgery1)
         detection2.save(failOnError:true)
         

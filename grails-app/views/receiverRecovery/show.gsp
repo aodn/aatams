@@ -54,7 +54,7 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name"><g:message code="receiverDeployment.location.label" default="Location" /></td>
-                                <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "location")}</td>
+                                <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "scrambledLocation")}</td>
 
                             </tr>
 
@@ -97,7 +97,7 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name"><g:message code="receiverRecovery.location.label" default="Location" /></td>
-                                <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "location")}</td>
+                                <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "scrambledLocation")}</td>
                             </tr>
                         
                             <tr class="prop">

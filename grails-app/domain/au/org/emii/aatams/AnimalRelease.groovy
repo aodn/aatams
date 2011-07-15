@@ -1,6 +1,8 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.util.GeometryUtils
 import au.org.emii.aatams.util.ListUtils
+
 import com.vividsolutions.jts.geom.Point
 
 /**
@@ -15,6 +17,7 @@ class AnimalRelease
 {
     static belongsTo = [project: Project]
     static hasMany = [surgeries: Surgery, measurements: AnimalMeasurement]
+    static transients = ['scrambledReleaseLocation']
     
     /**
      * Animal that has been captured and released.
@@ -54,5 +57,14 @@ class AnimalRelease
     String toString()
     {
         return String.valueOf(project) + " - " + String.valueOf(animal?.species) + " - " + String.valueOf(releaseDateTime)
+    }
+    
+    /**
+     * Non-authenticated users can only see scrambled locations.
+     */
+
+    Point getScrambledReleaseLocation()
+    {
+        return GeometryUtils.scrambleLocation(releaseLocation)
     }
 }

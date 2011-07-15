@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.util.GeometryUtils
+
 import com.vividsolutions.jts.geom.Point
 
 /**
@@ -17,7 +19,7 @@ class Detection
     Date timestamp
     
     static belongsTo = [receiverDeployment: ReceiverDeployment]
-    static transients = ['project']
+    static transients = ['project', 'scrambledLocation']
     
     /**
      * This is modelled as a one-to-many relationship, due to the fact that tags
@@ -68,5 +70,13 @@ class Detection
     Project getProject()
     {
         return receiverDeployment?.station?.installation?.project
+    }
+    
+    /**
+     * Non-authenticated users can only see scrambled locations.
+     */
+    Point getScrambledLocation()
+    {
+        return GeometryUtils.scrambleLocation(location)
     }
 }

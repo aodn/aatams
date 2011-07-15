@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.util.GeometryUtils
+
 import com.vividsolutions.jts.geom.Point
 
 /**
@@ -12,6 +14,7 @@ import com.vividsolutions.jts.geom.Point
 class ReceiverDeployment 
 {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
+    static transients = ['scrambledLocation']
 
     Integer deploymentNumber
     Date deploymentDate
@@ -84,5 +87,13 @@ class ReceiverDeployment
     String toString()
     {
         return String.valueOf(receiver) + " - " + String.valueOf(deploymentDate)
+    }
+
+    /**
+     * Non-authenticated users can only see scrambled locations.
+     */
+    Point getScrambledLocation()
+    {
+        return GeometryUtils.scrambleLocation(location)
     }
 }

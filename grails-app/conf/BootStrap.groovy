@@ -508,7 +508,6 @@ class BootStrap
                         treatmentType:antibiotic,
                         surgeon:joeBloggs).save(failOnError:true)
 
-
         // Receiver Recovery.
         ReceiverRecovery recovery1 = 
             new ReceiverRecovery(recoveryDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-17 12:34:56"),

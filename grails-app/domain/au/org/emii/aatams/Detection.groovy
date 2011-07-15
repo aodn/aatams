@@ -17,6 +17,7 @@ class Detection
     Date timestamp
     
     static belongsTo = [receiverDeployment: ReceiverDeployment]
+    static transients = ['project']
     
     /**
      * This is modelled as a one-to-many relationship, due to the fact that tags
@@ -61,5 +62,11 @@ class Detection
     String toString()
     {
         return timestamp.toString() + " " + String.valueOf(receiverDeployment?.receiver)
+    }
+    
+    // Convenience method.
+    Project getProject()
+    {
+        return receiverDeployment?.station?.installation?.project
     }
 }

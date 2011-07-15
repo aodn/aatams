@@ -15,7 +15,7 @@ class AnimalRelease
 {
     static belongsTo = [project: Project]
     static hasMany = [surgeries: Surgery, measurements: AnimalMeasurement]
-    static transients = ['tags']
+    
     /**
      * Animal that has been captured and released.
      */
@@ -49,11 +49,6 @@ class AnimalRelease
         releaseDateTime()
         comments(nullable:true)
         embargoDate(nullable:true)
-    }
-    
-    String getTags()
-    {
-        return ListUtils.fold(surgeries.tag, "codeName")
     }
     
     String toString()

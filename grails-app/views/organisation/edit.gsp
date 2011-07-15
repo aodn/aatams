@@ -45,6 +45,16 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                    <label for="name"><g:message code="organisation.department.label" default="Department" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'department', 'errors')}">
+                                    <g:textField name="department" value="${organisationInstance?.department}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="phoneNumber"><g:message code="organisation.phoneNumber.label" default="Phone Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'phoneNumber', 'errors')}">

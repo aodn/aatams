@@ -10,6 +10,7 @@ class Organisation
     static transients = ['projects', 'people']
     
     String name
+    String department
     String phoneNumber
     String faxNumber
     Address streetAddress
@@ -18,7 +19,8 @@ class Organisation
     
     static constraints =
     {
-        name(blank:false, unique:true)
+        name(blank:false)
+        department(blank:false)
         phoneNumber(blank:false)
         faxNumber()
         streetAddress()

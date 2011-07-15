@@ -105,8 +105,6 @@ class SecSecurityFilters
                     //
                     if (projectWriteActions.contains(actionName))
                     {
-                        println("params: " + params)
-                        
                         def projectId = getProjectId(params, controllerName)
                         
                         if (SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(projectId)))

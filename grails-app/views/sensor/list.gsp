@@ -28,8 +28,6 @@
                         
                             <g:sortableColumn property="serialNumber" title="${message(code: 'sensor.serialNumber.label', default: 'Serial Number')}" />
                         
-                            <g:sortableColumn property="embargoDate" title="${message(code: 'sensor.embargoDate.label', default: 'Embargo Date')}" />
-                        
                             <th><g:message code="sensor.status.label" default="Status" /></th>
                         
                             <g:sortableColumn property="codeMap" title="${message(code: 'sensor.codeMap.label', default: 'Code Map')}" />
@@ -45,8 +43,6 @@
                             <td>${fieldValue(bean: sensorInstance, field: "codeName")}</td>
                         
                             <td>${fieldValue(bean: sensorInstance, field: "serialNumber")}</td>
-                        
-                            <td><g:formatDate date="${sensorInstance.embargoDate}" /></td>
                         
                             <td>${fieldValue(bean: sensorInstance, field: "status")}</td>
                         

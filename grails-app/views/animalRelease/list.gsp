@@ -48,7 +48,11 @@
                         
                             <td class="rowButton"><g:link class="show" action="show" id="${animalReleaseInstance.id}"></g:link></td>
                     
-                            <td>${animalReleaseInstance.tags}</td>
+                            <td>
+                              <g:each var="surgery" in="${animalReleaseInstance.surgeries}">
+                                <g:link controller="tag" action="show" id="${surgery?.tag?.id}">${surgery.tag}<p/></g:link>
+                              </g:each>
+                            </td>
                         
                             <td>${fieldValue(bean: animalReleaseInstance, field: "animal.species")}</td>
 

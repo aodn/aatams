@@ -72,7 +72,7 @@
                             
                             <td valign="top" style="text-align: left;" class="value">
                                 <ul>
-                                <g:each in="${detectionInstance.surgeries}" var="s">
+                                <g:each in="${surgeries}" var="s">
                                     <li><g:link controller="tag" action="show" id="${s?.tag?.id}">${s?.tag?.encodeAsHTML()}</g:link></li>
                                 </g:each>
                                 </ul>

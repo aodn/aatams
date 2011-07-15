@@ -77,6 +77,7 @@ class BootStrap
         //
         Organisation csiroOrg = 
             new Organisation(name:'CSIRO', 
+                             department:'CMAR',
                              phoneNumber:'1234',
                              faxNumber:'1234',
                              streetAddress:csiroStreetAddress,
@@ -99,6 +100,7 @@ class BootStrap
 
         Organisation imosOrg = 
             new Organisation(name:'IMOS', 
+                             department:'eMII',
                              phoneNumber:'5678',
                              faxNumber:'5678',
                              streetAddress:imosStreetAddress,
@@ -121,6 +123,7 @@ class BootStrap
 
         Organisation imosOrg2 = 
             new Organisation(name:'IMOS 2', 
+                             department:'AATAMS',
                              phoneNumber:'5678',
                              faxNumber:'5678',
                              streetAddress:imosStreetAddress2,

@@ -29,6 +29,8 @@
 
                             <g:sortableColumn property="name" title="${message(code: 'organisation.name.label', default: 'Name')}" />
                         
+                            <g:sortableColumn property="department" title="${message(code: 'organisation.department.label', default: 'Department')}" />
+                        
                             <g:sortableColumn property="phoneNumber" title="${message(code: 'organisation.phoneNumber.label', default: 'Phone Number')}" />
                         
                             <g:sortableColumn property="faxNumber" title="${message(code: 'organisation.faxNumber.label', default: 'Fax Number')}" />
@@ -53,6 +55,8 @@
                               <td class="rowButton"><g:link class="show" action="show" id="${organisationInstance.id}"></g:link></td>
                       
                               <td>${fieldValue(bean: organisationInstance, field: "name")}</td>
+
+                              <td>${fieldValue(bean: organisationInstance, field: "department")}</td>
 
                               <td>${fieldValue(bean: organisationInstance, field: "phoneNumber")}</td>
 

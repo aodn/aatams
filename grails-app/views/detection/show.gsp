@@ -63,7 +63,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.location.label" default="Location" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "location")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "scrambledLocation")}</td>
                             
                         </tr>
                     

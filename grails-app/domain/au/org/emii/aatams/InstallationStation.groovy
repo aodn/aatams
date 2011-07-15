@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.util.GeometryUtils
+
 import com.vividsolutions.jts.geom.Point
 
 /**
@@ -12,6 +14,7 @@ class InstallationStation
 {
     static belongsTo = [installation:Installation]
     static hasMany = [receivers:Receiver]
+    static transients = ['scrambledLocation']
     
     static mapping =
     {
@@ -33,6 +36,14 @@ class InstallationStation
      * Geographic position of this station.
      */
     Point location
+    
+    /**
+     * Non-authenticated users can only see scrambled locations.
+     */
+    Point getScrambledLocation()
+    {
+        return GeometryUtils.scrambleLocation(location)
+    }
     
     static constraints =
     {

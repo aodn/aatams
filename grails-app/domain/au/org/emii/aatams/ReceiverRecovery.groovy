@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.util.GeometryUtils
+
 import com.vividsolutions.jts.geom.Point
 
 /**
@@ -10,6 +12,8 @@ import com.vividsolutions.jts.geom.Point
  */
 class ReceiverRecovery 
 {
+    static transients = ['scrambledLocation']
+
     Date recoveryDate
     Point location
     DeviceStatus status
@@ -37,5 +41,13 @@ class ReceiverRecovery
     String toString()
     {
         return String.valueOf(deployment.receiver) + " recovered on " + String.valueOf(recoveryDate)
+    }
+
+    /**
+     * Non-authenticated users can only see scrambled locations.
+     */
+    Point getScrambledLocation()
+    {
+        return GeometryUtils.scrambleLocation(location)
     }
 }

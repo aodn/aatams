@@ -62,6 +62,14 @@ class SecSecurityFilters
     
     def projectWriteAnyActions =
         ["create"]
+        
+    
+    def personWriteActions =
+        ["create",
+         "save",
+         "edit",
+         "update"]
+        
     
     //
     // Only sys admin role can perform these actions.
@@ -84,7 +92,8 @@ class SecSecurityFilters
                     return true
                 }
                 
-                if (!accessibleControllers.containsKey(controllerName))
+                if (   !accessibleControllers.containsKey(controllerName)
+                    || deleteActions.contains(actionName))
                 {
                     accessControl
                     {
@@ -97,6 +106,12 @@ class SecSecurityFilters
                     if (publicActions.contains(actionName) || (actionName == null))
                     {
                         return true
+                    }
+                    
+                    // Special handling for Person controller.
+                    if (controllerName == "person")
+                    {
+                        return handlePerson(actionName, params)
                     }
                     
                     //
@@ -141,19 +156,51 @@ class SecSecurityFilters
                         }
                     }
                     
-                    if (deleteActions.contains(actionName))
-                    {
-                        accessControl
-                        {
-                            role("SysAdmin")
-                        }
-                    }
-
                     // Access control by convention.
                     accessControl()
                 }
             }
         }
+    }
+    
+    /**
+     * A person can do anything to their own record, except delete.
+     * 
+     * Prinicipal Investigators have special permissions regarding people, 
+     * namely the ability to create and edit people.
+     */
+    def handlePerson(actionName, params)
+    {
+        SecUser paramUser = SecUser.get(params?.id)
+        SecUser principal = SecUser.findByUsername(SecurityUtils.subject.principal)
+        
+        // User can do anything but delete to their own record.
+        if (   (paramUser == principal)
+            && !deleteActions.contains(actionName))
+        {
+            return true
+        }
+        
+        // Sys admin can do anything.
+        if (SecurityUtils.subject.hasRole("SysAdmin"))
+        {
+            return true
+        }
+        
+        if (personWriteActions.contains(actionName))
+        {
+            ProjectRoleType principalInvestigator = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
+            for (ProjectRole role : principal.projectRoles)
+            {
+                if (role.roleType == principalInvestigator)
+                {
+                    return true
+                }
+            }
+        }
+        
+        return false
+        //accessControl()
     }
     
     /**

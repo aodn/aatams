@@ -22,9 +22,12 @@ class PermissionUtilsService
             == ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR))
         {
             log.debug("Adding PI permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
+            user.addToPermissions(buildPersonWriteAnyPermission())
             String permission = buildPrincipalInvestigatorPermission(projectRole.project.id)
-            user.addToPermissions(permission).save(flush:true)
+            user.addToPermissions(permission)
             log.debug("Added permission: " + permission)
+            
+            user.save(flush:true)
         }
         
         // Read access for project (this just allows embargoes data to be 
@@ -62,6 +65,7 @@ class PermissionUtilsService
         if (   projectRole.roleType 
             == ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR))
         {
+            user.removeFromPermissions(buildPersonWriteAnyPermission())
             user.removeFromPermissions(buildPrincipalInvestigatorPermission(projectRole.project.id))
         }
         
@@ -79,6 +83,8 @@ class PermissionUtilsService
             user.removeFromPermissions(buildProjectWritePermission(projectRole.project.id))
             user.removeFromPermissions(buildProjectWriteAnyPermission())
         }
+        
+        user.save(flush:true)
         
         return user
     }
@@ -115,5 +121,12 @@ class PermissionUtilsService
     {
         return "principalInvestigator:" + projectId
     }
+
+    String buildPersonWriteAnyPermission()
+    {
+        return "personWriteAny"
+    }
+    
+
 }
 

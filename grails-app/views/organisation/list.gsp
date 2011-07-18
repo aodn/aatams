@@ -41,6 +41,8 @@
                         
                             <shiro:hasRole name="SysAdmin">
                               <g:sortableColumn property="status" title="${message(code: 'organisation.status.label', default: 'Status')}" />
+                              
+                              <g:sortableColumn property="requester" title="${message(code: 'organisation.requester.label', default: 'Requester')}" />
                             </shiro:hasRole>
                             <g:sortableColumn property="projects" title="${message(code: 'organisation.projects.label', default: 'Projects')}" />
 
@@ -68,6 +70,8 @@
 
                               <shiro:hasRole name="SysAdmin">
                                 <td>${fieldValue(bean: organisationInstance, field: "status")}</td>
+                                
+                                <td><g:link controller="person" action="show" id="${organisationInstance?.requestingUser?.id}">${fieldValue(bean: organisationInstance, field: "requestingUser")}</g:link></td>
                               </shiro:hasRole>
                               
                               <td>${fieldValue(bean: organisationInstance, field: "projects")}</td>

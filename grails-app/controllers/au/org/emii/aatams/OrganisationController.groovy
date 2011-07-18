@@ -43,9 +43,31 @@ class OrganisationController
         organisationInstance.streetAddress = streetAddress
         organisationInstance.postalAddress = postalAddress
         
+        // If SysAdmin, then set Organisation's status to ACTIVE, otherwise,
+        // set to PENDING and record the requesting user.
+        if (SecurityUtils.getSubject().hasRole("SysAdmin"))
+        {
+            organisationInstance.status = EntityStatus.ACTIVE
+        }
+        else
+        {
+            organisationInstance.status = EntityStatus.PENDING
+            Person user = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
+            organisationInstance.requestingUser = user
+        }
+        
         if (organisationInstance.save(flush: true)) 
         {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.id])}"
+            if (SecurityUtils.getSubject().hasRole("SysAdmin"))
+            {
+                flash.message = "${message(code: 'default.created.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.id])}"
+            }
+            else
+            {
+                log.debug("sdgfdkhg")
+                sendCreationNotificationEmails(organisationInstance)
+                flash.message = "${message(code: 'default.requested.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.id])}"
+            }
             redirect(action: "show", id: organisationInstance.id)
         }
         else {
@@ -77,6 +99,9 @@ class OrganisationController
 
     def update = {
         def organisationInstance = Organisation.get(params.id)
+        
+        boolean prevPending = (organisationInstance.status == EntityStatus.PENDING)
+        
         if (organisationInstance) {
             if (params.version) {
                 def version = params.version.toLong()
@@ -89,6 +114,12 @@ class OrganisationController
             }
             organisationInstance.properties = params
             if (!organisationInstance.hasErrors() && organisationInstance.save(flush: true)) {
+                // Notify organisation activated.
+                if (prevPending && (organisationInstance.status == EntityStatus.ACTIVE))
+                {
+                    sendActivatedNotificationEmails(organisationInstance)
+                }
+                
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.id])}"
                 redirect(action: "show", id: organisationInstance.id)
             }
@@ -118,6 +149,37 @@ class OrganisationController
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'organisation.label', default: 'Organisation'), params.id])}"
             redirect(action: "list")
+        }
+    }
+    
+    /**
+     * Notification emails are sent when an organisation is created (by a non-
+     * sys admin) to:
+     *
+     *  - the requesting user
+     *  - AATAMS sys admins.
+     */
+    def sendCreationNotificationEmails(organisation)
+    {
+        sendMail 
+        {  
+            to organisation?.requestingUser?.emailAddress
+            bcc grailsApplication.config.grails.mail.adminEmailAddress
+            from grailsApplication.config.grails.mail.systemEmailAddress
+            subject "${message(code: 'mail.request.organisation.create.subject', args: [organisation.name])}"     
+            body "${message(code: 'mail.request.organisation.create.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
+        }
+    }
+    
+    def sendActivatedNotificationEmails(organisation)
+    {
+        sendMail 
+        {     
+            to organisation?.requestingUser?.emailAddress
+            bcc grailsApplication.config.grails.mail.adminEmailAddress
+            from grailsApplication.config.grails.mail.systemEmailAddress
+            subject "${message(code: 'mail.request.organisation.activate.subject', args: [organisation.name])}"     
+            body "${message(code: 'mail.request.organisation.activate.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
         }
     }
 }

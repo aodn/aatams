@@ -17,6 +17,9 @@ class Organisation
     Address postalAddress
     EntityStatus status = EntityStatus.PENDING
     
+    // The person requesting creation of Organisation.
+    Person requestingUser
+    
     static constraints =
     {
         name(blank:false)
@@ -28,6 +31,7 @@ class Organisation
         status()    // Default to PENDING
         organisationProjects()
         organisationPeople()
+        requestingUser(nullable:true)
     }
     
     String toString()

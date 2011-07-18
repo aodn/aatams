@@ -180,7 +180,7 @@ class BootStrap
                        name:'Joe Bloggs',
                        organisation:csiroOrg,
                        phoneNumber:'1234',
-                       emailAddress:'jbloggs@csiro.au').save(failOnError: true)
+                       emailAddress:'jbloggs@blah.au').save(failOnError: true)
 
         Person johnCitizen =
             new Person(username:'jcitizen',
@@ -188,7 +188,7 @@ class BootStrap
                        name:'John Citizen',
                        organisation:csiroOrg,
                        phoneNumber:'5678',
-                       emailAddress:'jcitizen@csiro.au').save(failOnError: true)
+                       emailAddress:'jcitizen@blah.au').save(failOnError: true)
 
         //
         // Project Roles.

@@ -11,22 +11,22 @@
           <li class="backgroundDataControllers">
             <g:link controller="organisation">Organisations</g:link>
             
-            <shiro:hasRole name="SysAdmin">
+            <shiro:user>
               <span class="inline">
                 <g:link controller="organisation" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
               </span>
-            </shiro:hasRole>
+            </shiro:user>
             
           </li>
           
           <li class="backgroundDataControllers">
             <g:link controller="project">Projects</g:link>
             
-            <shiro:hasRole name="SysAdmin">
+            <shiro:user>
               <span class="inline">
                 <g:link controller="project" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
               </span>
-            </shiro:hasRole>
+            </shiro:user>
             
           </li>
           <li class="backgroundDataControllers">

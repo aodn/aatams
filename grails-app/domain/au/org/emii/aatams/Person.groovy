@@ -4,11 +4,12 @@ import au.org.emii.aatams.util.ListUtils
 
 class Person extends SecUser
 {
-    static hasMany = [projectRoles:ProjectRole, 
-                      organisationPeople:OrganisationPerson]
+    static hasMany = [projectRoles:ProjectRole]
     
-    static transients = ['organisations', 'projects']
     
+    static transients = ['projects']
+    
+    Organisation organisation
     String name;
     String emailAddress;
     String phoneNumber;
@@ -16,6 +17,7 @@ class Person extends SecUser
     static constraints = 
     {
         name(blank:false)
+        organisation()
         phoneNumber(blank:true)
         emailAddress(email:true)
     }
@@ -23,11 +25,6 @@ class Person extends SecUser
     String toString()
     {
         return name
-    }
-    
-    String getOrganisations()
-    {
-        return ListUtils.fold(organisationPeople, "organisation")
     }
     
     String getProjects()

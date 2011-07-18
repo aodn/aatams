@@ -114,6 +114,13 @@ class SecSecurityFilters
                         return handlePerson(actionName, params)
                     }
                     
+                    if (   controllerName == "organisation" 
+                        && actionName == "save"
+                        && SecurityUtils.subject.isAuthenticated())
+                    {
+                        return true
+                    }
+                    
                     //
                     //  Only some users have "WRITE" access to a project (and
                     //  all its associated data).

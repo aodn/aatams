@@ -106,3 +106,36 @@ fileimport
 {
     path = "/Users/jburgess/Documents/aatams/test_uploads"
 }
+
+//
+// Email configuration.
+//
+environments 
+{
+    production 
+    {
+    }
+    
+    development 
+    {
+        grails 
+        {
+           mail 
+           {
+             adminEmailAddress = "aatams_admin@emii.org.au"
+             systemEmailAddress = "aatams_system@emii.org.au"
+             
+             host = "postoffice.utas.edu.au"
+             port = 25
+             username = "aatams_system@utas.edu.au"
+//             password = 
+             props = ["mail.smtp.auth":"false"] 					   
+           }
+        }        
+    }
+    
+    test 
+    {
+    }
+
+}

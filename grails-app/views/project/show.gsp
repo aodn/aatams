@@ -32,13 +32,6 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="project.description.label" default="Description" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: projectInstance, field: "description")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="project.organisationProjects.label" default="Organisations" /></td>
                             
                             <td valign="top" style="text-align: left;" class="value">
@@ -75,6 +68,22 @@
 
                             </td>  
                          </tr>
+
+                        <shiro:hasRole name="SysAdmin">
+                          <tr class="prop">
+                              <td valign="top" class="name"><g:message code="project.status.label" default="Status" /></td>
+
+                              <td valign="top" class="value">${projectInstance?.status?.encodeAsHTML()}</td>
+
+                          </tr>
+
+                          <tr class="prop">
+                              <td valign="top" class="name"><g:message code="project.requestingUser.label" default="Requester" /></td>
+
+                              <td valign="top" class="value"><g:link controller="person" action="show" id="${projectInstance?.requestingUser?.id}">${projectInstance?.requestingUser?.encodeAsHTML()}</g:link></td>
+
+                          </tr>
+                        </shiro:hasRole>
 
 <!--                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="project.devices.label" default="Devices" /></td>

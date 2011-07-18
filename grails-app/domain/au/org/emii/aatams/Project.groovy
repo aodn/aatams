@@ -12,11 +12,18 @@ class Project
     
     String name
     String description
-
+    
+    // These couple of attributes allow any authenticated user to request
+    // project creation.
+    EntityStatus status = EntityStatus.PENDING
+    Person requestingUser
+    
     static constraints = 
     {
         name(blank:false, unique:true)
-        description(blank:true)
+        description(nullable:true, blank:true)
+        status()
+        requestingUser(nullable:true)
     }
     
     String toString()

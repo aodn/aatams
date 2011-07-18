@@ -44,19 +44,9 @@
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="description"><g:message code="project.description.label" default="Description" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'description', 'errors')}">
-                                    <g:textField name="description" value="${projectInstance?.description}" />
-
-                                </td>
-                            </tr>
-                        
-                           <!--
+                            <!--
                                 Organisations.
-                           -->
+                            -->
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="organisationProjects"><g:message code="project.organisationProjects.label" default="Organisations" /></label>
@@ -111,6 +101,18 @@
 
                                 </td>  
                             </tr>
+                            
+                            <shiro:hasRole name="SysAdmin">
+                              <tr class="prop">
+                                  <td valign="top" class="name">
+                                    <label for="status"><g:message code="project.status.label" default="Status" /></label>
+                                  </td>
+                                  <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'status', 'errors')}">
+                                      <g:select name="status" from="${au.org.emii.aatams.EntityStatus?.values()}" keys="${au.org.emii.aatams.EntityStatus?.values()*.name()}" value="${projectInstance?.status?.name()}"  />
+
+                                  </td>
+                              </tr>
+                            </shiro:hasRole>
 <!--
                             <tr class="prop">
                                 <td valign="top" class="name">

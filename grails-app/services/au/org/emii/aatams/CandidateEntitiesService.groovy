@@ -17,7 +17,8 @@ class CandidateEntitiesService
         def candidateProjects = 
             Project.list().grep(
             {
-                SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(it.id))
+                (   (SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(it.id)))
+                 && (it.status == EntityStatus.ACTIVE))
             })
         
         return candidateProjects

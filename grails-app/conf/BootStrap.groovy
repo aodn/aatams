@@ -168,6 +168,7 @@ class BootStrap
             new Person(username:'jkburges',
                        passwordHash:new Sha256Hash("password").toHex(),
                        name:'Jon Burgess',
+                       organisation:imosOrg,
                        phoneNumber:'1234',
                        emailAddress:'jkburges@utas.edu.au')
         jonBurgess.addToRoles(sysAdmin)
@@ -177,6 +178,7 @@ class BootStrap
             new Person(username:'jbloggs',
                        passwordHash:new Sha256Hash("password").toHex(),
                        name:'Joe Bloggs',
+                       organisation:csiroOrg,
                        phoneNumber:'1234',
                        emailAddress:'jbloggs@csiro.au').save(failOnError: true)
 
@@ -184,6 +186,7 @@ class BootStrap
             new Person(username:'jcitizen',
                        passwordHash:new Sha256Hash("password").toHex(),
                        name:'John Citizen',
+                       organisation:csiroOrg,
                        phoneNumber:'5678',
                        emailAddress:'jcitizen@csiro.au').save(failOnError: true)
 
@@ -226,13 +229,6 @@ class BootStrap
                             person: johnCitizen,
                             roleType: administrator,
                             access:ProjectAccess.READ_WRITE).save(failOnError: true)
-
-        OrganisationPerson csiroJohnCitizen =
-            new OrganisationPerson(organisation:csiroOrg,
-                                   person:johnCitizen).save(failOnError: true)
-        OrganisationPerson csiroJoeBloggs =
-            new OrganisationPerson(organisation:csiroOrg,
-                                   person:joeBloggs).save(failOnError: true)
 
         //
         // Devices.

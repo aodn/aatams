@@ -68,6 +68,16 @@
 
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                    <label for="organisation"><g:message code="person.organisation.label" default="Organisation" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'organisation', 'errors')}">
+                                    <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${createPersonCmd?.organisation?.id}"  />
+
+                                </td>
+                            </tr>
+                            
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                     <label for="phoneNumber"><g:message code="person.phoneNumber.label" default="Phone Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'phoneNumber', 'errors')}">

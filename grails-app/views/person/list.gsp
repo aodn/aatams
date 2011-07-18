@@ -34,7 +34,7 @@
                         
                             <g:sortableColumn property="emailAddress" title="${message(code: 'person.emailAddress.label', default: 'Email Address')}" />
                             
-                            <g:sortableColumn property="organisations" title="${message(code: 'person.organisations.label', default: 'Organisations')}" />
+                            <g:sortableColumn property="organisation" title="${message(code: 'person.organisation.label', default: 'Organisation')}" />
 
                             <g:sortableColumn property="projects" title="${message(code: 'person.projects.label', default: 'Projects')}" />
                             
@@ -55,7 +55,7 @@
                         
                             <td>${fieldValue(bean: personInstance, field: "emailAddress")}</td>
                         
-                            <td>${fieldValue(bean: personInstance, field: "organisations")}</td>
+                            <td><g:link controller="organisation" action="show" id="${personInstance?.organisation?.id}">${fieldValue(bean: personInstance, field: "organisation")}</g:link></td>
                         
                             <td>${fieldValue(bean: personInstance, field: "projects")}</td>
 

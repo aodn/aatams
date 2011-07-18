@@ -149,6 +149,7 @@ class PersonCreateCommand
     String username
     String password         // Plain-text password.
     String passwordConfirm
+    Organisation organisation
     String phoneNumber
     String emailAddress
     
@@ -163,6 +164,7 @@ class PersonCreateCommand
             }
         })
         passwordConfirm(blank:false)
+        organisation(nullable:false)
         phoneNumber(blank:false)
         emailAddress(email:true)
     }
@@ -172,6 +174,7 @@ class PersonCreateCommand
         def person = new Person(username:username,
                                 passwordHash:new Sha256Hash(password).toHex(),
                                 name:name,
+                                organisation:organisation,
                                 phoneNumber:phoneNumber,
                                 emailAddress:emailAddress)
                             

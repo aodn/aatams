@@ -11,9 +11,9 @@
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
             <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
-            <shiro:hasRole name="SysAdmin">
+            <shiro:hasPermission permission="personWriteAny">
               <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
-            </shiro:hasRole>
+            </shiro:hasPermission>
         </div>
         <div class="body">
             <h1><g:message code="default.show.label" args="[entityName]" /></h1>
@@ -81,9 +81,12 @@
                 <g:form>
                     <g:hiddenField name="id" value="${personInstance?.id}" />
                     
-                    <!-- TODO: PI's should be able to edit people too? -->
-                    <shiro:hasRole name="SysAdmin">
+                    <!-- This button should only be shown if permitted -->
+<%--                    <shiro:hasPermission permission="person:${personInstance?.id}:write">--%>
                       <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
+<%--                    </shiro:hasPermission>--%>
+                    
+                    <shiro:hasRole name="SysAdmin">
                       <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
                     </shiro:hasRole>
                 </g:form>

@@ -8,19 +8,37 @@
       <h3>${message(code: 'navigationMenu.section.background.label', default: 'Background Data')} </h3>
       
       <ul>
-        <g:each var="c" in="${backgroundDataControllers}">
-          
           <li class="backgroundDataControllers">
-            <g:link controller="${c.key}">${c.value}</g:link>
+            <g:link controller="organisation">Organisations</g:link>
             
             <shiro:hasRole name="SysAdmin">
               <span class="inline">
-                <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
+                <g:link controller="organisation" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
               </span>
             </shiro:hasRole>
             
           </li>
-        </g:each>
+          
+          <li class="backgroundDataControllers">
+            <g:link controller="project">Projects</g:link>
+            
+            <shiro:hasRole name="SysAdmin">
+              <span class="inline">
+                <g:link controller="project" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
+              </span>
+            </shiro:hasRole>
+            
+          </li>
+          <li class="backgroundDataControllers">
+            <g:link controller="person">People</g:link>
+            
+            <shiro:hasPermission permission="personWriteAny">
+              <span class="inline">
+                <g:link controller="person" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
+              </span>
+            </shiro:hasPermission>
+            
+          </li>
       </ul>
 
       <h3>${message(code: 'navigationMenu.section.installation.label', default: 'Installation Data')} </h3>

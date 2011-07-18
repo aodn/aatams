@@ -33,21 +33,32 @@
                                     <label for="name"><g:message code="project.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'name', 'errors')}">
-                                    <g:textField name="name" value="${projectInstance?.name}" />
+                                    <g:textField name="name" value="${createProjectCmd?.name}" />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="description"><g:message code="project.description.label" default="Description" /></label>
+                                    <label for="organisation"><g:message code="project.organisation.label" default="Organisation" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'description', 'errors')}">
-                                    <g:textField name="description" value="${projectInstance?.description}" />
+                                <td valign="top" class="value ${hasErrors(bean: createProjectCmd, field: 'organisation', 'errors')}">
+                                    <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${createProjectCmd?.organisation?.id}"  />
 
                                 </td>
                             </tr>
-                        
+                            
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="person"><g:message code="project.organisation.label" default="Project Investigator" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'person', 'errors')}">
+                                    <g:select name="person.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${createProjectCmd?.person?.id}"  />
+
+                                </td>
+                            </tr>
+                            
+                            
                         </tbody>
                     </table>
                 </div>

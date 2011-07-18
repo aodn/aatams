@@ -66,19 +66,21 @@
                             
                         </tr>
                     
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="organisation.status.label" default="Status" /></td>
-                            
-                            <td valign="top" class="value">${organisationInstance?.status?.encodeAsHTML()}</td>
-                            
-                        </tr>
+                        <shiro:hasRole name="SysAdmin">
+                          <tr class="prop">
+                              <td valign="top" class="name"><g:message code="organisation.status.label" default="Status" /></td>
 
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="organisation.requestingUser.label" default="Requester" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="person" action="show" id="${organisationInstance?.requestingUser?.id}">${organisationInstance?.requestingUser?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
+                              <td valign="top" class="value">${organisationInstance?.status?.encodeAsHTML()}</td>
+
+                          </tr>
+
+                          <tr class="prop">
+                              <td valign="top" class="name"><g:message code="organisation.requestingUser.label" default="Requester" /></td>
+
+                              <td valign="top" class="value"><g:link controller="person" action="show" id="${organisationInstance?.requestingUser?.id}">${organisationInstance?.requestingUser?.encodeAsHTML()}</g:link></td>
+
+                          </tr>
+                        </shiro:hasRole>
                     
 <!--                    
                         <tr class="prop">

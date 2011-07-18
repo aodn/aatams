@@ -136,15 +136,18 @@ class BootStrap
         //
         Project sealCountProject =
             new Project(name:'Seal Count',
-                        description:'Counting seals').save(failOnError: true)
+                        description:'Counting seals',
+                        status:EntityStatus.ACTIVE).save(failOnError: true)
 
         Project tunaProject =
             new Project(name:'Tuna',
-                        description:'Counting tuna').save(failOnError: true)
+                        description:'Counting tuna',
+                        status:EntityStatus.ACTIVE).save(failOnError: true)
 
         Project whaleProject =
             new Project(name:'Whale',
-                        description:'Whale counting').save(failOnError: true)
+                        description:'Whale counting',
+                        status:EntityStatus.ACTIVE).save(failOnError: true)
 
         OrganisationProject csiroSeals =
             new OrganisationProject(organisation:csiroOrg,

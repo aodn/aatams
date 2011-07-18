@@ -64,7 +64,6 @@ class OrganisationController
             }
             else
             {
-                log.debug("sdgfdkhg")
                 sendCreationNotificationEmails(organisationInstance)
                 flash.message = "${message(code: 'default.requested.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.id])}"
             }

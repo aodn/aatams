@@ -11,6 +11,7 @@ class PermissionUtilsService
     {
         // Cleanup existing permissions.
         Person user = removePermissions(projectRole)
+//        Person user = Person.get(projectRole.person.id)
         if (!user)
         {
             return null

@@ -28,14 +28,18 @@
 
                             <g:sortableColumn property="name" title="${message(code: 'project.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn property="description" title="${message(code: 'project.description.label', default: 'Description')}" />
-                        
                             <g:sortableColumn property="organisations" title="${message(code: 'project.organisations.label', default: 'Organisations')}" />
 
                             <g:sortableColumn property="principalInvestigator" title="${message(code: 'project.principalInvestigator.label', default: 'Principal Investigator')}" />
                         
                             <g:sortableColumn property="people" title="${message(code: 'project.people.label', default: 'People')}" />
 
+                            <shiro:hasRole name="SysAdmin">
+                              <g:sortableColumn property="status" title="${message(code: 'project.status.label', default: 'Status')}" />
+                              
+                              <g:sortableColumn property="requester" title="${message(code: 'project.requester.label', default: 'Requester')}" />
+                            </shiro:hasRole>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -46,14 +50,18 @@
                     
                             <td>${fieldValue(bean: projectInstance, field: "name")}</td>
                         
-                            <td>${fieldValue(bean: projectInstance, field: "description")}</td>
-                        
                             <td>${fieldValue(bean: projectInstance, field: "organisations")}</td>
 
                             <td>${fieldValue(bean: projectInstance, field: "principalInvestigators")}</td>
 
                             <td>${fieldValue(bean: projectInstance, field: "people")}</td>
                             
+                            <shiro:hasRole name="SysAdmin">
+                                <td>${fieldValue(bean: projectInstance, field: "status")}</td>
+                                
+                                <td><g:link controller="person" action="show" id="${projectInstance?.requestingUser?.id}">${fieldValue(bean: projectInstance, field: "requestingUser")}</g:link></td>
+                            </shiro:hasRole>
+                              
                         </tr>
                     </g:each>
                     </tbody>

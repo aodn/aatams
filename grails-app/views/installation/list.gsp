@@ -36,10 +36,6 @@
                             
                             <th><g:message code="installation.stations.label" default="Stations" /></th>
 
-                            <th><g:message code="installation.lonOffset.label" default="Lon Offset" /></th>
-                        
-                            <th><g:message code="installation.latOffset.label" default="Lat Offset" /></th>
-                        
                         </tr>
                     </thead>
                     <tbody>
@@ -58,10 +54,6 @@
                             
                             <td>${installationInstance?.stations}</td>
 
-                            <td>${fieldValue(bean: installationInstance, field: "lonOffset")}</td>
-                        
-                            <td>${fieldValue(bean: installationInstance, field: "latOffset")}</td>
-                        
                         </tr>
                     </g:each>
                     </tbody>

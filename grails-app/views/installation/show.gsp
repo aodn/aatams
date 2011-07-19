@@ -46,20 +46,6 @@
                             
                         </tr>
                     
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="installation.lonOffset.label" default="Lon Offset" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: installationInstance, field: "lonOffset")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="installation.latOffset.label" default="Lat Offset" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: installationInstance, field: "latOffset")}</td>
-                            
-                        </tr>
-                    
                     </tbody>
                 </table>
             </div>

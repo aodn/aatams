@@ -360,16 +360,12 @@ class BootStrap
         Installation bondiLine =
             new Installation(name:'Bondi Line',
                              configuration:curtain,
-                             project:sealCountProject,
-                             lonOffset:15f,
-                             latOffset:30f).save(failOnError:true)
+                             project:sealCountProject).save(failOnError:true)
                          
         Installation ningalooArray =
             new Installation(name:'Ningaloo Array',
                              configuration:array,
-                             project:tunaProject,
-                             lonOffset:15f,
-                             latOffset:30f).save(failOnError:true)
+                             project:tunaProject).save(failOnError:true)
 
         WKTReader reader = new WKTReader();
 

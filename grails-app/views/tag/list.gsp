@@ -38,7 +38,7 @@
 
                             <g:sortableColumn property="codeMap" title="${message(code: 'tag.codeMap.label', default: 'Code Map')}" />
                         
-                            <g:sortableColumn property="pingCode" title="${message(code: 'tag.pingCode.label', default: 'Ping Code')}" />
+                            <g:sortableColumn property="pingCode" title="${message(code: 'tag.pingCode.label', default: 'Ping ID Code')}" />
                         
                             <g:sortableColumn property="status" title="${message(code: 'tag.status.label', default: 'Status')}" />
                             

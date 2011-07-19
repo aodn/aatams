@@ -80,7 +80,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="pingCode"><g:message code="tag.pingCode.label" default="Ping Code" /></label>
+                                  <label for="pingCode"><g:message code="tag.pingIDCode.label" default="Ping ID Code" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'pingCode', 'errors')}">
                                     <g:textField name="pingCode" value="${tagInstance?.pingCode}" />
@@ -173,7 +173,7 @@
 
                         <tr class="prop">
                             <td valign="top" class="name">
-                                <label for="sensorPingCode"><g:message code="sensor.pingCode.label" default="Ping Code" /></label>
+                                <label for="sensorPingCode"><g:message code="sensor.pingCode.label" default="Ping ID Code" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'pingCode', 'errors')}">
                                 <g:textField name="sensorPingCode" value="${fieldValue(bean: sensorInstance, field: 'pingCode')}" />

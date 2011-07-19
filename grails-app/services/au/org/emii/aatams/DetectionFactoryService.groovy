@@ -43,6 +43,19 @@ class DetectionFactoryService
 
         log.debug("Searching for tags with codeMap = " + codeMapBuilder.toString() + " and ping ID = " + pingIDBuilder.toString() + "...")
         def tags = Tag.findAllByCodeMapAndPingCode(codeMapBuilder.toString(), pingIDBuilder.toString())
+        
+        // Filter out retired tags.
+        tags.grep(
+            {
+                if (it.status == DeviceStatus.findByStatus('RETIRED'))
+                {
+                    log.warn("Detection matches retired tag: " + String.valueOf(it))
+                    return false
+                }
+                
+                return true
+            })
+        
         log.debug("Number of tags found: " + String.valueOf(tags.size()))
 
         Detection retDetection = null

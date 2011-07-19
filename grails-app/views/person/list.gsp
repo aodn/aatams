@@ -38,6 +38,9 @@
 
                             <g:sortableColumn property="projects" title="${message(code: 'person.projects.label', default: 'Projects')}" />
                             
+                            <shiro:hasRole name="SysAdmin">
+                              <g:sortableColumn property="status" title="${message(code: 'person.status.label', default: 'Status')}" />
+                            </shiro:hasRole>
                         
                         </tr>
                     </thead>
@@ -59,7 +62,11 @@
                         
                             <td>${fieldValue(bean: personInstance, field: "projects")}</td>
 
-                            </tr>
+                            <shiro:hasRole name="SysAdmin">
+                              <td>${fieldValue(bean: personInstance, field: "status")}</td>
+                            </shiro:hasRole>
+                            
+                        </tr>
                     </g:each>
                     </tbody>
                 </table>

@@ -94,6 +94,19 @@
 
                                 </td>
                             </tr>
+                            
+                            <shiro:hasRole name="SysAdmin">
+                              <tr class="prop">
+                                  <td valign="top" class="name">
+                                    <label for="status"><g:message code="person.status.label" default="Status" /></label>
+                                  </td>
+                                  <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'status', 'errors')}">
+                                      <g:select name="status" from="${au.org.emii.aatams.EntityStatus?.values()}" keys="${au.org.emii.aatams.EntityStatus?.values()*.name()}" value="${personInstance?.status?.name()}"  />
+
+                                  </td>
+                              </tr>
+                            </shiro:hasRole>
+                            
                         <%--
                             <tr class="prop">
                                 <td valign="top" class="name">

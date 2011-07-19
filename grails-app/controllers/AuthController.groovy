@@ -4,6 +4,9 @@ import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.web.util.SavedRequest
 import org.apache.shiro.web.util.WebUtils
 
+import au.org.emii.aatams.EntityStatus
+import au.org.emii.aatams.Person
+
 class AuthController {
     def shiroSecurityManager
 
@@ -32,7 +35,14 @@ class AuthController {
             if (savedRequest.queryString) targetUri = targetUri + '?' + savedRequest.queryString
         }
         
-        try{
+        try
+        {
+            // Don't let PENDING users log in.
+            if (Person.findByUsername(params.username)?.status == EntityStatus.PENDING)
+            {
+                throw new AuthenticationException("Attempted login by PENDING user: " + params.username)
+            }
+            
             // Perform the actual login. An AuthenticationException
             // will be thrown if the username is unrecognised or the
             // password is incorrect.

@@ -14,12 +14,18 @@ class Person extends SecUser
     String emailAddress;
     String phoneNumber;
     
+    // Allows for PENDING users when self-registering.
+    EntityStatus status
+    String registrationComment
+    
     static constraints = 
     {
         name(blank:false)
         organisation()
         phoneNumber(blank:true)
         emailAddress(email:true)
+        status()
+        registrationComment(nullable:true, blank:true)
     }
     
     String toString()

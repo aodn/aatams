@@ -133,7 +133,9 @@
         <div id="userlogin">
           <!-- Shown if not logged in. -->
           <shiro:guest>
-              <g:link controller="auth" params="[targetUri:request.getRequestURI() - request.getContextPath()]">Login</g:link>
+              <g:link controller="auth" params="[targetUri:request.getRequestURI() - request.getContextPath()]">Login</g:link> |
+              <g:link controller="person" action="create">Register</g:link>
+              
           </shiro:guest>
 
           <!-- Shown if logged in. -->

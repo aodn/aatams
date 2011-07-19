@@ -145,7 +145,7 @@ class PermissionUtilsService
     
     def principal()
     {
-        return Person.findByUsername(SecurityUtils.subject.principal)
+        return Person.findByUsername(SecurityUtils.subject?.principal)
     }
     
     /**

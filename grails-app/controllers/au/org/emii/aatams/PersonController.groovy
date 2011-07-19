@@ -1,9 +1,12 @@
 package au.org.emii.aatams
 
+import org.apache.shiro.SecurityUtils
 import org.apache.shiro.crypto.hash.Sha256Hash
 
 class PersonController {
 
+    def permissionUtilsService
+    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", updatePassword: "POST"]
 
     def index = {
@@ -28,9 +31,35 @@ class PersonController {
         if (createPersonCmd.validate())
         {
             def personInstance = createPersonCmd.createPerson()
+            
+            // If a PI then set Person's status to ACTIVE, otherwise,
+            // set to PENDING.
+            if (   !SecurityUtils.getSubject().isAuthenticated()
+                || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
+            {
+                personInstance.status = EntityStatus.PENDING
+            }
+            else
+            {
+                personInstance.status = EntityStatus.ACTIVE
+            }
+            
             if (personInstance.save(flush: true)) 
             {
-                flash.message = "${message(code: 'default.created.message', args: [message(code: 'person.label', default: 'Person'), personInstance.id])}"
+                if (   !SecurityUtils.getSubject().isAuthenticated()
+                    || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
+                {
+                    if (personInstance.status == EntityStatus.PENDING)
+                    {
+                        sendCreationNotificationEmails(personInstance)
+                    }
+                    
+                    flash.message = "${message(code: 'default.requested.message', args: [message(code: 'person.label', default: 'Person'), personInstance.id])}"
+                }
+                else
+                {
+                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'person.label', default: 'Person'), personInstance.id])}"
+                }
                 redirect(action: "show", id: personInstance.id)
             }
             else 
@@ -50,8 +79,39 @@ class PersonController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
             redirect(action: "list")
         }
-        else {
-            [personInstance: personInstance]
+        else 
+        {
+            def canEdit = false
+
+            if (!SecurityUtils.subject.isAuthenticated())
+            {
+                // canEdit = false
+            }
+            else if (SecurityUtils.subject.hasRole("SysAdmin"))
+            {
+                canEdit = true
+            }
+            // A person can edit their own record
+            else if (personInstance == Person.findByUsername(SecurityUtils.subject.principal))
+            {
+                canEdit = true
+            }
+            else
+            {
+                // Determine if the subject is a PI on any of this person's projects.
+                for (ProjectRole personInstanceRole : personInstance.projectRoles)
+                {
+                    Project project = personInstanceRole?.project
+
+                    // If the principal is a PI on this project, then they can edit.
+                    if (SecurityUtils.subject.isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission(project?.id)))
+                    {
+                        canEdit = true
+                    }
+                }
+            }
+            
+            [personInstance: personInstance, canEdit:canEdit]
         }
     }
 
@@ -68,6 +128,8 @@ class PersonController {
 
     def update = {
         def personInstance = Person.get(params.id)
+        boolean prevPending = (personInstance.status == EntityStatus.PENDING)
+        
         if (personInstance) {
             if (params.version) {
                 def version = params.version.toLong()
@@ -79,7 +141,14 @@ class PersonController {
                 }
             }
             personInstance.properties = params
-            if (!personInstance.hasErrors() && personInstance.save(flush: true)) {
+            if (!personInstance.hasErrors() && personInstance.save(flush: true)) 
+            {
+                // Notify organisation activated.
+                if (prevPending && (personInstance.status == EntityStatus.ACTIVE))
+                {
+                    sendActivatedNotificationEmails(personInstance)
+                }
+                
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'person.label', default: 'Person'), personInstance.id])}"
                 redirect(action: "show", id: personInstance.id)
             }
@@ -134,6 +203,37 @@ class PersonController {
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
             redirect(action: "list")
+        }
+    }
+
+    /**
+     * Notification emails are sent when a person is created (by a non-
+     * PI) to:
+     *
+     *  - the requesting user
+     *  - AATAMS sys admins.
+     */
+    def sendCreationNotificationEmails(person)
+    {
+        sendMail 
+        {  
+            to person?.emailAddress
+            bcc grailsApplication.config.grails.mail.adminEmailAddress
+            from grailsApplication.config.grails.mail.systemEmailAddress
+            subject "${message(code: 'mail.request.person.create.subject', args: [person.name])}"     
+            body "${message(code: 'mail.request.person.create.body', args: [person.name, createLink(action:'show', id:person.id, absolute:true)])}" 
+        }
+    }
+    
+    def sendActivatedNotificationEmails(person)
+    {
+        sendMail 
+        {     
+            to person?.emailAddress
+            bcc grailsApplication.config.grails.mail.adminEmailAddress
+            from grailsApplication.config.grails.mail.systemEmailAddress
+            subject "${message(code: 'mail.request.person.activate.subject', args: [person.name])}"     
+            body "${message(code: 'mail.request.person.activate.body', args: [person.name, createLink(action:'show', id:person.id, absolute:true)])}" 
         }
     }
 }

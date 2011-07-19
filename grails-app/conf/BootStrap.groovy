@@ -173,7 +173,8 @@ class BootStrap
                        name:'Jon Burgess',
                        organisation:imosOrg,
                        phoneNumber:'1234',
-                       emailAddress:'jkburges@utas.edu.au')
+                       emailAddress:'jkburges@utas.edu.au',
+                       status:EntityStatus.ACTIVE)
         jonBurgess.addToRoles(sysAdmin)
         jonBurgess.save(failOnError: true)
 
@@ -183,7 +184,8 @@ class BootStrap
                        name:'Joe Bloggs',
                        organisation:csiroOrg,
                        phoneNumber:'1234',
-                       emailAddress:'jbloggs@blah.au').save(failOnError: true)
+                       emailAddress:'jbloggs@blah.au',
+                       status:EntityStatus.ACTIVE).save(failOnError: true)
 
         Person johnCitizen =
             new Person(username:'jcitizen',
@@ -191,7 +193,8 @@ class BootStrap
                        name:'John Citizen',
                        organisation:csiroOrg,
                        phoneNumber:'5678',
-                       emailAddress:'jcitizen@blah.au').save(failOnError: true)
+                       emailAddress:'jcitizen@blah.au',
+                       status:EntityStatus.ACTIVE).save(failOnError: true)
 
         //
         // Project Roles.

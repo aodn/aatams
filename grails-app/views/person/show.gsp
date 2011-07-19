@@ -73,6 +73,16 @@
                             </td>
                             
                         </tr>
+                        
+                        <shiro:hasRole name="SysAdmin">
+                          <tr class="prop">
+                              <td valign="top" class="name"><g:message code="person.status.label" default="Status" /></td>
+
+                              <td valign="top" class="value">${personInstance?.status?.encodeAsHTML()}</td>
+
+                          </tr>
+                        </shiro:hasRole>
+                        
                     
                     </tbody>
                 </table>
@@ -82,8 +92,10 @@
                     <g:hiddenField name="id" value="${personInstance?.id}" />
                     
                     <!-- This button should only be shown if permitted -->
-<%--                    <shiro:hasPermission permission="person:${personInstance?.id}:write">--%>
-                      <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
+<%--                    <shiro:hasPermission permission="${personInstance?.id}:write">--%>
+                      <g:if test="${canEdit}">
+                        <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
+                      </g:if>
 <%--                    </shiro:hasPermission>--%>
                     
                     <shiro:hasRole name="SysAdmin">

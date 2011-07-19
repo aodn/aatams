@@ -89,11 +89,18 @@ class CandidateEntitiesService
         
         Person.list().each(
         {
-            for (ProjectRole role : it?.projectRoles)
+            if (it?.status == EntityStatus.PENDING)
             {
-                if (role?.project == project)
+                // Ignore PENDING people.
+            }
+            else
+            {
+                for (ProjectRole role : it?.projectRoles)
                 {
-                    candidatePeople.add(role?.person)
+                    if (role?.project == project)
+                    {
+                        candidatePeople.add(role?.person)
+                    }
                 }
             }
         })

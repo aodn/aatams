@@ -249,12 +249,21 @@ class SecSecurityFilters
      * A person can do anything to their own record, except delete.
      * 
      * Prinicipal Investigators have special permissions regarding people, 
-     * namely the ability to create and edit people.
+     * namely the ability to create people.
+     * 
+     * PIs can also edit people who have a role on the PIs project.
      */
     def handlePerson(actionName, params)
     {
+        // Anyone (even unauthenticated users) can create and save people now.
+        if (   !SecurityUtils.subject.isAuthenticated()
+            && ((actionName == "create") || (actionName == "save")))
+        {
+            return true
+        }
+        
         SecUser paramUser = SecUser.get(params?.id)
-        SecUser principal = SecUser.findByUsername(SecurityUtils.subject.principal)
+        SecUser principal = SecUser.findByUsername(SecurityUtils?.subject?.principal)
         
         // User can do anything but delete to their own record.
         if (   (paramUser == principal)
@@ -269,14 +278,24 @@ class SecSecurityFilters
             return true
         }
         
-        if (personWriteActions.contains(actionName))
+        // Principal is a PI
+        if (SecurityUtils.subject.isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
         {
-            ProjectRoleType principalInvestigator = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
-            for (ProjectRole role : principal.projectRoles)
+            if ((actionName == "create") || (actionName == "save"))
             {
-                if (role.roleType == principalInvestigator)
+                return true
+            }
+            else if ((actionName == "edit") || (actionName == "update"))
+            {
+                for (ProjectRole paramUserRole : paramUser.projectRoles)
                 {
-                    return true
+                    Project project = paramUserRole?.project
+                    
+                    // If the principal is a PI on this project, then they can edit.
+                    if (SecurityUtils.subject.isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission(project?.id)))
+                    {
+                        return true
+                    }
                 }
             }
         }

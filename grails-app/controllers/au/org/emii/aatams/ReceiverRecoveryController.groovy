@@ -36,6 +36,7 @@ class ReceiverRecoveryController {
     def save = 
     {
         ReceiverDeployment deployment = ReceiverDeployment.get(params.deploymentId)
+        log.debug("deployment: " + deployment)
         
         def receiverRecoveryInstance = new ReceiverRecovery(params)
         receiverRecoveryInstance.deployment = deployment
@@ -44,7 +45,9 @@ class ReceiverRecoveryController {
         deployment.receiver.status = receiverRecoveryInstance.status
         deployment.receiver.save(flush: true)
         
-        if (receiverRecoveryInstance.save(flush: true)) 
+        deployment.recovery = receiverRecoveryInstance
+        
+        if (deployment.save(flush: true)) 
         {
             // Create a new receiver download an associate it with the recovery
             // TODO: may need some extra controls in view to populate download 

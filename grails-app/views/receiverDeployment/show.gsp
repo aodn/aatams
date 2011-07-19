@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiverDeployment.label', default: 'ReceiverDeployment')}" />
-        <g:set var="projectId" value="${receiverDeploymentInstance?.receiver?.project?.id}" />
+        <g:set var="projectId" value="${receiverDeploymentInstance?.station?.installation?.project?.id}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>

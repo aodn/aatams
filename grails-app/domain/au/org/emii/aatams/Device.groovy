@@ -11,15 +11,17 @@ class Device
     
     DeviceModel model       
     String serialNumber
-    static belongsTo = [project: Project]
     
     DeviceStatus status
+    
+    String comment
     
     static constraints =
     {
         codeName(blank:false)
         serialNumber(blank:false)
         status()
+        comment(nullable:true, blank:true)
     }
     
     static transients = ['deviceID']

@@ -251,21 +251,22 @@ class BootStrap
                          serialNumber:'12345678',
                          status:deployedStatus,
                          model:vemcoXyz,
-                         project:sealCountProject).save(failOnError: true)
+                         organisation:csiroOrg,
+                         comment:'RX 1 belonging to CSIRO').save(failOnError: true)
 
         Receiver rx2 =
             new Receiver(codeName:String.valueOf(vemcoXyz) + " - " + '87654321',
                          serialNumber:'87654321',
                          status:deployedStatus,
                          model:vemcoXyz,
-                         project:tunaProject).save(failOnError: true)
+                         organisation:csiroOrg).save(failOnError: true)
 
         Receiver rx3 =
             new Receiver(codeName:String.valueOf(vemcoXyz) + " - " + '1111',
                          serialNumber:'1111',
                          status:newStatus,
                          model:vemcoXyz,
-                         project:tunaProject).save(failOnError: true)
+                         organisation:imosOrg).save(failOnError: true)
                      
         //
         // Tags.

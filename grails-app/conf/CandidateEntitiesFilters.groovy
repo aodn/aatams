@@ -35,6 +35,7 @@ class CandidateEntitiesFilters
                 model?.candidateSurgeries = candidateSurgeries
                 
                 def candidateReceivers = candidateEntitiesService.receivers()
+                
                 model?.candidateReceivers = candidateReceivers
                 
                 //

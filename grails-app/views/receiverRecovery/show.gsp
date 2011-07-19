@@ -6,16 +6,13 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiverRecovery.label', default: 'ReceiverRecovery')}" />
         <g:set var="receiverDeploymentInstance" value="${receiverRecoveryInstance?.deployment}"/>
-        <g:set var="projectId" value="${receiverRecoveryInstance?.deployment?.receiver?.project?.id}" />
+        <g:set var="projectId" value="${receiverRecoveryInstance?.deployment?.station?.installation?.project?.id}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
             <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
-            <shiro:hasPermission permission="projectWriteAny">
-              <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
-            </shiro:hasPermission>
         </div>
         <div class="body">
             <h1><g:message code="default.show.label" args="[entityName]" /></h1>

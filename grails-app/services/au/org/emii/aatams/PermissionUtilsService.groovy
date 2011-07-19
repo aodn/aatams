@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import org.apache.shiro.SecurityUtils
+
 /**
  * Collection of security related utility methods.
  * 
@@ -23,7 +25,9 @@ class PermissionUtilsService
             == ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR))
         {
             log.debug("Adding PI permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
+            
             user.addToPermissions(buildPersonWriteAnyPermission())
+            user.addToPermissions(buildReceiverCreatePermission())
             String permission = buildPrincipalInvestigatorPermission(projectRole.project.id)
             user.addToPermissions(permission)
             log.debug("Added permission: " + permission)
@@ -66,6 +70,7 @@ class PermissionUtilsService
         if (   projectRole.roleType 
             == ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR))
         {
+            user.removeFromPermissions(buildReceiverCreatePermission())
             user.removeFromPermissions(buildPersonWriteAnyPermission())
             user.removeFromPermissions(buildPrincipalInvestigatorPermission(projectRole.project.id))
         }
@@ -128,6 +133,50 @@ class PermissionUtilsService
         return "personWriteAny"
     }
     
+    String buildReceiverCreatePermission()
+    {
+        return "receiverCreate"
+    }
+    
+    String buildReceiverUpdatePermission(receiverId)
+    {
+        return "receiverUpdate:" + receiverId
+    }
+    
+    def principal()
+    {
+        return Person.findByUsername(SecurityUtils.subject.principal)
+    }
+    
+    /**
+     * This should be called by the ReceiverController whenever a receiver is
+     * created.
+     */
+    def receiverCreated(receiverInstance)
+    {
+        String permissionString = buildReceiverUpdatePermission(receiverInstance?.id)
+        
+        log.debug("Adding permission \'" + permissionString + "\' to user:" + String.valueOf(principal()))
+        principal().addToPermissions(permissionString)
+        principal().save(flush:true)
+    }
 
+    def receiverDeleted(receiverInstance)
+    {
+        String permissionString = buildReceiverUpdatePermission(receiverInstance?.id)
+     
+        log.debug("Deleting permission \'" + permissionString + "\' from all users...")
+        
+        // TODO: this is potentially an expensive operation - ref second level cache:
+        // http://stackoverflow.com/questions/2437446/grails-how-can-i-search-through-children-in-a-hasmany-relationship
+        def people = Person.list().each{
+            
+            if (it.permissions.contains(permissionString))
+            {
+                it.removeFromPermissions(permissionString)
+                it.save()
+            }
+        }
+    }
 }
 

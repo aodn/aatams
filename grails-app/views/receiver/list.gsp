@@ -10,7 +10,7 @@
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
-            <shiro:hasPermission permission="projectWriteAny">
+            <shiro:hasPermission permission="receiverCreate">
               <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
             </shiro:hasPermission>
         </div>
@@ -31,7 +31,7 @@
                         
                             <g:sortableColumn property="serialNumber" title="${message(code: 'receiver.serialNumber.label', default: 'Serial Number')}" />
                         
-                            <g:sortableColumn property="project" title="${message(code: 'device.project.label', default: 'Project')}" />
+                            <g:sortableColumn property="organisation" title="${message(code: 'device.organisation.label', default: 'Organisation')}" />
                         
                             <g:sortableColumn property="status" title="${message(code: 'receiver.status.label', default: 'Status')}" />
                         
@@ -49,7 +49,7 @@
                         
                             <td>${fieldValue(bean: receiverInstance, field: "serialNumber")}</td>
                         
-                            <td><g:link controller="project" action="show" id="${receiverInstance?.project?.id}">${fieldValue(bean: receiverInstance?.project, field: "name")}</g:link></td>
+                            <td><g:link controller="organisation" action="show" id="${receiverInstance?.organisation?.id}">${fieldValue(bean: receiverInstance?.organisation, field: "name")}</g:link></td>
 
                             <td>${fieldValue(bean: receiverInstance, field: "status")}</td>
                         

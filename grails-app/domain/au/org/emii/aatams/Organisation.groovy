@@ -5,7 +5,8 @@ import au.org.emii.aatams.util.ListUtils
 class Organisation 
 {
     static hasMany = [organisationProjects:OrganisationProject,
-                      organisationPeople:OrganisationPerson]
+                      organisationPeople:OrganisationPerson,
+                      receivers:Receiver]
     
     static transients = ['projects', 'people']
     

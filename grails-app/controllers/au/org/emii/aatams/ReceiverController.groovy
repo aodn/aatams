@@ -1,7 +1,9 @@
 package au.org.emii.aatams
 
-class ReceiverController {
-
+class ReceiverController 
+{
+    def permissionUtilsService
+    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -25,7 +27,11 @@ class ReceiverController {
         String codeName = Receiver.constructCodeName(params)
         receiverInstance.codeName = codeName
         
-        if (receiverInstance.save(flush: true)) {
+        if (receiverInstance.save(flush: true)) 
+        {
+            // Need to add update permission to subject.
+            permissionUtilsService.receiverCreated(receiverInstance)
+            
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.id])}"
             redirect(action: "show", id: receiverInstance.id)
         }
@@ -90,8 +96,13 @@ class ReceiverController {
     def delete = {
         def receiverInstance = Receiver.get(params.id)
         if (receiverInstance) {
-            try {
+            try 
+            {
                 receiverInstance.delete(flush: true)
+                
+                // Need to delete any update permissions for this receiver.
+                permissionUtilsService.receiverDeleted(receiverInstance)
+                
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiver.label', default: 'Receiver'), params.id])}"
                 redirect(action: "list")
             }

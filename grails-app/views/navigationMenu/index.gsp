@@ -48,11 +48,20 @@
           <li class="installationDataControllers">
             <g:link controller="${c.key}">${c.value}</g:link>
             
-            <shiro:hasPermission permission="projectWriteAny">
-              <span class="inline">
-                <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
-              </span>
-            </shiro:hasPermission>
+            <g:if test="${c.key == 'receiver'}">
+              <shiro:hasPermission permission="receiverCreate">
+                <span class="inline">
+                  <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
+                </span>
+              </shiro:hasPermission>
+            </g:if>
+            <g:else>
+              <shiro:hasPermission permission="projectWriteAny">
+                <span class="inline">
+                  <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
+                </span>
+              </shiro:hasPermission>
+            </g:else>
           </li>
         </g:each>
       </ul>

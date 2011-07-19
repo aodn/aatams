@@ -130,6 +130,72 @@ class SecSecurityFilters
                         return true
                     }
                     
+                    if (controllerName == "receiver")
+                    {
+                        if ((actionName == "update") || (actionName == "edit"))
+                        {
+                            String perm = permissionUtilsService.buildReceiverUpdatePermission(params.id)
+                            if (SecurityUtils.subject.isPermitted(perm))
+                            {
+                                return true
+                            }
+                        }
+                        
+                        if ((actionName == "save") || (actionName == "create"))
+                        {
+                            if (SecurityUtils.subject.isPermitted(permissionUtilsService.buildReceiverCreatePermission()))
+                            {
+                                return true
+                            }
+                        }
+                    }
+                    
+                    if (controllerName == "receiverDeployment")
+                    {
+                        def projectId
+                        if ((actionName == "update") || (actionName == "edit"))
+                        {
+                            projectId = params.project.id
+                        }
+                        else if (actionName == "save")
+                        {
+                            projectId = InstallationStation.get(params?.station?.id)?.installation?.project?.id
+                        }
+                            
+                        String perm = permissionUtilsService.buildProjectWritePermission(projectId)
+                        if (SecurityUtils.subject.isPermitted(perm))
+                        {
+                            return true
+                        }
+                    }
+                    
+                    if (controllerName == "receiverRecovery")
+                    {
+                        def projectId
+                        if (actionName == "update")
+                        {
+                            projectId = params.project.id
+                        }
+//                        else if (actionName == "edit")
+//                        {
+//                            
+//                        }
+                        else if (actionName == "save")
+                        {
+                            projectId = ReceiverDeployment.get(params.deploymentId)?.station?.installation?.project?.id
+                        }
+                            
+                        String perm = permissionUtilsService.buildProjectWritePermission(projectId)
+                        if (SecurityUtils.subject.isPermitted(perm))
+                        {
+                            return true
+                        }
+                        else
+                        {
+                            println("Not permitted, action: " + actionName)
+                        }
+                    }
+                    
                     //
                     //  Only some users have "WRITE" access to a project (and
                     //  all its associated data).
@@ -235,7 +301,7 @@ class SecSecurityFilters
             }
             else
             {
-                return ReceiverDeployment.get(params?.receiverDeployment?.id)?.receiver?.project?.id
+                return ReceiverDeployment.get(params?.receiverDeployment?.id)?.station?.installation?.project?.id
             }
         }
         

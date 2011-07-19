@@ -12,7 +12,9 @@
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
             <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
-            <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
+            <shiro:hasPermission permission="receiverCreate">
+              <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
+            </shiro:hasPermission>
         </div>
         <div class="body">
             <h1><g:message code="default.edit.label" args="[entityName]" /></h1>
@@ -40,10 +42,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="project"><g:message code="receiver.project.label" default="Project" /></label>
+                                  <label for="project"><g:message code="receiver.organisation.label" default="Project" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${receiverInstance?.project?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'organisation', 'errors')}">
+                                    <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${receiverInstance?.organisation?.id}"  />
 
                                 </td>
                             </tr>
@@ -74,6 +76,16 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverInstance?.status?.id}"  />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="comment"><g:message code="receiver.comment.label" default="Comment" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'comment', 'errors')}">
+                                    <g:textArea name="comment" value="${receiverInstance?.comment}" />
 
                                 </td>
                             </tr>

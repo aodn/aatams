@@ -63,30 +63,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="sutures"><g:message code="surgery.sutures.label" default="Sutures" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'sutures', 'errors')}">
-                                    <g:checkBox name="sutures" value="${surgeryInstance?.sutures}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                   <label for="treatmentType"><g:message code="surgery.treatmentType.label" default="Treatment Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'treatmentType', 'errors')}">
                                     <g:select name="treatmentType.id" from="${au.org.emii.aatams.SurgeryTreatmentType.list()}" optionKey="id" value="${surgeryInstance?.treatmentType?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="surgeon"><g:message code="surgery.surgeon.label" default="Surgeon" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'surgeon', 'errors')}">
-                                    <g:select name="surgeon.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${surgeryInstance?.surgeon?.id}"  />
 
                                 </td>
                             </tr>

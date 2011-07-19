@@ -82,9 +82,18 @@
                                 </td>
                             </tr>
                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="captureMethod"><g:message code="animalRelease.captureMethod.label" default="Capture Method" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureMethod', 'errors')}">
+                                    <g:select name="captureMethod.id" from="${au.org.emii.aatams.CaptureMethod.list()}" optionKey="id" value="${animalReleaseInstance?.captureMethod?.id}"  />
+                                </td>
+                            </tr>
+                        
                             <tr>
                                 <td valign="top" class="name">
-                                  <label for="surgeries"><g:message code="animalRelease.surgeries.label" default="Surgeries" /></label>
+                                  <label for="tagging"><g:message code="animalRelease.surgeries.label" default="Tagging" /></label>
                                 </td>
 
                                 <td valign="top" class="value">
@@ -94,10 +103,8 @@
                                       <tr>
                                         <th>Date/Time</th>
                                         <th>Tag</th>
-                                        <th>Type</th>
-                                        <th>Sutures</th>
+                                        <th>Placement</th>
                                         <th>Treatment</th>
-                                        <th>Person</th>
                                         <th>Comments</th>
                                       </tr>
                                     </thead>
@@ -110,11 +117,7 @@
                                             <g:link controller="tag" action="show" id="${s?.tag?.id}">${s?.tag}</g:link>
                                           </td>
                                           <td valign="top" class="value">${s?.type}</td>
-                                          <td valign="top" class="value">${s?.sutures}</td>
                                           <td valign="top" class="value">${s?.treatmentType}</td>
-                                          <td valign="top" class="value">
-                                            <g:link controller="person" action="show" id="${s?.surgeon?.id}">${s?.surgeon}</g:link>
-                                          </td>
                                           <td valign="top" class="value">${s?.comments}</td>
 
                                         </tr>
@@ -124,7 +127,7 @@
                                       <tr>
                                         <td>
                                           <a href="#" 
-                                             id='add_surgery_to_animal_release'>${message(code: 'default.add.label', args: [message(code: 'surgery.label', default: 'Surgery...')])}</a>
+                                             id='add_surgery_to_animal_release'>${message(code: 'default.add.label', args: [message(code: 'surgery.label', default: 'Tagging...')])}</a>
                                         </td>
                                       </tr>
 
@@ -255,7 +258,7 @@
         <!--
              Dialog presented when adding surgery to animal release.
         -->
-        <div id="dialog-form-add-surgery" title="Add Surgery to Animal Release">
+        <div id="dialog-form-add-surgery" title="Add Tagging to Animal Release">
             <g:form action="save" >
                 <div class="dialog">
                     <table>
@@ -294,20 +297,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="type"><g:message code="surgery.type.label" default="Type" /></label>
+                                    <label for="type"><g:message code="surgery.type.label" default="Placement" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'type', 'errors')}">
                                     <g:select name="surgeryTypeId" from="${au.org.emii.aatams.SurgeryType.list()}" optionKey="id" value="${surgeryInstance?.type?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="sutures"><g:message code="surgery.sutures.label" default="Sutures" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'sutures', 'errors')}">
-                                    <g:checkBox name="sutures" value="${surgeryInstance?.sutures}" />
 
                                 </td>
                             </tr>
@@ -318,16 +311,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'treatmentType', 'errors')}">
                                     <g:select name="treatmentTypeId" from="${au.org.emii.aatams.SurgeryTreatmentType.list()}" optionKey="id" value="${surgeryInstance?.treatmentType?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="surgeon"><g:message code="surgery.surgeon.label" default="Person" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'surgeon', 'errors')}">
-                                    <g:select name="surgeonId" from="${candidatePeople}" optionKey="id" value="${surgeryInstance?.surgeon?.id}"  />
 
                                 </td>
                             </tr>

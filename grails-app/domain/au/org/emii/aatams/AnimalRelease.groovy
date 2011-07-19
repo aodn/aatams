@@ -28,6 +28,8 @@ class AnimalRelease
     Point captureLocation
     Date captureDateTime
     
+    CaptureMethod captureMethod
+    
     String releaseLocality
     Point releaseLocation
     Date releaseDateTime
@@ -47,6 +49,7 @@ class AnimalRelease
         captureLocality()
         captureLocation()
         captureDateTime()
+        captureMethod()
         releaseLocality()
         releaseLocation()
         releaseDateTime()

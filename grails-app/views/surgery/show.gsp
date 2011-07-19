@@ -51,23 +51,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="surgery.sutures.label" default="Sutures" /></td>
-                            
-                            <td valign="top" class="value"><g:formatBoolean boolean="${surgeryInstance?.sutures}" /></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="surgery.treatmentType.label" default="Treatment Type" /></td>
                             
                             <td valign="top" class="value"><g:link controller="surgeryTreatmentType" action="show" id="${surgeryInstance?.treatmentType?.id}">${surgeryInstance?.treatmentType?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="surgery.surgeon.label" default="Surgeon" /></td>
-                            
-                            <td valign="top" class="value"><g:link controller="person" action="show" id="${surgeryInstance?.surgeon?.id}">${surgeryInstance?.surgeon?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     

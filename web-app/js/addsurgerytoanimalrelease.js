@@ -14,9 +14,7 @@ $(function() {
                 var timestamp_day = $("#surgeryTimestamp_day").val();
                 var tagId = $("#tagId option:selected").val();
                 var typeId = $("#surgeryTypeId option:selected").val();
-                var sutures = $("#sutures").is(':checked');
                 var treatmentTypeId = $("#treatmentTypeId option:selected").val();
-                var surgeonId = $("#surgeonId option:selected").val();
                 var comments = $("#surgeryComments").val();
                 var event = $("#id").val();
                 
@@ -29,9 +27,7 @@ $(function() {
                            'timestamp_day':timestamp_day,
                            'tag.id':tagId,
                            'type.id':typeId,
-                           'sutures':sutures,
                            'treatmentType.id':treatmentTypeId,
-                           'surgeon.id':surgeonId,
                            'comments':comments
                        },
                        function(data)
@@ -51,16 +47,8 @@ $(function() {
                            var typeColumn = $("<td>").attr("class", "value").html(data.type.type);
                            tableRow.append(typeColumn);
                            
-                           var suturesColumn = $("<td>").attr("class", "value").html(data.sutures.toString());
-                           tableRow.append(suturesColumn);
-                           
                            var treatmentColumn = $("<td>").attr("class", "value").html(data.treatmentType.type);
                            tableRow.append(treatmentColumn);
-                           
-                           var personColumn = $("<td>").attr("class", "value");
-                           tableRow.append(personColumn);
-                           var personLink = $("<a>").attr("href", '../person/show/' + data.surgeon.id).html(data.surgeon.name);
-                           personColumn.append(personLink);
                            
                            var commentsColumn = $("<td>").attr("class", "value").html(data.comments);
                            tableRow.append(commentsColumn);

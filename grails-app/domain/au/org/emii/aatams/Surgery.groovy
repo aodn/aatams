@@ -11,9 +11,7 @@ class Surgery
     Tag tag
     Date timestamp
     SurgeryType type
-    Boolean sutures
     SurgeryTreatmentType treatmentType
-    Person surgeon
     String comments
     
     static constraints =
@@ -21,14 +19,12 @@ class Surgery
         timestamp()
         release()
         tag()
-        sutures()
         treatmentType()
-        surgeon()
         comments(nullable:true, blank:true)
     }
     
     String toString()
     {
-        return "Tag (" + String.valueOf(tag) + "): " + String.valueOf(type) + " performed by " + String.valueOf(surgeon)
+        return "Tag (" + String.valueOf(tag) + "): " + String.valueOf(type)
     }
 }

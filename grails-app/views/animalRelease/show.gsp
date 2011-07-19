@@ -61,9 +61,15 @@
                             
                         </tr>
                     
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="animalRelease.captureMethod.label" default="Capture Method" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "captureMethod")}</td>
+                            
+                        </tr>
                         <tr>
                             <td valign="top" class="name">
-                              <label for="surgeries"><g:message code="animalRelease.surgeries.label" default="Surgeries" /></label>
+                              <label for="tagging"><g:message code="animalRelease.surgeries.label" default="Tagging" /></label>
                             </td>
 
                             <td valign="top" class="value">
@@ -73,10 +79,8 @@
                                   <tr>
                                     <th>Date/Time</th>
                                     <th>Tag</th>
-                                    <th>Type</th>
-                                    <th>Sutures</th>
+                                    <th>Placement</th>
                                     <th>Treatment</th>
-                                    <th>Person</th>
                                     <th>Comments</th>
                                   </tr>
                                 </thead>
@@ -89,11 +93,7 @@
                                         <g:link controller="tag" action="show" id="${s?.tag?.id}">${s?.tag}</g:link>
                                       </td>
                                       <td valign="top" class="value">${s?.type}</td>
-                                      <td valign="top" class="value">${s?.sutures}</td>
                                       <td valign="top" class="value">${s?.treatmentType}</td>
-                                      <td valign="top" class="value">
-                                        <g:link controller="person" action="show" id="${s?.surgeon?.id}">${s?.surgeon}</g:link>
-                                      </td>
                                       <td valign="top" class="value">${s?.comments}</td>
 
                                     </tr>

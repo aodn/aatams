@@ -87,6 +87,15 @@
                                 </td>
                             </tr>
                         
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="captureMethod"><g:message code="animalRelease.captureMethod.label" default="Capture Method" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureMethod', 'errors')}">
+                                    <g:select name="captureMethod.id" from="${au.org.emii.aatams.CaptureMethod.list()}" optionKey="id" value="${animalReleaseInstance?.captureMethod?.id}"  />
+                                </td>
+                            </tr>
+                        
                             <!-- TODO: surgeries -->
                             
                             <!-- TODO: measurements -->

@@ -41,9 +41,7 @@ class SurgeryController {
                 returnArray['timestamp'] = it.timestamp
                 returnArray['tag'] = it.tag
                 returnArray['type'] = it.type
-                returnArray['sutures'] = it.sutures
                 returnArray['treatmentType'] = it.treatmentType
-                returnArray['surgeon'] = it.surgeon
                 returnArray['comments'] = it.comments
                 
                 return returnArray

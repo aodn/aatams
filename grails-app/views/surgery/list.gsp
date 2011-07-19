@@ -30,8 +30,6 @@
                         
                             <th><g:message code="surgery.tag.label" default="Tag" /></th>
                         
-                            <g:sortableColumn property="sutures" title="${message(code: 'surgery.sutures.label', default: 'Sutures')}" />
-                        
                             <th><g:message code="surgery.treatmentType.label" default="Treatment Type" /></th>
                         
                         </tr>
@@ -47,8 +45,6 @@
                             <td>${fieldValue(bean: surgeryInstance, field: "release")}</td>
                         
                             <td>${fieldValue(bean: surgeryInstance, field: "tag")}</td>
-                        
-                            <td><g:formatBoolean boolean="${surgeryInstance.sutures}" /></td>
                         
                             <td>${fieldValue(bean: surgeryInstance, field: "treatmentType")}</td>
                         

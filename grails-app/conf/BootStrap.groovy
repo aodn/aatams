@@ -469,6 +469,9 @@ class BootStrap
         SurgeryType internal = new SurgeryType(type:'INTERNAL').save(failOnError:true)
         SurgeryType external = new SurgeryType(type:'EXTERNAL').save(failOnError:true)
 
+        CaptureMethod net = new CaptureMethod(name:'NET').save(failOnError:true)
+        CaptureMethod line = new CaptureMethod(name:'LINE').save(failOnError:true)
+        CaptureMethod longLine = new CaptureMethod(name:'LONG LINE').save(failOnError:true)
 
         AnimalRelease whiteShark1Release =
             new AnimalRelease(project:tunaProject,
@@ -478,6 +481,7 @@ class BootStrap
                               captureLocality:'Neptune Islands',
                               captureLocation:(Point)reader.read("POINT(20.1234 20.1234)"),
                               captureDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:10:00"),
+                              captureMethod:net,
                               releaseLocality:'Neptune Islands',
                               releaseLocation:(Point)reader.read("POINT(20.1234 20.1234)"),
                               releaseDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:15:00"),
@@ -503,18 +507,14 @@ class BootStrap
                         tag:tag1,
                         timestamp:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:12:00"),
                         type:external,
-                        sutures:false,
-                        treatmentType:antibiotic,
-                        surgeon:joeBloggs).save(failOnError:true)
+                        treatmentType:antibiotic).save(failOnError:true)
 
         Surgery surgery2 = 
             new Surgery(release:whiteShark1Release,
                         tag:tag2,
                         timestamp:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:13:00"),
                         type:external,
-                        sutures:false,
-                        treatmentType:antibiotic,
-                        surgeon:joeBloggs).save(failOnError:true)
+                        treatmentType:antibiotic).save(failOnError:true)
 
         // Receiver Recovery.
         ReceiverRecovery recovery1 = 

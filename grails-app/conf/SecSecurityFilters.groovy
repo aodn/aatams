@@ -117,14 +117,14 @@ class SecSecurityFilters
                     // Authenticated users can create Organisations (although
                     // they will have status of PENDING and not useable).
                     if (   controllerName == "organisation" 
-                        && actionName == "save"
+                        && ((actionName == "save") || (actionName == "create"))
                         && SecurityUtils.subject.isAuthenticated())
                     {
                         return true
                     }
                     
                     if (   controllerName == "project" 
-                        && actionName == "save"
+                        && ((actionName == "save") || (actionName == "create"))
                         && SecurityUtils.subject.isAuthenticated())
                     {
                         return true

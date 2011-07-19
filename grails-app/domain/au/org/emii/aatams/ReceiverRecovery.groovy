@@ -14,16 +14,16 @@ class ReceiverRecovery
 {
     static transients = ['scrambledLocation']
 
+    /**
+     * Every recovery must have a (chronologically) preceding deployment.
+     */
+    static belongsTo = [deployment: ReceiverDeployment]
+    
     Date recoveryDate
     Point location
     DeviceStatus status
     ReceiverDownload download
     ProjectRole recoverer
-    
-    /**
-     * Every recovery must have a (chronologically) preceding deployment.
-     */
-    ReceiverDeployment deployment
     
     String comments
 

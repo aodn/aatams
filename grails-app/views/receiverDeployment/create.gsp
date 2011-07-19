@@ -132,6 +132,8 @@
                     </table>
                 </div>
                 <div class="buttons">
+                    <g:hiddenField name="project.id" value="${receiverDeploymentInstance?.station?.installation?.project?.id}" />
+                  
                     <span class="button"><g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                 </div>
             </g:form>

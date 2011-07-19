@@ -24,6 +24,24 @@ class CandidateEntitiesService
         return candidateProjects
     }
     
+    def organisations =
+    {
+        def subjectsOrganisations
+
+        // SysAdmin "belongs" to all organisations.
+        if (SecurityUtils.subject.hasRole("SysAdmin"))
+        { 
+            subjectsOrganisations = Organisation.list()
+        }
+        else
+        {
+            Person person = permissionUtilsService.principal()
+            subjectsOrganisations = person?.organisation
+        }
+        
+        return subjectsOrganisations
+    }
+    
     def installations =
     {
         def candidateInstallations = 
@@ -48,12 +66,9 @@ class CandidateEntitiesService
     
     def receivers =
     {
-        def candidateReceivers =
-            Receiver.list().grep(
-            {
-                projects().contains(it?.project)
-            })
+        def candOrganisations = organisations()
         
+        def candidateReceivers = candOrganisations*.receivers?.flatten()
         return candidateReceivers
     }
     
@@ -91,7 +106,7 @@ class CandidateEntitiesService
         def candidateDeployments =
             ReceiverDeployment.list().grep(
             {
-                projects().contains(it?.receiver?.project)
+                projects().contains(it?.station?.installation?.project)
             })
         
         return candidateDeployments

@@ -30,10 +30,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="project"><g:message code="receiver.project.label" default="Project" /></label>
+                                  <label for="organisation"><g:message code="receiver.organisation.label" default="Organisation" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${receiverInstance?.project?.id}"  />
+                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'organisation', 'errors')}">
+                                    <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${receiverInstance?.organisation?.id}"  />
 
                                 </td>
                             </tr>
@@ -68,6 +68,16 @@
                                 </td>
                             </tr>
                         
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="comment"><g:message code="receiver.comment.label" default="Comment" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'comment', 'errors')}">
+                                    <g:textArea name="comment" value="${receiverInstance?.comment}" />
+
+                                </td>
+                            </tr>
+                            
                         </tbody>
                     </table>
                 </div>

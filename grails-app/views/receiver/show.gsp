@@ -5,14 +5,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiver.label', default: 'Receiver')}" />
-        <g:set var="projectId" value="${receiverInstance?.project?.id}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
             <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
-            <shiro:hasPermission permission="projectWriteAny">
+            <shiro:hasPermission permission="receiverCreate">
               <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
             </shiro:hasPermission>
         </div>
@@ -33,9 +32,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.project.label" default="Project" /></td>
+                            <td valign="top" class="name"><g:message code="receiver.organisation.label" default="Organisation" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="project" action="show" id="${receiverInstance?.project?.id}">${receiverInstance?.project?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value"><g:link controller="organisation" action="show" id="${receiverInstance?.organisation?.id}">${receiverInstance?.organisation?.encodeAsHTML()}</g:link></td>
                             
                         </tr>
                     
@@ -60,15 +59,21 @@
                             
                         </tr>
                     
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiver.comment.label" default="Comment" /></td>
+                            
+                            <td valign="top" class="value">${receiverInstance?.comment?.encodeAsHTML()}</td>
+                            
+                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
             <div class="buttons">
                 <g:form>
                     <g:hiddenField name="id" value="${receiverInstance?.id}" />
-                    <g:hiddenField name="project.id" value="${projectId}" />
-
-                    <shiro:hasPermission permission="project:${projectId}:write">
+                    
+                    <shiro:hasPermission permission="receiverUpdate:${receiverInstance?.id}">
                       <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                     </shiro:hasPermission>
                     <shiro:hasRole name="SysAdmin">

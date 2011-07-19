@@ -69,7 +69,13 @@
             </div>
             <div class="paginateButtons">
                 <g:paginate total="${projectInstanceTotal}" />
+                <g:jasperReport controller="project"
+                                jasper="projects" 
+                                action="testExample"
+                                format="PDF,HTML,XML,CSV" 
+                                name="All Projects" />
             </div>
+            
         </div>
     </body>
 </html>

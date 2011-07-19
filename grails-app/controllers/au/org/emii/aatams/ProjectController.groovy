@@ -200,6 +200,19 @@ class ProjectController {
             body "${message(code: 'mail.request.project.activate.body', args: [project.name, createLink(action:'show', id:project.id, absolute:true)])}" 
         }
     }
+    
+    def testExample = 
+    {
+        // This “data” object in this data model is the data that drives this Jasper report (i.e. what appears in the
+        // detail band)
+        List projects = Project.list();
+
+        chain(controller:'jasper', action:'index', model:[data:projects], params:params)
+
+        // here jasper is the plugin provided controller.
+        // and index is the default method in jasper controller.
+        // we need to pass the data and the params.
+    }
 }
 
 

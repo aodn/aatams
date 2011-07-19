@@ -32,6 +32,8 @@ class ReceiverDeployment
     
     MooringType mooringType
     
+    String mooringDescriptor
+    
     /**
      * Depth to bottom (m)
      */
@@ -45,9 +47,11 @@ class ReceiverDeployment
     /**
      * TODO: probably should be enum - what are possible values?
      */
-    String receiverOrientation
+    ReceiverOrientation receiverOrientation
     
     Point location
+    
+    Integer batteryLifeDays
     
     String comments
     
@@ -75,6 +79,7 @@ class ReceiverDeployment
         recoveryDate(nullable:true)
         acousticReleaseID(nullable:true)
         mooringType()
+        mooringDescriptor(nullable:true, blank:true)
         bottomDepthM(nullable:true, min:0F)
         depthBelowSurfaceM(nullable:true, min:0F)
         receiverOrientation(nullable:true)

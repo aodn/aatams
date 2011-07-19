@@ -40,6 +40,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDeployment.deploymentNumber.label" default="Deployment Number" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "deploymentNumber")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDate.label" default="Deployment Date" /></td>
                             
                             <td valign="top" class="value"><g:formatDate date="${receiverDeploymentInstance?.deploymentDate}" /></td>
@@ -75,6 +82,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDeployment.mooringDescriptor.label" default="Mooring Descriptor" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "mooringDescriptor")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDeployment.bottomDepthM.label" default="Bottom Depth (m)" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "bottomDepthM")}</td>
@@ -89,9 +103,23 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDeployment.embargoDate.label" default="Embargo Date" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDeployment.receiverOrientation.label" default="Receiver Orientation" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${receiverDeploymentInstance?.embargoDate}" /></td>
+                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "receiverOrientation")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDeployment.batteryLifeDays.label" default="Battery Life (days)" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "batteryLifeDays")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDeployment.comments.label" default="Comments" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "comments")}</td>
                             
                         </tr>
                     

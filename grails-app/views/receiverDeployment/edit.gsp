@@ -104,6 +104,16 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                    <label for="mooringDescriptor"><g:message code="receiverDeployment.mooringDescriptor.label" default="Mooring Descriptor" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'mooringDescriptor', 'errors')}">
+                                    <g:textField name="mooringDescriptor" value="${fieldValue(bean: receiverDeploymentInstance, field: 'mooringDescriptor')}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label for="bottomDepthM"><g:message code="receiverDeployment.bottomDepthM.label" default="Bottom Depth (m)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'bottomDepthM', 'errors')}">
@@ -124,10 +134,30 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="embargoDate"><g:message code="receiverDeployment.embargoDate.label" default="Embargo Date" /></label>
+                                    <label for="receiverOrientation"><g:message code="receiverDeployment.receiverOrientation.label" default="Receiver Orientation" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'embargoDate', 'errors')}">
-                                    <g:datePicker name="embargoDate" precision="day" value="${receiverDeploymentInstance?.embargoDate}" default="none" noSelection="['': '']" />
+                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'receiverOrientation', 'errors')}">
+                                    <g:select name="receiverOrientation" from="${au.org.emii.aatams.ReceiverOrientation?.values()}" keys="${au.org.emii.aatams.ReceiverOrientation?.values()}" value="${receiverDeploymentInstance?.receiverOrientation}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="batteryLifeDays"><g:message code="receiverDeployment.batteryLifeDays.label" default="Battery Life (days)" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'batteryLifeDays', 'errors')}">
+                                    <g:textField name="batteryLifeDays" value="${fieldValue(bean: receiverDeploymentInstance, field: 'batteryLifeDays')}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="comments"><g:message code="receiverDeployment.comments.label" default="Comments" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'comments', 'errors')}">
+                                    <g:textArea name="comments" value="${fieldValue(bean: receiverDeploymentInstance, field: 'comments')}" />
 
                                 </td>
                             </tr>

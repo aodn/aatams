@@ -26,6 +26,14 @@ class ReceiverDeploymentController {
         DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
         receiverDeploymentInstance.receiver.status = deployedStatus
 
+        // Increment that station's number of deployments.
+        receiverDeploymentInstance?.station?.numDeployments =
+            receiverDeploymentInstance?.station?.numDeployments + 1
+        receiverDeploymentInstance?.station?.save()
+        
+        // And record the deployment number against the actual deployment.
+        receiverDeploymentInstance?.deploymentNumber = receiverDeploymentInstance?.station?.numDeployments
+        
         if (receiverDeploymentInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.id])}"
             redirect(action: "show", id: receiverDeploymentInstance.id)

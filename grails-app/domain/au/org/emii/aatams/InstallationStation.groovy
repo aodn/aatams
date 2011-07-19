@@ -33,6 +33,11 @@ class InstallationStation
     Integer curtainPosition
     
     /**
+     * Number of deployments at this particular station.
+     */
+    
+    Integer numDeployments = 0
+    /**
      * Geographic position of this station.
      */
     Point location

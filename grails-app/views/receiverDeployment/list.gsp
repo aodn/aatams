@@ -38,8 +38,6 @@
                         
                             <g:sortableColumn property="recoveryDate" title="${message(code: 'receiverDeployment.recoveryDate.label', default: 'Recovery Date')}" />
                         
-                            <g:sortableColumn property="embargoDate" title="${message(code: 'receiverDeployment.embargoDate.label', default: 'Embargo Date')}" />
-
                         </tr>
                     </thead>
                     <tbody>
@@ -59,8 +57,6 @@
                             <td><g:formatDate date="${receiverDeploymentInstance.deploymentDate}" /></td>
                         
                             <td><g:formatDate date="${receiverDeploymentInstance.recoveryDate}" /></td>
-                        
-                            <td><g:formatDate date="${receiverDeploymentInstance.embargoDate}" /></td>
                         
                         </tr>
                     </g:each>

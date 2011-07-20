@@ -482,11 +482,11 @@ class BootStrap
                               measurements:[],
                               animal:whiteShark1,
                               captureLocality:'Neptune Islands',
-                              captureLocation:(Point)reader.read("POINT(20.1234 20.1234)"),
+                              captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
                               captureDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:10:00"),
                               captureMethod:net,
                               releaseLocality:'Neptune Islands',
-                              releaseLocation:(Point)reader.read("POINT(20.1234 20.1234)"),
+                              releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
                               releaseDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:15:00"),
                               embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2015-05-15 12:34:56")).save(failOnError:true)
 

@@ -60,8 +60,10 @@
                         
                             <td>${fieldValue(bean: animalReleaseInstance, field: "releaseLocality")}</td>
                         
-                            <td>${fieldValue(bean: animalReleaseInstance, field: "scrambledReleaseLocation")}</td>
-                        
+                            <td>
+                              <g:point name="scrambledReleaseLocation" 
+                                       value="${animalReleaseInstance?.scrambledReleaseLocation}"/>
+                            </td>
                             <td><g:link controller="project" action="show" id="${animalReleaseInstance.project.id}">${animalReleaseInstance.project}</g:link></td>
                         
                             <td><g:formatDate date="${animalReleaseInstance.embargoDate}" /></td>

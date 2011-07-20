@@ -160,7 +160,10 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "scrambledReleaseLocation")}</td>
+                            <td valign="top" class="value">
+                              <g:point name="scrambledReleaseLocation" 
+                                       value="${animalReleaseInstance?.scrambledReleaseLocation}"/>
+                            </td>
                             
                         </tr>
                     

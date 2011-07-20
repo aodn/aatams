@@ -36,7 +36,8 @@ class NavigationMenuController
         'animalRelease':"Tag Releases",
         'detection':"Tag Detections",
         'receiverDeployment':"Receiver Deployment",
-        'receiverRecovery':"Receiver Recovery"
+        'receiverRecovery':"Receiver Recovery",
+        'receiverEvent':"Receiver Events"
     ]
     
     def reportControllers =

@@ -22,9 +22,22 @@ class GeometryTagLib
     def point = { attrs, body ->
         
         def pointAsString = ""
-        def lon = attrs.value?.getCoordinate()?.x
-        def lat = attrs.value?.getCoordinate()?.y
-        def srid = attrs.value?.getSRID()
+        def lon
+        def lat
+        def srid
+        
+        if (attrs.value == null)
+        {
+            lon = 0.0
+            lat = 0.0
+            srid = 4326
+        }
+        else
+        {
+            lon = attrs.value?.getCoordinate()?.x
+            lat = attrs.value?.getCoordinate()?.y
+            srid = attrs.value?.getSRID()
+        }
         
         pointAsString += Math.abs(lon) + "°"
         if (lon >= 0)

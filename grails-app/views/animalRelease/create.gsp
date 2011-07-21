@@ -71,9 +71,9 @@
                                     <label for="captureLocation"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureLocation', 'errors')}">
-                                  <g:textField name="captureLocation" value="${animalReleaseInstance?.captureLocation}" />
-<!--                                  <g:pointInput name="captureLocation" lon="12" lat="34" datum="EPSG:4326"/> -->
-<!--                                  <g:pointInput name='captureLocation'/>-->
+                                  <g:point name="captureLocation" 
+                                           value="${animalReleaseInstance?.captureLocation}"
+                                           editable="${true}"/>
                                 </td>
                             </tr>
                         
@@ -125,8 +125,9 @@
                                     <label for="releaseLocation"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseLocation', 'errors')}">
-                                    <g:textField name="releaseLocation" value="${animalReleaseInstance?.releaseLocation}" />
-
+                                  <g:point name="releaseLocation" 
+                                           value="${animalReleaseInstance?.releaseLocation}"
+                                           editable="${true}"/>
                                 </td>
                             </tr>
                         

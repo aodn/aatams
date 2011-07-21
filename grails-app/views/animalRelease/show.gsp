@@ -50,7 +50,10 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "captureLocation")}</td>
+                            <td valign="top" class="value">
+                              <g:point name="captureLocation" 
+                                       value="${animalReleaseInstance?.captureLocation}"/>
+                            </td>
                             
                         </tr>
                     

@@ -67,7 +67,6 @@
                                   <label for="captureLocation"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureLocation', 'errors')}">
-<%--                                  <g:textField name="captureLocation" value="${animalReleaseInstance?.captureLocation}" /> --%>
                                   <g:point name="captureLocation" 
                                            value="${animalReleaseInstance?.captureLocation}"
                                            editable="${true}"/>

@@ -1,18 +1,20 @@
 <g:javascript src="pointEdit.js" />
 
-<div class="pointEdit" id="${parentName}">
-  <%-- <g:textField name="${parentName}" value="${value}" size="40"/> --%>
-  <%-- <g:textField name="pointInputTextField" value="${value}" size="40"/> --%>
-  <g:textField name="${parentName}" size="40"/>
+<div id="${parentName}" class="pointEdit">
+  
+  <g:textField name="pointInputTextField" size="40"/>
+
+  <!-- This is the value which is sent back to the server to be parsed. -->
+  <g:hiddenField name="${parentName}"/>
 
   <!-- Point attributes are stored in the following hidden fields.  These
        are updated when the edit dialog is closed.
   -->
-  <g:hiddenField name="lon" value="${lon}"/>
-  <g:hiddenField name="lat" value="${lat}"/>
-  <g:hiddenField name="srid" value="${srid}"/>
-
-  <div id="dialog-form-edit-point" title="Edit Point">
+  <g:hiddenField name="${parentName}_lon" value="${lon}"/>
+  <g:hiddenField name="${parentName}_lat" value="${lat}"/>
+  <g:hiddenField name="${parentName}_srid" value="${srid}"/>
+  
+  <div class="pointEditDialog" id="dialog-form-edit-point" parent="${parentName}" title="Edit Point">
       <g:form action="save" >
 
 

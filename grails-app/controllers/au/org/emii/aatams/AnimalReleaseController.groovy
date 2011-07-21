@@ -74,7 +74,8 @@ class AnimalReleaseController {
         }
     }
 
-    def update = {
+    def update = 
+    {
         def animalReleaseInstance = AnimalRelease.get(params.id)
         if (animalReleaseInstance) {
             if (params.version) {

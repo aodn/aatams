@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'detection.label', default: 'Detection')}" />
-        <g:set var="projectId" value="${detectionInstance?.receiverDeployment?.receiver?.project?.id}" />
+        <g:set var="projectId" value="${detectionInstance?.receiverDeployment?.station?.installation?.project?.id}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -63,8 +63,10 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.location.label" default="Location" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "scrambledLocation")}</td>
-                            
+                            <td valign="top" class="value">
+                                  <g:point name="scrambledLocation" 
+                                           value="${detectionInstance?.scrambledLocation}" />
+                            </td>
                         </tr>
                     
                         <tr class="prop">

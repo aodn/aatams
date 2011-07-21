@@ -6,7 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'detection.label', default: 'Detection')}" />
-        <g:set var="projectId" value="${detectionInstance?.receiverDeployment?.receiver?.project?.id}" />
+        <g:set var="projectId" value="${detectionInstance?.receiverDeployment?.station?.installation?.project?.id}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -87,8 +87,9 @@
                                   <label for="location"><g:message code="detection.location.label" default="Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'location', 'errors')}">
-                                    <g:textField name="location" value="${detectionInstance?.location}" />
-
+                                  <g:point name="location" 
+                                           value="${detectionInstance?.location}" 
+                                           editable="${true}" />
                                 </td>
                             </tr>
                         

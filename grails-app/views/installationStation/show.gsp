@@ -42,8 +42,10 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="installationStation.location.label" default="Location" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: installationStationInstance, field: "scrambledLocation")}</td>
-                            
+                            <td valign="top" class="value">
+                              <g:point name="scrambledLocation"
+                                       value="${installationStationInstance?.scrambledLocation}"/>
+                            </td>
                         </tr>
                     
                         <tr class="prop">

@@ -63,8 +63,10 @@
                                     <label for="location"><g:message code="receiverDeployment.location.label" default="Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'location', 'errors')}">
-                                    <g:textField name="location" value="${receiverDeploymentInstance?.location}" />
-
+                                  <g:point name="location"
+                                           value="${receiverDeploymentInstance?.location}"
+                                           editable="${true}"/>
+                            
                                 </td>
                             </tr>
                         

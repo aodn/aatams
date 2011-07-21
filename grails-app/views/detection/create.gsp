@@ -83,7 +83,9 @@
                                     <label for="location"><g:message code="detection.location.label" default="Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'location', 'errors')}">
-                                    <g:textField name="location" value="${detectionInstance?.location}" />
+                                  <g:point name="location" 
+                                           value="${detectionInstance?.location}"
+                                           editable="${true}"/>
 
                                 </td>
                             </tr>

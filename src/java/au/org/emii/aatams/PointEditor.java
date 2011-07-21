@@ -25,7 +25,7 @@ public class PointEditor extends PropertyEditorSupport
         
         try 
         {
-            String[] tokens = text.split("-");
+            String[] tokens = text.split(",");
             if (tokens.length != 2)
             {
                 throw new ParseException("Invalid number of tokens (!= 2): " + text);

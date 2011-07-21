@@ -65,7 +65,10 @@
 
                             <td><g:link controller="installationStation" action="show" id="${receiverDeployment?.station?.id}">${receiverDeployment?.station}</g:link></td>
                         
-                            <td>${fieldValue(bean: receiverDeployment?.station, field: "scrambledLocation")}</td>
+                            <td>
+                              <g:point name="scrambledLocation"
+                                       value="${receiverDeployment?.station?.scrambledLocation}" />
+                            </td>
                             
                             <td><g:link action="receiver" controller="receiver" action="show" id="${receiverDeployment?.receiver?.id}">${receiverDeployment?.receiver}</g:link></td>
 
@@ -82,7 +85,10 @@
                             
                             <td>${fieldValue(bean: receiverDeployment?.recovery?.recoverer, field: "person")}</td>
 
-                            <td>${fieldValue(bean: receiverDeployment?.recovery, field: "scrambledLocation")}</td>
+                            <td>
+                              <g:point name="scrambledLocation"
+                                       value="${receiverDeployment?.recovery?.scrambledLocation}" />
+                            </td>
 
                             <td><g:formatDate date="${receiverDeployment?.recovery?.recoveryDate}" /></td>
 

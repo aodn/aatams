@@ -55,7 +55,10 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name"><g:message code="receiverDeployment.location.label" default="Location" /></td>
-                                <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "location")}</td>
+                                <td valign="top" class="value">
+                                  <g:point name="location"
+                                           value="${receiverDeploymentInstance?.location}"/>
+                                </td>
 
                             </tr>
 
@@ -106,7 +109,9 @@
                                     <label for="location"><g:message code="receiverRecovery.location.label" default="Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'location', 'errors')}">
-                                    <g:textField name="location" value="${receiverRecoveryInstance?.location}" />
+                                  <g:point name="location"
+                                           value="${receiverRecoveryInstance?.location}"
+                                           editable="${true}"/>
 
                                 </td>
                             </tr>

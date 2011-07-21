@@ -144,5 +144,5 @@ function genPointString(lon, lat, srid)
 
 function genCodedPointString(lon, lat, srid)
 {
-    return "POINT(" + lon + " " + lat + ") - " + srid;
+    return "POINT(" + lon + " " + lat + ") , " + srid;
 }

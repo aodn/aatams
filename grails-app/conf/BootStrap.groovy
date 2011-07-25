@@ -319,6 +319,15 @@ class BootStrap
                     status:newStatus,
                     transmitterType:pinger).save(failOnError: true)
           
+        Tag tag6 =
+            new Tag(codeName:'A70-1303-44444',
+                    serialNumber:'4444',
+                    codeMap:'A70-1303',
+                    pingCode:'4444',
+                    model:vemcoXyz,
+                    project:tunaProject,
+                    status:newStatus,
+                    transmitterType:pinger).save(failOnError: true)
                 
         TransmitterType depth =
             new TransmitterType(transmitterTypeName:"DEPTH").save(failOnError:true)

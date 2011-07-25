@@ -26,35 +26,46 @@ class SurgeryController {
 
     def save = 
     {
-        def surgeryInstance = new Surgery(params)
+        try
+        {
+            def surgeryInstance = new Surgery(params)
 
-        // Need to update that status of the tag to DEPLOYED.
-        DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
-        surgeryInstance.tag.status = deployedStatus
-            
-        if (surgeryInstance.save(flush: true)) 
-        {
-            // Deep rendering of object not working due to geometry type
-            // Need to use custom object marshaller.
-            JSON.registerObjectMarshaller(Surgery.class)
+            // Need to update that status of the tag to DEPLOYED.
+            DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
+            surgeryInstance.tag.status = deployedStatus
+
+            if (surgeryInstance.save(flush: true)) 
             {
-                def returnArray = [:]
-                returnArray['id'] = it.id
-                returnArray['timestamp'] = DateTimeFormat.forPattern(grailsApplication.config.jodatime.format.org.joda.time.DateTime).print(it.timestamp)
-                returnArray['tag'] = it.tag
-                returnArray['type'] = it.type
-                returnArray['treatmentType'] = it.treatmentType
-                returnArray['comments'] = it.comments
-                
-                return returnArray
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tagging.label', default: 'Tagging'), surgeryInstance])}"
+
+                // Deep rendering of object not working due to geometry type
+                // Need to use custom object marshaller.
+                JSON.registerObjectMarshaller(Surgery.class)
+                {
+                    def returnArray = [:]
+                    returnArray['id'] = it.id
+                    returnArray['timestamp'] = DateTimeFormat.forPattern(grailsApplication.config.jodatime.format.org.joda.time.DateTime).print(it.timestamp)
+                    returnArray['tag'] = it.tag
+                    returnArray['type'] = it.type
+                    returnArray['treatmentType'] = it.treatmentType
+                    returnArray['comments'] = it.comments
+                    returnArray['flash'] = flash
+
+                    return returnArray
+                }
+
+                render surgeryInstance as JSON
             }
-            
-            render surgeryInstance as JSON
+            else 
+            {
+                log.error(surgeryInstance.errors)
+                render(view: "create", model: [surgeryInstance: surgeryInstance])
+            }
         }
-        else 
+        catch (Throwable t)
         {
-            log.error(surgeryInstance.errors)
-            render(view: "create", model: [surgeryInstance: surgeryInstance])
+            log.error(t)
+            render t as JSON
         }
     }
 

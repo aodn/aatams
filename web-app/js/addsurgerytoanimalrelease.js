@@ -38,6 +38,24 @@ $(function() {
                        },
                        function(data)
                        {
+                           console.log(data)
+                           
+                           // Remove any existing flash message.
+                           $(".body > .message").remove();;
+                           
+                           // Insert flash message (if there is one).
+                           if (data.flash.message)
+                           {
+                                var heading = $(".body > h1")
+                                heading.after('<div class=\"message\">' + data.flash.message + '</div>');
+                           }
+                           
+                           // Exception.
+                           else if (data.localizedMessage)
+                           {
+                               // TODO    
+                           }
+                           
                            var tableRow = $("<tr>");
                            
                            var dateTimeColumn = $("<td>").attr("class", "value");

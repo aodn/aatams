@@ -50,7 +50,7 @@ class ReceiverRecovery
     
     String toString()
     {
-        return String.valueOf(deployment.receiver) + " recovered on " + String.valueOf(recoveryDate)
+        return String.valueOf(deployment.receiver) + " recovered on " + String.valueOf(recoveryDateTime)
     }
 
     /**

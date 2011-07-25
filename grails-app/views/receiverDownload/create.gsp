@@ -40,11 +40,12 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="downloadDate"><g:message code="receiverDownload.downloadDate.label" default="Download Date" /></label>
+                                    <label for="downloadDateTime"><g:message code="receiverDownload.downloadDateTime.label" default="Download Date" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'downloadDate', 'errors')}">
-                                    <g:datePicker name="downloadDate" precision="day" value="${receiverDownloadInstance?.downloadDate}"  />
-
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'downloadDateTime', 'errors')}">
+                                    <joda:dateTimePicker name="downloadDateTime" 
+                                                         value="${receiverDownloadInstance?.downloadDateTime}"
+                                                         useZone="true"/>
                                 </td>
                             </tr>
                         

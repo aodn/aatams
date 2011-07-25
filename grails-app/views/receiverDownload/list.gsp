@@ -26,7 +26,7 @@
                         
                             <th><g:message code="receiverDownload.receiverRecovery.label" default="Receiver Recovery" /></th>
                         
-                            <g:sortableColumn property="downloadDate" title="${message(code: 'receiverDownload.downloadDate.label', default: 'Download Date')}" />
+                            <g:sortableColumn property="downloadDateTime" title="${message(code: 'receiverDownload.downloadDateTime.label', default: 'Download Date')}" />
                         
                             <g:sortableColumn property="clockDrift" title="${message(code: 'receiverDownload.clockDrift.label', default: 'Clock Drift')}" />
                         
@@ -44,7 +44,7 @@
                         
                             <td>${fieldValue(bean: receiverDownloadInstance, field: "receiverRecovery")}</td>
                         
-                            <td><g:formatDate date="${receiverDownloadInstance.downloadDate}" /></td>
+                            <td><joda:format value="${receiverDownloadInstance.downloadDateTime}" /></td>
                         
                             <td>${fieldValue(bean: receiverDownloadInstance, field: "clockDrift")}</td>
                         

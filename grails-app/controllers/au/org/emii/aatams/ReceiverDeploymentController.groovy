@@ -1,5 +1,8 @@
 package au.org.emii.aatams
 
+import org.joda.time.*
+import org.joda.time.contrib.hibernate.*
+
 class ReceiverDeploymentController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -22,6 +25,8 @@ class ReceiverDeploymentController {
     def save = {
         def receiverDeploymentInstance = new ReceiverDeployment(params)
 
+        log.debug("params: " + params)
+        
         // Need to update that status of the receiver to DEPLOYED.
         DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
         receiverDeploymentInstance.receiver.status = deployedStatus
@@ -66,6 +71,9 @@ class ReceiverDeploymentController {
     }
 
     def update = {
+        
+        log.debug("params: " + params)
+        
         def receiverDeploymentInstance = ReceiverDeployment.get(params.id)
         if (receiverDeploymentInstance) {
             if (params.version) {
@@ -78,6 +86,7 @@ class ReceiverDeploymentController {
                 }
             }
             receiverDeploymentInstance.properties = params
+            
             if (!receiverDeploymentInstance.hasErrors() && receiverDeploymentInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.id])}"
                 redirect(action: "show", id: receiverDeploymentInstance.id)

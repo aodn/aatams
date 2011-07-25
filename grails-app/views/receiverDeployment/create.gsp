@@ -50,10 +50,12 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="deploymentDate"><g:message code="receiverDeployment.deploymentDate.label" default="Deployment Date" /></label>
+                                  <label for="deploymentDateTime"><g:message code="receiverDeployment.deploymentDateTime.label" default="Deployment Date" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'deploymentDate', 'errors')}">
-                                    <g:datePicker name="deploymentDate" precision="day" value="${receiverDeploymentInstance?.deploymentDate}"  />
+                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'deploymentDateTime', 'errors')}">
+                                    <joda:dateTimePicker name="deploymentDateTime" 
+                                                         value="${receiverDeploymentInstance?.deploymentDateTime}"
+                                                         useZone="true"/>
 
                                 </td>
                             </tr>

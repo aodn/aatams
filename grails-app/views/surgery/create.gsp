@@ -33,7 +33,9 @@
                                     <label for="timestamp"><g:message code="surgery.timestamp.label" default="Timestamp" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'timestamp', 'errors')}">
-                                    <g:datePicker name="timestamp" precision="day" value="${surgeryInstance?.timestamp}"  />
+                                    <joda:dateTimePicker name="timestamp" 
+                                                         value="${surgeryInstance?.timestamp}"
+                                                         useZone="true"/>
 
                                 </td>
                             </tr>

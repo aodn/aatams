@@ -3,6 +3,8 @@ package au.org.emii.aatams
 //import grails.converters.deep.JSON
 import grails.converters.JSON
 
+import org.joda.time.format.DateTimeFormat
+
 class SurgeryController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -38,7 +40,7 @@ class SurgeryController {
             {
                 def returnArray = [:]
                 returnArray['id'] = it.id
-                returnArray['timestamp'] = it.timestamp
+                returnArray['timestamp'] = DateTimeFormat.forPattern(grailsApplication.config.jodatime.format.org.joda.time.DateTime).print(it.timestamp)
                 returnArray['tag'] = it.tag
                 returnArray['type'] = it.type
                 returnArray['treatmentType'] = it.treatmentType

@@ -4,6 +4,8 @@ import au.org.emii.aatams.util.GeometryUtils
 import au.org.emii.aatams.util.ListUtils
 
 import com.vividsolutions.jts.geom.Point
+import org.joda.time.*
+import org.joda.time.contrib.hibernate.*
 
 /**
  * Animal release is the process of capturing, tagging and releasing an animal,
@@ -18,7 +20,21 @@ class AnimalRelease
     static belongsTo = [project: Project]
     static hasMany = [surgeries: Surgery, measurements: AnimalMeasurement]
     static transients = ['scrambledReleaseLocation']
-    
+    static mapping =
+    {
+        captureDateTime type: PersistentDateTimeTZ,
+        {
+            column name: "captureDateTime_timestamp"
+            column name: "captureDateTime_zone"
+        }
+        
+        releaseDateTime type: PersistentDateTimeTZ,
+        {
+            column name: "releaseDateTime_timestamp"
+            column name: "releaseDateTime_zone"
+        }
+    }
+
     /**
      * Animal that has been captured and released.
      */
@@ -26,13 +42,13 @@ class AnimalRelease
     
     String captureLocality
     Point captureLocation
-    Date captureDateTime
+    DateTime captureDateTime
     
     CaptureMethod captureMethod
     
     String releaseLocality
     Point releaseLocation
-    Date releaseDateTime
+    DateTime releaseDateTime
 
     String comments
     

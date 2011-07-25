@@ -34,7 +34,7 @@
                             <tr class="prop">
                                 <td valign="top" class="name">Deployment Details</td>
                                 <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDate.label" default="Deployment Date" /></td>
-                                <td valign="top" class="value"><g:formatDate date="${receiverDeploymentInstance?.deploymentDate}" /></td>
+                                <td valign="top" class="value"><joda:format value="${receiverDeploymentInstance?.deploymentDate}" /></td>
 
                             </tr>
 
@@ -122,7 +122,10 @@
                                     <label for="recoveryDate"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDate', 'errors')}">
-                                    <g:datePicker name="recoveryDate" precision="day" value="${receiverRecoveryInstance?.recoveryDate}"  />
+                                    <joda:dateTimePicker name="recoveryDateTime" 
+                                                         value="${receiverRecoveryInstance?.recoveryDateTime}"
+                                                         useZone="true"/>
+<g:datePicker name="recoveryDate" precision="day" value="${receiverRecoveryInstance?.recoveryDate}"  />
 
                                 </td>
                             </tr>

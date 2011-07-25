@@ -32,7 +32,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="surgery.timestamp.label" default="Timestamp" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${surgeryInstance?.timestamp}" /></td>
+                            <td valign="top" class="value"><joda:format value="${surgeryInstance?.timestamp}" /></td>
                             
                         </tr>
                     

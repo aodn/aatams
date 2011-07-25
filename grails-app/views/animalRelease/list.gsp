@@ -56,7 +56,7 @@
                         
                             <td>${fieldValue(bean: animalReleaseInstance, field: "animal.species")}</td>
 
-                            <td><g:formatDate date="${animalReleaseInstance.releaseDateTime}" /></td>
+                            <td><joda:format value="${animalReleaseInstance.releaseDateTime}" /></td>
                         
                             <td>${fieldValue(bean: animalReleaseInstance, field: "releaseLocality")}</td>
                         

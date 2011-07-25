@@ -51,17 +51,19 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="deploymentDate"><g:message code="receiverDeployment.deploymentDate.label" default="Deployment Date" /></label>
+                                  <label for="deploymentDateTime"><g:message code="receiverDeployment.deploymentDateTime.label" default="Deployment Date" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'deploymentDate', 'errors')}">
-                                    <g:datePicker name="deploymentDate" precision="day" value="${receiverDeploymentInstance?.deploymentDate}"  />
+                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'deploymentDateTime', 'errors')}">
+                                    <joda:dateTimePicker name="deploymentDateTime" 
+                                                         value="${receiverDeploymentInstance?.deploymentDateTime}"
+                                                         useZone="true"/>
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="location"><g:message code="receiverDeployment.location.label" default="Location" /></label>
@@ -79,11 +81,11 @@
                                   <label for="recoveryDate"><g:message code="receiverDeployment.recoveryDate.label" default="Scheduled Recovery Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'recoveryDate', 'errors')}">
-                                    <g:datePicker name="recoveryDate" precision="day" value="${receiverDeploymentInstance?.recoveryDate}"  />
+                                    <g:datePicker name="recoveryDate" precision="day" value="${receiverDeploymentInstance?.recoveryDate}"  /> 
 
                                 </td>
                             </tr>
-                        
+                                      
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="acousticReleaseID"><g:message code="receiverDeployment.acousticReleaseID.label" default="Acoustic Release ID" /></label>

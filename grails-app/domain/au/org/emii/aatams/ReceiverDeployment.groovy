@@ -3,6 +3,9 @@ package au.org.emii.aatams
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
+import org.joda.time.*
+import org.joda.time.contrib.hibernate.*
+
 
 /**
  * Receiver deployment is the process of deploying a receiver in the ocean. The
@@ -17,7 +20,17 @@ class ReceiverDeployment
     static transients = ['scrambledLocation']
 
     Integer deploymentNumber
-    Date deploymentDate
+    
+    DateTime deploymentDateTime
+
+    static mapping =
+    {
+        deploymentDateTime type: PersistentDateTimeTZ,
+        {
+            column name: "deploymentDateTime_timestamp"
+            column name: "deploymentDateTime_zone"
+        }
+    }
     
     /**
      * Date the receiver is scheduled to be recovered.
@@ -75,7 +88,7 @@ class ReceiverDeployment
         receiver()
         station()
         deploymentNumber(nullable:true, min:0)
-        deploymentDate()
+        deploymentDateTime()
         recoveryDate(nullable:true)
         acousticReleaseID(nullable:true)
         mooringType()

@@ -96,7 +96,8 @@ log4j = {
     debug   "grails.app.controller.au.org.emii",
             "grails.app.service.au.org.emii",
             "grails.app.domain.au.org.emii",
-            "grails.app.filter"
+            "grails.app.filter"//,
+            //"grails.app.tagLib.com.energizedwork.grails.plugins.jodatime"
 }
 
 //
@@ -106,6 +107,10 @@ fileimport
 {
     path = "/Users/jburgess/Documents/aatams/test_uploads"
 }
+
+// Date formats.
+//jodatime.format.org.joda.time.DateTime = "yyyy-MM-dd'T'HH:mm:ssZ"
+jodatime.format.org.joda.time.DateTime = "dd/MM/yyyy HH:mm:ss zz"
 
 //
 // Email configuration.
@@ -138,4 +143,16 @@ environments
     {
     }
 
+}
+
+// Added by the Joda-Time plugin:
+grails.gorm.default.mapping = {
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentDateTime, class: org.joda.time.DateTime
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentDuration, class: org.joda.time.Duration
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentInstant, class: org.joda.time.Instant
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentInterval, class: org.joda.time.Interval
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentLocalDate, class: org.joda.time.LocalDate
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentLocalTimeAsString, class: org.joda.time.LocalTime
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentLocalDateTime, class: org.joda.time.LocalDateTime
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentPeriod, class: org.joda.time.Period
 }

@@ -6,6 +6,7 @@ import com.vividsolutions.jts.io.ParseException
 import com.vividsolutions.jts.io.WKTReader
 
 import org.apache.shiro.crypto.hash.Sha256Hash
+import org.joda.time.*
 
 class BootStrap 
 {
@@ -412,7 +413,8 @@ class BootStrap
             new ReceiverDeployment(station:bondiSW1,
                                    receiver:rx1,
                                    deploymentNumber:1,
-                                   deploymentDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 12:34:56"),
+                                   deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
+//                                   deploymentDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 12:34:56"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
                                    bottomDepthM:12f,
@@ -425,7 +427,8 @@ class BootStrap
             new ReceiverDeployment(station:bondiSW2,
                                    receiver:rx2,
                                    deploymentNumber:1,
-                                   deploymentDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:12:00"),
+                                   deploymentDateTime:new DateTime("2011-05-15T14:12:00+10:00"),
+//                                   deploymentDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:12:00"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
                                    bottomDepthM:16f,
@@ -438,7 +441,8 @@ class BootStrap
             new ReceiverDeployment(station:ningalooS1,
                                    receiver:rx3,
                                    deploymentNumber:1,
-                                   deploymentDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 12:34:56"),
+                                   deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
+//                                   deploymentDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 12:34:56"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
                                    bottomDepthM:12f,

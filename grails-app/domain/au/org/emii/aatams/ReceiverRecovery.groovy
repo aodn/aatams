@@ -3,6 +3,8 @@ package au.org.emii.aatams
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
+import org.joda.time.*
+import org.joda.time.contrib.hibernate.*
 
 /**
  * Receiver recovery is the process of retrieving a receiver from the field and
@@ -18,8 +20,16 @@ class ReceiverRecovery
      * Every recovery must have a (chronologically) preceding deployment.
      */
     static belongsTo = [deployment: ReceiverDeployment]
+    static mapping =
+    {
+        recoveryDateTime type: PersistentDateTimeTZ,
+        {
+            column name: "recoveryDateTime_timestamp"
+            column name: "recoveryDateTime_zone"
+        }
+    }
     
-    Date recoveryDate
+    DateTime recoveryDateTime
     Point location
     DeviceStatus status
     ReceiverDownload download
@@ -29,7 +39,7 @@ class ReceiverRecovery
 
     static constraints =
     {
-        recoveryDate()
+        recoveryDateTime()
         location()
         status()
         download(nullable:true)

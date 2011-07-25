@@ -414,7 +414,6 @@ class BootStrap
                                    receiver:rx1,
                                    deploymentNumber:1,
                                    deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
-//                                   deploymentDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 12:34:56"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
                                    bottomDepthM:12f,
@@ -428,7 +427,6 @@ class BootStrap
                                    receiver:rx2,
                                    deploymentNumber:1,
                                    deploymentDateTime:new DateTime("2011-05-15T14:12:00+10:00"),
-//                                   deploymentDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:12:00"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
                                    bottomDepthM:16f,
@@ -442,7 +440,6 @@ class BootStrap
                                    receiver:rx3,
                                    deploymentNumber:1,
                                    deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
-//                                   deploymentDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 12:34:56"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
                                    bottomDepthM:12f,
@@ -487,11 +484,11 @@ class BootStrap
                               animal:whiteShark1,
                               captureLocality:'Neptune Islands',
                               captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
-                              captureDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:10:00"),
+                              captureDateTime:new DateTime("2011-05-15T14:10:00"),
                               captureMethod:net,
                               releaseLocality:'Neptune Islands',
                               releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
-                              releaseDateTime:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:15:00"),
+                              releaseDateTime:new DateTime("2011-05-15T14:15:00"),
                               embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2015-05-15 12:34:56")).save(failOnError:true)
 
         AnimalMeasurement whiteShark1Length = 
@@ -512,20 +509,20 @@ class BootStrap
         Surgery surgery1 = 
             new Surgery(release:whiteShark1Release,
                         tag:tag1,
-                        timestamp:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:12:00"),
+                        timestamp:new DateTime("2011-05-15T14:12:00"),
                         type:external,
                         treatmentType:antibiotic).save(failOnError:true)
 
         Surgery surgery2 = 
             new Surgery(release:whiteShark1Release,
                         tag:tag2,
-                        timestamp:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-15 14:13:00"),
+                        timestamp:new DateTime("2011-05-15T14:13:00"),
                         type:external,
                         treatmentType:antibiotic).save(failOnError:true)
 
         // Receiver Recovery.
         ReceiverRecovery recovery1 = 
-            new ReceiverRecovery(recoveryDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-17 12:34:56"),
+            new ReceiverRecovery(recoveryDateTime: new DateTime("2011-05-17T12:34:56"),
                                  location:(Point)reader.read("POINT(10.1234 10.1234)"),
                                  status:recoveredStatus,
                                  recoverer:sealProjectInvestigator,
@@ -534,7 +531,7 @@ class BootStrap
                                  batteryVoltage:3.7f).save(failOnError:true)
                              
         ReceiverRecovery recovery2 = 
-            new ReceiverRecovery(recoveryDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-17 12:54:56"),
+            new ReceiverRecovery(recoveryDateTime: new DateTime("2011-05-17T12:54:56"),
                                  location:(Point)reader.read("POINT(20.1234 20.1234)"),
                                  status:recoveredStatus,
                                  recoverer:sealProjectInvestigator,

@@ -60,7 +60,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${animalReleaseInstance?.captureDateTime}" /></td>
+                            <td valign="top" class="value"><joda:format value="${animalReleaseInstance?.captureDateTime}" /></td>
                             
                         </tr>
                     
@@ -91,7 +91,7 @@
                                   <g:each in="${animalReleaseInstance?.surgeries?}" var="s">
                                     <tr>
 
-                                      <td valign="top" class="value">${s?.timestamp?.encodeAsHTML()}</td>
+                                      <td valign="top" class="value"><joda:format value="${s?.timestamp}" /></td>
                                       <td valign="top" class="value">
                                         <g:link controller="tag" action="show" id="${s?.tag?.id}">${s?.tag}</g:link>
                                       </td>
@@ -173,7 +173,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${animalReleaseInstance?.releaseDateTime}" /></td>
+                            <td valign="top" class="value"><joda:format date="${animalReleaseInstance?.releaseDateTime}" /></td>
                             
                         </tr>
                     

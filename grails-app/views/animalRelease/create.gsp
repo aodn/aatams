@@ -82,7 +82,9 @@
                                     <label for="captureDateTime"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureDateTime', 'errors')}">
-                                    <g:datePicker name="captureDateTime" precision="day" value="${animalReleaseInstance?.captureDateTime}"  />
+                                    <joda:dateTimePicker name="captureDateTime" 
+                                                         value="${animalReleaseInstance?.captureDateTime}"
+                                                         useZone="true"/>
 
                                 </td>
                             </tr>
@@ -136,7 +138,9 @@
                                     <label for="releaseDateTime"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseDateTime', 'errors')}">
-                                    <g:datePicker name="releaseDateTime" precision="day" value="${animalReleaseInstance?.releaseDateTime}"  />
+                                    <joda:dateTimePicker name="releaseDateTime" 
+                                                         value="${animalReleaseInstance?.releaseDateTime}"
+                                                         useZone="true"/>
 
                                 </td>
                             </tr>

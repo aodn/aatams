@@ -28,7 +28,7 @@
                         
                             <td/>
                             
-                            <g:sortableColumn property="deploymentDate" title="${message(code: 'receiverDeployment.deploymentDate.label', default: 'Deployment Date')}" />
+                            <g:sortableColumn property="deploymentDateTime" title="${message(code: 'receiverDeployment.deploymentDateTime.label', default: 'Deployment Date')}" />
 
                             <g:sortableColumn property="installation" title="${message(code: 'receiverDeployment.installation.label', default: 'Installation')}" />
                         
@@ -47,7 +47,7 @@
 
                             <th><g:message code="receiverRecovery.location" default="Location" /></th>
                         
-                            <g:sortableColumn property="recoveryDate" title="${message(code: 'receiverRecovery.recoveryDate.label', default: 'Recovery Date')}" />
+                            <g:sortableColumn property="recoveryDateTime" title="${message(code: 'receiverRecovery.recoveryDateTime.label', default: 'Recovery Date')}" />
                         
                             <g:sortableColumn property="status" title="${message(code: 'receiverRecovery.status.label', default: 'Status')}" />
                         
@@ -59,7 +59,7 @@
 
                             <td class="rowButton"><g:link class="show" controller="receiverDeployment" action="show" id="${receiverDeployment.id}"></g:link></td>
                     
-                            <td><g:formatDate date="${receiverDeployment.deploymentDate}" /></td>
+                            <td><joda:format value="${receiverDeployment.deploymentDateTime}" /></td>
                         
                             <td><g:link controller="installation" action="show" id="${receiverDeployment?.station?.installation?.id}">${receiverDeployment?.station?.installation}</g:link></td>
 
@@ -90,7 +90,7 @@
                                        value="${receiverDeployment?.recovery?.scrambledLocation}" />
                             </td>
 
-                            <td><g:formatDate date="${receiverDeployment?.recovery?.recoveryDate}" /></td>
+                            <td><joda:format value="${receiverDeployment?.recovery?.recoveryDateTime}" /></td>
 
                             <td>${fieldValue(bean: receiverDeployment?.recovery, field: "status")}</td>
 

@@ -40,7 +40,7 @@
                         
                             <td><g:link action="show" id="${surgeryInstance.id}">${fieldValue(bean: surgeryInstance, field: "id")}</g:link></td>
                         
-                            <td><g:formatDate date="${surgeryInstance.timestamp}" /></td>
+                            <td><joda:format value="${surgeryInstance.timestamp}" /></td>
                         
                             <td>${fieldValue(bean: surgeryInstance, field: "release")}</td>
                         

@@ -28,8 +28,8 @@
                             <!-- Deployment details -->
                             <tr class="prop">
                                 <td valign="top" class="name">Deployment Details</td>
-                                <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDate.label" default="Deployment Date" /></td>
-                                <td valign="top" class="value"><g:formatDate date="${receiverDeploymentInstance?.deploymentDate}" /></td>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDateTime.label" default="Deployment Date" /></td>
+                                <td valign="top" class="value"><joda:format value="${receiverDeploymentInstance?.deploymentDateTime}" /></td>
 
                             </tr>
 
@@ -107,8 +107,8 @@
                         
                             <tr class="prop">
                                 <td/>
-                                <td valign="top" class="name"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></td>
-                                <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "recoveryDate")}</td>
+                                <td valign="top" class="name"><g:message code="receiverRecovery.recoveryDateTime.label" default="Recovery Date" /></td>
+                                <td valign="top" class="value"><joda:format value="${fieldValue(bean: receiverRecoveryInstance, field: "recoveryDate")}" /></td>
                             </tr>
                         
                             <tr class="prop">

@@ -1,5 +1,8 @@
 package au.org.emii.aatams
 
+import org.joda.time.*
+import org.joda.time.contrib.hibernate.*
+
 /**
  * Surgery is the process of attaching/implanting a tag to/in an animal (given
  * by the owning AnimalRelease).
@@ -7,9 +10,17 @@ package au.org.emii.aatams
 class Surgery 
 {
     static belongsTo = [release: AnimalRelease]
+    static mapping =
+    {
+        timestamp type: PersistentDateTimeTZ,
+        {
+            column name: "timestamp_timestamp"
+            column name: "timestamp_zone"
+        }
+    }
     
     Tag tag
-    Date timestamp
+    DateTime timestamp
     SurgeryType type
     SurgeryTreatmentType treatmentType
     String comments

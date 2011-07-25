@@ -78,8 +78,9 @@
                                   <label for="captureDateTime"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureDateTime', 'errors')}">
-                                    <g:datePicker name="captureDateTime" precision="day" value="${animalReleaseInstance?.captureDateTime}"  />
-
+                                    <joda:dateTimePicker name="captureDateTime" 
+                                                         value="${animalReleaseInstance?.captureDateTime}"
+                                                         useZone="true"/>
                                 </td>
                             </tr>
                        
@@ -113,7 +114,7 @@
                                       <g:each in="${animalReleaseInstance?.surgeries?}" var="s">
                                         <tr>
 
-                                          <td valign="top" class="value">${s?.timestamp?.encodeAsHTML()}</td>
+                                          <td valign="top" class="value"><joda:format value="${s?.timestamp}" /></td>
                                           <td valign="top" class="value">
                                             <g:link controller="tag" action="show" id="${s?.tag?.id}">${s?.tag}</g:link>
                                           </td>
@@ -220,7 +221,9 @@
                                   <label for="releaseDateTime"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseDateTime', 'errors')}">
-                                    <g:datePicker name="releaseDateTime" precision="day" value="${animalReleaseInstance?.releaseDateTime}"  />
+                                    <joda:dateTimePicker name="releaseDateTime" 
+                                                         value="${animalReleaseInstance?.releaseDateTime}"
+                                                         useZone="true"/>
 
                                 </td>
                             </tr>
@@ -284,7 +287,9 @@
                                     <label for="surgeryTimestamp"><g:message code="surgery.timestamp.label" default="Timestamp" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'timestamp', 'errors')}">
-                                    <g:datePicker name="surgeryTimestamp" precision="day" value="${surgeryInstance?.timestamp}"  />
+                                    <joda:dateTimePicker name="surgeryTimestamp" 
+                                                         value="${surgeryInstance?.timestamp}"
+                                                         useZone="true"/>
 
                                 </td>
                             </tr>

@@ -26,46 +26,38 @@ class SurgeryController {
 
     def save = 
     {
-        try
+        def surgeryInstance = new Surgery(params)
+
+        // Need to update that status of the tag to DEPLOYED.
+        DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
+        surgeryInstance?.tag?.status = deployedStatus
+
+        if (surgeryInstance.save(flush: true)) 
         {
-            def surgeryInstance = new Surgery(params)
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tagging.label', default: 'Tagging'), surgeryInstance])}"
 
-            // Need to update that status of the tag to DEPLOYED.
-            DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
-            surgeryInstance.tag.status = deployedStatus
-
-            if (surgeryInstance.save(flush: true)) 
+            // Deep rendering of object not working due to geometry type
+            // Need to use custom object marshaller.
+            JSON.registerObjectMarshaller(Surgery.class)
             {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tagging.label', default: 'Tagging'), surgeryInstance])}"
+                def returnArray = [:]
+                returnArray['id'] = it.id
+                returnArray['timestamp'] = DateTimeFormat.forPattern(grailsApplication.config.jodatime.format.org.joda.time.DateTime).print(it.timestamp)
+                returnArray['tag'] = it.tag
+                returnArray['type'] = it.type
+                returnArray['treatmentType'] = it.treatmentType
+                returnArray['comments'] = it.comments
+                returnArray['flash'] = flash
 
-                // Deep rendering of object not working due to geometry type
-                // Need to use custom object marshaller.
-                JSON.registerObjectMarshaller(Surgery.class)
-                {
-                    def returnArray = [:]
-                    returnArray['id'] = it.id
-                    returnArray['timestamp'] = DateTimeFormat.forPattern(grailsApplication.config.jodatime.format.org.joda.time.DateTime).print(it.timestamp)
-                    returnArray['tag'] = it.tag
-                    returnArray['type'] = it.type
-                    returnArray['treatmentType'] = it.treatmentType
-                    returnArray['comments'] = it.comments
-                    returnArray['flash'] = flash
-
-                    return returnArray
-                }
-
-                render surgeryInstance as JSON
+                return returnArray
             }
-            else 
-            {
-                log.error(surgeryInstance.errors)
-                render(view: "create", model: [surgeryInstance: surgeryInstance])
-            }
+
+            render surgeryInstance as JSON
         }
-        catch (Throwable t)
+        else 
         {
-            log.error(t)
-            render t as JSON
+            log.error(surgeryInstance.errors)
+            render surgeryInstance.errors as JSON
         }
     }
 

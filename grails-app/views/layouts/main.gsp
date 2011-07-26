@@ -4,6 +4,8 @@
     <title><g:layoutTitle default="${message(code: 'default.application.title', default: 'AATAMS')}" /></title>
     <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 
+    <script type="text/javascript" src="${resource(dir:'js',file:'utils.js')}"></script>
+
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery-1.4.4.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery-ui-1.8.10.custom.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.layout.min.js')}"></script>

@@ -30,7 +30,7 @@
                             
                             <g:sortableColumn property="deploymentDateTime" title="${message(code: 'receiverDeployment.deploymentDateTime.label', default: 'Deployment Date')}" />
 
-                            <g:sortableColumn property="installation" title="${message(code: 'receiverDeployment.installation.label', default: 'Installation')}" />
+                            <g:sortableColumn property="station.installation" title="${message(code: 'receiverDeployment.installation.label', default: 'Installation')}" />
                         
                             <g:sortableColumn property="station" title="${message(code: 'receiverDeployment.station.label', default: 'Station')}" />
                         
@@ -41,15 +41,15 @@
                             <th><g:message code="receiverDeployment.station.depth.label" default="Depth" /></th>
                         
                             <!-- New/edit column -->
-                            <th></th>
+                            <g:sortableColumn property="recovery" title="${message(code: 'receiverRecovery.label', default: 'Recovery')}" />
                             
-                            <g:sortableColumn property="recoverer" title="${message(code: 'receiverRecovery.recoverer.label', default: 'Recovered By')}" />
+                            <g:sortableColumn property="recovery.recoverer" title="${message(code: 'receiverRecovery.recoverer.label', default: 'Recovered By')}" />
 
                             <th><g:message code="receiverRecovery.location" default="Location" /></th>
                         
-                            <g:sortableColumn property="recoveryDateTime" title="${message(code: 'receiverRecovery.recoveryDateTime.label', default: 'Recovery Date')}" />
+                            <g:sortableColumn property="recovery.recoveryDateTime" title="${message(code: 'receiverRecovery.recoveryDateTime.label', default: 'Recovery Date')}" />
                         
-                            <g:sortableColumn property="status" title="${message(code: 'receiverRecovery.status.label', default: 'Status')}" />
+                            <g:sortableColumn property="recovery.status" title="${message(code: 'receiverRecovery.status.label', default: 'Status')}" />
                         
                         </tr>
                     </thead>

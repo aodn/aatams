@@ -28,28 +28,28 @@ $(function() {
                         'status.id':status},
                        function(data) 
                        {
-                           console.log(data);
+                           updateHeader(data);
                            
                            var tableRow = $("<tr>");
                            
                            var tagTypeColumn = $("<td>").attr("class", "value");
                            tableRow.append(tagTypeColumn);
-                           var sensorLink = $("<a>").attr("href", '../sensor/show/' + data.id).html(data.transmitterType);
+                           var sensorLink = $("<a>").attr("href", '../sensor/show/' + data.instance.id).html(data.instance.transmitterType);
                            tagTypeColumn.append(sensorLink);
                            
-                           var pingCodeColumn = $("<td>").attr("class", "value").html(data.pingCode);
+                           var pingCodeColumn = $("<td>").attr("class", "value").html(data.instance.pingCode);
                            tableRow.append(pingCodeColumn);
 
-                           var slopeColumn = $("<td>").attr("class", "value").html(data.slope);
+                           var slopeColumn = $("<td>").attr("class", "value").html(data.instance.slope);
                            tableRow.append(slopeColumn);
                            
-                           var interceptColumn = $("<td>").attr("class", "value").html(data.intercept);
+                           var interceptColumn = $("<td>").attr("class", "value").html(data.instance.intercept);
                            tableRow.append(interceptColumn);
                            
-                           var unitColumn = $("<td>").attr("class", "value").html(data.unit);
+                           var unitColumn = $("<td>").attr("class", "value").html(data.instance.unit);
                            tableRow.append(unitColumn);
                            
-                           var statusColumn = $("<td>").attr("class", "value").html(data.status.status);
+                           var statusColumn = $("<td>").attr("class", "value").html(data.instance.status.status);
                            tableRow.append(statusColumn);
                            
                            var lastRow = $("#sensor_table_body > tr:last");

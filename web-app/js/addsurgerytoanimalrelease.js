@@ -45,21 +45,21 @@ $(function() {
                            var dateTimeColumn = $("<td>").attr("class", "value");
                            tableRow.append(dateTimeColumn);
                            
-                           var surgeryLink = $("<a>").attr("href", '../surgery/show/' + data.id).html(data.timestamp);
+                           var surgeryLink = $("<a>").attr("href", '../surgery/show/' + data.instance.id).html(data.instance.timestamp);
                            dateTimeColumn.append(surgeryLink);
                            
                            var tagColumn = $("<td>").attr("class", "value");
                            tableRow.append(tagColumn);
-                           var tagLink = $("<a>").attr("href", '../tag/show/' + data.tag.id).html(data.tag.codeName);
+                           var tagLink = $("<a>").attr("href", '../tag/show/' + data.instance.tag.id).html(data.instance.tag.codeName);
                            tagColumn.append(tagLink);
                            
-                           var typeColumn = $("<td>").attr("class", "value").html(data.type.type);
+                           var typeColumn = $("<td>").attr("class", "value").html(data.instance.type.type);
                            tableRow.append(typeColumn);
                            
-                           var treatmentColumn = $("<td>").attr("class", "value").html(data.treatmentType.type);
+                           var treatmentColumn = $("<td>").attr("class", "value").html(data.instance.treatmentType.type);
                            tableRow.append(treatmentColumn);
                            
-                           var commentsColumn = $("<td>").attr("class", "value").html(data.comments);
+                           var commentsColumn = $("<td>").attr("class", "value").html(data.instance.comments);
                            tableRow.append(commentsColumn);
                            
                            var lastRow = $("#surgeries_table_body > tr:last");

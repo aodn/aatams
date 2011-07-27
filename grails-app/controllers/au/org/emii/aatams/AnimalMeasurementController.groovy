@@ -25,6 +25,8 @@ class AnimalMeasurementController {
         def animalMeasurementInstance = new AnimalMeasurement(params)
         if (animalMeasurementInstance.save(flush: true)) 
         {
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'measurement.label', default: 'Measurement'), animalMeasurementInstance])}"
+                                                                 
             // Deep rendering of object not working due to geometry type
             // Need to use custom object marshaller.
             JSON.registerObjectMarshaller(AnimalMeasurement.class)
@@ -40,11 +42,12 @@ class AnimalMeasurementController {
                 return returnArray
             }
             
-            render animalMeasurementInstance as JSON
+            render ([instance:animalMeasurementInstance, message:flash] as JSON)
         }
-        else {
+        else 
+        {
             log.error(animalMeasurementInstance.errors)
-            render(view: "create", model: [animalMeasurementInstance: animalMeasurementInstance])
+            render ([errors:animalMeasurementInstance.errors] as JSON)
         }
     }
 

@@ -51,6 +51,12 @@ grails.spring.bean.packages = []
 // request parameters to mask when logging exceptions
 grails.exceptionresolver.params.exclude = ['password']
 
+// Require deep conversion to JSON.
+grails.converters.json.default.deep = true
+
+// This is required to avoid org.codehaus.groovy.grails.web.json.JSONException: Misplaced key.
+grails.converters.json.circular.reference.behaviour = "INSERT_NULL"
+
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {

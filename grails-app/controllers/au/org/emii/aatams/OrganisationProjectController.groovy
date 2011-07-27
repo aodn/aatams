@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-import grails.converters.deep.JSON
+import grails.converters.JSON
 
 class OrganisationProjectController {
 
@@ -25,10 +25,17 @@ class OrganisationProjectController {
         def organisationProjectInstance = new OrganisationProject(params)
         if (organisationProjectInstance.save(flush: true)) 
         {
-            render organisationProjectInstance as JSON
+            flash.message = "${message(code: 'default.added.message', args: [message(code: 'organisation.label', default: 'Organisation'), \
+                                                                             organisationProjectInstance.organisation, \
+                                                                             message(code: 'project.label', default: 'Project'), \
+                                                                             organisationProjectInstance.project])}"
+                                                                 
+            render ([instance:organisationProjectInstance, message:flash] as JSON)
         }
-        else {
-            render(view: "create", model: [organisationProjectInstance: organisationProjectInstance])
+        else 
+        {
+            log.error(organisationProjectInstance.errors)
+            render ([errors:organisationProjectInstance.errors] as JSON)
         }
     }
     

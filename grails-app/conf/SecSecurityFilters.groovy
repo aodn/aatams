@@ -205,10 +205,10 @@ class SecSecurityFilters
         //
         def projectAccessWriteControllers = 
             "installation|installationStation|tag|animalRelease|detection|" + \
-            "receiverDeployment|receiverRecovery|receiverEvent" + \
+            "projectRole|receiverDeployment|receiverRecovery|receiverEvent|" + \
             "organisationProject|sensor"
         
-        projectAccessWrite(controller:'projectAccessWriteControllers', 
+        projectAccessWrite(controller:projectAccessWriteControllers, 
                            action:'create|save|edit|update')
         {
             before =

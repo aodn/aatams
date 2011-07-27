@@ -26,41 +26,49 @@ class GeometryTagLib
         def lat
         def srid
         
-        if (attrs.value == null)
+        if ((attrs.value == null) && !attrs.editable)
         {
-            lon = 0.0
-            lat = 0.0
-            srid = 4326
+            // Do nothing - we just display an empty string.
         }
         else
         {
-            lon = attrs.value?.getCoordinate()?.x
-            lat = attrs.value?.getCoordinate()?.y
-            srid = attrs.value?.getSRID()
-        }
-        
-        pointAsString += Math.abs(lon) + "°"
-        if (lon >= 0)
-        {
-            pointAsString += 'N'
-        }
-        else
-        {
-            pointAsString += 'S'
-        }
-        
-        pointAsString += ' ' + Math.abs(lat) + "° "
-        if (lat >= 0)
-        {
-            pointAsString += 'E'
-        }
-        else
-        {
-            pointAsString += 'W'
-        }
-        
-        pointAsString += " (EPSG:" + srid + ")"
+            // Set defaults (because we must be editing to make it into this clause).
+            if (attrs.value == null)
+            {
+                lon = 0.0
+                lat = 0.0
+                srid = 4326
+            }
+            else
+            {
+                lon = attrs.value?.getCoordinate()?.x
+                lat = attrs.value?.getCoordinate()?.y
+                srid = attrs.value?.getSRID()
 
+                pointAsString += Math.abs(lon) + "°"
+                if (lon >= 0)
+                {
+                    pointAsString += 'N'
+                }
+                else
+                {
+                    pointAsString += 'S'
+                }
+
+                pointAsString += ' ' + Math.abs(lat) + "° "
+                if (lat >= 0)
+                {
+                    pointAsString += 'E'
+                }
+                else
+                {
+                    pointAsString += 'W'
+                }
+
+                pointAsString += " (EPSG:" + srid + ")"
+            }
+        }
+        
         if (attrs.editable)
         {
             out << render(template:"/common/geometry/pointInputTemplate", 

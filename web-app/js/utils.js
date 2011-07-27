@@ -17,17 +17,17 @@ function updateHeader(data)
     $(".body > .errors").remove();
 
     // Insert flash message (if there is one).
-    if (data.flash && data.flash.message)
+    if (data.message && data.message.message)
     {
         var heading = $(".body > h1")
-        heading.after('<div class=\"message\">' + data.flash.message + '</div>');
+        heading.after('<div class=\"message\">' + data.message.message + '</div>');
     }
     // Exception.
-    else if (data.errors)
+    else if (data.errors && data.errors.errors)
     {
        var insertAfterElement = $(".body > h1");
 
-       data.errors.forEach(function(item)
+       data.errors.errors.forEach(function(item)
        {
            var errorElement = '<div class=\"errors\"><ul><li>' + item.message + '</li></ul>'; 
            insertAfterElement.after(errorElement);
@@ -35,7 +35,7 @@ function updateHeader(data)
 
        });
     }                               
-    else if (data.localizedMessage)
+    else if (data.errors && data.errors.localizedMessage)
     {
         var errorElement = '<div class=\"errors\"><ul><li>' + data.localizedMessage + '</li></ul>'; 
         var heading = $(".body > h1");

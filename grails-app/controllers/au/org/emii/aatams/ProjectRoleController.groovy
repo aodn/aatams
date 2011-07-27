@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-import grails.converters.deep.JSON
+import grails.converters.JSON
 
 class ProjectRoleController {
 
@@ -27,11 +27,17 @@ class ProjectRoleController {
         
         if (projectRoleInstance.save(flush: true)) 
         {
-            render projectRoleInstance as JSON
+            flash.message = "${message(code: 'default.added.message', args: [message(code: 'person.label', default: 'Person'), \
+                                                                             projectRoleInstance.person, \
+                                                                             message(code: 'project.label', default: 'Project'), \
+                                                                             projectRoleInstance.project])}"
+                                                                     
+            render ([instance:projectRoleInstance, message:flash] as JSON)
         }
         else 
         {
-            render(view: "create", model: [projectRoleInstance: projectRoleInstance])
+            log.error(projectRoleInstance.errors)
+            render ([errors:projectRoleInstance.errors] as JSON)
         }
     }
 

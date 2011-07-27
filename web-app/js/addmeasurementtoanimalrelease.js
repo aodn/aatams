@@ -29,21 +29,23 @@ $(function() {
                        },
                        function(data)
                        {
+                           updateHeader(data);
+                           
                            var tableRow = $("<tr>");
                            
-                           var typeColumn = $("<td>").attr("class", "value").html(data.type.type);
+                           var typeColumn = $("<td>").attr("class", "value").html(data.instance.type.type);
                            tableRow.append(typeColumn);
                            
-                           var valueColumn = $("<td>").attr("class", "value").html(data.value);
+                           var valueColumn = $("<td>").attr("class", "value").html(data.instance.value);
                            tableRow.append(valueColumn);
                            
-                           var unitsColumn = $("<td>").attr("class", "value").html(data.unit.unit);
+                           var unitsColumn = $("<td>").attr("class", "value").html(data.instance.unit.unit);
                            tableRow.append(unitsColumn);
                            
-                           var estimateColumn = $("<td>").attr("class", "value").html(data.estimate.toString());
+                           var estimateColumn = $("<td>").attr("class", "value").html(data.instance.estimate.toString());
                            tableRow.append(estimateColumn);
                            
-                           var commentsColumn = $("<td>").attr("class", "value").html(data.comments);
+                           var commentsColumn = $("<td>").attr("class", "value").html(data.instance.comments);
                            tableRow.append(commentsColumn);
                            
                            var lastRow = $("#measurements_table_body > tr:last");

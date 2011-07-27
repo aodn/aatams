@@ -16,8 +16,10 @@ $(function() {
                        {'event.id':event, "project.id":projectId, "organisation.id":organisationId},
                        function(data) 
                        {
+                           updateHeader(data);
+                           
                            var item = $("<li>");
-                           var link = $("<a>").attr("href", '../organisation/show/' + data.organisation.id).html(data.organisation.name);
+                           var link = $("<a>").attr("href", '../organisation/show/' + data.instance.organisation.id).html(data.instance.organisation.name);
                            item.append(link);
                            var lastListElement = $("#organisation_list > li:last")
                            

@@ -1,6 +1,5 @@
 package au.org.emii.aatams
 
-//import grails.converters.deep.JSON
 import grails.converters.JSON
 
 import org.joda.time.format.DateTimeFormat
@@ -52,12 +51,12 @@ class SurgeryController {
                 return returnArray
             }
 
-            render surgeryInstance as JSON
+            render ([instance:surgeryInstance, message:flash] as JSON)
         }
         else 
         {
             log.error(surgeryInstance.errors)
-            render surgeryInstance.errors as JSON
+            render ([errors:surgeryInstance.errors] as JSON)
         }
     }
 

@@ -22,22 +22,22 @@ $(function() {
                         "access":access},
                        function(data) 
                        {
-                           console.log(data);
+                           updateHeader(data);
                            
                            var tableRow = $("<tr>");
                            
                            var personColumn = $("<td>").attr("class", "value");
                            tableRow.append(personColumn);
-                           var personLink = $("<a>").attr("href", '../person/show/' + data.person.id).html(data.person.name);
+                           var personLink = $("<a>").attr("href", '../person/show/' + data.instance.person.id).html(data.instance.person.name);
                            personColumn.append(personLink);
                            tableRow.append(personColumn);
                            
-                           var roleColumn = $("<td>").attr("class", "value").html(data.roleType.displayName)
+                           var roleColumn = $("<td>").attr("class", "value").html(data.instance.roleType.displayName)
                            tableRow.append(roleColumn);
 
                            // TODO: should really be displaying "displayName", but it's not being marshalled in the JSON response
                            // (despite attempting to register a custom marshaller in BootStrap).
-                           var accessColumn = $("<td>").attr("class", "value").html(data.access.name)
+                           var accessColumn = $("<td>").attr("class", "value").html(data.instance.access.name)
                            tableRow.append(accessColumn);
                            
                            var lastRow = $("#people_table_body > tr:last")

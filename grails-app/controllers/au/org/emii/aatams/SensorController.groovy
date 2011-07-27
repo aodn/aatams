@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-import grails.converters.deep.JSON
+import grails.converters.JSON
 
 class SensorController {
 
@@ -34,12 +34,14 @@ class SensorController {
         
         if (sensorInstance.save(flush: true)) 
         {
-            render sensorInstance as JSON
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance])}"
+            
+            render ([instance:sensorInstance, message:flash] as JSON)
         }
         else 
         {
             log.error(sensorInstance.errors)
-            render(view: "create", model: [sensorInstance: sensorInstance])
+            render ([errors:sensorInstance.errors] as JSON)
         }
     }
 

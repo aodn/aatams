@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import org.joda.time.*
+
 class ReceiverRecoveryController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -56,7 +58,7 @@ class ReceiverRecoveryController {
                 new ReceiverDownload()
                 
             download.receiverRecovery = receiverRecoveryInstance
-            download.downloadDate = new Date()
+            download.downloadDateTime = new DateTime()
             download.save(flush:true, failOnErrors:true)
             assert(download != null): "download cannot be null"
             

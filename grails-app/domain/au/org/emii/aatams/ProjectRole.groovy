@@ -35,6 +35,8 @@ class ProjectRole
     
     def beforeDelete =
     {
-        permissionUtilsService.removePermissions(this)
+        
+        // Temporarily commented out as causing stack overflow.
+//        permissionUtilsService.removePermissions(this)
     }
 }

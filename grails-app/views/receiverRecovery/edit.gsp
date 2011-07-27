@@ -124,7 +124,7 @@
                                 <td valign="top" class="name">
                                     <label for="recoveryDateTime"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDate', 'errors')}">
+                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDateTime', 'errors')}">
                                     <joda:dateTimePicker name="recoveryDateTime" 
                                                          value="${receiverRecoveryInstance?.recoveryDateTime}"
                                                          useZone="true"/>

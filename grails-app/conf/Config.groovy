@@ -1,4 +1,5 @@
-// locations to search for config files that get merged into the main config
+// 
+// // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
 // grails.config.locations = [ "classpath:${appName}-config.properties",
@@ -50,6 +51,10 @@ grails.spring.bean.packages = []
 
 // request parameters to mask when logging exceptions
 grails.exceptionresolver.params.exclude = ['password']
+
+//
+// JSON config.
+//
 
 // Require deep conversion to JSON.
 grails.converters.json.default.deep = true

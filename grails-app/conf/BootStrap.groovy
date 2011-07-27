@@ -1,5 +1,5 @@
 import au.org.emii.aatams.*
-import grails.converters.deep.JSON
+import grails.converters.JSON
 
 import com.vividsolutions.jts.geom.Point
 import com.vividsolutions.jts.io.ParseException
@@ -7,6 +7,9 @@ import com.vividsolutions.jts.io.WKTReader
 
 import org.apache.shiro.crypto.hash.Sha256Hash
 import org.joda.time.*
+import org.joda.time.format.DateTimeFormat
+
+import com.vividsolutions.jts.geom.Point
 
 class BootStrap 
 {
@@ -14,28 +17,51 @@ class BootStrap
     { 
         servletContext ->
 
-            // Add "label" property for the jquery autocomplete plugin.
-            JSON.registerObjectMarshaller(Species.class)
-            {
-                def returnArray = [:]
-                returnArray['id'] = it.id
-                returnArray['name'] = it.name
-                returnArray['label'] = it.name
-                
-                return returnArray
-            }
+        // Add "label" property for the jquery autocomplete plugin.
+        JSON.registerObjectMarshaller(Species.class)
+        {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['name'] = it.name
+            returnArray['label'] = it.name
 
+            return returnArray
+        }
 
-        // TODO: this is not having any effect.
-//        JSON.registerObjectMarshaller(ProjectAccess.class, 0)
-//        {
-//            log.info("Marshalling ProjectAccess: " + String.valueOf(it))
-//            def returnArray = [:]
-//            returnArray['name'] = it.name
-//            returnArray['displayStatus'] = it.displayStatus
-//            return returnArray
-//        }
+        JSON.registerObjectMarshaller(ProjectAccess.class)
+        {
+            def returnArray = [:]
+            returnArray['displayStatus'] = it.displayStatus
+            return returnArray
+        }
 
+        // TODO: this is being ignored for some reason (so we register a
+        // custom marshaller for Surgery, which includes a DateTime, 
+        // instead).
+        JSON.registerObjectMarshaller(DateTime.class, 0)
+        {
+            println("Formatting date")
+            return DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss zz").print(it)
+        }
+
+        JSON.registerObjectMarshaller(Surgery.class)
+        {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['timestamp'] = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss zz").print(it.timestamp)
+            returnArray['tag'] = it.tag
+            returnArray['type'] = it.type
+            returnArray['treatmentType'] = it.treatmentType
+            returnArray['comments'] = it.comments
+
+            return returnArray
+        }
+
+        JSON.registerObjectMarshaller(Point.class)
+        {
+            return "(" + it.coordinate.x + ", " + it.coordinate.y + ")"
+        }
+            
         environments
         {
             test

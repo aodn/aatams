@@ -20,10 +20,12 @@
           <td>Password:</td>
           <td><input type="password" name="password" value="" /></td>
         </tr>
+<%-- The "remember me" function doesn't work, so don't show the option.      
         <tr>
           <td>Remember me?:</td>
           <td><g:checkBox name="rememberMe" value="${rememberMe}" /></td>
         </tr>
+--%>
         <tr>
           <td />
           <td><input type="submit" value="Sign in" /></td>

@@ -145,6 +145,11 @@ class PermissionUtilsService
     
     def principal()
     {
+        if (!SecurityUtils.subject?.isAuthenticated())
+        {
+            return null
+        }
+        
         return Person.findByUsername(SecurityUtils.subject?.principal)
     }
     

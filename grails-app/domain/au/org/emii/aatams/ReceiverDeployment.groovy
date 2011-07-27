@@ -104,7 +104,7 @@ class ReceiverDeployment
     
     String toString()
     {
-        return String.valueOf(receiver) + " - " + String.valueOf(deploymentDate)
+        return String.valueOf(receiver) + " - " + String.valueOf(deploymentDateTime)
     }
 
     /**

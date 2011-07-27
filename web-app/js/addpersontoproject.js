@@ -35,9 +35,7 @@ $(function() {
                            var roleColumn = $("<td>").attr("class", "value").html(data.instance.roleType.displayName)
                            tableRow.append(roleColumn);
 
-                           // TODO: should really be displaying "displayName", but it's not being marshalled in the JSON response
-                           // (despite attempting to register a custom marshaller in BootStrap).
-                           var accessColumn = $("<td>").attr("class", "value").html(data.instance.access.name)
+                           var accessColumn = $("<td>").attr("class", "value").html(data.instance.access.displayStatus)
                            tableRow.append(accessColumn);
                            
                            var lastRow = $("#people_table_body > tr:last")

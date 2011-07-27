@@ -34,23 +34,6 @@ class SurgeryController {
         if (surgeryInstance.save(flush: true)) 
         {
             flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tagging.label', default: 'Tagging'), surgeryInstance])}"
-
-            // Deep rendering of object not working due to geometry type
-            // Need to use custom object marshaller.
-            JSON.registerObjectMarshaller(Surgery.class)
-            {
-                def returnArray = [:]
-                returnArray['id'] = it.id
-                returnArray['timestamp'] = DateTimeFormat.forPattern(grailsApplication.config.jodatime.format.org.joda.time.DateTime).print(it.timestamp)
-                returnArray['tag'] = it.tag
-                returnArray['type'] = it.type
-                returnArray['treatmentType'] = it.treatmentType
-                returnArray['comments'] = it.comments
-                returnArray['flash'] = flash
-
-                return returnArray
-            }
-
             render ([instance:surgeryInstance, message:flash] as JSON)
         }
         else 

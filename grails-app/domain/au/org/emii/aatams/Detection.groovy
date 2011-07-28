@@ -22,7 +22,7 @@ class Detection
     static transients = ['project', 'scrambledLocation']
     
     /**
-     * This is modelled as a one-to-many relationship, due to the fact that tags
+     * This is modelled as a many-to-many relationship, due to the fact that tags
      * transmit only code map and ping ID which is not guaranteed to be unique
      * between manufacturers, although in reality the relationship will *usually*
      * be one-to-one.
@@ -30,7 +30,7 @@ class Detection
      * Additionally, the relationship is modelled via surgery, due to the fact
      * that a tag could potentially be reused on several animals.
      */
-    static hasMany = [surgeries:Surgery]
+    static hasMany = [detectionSurgeries:DetectionSurgery]
     
     /**
      * Station name, as recorded in VUE database (this should match 

@@ -9,7 +9,9 @@ import org.joda.time.contrib.hibernate.*
  */
 class Surgery 
 {
-    static belongsTo = [release: AnimalRelease]
+    static belongsTo = [release: AnimalRelease, tag: Tag]
+    static hasMany = [detectionSurgeries: DetectionSurgery]
+    
     static mapping =
     {
         timestamp type: PersistentDateTimeTZ,
@@ -19,7 +21,6 @@ class Surgery
         }
     }
     
-    Tag tag
     DateTime timestamp
     SurgeryType type
     SurgeryTreatmentType treatmentType

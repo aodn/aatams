@@ -581,9 +581,10 @@ class BootStrap
                           stationName:'Bondi SW1',
                           transmitterName:'A69-1303-62339',
                           transmitterSerialNumber:'12345678',
-                          location:(Point)reader.read("POINT(10.1234 10.1234)"))
-        detection1.addToSurgeries(surgery1)
-        detection1.save(failOnError:true)
+                          location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
+        DetectionSurgery detSurg1 = 
+            new DetectionSurgery(detection:detection1,
+                                 surgery:surgery1).save(failOnError:true)
         
         Detection detection2 =
             new Detection(timestamp:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-20 15:10:00"),
@@ -591,9 +592,9 @@ class BootStrap
                           stationName:'Bondi SW2',
                           transmitterName:'A69-1303-62339',
                           transmitterSerialNumber:'12345678',
-                          location:(Point)reader.read("POINT(20.1234 20.1234)"))
-        detection2.addToSurgeries(surgery1)
-        detection2.save(failOnError:true)
-        
+                          location:(Point)reader.read("POINT(20.1234 20.1234)")).save(failOnError:true)
+        DetectionSurgery detSurg2 = 
+            new DetectionSurgery(detection:detection2,
+                                 surgery:surgery2).save(failOnError:true)
     }
 }

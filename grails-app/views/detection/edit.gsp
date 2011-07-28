@@ -98,7 +98,7 @@
                                   <label for="tags"><g:message code="detection.surgeries.label" default="Surgeries" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'surgeries', 'errors')}">
-                                    <g:select name="surgeries" from="${candidateSurgeries}" multiple="yes" optionKey="id" size="5" value="${detectionInstance?.surgeries*.id}" />
+                                    <g:select name="surgeries" from="${candidateSurgeries}" multiple="yes" optionKey="id" size="5" value="${detectionInstance?.detectionSurgeries*.surgery?.id}" />
 
                                 </td>
                             </tr>

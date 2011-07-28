@@ -176,7 +176,7 @@ class EmbargoFilters
                 String permissionString = permissionUtilsService.buildProjectReadPermission(detectionInstance?.project?.id)
                 boolean hasReadPermission = SecurityUtils.subject.isPermitted(permissionString)
                 
-                model?.surgeries = detectionInstance?.surgeries?.grep
+                model?.surgeries = detectionInstance?.detectionSurgeries*.surgery?.grep
                 {
                     boolean embargoed = isEmbargoed(it.release)
 

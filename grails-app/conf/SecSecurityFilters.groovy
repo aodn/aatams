@@ -130,17 +130,12 @@ class SecSecurityFilters
             }
         }
         
-        // Any user can create (as with project and organisation.
+        // Any user can create (as with project and organisation).
         personCreate(controller:'person', action:'create|save')
         {
             before =
             {
-                if (SecurityUtils.subject.isAuthenticated())
-                {
-                    return true
-                }
-
-                redirect(controller:'auth', action:'unauthorized')
+                return true
             }
         }
         

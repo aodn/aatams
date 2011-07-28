@@ -9,7 +9,7 @@ class Receiver extends Device
     /**
      * Detection recorded at the receiver (may also include SensorDetections).
      */
-    static hasMany = [detections: Detection]
+    static hasMany = [detections: Detection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
     
     static String constructCodeName(params)

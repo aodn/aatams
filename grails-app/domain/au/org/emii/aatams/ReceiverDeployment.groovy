@@ -18,6 +18,7 @@ class ReceiverDeployment
 {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
     static transients = ['scrambledLocation']
+    static hasMany = [detections: Detection]
 
     Integer deploymentNumber
     

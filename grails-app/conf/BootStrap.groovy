@@ -427,13 +427,13 @@ class BootStrap
                                     location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
                                 
         InstallationStation ningalooS1 = 
-            new InstallationStation(installation:bondiLine,
+            new InstallationStation(installation:ningalooArray,
                                     name:'Ningaloo S1',
                                     curtainPosition:1,
                                     location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
 
         InstallationStation ningalooS2 = 
-            new InstallationStation(installation:bondiLine,
+            new InstallationStation(installation:ningalooArray,
                                     name:'Ningaloo S2',
                                     curtainPosition:2,
                                     location:(Point)reader.read("POINT(20.1234 20.1234)")).save(failOnError:true)

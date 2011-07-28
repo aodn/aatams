@@ -135,7 +135,12 @@ class ReceiverRecoveryController {
     def delete = {
         def receiverRecoveryInstance = ReceiverRecovery.get(params.id)
         if (receiverRecoveryInstance) {
-            try {
+            try 
+            {
+                def deployment = receiverRecoveryInstance.deployment
+                deployment.recovery = null
+                deployment.save()
+                
                 receiverRecoveryInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), params.id])}"
                 redirect(action: "list")

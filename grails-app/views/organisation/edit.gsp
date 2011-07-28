@@ -104,41 +104,7 @@
 
                                 </td>
                             </tr>
-<!--                        
-                            <tr class="prop">
-                              <td valign="top" class="name">
-                                <label for="organisationProjects"><g:message code="organisation.organisationProjects.label" default="Projects" /></label>
-                              </td>
-                              <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'organisationProjects', 'errors')}">
-                                <ul>
-                                  <g:each in="${organisationInstance?.organisationProjects?}" var="o">
-                                    <li><g:link controller="organisationProject" action="show" id="${o.id}">${o?.project}</g:link></li>
-                                  </g:each>
-                                  <br/>
-                                  <g:link controller="organisationProject" 
-                                          action="createProjectToOrganisation" 
-                                          params="['organisation.id': organisationInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Project...')])}</g:link>
-                                </ul>
-                              </td>
-                            </tr>
 
-                            <tr class="prop">
-                              <td valign="top" class="name">
-                                <label for="organisationPeople"><g:message code="organisation.organisationPeople.label" default="People" /></label>
-                              </td>
-                              <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'organisationPeople', 'errors')}">
-                                <ul>
-                                  <g:each in="${organisationInstance?.organisationPeople?}" var="o">
-                                    <li><g:link controller="organisationPerson" action="show" id="${o.id}">${o?.person}</g:link></li>
-                                  </g:each>
-                                  <br/>
-                                  <g:link controller="organisationPerson" 
-                                          action="createPersonToOrganisation" 
-                                          params="['organisation.id': organisationInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'organisationPerson.label', default: 'People...')])}</g:link>
-                                </ul>
-                              </td>
-                            </tr>
-                            -->
                         </tbody>
                     </table>
                 </div>

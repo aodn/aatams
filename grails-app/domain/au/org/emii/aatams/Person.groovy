@@ -5,11 +5,10 @@ import au.org.emii.aatams.util.ListUtils
 class Person extends SecUser
 {
     static hasMany = [projectRoles:ProjectRole]
-    
+    static belongsTo = [organisation:Organisation]
     
     static transients = ['projects']
     
-    Organisation organisation
     String name;
     String emailAddress;
     String phoneNumber;

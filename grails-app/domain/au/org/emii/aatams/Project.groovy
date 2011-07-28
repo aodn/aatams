@@ -6,7 +6,9 @@ class Project
 {
     static hasMany = [organisationProjects:OrganisationProject, 
                       projectRoles:ProjectRole,
-                      devices:Device]
+                      tags:Tag,
+                      installations:Installation,
+                      releases:AnimalRelease]
                   
     static transients = ['organisations', 'people', 'principalInvestigators']
     

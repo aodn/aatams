@@ -17,9 +17,9 @@ class ProjectController {
 
         if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
         {
-            // Filter out PENDING organisations (only sys admin should see these).
+            // Filter out non-ACTIVE organisations (only sys admin should see these).
             projectList = projectList.findAll{
-                it.status != EntityStatus.PENDING
+                it.status == EntityStatus.ACTIVE
             }
         }
         

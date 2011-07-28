@@ -12,7 +12,8 @@ package au.org.emii.aatams
 enum EntityStatus 
 {
     PENDING('Pending'),
-    ACTIVE('Active')
+    ACTIVE('Active'),
+    DEACTIVATED('Deactivated')
     
     String displayStatus
     
@@ -23,6 +24,6 @@ enum EntityStatus
     
     static list()
     {
-        [PENDING, ACTIVE]
+        [PENDING, ACTIVE, DEACTIVATED]
     }
 }

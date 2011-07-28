@@ -12,6 +12,7 @@ class ProjectRole
     
     static belongsTo = [project:Project, person:Person]
     static transients = ['projectAndRole']
+    static hasMany = [recoveries:ReceiverRecovery]
     
     ProjectRoleType roleType
     

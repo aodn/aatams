@@ -19,7 +19,7 @@ class ReceiverRecovery
     /**
      * Every recovery must have a (chronologically) preceding deployment.
      */
-    static belongsTo = [deployment: ReceiverDeployment]
+    static belongsTo = [deployment: ReceiverDeployment, recoverer: ProjectRole]
     static mapping =
     {
         recoveryDateTime type: PersistentDateTimeTZ,
@@ -33,7 +33,6 @@ class ReceiverRecovery
     Point location
     DeviceStatus status
     ReceiverDownload download
-    ProjectRole recoverer
     
     String comments
 

@@ -8,10 +8,10 @@ package au.org.emii.aatams
 class Installation 
 {
     static hasMany = [stations:InstallationStation]
+    static belongsTo = [project:Project]
     
     String name
     InstallationConfiguration configuration
-    Project project
     
     static constraints =
     {

@@ -82,29 +82,17 @@
                           </tr>
                         </shiro:hasRole>
                     
-<!--                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="organisation.organisationProjects.label" default="Projects" /></td>
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${organisationInstance.organisationProjects}" var="o">
-                                    <li><g:link controller="project" action="show" id="${o.project.id}">${o?.project?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
-                        </tr>
-                    
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="organisation.organisationPeople.label" default="People" /></td>
                             <td valign="top" style="text-align: left;" class="value">
                                 <ul>
-                                <g:each in="${organisationInstance.organisationPeople}" var="o">
-                                    <li><g:link controller="person" action="show" id="${o.person.id}">${o?.person?.encodeAsHTML()}</g:link></li>
+                                <g:each in="${organisationInstance.people}" var="person">
+                                    <li><g:link controller="person" action="show" id="${person.id}">${person?.encodeAsHTML()}</g:link></li>
                                 </g:each>
                                 </ul>
                             </td>
                         </tr>
-                        -->
+
                     </tbody>
                 </table>
             </div>

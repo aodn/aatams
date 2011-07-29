@@ -17,7 +17,7 @@ class OrganisationControllerTests extends ControllerUnitTestCase
         super.tearDown()
     }
 
-    void initData()
+    static def createDataList()
     {
         Address address =
             new Address(streetAddress:'12 Smith Street',
@@ -57,6 +57,13 @@ class OrganisationControllerTests extends ControllerUnitTestCase
                              status:EntityStatus.DEACTIVATED)
                          
         def orgList = [activeOrg, pendingOrg, deactivatedOrg]
+        
+        return orgList
+    }
+    
+    void initData()
+    {
+        def orgList = createDataList()
         
         mockDomain(Organisation, orgList)
         
@@ -117,7 +124,6 @@ class OrganisationControllerTests extends ControllerUnitTestCase
         // Status should be set to PENDING.
         TestUtils.loginJoeBloggs(this)
 
-        // Status should be set to ACTIVE.
         def address = 
                     [streetAddress:'12 Smith Street',
                         suburbTown:'Hobart',

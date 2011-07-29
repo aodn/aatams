@@ -23,7 +23,7 @@ class ProjectController {
             }
         }
         
-        [projectInstanceList: projectList, projectInstanceTotal: projectList.count()]
+        [projectInstanceList: projectList, projectInstanceTotal: projectList.size()]
     }
 
     def create = {
@@ -42,6 +42,8 @@ class ProjectController {
     def save = {
         
         ProjectCreateCommand createProjectCmd ->
+        
+        println("params: " + params)
         
         if (createProjectCmd.validate())
         {

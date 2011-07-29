@@ -11,7 +11,7 @@ import org.apache.shiro.SecurityUtils
  */
 class TestUtils 
 {
-    static loginSysAdmin()
+    static loginSysAdmin(caller)
     {
         def subject = [ getPrincipal: { "jkburges" },
                         isAuthenticated: { true },
@@ -22,9 +22,12 @@ class TestUtils
                             [ getSubject: { subject } ] as SecurityManager )
 
         SecurityUtils.metaClass.static.getSubject = { subject }
+        
+        // Need this for "findByUsername()" etc.
+        caller.mockDomain(Person)
     }
     
-    static loginJoeBloggs()
+    static loginJoeBloggs(caller)
     {
         def subject = [ getPrincipal: { "jbloggs" },
                         isAuthenticated: { true },
@@ -45,6 +48,14 @@ class TestUtils
                             [ getSubject: { subject } ] as SecurityManager )
 
         SecurityUtils.metaClass.static.getSubject = { subject }
+
+        // Need this for "findByUsername()" etc.
+        caller.mockDomain(Person)
+    }
+    
+    static logout()
+    {
+        SecurityUtils.metaClass.static.getSubject = null
     }
     
     static setupMessage(controller)

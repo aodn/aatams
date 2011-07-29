@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import grails.util.GrailsUtil
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.apache.shiro.SecurityUtils
 
 class OrganisationController
@@ -15,7 +17,7 @@ class OrganisationController
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         
         def organisationList = Organisation.list(params)
-
+        
         if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
         {
             // Filter out non-ACTIVE organisations (only sys admin should see these).
@@ -24,7 +26,7 @@ class OrganisationController
             }
         }
         
-        [organisationInstanceList: organisationList, organisationInstanceTotal: organisationList.count()]
+        [organisationInstanceList: organisationList, organisationInstanceTotal: organisationList.size()]
     }
 
     def create = {
@@ -64,12 +66,14 @@ class OrganisationController
             }
             else
             {
+                println "Organisation created by non-SysAdmin, id: " + organisationInstance.id
                 sendCreationNotificationEmails(organisationInstance)
                 flash.message = "${message(code: 'default.requested.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.id])}"
             }
             redirect(action: "show", id: organisationInstance.id)
         }
         else {
+            println(organisationInstance.errors)
             render(view: "create", model: [organisationInstance: organisationInstance])
         }
     }
@@ -160,25 +164,39 @@ class OrganisationController
      */
     def sendCreationNotificationEmails(organisation)
     {
-        sendMail 
-        {  
-            to organisation?.requestingUser?.emailAddress
-            bcc grailsApplication.config.grails.mail.adminEmailAddress
-            from grailsApplication.config.grails.mail.systemEmailAddress
-            subject "${message(code: 'mail.request.organisation.create.subject', args: [organisation.name])}"     
-            body "${message(code: 'mail.request.organisation.create.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
+        if (GrailsUtil.getEnvironment().equals(GrailsApplication.ENV_TEST))
+        {
+            // Don't send email if testing.
+        }
+        else
+        {
+            sendMail 
+            {  
+                to organisation?.requestingUser?.emailAddress
+                bcc grailsApplication.config.grails.mail.adminEmailAddress
+                from grailsApplication.config.grails.mail.systemEmailAddress
+                subject "${message(code: 'mail.request.organisation.create.subject', args: [organisation.name])}"     
+                body "${message(code: 'mail.request.organisation.create.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
+            }
         }
     }
     
     def sendActivatedNotificationEmails(organisation)
     {
-        sendMail 
-        {     
-            to organisation?.requestingUser?.emailAddress
-            bcc grailsApplication.config.grails.mail.adminEmailAddress
-            from grailsApplication.config.grails.mail.systemEmailAddress
-            subject "${message(code: 'mail.request.organisation.activate.subject', args: [organisation.name])}"     
-            body "${message(code: 'mail.request.organisation.activate.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
+        if (GrailsUtil.getEnvironment().equals(GrailsApplication.ENV_TEST))
+        {
+            // Don't send email if testing.
+        }
+        else
+        {
+            sendMail 
+            {     
+                to organisation?.requestingUser?.emailAddress
+                bcc grailsApplication.config.grails.mail.adminEmailAddress
+                from grailsApplication.config.grails.mail.systemEmailAddress
+                subject "${message(code: 'mail.request.organisation.activate.subject', args: [organisation.name])}"     
+                body "${message(code: 'mail.request.organisation.activate.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
+            }
         }
     }
 }

@@ -66,6 +66,7 @@ class BootStrap
         {
             test
             {
+                println("bootstrap test")
                 initData()
             }
             

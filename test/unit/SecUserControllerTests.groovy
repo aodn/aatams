@@ -1,5 +1,3 @@
-package aatams
-
 import grails.test.*
 
 class SecUserControllerTests extends ControllerUnitTestCase {

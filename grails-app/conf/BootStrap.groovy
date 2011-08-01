@@ -558,7 +558,7 @@ class BootStrap
 
         // Receiver Recovery.
         ReceiverRecovery recovery1 = 
-            new ReceiverRecovery(recoveryDateTime: new DateTime("2011-05-17T12:34:56"),
+            new ReceiverRecovery(recoveryDateTime: new DateTime("2011-07-25T12:34:56"),
                                  location:(Point)reader.read("POINT(10.1234 10.1234)"),
                                  status:recoveredStatus,
                                  recoverer:sealProjectInvestigator,

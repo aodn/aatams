@@ -179,7 +179,7 @@ class SecSecurityFilters
                 {
                     for (ProjectRole operandUserRole : operandUser.projectRoles)
                     {
-                        Project project = poperandUserRole?.project
+                        Project project = operandUserRole?.project
 
                         // If the principal is a PI on this project, then they can edit.
                         if (SecurityUtils.subject.isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission(project?.id)))
@@ -208,9 +208,19 @@ class SecSecurityFilters
         {
             before =
             {
+                println params
+                
+                def projectId = params.project?.id
+                
+                // Some views store project's ID in "projectId" variable.
+                if (projectId == null)
+                {
+                    projectId = params.projectId
+                }
+                
                 // Non-authenticated users can't update.
                 if (   SecurityUtils.subject.isAuthenticated()
-                    && SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(params.project.id)))
+                    && SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(projectId)))
                 {
                     return true
                 }

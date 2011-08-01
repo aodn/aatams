@@ -97,6 +97,11 @@ class PermissionUtilsService
     
     String buildProjectReadPermission(projectId)
     {
+        if (!projectId)
+        {
+            return "notPermitted"
+        }
+        
         return "project:" + projectId + ":read"
     }
     
@@ -115,6 +120,11 @@ class PermissionUtilsService
     
     String buildProjectWritePermission(projectId)
     {
+        if (!projectId)
+        {
+            return "notPermitted"
+        }
+        
         return "project:" + projectId + ":write"
     }
     
@@ -125,6 +135,11 @@ class PermissionUtilsService
     
     String buildPrincipalInvestigatorPermission(projectId)
     {
+        if (!projectId)
+        {
+            return "notPermitted"
+        }
+        
         return "principalInvestigator:" + projectId
     }
 
@@ -140,6 +155,11 @@ class PermissionUtilsService
     
     String buildReceiverUpdatePermission(receiverId)
     {
+        if (!receiverId)
+        {
+            return "notPermitted"
+        }
+        
         return "receiverUpdate:" + receiverId
     }
     

@@ -26,6 +26,7 @@
             <g:set var="receiverDeploymentInstance" value="${receiverRecoveryInstance?.deployment}"/>
             <g:uploadForm action="save" >
               <g:hiddenField name="deploymentId" value="${receiverDeploymentInstance?.id}"/>
+              <g:hiddenField name="projectId" value="${receiverDeploymentInstance?.station?.installation?.project?.id}"/>
                 <div class="dialog">
                     <table>
                         <tbody>

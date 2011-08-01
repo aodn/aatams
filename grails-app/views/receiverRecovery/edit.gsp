@@ -28,6 +28,7 @@
             <g:form method="post" >
                 <g:hiddenField name="id" value="${receiverRecoveryInstance?.id}" />
                 <g:hiddenField name="version" value="${receiverRecoveryInstance?.version}" />
+                <g:hiddenField name="projectId" value="${receiverRecoveryInstance?.deployment?.station?.installation?.project?.id}"/>
                 <div class="dialog">
                     <table>
                       

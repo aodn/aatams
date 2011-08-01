@@ -19,6 +19,8 @@ class ReceiverDownloadFile
     FileProcessingStatus status
     
     String errMsg
+    
+    static belongsTo = [receiverDownload: ReceiverDownload]
 
     static constraints =
     {
@@ -26,14 +28,14 @@ class ReceiverDownloadFile
         path()
     }
     
-    ReceiverDownloadFile(String fullPath, String name)
-    {
-        this.importDate = new Date()
-        this.name = name
-        this.path = fullPath
-        this.type = ReceiverDownloadFileType.fromPath(fullPath)
-        this.status = FileProcessingStatus.PENDING
-    }
+//    ReceiverDownloadFile(String fullPath, String name)
+//    {
+//        this.importDate = new Date()
+//        this.name = name
+//        this.path = fullPath
+//        this.type = ReceiverDownloadFileType.fromPath(fullPath)
+//        this.status = FileProcessingStatus.PENDING
+//    }
     
     String toString()
     {

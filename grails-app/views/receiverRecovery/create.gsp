@@ -24,7 +24,7 @@
             </div>
             </g:hasErrors>
             <g:set var="receiverDeploymentInstance" value="${receiverRecoveryInstance?.deployment}"/>
-            <g:uploadForm action="save" >
+            <g:form action="save" >
               <g:hiddenField name="deploymentId" value="${receiverDeploymentInstance?.id}"/>
               <g:hiddenField name="projectId" value="${receiverDeploymentInstance?.station?.installation?.project?.id}"/>
                 <div class="dialog">
@@ -153,6 +153,7 @@
                             </tr>
                         
                             <!-- Import data file(s) -->
+<%-- Import is now done in pop-up on separate screen                             
                             <tr><td/></tr>
                             
                             <tr class="prop">
@@ -184,7 +185,7 @@
                                     <input type="file" name="csvFile" accept="csv" />
                                 </td>
                             </tr>
-                            
+--%>                            
                         </tbody>
                     </table>
                 </div>

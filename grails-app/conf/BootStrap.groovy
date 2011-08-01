@@ -278,7 +278,7 @@ class BootStrap
         DeviceStatus recoveredStatus = new DeviceStatus(status:'RECOVERED').save(failOnError: true)
 
         Receiver rx1 =
-            new Receiver(codeName:String.valueOf(vemcoXyz) + " - " + '12345678',
+            new Receiver(codeName:'VR2W-101336',
                          serialNumber:'12345678',
                          status:deployedStatus,
                          model:vemcoXyz,
@@ -286,14 +286,14 @@ class BootStrap
                          comment:'RX 1 belonging to CSIRO').save(failOnError: true)
 
         Receiver rx2 =
-            new Receiver(codeName:String.valueOf(vemcoXyz) + " - " + '87654321',
+            new Receiver(codeName:'VR2W-101337',
                          serialNumber:'87654321',
                          status:deployedStatus,
                          model:vemcoXyz,
                          organisation:csiroOrg).save(failOnError: true)
 
         Receiver rx3 =
-            new Receiver(codeName:String.valueOf(vemcoXyz) + " - " + '1111',
+            new Receiver(codeName:'VR2W-101338',
                          serialNumber:'1111',
                          status:newStatus,
                          model:vemcoXyz,
@@ -449,7 +449,7 @@ class BootStrap
             new ReceiverDeployment(station:bondiSW1,
                                    receiver:rx1,
                                    deploymentNumber:1,
-                                   deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
+                                   deploymentDateTime:new DateTime("2010-02-15T12:34:56+10:00"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
                                    bottomDepthM:12f,
@@ -564,7 +564,11 @@ class BootStrap
                                  recoverer:sealProjectInvestigator,
                                  deployment:rx1Bondi,
                                  batteryLife:12.5f,
-                                 batteryVoltage:3.7f).save(failOnError:true)
+                                 batteryVoltage:3.7f)
+        ReceiverDownload download1 =
+            new ReceiverDownload(receiverRecovery:recovery1,
+                                 downloadDateTime:new DateTime("2011-05-17T12:34:56"))
+        recovery1.save(failOnError:true)
                              
         ReceiverRecovery recovery2 = 
             new ReceiverRecovery(recoveryDateTime: new DateTime("2011-05-17T12:54:56"),
@@ -573,9 +577,14 @@ class BootStrap
                                  recoverer:sealProjectInvestigator,
                                  deployment:rx2Bondi,
                                  batteryLife:12.5f,
-                                 batteryVoltage:3.7f).save(failOnError:true)
+                                 batteryVoltage:3.7f)
+        ReceiverDownload download2 =
+            new ReceiverDownload(receiverRecovery:recovery2,
+                                 downloadDateTime:new DateTime("2011-05-17T12:54:56"))
+        recovery2.save(failOnError:true)
                              
         // Detections.
+        /**
         Detection detection1 =
             new Detection(timestamp:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-20 14:10:00"),
                           receiverDeployment:rx1Bondi,
@@ -597,5 +606,6 @@ class BootStrap
         DetectionSurgery detSurg2 = 
             new DetectionSurgery(detection:detection2,
                                  surgery:surgery2).save(failOnError:true)
+                                 */
     }
 }

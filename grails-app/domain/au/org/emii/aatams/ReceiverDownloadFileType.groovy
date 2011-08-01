@@ -2,10 +2,10 @@ package au.org.emii.aatams
 
 enum ReceiverDownloadFileType 
 {
-    CSV('csv'),
-    VRL('vrl'),
-    RLD('rld'),
-    INVALID('invalid')
+    DETECTIONS_CSV('detections (CSV)'),
+    EVENTS_CSV('events (CSV)'),
+    VRL('VRL'),
+    RLD('RLD')
     
     String type
     
@@ -14,21 +14,13 @@ enum ReceiverDownloadFileType
         this.type = type
     }
     
-    static ReceiverDownloadFileType fromPath(String path)
+    String toString()
     {
-        if (path.endsWith(CSV.type))
-        {
-            return CSV
-        }
-        else if (path.endsWith(VRL.type))
-        {
-            return VRL
-        }
-        else if (path.endsWith(RLD.type))
-        {
-            return RLD
-        }
-        
-        return INVALID
+        return type
+    }
+
+    static list()
+    {
+        [DETECTIONS_CSV ,EVENTS_CSV, VRL('VRL'), RLD('RLD')]
     }
 }

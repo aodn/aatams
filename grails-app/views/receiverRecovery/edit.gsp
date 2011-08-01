@@ -189,6 +189,43 @@
                                 </td>
                             </tr>
 --%>                            
+                            
+                            <!-- Receiver download files -->
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="receiverDownloads"><g:message code="receiverRecovery.download.downloadFiles.label" default="Receiver Exports" /></label>
+                                </td>
+                                
+                                <td valign="top" class="value" colspan="2">
+                                  
+                                  <table class="nested">
+                                    <tbody id="download_files_table_body">
+                                      <g:each in="${receiverRecoveryInstance?.download?.downloadFiles}" var="downloadFile">
+                                        <tr>
+                                          <td class="rowButton"><g:link class="show" controller="receiverDownloadFile" action="show" id="${downloadFile?.id}"></g:link></td>
+                                          <td valign="top" class="value">${downloadFile?.importDate}</td>
+                                          <td valign="top" class="value">${downloadFile?.name}</td>
+                                          <td valign="top" class="value">${downloadFile?.type}</td>
+                                          <td valign="top" class="value">${downloadFile?.status}</td>
+                                          <td valign="top" class="value">${downloadFile?.errMsg}</td>
+                                        </tr>
+                                        
+                                      </g:each>
+                                      <tr><td><br/></td></tr>
+                                      <tr>
+                                        <td class="rowButton">
+                                          <g:link class="create"
+                                                  action="create" 
+                                                  controller="receiverDownloadFile"
+                                                  params="[downloadId:receiverRecoveryInstance?.download?.id]"></g:link>
+                                        </td>
+                                      </tr>
+
+                                    </tbody>
+                                  </table>
+                                
+                            </tr>
+                            
                         </tbody>
 
                     </table>
@@ -202,5 +239,6 @@
                 </div>
             </g:form>
         </div>
+      
     </body>
 </html>

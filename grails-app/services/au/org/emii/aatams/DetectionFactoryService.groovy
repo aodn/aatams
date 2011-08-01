@@ -96,10 +96,18 @@ class DetectionFactoryService
             retDetection = new Detection()
         }
         
-        // Add the tag(s) to detection (there may be none if it's a SensorDetection).
+        // Add the tag(s) to detectionSurgery (there may be none if it's a SensorDetection).
         tags.each
         {
-            retDetection.addToTags(it)
+            // Tags are related to Detection via the DetectionSurgery (which itself
+            // models a particular tag being attached to a particular animal).
+            def surgeries = it?.surgeries?.sort{ it.timestamp}
+            def currentSurgery = surgeries.last()
+            
+            DetectionSurgery detSurgery = 
+                new DetectionSurgery(surgery:currentSurgery,
+                                     deteciton:retDetection)
+            retDetection.addToDetectionSurgeries(detSurgery)
         }
         
         String dateString = detectionParams[DATE_AND_TIME_COLUMN] + " " + "UTC"
@@ -114,13 +122,20 @@ class DetectionFactoryService
         {
             throw new FileProcessingException(errMsg)
         }
-        retDetection.receiver = receiver
+        
+        // Find the appropriate receiver deployment (based on the timestamp of
+        // the detection and the deployment/recovery timestamps.
+        ReceiverDeployment deployment = findReceiverDeployment(receiver, detectionDate)
+        retDetection.receiverDeployment = deployment
 
         String transmitterName = detectionParams[TRANSMITTER_NAME_COLUMN]
         retDetection.transmitterName = transmitterName
         
         String transmitterSerialNumber = detectionParams[TRANSMITTER_SERIAL_NUMBER_COLUMN]
         retDetection.transmitterSerialNumber = transmitterSerialNumber
+
+        String stationName = detectionParams[STATION_NAME_COLUMN]
+        retDetection.stationName = stationName
 
         Float lat = detectionParams[LATITUDE_COLUMN]
         Float lon = detectionParams[LONGITUDE_COLUMN]
@@ -170,5 +185,32 @@ class DetectionFactoryService
         
         pingIDBuilder.append(transmitterID.substring(index + 1, transmitterID.length()))
         codeMapBuilder.append(transmitterID.substring(0, index))
+    }
+    
+    ReceiverDeployment findReceiverDeployment(receiver, detectionDate)
+    {
+        List<ReceiverDeployment> deployments = receiver.deployments.grep(
+        {
+            // Check that the receiver was deployed before the detection and
+            // that there is a valid recovery and that the recovery date is
+            // after the detection.
+            if (   (it.deploymentDateTime.toDate() <= detectionDate)
+                && (it?.recovery.recoveryDateTime?.toDate() >= detectionDate))
+            {
+                return true
+            }
+            else
+            {
+                return false
+            }
+        }).sort{it.deploymentDateTime}
+        
+        // There should be one and only one matching deployment.
+        if (deployments.size() != 1)
+        {
+            log.warn("There are not exactly one matching deployment for receiver: " + receiver + ", detection date: " + detectionDate)
+        }
+        
+        return deployments?.first()
     }
 }

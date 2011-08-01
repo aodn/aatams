@@ -23,7 +23,8 @@
                 <g:renderErrors bean="${receiverDownloadFileInstance}" as="list" />
             </div>
             </g:hasErrors>
-            <g:form action="save" >
+            <g:uploadForm action="save" >
+                <g:hiddenField name="downloadId" value="${receiverDownloadFileInstance?.receiverDownload?.id}" />
                 <div class="dialog">
                     <table>
                         <tbody>
@@ -43,8 +44,7 @@
                                     <label for="path"><g:message code="receiverDownloadFile.path.label" default="Path" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'path', 'errors')}">
-                                    <g:textField name="path" value="${receiverDownloadFileInstance?.path}" />
-
+                                    <input type="file" name="path" accept="*" />
                                 </td>
                             </tr>
                         
@@ -54,7 +54,7 @@
                 <div class="buttons">
                     <span class="button"><g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                 </div>
-            </g:form>
+            </g:uploadForm>
         </div>
     </body>
 </html>

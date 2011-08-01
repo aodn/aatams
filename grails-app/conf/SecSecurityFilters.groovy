@@ -200,7 +200,7 @@ class SecSecurityFilters
         //
         def projectAccessWriteControllers = 
             "installation|installationStation|tag|animalRelease|detection|" + \
-            "projectRole|receiverDeployment|receiverRecovery|receiverEvent|" + \
+            "projectRole|receiverDeployment|receiverDownloadFile|receiverRecovery|receiverEvent|" + \
             "organisationProject|sensor"
         
         projectAccessWrite(controller:projectAccessWriteControllers, 

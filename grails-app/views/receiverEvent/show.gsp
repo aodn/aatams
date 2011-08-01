@@ -27,7 +27,9 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverEvent.timestamp.label" default="Timestamp" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${receiverEventInstance?.timestamp}" /></td>
+                            <td valign="top" class="value"><g:formatDate date="${receiverEventInstance?.timestamp}"
+                                                                         format="yyyy-MM-dd'T'HH:mm:ssZ"
+                                                                         timeZone='${TimeZone.getTimeZone("UTC")}'/></td>
                             
                         </tr>
                     

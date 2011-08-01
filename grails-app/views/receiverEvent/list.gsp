@@ -44,7 +44,9 @@
                         
                             <td class="rowButton"><g:link class="show" action="show" id="${receiverEventInstance.id}"></g:link></td>
                       
-                            <td><g:formatDate date="${receiverEventInstance.timestamp}" /></td>
+                            <td><g:formatDate date="${receiverEventInstance.timestamp}"
+                                              format="yyyy-MM-dd'T'HH:mm:ssZ"
+                                              timeZone='${TimeZone.getTimeZone("UTC")}'/></td>
                         
                             <td>${fieldValue(bean: receiverEventInstance, field: "description")}</td>
                         

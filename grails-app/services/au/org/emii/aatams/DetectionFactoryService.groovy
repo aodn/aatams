@@ -152,6 +152,8 @@ class DetectionFactoryService
             // TODO
         }
         
+        deployment.save()
+        
         return retDetection
     }
    

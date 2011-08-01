@@ -8,6 +8,7 @@ class FileProcessorService extends AbstractFileProcessorService
     static transactional = true
 
     def vueDetectionFileProcessorService
+    def vueEventFileProcessorService
 
     void process(ReceiverDownloadFile receiverDownloadFile, MultipartFile file)
     {
@@ -53,6 +54,9 @@ class FileProcessorService extends AbstractFileProcessorService
                     
                     case ReceiverDownloadFileType.EVENTS_CSV:
 
+                        // Delegate to VUE Event Processor...
+                        log.debug("Processing events...")
+                        vueEventFileProcessorService.process(receiverDownloadFile)
                         break;
                     
                     default:

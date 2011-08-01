@@ -6,8 +6,6 @@ class ReceiverRecoveryController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def fileProcessorService
-    
     def index = {
         redirect(action: "list", params: params)
     }
@@ -61,19 +59,6 @@ class ReceiverRecoveryController {
             download.downloadDateTime = new DateTime()
             download.save(flush:true, failOnErrors:true)
             assert(download != null): "download cannot be null"
-            
-            def fileMap = request.getFileMap()
-            
-            for (e in fileMap)
-            {
-                log.debug("key: " + e.key)
-                
-                // Kick off processing here.
-//                runAsync
-//                {
-                    fileProcessorService.process(download, e.value)
-//                }
-            }
 
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.id])}"
             redirect(action: "show", id: receiverRecoveryInstance.id)

@@ -28,7 +28,9 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.timestamp.label" default="Timestamp" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${detectionInstance?.timestamp}" /></td>
+                            <td valign="top" class="value"><g:formatDate date="${detectionInstance?.timestamp}"
+                                                                         format="yyyy-MM-dd'T'HH:mm:ssZ"
+                                                                         timeZone='${TimeZone.getTimeZone("UTC")}'/></td>
                             
                         </tr>
                     
@@ -74,7 +76,7 @@
                             
                             <td valign="top" style="text-align: left;" class="value">
                                 <ul>
-                                <g:each in="${detectionSurgeries}" var="s">
+                                <g:each in="${detectionInstance?.detectionSurgeries}" var="s">
                                     <li><g:link controller="tag" action="show" id="${s?.surgery?.tag?.id}">${s?.surgery?.tag?.encodeAsHTML()}</g:link></li>
                                 </g:each>
                                 </ul>

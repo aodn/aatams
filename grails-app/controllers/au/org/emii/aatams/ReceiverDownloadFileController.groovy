@@ -2,6 +2,8 @@ package au.org.emii.aatams
 
 class ReceiverDownloadFileController {
 
+    def fileProcessorService
+    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -13,21 +15,35 @@ class ReceiverDownloadFileController {
         [receiverDownloadFileInstanceList: ReceiverDownloadFile.list(params), receiverDownloadFileInstanceTotal: ReceiverDownloadFile.count()]
     }
 
-    def create = {
+    def create = 
+    {
         def receiverDownloadFileInstance = new ReceiverDownloadFile()
         receiverDownloadFileInstance.properties = params
+        receiverDownloadFileInstance.receiverDownload = ReceiverDownload.get(params.downloadId)
+        
         return [receiverDownloadFileInstance: receiverDownloadFileInstance]
     }
 
-    def save = {
+    def save = 
+    {
         def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
-        if (receiverDownloadFileInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.id])}"
-            redirect(action: "show", id: receiverDownloadFileInstance.id)
+        receiverDownloadFileInstance.receiverDownload = ReceiverDownload.get(params.downloadId)
+        receiverDownloadFileInstance.errMsg = ""
+        receiverDownloadFileInstance.importDate = new Date()
+        receiverDownloadFileInstance.status = FileProcessingStatus.PENDING
+        
+        def fileMap = request.getFileMap()
+        
+        // Should only be one file in file map.
+        for (e in fileMap)
+        {
+            fileProcessorService.process(receiverDownloadFileInstance, e.value)
         }
-        else {
-            render(view: "create", model: [receiverDownloadFileInstance: receiverDownloadFileInstance])
-        }
+        
+        flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.id])}"
+
+        // Go back to receiver recovery edit screen.
+        redirect(controller: "receiverRecovery", action: "edit", id: receiverDownloadFileInstance?.receiverDownload?.receiverRecovery?.id)
     }
 
     def show = {

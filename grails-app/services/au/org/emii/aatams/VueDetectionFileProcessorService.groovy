@@ -6,34 +6,14 @@ import org.springframework.web.multipart.MultipartFile
 /**
  * Process a file downloaded from receiver's VUE application.
  */
-class VueFileProcessorService
+class VueDetectionFileProcessorService
 {
     def detectionFactoryService
     
     static transactional = true
 
-    /**
-     * Determine whether or not the given file is parseable by this processor.
-     */
-    boolean isParseable(ReceiverDownloadFile downloadFile)
-    {
-        
-        // Just go by file suffix for now (might come up with a better way
-        // of doing this.
-        if (downloadFile.name.endsWith(".csv"))
-        {
-            log.debug("File " + downloadFile.name + " is parseable")
-            return true
-        }
-        
-        log.debug("File " + downloadFile.name + " is not parseable")
-        return false
-    }
-    
     void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
     {
-        assert(isParseable(downloadFile)): "File is not parseable, downloadFile: " + String.valueOf(downloadFile)
-        
         downloadFile.status = FileProcessingStatus.PROCESSING
         downloadFile.save()
         

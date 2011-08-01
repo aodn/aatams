@@ -7,21 +7,26 @@ class FileProcessorService extends AbstractFileProcessorService
 {
     static transactional = true
 
-    def vueFileProcessorService
+    def vueDetectionFileProcessorService
 
-    void process(receiverDownload, MultipartFile file)
+    void process(ReceiverDownloadFile receiverDownloadFile, MultipartFile file)
     {
+        log.debug "process()"
+    
 //        ReceiverDownload receiverDownload = ReceiverDownload.get(receiverDownloadId)
-        assert(receiverDownload != null): "receiverDownload cannot be null"
+        assert(receiverDownloadFile != null): "receiverDownloadFile cannot be null"
         
         if (!file.isEmpty())
         {
-            log.info("Processing receiver download, id: " + receiverDownload?.id)
+            def receiverDownload = receiverDownloadFile?.receiverDownload
+            assert (receiverDownload != null): "receiverDownload cannot be null"
+            
+            log.info("Adding file to receiver download, id: " + receiverDownload?.id)
 
             // Save the file to disk.
             def path = getPath(receiverDownload)
             String fullPath = path + File.separator + file.getOriginalFilename()
-            log.debug("Saving file, full path: " + fullPath)
+            log.info("Saving file, full path: " + fullPath)
             File outFile = new File(fullPath)
             
             // Create the directory structure first...
@@ -30,24 +35,31 @@ class FileProcessorService extends AbstractFileProcessorService
             // ... then transfer the data.
             file.transferTo(outFile)
 
-            // Create a new ReceiverDownloadFile instance and add it to the given
-            // ReceiverDownload.
-            ReceiverDownloadFile downloadFile = new ReceiverDownloadFile(fullPath, file.getOriginalFilename())
-            downloadFile.save()
+            receiverDownloadFile.path = fullPath
+            receiverDownloadFile.name = file.getOriginalFilename()
+            
+            receiverDownload.addToDownloadFiles(receiverDownloadFile)
+            receiverDownload.save()
             
             try
             {
-                if (vueFileProcessorService.isParseable(downloadFile))
+                switch (receiverDownloadFile.type)
                 {
-                    // Delegate to VUE Processor...
-                    vueFileProcessorService.process(downloadFile)
+                    case ReceiverDownloadFileType.DETECTIONS_CSV:
+                    
+                        // Delegate to VUE Detection Processor...
+                        vueDetectionFileProcessorService.process(receiverDownloadFile)
+                        break;
+                    
+                    case ReceiverDownloadFileType.EVENTS_CSV:
 
-                }
-                else
-                {
-                    // No processing - just update the status.
-                    downloadFile.status = FileProcessingStatus.PROCESSED
-                    downloadFile.save()
+                        break;
+                    
+                    default:
+
+                        // No processing - just update the status.
+                        receiverDownloadFile.status = FileProcessingStatus.PROCESSED
+                        receiverDownloadFile.save()
                 }
 
                 log.info "Finished processing."
@@ -55,9 +67,9 @@ class FileProcessorService extends AbstractFileProcessorService
             catch (FileProcessingException e)
             {
                 log.error("Error processing file", e)
-                downloadFile.status = FileProcessingStatus.ERROR
-                downloadFile.errMsg = String.valueOf(e)
-                downloadFile.save()
+                receiverDownloadFile.status = FileProcessingStatus.ERROR
+                receiverDownloadFile.errMsg = String.valueOf(e)
+                receiverDownloadFile.save()
 
                 throw e
             }

@@ -76,7 +76,10 @@
 
                             <td class="rowButton">
                               <g:if test="${receiverDeployment?.recovery == null}">
-                                <g:link class="create" action="create" params="[deploymentId:receiverDeployment.id]"></g:link>
+                                <shiro:hasPermission permission="project:${projectId:receiverDeployment?.station?.installation?.project?.id}:write">
+                                  <g:link class="create" action="create" 
+                                          params="[deploymentId:receiverDeployment.id, projectId:receiverDeployment?.station?.installation?.project?.id]"></g:link>
+                                </shiro:hasPermission>  
                               </g:if>
                               <g:else>
                                 <g:link class="show" action="show" id="${receiverDeployment?.recovery?.id}"></g:link>

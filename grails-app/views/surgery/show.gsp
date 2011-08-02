@@ -23,13 +23,6 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="surgery.id.label" default="Id" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: surgeryInstance, field: "id")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="surgery.timestamp.label" default="Timestamp" /></td>
                             
                             <td valign="top" class="value"><joda:format value="${surgeryInstance?.timestamp}" /></td>

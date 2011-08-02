@@ -18,13 +18,22 @@ $(function() {
                        {
                            updateHeader(data);
                            
-                           var item = $("<li>");
-                           var link = $("<a>").attr("href", '../organisation/show/' + data.instance.organisation.id).html(data.instance.organisation.name);
-                           item.append(link);
-                           var lastListElement = $("#organisation_list > li:last")
+                           var tableRow = $("<tr>");
                            
-                           // Second last element is a <br>, last element is a link to "Add..."
-                           lastListElement.prev().before(item)
+                           //<td class="rowButton"><a href="/aatams/organisationProject/show/13" class="show"></a></td>
+                           var infoColumn = $("<td>").attr("class", "rowButton");
+                           var infoLink = $("<a>").attr("href", '/aatams/organisationProject/show/' + data.instance.id);
+                           infoLink.attr("class", "show");
+                           infoColumn.append(infoLink);
+                           tableRow.append(infoColumn);
+                           
+                           var orgColumn = $("<td>").attr("class", "value");
+                           var orgLink = $("<a>").attr("href", '/aatams/organisation/show/' + data.instance.organisation.id).html(data.instance.organisation.name);
+                           orgColumn.append(orgLink);
+                           tableRow.append(orgColumn);
+                           
+                           var lastRow = $("#organisation_table_body > tr:last")
+                           lastRow.prev().before(tableRow);
                        }, 
                        'json');
                        

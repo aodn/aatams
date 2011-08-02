@@ -82,6 +82,7 @@
                               <table class="nested">
                                 <thead>
                                   <tr>
+                                    <th></th>  <!-- Link to sensor/show -->
                                     <th>Tag Type</th>
                                     <th>Ping Code</th>
                                     <th>Slope</th>
@@ -93,6 +94,9 @@
                                 <tbody>
                                   <g:each in="${tagInstance.sensors}" var="s">
                                     <tr>
+                                      <td class="rowButton">
+                                        <g:link class="show" controller="sensor" action="show" id="${s?.id}"></g:link>
+                                      </td>
                                       <td>
                                         <g:link controller="sensor" action="show" id="${s.id}">${s?.transmitterType}</g:link>
                                       </td>

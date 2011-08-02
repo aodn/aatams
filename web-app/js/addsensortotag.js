@@ -34,6 +34,12 @@ $(function() {
                            
                            var tableRow = $("<tr>");
                            
+                           var infoColumn = $("<td>").attr("class", "rowButton");
+                           var infoLink = $("<a>").attr("href", '/aatams/sensor/show/' + data.instance.id);
+                           infoLink.attr("class", "show");
+                           infoColumn.append(infoLink);
+                           tableRow.append(infoColumn);
+
                            var tagTypeColumn = $("<td>").attr("class", "value");
                            tableRow.append(tagTypeColumn);
                            var sensorLink = $("<a>").attr("href", '../sensor/show/' + data.instance.id).html(data.instance.transmitterType.transmitterTypeName);

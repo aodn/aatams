@@ -23,13 +23,6 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="organisationProject.id.label" default="Id" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: organisationProjectInstance, field: "id")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="organisationProject.organisation.label" default="Organisation" /></td>
                             
                             <td valign="top" class="value"><g:link controller="organisation" action="show" id="${organisationProjectInstance?.organisation?.id}">${organisationProjectInstance?.organisation?.encodeAsHTML()}</g:link></td>

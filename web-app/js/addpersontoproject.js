@@ -26,9 +26,15 @@ $(function() {
                            
                            var tableRow = $("<tr>");
                            
+                           var infoColumn = $("<td>").attr("class", "rowButton");
+                           var infoLink = $("<a>").attr("href", '/aatams/projectRole/show/' + data.instance.id);
+                           infoLink.attr("class", "show");
+                           infoColumn.append(infoLink);
+                           tableRow.append(infoColumn);
+                           
                            var personColumn = $("<td>").attr("class", "value");
                            tableRow.append(personColumn);
-                           var personLink = $("<a>").attr("href", '../person/show/' + data.instance.person.id).html(data.instance.person.name);
+                           var personLink = $("<a>").attr("href", '/aatams/person/show/' + data.instance.person.id).html(data.instance.person.name);
                            personColumn.append(personLink);
                            tableRow.append(personColumn);
                            

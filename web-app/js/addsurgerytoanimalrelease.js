@@ -19,11 +19,13 @@ $(function() {
                 var typeId = $("#surgeryTypeId option:selected").val();
                 var treatmentTypeId = $("#treatmentTypeId option:selected").val();
                 var comments = $("#surgeryComments").val();
+                var projectId = $("#project\\.id option:selected").val();
                 var event = $("#id").val();
                 
                 $.post('/aatams/surgery/save',
                        {
                            'event.id':event,
+                           'projectId':projectId,
                            'release.id':animalReleaseId,
                            'timestamp_year':timestamp_year,
                            'timestamp_month':timestamp_month,

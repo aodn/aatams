@@ -16,9 +16,11 @@ $(function() {
                 var intercept = $("#intercept").val();
                 var unit = $("#unit").val();
                 var status = $("#statusId option:selected").val();
+                var projectId = $("#project\\.id option:selected").val();
                 
                 $.post('/aatams/sensor/save', 
                        {'event.id':event,
+                        'projectId':projectId,
                         'tag.id':tagId,
                         'transmitterType.id':transmitterTypeId,
                         'pingCode':pingCode,
@@ -34,7 +36,7 @@ $(function() {
                            
                            var tagTypeColumn = $("<td>").attr("class", "value");
                            tableRow.append(tagTypeColumn);
-                           var sensorLink = $("<a>").attr("href", '../sensor/show/' + data.instance.id).html(data.instance.transmitterType);
+                           var sensorLink = $("<a>").attr("href", '../sensor/show/' + data.instance.id).html(data.instance.transmitterType.transmitterTypeName);
                            tagTypeColumn.append(sensorLink);
                            
                            var pingCodeColumn = $("<td>").attr("class", "value").html(data.instance.pingCode);

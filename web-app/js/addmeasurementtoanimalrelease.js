@@ -15,11 +15,14 @@ $(function() {
                 var unitId = $("#unitId option:selected").val();
                 var estimate = $("#estimate").is(':checked');
                 var comments = $("#measurementComments").val();
+                var projectId = $("#project\\.id option:selected").val();
+                
                 var event = $("#id").val();
 
                 $.post('/aatams/animalMeasurement/save',
                        {
                            'event.id':event,
+                           'projectId':projectId,
                            'release.id':animalReleaseId,
                            'type.id':typeId,
                            'value':value,

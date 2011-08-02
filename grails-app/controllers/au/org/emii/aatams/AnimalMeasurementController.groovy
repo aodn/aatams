@@ -25,7 +25,7 @@ class AnimalMeasurementController {
         def animalMeasurementInstance = new AnimalMeasurement(params)
         if (animalMeasurementInstance.save(flush: true)) 
         {
-            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'measurement.label', default: 'Measurement'), animalMeasurementInstance])}"
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance])}"
             render ([instance:animalMeasurementInstance, message:flash] as JSON)
         }
         else 

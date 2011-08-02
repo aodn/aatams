@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile')}" />
+        
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -25,6 +26,7 @@
             </g:hasErrors>
             <g:uploadForm action="save" >
                 <g:hiddenField name="downloadId" value="${receiverDownloadFileInstance?.receiverDownload?.id}" />
+                <g:hiddenField name="projectId" value="${projectId}" />
                 <div class="dialog">
                     <table>
                         <tbody>

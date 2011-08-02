@@ -244,7 +244,7 @@ class SecSecurityFilters
             {
                 // Non-authenticated users can't update.
                 if (   SecurityUtils.subject.isAuthenticated()
-                    && SecurityUtils.subject.isPermitted(permissionUtilsService.buildReceiverCreatePermission(params.id)))
+                    && SecurityUtils.subject.isPermitted(permissionUtilsService.buildReceiverCreatePermission()))
                 {
                     return true
                 }

@@ -31,7 +31,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="streetAddress"><g:message code="address.streetAddress.label" default="Street Address" /></label>
+                                    <label class="compulsory" for="streetAddress"><g:message code="address.streetAddress.label" default="Street Address" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: addressInstance, field: 'streetAddress', 'errors')}">
                                     <g:textField name="streetAddress" value="${addressInstance?.streetAddress}" />
@@ -41,7 +41,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="suburbTown"><g:message code="address.suburbTown.label" default="Suburb Town" /></label>
+                                    <label class="compulsory" for="suburbTown"><g:message code="address.suburbTown.label" default="Suburb Town" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: addressInstance, field: 'suburbTown', 'errors')}">
                                     <g:textField name="suburbTown" value="${addressInstance?.suburbTown}" />
@@ -51,7 +51,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="state"><g:message code="address.state.label" default="State" /></label>
+                                    <label class="compulsory" for="state"><g:message code="address.state.label" default="State" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: addressInstance, field: 'state', 'errors')}">
                                     <g:textField name="state" value="${addressInstance?.state}" />
@@ -61,7 +61,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="postcode"><g:message code="address.postcode.label" default="Postcode" /></label>
+                                    <label class="compulsory" for="postcode"><g:message code="address.postcode.label" default="Postcode" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: addressInstance, field: 'postcode', 'errors')}">
                                     <g:textField name="postcode" value="${fieldValue(bean: addressInstance, field: 'postcode')}" />
@@ -71,7 +71,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="country"><g:message code="address.country.label" default="Country" /></label>
+                                    <label class="compulsory" for="country"><g:message code="address.country.label" default="Country" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: addressInstance, field: 'country', 'errors')}">
                                     <g:textField name="country" value="${addressInstance?.country}" />

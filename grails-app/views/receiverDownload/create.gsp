@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="receiverRecovery"><g:message code="receiverDownload.receiverRecovery.label" default="Receiver Recovery" /></label>
+                                    <label class="compulsory" for="receiverRecovery"><g:message code="receiverDownload.receiverRecovery.label" default="Receiver Recovery" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'receiverRecovery', 'errors')}">
                                     <g:select name="receiverRecovery.id" from="${au.org.emii.aatams.ReceiverRecovery.list()}" optionKey="id" value="${receiverDownloadInstance?.receiverRecovery?.id}"  />

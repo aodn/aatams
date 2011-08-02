@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="name"><g:message code="secRole.name.label" default="Name" /></label>
+                                    <label class="compulsory" for="name"><g:message code="secRole.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: secRoleInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${secRoleInstance?.name}" />

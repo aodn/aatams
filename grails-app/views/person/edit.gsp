@@ -37,7 +37,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="name"><g:message code="person.name.label" default="Name" /></label>
+                                  <label class="compulsory" for="name"><g:message code="person.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${personInstance?.name}" />
@@ -47,7 +47,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="username"><g:message code="secUser.username.label" default="Username" /></label>
+                                  <label class="compulsory" for="username"><g:message code="secUser.username.label" default="Username" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'username', 'errors')}">
                                     <g:textField name="username" value="${personInstance?.username}" />
@@ -57,7 +57,7 @@
 <%--                        
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="password"><g:message code="secUser.password.label" default="Password" /></label>
+                                  <label class="compulsory" for="password"><g:message code="secUser.password.label" default="Password" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'password', 'errors')}">
                                     <g:textField name="password" value="${personInstance?.passwordHash}" />
@@ -67,7 +67,7 @@
 --%>
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="organisation"><g:message code="person.organisation.label" default="Organisation" /></label>
+                                    <label class="compulsory" for="organisation"><g:message code="person.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'organisation', 'errors')}">
                                     <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${personInstance?.organisation?.id}"  />
@@ -77,7 +77,7 @@
                                           
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="phoneNumber"><g:message code="person.phoneNumber.label" default="Phone Number" /></label>
+                                  <label class="compulsory" for="phoneNumber"><g:message code="person.phoneNumber.label" default="Phone Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'phoneNumber', 'errors')}">
                                     <g:textField name="phoneNumber" value="${personInstance?.phoneNumber}" />
@@ -87,7 +87,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="emailAddress"><g:message code="person.emailAddress.label" default="Email Address" /></label>
+                                  <label class="compulsory" for="emailAddress"><g:message code="person.emailAddress.label" default="Email Address" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'emailAddress', 'errors')}">
                                     <g:textField name="emailAddress" value="${personInstance?.emailAddress}" />
@@ -98,7 +98,7 @@
                             <shiro:hasRole name="SysAdmin">
                               <tr class="prop">
                                   <td valign="top" class="name">
-                                    <label for="status"><g:message code="person.status.label" default="Status" /></label>
+                                    <label class="compulsory" for="status"><g:message code="person.status.label" default="Status" /></label>
                                   </td>
                                   <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'status', 'errors')}">
                                       <g:select name="status" from="${au.org.emii.aatams.EntityStatus?.values()}" keys="${au.org.emii.aatams.EntityStatus?.values()*.name()}" value="${personInstance?.status?.name()}"  />
@@ -110,7 +110,7 @@
                         <%--
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="systemRoles"><g:message code="person.systemRoles.label" default="System Roles" /></label>
+                                  <label class="compulsory" for="systemRoles"><g:message code="person.systemRoles.label" default="System Roles" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'systemRoles', 'errors')}">
                                     <g:select name="systemRoles" from="${au.org.emii.aatams.SystemRole.list()}" multiple="yes" optionKey="id" size="5" value="${personInstance?.systemRoles*.id}" />
@@ -149,18 +149,18 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="personId"><g:message code="person.label" default="Person" /></label>
+                                    <label class="compulsory" for="personId"><g:message code="person.label" default="Person" /></label>
                                     <g:hiddenField name="personId" value="${personInstance?.id}" />
 
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'name', 'errors')}">
-                                  <label id="project">${personInstance?.name}</label>
+                                  <label class="compulsory" id="project">${personInstance?.name}</label>
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="password"><g:message code="secUser.password.label" default="Password" /></label>
+                                    <label class="compulsory" for="password"><g:message code="secUser.password.label" default="Password" /></label>
                                 </td>
                                 <td valign="top" class="value ">
                                     <input type="password" id="password" value="" />
@@ -169,7 +169,7 @@
 
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="passwordConfirm"><g:message code="secUser.password.label" default="Password (confirm)" /></label>
+                                    <label class="compulsory" for="passwordConfirm"><g:message code="secUser.password.label" default="Password (confirm)" /></label>
                                 </td>
                                 <td valign="top" class="value ">
                                     <input type="password" id="passwordConfirm" value="" />

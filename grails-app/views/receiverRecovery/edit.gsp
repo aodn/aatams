@@ -99,7 +99,7 @@
                             <tr class="prop">
                                 <td valign="top" class="name">Recovery Details</td>
                                 <td valign="top" class="name">
-                                    <label for="recoverer"><g:message code="receiverRecovery.recoverer.label" default="Recovered By" /></label>
+                                    <label class="compulsory" for="recoverer"><g:message code="receiverRecovery.recoverer.label" default="Recovered By" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoverer', 'errors')}">
                                     <g:select name="recoverer.id" from="${receiverDeploymentInstance?.station?.installation?.project?.projectRoles}" optionKey="id" value="${receiverRecoveryInstance?.recoverer?.id}"  />
@@ -110,7 +110,7 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name">
-                                    <label for="location"><g:message code="receiverRecovery.location.label" default="Location" /></label>
+                                    <label class="compulsory" for="location"><g:message code="receiverRecovery.location.label" default="Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'location', 'errors')}">
                                   <g:point name="location"
@@ -123,7 +123,7 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name">
-                                    <label for="recoveryDateTime"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></label>
+                                    <label class="compulsory" for="recoveryDateTime"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDateTime', 'errors')}">
                                     <joda:dateTimePicker name="recoveryDateTime" 
@@ -136,7 +136,7 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name">
-                                    <label for="status"><g:message code="receiverRecovery.status.label" default="Status" /></label>
+                                    <label class="compulsory" for="status"><g:message code="receiverRecovery.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverRecoveryInstance?.status?.id}"  />
@@ -158,7 +158,7 @@
                             <!-- Receiver download files -->
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="receiverDownloads"><g:message code="receiverRecovery.download.downloadFiles.label" default="Receiver Exports" /></label>
+                                  <label class="compulsory" for="receiverDownloads"><g:message code="receiverRecovery.download.downloadFiles.label" default="Receiver Exports" /></label>
                                 </td>
                                 
                                 <td valign="top" class="value" colspan="2">

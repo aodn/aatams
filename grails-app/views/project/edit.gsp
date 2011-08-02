@@ -36,7 +36,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="name"><g:message code="project.name.label" default="Name" /></label>
+                                  <label class="compulsory" for="name"><g:message code="project.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${projectInstance?.name}" />
@@ -49,7 +49,7 @@
                             -->
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="organisationProjects"><g:message code="project.organisationProjects.label" default="Organisations" /></label>
+                                  <label class="compulsory" for="organisationProjects"><g:message code="project.organisationProjects.label" default="Organisations" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'organisationProjects', 'errors')}">
                                   <table class="nested">
@@ -81,7 +81,7 @@
                             -->
                             <tr>
                                 <td valign="top" class="name">
-                                  <label for="projectRoles"><g:message code="project.projectRoles.people.label" default="People" /></label>
+                                  <label class="compulsory" for="projectRoles"><g:message code="project.projectRoles.people.label" default="People" /></label>
                                 </td>
 
                                 <td valign="top" class="value">
@@ -116,7 +116,7 @@
                             <shiro:hasRole name="SysAdmin">
                               <tr class="prop">
                                   <td valign="top" class="name">
-                                    <label for="status"><g:message code="project.status.label" default="Status" /></label>
+                                    <label class="compulsory" for="status"><g:message code="project.status.label" default="Status" /></label>
                                   </td>
                                   <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'status', 'errors')}">
                                       <g:select name="status" from="${au.org.emii.aatams.EntityStatus?.values()}" keys="${au.org.emii.aatams.EntityStatus?.values()*.name()}" value="${projectInstance?.status?.name()}"  />
@@ -152,18 +152,18 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="projectId"><g:message code="organisationProject.project.label" default="Project" /></label>
+                                    <label class="compulsory" for="projectId"><g:message code="organisationProject.project.label" default="Project" /></label>
                                     <g:hiddenField name="projectId" value="${projectInstance?.id}" />
 
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationProjectInstance, field: 'project', 'errors')}">
-                                  <label id="project">${projectInstance}</label>
+                                  <label class="compulsory" id="project">${projectInstance}</label>
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="organisationId"><g:message code="organisationProject.organisation.label" default="Organisation" /></label>
+                                    <label class="compulsory" for="organisationId"><g:message code="organisationProject.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationProjectInstance, field: 'organisation', 'errors')}">
                                   <g:select name="organisationId" from="${unrelatedOrganisations}" optionKey="id"/>
@@ -188,18 +188,18 @@
 
                         <tr class="prop">
                             <td valign="top" class="name">
-                                <label for="projectId"><g:message code="organisationProject.project.label" default="Project" /></label>
+                                <label class="compulsory" for="projectId"><g:message code="organisationProject.project.label" default="Project" /></label>
                                 <g:hiddenField name="projectId" value="${projectInstance?.id}" />
 
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: organisationProjectInstance, field: 'project', 'errors')}">
-                              <label id="project">${projectInstance}</label>
+                              <label class="compulsory" id="project">${projectInstance}</label>
                             </td>
                         </tr>
 
                         <tr class="prop">
                             <td valign="top" class="name">
-                                <label for="person"><g:message code="projectRole.person.label" default="Person" /></label>
+                                <label class="compulsory" for="person"><g:message code="projectRole.person.label" default="Person" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'person', 'errors')}">
                                 <g:select name="personId" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${projectRoleInstance?.person?.id}"  />
@@ -209,7 +209,7 @@
 
                         <tr class="prop">
                             <td valign="top" class="name">
-                                <label for="roleType"><g:message code="projectRole.roleType.label" default="Role Type" /></label>
+                                <label class="compulsory" for="roleType"><g:message code="projectRole.roleType.label" default="Role Type" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'roleType', 'errors')}">
                                 <g:select name="roleTypeId" from="${au.org.emii.aatams.ProjectRoleType.list()}" optionKey="id" value="${projectRoleInstance?.roleType?.id}"  />
@@ -219,7 +219,7 @@
 
                         <tr class="prop">
                             <td valign="top" class="name">
-                                <label for="access"><g:message code="projectRole.access.label" default="Access" /></label>
+                                <label class="compulsory" for="access"><g:message code="projectRole.access.label" default="Access" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'access', 'errors')}">
                                 <g:select name="access" from="${au.org.emii.aatams.ProjectAccess?.values()}" keys="${au.org.emii.aatams.ProjectAccess?.values()*.name()}" value="${projectRoleInstance?.access?.name()}"  />

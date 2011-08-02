@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="timestamp"><g:message code="surgery.timestamp.label" default="Timestamp" /></label>
+                                    <label class="compulsory" for="timestamp"><g:message code="surgery.timestamp.label" default="Timestamp" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'timestamp', 'errors')}">
                                     <joda:dateTimePicker name="timestamp" 
@@ -42,7 +42,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="release"><g:message code="surgery.release.label" default="Release" /></label>
+                                    <label class="compulsory" for="release"><g:message code="surgery.release.label" default="Release" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'release', 'errors')}">
                                     <g:select name="release.id" from="${au.org.emii.aatams.AnimalRelease.list()}" optionKey="id" value="${surgeryInstance?.release?.id}"  />
@@ -52,20 +52,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="tag"><g:message code="surgery.tag.label" default="Tag" /></label>
+                                    <label class="compulsory" for="tag"><g:message code="surgery.tag.label" default="Tag" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'tag', 'errors')}">
                                     <g:select name="tag.id" from="${au.org.emii.aatams.Tag.list()}" optionKey="id" value="${surgeryInstance?.tag?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="sutures"><g:message code="surgery.sutures.label" default="Sutures" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'sutures', 'errors')}">
-                                    <g:checkBox name="sutures" value="${surgeryInstance?.sutures}" />
 
                                 </td>
                             </tr>
@@ -82,7 +72,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="surgeon"><g:message code="surgery.surgeon.label" default="Surgeon" /></label>
+                                    <label class="compulsory" for="surgeon"><g:message code="surgery.surgeon.label" default="Surgeon" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'surgeon', 'errors')}">
                                     <g:select name="surgeon.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${surgeryInstance?.surgeon?.id}"  />
@@ -102,7 +92,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="type"><g:message code="surgery.type.label" default="Type" /></label>
+                                    <label class="compulsory" for="type"><g:message code="surgery.type.label" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'type', 'errors')}">
                                     <g:select name="type.id" from="${au.org.emii.aatams.SurgeryType.list()}" optionKey="id" value="${surgeryInstance?.type?.id}"  />

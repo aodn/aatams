@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="station"><g:message code="receiverDeployment.station.label" default="Station" /></label>
+                                    <label class="compulsory" for="station"><g:message code="receiverDeployment.station.label" default="Station" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'station', 'errors')}">
                                     <g:select name="station.id" from="${candidateStations}" optionKey="id" value="${receiverDeploymentInstance?.station?.id}"  />
@@ -40,7 +40,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="receiver"><g:message code="receiverDeployment.receiver.label" default="Receiver" /></label>
+                                    <label class="compulsory" for="receiver"><g:message code="receiverDeployment.receiver.label" default="Receiver" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'receiver', 'errors')}">
                                     <g:select name="receiver.id" from="${candidateReceivers}" optionKey="id" value="${receiverDeploymentInstance?.receiver?.id}"  />
@@ -50,7 +50,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="deploymentDateTime"><g:message code="receiverDeployment.deploymentDateTime.label" default="Deployment Date" /></label>
+                                  <label class="compulsory" for="deploymentDateTime"><g:message code="receiverDeployment.deploymentDateTime.label" default="Deployment Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'deploymentDateTime', 'errors')}">
                                     <joda:dateTimePicker name="deploymentDateTime" 
@@ -94,7 +94,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="mooringType"><g:message code="receiverDeployment.mooringType.label" default="Mooring Type" /></label>
+                                    <label class="compulsory" for="mooringType"><g:message code="receiverDeployment.mooringType.label" default="Mooring Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'mooringType', 'errors')}">
                                     <g:select name="mooringType.id" from="${au.org.emii.aatams.MooringType.list()}" optionKey="id" value="${receiverDeploymentInstance?.mooringType?.id}"  />

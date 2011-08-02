@@ -33,7 +33,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="sex"><g:message code="sex.sex.label" default="Sex" /></label>
+                                  <label class="compulsory" for="sex"><g:message code="sex.sex.label" default="Sex" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sexInstance, field: 'sex', 'errors')}">
                                     <g:textField name="sex" value="${sexInstance?.sex}" />

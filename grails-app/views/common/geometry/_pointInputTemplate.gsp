@@ -24,7 +24,7 @@
 
                       <tr class="prop">
                           <td valign="top" class="name">
-                              <label for="value"><g:message code="point.longitude.label" default="Longitude" /></label>
+                              <label class="compulsory" for="value"><g:message code="point.longitude.label" default="Longitude" /></label>
                           </td>
                           <td valign="top" class="value">
                               <g:textField name="editLon" value="${lon}" />
@@ -34,7 +34,7 @@
 
                       <tr class="prop">
                           <td valign="top" class="name">
-                              <label for="value"><g:message code="point.latitude.label" default="Latitude" /></label>
+                              <label class="compulsory" for="value"><g:message code="point.latitude.label" default="Latitude" /></label>
                           </td>
                           <td valign="top" class="value">
                               <g:textField name="editLat" value="${lat}" />
@@ -44,7 +44,7 @@
 
                       <tr class="prop">
                           <td valign="top" class="name">
-                              <label for="value"><g:message code="point.srid.label" default="SRID" /></label>
+                              <label class="compulsory" for="value"><g:message code="point.srid.label" default="SRID" /></label>
                           </td>
                           <td valign="top" class="value">
                               <g:textField name="editSrid" value="${srid}" />

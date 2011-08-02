@@ -33,7 +33,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="receiverRecovery"><g:message code="receiverDownload.receiverRecovery.label" default="Receiver Recovery" /></label>
+                                  <label class="compulsory" for="receiverRecovery"><g:message code="receiverDownload.receiverRecovery.label" default="Receiver Recovery" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'receiverRecovery', 'errors')}">
                                     <g:select name="receiverRecovery.id" from="${au.org.emii.aatams.ReceiverRecovery.list()}" optionKey="id" value="${receiverDownloadInstance?.receiverRecovery?.id}"  />
@@ -118,16 +118,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'batteryDays', 'errors')}">
                                     <g:textField name="batteryDays" value="${fieldValue(bean: receiverDownloadInstance, field: 'batteryDays')}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="downloadFiles"><g:message code="receiverDownload.downloadFiles.label" default="Download Files" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadInstance, field: 'downloadFiles', 'errors')}">
-                                    <g:select name="downloadFiles" from="${au.org.emii.aatams.ReceiverDownloadFile.list()}" multiple="yes" optionKey="id" size="5" value="${receiverDownloadInstance?.downloadFiles*.id}" />
 
                                 </td>
                             </tr>

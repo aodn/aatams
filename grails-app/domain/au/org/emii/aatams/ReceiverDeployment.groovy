@@ -101,6 +101,7 @@ class ReceiverDeployment
         comments(nullable:true)
         recovery(nullable:true)
         embargoDate(nullable:true)
+        batteryLifeDays(nullable:true)
     }
     
     String toString()

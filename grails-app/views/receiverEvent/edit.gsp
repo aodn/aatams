@@ -35,7 +35,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="timestamp"><g:message code="receiverEvent.timestamp.label" default="Timestamp" /></label>
+                                  <label class="compulsory" for="timestamp"><g:message code="receiverEvent.timestamp.label" default="Timestamp" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverEventInstance, field: 'timestamp', 'errors')}">
                                     <g:datePicker name="timestamp" precision="day" value="${receiverEventInstance?.timestamp}"  />
@@ -45,7 +45,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="description"><g:message code="receiverEvent.description.label" default="Description" /></label>
+                                  <label class="compulsory" for="description"><g:message code="receiverEvent.description.label" default="Description" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverEventInstance, field: 'description', 'errors')}">
                                     <g:textField name="description" value="${receiverEventInstance?.description}" />
@@ -75,7 +75,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="receiverDeployment"><g:message code="receiverEvent.receiverDeployment.label" default="Receiver Deployment" /></label>
+                                  <label class="compulsory" for="receiverDeployment"><g:message code="receiverEvent.receiverDeployment.label" default="Receiver Deployment" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverEventInstance, field: 'receiverDeployment', 'errors')}">
                                     <g:select name="receiverDeployment.id" from="${au.org.emii.aatams.ReceiverDeployment.list()}" optionKey="id" value="${receiverEventInstance?.receiverDeployment?.id}"  />

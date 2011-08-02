@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="name"><g:message code="project.name.label" default="Name" /></label>
+                                    <label class="compulsory" for="name"><g:message code="project.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${createProjectCmd?.name}" />
@@ -40,7 +40,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="organisation"><g:message code="project.organisation.label" default="Organisation" /></label>
+                                    <label class="compulsory" for="organisation"><g:message code="project.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createProjectCmd, field: 'organisation', 'errors')}">
                                     <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${createProjectCmd?.organisation?.id}"  />
@@ -50,7 +50,7 @@
                             
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="person"><g:message code="project.organisation.label" default="Project Investigator" /></label>
+                                    <label class="compulsory" for="person"><g:message code="project.organisation.label" default="Project Investigator" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'person', 'errors')}">
                                     <g:select name="person.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${createProjectCmd?.person?.id}"  />

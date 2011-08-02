@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="access"><g:message code="projectRole.access.label" default="Access" /></label>
+                                    <label class="compulsory" for="access"><g:message code="projectRole.access.label" default="Access" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'access', 'errors')}">
                                     <g:select name="access" from="${au.org.emii.aatams.ProjectAccess?.values()}" keys="${au.org.emii.aatams.ProjectAccess?.values()*.name()}" value="${projectRoleInstance?.access?.name()}"  />
@@ -40,7 +40,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="person"><g:message code="projectRole.person.label" default="Person" /></label>
+                                    <label class="compulsory" for="person"><g:message code="projectRole.person.label" default="Person" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'person', 'errors')}">
                                     <g:select name="person.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${projectRoleInstance?.person?.id}"  />
@@ -50,7 +50,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="project"><g:message code="projectRole.project.label" default="Project" /></label>
+                                    <label class="compulsory" for="project"><g:message code="projectRole.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${projectRoleInstance?.project?.id}"  />
@@ -60,7 +60,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="roleType"><g:message code="projectRole.roleType.label" default="Role Type" /></label>
+                                    <label class="compulsory" for="roleType"><g:message code="projectRole.roleType.label" default="Role Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'roleType', 'errors')}">
                                     <g:select name="roleType.id" from="${au.org.emii.aatams.ProjectRoleType.list()}" optionKey="id" value="${projectRoleInstance?.roleType?.id}"  />

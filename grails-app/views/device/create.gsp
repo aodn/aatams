@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="codeName"><g:message code="device.codeName.label" default="Code Name" /></label>
+                                    <label class="compulsory" for="codeName"><g:message code="device.codeName.label" default="Code Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'codeName', 'errors')}">
                                     <g:textField name="codeName" value="${deviceInstance?.codeName}" />
@@ -40,7 +40,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="serialNumber"><g:message code="device.serialNumber.label" default="Serial Number" /></label>
+                                    <label class="compulsory" for="serialNumber"><g:message code="device.serialNumber.label" default="Serial Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'serialNumber', 'errors')}">
                                     <g:textField name="serialNumber" value="${deviceInstance?.serialNumber}" />
@@ -50,7 +50,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="model"><g:message code="device.model.label" default="Model" /></label>
+                                    <label class="compulsory" for="model"><g:message code="device.model.label" default="Model" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'model', 'errors')}">
                                     <g:select name="model.id" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" value="${deviceInstance?.model?.id}"  />
@@ -60,7 +60,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="project"><g:message code="device.project.label" default="Project" /></label>
+                                    <label class="compulsory" for="project"><g:message code="device.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" from="${au.org.emii.aatams.Project.list()}" optionKey="id" value="${deviceInstance?.project?.id}"  />
@@ -70,7 +70,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="status"><g:message code="device.status.label" default="Status" /></label>
+                                    <label class="compulsory" for="status"><g:message code="device.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${deviceInstance?.status?.id}"  />

@@ -33,14 +33,14 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="codeName"><g:message code="tag.codeName.label" default="ID" /></label>
+                                  <label class="compulsory" for="codeName"><g:message code="tag.codeName.label" default="ID" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeName', 'errors')}">${tagInstance?.codeName}</td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="project"><g:message code="tag.project.label" default="Project" /></label>
+                                  <label class="compulsory" for="project"><g:message code="tag.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${tagInstance?.project?.id}"  />
@@ -50,7 +50,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="model"><g:message code="tag.model.label" default="Model" /></label>
+                                  <label class="compulsory" for="model"><g:message code="tag.model.label" default="Model" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'model', 'errors')}">
                                     <g:select name="model.id" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" value="${tagInstance?.model?.id}"  />
@@ -60,7 +60,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="serialNumber"><g:message code="tag.serialNumber.label" default="Serial Number" /></label>
+                                  <label class="compulsory" for="serialNumber"><g:message code="tag.serialNumber.label" default="Serial Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'serialNumber', 'errors')}">
                                     <g:textField name="serialNumber" value="${tagInstance?.serialNumber}" />
@@ -70,7 +70,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="codeMap"><g:message code="tag.codeMap.label" default="Code Map" /></label>
+                                  <label class="compulsory" for="codeMap"><g:message code="tag.codeMap.label" default="Code Map" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeMap', 'errors')}">
                                     <g:textField name="codeMap" value="${tagInstance?.codeMap}" />
@@ -80,7 +80,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="pingCode"><g:message code="tag.pingIDCode.label" default="Ping ID Code" /></label>
+                                  <label class="compulsory" for="pingCode"><g:message code="tag.pingIDCode.label" default="Ping ID Code" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'pingCode', 'errors')}">
                                     <g:textField name="pingCode" value="${tagInstance?.pingCode}" />
@@ -89,7 +89,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="status"><g:message code="tag.status.label" default="Status" /></label>
+                                  <label class="compulsory" for="status"><g:message code="tag.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${tagInstance?.status?.id}"  />
@@ -167,7 +167,7 @@
 
                         <tr class="prop">
                             <td valign="top" class="name">
-                                <label for="transmitterType"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></label>
+                                <label class="compulsory" for="transmitterType"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
                                 <g:select name="transmitterTypeId" from="${au.org.emii.aatams.TransmitterType.list()}" optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
@@ -177,7 +177,7 @@
 
                         <tr class="prop">
                             <td valign="top" class="name">
-                                <label for="sensorPingCode"><g:message code="sensor.pingCode.label" default="Ping ID Code" /></label>
+                                <label class="compulsory" for="sensorPingCode"><g:message code="sensor.pingCode.label" default="Ping ID Code" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'pingCode', 'errors')}">
                                 <g:textField name="sensorPingCode" value="${fieldValue(bean: sensorInstance, field: 'pingCode')}" />
@@ -217,7 +217,7 @@
 
                         <tr class="prop">
                             <td valign="top" class="name">
-                                <label for="status"><g:message code="sensor.status.label" default="Status" /></label>
+                                <label class="compulsory" for="status"><g:message code="sensor.status.label" default="Status" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'status', 'errors')}">
                                 <g:select name="statusId" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${sensorInstance?.status?.id}"  />

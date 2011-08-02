@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="name"><g:message code="species.name.label" default="Name" /></label>
+                                    <label class="compulsory" for="name"><g:message code="species.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: speciesInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${speciesInstance?.name}" />

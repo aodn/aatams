@@ -61,7 +61,50 @@ class BootStrap
         {
             return "(" + it.coordinate.x + ", " + it.coordinate.y + ")"
         }
+           
+        JSON.registerObjectMarshaller(AnimalMeasurement.class)
+        {
+            def returnArray = [:]
+            returnArray['type'] = it.type
+            returnArray['value'] = it.value
+            returnArray['unit'] = it.unit
+            returnArray['estimate'] = it.estimate
+            returnArray['comments'] = it.comments
             
+            return returnArray
+        }
+        
+        JSON.registerObjectMarshaller(ProjectRole.class)
+        {
+            def returnArray = [:]
+            returnArray['person'] = it.person
+            returnArray['roleType'] = it.roleType
+            returnArray['access'] = it.access
+            
+            return returnArray
+        }
+        
+        JSON.registerObjectMarshaller(OrganisationProject.class)
+        {
+            def returnArray = [:]
+            returnArray['organisation'] = it.organisation
+            
+            return returnArray
+        }
+        
+        JSON.registerObjectMarshaller(Sensor.class)
+        {
+            def returnArray = [:]
+            returnArray['transmitterType'] = it.transmitterType
+            returnArray['pingCode'] = it.pingCode
+            returnArray['slope'] = it.slope
+            returnArray['intercept'] = it.intercept
+            returnArray['unit'] = it.unit
+            returnArray['status'] = it.status
+            
+            return returnArray
+        }
+        
         environments
         {
             test

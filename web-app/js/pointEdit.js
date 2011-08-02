@@ -38,7 +38,7 @@ $(function()
                 var pointInput = parentDiv.find('#' + parentName);
                 var pointCodedString = genCodedPointString(lon, lat, srid);
                 pointInput.val(pointCodedString)
-                console.log(pointInput);
+//                console.log(pointInput);
                 
                 // Update textfield.
                 var pointAsString = genPointString(lon, lat, srid);
@@ -58,7 +58,7 @@ $(function()
         // Guard against running the script multiple times.
         if (loaded)
         {
-            console.warn("pointEdit script is already loaded")
+//            console.warn("pointEdit script is already loaded")
             return;
         }
         
@@ -73,11 +73,11 @@ $(function()
             // Save the point as a "coded" string.  This is then parsed on 
             // by the PointEditor.
             var parentName = $(this).attr("id");
-            console.log("parentName: " + parentName);
+//            console.log("parentName: " + parentName);
             var pointInput = $(this).find('#' + parentName);
             var pointCodedString = genCodedPointString(lon, lat, srid);
             pointInput.val(pointCodedString);
-            console.log(pointInput);
+//            console.log(pointInput);
             
             var pointAsString = genPointString(lon, lat, srid);
             var pointInputTextField = $(this).find('#pointInputTextField')

@@ -11,10 +11,12 @@ class SecSecurityFilters
     def permissionUtilsService
     
     def accessibleControllersRegexp = 
+        "animalMeasurement|" + \
         "organisation|organisationProject|project|projectRole|person|" + \
         "installation|installationStation|receiver|species|tag|sensor|" + \
         "animalRelease|detection|receiverDeployment|receiverRecovery|" + \
-        "receiverEvent|navigationMenu|receiverDownloadFile"
+        "receiverEvent|navigationMenu|receiverDownloadFile|" + \
+        "surgery"
     
     def filters = 
     {
@@ -82,6 +84,7 @@ class SecSecurityFilters
                 }
 
                 redirect(controller:'auth', action:'unauthorized')
+                return false
             }
         }
 
@@ -111,6 +114,7 @@ class SecSecurityFilters
                 }
 
                 redirect(controller:'auth', action:'unauthorized')
+                return false
             }
         }
 
@@ -127,6 +131,7 @@ class SecSecurityFilters
                 }
                 
                 redirect(controller:'auth', action:'unauthorized')
+                return false
             }
         }
         
@@ -191,6 +196,7 @@ class SecSecurityFilters
 
                 // Non of the update conditions were met if we got this far.
                 redirect(controller:'auth', action:'unauthorized')
+                return false
             }
         }
         
@@ -199,17 +205,15 @@ class SecSecurityFilters
         // principal has write access to the associated project.
         //
         def projectAccessWriteControllers = 
-            "installation|installationStation|tag|animalRelease|detection|" + \
+            "animalMeasurement|installation|installationStation|tag|animalRelease|detection|" + \
             "projectRole|receiverDeployment|receiverDownloadFile|receiverRecovery|receiverEvent|" + \
-            "organisationProject|sensor"
+            "organisationProject|sensor|surgery"
         
         projectAccessWrite(controller:projectAccessWriteControllers, 
                            action:'create|save|edit|update')
         {
             before =
             {
-                println params
-                
                 def projectId = params.project?.id
                 
                 // Some views store project's ID in "projectId" variable.
@@ -217,7 +221,7 @@ class SecSecurityFilters
                 {
                     projectId = params.projectId
                 }
-                
+
                 // Non-authenticated users can't update.
                 if (   SecurityUtils.subject.isAuthenticated()
                     && SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(projectId)))
@@ -226,6 +230,7 @@ class SecSecurityFilters
                 }
                 
                 redirect(controller:'auth', action:'unauthorized')
+                return false
             }
         }
         
@@ -245,6 +250,7 @@ class SecSecurityFilters
                 }
                 
                 redirect(controller:'auth', action:'unauthorized')
+                return false
             }
         }
         
@@ -265,6 +271,7 @@ class SecSecurityFilters
                 }
                 
                 redirect(controller:'auth', action:'unauthorized')
+                return false
             }
         }
     }

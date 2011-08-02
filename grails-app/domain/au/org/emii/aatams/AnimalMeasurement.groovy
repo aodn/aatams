@@ -23,4 +23,9 @@ class AnimalMeasurement
         estimate()
         comments(nullable:true)
     }
+    
+    String toString()
+    {
+        return String.valueOf(type) + ":" + value + " (" + unit + ")"
+    }
 }

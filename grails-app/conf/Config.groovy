@@ -57,7 +57,7 @@ grails.exceptionresolver.params.exclude = ['password']
 //
 
 // Require deep conversion to JSON.
-grails.converters.json.default.deep = true
+//grails.converters.json.default.deep = true
 
 // This is required to avoid org.codehaus.groovy.grails.web.json.JSONException: Misplaced key.
 grails.converters.json.circular.reference.behaviour = "INSERT_NULL"

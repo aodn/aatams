@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="displayName"><g:message code="projectRoleType.displayName.label" default="Display Name" /></label>
+                                    <label class="compulsory" for="displayName"><g:message code="projectRoleType.displayName.label" default="Display Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectRoleTypeInstance, field: 'displayName', 'errors')}">
                                     <g:textField name="displayName" value="${projectRoleTypeInstance?.displayName}" />

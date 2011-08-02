@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="username"><g:message code="secUser.username.label" default="Username" /></label>
+                                    <label class="compulsory" for="username"><g:message code="secUser.username.label" default="Username" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: secUserInstance, field: 'username', 'errors')}">
                                     <g:textField name="username" value="${secUserInstance?.username}" />
@@ -40,7 +40,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="passwordHash"><g:message code="secUser.passwordHash.label" default="Password Hash" /></label>
+                                    <label class="compulsory" for="passwordHash"><g:message code="secUser.passwordHash.label" default="Password Hash" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: secUserInstance, field: 'passwordHash', 'errors')}">
                                     <g:textField name="passwordHash" value="${secUserInstance?.passwordHash}" />

@@ -555,3 +555,8 @@ div.paging a {
     margin-left: 4px;
 }
 
+label.compulsory:after
+{
+    content: "*"
+}
+

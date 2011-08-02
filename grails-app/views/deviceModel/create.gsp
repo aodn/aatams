@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="modelName"><g:message code="deviceModel.modelName.label" default="Model Name" /></label>
+                                    <label class="compulsory" for="modelName"><g:message code="deviceModel.modelName.label" default="Model Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceModelInstance, field: 'modelName', 'errors')}">
                                     <g:textField name="modelName" value="${deviceModelInstance?.modelName}" />
@@ -40,7 +40,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="manufacturer"><g:message code="deviceModel.manufacturer.label" default="Manufacturer" /></label>
+                                    <label class="compulsory" for="manufacturer"><g:message code="deviceModel.manufacturer.label" default="Manufacturer" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceModelInstance, field: 'manufacturer', 'errors')}">
                                     <g:select name="manufacturer.id" from="${au.org.emii.aatams.DeviceManufacturer.list()}" optionKey="id" value="${deviceModelInstance?.manufacturer?.id}"  />

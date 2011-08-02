@@ -32,7 +32,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="name"><g:message code="organisation.name.label" default="Name" /></label>
+                                    <label class="compulsory" for="name"><g:message code="organisation.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'name', 'errors')}">
                                     <g:textField name="organisation.name" value="${organisationInstance?.name}" />
@@ -42,7 +42,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="name"><g:message code="organisation.department.label" default="Department" /></label>
+                                    <label class="compulsory" for="name"><g:message code="organisation.department.label" default="Department" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'department', 'errors')}">
                                     <g:textField name="organisation.department" value="${organisationInstance?.department}" />
@@ -52,7 +52,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="phoneNumber"><g:message code="organisation.phoneNumber.label" default="Phone Number" /></label>
+                                    <label class="compulsory" for="phoneNumber"><g:message code="organisation.phoneNumber.label" default="Phone Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'phoneNumber', 'errors')}">
                                     <g:textField name="organisation.phoneNumber" value="${organisationInstance?.phoneNumber}" />
@@ -62,7 +62,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="faxNumber"><g:message code="organisation.faxNumber.label" default="Fax Number" /></label>
+                                    <label class="compulsory" for="faxNumber"><g:message code="organisation.faxNumber.label" default="Fax Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'faxNumber', 'errors')}">
                                     <g:textField name="organisation.faxNumber" value="${organisationInstance?.faxNumber}" />
@@ -74,7 +74,7 @@
                             <!-- Street address. -->
                             <tr class="prop">
                               <td valign="top" class="name">
-                                  <label for="streetAddress"><g:message code="organisation.streetAddress.label" default="Street Address" /></label>
+                                  <label class="compulsory" for="streetAddress"><g:message code="organisation.streetAddress.label" default="Street Address" /></label>
                               </td>
                               <td>
                                 <g:addressDetail addressName='streetAddress'/>

@@ -34,7 +34,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="project"><g:message code="animalRelease.project.label" default="Project" /></label>
+                                  <label class="compulsory" for="project"><g:message code="animalRelease.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${animalReleaseInstance?.project?.id}"  />
@@ -44,7 +44,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="animal"><g:message code="animalRelease.animal.species.label" default="Species" /></label>
+                                  <label class="compulsory" for="animal"><g:message code="animalRelease.animal.species.label" default="Species" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'species', 'errors')}">
 <!--                                    <g:select name="species.id" from="${au.org.emii.aatams.Species.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.species?.id}"  />-->
@@ -54,7 +54,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="captureLocality"><g:message code="animalRelease.captureLocality.label" default="Capture Locality" /></label>
+                                  <label class="compulsory" for="captureLocality"><g:message code="animalRelease.captureLocality.label" default="Capture Locality" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureLocality', 'errors')}">
                                     <g:textField name="captureLocality" value="${animalReleaseInstance?.captureLocality}" />
@@ -64,7 +64,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="captureLocation"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></label>
+                                  <label class="compulsory" for="captureLocation"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureLocation', 'errors')}">
                                   <g:point name="captureLocation" 
@@ -75,7 +75,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="captureDateTime"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></label>
+                                  <label class="compulsory" for="captureDateTime"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureDateTime', 'errors')}">
                                     <joda:dateTimePicker name="captureDateTime" 
@@ -86,7 +86,7 @@
                        
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="captureMethod"><g:message code="animalRelease.captureMethod.label" default="Capture Method" /></label>
+                                    <label class="compulsory" for="captureMethod"><g:message code="animalRelease.captureMethod.label" default="Capture Method" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureMethod', 'errors')}">
                                     <g:select name="captureMethod.id" from="${au.org.emii.aatams.CaptureMethod.list()}" optionKey="id" value="${animalReleaseInstance?.captureMethod?.id}"  />
@@ -95,7 +95,7 @@
                         
                             <tr>
                                 <td valign="top" class="name">
-                                  <label for="tagging"><g:message code="animalRelease.surgeries.label" default="Tagging" /></label>
+                                  <label class="compulsory" for="tagging"><g:message code="animalRelease.surgeries.label" default="Tagging" /></label>
                                 </td>
 
                                 <td valign="top" class="value">
@@ -143,7 +143,7 @@
                             
                             <tr>
                                 <td valign="top" class="name">
-                                  <label for="measurements"><g:message code="animalRelease.measurements.label" default="Measurements" /></label>
+                                  <label class="compulsory" for="measurements"><g:message code="animalRelease.measurements.label" default="Measurements" /></label>
                                 </td>
 
                                 <td valign="top" class="value">
@@ -189,7 +189,7 @@
                             
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="animal"><g:message code="animalRelease.animal.sex.label" default="Sex" /></label>
+                                  <label class="compulsory" for="animal"><g:message code="animalRelease.animal.sex.label" default="Sex" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'sex', 'errors')}">
                                     <g:select name="sex.id" from="${au.org.emii.aatams.Sex.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.sex?.id}"  />
@@ -199,7 +199,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="releaseLocality"><g:message code="animalRelease.releaseLocality.label" default="Release Locality" /></label>
+                                  <label class="compulsory" for="releaseLocality"><g:message code="animalRelease.releaseLocality.label" default="Release Locality" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseLocality', 'errors')}">
                                     <g:textField name="releaseLocality" value="${animalReleaseInstance?.releaseLocality}" />
@@ -209,7 +209,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="releaseLocation"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></label>
+                                  <label class="compulsory" for="releaseLocation"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></label>
                                 </td>
 
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseLocation', 'errors')}">
@@ -222,7 +222,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="releaseDateTime"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></label>
+                                  <label class="compulsory" for="releaseDateTime"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseDateTime', 'errors')}">
                                     <joda:dateTimePicker name="releaseDateTime" 
@@ -277,18 +277,18 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="animalReleaseId"><g:message code="animalRelease.label" default="Animal Release" /></label>
+                                    <label class="compulsory" for="animalReleaseId"><g:message code="animalRelease.label" default="Animal Release" /></label>
                                     <g:hiddenField name="animalReleaseId" value="${animalReleaseInstance?.id}" />
 
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'id', 'errors')}">
-                                  <label id="project">${animalReleaseInstance}</label>
+                                  <label class="compulsory" id="project">${animalReleaseInstance}</label>
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="surgeryTimestamp"><g:message code="surgery.timestamp.label" default="Timestamp" /></label>
+                                    <label class="compulsory" for="surgeryTimestamp"><g:message code="surgery.timestamp.label" default="Timestamp" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'timestamp', 'errors')}">
                                     <joda:dateTimePicker name="surgeryTimestamp" 
@@ -300,7 +300,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="tag"><g:message code="surgery.tag.label" default="Tag" /></label>
+                                    <label class="compulsory" for="tag"><g:message code="surgery.tag.label" default="Tag" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'tag', 'errors')}">
                                     <g:select name="tagId" from="${candidateTags}" optionKey="id" value="${surgeryInstance?.tag?.id}"  />
@@ -310,7 +310,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="type"><g:message code="surgery.type.label" default="Placement" /></label>
+                                    <label class="compulsory" for="type"><g:message code="surgery.type.label" default="Placement" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'type', 'errors')}">
                                     <g:select name="surgeryTypeId" from="${au.org.emii.aatams.SurgeryType.list()}" optionKey="id" value="${surgeryInstance?.type?.id}"  />
@@ -320,7 +320,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="treatmentType"><g:message code="surgery.treatmentType.label" default="Treatment" /></label>
+                                    <label class="compulsory" for="treatmentType"><g:message code="surgery.treatmentType.label" default="Treatment" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'treatmentType', 'errors')}">
                                     <g:select name="treatmentTypeId" from="${au.org.emii.aatams.SurgeryTreatmentType.list()}" optionKey="id" value="${surgeryInstance?.treatmentType?.id}"  />
@@ -355,18 +355,18 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="animalReleaseId"><g:message code="animalRelease.label" default="Animal Release" /></label>
+                                    <label class="compulsory" for="animalReleaseId"><g:message code="animalRelease.label" default="Animal Release" /></label>
                                     <g:hiddenField name="animalReleaseId" value="${animalReleaseInstance?.id}" />
 
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'id', 'errors')}">
-                                  <label id="project">${animalReleaseInstance}</label>
+                                  <label class="compulsory" id="project">${animalReleaseInstance}</label>
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="type"><g:message code="animalMeasurement.type.label" default="Type" /></label>
+                                    <label class="compulsory" for="type"><g:message code="animalMeasurement.type.label" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'type', 'errors')}">
                                     <g:select name="measurementTypeId" from="${au.org.emii.aatams.AnimalMeasurementType.list()}" optionKey="id" value="${animalMeasurementInstance?.type?.id}"  />
@@ -376,7 +376,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="value"><g:message code="animalMeasurement.value.label" default="Value" /></label>
+                                    <label class="compulsory" for="value"><g:message code="animalMeasurement.value.label" default="Value" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'value', 'errors')}">
                                     <g:textField name="value" value="${fieldValue(bean: animalMeasurementInstance, field: 'value')}" />
@@ -386,7 +386,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="unit"><g:message code="animalMeasurement.unit.label" default="Unit" /></label>
+                                    <label class="compulsory" for="unit"><g:message code="animalMeasurement.unit.label" default="Unit" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'unit', 'errors')}">
                                     <g:select name="unitId" from="${au.org.emii.aatams.MeasurementUnit.list()}" optionKey="id" value="${animalMeasurementInstance?.unit?.id}"  />
@@ -396,7 +396,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="estimate"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></label>
+                                    <label class="compulsory" for="estimate"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'estimate', 'errors')}">
                                     <g:checkBox name="estimate" value="${animalMeasurementInstance?.estimate}" />

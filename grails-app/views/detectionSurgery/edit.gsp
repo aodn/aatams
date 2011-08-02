@@ -33,7 +33,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="detection"><g:message code="detectionSurgery.detection.label" default="Detection" /></label>
+                                  <label class="compulsory" for="detection"><g:message code="detectionSurgery.detection.label" default="Detection" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionSurgeryInstance, field: 'detection', 'errors')}">
                                     <g:select optionKey="id" from="${au.org.emii.aatams.Detection.list()}" name="detection.id" value="${detectionSurgeryInstance?.detection?.id}" ></g:select>
@@ -42,7 +42,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="surgery"><g:message code="detectionSurgery.surgery.label" default="Surgery" /></label>
+                                  <label class="compulsory" for="surgery"><g:message code="detectionSurgery.surgery.label" default="Surgery" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionSurgeryInstance, field: 'surgery', 'errors')}">
                                     <g:select optionKey="id" from="${au.org.emii.aatams.Surgery.list()}" name="surgery.id" value="${detectionSurgeryInstance?.surgery?.id}" ></g:select>

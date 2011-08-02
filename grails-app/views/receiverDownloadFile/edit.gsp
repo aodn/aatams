@@ -33,7 +33,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="type"><g:message code="receiverDownloadFile.type.label" default="Type" /></label>
+                                  <label class="compulsory" for="type"><g:message code="receiverDownloadFile.type.label" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'type', 'errors')}">
                                     <g:select name="type" from="${au.org.emii.aatams.ReceiverDownloadFileType?.values()}" keys="${au.org.emii.aatams.ReceiverDownloadFileType?.values()*.name()}" value="${receiverDownloadFileInstance?.type?.name()}"  />
@@ -43,7 +43,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="path"><g:message code="receiverDownloadFile.path.label" default="Path" /></label>
+                                  <label class="compulsory" for="path"><g:message code="receiverDownloadFile.path.label" default="Path" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'path', 'errors')}">
                                     <g:textField name="path" value="${receiverDownloadFileInstance?.path}" />

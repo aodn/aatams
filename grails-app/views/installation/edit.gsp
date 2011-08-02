@@ -33,7 +33,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="name"><g:message code="installation.name.label" default="Name" /></label>
+                                  <label class="compulsory" for="name"><g:message code="installation.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${installationInstance?.name}" />
@@ -43,7 +43,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="configuration"><g:message code="installation.configuration.label" default="Configuration" /></label>
+                                  <label class="compulsory" for="configuration"><g:message code="installation.configuration.label" default="Configuration" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'configuration', 'errors')}">
                                     <g:select name="configuration.id" from="${au.org.emii.aatams.InstallationConfiguration.list()}" optionKey="id" value="${installationInstance?.configuration?.id}"  />
@@ -53,7 +53,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="project"><g:message code="installation.project.label" default="Project" /></label>
+                                  <label class="compulsory" for="project"><g:message code="installation.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${installationInstance?.project?.id}"  />

@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="transmitterTypeName"><g:message code="transmitterType.transmitterTypeName.label" default="Transmitter Type Name" /></label>
+                                    <label class="compulsory" for="transmitterTypeName"><g:message code="transmitterType.transmitterTypeName.label" default="Transmitter Type Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: transmitterTypeInstance, field: 'transmitterTypeName', 'errors')}">
                                     <g:textField name="transmitterTypeName" value="${transmitterTypeInstance?.transmitterTypeName}" />

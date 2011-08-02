@@ -33,7 +33,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="type"><g:message code="animalMeasurement.type.label" default="Type" /></label>
+                                  <label class="compulsory" for="type"><g:message code="animalMeasurement.type.label" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'type', 'errors')}">
                                     <g:select name="type.id" from="${au.org.emii.aatams.AnimalMeasurementType.list()}" optionKey="id" value="${animalMeasurementInstance?.type?.id}"  />
@@ -43,7 +43,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="value"><g:message code="animalMeasurement.value.label" default="Value" /></label>
+                                  <label class="compulsory" for="value"><g:message code="animalMeasurement.value.label" default="Value" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'value', 'errors')}">
                                     <g:textField name="value" value="${fieldValue(bean: animalMeasurementInstance, field: 'value')}" />
@@ -53,7 +53,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="unit"><g:message code="animalMeasurement.unit.label" default="Unit" /></label>
+                                  <label class="compulsory" for="unit"><g:message code="animalMeasurement.unit.label" default="Unit" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'unit', 'errors')}">
                                     <g:select name="unit.id" from="${au.org.emii.aatams.MeasurementUnit.list()}" optionKey="id" value="${animalMeasurementInstance?.unit?.id}"  />
@@ -63,7 +63,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="estimate"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></label>
+                                  <label class="compulsory" for="estimate"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'estimate', 'errors')}">
                                     <g:checkBox name="estimate" value="${animalMeasurementInstance?.estimate}" />

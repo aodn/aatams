@@ -35,14 +35,14 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="codeName"><g:message code="receiver.codeName.label" default="ID" /></label>
+                                  <label class="compulsory" for="codeName"><g:message code="receiver.codeName.label" default="ID" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'codeName', 'errors')}">${receiverInstance?.codeName}</td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="project"><g:message code="receiver.organisation.label" default="Project" /></label>
+                                  <label class="compulsory" for="project"><g:message code="receiver.organisation.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'organisation', 'errors')}">
                                     <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${receiverInstance?.organisation?.id}"  />
@@ -52,7 +52,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="model"><g:message code="receiver.model.label" default="Model" /></label>
+                                  <label class="compulsory" for="model"><g:message code="receiver.model.label" default="Model" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'model', 'errors')}">
                                     <g:select name="model.id" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" value="${receiverInstance?.model?.id}"  />
@@ -62,7 +62,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="serialNumber"><g:message code="receiver.serialNumber.label" default="Serial Number" /></label>
+                                  <label class="compulsory" for="serialNumber"><g:message code="receiver.serialNumber.label" default="Serial Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'serialNumber', 'errors')}">
                                     <g:textField name="serialNumber" value="${receiverInstance?.serialNumber}" />
@@ -72,7 +72,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="status"><g:message code="receiver.status.label" default="Status" /></label>
+                                  <label class="compulsory" for="status"><g:message code="receiver.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverInstance?.status?.id}"  />
@@ -82,7 +82,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="comment"><g:message code="receiver.comment.label" default="Comment" /></label>
+                                  <label class="compulsory" for="comment"><g:message code="receiver.comment.label" default="Comment" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'comment', 'errors')}">
                                     <g:textArea name="comment" value="${receiverInstance?.comment}" />

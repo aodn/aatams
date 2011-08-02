@@ -34,7 +34,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="timestamp"><g:message code="detection.timestamp.label" default="Timestamp" /></label>
+                                  <label class="compulsory" for="timestamp"><g:message code="detection.timestamp.label" default="Timestamp" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'timestamp', 'errors')}">
                                     <g:datePicker name="timestamp" precision="minute" value="${detectionInstance?.timestamp}"  />
@@ -44,7 +44,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="receiver"><g:message code="detection.receiverDeployment.label" default="Receiver Deployment" /></label>
+                                  <label class="compulsory" for="receiver"><g:message code="detection.receiverDeployment.label" default="Receiver Deployment" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'receiverDeployment', 'errors')}">
                                     <g:select name="receiverDeployment.id" from="${candidateDeployments}" optionKey="id" value="${detectionInstance?.receiverDeployment?.id}"  />
@@ -95,7 +95,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="tags"><g:message code="detection.surgeries.label" default="Surgeries" /></label>
+                                  <label class="compulsory" for="tags"><g:message code="detection.surgeries.label" default="Surgeries" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'surgeries', 'errors')}">
                                     <g:select name="surgeries" from="${candidateSurgeries}" multiple="yes" optionKey="id" size="5" value="${detectionInstance?.detectionSurgeries*.surgery?.id}" />

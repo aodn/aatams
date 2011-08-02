@@ -557,6 +557,7 @@ div.paging a {
 
 label.compulsory:after
 {
-    content: "*"
+    content: " *";
+    color: #FF0000;
 }
 

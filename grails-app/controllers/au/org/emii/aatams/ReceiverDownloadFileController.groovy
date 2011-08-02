@@ -113,4 +113,26 @@ class ReceiverDownloadFileController {
             redirect(action: "list")
         }
     }
+    
+    /**
+     * User has chosen to download the actual file.
+     */
+    def download =
+    {
+        def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
+        if (!receiverDownloadFileInstance) 
+        {
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), params.id])}"
+            redirect(action: "list")
+        }
+        else 
+        {
+            def file = new File(receiverDownloadFileInstance.path)    
+            response.setContentType("application/octet-stream")
+            response.setHeader("Content-disposition", "attachment;filename=${file.getName()}")
+
+            response.outputStream << file.newInputStream() // Performing a binary stream copy
+            [receiverDownloadFileInstance: receiverDownloadFileInstance]
+        }
+    }
 }

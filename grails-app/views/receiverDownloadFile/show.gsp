@@ -5,6 +5,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile')}" />
+        <g:set var="projectId" value="${receiverDownloadFileInstance?.receiverDownload?.receiverRecovery?.deployment?.station?.installation?.project?.id}" />
+               
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -23,12 +25,12 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownloadFile.id.label" default="Id" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDownloadFile.name.label" default="Name" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadFileInstance, field: "id")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadFileInstance, field: "name")}</td>
                             
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.type.label" default="Type" /></td>
                             
@@ -36,12 +38,14 @@
                             
                         </tr>
                     
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownloadFile.path.label" default="Path" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverDownloadFileInstance, field: "path")}</td>
-                            
-                        </tr>
+                        <shiro:hasRole name="SysAdmin">
+                          <tr class="prop">
+                              <td valign="top" class="name"><g:message code="receiverDownloadFile.path.label" default="Path" /></td>
+
+                              <td valign="top" class="value">${fieldValue(bean: receiverDownloadFileInstance, field: "path")}</td>
+
+                          </tr>
+                        </shiro:hasRole>
                     
                     </tbody>
                 </table>
@@ -49,8 +53,15 @@
             <div class="buttons">
                 <g:form>
                     <g:hiddenField name="id" value="${receiverDownloadFileInstance?.id}" />
-                    <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
-                    <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    <g:hiddenField name="projectId" value="${projectId}" />
+                    
+                    <shiro:hasPermission permission="project:${projectId}:read">
+                      <span class="button"><g:actionSubmit class="download" action="download" value="${message(code: 'default.button.download.label', default: 'Download')}" /></span>
+                    </shiro:hasPermission>
+                    <shiro:hasRole name="SysAdmin">
+                      <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
+                      <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    </shiro:hasRole>
                 </g:form>
             </div>
         </div>

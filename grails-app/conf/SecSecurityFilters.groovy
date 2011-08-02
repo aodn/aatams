@@ -14,7 +14,7 @@ class SecSecurityFilters
         "organisation|organisationProject|project|projectRole|person|" + \
         "installation|installationStation|receiver|species|tag|sensor|" + \
         "animalRelease|detection|receiverDeployment|receiverRecovery|" + \
-        "receiverEvent|navigationMenu"
+        "receiverEvent|navigationMenu|receiverDownloadFile"
     
     def filters = 
     {

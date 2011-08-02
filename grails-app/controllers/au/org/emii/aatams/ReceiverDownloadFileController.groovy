@@ -21,7 +21,7 @@ class ReceiverDownloadFileController {
         receiverDownloadFileInstance.properties = params
         receiverDownloadFileInstance.receiverDownload = ReceiverDownload.get(params.downloadId)
         
-        return [receiverDownloadFileInstance: receiverDownloadFileInstance]
+        return [receiverDownloadFileInstance: receiverDownloadFileInstance, projectId:params.projectId]
     }
 
     def save = 
@@ -43,7 +43,10 @@ class ReceiverDownloadFileController {
         flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.id])}"
 
         // Go back to receiver recovery edit screen.
-        redirect(controller: "receiverRecovery", action: "edit", id: receiverDownloadFileInstance?.receiverDownload?.receiverRecovery?.id)
+        redirect(controller: "receiverRecovery", 
+                 action: "edit", 
+                 id: receiverDownloadFileInstance?.receiverDownload?.receiverRecovery?.id,
+                 params:[projectId:params.projectId])
     }
 
     def show = {

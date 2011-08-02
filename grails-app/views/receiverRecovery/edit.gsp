@@ -182,7 +182,7 @@
                                           <g:link class="create"
                                                   action="create" 
                                                   controller="receiverDownloadFile"
-                                                  params="[downloadId:receiverRecoveryInstance?.download?.id]"></g:link>
+                                                  params="[downloadId:receiverRecoveryInstance?.download?.id, projectId:projectId]"></g:link>
                                         </td>
                                       </tr>
 

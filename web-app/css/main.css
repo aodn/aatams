@@ -285,7 +285,7 @@ td.errors textarea {
 
 table.nested td, table.nested th {
     font: 11px verdana, arial, helvetica, sans-serif;
-    line-height: 12px;
+    line-height: 16px;
     padding: 0px;
     text-align: left;
     vertical-align: top;
@@ -554,3 +554,4 @@ div.results {
 div.paging a {
     margin-left: 4px;
 }
+

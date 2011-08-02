@@ -23,13 +23,6 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="projectRole.id.label" default="Id" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: projectRoleInstance, field: "id")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="projectRole.access.label" default="Access" /></td>
                             
                             <td valign="top" class="value">${projectRoleInstance?.access?.encodeAsHTML()}</td>

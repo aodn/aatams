@@ -65,6 +65,7 @@ class BootStrap
         JSON.registerObjectMarshaller(AnimalMeasurement.class)
         {
             def returnArray = [:]
+            returnArray['id'] = it.id
             returnArray['type'] = it.type
             returnArray['value'] = it.value
             returnArray['unit'] = it.unit
@@ -77,6 +78,7 @@ class BootStrap
         JSON.registerObjectMarshaller(ProjectRole.class)
         {
             def returnArray = [:]
+            returnArray['id'] = it.id
             returnArray['person'] = it.person
             returnArray['roleType'] = it.roleType
             returnArray['access'] = it.access
@@ -87,6 +89,8 @@ class BootStrap
         JSON.registerObjectMarshaller(OrganisationProject.class)
         {
             def returnArray = [:]
+            
+            returnArray['id'] = it.id
             returnArray['organisation'] = it.organisation
             
             return returnArray
@@ -95,6 +99,7 @@ class BootStrap
         JSON.registerObjectMarshaller(Sensor.class)
         {
             def returnArray = [:]
+            returnArray['id'] = it.id
             returnArray['transmitterType'] = it.transmitterType
             returnArray['pingCode'] = it.pingCode
             returnArray['slope'] = it.slope

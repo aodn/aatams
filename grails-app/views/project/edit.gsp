@@ -52,17 +52,27 @@
                                   <label for="organisationProjects"><g:message code="project.organisationProjects.label" default="Organisations" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'organisationProjects', 'errors')}">
+                                  <table class="nested">
+                                    <tbody id="organisation_table_body">
+                                      <g:each in="${projectInstance.organisationProjects}" var="op">
+                                        <tr>
+                                          <td class="rowButton"><g:link class="show" controller="organisationProject" action="show" id="${op?.id}"></g:link></td>
+                                          <td>
+                                            <g:link controller="organisation" action="show" id="${op?.organisation.id}">${op?.organisation?.encodeAsHTML()}</g:link>
+                                          </td>
+                                        </tr>
+
+                                      </g:each>
+                                      <tr><td><br/></td></tr>
+                                      <tr>
+                                        <td>
+                                          <a href="#" 
+                                             id='add_organisation_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</a>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
                                     
-                                  <ul id="organisation_list">
-                                    <g:each in="${projectInstance?.organisationProjects?.organisation.sort{it?.name}}" var="o">
-                                        <li><g:link controller="organisation" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
-                                    </g:each>
-                                    <li><br/></li>
-                                    <li>
-                                      <a href="#" 
-                                         id='add_organisation_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</a>
-                                    </li>
-                                  </ul>
                                 </td>
                             </tr>
 
@@ -80,6 +90,7 @@
                                     <tbody id="people_table_body">
                                       <g:each in="${projectInstance?.projectRoles?}" var="p">
                                         <tr>
+                                          <td class="rowButton"><g:link class="show" controller="projectRole" action="show" id="${p?.id}"></g:link></td>
                                           <td valign="top" class="value">
                                             <g:link controller="person" action="show" id="${p?.person?.id}">${p?.person?.encodeAsHTML()}</g:link>
                                           </td>

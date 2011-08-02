@@ -23,13 +23,6 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalMeasurement.id.label" default="Id" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: animalMeasurementInstance, field: "id")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalMeasurement.type.label" default="Type" /></td>
                             
                             <td valign="top" class="value"><g:link controller="animalMeasurementType" action="show" id="${animalMeasurementInstance?.type?.id}">${animalMeasurementInstance?.type?.encodeAsHTML()}</g:link></td>

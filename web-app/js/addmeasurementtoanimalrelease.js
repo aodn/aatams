@@ -36,6 +36,12 @@ $(function() {
                            
                            var tableRow = $("<tr>");
                            
+                           var infoColumn = $("<td>").attr("class", "rowButton");
+                           var infoLink = $("<a>").attr("href", '/aatams/animalMeasurement/show/' + data.instance.id);
+                           infoLink.attr("class", "show");
+                           infoColumn.append(infoLink);
+                           tableRow.append(infoColumn);
+
                            var typeColumn = $("<td>").attr("class", "value").html(data.instance.type.type);
                            tableRow.append(typeColumn);
                            

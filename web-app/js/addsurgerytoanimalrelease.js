@@ -44,6 +44,12 @@ $(function() {
                            
                            var tableRow = $("<tr>");
                            
+                           var infoColumn = $("<td>").attr("class", "rowButton");
+                           var infoLink = $("<a>").attr("href", '/aatams/surgery/show/' + data.instance.id);
+                           infoLink.attr("class", "show");
+                           infoColumn.append(infoLink);
+                           tableRow.append(infoColumn);
+                           
                            var dateTimeColumn = $("<td>").attr("class", "value");
                            tableRow.append(dateTimeColumn);
                            

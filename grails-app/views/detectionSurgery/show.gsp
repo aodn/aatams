@@ -23,13 +23,6 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="detectionSurgery.id.label" default="Id" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: detectionSurgeryInstance, field: "id")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="detectionSurgery.detection.label" default="Detection" /></td>
                             
                             <td valign="top" class="value"><g:link controller="detection" action="show" id="${detectionSurgeryInstance?.detection?.id}">${detectionSurgeryInstance?.detection?.encodeAsHTML()}</g:link></td>
@@ -49,8 +42,12 @@
             <div class="buttons">
                 <g:form>
                     <g:hiddenField name="id" value="${detectionSurgeryInstance?.id}" />
-                    <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
-                    <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    <shiro:hasPermission permission="project:${detectionSurgeryInstance?.surgery?.tag?.project?.id}:write">
+                      <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
+                    </shiro:hasPermission>
+                    <shiro:hasRole name="SysAdmin">
+                      <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    </shiro:hasRole>
                 </g:form>
             </div>
         </div>

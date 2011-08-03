@@ -75,11 +75,21 @@
                             <td valign="top" class="name"><g:message code="detection.tags.label" default="Tags" /></td>
                             
                             <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${detectionInstance?.detectionSurgeries}" var="s">
-                                    <li><g:link controller="tag" action="show" id="${s?.surgery?.tag?.id}">${s?.surgery?.tag?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
+                              
+                              <table class="nested">
+                                <tbody>
+                                  <g:each in="${detectionInstance?.detectionSurgeries}" var="s">
+                                    <tr>
+                                      <td class="rowButton"><g:link class="show" controller="detectionSurgery" action="show" id="${s?.id}"></g:link></td>
+                                      <td>
+                                        <g:link controller="tag" action="show" id="${s?.surgery?.tag?.id}">${s?.surgery?.tag?.encodeAsHTML()}</g:link>
+                                      </td>
+                                    </tr>
+
+                                  </g:each>
+                                </tbody>
+                              </table>
+
                             </td>
                             
                         </tr>

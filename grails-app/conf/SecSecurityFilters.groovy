@@ -16,7 +16,7 @@ class SecSecurityFilters
         "installation|installationStation|receiver|species|tag|sensor|" + \
         "animalRelease|detection|receiverDeployment|receiverRecovery|" + \
         "receiverEvent|navigationMenu|receiverDownloadFile|" + \
-        "surgery"
+        "surgery|detectionSurgery"
     
     def filters = 
     {
@@ -205,7 +205,7 @@ class SecSecurityFilters
         // principal has write access to the associated project.
         //
         def projectAccessWriteControllers = 
-            "animalMeasurement|installation|installationStation|tag|animalRelease|detection|" + \
+            "animalMeasurement|installation|installationStation|tag|animalRelease|detection|detectionSurgery" + \
             "projectRole|receiverDeployment|receiverDownloadFile|receiverRecovery|receiverEvent|" + \
             "organisationProject|sensor|surgery"
         

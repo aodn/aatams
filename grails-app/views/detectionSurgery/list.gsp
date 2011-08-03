@@ -22,7 +22,7 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'detectionSurgery.id.label', default: 'Id')}" />
+                            <th/>
                         
                             <th><g:message code="detectionSurgery.detection.label" default="Detection" /></th>
                         
@@ -34,7 +34,7 @@
                     <g:each in="${detectionSurgeryInstanceList}" status="i" var="detectionSurgeryInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${detectionSurgeryInstance.id}">${fieldValue(bean: detectionSurgeryInstance, field: "id")}</g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${detectionSurgeryInstance.id}"></g:link></td>
                         
                             <td>${fieldValue(bean: detectionSurgeryInstance, field: "detection")}</td>
                         

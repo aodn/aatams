@@ -94,14 +94,28 @@
                             </tr>
                         
                             <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label class="compulsory" for="tags"><g:message code="detection.surgeries.label" default="Surgeries" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'surgeries', 'errors')}">
-                                    <g:select name="surgeries" from="${candidateSurgeries}" multiple="yes" optionKey="id" size="5" value="${detectionInstance?.detectionSurgeries*.surgery?.id}" />
+                                <td valign="top" class="name"><g:message code="detection.tags.label" default="Tags" /></td>
+
+                                <td valign="top" style="text-align: left;" class="value">
+
+                                  <table class="nested">
+                                    <tbody>
+                                      <g:each in="${detectionInstance?.detectionSurgeries}" var="s">
+                                        <tr>
+                                          <td class="rowButton"><g:link class="show" controller="detectionSurgery" action="show" id="${s?.id}"></g:link></td>
+                                          <td>
+                                            <g:link controller="tag" action="show" id="${s?.surgery?.tag?.id}">${s?.surgery?.tag?.encodeAsHTML()}</g:link>
+                                          </td>
+                                        </tr>
+
+                                      </g:each>
+                                    </tbody>
+                                  </table>
 
                                 </td>
+
                             </tr>
+                            
                         
                         </tbody>
                     </table>

@@ -22,8 +22,18 @@ class BootStrap
         {
             def returnArray = [:]
             returnArray['id'] = it.id
-            returnArray['name'] = it.name
-            returnArray['label'] = it.name
+            returnArray['name'] = it.toString()
+            returnArray['label'] = it.toString()
+
+            return returnArray
+        }
+
+        JSON.registerObjectMarshaller(CaabSpecies.class)
+        {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['name'] = it.toString()
+            returnArray['label'] = it.toString()
 
             return returnArray
         }

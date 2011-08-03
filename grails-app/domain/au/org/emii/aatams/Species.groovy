@@ -15,7 +15,7 @@ class Species
     
     static constraints = 
     {
-        name(blank:false)
+        name(nullable:true)
         embargoDate(nullable:true)
     }
     

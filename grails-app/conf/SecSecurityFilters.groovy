@@ -209,8 +209,25 @@ class SecSecurityFilters
             "projectRole|receiverDeployment|receiverDownloadFile|receiverRecovery|receiverEvent|" + \
             "organisationProject|sensor|surgery"
         
+        projectAccessWriteAny(controller:projectAccessWriteControllers, 
+                              action:'create|save')
+        {
+            before =
+            {
+                // Non-authenticated users can't update.
+                if (   SecurityUtils.subject.isAuthenticated()
+                    && SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWriteAnyPermission()))
+                {
+                    return true
+                }
+                
+                redirect(controller:'auth', action:'unauthorized')
+                return false
+            }
+        }
+        
         projectAccessWrite(controller:projectAccessWriteControllers, 
-                           action:'create|save|edit|update')
+                           action:'edit|update')
         {
             before =
             {

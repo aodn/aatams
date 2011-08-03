@@ -1,1 +1,1 @@
-<label class="compulsory" for="point">${value}</label>
+<label for="point">${value}</label>

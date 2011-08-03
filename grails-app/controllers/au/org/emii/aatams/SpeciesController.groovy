@@ -4,6 +4,8 @@ import grails.converters.JSON
 
 class SpeciesController {
 
+    def speciesService
+    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -107,7 +109,13 @@ class SpeciesController {
     {
         log.debug("Looking up species, name: " + params.term)
         
-        def species = Species.findAllByNameIlike(params.term + "%", [sort:"name", order:"asc"])
+        // Delegate to the species service (limit to the first 25 items
+        // since any more than that will barely fit on the screen).
+        def species = speciesService.lookup(params.term)
+        if (species.size() > 20)
+        {
+            species = species[0..19]
+        }
         
         log.debug("Returning: " + (species as JSON))
         render species as JSON

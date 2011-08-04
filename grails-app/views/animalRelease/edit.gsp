@@ -282,7 +282,7 @@
 
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'id', 'errors')}">
-                                  <label class="compulsory" id="project">${animalReleaseInstance}</label>
+                                  <label id="project">${animalReleaseInstance}</label>
                                 </td>
                             </tr>
                         
@@ -360,7 +360,7 @@
 
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'id', 'errors')}">
-                                  <label class="compulsory" id="project">${animalReleaseInstance}</label>
+                                  <label id="project">${animalReleaseInstance}</label>
                                 </td>
                             </tr>
                         

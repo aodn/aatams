@@ -95,7 +95,7 @@
                         
                             <tr>
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="tagging"><g:message code="animalRelease.surgeries.label" default="Tagging" /></label>
+                                  <label for="tagging"><g:message code="animalRelease.surgeries.label" default="Tagging" /></label>
                                 </td>
 
                                 <td valign="top" class="value">
@@ -143,7 +143,7 @@
                             
                             <tr>
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="measurements"><g:message code="animalRelease.measurements.label" default="Measurements" /></label>
+                                  <label for="measurements"><g:message code="animalRelease.measurements.label" default="Measurements" /></label>
                                 </td>
 
                                 <td valign="top" class="value">

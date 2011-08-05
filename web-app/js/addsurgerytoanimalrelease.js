@@ -12,7 +12,7 @@ $(function()
         buttons: {
             'Add': function() 
             {
-                var animalReleaseId = $("#animalReleaseId").val();
+                var animalReleaseId = $("#id").val();
                 var timestamp_year = $("#surgeryTimestamp_year").val();
                 var timestamp_month = $("#surgeryTimestamp_month").val();
                 var timestamp_day = $("#surgeryTimestamp_day").val();

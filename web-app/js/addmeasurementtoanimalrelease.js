@@ -13,7 +13,7 @@ $(function() {
             'Add': function() 
             {
                 
-                var animalReleaseId = $("#animalReleaseId").val();
+                var animalReleaseId = $("#id").val();
                 var typeId = $("#measurementTypeId option:selected").val();
                 var value = $("#value").val();
                 var unitId = $("#unitId option:selected").val();

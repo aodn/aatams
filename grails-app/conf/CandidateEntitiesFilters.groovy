@@ -17,7 +17,7 @@ class CandidateEntitiesFilters
 
     def filters = 
     {
-        all(controller:'*', action:'create|edit|save|update')
+        all(controller:'*', action:'create|edit|save|update|addSurgery')
         {
             after = {model ->
                 

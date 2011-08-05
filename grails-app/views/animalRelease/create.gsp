@@ -9,6 +9,8 @@
         <title><g:message code="default.create.label" args="[entityName]" /></title>
         
         <g:javascript src="speciesLookup.js" />
+        <g:javascript src="addsurgerytoanimalrelease.js"/>
+        <g:javascript src="addmeasurementtoanimalrelease.js"/>
     </head>
     <body>
         <div class="nav">
@@ -96,9 +98,73 @@
                                 </td>
                             </tr>
                         
-                            <!-- TODO: surgeries -->
+                            <!-- Surgeries -->
+                            <tr>
+                                <td valign="top" class="name">
+                                  <label for="tagging"><g:message code="animalRelease.surgeries.label" default="Tagging" /></label>
+                                </td>
+
+                                <td valign="top" class="value">
+                                  
+                                  <table class="nested">
+                                    <thead>
+                                      <tr>
+                                        <th>Date/Time</th>
+                                        <th>Tag</th>
+                                        <th>Placement</th>
+                                        <th>Treatment</th>
+                                        <th>Comments</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="surgeries_table_body">
+
+                                      <tr><td><br/></td></tr>
+                                      <tr>
+                                        <td>
+                                          <a href="#" 
+                                             id='add_surgery_to_animal_release'>${message(code: 'default.add.label', args: [message(code: 'surgery.label', default: 'Tagging...')])}</a>
+                                        </td>
+                                      </tr>
+
+                                    </tbody>
+                                  </table>
+
+                                </td>  
+                            </tr>
                             
-                            <!-- TODO: measurements -->
+                            <!-- Measurements -->
+                            <tr>
+                                <td valign="top" class="name">
+                                  <label for="measurements"><g:message code="animalRelease.measurements.label" default="Measurements" /></label>
+                                </td>
+
+                                <td valign="top" class="value">
+                                  
+                                  <table class="nested">
+                                    <thead>
+                                      <tr>
+                                        <th>Type</th>
+                                        <th>Value</th>
+                                        <th>Units</th>
+                                        <th>Estimated</th>
+                                        <th>Comments</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="measurements_table_body">
+
+                                      <tr><td><br/></td></tr>
+                                      <tr>
+                                        <td>
+                                          <a href="#" 
+                                             id='add_measurement_to_animal_release'>${message(code: 'default.add.label', args: [message(code: 'measurement.label', default: 'Measurement...')])}</a>
+                                        </td>
+                                      </tr>
+
+                                    </tbody>
+                                  </table>
+
+                                </td>
+                            </tr>
                             
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -172,5 +238,8 @@
                 </div>
             </g:form>
         </div>
+      
+        <div id='dialog-form-add-surgery'></div>
+        <div id='dialog-form-add-measurement'></div>
     </body>
 </html>

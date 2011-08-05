@@ -14,11 +14,9 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.selectlist.js')}"></script>
 <!--    <script type="text/javascript" src="${resource(dir:'js',file:'jquery-custom-file-input.js')}"></script>-->
 
-    <script type="text/javascript" src="${resource(dir:'js',file:'addmeasurementtoanimalrelease.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'addorganisationtoproject.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'addpersontoproject.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'addsensortotag.js')}"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'addsurgerytoanimalrelease.js')}"></script>
 <!--    <script type="text/javascript" src="${resource(dir:'js',file:'fileupload.js')}"></script>-->
 
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>

@@ -73,7 +73,7 @@ class AnimalReleaseController {
         // and sex) - so we need to create one here.
         Sex sex = Sex.get(params.sex.id)
         
-        Species species = lookupOrCreateSpecies(params.speciesName)
+        Species species = lookupOrCreateSpecies(params)
         Animal animalInstance = new Animal(sex:sex, species:species)
         
         animalReleaseInstance.animal = animalInstance
@@ -210,18 +210,20 @@ class AnimalReleaseController {
         }
     }
     
-    def lookupOrCreateSpecies(speciesName)
+    def lookupOrCreateSpecies(params)
     {
-        Species species = Species.findByName(speciesName)
-        if (!species)
+        // Use species ID if specified, otherwise create a new species (from
+        // the species name).
+        
+        if (params.speciesId)
         {
-            log.info("Creating new species, name: " + speciesName)
-            species = new Species(name:speciesName).save(flush:true)
+            return Species.get(params.speciesId)
         }
-         
-        return species
+        
+        // No species ID specified - create a new species.
+        log.info("Creating new species, name: " + params.speciesName)
+        return new Species(name:params.speciesName).save(flush:true)
     }
-    
 }
 
 

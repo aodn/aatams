@@ -52,6 +52,7 @@
                                     <label class="compulsory" for="species"><g:message code="animalRelease.animal.species.label" default="Species" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'species', 'errors')}">
+                                  <g:hiddenField name="speciesId" />
                                   <g:textField name="speciesName" />
                                 </td>
                             </tr>

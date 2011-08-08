@@ -111,7 +111,7 @@ class SpeciesController {
         
         // Delegate to the species service (limit to the first 25 items
         // since any more than that will barely fit on the screen).
-        def species = speciesService.lookup(params.term)
+        def species = speciesService.lookup(params.term) + Species.findAllByNameIlike("%" + params.term + "%")
         if (species.size() > 20)
         {
             species = species[0..19]

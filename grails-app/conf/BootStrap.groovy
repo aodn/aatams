@@ -66,6 +66,19 @@ class BootStrap
 
             return returnArray
         }
+        
+        JSON.registerObjectMarshaller(Tag.class)
+        {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['label'] = it.getCodeMapPingCode()
+            returnArray['serialNumber'] = it.serialNumber
+            returnArray['model'] = it.model
+            returnArray['transmitterType'] = it.transmitterType
+
+            return returnArray
+        }
+        
 
         JSON.registerObjectMarshaller(Point.class)
         {
@@ -116,6 +129,10 @@ class BootStrap
             returnArray['intercept'] = it.intercept
             returnArray['unit'] = it.unit
             returnArray['status'] = it.status
+
+            returnArray['label'] = it.getCodeMapPingCode()
+            returnArray['serialNumber'] = it.serialNumber
+            returnArray['model'] = it.model
             
             return returnArray
         }
@@ -330,6 +347,8 @@ class BootStrap
 
         DeviceModel vemcoXyz =
             new DeviceModel(modelName:'XYZ', manufacturer:vemco).save(failOnError: true)
+        DeviceModel vemcoAbc =
+            new DeviceModel(modelName:'ABC', manufacturer:vemco).save(failOnError: true)
 
         DeviceStatus newStatus = new DeviceStatus(status:'NEW').save(failOnError: true)
         DeviceStatus deployedStatus = new DeviceStatus(status:'DEPLOYED').save(failOnError: true)
@@ -364,7 +383,7 @@ class BootStrap
             new TransmitterType(transmitterTypeName:"PINGER").save(failOnError:true)
         Tag tag1 =
             new Tag(codeName:'A69-1303-62339',
-                    serialNumber:'12345678',
+                    serialNumber:'62339',
                     codeMap:'A69-1303',
                     pingCode:'62339',
                     model:vemcoXyz,
@@ -374,10 +393,10 @@ class BootStrap
 
         Tag tag2 =
             new Tag(codeName:'A69-1303-46601',
-                    serialNumber:'12345678',
+                    serialNumber:'46601',
                     codeMap:'A69-1303',
                     pingCode:'46601',
-                    model:vemcoXyz,
+                    model:vemcoAbc,
                     project:sealCountProject,
                     status:deployedStatus,
                     transmitterType:pinger).save(failOnError: true)
@@ -387,7 +406,7 @@ class BootStrap
                     serialNumber:'1111',
                     codeMap:'A69-1303',
                     pingCode:'11111',
-                    model:vemcoXyz,
+                    model:vemcoAbc,
                     project:sealCountProject,
                     status:newStatus,
                     transmitterType:pinger).save(failOnError: true)
@@ -421,7 +440,7 @@ class BootStrap
 
         Sensor sensor1 =
             new Sensor(codeName:'A69-1400-64000',
-                    serialNumber:'5678',
+                    serialNumber:'64000',
                     codeMap:'A69-1400',
                     pingCode:'64000',
                     model:vemcoXyz,
@@ -435,7 +454,7 @@ class BootStrap
 
         Sensor sensor2 =
             new Sensor(codeName:'A69-1500-65000',
-                    serialNumber:'6789',
+                    serialNumber:'65000',
                     codeMap:'A69-1500',
                     pingCode:'65000',
                     model:vemcoXyz,

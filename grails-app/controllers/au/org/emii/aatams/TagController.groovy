@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import grails.converters.JSON
+
 class TagController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -111,5 +113,24 @@ class TagController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'tag.label', default: 'Tag'), params.id])}"
             redirect(action: "list")
         }
+    }
+    
+    /**
+     * Allows auto-complete functionality on front-end.
+     */
+    def lookupByCodeName =
+    {
+        log.debug("Looking up tag, codeName: " + params.term)
+        
+        def tags = Tag.findAllByCodeNameIlike(params.term + "%")
+        
+        // Limit so that all results fit on screen.
+        if (tags?.size() > 20)
+        {
+            tags = tags[0..19]
+        }
+        
+        log.debug("Returning: " + (tags as JSON))
+        render tags as JSON
     }
 }

@@ -3,7 +3,9 @@ package au.org.emii.aatams
 class AnimalReleaseController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
+    
+    def tagFactoryService
+    
     def index = {
         redirect(action: "list", params: params)
     }
@@ -47,6 +49,10 @@ class AnimalReleaseController {
         [animalReleaseInstance: animalReleaseInstance]
     }
     
+    /**
+     * This method just populates the model with appropriate objects when
+     * adding surgery to an animal release.
+     */
     def addSurgery =
     {
         log.debug("In addSurgery, params: " + params + ", flash: " + flash)
@@ -82,7 +88,15 @@ class AnimalReleaseController {
             // See http://stackoverflow.com/questions/1811395/grails-indexed-parameters
             if (!k.contains("."))
             {
+                // Lookup or create tag (after inserting some required parameters)...
+                v['project'] = Project.get(params.project.id)
+                v['status'] = DeviceStatus.findByStatus('DEPLOYED')
+                v['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
+                
+                def tag = tagFactoryService.lookupOrCreate(v)
+                
                 Surgery surgery = new Surgery(v)
+                surgery.tag = tag
                 
                 animalReleaseInstance.addToSurgeries(surgery)
                 

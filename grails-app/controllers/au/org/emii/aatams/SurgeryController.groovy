@@ -8,6 +8,8 @@ class SurgeryController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def tagFactoryService
+    
     def index = {
         redirect(action: "list", params: params)
     }
@@ -27,10 +29,14 @@ class SurgeryController {
     {
         def surgeryInstance = new Surgery(params)
 
-        // Need to update that status of the tag to DEPLOYED.
-        DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
-        surgeryInstance?.tag?.status = deployedStatus
-
+        // Lookup or create tag (after inserting some required parameters)...
+        params.tag['project'] = Project.get(params.projectId)
+        params.tag['status'] = DeviceStatus.findByStatus('DEPLOYED')
+        params.tag['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
+                
+        def tag = tagFactoryService.lookupOrCreate(params.tag)
+        surgeryInstance.tag = tag
+        
         if (surgeryInstance.save(flush: true)) 
         {
             flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tagging.label', default: 'Tagging'), surgeryInstance])}"

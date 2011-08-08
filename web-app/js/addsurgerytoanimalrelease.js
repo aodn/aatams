@@ -6,7 +6,7 @@ $(function()
 {
     $('#dialog-form-add-surgery').dialog({
         autoOpen: false,
-        height: 350,
+        height: 450,
         width: 750,
         modal: true,
         buttons: {
@@ -19,10 +19,22 @@ $(function()
                 var timestamp_hour = $("#surgeryTimestamp_hour").val();
                 var timestamp_minute = $("#surgeryTimestamp_minute").val();
                 var timestamp_zone = $("#surgeryTimestamp_zone").val();
-                var tagId = $("#tagId option:selected").val();
                 var typeId = $("#surgeryTypeId option:selected").val();
                 var treatmentTypeId = $("#treatmentTypeId option:selected").val();
                 var comments = $("#surgeryComments").val();
+
+                //
+                // Tag related variables (user has the option of selecting an 
+                // existing tag or entering new tag as part of the surgery
+                // process).
+                //
+                // Leave it up to the controller to determine whether or not to
+                // create a new tag.
+                //
+                var tagCodeName = $("#tagCodeName").val();
+                var tagSerialNumber = $("#serialNumber").val();
+                var tagModelId = $("#modelId option:selected").val();
+
                 var projectId = $("#project\\.id option:selected").val();
                 var event = $("#id").val();
                 
@@ -43,7 +55,7 @@ $(function()
                                    timestamp_hour + ":" + 
                                    timestamp_minute + " " + 
                                    timestamp_zone;
-                    var tag = {id:tagId, codeName:$("#tagId option:selected").text()};
+                    var tag = {codeName:tagCodeName};
                     var type = {type:$("#surgeryTypeId option:selected").text()};
                     var treatmentType = {type:$("#treatmentTypeId option:selected").text()};
                     var instance = {timestamp:dateTime, 
@@ -66,10 +78,12 @@ $(function()
                     mainForm.append(hiddenField(idPrefix + "timestamp_hour", timestamp_hour));
                     mainForm.append(hiddenField(idPrefix + "timestamp_minute", timestamp_minute));
                     mainForm.append(hiddenField(idPrefix + "timestamp_zone", timestamp_zone));
-                    mainForm.append(hiddenField(idPrefix + "tag.id", tagId));
                     mainForm.append(hiddenField(idPrefix + "type.id", typeId));
                     mainForm.append(hiddenField(idPrefix + "treatmentType.id", treatmentTypeId));
                     mainForm.append(hiddenField(idPrefix + "comments", comments));
+                    mainForm.append(hiddenField(idPrefix + "tagCodeName", tagCodeName));
+                    mainForm.append(hiddenField(idPrefix + "tagSerialNumber", tagSerialNumber));
+                    mainForm.append(hiddenField(idPrefix + "tagModelId", tagModelId));
                 }
                 else
                 {
@@ -84,7 +98,9 @@ $(function()
                        'timestamp_hour':timestamp_hour,
                        'timestamp_minute':timestamp_minute,
                        'timestamp_zone':timestamp_zone,
-                       'tag.id':tagId,
+                       'tag.codeName':tagCodeName,
+                       'tag.serialNumber':tagSerialNumber,
+                       'tag.model.id':tagModelId,
                        'type.id':typeId,
                        'treatmentType.id':treatmentTypeId,
                        'comments':comments
@@ -146,9 +162,17 @@ function updateSurgeryTable(data)
     tableRow.append(dateTimeColumn);
 
     var tagColumn = $("<td>").attr("class", "value");
+    
+    if (data.instance.tag.id != null)
+    {
+        var tagLink = $("<a>").attr("href", '../tag/show/' + data.instance.tag.id)
+        tagColumn.append(tagLink);
+    }
+    else
+    {
+        tagColumn.html(data.instance.tag.codeName);    
+    }
     tableRow.append(tagColumn);
-    var tagLink = $("<a>").attr("href", '../tag/show/' + data.instance.tag.id).html(data.instance.tag.codeName);
-    tagColumn.append(tagLink);
 
     var typeColumn = $("<td>").attr("class", "value").html(data.instance.type.type);
     tableRow.append(typeColumn);

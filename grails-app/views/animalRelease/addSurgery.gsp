@@ -4,6 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Add Tagging to Animal Release</title>
+    <g:javascript src="tagLookup.js" />
   </head>
   <body>
         <!--
@@ -43,8 +44,26 @@
                                     <label class="compulsory" for="tag"><g:message code="surgery.tag.label" default="Tag" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'tag', 'errors')}">
-                                    <g:select name="tagId" from="${candidateTags}" optionKey="id" value="${surgeryInstance?.tag?.id}"  />
+                                    <g:textField name="tagCodeName" />
 
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label class="compulsory" for="serialNumber"><g:message code="tag.serialNumber.label" default="Serial Number" /></label>
+                                </td>
+                                <td valign="top" class="value">
+                                    <g:textField name="serialNumber" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label class="compulsory" for="modelId"><g:message code="tag.model.label" default="Model" /></label>
+                                </td>
+                                <td valign="top" class="value">
+                                    <g:select name="modelId" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" />
                                 </td>
                             </tr>
                         

@@ -6,9 +6,6 @@ $(function()
     $("#speciesName").autocomplete({
         select:function(event, ui)
         {
-            console.log("species selected:");
-            console.log(ui);
-
             // Update hidden field speciesId
             $("#speciesId").attr("value", ui.item.id);
         }

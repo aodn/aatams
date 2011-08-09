@@ -17,6 +17,15 @@ class BootStrap
     { 
         servletContext ->
 
+        JSON.registerObjectMarshaller(Animal.class)
+        {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['name'] = it.toString()
+
+            return returnArray
+        }
+        
         // Add "label" property for the jquery autocomplete plugin.
         JSON.registerObjectMarshaller(Species.class)
         {
@@ -573,6 +582,8 @@ class BootStrap
 
         Animal whiteShark1 = new Animal(species:whiteShark,
                                         sex:male).save(failOnError:true)
+        Animal whiteShark2 = new Animal(species:whiteShark,
+                                        sex:male).save(failOnError:true)
         Animal blueFinTuna1 = new Animal(species:blueFinTuna,
                                          sex:female).save(failOnError:true)
 
@@ -604,6 +615,34 @@ class BootStrap
                               releaseDateTime:new DateTime("2011-05-15T14:15:00"),
                               embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2015-05-15 12:34:56")).save(failOnError:true)
 
+        AnimalRelease whiteShark2Release =
+            new AnimalRelease(project:tunaProject,
+                              surgeries:[],
+                              measurements:[],
+                              animal:whiteShark2,
+                              captureLocality:'Neptune Islands',
+                              captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
+                              captureDateTime:new DateTime("2011-05-15T14:10:00"),
+                              captureMethod:net,
+                              releaseLocality:'Neptune Islands',
+                              releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
+                              releaseDateTime:new DateTime("2011-05-15T14:15:00"),
+                              embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2015-05-15 12:34:56")).save(failOnError:true)
+                          
+        AnimalRelease blueFinTuna1Release =
+            new AnimalRelease(project:tunaProject,
+                              surgeries:[],
+                              measurements:[],
+                              animal:blueFinTuna1,
+                              captureLocality:'Neptune Islands',
+                              captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
+                              captureDateTime:new DateTime("2011-05-15T14:10:00"),
+                              captureMethod:net,
+                              releaseLocality:'Neptune Islands',
+                              releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
+                              releaseDateTime:new DateTime("2011-05-15T14:15:00"),
+                              embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2015-05-15 12:34:56")).save(failOnError:true)
+                          
         AnimalMeasurement whiteShark1Length = 
             new AnimalMeasurement(release:whiteShark1Release,
                                   type:length,
@@ -633,6 +672,20 @@ class BootStrap
                         type:external,
                         treatmentType:antibiotic).save(failOnError:true)
 
+        Surgery surgery3 = 
+            new Surgery(release:whiteShark2Release,
+                        tag:tag1,   // Can't really have a tag on two different animals.
+                        timestamp:new DateTime("2011-05-15T14:12:00"),
+                        type:external,
+                        treatmentType:antibiotic).save(failOnError:true)
+                    
+        Surgery surgery4 = 
+            new Surgery(release:blueFinTuna1Release,
+                        tag:tag1,   // Can't really have a tag on two different animals.
+                        timestamp:new DateTime("2011-05-15T14:12:00"),
+                        type:external,
+                        treatmentType:antibiotic).save(failOnError:true)
+                    
         // Receiver Recovery.
         ReceiverRecovery recovery1 = 
             new ReceiverRecovery(recoveryDateTime: new DateTime("2011-07-25T12:34:56"),

@@ -4,6 +4,8 @@ class AnimalReleaseController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     
+    def animalFactoryService
+    
     def tagFactoryService
     
     def index = {
@@ -69,13 +71,9 @@ class AnimalReleaseController {
     {
         def animalReleaseInstance = new AnimalRelease(params)
         
-        // The request does not include an Animal instance as such (just species
-        // and sex) - so we need to create one here.
-        Sex sex = Sex.get(params.sex.id)
-        
-        Species species = lookupOrCreateSpecies(params)
-        Animal animalInstance = new Animal(sex:sex, species:species)
-        
+        // The request can contain either a known animal, or just a species and
+        // sex, in which case we need to create an animal.
+        Animal animalInstance = animalFactoryService.lookupOrCreate(params)
         animalReleaseInstance.animal = animalInstance
         
         // Create any associated surgeries (and set associated tags' status to
@@ -172,12 +170,20 @@ class AnimalReleaseController {
                     return
                 }
             }
+            
+            def animal = animalFactoryService.lookupOrCreate(params)
+            
+            params.remove('animal')
+            params.remove('animal.id')
+            log.debug("params: " + params)
+            
             animalReleaseInstance.properties = params
+            animalReleaseInstance.animal = animal
             
-            Species species = lookupOrCreateSpecies(params.speciesName)
-            animalReleaseInstance.animal.species = species
-            
-            if (!animalReleaseInstance.hasErrors() && animalReleaseInstance.save(flush: true)) {
+            if (   !animalReleaseInstance.hasErrors() 
+                && !animal.hasErrors()
+                && animal.save(flush: true)) 
+            {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.id])}"
                 redirect(action: "show", id: animalReleaseInstance.id)
             }
@@ -208,21 +214,6 @@ class AnimalReleaseController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), params.id])}"
             redirect(action: "list")
         }
-    }
-    
-    def lookupOrCreateSpecies(params)
-    {
-        // Use species ID if specified, otherwise create a new species (from
-        // the species name).
-        
-        if (params.speciesId)
-        {
-            return Species.get(params.speciesId)
-        }
-        
-        // No species ID specified - create a new species.
-        log.info("Creating new species, name: " + params.speciesName)
-        return new Species(name:params.speciesName).save(flush:true)
     }
 }
 

@@ -41,6 +41,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="animalRelease.animal.sex.label" default="Sex" /></td>
+                            
+                            <td valign="top" class="value">${animalReleaseInstance?.animal?.sex}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.captureLocality.label" default="Capture Locality" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "captureLocality")}</td>
@@ -150,13 +157,6 @@
                             </td>
                         </tr>
                         
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalRelease.animal.sex.label" default="Sex" /></td>
-                            
-                            <td valign="top" class="value">${animalReleaseInstance?.animal?.sex}</td>
-                            
-                        </tr>
-                    
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.releaseLocality.label" default="Release Locality" /></td>
                             

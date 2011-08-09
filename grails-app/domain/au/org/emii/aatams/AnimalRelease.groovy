@@ -17,7 +17,7 @@ import org.joda.time.contrib.hibernate.*
  */
 class AnimalRelease 
 {
-    static belongsTo = [project: Project]
+    static belongsTo = [project: Project, animal: Animal]
     static hasMany = [surgeries: Surgery, measurements: AnimalMeasurement]
     static transients = ['scrambledReleaseLocation']
     static mapping =
@@ -35,11 +35,6 @@ class AnimalRelease
         }
     }
 
-    /**
-     * Animal that has been captured and released.
-     */
-    Animal animal
-    
     String captureLocality
     Point captureLocation
     DateTime captureDateTime

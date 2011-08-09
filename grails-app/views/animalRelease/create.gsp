@@ -9,6 +9,7 @@
         <title><g:message code="default.create.label" args="[entityName]" /></title>
         
         <g:javascript src="speciesLookup.js" />
+        <g:javascript src="animalLookup.js" />
         <g:javascript src="addsurgerytoanimalrelease.js"/>
         <g:javascript src="addmeasurementtoanimalrelease.js"/>
     </head>
@@ -54,6 +55,29 @@
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'species', 'errors')}">
                                   <g:hiddenField name="speciesId" />
                                   <g:textField name="speciesName" />
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label class="compulsory" for="sex"><g:message code="animalRelease.animal.sex.label" default="Sex" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'sex', 'errors')}">
+                                    <g:select name="sex.id" 
+                                              from="${au.org.emii.aatams.Sex.list()}" 
+                                              optionKey="id" value="${animalReleaseInstance?.animal?.sex?.id}" 
+                                              noSelection="['':'Not specified']"/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label class="compulsory" for="animal"><g:message code="animalRelease.animal.label" default="Animal" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'animal', 'errors')}">
+                                    <g:select name="animal.id" 
+                                              optionKey="id" 
+                                              noSelection="['':'New animal']"/>
                                 </td>
                             </tr>
                         
@@ -167,15 +191,6 @@
                                 </td>
                             </tr>
                             
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label class="compulsory" for="sex"><g:message code="animalRelease.animal.sex.label" default="Sex" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'sex', 'errors')}">
-                                    <g:select name="sex.id" from="${au.org.emii.aatams.Sex.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.sex?.id}"  />
-                                </td>
-                            </tr>
-                        
 
                             <tr class="prop">
                                 <td valign="top" class="name">

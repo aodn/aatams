@@ -27,12 +27,12 @@ class NavigationMenuController
     [
         'installation':"Installations",
         'installationStation':"Stations",
-        'receiver':"Receivers",
-        'tag':"Tags"
+        'receiver':"Receivers"
     ]
     
     def fieldDataControllers =
     [
+        'tag':"Tags",
         'animalRelease':"Tag Releases",
         'detection':"Tag Detections",
         'receiverDeployment':"Receiver Deployment",

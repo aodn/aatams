@@ -41,7 +41,7 @@
           </li>
       </ul>
 
-      <h3>${message(code: 'navigationMenu.section.installation.label', default: 'Installation Data')} </h3>
+      <h3>${message(code: 'navigationMenu.section.installation.label', default: 'Location Data')} </h3>
       <ul>
         <g:each var="c" in="${installationDataControllers}">
           

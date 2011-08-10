@@ -11,7 +11,7 @@ class SecSecurityFilters
     def permissionUtilsService
     
     def accessibleControllersRegexp = 
-        "animalMeasurement|" + \
+        "animal|animalMeasurement|" + \
         "organisation|organisationProject|project|projectRole|person|" + \
         "installation|installationStation|receiver|species|tag|sensor|" + \
         "animalRelease|detection|receiverDeployment|receiverRecovery|" + \

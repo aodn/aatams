@@ -6,6 +6,8 @@ class ProjectRoleController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def permissionUtilsService
+    
     def index = {
         redirect(action: "list", params: params)
     }
@@ -23,10 +25,14 @@ class ProjectRoleController {
 
     def save = 
     {
+        log.debug("Adding projectRole...")
+        
         def projectRoleInstance = new ProjectRole(params)
         
         if (projectRoleInstance.save(flush: true)) 
         {
+            permissionUtilsService.setPermissions(projectRoleInstance)
+            
             flash.message = "${message(code: 'default.added.message', args: [message(code: 'person.label', default: 'Person'), \
                                                                              projectRoleInstance.person, \
                                                                              message(code: 'project.label', default: 'Project'), \
@@ -93,7 +99,9 @@ class ProjectRoleController {
     def delete = {
         def projectRoleInstance = ProjectRole.get(params.id)
         if (projectRoleInstance) {
-            try {
+            try 
+            {
+                permissionUtilsService.removePermissions(projectRoleInstance)
                 projectRoleInstance.delete(flush: true)
                 
                 // Delete permissions from associated user.

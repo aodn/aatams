@@ -11,11 +11,15 @@ class PermissionUtilsService
 {
     Person setPermissions(ProjectRole projectRole)
     {
+        log.debug("projectRole: " + String.valueOf(projectRole))
+        
         // Cleanup existing permissions.
         Person user = removePermissions(projectRole)
 //        Person user = Person.get(projectRole.person.id)
+
         if (!user)
         {
+            log.error("Unknown user for role: " + projectRole)
             return null
         }
 
@@ -64,6 +68,7 @@ class PermissionUtilsService
         Person user = Person.get(projectRole.person.id)
         if (!user)
         {
+            log.error("Unknown user for role: " + projectRole)
             return null
         }
 

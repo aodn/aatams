@@ -69,7 +69,7 @@ class CaabSpecies extends Species
         SUBCLASS(nullable:true)
         ORDER_NAME(nullable:true)
         SUBORDER(nullable:true)
-        INFRAORDE(nullable:true)
+        INFRAORDER(nullable:true)
     }
     
     String toString()

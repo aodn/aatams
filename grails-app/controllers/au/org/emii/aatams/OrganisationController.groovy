@@ -16,6 +16,7 @@ class OrganisationController
     {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         
+        def organisationTotal = Organisation.count()
         def organisationList = Organisation.list(params)
         
         if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
@@ -24,9 +25,14 @@ class OrganisationController
             organisationList = organisationList.findAll{
                 it.status == EntityStatus.ACTIVE
             }
+            
+            // Only count ACTIVE organisations.
+            organisationTotal = Organisation.list().count({
+                it.status == EntityStatus.ACTIVE
+            })
         }
         
-        [organisationInstanceList: organisationList, organisationInstanceTotal: organisationList.size()]
+        [organisationInstanceList: organisationList, organisationInstanceTotal: organisationTotal]
     }
 
     def create = {

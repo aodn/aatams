@@ -13,6 +13,7 @@ class ProjectController {
     def list = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         
+        def projectTotal = Project.count()
         def projectList = Project.list(params)
 
         if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
@@ -21,9 +22,14 @@ class ProjectController {
             projectList = projectList.findAll{
                 it.status == EntityStatus.ACTIVE
             }
+            
+            // Only count ACTIVE projects.
+            projectTotal = Project.list().count({
+                it.status == EntityStatus.ACTIVE
+            })
         }
         
-        [projectInstanceList: projectList, projectInstanceTotal: projectList.size()]
+        [projectInstanceList: projectList, projectInstanceTotal: projectTotal]
     }
 
     def create = {

@@ -51,8 +51,12 @@ class PersonController {
             
             // If a PI then set Person's status to ACTIVE, otherwise,
             // set to PENDING.
+            // (Use "personWriteAny" permission for now, as my understanding
+            // of shiro permission wildcards was back-to-front, so the commented
+            // out way of doing things doesn't work.
             if (   !SecurityUtils.getSubject().isAuthenticated()
-                || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
+//                || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
+                || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission())) 
             {
                 personInstance.status = EntityStatus.PENDING
             }
@@ -64,7 +68,8 @@ class PersonController {
             if (personInstance.save(flush: true)) 
             {
                 if (   !SecurityUtils.getSubject().isAuthenticated()
-                    || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
+//                    || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
+                    || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission())) 
                 {
                     if (personInstance.status == EntityStatus.PENDING)
                     {

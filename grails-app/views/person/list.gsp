@@ -36,7 +36,7 @@
                             
                             <g:sortableColumn property="organisation" title="${message(code: 'person.organisation.label', default: 'Organisation')}" />
 
-                            <g:sortableColumn property="projects" title="${message(code: 'person.projects.label', default: 'Projects')}" />
+                            <th><g:message code="person.projects.label" default="Projects" />
                             
                             <shiro:hasRole name="SysAdmin">
                               <g:sortableColumn property="status" title="${message(code: 'person.status.label', default: 'Status')}" />

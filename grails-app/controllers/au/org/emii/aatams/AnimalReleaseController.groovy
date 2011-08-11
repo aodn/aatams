@@ -71,67 +71,70 @@ class AnimalReleaseController {
     {
         def animalReleaseInstance = new AnimalRelease(params)
         
-        // The request can contain either a known animal, or just a species and
-        // sex, in which case we need to create an animal.
-        Animal animalInstance = animalFactoryService.lookupOrCreate(params)
-        animalReleaseInstance.animal = animalInstance
-        
-        // Create any associated surgeries (and set associated tags' status to
-        // DEPLOYED).
-        DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
-        params.surgery.findAll
+        // Either animal.id or speciesId must be specified.
+        if ((params.animal?.id == null) && (params.speciesId == null))
         {
-            k, v ->
-            
-            // See http://stackoverflow.com/questions/1811395/grails-indexed-parameters
-            if (!k.contains("."))
-            {
-                // Lookup or create tag (after inserting some required parameters)...
-                v['project'] = Project.get(params.project.id)
-                v['status'] = DeviceStatus.findByStatus('DEPLOYED')
-                v['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
-                
-                def tag = tagFactoryService.lookupOrCreate(v)
-                
-                Surgery surgery = new Surgery(v)
-                surgery.tag = tag
-                
-                animalReleaseInstance.addToSurgeries(surgery)
-                
-                // Need to update that status of the tag to DEPLOYED.
-                surgery?.tag?.status = deployedStatus
-            }
+            render(view: "create", model: [animalReleaseInstance: animalReleaseInstance])
         }
+        else
+        {
+            // The request can contain either a known animal, or just a species and
+            // sex, in which case we need to create an animal.
+            Animal animalInstance = animalFactoryService.lookupOrCreate(params)
+            animalReleaseInstance.animal = animalInstance
 
-        params.measurement.findAll
-        {
-            k, v ->
-            
-            // See http://stackoverflow.com/questions/1811395/grails-indexed-parameters
-            if (!k.contains("."))
+            // Create any associated surgeries (and set associated tags' status to
+            // DEPLOYED).
+            DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
+            params.surgery.findAll
             {
-                AnimalMeasurement measurement = new AnimalMeasurement(v)
-                
-                animalReleaseInstance.addToMeasurements(measurement)
+                k, v ->
+
+                // See http://stackoverflow.com/questions/1811395/grails-indexed-parameters
+                if (!k.contains("."))
+                {
+                    // Lookup or create tag (after inserting some required parameters)...
+                    v['project'] = Project.get(params.project.id)
+                    v['status'] = DeviceStatus.findByStatus('DEPLOYED')
+                    v['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
+
+                    def tag = tagFactoryService.lookupOrCreate(v)
+
+                    Surgery surgery = new Surgery(v)
+                    surgery.tag = tag
+
+                    animalReleaseInstance.addToSurgeries(surgery)
+
+                    // Need to update that status of the tag to DEPLOYED.
+                    surgery?.tag?.status = deployedStatus
+                }
             }
-        }
-        
-        if (animalInstance.save(flush:true))
-        {
-            if (animalReleaseInstance.save(flush: true)) 
+
+            params.measurement.findAll
+            {
+                k, v ->
+
+                // See http://stackoverflow.com/questions/1811395/grails-indexed-parameters
+                if (!k.contains("."))
+                {
+                    AnimalMeasurement measurement = new AnimalMeasurement(v)
+
+                    animalReleaseInstance.addToMeasurements(measurement)
+                }
+            }
+
+            if (   (animalInstance.save(flush:true))
+                && (animalReleaseInstance.save(flush: true)))
             {
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.id])}"
                 redirect(action: "show", id: animalReleaseInstance.id)
             }
             else 
             {
+                log.error(animalReleaseInstance?.errors)
+                log.error(animalInstance?.errors)
                 render(view: "create", model: [animalReleaseInstance: animalReleaseInstance, animal:animalInstance])
             }
-        }
-        else 
-        {
-            log.error("animalInstance.save() error: " + animalInstance.errors)
-            render(view: "create", model: [animalReleaseInstance: animalReleaseInstance, animal:animalInstance])
         }
     }
 

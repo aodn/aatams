@@ -15,7 +15,24 @@ class PersonController {
 
     def list = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [personInstanceList: Person.list(params), personInstanceTotal: Person.count()]
+        
+        def personTotal = Person.count()
+        def personList = Person.list(params)
+        
+        if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
+        {
+            // Filter out non-ACTIVE people (only sys admin should see these).
+            personList = personList.findAll{
+                it.status == EntityStatus.ACTIVE
+            }
+            
+            // Only count ACTIVE people..
+            personTotal = Person.list().count({
+                it.status == EntityStatus.ACTIVE
+            })
+        }
+        
+        [personInstanceList: personList, personInstanceTotal: personTotal]
     }
 
     def create = {

@@ -6,6 +6,8 @@ class ProjectController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def permissionUtilsService
+    
     def index = {
         redirect(action: "list", params: params)
     }
@@ -77,7 +79,11 @@ class ProjectController {
                     new ProjectRole(person:createProjectCmd.person, 
                                     project:projectInstance, 
                                     roleType:pi,
-                                    access:ProjectAccess.READ_WRITE).save(flush:true)
+                                    access:ProjectAccess.READ_WRITE)
+                if (projectRole.save(flush:true))
+                {
+                    permissionUtilsService.setPermissions(projectRole)
+                }
                 
                 if (SecurityUtils.getSubject().hasRole("SysAdmin"))
                 {

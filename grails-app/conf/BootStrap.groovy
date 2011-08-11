@@ -13,6 +13,8 @@ import com.vividsolutions.jts.geom.Point
 
 class BootStrap 
 {
+    def permissionUtilsService // = new PermissionUtilsService()
+    
     def init = 
     { 
         servletContext ->
@@ -150,13 +152,13 @@ class BootStrap
         {
             test
             {
-                println("bootstrap test")
                 initData()
             }
             
             development
             {
                 initData()
+//                initPerformanceData()
             }
         }
     }
@@ -330,23 +332,30 @@ class BootStrap
                             person: joeBloggs,
                             roleType: administrator,
                             access:ProjectAccess.READ_WRITE).save(failOnError: true)
+        permissionUtilsService.setPermissions(tunaAdmin)
+        
         ProjectRole sealProjectInvestigator =
             new ProjectRole(project:sealCountProject,
                             person: joeBloggs,
                             roleType: principalInvestigator,
                             access:ProjectAccess.READ_WRITE).save(failOnError: true)
         joeBloggs.save(failOnError:true)
+        permissionUtilsService.setPermissions(sealProjectInvestigator)
 
         ProjectRole sealAdmin =
             new ProjectRole(project:sealCountProject,
                             person: johnCitizen,
                             roleType: administrator,
                             access:ProjectAccess.READ_ONLY).save(failOnError: true)
+        permissionUtilsService.setPermissions(sealAdmin)
+
         ProjectRole tunaWrite =
             new ProjectRole(project:tunaProject,
                             person: johnCitizen,
                             roleType: administrator,
                             access:ProjectAccess.READ_WRITE).save(failOnError: true)
+        permissionUtilsService.setPermissions(tunaWrite)
+
 
         //
         // Devices.
@@ -737,5 +746,72 @@ class BootStrap
             new DetectionSurgery(detection:detection2,
                                  surgery:surgery2).save(failOnError:true)
                                  */
+    }
+    
+    def initPerformanceData()
+    {
+        //
+        // Security/people.
+        //
+        SecRole sysAdmin = new SecRole(name:"SysAdmin")
+        sysAdmin.addToPermissions("*:*")
+        sysAdmin.save(failOnError: true)
+            
+        //
+        // People.
+        //
+        Person jonBurgess =
+            new Person(username:'jkburges',
+                       passwordHash:new Sha256Hash("password").toHex(),
+                       name:'Jon Burgess',
+                       organisation:Organisation.build(),
+                       phoneNumber:'1234',
+                       emailAddress:'jkburges@utas.edu.au',
+                       status:EntityStatus.ACTIVE)
+        jonBurgess.addToRoles(sysAdmin)
+        jonBurgess.save(failOnError: true)
+        
+        
+        ProjectRoleType principalInvestigator = ProjectRoleType.build(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
+        ProjectRoleType student = ProjectRoleType.build(displayName:'student').save()
+        
+        def numOrgs = 10
+        def numProjectsPerOrg = 5
+        def numPeoplePerProject = 4
+        
+        numOrgs.times
+        {
+            orgCount ->
+            
+            def org = Organisation.build(name: "Org " + orgCount)
+            org.save()
+            
+            // 5 projects for each organisation, each with 4 people (including one PI).
+            numProjectsPerOrg.times
+            {
+                projectCount ->
+                
+                def project = Project.build(name: "Project " + orgCount + "." + projectCount).save()
+                def orgProject = OrganisationProject.build(organisation:org,
+                                                           project:project).save()
+                numPeoplePerProject.times
+                {
+                    personCount ->
+                    
+                    def person = Person.build(name: "Person " + orgCount + "." + projectCount + "." + personCount).save()
+                    
+                    ProjectRole role = ProjectRole.build(project:project,
+                                                         person:person,
+                                                         roleType:student)
+                                                         
+                    if (personCount == 0)
+                    {
+                        role.roleType = principalInvestigator
+                    }
+                    role.save()
+                    permissionUtilsService.setPermissions(role)
+                }
+            }
+        }
     }
 }

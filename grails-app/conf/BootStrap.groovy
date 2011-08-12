@@ -157,8 +157,8 @@ class BootStrap
             
             development
             {
-                initData()
-//                initPerformanceData()
+//                initData()
+                initPerformanceData()
             }
         }
     }
@@ -760,9 +760,35 @@ class BootStrap
                                  */
     }
     
+    def numOrgs = 3 //10
+    def numProjectsPerOrg = 2 // 5
+    def numPeoplePerProject = 2 //4
+
+    def numInstallationsPerProject = 2
+    def numStationsPerInstallation = 2
+    def numReceiversPerOrg = 2
+
+    def numTagsPerProject = 2
+    def numReleasesPerTag = 1 
+    def numDetectionsPerTag = 2
+    def numDeploymentsPerReceiver = 1
+    def numRecoveriesPerReceiver = 1
+    def numEventsPerRecovery = 2
+    
+    ProjectRoleType principalInvestigator = ProjectRoleType.build(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
+    ProjectRoleType student = ProjectRoleType.build(displayName:'student').save()
+    DeviceModel deviceModel = DeviceModel.build().save() 
+    DeviceStatus newStatus = DeviceStatus.build(status:'NEW').save()
+    DeviceStatus deployedStatus = DeviceStatus.build(status:'DEPLOYED').save()
+    WKTReader reader = new WKTReader();
+    
+    InstallationConfiguration installationConfig = InstallationConfiguration.build(type:'ARRAY').save()
+    
     def initPerformanceData()
     {
-        //
+        
+        
+        // 
         // Security/people.
         //
         SecRole sysAdmin = new SecRole(name:"SysAdmin")
@@ -776,26 +802,57 @@ class BootStrap
             new Person(username:'jkburges',
                        passwordHash:new Sha256Hash("password").toHex(),
                        name:'Jon Burgess',
-                       organisation:Organisation.build(),
+//                       organisation:Organisation.build(),
                        phoneNumber:'1234',
                        emailAddress:'jkburges@utas.edu.au',
                        status:EntityStatus.ACTIVE)
+                   
+        Address imosStreetAddress =
+            new Address(streetAddress:'12 Smith Street',
+                        suburbTown:'Hobart',
+                        state:'TAS',
+                        country:'Australia',
+                        postcode:'7000')
+
+        Address imosPostalAddress =
+            new Address(streetAddress:'34 Queen Street',
+                        suburbTown:'Melbourne',
+                        state:'VIC',
+                        country:'Australia',
+                        postcode:'3000')
+
+        Organisation imosOrg = 
+            new Organisation(name:'IMOS', 
+                             department:'eMII',
+                             phoneNumber:'5678',
+                             faxNumber:'5678',
+                             streetAddress:imosStreetAddress,
+                             postalAddress:imosPostalAddress,
+                             status:EntityStatus.PENDING,
+                             requestingUser:jonBurgess).save(failOnError: true)
+        
         jonBurgess.addToRoles(sysAdmin)
         jonBurgess.save(failOnError: true)
         
-        
-        ProjectRoleType principalInvestigator = ProjectRoleType.build(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
-        ProjectRoleType student = ProjectRoleType.build(displayName:'student').save()
-        
-        def numOrgs = 10
-        def numProjectsPerOrg = 5
-        def numPeoplePerProject = 4
         
         numOrgs.times
         {
             orgCount ->
             
-            def org = Organisation.build(name: "Org " + orgCount)
+            def org = Organisation.build(name: "Org " + orgCount,
+                                         requestingUser: jonBurgess)
+                                     
+//            numReceiversPerOrg.times
+//            {
+//                receiverCount ->
+//                
+//                def receiver = Receiver.build(codeName: orgCount + "." + receiverCount,
+//                                              model: deviceModel,
+//                                              status: newStatus,
+//                                              organisation:org)
+//                org.addToReceivers(receiver)
+//            }
+            
             org.save()
             
             // 5 projects for each organisation, each with 4 people (including one PI).
@@ -806,24 +863,67 @@ class BootStrap
                 def project = Project.build(name: "Project " + orgCount + "." + projectCount).save()
                 def orgProject = OrganisationProject.build(organisation:org,
                                                            project:project).save()
-                numPeoplePerProject.times
-                {
-                    personCount ->
-                    
-                    def person = Person.build(name: "Person " + orgCount + "." + projectCount + "." + personCount).save()
-                    
-                    ProjectRole role = ProjectRole.build(project:project,
-                                                         person:person,
-                                                         roleType:student)
-                                                         
-                    if (personCount == 0)
-                    {
-                        role.roleType = principalInvestigator
-                    }
-                    role.save()
-                    permissionUtilsService.setPermissions(role)
-                }
+                                                       
+                createPeople(org, orgCount, project, projectCount)
+                createInstallations(orgCount, project, projectCount)
             }
+        }
+    }
+    
+    def createPeople(org, orgCount, project, projectCount)
+    {
+        numPeoplePerProject.times
+        {
+            personCount ->
+
+            def person = Person.build(name: "Person " + orgCount + "." + projectCount + "." + personCount,
+                                      organisation:org).save()
+
+            ProjectRole role = ProjectRole.build(project:project,
+                                                 person:person,
+                                                 roleType:student)
+
+            if (personCount == 0)
+            {
+                role.roleType = principalInvestigator
+            }
+            role.save()
+            
+            permissionUtilsService.setPermissions(role)
+        }
+    }
+    
+    def createInstallations(orgCount, project, projectCount)
+    {
+        numInstallationsPerProject.times
+        {
+            installationCount ->
+            
+            def installation = Installation.build(name: "Installation " + orgCount + "." + projectCount + "." + installationCount,
+                                                  project: project,
+                                                  configuration: installationConfig)
+            
+            numStationsPerInstallation.times
+            {
+                stationCount ->
+                
+                def station = InstallationStation.build(name: "InstallationStation " + orgCount + "." + projectCount + "." + installationCount + "." + stationCount,
+                                                        location:(Point)reader.read("POINT(10.1234 10.1234)"),
+                                                        installation:installation)
+                        
+                installation.addToStations(station)
+                
+                // Just create one receiver/deployment per station for now.
+                Organisation org = Organisation.get(0)
+                def receiver = Receiver.build(codeName: "Receiver: " + station.name,
+                                              model: deviceModel,
+                                              status: deployedStatus,
+                                              organisation:org)
+                org.addToReceivers(receiver)
+                org.save()
+            }
+            
+            installation.save()
         }
     }
 }

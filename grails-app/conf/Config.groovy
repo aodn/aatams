@@ -95,7 +95,7 @@ log4j = {
            'org.codehaus.groovy.grails.plugins', // plugins
            'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
            'org.springframework',
-           'org.hibernate',
+//           'org.hibernate',
            'net.sf.ehcache.hibernate'
 
     warn   'org.mortbay.log'
@@ -105,8 +105,9 @@ log4j = {
 //           'org.codehaus.groovy.grails.orm.hibernate'
 
     debug   "grails.app.controller.au.org.emii",
-            "grails.app.service.au.org.emii",
+//            "grails.app.service.au.org.emii",
             "grails.app.domain.au.org.emii",
+//           'org.hibernate',
             "grails.app.filter"//,
             //"grails.app.tagLib.com.energizedwork.grails.plugins.jodatime"
 }

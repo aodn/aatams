@@ -47,19 +47,22 @@ class ReceiverRecoveryController {
         
         deployment.recovery = receiverRecoveryInstance
         
+        // Create a new receiver download an associate it with the recovery
+        // TODO: may need some extra controls in view to populate download 
+        // fields.
+        ReceiverDownload download = 
+            new ReceiverDownload()
+
+        download.receiverRecovery = receiverRecoveryInstance
+        download.downloadDateTime = new DateTime()
+//        download.save(flush:true, failOnErrors:true)
+        
+        deployment.recovery.download = download
+        
+//        assert(download != null): "download cannot be null"
+
         if (deployment.save(flush: true)) 
         {
-            // Create a new receiver download an associate it with the recovery
-            // TODO: may need some extra controls in view to populate download 
-            // fields.
-            ReceiverDownload download = 
-                new ReceiverDownload()
-                
-            download.receiverRecovery = receiverRecoveryInstance
-            download.downloadDateTime = new DateTime()
-            download.save(flush:true, failOnErrors:true)
-            assert(download != null): "download cannot be null"
-
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.id])}"
             redirect(action: "show", id: receiverRecoveryInstance.id)
         }

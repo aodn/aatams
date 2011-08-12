@@ -26,6 +26,8 @@ class ReceiverDownloadFileController {
 
     def save = 
     {
+        log.debug("params: " + params)
+        
         def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
         receiverDownloadFileInstance.receiverDownload = ReceiverDownload.get(params.downloadId)
         receiverDownloadFileInstance.errMsg = ""

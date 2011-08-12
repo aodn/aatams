@@ -31,7 +31,7 @@ class Organisation
         postalAddress(nullable:true)
         status()    // Default to PENDING
         organisationProjects()
-        requestingUser(nullable:true)
+        requestingUser(nullable:false)
     }
     
     String toString()

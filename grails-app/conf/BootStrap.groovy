@@ -186,6 +186,15 @@ class BootStrap
                         country:'Australia',
                         postcode:'3000')
 
+        Person jonBurgess =
+            new Person(username:'jkburges',
+                       passwordHash:new Sha256Hash("password").toHex(),
+                       name:'Jon Burgess',
+                       //organisation:imosOrg,
+                       phoneNumber:'1234',
+                       emailAddress:'jkburges@utas.edu.au',
+                       status:EntityStatus.ACTIVE)
+                   
         //
         // Organisations.
         //
@@ -196,7 +205,8 @@ class BootStrap
                              faxNumber:'1234',
                              streetAddress:csiroStreetAddress,
                              postalAddress:csiroPostalAddress,
-                             status:EntityStatus.ACTIVE).save(failOnError: true)
+                             status:EntityStatus.ACTIVE,
+                             requestingUser:jonBurgess).save(failOnError: true)
 
         Address imosStreetAddress =
             new Address(streetAddress:'12 Smith Street',
@@ -219,7 +229,8 @@ class BootStrap
                              faxNumber:'5678',
                              streetAddress:imosStreetAddress,
                              postalAddress:imosPostalAddress,
-                             status:EntityStatus.PENDING).save(failOnError: true)
+                             status:EntityStatus.PENDING,
+                             requestingUser:jonBurgess).save(failOnError: true)
 
         Address imosStreetAddress2 =
             new Address(streetAddress:'12 Smith Street',
@@ -242,7 +253,8 @@ class BootStrap
                              faxNumber:'5678',
                              streetAddress:imosStreetAddress2,
                              postalAddress:imosPostalAddress2,
-                             status:EntityStatus.PENDING).save(failOnError: true)
+                             status:EntityStatus.PENDING,
+                             requestingUser:jonBurgess).save(failOnError: true)
 
 
         //
@@ -281,14 +293,14 @@ class BootStrap
         //
         // People.
         //
-        Person jonBurgess =
-            new Person(username:'jkburges',
-                       passwordHash:new Sha256Hash("password").toHex(),
-                       name:'Jon Burgess',
-                       organisation:imosOrg,
-                       phoneNumber:'1234',
-                       emailAddress:'jkburges@utas.edu.au',
-                       status:EntityStatus.ACTIVE)
+//        Person jonBurgess =
+//            new Person(username:'jkburges',
+//                       passwordHash:new Sha256Hash("password").toHex(),
+//                       name:'Jon Burgess',
+//                       organisation:imosOrg,
+//                       phoneNumber:'1234',
+//                       emailAddress:'jkburges@utas.edu.au',
+//                       status:EntityStatus.ACTIVE)
         jonBurgess.addToRoles(sysAdmin)
         jonBurgess.save(failOnError: true)
 

@@ -158,9 +158,17 @@ class BootStrap
             
             development
             {
-                initData()
-//                initPerformanceData()
+//                initData()
+                initPerformanceData()
             }
+            
+            // TODO: remove this.
+            production
+            {
+//                initData()
+                initPerformanceData()
+            }
+            
         }
     }
     
@@ -761,29 +769,56 @@ class BootStrap
                                  */
     }
     
-    def numOrgs = 3 //10
-    def numProjectsPerOrg = 2 // 5
-    def numPeoplePerProject = 2 //4
+    // Small counts for test-data testing.
+    /**
+    def numOrgs = 3
+    def numProjectsPerOrg = 2           // 6
+    def numPeoplePerProject = 2         // 12
 
-    def numInstallationsPerProject = 2
-    def numStationsPerInstallation = 2
-    def numReceiversPerOrg = 2
+    def numInstallationsPerProject = 2  // 12
+    def numStationsPerInstallation = 2  // 24
+    def numDeploymentsPerReceiver = 1   // 24
+    def numRecoveriesPerReceiver = 1    // 24
 
-    def numTagsPerProject = 2
-    def numReleasesPerTag = 1 
-    def numDetectionsPerTag = 2
-    def numDeploymentsPerReceiver = 1
-    def numRecoveriesPerReceiver = 1
-    def numEventsPerRecovery = 2
+    def numTagsPerProject = 2           // 24
+    def numDetectionsPerSurgery = 2     // 48
+    */
     
-//    ProjectRoleType principalInvestigator = ProjectRoleType.build(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
-//    ProjectRoleType student = ProjectRoleType.build(displayName:'student').save()
-//    DeviceModel deviceModel = DeviceModel.build().save() 
-//    DeviceStatus newStatus = DeviceStatus.build(status:'NEW').save()
-//    DeviceStatus deployedStatus = DeviceStatus.build(status:'DEPLOYED').save()
-//    WKTReader reader = new WKTReader();
-//    
-//    InstallationConfiguration installationConfig = InstallationConfiguration.build(type:'ARRAY').save()
+//    def numEventsPerRecovery = 2
+   
+    // Large numbers for performance/load testing.
+    def numOrgs = 10
+    def numProjectsPerOrg = 5           // 50
+    def numPeoplePerProject = 4         // 200
+
+    def numInstallationsPerProject = 5  // 250
+    def numStationsPerInstallation = 5  // 1250
+    def numDeploymentsPerReceiver = 1   // 1250
+    def numRecoveriesPerReceiver = 1    // 1250
+
+    def numTagsPerProject = 50          // 2500
+    def numDetectionsPerSurgery = 10    // 25000
+    
+//    def numEventsPerRecovery = 2
+    
+   
+    ProjectRoleType principalInvestigator = ProjectRoleType.build(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
+    ProjectRoleType student = ProjectRoleType.build(displayName:'student').save()
+    DeviceModel deviceModel = DeviceModel.build().save() 
+    DeviceStatus newStatus = DeviceStatus.build(status:'NEW').save()
+    DeviceStatus deployedStatus = DeviceStatus.build(status:'DEPLOYED').save()
+    WKTReader reader = new WKTReader();
+    
+    InstallationConfiguration installationConfig = InstallationConfiguration.build(type:'ARRAY').save()
+    Organisation imosOrg
+    
+    Species testSpecies = new Species(name:'Test Species').save()
+    Animal testAnimal = new Animal(species:testSpecies).save()
+    
+    MooringType mooringType = MooringType.build().save()
+    TransmitterType pinger = TransmitterType.build(transmitterTypeName:'PINGER').save()
+    SurgeryType surgeryType = SurgeryType.build().save()
+    SurgeryTreatmentType surgeryTreatmentType = SurgeryTreatmentType.build().save()
     
     def initPerformanceData()
     {
@@ -822,7 +857,7 @@ class BootStrap
                         country:'Australia',
                         postcode:'3000')
 
-        Organisation imosOrg = 
+        imosOrg = 
             new Organisation(name:'IMOS', 
                              department:'eMII',
                              phoneNumber:'5678',
@@ -867,7 +902,61 @@ class BootStrap
                                                        
                 createPeople(org, orgCount, project, projectCount)
                 createInstallations(orgCount, project, projectCount)
+                createTags(org, orgCount, project, projectCount)
             }
+        }
+    }
+    
+    def totalDetectionCount = 0
+    def totalTagCount = 0
+    
+    def createTags(org, orgCount, project, projectCount)
+    {
+        numTagsPerProject.times
+        {
+            tagCount ->
+            
+            // 1 release/surgery per tag.
+            def tag = Tag.build(codeName:totalTagCount,
+                                project:project,
+                                model:deviceModel,
+                                status:deployedStatus,
+                                transmitterType:pinger)
+                                    
+            totalTagCount++            
+            
+            def release = AnimalRelease.build(project:project, animal:testAnimal,
+                                              captureLocation:(Point)reader.read("POINT(10.1234 10.1234)"),
+                                              releaseLocation:(Point)reader.read("POINT(10.1234 10.1234)"))
+            
+            def surgery = Surgery.build(release:release, tag:tag,
+                                        type:surgeryType,
+                                        treatmentType:surgeryTreatmentType)
+            
+            numDetectionsPerSurgery.times
+            {
+                def codeName = String.valueOf(totalDetectionCount % totalReceiverCount)
+                Receiver receiver = Receiver.findByCodeName(codeName)
+                assert receiver != null: "Receiver not found, codeName: " + codeName
+//                def deployment = receiver.deployments[0]
+                def deployment = ReceiverDeployment.findByReceiver(receiver)
+                assert deployment != null: "No deployment for receiver: " + String.valueOf(receiver)
+                
+                def detection = Detection.build(receiverDeployment:deployment,
+                                                location:(Point)reader.read("POINT(10.1234 10.1234)"))
+
+                def detectionSurgery = DetectionSurgery.build(surgery:surgery,
+                                                              detection:detection)
+                
+                totalDetectionCount++
+            }
+            
+            
+            // This should cascase save the above.
+            project.save()
+            
+            
+            
         }
     }
     
@@ -894,6 +983,9 @@ class BootStrap
         }
     }
     
+    // This is used when creating detections.
+    def totalReceiverCount = 0
+    
     def createInstallations(orgCount, project, projectCount)
     {
         numInstallationsPerProject.times
@@ -915,16 +1007,23 @@ class BootStrap
                 installation.addToStations(station)
                 
                 // Just create one receiver/deployment per station for now.
-                Organisation org = Organisation.get(0)
-                def receiver = Receiver.build(codeName: "Receiver: " + station.name,
+                def codeName = String.valueOf(totalReceiverCount)
+                def receiver = Receiver.build(codeName: codeName,
                                               model: deviceModel,
-                                              status: deployedStatus,
-                                              organisation:org)
-                org.addToReceivers(receiver)
-                org.save()
+                                              status: deployedStatus)
+                imosOrg.addToReceivers(receiver)
+                
+                def receiverDeployment = 
+                    ReceiverDeployment.build(station: station,
+                                             receiver: receiver,
+                                             mooringType: mooringType)
+
+                imosOrg.save()
+                
+                totalReceiverCount++
             }
             
-            installation.save()
+            installation.save(flush:true)
         }
     }
 }

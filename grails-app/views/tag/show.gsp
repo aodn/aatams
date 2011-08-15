@@ -84,6 +84,7 @@
                                   <tr>
                                     <th></th>  <!-- Link to sensor/show -->
                                     <th>Tag Type</th>
+                                    <th>Code Map</th>
                                     <th>Ping Code</th>
                                     <th>Slope</th>
                                     <th>Intercept</th>
@@ -97,9 +98,8 @@
                                       <td class="rowButton">
                                         <g:link class="show" controller="sensor" action="show" id="${s?.id}"></g:link>
                                       </td>
-                                      <td>
-                                        <g:link controller="sensor" action="show" id="${s.id}">${s?.transmitterType}</g:link>
-                                      </td>
+                                      <td>${s?.transmitterType}</td>
+                                      <td>${s?.codeMap}</td>
                                       <td>${s?.pingCode}</td>
                                       <td>${s?.slope}</td>
                                       <td>${s?.intercept}</td>

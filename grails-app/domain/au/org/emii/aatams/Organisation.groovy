@@ -26,7 +26,7 @@ class Organisation
         name(blank:false)
         department(blank:false)
         phoneNumber(blank:false)
-        faxNumber()
+        faxNumber(nullable:true)
         streetAddress()
         postalAddress(nullable:true)
         status()    // Default to PENDING

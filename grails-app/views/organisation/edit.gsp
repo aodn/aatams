@@ -67,7 +67,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="faxNumber"><g:message code="organisation.faxNumber.label" default="Fax Number" /></label>
+                                  <label for="faxNumber"><g:message code="organisation.faxNumber.label" default="Fax Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationInstance, field: 'faxNumber', 'errors')}">
                                     <g:textField name="faxNumber" value="${organisationInstance?.faxNumber}" />

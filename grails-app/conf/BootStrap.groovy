@@ -157,8 +157,8 @@ class BootStrap
             
             development
             {
-//                initData()
-                initPerformanceData()
+                initData()
+//                initPerformanceData()
             }
         }
     }
@@ -775,14 +775,14 @@ class BootStrap
     def numRecoveriesPerReceiver = 1
     def numEventsPerRecovery = 2
     
-    ProjectRoleType principalInvestigator = ProjectRoleType.build(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
-    ProjectRoleType student = ProjectRoleType.build(displayName:'student').save()
-    DeviceModel deviceModel = DeviceModel.build().save() 
-    DeviceStatus newStatus = DeviceStatus.build(status:'NEW').save()
-    DeviceStatus deployedStatus = DeviceStatus.build(status:'DEPLOYED').save()
-    WKTReader reader = new WKTReader();
-    
-    InstallationConfiguration installationConfig = InstallationConfiguration.build(type:'ARRAY').save()
+//    ProjectRoleType principalInvestigator = ProjectRoleType.build(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
+//    ProjectRoleType student = ProjectRoleType.build(displayName:'student').save()
+//    DeviceModel deviceModel = DeviceModel.build().save() 
+//    DeviceStatus newStatus = DeviceStatus.build(status:'NEW').save()
+//    DeviceStatus deployedStatus = DeviceStatus.build(status:'DEPLOYED').save()
+//    WKTReader reader = new WKTReader();
+//    
+//    InstallationConfiguration installationConfig = InstallationConfiguration.build(type:'ARRAY').save()
     
     def initPerformanceData()
     {

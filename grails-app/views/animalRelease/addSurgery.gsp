@@ -41,7 +41,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label class="compulsory" for="tag"><g:message code="surgery.tag.label" default="Tag" /></label>
+                                    <label class="compulsory" for="tag"><g:message code="surgery.tag.label" default="Tag ID" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'tag', 'errors')}">
                                     <g:textField name="tagCodeName" />
@@ -92,7 +92,7 @@
                                     <label for="comments"><g:message code="surgery.comments.label" default="Comments" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'comments', 'errors')}">
-                                    <g:textField name="surgeryComments" value="${surgeryInstance?.comments}" />
+                                    <g:textArea name="surgeryComments" value="${surgeryInstance?.comments}" />
 
                                 </td>
                             </tr>

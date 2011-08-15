@@ -135,6 +135,7 @@ class BootStrap
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['transmitterType'] = it.transmitterType
+            returnArray['codeMap'] = it.codeMap
             returnArray['pingCode'] = it.pingCode
             returnArray['slope'] = it.slope
             returnArray['intercept'] = it.intercept

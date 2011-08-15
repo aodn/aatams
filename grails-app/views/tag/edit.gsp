@@ -106,6 +106,7 @@
                                       <tr>
                                         <th></th>
                                         <th>Tag Type</th>
+                                        <th>Code Map</th>
                                         <th>Ping Code</th>
                                         <th>Slope</th>
                                         <th>Intercept</th>
@@ -119,9 +120,8 @@
                                           <td class="rowButton">
                                             <g:link class="show" controller="sensor" action="show" id="${s?.id}"></g:link>
                                           </td>
-                                          <td>
-                                            <g:link controller="sensor" action="show" id="${s.id}">${s?.transmitterType}</g:link>
-                                          </td>
+                                          <td>${s?.transmitterType}</td>
+                                          <td>${s?.codeMap}</td>
                                           <td>${s?.pingCode}</td>
                                           <td>${s?.slope}</td>
                                           <td>${s?.intercept}</td>
@@ -171,6 +171,16 @@
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
                                 <g:select name="transmitterTypeId" from="${au.org.emii.aatams.TransmitterType.list()}" optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
+
+                            </td>
+                        </tr>
+
+                        <tr class="prop">
+                            <td valign="top" class="name">
+                                <label class="compulsory" for="sensorCodeMap"><g:message code="sensor.codeMap.label" default="Code Map" /></label>
+                            </td>
+                            <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'codeMap', 'errors')}">
+                                <g:textField name="sensorCodeMap" value="${fieldValue(bean: sensorInstance, field: 'codeMap')}" />
 
                             </td>
                         </tr>

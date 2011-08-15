@@ -6,8 +6,8 @@ $(function()
 {
     $('#dialog-form-add-surgery').dialog({
         autoOpen: false,
-        height: 450,
         width: 750,
+        height: 575,
         modal: true,
         buttons: {
             'Add': function() 

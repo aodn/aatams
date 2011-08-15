@@ -117,8 +117,8 @@ function genPointString(lon, lat, srid)
     // Construct the string from lon, lat, srid values.
     var pointAsString = "";
     
-    pointAsString += Math.abs(lon) + "°"
-    if (lon >= 0)
+    pointAsString += Math.abs(lat) + "°"
+    if (lat >= 0)
     {
         pointAsString += 'N'
     }
@@ -127,8 +127,8 @@ function genPointString(lon, lat, srid)
         pointAsString += 'S'
     }
 
-    pointAsString += ' ' + Math.abs(lat) + "° "
-    if (lat >= 0)
+    pointAsString += ' ' + Math.abs(lon) + "° "
+    if (lon >= 0)
     {
         pointAsString += 'E'
     }

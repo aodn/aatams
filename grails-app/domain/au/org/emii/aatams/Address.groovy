@@ -11,7 +11,7 @@ class Address
     String postcode     // handle alpha-numeric (e.g. USA zipcodes).
     String country      // needed?
     
-    static belongsTo = [organisation: Organisation]
+    //static belongsTo = [organisation: Organisation]
     static constraints = 
     {
         streetAddress()

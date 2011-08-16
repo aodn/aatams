@@ -771,6 +771,7 @@ class BootStrap
     
     // Small counts for test-data testing.
     /**
+    def smallTest = true
     def numOrgs = 3
     def numProjectsPerOrg = 2           // 6
     def numPeoplePerProject = 2         // 12
@@ -782,11 +783,12 @@ class BootStrap
 
     def numTagsPerProject = 2           // 24
     def numDetectionsPerSurgery = 2     // 48
-    */
     
 //    def numEventsPerRecovery = 2
-   
+    */
+    
     // Large numbers for performance/load testing.
+    def smallTest = false
     def numOrgs = 10
     def numProjectsPerOrg = 5           // 50
     def numPeoplePerProject = 4         // 200
@@ -796,14 +798,14 @@ class BootStrap
     def numDeploymentsPerReceiver = 1   // 1250
     def numRecoveriesPerReceiver = 1    // 1250
 
-    def numTagsPerProject = 50          // 2500
-    def numDetectionsPerSurgery = 10    // 25000
+    def numTagsPerProject = 100         // 5000
+    def numDetectionsPerSurgery = 5     // 25000
     
 //    def numEventsPerRecovery = 2
     
    
-    ProjectRoleType principalInvestigator = ProjectRoleType.build(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
-    ProjectRoleType student = ProjectRoleType.build(displayName:'student').save()
+    ProjectRoleType principalInvestigator = new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
+    ProjectRoleType student = new ProjectRoleType(displayName:'student').save()
     DeviceModel deviceModel = DeviceModel.build().save() 
     DeviceStatus newStatus = DeviceStatus.build(status:'NEW').save()
     DeviceStatus deployedStatus = DeviceStatus.build(status:'DEPLOYED').save()
@@ -819,10 +821,28 @@ class BootStrap
     TransmitterType pinger = TransmitterType.build(transmitterTypeName:'PINGER').save()
     SurgeryType surgeryType = SurgeryType.build().save()
     SurgeryTreatmentType surgeryTreatmentType = SurgeryTreatmentType.build().save()
+    CaptureMethod defaultCaptureMethod = CaptureMethod.build().save()
+    
+    Address defaultAddress = Address.build().save()
+    
+    def totalProjectCount = 0
+
+    def sessionFactory
+    def propertyInstanceMap = org.codehaus.groovy.grails.plugins.DomainClassGrailsPlugin.PROPERTY_INSTANCE_MAP
+ 
+    def cleanUpGorm() 
+    {
+        def session = sessionFactory.currentSession
+        session.flush()
+        session.clear()
+        propertyInstanceMap.get().clear()
+    }
     
     def initPerformanceData()
     {
-        
+        def startTimestamp = System.currentTimeMillis()
+        def results = new File("/tmp/profiling.csv")
+        results.write("project count,elapsed time\n")
         
         // 
         // Security/people.
@@ -848,14 +868,14 @@ class BootStrap
                         suburbTown:'Hobart',
                         state:'TAS',
                         country:'Australia',
-                        postcode:'7000')
+                        postcode:'7000').save()
 
         Address imosPostalAddress =
             new Address(streetAddress:'34 Queen Street',
                         suburbTown:'Melbourne',
                         state:'VIC',
                         country:'Australia',
-                        postcode:'3000')
+                        postcode:'3000').save()
 
         imosOrg = 
             new Organisation(name:'IMOS', 
@@ -875,34 +895,49 @@ class BootStrap
         {
             orgCount ->
             
-            def org = Organisation.build(name: "Org " + orgCount,
-                                         requestingUser: jonBurgess)
-                                     
-//            numReceiversPerOrg.times
-//            {
-//                receiverCount ->
-//                
-//                def receiver = Receiver.build(codeName: orgCount + "." + receiverCount,
-//                                              model: deviceModel,
-//                                              status: newStatus,
-//                                              organisation:org)
-//                org.addToReceivers(receiver)
-//            }
+//            println("org count: " + orgCount)
             
-            org.save()
+            String orgName = "Org " + orgCount
+            def org = new Organisation(name: orgName,
+                                         department: "asdf",
+                                         phoneNumber: "1234",
+                                         faxNumber: "1234",
+                                         streetAddress: defaultAddress,
+                                         postalAddress: defaultAddress,
+                                         status: EntityStatus.ACTIVE,
+                                         requestingUser: jonBurgess)
+            org.save(flush:true)
             
             // 5 projects for each organisation, each with 4 people (including one PI).
             numProjectsPerOrg.times
             {
                 projectCount ->
                 
-                def project = Project.build(name: "Project " + orgCount + "." + projectCount).save()
-                def orgProject = OrganisationProject.build(organisation:org,
-                                                           project:project).save()
-                                                       
+                // Do this to ensure that correct organisation object is used in session (after clearing/flushing).
+                org = Organisation.findByName(orgName)
+                assert(org != null): "Organisation null, name: " + orgName
+                
+                def project = new Project(name: "Project " + orgCount + "." + projectCount,
+                                          description: "asdf",
+                                          status: EntityStatus.ACTIVE,
+                                          requestingUser: jonBurgess).save()
+                def orgProject = new OrganisationProject(organisation:org,
+                                                         project:project).save()
+                
                 createPeople(org, orgCount, project, projectCount)
-                createInstallations(orgCount, project, projectCount)
+                createInstallations(org, orgCount, project, projectCount)
                 createTags(org, orgCount, project, projectCount)
+               
+                totalProjectCount++
+                
+                def elapsedTime = System.currentTimeMillis() - startTimestamp
+                println(String.valueOf(new Date()) + ": total projects: " + totalProjectCount)
+                results.append(totalProjectCount)
+                results.append(',')
+                results.append(elapsedTime)
+                results.append('\n')
+
+                cleanUpGorm()
             }
         }
     }
@@ -917,21 +952,31 @@ class BootStrap
             tagCount ->
             
             // 1 release/surgery per tag.
-            def tag = Tag.build(codeName:totalTagCount,
-                                project:project,
-                                model:deviceModel,
-                                status:deployedStatus,
-                                transmitterType:pinger)
+            def tag = new Tag(codeName:totalTagCount,
+                              codeMap:"A69-1303",
+                              pingCode:"1234",
+                              project:project,
+                              model:deviceModel,
+                              status:deployedStatus,
+                              transmitterType:pinger,
+                              serialNumber:"1234").save(failOnError:true)
                                     
             totalTagCount++            
             
-            def release = AnimalRelease.build(project:project, animal:testAnimal,
+            def release = new AnimalRelease(project:project, animal:testAnimal,
                                               captureLocation:(Point)reader.read("POINT(10.1234 10.1234)"),
-                                              releaseLocation:(Point)reader.read("POINT(10.1234 10.1234)"))
+                                              releaseLocation:(Point)reader.read("POINT(10.1234 10.1234)"),
+                                              captureLocality:"asdf",
+                                              captureDateTime:new DateTime(),
+                                              captureMethod:defaultCaptureMethod,
+                                              releaseLocality:"awef",
+                                              releaseDateTime:new DateTime()).save(failOnError:true)
+                                              
             
-            def surgery = Surgery.build(release:release, tag:tag,
+            def surgery = new Surgery(release:release, tag:tag,
+                                        timestamp:new DateTime(),
                                         type:surgeryType,
-                                        treatmentType:surgeryTreatmentType)
+                                        treatmentType:surgeryTreatmentType).save(failOnError:true)
             
             numDetectionsPerSurgery.times
             {
@@ -942,21 +987,19 @@ class BootStrap
                 def deployment = ReceiverDeployment.findByReceiver(receiver)
                 assert deployment != null: "No deployment for receiver: " + String.valueOf(receiver)
                 
-                def detection = Detection.build(receiverDeployment:deployment,
-                                                location:(Point)reader.read("POINT(10.1234 10.1234)"))
+                def detection = new Detection(receiverDeployment:deployment,
+                                              location:(Point)reader.read("POINT(10.1234 10.1234)"),
+                                              timestamp:new Date()).save(failOnError:true)
 
-                def detectionSurgery = DetectionSurgery.build(surgery:surgery,
-                                                              detection:detection)
+                def detectionSurgery = new DetectionSurgery(surgery:surgery,
+                                                            detection:detection).save(failOnError:true)
                 
                 totalDetectionCount++
             }
             
             
-            // This should cascase save the above.
+            // This should cascade save the above.
             project.save()
-            
-            
-            
         }
     }
     
@@ -966,64 +1009,77 @@ class BootStrap
         {
             personCount ->
 
-            def person = Person.build(name: "Person " + orgCount + "." + projectCount + "." + personCount,
-                                      organisation:org).save()
+            def person = new Person(name: "Person " + orgCount + "." + projectCount + "." + personCount,
+                                    organisation:org,
+                                    emailAddress:"asdf@asdf.com",
+                                    phoneNumber:"1234",
+                                    status:EntityStatus.ACTIVE).save()
 
-            ProjectRole role = ProjectRole.build(project:project,
-                                                 person:person,
-                                                 roleType:student)
+            project.save()
+            
+            ProjectRole role = new ProjectRole(project:project,
+                                               person:person,
+                                               roleType:student,
+                                               access:ProjectAccess.READ_WRITE)
 
+            // Make the first person on each project a PI.
             if (personCount == 0)
             {
                 role.roleType = principalInvestigator
             }
             role.save()
             
-            permissionUtilsService.setPermissions(role)
+            // Don't set permissions for now as it is too slow.
+//            permissionUtilsService.setPermissions(role)
         }
     }
     
     // This is used when creating detections.
     def totalReceiverCount = 0
     
-    def createInstallations(orgCount, project, projectCount)
+    def createInstallations(org, orgCount, project, projectCount)
     {
         numInstallationsPerProject.times
         {
             installationCount ->
             
-            def installation = Installation.build(name: "Installation " + orgCount + "." + projectCount + "." + installationCount,
-                                                  project: project,
-                                                  configuration: installationConfig)
+            def installation = new Installation(name: "Installation " + orgCount + "." + projectCount + "." + installationCount,
+                                                project: project,
+                                                configuration: installationConfig).save()
             
             numStationsPerInstallation.times
             {
                 stationCount ->
                 
-                def station = InstallationStation.build(name: "InstallationStation " + orgCount + "." + projectCount + "." + installationCount + "." + stationCount,
+                def station = new InstallationStation(name: "InstallationStation " + orgCount + "." + projectCount + "." + installationCount + "." + stationCount,
                                                         location:(Point)reader.read("POINT(10.1234 10.1234)"),
-                                                        installation:installation)
+                                                        installation:installation).save()
                         
                 installation.addToStations(station)
                 
                 // Just create one receiver/deployment per station for now.
                 def codeName = String.valueOf(totalReceiverCount)
-                def receiver = Receiver.build(codeName: codeName,
-                                              model: deviceModel,
-                                              status: deployedStatus)
-                imosOrg.addToReceivers(receiver)
+                def receiver = new Receiver(codeName: codeName,
+                                            model: deviceModel,
+                                            serialNumber: "1234",
+                                            status: deployedStatus,
+                                            organisation: org).save(flush:true)
+                org.addToReceivers(receiver).save(flush:true)
                 
                 def receiverDeployment = 
-                    ReceiverDeployment.build(station: station,
-                                             receiver: receiver,
-                                             mooringType: mooringType)
+                    new ReceiverDeployment(station: station,
+                                           receiver: receiver,
+                                           deploymentNumber:0,
+                                           deploymentDateTime:new DateTime(),
+                                           mooringType: mooringType).save(flush:true)
 
-                imosOrg.save()
                 
                 totalReceiverCount++
             }
             
-            installation.save(flush:true)
+            installation.save()
         }
+        
+//        org.save(flush:true)    // Flush so that Receiver.findByCodeName (in tags) works.
     }
 }

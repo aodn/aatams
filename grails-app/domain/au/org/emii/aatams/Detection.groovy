@@ -32,6 +32,10 @@ class Detection
      * Additionally, the relationship is modelled via surgery, due to the fact
      * that a tag could potentially be reused on several animals.
      */
+    // Note: initialise with empty list so that detectionSurgeries.isEmpty()
+    // returns true (I thought that the initialisation should happen when save()
+    // is called but apparently not.
+    List<DetectionSurgery> detectionSurgeries = new ArrayList<DetectionSurgery>()
     static hasMany = [detectionSurgeries:DetectionSurgery]
     
     String receiverName;
@@ -42,6 +46,11 @@ class Detection
      * recorded here also for completeness).
      */
     String stationName;
+    
+    /**
+     * Record the actual ID transmitted by the tag.
+     */
+    String transmitterId;
     
     /**
      * May be different (as with station name above).

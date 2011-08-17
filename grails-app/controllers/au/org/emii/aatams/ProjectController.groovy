@@ -21,14 +21,21 @@ class ProjectController {
         if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
         {
             // Filter out non-ACTIVE organisations (only sys admin should see these).
-            projectList = projectList.findAll{
-                it.status == EntityStatus.ACTIVE
+            projectList = projectList.grep
+            {
+                return (it.status == EntityStatus.ACTIVE)
             }
             
             // Only count ACTIVE projects.
-            projectTotal = Project.list().count({
-                it.status == EntityStatus.ACTIVE
-            })
+            // TODO: why doesn't count({}) work?
+            projectTotal = 0
+            Project.list().each
+            {
+                if (it.status == EntityStatus.ACTIVE)
+                {
+                    projectTotal++
+                }
+            }
         }
         
         [projectInstanceList: projectList, projectInstanceTotal: projectTotal]

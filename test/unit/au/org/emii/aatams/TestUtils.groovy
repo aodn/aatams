@@ -13,7 +13,8 @@ class TestUtils
 {
     static loginSysAdmin(caller)
     {
-        def subject = [ getPrincipal: { "jkburges" },
+        Person jkburges = new Person(username: 'jkburges')
+        def subject = [ getPrincipal: { jkburges.username },
                         isAuthenticated: { true },
                         hasRole: { true } 
                       ] as Subject
@@ -24,12 +25,13 @@ class TestUtils
         SecurityUtils.metaClass.static.getSubject = { subject }
         
         // Need this for "findByUsername()" etc.
-        caller.mockDomain(Person)
+        caller.mockDomain(Person, [jkburges])
     }
     
     static loginJoeBloggs(caller)
     {
-        def subject = [ getPrincipal: { "jbloggs" },
+        Person jbloggs = new Person(username: 'jbloggs')
+        def subject = [ getPrincipal: { jbloggs.username },
                         isAuthenticated: { true },
                         hasRole:
                         {
@@ -50,7 +52,7 @@ class TestUtils
         SecurityUtils.metaClass.static.getSubject = { subject }
 
         // Need this for "findByUsername()" etc.
-        caller.mockDomain(Person)
+        caller.mockDomain(Person, [jbloggs])
     }
     
     static logout()

@@ -22,14 +22,26 @@ class OrganisationController
         if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
         {
             // Filter out non-ACTIVE organisations (only sys admin should see these).
-            organisationList = organisationList.findAll{
-                it.status == EntityStatus.ACTIVE
+            organisationList = organisationList.grep
+            {
+                return (it.status == EntityStatus.ACTIVE)
             }
             
             // Only count ACTIVE organisations.
-            organisationTotal = Organisation.list().count({
-                it.status == EntityStatus.ACTIVE
-            })
+            // TODO: why doesn't .count({}) work here?
+            organisationTotal = 0
+            Organisation.list().each
+            {
+                if (it.status == EntityStatus.ACTIVE)
+                {
+                    organisationTotal++
+                }
+            }
+//            organisationTotal = 
+//                Organisation.list().count
+//                {
+//                    it.status == EntityStatus.ACTIVE
+//                }
         }
         
         [organisationInstanceList: organisationList, organisationInstanceTotal: organisationTotal]
@@ -52,7 +64,11 @@ class OrganisationController
         organisationInstance.postalAddress = postalAddress
         
         // If SysAdmin, then set Organisation's status to ACTIVE, otherwise,
-        // set to PENDING and record the requesting user.
+        // set to PENDING.
+        println("Principal: " + SecurityUtils.getSubject().getPrincipal())
+        Person user = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
+        organisationInstance.requestingUser = user
+        
         if (SecurityUtils.getSubject().hasRole("SysAdmin"))
         {
             organisationInstance.status = EntityStatus.ACTIVE
@@ -60,8 +76,6 @@ class OrganisationController
         else
         {
             organisationInstance.status = EntityStatus.PENDING
-            Person user = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
-            organisationInstance.requestingUser = user
         }
         
         if (organisationInstance.save(flush: true)) 

@@ -126,6 +126,8 @@ fileimport
 //jodatime.format.org.joda.time.DateTime = "yyyy-MM-dd'T'HH:mm:ssZ"
 jodatime.format.org.joda.time.DateTime = "dd/MM/yyyy HH:mm:ss zz"
 
+tag.expectedLifeTime.gracePeriodDays = 182 // 6 months
+
 //
 // Email configuration.
 //

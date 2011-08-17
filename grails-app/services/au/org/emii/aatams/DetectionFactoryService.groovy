@@ -127,6 +127,9 @@ class DetectionFactoryService
         ReceiverDeployment deployment = findReceiverDeployment(receiver, detectionDate)
         retDetection.receiverDeployment = deployment
 
+        String transmitterId = detectionParams[TRANSMITTER_COLUMN]
+        retDetection.transmitterId = transmitterId
+
         String transmitterName = detectionParams[TRANSMITTER_NAME_COLUMN]
         retDetection.transmitterName = transmitterName
         
@@ -263,7 +266,7 @@ class DetectionFactoryService
         codeMapBuilder.append(transmitterID.substring(0, index))
     }
     
-    ReceiverDeployment findReceiverDeployment(receiver, detectionDate)
+    ReceiverDeployment findReceiverDeployment(receiver, detectionDate)  throws FileProcessingException
     {
         List<ReceiverDeployment> deployments = receiver.deployments.grep(
         {
@@ -271,7 +274,7 @@ class DetectionFactoryService
             // that there is a valid recovery and that the recovery date is
             // after the detection.
             if (   (it.deploymentDateTime.toDate() <= detectionDate)
-                && (it?.recovery.recoveryDateTime?.toDate() >= detectionDate))
+                && (it?.recovery?.recoveryDateTime?.toDate() >= detectionDate))
             {
                 return true
             }
@@ -285,6 +288,12 @@ class DetectionFactoryService
         if (deployments.size() != 1)
         {
             log.warn("There are not exactly one matching deployment for receiver: " + receiver + ", detection date: " + detectionDate)
+        }
+        
+        if (deployments.isEmpty())
+        {
+            throw new FileProcessingException("No deployments for receiver: " + String.valueOf(receiver)
+                            + ", detectionDate: " + String.valueOf(detectionDate))
         }
         
         return deployments?.first()

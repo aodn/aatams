@@ -13,6 +13,7 @@ class Animal
     
     String toString()
     {
+        // Cast is necessary to avoid NPE.
         StringBuffer buf = new StringBuffer(String.valueOf(species))
         buf.append("-")
         buf.append(String.valueOf(sex))

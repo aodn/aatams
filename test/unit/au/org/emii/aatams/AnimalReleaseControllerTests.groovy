@@ -346,8 +346,13 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
 
     void testSaveNoProject()
     {
-        Animal animal = new Animal(species:new Species())
+        Species species = new Species()
+        mockDomain(Species, [species])
+        species.save()
+        
+        Animal animal = new Animal(species:species)
         mockDomain(Animal, [animal])
+        
         animal.save()
         controller.params.animal = [id:animal.id]
 
@@ -357,5 +362,43 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         assertNull(controller.redirectArgs.action)
         assertNotNull(model.animalReleaseInstance)
         assertTrue(model.animalReleaseInstance.hasErrors())
+    }
+    
+    /**
+     * Tests that status is set correctly when an animal is re-released.
+     */
+    void testSaveStatusCurrentPreviousFinished()
+    {
+        Species species = new Species(name:"flathead")
+        mockDomain(Species, [species])
+        species.save()
+        
+        Animal animal = new Animal(species:species)
+        mockDomain(Animal, [animal])
+        animal.save()
+        controller.params.animal = [id:animal.id]
+        controller.params.species = animal.species
+
+        mockDomain(AnimalRelease)
+
+        def model = controller.save()
+        assertEquals("show", controller.redirectArgs.action)
+        assertNotNull(controller.redirectArgs.id)
+
+        AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
+        assertNotNull(release)
+        assertEquals(AnimalReleaseStatus.CURRENT, release.status)
+        
+        // Now create another release for the same animal...
+        model = controller.save()
+        assertEquals("show", controller.redirectArgs.action)
+        assertNotNull(controller.redirectArgs.id)
+
+        AnimalRelease release2 = AnimalRelease.get(controller.redirectArgs.id)
+        assertNotNull(release2)
+        assertEquals(AnimalReleaseStatus.CURRENT, release2.status)
+        
+        // Importantly, the previous release's status should now be FINISHED.
+        assertEquals(AnimalReleaseStatus.FINISHED, release.status)
     }
 }

@@ -36,9 +36,4 @@ class Sensor extends Tag
         slope(nullable:true)
         intercept(nullable:true)
     }
-    
-    String toString()
-    {
-        return codeMap + " - " + String.valueOf(pingCode)
-    }
 }

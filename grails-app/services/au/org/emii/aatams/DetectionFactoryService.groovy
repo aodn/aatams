@@ -4,9 +4,19 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
+import org.joda.time.*
+
+/**
+ * Implementation of the detection/surgery matching algorithm as outlined here:
+ * 
+ * http://redmine.emii.org.au/issues/379
+ * 
+ * Essentially, input is a set of detection parameters (as recorded by a receiver
+ * and exported with the VUE application), output is a detection record plus
+ * 0 or more DetectionSurgeries.
+ */
 class DetectionFactoryService 
 {
-
     static transactional = true
 
     static final String DATE_AND_TIME_COLUMN = "\uFEFFDate and Time (UTC)"  // \uFEFF is a zero-width non-breaking space.
@@ -29,85 +39,73 @@ class DetectionFactoryService
      */
     Detection newDetection(detectionParams) throws FileProcessingException 
     {
-        //
-        // First, see if we can find matching tag(s) - if not try matching 
-        // sensor(s) - to determine what kind of Detection this actually is.
-        //
+        def detection = createDetection(detectionParams)
         
-        // Transmitter ID (a.k.a. Tag) is combination of tag code map and ping ID.
-        String transmitterID = detectionParams[TRANSMITTER_COLUMN]
-        
-        StringBuilder codeMapBuilder = new StringBuilder()
-        StringBuilder pingIDBuilder = new StringBuilder()
-        parseCodeMapAndPingID(transmitterID, codeMapBuilder, pingIDBuilder)
-
-        log.debug("Searching for tags with codeMap = " + codeMapBuilder.toString() + " and ping ID = " + pingIDBuilder.toString() + "...")
-        def tags = Tag.findAllByCodeMapAndPingCode(codeMapBuilder.toString(), pingIDBuilder.toString())
-        
-        // Filter out retired tags.
-        tags.grep(
-            {
-                if (it.status == DeviceStatus.findByStatus('RETIRED'))
-                {
-                    log.warn("Detection matches retired tag: " + String.valueOf(it))
-                    return false
-                }
-                
-                return true
-            })
-        
-        log.debug("Number of tags found: " + String.valueOf(tags.size()))
-
-        Detection retDetection = null
-        
-        if (tags.size() == 0)
+        // Check that we don't already have an existing matching detection 
+        // (in which case just return the existing detection).
+        Detection.findAllByTimestamp(detection.timestamp).each
         {
-            // No matching tag - it must be a "SensorDetection"
-            SensorDetection sensorDetection = new SensorDetection()
-
-            def sensors = Sensor.findAllByCodeMapAndPingCode(codeMapBuilder.toString(), pingIDBuilder.toString())
-            sensors.each
+            if (it.equals(detection))
             {
-                tags.add(it.tag)
-                sensorDetection.addToSensors(it)
+                log.warn(  "Returning existing matching detection for params: " + String.valueOf(detectionParams) 
+                         + ", detection: " + String.valueOf(it))
+                return it
             }
-            //assert (sensors.size() > 0) : "Detection must belong to at least one tag or sensor"
-            if (sensors.size() == 0)
-            {
-                log.warn("Detection does not belong to either a tag or sensor")
-            }
-            
-            Float sensorValue = (detectionParams[SENSOR_VALUE_COLUMN] != null) ? Float.parseFloat(detectionParams[SENSOR_VALUE_COLUMN]) : null
-            sensorDetection.uncalibratedValue = sensorValue
-            String sensorUnit = detectionParams[SENSOR_UNIT_COLUMN]
-            sensorDetection.sensorUnit = sensorUnit
-            
-            retDetection = sensorDetection
         }
-        else if (tags.size() == 1)
+        
+        // The list of surgeries which match detection parameters.
+        def matchingSurgeries = findMatchingSurgeries(detectionParams, detection)
+        
+        def numMatchingSurgeries = matchingSurgeries.size()
+        if (numMatchingSurgeries == 0)
         {
-            // The normal case.
-            retDetection = new Detection()
+            // Must be a non-AATAMS tag, or just not entered in to database yet.
+            log.warn("No surgeries found for detection, params: " + String.valueOf(detectionParams))
+        }
+        else if (numMatchingSurgeries == 1)
+        {
+            // Normal case, no log message.
+        }
+        else (numMatchingSurgeries)     // > 1
+        {
+            log.warn(  "Multiple surgeries found for detection, params: " + String.valueOf(detectionParams) 
+                     + ", surgeries: " + String.valueOf(matchingSurgeries))
+        }
+        
+        matchingSurgeries.each
+        {
+            DetectionSurgery detectionSurgery = 
+                new DetectionSurgery(surgery:it,
+                                     detection:detection)
+            detection.addToDetectionSurgeries(detectionSurgery)
+            it.addToDetectionSurgeries(detectionSurgery)
+            it.save()
+        }
+        
+        detection.save()
+        
+        return detection
+    }
+    
+    /**
+     * It's either a Detection or SensorDetection, based on whether a sensor
+     * value and unit is present in the parameters.
+     */
+    Detection createDetection(detectionParams) throws FileProcessingException
+    {
+        Float sensorValue = (detectionParams[SENSOR_VALUE_COLUMN] != null) ? Float.parseFloat(detectionParams[SENSOR_VALUE_COLUMN]) : null
+        String sensorUnit = detectionParams[SENSOR_UNIT_COLUMN]
+        
+        Detection retDetection = null
+        if (sensorValue && sensorUnit)
+        {
+            retDetection = new SensorDetection()
+            retDetection.uncalibratedValue = sensorValue
+            retDetection.sensorUnit = sensorUnit
         }
         else
         {
-            // Extremely unlikely - but possible.
-            log.warn("Multiple tags match identifier: " + transmitterID)
             retDetection = new Detection()
-        }
-        
-        // Add the tag(s) to detectionSurgery (there may be none if it's a SensorDetection).
-        tags.each
-        {
-            // Tags are related to Detection via the DetectionSurgery (which itself
-            // models a particular tag being attached to a particular animal).
-            def surgeries = it?.surgeries?.sort{ it.timestamp}
-            def currentSurgery = surgeries.last()
-            
-            DetectionSurgery detSurgery = 
-                new DetectionSurgery(surgery:currentSurgery,
-                                     deteciton:retDetection)
-            retDetection.addToDetectionSurgeries(detSurgery)
         }
         
         String dateString = detectionParams[DATE_AND_TIME_COLUMN] + " " + "UTC"
@@ -115,7 +113,8 @@ class DetectionFactoryService
         Date detectionDate = new Date().parse(DATE_FORMAT, dateString)
         retDetection.timestamp = detectionDate
         
-        Receiver receiver = Receiver.findByCodeName(detectionParams[RECEIVER_COLUMN])
+        retDetection.receiverName = detectionParams[RECEIVER_COLUMN]
+        Receiver receiver = Receiver.findByCodeName(retDetection.receiverName)
         String errMsg = "Unknown receiver name: " + detectionParams[RECEIVER_COLUMN]
         //assert(receiver != null): errMsg
         if (receiver == null)
@@ -152,9 +151,84 @@ class DetectionFactoryService
             // TODO
         }
         
-        deployment.save()
-        
         return retDetection
+    }
+
+    /**
+     * Find matching surgeries based on:
+     * 
+     * - tags matching Transmitter ID (which is itself is a concatenation of 
+     *   the tag code map and ping code);
+     * - releases which are ACTIVE
+     * - tag window of operation
+     * - tags which are not RETIRED 
+     */
+    List<Surgery> findMatchingSurgeries(detectionParams, detection)
+    {
+        // Transmitter ID (a.k.a. Tag) is combination of tag code map and ping ID.
+        String transmitterID = detectionParams[TRANSMITTER_COLUMN]
+        
+        StringBuilder codeMapBuilder = new StringBuilder()
+        StringBuilder pingIDBuilder = new StringBuilder()
+        parseCodeMapAndPingID(transmitterID, codeMapBuilder, pingIDBuilder)
+
+        log.debug("Searching for tags with codeMap = " + codeMapBuilder.toString() + " and ping ID = " + pingIDBuilder.toString() + "...")
+        def tags = Tag.findAllByCodeMapAndPingCode(codeMapBuilder.toString(), pingIDBuilder.toString())
+        
+        // Also include parent tags of any matching sensors.
+        // Note: the surgery is recorded as between an animal and a tag, not for each sensor.
+        def sensors = Sensor.findAllByCodeMapAndPingCode(codeMapBuilder.toString(), pingIDBuilder.toString())
+        tags.addAll(sensors*.tag)
+        
+        // Filter out retired tags.
+        tags.grep(
+        {
+            if (it.status == DeviceStatus.findByStatus('RETIRED'))
+            {
+                log.warn("Detection matches retired tag: " + String.valueOf(it))
+                return false
+            }
+
+            return true
+        })
+    
+        // We now have a list of tags to go from.
+        def surgeries = (tags*.surgeries).flatten()
+        
+        // Filter out based on release status and tag window of operation.
+        surgeries.grep(
+        {
+            surgery ->
+            
+            if (surgery?.release?.status != AnimalReleaseStatus.ACTIVE)
+            {
+                return false
+            }
+            
+            // Now check window of operation.
+            if (!surgery?.tag?.expectedLifeTimeDays)
+            {
+                // Expected life time not specified (therefore there's no
+                // window limit.
+                return true
+            }
+            
+            def startWindow = surgery?.release?.releaseDateTime
+            if (new DateTime(detection.timestamp).isBefore(startWindow))
+            {
+                return false
+            }
+            
+            def endWindow = startWindow.plusDays(surgery?.tag?.expectedLifeTimeDays).plusDays(grailsApplication.config.tag.expectedLifeTime.gracePeriodDays)
+            if (new DateTime(detection.timestamp).isAfter(endWindow))
+            {
+                return false
+            }
+            
+            return true    
+        })
+        
+        return surgeries
     }
    
     void parseCodeMapAndPingID(transmitterID, codeMapBuilder, pingIDBuilder) throws FileProcessingException

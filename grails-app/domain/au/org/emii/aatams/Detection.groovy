@@ -3,6 +3,8 @@ package au.org.emii.aatams
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
 
 /**
  * Tag detections are received and stored on a receiver.  Each detection 
@@ -31,6 +33,8 @@ class Detection
      * that a tag could potentially be reused on several animals.
      */
     static hasMany = [detectionSurgeries:DetectionSurgery]
+    
+    String receiverName;
     
     /**
      * Station name, as recorded in VUE database (this should match 
@@ -79,4 +83,36 @@ class Detection
     {
         return GeometryUtils.scrambleLocation(location)
     }
+    
+    public boolean equals(Object obj) 
+    {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) 
+        {
+            return false;
+        }
+        
+        Detection rhs = (Detection) obj;
+        return new EqualsBuilder()
+            .appendSuper(super.equals(obj))
+            .append(receiverName, rhs.receiverName)
+            .append(stationName, rhs.stationName)
+            .append(transmitterName, rhs.transmitterName)
+            .append(transmitterSerialNumber, rhs.transmitterSerialNumber)
+            .append(location, rhs.location)
+        .isEquals();
+    }
+    
+    public int hashCode() 
+    {
+        return new HashCodeBuilder(17, 37)
+            .appendSuper(super.equals(obj))
+            .append(receiverName, rhs.receiverName)
+            .append(stationName, rhs.stationName)
+            .append(transmitterName, rhs.transmitterName)
+            .append(transmitterSerialNumber, rhs.transmitterSerialNumber)
+            .append(location, rhs.location)
+        .toHashCode();
+   }
 }

@@ -25,6 +25,8 @@ class OrganisationControllerTests extends ControllerUnitTestCase
                         state:'TAS',
                         country:'Australia',
                         postcode:'7000')
+                    
+        Person somePerson = new Person()
 
         //
         // Organisations.
@@ -36,7 +38,8 @@ class OrganisationControllerTests extends ControllerUnitTestCase
                              faxNumber:'1234',
                              streetAddress:address,
                              postalAddress:address,
-                             status:EntityStatus.ACTIVE)
+                             status:EntityStatus.ACTIVE,
+                             requestingUser:somePerson)
 
         Organisation pendingOrg = 
             new Organisation(name:'IMOS', 
@@ -45,7 +48,8 @@ class OrganisationControllerTests extends ControllerUnitTestCase
                              faxNumber:'1234',
                              streetAddress:address,
                              postalAddress:address,
-                             status:EntityStatus.PENDING)
+                             status:EntityStatus.PENDING,
+                             requestingUser:somePerson)
 
         Organisation deactivatedOrg = 
             new Organisation(name:'SIMS', 
@@ -54,7 +58,8 @@ class OrganisationControllerTests extends ControllerUnitTestCase
                              faxNumber:'1234',
                              streetAddress:address,
                              postalAddress:address,
-                             status:EntityStatus.DEACTIVATED)
+                             status:EntityStatus.DEACTIVATED,
+                             requestingUser:somePerson)
                          
         def orgList = [activeOrg, pendingOrg, deactivatedOrg]
         
@@ -68,7 +73,10 @@ class OrganisationControllerTests extends ControllerUnitTestCase
         mockDomain(Organisation, orgList)
         
         // Save each of the domain object so that the IDs are set properly.
-        orgList.each{ it.save() }
+        orgList.each
+        {
+            it.save(flush:true, failOnError:true)
+        }
     }
     
     void testListAsSysAdmin()
@@ -79,6 +87,7 @@ class OrganisationControllerTests extends ControllerUnitTestCase
         def retVal = controller.list()
         assertEquals(3,
                      retVal.organisationInstanceTotal)
+        assertEquals(3, retVal.organisationInstanceList.size())
     }
     
     void testListAsNonSysAdmin()
@@ -89,6 +98,15 @@ class OrganisationControllerTests extends ControllerUnitTestCase
         def retVal = controller.list()
         assertEquals(1, 
                      retVal.organisationInstanceTotal)
+        assertEquals(1, retVal.organisationInstanceList.size())
+    }
+    
+    void testListAsNoone()
+    {
+        // There list of organisations should include non-active.
+        def retVal = controller.list()
+        assertEquals(1, retVal.organisationInstanceTotal)
+        assertEquals(1, retVal.organisationInstanceList.size())
     }
     
     void testSaveAsSysAdmin()

@@ -158,8 +158,8 @@ class BootStrap
             
             development
             {
-//                initData()
-                initPerformanceData()
+                initData()
+//                initPerformanceData()
             }
             
             // TODO: remove this.
@@ -186,14 +186,14 @@ class BootStrap
                         suburbTown:'Hobart',
                         state:'TAS',
                         country:'Australia',
-                        postcode:'7000')
+                        postcode:'7000').save()
 
         Address csiroPostalAddress =
             new Address(streetAddress:'34 Queen Street',
                         suburbTown:'Melbourne',
                         state:'VIC',
                         country:'Australia',
-                        postcode:'3000')
+                        postcode:'3000').save()
 
         Person jonBurgess =
             new Person(username:'jkburges',
@@ -222,14 +222,14 @@ class BootStrap
                         suburbTown:'Hobart',
                         state:'TAS',
                         country:'Australia',
-                        postcode:'7000')
+                        postcode:'7000').save()
 
         Address imosPostalAddress =
             new Address(streetAddress:'34 Queen Street',
                         suburbTown:'Melbourne',
                         state:'VIC',
                         country:'Australia',
-                        postcode:'3000')
+                        postcode:'3000').save()
 
         Organisation imosOrg = 
             new Organisation(name:'IMOS', 
@@ -246,14 +246,14 @@ class BootStrap
                         suburbTown:'Hobart',
                         state:'TAS',
                         country:'Australia',
-                        postcode:'7000')
+                        postcode:'7000').save()
 
         Address imosPostalAddress2 =
             new Address(streetAddress:'34 Queen Street',
                         suburbTown:'Melbourne',
                         state:'VIC',
                         country:'Australia',
-                        postcode:'3000')
+                        postcode:'3000').save()
 
         Organisation imosOrg2 = 
             new Organisation(name:'IMOS 2', 
@@ -803,7 +803,7 @@ class BootStrap
     
 //    def numEventsPerRecovery = 2
     
-   
+/**   
     ProjectRoleType principalInvestigator = new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
     ProjectRoleType student = new ProjectRoleType(displayName:'student').save()
     DeviceModel deviceModel = DeviceModel.build().save() 
@@ -1082,4 +1082,5 @@ class BootStrap
         
 //        org.save(flush:true)    // Flush so that Receiver.findByCodeName (in tags) works.
     }
+*/    
 }

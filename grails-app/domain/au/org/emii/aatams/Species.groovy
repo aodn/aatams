@@ -21,6 +21,6 @@ class Species
     
     String toString()
     {
-        return name
+        return String.valueOf(name)
     }
 }

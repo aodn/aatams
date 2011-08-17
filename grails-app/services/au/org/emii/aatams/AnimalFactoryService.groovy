@@ -9,10 +9,12 @@ class AnimalFactoryService
         // If animal.id is specified, just return that animal.
         if (params.animal?.id)
         {
+            log.debug("Returning existing animal...")
             return Animal.get(params.animal?.id)
         }
         
         // Otherwise, we need to create a new Animal.
+        log.debug("Creating new animal...")
         Sex sex = Sex.get(params.sex?.id)
         Species species = lookupOrCreateSpecies(params)
         

@@ -9,12 +9,22 @@ class Tag extends Device
     Integer pingCode
 
     TransmitterType transmitterType
+    
+    /**
+     * The expected lifetime (in days) of a tag once is it deployed.  This
+     * value is used to derive the "window of operation" of a Surgery when 
+     * searching for surgeries to match against detections.
+     * 
+     * If not specified, then assume infinity.
+     */
+    Integer expectedLifeTimeDays
 
     static constraints =
     {
         codeMap(blank:false)
         pingCode()
         transmitterType()
+        expectedLifeTimeDays(nullable:true)
     }
     
     static transients = ['codeMapPingCode']

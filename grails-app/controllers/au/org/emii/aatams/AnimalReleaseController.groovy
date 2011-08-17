@@ -81,8 +81,17 @@ class AnimalReleaseController {
             // The request can contain either a known animal, or just a species and
             // sex, in which case we need to create an animal.
             Animal animalInstance = animalFactoryService.lookupOrCreate(params)
-            animalReleaseInstance.animal = animalInstance
 
+            // Update status of any previous releases for this animal to "FINISHED".
+            animalInstance.releases?.each
+            {
+                log.debug("Setting previous release's status to FINSIHED: " + String.valueOf(it))
+                it.status = AnimalReleaseStatus.FINISHED
+            }
+
+            animalReleaseInstance.animal = animalInstance
+            animalInstance.addToReleases(animalReleaseInstance)
+            
             // Create any associated surgeries (and set associated tags' status to
             // DEPLOYED).
             DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')

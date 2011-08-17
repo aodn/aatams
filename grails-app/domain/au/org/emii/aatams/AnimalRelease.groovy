@@ -52,6 +52,13 @@ class AnimalRelease
      * indicate that no embargo exists).
      */
     Date embargoDate
+    
+    /**
+     * Status is used to model the case where an animal (with associated tag
+     * and surgery) is recaptured at which point the surgery is no longer 
+     * current.
+     */
+    AnimalReleaseStatus status = AnimalReleaseStatus.CURRENT
 
     static constraints =
     {

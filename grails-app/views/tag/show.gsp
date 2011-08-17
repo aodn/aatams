@@ -69,6 +69,12 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="tag.expectedLifeTimeDays.label" default="Expected Life Time (days)" /></td>
+        
+                            <td valign="top" class="value">${tagInstance?.expectedLifeTimeDays}</td>
+                        </tr>
+
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="tag.status.label" default="Status" /></td>
                             
                             <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${tagInstance?.status?.id}">${tagInstance?.status?.encodeAsHTML()}</g:link></td>

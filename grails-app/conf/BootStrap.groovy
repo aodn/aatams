@@ -693,28 +693,32 @@ class BootStrap
                         tag:tag1,
                         timestamp:new DateTime("2011-05-15T14:12:00"),
                         type:external,
-                        treatmentType:antibiotic).save(failOnError:true)
+                        treatmentType:antibiotic)
+        tag1.addToSurgeries(surgery1).save(failOnError:true)
 
         Surgery surgery2 = 
             new Surgery(release:whiteShark1Release,
                         tag:tag2,
                         timestamp:new DateTime("2011-05-15T14:13:00"),
                         type:external,
-                        treatmentType:antibiotic).save(failOnError:true)
-
+                        treatmentType:antibiotic)
+        tag2.addToSurgeries(surgery1).save(failOnError:true)
+        
         Surgery surgery3 = 
             new Surgery(release:whiteShark2Release,
                         tag:tag1,   // Can't really have a tag on two different animals.
                         timestamp:new DateTime("2011-05-15T14:12:00"),
                         type:external,
-                        treatmentType:antibiotic).save(failOnError:true)
+                        treatmentType:antibiotic)
+        tag1.addToSurgeries(surgery3).save(failOnError:true)
                     
         Surgery surgery4 = 
             new Surgery(release:blueFinTuna1Release,
                         tag:tag1,   // Can't really have a tag on two different animals.
                         timestamp:new DateTime("2011-05-15T14:12:00"),
                         type:external,
-                        treatmentType:antibiotic).save(failOnError:true)
+                        treatmentType:antibiotic)
+        tag1.addToSurgeries(surgery4).save(failOnError:true)
                     
         // Receiver Recovery.
         ReceiverRecovery recovery1 = 

@@ -108,7 +108,7 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name"><g:message code="receiverRecovery.recoveryDateTime.label" default="Recovery Date" /></td>
-                                <td valign="top" class="value"><joda:format value="${fieldValue(bean: receiverRecoveryInstance, field: "recoveryDate")}" /></td>
+                                <td valign="top" class="value"><joda:format value="${receiverRecoveryInstance?.recoveryDateTime}" /></td>
                             </tr>
                         
                             <tr class="prop">

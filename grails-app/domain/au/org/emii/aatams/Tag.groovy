@@ -2,7 +2,11 @@ package au.org.emii.aatams
 
 class Tag extends Device
 {
-    static hasMany = [sensors:Sensor, surgeries:Surgery]
+    List<Surgery> surgeries = new ArrayList<Surgery>()
+    
+    static hasMany = [sensors:Sensor, 
+                      surgeries:Surgery, 
+                      detectionSurgeries:DetectionSurgery]
     static belongsTo = [project: Project]
     
     String codeMap

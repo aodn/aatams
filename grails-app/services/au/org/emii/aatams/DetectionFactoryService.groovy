@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import org.codehaus.groovy.grails.commons.ConfigurationHolder as GrailsConfig
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
@@ -43,14 +45,23 @@ class DetectionFactoryService
         
         // Check that we don't already have an existing matching detection 
         // (in which case just return the existing detection).
+        boolean alreadyExists = false
         Detection.findAllByTimestamp(detection.timestamp).each
         {
-            if (it.equals(detection))
+            log.warn("Comparing detections, it: " + it + ", detection: " + detection)
+            if (it.similar(detection))
             {
                 log.warn(  "Returning existing matching detection for params: " + String.valueOf(detectionParams) 
                          + ", detection: " + String.valueOf(it))
-                return it
+                alreadyExists = true
+                detection = it
+                return
             }
+        }
+        
+        if (alreadyExists)
+        {
+            return detection
         }
         
         // The list of surgeries which match detection parameters.
@@ -66,7 +77,7 @@ class DetectionFactoryService
         {
             // Normal case, no log message.
         }
-        else (numMatchingSurgeries)     // > 1
+        else  // (numMatchingSurgeries > 1)
         {
             log.warn(  "Multiple surgeries found for detection, params: " + String.valueOf(detectionParams) 
                      + ", surgeries: " + String.valueOf(matchingSurgeries))
@@ -74,12 +85,15 @@ class DetectionFactoryService
         
         matchingSurgeries.each
         {
+            surgery, tag ->
+            
             DetectionSurgery detectionSurgery = 
-                new DetectionSurgery(surgery:it,
-                                     detection:detection)
+                new DetectionSurgery(surgery:surgery,
+                                     detection:detection,
+                                     tag:tag)
             detection.addToDetectionSurgeries(detectionSurgery)
-            it.addToDetectionSurgeries(detectionSurgery)
-            it.save()
+            surgery.addToDetectionSurgeries(detectionSurgery)
+            surgery.save()
         }
         
         detection.save()
@@ -99,12 +113,14 @@ class DetectionFactoryService
         Detection retDetection = null
         if (sensorValue && sensorUnit)
         {
+            log.debug("Creating new SensorDetection...")
             retDetection = new SensorDetection()
             retDetection.uncalibratedValue = sensorValue
             retDetection.sensorUnit = sensorUnit
         }
         else
         {
+            log.debug("Creating new Detection...")
             retDetection = new Detection()
         }
         
@@ -165,8 +181,12 @@ class DetectionFactoryService
      * - releases which are ACTIVE
      * - tag window of operation
      * - tags which are not RETIRED 
+     * 
+     * Returns also the exact tag (which could be a sensor within a physical
+     * tag) that the detection came from, as this needs to be recorded in the
+     * DetectionSurgery association.
      */
-    List<Surgery> findMatchingSurgeries(detectionParams, detection)
+    Map<Surgery, Tag> findMatchingSurgeries(detectionParams, detection)
     {
         // Transmitter ID (a.k.a. Tag) is combination of tag code map and ping ID.
         String transmitterID = detectionParams[TRANSMITTER_COLUMN]
@@ -175,16 +195,21 @@ class DetectionFactoryService
         StringBuilder pingIDBuilder = new StringBuilder()
         parseCodeMapAndPingID(transmitterID, codeMapBuilder, pingIDBuilder)
 
-        log.debug("Searching for tags with codeMap = " + codeMapBuilder.toString() + " and ping ID = " + pingIDBuilder.toString() + "...")
-        def tags = Tag.findAllByCodeMapAndPingCode(codeMapBuilder.toString(), pingIDBuilder.toString())
+        String codeMap = codeMapBuilder.toString()
+        String pingCode = pingIDBuilder.toString()
+        log.debug("Searching for tags with codeMap = " + codeMap  + " and ping ID = " + pingCode)
+        def tags = Tag.findAllByCodeMapAndPingCode(codeMap, pingCode)
+        log.debug("Tags found: " + String.valueOf(tags))
         
         // Also include parent tags of any matching sensors.
         // Note: the surgery is recorded as between an animal and a tag, not for each sensor.
+        log.debug("Searching for sensors with codeMap = " + codeMapBuilder.toString() + " and ping ID = " + pingIDBuilder.toString() + "...")
         def sensors = Sensor.findAllByCodeMapAndPingCode(codeMapBuilder.toString(), pingIDBuilder.toString())
-        tags.addAll(sensors*.tag)
+        log.debug("Sensors found: " + String.valueOf(sensors))
+        tags.addAll(sensors)
         
         // Filter out retired tags.
-        tags.grep(
+        tags = tags.grep(
         {
             if (it.status == DeviceStatus.findByStatus('RETIRED'))
             {
@@ -194,46 +219,90 @@ class DetectionFactoryService
 
             return true
         })
-    
-        // We now have a list of tags to go from.
-        def surgeries = (tags*.surgeries).flatten()
         
         // Filter out based on release status and tag window of operation.
-        surgeries.grep(
+        def surgeriesAndTags = new HashMap<Surgery, Tag>()
+        tags.each
         {
-            surgery ->
+            tag ->
             
-            if (surgery?.release?.status != AnimalReleaseStatus.ACTIVE)
+            log.debug("Checking tag: " + String.valueOf(tag))
+            
+            def surgeries = tag.surgeries
+            
+            // Get the parent tag's surgeries if this is a Sensor.
+            if (tag instanceof Sensor)
             {
-                return false
+                Sensor sensor = (Sensor)tag
+                surgeries.addAll(sensor?.tag?.surgeries)
             }
             
-            // Now check window of operation.
-            if (!surgery?.tag?.expectedLifeTimeDays)
+            surgeries.each
             {
-                // Expected life time not specified (therefore there's no
-                // window limit.
-                return true
+                surgery ->
+
+                log.debug("Checking surgery: " + String.valueOf(surgery))
+                
+                if (surgery?.release?.status != AnimalReleaseStatus.CURRENT)
+                {
+                    log.warn("Discarding surgery, associated release is not CURRENT, surgery: " + String.valueOf(surgery))
+                }
+                else if (!detectionInWindow(detection, surgery))
+                {
+                    log.warn("Discarding surgery, detection outside window, surgery: " + String.valueOf(surgery)
+                             + ", detection: " + String.valueOf(detection))
+                }
+                else
+                {
+                    // It's an active release and the detection is within
+                    // the tag's window of operation.
+                    surgeriesAndTags.put(surgery, tag)
+                }
             }
-            
-            def startWindow = surgery?.release?.releaseDateTime
-            if (new DateTime(detection.timestamp).isBefore(startWindow))
-            {
-                return false
-            }
-            
-            def endWindow = startWindow.plusDays(surgery?.tag?.expectedLifeTimeDays).plusDays(grailsApplication.config.tag.expectedLifeTime.gracePeriodDays)
-            if (new DateTime(detection.timestamp).isAfter(endWindow))
-            {
-                return false
-            }
-            
-            return true    
-        })
+        }
         
-        return surgeries
+        return surgeriesAndTags
     }
    
+    /**
+     * Determines whether the given detection occurred within the window 
+     * determined
+     * by the tag's expected lifetime and the release date.
+     */
+    boolean detectionInWindow(detection, surgery)
+    {
+        def startWindow = surgery?.release?.releaseDateTime
+        if (new DateTime(detection.timestamp).isBefore(startWindow))
+        {
+            log.warn("Discarding surgery, detection before start window, surgery: " + String.valueOf(surgery)
+                     + ", start window: " + String.valueOf(startWindow)
+                     + ", detection: " + String.valueOf(detection))
+                 
+            return false
+        }
+        
+        // Now check window of operation.
+        if (!surgery?.tag?.expectedLifeTimeDays)
+        {
+            // Expected life time not specified (therefore there's no
+            // end window limit.
+            return true
+        }
+        
+//        def endWindow = startWindow.plusDays(surgery?.tag?.expectedLifeTimeDays).plusDays(grailsApplication.config.tag.expectedLifeTime.gracePeriodDays)
+        def endWindow = startWindow.plusDays(surgery?.tag?.expectedLifeTimeDays).plusDays(GrailsConfig.config.tag.expectedLifeTime.gracePeriodDays)
+        if (new DateTime(detection.timestamp).isAfter(endWindow))
+        {
+            log.warn("Discarding surgery, detection after end window, surgery: " + String.valueOf(surgery)
+                     + ", end window: " + String.valueOf(endWindow)
+                     + ", detection: " + String.valueOf(detection))
+                 
+            return false
+        }
+        
+        return true
+    }
+    
     void parseCodeMapAndPingID(transmitterID, codeMapBuilder, pingIDBuilder) throws FileProcessingException
     {
         if (transmitterID.length() < 3)

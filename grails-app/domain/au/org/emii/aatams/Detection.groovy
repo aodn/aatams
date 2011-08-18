@@ -3,8 +3,6 @@ package au.org.emii.aatams
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
-import org.apache.commons.lang.builder.EqualsBuilder
-import org.apache.commons.lang.builder.HashCodeBuilder
 
 /**
  * Tag detections are received and stored on a receiver.  Each detection 
@@ -93,35 +91,16 @@ class Detection
         return GeometryUtils.scrambleLocation(location)
     }
     
-    public boolean equals(Object obj) 
+    boolean similar(other)
     {
-        if (obj == null) { return false; }
-        if (obj == this) { return true; }
-        if (obj.getClass() != getClass()) 
-        {
-            return false;
-        }
-        
-        Detection rhs = (Detection) obj;
-        return new EqualsBuilder()
-            .appendSuper(super.equals(obj))
-            .append(receiverName, rhs.receiverName)
-            .append(stationName, rhs.stationName)
-            .append(transmitterName, rhs.transmitterName)
-            .append(transmitterSerialNumber, rhs.transmitterSerialNumber)
-            .append(location, rhs.location)
-        .isEquals();
+        return \
+           (timestamp == other?.timestamp) \
+        && (receiverDeployment == other?.receiverDeployment) \
+        && (receiverName == other?.receiverName) \
+        && (stationName == other?.stationName) \
+        && (transmitterId == other?.transmitterId) \
+        && (transmitterName == other?.transmitterName) \
+        && (transmitterSerialNumber == other?.transmitterSerialNumber) \
+        && (location == other?.location)
     }
-    
-    public int hashCode() 
-    {
-        return new HashCodeBuilder(17, 37)
-            .appendSuper(super.equals(obj))
-            .append(receiverName, rhs.receiverName)
-            .append(stationName, rhs.stationName)
-            .append(transmitterName, rhs.transmitterName)
-            .append(transmitterSerialNumber, rhs.transmitterSerialNumber)
-            .append(location, rhs.location)
-        .toHashCode();
-   }
 }

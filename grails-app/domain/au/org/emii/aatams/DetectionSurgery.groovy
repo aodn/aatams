@@ -16,8 +16,12 @@ package au.org.emii.aatams
  *
  * Therefore, the relationship is modelled as many-to-many between Detection and
  * Surgery.
+ * 
+ * Note: additionally store the tag reference so we can differentiate between
+ * pings sent out from tags with multiple sensors on the one physical tag (and
+ * hence only one surgery).
  */
 class DetectionSurgery 
 {
-    static belongsTo = [surgery:Surgery, detection:Detection]
+    static belongsTo = [surgery:Surgery, detection:Detection, tag:Tag]
 }

@@ -72,6 +72,11 @@ class Detection
         location(nullable:true)
     }
     
+    static mapping =
+    {
+        timestamp index:'timestamp_index'
+    }
+    
     String toString()
     {
         return timestamp.toString() + " " + String.valueOf(receiverDeployment?.receiver)

@@ -8,14 +8,22 @@ import org.springframework.web.multipart.MultipartFile
  */
 class VueDetectionFileProcessorService
 {
+    def cachedDetectionFactoryService
     def detectionFactoryService
     
     static transactional = true
 
     void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
     {
+        def detectionService = cachedDetectionFactoryService
+//        def detectionService = detectionFactoryService
+    
         downloadFile.status = FileProcessingStatus.PROCESSING
         downloadFile.save()
+        
+        detectionService.clearCache()
+        
+        def startTimestamp = System.currentTimeMillis()
         
         //
         // Expects csv files with the following columns (including a header row).
@@ -31,16 +39,34 @@ class VueDetectionFileProcessorService
         //      Latitude	
         //      Longitude
         //
-        new File(downloadFile.path).toCsvMapReader().eachWithIndex{ map, i ->
+        def records = new File(downloadFile.path).toCsvMapReader().toList()
+        def numRecords = records.size()
+        
+        // Provide more frequent updates when there are many records to process.
+        int percentComplete = 0
+        int percentCompleteInc = (numRecords > 1000) ? 1 : 10
+        
+        records.eachWithIndex{ map, i ->
             
             log.debug("Processing record number: " + String.valueOf(i))
             
-            Detection detection = detectionFactoryService.newDetection(map).save(failOnError: true)
+            Detection detection = detectionService.newDetection(map).save(failOnError: true)
+            
+            def exactPercentComplete = i * 100 / numRecords
+            if (exactPercentComplete > (percentComplete + percentCompleteInc))
+            {
+                String percentCompleteMsg = percentComplete + "% complete"
+                log.info("Receiver export: " + String.valueOf(downloadFile.name) + ", " + percentCompleteMsg)
+                percentComplete = exactPercentComplete / percentCompleteInc * percentCompleteInc
+            }
             
             log.debug("Successfully processed record number: " + String.valueOf(i))
         }
-
+        
+        log.info("Detections processed: (" + numRecords + ") in " + (System.currentTimeMillis() - startTimestamp) / 1000 + "s.")
+            
         downloadFile.status = FileProcessingStatus.PROCESSED
+        downloadFile.errMsg = ""
         downloadFile.save()
     }   
 }

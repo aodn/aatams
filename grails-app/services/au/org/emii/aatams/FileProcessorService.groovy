@@ -3,18 +3,29 @@ package au.org.emii.aatams
 import org.codehaus.groovy.grails.commons.*
 import org.springframework.web.multipart.MultipartFile
 
-class FileProcessorService extends AbstractFileProcessorService
+class FileProcessorService
 {
     static transactional = true
 
     def vueDetectionFileProcessorService
     def vueEventFileProcessorService
 
-    void process(ReceiverDownloadFile receiverDownloadFile, MultipartFile file)
+//    void process(ReceiverDownloadFile receiverDownloadFile, MultipartFile file)
+    void process(receiverDownloadFileId, MultipartFile file)
     {
-        log.debug "process()"
-    
+        log.debug("Processing receiver export, download file ID: " + receiverDownloadFileId)
+        
+//        def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
+//        receiverDownloadFileInstance.receiverDownload = ReceiverDownload.get(params.downloadId)
+//        receiverDownloadFileInstance.errMsg = ""
+//        receiverDownloadFileInstance.importDate = new Date()
+//        receiverDownloadFileInstance.status = FileProcessingStatus.PENDING
+        
+//        receiverDownloadFileInstance.save(flush:true, failOnError:true)
+
 //        ReceiverDownload receiverDownload = ReceiverDownload.get(receiverDownloadId)
+        
+        def receiverDownloadFile = ReceiverDownloadFile.get(receiverDownloadFileId)
         assert(receiverDownloadFile != null): "receiverDownloadFile cannot be null"
         
         if (!file.isEmpty())
@@ -25,22 +36,14 @@ class FileProcessorService extends AbstractFileProcessorService
             log.info("Adding file to receiver download, id: " + receiverDownload?.id)
 
             // Save the file to disk.
-            def path = getPath(receiverDownload)
-            String fullPath = path + File.separator + file.getOriginalFilename()
-            log.info("Saving file, full path: " + fullPath)
-            File outFile = new File(fullPath)
+            def path = receiverDownloadFile.path
+            File outFile = new File(path)
             
             // Create the directory structure first...
             outFile.mkdirs()
             
             // ... then transfer the data.
             file.transferTo(outFile)
-
-            receiverDownloadFile.path = fullPath
-            receiverDownloadFile.name = file.getOriginalFilename()
-            
-            receiverDownload.addToDownloadFiles(receiverDownloadFile)
-            receiverDownload.save()
             
             try
             {
@@ -49,6 +52,7 @@ class FileProcessorService extends AbstractFileProcessorService
                     case ReceiverDownloadFileType.DETECTIONS_CSV:
                     
                         // Delegate to VUE Detection Processor...
+                        log.debug("Delegating to VUE detection file processor...")
                         vueDetectionFileProcessorService.process(receiverDownloadFile)
                         break;
                     
@@ -78,40 +82,14 @@ class FileProcessorService extends AbstractFileProcessorService
                 throw e
             }
         }
+        else
+        {
+            log.warn("File is empty.")
+        }
     }
     
     boolean isParseable(downloadFile)
     {
         return true
-    }
-    
-        
-    /**
-     *  Files are stored at: 
-     *  
-     *      <basepath>/<project>/<installation>/<station>/<receiver>/<filename>.
-     */
-    String getPath(ReceiverDownload download)
-    {
-        def config = ConfigurationHolder.config['fileimport']
-        
-        // Save the file to disk.
-        def path = config.path
-        if (!path.endsWith(File.separator))
-        {
-            path = path + File.separator
-        }
-        
-        ReceiverRecovery recovery = download.receiverRecovery
-        ReceiverDeployment deployment = recovery.deployment
-        Receiver receiver = deployment.receiver
-        InstallationStation station = download.receiverRecovery.deployment.station
-        Installation installation = station.installation
-        Project project = installation.project
-        
-        path += project.name + File.separator
-        path += installation.name + File.separator
-        path += station.name + File.separator
-        path += receiver.codeName
     }
 }

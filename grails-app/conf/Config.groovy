@@ -105,9 +105,11 @@ log4j = {
 //           'org.hibernate',
 //           'org.codehaus.groovy.grails.orm.hibernate'
 
+    info    "grails.app.service.au.org.emii"
+
     debug   "grails.app.controller.au.org.emii",
-            "grails.app.service.au.org.emii",
-            "grails.app.service.aatams",
+//            "grails.app.service.au.org.emii",
+//            "grails.app.service.aatams",
             "grails.app.domain.au.org.emii",
 //           'org.hibernate',
 //            "grails.buildtestdata"

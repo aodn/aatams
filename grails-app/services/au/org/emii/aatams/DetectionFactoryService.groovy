@@ -21,7 +21,8 @@ class DetectionFactoryService
 {
     static transactional = true
 
-    static final String DATE_AND_TIME_COLUMN = "\uFEFFDate and Time (UTC)"  // \uFEFF is a zero-width non-breaking space.
+//    static final String DATE_AND_TIME_COLUMN = "\uFEFFDate and Time (UTC)"  // \uFEFF is a zero-width non-breaking space.
+    static final String DATE_AND_TIME_COLUMN = "Date and Time (UTC)"  // \uFEFF is a zero-width non-breaking space.
     static final String RECEIVER_COLUMN = "Receiver"
     static final String TRANSMITTER_COLUMN = "Transmitter"
     static final String TRANSMITTER_NAME_COLUMN = "Transmitter Name"
@@ -34,6 +35,8 @@ class DetectionFactoryService
     
     static final String TRANSMITTER_ID_DELIM = "-"
     static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
+    
+    DeviceStatus retiredStatus = null
     
     /**
      * Creates a detection given a map of parameters (which originate from a line
@@ -48,9 +51,14 @@ class DetectionFactoryService
         boolean alreadyExists = false
         Detection.findAllByTimestamp(detection.timestamp).each
         {
-            log.warn("Comparing detections, it: " + it + ", detection: " + detection)
+            if (log.isDebugEnabled())
+            {
+                log.debug("Comparing detections, it: " + it + ", detection: " + detection)
+            }
+            
             if (it.similar(detection))
             {
+                
                 log.warn(  "Returning existing matching detection for params: " + String.valueOf(detectionParams) 
                          + ", detection: " + String.valueOf(it))
                 alreadyExists = true
@@ -58,7 +66,7 @@ class DetectionFactoryService
                 return
             }
         }
-        
+
         if (alreadyExists)
         {
             return detection
@@ -130,13 +138,7 @@ class DetectionFactoryService
         retDetection.timestamp = detectionDate
         
         retDetection.receiverName = detectionParams[RECEIVER_COLUMN]
-        Receiver receiver = Receiver.findByCodeName(retDetection.receiverName)
-        String errMsg = "Unknown receiver name: " + detectionParams[RECEIVER_COLUMN]
-        //assert(receiver != null): errMsg
-        if (receiver == null)
-        {
-            throw new FileProcessingException(errMsg)
-        }
+        Receiver receiver = findReceiver(retDetection.receiverName)
         
         // Find the appropriate receiver deployment (based on the timestamp of
         // the detection and the deployment/recovery timestamps.
@@ -198,27 +200,7 @@ class DetectionFactoryService
         String codeMap = codeMapBuilder.toString()
         String pingCode = pingIDBuilder.toString()
         log.debug("Searching for tags with codeMap = " + codeMap  + " and ping ID = " + pingCode)
-        def tags = Tag.findAllByCodeMapAndPingCode(codeMap, pingCode)
-        log.debug("Tags found: " + String.valueOf(tags))
-        
-        // Also include parent tags of any matching sensors.
-        // Note: the surgery is recorded as between an animal and a tag, not for each sensor.
-        log.debug("Searching for sensors with codeMap = " + codeMapBuilder.toString() + " and ping ID = " + pingIDBuilder.toString() + "...")
-        def sensors = Sensor.findAllByCodeMapAndPingCode(codeMapBuilder.toString(), pingIDBuilder.toString())
-        log.debug("Sensors found: " + String.valueOf(sensors))
-        tags.addAll(sensors)
-        
-        // Filter out retired tags.
-        tags = tags.grep(
-        {
-            if (it.status == DeviceStatus.findByStatus('RETIRED'))
-            {
-                log.warn("Detection matches retired tag: " + String.valueOf(it))
-                return false
-            }
-
-            return true
-        })
+        def tags = findTags(codeMap, pingCode)
         
         // Filter out based on release status and tag window of operation.
         def surgeriesAndTags = new HashMap<Surgery, Tag>()
@@ -366,5 +348,60 @@ class DetectionFactoryService
         }
         
         return deployments?.first()
+    }
+    
+    def getRetiredStatus()
+    {
+        if (retiredStatus == null)
+        {
+            retiredStatus = DeviceStatus.findByStatus('RETIRED')
+        }
+        
+        return retiredStatus
+    }
+    
+    def findTags(codeMap, pingCode)
+    {
+        def tags = Tag.findAllByCodeMapAndPingCode(codeMap, pingCode)
+        log.debug("Tags found: " + String.valueOf(tags))
+        
+        // Also include parent tags of any matching sensors.
+        // Note: the surgery is recorded as between an animal and a tag, not for each sensor.
+        log.debug("Searching for sensors with codeMap = " + codeMap + " and ping ID = " + pingCode + "...")
+        def sensors = Sensor.findAllByCodeMapAndPingCode(codeMap, pingCode)
+        log.debug("Sensors found: " + String.valueOf(sensors))
+        tags.addAll(sensors)
+        
+        // Filter out retired tags.
+        tags = tags.grep(
+        {
+            if (it.status == retiredStatus)
+            {
+                log.warn("Detection matches retired tag: " + String.valueOf(it))
+                return false
+            }
+
+            return true
+        })
+
+        return tags
+    }
+    
+    def findReceiver(codeName) throws FileProcessingException
+    {
+        Receiver receiver = Receiver.findByCodeName(codeName)
+        
+        if (receiver == null)
+        {
+            String errMsg = "Unknown receiver name: " + codeName
+            throw new FileProcessingException(errMsg)
+        }
+
+        return receiver
+    }
+    
+    void clearCache()
+    {
+        // No-op for this base class.
     }
 }

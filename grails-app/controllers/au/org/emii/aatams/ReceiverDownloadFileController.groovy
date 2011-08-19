@@ -1,7 +1,10 @@
 package au.org.emii.aatams
 
-class ReceiverDownloadFileController {
+import org.codehaus.groovy.grails.commons.*
+import org.springframework.web.multipart.MultipartFile
 
+class ReceiverDownloadFileController 
+{
     def fileProcessorService
     
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -26,28 +29,58 @@ class ReceiverDownloadFileController {
 
     def save = 
     {
-        log.debug("params: " + params)
-        
-        def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
-        receiverDownloadFileInstance.receiverDownload = ReceiverDownload.get(params.downloadId)
-        receiverDownloadFileInstance.errMsg = ""
-        receiverDownloadFileInstance.importDate = new Date()
-        receiverDownloadFileInstance.status = FileProcessingStatus.PENDING
-        
+        log.debug("Processing receiver export, params: " + params)
+
+        // Save the file to disk.
         def fileMap = request.getFileMap()
-        
-        // Should only be one file in file map.
-        for (e in fileMap)
+        if (fileMap.size() != 1)
         {
-            fileProcessorService.process(receiverDownloadFileInstance, e.value)
+            // Error.
+            flash.error = "Number of posted files must be exactly one, you posted: " + fileMap.size()
+        }
+        else
+        {
+            def receiverDownload = ReceiverDownload.get(params.downloadId)
+
+            def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
+            receiverDownloadFileInstance.receiverDownload = receiverDownload
+            receiverDownloadFileInstance.errMsg = ""
+            receiverDownloadFileInstance.importDate = new Date()
+            receiverDownloadFileInstance.status = FileProcessingStatus.PENDING
+
+            MultipartFile file = (fileMap.values() as List)[0]
+            def path = getPath(receiverDownload)
+            String fullPath = path + File.separator + file.getOriginalFilename()
+
+            receiverDownloadFileInstance.path = fullPath
+            receiverDownloadFileInstance.name = file.getOriginalFilename()
+
+            receiverDownload.addToDownloadFiles(receiverDownloadFileInstance)
+            receiverDownload.save(flush:true, failOnError:true)
+
+            flash.message = "${message(code: 'default.processing.receiverUpload.message')}"
+
+            runAsync
+            {
+                try
+                {
+                    fileProcessorService.process(receiverDownloadFileInstance.id, file)
+                }
+                catch (Throwable t)
+                {
+                    log.error(t)
+                    
+                    receiverDownloadFileInstance.status = FileProcessingStatus.ERROR
+                    receiverDownloadFileInstance.errMsg = t.getMessage()
+                    receiverDownloadFileInstance.save()
+                }
+            }
         }
         
-        flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.id])}"
-
         // Go back to receiver recovery edit screen.
         redirect(controller: "receiverRecovery", 
                  action: "edit", 
-                 id: receiverDownloadFileInstance?.receiverDownload?.receiverRecovery?.id,
+                 id: ReceiverDownload.get(params.downloadId).receiverRecovery?.id,
                  params:[projectId:params.projectId])
     }
 
@@ -139,5 +172,34 @@ class ReceiverDownloadFileController {
             response.outputStream << file.newInputStream() // Performing a binary stream copy
             [receiverDownloadFileInstance: receiverDownloadFileInstance]
         }
+    }
+    
+    /**
+     *  Files are stored at: 
+     *  
+     *      <basepath>/<project>/<installation>/<station>/<receiver>/<filename>.
+     */
+    String getPath(ReceiverDownload download)
+    {
+        def config = ConfigurationHolder.config['fileimport']
+        
+        // Save the file to disk.
+        def path = config.path
+        if (!path.endsWith(File.separator))
+        {
+            path = path + File.separator
+        }
+        
+        ReceiverRecovery recovery = download.receiverRecovery
+        ReceiverDeployment deployment = recovery.deployment
+        Receiver receiver = deployment.receiver
+        InstallationStation station = download.receiverRecovery.deployment.station
+        Installation installation = station.installation
+        Project project = installation.project
+        
+        path += project.name + File.separator
+        path += installation.name + File.separator
+        path += station.name + File.separator
+        path += receiver.codeName
     }
 }

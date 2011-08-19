@@ -38,6 +38,20 @@
                             
                         </tr>
                     
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDownloadFile.status.label" default="Status" /></td>
+                            
+                            <td valign="top" class="value">${receiverDownloadFileInstance?.status?.encodeAsHTML()}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDownloadFile.errMsg.label" default="Error" /></td>
+                            
+                            <td valign="top" class="value">${receiverDownloadFileInstance?.errMsg}</td>
+                            
+                        </tr>
+                    
                         <shiro:hasRole name="SysAdmin">
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.path.label" default="Path" /></td>

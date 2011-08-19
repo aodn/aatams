@@ -158,8 +158,8 @@ class BootStrap
             
             development
             {
-                initData()
-//                initPerformanceData()
+//                initData()
+                initPerformanceData()
             }
             
             // TODO: remove this.
@@ -168,6 +168,12 @@ class BootStrap
 //                initData()
                 initPerformanceData()
             }
+            
+            performance
+            {
+                 
+            }
+            
             
         }
     }
@@ -774,7 +780,6 @@ class BootStrap
     }
     
     // Small counts for test-data testing.
-    /**
     def smallTest = true
     def numOrgs = 3
     def numProjectsPerOrg = 2           // 6
@@ -789,9 +794,9 @@ class BootStrap
     def numDetectionsPerSurgery = 2     // 48
     
 //    def numEventsPerRecovery = 2
-    */
     
     // Large numbers for performance/load testing.
+    /**
     def smallTest = false
     def numOrgs = 10
     def numProjectsPerOrg = 5           // 50
@@ -804,10 +809,10 @@ class BootStrap
 
     def numTagsPerProject = 100         // 5000
     def numDetectionsPerSurgery = 5     // 25000
-    
+    */
 //    def numEventsPerRecovery = 2
     
-/**   
+/**    */
     ProjectRoleType principalInvestigator = new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
     ProjectRoleType student = new ProjectRoleType(displayName:'student').save()
     DeviceModel deviceModel = DeviceModel.build().save() 
@@ -831,9 +836,14 @@ class BootStrap
     
     def totalProjectCount = 0
 
+    def deploymentDateTime = new DateTime("2000-01-01T12:54:56")
+    def recoveryDateTime = new DateTime("2020-01-01T12:54:56")
+    def releaseDateTime = new DateTime("2000-01-01T12:54:56")
+    
+    Person jonBurgess
     def sessionFactory
     def propertyInstanceMap = org.codehaus.groovy.grails.plugins.DomainClassGrailsPlugin.PROPERTY_INSTANCE_MAP
- 
+    
     def cleanUpGorm() 
     {
         def session = sessionFactory.currentSession
@@ -858,7 +868,7 @@ class BootStrap
         //
         // People.
         //
-        Person jonBurgess =
+        jonBurgess =
             new Person(username:'jkburges',
                        passwordHash:new Sha256Hash("password").toHex(),
                        name:'Jon Burgess',
@@ -956,9 +966,9 @@ class BootStrap
             tagCount ->
             
             // 1 release/surgery per tag.
-            def tag = new Tag(codeName:totalTagCount,
+            def tag = new Tag(codeName:"A69-1303-" + totalTagCount,
                               codeMap:"A69-1303",
-                              pingCode:"1234",
+                              pingCode:totalTagCount,
                               project:project,
                               model:deviceModel,
                               status:deployedStatus,
@@ -971,17 +981,22 @@ class BootStrap
                                               captureLocation:(Point)reader.read("POINT(10.1234 10.1234)"),
                                               releaseLocation:(Point)reader.read("POINT(10.1234 10.1234)"),
                                               captureLocality:"asdf",
-                                              captureDateTime:new DateTime(),
+                                              captureDateTime:releaseDateTime,
                                               captureMethod:defaultCaptureMethod,
                                               releaseLocality:"awef",
-                                              releaseDateTime:new DateTime()).save(failOnError:true)
+                                              releaseDateTime:releaseDateTime).save(failOnError:true)
                                               
             
-            def surgery = new Surgery(release:release, tag:tag,
-                                        timestamp:new DateTime(),
-                                        type:surgeryType,
-                                        treatmentType:surgeryTreatmentType).save(failOnError:true)
-            
+            def surgery = new Surgery(release:release, // tag:tag,
+                                      timestamp:releaseDateTime,
+                                      type:surgeryType,
+                                      treatmentType:surgeryTreatmentType)
+                                    
+            tag.addToSurgeries(surgery)
+            tag.save(flush:true, failOnError:true)
+           
+            assert(surgery != null): "surgery cannot be null"
+/**            
             numDetectionsPerSurgery.times
             {
                 def codeName = String.valueOf(totalDetectionCount % totalReceiverCount)
@@ -993,14 +1008,20 @@ class BootStrap
                 
                 def detection = new Detection(receiverDeployment:deployment,
                                               location:(Point)reader.read("POINT(10.1234 10.1234)"),
-                                              timestamp:new Date()).save(failOnError:true)
-
+                                              timestamp:new Date(),
+                                              receiverName:codeName,
+                                              transmitterId:tag.codeName)
+               
                 def detectionSurgery = new DetectionSurgery(surgery:surgery,
-                                                            detection:detection).save(failOnError:true)
+                                                            tag:tag,
+                                                            detection:detection)
+                                                            
+                detection.addToDetectionSurgeries(detectionSurgery)
+                detection.save(failOnError:true)
                 
                 totalDetectionCount++
             }
-            
+*/            
             
             // This should cascade save the above.
             project.save()
@@ -1031,7 +1052,7 @@ class BootStrap
             {
                 role.roleType = principalInvestigator
             }
-            role.save()
+            role.save(flush:true)
             
             // Don't set permissions for now as it is too slow.
 //            permissionUtilsService.setPermissions(role)
@@ -1043,6 +1064,11 @@ class BootStrap
     
     def createInstallations(org, orgCount, project, projectCount)
     {
+        ProjectRole recoverer = new ProjectRole(project:project,
+                                   person:jonBurgess,
+                                   roleType:principalInvestigator,
+                                   access:ProjectAccess.READ_WRITE).save()
+
         numInstallationsPerProject.times
         {
             installationCount ->
@@ -1074,9 +1100,20 @@ class BootStrap
                     new ReceiverDeployment(station: station,
                                            receiver: receiver,
                                            deploymentNumber:0,
-                                           deploymentDateTime:new DateTime(),
-                                           mooringType: mooringType).save(flush:true)
-
+                                           deploymentDateTime:deploymentDateTime,
+                                           mooringType: mooringType)
+                receiver.addToDeployments(receiverDeployment)                       
+                                       
+                def receiverRecovery =
+                    new ReceiverRecovery(deployment:receiverDeployment,
+                                         recoverer:recoverer,
+                                         recoveryDateTime:recoveryDateTime,
+                                         location:(Point)reader.read("POINT(10.1234 10.1234)"),
+                                         status: deployedStatus,
+                                         download:new ReceiverDownload(downloadDateTime:recoveryDateTime))
+                                             
+                receiverDeployment.recovery = receiverRecovery
+                receiver.save()
                 
                 totalReceiverCount++
             }
@@ -1086,5 +1123,5 @@ class BootStrap
         
 //        org.save(flush:true)    // Flush so that Receiver.findByCodeName (in tags) works.
     }
-*/    
+/** */    
 }

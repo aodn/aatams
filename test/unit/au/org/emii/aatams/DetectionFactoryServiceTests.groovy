@@ -11,7 +11,7 @@ import com.vividsolutions.jts.io.WKTReader
 
 class DetectionFactoryServiceTests extends GrailsUnitTestCase 
 {
-    def service
+    protected def service
     
     WKTReader reader = new WKTReader();
 

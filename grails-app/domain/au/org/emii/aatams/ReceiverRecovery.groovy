@@ -27,6 +27,8 @@ class ReceiverRecovery
             column name: "recoveryDateTime_timestamp"
             column name: "recoveryDateTime_zone"
         }
+
+        comments type: 'text'
     }
     
     DateTime recoveryDateTime

@@ -9,9 +9,13 @@ import com.vividsolutions.jts.io.WKTReader;
 import org.joda.time.*
 import org.joda.time.format.DateTimeFormat
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
 class AnimalReleaseControllerTests extends ControllerUnitTestCase 
 {
     WKTReader reader = new WKTReader()
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 
     protected void setUp() 
     {
@@ -400,5 +404,157 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         
         // Importantly, the previous release's status should now be FINISHED.
         assertEquals(AnimalReleaseStatus.FINISHED, release.status)
+    }
+    
+    void testSaveNoEmbargo()
+    {
+        Animal animal = new Animal(species:new Species(),
+                                   sex:new Sex())
+        mockDomain(Animal, [animal])
+        animal.save()
+        controller.params.animal = [id:animal.id]
+        
+        def model = controller.save()
+        assertEquals("show", controller.redirectArgs.action)
+        
+        AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
+        assertNotNull(release)
+        
+        // Embargo date must be null.
+        assertNull(release.embargoDate)
+    }
+    
+    void testSave3MonthsEmbargo()
+    {
+        Animal animal = new Animal(species:new Species(),
+                                   sex:new Sex())
+        mockDomain(Animal, [animal])
+        animal.save()
+        controller.params.animal = [id:animal.id]
+        
+        // controller.params.releaseDateTime = new DateTime("2011-05-15T14:12:00+10:00")
+        controller.params.embargoPeriod = 3
+        
+        def model = controller.save()
+        assertEquals("show", controller.redirectArgs.action)
+        
+        AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
+        assertNotNull(release)
+        assertNotNull(release.embargoDate)
+        
+        // Embargo date == 2011-08-15"
+        Calendar expectedCal = Calendar.getInstance()
+        expectedCal.setTime(dateFormat.parse("2011-08-15"))
+        
+        Calendar releaseCal = Calendar.getInstance()
+        releaseCal.setTime(release.embargoDate)
+        
+        assertTrue("year", expectedCal.get(Calendar.YEAR) == releaseCal.get(Calendar.YEAR))
+        assertTrue("day", expectedCal.get(Calendar.DAY_OF_YEAR) == releaseCal.get(Calendar.DAY_OF_YEAR))
+    }
+
+    void testUpdateNoEmbargo()
+    {
+        // Create the release first...
+        Animal animal = new Animal(species:new Species(),
+                                   sex:new Sex())
+        mockDomain(Animal, [animal])
+        animal.save()
+        controller.params.animal = [id:animal.id]
+        
+        def model = controller.save()
+        assertEquals("show", controller.redirectArgs.action)
+        
+        AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
+        assertNotNull(release)
+        assertNull(release.embargoDate)
+        
+        // ... now do an update.
+        controller.params.id = release.id
+        controller.params.embargoPeriod = null
+        
+        controller.update()
+        
+        release = AnimalRelease.get(controller.redirectArgs.id)
+        assertNotNull(release)
+        
+        // Embargo date must be null.
+        assertNull(release.embargoDate)
+    }
+    
+    void testUpdate3MonthsEmbargo()
+    {
+        // Create the release first...
+        Animal animal = new Animal(species:new Species(),
+                                   sex:new Sex())
+        mockDomain(Animal, [animal])
+        animal.save()
+        controller.params.animal = [id:animal.id]
+        
+        def model = controller.save()
+        assertEquals("show", controller.redirectArgs.action)
+        
+        AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
+        assertNotNull(release)
+        assertNull(release.embargoDate)
+        
+        // ... now do an update.
+        controller.params.id = release.id
+        controller.params.embargoPeriod = 3
+        
+        controller.update()
+        
+        release = AnimalRelease.get(controller.redirectArgs.id)
+        assertNotNull(release)
+        assertNotNull(release.embargoDate)
+        
+        // Embargo date == 2011-08-15"
+        Calendar expectedCal = Calendar.getInstance()
+        expectedCal.setTime(dateFormat.parse("2011-08-15"))
+        
+        Calendar releaseCal = Calendar.getInstance()
+        releaseCal.setTime(release.embargoDate)
+        
+        assertTrue("year", expectedCal.get(Calendar.YEAR) == releaseCal.get(Calendar.YEAR))
+        assertTrue("day", expectedCal.get(Calendar.DAY_OF_YEAR) == releaseCal.get(Calendar.DAY_OF_YEAR))
+    }
+    
+    void testSave3MonthUpdateNo()
+    {
+        Animal animal = new Animal(species:new Species(),
+                                   sex:new Sex())
+        mockDomain(Animal, [animal])
+        animal.save()
+        controller.params.animal = [id:animal.id]
+        
+        // controller.params.releaseDateTime = new DateTime("2011-05-15T14:12:00+10:00")
+        controller.params.embargoPeriod = 3
+        
+        def model = controller.save()
+        assertEquals("show", controller.redirectArgs.action)
+        
+        AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
+        assertNotNull(release)
+        assertNotNull(release.embargoDate)
+        
+        // Embargo date == 2011-08-15"
+        Calendar expectedCal = Calendar.getInstance()
+        expectedCal.setTime(dateFormat.parse("2011-08-15"))
+        
+        Calendar releaseCal = Calendar.getInstance()
+        releaseCal.setTime(release.embargoDate)
+        
+        assertTrue("year", expectedCal.get(Calendar.YEAR) == releaseCal.get(Calendar.YEAR))
+        assertTrue("day", expectedCal.get(Calendar.DAY_OF_YEAR) == releaseCal.get(Calendar.DAY_OF_YEAR))
+        
+        // Now set embargo period back to null and update.
+        controller.params.embargoPeriod = null
+        controller.params.id = release.id
+        
+        controller.update()
+        
+        release = AnimalRelease.get(controller.redirectArgs.id)
+        assertNotNull(release)
+        assertNull(release.embargoDate)
     }
 }

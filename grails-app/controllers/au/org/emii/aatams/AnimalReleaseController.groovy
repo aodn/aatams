@@ -78,6 +78,9 @@ class AnimalReleaseController {
         }
         else
         {
+            // Set the embargo date if embargo period (in months) has been specified.
+            setEmbargoDate(params, animalReleaseInstance)
+            
             // The request can contain either a known animal, or just a species and
             // sex, in which case we need to create an animal.
             Animal animalInstance = animalFactoryService.lookupOrCreate(params)
@@ -192,6 +195,9 @@ class AnimalReleaseController {
             animalReleaseInstance.properties = params
             animalReleaseInstance.animal = animal
             
+            // Set the embargo date if embargo period (in months) has been specified.
+            setEmbargoDate(params, animalReleaseInstance)
+            
             if (   !animalReleaseInstance.hasErrors() 
                 && !animal.hasErrors()
                 && animal.save(flush: true)) 
@@ -225,6 +231,20 @@ class AnimalReleaseController {
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), params.id])}"
             redirect(action: "list")
+        }
+    }
+    
+    def setEmbargoDate(params, animalReleaseInstance)
+    {
+        if (params.embargoPeriod)
+        {
+            Calendar releaseCalendar = animalReleaseInstance.releaseDateTime?.toGregorianCalendar()
+            def embargoDate = releaseCalendar.add(Calendar.MONTH, Integer.valueOf(params.embargoPeriod))
+            animalReleaseInstance.embargoDate = releaseCalendar.getTime()
+        }
+        else
+        {
+            animalReleaseInstance.embargoDate = null
         }
     }
 }

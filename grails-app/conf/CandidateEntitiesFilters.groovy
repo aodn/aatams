@@ -59,6 +59,18 @@ class CandidateEntitiesFilters
                 }
             }
         }
+        
+        embargoPeriod(controller:'animalRelease', action:'create|edit')
+        {
+            after =
+            {
+                model ->
+                
+                // The list of embargo periods to choose from.
+                def embargoPeriods = [6: '6 months', 12: '12 months']
+                model?.embargoPeriods = embargoPeriods.entrySet()
+            }
+        }
     }
 }
 

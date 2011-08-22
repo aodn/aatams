@@ -2,6 +2,7 @@ package au.org.emii.aatams
 
 import org.codehaus.groovy.grails.commons.*
 import org.springframework.web.multipart.MultipartFile
+import org.apache.shiro.SecurityUtils
 
 class ReceiverDownloadFileController 
 {
@@ -48,6 +49,8 @@ class ReceiverDownloadFileController
             receiverDownloadFileInstance.importDate = new Date()
             receiverDownloadFileInstance.status = FileProcessingStatus.PROCESSING
 
+            receiverDownloadFileInstance.requestingUser = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
+            
             MultipartFile file = (fileMap.values() as List)[0]
             def path = getPath(receiverDownload)
             String fullPath = path + File.separator + file.getOriginalFilename()
@@ -59,12 +62,18 @@ class ReceiverDownloadFileController
             receiverDownload.save(flush:true, failOnError:true)
 
             flash.message = "${message(code: 'default.processing.receiverUpload.message')}"
-
+            
+            // Define this in web thread, as it fails if done async.
+            def downloadFileId = receiverDownloadFileInstance.id
+            def showLink = createLink(action:'show', id:downloadFileId, absolute:true)
+            
             runAsync
             {
                 try
                 {
-                    fileProcessorService.process(receiverDownloadFileInstance.id, file)
+                    fileProcessorService.process(downloadFileId, 
+                                                 file,
+                                                 showLink)
                 }
                 catch (Throwable t)
                 {

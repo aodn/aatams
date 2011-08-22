@@ -20,6 +20,8 @@ class ReceiverDownloadFile
     
     String errMsg
     
+    Person requestingUser
+    
     static belongsTo = [receiverDownload: ReceiverDownload]
 
     static constraints =

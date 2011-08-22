@@ -15,7 +15,7 @@ def delimiter = ','
 
 def numReceivers = 1
 def numTransmitters = 12
-def numDetections = 1000 //10 //100   // (per receiver/tag combination)
+def numDetections = 300 // 1000 //10 //100   // (per receiver/tag combination)
 
 def DATE_FORMAT_STRING = "yyyy-MM-dd HH:mm:ss"
 def dateFormat = new SimpleDateFormat(DATE_FORMAT_STRING)

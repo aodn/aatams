@@ -46,7 +46,7 @@ class ReceiverDownloadFileController
             receiverDownloadFileInstance.receiverDownload = receiverDownload
             receiverDownloadFileInstance.errMsg = ""
             receiverDownloadFileInstance.importDate = new Date()
-            receiverDownloadFileInstance.status = FileProcessingStatus.PENDING
+            receiverDownloadFileInstance.status = FileProcessingStatus.PROCESSING
 
             MultipartFile file = (fileMap.values() as List)[0]
             def path = getPath(receiverDownload)

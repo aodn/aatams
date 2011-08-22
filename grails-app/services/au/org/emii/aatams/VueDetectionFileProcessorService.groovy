@@ -13,6 +13,9 @@ class VueDetectionFileProcessorService
     
     static transactional = true
 
+    def sessionFactory
+    def propertyInstanceMap = org.codehaus.groovy.grails.plugins.DomainClassGrailsPlugin.PROPERTY_INSTANCE_MAP
+    
     void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
     {
         def detectionService = cachedDetectionFactoryService
@@ -50,7 +53,7 @@ class VueDetectionFileProcessorService
             
             log.debug("Processing record number: " + String.valueOf(i))
             
-            Detection detection = detectionService.newDetection(map).save(failOnError: true)
+            Detection detection = detectionService.newDetection(map)
             
             def exactPercentComplete = i * 100 / numRecords
             if (exactPercentComplete > (percentComplete + percentCompleteInc))

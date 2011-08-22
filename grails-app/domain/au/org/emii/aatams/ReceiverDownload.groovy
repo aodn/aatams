@@ -18,6 +18,7 @@ class ReceiverDownload
             column name: "downloadDateTime_timestamp"
             column name: "downloadDateTime_zone"
         }
+        comments type: 'text'
     }
     
     DateTime downloadDateTime
@@ -55,10 +56,5 @@ class ReceiverDownload
         downloader(nullable:true, )
         batteryVoltage(nullable:true, min:0F)
         batteryDays(nullable:true, min:0)
-    }
-
-    static mapping =
-    {
-        comments type: 'text'
     }
 }

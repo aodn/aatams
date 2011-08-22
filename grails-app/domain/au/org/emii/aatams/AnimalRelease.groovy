@@ -33,6 +33,8 @@ class AnimalRelease
             column name: "releaseDateTime_timestamp"
             column name: "releaseDateTime_zone"
         }
+        
+        comments type: 'text'
     }
 
     String captureLocality

@@ -19,6 +19,8 @@ class Surgery
             column name: "timestamp_timestamp"
             column name: "timestamp_zone"
         }
+        
+        comments type: 'text'
     }
     
     DateTime timestamp

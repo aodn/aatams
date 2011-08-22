@@ -31,6 +31,8 @@ class ReceiverDeployment
             column name: "deploymentDateTime_timestamp"
             column name: "deploymentDateTime_zone"
         }
+
+        comments type: 'text'
     }
     
     /**

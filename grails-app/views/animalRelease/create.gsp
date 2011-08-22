@@ -237,11 +237,14 @@
 
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="embargoDate"><g:message code="animalRelease.embargoDate.label" default="Embargo Date" /></label>
+                                    <label for="embargoPeriod"><g:message code="animalRelease.embargoDate.label" default="Embargo Period" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'embargoDate', 'errors')}">
-                                    <g:datePicker name="embargoDate" precision="day" value="${animalReleaseInstance?.embargoDate}" default="none" noSelection="['': '']" />
-
+                                    <g:select from="${embargoPeriods}"
+                                              name="embargoPeriod" 
+                                              optionKey="key"
+                                              optionValue="value"
+                                              noSelection="[null:'No embargo']"/>
                                 </td>
                             </tr>
                         

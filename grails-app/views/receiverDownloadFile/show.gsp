@@ -32,6 +32,15 @@
                         </tr>
 
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDownloadFile.receiverDownload.receiverRecovery.label" default="Receiver Recovery" /></td>
+                            <td valign="top" class="value">
+                              <g:link controller="receiverRecovery" 
+                                      action="show" 
+                                      id="${receiverDownloadFileInstance?.receiverDownload?.receiverRecovery?.id}">${receiverDownloadFileInstance?.receiverDownload?.receiverRecovery?.encodeAsHTML()}</g:link>
+                            </td>
+                        </tr>
+                        
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.type.label" default="Type" /></td>
                             
                             <td valign="top" class="value">${receiverDownloadFileInstance?.type?.encodeAsHTML()}</td>

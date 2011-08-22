@@ -2,6 +2,7 @@ package au.org.emii.aatams
 
 import org.codehaus.groovy.grails.commons.*
 import org.springframework.web.multipart.MultipartFile
+import org.codehaus.groovy.grails.commons.GrailsApplication
 
 class FileProcessorService
 {
@@ -9,9 +10,12 @@ class FileProcessorService
 
     def vueDetectionFileProcessorService
     def vueEventFileProcessorService
+    
+    def grailsApplication
+    def mailService
 
 //    void process(ReceiverDownloadFile receiverDownloadFile, MultipartFile file)
-    void process(receiverDownloadFileId, MultipartFile file)
+    void process(receiverDownloadFileId, MultipartFile file, showLink)
     {
         log.debug("Processing receiver export, download file ID: " + receiverDownloadFileId)
         
@@ -72,7 +76,8 @@ class FileProcessorService
 
                 log.info "Finished processing."
             }
-            catch (FileProcessingException e)
+//            catch (FileProcessingException e)
+            catch (Throwable e)
             {
                 log.error("Error processing file", e)
                 receiverDownloadFile.status = FileProcessingStatus.ERROR
@@ -80,6 +85,10 @@ class FileProcessorService
                 receiverDownloadFile.save()
 
                 throw e
+            }
+            finally 
+            {
+                sendNotification(receiverDownloadFile, showLink)
             }
         }
         else
@@ -91,5 +100,19 @@ class FileProcessorService
     boolean isParseable(downloadFile)
     {
         return true
+    }
+    
+    def sendNotification(receiverDownloadFile, showLink)
+    {
+        mailService.sendMail 
+        {     
+            to receiverDownloadFile?.requestingUser?.emailAddress
+            bcc grailsApplication.config.grails.mail.adminEmailAddress
+            from grailsApplication.config.grails.mail.systemEmailAddress
+            subject "AATAMS receiver export " + receiverDownloadFile?.name + ": " + receiverDownloadFile?.status
+            body "AATAMS receiver export " + receiverDownloadFile?.name \
+                 + ": " + receiverDownloadFile?.status + "\n\n" \
+                 + showLink
+        }
     }
 }

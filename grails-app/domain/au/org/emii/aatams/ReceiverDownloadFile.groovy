@@ -28,6 +28,11 @@ class ReceiverDownloadFile
         path()
     }
     
+    static mapping =
+    {
+        errMsg type: 'text'
+    }
+    
 //    ReceiverDownloadFile(String fullPath, String name)
 //    {
 //        this.importDate = new Date()

@@ -140,7 +140,6 @@
                                           <td valign="top" class="value">${downloadFile?.name}</td>
                                           <td valign="top" class="value">${downloadFile?.type}</td>
                                           <td valign="top" class="value">${downloadFile?.status}</td>
-                                          <td valign="top" class="value">${downloadFile?.errMsg}</td>
                                         </tr>
                                         
                                       </g:each>

@@ -66,15 +66,22 @@ grails.converters.json.circular.reference.behaviour = "INSERT_NULL"
 environments {
     production {
         grails.serverURL = "http://preview.emii.org.au/${appName}"
+
+        // This is used in the embargo notification job.
+        grails.serverHost = "http://preview.emii.org.au"
     }
     development {
         grails.serverURL = "http://localhost:8080/${appName}"
+        grails.serverHost = "http://localhost:8080"
     }
     test {
         grails.serverURL = "http://localhost:8080/${appName}"
+        grails.serverHost = "http://localhost:8080"
     }
 
 }
+
+
 
 // log4j configuration
 log4j = {
@@ -111,6 +118,7 @@ log4j = {
 //            "grails.app.service.au.org.emii",
 //            "grails.app.service.aatams",
             "grails.app.domain.au.org.emii",
+            "grails.app.task",
 //           'org.hibernate',
 //            "grails.buildtestdata"
             "grails.app.filter"//,
@@ -130,6 +138,9 @@ fileimport
 jodatime.format.org.joda.time.DateTime = "dd/MM/yyyy HH:mm:ss zz"
 
 tag.expectedLifeTime.gracePeriodDays = 182 // 6 months
+
+// Warning period for release embargo expiration.
+animalRelease.embargoExpiration.warningPeriodMonths = 1
 
 //
 // Email configuration.

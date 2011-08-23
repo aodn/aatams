@@ -270,7 +270,7 @@
                                               name="embargoPeriod" 
                                               optionKey="key"
                                               optionValue="value"
-                                              noSelection="[null:'No embargo']"/>
+                                              noSelection="['':'No embargo']"/>
                                 </td>
                             </tr>
                         

@@ -115,6 +115,7 @@ class AnimalReleaseController {
                     Surgery surgery = new Surgery(v)
                     surgery.tag = tag
 
+                    tag.addToSurgeries(surgery)
                     animalReleaseInstance.addToSurgeries(surgery)
 
                     // Need to update that status of the tag to DEPLOYED.

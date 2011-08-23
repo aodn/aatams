@@ -16,7 +16,8 @@ class SecSecurityFilters
         "installation|installationStation|receiver|species|tag|sensor|" + \
         "animalRelease|detection|receiverDeployment|receiverRecovery|" + \
         "receiverEvent|navigationMenu|receiverDownloadFile|" + \
-        "surgery|detectionSurgery"
+        "surgery|detectionSurgery|" + \
+        "gettingStarted|about"
     
     def filters = 
     {

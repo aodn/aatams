@@ -44,6 +44,12 @@ class NavigationMenuController
     [
         // TODO
     ]
+    
+    def helpControllers =
+    [
+        'gettingStarted':"Getting Started",
+        'about':"About"
+    ]
 
     // Only visible to administrators...
     def adminControllers =
@@ -85,6 +91,7 @@ class NavigationMenuController
          installationDataControllers: installationDataControllers,
          fieldDataControllers: fieldDataControllers,
          reportControllers: reportControllers,
+         helpControllers: helpControllers,
          adminControllers: adminControllers,
          blacklistControllers: blacklistControllers
         ]

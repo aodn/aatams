@@ -13,6 +13,6 @@ class DeviceModel
     
     String toString()
     {
-        return manufacturer.toString() + " " + modelName
+        return modelName
     }
 }

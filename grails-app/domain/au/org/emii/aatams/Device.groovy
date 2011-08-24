@@ -24,6 +24,11 @@ class Device
         comment(nullable:true, blank:true)
     }
     
+    static mapping =
+    {
+        codeName index:'code_name_index'
+    }
+    
     static transients = ['deviceID']
     
     String toString()

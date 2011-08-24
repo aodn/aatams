@@ -188,12 +188,12 @@
 
                         <tr class="prop">
                             <td valign="top" class="name">
-                                <label class="compulsory" for="projectId"><g:message code="organisationProject.project.label" default="Project" /></label>
+                                <label for="projectId"><g:message code="organisationProject.project.label" default="Project" /></label>
                                 <g:hiddenField name="projectId" value="${projectInstance?.id}" />
 
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: organisationProjectInstance, field: 'project', 'errors')}">
-                              <label class="compulsory" id="project">${projectInstance}</label>
+                              <label id="project">${projectInstance}</label>
                             </td>
                         </tr>
 

@@ -19,4 +19,31 @@ class ProjectRoleType
     {
         return displayName
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final ProjectRoleType other = (ProjectRoleType) obj;
+        if ((this.displayName == null) ? (other.displayName != null) : !this.displayName.equals(other.displayName))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 3;
+        hash = 13 * hash + (this.displayName != null ? this.displayName.hashCode() : 0);
+        return hash;
+    }
 }

@@ -159,8 +159,8 @@ class BootStrap
             
             development
             {
-//                initReferenceData()
-                initData()
+                initReferenceData()
+//                initData()
 //                initPerformanceData()
             }
             

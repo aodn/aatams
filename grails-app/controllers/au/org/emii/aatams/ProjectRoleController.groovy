@@ -25,9 +25,10 @@ class ProjectRoleController {
 
     def save = 
     {
-        log.debug("Adding projectRole...")
+        log.debug("Adding projectRole, params: " + params)
         
         def projectRoleInstance = new ProjectRole(params)
+        log.debug("Role type: " + projectRoleInstance.roleType)
         
         if (projectRoleInstance.save(flush: true)) 
         {

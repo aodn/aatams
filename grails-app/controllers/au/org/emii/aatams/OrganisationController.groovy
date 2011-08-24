@@ -55,8 +55,8 @@ class OrganisationController
 
     def save = 
     {
-        def streetAddress = new Address(params['streetAddress'])
-        def postalAddress = new Address(params['postalAddress'])
+        def streetAddress = new Address(params['streetAddress']).save()
+        def postalAddress = new Address(params['postalAddress']).save()
 
         def organisationInstance = 
             new Organisation(params['organisation'])

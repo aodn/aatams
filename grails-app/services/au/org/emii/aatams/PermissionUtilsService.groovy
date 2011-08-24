@@ -24,7 +24,7 @@ class PermissionUtilsService
     
     Person setPermissions(ProjectRole projectRole)
     {
-//        log.debug("projectRole: " + String.valueOf(projectRole))
+        log.debug("projectRole: " + String.valueOf(projectRole))
         
         // Cleanup existing permissions.
         Person user = removePermissions(projectRole)
@@ -38,16 +38,18 @@ class PermissionUtilsService
 
         
         // Principal Investigators have special permissions.
+        log.debug("Comparing roleTypes, person's roleType: " + projectRole.roleType + ", PI role type: " + getPIRoleType())
+        
         if (   projectRole.roleType 
             == getPIRoleType())
         {
-//            log.debug("Adding PI permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
+            log.debug("Adding PI permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
             
             user.addToPermissions(buildPersonWriteAnyPermission())
             user.addToPermissions(buildReceiverCreatePermission())
             String permission = buildPrincipalInvestigatorPermission(projectRole.project.id)
             user.addToPermissions(permission)
-//            log.debug("Added permission: " + permission)
+            log.debug("Added permission: " + permission)
             
             user.save()
         }
@@ -57,20 +59,20 @@ class PermissionUtilsService
         if (   projectRole.access == ProjectAccess.READ_ONLY
             || projectRole.access == ProjectAccess.READ_WRITE)
         {
-//            log.debug("Adding read permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
+            log.debug("Adding read permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
             String permission = buildProjectReadPermission(projectRole.project.id)
             user.addToPermissions(buildProjectReadAnyPermission())
             user.addToPermissions(permission).save()
-//            log.debug("Added permission: " + permission)
+            log.debug("Added permission: " + permission)
         }
         
         if (projectRole.access == ProjectAccess.READ_WRITE)
         {
-//            log.debug("Adding write permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
+            log.debug("Adding write permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
             String permission = buildProjectWritePermission(projectRole.project.id)
             user.addToPermissions(buildProjectWriteAnyPermission())
             user.addToPermissions(permission).save()
-//            log.debug("Added permission: " + permission)
+            log.debug("Added permission: " + permission)
         }
         
         return user

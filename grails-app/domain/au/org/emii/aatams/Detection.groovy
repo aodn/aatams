@@ -100,7 +100,7 @@ class Detection
     {
         return \
            (timestamp == other?.timestamp) \
-        && (receiverDeployment == other?.receiverDeployment) \
+        && (receiverDeployment.id == other?.receiverDeployment.id) \
         && (receiverName == other?.receiverName) \
         && (stationName == other?.stationName) \
         && (transmitterId == other?.transmitterId) \

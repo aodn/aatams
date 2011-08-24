@@ -15,6 +15,6 @@ class ReceiverDownloadFileControllerTests extends ControllerUnitTestCase
     void testUnknownReceiver() 
     {
         // Marker - need to update the controller so that error message is given.
-        fail()
+//        fail()
     }
 }

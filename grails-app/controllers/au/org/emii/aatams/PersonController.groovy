@@ -104,12 +104,17 @@ class PersonController {
 
     def show = {
         def personInstance = Person.get(params.id)
-        if (!personInstance) {
+        if (!personInstance) 
+        {
+            log.debug("Person not found, id: " + params.id)
+            
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
             redirect(action: "list")
         }
         else 
         {
+            log.debug("Person found, id: " + params.id)
+            
             def canEdit = false
 
             if (!SecurityUtils.subject.isAuthenticated())
@@ -121,7 +126,7 @@ class PersonController {
                 canEdit = true
             }
             // A person can edit their own record
-            else if (personInstance == Person.findByUsername(SecurityUtils.subject.principal))
+            else if (personInstance.id == Person.findByUsername(SecurityUtils.subject.principal).id)
             {
                 canEdit = true
             }

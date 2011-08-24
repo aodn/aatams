@@ -154,7 +154,7 @@ class BootStrap
             test
             {
 //                initData()
-                initPerformanceData()
+//                initPerformanceData()
             }
             
             development

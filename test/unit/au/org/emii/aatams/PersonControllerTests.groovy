@@ -79,6 +79,9 @@ class PersonControllerTests extends ControllerUnitTestCase
                                   state:'TAS',
                                   postcode:'7000',
                                   country:'Australia')
+                       
+        mockDomain(Address, [address])
+        address.save()
         
         // Create organisation.
         def imos = new Organisation(id:2,
@@ -89,18 +92,21 @@ class PersonControllerTests extends ControllerUnitTestCase
                                     streetAddress:address,
                                     postalAddress:address,
                                     status:EntityStatus.ACTIVE)
+        mockDomain(Organisation, [imos])
+        imos.save()
         
-        def joeBloggs = new Person(id:3,
-                                   organisation:imos,
+        def joeBloggs = new Person(organisation:new Organisation(),
                                    name:'Joe Bloggs',
+                                   username:'jbloggs',
                                    emailAddress:'jbloggs@imos.org.au',
                                    phoneNumber:'12345678',
+                                   passwordHash:'asdf',
                                    status:EntityStatus.ACTIVE)
-        mockDomain(Person, [joeBloggs])                      
+        mockDomain(Person, [joeBloggs]) 
+        joeBloggs.save()
         
-        controller.params.id = 3
+        controller.params.id = joeBloggs.id
         def returnValue = controller.show()
-        println(returnValue)
         
         assertSame(returnValue.personInstance, joeBloggs)
     }

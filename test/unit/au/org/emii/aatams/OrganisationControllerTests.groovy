@@ -25,7 +25,7 @@ class OrganisationControllerTests extends ControllerUnitTestCase
                         state:'TAS',
                         country:'Australia',
                         postcode:'7000')
-                    
+        
         Person somePerson = new Person()
 
         //
@@ -68,6 +68,8 @@ class OrganisationControllerTests extends ControllerUnitTestCase
     
     void initData()
     {
+        mockDomain(Address)
+        
         def orgList = createDataList()
         
         mockDomain(Organisation, orgList)

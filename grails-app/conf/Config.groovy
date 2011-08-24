@@ -128,11 +128,25 @@ log4j = {
 //
 //  File uploader configuration.
 //
-fileimport
+fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads"
+/**
+environments 
 {
-    path = "/Users/jburgess/Documents/aatams/test_uploads"
+    production 
+    {
+        fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads"
+    }
+    
+    development 
+    {
+        fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
+    }
+    
+    test 
+    {
+    }
 }
-
+*/
 // Date formats.
 //jodatime.format.org.joda.time.DateTime = "yyyy-MM-dd'T'HH:mm:ssZ"
 jodatime.format.org.joda.time.DateTime = "dd/MM/yyyy HH:mm:ss zz"
@@ -149,6 +163,20 @@ environments
 {
     production 
     {
+        grails 
+        {
+           mail 
+           {
+             adminEmailAddress = "aatams_admin@emii.org.au"
+             systemEmailAddress = "aatams_system@emii.org.au"
+             
+             host = "localhost"
+             port = 25
+             username = "aatams_system@utas.edu.au"
+//             password = 
+             props = ["mail.smtp.auth":"false"] 					   
+           }
+        }        
     }
     
     development 
@@ -163,7 +191,6 @@ environments
              host = "postoffice.utas.edu.au"
              port = 25
              username = "aatams_system@utas.edu.au"
-//             password = 
              props = ["mail.smtp.auth":"false"] 					   
            }
         }        

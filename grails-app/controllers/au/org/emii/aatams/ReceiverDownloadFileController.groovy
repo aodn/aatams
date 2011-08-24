@@ -75,12 +75,20 @@ class ReceiverDownloadFileController
                                                  file,
                                                  showLink)
                 }
+                catch (FileProcessingException e)
+                {
+                    log.error(e)
+                    
+                    receiverDownloadFileInstance.status = FileProcessingStatus.ERROR
+                    receiverDownloadFileInstance.errMsg = e.getMessage()
+                    receiverDownloadFileInstance.save()
+                }
                 catch (Throwable t)
                 {
                     log.error(t)
                     
                     receiverDownloadFileInstance.status = FileProcessingStatus.ERROR
-                    receiverDownloadFileInstance.errMsg = t.getMessage()
+                    receiverDownloadFileInstance.errMsg = "System Error - Contact eMII" //t.getMessage()
                     receiverDownloadFileInstance.save()
                 }
             }
@@ -190,10 +198,10 @@ class ReceiverDownloadFileController
      */
     String getPath(ReceiverDownload download)
     {
-        def config = ConfigurationHolder.config['fileimport']
-        
         // Save the file to disk.
-        def path = config.path
+//        def path = config.path
+        def path = grailsApplication.config.fileimport.path
+        log.debug("File import config: " + grailsApplication.config.fileimport)
         if (!path.endsWith(File.separator))
         {
             path = path + File.separator

@@ -57,12 +57,8 @@ environments {
         // Make *sure* you've got Grails Environment set to "production"!!
         dataSource 
         {
-//            dbCreate = "create" // one of 'create', 'create-drop','update'
-//            jndiName = "java:comp/env/jdbc/aatams3"
-            
-            // TODO: change back to "update" or just comment out.
-            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-            jndiName = "java:comp/env/jdbc/aatams3_obsidian"
+//            dbCreate = "create"
+            jndiName = "java:comp/env/jdbc/aatams3"
         }
     }
 }

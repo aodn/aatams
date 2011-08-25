@@ -10,8 +10,13 @@
         <script>
             $(document).ready(function() 
             {
-                console.log("accordion ready");
-                $("#accordion").accordion({fillSpace:true, collapsible:true, active:false});
+//                $("#accordion").accordion({fillSpace:true, collapsible:true, active:false, autoHeight:true});
+                $("#accordion").accordion({collapsible:true, 
+                                           active:false, 
+                                           //autoHeight:true, 
+                                           //fillSpace: true,
+                                           clearStyle: true});
+                $("#accordion").accordion({active:0});
             });
         </script>
             

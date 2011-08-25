@@ -58,8 +58,6 @@ class ProjectController {
         
         ProjectCreateCommand createProjectCmd ->
         
-        println("params: " + params)
-        
         if (createProjectCmd.validate())
         {
             def projectInstance =  createProjectCmd.createProject()
@@ -105,9 +103,15 @@ class ProjectController {
             }
             else 
             {
+                log.error("Error saving projectInstance: " + projectInstance.errors)
 //                    render(view: "create", model: [projectInstance: projectInstance])
-                render(view: "create", model: [createProjectCmd:createProjectCmd])
+                render(view: "create", model: [projectInstance:projectInstance, createProjectCmd:createProjectCmd])
             }
+        }
+        else
+        {
+            log.error("Create project command invalid.")
+            render(view: "create", model: [createProjectCmd:createProjectCmd])
         }
     }
 

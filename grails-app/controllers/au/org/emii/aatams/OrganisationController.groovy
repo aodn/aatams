@@ -85,14 +85,12 @@ class OrganisationController
             }
             else
             {
-                println "Organisation created by non-SysAdmin, id: " + organisationInstance.id
                 sendCreationNotificationEmails(organisationInstance)
                 flash.message = "${message(code: 'default.requested.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.id])}"
             }
             redirect(action: "show", id: organisationInstance.id)
         }
         else {
-            println(organisationInstance.errors)
             render(view: "create", model: [organisationInstance: organisationInstance])
         }
     }

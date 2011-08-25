@@ -52,7 +52,7 @@
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="password"><g:message code="secUser.password.label" default="Password" /></label>
                                 </td>
-                                <td valign="top" class="value ">
+                                <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'password', 'errors')}">
                                     <input type="password" name="password" value="" />
                                 </td>
                             </tr>
@@ -61,7 +61,7 @@
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="passwordConfirm"><g:message code="secUser.password.label" default="Password (confirm)" /></label>
                                 </td>
-                                <td valign="top" class="value ">
+                                <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'passwordConfirm', 'errors')}">
                                     <input type="password" name="passwordConfirm" value="" />
                                 </td>
                             </tr>

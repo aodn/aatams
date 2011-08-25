@@ -46,7 +46,7 @@
                     <g:each in="${animalReleaseInstanceList}" status="i" var="animalReleaseInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td class="rowButton"><g:link class="show" action="show" id="${animalReleaseInstance.id}"></g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${animalReleaseInstance.id}">.</g:link></td>
                     
                             <td>
                               <g:each var="surgery" in="${animalReleaseInstance.surgeries}">

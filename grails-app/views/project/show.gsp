@@ -39,7 +39,7 @@
                                 <tbody>
                                   <g:each in="${projectInstance.organisationProjects}" var="op">
                                     <tr>
-                                      <td class="rowButton"><g:link class="show" controller="organisationProject" action="show" id="${op?.id}"></g:link></td>
+                                      <td class="rowButton"><g:link class="show" controller="organisationProject" action="show" id="${op?.id}">.</g:link></td>
                                       <td>
                                         <g:link controller="organisation" action="show" id="${op?.organisation.id}">${op?.organisation?.encodeAsHTML()}</g:link>
                                       </td>
@@ -62,7 +62,7 @@
                                 <tbody>
                                   <g:each in="${projectInstance?.projectRoles?}" var="p">
                                     <tr>
-                                      <td class="rowButton"><g:link class="show" controller="projectRole" action="show" id="${p?.id}"></g:link></td>
+                                      <td class="rowButton"><g:link class="show" controller="projectRole" action="show" id="${p?.id}">.</g:link></td>
                                       <td>
                                         <g:link controller="person" action="show" id="${p?.person?.id}">${p?.person?.encodeAsHTML()}</g:link>
                                       </td>

@@ -12,7 +12,6 @@ $(function() {
                 var password = $("#password").val();
                 var passwordConfirm = $("#passwordConfirm").val();
                 
-                console.log("password: " + $("#password"))
                 var event = $("#id").val();
                 
                 $.post('/aatams/person/updatePassword', 

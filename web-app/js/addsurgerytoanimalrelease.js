@@ -64,7 +64,6 @@ $(function()
                                     treatmentType:treatmentType,
                                     comments:comments};
                     var data = {instance:instance};
-                    console.log(data);
                     
                     updateSurgeryTable(data);
                     

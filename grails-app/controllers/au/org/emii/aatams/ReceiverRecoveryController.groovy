@@ -42,10 +42,10 @@ class ReceiverRecoveryController {
         receiverRecoveryInstance.deployment = deployment
 
         // Set the receiver's status to that of the recovery's.
-        deployment.receiver.status = receiverRecoveryInstance.status
-        deployment.receiver.save(flush: true)
+        deployment?.receiver?.status = receiverRecoveryInstance.status
+        deployment?.receiver?.save(flush: true)
         
-        deployment.recovery = receiverRecoveryInstance
+        deployment?.recovery = receiverRecoveryInstance
         
         // Create a new receiver download an associate it with the recovery
         // TODO: may need some extra controls in view to populate download 
@@ -57,11 +57,11 @@ class ReceiverRecoveryController {
         download.downloadDateTime = new DateTime()
 //        download.save(flush:true, failOnErrors:true)
         
-        deployment.recovery.download = download
+        deployment?.recovery?.download = download
         
 //        assert(download != null): "download cannot be null"
 
-        if (deployment.save(flush: true)) 
+        if (deployment?.save(flush: true)) 
         {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.id])}"
             redirect(action: "show", id: receiverRecoveryInstance.id)

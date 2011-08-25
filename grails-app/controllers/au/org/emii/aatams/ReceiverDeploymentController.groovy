@@ -29,12 +29,15 @@ class ReceiverDeploymentController {
         
         // Need to update that status of the receiver to DEPLOYED.
         DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
-        receiverDeploymentInstance.receiver.status = deployedStatus
+        receiverDeploymentInstance.receiver?.status = deployedStatus
 
         // Increment that station's number of deployments.
-        receiverDeploymentInstance?.station?.numDeployments =
-            receiverDeploymentInstance?.station?.numDeployments + 1
-        receiverDeploymentInstance?.station?.save()
+        if (receiverDeploymentInstance?.station?.numDeployments)
+        {
+            receiverDeploymentInstance?.station?.numDeployments =
+                receiverDeploymentInstance?.station?.numDeployments + 1
+            receiverDeploymentInstance?.station?.save()
+        }
         
         // And record the deployment number against the actual deployment.
         receiverDeploymentInstance?.deploymentNumber = receiverDeploymentInstance?.station?.numDeployments

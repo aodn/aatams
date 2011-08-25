@@ -18,6 +18,11 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
+            <g:hasErrors bean="${createProjectCmd}">
+            <div class="errors">
+                <g:renderErrors bean="${createProjectCmd}" as="list" />
+            </div>
+            </g:hasErrors>
             <g:hasErrors bean="${projectInstance}">
             <div class="errors">
                 <g:renderErrors bean="${projectInstance}" as="list" />
@@ -32,7 +37,7 @@
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="name"><g:message code="project.name.label" default="Name" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'name', 'errors')}">
+                                <td valign="top" class="value ${hasErrors(bean: createProjectCmd, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${createProjectCmd?.name}" />
 
                                 </td>

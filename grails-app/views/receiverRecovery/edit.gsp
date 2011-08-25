@@ -167,7 +167,7 @@
                                     <tbody id="download_files_table_body">
                                       <g:each in="${receiverRecoveryInstance?.download?.downloadFiles}" var="downloadFile">
                                         <tr>
-                                          <td class="rowButton"><g:link class="show" controller="receiverDownloadFile" action="show" id="${downloadFile?.id}"></g:link></td>
+                                          <td class="rowButton"><g:link class="show" controller="receiverDownloadFile" action="show" id="${downloadFile?.id}">.</g:link></td>
                                           <td valign="top" class="value">${downloadFile?.importDate}</td>
                                           <td valign="top" class="value">${downloadFile?.name}</td>
                                           <td valign="top" class="value">${downloadFile?.type}</td>

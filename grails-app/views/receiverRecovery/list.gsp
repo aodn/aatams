@@ -57,7 +57,7 @@
                     <g:each in="${receiverDeploymentInstanceList}" status="i" var="receiverDeployment">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 
-                            <td class="rowButton"><g:link class="show" controller="receiverDeployment" action="show" id="${receiverDeployment.id}"></g:link></td>
+                            <td class="rowButton"><g:link class="show" controller="receiverDeployment" action="show" id="${receiverDeployment.id}">.</g:link></td>
                     
                             <td><joda:format value="${receiverDeployment.deploymentDateTime}" /></td>
                         

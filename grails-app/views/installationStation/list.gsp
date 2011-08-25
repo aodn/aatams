@@ -42,7 +42,7 @@
                     <g:each in="${installationStationInstanceList}" status="i" var="installationStationInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td class="rowButton"><g:link class="show" action="show" id="${installationStationInstance.id}"></g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${installationStationInstance.id}">.</g:link></td>
                     
                             <td>${fieldValue(bean: installationStationInstance, field: "name")}</td>
                         

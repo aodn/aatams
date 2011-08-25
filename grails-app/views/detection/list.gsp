@@ -42,7 +42,7 @@
                     <g:each in="${detectionInstanceList}" status="i" var="detectionInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td class="rowButton"><g:link class="show" action="show" id="${detectionInstance.id}"></g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${detectionInstance.id}">.</g:link></td>
                     
                             <td><g:formatDate date="${detectionInstance.timestamp}"
                                               format="yyyy-MM-dd'T'HH:mm:ssZ"

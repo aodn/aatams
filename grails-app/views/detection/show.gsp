@@ -80,7 +80,7 @@
                                 <tbody>
                                   <g:each in="${detectionInstance?.detectionSurgeries}" var="s">
                                     <tr>
-                                      <td class="rowButton"><g:link class="show" controller="detectionSurgery" action="show" id="${s?.id}"></g:link></td>
+                                      <td class="rowButton"><g:link class="show" controller="detectionSurgery" action="show" id="${s?.id}">.</g:link></td>
                                       <td>
                                         <g:link controller="tag" action="show" id="${s?.surgery?.tag?.id}">${s?.surgery?.tag?.encodeAsHTML()}</g:link>
                                       </td>

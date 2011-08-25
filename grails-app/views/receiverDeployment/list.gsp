@@ -44,7 +44,7 @@
                     <g:each in="${receiverDeploymentInstanceList}" status="i" var="receiverDeploymentInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td class="rowButton"><g:link class="show" action="show" id="${receiverDeploymentInstance.id}"></g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${receiverDeploymentInstance.id}">.</g:link></td>
                     
                             <td><g:link controller="installation" action="show" id="${receiverDeploymentInstance?.station?.installation?.id}">${receiverDeploymentInstance?.station?.installation}</g:link></td>
 

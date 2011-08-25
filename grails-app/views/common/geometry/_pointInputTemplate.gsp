@@ -15,8 +15,6 @@
   <g:hiddenField name="${parentName}_srid" value="${srid}"/>
   
   <div class="pointEditDialog" id="dialog-form-edit-point" parent="${parentName}" title="Edit Point">
-      <g:form action="save" >
-
 
           <div class="dialog">
               <table>
@@ -55,7 +53,6 @@
                   </tbody>
               </table>
           </div>
-      </g:form>
   </div>
 </div>
 

@@ -8,8 +8,6 @@
  */
 function updateHeader(data)
 {
-    console.log(data)
-
     // Remove any existing flash message.
     $(".body > .message").remove();
 

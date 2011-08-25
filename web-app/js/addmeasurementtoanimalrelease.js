@@ -90,9 +90,6 @@ $(function() {
     
     $('#add_measurement_to_animal_release').click(function() 
     {
-//        $('#dialog-form-add-measurement').dialog('open');
-        console.log("addmeasurement click");
-        
         var addMeasurementUrl = '/aatams/animalRelease/addMeasurement';
         var animalReleaseId = $("#animalReleaseId").val();
         if (animalReleaseId)

@@ -1,18 +1,10 @@
 package aatams
 
+import au.org.emii.aatams.DatumService
+
 class GeometryTagLib 
 {
-    def pointInput = { attrs, body ->
-        
-        out << render(template:"/common/geometry/pointInputTemplate", 
-                      model:[parentName:attrs.name, lon:attrs.lon, lat:attrs.lat, srid:attrs.srid])
-    }
-    
-    def pointOutput = { attrs, body ->
-        
-        out << render(template:"/common/geometry/pointOutputTemplate", 
-                      model:[parentName:attrs.name, lon:attrs.lon, lat:attrs.lat, srid:attrs.srid])
-    }
+    def datumService
     
     /**
      * Generic tag for Point types.
@@ -65,18 +57,23 @@ class GeometryTagLib
                     pointAsString += 'W'
                 }
 
-                pointAsString += " (EPSG:" + srid + ")"
+                pointAsString += " (datum:" + datumService.getName(srid) + ")"
             }
         }
         
         if (attrs.editable)
         {
+            log.debug("Datums: " + datumService.datums)
+
             out << render(template:"/common/geometry/pointInputTemplate", 
                           model:[parentName:attrs.name, 
                                  value:pointAsString,
                                  lon:lon,
+                                 lonEastOrWest:(lon >= 0 ? 'E' : 'W'),
                                  lat:lat,
-                                 srid:srid]) 
+                                 latNorthOrSouth:(lat > 0 ? 'N' : 'S'),
+                                 srid:srid,
+                                 datums:datumService.datums]) 
         }
         else
         {

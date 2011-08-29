@@ -42,6 +42,14 @@
     });
     </g:if>
     </script>
+    
+    <script>
+      $(document).ready(function()
+      {
+          // Set focus to first visible element.
+          $("input:text:visible:first").focus();   
+      });
+    </script>
 
     <g:layoutHead />
 <!--    <g:javascript library="application" />-->

@@ -112,7 +112,7 @@ log4j = {
 //           'org.hibernate',
 //           'org.codehaus.groovy.grails.orm.hibernate'
 
-    info    "grails.app.service.au.org.emii"
+//    info    "grails.app.service.au.org.emii"
 
     debug   "grails.app.controller.au.org.emii",
             "grails.app.service.au.org.emii",
@@ -120,7 +120,7 @@ log4j = {
             "grails.app.domain.au.org.emii",
             "grails.app.task",
 //           'org.hibernate',
-//            "grails.buildtestdata"
+//            "grails.buildtestdata",
             "grails.app.filter"//,
             //"grails.app.tagLib.com.energizedwork.grails.plugins.jodatime"
 }

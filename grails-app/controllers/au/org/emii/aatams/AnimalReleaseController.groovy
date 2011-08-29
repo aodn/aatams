@@ -6,6 +6,8 @@ class AnimalReleaseController {
     
     def animalFactoryService
     
+    def detectionFactoryService
+    
     def tagFactoryService
     
     def index = {
@@ -112,6 +114,7 @@ class AnimalReleaseController {
 
                     def tag = tagFactoryService.lookupOrCreate(v)
 
+                    log.debug("Surgery parameters: " + v)
                     Surgery surgery = new Surgery(v)
                     surgery.tag = tag
 
@@ -120,6 +123,11 @@ class AnimalReleaseController {
 
                     // Need to update that status of the tag to DEPLOYED.
                     surgery?.tag?.status = deployedStatus
+                    
+                    // Rescan detections in case they match this new surgery
+                    // (ref bug #364).
+                    log.debug("Rescanning existing detections for surgery: " + String.valueOf(surgery))
+                    detectionFactoryService.rescanForSurgery(surgery)
                 }
             }
 

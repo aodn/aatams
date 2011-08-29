@@ -176,6 +176,54 @@ class DetectionFactoryService
     }
 
     /**
+     * Rescans existing detections for those that match the given surgery.
+     *
+     * @return collection of detections which are matched against the given surgery.
+     */
+    Collection<Detection> rescanForSurgery(Surgery surgery)
+    {
+        // Tag must be active.
+        def tag = surgery.tag
+        if (!isTagActive(tag))
+        {
+            log.warn("Tag associated with surgery is not active: " + String.valueOf(tag))
+            return null
+        }
+        
+        // Find by transmitter ID.
+        def detections = Detection.findAllByTransmitterId(surgery.tag.codeName)
+        log.debug("Detections found: " + detections.size())
+        
+        // Detection must be in tag's window.
+        detections = detections.grep
+        {
+            detection ->
+            
+            if (detectionInWindow(detection, surgery))
+            {
+                // Associated the surgery and detection.
+                DetectionSurgery detectionSurgery = 
+                    new DetectionSurgery(surgery:surgery,
+                                         detection:detection,
+                                         tag:tag)
+                detection.addToDetectionSurgeries(detectionSurgery)
+                surgery.addToDetectionSurgeries(detectionSurgery)
+                surgery.save()
+                
+                return true
+            }
+            else
+            {
+                log.debug("Detection is outside surgery's window, surgery: " + surgery + ", detection: " + detection)
+                return false
+            }
+                
+        }
+        
+        return detections
+    }
+    
+    /**
      * Find matching surgeries based on:
      * 
      * - tags matching Transmitter ID (which is itself is a concatenation of 
@@ -375,16 +423,21 @@ class DetectionFactoryService
         // Filter out retired tags.
         tags = tags.grep(
         {
-            if (it.status == retiredStatus)
-            {
-                log.warn("Detection matches retired tag: " + String.valueOf(it))
-                return false
-            }
-
-            return true
+            return isTagActive(it)
         })
 
         return tags
+    }
+    
+    boolean isTagActive(Tag tag)
+    {
+        if (tag.status == getRetiredStatus())
+        {
+            log.warn("Detection matches retired tag: " + String.valueOf(tag))
+            return false
+        }
+        
+        return true
     }
     
     def findReceiver(codeName) throws FileProcessingException

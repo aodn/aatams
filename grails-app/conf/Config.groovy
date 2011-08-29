@@ -118,6 +118,7 @@ log4j = {
             "grails.app.service.au.org.emii",
 //            "grails.app.service.aatams",
             "grails.app.domain.au.org.emii",
+            "grails.app.tagLib.au.org.emii",
             "grails.app.task",
 //           'org.hibernate',
 //            "grails.buildtestdata",

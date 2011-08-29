@@ -13,11 +13,10 @@ $(function()
     {
         autoOpen: false,
         height: 225,
-        width: 300,
+        width: 350,
         modal: true,
         buttons: 
         {
-        
             Ok: function() 
             {
                 // Get a reference to the div with id of parentName.
@@ -27,23 +26,56 @@ $(function()
                 // Update the hidden field values.
                 var lon = $(this).find('#editLon').val();
                 var lat = $(this).find('#editLat').val();
-                var srid = $(this).find('#editSrid').val();
                 
-                parentDiv.find('input[name$="_lon"]').val(lon);
-                parentDiv.find('input[name$="_lat"]').val(lat);
-                parentDiv.find('input[name$="_srid"]').val(srid);
-
-                // Save the point as a "coded" string.  This is then parsed on 
-                // by the PointEditor.
-                var pointInput = parentDiv.find('#' + parentName);
-                var pointCodedString = genCodedPointString(lon, lat, srid);
-                pointInput.val(pointCodedString)
+                var editLon = $(this).find('#editLon')
+                editLon.parent().attr("class", "value")
+                var editLat = $(this).find('#editLat')
+                editLat.parent().attr("class", "value")
                 
-                // Update textfield.
-                var pointAsString = genPointString(lon, lat, srid);
-                parentDiv.find('#pointInputTextField').val(pointAsString);
-                $(this).dialog('close');
+                // Validate...
+                if ((lon > 180) || (lon < -180))
+                {
+                    editLon.parent().attr("class", "value errors")
+                    alert("Longitude must be in the range +/- 180")
+                    editLon.focus();
+                }
+                else if ((lat > 90) || (lat < -90))
+                {
+                    editLat.parent().attr("class", "value errors")
+                    alert("Latitude must be in the range +/- 90")
+                    editLat.focus();
+                }
+                else
+                {
+                    // Negate the lat and lon values if necessary.
+                    if ($(this).find('#editEastWest').val() == 'W')
+                    {
+                        lon = -lon
+                    }
 
+                    if ($(this).find('#editNorthSouth').val() == 'S')
+                    {
+                        lat = -lat
+                    }
+
+                    var srid = $(this).find('#editSrid').val();
+
+                    parentDiv.find('input[name$="_lon"]').val(lon);
+                    parentDiv.find('input[name$="_lat"]').val(lat);
+                    parentDiv.find('input[name$="_srid"]').val(srid);
+
+                    // Save the point as a "coded" string.  This is then parsed on 
+                    // by the PointEditor.
+                    var pointInput = parentDiv.find('#' + parentName);
+                    var pointCodedString = genCodedPointString(lon, lat, srid);
+
+                    pointInput.val(pointCodedString)
+
+                    // Update textfield.
+                    var pointAsString = genPointString(lon, lat, srid);
+                    parentDiv.find('#pointInputTextField').val(pointAsString);
+                    $(this).dialog('close');
+                }
             },
             Cancel: function() 
             {
@@ -97,8 +129,34 @@ $(function()
                 var lat = $(this).parent().find('input[name$="_lat"]').val();
                 var srid = $(this).parent().find('input[name$="_srid"]').val();
                 
-                editPointDialog.find('#editLon').val(lon);
-                editPointDialog.find('#editLat').val(lat);
+                // Clear css class in case there was an error previously.
+                var editLon = editPointDialog.find('#editLon')
+                editLon.parent().attr("class", "value")
+                var editLat = editPointDialog.find('#editLat')
+                editLat.parent().attr("class", "value")
+
+                editLon.val(Math.abs(lon));
+                // If longitude is non-negative, select 'E'
+                if (lon >= 0)
+                {
+                    editPointDialog.find('#editEastWest').val('E')
+                }
+                else
+                {
+                    editPointDialog.find('#editEastWest').val('W')
+                }
+                
+                editLat.val(Math.abs(lat));
+                // If latitude is positive, select 'N'
+                if (lat > 0)
+                {
+                    editPointDialog.find('#editNorthSouth').val('N')
+                }
+                else
+                {
+                    editPointDialog.find('#editNorthSouth').val('S')
+                }
+
                 editPointDialog.find('#editSrid').val(srid);
 
 //                $('#dialog-form-edit-point').dialog('open');
@@ -133,7 +191,7 @@ function genPointString(lon, lat, srid)
         pointAsString += 'W'
     }
 
-    pointAsString += " (EPSG:" + srid + ")"
+    pointAsString += " (datum:" + getName(srid) + ")"
     
     return pointAsString;
 }
@@ -141,4 +199,9 @@ function genPointString(lon, lat, srid)
 function genCodedPointString(lon, lat, srid)
 {
     return "POINT(" + lon + " " + lat + ") , " + srid;
+}
+
+function getName(srid)
+{
+    return $("#editSrid option[value='" + srid + "']").first().text()
 }

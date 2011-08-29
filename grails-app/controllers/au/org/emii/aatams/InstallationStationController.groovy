@@ -52,7 +52,10 @@ class InstallationStationController {
         }
     }
 
-    def update = {
+    def update = 
+    {
+        log.debug("params: " + params)
+        
         def installationStationInstance = InstallationStation.get(params.id)
         if (installationStationInstance) {
             if (params.version) {

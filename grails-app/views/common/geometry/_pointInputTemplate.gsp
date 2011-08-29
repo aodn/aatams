@@ -28,6 +28,14 @@
                               <g:textField name="editLat" value="${lat}" />
 
                           </td>
+                          <td valign="top" class="value">
+                              <g:select name="editNorthSouth" 
+                                        optionKey="key"
+                                        optionValue="value"
+                                        from="['S':'S', 'N':'N']"
+                                        value="${latNorthOrSouth}"/>
+
+                          </td>
                       </tr>
 
                       <tr class="prop">
@@ -38,16 +46,29 @@
                               <g:textField name="editLon" value="${lon}" />
 
                           </td>
+                          <td valign="top" class="value">
+                              <g:select name="editEastWest" 
+                                        optionKey="key"
+                                        optionValue="value"
+                                        from="['W':'W', 'E':'E']"
+                                        value="${lonEastOrWest}"/>
+
+                          </td>
                       </tr>
 
                       <tr class="prop">
                           <td valign="top" class="name">
-                              <label class="compulsory" for="value"><g:message code="point.srid.label" default="SRID" /></label>
+                              <label class="compulsory" for="value"><g:message code="point.srid.label" default="Datum" /></label>
                           </td>
                           <td valign="top" class="value">
-                              <g:textField name="editSrid" value="${srid}" />
+                              <g:select name="editSrid" 
+                                        optionKey="key"
+                                        optionValue="value"
+                                        from="${datums}"
+                                        value="${srid}" />
 
                           </td>
+                          <td/>
                       </tr>
 
                   </tbody>

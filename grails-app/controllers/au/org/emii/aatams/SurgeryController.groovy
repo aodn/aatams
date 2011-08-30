@@ -36,6 +36,7 @@ class SurgeryController {
                 
         def tag = tagFactoryService.lookupOrCreate(params.tag)
         surgeryInstance.tag = tag
+        tag.addToSurgeries(surgeryInstance)
         
         if (surgeryInstance.save(flush: true)) 
         {

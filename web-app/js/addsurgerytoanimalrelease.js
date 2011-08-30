@@ -80,9 +80,9 @@ $(function()
                     mainForm.append(hiddenField(idPrefix + "type.id", typeId));
                     mainForm.append(hiddenField(idPrefix + "treatmentType.id", treatmentTypeId));
                     mainForm.append(hiddenField(idPrefix + "comments", comments));
-                    mainForm.append(hiddenField(idPrefix + "tagCodeName", tagCodeName));
-                    mainForm.append(hiddenField(idPrefix + "tagSerialNumber", tagSerialNumber));
-                    mainForm.append(hiddenField(idPrefix + "tagModelId", tagModelId));
+                    mainForm.append(hiddenField(idPrefix + "tag.codeName", tagCodeName));
+                    mainForm.append(hiddenField(idPrefix + "tag.serialNumber", tagSerialNumber));
+                    mainForm.append(hiddenField(idPrefix + "tag.model.id", tagModelId));
                 }
                 else
                 {
@@ -165,12 +165,14 @@ function updateSurgeryTable(data)
     if (data.instance.tag.id != null)
     {
         var tagLink = $("<a>").attr("href", '../tag/show/' + data.instance.tag.id)
+        tagLink.html(data.instance.tag.codeName);    
         tagColumn.append(tagLink);
     }
     else
     {
         tagColumn.html(data.instance.tag.codeName);    
     }
+    
     tableRow.append(tagColumn);
 
     var typeColumn = $("<td>").attr("class", "value").html(data.instance.type.type);

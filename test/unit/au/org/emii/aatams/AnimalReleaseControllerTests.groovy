@@ -191,9 +191,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
             type: [id:1],
             treatmentType : [id:1],
             comments: "",
-            tagCodeName: tag.codeName,
-            tagSerialNumber: "12345",
-            tagModelId: 1]
+            tag:[codeName: tag.codeName, serialNumber: "12345", model:[id: 1]]]
         
         controller.params.surgery = ['0':surgery0]
         
@@ -252,9 +250,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
                 type: [id:1],
                 treatmentType : [id:1],
                 comments: "",
-                tagCodeName: tag.codeName,
-                tagSerialNumber: "12345",
-                tagModelId: 1]
+                tag:[codeName: tag.codeName, serialNumber: "12345", model:[id: 1]]]
             
             surgeryMap.put(String.valueOf(it), surgery)
         })
@@ -320,9 +316,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
             type: [id:1],
             treatmentType : [id:1],
             comments: "",
-            tagCodeName: codeName,
-            tagSerialNumber: serialNum,
-            tagModelId: deviceModel.id]
+            tag:[codeName: codeName, serialNumber: serialNum, model:[id: deviceModel.id]]]
         
         controller.params.surgery = ['0':surgery0]
         

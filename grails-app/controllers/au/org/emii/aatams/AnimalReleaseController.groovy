@@ -106,11 +106,11 @@ class AnimalReleaseController {
                 if (!k.contains("."))
                 {
                     // Lookup or create tag (after inserting some required parameters)...
-                    v['project'] = Project.get(params.project.id)
-                    v['status'] = DeviceStatus.findByStatus('DEPLOYED')
-                    v['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
-
-                    def tag = tagFactoryService.lookupOrCreate(v)
+                    v.tag['project'] = Project.get(params.project.id)
+                    v.tag['status'] = DeviceStatus.findByStatus('DEPLOYED')
+                    v.tag['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
+                    
+                    def tag = tagFactoryService.lookupOrCreate(v.tag)
 
                     Surgery surgery = new Surgery(v)
                     surgery.tag = tag

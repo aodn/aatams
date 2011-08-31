@@ -140,7 +140,12 @@
                                   <g:each in="${animalReleaseInstance?.measurements?}" var="m">
                                     <tr>
 
-                                      <td class="rowButton"><g:link class="show" controller="animalMeasurement" action="show" id="${m?.id}">.</g:link></td>
+                                      <td class="rowButton">
+                                        <g:link class="show" 
+                                                controller="animalMeasurement" 
+                                                action="show"
+                                                id="${m?.id}">.</g:link>
+                                      </td>
                                       <td valign="top" class="value">${m?.type?.type}</td>
                                       <td valign="top" class="value">${m?.value}</td>
                                       <td valign="top" class="value">${m?.unit?.unit}</td>

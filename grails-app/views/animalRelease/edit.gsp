@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'animalRelease.label', default: 'AnimalRelease')}" />
+        <g:set var="projectId" value="${animalReleaseInstance?.project?.id}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
         <g:javascript src="speciesLookup.js" />
         <g:javascript src="animalLookup.js" />
@@ -31,6 +32,7 @@
             <g:form method="post" >
                 <g:hiddenField name="id" value="${animalReleaseInstance?.id}" />
                 <g:hiddenField name="version" value="${animalReleaseInstance?.version}" />
+                <g:hiddenField name="projectId" value="${projectId}" />
                 <div class="dialog">
                     <table>
                         <tbody>
@@ -133,6 +135,9 @@
                                     <thead>
                                       <tr>
                                         <th/>
+                                        <shiro:hasPermission permission="project:${projectId}:write">
+                                          <th/>
+                                        </shiro:hasPermission>
                                         <th>Date/Time</th>
                                         <th>Tag</th>
                                         <th>Placement</th>
@@ -145,6 +150,16 @@
                                         <tr>
 
                                           <td class="rowButton"><g:link class="show" controller="surgery" action="show" id="${s?.id}">.</g:link></td>
+                                          <shiro:hasPermission permission="project:${projectId}:write">
+                                            <td class="rowButton">
+                                              <g:link controller="surgery"
+                                                      action="delete"
+                                                      class="delete"
+                                                      params="[projectId:projectId]"
+                                                      id="${s?.id}"
+                                                      onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">.</g:link>
+                                            </td>
+                                          </shiro:hasPermission>
                                           <td valign="top" class="value"><joda:format value="${s?.timestamp}" /></td>
                                           <td valign="top" class="value">
                                             <g:link controller="tag" action="show" id="${s?.tag?.id}">${s?.tag}</g:link>
@@ -181,6 +196,10 @@
                                     <thead>
                                       <tr>
                                         <th/>
+                                        <shiro:hasPermission permission="project:${projectId}:write">
+                                          <th/>
+                                        </shiro:hasPermission>
+                                        
                                         <th>Type</th>
                                         <th>Value</th>
                                         <th>Units</th>
@@ -192,7 +211,22 @@
                                       <g:each in="${animalReleaseInstance?.measurements?}" var="m">
                                         <tr>
 
-                                          <td class="rowButton"><g:link class="show" controller="animalMeasurement" action="show" id="${m?.id}">.</g:link></td>
+                                          <td class="rowButton">
+                                            <g:link class="show" 
+                                                    controller="animalMeasurement" 
+                                                    action="show"
+                                                    id="${m?.id}">.</g:link>
+                                          </td>
+                                          <shiro:hasPermission permission="project:${projectId}:write">
+                                            <td class="rowButton">
+                                              <g:link controller="animalMeasurement"
+                                                      action="delete"
+                                                      class="delete"
+                                                      params="[projectId:projectId]"
+                                                      id="${m?.id}"
+                                                      onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">.</g:link>
+                                            </td>
+                                          </shiro:hasPermission>
                                           <td valign="top" class="value">${m?.type?.type}</td>
                                           <td valign="top" class="value">${m?.value}</td>
                                           <td valign="top" class="value">${m?.unit?.unit}</td>

@@ -4,7 +4,7 @@ import grails.converters.JSON
 
 class ProjectRoleController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
     def permissionUtilsService
     
@@ -85,7 +85,9 @@ class ProjectRoleController {
             projectRoleInstance.properties = params
             if (!projectRoleInstance.hasErrors() && projectRoleInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), projectRoleInstance.id])}"
-                redirect(action: "show", id: projectRoleInstance.id)
+            
+                def projectId = projectRoleInstance?.project?.id
+                redirect(controller:"project", action: "edit", id: projectId, params: [projectId:projectId])
             }
             else {
                 render(view: "edit", model: [projectRoleInstance: projectRoleInstance])
@@ -109,12 +111,13 @@ class ProjectRoleController {
                 // TODO:
                 
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), params.id])}"
-                redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), params.id])}"
-                redirect(action: "show", id: params.id)
             }
+            
+            def projectId = projectRoleInstance?.project?.id
+            redirect(controller:"project", action: "edit", id: projectId, params: [projectId:projectId])
         }
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), params.id])}"

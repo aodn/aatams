@@ -42,6 +42,13 @@ $(function() {
                            infoColumn.append(infoLink);
                            tableRow.append(infoColumn);
 
+                           var deleteColumn = $("<td>").attr("class", "rowButton");
+                           var deleteLink = $("<a>").attr("href", '/aatams/sensor/delete/' + data.instance.id + "?projectId=" + projectId);
+                           deleteLink.attr("class", "delete");
+                           deleteLink.click(function() { return confirm('Are you sure?'); });
+                           deleteColumn.append(deleteLink);
+                           tableRow.append(deleteColumn);
+
                            var tagTypeColumn = $("<td>").attr("class", "value");
                            tableRow.append(tagTypeColumn);
                            var sensorLink = $("<a>").attr("href", '../sensor/show/' + data.instance.id).html(data.instance.transmitterType.transmitterTypeName);

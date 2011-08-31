@@ -134,6 +134,7 @@
                                   <table class="nested">
                                     <thead>
                                       <tr>
+                                        <th/>
                                         <th>Date/Time</th>
                                         <th>Tag</th>
                                         <th>Placement</th>
@@ -168,6 +169,7 @@
                                   <table class="nested">
                                     <thead>
                                       <tr>
+                                        <th/>
                                         <th>Type</th>
                                         <th>Value</th>
                                         <th>Units</th>

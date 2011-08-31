@@ -86,6 +86,7 @@ class BootStrap
             returnArray['serialNumber'] = it.serialNumber
             returnArray['model'] = it.model
             returnArray['transmitterType'] = it.transmitterType
+            returnArray['codeName'] = it.codeName
 
             return returnArray
         }

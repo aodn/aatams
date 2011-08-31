@@ -32,6 +32,13 @@ $(function() {
                            infoColumn.append(infoLink);
                            tableRow.append(infoColumn);
                            
+                           var deleteColumn = $("<td>").attr("class", "rowButton");
+                           var deleteLink = $("<a>").attr("href", '/aatams/projectRole/delete/' + data.instance.id + "?projectId=" + projectId);
+                           deleteLink.attr("class", "delete");
+                           deleteLink.click(function() { return confirm('Are you sure?'); });
+                           deleteColumn.append(deleteLink);
+                           tableRow.append(deleteColumn);
+
                            var personColumn = $("<td>").attr("class", "value");
                            tableRow.append(personColumn);
                            var personLink = $("<a>").attr("href", '/aatams/person/show/' + data.instance.person.id).html(data.instance.person.name);

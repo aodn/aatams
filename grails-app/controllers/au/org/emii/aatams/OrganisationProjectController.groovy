@@ -4,7 +4,7 @@ import grails.converters.JSON
 
 class OrganisationProjectController {
 
-    static allowedMethods = [saveOrganisationToProject: "POST", save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [saveOrganisationToProject: "POST", save: "POST", update: "POST", delete: ["POST", "GET"]]
 
     def index = {
         redirect(action: "list", params: params)
@@ -76,7 +76,8 @@ class OrganisationProjectController {
             organisationProjectInstance.properties = params
             if (!organisationProjectInstance.hasErrors() && organisationProjectInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), organisationProjectInstance.id])}"
-                redirect(action: "show", id: organisationProjectInstance.id)
+                def projectId = organisationProjectInstance?.project?.id
+                redirect(controller: "project", action: "edit", id: projectId, params: [projectId:projectId])
             }
             else {
                 render(view: "edit", model: [organisationProjectInstance: organisationProjectInstance])
@@ -94,12 +95,13 @@ class OrganisationProjectController {
             try {
                 organisationProjectInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), params.id])}"
-                redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), params.id])}"
-                redirect(action: "show", id: params.id)
             }
+
+            def projectId = organisationProjectInstance?.project?.id
+            redirect(controller: "project", action: "edit", id: projectId, params: [projectId:projectId])
         }
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), params.id])}"

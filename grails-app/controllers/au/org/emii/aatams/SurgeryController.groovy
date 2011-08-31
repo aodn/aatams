@@ -6,8 +6,9 @@ import org.joda.time.format.DateTimeFormat
 
 class SurgeryController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
+    def detectionFactoryService
     def tagFactoryService
     
     def index = {
@@ -36,6 +37,8 @@ class SurgeryController {
                 
         def tag = tagFactoryService.lookupOrCreate(params.tag)
         surgeryInstance.tag = tag
+        tag.addToSurgeries(surgeryInstance)
+        detectionFactoryService.rescanForSurgery(surgeryInstance)
         
         if (surgeryInstance.save(flush: true)) 
         {
@@ -86,7 +89,8 @@ class SurgeryController {
             surgeryInstance.properties = params
             if (!surgeryInstance.hasErrors() && surgeryInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'surgery.label', default: 'Surgery'), surgeryInstance.id])}"
-                redirect(action: "show", id: surgeryInstance.id)
+                def release = surgeryInstance?.release
+                redirect(controller: "animalRelease", action: "edit", id: release?.id, params: [projectId:release?.project?.id])
             }
             else {
                 render(view: "edit", model: [surgeryInstance: surgeryInstance])
@@ -104,12 +108,13 @@ class SurgeryController {
             try {
                 surgeryInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'surgery.label', default: 'Surgery'), params.id])}"
-                redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'surgery.label', default: 'Surgery'), params.id])}"
-                redirect(action: "show", id: params.id)
             }
+
+            def release = surgeryInstance?.release
+            redirect(controller: "animalRelease", action: "edit", id: release?.id, params: [projectId:release?.project?.id])
         }
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'surgery.label', default: 'Surgery'), params.id])}"

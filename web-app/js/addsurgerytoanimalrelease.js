@@ -65,11 +65,11 @@ $(function()
                                     comments:comments};
                     var data = {instance:instance};
                     
-                    updateSurgeryTable(data);
+                    var idPrefix = "surgery." + numSurgeries + ".";
+                    updateSurgeryTable(data, projectId, idPrefix);
                     
                     // Add variables as hidden fields so that the parameters are
                     // sent to the controller on form submit.
-                    var idPrefix = "surgery." + numSurgeries + ".";
 
                     mainForm.append(hiddenField(idPrefix + "timestamp_day", timestamp_day));
                     mainForm.append(hiddenField(idPrefix + "timestamp_month", timestamp_month));
@@ -80,9 +80,9 @@ $(function()
                     mainForm.append(hiddenField(idPrefix + "type.id", typeId));
                     mainForm.append(hiddenField(idPrefix + "treatmentType.id", treatmentTypeId));
                     mainForm.append(hiddenField(idPrefix + "comments", comments));
-                    mainForm.append(hiddenField(idPrefix + "tagCodeName", tagCodeName));
-                    mainForm.append(hiddenField(idPrefix + "tagSerialNumber", tagSerialNumber));
-                    mainForm.append(hiddenField(idPrefix + "tagModelId", tagModelId));
+                    mainForm.append(hiddenField(idPrefix + "tag.codeName", tagCodeName));
+                    mainForm.append(hiddenField(idPrefix + "tag.serialNumber", tagSerialNumber));
+                    mainForm.append(hiddenField(idPrefix + "tag.model.id", tagModelId));
                 }
                 else
                 {
@@ -107,7 +107,7 @@ $(function()
                     function(data)
                     {
                        updateHeader(data);
-                       updateSurgeryTable(data);
+                       updateSurgeryTable(data, projectId, null);
 
                     },
                     'json');
@@ -142,19 +142,56 @@ $(function()
     });
 });
 
-function updateSurgeryTable(data)
+function isEditView(data)
+{
+    return (data.instance.id)
+}
+
+function updateSurgeryTable(data, projectId, idPrefix)
 {
     var tableRow = $("<tr>");
 
     // Only show info colum in edit screen (i.e. when the surgery instance
     // has actually been persisted).
-    if (data.instance.id)
+    if (isEditView(data))
     {
         var infoColumn = $("<td>").attr("class", "rowButton");
         var infoLink = $("<a>").attr("href", '/aatams/surgery/show/' + data.instance.id);
         infoLink.attr("class", "show");
         infoColumn.append(infoLink);
         tableRow.append(infoColumn);
+
+        var deleteColumn = $("<td>").attr("class", "rowButton");
+        var deleteLink = $("<a>").attr("href", '/aatams/surgery/delete/' + data.instance.id + "?projectId=" + projectId);
+        deleteLink.attr("class", "delete");
+        deleteLink.click(function() { return confirm('Are you sure?'); });
+        deleteColumn.append(deleteLink);
+        tableRow.append(deleteColumn);
+    }
+    //
+    // create view - no entities are actually persisted until "create"
+    // is pressed.
+    //
+    else    
+    {
+        // We want to enable users to delete (but not edit).
+        deleteColumn = $("<td>").attr("class", "rowButton");
+        deleteLink = $("<a>").attr("href", '#');
+        deleteLink.attr("class", "delete");
+        deleteLink.click(function() 
+        {
+            if (confirm('Are you sure?'))
+            {
+                // Remove this row.
+                tableRow.remove();
+                
+                // Remove hidden fields.
+                $("[id*=" + idPrefix + "]").remove();
+            }
+                
+        });
+        deleteColumn.append(deleteLink);
+        tableRow.append(deleteColumn);
     }
     
     var dateTimeColumn = $("<td>").attr("class", "value").html(data.instance.timestamp);
@@ -165,12 +202,14 @@ function updateSurgeryTable(data)
     if (data.instance.tag.id != null)
     {
         var tagLink = $("<a>").attr("href", '../tag/show/' + data.instance.tag.id)
+        tagLink.html(data.instance.tag.codeName);    
         tagColumn.append(tagLink);
     }
     else
     {
         tagColumn.html(data.instance.tag.codeName);    
     }
+    
     tableRow.append(tagColumn);
 
     var typeColumn = $("<td>").attr("class", "value").html(data.instance.type.type);

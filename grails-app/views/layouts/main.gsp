@@ -20,6 +20,8 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'addsensortotag.js')}"></script>
 <!--    <script type="text/javascript" src="${resource(dir:'js',file:'fileupload.js')}"></script>-->
 
+    <g:javascript src="asAbove.js"/>
+    
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>
 <!--    <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui-lightness/jquery-ui-1.8.10.custom.css')}"/>-->
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'custom-theme/jquery-ui-1.8.13.custom.css')}"/>

@@ -3,6 +3,19 @@
         <table>
             <tbody>
 
+                <g:if test="${asAboveElement}">
+                  <g:hiddenField name="${addressName}.asAboveElement" value="${asAboveElement}"/>
+                  
+                  <tr class="prop">
+                    <td valign="top" class="name">
+                        <label for="asAbove"><g:message code="asAbove.label" default="As above" /></label>
+                    </td>
+                    <td>
+                      <g:checkBox name="${addressName}.asAbove" value="${false}"/>
+                    </td>  
+                  </tr>
+                </g:if>
+                            
                 <tr class="prop">
                     <td valign="top" class="name">
                         <label class="compulsory" for="streetAddress"><g:message code="address.streetAddress.label" default="Address" /></label>

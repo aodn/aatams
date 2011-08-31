@@ -155,7 +155,7 @@
                                       </g:each>
                                       <tr><td><br/></td></tr>
                                       <tr>
-                                        <td>
+                                        <td colspan="5">
                                           <a href="#" 
                                              id='add_sensor_to_tag'>${message(code: 'default.add.label', args: [message(code: 'sensor.label', default: 'Sensor...')])}</a>
                                         </td>

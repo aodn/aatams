@@ -8,7 +8,8 @@ class TagFactoryService {
     {
         log.debug(params)
         
-        String codeName = params.tagCodeName
+        String codeName = params.codeName
+        log.debug("Parsing codeName: " + codeName)
         def tag = Tag.findByCodeName(codeName)
 
         if (tag == null)
@@ -20,12 +21,12 @@ class TagFactoryService {
             }
             else
             {
-                DeviceModel model = DeviceModel.get(params.tagModelId)
+                DeviceModel model = DeviceModel.get(params.model.id)
                 
                 String codeMap = codeNameTokens[0] + "-" + codeNameTokens[1]
                 String pingCode = codeNameTokens[2]
                 tag = new Tag(codeName:codeName,
-                              serialNumber:params.tagSerialNumber,
+                              serialNumber:params.serialNumber,
                               codeMap:codeMap,
                               pingCode:pingCode,
                               model:model,

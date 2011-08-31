@@ -18,13 +18,18 @@ class SecSecurityFilters
         "receiverEvent|navigationMenu|receiverDownloadFile|" + \
         "surgery|detectionSurgery|" + \
         "gettingStarted|about"
+
+    //
+    // Only Sys Admins can delete (except for the following child/association 
+    // entities, which users with project write access can delete).
+    //
+    def deleteControllersRegexp = 
+        "animalMeasurement|organisationProject|" + \
+        "projectRole|sensor|surgery"
     
     def filters = 
     {
-        //
-        // Only Sys Admins can delete.
-        //
-        delete(controller:'*', action:'delete')
+        delete(controller:'[^(' + deleteControllersRegexp + ')]' , action:'delete')
         {
             before = 
             {
@@ -32,6 +37,30 @@ class SecSecurityFilters
                 {
                     role("SysAdmin")
                 }
+            }
+        }
+        
+        // Filter for special case delete of association/child entities.
+        delete(controller:deleteControllersRegexp, action:'delete')
+        {
+            before = 
+            {
+                def projectId = params.project?.id
+                
+                // Some views store project's ID in "projectId" variable.
+                if (projectId == null)
+                {
+                    projectId = params.projectId
+                }
+                
+                if (   SecurityUtils.subject.isAuthenticated()
+                    && SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(projectId)))
+                {
+                    return true
+                }
+                
+                redirect(controller:'auth', action:'unauthorized')
+                return false
             }
         }
         

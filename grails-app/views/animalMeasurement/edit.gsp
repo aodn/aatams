@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'animalMeasurement.label', default: 'AnimalMeasurement')}" />
+        <g:set var="projectId" value="${animalMeasurementInstance?.release?.project?.id}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -46,7 +47,7 @@
                                   <label class="compulsory" for="value"><g:message code="animalMeasurement.value.label" default="Value" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'value', 'errors')}">
-                                    <g:textField name="value" value="${fieldValue(bean: animalMeasurementInstance, field: 'value')}" />
+                                    <g:textField name="value" value="${animalMeasurementInstance?.value}" />
 
                                 </td>
                             </tr>
@@ -85,8 +86,11 @@
                     </table>
                 </div>
                 <div class="buttons">
-                    <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-                    <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    <g:hiddenField name="projectId" value="${projectId}" />
+                    <shiro:hasPermission permission="project:${projectId}:write">
+                      <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+                      <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    </shiro:hasPermission>
                 </div>
             </g:form>
         </div>

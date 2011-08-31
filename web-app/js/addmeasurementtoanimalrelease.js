@@ -44,11 +44,11 @@ $(function() {
                                     comments:comments}
                     var data = {instance:instance};
                     
-                    updateMeasurementTable(data);
+                    var idPrefix = "measurement." + numMeasurements + ".";
+                    updateMeasurementTable(data, projectId, idPrefix);
                     
                     // Add variables as hidden fields so that the parameters are
                     // sent to the controller on form submit.
-                    var idPrefix = "measurement." + numMeasurements + ".";
 
                     mainForm.append(hiddenField(idPrefix + "type.id", typeId));
                     mainForm.append(hiddenField(idPrefix + "value", value));
@@ -72,7 +72,7 @@ $(function() {
                     function(data)
                     {
                        updateHeader(data);
-                       updateMeasurementTable(data);
+                       updateMeasurementTable(data, projectId, null);
                     },
                     'json');
                 }
@@ -107,20 +107,56 @@ $(function() {
     });
 });
 
+function isEditView(data)
+{
+    return (data.instance.id)
+}
 
-function updateMeasurementTable(data)
+function updateMeasurementTable(data, projectId, idPrefix)
 {
     var tableRow = $("<tr>");
 
-    // Only show info colum in edit screen (i.e. when the measurement instance
+    // Only show info and delete colums in edit screen (i.e. when the measurement instance
     // has actually been persisted).
-    if (data.instance.id)
+    if (isEditView(data))
     {
         var infoColumn = $("<td>").attr("class", "rowButton");
         var infoLink = $("<a>").attr("href", '/aatams/animalMeasurement/show/' + data.instance.id);
         infoLink.attr("class", "show");
         infoColumn.append(infoLink);
         tableRow.append(infoColumn);
+
+        var deleteColumn = $("<td>").attr("class", "rowButton");
+        var deleteLink = $("<a>").attr("href", '/aatams/animalMeasurement/delete/' + data.instance.id + "?projectId=" + projectId);
+        deleteLink.attr("class", "delete");
+        deleteLink.click(function() { return confirm('Are you sure?'); });
+        deleteColumn.append(deleteLink);
+        tableRow.append(deleteColumn);
+    }
+    //
+    // create view - no entities are actually persisted until "create"
+    // is pressed.
+    //
+    else    
+    {
+        // We want to enable users to delete (but not edit).
+        deleteColumn = $("<td>").attr("class", "rowButton");
+        deleteLink = $("<a>").attr("href", '#');
+        deleteLink.attr("class", "delete");
+        deleteLink.click(function() 
+        {
+            if (confirm('Are you sure?'))
+            {
+                // Remove this row.
+                tableRow.remove();
+                
+                // Remove hidden fields.
+                $("[id*=" + idPrefix + "]").remove();
+            }
+                
+        });
+        deleteColumn.append(deleteLink);
+        tableRow.append(deleteColumn);
     }
     
     var typeColumn = $("<td>").attr("class", "value").html(data.instance.type.type);

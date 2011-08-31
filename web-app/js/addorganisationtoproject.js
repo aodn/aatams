@@ -26,7 +26,14 @@ $(function() {
                            infoLink.attr("class", "show");
                            infoColumn.append(infoLink);
                            tableRow.append(infoColumn);
-                           
+
+                           var deleteColumn = $("<td>").attr("class", "rowButton");
+                           var deleteLink = $("<a>").attr("href", '/aatams/organisationProject/delete/' + data.instance.id + "?projectId=" + projectId);
+                           deleteLink.attr("class", "delete");
+                           deleteLink.click(function() { return confirm('Are you sure?'); });
+                           deleteColumn.append(deleteLink);
+                           tableRow.append(deleteColumn);
+
                            var orgColumn = $("<td>").attr("class", "value");
                            var orgLink = $("<a>").attr("href", '/aatams/organisation/show/' + data.instance.organisation.id).html(data.instance.organisation.name);
                            orgColumn.append(orgLink);

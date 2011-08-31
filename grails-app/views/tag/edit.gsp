@@ -115,6 +115,9 @@
                                     <thead>
                                       <tr>
                                         <th></th>
+                                        <shiro:hasPermission permission="project:${tagInstance?.project?.id}:write">
+                                          <th/>
+                                        </shiro:hasPermission>
                                         <th>Tag Type</th>
                                         <th>Code Map</th>
                                         <th>Ping Code</th>
@@ -130,6 +133,16 @@
                                           <td class="rowButton">
                                             <g:link class="show" controller="sensor" action="show" id="${s?.id}"></g:link>
                                           </td>
+                                          <shiro:hasPermission permission="project:${tagInstance?.project?.id}:write">
+                                            <td class="rowButton">
+                                              <g:link controller="sensor"
+                                                      action="delete"
+                                                      class="delete"
+                                                      params="[projectId:tagInstance?.project?.id]"
+                                                      id="${s?.id}"
+                                                      onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">.</g:link>
+                                            </td>
+                                          </shiro:hasPermission>
                                           <td>${s?.transmitterType}</td>
                                           <td>${s?.codeMap}</td>
                                           <td>${s?.pingCode}</td>

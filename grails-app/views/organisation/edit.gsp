@@ -91,7 +91,7 @@
                                   <label for="postalAddress"><g:message code="organisation.streetAddress.label" default="Postal Address" /></label>
                               </td>
                               <td>
-                                <g:addressDetail addressName='postalAddress' address='${organisationInstance?.postalAddress}'/>
+                                <g:addressDetail addressName='postalAddress' address='${organisationInstance?.postalAddress}' asAboveElement="streetAddress"/>
                               </td>  
                             </tr>
                         

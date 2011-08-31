@@ -52,13 +52,6 @@
     </script>
 
     <g:layoutHead />
-<!--    <g:javascript library="application" />-->
-    <g:javascript library="jquery" />
-    <g:javascript library="main_extras" />
-
-    <g:setProvider library="jquery"/>
-
-
 
     <script type="text/javascript">
 

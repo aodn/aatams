@@ -75,7 +75,7 @@
                                       </g:each>
                                       <tr><td><br/></td></tr>
                                       <tr>
-                                        <td>
+                                        <td colspan="5">
                                           <a href="#" 
                                              id='add_organisation_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</a>
                                         </td>
@@ -121,7 +121,7 @@
                                       </g:each>
                                       <tr><td><br/></td></tr>
                                       <tr>
-                                        <td>
+                                        <td colspan="5">
                                           <a href="#" 
                                              id='add_person_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Person...')])}</a>
                                         </td>

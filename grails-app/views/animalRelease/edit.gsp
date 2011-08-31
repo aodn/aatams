@@ -173,7 +173,7 @@
                                       </g:each>
                                       <tr><td><br/></td></tr>
                                       <tr>
-                                        <td>
+                                        <td colspan="5">
                                           <a href="#" 
                                              id='add_surgery_to_animal_release'>${message(code: 'default.add.label', args: [message(code: 'surgery.label', default: 'Tagging...')])}</a>
                                         </td>
@@ -238,7 +238,7 @@
                                       </g:each>
                                       <tr><td><br/></td></tr>
                                       <tr>
-                                        <td>
+                                        <td colspan="5">
                                           <a href="#" 
                                              id='add_measurement_to_animal_release'>${message(code: 'default.add.label', args: [message(code: 'measurement.label', default: 'Measurement...')])}</a>
                                         </td>

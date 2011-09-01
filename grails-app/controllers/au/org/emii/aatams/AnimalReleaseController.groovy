@@ -119,6 +119,7 @@ class AnimalReleaseController {
                     surgery.tag = tag
 
                     tag.addToSurgeries(surgery)
+                    tag.save()
                     animalReleaseInstance.addToSurgeries(surgery)
 
                     // Need to update that status of the tag to DEPLOYED.

@@ -208,7 +208,10 @@ class DetectionFactoryService
                                          tag:tag)
                 detection.addToDetectionSurgeries(detectionSurgery)
                 surgery.addToDetectionSurgeries(detectionSurgery)
-                surgery.save()
+
+                detection.save()
+                surgery.save(flush:true)
+                tag.save()
                 
                 return true
             }

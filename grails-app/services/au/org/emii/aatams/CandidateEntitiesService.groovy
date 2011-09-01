@@ -129,4 +129,22 @@ class CandidateEntitiesService
         
         return candidateSurgeries
     }
+    
+    /**
+     * The list of projects that the current user has read access on.
+     */
+    def readableProjects =
+    {
+        def subject = SecurityUtils.subject
+        if (!subject)
+        {
+            return []
+        }
+        
+        Project.list().grep(
+        {
+            (   (subject.isPermitted(permissionUtilsService.buildProjectReadPermission(it.id)))
+             && (it.status == EntityStatus.ACTIVE))
+        })
+    }
 }

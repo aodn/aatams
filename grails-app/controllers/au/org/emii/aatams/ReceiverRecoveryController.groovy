@@ -2,12 +2,77 @@ package au.org.emii.aatams
 
 import org.joda.time.*
 
-class ReceiverRecoveryController {
+class ReceiverRecoveryController 
+{
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def candidateEntitiesService
+    
     def index = {
         redirect(action: "list", params: params)
+    }
+    
+    def passesFilter(it, params)
+    {
+        // Filter by project (if specified).
+        def projectId = params.filter?.project?.id
+        if (projectId)
+        {
+            projectId = Integer.valueOf(projectId)  // Not sure why it's a String initially?
+            
+            if (it.station?.installation?.project?.id != projectId)
+            {
+                // Wrong project, filter out.
+                return false
+            }
+        }
+
+        // Filter by recovery status (if specified).
+        def unrecoveredOnly = params.filter?.unrecoveredOnly
+        if (unrecoveredOnly && it.recovery)
+        {
+            // This deployment has been recovered, filter out.
+            return false
+        }
+
+        return true
+    }
+    
+    def filter = 
+    {
+        log.debug("Filter parameters: " + params.filter)
+
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+
+        // We actually want to display a list of deployments (some with and some
+        // without associated recoveries).
+        // TODO: sort(hasRecovery, date)
+        def receiverDeploymentList = ReceiverDeployment.list(params)
+
+        // Filter...
+        receiverDeploymentList = receiverDeploymentList.grep
+        {
+            return passesFilter(it, params)
+        }
+        
+        // Determine total matching deployments.
+        def receiverDeploymentInstanceTotal = 0
+        ReceiverDeployment.list().each
+        {
+            if (passesFilter(it, params))
+            {
+                receiverDeploymentInstanceTotal++
+            }
+        }
+        
+        render(view:"list", model:
+        [receiverDeploymentInstanceList: receiverDeploymentList, 
+         receiverDeploymentInstanceTotal: receiverDeploymentInstanceTotal,
+         readableProjects:candidateEntitiesService.readableProjects(),
+         selectedProjectId:params.filter?.project?.id,
+         unrecoveredOnly:params.filter?.unrecoveredOnly])
+        
     }
 
     def list = {
@@ -19,7 +84,9 @@ class ReceiverRecoveryController {
         // TODO: sort(hasRecovery, date)
         def receiverDeploymentList = ReceiverDeployment.list(params)
                                    
-        [receiverDeploymentInstanceList: receiverDeploymentList, receiverDeploymentInstanceTotal: ReceiverDeployment.count()]
+        [receiverDeploymentInstanceList: receiverDeploymentList, 
+         receiverDeploymentInstanceTotal: ReceiverDeployment.count(),
+         readableProjects:candidateEntitiesService.readableProjects()]
     }
 
     def create = 

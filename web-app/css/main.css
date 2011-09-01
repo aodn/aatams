@@ -466,6 +466,11 @@ th.desc a {
     background: transparent url(../images/skin/database_save.png) 5px 50% no-repeat;
     padding-left: 28px;
 }
+.buttons input.update {
+    background: transparent url(../images/skin/database_table.png) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+
 
 /* extras for jQuery_ui */
 .ui-datepicker {
@@ -570,5 +575,11 @@ label.compulsory:after
 {
     content: " *";
     color: #FF0000;
+}
+
+/*table {border: 1px solid #808080;}
+td {border: 0;}*/
+div.filter td {
+    border: 0;
 }
 

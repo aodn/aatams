@@ -13,17 +13,9 @@ class EmbargoExpirationJobTests extends GrailsUnitTestCase
         super.setUp()
         
         mockConfig("animalRelease { embargoExpiration {warningPeriodMonths = 1}}")
-        
+
+        mockLogging(EmbargoExpirationJob, true)
         job = new EmbargoExpirationJob()
-        def logger = Logger.getLogger(EmbargoExpirationJob.class)
-        logger.setLevel(Level.DEBUG)
-        
-        ConsoleAppender ca = new ConsoleAppender();
-        ca.setWriter(new OutputStreamWriter(System.out));
-        ca.setLayout(new PatternLayout("%-5p [%t]: %m%n"));
-        logger.addAppender(ca);logger.addAppender(new ConsoleAppender())
-        
-        job.metaClass.log = logger
     }
 
     protected void tearDown() 

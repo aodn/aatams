@@ -2,7 +2,8 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class ReceiverDownloadFileControllerTests extends ControllerUnitTestCase {
+class ReceiverDownloadFileControllerTests extends ControllerUnitTestCase 
+{
     protected void setUp() {
         super.setUp()
     }
@@ -11,7 +12,9 @@ class ReceiverDownloadFileControllerTests extends ControllerUnitTestCase {
         super.tearDown()
     }
 
-    void testSomething() {
-
+    void testUnknownReceiver() 
+    {
+        // Marker - need to update the controller so that error message is given.
+//        fail()
     }
 }

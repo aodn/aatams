@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="sex"><g:message code="animal.sex.label" default="Sex" /></label>
+                                    <label class="compulsory" for="sex"><g:message code="animal.sex.label" default="Sex" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalInstance, field: 'sex', 'errors')}">
                                     <g:select name="sex.id" from="${au.org.emii.aatams.Sex.list()}" optionKey="id" value="${animalInstance?.sex?.id}"  />
@@ -40,7 +40,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="species"><g:message code="animal.species.label" default="Species" /></label>
+                                    <label class="compulsory" for="species"><g:message code="animal.species.label" default="Species" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalInstance, field: 'species', 'errors')}">
                                     <g:select name="species.id" from="${au.org.emii.aatams.Species.list()}" optionKey="id" value="${animalInstance?.species?.id}"  />

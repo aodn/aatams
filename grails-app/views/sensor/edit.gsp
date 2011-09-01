@@ -33,7 +33,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="transmitterType"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></label>
+                                  <label class="compulsory" for="transmitterType"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
                                     <g:select name="transmitterType.id" from="${au.org.emii.aatams.TransmitterType.list()}" optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
@@ -43,7 +43,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="pingCode"><g:message code="sensor.pingCode.label" default="Ping Code" /></label>
+                                  <label class="compulsory" for="pingCode"><g:message code="sensor.pingCode.label" default="Ping Code" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'pingCode', 'errors')}">
                                     <g:textField name="pingCode" value="${sensorInstance?.pingCode}" />
@@ -83,7 +83,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="status"><g:message code="sensor.status.label" default="Status" /></label>
+                                  <label class="compulsory" for="status"><g:message code="sensor.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${sensorInstance?.status?.id}"  />
@@ -95,8 +95,11 @@
                     </table>
                 </div>
                 <div class="buttons">
-                    <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-                    <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    <g:hiddenField name="projectId" value="${sensorInstance?.project?.id}" />
+                    <shiro:hasPermission permission="project:${sensorInstance?.project?.id}:write">
+                      <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+                      <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    </shiro:hasPermission>
                 </div>
             </g:form>
         </div>

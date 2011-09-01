@@ -33,7 +33,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="username"><g:message code="secUser.username.label" default="Username" /></label>
+                                  <label class="compulsory" for="username"><g:message code="secUser.username.label" default="Username" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: secUserInstance, field: 'username', 'errors')}">
                                     <g:textField name="username" value="${secUserInstance?.username}" />
@@ -43,7 +43,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="passwordHash"><g:message code="secUser.passwordHash.label" default="Password Hash" /></label>
+                                  <label class="compulsory" for="passwordHash"><g:message code="secUser.passwordHash.label" default="Password Hash" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: secUserInstance, field: 'passwordHash', 'errors')}">
                                     <g:textField name="passwordHash" value="${secUserInstance?.passwordHash}" />
@@ -53,7 +53,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="permissions"><g:message code="secUser.permissions.label" default="Permissions" /></label>
+                                  <label class="compulsory" for="permissions"><g:message code="secUser.permissions.label" default="Permissions" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: secUserInstance, field: 'permissions', 'errors')}">
                                     
@@ -63,7 +63,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="roles"><g:message code="secUser.roles.label" default="Roles" /></label>
+                                  <label class="compulsory" for="roles"><g:message code="secUser.roles.label" default="Roles" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: secUserInstance, field: 'roles', 'errors')}">
                                     <g:select name="roles" from="${SecRole.list()}" multiple="yes" optionKey="id" size="5" value="${secUserInstance?.roles*.id}" />

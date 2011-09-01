@@ -1,12 +1,16 @@
 package au.org.emii.aatams
 
-//import grails.converters.deep.JSON
 import grails.converters.JSON
+
+import org.joda.time.format.DateTimeFormat
 
 class SurgeryController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
+    def detectionFactoryService
+    def tagFactoryService
+    
     def index = {
         redirect(action: "list", params: params)
     }
@@ -26,33 +30,25 @@ class SurgeryController {
     {
         def surgeryInstance = new Surgery(params)
 
-        // Need to update that status of the tag to DEPLOYED.
-        DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
-        surgeryInstance.tag.status = deployedStatus
-            
+        // Lookup or create tag (after inserting some required parameters)...
+        params.tag['project'] = Project.get(params.projectId)
+        params.tag['status'] = DeviceStatus.findByStatus('DEPLOYED')
+        params.tag['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
+                
+        def tag = tagFactoryService.lookupOrCreate(params.tag)
+        surgeryInstance.tag = tag
+        tag.addToSurgeries(surgeryInstance)
+        detectionFactoryService.rescanForSurgery(surgeryInstance)
+        
         if (surgeryInstance.save(flush: true)) 
         {
-            // Deep rendering of object not working due to geometry type
-            // Need to use custom object marshaller.
-            JSON.registerObjectMarshaller(Surgery.class)
-            {
-                def returnArray = [:]
-                returnArray['id'] = it.id
-                returnArray['timestamp'] = it.timestamp
-                returnArray['tag'] = it.tag
-                returnArray['type'] = it.type
-                returnArray['treatmentType'] = it.treatmentType
-                returnArray['comments'] = it.comments
-                
-                return returnArray
-            }
-            
-            render surgeryInstance as JSON
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tagging.label', default: 'Tagging'), surgeryInstance])}"
+            render ([instance:surgeryInstance, message:flash] as JSON)
         }
         else 
         {
             log.error(surgeryInstance.errors)
-            render(view: "create", model: [surgeryInstance: surgeryInstance])
+            render ([errors:surgeryInstance.errors] as JSON)
         }
     }
 
@@ -93,7 +89,8 @@ class SurgeryController {
             surgeryInstance.properties = params
             if (!surgeryInstance.hasErrors() && surgeryInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'surgery.label', default: 'Surgery'), surgeryInstance.id])}"
-                redirect(action: "show", id: surgeryInstance.id)
+                def release = surgeryInstance?.release
+                redirect(controller: "animalRelease", action: "edit", id: release?.id, params: [projectId:release?.project?.id])
             }
             else {
                 render(view: "edit", model: [surgeryInstance: surgeryInstance])
@@ -111,12 +108,13 @@ class SurgeryController {
             try {
                 surgeryInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'surgery.label', default: 'Surgery'), params.id])}"
-                redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'surgery.label', default: 'Surgery'), params.id])}"
-                redirect(action: "show", id: params.id)
             }
+
+            def release = surgeryInstance?.release
+            redirect(controller: "animalRelease", action: "edit", id: release?.id, params: [projectId:release?.project?.id])
         }
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'surgery.label', default: 'Surgery'), params.id])}"

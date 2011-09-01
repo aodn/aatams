@@ -36,7 +36,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="name"><g:message code="project.name.label" default="Name" /></label>
+                                  <label class="compulsory" for="name"><g:message code="project.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${projectInstance?.name}" />
@@ -49,20 +49,40 @@
                             -->
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="organisationProjects"><g:message code="project.organisationProjects.label" default="Organisations" /></label>
+                                  <label class="compulsory" for="organisationProjects"><g:message code="project.organisationProjects.label" default="Organisations" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'organisationProjects', 'errors')}">
+                                  <table class="nested">
+                                    <tbody id="organisation_table_body">
+                                      <g:each in="${projectInstance.organisationProjects}" var="op">
+                                        <tr>
+                                          <td class="rowButton"><g:link class="show" controller="organisationProject" action="show" id="${op?.id}">.</g:link></td>
+                                          <shiro:hasPermission permission="project:${projectInstance?.id}:write">
+                                            <td class="rowButton">
+                                              <g:link controller="organisationProject"
+                                                      action="delete"
+                                                      class="delete"
+                                                      params="[projectId:projectInstance?.id]"
+                                                      id="${op?.id}"
+                                                      onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">.</g:link>
+                                            </td>
+                                          </shiro:hasPermission>
+                                          <td>
+                                            <g:link controller="organisation" action="show" id="${op?.organisation.id}">${op?.organisation?.encodeAsHTML()}</g:link>
+                                          </td>
+                                        </tr>
+
+                                      </g:each>
+                                      <tr><td><br/></td></tr>
+                                      <tr>
+                                        <td colspan="5">
+                                          <a href="#" 
+                                             id='add_organisation_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</a>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
                                     
-                                  <ul id="organisation_list">
-                                    <g:each in="${projectInstance?.organisationProjects?.organisation.sort{it?.name}}" var="o">
-                                        <li><g:link controller="organisation" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
-                                    </g:each>
-                                    <li><br/></li>
-                                    <li>
-                                      <a href="#" 
-                                         id='add_organisation_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</a>
-                                    </li>
-                                  </ul>
                                 </td>
                             </tr>
 
@@ -71,7 +91,7 @@
                             -->
                             <tr>
                                 <td valign="top" class="name">
-                                  <label for="projectRoles"><g:message code="project.projectRoles.people.label" default="People" /></label>
+                                  <label class="compulsory" for="projectRoles"><g:message code="project.projectRoles.people.label" default="People" /></label>
                                 </td>
 
                                 <td valign="top" class="value">
@@ -80,6 +100,17 @@
                                     <tbody id="people_table_body">
                                       <g:each in="${projectInstance?.projectRoles?}" var="p">
                                         <tr>
+                                          <td class="rowButton"><g:link class="show" controller="projectRole" action="show" id="${p?.id}">.</g:link></td>
+                                          <shiro:hasPermission permission="project:${projectInstance?.id}:write">
+                                            <td class="rowButton">
+                                              <g:link controller="projectRole"
+                                                      action="delete"
+                                                      class="delete"
+                                                      params="[projectId:projectInstance?.id]"
+                                                      id="${p?.id}"
+                                                      onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">.</g:link>
+                                            </td>
+                                          </shiro:hasPermission>
                                           <td valign="top" class="value">
                                             <g:link controller="person" action="show" id="${p?.person?.id}">${p?.person?.encodeAsHTML()}</g:link>
                                           </td>
@@ -90,7 +121,7 @@
                                       </g:each>
                                       <tr><td><br/></td></tr>
                                       <tr>
-                                        <td>
+                                        <td colspan="5">
                                           <a href="#" 
                                              id='add_person_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Person...')])}</a>
                                         </td>
@@ -105,7 +136,7 @@
                             <shiro:hasRole name="SysAdmin">
                               <tr class="prop">
                                   <td valign="top" class="name">
-                                    <label for="status"><g:message code="project.status.label" default="Status" /></label>
+                                    <label class="compulsory" for="status"><g:message code="project.status.label" default="Status" /></label>
                                   </td>
                                   <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'status', 'errors')}">
                                       <g:select name="status" from="${au.org.emii.aatams.EntityStatus?.values()}" keys="${au.org.emii.aatams.EntityStatus?.values()*.name()}" value="${projectInstance?.status?.name()}"  />
@@ -113,23 +144,6 @@
                                   </td>
                               </tr>
                             </shiro:hasRole>
-<!--
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="devices"><g:message code="project.devices.label" default="Devices" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'devices', 'errors')}">
-
-                                  <ul>
-                                  <g:each in="${projectInstance?.devices?}" var="d">
-                                      <li><g:link controller="device" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
-                                  </g:each>
-                                  </ul>
-                                  <g:link controller="device" action="create" params="['project.id': projectInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'device.label', default: 'Device')])}</g:link>
--->
-
-                                </td>
-                            </tr>
                         
                         </tbody>
                     </table>
@@ -158,18 +172,18 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="projectId"><g:message code="organisationProject.project.label" default="Project" /></label>
+                                    <label class="compulsory" for="projectId"><g:message code="organisationProject.project.label" default="Project" /></label>
                                     <g:hiddenField name="projectId" value="${projectInstance?.id}" />
 
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationProjectInstance, field: 'project', 'errors')}">
-                                  <label id="project">${projectInstance}</label>
+                                  <label class="compulsory" id="project">${projectInstance}</label>
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="organisationId"><g:message code="organisationProject.organisation.label" default="Organisation" /></label>
+                                    <label class="compulsory" for="organisationId"><g:message code="organisationProject.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: organisationProjectInstance, field: 'organisation', 'errors')}">
                                   <g:select name="organisationId" from="${unrelatedOrganisations}" optionKey="id"/>
@@ -205,7 +219,7 @@
 
                         <tr class="prop">
                             <td valign="top" class="name">
-                                <label for="person"><g:message code="projectRole.person.label" default="Person" /></label>
+                                <label class="compulsory" for="person"><g:message code="projectRole.person.label" default="Person" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'person', 'errors')}">
                                 <g:select name="personId" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${projectRoleInstance?.person?.id}"  />
@@ -215,7 +229,7 @@
 
                         <tr class="prop">
                             <td valign="top" class="name">
-                                <label for="roleType"><g:message code="projectRole.roleType.label" default="Role Type" /></label>
+                                <label class="compulsory" for="roleType"><g:message code="projectRole.roleType.label" default="Role Type" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'roleType', 'errors')}">
                                 <g:select name="roleTypeId" from="${au.org.emii.aatams.ProjectRoleType.list()}" optionKey="id" value="${projectRoleInstance?.roleType?.id}"  />
@@ -225,7 +239,7 @@
 
                         <tr class="prop">
                             <td valign="top" class="name">
-                                <label for="access"><g:message code="projectRole.access.label" default="Access" /></label>
+                                <label class="compulsory" for="access"><g:message code="projectRole.access.label" default="Access" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: projectRoleInstance, field: 'access', 'errors')}">
                                 <g:select name="access" from="${au.org.emii.aatams.ProjectAccess?.values()}" keys="${au.org.emii.aatams.ProjectAccess?.values()*.name()}" value="${projectRoleInstance?.access?.name()}"  />

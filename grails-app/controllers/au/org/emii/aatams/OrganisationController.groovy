@@ -1,6 +1,8 @@
 package au.org.emii.aatams
 
 import org.apache.shiro.SecurityUtils
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import grails.util.GrailsUtil
 
 class OrganisationController
 {
@@ -14,17 +16,35 @@ class OrganisationController
     {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         
+        def organisationTotal = Organisation.count()
         def organisationList = Organisation.list(params)
-
+        
         if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
         {
-            // Filter out PENDING organisations (only sys admin should see these).
-            organisationList = organisationList.findAll{
-                it.status != EntityStatus.PENDING
+            // Filter out non-ACTIVE organisations (only sys admin should see these).
+            organisationList = organisationList.grep
+            {
+                return (it.status == EntityStatus.ACTIVE)
             }
+            
+            // Only count ACTIVE organisations.
+            // TODO: why doesn't .count({}) work here?
+            organisationTotal = 0
+            Organisation.list().each
+            {
+                if (it.status == EntityStatus.ACTIVE)
+                {
+                    organisationTotal++
+                }
+            }
+//            organisationTotal = 
+//                Organisation.list().count
+//                {
+//                    it.status == EntityStatus.ACTIVE
+//                }
         }
         
-        [organisationInstanceList: organisationList, organisationInstanceTotal: organisationList.count()]
+        [organisationInstanceList: organisationList, organisationInstanceTotal: organisationTotal]
     }
 
     def create = {
@@ -35,8 +55,8 @@ class OrganisationController
 
     def save = 
     {
-        def streetAddress = new Address(params['streetAddress'])
-        def postalAddress = new Address(params['postalAddress'])
+        def streetAddress = new Address(params['streetAddress']).save()
+        def postalAddress = new Address(params['postalAddress']).save()
 
         def organisationInstance = 
             new Organisation(params['organisation'])
@@ -44,7 +64,10 @@ class OrganisationController
         organisationInstance.postalAddress = postalAddress
         
         // If SysAdmin, then set Organisation's status to ACTIVE, otherwise,
-        // set to PENDING and record the requesting user.
+        // set to PENDING.
+        Person user = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
+        organisationInstance.requestingUser = user
+        
         if (SecurityUtils.getSubject().hasRole("SysAdmin"))
         {
             organisationInstance.status = EntityStatus.ACTIVE
@@ -52,8 +75,6 @@ class OrganisationController
         else
         {
             organisationInstance.status = EntityStatus.PENDING
-            Person user = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
-            organisationInstance.requestingUser = user
         }
         
         if (organisationInstance.save(flush: true)) 
@@ -160,25 +181,31 @@ class OrganisationController
      */
     def sendCreationNotificationEmails(organisation)
     {
-        sendMail 
-        {  
-            to organisation?.requestingUser?.emailAddress
-            bcc grailsApplication.config.grails.mail.adminEmailAddress
-            from grailsApplication.config.grails.mail.systemEmailAddress
-            subject "${message(code: 'mail.request.organisation.create.subject', args: [organisation.name])}"     
-            body "${message(code: 'mail.request.organisation.create.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
+        if (!GrailsUtil.getEnvironment().equals(GrailsApplication.ENV_TEST))
+        {
+            sendMail 
+            {  
+                to organisation?.requestingUser?.emailAddress
+                bcc grailsApplication.config.grails.mail.adminEmailAddress
+                from grailsApplication.config.grails.mail.systemEmailAddress
+                subject "${message(code: 'mail.request.organisation.create.subject', args: [organisation.name])}"     
+                body "${message(code: 'mail.request.organisation.create.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
+            }
         }
     }
     
     def sendActivatedNotificationEmails(organisation)
     {
-        sendMail 
-        {     
-            to organisation?.requestingUser?.emailAddress
-            bcc grailsApplication.config.grails.mail.adminEmailAddress
-            from grailsApplication.config.grails.mail.systemEmailAddress
-            subject "${message(code: 'mail.request.organisation.activate.subject', args: [organisation.name])}"     
-            body "${message(code: 'mail.request.organisation.activate.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
+        if (!GrailsUtil.getEnvironment().equals(GrailsApplication.ENV_TEST))
+        {
+            sendMail 
+            {     
+                to organisation?.requestingUser?.emailAddress
+                bcc grailsApplication.config.grails.mail.adminEmailAddress
+                from grailsApplication.config.grails.mail.systemEmailAddress
+                subject "${message(code: 'mail.request.organisation.activate.subject', args: [organisation.name])}"     
+                body "${message(code: 'mail.request.organisation.activate.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
+            }
         }
     }
 }

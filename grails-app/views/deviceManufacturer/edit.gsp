@@ -33,7 +33,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="manufacturerName"><g:message code="deviceManufacturer.manufacturerName.label" default="Manufacturer Name" /></label>
+                                  <label class="compulsory" for="manufacturerName"><g:message code="deviceManufacturer.manufacturerName.label" default="Manufacturer Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: deviceManufacturerInstance, field: 'manufacturerName', 'errors')}">
                                     <g:textField name="manufacturerName" value="${deviceManufacturerInstance?.manufacturerName}" />

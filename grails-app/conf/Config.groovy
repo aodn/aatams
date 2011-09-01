@@ -1,4 +1,5 @@
-// locations to search for config files that get merged into the main config
+// 
+// // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
 // grails.config.locations = [ "classpath:${appName}-config.properties",
@@ -51,19 +52,36 @@ grails.spring.bean.packages = []
 // request parameters to mask when logging exceptions
 grails.exceptionresolver.params.exclude = ['password']
 
+//
+// JSON config.
+//
+
+// Require deep conversion to JSON.
+//grails.converters.json.default.deep = true
+
+// This is required to avoid org.codehaus.groovy.grails.web.json.JSONException: Misplaced key.
+grails.converters.json.circular.reference.behaviour = "INSERT_NULL"
+
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
         grails.serverURL = "http://preview.emii.org.au/${appName}"
+
+        // This is used in the embargo notification job.
+        grails.serverHost = "http://preview.emii.org.au"
     }
     development {
         grails.serverURL = "http://localhost:8080/${appName}"
+        grails.serverHost = "http://localhost:8080"
     }
     test {
         grails.serverURL = "http://localhost:8080/${appName}"
+        grails.serverHost = "http://localhost:8080"
     }
 
 }
+
+
 
 // log4j configuration
 log4j = {
@@ -73,6 +91,7 @@ log4j = {
     appenders {
 //        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
         console name:'stdout', layout:pattern(conversionPattern: '%d [%t] %-5p %c - %m%n')
+        'null' name: "stacktrace"
     }
 
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
@@ -84,7 +103,7 @@ log4j = {
            'org.codehaus.groovy.grails.plugins', // plugins
            'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
            'org.springframework',
-           'org.hibernate',
+//           'org.hibernate',
            'net.sf.ehcache.hibernate'
 
     warn   'org.mortbay.log'
@@ -93,19 +112,50 @@ log4j = {
 //           'org.hibernate',
 //           'org.codehaus.groovy.grails.orm.hibernate'
 
+//    info    "grails.app.service.au.org.emii"
+
     debug   "grails.app.controller.au.org.emii",
             "grails.app.service.au.org.emii",
+//            "grails.app.service.aatams",
             "grails.app.domain.au.org.emii",
-            "grails.app.filter"
+            "grails.app.tagLib.au.org.emii",
+            "grails.app.task",
+//           'org.hibernate',
+//            "grails.buildtestdata",
+            "grails.app.filter"//,
+            //"grails.app.tagLib.com.energizedwork.grails.plugins.jodatime"
 }
 
 //
 //  File uploader configuration.
 //
-fileimport
+fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads"
+/**
+environments 
 {
-    path = "/Users/jburgess/Documents/aatams/test_uploads"
+    production 
+    {
+        fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads"
+    }
+    
+    development 
+    {
+        fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
+    }
+    
+    test 
+    {
+    }
 }
+*/
+// Date formats.
+//jodatime.format.org.joda.time.DateTime = "yyyy-MM-dd'T'HH:mm:ssZ"
+jodatime.format.org.joda.time.DateTime = "dd/MM/yyyy HH:mm:ss zz"
+
+tag.expectedLifeTime.gracePeriodDays = 182 // 6 months
+
+// Warning period for release embargo expiration.
+animalRelease.embargoExpiration.warningPeriodMonths = 1
 
 //
 // Email configuration.
@@ -114,6 +164,20 @@ environments
 {
     production 
     {
+        grails 
+        {
+           mail 
+           {
+             adminEmailAddress = "aatams_admin@emii.org.au"
+             systemEmailAddress = "aatams_system@emii.org.au"
+             
+             host = "localhost"
+             port = 25
+             username = "aatams_system@utas.edu.au"
+//             password = 
+             props = ["mail.smtp.auth":"false"] 					   
+           }
+        }        
     }
     
     development 
@@ -128,7 +192,6 @@ environments
              host = "postoffice.utas.edu.au"
              port = 25
              username = "aatams_system@utas.edu.au"
-//             password = 
              props = ["mail.smtp.auth":"false"] 					   
            }
         }        
@@ -138,4 +201,16 @@ environments
     {
     }
 
+}
+
+// Added by the Joda-Time plugin:
+grails.gorm.default.mapping = {
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentDateTime, class: org.joda.time.DateTime
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentDuration, class: org.joda.time.Duration
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentInstant, class: org.joda.time.Instant
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentInterval, class: org.joda.time.Interval
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentLocalDate, class: org.joda.time.LocalDate
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentLocalTimeAsString, class: org.joda.time.LocalTime
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentLocalDateTime, class: org.joda.time.LocalDateTime
+	"user-type" type: org.joda.time.contrib.hibernate.PersistentPeriod, class: org.joda.time.Period
 }

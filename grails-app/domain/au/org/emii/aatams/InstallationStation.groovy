@@ -13,7 +13,7 @@ import com.vividsolutions.jts.geom.Point
 class InstallationStation 
 {
     static belongsTo = [installation:Installation]
-    static hasMany = [receivers:Receiver]
+    static hasMany = [receivers:Receiver, deployments:ReceiverDeployment]
     static transients = ['scrambledLocation']
     
     static mapping =

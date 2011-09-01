@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="name"><g:message code="person.name.label" default="Name" /></label>
+                                    <label class="compulsory" for="name"><g:message code="person.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${createPersonCmd?.name}" />
@@ -40,7 +40,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="username"><g:message code="secUser.username.label" default="Username" /></label>
+                                    <label class="compulsory" for="username"><g:message code="secUser.username.label" default="Username" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'username', 'errors')}">
                                     <g:textField name="username" value="${createPersonCmd?.username}" />
@@ -50,25 +50,25 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="password"><g:message code="secUser.password.label" default="Password" /></label>
+                                    <label class="compulsory" for="password"><g:message code="secUser.password.label" default="Password" /></label>
                                 </td>
-                                <td valign="top" class="value ">
+                                <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'password', 'errors')}">
                                     <input type="password" name="password" value="" />
                                 </td>
                             </tr>
 
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="passwordConfirm"><g:message code="secUser.password.label" default="Password (confirm)" /></label>
+                                    <label class="compulsory" for="passwordConfirm"><g:message code="secUser.password.label" default="Password (confirm)" /></label>
                                 </td>
-                                <td valign="top" class="value ">
+                                <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'passwordConfirm', 'errors')}">
                                     <input type="password" name="passwordConfirm" value="" />
                                 </td>
                             </tr>
 
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="organisation"><g:message code="person.organisation.label" default="Organisation" /></label>
+                                    <label class="compulsory" for="organisation"><g:message code="person.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'organisation', 'errors')}">
                                     <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${createPersonCmd?.organisation?.id}"  />
@@ -78,7 +78,7 @@
                             
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="phoneNumber"><g:message code="person.phoneNumber.label" default="Phone Number" /></label>
+                                    <label class="compulsory" for="phoneNumber"><g:message code="person.phoneNumber.label" default="Phone Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'phoneNumber', 'errors')}">
                                     <g:textField name="phoneNumber" value="${createPersonCmd?.phoneNumber}" />
@@ -88,7 +88,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="emailAddress"><g:message code="person.emailAddress.label" default="Email Address" /></label>
+                                    <label class="compulsory" for="emailAddress"><g:message code="person.emailAddress.label" default="Email Address" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'emailAddress', 'errors')}">
                                     <g:textField name="emailAddress" value="${createPersonCmd?.emailAddress}" />

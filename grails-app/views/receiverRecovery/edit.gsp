@@ -28,6 +28,7 @@
             <g:form method="post" >
                 <g:hiddenField name="id" value="${receiverRecoveryInstance?.id}" />
                 <g:hiddenField name="version" value="${receiverRecoveryInstance?.version}" />
+                <g:hiddenField name="projectId" value="${receiverRecoveryInstance?.deployment?.station?.installation?.project?.id}"/>
                 <div class="dialog">
                     <table>
                       
@@ -36,8 +37,8 @@
                             <!-- Deployment details -->
                             <tr class="prop">
                                 <td valign="top" class="name">Deployment Details</td>
-                                <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDate.label" default="Deployment Date" /></td>
-                                <td valign="top" class="value"><g:formatDate date="${receiverDeploymentInstance?.deploymentDate}" /></td>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDateTime.label" default="Deployment Date" /></td>
+                                <td valign="top" class="value"><joda:format value="${receiverDeploymentInstance?.deploymentDateTime}" /></td>
 
                             </tr>
 
@@ -58,7 +59,10 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name"><g:message code="receiverDeployment.location.label" default="Location" /></td>
-                                <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "location")}</td>
+                                <td valign="top" class="value">
+                                  <g:point name="location"
+                                           value="${receiverDeploymentInstance?.location}" />
+                                </td>
 
                             </tr>
 
@@ -95,7 +99,7 @@
                             <tr class="prop">
                                 <td valign="top" class="name">Recovery Details</td>
                                 <td valign="top" class="name">
-                                    <label for="recoverer"><g:message code="receiverRecovery.recoverer.label" default="Recovered By" /></label>
+                                    <label class="compulsory" for="recoverer"><g:message code="receiverRecovery.recoverer.label" default="Recovered By" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoverer', 'errors')}">
                                     <g:select name="recoverer.id" from="${receiverDeploymentInstance?.station?.installation?.project?.projectRoles}" optionKey="id" value="${receiverRecoveryInstance?.recoverer?.id}"  />
@@ -106,10 +110,12 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name">
-                                    <label for="location"><g:message code="receiverRecovery.location.label" default="Location" /></label>
+                                    <label class="compulsory" for="location"><g:message code="receiverRecovery.location.label" default="Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'location', 'errors')}">
-                                    <g:textField name="location" value="${receiverRecoveryInstance?.location}" />
+                                  <g:point name="location"
+                                           value="${receiverRecoveryInstance?.location}" 
+                                           editable="${true}"/>
 
                                 </td>
                             </tr>
@@ -117,10 +123,12 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name">
-                                    <label for="recoveryDate"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></label>
+                                    <label class="compulsory" for="recoveryDateTime"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDate', 'errors')}">
-                                    <g:datePicker name="recoveryDate" precision="day" value="${receiverRecoveryInstance?.recoveryDate}"  />
+                                <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDateTime', 'errors')}">
+                                    <joda:dateTimePicker name="recoveryDateTime" 
+                                                         value="${receiverRecoveryInstance?.recoveryDateTime}"
+                                                         useZone="true"/>
 
                                 </td>
                             </tr>
@@ -128,7 +136,7 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name">
-                                    <label for="status"><g:message code="receiverRecovery.status.label" default="Status" /></label>
+                                    <label class="compulsory" for="status"><g:message code="receiverRecovery.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverRecoveryInstance?.status?.id}"  />
@@ -147,40 +155,41 @@
                                 </td>
                             </tr>
                         
-                            <!-- Import data file(s) -->
-<%--                            
-                            <tr><td/></tr>
-                            
+                            <!-- Receiver download files -->
                             <tr class="prop">
-                                <td valign="top" class="name">Import Data Files</td>
                                 <td valign="top" class="name">
-                                    <label for="import">Import VRL</label>
+                                  <label class="compulsory" for="receiverDownloads"><g:message code="receiverRecovery.download.downloadFiles.label" default="Receiver Exports" /></label>
                                 </td>
-                                <td>
-                                    <input type="file" name="vrlFile" accept="vrl" />
-                                </td>
-                            </tr>
+                                
+                                <td valign="top" class="value" colspan="2">
+                                  
+                                  <table class="nested">
+                                    <tbody id="download_files_table_body">
+                                      <g:each in="${receiverRecoveryInstance?.download?.downloadFiles}" var="downloadFile">
+                                        <tr>
+                                          <td class="rowButton"><g:link class="show" controller="receiverDownloadFile" action="show" id="${downloadFile?.id}">.</g:link></td>
+                                          <td valign="top" class="value">${downloadFile?.importDate}</td>
+                                          <td valign="top" class="value">${downloadFile?.name}</td>
+                                          <td valign="top" class="value">${downloadFile?.type}</td>
+                                          <td valign="top" class="value">${downloadFile?.status}</td>
+                                        </tr>
+                                        
+                                      </g:each>
+                                      <tr><td><br/></td></tr>
+                                      <tr>
+                                        <td class="rowButton">
+                                          <g:link class="create"
+                                                  action="create" 
+                                                  controller="receiverDownloadFile"
+                                                  params="[downloadId:receiverRecoveryInstance?.download?.id, projectId:projectId]"></g:link>
+                                        </td>
+                                      </tr>
 
-                            <tr class="prop">
-                                <td/>
-                                <td valign="top" class="name">
-                                    <label for="import">Import RLD</label>
-                                </td>
-                                <td>
-                                    <input type="file" name="rldFile" accept="rld" />
-                                </td>
+                                    </tbody>
+                                  </table>
+                                
                             </tr>
                             
-                            <tr class="prop">
-                                <td/>
-                                <td valign="top" class="name">
-                                    <label for="import">Import CSV</label>
-                                </td>
-                                <td>
-                                    <input type="file" name="csvFile" accept="csv" />
-                                </td>
-                            </tr>
---%>                            
                         </tbody>
 
                     </table>
@@ -194,5 +203,6 @@
                 </div>
             </g:form>
         </div>
+      
     </body>
 </html>

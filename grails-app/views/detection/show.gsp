@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'detection.label', default: 'Detection')}" />
-        <g:set var="projectId" value="${detectionInstance?.receiverDeployment?.receiver?.project?.id}" />
+        <g:set var="projectId" value="${detectionInstance?.receiverDeployment?.station?.installation?.project?.id}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -28,7 +28,9 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.timestamp.label" default="Timestamp" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${detectionInstance?.timestamp}" /></td>
+                            <td valign="top" class="value"><g:formatDate date="${detectionInstance?.timestamp}"
+                                                                         format="yyyy-MM-dd'T'HH:mm:ssZ"
+                                                                         timeZone='${TimeZone.getTimeZone("UTC")}'/></td>
                             
                         </tr>
                     
@@ -63,19 +65,31 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.location.label" default="Location" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "scrambledLocation")}</td>
-                            
+                            <td valign="top" class="value">
+                                  <g:point name="scrambledLocation" 
+                                           value="${detectionInstance?.scrambledLocation}" />
+                            </td>
                         </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.tags.label" default="Tags" /></td>
                             
                             <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${surgeries}" var="s">
-                                    <li><g:link controller="tag" action="show" id="${s?.tag?.id}">${s?.tag?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
+                              
+                              <table class="nested">
+                                <tbody>
+                                  <g:each in="${detectionInstance?.detectionSurgeries}" var="s">
+                                    <tr>
+                                      <td class="rowButton"><g:link class="show" controller="detectionSurgery" action="show" id="${s?.id}">.</g:link></td>
+                                      <td>
+                                        <g:link controller="tag" action="show" id="${s?.surgery?.tag?.id}">${s?.surgery?.tag?.encodeAsHTML()}</g:link>
+                                      </td>
+                                    </tr>
+
+                                  </g:each>
+                                </tbody>
+                              </table>
+
                             </td>
                             
                         </tr>

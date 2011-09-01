@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import grails.converters.JSON
+
 class AnimalController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -96,5 +98,40 @@ class AnimalController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'animal.label', default: 'Animal'), params.id])}"
             redirect(action: "list")
         }
+    }
+   
+    def lookup =
+    {
+        def criteria = Animal.createCriteria()
+        
+        def animals = criteria
+        {
+            and
+            {
+                releases
+                {
+                    project
+                    {
+                        eq("id", Long.valueOf(params.project.id))
+                    }
+                }
+                
+                species
+                {
+                    eq("id", Long.valueOf(params.species.id))
+                }
+
+                if (params.sex?.id)
+                {
+                    sex
+                    {
+                        eq("id", Long.valueOf(params.sex.id))
+                    }
+                }
+            }
+        }
+
+        log.debug("animals: " + animals)
+        render (animals as JSON)
     }
 }

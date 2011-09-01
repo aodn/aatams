@@ -9,20 +9,39 @@ import org.apache.shiro.SecurityUtils
  */
 class PermissionUtilsService
 {
+    // Cache the Principal Investigator role type to speed things up.
+    def piRoleType
+    
+    ProjectRoleType getPIRoleType()
+    {
+        if (piRoleType == null)
+        {
+            piRoleType = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
+        }
+        
+        return piRoleType
+    }
+    
     Person setPermissions(ProjectRole projectRole)
     {
+        log.debug("projectRole: " + String.valueOf(projectRole))
+        
         // Cleanup existing permissions.
         Person user = removePermissions(projectRole)
 //        Person user = Person.get(projectRole.person.id)
+
         if (!user)
         {
+            log.error("Unknown user for role: " + projectRole)
             return null
         }
 
         
         // Principal Investigators have special permissions.
+        log.debug("Comparing roleTypes, person's roleType: " + projectRole.roleType + ", PI role type: " + getPIRoleType())
+        
         if (   projectRole.roleType 
-            == ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR))
+            == getPIRoleType())
         {
             log.debug("Adding PI permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
             
@@ -32,7 +51,7 @@ class PermissionUtilsService
             user.addToPermissions(permission)
             log.debug("Added permission: " + permission)
             
-            user.save(flush:true)
+            user.save()
         }
         
         // Read access for project (this just allows embargoes data to be 
@@ -43,7 +62,7 @@ class PermissionUtilsService
             log.debug("Adding read permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
             String permission = buildProjectReadPermission(projectRole.project.id)
             user.addToPermissions(buildProjectReadAnyPermission())
-            user.addToPermissions(permission).save(flush:true)
+            user.addToPermissions(permission).save()
             log.debug("Added permission: " + permission)
         }
         
@@ -52,7 +71,7 @@ class PermissionUtilsService
             log.debug("Adding write permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
             String permission = buildProjectWritePermission(projectRole.project.id)
             user.addToPermissions(buildProjectWriteAnyPermission())
-            user.addToPermissions(permission).save(flush:true)
+            user.addToPermissions(permission).save()
             log.debug("Added permission: " + permission)
         }
         
@@ -64,11 +83,12 @@ class PermissionUtilsService
         Person user = Person.get(projectRole.person.id)
         if (!user)
         {
+            log.error("Unknown user for role: " + projectRole)
             return null
         }
 
         if (   projectRole.roleType 
-            == ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR))
+            == getPIRoleType())
         {
             user.removeFromPermissions(buildReceiverCreatePermission())
             user.removeFromPermissions(buildPersonWriteAnyPermission())
@@ -90,13 +110,18 @@ class PermissionUtilsService
             user.removeFromPermissions(buildProjectWriteAnyPermission())
         }
         
-        user.save(flush:true)
+        user.save()
         
         return user
     }
     
     String buildProjectReadPermission(projectId)
     {
+        if (!projectId)
+        {
+            return "notPermitted"
+        }
+        
         return "project:" + projectId + ":read"
     }
     
@@ -115,6 +140,11 @@ class PermissionUtilsService
     
     String buildProjectWritePermission(projectId)
     {
+        if (!projectId)
+        {
+            return "notPermitted"
+        }
+        
         return "project:" + projectId + ":write"
     }
     
@@ -125,6 +155,11 @@ class PermissionUtilsService
     
     String buildPrincipalInvestigatorPermission(projectId)
     {
+        if (!projectId)
+        {
+            return "notPermitted"
+        }
+        
         return "principalInvestigator:" + projectId
     }
 
@@ -140,11 +175,21 @@ class PermissionUtilsService
     
     String buildReceiverUpdatePermission(receiverId)
     {
+        if (!receiverId)
+        {
+            return "notPermitted"
+        }
+        
         return "receiverUpdate:" + receiverId
     }
     
     def principal()
     {
+        if (!SecurityUtils.subject?.isAuthenticated())
+        {
+            return null
+        }
+        
         return Person.findByUsername(SecurityUtils.subject?.principal)
     }
     
@@ -156,9 +201,9 @@ class PermissionUtilsService
     {
         String permissionString = buildReceiverUpdatePermission(receiverInstance?.id)
         
-        log.debug("Adding permission \'" + permissionString + "\' to user:" + String.valueOf(principal()))
+//        log.debug("Adding permission \'" + permissionString + "\' to user:" + String.valueOf(principal()))
         principal().addToPermissions(permissionString)
-        principal().save(flush:true)
+        principal().save()
     }
 
     def receiverDeleted(receiverInstance)

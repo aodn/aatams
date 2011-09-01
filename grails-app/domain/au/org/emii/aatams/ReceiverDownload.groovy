@@ -1,5 +1,8 @@
 package au.org.emii.aatams
 
+import org.joda.time.*
+import org.joda.time.contrib.hibernate.*
+
 /**
  * Data downloaded from receiver after recovery (hence associated with a 
  * ReceiverRecovery).
@@ -8,8 +11,17 @@ class ReceiverDownload
 {
     static belongsTo = [receiverRecovery: ReceiverRecovery]
     static hasMany = [downloadFiles: ReceiverDownloadFile]
+    static mapping =
+    {
+        downloadDateTime type: PersistentDateTimeTZ,
+        {
+            column name: "downloadDateTime_timestamp"
+            column name: "downloadDateTime_zone"
+        }
+        comments type: 'text'
+    }
     
-    Date downloadDate
+    DateTime downloadDateTime
     Float clockDrift
     
     /**
@@ -36,7 +48,7 @@ class ReceiverDownload
     
     static constraints = 
     {
-        downloadDate(nullable:true)
+        downloadDateTime(nullable:true)
         clockDrift(nullable:true)
         pingCount(nullable:true, min:0)
         detectionCount(nullable:true, min:0)

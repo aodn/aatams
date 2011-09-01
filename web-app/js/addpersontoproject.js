@@ -22,22 +22,33 @@ $(function() {
                         "access":access},
                        function(data) 
                        {
-                           console.log(data);
+                           updateHeader(data);
                            
                            var tableRow = $("<tr>");
                            
+                           var infoColumn = $("<td>").attr("class", "rowButton");
+                           var infoLink = $("<a>").attr("href", '/aatams/projectRole/show/' + data.instance.id);
+                           infoLink.attr("class", "show");
+                           infoColumn.append(infoLink);
+                           tableRow.append(infoColumn);
+                           
+                           var deleteColumn = $("<td>").attr("class", "rowButton");
+                           var deleteLink = $("<a>").attr("href", '/aatams/projectRole/delete/' + data.instance.id + "?projectId=" + projectId);
+                           deleteLink.attr("class", "delete");
+                           deleteLink.click(function() { return confirm('Are you sure?'); });
+                           deleteColumn.append(deleteLink);
+                           tableRow.append(deleteColumn);
+
                            var personColumn = $("<td>").attr("class", "value");
                            tableRow.append(personColumn);
-                           var personLink = $("<a>").attr("href", '../person/show/' + data.person.id).html(data.person.name);
+                           var personLink = $("<a>").attr("href", '/aatams/person/show/' + data.instance.person.id).html(data.instance.person.name);
                            personColumn.append(personLink);
                            tableRow.append(personColumn);
                            
-                           var roleColumn = $("<td>").attr("class", "value").html(data.roleType.displayName)
+                           var roleColumn = $("<td>").attr("class", "value").html(data.instance.roleType.displayName)
                            tableRow.append(roleColumn);
 
-                           // TODO: should really be displaying "displayName", but it's not being marshalled in the JSON response
-                           // (despite attempting to register a custom marshaller in BootStrap).
-                           var accessColumn = $("<td>").attr("class", "value").html(data.access.name)
+                           var accessColumn = $("<td>").attr("class", "value").html(data.instance.access.displayStatus)
                            tableRow.append(accessColumn);
                            
                            var lastRow = $("#people_table_body > tr:last")

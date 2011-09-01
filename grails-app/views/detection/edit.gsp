@@ -6,7 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'detection.label', default: 'Detection')}" />
-        <g:set var="projectId" value="${detectionInstance?.receiverDeployment?.receiver?.project?.id}" />
+        <g:set var="projectId" value="${detectionInstance?.receiverDeployment?.station?.installation?.project?.id}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -34,7 +34,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="timestamp"><g:message code="detection.timestamp.label" default="Timestamp" /></label>
+                                  <label class="compulsory" for="timestamp"><g:message code="detection.timestamp.label" default="Timestamp" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'timestamp', 'errors')}">
                                     <g:datePicker name="timestamp" precision="minute" value="${detectionInstance?.timestamp}"  />
@@ -44,7 +44,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="receiver"><g:message code="detection.receiverDeployment.label" default="Receiver Deployment" /></label>
+                                  <label class="compulsory" for="receiver"><g:message code="detection.receiverDeployment.label" default="Receiver Deployment" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'receiverDeployment', 'errors')}">
                                     <g:select name="receiverDeployment.id" from="${candidateDeployments}" optionKey="id" value="${detectionInstance?.receiverDeployment?.id}"  />
@@ -87,20 +87,35 @@
                                   <label for="location"><g:message code="detection.location.label" default="Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'location', 'errors')}">
-                                    <g:textField name="location" value="${detectionInstance?.location}" />
-
+                                  <g:point name="location" 
+                                           value="${detectionInstance?.location}" 
+                                           editable="${true}" />
                                 </td>
                             </tr>
                         
                             <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label for="tags"><g:message code="detection.surgeries.label" default="Surgeries" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: detectionInstance, field: 'surgeries', 'errors')}">
-                                    <g:select name="surgeries" from="${candidateSurgeries}" multiple="yes" optionKey="id" size="5" value="${detectionInstance?.surgeries*.id}" />
+                                <td valign="top" class="name"><g:message code="detection.tags.label" default="Tags" /></td>
+
+                                <td valign="top" style="text-align: left;" class="value">
+
+                                  <table class="nested">
+                                    <tbody>
+                                      <g:each in="${detectionInstance?.detectionSurgeries}" var="s">
+                                        <tr>
+                                          <td class="rowButton"><g:link class="show" controller="detectionSurgery" action="show" id="${s?.id}">.</g:link></td>
+                                          <td>
+                                            <g:link controller="tag" action="show" id="${s?.surgery?.tag?.id}">${s?.surgery?.tag?.encodeAsHTML()}</g:link>
+                                          </td>
+                                        </tr>
+
+                                      </g:each>
+                                    </tbody>
+                                  </table>
 
                                 </td>
+
                             </tr>
+                            
                         
                         </tbody>
                     </table>

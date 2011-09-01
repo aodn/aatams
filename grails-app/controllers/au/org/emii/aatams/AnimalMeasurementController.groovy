@@ -4,7 +4,7 @@ import grails.converters.JSON
 
 class AnimalMeasurementController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
     def index = {
         redirect(action: "list", params: params)
@@ -25,26 +25,13 @@ class AnimalMeasurementController {
         def animalMeasurementInstance = new AnimalMeasurement(params)
         if (animalMeasurementInstance.save(flush: true)) 
         {
-            // Deep rendering of object not working due to geometry type
-            // Need to use custom object marshaller.
-            JSON.registerObjectMarshaller(AnimalMeasurement.class)
-            {
-                def returnArray = [:]
-                returnArray['id'] = it.id
-                returnArray['type'] = it.type
-                returnArray['value'] = it.value
-                returnArray['unit'] = it.unit
-                returnArray['estimate'] = it.estimate
-                returnArray['comments'] = it.comments
-                
-                return returnArray
-            }
-            
-            render animalMeasurementInstance as JSON
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance])}"
+            render ([instance:animalMeasurementInstance, message:flash] as JSON)
         }
-        else {
+        else 
+        {
             log.error(animalMeasurementInstance.errors)
-            render(view: "create", model: [animalMeasurementInstance: animalMeasurementInstance])
+            render ([errors:animalMeasurementInstance.errors] as JSON)
         }
     }
 
@@ -83,9 +70,14 @@ class AnimalMeasurementController {
                 }
             }
             animalMeasurementInstance.properties = params
-            if (!animalMeasurementInstance.hasErrors() && animalMeasurementInstance.save(flush: true)) {
+            if (!animalMeasurementInstance.hasErrors() && animalMeasurementInstance.save(flush: true)) 
+            {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.id])}"
-                redirect(action: "show", id: animalMeasurementInstance.id)
+                def release = animalMeasurementInstance?.release
+                redirect(controller: "animalRelease", 
+                         action: "edit", 
+                         id: release?.id,
+                         params: [projectId:release?.project?.id])
             }
             else {
                 render(view: "edit", model: [animalMeasurementInstance: animalMeasurementInstance])
@@ -97,20 +89,31 @@ class AnimalMeasurementController {
         }
     }
 
-    def delete = {
+    def delete = 
+    {
         def animalMeasurementInstance = AnimalMeasurement.get(params.id)
-        if (animalMeasurementInstance) {
-            try {
+        if (animalMeasurementInstance) 
+        {
+            try 
+            {
                 animalMeasurementInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), params.id])}"
-                redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), params.id])}"
-                redirect(action: "show", id: params.id)
             }
+            
+            // Redirect to the "owning" animal release edit, since that is where
+            // a normal user (i.e. non sysadmin) would have deleted from).
+            def release = animalMeasurementInstance?.release
+            log.debug("Redirecting to animalRelease, id: " + release?.id)
+            redirect(controller: "animalRelease", 
+                     action: "edit", 
+                     id: release?.id,
+                     params: [projectId:release?.project?.id])
         }
-        else {
+        else 
+        {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), params.id])}"
             redirect(action: "list")
         }

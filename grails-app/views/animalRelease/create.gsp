@@ -9,6 +9,9 @@
         <title><g:message code="default.create.label" args="[entityName]" /></title>
         
         <g:javascript src="speciesLookup.js" />
+        <g:javascript src="animalLookup.js" />
+        <g:javascript src="addsurgerytoanimalrelease.js"/>
+        <g:javascript src="addmeasurementtoanimalrelease.js"/>
     </head>
     <body>
         <div class="nav">
@@ -37,7 +40,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="project"><g:message code="animalRelease.project.label" default="Project" /></label>
+                                    <label class="compulsory" for="project"><g:message code="animalRelease.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${animalReleaseInstance?.project?.id}"  />
@@ -47,18 +50,40 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="species"><g:message code="animalRelease.animal.species.label" default="Species" /></label>
+                                    <label class="compulsory" for="species"><g:message code="animalRelease.animal.species.label" default="Species" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'species', 'errors')}">
-<!--                                    <g:select name="species.id" from="${au.org.emii.aatams.Species.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.species?.id}"  />-->
-                                  
+                                  <g:hiddenField name="speciesId" />
                                   <g:textField name="speciesName" />
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="captureLocality"><g:message code="animalRelease.captureLocality.label" default="Capture Locality" /></label>
+                                    <label class="compulsory" for="sex"><g:message code="animalRelease.animal.sex.label" default="Sex" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'sex', 'errors')}">
+                                    <g:select name="sex.id" 
+                                              from="${au.org.emii.aatams.Sex.list()}" 
+                                              optionKey="id" value="${animalReleaseInstance?.animal?.sex?.id}" 
+                                              noSelection="['':'Not specified']"/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label class="compulsory" for="animal"><g:message code="animalRelease.animal.label" default="Animal" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'animal', 'errors')}">
+                                    <g:select name="animal.id" 
+                                              optionKey="id" 
+                                              noSelection="['':'New animal']"/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label class="compulsory" for="captureLocality"><g:message code="animalRelease.captureLocality.label" default="Capture Locality" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureLocality', 'errors')}">
                                     <g:textField name="captureLocality" value="${animalReleaseInstance?.captureLocality}" />
@@ -68,51 +93,110 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="captureLocation"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></label>
+                                    <label class="compulsory" for="captureLocation"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureLocation', 'errors')}">
-                                  <g:textField name="captureLocation" value="${animalReleaseInstance?.captureLocation}" />
-<!--                                  <g:pointInput name="captureLocation" lon="12" lat="34" datum="EPSG:4326"/> -->
-<!--                                  <g:pointInput name='captureLocation'/>-->
+                                  <g:point name="captureLocation" 
+                                           value="${animalReleaseInstance?.captureLocation}"
+                                           editable="${true}"/>
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="captureDateTime"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></label>
+                                    <label class="compulsory" for="captureDateTime"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureDateTime', 'errors')}">
-                                    <g:datePicker name="captureDateTime" precision="day" value="${animalReleaseInstance?.captureDateTime}"  />
+                                    <joda:dateTimePicker name="captureDateTime" 
+                                                         value="${animalReleaseInstance?.captureDateTime}"
+                                                         useZone="true"/>
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="captureMethod"><g:message code="animalRelease.captureMethod.label" default="Capture Method" /></label>
+                                    <label class="compulsory" for="captureMethod"><g:message code="animalRelease.captureMethod.label" default="Capture Method" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureMethod', 'errors')}">
                                     <g:select name="captureMethod.id" from="${au.org.emii.aatams.CaptureMethod.list()}" optionKey="id" value="${animalReleaseInstance?.captureMethod?.id}"  />
                                 </td>
                             </tr>
                         
-                            <!-- TODO: surgeries -->
-                            
-                            <!-- TODO: measurements -->
-                            
-                            <tr class="prop">
+                            <!-- Surgeries -->
+                            <tr>
                                 <td valign="top" class="name">
-                                    <label for="sex"><g:message code="animalRelease.animal.sex.label" default="Sex" /></label>
+                                  <label for="tagging"><g:message code="animalRelease.surgeries.label" default="Tagging" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'sex', 'errors')}">
-                                    <g:select name="sex.id" from="${au.org.emii.aatams.Sex.list()}" optionKey="id" value="${animalReleaseInstance?.animal?.sex?.id}"  />
+
+                                <td valign="top" class="value">
+                                  
+                                  <table class="nested">
+                                    <thead>
+                                      <tr>
+                                        <th/>
+                                        <th>Date/Time</th>
+                                        <th>Tag</th>
+                                        <th>Placement</th>
+                                        <th>Treatment</th>
+                                        <th>Comments</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="surgeries_table_body">
+
+                                      <tr><td><br/></td></tr>
+                                      <tr>
+                                        <td colspan="5">
+                                          <a href="#" 
+                                             id='add_surgery_to_animal_release'>${message(code: 'default.add.label', args: [message(code: 'surgery.label', default: 'Tagging...')])}</a>
+                                        </td>
+                                      </tr>
+
+                                    </tbody>
+                                  </table>
+
+                                </td>  
+                            </tr>
+                            
+                            <!-- Measurements -->
+                            <tr>
+                                <td valign="top" class="name">
+                                  <label for="measurements"><g:message code="animalRelease.measurements.label" default="Measurements" /></label>
+                                </td>
+
+                                <td valign="top" class="value">
+                                  
+                                  <table class="nested">
+                                    <thead>
+                                      <tr>
+                                        <th/>
+                                        <th>Type</th>
+                                        <th>Value</th>
+                                        <th>Units</th>
+                                        <th>Estimated</th>
+                                        <th>Comments</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="measurements_table_body">
+
+                                      <tr><td><br/></td></tr>
+                                      <tr>
+                                        <td colspan="5">
+                                          <a href="#" 
+                                             id='add_measurement_to_animal_release'>${message(code: 'default.add.label', args: [message(code: 'measurement.label', default: 'Measurement...')])}</a>
+                                        </td>
+                                      </tr>
+
+                                    </tbody>
+                                  </table>
+
                                 </td>
                             </tr>
-                        
+                            
 
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="releaseLocality"><g:message code="animalRelease.releaseLocality.label" default="Release Locality" /></label>
+                                    <label class="compulsory" for="releaseLocality"><g:message code="animalRelease.releaseLocality.label" default="Release Locality" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseLocality', 'errors')}">
                                     <g:textField name="releaseLocality" value="${animalReleaseInstance?.releaseLocality}" />
@@ -122,20 +206,23 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="releaseLocation"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></label>
+                                    <label class="compulsory" for="releaseLocation"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseLocation', 'errors')}">
-                                    <g:textField name="releaseLocation" value="${animalReleaseInstance?.releaseLocation}" />
-
+                                  <g:point name="releaseLocation" 
+                                           value="${animalReleaseInstance?.releaseLocation}"
+                                           editable="${true}"/>
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="releaseDateTime"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></label>
+                                    <label class="compulsory" for="releaseDateTime"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseDateTime', 'errors')}">
-                                    <g:datePicker name="releaseDateTime" precision="day" value="${animalReleaseInstance?.releaseDateTime}"  />
+                                    <joda:dateTimePicker name="releaseDateTime" 
+                                                         value="${animalReleaseInstance?.releaseDateTime}"
+                                                         useZone="true"/>
 
                                 </td>
                             </tr>
@@ -152,11 +239,14 @@
 
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="embargoDate"><g:message code="animalRelease.embargoDate.label" default="Embargo Date" /></label>
+                                    <label for="embargoPeriod"><g:message code="animalRelease.embargoDate.label" default="Embargo Period" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'embargoDate', 'errors')}">
-                                    <g:datePicker name="embargoDate" precision="day" value="${animalReleaseInstance?.embargoDate}" default="none" noSelection="['': '']" />
-
+                                    <g:select from="${embargoPeriods}"
+                                              name="embargoPeriod" 
+                                              optionKey="key"
+                                              optionValue="value"
+                                              noSelection="['':'No embargo']"/>
                                 </td>
                             </tr>
                         
@@ -169,5 +259,8 @@
                 </div>
             </g:form>
         </div>
+      
+        <div id='dialog-form-add-surgery'></div>
+        <div id='dialog-form-add-measurement'></div>
     </body>
 </html>

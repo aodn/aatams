@@ -19,6 +19,10 @@ class ReceiverDownloadFile
     FileProcessingStatus status
     
     String errMsg
+    
+    Person requestingUser
+    
+    static belongsTo = [receiverDownload: ReceiverDownload]
 
     static constraints =
     {
@@ -26,14 +30,19 @@ class ReceiverDownloadFile
         path()
     }
     
-    ReceiverDownloadFile(String fullPath, String name)
+    static mapping =
     {
-        this.importDate = new Date()
-        this.name = name
-        this.path = fullPath
-        this.type = ReceiverDownloadFileType.fromPath(fullPath)
-        this.status = FileProcessingStatus.PENDING
+        errMsg type: 'text'
     }
+    
+//    ReceiverDownloadFile(String fullPath, String name)
+//    {
+//        this.importDate = new Date()
+//        this.name = name
+//        this.path = fullPath
+//        this.type = ReceiverDownloadFileType.fromPath(fullPath)
+//        this.status = FileProcessingStatus.PENDING
+//    }
     
     String toString()
     {

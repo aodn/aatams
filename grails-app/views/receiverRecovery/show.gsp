@@ -28,8 +28,8 @@
                             <!-- Deployment details -->
                             <tr class="prop">
                                 <td valign="top" class="name">Deployment Details</td>
-                                <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDate.label" default="Deployment Date" /></td>
-                                <td valign="top" class="value"><g:formatDate date="${receiverDeploymentInstance?.deploymentDate}" /></td>
+                                <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDateTime.label" default="Deployment Date" /></td>
+                                <td valign="top" class="value"><joda:format value="${receiverDeploymentInstance?.deploymentDateTime}" /></td>
 
                             </tr>
 
@@ -51,7 +51,11 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name"><g:message code="receiverDeployment.location.label" default="Location" /></td>
-                                <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "scrambledLocation")}</td>
+                                <td valign="top" class="value">
+                                  <g:point name="scrambledLocation"
+                                           value="${receiverDeploymentInstance?.scrambledLocation}" />
+
+                                </td>
 
                             </tr>
 
@@ -94,13 +98,17 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name"><g:message code="receiverRecovery.location.label" default="Location" /></td>
-                                <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "scrambledLocation")}</td>
+                                <td valign="top" class="value">
+                                  <g:point name="scrambledLocation"
+                                           value="${receiverRecoveryInstance?.scrambledLocation}" />
+
+                                </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td/>
-                                <td valign="top" class="name"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></td>
-                                <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "recoveryDate")}</td>
+                                <td valign="top" class="name"><g:message code="receiverRecovery.recoveryDateTime.label" default="Recovery Date" /></td>
+                                <td valign="top" class="value"><joda:format value="${receiverRecoveryInstance?.recoveryDateTime}" /></td>
                             </tr>
                         
                             <tr class="prop">
@@ -115,41 +123,31 @@
                                 <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "comments")}</td>
                             </tr>
                         
-                            <!-- Import data file(s) -->
-                            <!-- TODO -->
-<%--                            
-                            <tr><td/></tr>
-                            
+                            <!-- Receiver download files -->
                             <tr class="prop">
-                                <td valign="top" class="name">Import Data Files</td>
                                 <td valign="top" class="name">
-                                    <label for="import">Import VRL</label>
+                                  <label for="receiverDownloads"><g:message code="receiverRecovery.download.downloadFiles.label" default="Receiver Exports" /></label>
                                 </td>
-                                <td>
-                                    <input type="file" name="vrlFile" accept="vrl" />
-                                </td>
-                            </tr>
+                                
+                                <td valign="top" class="value" colspan="2">
+                                  
+                                  <table class="nested">
+                                    <tbody id="download_files_table_body">
+                                      <g:each in="${receiverRecoveryInstance?.download?.downloadFiles}" var="downloadFile">
+                                        <tr>
+                                          <td class="rowButton"><g:link class="show" controller="receiverDownloadFile" action="show" id="${downloadFile?.id}">.</g:link></td>
+                                          <td valign="top" class="value">${downloadFile?.importDate}</td>
+                                          <td valign="top" class="value">${downloadFile?.name}</td>
+                                          <td valign="top" class="value">${downloadFile?.type}</td>
+                                          <td valign="top" class="value">${downloadFile?.status}</td>
+                                        </tr>
+                                        
+                                      </g:each>
 
-                            <tr class="prop">
-                                <td/>
-                                <td valign="top" class="name">
-                                    <label for="import">Import RLD</label>
-                                </td>
-                                <td>
-                                    <input type="file" name="rldFile" accept="rld" />
-                                </td>
+                                    </tbody>
+                                  </table>
+                                
                             </tr>
-                            
-                            <tr class="prop">
-                                <td/>
-                                <td valign="top" class="name">
-                                    <label for="import">Import CSV</label>
-                                </td>
-                                <td>
-                                    <input type="file" name="csvFile" accept="csv" />
-                                </td>
-                            </tr>
---%>                            
                         </tbody>
                       
                     </tbody>

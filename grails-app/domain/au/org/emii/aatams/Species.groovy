@@ -15,12 +15,12 @@ class Species
     
     static constraints = 
     {
-        name(blank:false)
+        name(nullable:true)
         embargoDate(nullable:true)
     }
     
     String toString()
     {
-        return name
+        return String.valueOf(name)
     }
 }

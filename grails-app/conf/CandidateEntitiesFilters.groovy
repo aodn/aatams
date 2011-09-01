@@ -17,7 +17,7 @@ class CandidateEntitiesFilters
 
     def filters = 
     {
-        all(controller:'*', action:'create|edit')
+        all(controller:'*', action:'create|edit|save|update|addSurgery')
         {
             after = {model ->
                 
@@ -57,6 +57,18 @@ class CandidateEntitiesFilters
                     def candidatePeople = candidateEntitiesService.people(model?.animalReleaseInstance?.project)
                     model?.candidatePeople = candidatePeople
                 }
+            }
+        }
+        
+        embargoPeriod(controller:'animalRelease', action:'create|edit')
+        {
+            after =
+            {
+                model ->
+                
+                // The list of embargo periods to choose from.
+                def embargoPeriods = [6: '6 months', 12: '12 months']
+                model?.embargoPeriods = embargoPeriods.entrySet()
             }
         }
     }

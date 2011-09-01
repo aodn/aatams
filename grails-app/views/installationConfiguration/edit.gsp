@@ -33,7 +33,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="type"><g:message code="installationConfiguration.type.label" default="Type" /></label>
+                                  <label class="compulsory" for="type"><g:message code="installationConfiguration.type.label" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationConfigurationInstance, field: 'type', 'errors')}">
                                     <g:textField name="type" value="${installationConfigurationInstance?.type}" />

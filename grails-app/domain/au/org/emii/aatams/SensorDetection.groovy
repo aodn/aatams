@@ -7,8 +7,6 @@ package au.org.emii.aatams
  */
 class SensorDetection extends Detection
 {
-    static hasMany = [sensors: Sensor]
-    
     Float uncalibratedValue
     String sensorUnit
     
@@ -28,3 +26,4 @@ class SensorDetection extends Detection
         return super.toString() + ", " + String.valueOf(uncalibratedValue) 
     }
 }
+    

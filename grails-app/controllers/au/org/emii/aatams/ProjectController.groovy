@@ -6,6 +6,8 @@ class ProjectController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def permissionUtilsService
+    
     def index = {
         redirect(action: "list", params: params)
     }
@@ -13,17 +15,30 @@ class ProjectController {
     def list = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         
+        def projectTotal = Project.count()
         def projectList = Project.list(params)
 
         if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
         {
-            // Filter out PENDING organisations (only sys admin should see these).
-            projectList = projectList.findAll{
-                it.status != EntityStatus.PENDING
+            // Filter out non-ACTIVE organisations (only sys admin should see these).
+            projectList = projectList.grep
+            {
+                return (it.status == EntityStatus.ACTIVE)
+            }
+            
+            // Only count ACTIVE projects.
+            // TODO: why doesn't count({}) work?
+            projectTotal = 0
+            Project.list().each
+            {
+                if (it.status == EntityStatus.ACTIVE)
+                {
+                    projectTotal++
+                }
             }
         }
         
-        [projectInstanceList: projectList, projectInstanceTotal: projectList.count()]
+        [projectInstanceList: projectList, projectInstanceTotal: projectTotal]
     }
 
     def create = {
@@ -69,7 +84,11 @@ class ProjectController {
                     new ProjectRole(person:createProjectCmd.person, 
                                     project:projectInstance, 
                                     roleType:pi,
-                                    access:ProjectAccess.READ_WRITE).save(flush:true)
+                                    access:ProjectAccess.READ_WRITE)
+                if (projectRole.save(flush:true))
+                {
+                    permissionUtilsService.setPermissions(projectRole)
+                }
                 
                 if (SecurityUtils.getSubject().hasRole("SysAdmin"))
                 {
@@ -84,9 +103,15 @@ class ProjectController {
             }
             else 
             {
+                log.error("Error saving projectInstance: " + projectInstance.errors)
 //                    render(view: "create", model: [projectInstance: projectInstance])
-                render(view: "create", model: [createProjectCmd:createProjectCmd])
+                render(view: "create", model: [projectInstance:projectInstance, createProjectCmd:createProjectCmd])
             }
+        }
+        else
+        {
+            log.error("Create project command invalid.")
+            render(view: "create", model: [createProjectCmd:createProjectCmd])
         }
     }
 
@@ -199,19 +224,6 @@ class ProjectController {
             subject "${message(code: 'mail.request.project.activate.subject', args: [project.name])}"     
             body "${message(code: 'mail.request.project.activate.body', args: [project.name, createLink(action:'show', id:project.id, absolute:true)])}" 
         }
-    }
-    
-    def testExample = 
-    {
-        // This “data” object in this data model is the data that drives this Jasper report (i.e. what appears in the
-        // detail band)
-        List projects = Project.list();
-
-        chain(controller:'jasper', action:'index', model:[data:projects], params:params)
-
-        // here jasper is the plugin provided controller.
-        // and index is the default method in jasper controller.
-        // we need to pass the data and the params.
     }
 }
 

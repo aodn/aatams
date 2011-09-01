@@ -34,7 +34,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="name"><g:message code="installationStation.name.label" default="Name" /></label>
+                                  <label class="compulsory" for="name"><g:message code="installationStation.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'name', 'errors')}">
                                     <g:textField name="name" value="${installationStationInstance?.name}" />
@@ -54,17 +54,19 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="location"><g:message code="installationStation.location.label" default="Location" /></label>
+                                  <label class="compulsory" for="location"><g:message code="installationStation.location.label" default="Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'location', 'errors')}">
-                                    <g:textField name="location" value="${installationStationInstance?.location}" />
+                                    <g:point name="location"
+                                             value="${installationStationInstance?.location}"
+                                             editable="${true}"/>
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="installation"><g:message code="installationStation.installation.label" default="Installation" /></label>
+                                  <label class="compulsory" for="installation"><g:message code="installationStation.installation.label" default="Installation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'installation', 'errors')}">
                                     <g:select name="installation.id" from="${candidateInstallations}" optionKey="id" value="${installationStationInstance?.installation?.id}"  />
@@ -74,7 +76,7 @@
 <!--                        
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="receivers"><g:message code="installationStation.receivers.label" default="Receivers" /></label>
+                                  <label class="compulsory" for="receivers"><g:message code="installationStation.receivers.label" default="Receivers" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'receivers', 'errors')}">
                                     

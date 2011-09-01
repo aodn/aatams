@@ -37,9 +37,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownload.downloadDate.label" default="Download Date" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDownload.downloadDateTime.label" default="Download Date" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${receiverDownloadInstance?.downloadDate}" /></td>
+                            <td valign="top" class="value"><joda:format value="${receiverDownloadInstance?.downloadDateTime}" /></td>
                             
                         </tr>
                     

@@ -41,7 +41,7 @@
           </li>
       </ul>
 
-      <h3>${message(code: 'navigationMenu.section.installation.label', default: 'Installation Data')} </h3>
+      <h3>${message(code: 'navigationMenu.section.installation.label', default: 'Location Data')} </h3>
       <ul>
         <g:each var="c" in="${installationDataControllers}">
           
@@ -96,7 +96,18 @@
       </ul>
       
       <h3>${message(code: 'navigationMenu.section.fieldSheets.label', default: 'Field Sheets')} </h3>
-
+      <ul/></ul>
+    
+      <h3>${message(code: 'navigationMenu.section.help.label', default: 'Help')} </h3>
+      <ul>
+        <g:each var="c" in="${helpControllers}">
+          
+          <li class="helpControllers">
+            <g:link controller="${c.key}">${c.value}</g:link>
+          </li>
+        </g:each>
+      </ul>
+      
       <%--
       <h3>${message(code: 'navigationMenu.section.admin.label', default: 'Administration')} </h3>
       <ul>

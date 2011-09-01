@@ -28,16 +28,16 @@
 
                             <g:sortableColumn property="name" title="${message(code: 'project.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn property="organisations" title="${message(code: 'project.organisations.label', default: 'Organisations')}" />
+                            <th><g:message code="project.organisations.label" default="Organisations" />
 
-                            <g:sortableColumn property="principalInvestigator" title="${message(code: 'project.principalInvestigator.label', default: 'Principal Investigator')}" />
+                            <th><g:message code="project.principalInvestigators.label" default="Principal Investigator" />
                         
-                            <g:sortableColumn property="people" title="${message(code: 'project.people.label', default: 'People')}" />
+                            <th><g:message code="project.people.label" default="People" />
 
                             <shiro:hasRole name="SysAdmin">
                               <g:sortableColumn property="status" title="${message(code: 'project.status.label', default: 'Status')}" />
                               
-                              <g:sortableColumn property="requester" title="${message(code: 'project.requester.label', default: 'Requester')}" />
+                              <g:sortableColumn property="requestingUser" title="${message(code: 'project.requester.label', default: 'Requester')}" />
                             </shiro:hasRole>
                             
                         </tr>
@@ -46,7 +46,7 @@
                     <g:each in="${projectInstanceList}" status="i" var="projectInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td class="rowButton"><g:link class="show" action="show" id="${projectInstance.id}"></g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${projectInstance.id}">.</g:link></td>
                     
                             <td>${fieldValue(bean: projectInstance, field: "name")}</td>
                         
@@ -69,13 +69,7 @@
             </div>
             <div class="paginateButtons">
                 <g:paginate total="${projectInstanceTotal}" />
-                <g:jasperReport controller="project"
-                                jasper="projects" 
-                                action="testExample"
-                                format="PDF,HTML,XML,CSV" 
-                                name="All Projects" />
             </div>
-            
         </div>
     </body>
 </html>

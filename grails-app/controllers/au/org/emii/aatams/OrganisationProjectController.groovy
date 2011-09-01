@@ -1,10 +1,10 @@
 package au.org.emii.aatams
 
-import grails.converters.deep.JSON
+import grails.converters.JSON
 
 class OrganisationProjectController {
 
-    static allowedMethods = [saveOrganisationToProject: "POST", save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [saveOrganisationToProject: "POST", save: "POST", update: "POST", delete: ["POST", "GET"]]
 
     def index = {
         redirect(action: "list", params: params)
@@ -25,10 +25,17 @@ class OrganisationProjectController {
         def organisationProjectInstance = new OrganisationProject(params)
         if (organisationProjectInstance.save(flush: true)) 
         {
-            render organisationProjectInstance as JSON
+            flash.message = "${message(code: 'default.added.message', args: [message(code: 'organisation.label', default: 'Organisation'), \
+                                                                             organisationProjectInstance.organisation, \
+                                                                             message(code: 'project.label', default: 'Project'), \
+                                                                             organisationProjectInstance.project])}"
+                                                                 
+            render ([instance:organisationProjectInstance, message:flash] as JSON)
         }
-        else {
-            render(view: "create", model: [organisationProjectInstance: organisationProjectInstance])
+        else 
+        {
+            log.error(organisationProjectInstance.errors)
+            render ([errors:organisationProjectInstance.errors] as JSON)
         }
     }
     
@@ -69,7 +76,8 @@ class OrganisationProjectController {
             organisationProjectInstance.properties = params
             if (!organisationProjectInstance.hasErrors() && organisationProjectInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), organisationProjectInstance.id])}"
-                redirect(action: "show", id: organisationProjectInstance.id)
+                def projectId = organisationProjectInstance?.project?.id
+                redirect(controller: "project", action: "edit", id: projectId, params: [projectId:projectId])
             }
             else {
                 render(view: "edit", model: [organisationProjectInstance: organisationProjectInstance])
@@ -87,12 +95,13 @@ class OrganisationProjectController {
             try {
                 organisationProjectInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), params.id])}"
-                redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), params.id])}"
-                redirect(action: "show", id: params.id)
             }
+
+            def projectId = organisationProjectInstance?.project?.id
+            redirect(controller: "project", action: "edit", id: projectId, params: [projectId:projectId])
         }
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), params.id])}"

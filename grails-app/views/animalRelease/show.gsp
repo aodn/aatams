@@ -41,6 +41,13 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="animalRelease.animal.sex.label" default="Sex" /></td>
+                            
+                            <td valign="top" class="value">${animalReleaseInstance?.animal?.sex}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.captureLocality.label" default="Capture Locality" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "captureLocality")}</td>
@@ -50,14 +57,17 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "captureLocation")}</td>
+                            <td valign="top" class="value">
+                              <g:point name="captureLocation" 
+                                       value="${animalReleaseInstance?.captureLocation}"/>
+                            </td>
                             
                         </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${animalReleaseInstance?.captureDateTime}" /></td>
+                            <td valign="top" class="value"><joda:format value="${animalReleaseInstance?.captureDateTime}" /></td>
                             
                         </tr>
                     
@@ -77,6 +87,7 @@
                               <table class="nested">
                                 <thead>
                                   <tr>
+                                    <th/>
                                     <th>Date/Time</th>
                                     <th>Tag</th>
                                     <th>Placement</th>
@@ -88,7 +99,8 @@
                                   <g:each in="${animalReleaseInstance?.surgeries?}" var="s">
                                     <tr>
 
-                                      <td valign="top" class="value">${s?.timestamp?.encodeAsHTML()}</td>
+                                      <td class="rowButton"><g:link class="show" controller="surgery" action="show" id="${s?.id}">.</g:link></td>
+                                      <td valign="top" class="value"><joda:format value="${s?.timestamp}" /></td>
                                       <td valign="top" class="value">
                                         <g:link controller="tag" action="show" id="${s?.tag?.id}">${s?.tag}</g:link>
                                       </td>
@@ -116,6 +128,7 @@
                               <table class="nested">
                                 <thead>
                                   <tr>
+                                    <th/>
                                     <th>Type</th>
                                     <th>Value</th>
                                     <th>Units</th>
@@ -127,6 +140,12 @@
                                   <g:each in="${animalReleaseInstance?.measurements?}" var="m">
                                     <tr>
 
+                                      <td class="rowButton">
+                                        <g:link class="show" 
+                                                controller="animalMeasurement" 
+                                                action="show"
+                                                id="${m?.id}">.</g:link>
+                                      </td>
                                       <td valign="top" class="value">${m?.type?.type}</td>
                                       <td valign="top" class="value">${m?.value}</td>
                                       <td valign="top" class="value">${m?.unit?.unit}</td>
@@ -144,13 +163,6 @@
                         </tr>
                         
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="animalRelease.animal.sex.label" default="Sex" /></td>
-                            
-                            <td valign="top" class="value">${animalReleaseInstance?.animal?.sex}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.releaseLocality.label" default="Release Locality" /></td>
                             
                             <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "releaseLocality")}</td>
@@ -160,14 +172,17 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "scrambledReleaseLocation")}</td>
+                            <td valign="top" class="value">
+                              <g:point name="scrambledReleaseLocation" 
+                                       value="${animalReleaseInstance?.scrambledReleaseLocation}"/>
+                            </td>
                             
                         </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${animalReleaseInstance?.releaseDateTime}" /></td>
+                            <td valign="top" class="value"><joda:format date="${animalReleaseInstance?.releaseDateTime}" /></td>
                             
                         </tr>
                     

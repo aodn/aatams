@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'animalMeasurement.label', default: 'AnimalMeasurement')}" />
+        <g:set var="projectId" value="${animalMeasurementInstance?.release?.project?.id}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -33,7 +34,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="type"><g:message code="animalMeasurement.type.label" default="Type" /></label>
+                                  <label class="compulsory" for="type"><g:message code="animalMeasurement.type.label" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'type', 'errors')}">
                                     <g:select name="type.id" from="${au.org.emii.aatams.AnimalMeasurementType.list()}" optionKey="id" value="${animalMeasurementInstance?.type?.id}"  />
@@ -43,17 +44,17 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="value"><g:message code="animalMeasurement.value.label" default="Value" /></label>
+                                  <label class="compulsory" for="value"><g:message code="animalMeasurement.value.label" default="Value" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'value', 'errors')}">
-                                    <g:textField name="value" value="${fieldValue(bean: animalMeasurementInstance, field: 'value')}" />
+                                    <g:textField name="value" value="${animalMeasurementInstance?.value}" />
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="unit"><g:message code="animalMeasurement.unit.label" default="Unit" /></label>
+                                  <label class="compulsory" for="unit"><g:message code="animalMeasurement.unit.label" default="Unit" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'unit', 'errors')}">
                                     <g:select name="unit.id" from="${au.org.emii.aatams.MeasurementUnit.list()}" optionKey="id" value="${animalMeasurementInstance?.unit?.id}"  />
@@ -63,7 +64,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="estimate"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></label>
+                                  <label class="compulsory" for="estimate"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'estimate', 'errors')}">
                                     <g:checkBox name="estimate" value="${animalMeasurementInstance?.estimate}" />
@@ -85,8 +86,11 @@
                     </table>
                 </div>
                 <div class="buttons">
-                    <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-                    <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    <g:hiddenField name="projectId" value="${projectId}" />
+                    <shiro:hasPermission permission="project:${projectId}:write">
+                      <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+                      <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    </shiro:hasPermission>
                 </div>
             </g:form>
         </div>

@@ -15,7 +15,31 @@ class PersonController {
 
     def list = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [personInstanceList: Person.list(params), personInstanceTotal: Person.count()]
+        
+        def personTotal = Person.count()
+        def personList = Person.list(params)
+        
+        if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
+        {
+            // Filter out non-ACTIVE people (only sys admin should see these).
+            personList = personList.grep
+            {
+                return (it.status == EntityStatus.ACTIVE)
+            }
+            
+            // Only count ACTIVE people..
+            // TODO: why doesn't count({}) work?
+            personTotal = 0
+            Person.list().each
+            {
+                if (it.status == EntityStatus.ACTIVE)
+                {
+                    personTotal++
+                }
+            }
+        }
+        
+        [personInstanceList: personList, personInstanceTotal: personTotal]
     }
 
     def create = {
@@ -34,8 +58,12 @@ class PersonController {
             
             // If a PI then set Person's status to ACTIVE, otherwise,
             // set to PENDING.
+            // (Use "personWriteAny" permission for now, as my understanding
+            // of shiro permission wildcards was back-to-front, so the commented
+            // out way of doing things doesn't work.
             if (   !SecurityUtils.getSubject().isAuthenticated()
-                || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
+//                || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
+                || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission())) 
             {
                 personInstance.status = EntityStatus.PENDING
             }
@@ -47,7 +75,8 @@ class PersonController {
             if (personInstance.save(flush: true)) 
             {
                 if (   !SecurityUtils.getSubject().isAuthenticated()
-                    || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
+//                    || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
+                    || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission())) 
                 {
                     if (personInstance.status == EntityStatus.PENDING)
                     {
@@ -75,12 +104,17 @@ class PersonController {
 
     def show = {
         def personInstance = Person.get(params.id)
-        if (!personInstance) {
+        if (!personInstance) 
+        {
+            log.debug("Person not found, id: " + params.id)
+            
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
             redirect(action: "list")
         }
         else 
         {
+            log.debug("Person found, id: " + params.id)
+            
             def canEdit = false
 
             if (!SecurityUtils.subject.isAuthenticated())
@@ -92,7 +126,7 @@ class PersonController {
                 canEdit = true
             }
             // A person can edit their own record
-            else if (personInstance == Person.findByUsername(SecurityUtils.subject.principal))
+            else if (personInstance.id == Person.findByUsername(SecurityUtils.subject.principal).id)
             {
                 canEdit = true
             }

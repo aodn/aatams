@@ -36,7 +36,7 @@
                             
                             <g:sortableColumn property="organisation" title="${message(code: 'person.organisation.label', default: 'Organisation')}" />
 
-                            <g:sortableColumn property="projects" title="${message(code: 'person.projects.label', default: 'Projects')}" />
+                            <th><g:message code="person.projects.label" default="Projects" />
                             
                             <shiro:hasRole name="SysAdmin">
                               <g:sortableColumn property="status" title="${message(code: 'person.status.label', default: 'Status')}" />
@@ -48,7 +48,7 @@
                     <g:each in="${personInstanceList}" status="i" var="personInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td class="rowButton"><g:link class="show" action="show" id="${personInstance.id}"></g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${personInstance.id}">.</g:link></td>
                     
                             <td>${fieldValue(bean: personInstance, field: "name")}</td>
                         

@@ -22,7 +22,7 @@ class Detection
     static transients = ['project', 'scrambledLocation']
     
     /**
-     * This is modelled as a one-to-many relationship, due to the fact that tags
+     * This is modelled as a many-to-many relationship, due to the fact that tags
      * transmit only code map and ping ID which is not guaranteed to be unique
      * between manufacturers, although in reality the relationship will *usually*
      * be one-to-one.
@@ -30,7 +30,13 @@ class Detection
      * Additionally, the relationship is modelled via surgery, due to the fact
      * that a tag could potentially be reused on several animals.
      */
-    static hasMany = [surgeries:Surgery]
+    // Note: initialise with empty list so that detectionSurgeries.isEmpty()
+    // returns true (I thought that the initialisation should happen when save()
+    // is called but apparently not.
+    List<DetectionSurgery> detectionSurgeries = new ArrayList<DetectionSurgery>()
+    static hasMany = [detectionSurgeries:DetectionSurgery]
+    
+    String receiverName;
     
     /**
      * Station name, as recorded in VUE database (this should match 
@@ -38,6 +44,11 @@ class Detection
      * recorded here also for completeness).
      */
     String stationName;
+    
+    /**
+     * Record the actual ID transmitted by the tag.
+     */
+    String transmitterId;
     
     /**
      * May be different (as with station name above).
@@ -61,6 +72,11 @@ class Detection
         location(nullable:true)
     }
     
+    static mapping =
+    {
+        timestamp index:'timestamp_index'
+    }
+    
     String toString()
     {
         return timestamp.toString() + " " + String.valueOf(receiverDeployment?.receiver)
@@ -78,5 +94,18 @@ class Detection
     Point getScrambledLocation()
     {
         return GeometryUtils.scrambleLocation(location)
+    }
+    
+    boolean similar(other)
+    {
+        return \
+           (timestamp == other?.timestamp) \
+        && (receiverDeployment.id == other?.receiverDeployment.id) \
+        && (receiverName == other?.receiverName) \
+        && (stationName == other?.stationName) \
+        && (transmitterId == other?.transmitterId) \
+        && (transmitterName == other?.transmitterName) \
+        && (transmitterSerialNumber == other?.transmitterSerialNumber) \
+        && (location == other?.location)
     }
 }

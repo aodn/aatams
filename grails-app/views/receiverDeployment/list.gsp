@@ -34,7 +34,7 @@
                         
                             <g:sortableColumn property="project" title="${message(code: 'receiverDeployment.project.label', default: 'Project')}" />
                         
-                            <g:sortableColumn property="deploymentDate" title="${message(code: 'receiverDeployment.deploymentDate.label', default: 'Deployment Date')}" />
+                            <g:sortableColumn property="deploymentDateTime" title="${message(code: 'receiverDeployment.deploymentDateTime.label', default: 'Deployment Date')}" />
                         
                             <g:sortableColumn property="recoveryDate" title="${message(code: 'receiverDeployment.recoveryDate.label', default: 'Recovery Date')}" />
                         
@@ -44,7 +44,7 @@
                     <g:each in="${receiverDeploymentInstanceList}" status="i" var="receiverDeploymentInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td class="rowButton"><g:link class="show" action="show" id="${receiverDeploymentInstance.id}"></g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${receiverDeploymentInstance.id}">.</g:link></td>
                     
                             <td><g:link controller="installation" action="show" id="${receiverDeploymentInstance?.station?.installation?.id}">${receiverDeploymentInstance?.station?.installation}</g:link></td>
 
@@ -54,7 +54,7 @@
                         
                             <td><g:link controller="project" action="show" id="${receiverDeploymentInstance?.station?.installation?.project?.id}">${receiverDeploymentInstance?.station?.installation?.project}</g:link></td>
                         
-                            <td><g:formatDate date="${receiverDeploymentInstance.deploymentDate}" /></td>
+                            <td><joda:format value="${receiverDeploymentInstance.deploymentDateTime}" /></td>
                         
                             <td><g:formatDate date="${receiverDeploymentInstance.recoveryDate}" /></td>
                         

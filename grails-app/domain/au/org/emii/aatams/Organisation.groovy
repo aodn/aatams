@@ -5,10 +5,10 @@ import au.org.emii.aatams.util.ListUtils
 class Organisation 
 {
     static hasMany = [organisationProjects:OrganisationProject,
-                      organisationPeople:OrganisationPerson,
-                      receivers:Receiver]
-    
-    static transients = ['projects', 'people']
+                      receivers:Receiver,
+                      people:Person]
+                  
+    static transients = ['projects']
     
     String name
     String department
@@ -26,13 +26,12 @@ class Organisation
         name(blank:false)
         department(blank:false)
         phoneNumber(blank:false)
-        faxNumber()
+        faxNumber(nullable:true)
         streetAddress()
         postalAddress(nullable:true)
         status()    // Default to PENDING
         organisationProjects()
-        organisationPeople()
-        requestingUser(nullable:true)
+        requestingUser(nullable:false)
     }
     
     String toString()
@@ -43,10 +42,5 @@ class Organisation
     String getProjects()
     {
         return ListUtils.fold(organisationProjects, "project")
-    }
-    
-    String getPeople()
-    {
-        return ListUtils.fold(organisationPeople, "person")
     }
 }

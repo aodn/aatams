@@ -1,10 +1,10 @@
 package au.org.emii.aatams
 
-import grails.converters.deep.JSON
+import grails.converters.JSON
 
 class SensorController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
     def index = {
         redirect(action: "list", params: params)
@@ -34,12 +34,14 @@ class SensorController {
         
         if (sensorInstance.save(flush: true)) 
         {
-            render sensorInstance as JSON
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance])}"
+            
+            render ([instance:sensorInstance, message:flash] as JSON)
         }
         else 
         {
             log.error(sensorInstance.errors)
-            render(view: "create", model: [sensorInstance: sensorInstance])
+            render ([errors:sensorInstance.errors] as JSON)
         }
     }
 
@@ -80,7 +82,9 @@ class SensorController {
             sensorInstance.properties = params
             if (!sensorInstance.hasErrors() && sensorInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance.id])}"
-                redirect(action: "show", id: sensorInstance.id)
+                def tagId = sensorInstance?.tag?.id
+                redirect(controller: "tag", action: "edit", id: tagId, params: [projectId:sensorInstance?.project?.id])
+                
             }
             else {
                 render(view: "edit", model: [sensorInstance: sensorInstance])
@@ -90,7 +94,7 @@ class SensorController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'sensor.label', default: 'Sensor'), params.id])}"
             redirect(action: "list")
         }
-    }
+}
 
     def delete = {
         def sensorInstance = Sensor.get(params.id)
@@ -98,12 +102,13 @@ class SensorController {
             try {
                 sensorInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'sensor.label', default: 'Sensor'), params.id])}"
-                redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'sensor.label', default: 'Sensor'), params.id])}"
-                redirect(action: "show", id: params.id)
             }
+            
+            def tagId = sensorInstance?.tag?.id
+            redirect(controller: "tag", action: "edit", id: tagId, params: [projectId:sensorInstance?.project?.id])
         }
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'sensor.label', default: 'Sensor'), params.id])}"

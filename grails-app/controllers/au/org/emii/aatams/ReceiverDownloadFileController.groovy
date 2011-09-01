@@ -1,7 +1,13 @@
 package au.org.emii.aatams
 
-class ReceiverDownloadFileController {
+import org.codehaus.groovy.grails.commons.*
+import org.springframework.web.multipart.MultipartFile
+import org.apache.shiro.SecurityUtils
 
+class ReceiverDownloadFileController 
+{
+    def fileProcessorService
+    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -13,21 +19,86 @@ class ReceiverDownloadFileController {
         [receiverDownloadFileInstanceList: ReceiverDownloadFile.list(params), receiverDownloadFileInstanceTotal: ReceiverDownloadFile.count()]
     }
 
-    def create = {
+    def create = 
+    {
         def receiverDownloadFileInstance = new ReceiverDownloadFile()
         receiverDownloadFileInstance.properties = params
-        return [receiverDownloadFileInstance: receiverDownloadFileInstance]
+        receiverDownloadFileInstance.receiverDownload = ReceiverDownload.get(params.downloadId)
+        
+        return [receiverDownloadFileInstance: receiverDownloadFileInstance, projectId:params.projectId]
     }
 
-    def save = {
-        def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
-        if (receiverDownloadFileInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.id])}"
-            redirect(action: "show", id: receiverDownloadFileInstance.id)
+    def save = 
+    {
+        log.debug("Processing receiver export, params: " + params)
+
+        // Save the file to disk.
+        def fileMap = request.getFileMap()
+        if (fileMap.size() != 1)
+        {
+            // Error.
+            flash.error = "Number of posted files must be exactly one, you posted: " + fileMap.size()
         }
-        else {
-            render(view: "create", model: [receiverDownloadFileInstance: receiverDownloadFileInstance])
+        else
+        {
+            def receiverDownload = ReceiverDownload.get(params.downloadId)
+
+            def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
+            receiverDownloadFileInstance.receiverDownload = receiverDownload
+            receiverDownloadFileInstance.errMsg = ""
+            receiverDownloadFileInstance.importDate = new Date()
+            receiverDownloadFileInstance.status = FileProcessingStatus.PROCESSING
+
+            receiverDownloadFileInstance.requestingUser = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
+            
+            MultipartFile file = (fileMap.values() as List)[0]
+            def path = getPath(receiverDownload)
+            String fullPath = path + File.separator + file.getOriginalFilename()
+
+            receiverDownloadFileInstance.path = fullPath
+            receiverDownloadFileInstance.name = file.getOriginalFilename()
+
+            receiverDownload.addToDownloadFiles(receiverDownloadFileInstance)
+            receiverDownload.save(flush:true, failOnError:true)
+
+            flash.message = "${message(code: 'default.processing.receiverUpload.message')}"
+            
+            // Define this in web thread, as it fails if done async.
+            def downloadFileId = receiverDownloadFileInstance.id
+            def showLink = createLink(action:'show', id:downloadFileId, absolute:true)
+            
+            runAsync
+            {
+                try
+                {
+                    fileProcessorService.process(downloadFileId, 
+                                                 file,
+                                                 showLink)
+                }
+                catch (FileProcessingException e)
+                {
+                    log.error(e)
+                    
+                    receiverDownloadFileInstance.status = FileProcessingStatus.ERROR
+                    receiverDownloadFileInstance.errMsg = e.getMessage()
+                    receiverDownloadFileInstance.save()
+                }
+                catch (Throwable t)
+                {
+                    log.error(t)
+                    
+                    receiverDownloadFileInstance.status = FileProcessingStatus.ERROR
+                    receiverDownloadFileInstance.errMsg = "System Error - Contact eMII" //t.getMessage()
+                    receiverDownloadFileInstance.save()
+                }
+            }
         }
+        
+        // Go back to receiver recovery edit screen.
+        redirect(controller: "receiverRecovery", 
+                 action: "edit", 
+                 id: ReceiverDownload.get(params.downloadId).receiverRecovery?.id,
+                 params:[projectId:params.projectId])
     }
 
     def show = {
@@ -96,5 +167,56 @@ class ReceiverDownloadFileController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), params.id])}"
             redirect(action: "list")
         }
+    }
+    
+    /**
+     * User has chosen to download the actual file.
+     */
+    def download =
+    {
+        def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
+        if (!receiverDownloadFileInstance) 
+        {
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), params.id])}"
+            redirect(action: "list")
+        }
+        else 
+        {
+            def file = new File(receiverDownloadFileInstance.path)    
+            response.setContentType("application/octet-stream")
+            response.setHeader("Content-disposition", "attachment;filename=${file.getName()}")
+
+            response.outputStream << file.newInputStream() // Performing a binary stream copy
+            [receiverDownloadFileInstance: receiverDownloadFileInstance]
+        }
+    }
+    
+    /**
+     *  Files are stored at: 
+     *  
+     *      <basepath>/<project>/<installation>/<station>/<receiver>/<filename>.
+     */
+    String getPath(ReceiverDownload download)
+    {
+        // Save the file to disk.
+//        def path = config.path
+        def path = grailsApplication.config.fileimport.path
+        log.debug("File import config: " + grailsApplication.config.fileimport)
+        if (!path.endsWith(File.separator))
+        {
+            path = path + File.separator
+        }
+        
+        ReceiverRecovery recovery = download.receiverRecovery
+        ReceiverDeployment deployment = recovery.deployment
+        Receiver receiver = deployment.receiver
+        InstallationStation station = download.receiverRecovery.deployment.station
+        Installation installation = station.installation
+        Project project = installation.project
+        
+        path += project.name + File.separator
+        path += installation.name + File.separator
+        path += station.name + File.separator
+        path += receiver.codeName
     }
 }

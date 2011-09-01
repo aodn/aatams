@@ -1,8 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<!DOCTYPE html>
 <html >
   <head>
     <title><g:layoutTitle default="${message(code: 'default.application.title', default: 'AATAMS')}" /></title>
     <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
+
+    <script type="text/javascript" src="${resource(dir:'js',file:'utils.js')}"></script>
 
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery-1.4.4.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery-ui-1.8.10.custom.min.js')}"></script>
@@ -12,13 +15,13 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.selectlist.js')}"></script>
 <!--    <script type="text/javascript" src="${resource(dir:'js',file:'jquery-custom-file-input.js')}"></script>-->
 
-    <script type="text/javascript" src="${resource(dir:'js',file:'addmeasurementtoanimalrelease.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'addorganisationtoproject.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'addpersontoproject.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'addsensortotag.js')}"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'addsurgerytoanimalrelease.js')}"></script>
 <!--    <script type="text/javascript" src="${resource(dir:'js',file:'fileupload.js')}"></script>-->
 
+    <g:javascript src="asAbove.js"/>
+    
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>
 <!--    <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui-lightness/jquery-ui-1.8.10.custom.css')}"/>-->
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'custom-theme/jquery-ui-1.8.13.custom.css')}"/>
@@ -41,15 +44,16 @@
     });
     </g:if>
     </script>
+    
+    <script>
+      $(document).ready(function()
+      {
+          // Set focus to first visible element.
+          $("input:text:visible:first").focus();   
+      });
+    </script>
 
     <g:layoutHead />
-<!--    <g:javascript library="application" />-->
-    <g:javascript library="jquery" />
-    <g:javascript library="main_extras" />
-
-    <g:setProvider library="jquery"/>
-
-
 
     <script type="text/javascript">
 

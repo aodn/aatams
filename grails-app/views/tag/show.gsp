@@ -69,6 +69,12 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="tag.expectedLifeTimeDays.label" default="Expected Life Time (days)" /></td>
+        
+                            <td valign="top" class="value">${tagInstance?.expectedLifeTimeDays}</td>
+                        </tr>
+
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="tag.status.label" default="Status" /></td>
                             
                             <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${tagInstance?.status?.id}">${tagInstance?.status?.encodeAsHTML()}</g:link></td>
@@ -82,7 +88,9 @@
                               <table class="nested">
                                 <thead>
                                   <tr>
+                                    <th></th>  <!-- Link to sensor/show -->
                                     <th>Tag Type</th>
+                                    <th>Code Map</th>
                                     <th>Ping Code</th>
                                     <th>Slope</th>
                                     <th>Intercept</th>
@@ -93,9 +101,11 @@
                                 <tbody>
                                   <g:each in="${tagInstance.sensors}" var="s">
                                     <tr>
-                                      <td>
-                                        <g:link controller="sensor" action="show" id="${s.id}">${s?.transmitterType}</g:link>
+                                      <td class="rowButton">
+                                        <g:link class="show" controller="sensor" action="show" id="${s?.id}"></g:link>
                                       </td>
+                                      <td>${s?.transmitterType}</td>
+                                      <td>${s?.codeMap}</td>
                                       <td>${s?.pingCode}</td>
                                       <td>${s?.slope}</td>
                                       <td>${s?.intercept}</td>

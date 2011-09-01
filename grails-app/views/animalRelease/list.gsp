@@ -46,7 +46,7 @@
                     <g:each in="${animalReleaseInstanceList}" status="i" var="animalReleaseInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td class="rowButton"><g:link class="show" action="show" id="${animalReleaseInstance.id}"></g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${animalReleaseInstance.id}">.</g:link></td>
                     
                             <td>
                               <g:each var="surgery" in="${animalReleaseInstance.surgeries}">
@@ -56,12 +56,14 @@
                         
                             <td>${fieldValue(bean: animalReleaseInstance, field: "animal.species")}</td>
 
-                            <td><g:formatDate date="${animalReleaseInstance.releaseDateTime}" /></td>
+                            <td><joda:format value="${animalReleaseInstance.releaseDateTime}" /></td>
                         
                             <td>${fieldValue(bean: animalReleaseInstance, field: "releaseLocality")}</td>
                         
-                            <td>${fieldValue(bean: animalReleaseInstance, field: "scrambledReleaseLocation")}</td>
-                        
+                            <td>
+                              <g:point name="scrambledReleaseLocation" 
+                                       value="${animalReleaseInstance?.scrambledReleaseLocation}"/>
+                            </td>
                             <td><g:link controller="project" action="show" id="${animalReleaseInstance.project.id}">${animalReleaseInstance.project}</g:link></td>
                         
                             <td><g:formatDate date="${animalReleaseInstance.embargoDate}" /></td>

@@ -33,17 +33,19 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="timestamp"><g:message code="surgery.timestamp.label" default="Timestamp" /></label>
+                                  <label class="compulsory" for="timestamp"><g:message code="surgery.timestamp.label" default="Timestamp" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'timestamp', 'errors')}">
-                                    <g:datePicker name="timestamp" precision="day" value="${surgeryInstance?.timestamp}"  />
+                                    <joda:dateTimePicker name="timestamp" 
+                                                         value="${surgeryInstance?.timestamp}"
+                                                         useZone="true"/>
 
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="release"><g:message code="surgery.release.label" default="Release" /></label>
+                                  <label class="compulsory" for="release"><g:message code="surgery.release.label" default="Release" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'release', 'errors')}">
                                     <g:select name="release.id" from="${au.org.emii.aatams.AnimalRelease.list()}" optionKey="id" value="${surgeryInstance?.release?.id}"  />
@@ -53,7 +55,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="tag"><g:message code="surgery.tag.label" default="Tag" /></label>
+                                  <label class="compulsory" for="tag"><g:message code="surgery.tag.label" default="Tag" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'tag', 'errors')}">
                                     <g:select name="tag.id" from="${au.org.emii.aatams.Tag.list()}" optionKey="id" value="${surgeryInstance?.tag?.id}"  />
@@ -63,7 +65,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="treatmentType"><g:message code="surgery.treatmentType.label" default="Treatment Type" /></label>
+                                  <label class="compulsory" for="treatmentType"><g:message code="surgery.treatmentType.label" default="Treatment Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'treatmentType', 'errors')}">
                                     <g:select name="treatmentType.id" from="${au.org.emii.aatams.SurgeryTreatmentType.list()}" optionKey="id" value="${surgeryInstance?.treatmentType?.id}"  />
@@ -83,7 +85,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label for="type"><g:message code="surgery.type.label" default="Type" /></label>
+                                  <label class="compulsory" for="type"><g:message code="surgery.type.label" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'type', 'errors')}">
                                     <g:select name="type.id" from="${au.org.emii.aatams.SurgeryType.list()}" optionKey="id" value="${surgeryInstance?.type?.id}"  />
@@ -95,8 +97,11 @@
                     </table>
                 </div>
                 <div class="buttons">
-                    <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
-                    <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    <g:hiddenField name="projectId" value="${surgeryInstance?.release?.project?.id}" />
+                    <shiro:hasPermission permission="project:${surgeryInstance?.release?.project?.id}:write">
+                      <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+                      <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
+                    </shiro:hasPermission>
                 </div>
             </g:form>
         </div>

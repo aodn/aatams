@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile')}" />
+        
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -23,14 +24,16 @@
                 <g:renderErrors bean="${receiverDownloadFileInstance}" as="list" />
             </div>
             </g:hasErrors>
-            <g:form action="save" >
+            <g:uploadForm action="save" >
+                <g:hiddenField name="downloadId" value="${receiverDownloadFileInstance?.receiverDownload?.id}" />
+                <g:hiddenField name="projectId" value="${projectId}" />
                 <div class="dialog">
                     <table>
                         <tbody>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="type"><g:message code="receiverDownloadFile.type.label" default="Type" /></label>
+                                    <label class="compulsory" for="type"><g:message code="receiverDownloadFile.type.label" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'type', 'errors')}">
                                     <g:select name="type" from="${au.org.emii.aatams.ReceiverDownloadFileType?.values()}" keys="${au.org.emii.aatams.ReceiverDownloadFileType?.values()*.name()}" value="${receiverDownloadFileInstance?.type?.name()}"  />
@@ -40,11 +43,10 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="path"><g:message code="receiverDownloadFile.path.label" default="Path" /></label>
+                                    <label class="compulsory" for="path"><g:message code="receiverDownloadFile.path.label" default="Path" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'path', 'errors')}">
-                                    <g:textField name="path" value="${receiverDownloadFileInstance?.path}" />
-
+                                    <input type="file" name="path" accept="*" />
                                 </td>
                             </tr>
                         
@@ -54,7 +56,7 @@
                 <div class="buttons">
                     <span class="button"><g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                 </div>
-            </g:form>
+            </g:uploadForm>
         </div>
     </body>
 </html>

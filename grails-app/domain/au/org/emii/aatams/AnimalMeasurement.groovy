@@ -23,4 +23,14 @@ class AnimalMeasurement
         estimate()
         comments(nullable:true)
     }
+    
+    static mapping =
+    {
+        comments type: 'text'
+    }
+    
+    String toString()
+    {
+        return String.valueOf(type) + ":" + value + " (" + unit + ")"
+    }
 }

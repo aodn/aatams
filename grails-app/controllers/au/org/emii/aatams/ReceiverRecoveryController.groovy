@@ -1,13 +1,78 @@
 package au.org.emii.aatams
 
-class ReceiverRecoveryController {
+import org.joda.time.*
+
+class ReceiverRecoveryController 
+{
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def fileProcessorService
+    def candidateEntitiesService
     
     def index = {
         redirect(action: "list", params: params)
+    }
+    
+    def passesFilter(it, params)
+    {
+        // Filter by project (if specified).
+        def projectId = params.filter?.project?.id
+        if (projectId)
+        {
+            projectId = Integer.valueOf(projectId)  // Not sure why it's a String initially?
+            
+            if (it.station?.installation?.project?.id != projectId)
+            {
+                // Wrong project, filter out.
+                return false
+            }
+        }
+
+        // Filter by recovery status (if specified).
+        def unrecoveredOnly = params.filter?.unrecoveredOnly
+        if (unrecoveredOnly && it.recovery)
+        {
+            // This deployment has been recovered, filter out.
+            return false
+        }
+
+        return true
+    }
+    
+    def filter = 
+    {
+        log.debug("Filter parameters: " + params.filter)
+
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+
+        // We actually want to display a list of deployments (some with and some
+        // without associated recoveries).
+        // TODO: sort(hasRecovery, date)
+        def receiverDeploymentList = ReceiverDeployment.list(params)
+
+        // Filter...
+        receiverDeploymentList = receiverDeploymentList.grep
+        {
+            return passesFilter(it, params)
+        }
+        
+        // Determine total matching deployments.
+        def receiverDeploymentInstanceTotal = 0
+        ReceiverDeployment.list().each
+        {
+            if (passesFilter(it, params))
+            {
+                receiverDeploymentInstanceTotal++
+            }
+        }
+        
+        render(view:"list", model:
+        [receiverDeploymentInstanceList: receiverDeploymentList, 
+         receiverDeploymentInstanceTotal: receiverDeploymentInstanceTotal,
+         readableProjects:candidateEntitiesService.readableProjects(),
+         selectedProjectId:params.filter?.project?.id,
+         unrecoveredOnly:params.filter?.unrecoveredOnly])
+        
     }
 
     def list = {
@@ -19,7 +84,9 @@ class ReceiverRecoveryController {
         // TODO: sort(hasRecovery, date)
         def receiverDeploymentList = ReceiverDeployment.list(params)
                                    
-        [receiverDeploymentInstanceList: receiverDeploymentList, receiverDeploymentInstanceTotal: ReceiverDeployment.count()]
+        [receiverDeploymentInstanceList: receiverDeploymentList, 
+         receiverDeploymentInstanceTotal: ReceiverDeployment.count(),
+         readableProjects:candidateEntitiesService.readableProjects()]
     }
 
     def create = 
@@ -42,37 +109,27 @@ class ReceiverRecoveryController {
         receiverRecoveryInstance.deployment = deployment
 
         // Set the receiver's status to that of the recovery's.
-        deployment.receiver.status = receiverRecoveryInstance.status
-        deployment.receiver.save(flush: true)
+        deployment?.receiver?.status = receiverRecoveryInstance.status
+        deployment?.receiver?.save(flush: true)
         
-        deployment.recovery = receiverRecoveryInstance
+        deployment?.recovery = receiverRecoveryInstance
         
-        if (deployment.save(flush: true)) 
-        {
-            // Create a new receiver download an associate it with the recovery
-            // TODO: may need some extra controls in view to populate download 
-            // fields.
-            ReceiverDownload download = 
-                new ReceiverDownload()
-                
-            download.receiverRecovery = receiverRecoveryInstance
-            download.downloadDate = new Date()
-            download.save(flush:true, failOnErrors:true)
-            assert(download != null): "download cannot be null"
-            
-            def fileMap = request.getFileMap()
-            
-            for (e in fileMap)
-            {
-                log.debug("key: " + e.key)
-                
-                // Kick off processing here.
-//                runAsync
-//                {
-                    fileProcessorService.process(download, e.value)
-//                }
-            }
+        // Create a new receiver download an associate it with the recovery
+        // TODO: may need some extra controls in view to populate download 
+        // fields.
+        ReceiverDownload download = 
+            new ReceiverDownload()
 
+        download.receiverRecovery = receiverRecoveryInstance
+        download.downloadDateTime = new DateTime()
+//        download.save(flush:true, failOnErrors:true)
+        
+        deployment?.recovery?.download = download
+        
+//        assert(download != null): "download cannot be null"
+
+        if (deployment?.save(flush: true)) 
+        {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.id])}"
             redirect(action: "show", id: receiverRecoveryInstance.id)
         }
@@ -133,7 +190,12 @@ class ReceiverRecoveryController {
     def delete = {
         def receiverRecoveryInstance = ReceiverRecovery.get(params.id)
         if (receiverRecoveryInstance) {
-            try {
+            try 
+            {
+                def deployment = receiverRecoveryInstance.deployment
+                deployment.recovery = null
+                deployment.save()
+                
                 receiverRecoveryInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), params.id])}"
                 redirect(action: "list")

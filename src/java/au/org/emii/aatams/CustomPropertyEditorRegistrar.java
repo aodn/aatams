@@ -9,5 +9,8 @@ public class CustomPropertyEditorRegistrar implements PropertyEditorRegistrar
     {
         registry.registerCustomEditor(com.vividsolutions.jts.geom.Point.class, 
                                       new PointEditor());
+        
+//        registry.registerCustomEditor(org.joda.time.DateTime.class,
+//                                      new DateTimeEditor());
     }
 }

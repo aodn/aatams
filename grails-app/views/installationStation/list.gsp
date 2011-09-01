@@ -42,13 +42,16 @@
                     <g:each in="${installationStationInstanceList}" status="i" var="installationStationInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td class="rowButton"><g:link class="show" action="show" id="${installationStationInstance.id}"></g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${installationStationInstance.id}">.</g:link></td>
                     
                             <td>${fieldValue(bean: installationStationInstance, field: "name")}</td>
                         
                             <td>${fieldValue(bean: installationStationInstance, field: "curtainPosition")}</td>
                         
-                            <td>${fieldValue(bean: installationStationInstance, field: "scrambledLocation")}</td>
+                            <td>
+                              <g:point name="scrambledLocation" 
+                                       value="${installationStationInstance?.scrambledLocation}"/>
+                            </td>
                         
                             <td><g:link controller="installation" action="show" id="${installationStationInstance?.installation?.id}">${fieldValue(bean: installationStationInstance?.installation, field: "name")}</g:link></td>
 

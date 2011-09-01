@@ -35,13 +35,20 @@
                             <td valign="top" class="name"><g:message code="project.organisationProjects.label" default="Organisations" /></td>
                             
                             <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${projectInstance.organisationProjects?.organisation}" var="o">
-                                    <li><g:link controller="organisation" action="show" id="${o.id}">${o?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
+                              <table class="nested">
+                                <tbody>
+                                  <g:each in="${projectInstance.organisationProjects}" var="op">
+                                    <tr>
+                                      <td class="rowButton"><g:link class="show" controller="organisationProject" action="show" id="${op?.id}">.</g:link></td>
+                                      <td>
+                                        <g:link controller="organisation" action="show" id="${op?.organisation.id}">${op?.organisation?.encodeAsHTML()}</g:link>
+                                      </td>
+                                    </tr>
+
+                                  </g:each>
+                                </tbody>
+                              </table>
                             </td>
-                            
                         </tr>
                     
                         <tr class="prop">
@@ -55,6 +62,7 @@
                                 <tbody>
                                   <g:each in="${projectInstance?.projectRoles?}" var="p">
                                     <tr>
+                                      <td class="rowButton"><g:link class="show" controller="projectRole" action="show" id="${p?.id}">.</g:link></td>
                                       <td>
                                         <g:link controller="person" action="show" id="${p?.person?.id}">${p?.person?.encodeAsHTML()}</g:link>
                                       </td>
@@ -85,19 +93,6 @@
                           </tr>
                         </shiro:hasRole>
 
-<!--                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="project.devices.label" default="Devices" /></td>
-                            
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${projectInstance.devices}" var="d">
-                                    <li><g:link controller="device" action="show" id="${d.id}">${d?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
-                            
-                        </tr>-->
-                    
                     </tbody>
                 </table>
             </div>

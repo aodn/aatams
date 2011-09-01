@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="unit"><g:message code="measurementUnit.unit.label" default="Unit" /></label>
+                                    <label class="compulsory" for="unit"><g:message code="measurementUnit.unit.label" default="Unit" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: measurementUnitInstance, field: 'unit', 'errors')}">
                                     <g:textField name="unit" value="${measurementUnitInstance?.unit}" />

@@ -45,19 +45,22 @@
                             <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "deploymentNumber")}</td>
                             
                         </tr>
-                    
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDate.label" default="Deployment Date" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${receiverDeploymentInstance?.deploymentDate}" /></td>
+                            <td valign="top" class="value">
+                              <joda:format value="${receiverDeploymentInstance?.deploymentDateTime}" />
+                            </td>
                             
                         </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDeployment.location.label" default="Location" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "scrambledLocation")}</td>
-                            
+                            <td valign="top" class="value">
+                              <g:point name="scrambledLocation"
+                                       value="${receiverDeploymentInstance?.scrambledLocation}"/>
+                            </td>
                         </tr>
                     
                         <tr class="prop">

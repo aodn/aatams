@@ -2,65 +2,98 @@ package au.org.emii.aatams
 
 import org.codehaus.groovy.grails.commons.*
 import org.springframework.web.multipart.MultipartFile
+import org.codehaus.groovy.grails.commons.GrailsApplication
 
-class FileProcessorService extends AbstractFileProcessorService
+class FileProcessorService
 {
     static transactional = true
 
-    def vueFileProcessorService
+    def vueDetectionFileProcessorService
+    def vueEventFileProcessorService
+    
+    def grailsApplication
+    def mailService
 
-    void process(receiverDownload, MultipartFile file)
+//    void process(ReceiverDownloadFile receiverDownloadFile, MultipartFile file)
+    void process(receiverDownloadFileId, MultipartFile file, showLink)
     {
+        log.debug("Processing receiver export, download file ID: " + receiverDownloadFileId)
+        
+//        def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
+//        receiverDownloadFileInstance.receiverDownload = ReceiverDownload.get(params.downloadId)
+//        receiverDownloadFileInstance.errMsg = ""
+//        receiverDownloadFileInstance.importDate = new Date()
+//        receiverDownloadFileInstance.status = FileProcessingStatus.PENDING
+        
+//        receiverDownloadFileInstance.save(flush:true, failOnError:true)
+
 //        ReceiverDownload receiverDownload = ReceiverDownload.get(receiverDownloadId)
-        assert(receiverDownload != null): "receiverDownload cannot be null"
+        
+        def receiverDownloadFile = ReceiverDownloadFile.get(receiverDownloadFileId)
+        assert(receiverDownloadFile != null): "receiverDownloadFile cannot be null"
         
         if (!file.isEmpty())
         {
-            log.info("Processing receiver download, id: " + receiverDownload?.id)
+            def receiverDownload = receiverDownloadFile?.receiverDownload
+            assert (receiverDownload != null): "receiverDownload cannot be null"
+            
+            log.info("Adding file to receiver download, id: " + receiverDownload?.id)
 
             // Save the file to disk.
-            def path = getPath(receiverDownload)
-            String fullPath = path + File.separator + file.getOriginalFilename()
-            log.debug("Saving file, full path: " + fullPath)
-            File outFile = new File(fullPath)
+            def path = receiverDownloadFile.path
+            File outFile = new File(path)
             
             // Create the directory structure first...
             outFile.mkdirs()
             
             // ... then transfer the data.
             file.transferTo(outFile)
-
-            // Create a new ReceiverDownloadFile instance and add it to the given
-            // ReceiverDownload.
-            ReceiverDownloadFile downloadFile = new ReceiverDownloadFile(fullPath, file.getOriginalFilename())
-            downloadFile.save()
             
             try
             {
-                if (vueFileProcessorService.isParseable(downloadFile))
+                switch (receiverDownloadFile.type)
                 {
-                    // Delegate to VUE Processor...
-                    vueFileProcessorService.process(downloadFile)
+                    case ReceiverDownloadFileType.DETECTIONS_CSV:
+                    
+                        // Delegate to VUE Detection Processor...
+                        log.debug("Delegating to VUE detection file processor...")
+                        vueDetectionFileProcessorService.process(receiverDownloadFile)
+                        break;
+                    
+                    case ReceiverDownloadFileType.EVENTS_CSV:
 
-                }
-                else
-                {
-                    // No processing - just update the status.
-                    downloadFile.status = FileProcessingStatus.PROCESSED
-                    downloadFile.save()
+                        // Delegate to VUE Event Processor...
+                        log.debug("Processing events...")
+                        vueEventFileProcessorService.process(receiverDownloadFile)
+                        break;
+                    
+                    default:
+
+                        // No processing - just update the status.
+                        receiverDownloadFile.status = FileProcessingStatus.PROCESSED
+                        receiverDownloadFile.save()
                 }
 
                 log.info "Finished processing."
             }
-            catch (FileProcessingException e)
+//            catch (FileProcessingException e)
+            catch (Throwable e)
             {
                 log.error("Error processing file", e)
-                downloadFile.status = FileProcessingStatus.ERROR
-                downloadFile.errMsg = String.valueOf(e)
-                downloadFile.save()
+                receiverDownloadFile.status = FileProcessingStatus.ERROR
+                receiverDownloadFile.errMsg = String.valueOf(e)
+                receiverDownloadFile.save()
 
                 throw e
             }
+            finally 
+            {
+                sendNotification(receiverDownloadFile, showLink)
+            }
+        }
+        else
+        {
+            log.warn("File is empty.")
         }
     }
     
@@ -69,33 +102,17 @@ class FileProcessorService extends AbstractFileProcessorService
         return true
     }
     
-        
-    /**
-     *  Files are stored at: 
-     *  
-     *      <basepath>/<project>/<installation>/<station>/<receiver>/<filename>.
-     */
-    String getPath(ReceiverDownload download)
+    def sendNotification(receiverDownloadFile, showLink)
     {
-        def config = ConfigurationHolder.config['fileimport']
-        
-        // Save the file to disk.
-        def path = config.path
-        if (!path.endsWith(File.separator))
-        {
-            path = path + File.separator
+        mailService.sendMail 
+        {     
+            to receiverDownloadFile?.requestingUser?.emailAddress
+            bcc grailsApplication.config.grails.mail.adminEmailAddress
+            from grailsApplication.config.grails.mail.systemEmailAddress
+            subject "AATAMS receiver export " + receiverDownloadFile?.name + ": " + receiverDownloadFile?.status
+            body "AATAMS receiver export " + receiverDownloadFile?.name \
+                 + ": " + receiverDownloadFile?.status + "\n\n" \
+                 + showLink
         }
-        
-        ReceiverRecovery recovery = download.receiverRecovery
-        ReceiverDeployment deployment = recovery.deployment
-        Receiver receiver = deployment.receiver
-        InstallationStation station = download.receiverRecovery.deployment.station
-        Installation installation = station.installation
-        Project project = installation.project
-        
-        path += project.name + File.separator
-        path += installation.name + File.separator
-        path += station.name + File.separator
-        path += receiver.codeName
     }
 }

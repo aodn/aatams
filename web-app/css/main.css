@@ -229,18 +229,28 @@ input:focus, select:focus, textarea:focus {
 .rowButton {
     font-size: 10px;
     padding: 0 5px;
-    width: 20px;
+    width: 30px;
 }
 .rowButton a {
     background: url(../images/skin/house.png) center left no-repeat;
     font-weight: bold;
-    padding: 10px 10px 10px 10px;
+    padding: 10px 5px 10px 10px;
 }
 .rowButton a.show {
     background: url(../images/skin/information.png) center no-repeat;
 }
 .rowButton a.create {
     background: url(../images/skin/database_add.png) center no-repeat;
+}
+/* This is for the delete icons which appear within tables, e.g. delete
+ * measurement from animal release. */
+/*.rowButton input.delete {
+    padding: 10px 10px 0px 10px;
+    border: 0;
+    background: url(../images/skin/database_delete.png) center no-repeat;
+}*/
+.rowButton a.delete {
+    background: url(../images/skin/database_delete.png) center no-repeat;
 }
 
 /* MESSAGES AND ERRORS */
@@ -285,11 +295,12 @@ td.errors textarea {
 
 table.nested td, table.nested th {
     font: 11px verdana, arial, helvetica, sans-serif;
-    line-height: 12px;
+/*    line-height: 16px;*/
+    line-height: 32px;
     padding: 0px;
     text-align: left;
     vertical-align: top;
-    width:0%;
+/*    width:0%;*/
 }
 
 table {
@@ -451,6 +462,15 @@ th.desc a {
     background: transparent url(../images/skin/database_save.png) 5px 50% no-repeat;
     padding-left: 28px;
 }
+.buttons input.download {
+    background: transparent url(../images/skin/database_save.png) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+.buttons input.update {
+    background: transparent url(../images/skin/database_table.png) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+
 
 /* extras for jQuery_ui */
 .ui-datepicker {
@@ -550,3 +570,16 @@ div.results {
 div.paging a {
     margin-left: 4px;
 }
+
+label.compulsory:after
+{
+    content: " *";
+    color: #FF0000;
+}
+
+/*table {border: 1px solid #808080;}
+td {border: 0;}*/
+div.filter td {
+    border: 0;
+}
+

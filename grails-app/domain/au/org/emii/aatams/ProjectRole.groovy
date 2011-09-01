@@ -12,6 +12,7 @@ class ProjectRole
     
     static belongsTo = [project:Project, person:Person]
     static transients = ['projectAndRole']
+    static hasMany = [recoveries:ReceiverRecovery]
     
     ProjectRoleType roleType
     
@@ -30,11 +31,13 @@ class ProjectRole
     def beforeInsert =
     {
         // Add permissions based on role type and access.
-        permissionUtilsService.setPermissions(this)
+//        permissionUtilsService.setPermissions(this)
     }
     
     def beforeDelete =
     {
-        permissionUtilsService.removePermissions(this)
+        
+        // Temporarily commented out as causing stack overflow.
+//        permissionUtilsService.removePermissions(this)
     }
 }

@@ -16,7 +16,7 @@ environments {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'
             driverClassName = "org.postgresql.Driver"
-            url = "jdbc:postgresql://localhost:5432/aatams"
+            url = "jdbc:postgresql://localhost:5433/aatams"
             username = "aatams"
             password = "aatams"
             
@@ -41,11 +41,14 @@ environments {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'
             driverClassName = "org.postgresql.Driver"
-            url = "jdbc:postgresql://localhost:5432/aatams"
+            url = "jdbc:postgresql://localhost:5433/aatams_test"
             username = "aatams"
             password = "aatams"
-            
         }
+//        dataSource {
+//            dbCreate = "update"
+//            url = "jdbc:hsqldb:mem:testDb"
+//        }
     }
     
     production 
@@ -54,7 +57,7 @@ environments {
         // Make *sure* you've got Grails Environment set to "production"!!
         dataSource 
         {
-//            dbCreate = "create" // one of 'create', 'create-drop','update'
+//            dbCreate = "create"
             jndiName = "java:comp/env/jdbc/aatams3"
         }
     }

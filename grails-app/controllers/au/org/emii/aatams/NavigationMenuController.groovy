@@ -27,21 +27,28 @@ class NavigationMenuController
     [
         'installation':"Installations",
         'installationStation':"Stations",
-        'receiver':"Receivers",
-        'tag':"Tags"
+        'receiver':"Receivers"
     ]
     
     def fieldDataControllers =
     [
+        'tag':"Tags",
         'animalRelease':"Tag Releases",
         'detection':"Tag Detections",
         'receiverDeployment':"Receiver Deployment",
-        'receiverRecovery':"Receiver Recovery"
+        'receiverRecovery':"Receiver Recovery",
+        'receiverEvent':"Receiver Events"
     ]
     
     def reportControllers =
     [
         // TODO
+    ]
+    
+    def helpControllers =
+    [
+        'gettingStarted':"Getting Started",
+        'about':"About"
     ]
 
     // Only visible to administrators...
@@ -84,6 +91,7 @@ class NavigationMenuController
          installationDataControllers: installationDataControllers,
          fieldDataControllers: fieldDataControllers,
          reportControllers: reportControllers,
+         helpControllers: helpControllers,
          adminControllers: adminControllers,
          blacklistControllers: blacklistControllers
         ]

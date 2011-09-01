@@ -4,6 +4,8 @@ import au.org.emii.aatams.util.GeometryUtils
 import au.org.emii.aatams.util.ListUtils
 
 import com.vividsolutions.jts.geom.Point
+import org.joda.time.*
+import org.joda.time.contrib.hibernate.*
 
 /**
  * Animal release is the process of capturing, tagging and releasing an animal,
@@ -15,24 +17,35 @@ import com.vividsolutions.jts.geom.Point
  */
 class AnimalRelease 
 {
-    static belongsTo = [project: Project]
+    static belongsTo = [project: Project, animal: Animal]
     static hasMany = [surgeries: Surgery, measurements: AnimalMeasurement]
     static transients = ['scrambledReleaseLocation']
-    
-    /**
-     * Animal that has been captured and released.
-     */
-    Animal animal
-    
+    static mapping =
+    {
+        captureDateTime type: PersistentDateTimeTZ,
+        {
+            column name: "captureDateTime_timestamp"
+            column name: "captureDateTime_zone"
+        }
+        
+        releaseDateTime type: PersistentDateTimeTZ,
+        {
+            column name: "releaseDateTime_timestamp"
+            column name: "releaseDateTime_zone"
+        }
+        
+        comments type: 'text'
+    }
+
     String captureLocality
     Point captureLocation
-    Date captureDateTime
+    DateTime captureDateTime
     
     CaptureMethod captureMethod
     
     String releaseLocality
     Point releaseLocation
-    Date releaseDateTime
+    DateTime releaseDateTime
 
     String comments
     
@@ -41,6 +54,13 @@ class AnimalRelease
      * indicate that no embargo exists).
      */
     Date embargoDate
+    
+    /**
+     * Status is used to model the case where an animal (with associated tag
+     * and surgery) is recaptured at which point the surgery is no longer 
+     * current.
+     */
+    AnimalReleaseStatus status = AnimalReleaseStatus.CURRENT
 
     static constraints =
     {

@@ -148,9 +148,7 @@ class AnimalReleaseControllerTests extends GroovyTestCase
             type: surgeryType,
             treatmentType : surgeryTreatmentType,
             comments: "",
-            tagCodeName: tag.codeName,
-            tagSerialNumber: "12345",
-            tagModelId: model.id]
+            tag :[codeName: tag.codeName, serialNumber: "12345", modelId: model.id]]
         
         controller.params.surgery = ['0':surgery0]
         

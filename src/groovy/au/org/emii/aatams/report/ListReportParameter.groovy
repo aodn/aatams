@@ -16,5 +16,19 @@ class ListReportParameter extends ReportParameter
     {
         return List.class
     }
+    
+    String getTemplate()
+    {
+        return "/report/filter/listTemplate"
+    }
+    
+    /**
+     * Returns the model which can be passed to GSP/render.
+     */
+    Map getModel()
+    {
+        return [domainName:domainName,
+                range:range]
+    }
 }
 

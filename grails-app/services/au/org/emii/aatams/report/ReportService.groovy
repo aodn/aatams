@@ -9,10 +9,21 @@ import au.org.emii.aatams.*
  * - execute a query for a given report, applying the given set of filter parameters,
  *   and returning a list of domain objects which can then be passed to the 
  *   jasper reporting "engine".
+ *   
+ *   TODO: may move modelling of ReportInfo and associated parameters to domain classes.
  */
 class ReportService 
 {
     static transactional = true
+
+    /**
+     * Mapping between report name and relevant domain class.
+     * Saves clients from having to know anything about internal package
+     * hierarchy etc).
+     */
+    static def reportMapping =
+        ["installation": "au.org.emii.aatams.Installation",
+         "receiver": "au.org.emii.aatams.Receiver"]
 
     /**
      * Executes a query for the named domain class with given filter parameters
@@ -24,6 +35,8 @@ class ReportService
      */
     List executeQuery(Class domain, Map params)
     {
+        log.debug("Executing report query, domain: " + domain + ", params: " + params)
+        
         if (!params || params.isEmpty())
         {
             // No filter parametes specified, just return all.
@@ -47,6 +60,19 @@ class ReportService
         return results
     }
 
+    List executeQuery(String name, Map params)
+    {
+        log.debug("getReportInfo(String)")
+        def domainClassName = reportMapping[name]
+        if (!domainClassName)
+        {
+            log.error("No domain class mapped to report name: " + name)
+            return null
+        }
+
+        Class reportDomainClass = Thread.currentThread().contextClassLoader.loadClass(domainClassName)
+        return executeQuery(reportDomainClass, params)
+    }
     /**
      * Return info for all available reports (keyed by the domain class).
      */
@@ -60,8 +86,10 @@ class ReportService
              new ListReportParameter(domainName: "installation", propertyName:"name", range:installationRange)]
         
         return [(Receiver.class):new ReportInfo(displayName:"Receivers", 
-                                        jrxmlFilename:"receiverList", 
-                                        filterParams:receiverFilterParams)]
+                                                jrxmlFilename:"receiverList", 
+                                                filterParams:receiverFilterParams),
+                (Installation.class):new ReportInfo(displayName:"Installations",
+                                                    jrxmlFilename:"installationList")]
     }
     
     /**
@@ -69,6 +97,26 @@ class ReportService
      */
     ReportInfo getReportInfo(Class domain)
     {
+        log.debug("getReportInfo(Class)")
         return getReportInfo().get(domain)
+    }
+    
+    /**
+     * Return report info for a particular name.
+     */
+    ReportInfo getReportInfo(String name)
+    {
+        log.debug("getReportInfo(String)")
+        def domainClassName = reportMapping[name]
+        if (!domainClassName)
+        {
+            log.error("No domain class mapped to report name: " + name)
+            return null
+        }
+        
+        log.debug("Report name: " + name + ", domain class name: " + domainClassName)
+        
+        Class reportDomainClass = Thread.currentThread().contextClassLoader.loadClass(domainClassName)
+        return getReportInfo(reportDomainClass)
     }
 }

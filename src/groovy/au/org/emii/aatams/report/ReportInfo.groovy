@@ -21,5 +21,10 @@ class ReportInfo
      * and the valid range of values as well as a display name.
      */
     List<ReportParameter> filterParams
+    
+    String toString()
+    {
+        return displayName
+    }
 }
 

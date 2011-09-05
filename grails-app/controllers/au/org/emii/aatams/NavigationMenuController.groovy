@@ -40,9 +40,12 @@ class NavigationMenuController
         'receiverEvent':"Receiver Events"
     ]
     
-    def reportControllers =
+    /**
+     * All reports use the same controller, just a different action.
+     */
+    def reportActions =
     [
-        // TODO
+        'receiverCreate':"Receivers"
     ]
     
     def helpControllers =
@@ -90,7 +93,7 @@ class NavigationMenuController
         [backgroundDataControllers: backgroundDataControllers,
          installationDataControllers: installationDataControllers,
          fieldDataControllers: fieldDataControllers,
-         reportControllers: reportControllers,
+         reportActions: reportActions,
          helpControllers: helpControllers,
          adminControllers: adminControllers,
          blacklistControllers: blacklistControllers

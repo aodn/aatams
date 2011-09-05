@@ -3,28 +3,28 @@ package au.org.emii.aatams.report
 import grails.test.*
 import au.org.emii.aatams.*
 
-class ReportServiceTests extends GroovyTestCase
+class ReportInfoServiceTests extends GrailsUnitTestCase 
 {
-    def reportService
+    def reportInfoService
     
     protected void setUp() 
     {
         super.setUp()
         
-//        mockLogging(ReportService, true)
-        reportService = new ReportService()
+        mockLogging(ReportInfoService, true)
+        reportInfoService = new ReportInfoService()
         
         // Create a couple of projects and installations.
         Project project1 = new Project(name: "project 1")
         Project project2 = new Project(name: "project 2")
         def projectList = [project1, project2]
-//        mockDomain(Project, projectList)
+        mockDomain(Project, projectList)
         projectList.each{ it.save()}
         
         Installation installation1 = new Installation(name: "installation 1")
         Installation installation2 = new Installation(name: "installation 2")
         def installationList = [installation1, installation2]
-//        mockDomain(Installation, installationList)
+        mockDomain(Installation, installationList)
         installationList.each { it.save() }
     }
 
@@ -33,17 +33,16 @@ class ReportServiceTests extends GroovyTestCase
         super.tearDown()
     }
 
-    void testExecuteQueryNullFilter()
+    void testGetReportInfo() 
     {
-        def results = reportService.executeQuery(Project, null)
-        assertEquals(2, results.size())
-    }
-    
-    void testExecuteQueryFilterByProjectName()
-    {
-        def results = reportService.executeQuery(Project, ["name":"project 1"])
+        def reportInfos = reportInfoService.getReportInfo()
         
-        assertEquals(1, results.size())
-        assertEquals("project 1", results[0].name)
+        assertEquals(2, reportInfos.size())
+
+        ReportInfo receiverReportInfo = reportInfos.get(Receiver.class)
+        
+        assertNotNull(receiverReportInfo)
+        assertEquals("Receivers", receiverReportInfo.getDisplayName())
+        assertEquals("receiverList", receiverReportInfo.getJrxmlFilename())
     }
 }

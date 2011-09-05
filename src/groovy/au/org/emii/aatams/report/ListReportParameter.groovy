@@ -27,8 +27,9 @@ class ListReportParameter extends ReportParameter
      */
     Map getModel()
     {
-        return [domainName:domainName,
-                range:range]
+        def model = super.getModel()
+        model.range = range
+        return model
     }
 }
 

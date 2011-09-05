@@ -2,7 +2,7 @@ package au.org.emii.aatams.report
 
 import grails.test.*
 
-class ReportFilterTagLibTests extends TagLibUnitTestCase {
+class ReportTagLibTests extends TagLibUnitTestCase {
     protected void setUp() {
         super.setUp()
     }

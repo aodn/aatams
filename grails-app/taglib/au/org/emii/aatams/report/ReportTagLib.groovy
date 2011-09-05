@@ -7,7 +7,7 @@ import au.org.emii.aatams.*
  */
 class ReportTagLib 
 {
-    def reportService
+    def reportInfoService
 
     def reportFilterParameter =
     {
@@ -21,7 +21,7 @@ class ReportTagLib
     {
         attrs, body ->
           
-        ReportInfo reportInfo = reportService.getReportInfo(attrs.name)
+        ReportInfo reportInfo = reportInfoService.getReportInfo(attrs.name)
         if (!reportInfo)
         {
             // TODO: error
@@ -43,7 +43,7 @@ class ReportTagLib
         }
         else
         {
-            ReportInfo reportInfo = reportService.getReportInfo(attrs.name)
+            ReportInfo reportInfo = reportInfoService.getReportInfo(attrs.name)
             if (!reportInfo)
             {
                 // TODO: error

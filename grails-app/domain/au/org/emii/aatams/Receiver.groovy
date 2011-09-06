@@ -12,6 +12,11 @@ class Receiver extends Device
     static hasMany = [detections: Detection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
     
+    static mapping = 
+    {
+        organisation sort:'name'
+    }
+    
     static String constructCodeName(params)
     {
         DeviceModel model = DeviceModel.get(params.model.id)

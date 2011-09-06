@@ -34,6 +34,11 @@ class Organisation
         requestingUser(nullable:false)
     }
     
+    static mapping =
+    {
+        sort "name"
+    }
+    
     String toString()
     {
         return name

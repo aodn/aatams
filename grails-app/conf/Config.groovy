@@ -122,6 +122,8 @@ log4j = {
             "grails.app.task",
 //           'org.hibernate',
 //            "grails.buildtestdata",
+//            "net.sf.jasperreports",
+//            "org.codehaus.groovy.grails.plugins.jasper",
             "grails.app.filter"//,
             //"grails.app.tagLib.com.energizedwork.grails.plugins.jodatime"
 }

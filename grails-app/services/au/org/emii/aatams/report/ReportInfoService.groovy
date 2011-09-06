@@ -21,6 +21,9 @@ class ReportInfoService
         ["installation": "au.org.emii.aatams.Installation",
          "receiver": "au.org.emii.aatams.Receiver"]
 
+    static def propertyToLabel =
+        ["organisation.name": "organisation"]
+        
     /**
      * Return info for all available reports (keyed by the domain class).
      */
@@ -31,7 +34,7 @@ class ReportInfoService
         def installationRange = Installation.list()*.name
         
         def receiverFilterParams = 
-            [new ListReportParameter(label: "organisation", propertyName:"organisation.name", range:organisationRange)]
+            [new ListReportParameter(label: propertyToLabel["organisation.name"], propertyName:"organisation.name", range:organisationRange)]
             
 //            [new ListReportParameter(label: "project", propertyName:"deployments.station.installation.project.name", range:projectRange),
 //             new ListReportParameter(label: "installation", propertyName:"deployments.station.installation.name", range:installationRange)]
@@ -69,5 +72,54 @@ class ReportInfoService
         
         Class reportDomainClass = Thread.currentThread().contextClassLoader.loadClass(domainClassName)
         return getReportInfo(reportDomainClass)
+    }
+    
+    /**
+     * Useful for converting a map of nested map of filter paramaters to entries
+     * of the form:
+     * 
+     *  "level1.level2":"value" 
+     */
+    Map<String, Object> filterParamsToReportFormat(params)
+    {
+        // Only include entries with non-map, non-blank, non-null values.
+        Map filteredVals = params.findAll
+        {
+            key, val ->
+            
+            log.debug("Filtering key: " + key + ", value: " + val)    
+            
+            if (!val)
+            {
+                log.debug("Filtered out key: " + key + ", value: " + val)    
+                return false
+            }
+
+            if (val == "")
+            {
+                log.debug("Filtered out key: " + key + ", value: " + val)    
+                return false
+            }
+            
+            if (val instanceof Map)
+            {
+                log.debug("Filtered out key: " + key + ", value: " + val)    
+                return false
+            }
+            
+            log.debug("Keeping key: " + key + ", value: " + val)
+            return true
+        }
+        
+        // Replace key with equivalent label.
+        def retVals = [:]
+        filteredVals.each
+        {
+            key, val ->
+            
+            retVals[propertyToLabel.get(key, key)] = val
+        }
+        
+        return retVals
     }
 }

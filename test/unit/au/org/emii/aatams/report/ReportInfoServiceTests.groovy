@@ -26,6 +26,8 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         def installationList = [installation1, installation2]
         mockDomain(Installation, installationList)
         installationList.each { it.save() }
+        
+        mockDomain(Organisation)
     }
 
     protected void tearDown() 
@@ -44,5 +46,30 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         assertNotNull(receiverReportInfo)
         assertEquals("Receivers", receiverReportInfo.getDisplayName())
         assertEquals("receiverList", receiverReportInfo.getJrxmlFilename())
+    }
+
+    
+    void testFilterParamsToReportFormat()
+    {
+        def filter = [user:"Jon Burgess", 
+                      "organisation.name":"CSIRO", 
+                      organisation:[name:"CSIRO"]]
+    
+        def result = reportInfoService.filterParamsToReportFormat(filter)
+        assertEquals([user:"Jon Burgess", organisation:"CSIRO"], result)
+
+        filter = [user:"Jon Burgess", 
+                  "organisation":null, 
+                  organisation:[name:null]]
+    
+        result = reportInfoService.filterParamsToReportFormat(filter)
+        assertEquals([user:"Jon Burgess"], result)
+        
+        filter = [user:"Jon Burgess", 
+                  "organisation":"", 
+                  organisation:[name:""]]
+    
+        result = reportInfoService.filterParamsToReportFormat(filter)
+        assertEquals([user:"Jon Burgess"], result)
     }
 }

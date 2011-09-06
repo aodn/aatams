@@ -3,6 +3,12 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<template><![CDATA["/Users/jburgess/NetBeansProjects/aatams_reports/web-app/reports/aatamsStyle.jrtx"]]></template>
+	<parameter name="REPORT_USER" class="java.lang.String"/>
+	<parameter name="FILTER_PARAMS" class="java.util.Collection" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/Users/jburgess/NetBeansProjects/aatams_reports/web-app/reports/"]]></defaultValueExpression>
+	</parameter>
 	<field name="codeName" class="java.lang.String"/>
 	<field name="status.status" class="java.lang.String"/>
 	<field name="model.modelName" class="java.lang.String"/>
@@ -12,14 +18,14 @@
 	<group name="organisationGroup">
 		<groupExpression><![CDATA[$F{organisation.name}]]></groupExpression>
 		<groupHeader>
-			<band height="20">
+			<band height="27">
 				<textField>
-					<reportElement x="91" y="0" width="100" height="20"/>
+					<reportElement style="fieldValue" x="91" y="7" width="100" height="20"/>
 					<textElement/>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{organisation.name}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="18" y="0" width="73" height="20"/>
+					<reportElement style="fieldNameText" x="18" y="7" width="73" height="20"/>
 					<textElement/>
 					<text><![CDATA[organisation:]]></text>
 				</staticText>
@@ -32,44 +38,51 @@
 	<title>
 		<band height="79" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="555" height="79" forecolor="#FFFFFF" backcolor="#006699"/>
+				<reportElement style="titleBackground" x="0" y="0" width="555" height="79"/>
 			</rectangle>
 			<staticText>
-				<reportElement mode="Transparent" x="26" y="23" width="262" height="33" forecolor="#FFFFFF" backcolor="#006699"/>
-				<textElement>
-					<font size="24"/>
-				</textElement>
+				<reportElement style="titleText" mode="Transparent" x="26" y="23" width="262" height="33"/>
+				<textElement/>
 				<text><![CDATA[AATAMS Receivers]]></text>
 			</staticText>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch"/>
+		<band height="101" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="16" width="555" height="85"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{FILTER_PARAMS})]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "filterParamsSubreport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
 	</pageHeader>
 	<columnHeader>
 		<band height="21" splitType="Stretch">
+			<rectangle>
+				<reportElement style="columnHeaderBackground" x="0" y="0" width="555" height="21"/>
+			</rectangle>
 			<staticText>
-				<reportElement x="32" y="0" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="32" y="1" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[code name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="132" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="132" y="1" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[status]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="232" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="232" y="1" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[manufacturer]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="332" y="0" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="332" y="1" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[model]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="432" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="432" y="1" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[serial number]]></text>
 			</staticText>
@@ -78,27 +91,27 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="32" y="0" width="100" height="20"/>
+				<reportElement style="fieldValue" x="32" y="0" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{codeName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="132" y="0" width="100" height="20"/>
+				<reportElement style="fieldValue" x="132" y="0" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{status.status}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="232" y="0" width="100" height="20"/>
+				<reportElement style="fieldValue" x="232" y="0" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{model.manufacturer.manufacturerName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="332" y="0" width="100" height="20"/>
+				<reportElement style="fieldValue" x="332" y="0" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{model.modelName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="432" y="0" width="100" height="20"/>
+				<reportElement style="fieldValue" x="432" y="0" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{serialNumber}]]></textFieldExpression>
 			</textField>

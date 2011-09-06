@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jasperTemplate PUBLIC "-//JasperReports//DTD Template//EN" "http://jasperreports.sourceforge.net/dtds/jaspertemplate.dtd">
+
+<jasperTemplate>
+	<style name="titleBackground" forecolor="#FFFFFF" backcolor="#006699" radius="4"/>
+	<style name="columnHeaderBackground" forecolor="#FFFFFF" backcolor="#E6E6E6" radius="4"/>
+	<style name="titleText" forecolor="#FFFFFF" fontSize="24"/>
+	<style name="fieldNameText" vAlign="Middle" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="fieldValue" forecolor="#000000" vAlign="Middle" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+</jasperTemplate>

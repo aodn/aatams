@@ -21,7 +21,9 @@ class ReportController
     {
         log.debug("Executing report, params: " + params)
 
-        def resultList = reportQueryExecutorService.executeQuery(Receiver, params.filter)
+        def resultList = 
+            reportQueryExecutorService.executeQuery(reportInfoService.getClassForName(params._name), 
+                                                    params.filter)
         
         params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"
         
@@ -50,5 +52,10 @@ class ReportController
     def receiverCreate =
     {
         redirect(action:"create", params:[name:"receiver"])
+    }
+    
+    def receiverDeploymentCreate =
+    {
+        redirect(action:"create", params:[name:"receiverDeployment"])
     }
 }

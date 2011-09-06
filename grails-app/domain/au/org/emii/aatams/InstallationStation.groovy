@@ -14,7 +14,7 @@ class InstallationStation
 {
     static belongsTo = [installation:Installation]
     static hasMany = [receivers:Receiver, deployments:ReceiverDeployment]
-    static transients = ['scrambledLocation']
+    static transients = ['scrambledLocation', 'latitude', 'longitude']
     
     static mapping =
     {
@@ -48,6 +48,22 @@ class InstallationStation
     Point getScrambledLocation()
     {
         return GeometryUtils.scrambleLocation(location)
+    }
+    
+    /**
+     * Convenience method to get the (possible scrambled) latitude.
+     * It's mainly here because Jasper reports expects bean properties, and
+     * Point.coordinate.y doesn't conform to that (i.e. there is no getY() 
+     * method).
+     */
+    double getLatitude()
+    {
+        return getScrambledLocation().coordinate.y
+    }
+    
+    double getLongitude()
+    {
+        return getScrambledLocation().coordinate.x
     }
     
     static constraints =

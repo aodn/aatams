@@ -45,7 +45,8 @@ class NavigationMenuController
      */
     def reportActions =
     [
-        'receiverCreate':"Receivers"
+        'receiverCreate':"Receivers",
+        'receiverDeploymentCreate':"Receiver Deployments"
     ]
     
     def helpControllers =

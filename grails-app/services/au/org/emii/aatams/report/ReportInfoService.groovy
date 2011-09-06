@@ -19,10 +19,16 @@ class ReportInfoService
      */
     static def reportMapping =
         ["installation": "au.org.emii.aatams.Installation",
-         "receiver": "au.org.emii.aatams.Receiver"]
+         "receiver": "au.org.emii.aatams.Receiver",
+         "receiverDeployment": "au.org.emii.aatams.ReceiverDeployment"]
 
     static def propertyToLabel =
-        ["organisation.name": "organisation"]
+        ["organisation.name": "organisation",
+         "station.installation.project.name": "project"]
+    
+    static def reportNameToClass =
+        ["receiver": Receiver.class,
+         "receiverDeployment": ReceiverDeployment.class]
         
     /**
      * Return info for all available reports (keyed by the domain class).
@@ -36,12 +42,19 @@ class ReportInfoService
         def receiverFilterParams = 
             [new ListReportParameter(label: propertyToLabel["organisation.name"], propertyName:"organisation.name", range:organisationRange)]
             
+        def receiverDeploymentFilterParams = 
+            [new ListReportParameter(label: propertyToLabel["station.installation.project.name"], propertyName:"station.installation.project.name", range:projectRange)]
+        
+            
 //            [new ListReportParameter(label: "project", propertyName:"deployments.station.installation.project.name", range:projectRange),
 //             new ListReportParameter(label: "installation", propertyName:"deployments.station.installation.name", range:installationRange)]
         
         return [(Receiver.class):new ReportInfo(displayName:"Receivers", 
                                                 jrxmlFilename:"receiverList", 
                                                 filterParams:receiverFilterParams),
+                (ReceiverDeployment.class):new ReportInfo(displayName:"Receiver Deployments", 
+                                                          jrxmlFilename:"receiverDeploymentList", 
+                                                          filterParams:receiverDeploymentFilterParams),
                 (Installation.class):new ReportInfo(displayName:"Installations",
                                                     jrxmlFilename:"installationList")]
     }
@@ -53,6 +66,11 @@ class ReportInfoService
     {
         log.debug("getReportInfo(Class)")
         return getReportInfo().get(domain)
+    }
+    
+    Class getClassForName(String name)
+    {
+        return reportNameToClass[name]
     }
     
     /**

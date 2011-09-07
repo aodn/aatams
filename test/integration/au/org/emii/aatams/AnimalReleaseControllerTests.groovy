@@ -40,14 +40,14 @@ class AnimalReleaseControllerTests extends GroovyTestCase
         controller.detectionFactoryService = detectionFactoryService
         controller.tagFactoryService = tagFactoryService
         
-        project = Project.build().save(failOnError:true)
-        def org = Organisation.build().save(failOnError:true)
+        project = Project.buildLazy().save(failOnError:true)
+        def org = Organisation.buildLazy().save(failOnError:true)
         
-        def pinger = TransmitterType.build(transmitterTypeName:'PINGER').save()
-        deployedStatus = DeviceStatus.build(status:'DEPLOYED').save()
-        retiredStatus = DeviceStatus.build(status:'RETIRED').save()
-        netCapture = CaptureMethod.build(name:'NET').save()
-        model = DeviceModel.build().save()
+        def pinger = TransmitterType.buildLazy(transmitterTypeName:'PINGER').save()
+        deployedStatus = DeviceStatus.buildLazy(status:'DEPLOYED').save()
+        retiredStatus = DeviceStatus.buildLazy(status:'RETIRED').save()
+        netCapture = CaptureMethod.buildLazy(name:'NET').save()
+        model = DeviceModel.buildLazy().save()
         
         def receiver =
             Receiver.build(codeName:"VR2W-1234",

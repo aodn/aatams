@@ -19,7 +19,7 @@ class ReportQueryExecutorServiceTests extends GroovyTestCase
         def projectList = [project1, project2]
         projectList.each{ it.save()}
         
-        InstallationConfiguration config = InstallationConfiguration.build(type:"CURTAIN").save()
+        InstallationConfiguration config = InstallationConfiguration.buildLazy(type:"CURTAIN").save()
         
         Installation installation1 = Installation.build(name: "installation 1",
                                                         project: project1,
@@ -39,7 +39,7 @@ class ReportQueryExecutorServiceTests extends GroovyTestCase
     void testExecuteQueryNullFilter()
     {
         def results = reportQueryExecutorService.executeQuery(Project, null)
-        assertEquals(2, results.size())
+        assertEquals(5, results.size())
     }
     
     void testExecuteQueryFilterByProjectName()

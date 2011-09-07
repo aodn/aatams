@@ -10,15 +10,17 @@ class JasperController extends org.codehaus.groovy.grails.plugins.jasper.JasperC
 
     def indexWithSession = 
     {
+        log.debug("indexWithSession, params: " + params)
+        
         def testModel = this.getProperties().containsKey('chainModel') ? chainModel : null
-
+        
         // Re-attach model objects to avoid LazyInitializationException.
         def session = sessionFactory.getCurrentSession()
         testModel?.data?.each
         {
             session.update(it)
         }
-
+        
         // Get the filter parameters out of flash and put in to "params" (which
         // is where they need to be, but we put in flash in the report controller
         // to avoid them being converted to toString() representation).

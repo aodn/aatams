@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="receiverList" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="installationStationList" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -9,28 +9,49 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/Users/jburgess/NetBeansProjects/aatams_reports/web-app/reports/"]]></defaultValueExpression>
 	</parameter>
-	<field name="codeName" class="java.lang.String"/>
-	<field name="status.status" class="java.lang.String"/>
-	<field name="model.modelName" class="java.lang.String"/>
-	<field name="model.manufacturer.manufacturerName" class="java.lang.String"/>
-	<field name="serialNumber" class="java.lang.String"/>
-	<field name="organisation.name" class="java.lang.String"/>
+	<field name="installation.project.name" class="java.lang.String"/>
+	<field name="installation.name" class="java.lang.String"/>
+	<field name="installation.configuration.type" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="curtainPosition" class="java.lang.Integer"/>
+	<field name="latitude" class="java.lang.Double"/>
+	<field name="longitude" class="java.lang.Double"/>
 
-	<sortField name="organisation.name" order="Ascending"/>
-	<sortField name="codeName" order="Ascending"/>
-	<group name="organisationGroup">
-		<groupExpression><![CDATA[$F{organisation.name}]]></groupExpression>
+	<sortField name="installation.project.name" order="Ascending"/>
+	<sortField name="installation.name" order="Ascending"/>
+	<sortField name="name" order="Ascending"/>
+	<sortField name="curtainPosition" order="Ascending"/>
+
+	<group name="projectGroup">
+		<groupExpression><![CDATA[$F{installation.project.name}]]></groupExpression>
 		<groupHeader>
 			<band height="27">
 				<textField>
 					<reportElement style="fieldValue" x="91" y="7" width="100" height="20"/>
 					<textElement/>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{organisation.name}]]></textFieldExpression>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{installation.project.name}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement style="fieldNameText" x="18" y="7" width="73" height="20"/>
 					<textElement/>
-					<text><![CDATA[organisation:]]></text>
+					<text><![CDATA[project:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="installationGroup">
+		<groupExpression><![CDATA[$F{installation.name}]]></groupExpression>
+		<groupHeader>
+			<band height="27">
+				<textField>
+					<reportElement style="fieldValue" x="91" y="7" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{installation.name}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="fieldNameText" x="18" y="7" width="73" height="20"/>
+					<textElement/>
+					<text><![CDATA[installation:]]></text>
 				</staticText>
 			</band>
 		</groupHeader>
@@ -46,7 +67,7 @@
 			<staticText>
 				<reportElement style="titleText" mode="Transparent" x="26" y="23" width="262" height="33"/>
 				<textElement/>
-				<text><![CDATA[AATAMS Receivers]]></text>
+				<text><![CDATA[AATAMS Installations]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -67,27 +88,27 @@
 			<staticText>
 				<reportElement style="fieldNameText" mode="Transparent" x="32" y="1" width="100" height="20"/>
 				<textElement/>
-				<text><![CDATA[code name]]></text>
+				<text><![CDATA[configuration]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="fieldNameText" mode="Transparent" x="132" y="1" width="100" height="20"/>
 				<textElement/>
-				<text><![CDATA[status]]></text>
+				<text><![CDATA[station name]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="fieldNameText" mode="Transparent" x="232" y="1" width="100" height="20"/>
 				<textElement/>
-				<text><![CDATA[manufacturer]]></text>
+				<text><![CDATA[curtain position]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="fieldNameText" mode="Transparent" x="332" y="1" width="100" height="20"/>
 				<textElement/>
-				<text><![CDATA[model]]></text>
+				<text><![CDATA[latitude]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="fieldNameText" mode="Transparent" x="432" y="1" width="100" height="20"/>
 				<textElement/>
-				<text><![CDATA[serial number]]></text>
+				<text><![CDATA[longitude]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -96,27 +117,27 @@
 			<textField>
 				<reportElement style="fieldValue" x="32" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{codeName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{installation.configuration.type}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="fieldValue" x="132" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{status.status}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="fieldValue" x="232" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{model.manufacturer.manufacturerName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{curtainPosition} == null ? "" : $F{curtainPosition}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="fieldValue" x="332" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{model.modelName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{latitude}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="fieldValue" x="432" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{serialNumber}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{longitude}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

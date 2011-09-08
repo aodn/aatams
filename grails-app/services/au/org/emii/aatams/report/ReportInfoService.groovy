@@ -18,17 +18,19 @@ class ReportInfoService
      * hierarchy etc).
      */
     static def reportMapping =
-        ["installation": "au.org.emii.aatams.Installation",
+        ["installationStation": "au.org.emii.aatams.InstallationStation",
          "receiver": "au.org.emii.aatams.Receiver",
          "receiverDeployment": "au.org.emii.aatams.ReceiverDeployment"]
 
     static def propertyToLabel =
         ["organisation.name": "organisation",
+         "installation.project.name": "project",
          "station.installation.project.name": "project",
          "station.installation.name": "installation"]
     
     static def reportNameToClass =
-        ["receiver": Receiver.class,
+        ["installationStation": InstallationStation.class,
+         "receiver": Receiver.class,
          "receiverDeployment": ReceiverDeployment.class]
         
     /**
@@ -40,6 +42,9 @@ class ReportInfoService
         def organisationRange = Organisation.list()*.name
         def installationRange = Installation.list()*.name
         
+        def installationStationFilterParams = 
+            [new ListReportParameter(label: propertyToLabel["installation.project.name"], propertyName:"installation.project.name", range:projectRange)]
+
         def receiverFilterParams = 
             [new ListReportParameter(label: propertyToLabel["organisation.name"], propertyName:"organisation.name", range:organisationRange)]
             
@@ -51,14 +56,16 @@ class ReportInfoService
 //            [new ListReportParameter(label: "project", propertyName:"deployments.station.installation.project.name", range:projectRange),
 //             new ListReportParameter(label: "installation", propertyName:"deployments.station.installation.name", range:installationRange)]
         
-        return [(Receiver.class):new ReportInfo(displayName:"Receivers", 
+        return [(InstallationStation.class):new ReportInfo(displayName:"Installations",
+                                                           jrxmlFilename:"installationStationList",
+                                                           filterParams:installationStationFilterParams),
+                (Receiver.class):new ReportInfo(displayName:"Receivers", 
                                                 jrxmlFilename:"receiverList", 
                                                 filterParams:receiverFilterParams),
                 (ReceiverDeployment.class):new ReportInfo(displayName:"Receiver Deployments", 
                                                           jrxmlFilename:"receiverDeploymentList", 
-                                                          filterParams:receiverDeploymentFilterParams),
-                (Installation.class):new ReportInfo(displayName:"Installations",
-                                                    jrxmlFilename:"installationList")]
+                                                          filterParams:receiverDeploymentFilterParams)
+                ]
     }
     
     /**

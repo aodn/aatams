@@ -43,5 +43,10 @@ abstract class ReportParameter
         return [label:label,
                 propertyName:propertyName]
     }
+    
+    String toString()
+    {
+        return label + ":" + propertyName + ":" + type + ":" + template + ":" + model
+    }
 }
 

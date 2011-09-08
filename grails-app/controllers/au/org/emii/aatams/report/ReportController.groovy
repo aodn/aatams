@@ -49,6 +49,11 @@ class ReportController
               params:params)
     }
     
+    def installationStationCreate =
+    {
+        redirect(action:"create", params:[name:"installationStation"])
+    }
+    
     def receiverCreate =
     {
         redirect(action:"create", params:[name:"receiver"])

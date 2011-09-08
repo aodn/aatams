@@ -35,7 +35,7 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         super.tearDown()
     }
 
-    void testGetReportInfo() 
+    void testGetReportInfoReceiver() 
     {
         def reportInfos = reportInfoService.getReportInfo()
         
@@ -46,6 +46,17 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         assertNotNull(receiverReportInfo)
         assertEquals("Receivers", receiverReportInfo.getDisplayName())
         assertEquals("receiverList", receiverReportInfo.getJrxmlFilename())
+    }
+    
+    void testGetReportInfoInstallationStation()
+    {
+        ReportInfo stationReportInfo = reportInfoService.getReportInfo("installationStation")
+        assertNotNull(stationReportInfo)
+        assertEquals("Installations", stationReportInfo.displayName)
+
+        def filterParams = stationReportInfo.filterParams
+        assertNotNull(filterParams)
+        assertEquals("project", filterParams[0].label)
     }
 
     

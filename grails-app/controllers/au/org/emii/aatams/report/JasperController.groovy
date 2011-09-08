@@ -16,10 +16,14 @@ class JasperController extends org.codehaus.groovy.grails.plugins.jasper.JasperC
         
         // Re-attach model objects to avoid LazyInitializationException.
         def session = sessionFactory.getCurrentSession()
+        def reattachedData = []
         testModel?.data?.each
         {
-            session.update(it)
+            def reattachedObject = session.merge(it)
+            reattachedData.add(reattachedObject)
+            log.debug("Re-attached object: " + String.valueOf(reattachedObject))
         }
+        testModel?.data = reattachedData
         
         // Get the filter parameters out of flash and put in to "params" (which
         // is where they need to be, but we put in flash in the report controller

@@ -13,6 +13,7 @@ class ReportTagLib
     {
         attrs, body ->
         
+        log.debug("Rendering filter parameter, attrs: " + attrs)
         out << render(template:attrs.template,
                       model:attrs.model)
     }
@@ -28,6 +29,7 @@ class ReportTagLib
         }
         else if (reportInfo.filterParams)
         {
+            log.debug("Rendering filter, params: " + reportInfo.filterParams)
             out << render(template:"/report/filter/reportFilter",
                           model:[filterParams:reportInfo.filterParams])
         }

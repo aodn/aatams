@@ -125,12 +125,12 @@
 				<text><![CDATA[mooring type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" x="574" y="0" width="68" height="20"/>
+				<reportElement style="fieldNameText" x="574" y="1" width="68" height="20"/>
 				<textElement/>
-				<text><![CDATA[depth below surface (m)]]></text>
+				<text><![CDATA[depth (m)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" x="644" y="0" width="158" height="20"/>
+				<reportElement style="fieldNameText" x="644" y="1" width="158" height="20"/>
 				<textElement/>
 				<text><![CDATA[comments]]></text>
 			</staticText>

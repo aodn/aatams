@@ -45,6 +45,7 @@ class NavigationMenuController
      */
     def reportActions =
     [
+        'installationStationCreate':"Installations",
         'receiverCreate':"Receivers",
         'receiverDeploymentCreate':"Receiver Deployments"
     ]

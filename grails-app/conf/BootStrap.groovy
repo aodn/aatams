@@ -531,6 +531,20 @@ class BootStrap
                          model:vemcoXyz,
                          organisation:imosOrg).save(failOnError: true)
                      
+        Receiver rx4 =
+            new Receiver(codeName:'VR2W-101344',
+                         serialNumber:'4444',
+                         status:newStatus,
+                         model:vemcoXyz,
+                         organisation:imosOrg).save(failOnError: true)
+                     
+        Receiver rx5 =
+            new Receiver(codeName:'VR2W-101355',
+                         serialNumber:'5555',
+                         status:newStatus,
+                         model:vemcoXyz,
+                         organisation:imosOrg).save(failOnError: true)
+                     
         //
         // Tags.
         //
@@ -634,6 +648,11 @@ class BootStrap
                              configuration:curtain,
                              project:sealCountProject).save(failOnError:true)
                          
+        Installation heronCurtain =
+            new Installation(name:'Heron Island Curtain',
+                             configuration:curtain,
+                             project:sealCountProject).save(failOnError:true)
+
         Installation ningalooArray =
             new Installation(name:'Ningaloo Array',
                              configuration:array,
@@ -671,6 +690,18 @@ class BootStrap
                                     curtainPosition:2,
                                     location:(Point)reader.read("POINT(20.1234 20.1234)")).save(failOnError:true)
             
+        InstallationStation heronS1 = 
+            new InstallationStation(installation:heronCurtain,
+                                    name:'Heron S1',
+                                    curtainPosition:1,
+                                    location:(Point)reader.read("POINT(12.34 -42.30)")).save(failOnError:true)
+
+        InstallationStation heronS2 = 
+            new InstallationStation(installation:heronCurtain,
+                                    name:'Heron S2',
+                                    curtainPosition:2,
+                                    location:(Point)reader.read("POINT(76.02 -20.1234)")).save(failOnError:true)
+            
 
         //
         //  Receiver Deployments.
@@ -706,6 +737,33 @@ class BootStrap
         ReceiverDeployment rx3Ningaloo =
             new ReceiverDeployment(station:ningalooS1,
                                    receiver:rx3,
+                                   deploymentNumber:1,
+                                   deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
+                                   acousticReleaseID:"asdf",
+                                   mooringType:concreteMooring,
+                                   bottomDepthM:12f,
+                                   depthBelowSurfaceM:5f,
+                                   receiverOrientation:ReceiverOrientation.UP,
+                                   batteryLifeDays:90,
+                                   location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
+                               
+        ReceiverDeployment rx4Heron =
+            new ReceiverDeployment(station:heronS1,
+                                   receiver:rx4,
+                                   deploymentNumber:1,
+                                   deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
+                                   acousticReleaseID:"asdf",
+                                   mooringType:concreteMooring,
+                                   bottomDepthM:12f,
+                                   depthBelowSurfaceM:5f,
+                                   receiverOrientation:ReceiverOrientation.UP,
+                                   batteryLifeDays:90,
+                                   location:(Point)reader.read("POINT(10.1234 10.1234)"),
+                                   comments:"This was fun to deploy").save(failOnError:true)
+                               
+        ReceiverDeployment rx5Heron =
+            new ReceiverDeployment(station:heronS2,
+                                   receiver:rx5,
                                    deploymentNumber:1,
                                    deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
                                    acousticReleaseID:"asdf",

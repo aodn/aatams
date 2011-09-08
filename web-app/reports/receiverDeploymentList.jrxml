@@ -18,6 +18,48 @@
 	<field name="mooringType.type" class="java.lang.String"/>
 	<field name="depthBelowSurfaceM" class="java.lang.Double"/>
 	<field name="comments" class="java.lang.String"/>
+	<field name="station.installation.project.name" class="java.lang.String"/>
+	<field name="station.installation.name" class="java.lang.String"/>
+
+    <sortField name="station.installation.project.name" order="Ascending"/>
+    <sortField name="station.installation.name" order="Ascending"/>
+    <sortField name="receiver.codeName" order="Ascending"/>
+
+
+	<group name="projectGroup">
+		<groupExpression><![CDATA[$F{station.installation.project.name}]]></groupExpression>
+		<groupHeader>
+			<band height="27">
+				<textField>
+					<reportElement style="fieldValue" x="91" y="7" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{station.installation.project.name}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="fieldNameText" x="18" y="7" width="73" height="20"/>
+					<textElement/>
+					<text><![CDATA[project:]]></text>
+				</staticText>
+            </band>
+		</groupHeader>
+	</group>
+	<group name="installationGroup">
+		<groupExpression><![CDATA[$F{station.installation.name}]]></groupExpression>
+		<groupHeader>
+			<band height="27">
+				<textField>
+					<reportElement style="fieldValue" x="91" y="7" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{station.installation.name}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="fieldNameText" x="18" y="7" width="73" height="20"/>
+					<textElement/>
+					<text><![CDATA[installation:]]></text>
+				</staticText>
+            </band>
+		</groupHeader>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

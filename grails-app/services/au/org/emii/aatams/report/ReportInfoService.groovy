@@ -24,7 +24,8 @@ class ReportInfoService
 
     static def propertyToLabel =
         ["organisation.name": "organisation",
-         "station.installation.project.name": "project"]
+         "station.installation.project.name": "project",
+         "station.installation.name": "installation"]
     
     static def reportNameToClass =
         ["receiver": Receiver.class,
@@ -43,7 +44,8 @@ class ReportInfoService
             [new ListReportParameter(label: propertyToLabel["organisation.name"], propertyName:"organisation.name", range:organisationRange)]
             
         def receiverDeploymentFilterParams = 
-            [new ListReportParameter(label: propertyToLabel["station.installation.project.name"], propertyName:"station.installation.project.name", range:projectRange)]
+            [new ListReportParameter(label: propertyToLabel["station.installation.project.name"], propertyName:"station.installation.project.name", range:projectRange),
+             new ListReportParameter(label: propertyToLabel["station.installation.name"], propertyName:"station.installation.name", range:installationRange)]
         
             
 //            [new ListReportParameter(label: "project", propertyName:"deployments.station.installation.project.name", range:projectRange),

@@ -15,6 +15,10 @@
 	<field name="model.manufacturer.manufacturerName" class="java.lang.String"/>
 	<field name="serialNumber" class="java.lang.String"/>
 	<field name="organisation.name" class="java.lang.String"/>
+
+    <sortField name="organisation.name" order="Ascending"/>
+    <sortField name="codeName" order="Ascending"/>
+
 	<group name="organisationGroup">
 		<groupExpression><![CDATA[$F{organisation.name}]]></groupExpression>
 		<groupHeader>

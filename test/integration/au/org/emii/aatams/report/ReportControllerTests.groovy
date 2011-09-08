@@ -2,12 +2,12 @@ package au.org.emii.aatams.report
 
 import grails.test.*
 
+import au.org.emii.aatams.*
+
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
  
-import javax.servlet.ServletContext
-
 import org.codehaus.groovy.grails.plugins.jasper.*
 import org.apache.commons.lang.StringUtils
 
@@ -15,8 +15,8 @@ import org.apache.commons.lang.StringUtils
  * Report formats are CSV, so that we can easily compare controller output to
  * an expected CSV output. (as opposed to PDF).
  */
-//class ReportControllerTests extends GroovyTestCase 
-class ReportControllerTests extends ControllerUnitTestCase 
+//class ReportControllerTests extends ControllerUnitTestCase 
+class ReportControllerTests extends ChainableControllerUnitTestCase 
 {
 //    def controller
     def reportInfoService
@@ -30,16 +30,11 @@ class ReportControllerTests extends ControllerUnitTestCase
     {
         super.setUp()
         
-//        controller = new ReportController()
-        
-        controller.reportInfoService = reportInfoService
-        controller.reportQueryExecutorService = reportQueryExecutorService
-
-        controller.metaClass.servletContext = 
-            [ getRealPath: {System.getProperty("user.dir") + "/web-app/reports"}] as ServletContext
-        
-        jasperController = new au.org.emii.aatams.report.JasperController()
-        jasperController.jasperService = jasperService
+          mockController(JasperController)
+          jasperController = JasperController.newInstance()
+          
+//        controller.metaClass.servletContext = 
+//            [ getRealPath: {System.getProperty("user.dir") + "/web-app" + it }] as ServletContext
         
         mockLogging(JasperController, true)
         mockLogging(ReportController, true)

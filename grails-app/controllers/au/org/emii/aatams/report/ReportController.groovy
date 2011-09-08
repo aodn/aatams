@@ -25,7 +25,7 @@ class ReportController
             reportQueryExecutorService.executeQuery(reportInfoService.getClassForName(params._name), 
                                                     params.filter)
         
-        params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"
+        params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/" 
         
         // Put the filter params in flash scope, since the controller chaining
         // below converts everything in "params" to its toString() representation

@@ -19,8 +19,9 @@ class CandidateEntitiesFilters
     {
         all(controller:'*', action:'create|edit|save|update|addSurgery')
         {
+/**            
             after = {model ->
-                
+
                 if (   !SecurityUtils.subject.isAuthenticated()
                     && (controllerName == "person"))
                 {
@@ -58,6 +59,7 @@ class CandidateEntitiesFilters
                     model?.candidatePeople = candidatePeople
                 }
             }
+*/                
         }
         
         embargoPeriod(controller:'animalRelease', action:'create|edit')

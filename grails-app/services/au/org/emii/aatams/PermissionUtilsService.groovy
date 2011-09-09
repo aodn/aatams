@@ -12,6 +12,18 @@ class PermissionUtilsService
     // Cache the Principal Investigator role type to speed things up.
     def piRoleType
     
+    private static final String NOT_PERMITTED = "notPermitted"
+    private static final String PROJECT_READ_ANY = "projectReadAny"
+    private static final String PROJECT_WRITE_ANY = "projectWriteAny"
+    private static final String PERSON_WRITE_ANY = "personWriteAny"
+    private static final String RECEIVER_CREATE = "receiverCreate"
+    
+
+    private static final Map<Long, String> PROJECT_READ = [:]
+    private static final Map<Long, String> PROJECT_WRITE = [:]
+    private static final Map<Long, String> PI = [:]
+    private static final Map<Long, String> RECEIVER = [:]
+    
     ProjectRoleType getPIRoleType()
     {
         if (piRoleType == null)
@@ -19,6 +31,7 @@ class PermissionUtilsService
             piRoleType = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
         }
         
+        assert(piRoleType): "piRoleType cannot be null"
         return piRoleType
     }
     
@@ -115,14 +128,29 @@ class PermissionUtilsService
         return user
     }
     
-    String buildProjectReadPermission(projectId)
+    private String buildPermission(Long id, Map cache, String permFormat)
     {
-        if (!projectId)
+        if (!id)
         {
-            return "notPermitted"
+            return NOT_PERMITTED
         }
         
-        return "project:" + projectId + ":read"
+        String perm = cache.get(id)
+        if (!perm)
+        {
+            perm = String.format(permFormat, id)
+            cache[id] = perm
+        }
+        
+        assert(perm): "permission cannot be null"
+        assert(perm != ""): "permission cannot be blank"
+        
+        return perm
+    }
+    
+    String buildProjectReadPermission(projectId)
+    {
+        return buildPermission(projectId, PROJECT_READ, "project:%d:read")
     }
     
     /**
@@ -135,52 +163,37 @@ class PermissionUtilsService
      */
     String buildProjectReadAnyPermission()
     {
-        return "projectReadAny"
+        return PROJECT_READ_ANY
     }
     
     String buildProjectWritePermission(projectId)
     {
-        if (!projectId)
-        {
-            return "notPermitted"
-        }
-        
-        return "project:" + projectId + ":write"
+        return buildPermission(projectId, PROJECT_WRITE, "project:%d:write")
     }
     
     String buildProjectWriteAnyPermission()
     {
-        return "projectWriteAny"
+        return PROJECT_WRITE_ANY
     }
     
     String buildPrincipalInvestigatorPermission(projectId)
     {
-        if (!projectId)
-        {
-            return "notPermitted"
-        }
-        
-        return "principalInvestigator:" + projectId
+        return buildPermission(projectId, PI, "principalInvestigator:%d")
     }
 
     String buildPersonWriteAnyPermission()
     {
-        return "personWriteAny"
+        return PERSON_WRITE_ANY
     }
     
     String buildReceiverCreatePermission()
     {
-        return "receiverCreate"
+        return RECEIVER_CREATE
     }
     
     String buildReceiverUpdatePermission(receiverId)
     {
-        if (!receiverId)
-        {
-            return "notPermitted"
-        }
-        
-        return "receiverUpdate:" + receiverId
+        return buildPermission(receiverId, RECEIVER, "receiverUpdate:%d")
     }
     
     def principal()

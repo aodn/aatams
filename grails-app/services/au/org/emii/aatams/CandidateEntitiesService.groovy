@@ -12,7 +12,7 @@ class CandidateEntitiesService
 
     def permissionUtilsService
     
-    def projects =
+    def projects()
     {
         def candidateProjects = 
             Project.list().grep(
@@ -24,7 +24,7 @@ class CandidateEntitiesService
         return candidateProjects
     }
     
-    def organisations =
+    def organisations()
     {
         def subjectsOrganisations
 
@@ -42,7 +42,7 @@ class CandidateEntitiesService
         return subjectsOrganisations
     }
     
-    def installations =
+    def installations()
     {
         def candidateInstallations = 
             Installation.list().grep(
@@ -53,7 +53,7 @@ class CandidateEntitiesService
         return candidateInstallations
     }
     
-    def stations =
+    def stations()
     {
         def candidateStations = 
             InstallationStation.list().grep(
@@ -64,7 +64,7 @@ class CandidateEntitiesService
         return candidateStations
     }
     
-    def receivers =
+    def receivers()
     {
         def candOrganisations = organisations()
         
@@ -108,7 +108,7 @@ class CandidateEntitiesService
         return candidatePeople
     }
     
-    def deployments =
+    def deployments()
     {
         def candidateDeployments =
             ReceiverDeployment.list().grep(
@@ -119,7 +119,7 @@ class CandidateEntitiesService
         return candidateDeployments
     }
     
-    def surgeries =
+    def surgeries()
     {
         def candidateSurgeries =
             Surgery.list().grep(
@@ -133,7 +133,7 @@ class CandidateEntitiesService
     /**
      * The list of projects that the current user has read access on.
      */
-    def readableProjects =
+    def readableProjects()
     {
         def subject = SecurityUtils.subject
         if (!subject)

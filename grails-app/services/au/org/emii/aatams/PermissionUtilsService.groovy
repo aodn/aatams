@@ -206,7 +206,8 @@ class PermissionUtilsService
             return null
         }
         
-        Person principal = Person.findByUsername(SecurityUtils.subject?.principal)
+        // Caching to speed up candidateEntitiesService.
+        Person principal = Person.findByUsername(SecurityUtils.subject?.principal, [cache:true])
         assert(principal): "principal cannot be null"
         return principal
     }

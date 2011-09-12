@@ -33,6 +33,10 @@ class ReceiverDeployment
         }
 
         comments type: 'text'
+        
+        // Speed up candidateEntitiesService.
+        cache: true
+        station cache:true
     }
     
     /**

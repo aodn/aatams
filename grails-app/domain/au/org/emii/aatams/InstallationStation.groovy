@@ -22,6 +22,10 @@ class InstallationStation
         {
             location type:org.hibernatespatial.GeometryUserType
         }
+        
+        // Speed up candidateEntitiesService.
+        cache: true
+        installation cache:true
     }
     
     String name

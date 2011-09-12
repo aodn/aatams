@@ -20,6 +20,13 @@ class Installation
         project()
     }
      
+    static mapping =
+    {
+        // Speed up candidateEntitiesService.
+        cache: true
+        project cache:true
+    }
+    
     String toString()
     {
         return name

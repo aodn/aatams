@@ -8,8 +8,6 @@ import org.apache.shiro.SecurityUtils
 
 class CandidateEntitiesFilterTests extends GrailsUnitTestCase 
 {
-    CandidateEntitiesFilters filter
-    
     PermissionUtilsService permService
     Project activeProj
     Project pendingProj
@@ -141,6 +139,7 @@ class CandidateEntitiesFilterTests extends GrailsUnitTestCase
                          
         def installList = [activeInstallation, pendingInstallation, nonWriteInstallation]
         mockDomain(Installation, installList)
+        Installation.metaClass.static.createCriteria = {[list: {Closure cls -> [activeInstallation]}]}
         installList.each { it.save() }
 
         activeStation =

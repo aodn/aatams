@@ -49,6 +49,7 @@ class PermissionUtilsService
             return null
         }
 
+        CachedDbRealm.markCacheDirty()
         
         // Principal Investigators have special permissions.
         log.debug("Comparing roleTypes, person's roleType: " + projectRole.roleType + ", PI role type: " + getPIRoleType())
@@ -100,6 +101,8 @@ class PermissionUtilsService
             return null
         }
 
+        CachedDbRealm.markCacheDirty()
+        
         if (   projectRole.roleType 
             == getPIRoleType())
         {
@@ -212,6 +215,8 @@ class PermissionUtilsService
      */
     def receiverCreated(receiverInstance)
     {
+        CachedDbRealm.markCacheDirty()
+        
         String permissionString = buildReceiverUpdatePermission(receiverInstance?.id)
         
 //        log.debug("Adding permission \'" + permissionString + "\' to user:" + String.valueOf(principal()))
@@ -221,6 +226,8 @@ class PermissionUtilsService
 
     def receiverDeleted(receiverInstance)
     {
+        CachedDbRealm.markCacheDirty()
+        
         String permissionString = buildReceiverUpdatePermission(receiverInstance?.id)
      
         log.debug("Deleting permission \'" + permissionString + "\' from all users...")

@@ -1,3 +1,7 @@
+package au.org.emii.aatams
+
+import shiro.SecDbRealm
+
 /**
  *
  * @author jburgess

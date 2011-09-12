@@ -5,6 +5,8 @@ import org.joda.time.contrib.hibernate.*
 
 class ReceiverDeploymentController {
 
+    def candidateEntitiesService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -19,7 +21,11 @@ class ReceiverDeploymentController {
     def create = {
         def receiverDeploymentInstance = new ReceiverDeployment()
         receiverDeploymentInstance.properties = params
-        return [receiverDeploymentInstance: receiverDeploymentInstance]
+        
+        def model = [receiverDeploymentInstance: receiverDeploymentInstance]
+        model.candidateStations = candidateEntitiesService.stations()
+        model.candidateReceivers = candidateEntitiesService.receivers()
+        return model
     }
 
     def save = {
@@ -69,7 +75,10 @@ class ReceiverDeploymentController {
             redirect(action: "list")
         }
         else {
-            return [receiverDeploymentInstance: receiverDeploymentInstance]
+            def model = [receiverDeploymentInstance: receiverDeploymentInstance]
+            model.candidateStations = candidateEntitiesService.stations()
+            model.candidateReceivers = candidateEntitiesService.receivers()
+            return model
         }
     }
 

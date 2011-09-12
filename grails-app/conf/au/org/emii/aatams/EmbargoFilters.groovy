@@ -1,4 +1,4 @@
-import au.org.emii.aatams.*
+package au.org.emii.aatams
 
 import org.apache.shiro.SecurityUtils
 

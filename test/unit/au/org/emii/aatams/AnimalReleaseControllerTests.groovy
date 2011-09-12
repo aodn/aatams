@@ -561,4 +561,5 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         assertNotNull(release)
         assertNull(release.embargoDate)
     }
+    
 }

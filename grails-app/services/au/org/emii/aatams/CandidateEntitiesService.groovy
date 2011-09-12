@@ -15,11 +15,10 @@ class CandidateEntitiesService
     def projects()
     {
         def candidateProjects = 
-            Project.list().grep(
+            Project.findAllByStatus(EntityStatus.ACTIVE).grep
             {
-                (   (SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(it.id)))
-                 && (it.status == EntityStatus.ACTIVE))
-            })
+                SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(it.id))
+            }
         
         return candidateProjects
     }
@@ -44,13 +43,27 @@ class CandidateEntitiesService
     
     def installations()
     {
-        def candidateInstallations = 
-            Installation.list().grep(
-            {
-                projects().contains(it.project)
-            })
+//        def candidateInstallations = 
+//            Installation.list().grep(
+//            {
+//                projects().contains(it.project)
+//            })
+//        
+//        return candidateInstallations
         
-        return candidateInstallations
+        def criteria = Installation.createCriteria()
+        def results = criteria.list
+        {
+            project
+            {
+                projects().each
+                {
+                    eq('id', it.id)
+                }
+            }
+        }
+        
+        return results
     }
     
     def stations()
@@ -141,10 +154,9 @@ class CandidateEntitiesService
             return []
         }
         
-        Project.list().grep(
+        Project.findAllByStatus(EntityStatus.ACTIVE).grep
         {
-            (   (subject.isPermitted(permissionUtilsService.buildProjectReadPermission(it.id)))
-             && (it.status == EntityStatus.ACTIVE))
-        })
+            SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(it.id))
+        }
     }
 }

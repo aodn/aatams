@@ -1,3 +1,5 @@
+package shiro
+
 class SecRoleController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]

@@ -6,6 +6,8 @@ import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
+import shiro.*
+
 class CachedDbRealmTests extends GrailsUnitTestCase 
 {
     def realm

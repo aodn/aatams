@@ -11,6 +11,8 @@ import org.joda.time.format.DateTimeFormat
 
 import com.vividsolutions.jts.geom.Point
 
+import shiro.*
+
 class BootStrap 
 {
     def permissionUtilsService // = new PermissionUtilsService()
@@ -160,8 +162,8 @@ class BootStrap
             
             development
             {
-                initData()
-//                initPerformanceData()
+//                initData()
+                initPerformanceData()
             }
             
             production
@@ -919,7 +921,7 @@ class BootStrap
     def numTagsPerProject = 100         // 5000
     def numDetectionsPerSurgery = 5     // 25000
     
-/*     
+/*     */
     ProjectRoleType principalInvestigator = new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
     ProjectRoleType student = new ProjectRoleType(displayName:'student').save()
     DeviceModel deviceModel = DeviceModel.build().save() 
@@ -1231,5 +1233,5 @@ class BootStrap
 //        org.save(flush:true)    // Flush so that Receiver.findByCodeName (in tags) works.
 
     }
-    */
+    /** */
 }

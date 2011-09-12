@@ -26,6 +26,12 @@ class Person extends SecUser
         status()
         registrationComment(nullable:true, blank:true)
     }
+
+    static mapping = 
+    {
+        // Speed up candidate entities service/permission utils service.
+        cache:true
+    }
     
     String toString()
     {

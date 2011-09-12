@@ -1,6 +1,8 @@
+package shiro
+
 import grails.test.*
 
-class SecUserControllerTests extends ControllerUnitTestCase {
+class SecRoleControllerTests extends ControllerUnitTestCase {
     protected void setUp() {
         super.setUp()
     }

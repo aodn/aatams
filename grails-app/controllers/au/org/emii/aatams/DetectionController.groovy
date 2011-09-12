@@ -2,6 +2,8 @@ package au.org.emii.aatams
 
 class DetectionController {
 
+    def candidateEntitiesService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -16,7 +18,10 @@ class DetectionController {
     def create = {
         def detectionInstance = new Detection()
         detectionInstance.properties = params
-        return [detectionInstance: detectionInstance]
+        
+        def model = [detectionInstance: detectionInstance]
+        model.candidateDeployments = candidateEntitiesService.deployments()
+        return model
     }
 
     def save = {
@@ -47,8 +52,11 @@ class DetectionController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'detection.label', default: 'Detection'), params.id])}"
             redirect(action: "list")
         }
-        else {
-            return [detectionInstance: detectionInstance]
+        else 
+        {
+            def model = [detectionInstance: detectionInstance]
+            model.candidateDeployments = candidateEntitiesService.deployments()
+            return model
         }
     }
 

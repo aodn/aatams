@@ -5,7 +5,7 @@ class AnimalReleaseController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     
     def animalFactoryService
-    
+    def candidateEntitiesService
     def detectionFactoryService
     
     def tagFactoryService
@@ -22,7 +22,12 @@ class AnimalReleaseController {
     def create = {
         def animalReleaseInstance = new AnimalRelease()
         animalReleaseInstance.properties = params
-        return [animalReleaseInstance: animalReleaseInstance]
+        
+        def model = [animalReleaseInstance: animalReleaseInstance]
+        addEmbargoPeriodsToModel(model)
+        model.candidateProjects = candidateEntitiesService.projects()
+
+        return model
     }
     
     def addDependantEntity(params)
@@ -178,7 +183,11 @@ class AnimalReleaseController {
             redirect(action: "list")
         }
         else {
-            return [animalReleaseInstance: animalReleaseInstance]
+            def model = [animalReleaseInstance: animalReleaseInstance]
+            addEmbargoPeriodsToModel(model)
+            model.candidateProjects = candidateEntitiesService.projects()
+
+            return model
         }
     }
 
@@ -256,6 +265,12 @@ class AnimalReleaseController {
         {
             animalReleaseInstance.embargoDate = null
         }
+    }
+    
+    def addEmbargoPeriodsToModel(def model)
+    {
+        def embargoPeriods = [6: '6 months', 12: '12 months']
+        model?.embargoPeriods = embargoPeriods.entrySet()
     }
 }
 

@@ -4,6 +4,8 @@ import grails.converters.JSON
 
 class TagController {
 
+    def candidateEntitiesService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -22,7 +24,9 @@ class TagController {
         // Default to NEW.
         tagInstance.status = DeviceStatus.findByStatus('NEW')
         
-        return [tagInstance: tagInstance]
+        def model = [tagInstance: tagInstance]
+        model.candidateProjects = candidateEntitiesService.projects()
+        return model
     }
 
     def save = {
@@ -60,7 +64,9 @@ class TagController {
             redirect(action: "list")
         }
         else {
-            return [tagInstance: tagInstance]
+            def model = [tagInstance: tagInstance]
+            model.candidateProjects = candidateEntitiesService.projects()
+            return model
         }
     }
 

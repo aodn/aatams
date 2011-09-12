@@ -206,7 +206,9 @@ class PermissionUtilsService
             return null
         }
         
-        return Person.findByUsername(SecurityUtils.subject?.principal)
+        Person principal = Person.findByUsername(SecurityUtils.subject?.principal)
+        assert(principal): "principal cannot be null"
+        return principal
     }
     
     /**

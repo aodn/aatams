@@ -2,6 +2,8 @@ package au.org.emii.aatams
 
 class InstallationController {
 
+    def candidateEntitiesService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -17,7 +19,9 @@ class InstallationController {
         def installationInstance = new Installation()
         installationInstance.properties = params
         
-        return [installationInstance: installationInstance]
+        def model = [installationInstance: installationInstance]
+        model.candidateProjects = candidateEntitiesService.projects()
+        return model
     }
 
     def save = {
@@ -50,7 +54,9 @@ class InstallationController {
         }
         else 
         {
-            return [installationInstance: installationInstance]
+            def model = [installationInstance: installationInstance]
+            model.candidateProjects = candidateEntitiesService.projects()
+            return model
         }
     }
 

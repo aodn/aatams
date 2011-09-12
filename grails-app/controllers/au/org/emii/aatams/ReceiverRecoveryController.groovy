@@ -4,7 +4,6 @@ import org.joda.time.*
 
 class ReceiverRecoveryController 
 {
-
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def candidateEntitiesService

@@ -1,5 +1,6 @@
 import au.org.emii.aatams.*
 
+import shiro.*
 import org.apache.shiro.SecurityUtils
 
 /**

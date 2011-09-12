@@ -1,3 +1,5 @@
+package shiro
+
 class SecRole {
     String name
 

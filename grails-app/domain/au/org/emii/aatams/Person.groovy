@@ -1,6 +1,7 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.util.ListUtils
+import shiro.*
 
 class Person extends SecUser
 {

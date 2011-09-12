@@ -28,10 +28,11 @@ class Project
         requestingUser(nullable:true)
     }
     
-    static mapping = 
+    static mapping =
     {
         // Speed up the candidateEntitiesService (that reads user's projects).
-        cache true
+	cache true
+	status index:'status_index'
     }
     
     String toString()

@@ -1,3 +1,5 @@
+package shiro
+
 class SecUser {
     String username
     String passwordHash

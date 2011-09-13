@@ -160,9 +160,8 @@ class BootStrap
             
             development
             {
-//                initReferenceData()
-                initData()
-//                initPerformanceData()
+//                initData()
+                initPerformanceData()
             }
             
             production
@@ -963,12 +962,13 @@ class BootStrap
     def numDetectionsPerSurgery = 2     // 48
     
 //    def numEventsPerRecovery = 2
-    
+*/
+
     // Large numbers for performance/load testing.
-    
+/**    
     def smallTest = false
-    def numOrgs = 10
-    def numProjectsPerOrg = 5           // 50
+    def numOrgs = 2 // 10
+    def numProjectsPerOrg = 2 // 5           // 50
     def numPeoplePerProject = 4         // 200
 
     def numInstallationsPerProject = 5  // 250
@@ -979,7 +979,6 @@ class BootStrap
     def numTagsPerProject = 100         // 5000
     def numDetectionsPerSurgery = 5     // 25000
     
-//    def numEventsPerRecovery = 2
     
     ProjectRoleType principalInvestigator = new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
     ProjectRoleType student = new ProjectRoleType(displayName:'student').save()
@@ -1291,5 +1290,5 @@ class BootStrap
         
 //        org.save(flush:true)    // Flush so that Receiver.findByCodeName (in tags) works.
     }
-    */    
+     */    
 }

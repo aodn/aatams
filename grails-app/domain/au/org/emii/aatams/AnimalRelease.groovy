@@ -19,7 +19,7 @@ class AnimalRelease
 {
     static belongsTo = [project: Project, animal: Animal]
     static hasMany = [surgeries: Surgery, measurements: AnimalMeasurement]
-    static transients = ['scrambledReleaseLocation']
+    static transients = ['scrambledReleaseLocation', 'current', 'embargoed']
     static mapping =
     {
         captureDateTime type: PersistentDateTimeTZ,
@@ -89,5 +89,15 @@ class AnimalRelease
     Point getScrambledReleaseLocation()
     {
         return GeometryUtils.scrambleLocation(releaseLocation)
+    }
+    
+    boolean isCurrent()
+    {
+        return status == AnimalReleaseStatus.CURRENT
+    }
+    
+    boolean isEmbargoed()
+    {
+        return (embargoDate != null) && (embargoDate.compareTo(new Date()) > 0)
     }
 }

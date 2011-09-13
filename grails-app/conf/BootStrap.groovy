@@ -160,8 +160,8 @@ class BootStrap
             
             development
             {
-//                initData()
-                initPerformanceData()
+                initData()
+//                initPerformanceData()
             }
             
             production

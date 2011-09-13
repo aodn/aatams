@@ -45,6 +45,7 @@ class NavigationMenuController
      */
     def reportActions =
     [
+        'animalReleaseSummaryCreate':"Tag Summary",
         'installationStationCreate':"Installations",
         'receiverCreate':"Receivers",
         'receiverDeploymentCreate':"Receiver Deployments"

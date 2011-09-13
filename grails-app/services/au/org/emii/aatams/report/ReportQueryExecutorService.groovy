@@ -11,6 +11,8 @@ class ReportQueryExecutorService
 {
     static transactional = true
 
+    def animalReleaseSummaryService
+    
     /**
      * Executes a query for the named domain class with given filter parameters
      * applied.
@@ -23,12 +25,19 @@ class ReportQueryExecutorService
     {
         log.debug("Executing report query, domain: " + domain + ", params: " + params)
         
+        // Special handling for AnimalReleaseSummaryService
+        // TODO: refactor
+        if (domain == AnimalReleaseSummaryService)
+        {
+            return animalReleaseSummaryService.executeReportQuery(params)
+        }
+        
         if (!params || params.isEmpty())
         {
             // No filter parameters specified, just return all.
             return domain.list()
         }
-        
+
         // Filter parameters specified, need to build a criteria.
         def criteria = domain.createCriteria()
 

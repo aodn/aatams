@@ -20,7 +20,8 @@ class ReportInfoService
     static def reportMapping =
         ["installationStation": "au.org.emii.aatams.InstallationStation",
          "receiver": "au.org.emii.aatams.Receiver",
-         "receiverDeployment": "au.org.emii.aatams.ReceiverDeployment"]
+         "receiverDeployment": "au.org.emii.aatams.ReceiverDeployment",
+         "animalReleaseSummary": "au.org.emii.aatams.report.AnimalReleaseSummaryService"]
 
     static def propertyToLabel =
         ["organisation.name": "organisation",
@@ -31,7 +32,8 @@ class ReportInfoService
     static def reportNameToClass =
         ["installationStation": InstallationStation.class,
          "receiver": Receiver.class,
-         "receiverDeployment": ReceiverDeployment.class]
+         "receiverDeployment": ReceiverDeployment.class,
+         "animalReleaseSummary": AnimalReleaseSummaryService.class]
         
     /**
      * Return info for all available reports (keyed by the domain class).
@@ -53,9 +55,6 @@ class ReportInfoService
              new ListReportParameter(label: propertyToLabel["station.installation.name"], propertyName:"station.installation.name", range:installationRange)]
         
             
-//            [new ListReportParameter(label: "project", propertyName:"deployments.station.installation.project.name", range:projectRange),
-//             new ListReportParameter(label: "installation", propertyName:"deployments.station.installation.name", range:installationRange)]
-        
         return [(InstallationStation.class):new ReportInfo(displayName:"Installations",
                                                            jrxmlFilename:"installationStationList",
                                                            filterParams:installationStationFilterParams),
@@ -64,7 +63,10 @@ class ReportInfoService
                                                 filterParams:receiverFilterParams),
                 (ReceiverDeployment.class):new ReportInfo(displayName:"Receiver Deployments", 
                                                           jrxmlFilename:"receiverDeploymentList", 
-                                                          filterParams:receiverDeploymentFilterParams)
+                                                          filterParams:receiverDeploymentFilterParams),
+                (AnimalReleaseSummaryService.class):new ReportInfo(displayName:"Tag Summary", 
+                                                          jrxmlFilename:"animalReleaseSummary", 
+                                                          filterParams:[])
                 ]
     }
     
@@ -109,6 +111,11 @@ class ReportInfoService
      */
     Map<String, Object> filterParamsToReportFormat(params)
     {
+        if (!params)
+        {
+            return [:]
+        }
+        
         // Only include entries with non-map, non-blank, non-null values.
         Map filteredVals = params.findAll
         {

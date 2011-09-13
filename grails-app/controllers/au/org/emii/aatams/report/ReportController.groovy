@@ -32,17 +32,19 @@ class ReportController
         // Put the filter params in flash scope, since the controller chaining
         // below converts everything in "params" to its toString() representation
         // (whereas we want an actual Map delivered to Jasper).
-        flash.FILTER_PARAMS = [:]
+        def filterParams = [:]
         
         Person person = permissionUtilsService.principal()
         if (person)
         {
-            flash.FILTER_PARAMS.user = person.name
+            filterParams.user = person.name
         }
 
-        flash.FILTER_PARAMS = flash.FILTER_PARAMS + reportInfoService.filterParamsToReportFormat(params.filter)
+        filterParams = filterParams + reportInfoService.filterParamsToReportFormat(params.filter)
         
-        log.debug("Filter params: " + flash.FILTER_PARAMS)
+        log.debug("Filter params: " + filterParams)
+        
+        params.FILTER_PARAMS = filterParams.entrySet()
         
         // Delegate to report controller, including our wrapped data.
         JasperReportDef report = jasperService.buildReportDefinition(params, request.getLocale(), [data:resultList])
@@ -67,6 +69,11 @@ class ReportController
         {
             render(text: reportDef.contentStream, contentType: reportDef.fileFormat.mimeTyp, encoding: reportDef.parameters.encoding ? reportDef.parameters.encoding : 'UTF-8');
         }
+    }
+    
+    def animalReleaseSummaryCreate =
+    {
+        redirect(action:"create", params:[name:"animalReleaseSummary"])
     }
     
     def installationStationCreate =

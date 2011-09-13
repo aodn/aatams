@@ -44,7 +44,9 @@ class ReportControllerTests extends ControllerUnitTestCase
         
         controller.metaClass.servletContext = 
             [ getRealPath: {System.getProperty("user.dir") + "/web-app" + it }] as ServletContext
-        
+
+        controller.params.pdf = "PDF"
+        controller.params._format = "CSV"
     }
 
     protected void tearDown() 
@@ -54,8 +56,6 @@ class ReportControllerTests extends ControllerUnitTestCase
 
     void testExecuteReceiverNoFilter() 
     {
-        controller.params.pdf = "PDF"
-        controller.params._format = "CSV"
         controller.params._name = "receiver"
         controller.params."filter.organisation.name" = null
         controller.params._file = "receiverList"
@@ -70,10 +70,7 @@ class ReportControllerTests extends ControllerUnitTestCase
     
     void testExecuteReceiverFilterByOrg() 
     {
-        controller.params.pdf = "PDF"
-        controller.params._format = "CSV"
         controller.params._name = "receiver"
-        controller.params."filter.organisation.name" = "IMOS"
         controller.params._file = "receiverList"
         controller.params.filter = 
                     [organisation:[name:"IMOS"]]
@@ -85,8 +82,6 @@ class ReportControllerTests extends ControllerUnitTestCase
 
     void testExecuteInstallationStationNoFilter() 
     {
-        controller.params.pdf = "PDF"
-        controller.params._format = "CSV"
         controller.params._name = "installationStation"
         controller.params._file = "installationStationList"
         controller.params.filter = 
@@ -99,8 +94,6 @@ class ReportControllerTests extends ControllerUnitTestCase
     
     void testExecuteInstallationStationByProject() 
     {
-        controller.params.pdf = "PDF"
-        controller.params._format = "CSV"
         controller.params._name = "installationStation"
         controller.params._file = "installationStationList"
         controller.params.filter = 
@@ -113,8 +106,6 @@ class ReportControllerTests extends ControllerUnitTestCase
 
     void testExecuteReceiverDeploymentNoFilter() 
     {
-        controller.params.pdf = "PDF"
-        controller.params._format = "CSV"
         controller.params._name = "receiverDeployment"
         controller.params._file = "receiverDeploymentList"
         controller.params.filter = 
@@ -127,8 +118,6 @@ class ReportControllerTests extends ControllerUnitTestCase
     
     void testExecuteReceiverDeploymentByProject() 
     {
-        controller.params.pdf = "PDF"
-        controller.params._format = "CSV"
         controller.params._name = "receiverDeployment"
         controller.params._file = "receiverDeploymentList"
         controller.params.filter = 
@@ -141,8 +130,6 @@ class ReportControllerTests extends ControllerUnitTestCase
     
     void testExecuteReceiverDeploymentByInstallation() 
     {
-        controller.params.pdf = "PDF"
-        controller.params._format = "CSV"
         controller.params._name = "receiverDeployment"
         controller.params._file = "receiverDeploymentList"
         controller.params.filter = 
@@ -155,8 +142,6 @@ class ReportControllerTests extends ControllerUnitTestCase
 
     void testExecuteReceiverDeploymentByProjectAndInstallation() 
     {
-        controller.params.pdf = "PDF"
-        controller.params._format = "CSV"
         controller.params._name = "receiverDeployment"
         controller.params._file = "receiverDeploymentList"
         controller.params.filter = 
@@ -166,6 +151,18 @@ class ReportControllerTests extends ControllerUnitTestCase
         
         checkResponse("testExecuteReceiverDeploymentByProjectAndInstallation")
     }
+    
+    void testExecuteAnimalReleaseSummary()
+    {
+        controller.params._name = "animalReleaseSummary"
+        controller.params._file = "animalReleaseSummary"
+        controller.params.filter = [:]
+                 
+        controller.execute()
+        
+        checkResponse("testExecuteAnimalReleaseSummary")
+    }
+    
 
     private void checkResponse(def expectedFileName)
     {

@@ -65,16 +65,121 @@ class ReportControllerTests extends ControllerUnitTestCase
                  
         controller.execute()
         
+        checkResponse("testExecuteReceiverNoFilter")
+    }
+    
+    void testExecuteReceiverFilterByOrg() 
+    {
+        controller.params.pdf = "PDF"
+        controller.params._format = "CSV"
+        controller.params._name = "receiver"
+        controller.params."filter.organisation.name" = "IMOS"
+        controller.params._file = "receiverList"
+        controller.params.filter = 
+                    [organisation:[name:"IMOS"]]
+                 
+        controller.execute()
+        
+        checkResponse("testExecuteReceiverFilterByOrg")
+    }
+
+    void testExecuteInstallationStationNoFilter() 
+    {
+        controller.params.pdf = "PDF"
+        controller.params._format = "CSV"
+        controller.params._name = "installationStation"
+        controller.params._file = "installationStationList"
+        controller.params.filter = 
+                    [installation:[project:[name:null]]] 
+                 
+        controller.execute()
+        
+        checkResponse("testExecuteInstallationStationNoFilter")
+    }
+    
+    void testExecuteInstallationStationByProject() 
+    {
+        controller.params.pdf = "PDF"
+        controller.params._format = "CSV"
+        controller.params._name = "installationStation"
+        controller.params._file = "installationStationList"
+        controller.params.filter = 
+                    [installation:[project:[name:"Seal Count"]]] 
+                 
+        controller.execute()
+        
+        checkResponse("testExecuteInstallationStationByProject")
+    }
+
+    void testExecuteReceiverDeploymentNoFilter() 
+    {
+        controller.params.pdf = "PDF"
+        controller.params._format = "CSV"
+        controller.params._name = "receiverDeployment"
+        controller.params._file = "receiverDeploymentList"
+        controller.params.filter = 
+            [station:[installation:[project:[name:null], name:null]]]
+                 
+        controller.execute()
+        
+        checkResponse("testExecuteReceiverDeploymentNoFilter")
+    }
+    
+    void testExecuteReceiverDeploymentByProject() 
+    {
+        controller.params.pdf = "PDF"
+        controller.params._format = "CSV"
+        controller.params._name = "receiverDeployment"
+        controller.params._file = "receiverDeploymentList"
+        controller.params.filter = 
+            [station:[installation:[project:[name:"Seal Count"], name:null]]]
+                 
+        controller.execute()
+        
+        checkResponse("testExecuteReceiverDeploymentByProject")
+    }
+    
+    void testExecuteReceiverDeploymentByInstallation() 
+    {
+        controller.params.pdf = "PDF"
+        controller.params._format = "CSV"
+        controller.params._name = "receiverDeployment"
+        controller.params._file = "receiverDeploymentList"
+        controller.params.filter = 
+            [station:[installation:[project:[name:null], name:"Ningaloo Array"]]]
+                 
+        controller.execute()
+        
+        checkResponse("testExecuteReceiverDeploymentByInstallation")
+    }
+
+    void testExecuteReceiverDeploymentByProjectAndInstallation() 
+    {
+        controller.params.pdf = "PDF"
+        controller.params._format = "CSV"
+        controller.params._name = "receiverDeployment"
+        controller.params._file = "receiverDeploymentList"
+        controller.params.filter = 
+            [station:[installation:[project:[name:"Seal Count"], name:"Heron Island"]]]
+                 
+        controller.execute()
+        
+        checkResponse("testExecuteReceiverDeploymentByProjectAndInstallation")
+    }
+
+    private void checkResponse(def expectedFileName)
+    {
         // Compare the response content with expected.
-        String expectedFileName = \
+        String expectedFilePath = \
             System.getProperty("user.dir") + \
             "/test/integration/au/org/emii/aatams/report/resources/" + \
-            "testExecuteReceiverNoFilter.expected.csv"
-        File expectedFile = new File(expectedFileName)
+            expectedFileName + ".expected.csv"
+            
+        File expectedFile = new File(expectedFilePath)
             
         // Write the content to a temp file (so we can see the test output after
         // the test has run).
-        File tmpFile = File.createTempFile("testExecuteReceiverNoFilter.actual.csv", "")
+        File tmpFile = File.createTempFile(expectedFileName + ".actual.csv", "")
         tmpFile.write(controller.response.contentAsString.trim())
         
         // Compare all but the last line (which includes a date, and therefore

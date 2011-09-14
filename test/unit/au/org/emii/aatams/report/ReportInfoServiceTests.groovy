@@ -39,7 +39,7 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
     {
         def reportInfos = reportInfoService.getReportInfo()
         
-        assertEquals(4, reportInfos.size())
+        assertEquals(5, reportInfos.size())
 
         ReportInfo receiverReportInfo = reportInfos.get(Receiver.class)
         

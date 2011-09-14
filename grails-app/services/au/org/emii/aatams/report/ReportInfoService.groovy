@@ -18,10 +18,12 @@ class ReportInfoService
      * hierarchy etc).
      */
     static def reportMapping =
-        ["installationStation": "au.org.emii.aatams.InstallationStation",
+        ["animalReleaseSummary": "au.org.emii.aatams.report.AnimalReleaseSummaryService",
+         "installationStation": "au.org.emii.aatams.InstallationStation",
          "receiver": "au.org.emii.aatams.Receiver",
          "receiverDeployment": "au.org.emii.aatams.ReceiverDeployment",
-         "animalReleaseSummary": "au.org.emii.aatams.report.AnimalReleaseSummaryService"]
+         "tag": "au.org.emii.aatams.Tag"
+         ]
 
     static def propertyToLabel =
         ["organisation.name": "organisation",
@@ -30,10 +32,12 @@ class ReportInfoService
          "station.installation.name": "installation"]
     
     static def reportNameToClass =
-        ["installationStation": InstallationStation.class,
+        ["animalReleaseSummary": AnimalReleaseSummaryService.class,
+         "installationStation": InstallationStation.class,
          "receiver": Receiver.class,
          "receiverDeployment": ReceiverDeployment.class,
-         "animalReleaseSummary": AnimalReleaseSummaryService.class]
+         "tag": Tag.class
+         ]
         
     /**
      * Return info for all available reports (keyed by the domain class).
@@ -55,7 +59,10 @@ class ReportInfoService
              new ListReportParameter(label: propertyToLabel["station.installation.name"], propertyName:"station.installation.name", range:installationRange)]
         
             
-        return [(InstallationStation.class):new ReportInfo(displayName:"Installations",
+        return [(AnimalReleaseSummaryService.class):new ReportInfo(displayName:"Tag Summary", 
+                                                          jrxmlFilename:"animalReleaseSummary", 
+                                                          filterParams:[]),
+                (InstallationStation.class):new ReportInfo(displayName:"Installations",
                                                            jrxmlFilename:"installationStationList",
                                                            filterParams:installationStationFilterParams),
                 (Receiver.class):new ReportInfo(displayName:"Receivers", 
@@ -64,9 +71,9 @@ class ReportInfoService
                 (ReceiverDeployment.class):new ReportInfo(displayName:"Receiver Deployments", 
                                                           jrxmlFilename:"receiverDeploymentList", 
                                                           filterParams:receiverDeploymentFilterParams),
-                (AnimalReleaseSummaryService.class):new ReportInfo(displayName:"Tag Summary", 
-                                                          jrxmlFilename:"animalReleaseSummary", 
-                                                          filterParams:[])
+                (Tag.class):new ReportInfo(displayName:"Tags", 
+                                           jrxmlFilename:"tagList", 
+                                           filterParams:[])
                 ]
     }
     

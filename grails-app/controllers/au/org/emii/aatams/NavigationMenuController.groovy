@@ -43,12 +43,17 @@ class NavigationMenuController
     /**
      * All reports use the same controller, just a different action.
      */
-    def reportActions =
+    def reportActions = 
     [
-        'animalReleaseSummaryCreate':"Tag Summary",
         'installationStationCreate':"Installations",
         'receiverCreate':"Receivers",
-        'receiverDeploymentCreate':"Receiver Deployments"
+        'receiverDeploymentCreate':"Receiver Deployments",
+        'animalReleaseSummaryCreate':"Tag Summary"
+    ]
+
+    def dataExtractActions = 
+    [
+        'tagCreate':"Tags"
     ]
     
     def helpControllers =
@@ -97,6 +102,7 @@ class NavigationMenuController
          installationDataControllers: installationDataControllers,
          fieldDataControllers: fieldDataControllers,
          reportActions: reportActions,
+         dataExtractActions: dataExtractActions,
          helpControllers: helpControllers,
          adminControllers: adminControllers,
          blacklistControllers: blacklistControllers

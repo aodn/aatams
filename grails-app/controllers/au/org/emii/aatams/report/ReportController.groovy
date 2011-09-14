@@ -103,4 +103,9 @@ class ReportController
     {
         redirect(action:"create", params:[name:"receiverDeployment"])
     }
+
+    def tagCreate =
+    {
+        redirect(action:"create", params:[name:"tag"])
+    }
 }

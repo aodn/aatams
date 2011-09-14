@@ -43,4 +43,14 @@ class Device
     {
         return codeName
     }
+    
+    String getComment()
+    {
+        if (!comment)
+        {
+            return ""
+        }
+        
+        return comment
+    }
 }

@@ -163,6 +163,17 @@ class ReportControllerTests extends ControllerUnitTestCase
         checkResponse("testExecuteAnimalReleaseSummary")
     }
     
+    void testExecuteTag()
+    {
+        controller.params._name = "tag"
+        controller.params._file = "tagList"
+        controller.params.filter = [:]
+                 
+        controller.execute()
+        
+        checkResponse("testExecuteTag")
+    }
+    
 
     private void checkResponse(def expectedFileName)
     {

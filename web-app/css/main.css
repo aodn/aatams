@@ -470,8 +470,13 @@ th.desc a {
     background: transparent url(../images/skin/database_table.png) 5px 50% no-repeat;
     padding-left: 28px;
 }
-.buttons input.pdf {
+
+.buttons input.PDF {
     background: transparent url(../images/skin/PDF.gif) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+.buttons input.CSV {
+    background: transparent url(../images/skin/CSV.gif) 5px 50% no-repeat;
     padding-left: 28px;
 }
 

@@ -17,13 +17,24 @@ class ReportController
     
     def create =
     {
-        return [name:params.name]
+        return [name:params.name, formats:params.formats]
     }
     
     def execute =
     {
         log.debug("Executing report, params: " + params)
 
+        // Test which button was clicked (which tells us the format.
+        def possibleFormats = ["PDF", "CSV"]
+        possibleFormats.each
+        {
+            format ->
+            if (params[format])
+            {
+                params._format = format
+            }
+        }
+        
         def resultList = []
         
         // Special handling for animal release summary.
@@ -86,26 +97,26 @@ class ReportController
     
     def animalReleaseSummaryCreate =
     {
-        redirect(action:"create", params:[name:"animalReleaseSummary"])
+        redirect(action:"create", params:[name:"animalReleaseSummary", formats:["PDF"]])
     }
     
     def installationStationCreate =
     {
-        redirect(action:"create", params:[name:"installationStation"])
+        redirect(action:"create", params:[name:"installationStation", formats:["PDF"]])
     }
     
     def receiverCreate =
     {
-        redirect(action:"create", params:[name:"receiver"])
+        redirect(action:"create", params:[name:"receiver", formats:["PDF"]])
     }
     
     def receiverDeploymentCreate =
     {
-        redirect(action:"create", params:[name:"receiverDeployment"])
+        redirect(action:"create", params:[name:"receiverDeployment", formats:["PDF"]])
     }
 
     def tagCreate =
     {
-        redirect(action:"create", params:[name:"tag"])
+        redirect(action:"create", params:[name:"tag", formats:["PDF", "CSV"]])
     }
 }

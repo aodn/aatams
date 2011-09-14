@@ -4,26 +4,18 @@
       <g:reportFilter name="${name}"/>
     </div>
 
-<%--    
     <div class="buttons">
-      <g:jasperReport jasper="${jrxmlFilename}"
-                      format="${format}"
-                      controller="${controller}"
-                      action="${action}"
-                      reportName="${name}"
-                      language="groovy" />
-    </div>
---%> 
-    <%-- _format:PDF, _name:, _file:receiverList, action:execute, controller:report --%>
-    <div class="buttons">
-      <g:hiddenField name="_format" value="${format}"/>
+      
       <g:hiddenField name="_file" value="${jrxmlFilename}"/>
       <g:hiddenField name="_name" value="${name}"/>
       
       <span class="button">
-        <g:submitButton name="pdf" 
-                        class="pdf" 
-                        value="${message(code: 'default.button.report.PDF.label', default: 'PDF')}" />
+        <g:each in="${formats}" var="format">
+          
+          <g:submitButton name="${format}" 
+                          class="${format}" 
+                          value="${format}"/>
+        </g:each>
       </span>
     </div>
   </g:form>  

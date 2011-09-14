@@ -53,11 +53,12 @@ class ReportTagLib
             else
             {
                 log.debug("Report info: " + reportInfo)
-
+                log.debug("Formats: " + attrs.formats)
+                
                 out << render(template:"/report/filter/reportTemplate",
                               model:[name:attrs.name,
                                      jrxmlFilename:reportInfo.jrxmlFilename,
-                                     format:"PDF",
+                                     formats:attrs.formats,
                                      controller:"report",
                                      action:"execute"])
             }

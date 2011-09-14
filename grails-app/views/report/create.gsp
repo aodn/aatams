@@ -23,7 +23,7 @@
         <g:message code="default.report.create.label" args="[name]" />        
       </h1>
       
-      <g:report name="${name}"/>
+      <g:report name="${name}" formats="${formats}"/>
       
     </div>
 

@@ -12,7 +12,6 @@
       <g:hiddenField name="_name" value="${name}"/>
       
       <span class="button">
-<%--        <g:each in="${formats}" var="format"> --%>
         <g:each in="${params.list('formats')}" var="format">
           
           <g:submitButton name="${format}" 

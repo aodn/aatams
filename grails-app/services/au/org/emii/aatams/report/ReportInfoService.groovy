@@ -72,7 +72,7 @@ class ReportInfoService
                                                           jrxmlFilename:"receiverDeploymentList", 
                                                           filterParams:receiverDeploymentFilterParams),
                 (Tag.class):new ReportInfo(displayName:"Tags", 
-                                           jrxmlFilename:"tagList", 
+                                           jrxmlFilename:"tagExtract", 
                                            filterParams:[])
                 ]
     }

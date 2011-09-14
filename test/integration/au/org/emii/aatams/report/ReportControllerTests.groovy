@@ -166,7 +166,7 @@ class ReportControllerTests extends ControllerUnitTestCase
     void testExecuteTag()
     {
         controller.params._name = "tag"
-        controller.params._file = "tagList"
+        controller.params._file = "tagExtract"
         controller.params.filter = [:]
                  
         controller.execute()

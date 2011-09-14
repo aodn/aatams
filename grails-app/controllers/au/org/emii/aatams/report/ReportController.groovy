@@ -125,6 +125,11 @@ class ReportController
         redirect(action:"extract", params:[name:"installationStation", formats:["CSV"]])
     }
     
+    def receiverExtract =
+    {
+        redirect(action:"extract", params:[name:"receiver", formats:["CSV"]])
+    }
+
     def tagExtract =
     {
         redirect(action:"extract", params:[name:"tag", formats:["CSV"]])

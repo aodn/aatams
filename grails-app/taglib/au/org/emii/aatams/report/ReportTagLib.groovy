@@ -39,6 +39,18 @@ class ReportTagLib
     {
         attrs, body ->
 
+        delegateTemplate(attrs, body, true)
+    }
+    
+    def extract =
+    {
+        attrs, body ->
+
+        delegateTemplate(attrs, body, false)
+    }
+    
+    def delegateTemplate(attrs, body, showFilter)
+    {
         if (!attrs.name)
         {
             // TODO: error
@@ -55,12 +67,13 @@ class ReportTagLib
                 log.debug("Report info: " + reportInfo)
                 log.debug("Formats: " + attrs.formats)
                 
-                out << render(template:"/report/filter/reportTemplate",
+                out << render(template:"/report/reportTemplate",
                               model:[name:attrs.name,
                                      jrxmlFilename:reportInfo.jrxmlFilename,
                                      formats:attrs.formats,
                                      controller:"report",
-                                     action:"execute"])
+                                     action:"execute",
+                                     showFilter:showFilter])
             }
         }
     }

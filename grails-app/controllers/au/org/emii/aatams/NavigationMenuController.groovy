@@ -53,7 +53,8 @@ class NavigationMenuController
 
     def dataExtractActions = 
     [
-        'tagCreate':"Tags"
+        'installationStationExtract':"Installations",
+        'tagExtract':"Tags"
     ]
     
     def helpControllers =

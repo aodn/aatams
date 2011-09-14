@@ -20,6 +20,11 @@ class ReportController
         return [name:params.name, formats:params.formats]
     }
     
+    def extract =
+    {
+        return [name:params.name, formats:params.formats]
+    }
+    
     def execute =
     {
         log.debug("Executing report, params: " + params)
@@ -115,8 +120,13 @@ class ReportController
         redirect(action:"create", params:[name:"receiverDeployment", formats:["PDF"]])
     }
 
-    def tagCreate =
+    def installationStationExtract =
     {
-        redirect(action:"create", params:[name:"tag", formats:["PDF", "CSV"]])
+        redirect(action:"extract", params:[name:"installationStation", formats:["CSV"]])
+    }
+    
+    def tagExtract =
+    {
+        redirect(action:"extract", params:[name:"tag", formats:["CSV"]])
     }
 }

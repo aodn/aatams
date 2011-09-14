@@ -31,7 +31,7 @@ class Tag extends Device
         expectedLifeTimeDays(nullable:true)
     }
     
-    static transients = ['codeMapPingCode']
+    static transients = ['codeMapPingCode', 'expectedLifeTimeDaysAsString']
     
     String toString()
     {
@@ -49,5 +49,16 @@ class Tag extends Device
     static String constructCodeName(params)
     {
         return params.codeMap + "-" + params.pingCode
+    }
+    
+    // For reports...
+    String getExpectedLifeTimeDaysAsString()
+    {
+        if (!expectedLifeTimeDays)
+        {
+            return ""
+        }
+        
+        return String.valueOf(expectedLifeTimeDays)
     }
 }

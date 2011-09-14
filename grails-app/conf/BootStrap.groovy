@@ -599,7 +599,8 @@ class BootStrap
                     model:vemcoXyz,
                     project:tunaProject,
                     status:newStatus,
-                    transmitterType:pinger).save(failOnError: true)
+                    transmitterType:pinger,
+                    expectedLifeTimeDays:100).save(failOnError: true)
                 
         TransmitterType depth =
             new TransmitterType(transmitterTypeName:"DEPTH").save(failOnError:true)

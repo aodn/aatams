@@ -116,10 +116,6 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
     
     void testTagEmbargoFiltering()
     {
-        mockDomain(Tag)
-        mockDomain(AnimalRelease)
-        mockDomain(Surgery)
-        
         // Check permissions are behaving correctly.
         assertTrue(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(project1.id)))
         assertFalse(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(project2.id)))
@@ -127,50 +123,35 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
         // Tags which have an embargo date in the future and belong to non-readable project
         // should be filtered.
         Tag tagNonEmbargoed = new Tag(project:project1, codeName:"A69-1303-1111", codeMap:"A69-1303", pingCode:1111)
-        tagNonEmbargoed.save()
-        
         AnimalRelease releaseNonEmbargoed = new AnimalRelease()
-        releaseNonEmbargoed.save()
-        
         Surgery surgeryNonEmbargoed = new Surgery(tag:tagNonEmbargoed, release:releaseNonEmbargoed)
-        surgeryNonEmbargoed.save()
+        
+        Tag tagEmbargoedReadableProject = new Tag(project:project1, codeName:"A69-1303-2222", codeMap:"A69-1303", pingCode:2222)
+        AnimalRelease releaseEmbargoedReadableProject = new AnimalRelease()
+        Surgery surgeryEmbargoedReadableProject = new Surgery(tag:tagEmbargoedReadableProject, release:releaseEmbargoedReadableProject)
+        
+        Tag tagEmbargoedNonReadableProject = new Tag(project:project2, codeName:"A69-1303-3333", codeMap:"A69-1303", pingCode:3333)
+        AnimalRelease releaseEmbargoedNonReadableProject = new AnimalRelease()
+        Surgery surgeryEmbargoedNonReadableProject = new Surgery(tag:tagEmbargoedNonReadableProject, release:releaseEmbargoedNonReadableProject)
+        
+        def tagList = [tagNonEmbargoed, tagEmbargoedReadableProject, tagEmbargoedNonReadableProject]
+        def releaseList = [releaseEmbargoedNonReadableProject, releaseEmbargoedReadableProject, releaseNonEmbargoed]
+        def surgeryList = [surgeryNonEmbargoed, surgeryEmbargoedReadableProject, surgeryEmbargoedNonReadableProject]
+        
+        mockDomain(Tag, tagList)
+        mockDomain(AnimalRelease, releaseList)
+        mockDomain(Surgery, surgeryList)
         
         releaseNonEmbargoed.addToSurgeries(surgeryNonEmbargoed)
         tagNonEmbargoed.addToSurgeries(surgeryNonEmbargoed)
-        releaseNonEmbargoed.save()
-        tagNonEmbargoed.save()
-        
-        
-        
-        Tag tagEmbargoedReadableProject = new Tag(project:project1, codeName:"A69-1303-2222", codeMap:"A69-1303", pingCode:2222)
-        tagEmbargoedReadableProject.save()
-        
-        AnimalRelease releaseEmbargoedReadableProject = new AnimalRelease()
-        releaseEmbargoedReadableProject.save()
-        
-        Surgery surgeryEmbargoedReadableProject = new Surgery(tag:tagEmbargoedReadableProject, release:releaseEmbargoedReadableProject)
-        surgeryEmbargoedReadableProject.save()
-        
         releaseEmbargoedReadableProject.addToSurgeries(surgeryEmbargoedReadableProject)
         tagEmbargoedReadableProject.addToSurgeries(surgeryEmbargoedReadableProject)
-        releaseEmbargoedReadableProject.save()
-        tagEmbargoedReadableProject.save()
-
-        
-        
-        Tag tagEmbargoedNonReadableProject = new Tag(project:project2, codeName:"A69-1303-3333", codeMap:"A69-1303", pingCode:3333)
-        tagEmbargoedNonReadableProject.save()
-        
-        AnimalRelease releaseEmbargoedNonReadableProject = new AnimalRelease()
-        releaseEmbargoedNonReadableProject.save()
-        
-        Surgery surgeryEmbargoedNonReadableProject = new Surgery(tag:tagEmbargoedNonReadableProject, release:releaseEmbargoedNonReadableProject)
-        surgeryEmbargoedNonReadableProject.save()
-        
         releaseEmbargoedNonReadableProject.addToSurgeries(surgeryEmbargoedNonReadableProject)
         tagEmbargoedNonReadableProject.addToSurgeries(surgeryEmbargoedNonReadableProject)
-        releaseEmbargoedNonReadableProject.save()
-        tagEmbargoedNonReadableProject.save()
+        
+        tagList.each { it.save() }
+        releaseList.each { it.save() }
+        surgeryList.each { it.save() }
         
         def tags = reportQueryExecutorService.executeQuery(Tag.class, [:])
         println(tags)

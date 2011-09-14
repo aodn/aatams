@@ -59,6 +59,15 @@ class ReportController
             resultList = reportQueryExecutorService.executeQuery(reportInfoService.getClassForName(params._name), 
                                                         params.filter)
         }
+
+        if (params._name == "detection")
+        {
+            resultList.each
+            {
+                assert(it.firstDetectionSurgery.surgery.release.animal.species)
+//                log.debug("species name: " + it.firstDetectionSurgery.surgery.release.animal.species)
+            }
+        }
         
         params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/" 
         
@@ -124,6 +133,11 @@ class ReportController
         redirect(action:"create", params:[name:"receiverDeployment", formats:["PDF"]])
     }
 
+    def detectionExtract =
+    {
+        redirect(action:"extract", params:[name:"detection", formats:["CSV"]])
+    }
+    
     def installationExtract =
     {
         redirect(action:"extract", params:[name:"installation", formats:["CSV"]])

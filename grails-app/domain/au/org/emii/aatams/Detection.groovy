@@ -19,7 +19,7 @@ class Detection
     Date timestamp
     
     static belongsTo = [receiverDeployment: ReceiverDeployment]
-    static transients = ['project', 'scrambledLocation']
+    static transients = ['project', 'scrambledLocation', 'firstDetectionSurgery']
     
     /**
      * This is modelled as a many-to-many relationship, due to the fact that tags
@@ -107,5 +107,34 @@ class Detection
         && (transmitterName == other?.transmitterName) \
         && (transmitterSerialNumber == other?.transmitterSerialNumber) \
         && (location == other?.location)
+    }
+    
+    /**
+     * Null object used where a detection has no associated surgeries.
+     */
+    static DetectionSurgery NULL_DETECTION_SURGERY = null
+    
+    DetectionSurgery getFirstDetectionSurgery()
+    {
+        if (detectionSurgeries.isEmpty())
+        {
+            if (!NULL_DETECTION_SURGERY)
+            {
+                // Employ the null object pattern so that we don't have to have
+                // conditionals in the extract report.
+                Species species = new Species(name:" ")
+                Animal animal = new Animal(species:species)
+                AnimalRelease release = new AnimalRelease(animal:animal)
+                Surgery surgery = new Surgery(release:release)
+
+                Tag tag = new Tag(codeName:" ")
+                
+                NULL_DETECTION_SURGERY = new DetectionSurgery(surgery:surgery, tag:tag)
+            }
+            
+            return NULL_DETECTION_SURGERY
+        }
+        
+        return detectionSurgeries[0]
     }
 }

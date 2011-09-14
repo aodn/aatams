@@ -53,6 +53,7 @@ class NavigationMenuController
 
     def dataExtractActions = 
     [
+        'detectionExtract':"Detections",
         'installationExtract':"Installations",
         'installationStationExtract':"Installation Stations",
         'receiverExtract':"Receivers",

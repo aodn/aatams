@@ -19,6 +19,7 @@ class ReportInfoService
      */
     static def reportMapping =
         ["animalReleaseSummary": "au.org.emii.aatams.report.AnimalReleaseSummaryService",
+         "detection": "au.org.emii.aatams.Detection",
          "installation": "au.org.emii.aatams.Installation",
          "installationStation": "au.org.emii.aatams.InstallationStation",
          "receiver": "au.org.emii.aatams.Receiver",
@@ -35,6 +36,7 @@ class ReportInfoService
     
     static def reportNameToClass =
         ["animalReleaseSummary": AnimalReleaseSummaryService.class,
+         "detection": Detection.class,
          "installation": Installation.class,
          "installationStation": InstallationStation.class,
          "receiver": Receiver.class,
@@ -66,6 +68,9 @@ class ReportInfoService
         return [(AnimalReleaseSummaryService.class):new ReportInfo(displayName:"Tag Summary", 
                                                           jrxmlFilename:["report":"animalReleaseSummary"], 
                                                           filterParams:[]),
+                (Detection.class):new ReportInfo(displayName:"Detections",
+                                                    jrxmlFilename:["extract":"detectionExtract"],
+                                                    filterParams:[]),
                 (Installation.class):new ReportInfo(displayName:"Installations",
                                                     jrxmlFilename:["extract":"installationExtract"],
                                                     filterParams:[]),

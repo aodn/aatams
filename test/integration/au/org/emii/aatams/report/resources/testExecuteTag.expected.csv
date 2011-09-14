@@ -1,4 +1,4 @@
-ID,code map,ping code,serial number,type,manufacturer,model,status,life (days),comment
+tag ID,code map,ping code,serial number,type,manufacturer,model,status,life (days),comment
 A69-1303-11111,A69-1303,11111,1111,PINGER,Vemco,ABC,NEW,,
 A69-1303-46601,A69-1303,46601,46601,PINGER,Vemco,ABC,DEPLOYED,,
 A69-1303-62339,A69-1303,62339,62339,PINGER,Vemco,XYZ,DEPLOYED,,

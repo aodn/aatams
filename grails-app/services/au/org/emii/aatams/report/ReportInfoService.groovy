@@ -19,6 +19,7 @@ class ReportInfoService
      */
     static def reportMapping =
         ["animalReleaseSummary": "au.org.emii.aatams.report.AnimalReleaseSummaryService",
+         "installation": "au.org.emii.aatams.Installation",
          "installationStation": "au.org.emii.aatams.InstallationStation",
          "receiver": "au.org.emii.aatams.Receiver",
          "receiverDeployment": "au.org.emii.aatams.ReceiverDeployment",
@@ -33,6 +34,7 @@ class ReportInfoService
     
     static def reportNameToClass =
         ["animalReleaseSummary": AnimalReleaseSummaryService.class,
+         "installation": Installation.class,
          "installationStation": InstallationStation.class,
          "receiver": Receiver.class,
          "receiverDeployment": ReceiverDeployment.class,
@@ -60,19 +62,24 @@ class ReportInfoService
         
             
         return [(AnimalReleaseSummaryService.class):new ReportInfo(displayName:"Tag Summary", 
-                                                          jrxmlFilename:"animalReleaseSummary", 
+                                                          jrxmlFilename:["report":"animalReleaseSummary"], 
                                                           filterParams:[]),
+                (Installation.class):new ReportInfo(displayName:"Installations",
+                                                    jrxmlFilename:["extract":"installationExtract"],
+                                                    filterParams:[]),
                 (InstallationStation.class):new ReportInfo(displayName:"Installations",
-                                                           jrxmlFilename:"installationStationList",
+                                                           jrxmlFilename:["report":"installationStationList",
+                                                                          "extract":"installationStationExtract"],
                                                            filterParams:installationStationFilterParams),
                 (Receiver.class):new ReportInfo(displayName:"Receivers", 
-                                                jrxmlFilename:"receiverList", 
+                                                jrxmlFilename:["report":"receiverList",
+                                                               "extract":"receiverExtract"], 
                                                 filterParams:receiverFilterParams),
                 (ReceiverDeployment.class):new ReportInfo(displayName:"Receiver Deployments", 
-                                                          jrxmlFilename:"receiverDeploymentList", 
+                                                          jrxmlFilename:["report":"receiverDeploymentList"], 
                                                           filterParams:receiverDeploymentFilterParams),
                 (Tag.class):new ReportInfo(displayName:"Tags", 
-                                           jrxmlFilename:"tagExtract", 
+                                           jrxmlFilename:["extract":"tagExtract"], 
                                            filterParams:[])
                 ]
     }

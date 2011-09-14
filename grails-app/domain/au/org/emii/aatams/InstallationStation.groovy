@@ -14,7 +14,7 @@ class InstallationStation
 {
     static belongsTo = [installation:Installation]
     static hasMany = [receivers:Receiver, deployments:ReceiverDeployment]
-    static transients = ['scrambledLocation', 'latitude', 'longitude']
+    static transients = ['curtainPositionAsString', 'scrambledLocation', 'latitude', 'longitude']
     
     static mapping =
     {
@@ -76,5 +76,15 @@ class InstallationStation
     String toString()
     {
         return name
+    }
+    
+    String getCurtainPositionAsString()
+    {
+        if (!curtainPosition)
+        {
+            return ""
+        }
+        
+        return String.valueOf(curtainPosition)
     }
 }

@@ -20,7 +20,7 @@
     <div class="body">
       
       <h1>
-        <g:message code="default.extract.create.label" args="[name]" />        
+        <g:message code="default.extract.create.label" args="[displayName]" />        
       </h1>
       
       <g:extract name="${name}" formats="${formats}"/>

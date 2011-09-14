@@ -17,12 +17,16 @@ class ReportController
     
     def create =
     {
-        return [name:params.name, formats:params.formats]
+        return [name:params.name,
+                displayName:reportInfoService.getReportInfo(params.name).displayName,
+                formats:params.formats]
     }
     
     def extract =
     {
-        return [name:params.name, formats:params.formats]
+        return [name:params.name,
+                displayName:reportInfoService.getReportInfo(params.name).displayName,
+                formats:params.formats]
     }
     
     def execute =
@@ -120,6 +124,11 @@ class ReportController
         redirect(action:"create", params:[name:"receiverDeployment", formats:["PDF"]])
     }
 
+    def installationExtract =
+    {
+        redirect(action:"extract", params:[name:"installation", formats:["CSV"]])
+    }
+    
     def installationStationExtract =
     {
         redirect(action:"extract", params:[name:"installationStation", formats:["CSV"]])

@@ -13,8 +13,9 @@ class ReportInfo
     
     /**
      * The name of the associated jrxml file.
+     * Maps report type (i.e. "report" or "extract" to name.
      */
-    String jrxmlFilename
+    Map<String, String> jrxmlFilename
     
     /**
      * List of filter parameters, which encapsulates the type (e.g. list, number)

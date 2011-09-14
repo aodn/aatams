@@ -20,7 +20,7 @@
     <div class="body">
       
       <h1>
-        <g:message code="default.report.create.label" args="[name]" />        
+        <g:message code="default.report.create.label" args="[displayName]" />        
       </h1>
       
       <g:report name="${name}" formats="${formats}"/>

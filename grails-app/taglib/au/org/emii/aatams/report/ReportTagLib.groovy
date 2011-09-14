@@ -39,17 +39,17 @@ class ReportTagLib
     {
         attrs, body ->
 
-        delegateTemplate(attrs, body, true)
+        delegateTemplate(attrs, body, true, "report")
     }
     
     def extract =
     {
         attrs, body ->
 
-        delegateTemplate(attrs, body, false)
+        delegateTemplate(attrs, body, false, "extract")
     }
     
-    def delegateTemplate(attrs, body, showFilter)
+    def delegateTemplate(attrs, body, showFilter, type)
     {
         if (!attrs.name)
         {
@@ -68,8 +68,9 @@ class ReportTagLib
                 log.debug("Formats: " + attrs.formats)
                 
                 out << render(template:"/report/reportTemplate",
-                              model:[name:attrs.name,
-                                     jrxmlFilename:reportInfo.jrxmlFilename,
+                              model:[displayName:attrs.displayName,
+                                     name:attrs.name,
+                                     jrxmlFilename:reportInfo.jrxmlFilename[type],
                                      formats:attrs.formats,
                                      controller:"report",
                                      action:"execute",

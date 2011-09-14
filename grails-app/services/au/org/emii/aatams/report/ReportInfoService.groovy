@@ -23,6 +23,7 @@ class ReportInfoService
          "installationStation": "au.org.emii.aatams.InstallationStation",
          "receiver": "au.org.emii.aatams.Receiver",
          "receiverDeployment": "au.org.emii.aatams.ReceiverDeployment",
+         "receiverEvent": "au.org.emii.aatams.ReceiverEvent",
          "tag": "au.org.emii.aatams.Tag"
          ]
 
@@ -38,6 +39,7 @@ class ReportInfoService
          "installationStation": InstallationStation.class,
          "receiver": Receiver.class,
          "receiverDeployment": ReceiverDeployment.class,
+         "receiverEvent": ReceiverEvent.class,
          "tag": Tag.class
          ]
         
@@ -78,6 +80,9 @@ class ReportInfoService
                 (ReceiverDeployment.class):new ReportInfo(displayName:"Receiver Deployments", 
                                                           jrxmlFilename:["report":"receiverDeploymentList"], 
                                                           filterParams:receiverDeploymentFilterParams),
+                (ReceiverEvent.class):new ReportInfo(displayName:"Receiver Events", 
+                                                     jrxmlFilename:["extract":"receiverEventExtract"], 
+                                                     filterParams:[]),
                 (Tag.class):new ReportInfo(displayName:"Tags", 
                                            jrxmlFilename:["extract":"tagExtract"], 
                                            filterParams:[])

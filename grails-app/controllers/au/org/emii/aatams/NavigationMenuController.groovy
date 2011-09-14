@@ -56,6 +56,7 @@ class NavigationMenuController
         'installationExtract':"Installations",
         'installationStationExtract':"Installation Stations",
         'receiverExtract':"Receivers",
+        'receiverEventExtract':"Receiver Events",
         'tagExtract':"Tags"
     ]
     

@@ -8,7 +8,7 @@ class AnimalReleaseSummaryService
     static transactional = true
 
     
-    def countBySpecies() 
+    List<AnimalReleaseCount> countBySpecies() 
     {
         def countsBySpecies = [:]
         
@@ -37,24 +37,13 @@ class AnimalReleaseSummaryService
         return sortByTotalReleases(countsBySpecies.values())
     }
     
-    def sortByTotalReleases(def counts)
+    Map<String, Number> summary()
     {
-        return counts.sort(
-        {
-            a, b ->
-            
-            b.totalReleases <=> a.totalReleases
-        })
-    }
-    
-    Map<String, Long> summary()
-    {
-        def retMap = ["% embargoed":0,
-                      "last 30 days":0,
-                      "this year":0,
-                      "total":0,
-                      "embargoed":0,
-                      "count by species":null]
+        def retMap = ["% embargoed":Float.valueOf(0),
+                      "last 30 days":Long.valueOf(0),
+                      "this year":Long.valueOf(0),
+                      "total":Long.valueOf(0),
+                      "embargoed":Long.valueOf(0)]
 
         AnimalRelease.list().each
         {
@@ -78,15 +67,20 @@ class AnimalReleaseSummaryService
             }
         }
         
-        retMap["% embargoed"] = retMap["embargoed"] * 100 / retMap["total"]
+        retMap["% embargoed"] = Float.valueOf(retMap["embargoed"] * 100 / retMap["total"])
         retMap["count by species"] = countBySpecies()
         
         return retMap
     }
     
-    def executeReportQuery(def params)
+    private List sortByTotalReleases(def counts)
     {
-        return [summary()]
+        return counts.sort(
+        {
+            a, b ->
+            
+            b.totalReleases <=> a.totalReleases
+        })
     }
     
     private boolean last30Days(DateTime date)

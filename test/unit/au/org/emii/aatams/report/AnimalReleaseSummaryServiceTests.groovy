@@ -109,13 +109,5 @@ class AnimalReleaseSummaryServiceTests extends GrailsUnitTestCase
         assertEquals(3, result["last 30 days"])
         assertEquals(5, result["this year"])    // This will be broken between 1st Jan and 19th Feb :-)
         assertEquals(8, result["total"])
-        assertEquals(3, result["count by species"].size())
-    }
-    
-    void testExecuteQuery()
-    {
-        def result = AnimalReleaseSummaryService.executeReportQuery(null)
-        
-        assertEquals(1, result.size())
     }
 }

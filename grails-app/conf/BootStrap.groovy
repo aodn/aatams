@@ -843,8 +843,7 @@ class BootStrap
                               captureMethod:net,
                               releaseLocality:'Neptune Islands',
                               releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
-                              releaseDateTime:new DateTime("2011-05-15T14:15:00"),
-                              embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2015-05-15 12:34:56")).save(failOnError:true)
+                              releaseDateTime:new DateTime("2011-05-15T14:15:00")).save(failOnError:true)
                           
         AnimalMeasurement whiteShark1Length = 
             new AnimalMeasurement(release:whiteShark1Release,

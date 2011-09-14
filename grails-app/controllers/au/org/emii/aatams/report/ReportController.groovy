@@ -7,6 +7,7 @@ import org.codehaus.groovy.grails.plugins.jasper.*
 
 class ReportController 
 {
+    def animalReleaseSummaryService
     def jasperService
     def permissionUtilsService
     def reportInfoService
@@ -23,9 +24,21 @@ class ReportController
     {
         log.debug("Executing report, params: " + params)
 
-        def resultList = 
-            reportQueryExecutorService.executeQuery(reportInfoService.getClassForName(params._name), 
-                                                    params.filter)
+        def resultList = []
+        
+        // Special handling for animal release summary.
+        // TODO: refactor to remove dependency of this controller on to 
+        // AnimalReleaseSummaryService.
+        if (params._name == "animalReleaseSummary")
+        {
+            resultList = animalReleaseSummaryService.countBySpecies()
+            params.putAll(animalReleaseSummaryService.summary())
+        }
+        else
+        {
+            resultList = reportQueryExecutorService.executeQuery(reportInfoService.getClassForName(params._name), 
+                                                        params.filter)
+        }
         
         params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/" 
         

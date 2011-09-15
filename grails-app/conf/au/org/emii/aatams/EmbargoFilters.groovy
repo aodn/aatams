@@ -1,4 +1,4 @@
-import au.org.emii.aatams.*
+package au.org.emii.aatams
 
 import org.apache.shiro.SecurityUtils
 
@@ -176,11 +176,30 @@ class EmbargoFilters
                 String permissionString = permissionUtilsService.buildProjectReadPermission(detectionInstance?.project?.id)
                 boolean hasReadPermission = SecurityUtils.subject.isPermitted(permissionString)
                 
-                model?.surgeries = detectionInstance?.detectionSurgeries*.surgery?.grep
+                // No need to do any filtering.
+                println("detection.id: " + detectionInstance.id)
+                if (hasReadPermission)
                 {
-                    boolean embargoed = isEmbargoed(it.release)
+                    println("hasReadPermission")
+                }
+                else
+                {
+                    println("not hasReadPermission")
+                    
+                    // Return a temporary detection, with embargoed surgeries removed.
+                    Detection retDetection = new Detection(detectionInstance)
+                    retDetection.detectionSurgeries = []
 
-                    (!embargoed || hasReadPermission)
+                    // Filter
+                    detectionInstance?.detectionSurgeries.each
+                    {
+                        if (!isEmbargoed(it.surgery.release))
+                        {
+                            retDetection.addToDetectionSurgeries(it)
+                        }
+                    }
+
+                    model.detectionInstance = retDetection
                 }
             }
         }
@@ -188,11 +207,9 @@ class EmbargoFilters
 
     def isEmbargoed(Collection<AnimalRelease> animalReleases)
     {
-        Date now = new Date()
-
         for (AnimalRelease animalRelease : animalReleases)
         {
-            if (animalRelease?.embargoDate?.after(now))
+            if (animalRelease?.embargoDate?.after(now()))
             {
                 return true
             }
@@ -203,14 +220,17 @@ class EmbargoFilters
     
     def isEmbargoed(AnimalRelease animalRelease)
     {
-        Date now = new Date()
-        
-        if (animalRelease?.embargoDate?.after(now))
+        if (animalRelease?.embargoDate?.after(now()))
         {
             return true
         }
         
         return false
+    }
+    
+    private Date now()
+    {
+        return new Date()
     }
 }
 

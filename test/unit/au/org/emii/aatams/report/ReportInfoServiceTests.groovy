@@ -45,7 +45,8 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         
         assertNotNull(receiverReportInfo)
         assertEquals("Receivers", receiverReportInfo.getDisplayName())
-        assertEquals("receiverList", receiverReportInfo.getJrxmlFilename())
+        assertEquals("receiverList", receiverReportInfo.getJrxmlFilename()["report"])
+        assertEquals("receiverExtract", receiverReportInfo.getJrxmlFilename()["extract"])
     }
     
     void testGetReportInfoInstallationStation()

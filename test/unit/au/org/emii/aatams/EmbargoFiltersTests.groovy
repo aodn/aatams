@@ -1,0 +1,344 @@
+package au.org.emii.aatams
+
+import grails.test.*
+
+import org.apache.shiro.subject.Subject
+import org.apache.shiro.util.ThreadContext
+import org.apache.shiro.SecurityUtils
+
+import org.codehaus.groovy.grails.plugins.web.filters.FilterConfig
+
+class EmbargoFiltersTests extends FiltersUnitTestCase 
+{
+    def permissionUtilsService
+    
+    Project project1
+    Project project2
+    
+    AnimalReleaseController releaseController
+    DetectionController detectionController
+    SensorController sensorController
+    TagController tagController
+
+    def releaseList
+    
+    AnimalRelease releaseNonEmbargoed
+    AnimalRelease releaseEmbargoedReadableProject
+    AnimalRelease releaseEmbargoedNonReadableProject
+    AnimalRelease releasePastEmbargoed
+    
+    Tag tagNonEmbargoed
+    Tag tagEmbargoedReadableProject
+    Tag tagEmbargoedNonReadableProject
+    Tag tagPastEmbargoed
+
+    Sensor sensorNonEmbargoed
+    Sensor sensorEmbargoedReadableProject
+    Sensor sensorEmbargoedNonReadableProject
+    Sensor sensorPastEmbargoed
+    
+    Detection detectionNonEmbargoed
+    Detection detectionEmbargoedReadableProject
+    Detection detectionEmbargoedNonReadableProject
+    Detection detectionPastEmbargoed
+    
+    
+    protected void setUp() 
+    {
+        super.setUp()
+
+        mockLogging(PermissionUtilsService, true)
+        permissionUtilsService = new PermissionUtilsService()
+
+        filters.permissionUtilsService = permissionUtilsService
+        
+        project1 = new Project(name: "project 1")
+        project2 = new Project(name: "project 2")
+        def projectList = [project1, project2]
+        mockDomain(Project, projectList)
+        projectList.each{ it.save()}
+        
+        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
+                            [ getSubject: { subject } ] as SecurityManager )
+                        
+        Person jkburges = new Person(username: 'jkburges')
+        def subject = [ getPrincipal: { jkburges.username },
+                        isAuthenticated: { true },
+                        hasRole: { true },
+                        isPermitted:
+                        {
+                            if (it == "project:" + project1.id + ":read")
+                            {
+                                return true
+                            }
+                            
+                            return false
+                        }
+                        
+                        
+                      ] as Subject
+
+        SecurityUtils.metaClass.static.getSubject = { subject }
+        
+        // Need this for "findByUsername()" etc.
+        mockDomain(Person, [jkburges])
+        jkburges.save()
+        
+        // Check permissions are behaving correctly.
+        assertTrue(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(project1.id)))
+        assertFalse(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(project2.id)))
+
+        mockController(AnimalReleaseController)
+        mockLogging(AnimalReleaseController)
+        releaseController = new AnimalReleaseController()
+        
+        mockController(DetectionController)
+        mockLogging(DetectionController)
+        detectionController = new DetectionController()
+        
+        mockController(SensorController)
+        mockLogging(SensorController)
+        sensorController = new SensorController()
+        
+        mockController(TagController)
+        mockLogging(TagController)
+        tagController = new TagController()
+        
+        // Set up some data.
+        tagNonEmbargoed = new Tag(project:project1, codeName:"A69-1303-1111", codeMap:"A69-1303", pingCode:1111)
+        tagEmbargoedReadableProject = new Tag(project:project1, codeName:"A69-1303-2222", codeMap:"A69-1303", pingCode:2222)
+        tagEmbargoedNonReadableProject = new Tag(project:project2, codeName:"A69-1303-3333", codeMap:"A69-1303", pingCode:3333)
+        tagPastEmbargoed = new Tag(project:project2, codeName:"A69-1303-4444", codeMap:"A69-1303", pingCode:4444)
+
+        sensorNonEmbargoed = new Sensor(project:project1, tag:tagNonEmbargoed, codeName:"sensor-1111", codeMap:"sensor", pingCode:1111)
+        sensorEmbargoedReadableProject = new Sensor(project:project1, tag:tagEmbargoedReadableProject, codeName:"sensor-2222", codeMap:"sensor", pingCode:2222)
+        sensorEmbargoedNonReadableProject = new Sensor(project:project2, tag:tagEmbargoedNonReadableProject, codeName:"sensor-3333", codeMap:"sensor", pingCode:3333)
+        sensorPastEmbargoed = new Sensor(project:project2, tag:tagPastEmbargoed, codeName:"sensor-4444", codeMap:"sensor", pingCode:4444)
+
+        releaseNonEmbargoed = new AnimalRelease(project:project1)
+        releaseEmbargoedReadableProject = new AnimalRelease(project:project1, embargoDate:nextYear())
+        releaseEmbargoedNonReadableProject = new AnimalRelease(project:project2, embargoDate:nextYear())
+        releasePastEmbargoed = new AnimalRelease(project:project2, embargoDate:lastYear())
+
+        Surgery surgeryNonEmbargoed = new Surgery(tag:tagNonEmbargoed, release:releaseNonEmbargoed)
+        Surgery surgeryEmbargoedReadableProject = new Surgery(tag:tagEmbargoedReadableProject, release:releaseEmbargoedReadableProject)
+        Surgery surgeryEmbargoedNonReadableProject = new Surgery(tag:tagEmbargoedNonReadableProject, release:releaseEmbargoedNonReadableProject)
+        Surgery surgeryPastEmbargoed = new Surgery(tag:tagPastEmbargoed, release:releasePastEmbargoed)
+
+        detectionNonEmbargoed = new Detection()
+        detectionEmbargoedReadableProject = new Detection()
+        detectionEmbargoedNonReadableProject = new Detection()
+        detectionPastEmbargoed = new Detection()
+
+        DetectionSurgery detectionSurgeryNonEmbargoed = new DetectionSurgery(surgery:surgeryNonEmbargoed, detection:detectionNonEmbargoed, tag:tagNonEmbargoed)
+        DetectionSurgery detectionSurgeryEmbargoedReadableProject = new DetectionSurgery(surgery:surgeryEmbargoedReadableProject, detection:detectionEmbargoedReadableProject, tag:tagEmbargoedReadableProject)
+        DetectionSurgery detectionSurgeryEmbargoedNonReadableProject = new DetectionSurgery(surgery:surgeryEmbargoedNonReadableProject, detection:detectionEmbargoedNonReadableProject, tag:tagEmbargoedNonReadableProject)
+        DetectionSurgery detectionSurgeryPastEmbargoed = new DetectionSurgery(surgery:surgeryPastEmbargoed, detection:detectionPastEmbargoed, tag:tagPastEmbargoed)
+
+        
+        def tagList =     [tagNonEmbargoed,     tagEmbargoedReadableProject,     tagEmbargoedNonReadableProject,     tagPastEmbargoed]
+        def sensorList =  [sensorNonEmbargoed,  sensorEmbargoedReadableProject,  sensorEmbargoedNonReadableProject,  sensorPastEmbargoed]
+        releaseList =     [releaseNonEmbargoed, releaseEmbargoedReadableProject, releaseEmbargoedNonReadableProject, releasePastEmbargoed]
+        def surgeryList = [surgeryNonEmbargoed, surgeryEmbargoedReadableProject, surgeryEmbargoedNonReadableProject, surgeryPastEmbargoed]
+        def detectionList =
+                          [detectionNonEmbargoed, detectionEmbargoedReadableProject, detectionEmbargoedNonReadableProject, detectionPastEmbargoed]
+        def detectionSurgeryList =
+                          [detectionSurgeryNonEmbargoed, detectionSurgeryEmbargoedReadableProject, detectionSurgeryEmbargoedNonReadableProject, detectionSurgeryPastEmbargoed]
+        
+        mockDomain(Tag, tagList)
+        mockDomain(Sensor, sensorList)
+        mockDomain(AnimalRelease, releaseList)
+        mockDomain(Surgery, surgeryList)
+        mockDomain(Detection, detectionList)
+        mockDomain(DetectionSurgery, detectionSurgeryList)
+        
+        releaseNonEmbargoed.addToSurgeries(surgeryNonEmbargoed)
+        tagNonEmbargoed.addToSurgeries(surgeryNonEmbargoed)
+        tagNonEmbargoed.addToSensors(sensorNonEmbargoed)
+        tagNonEmbargoed.addToDetectionSurgeries(detectionSurgeryNonEmbargoed)
+        detectionNonEmbargoed.addToDetectionSurgeries(detectionSurgeryNonEmbargoed)
+        
+        releaseEmbargoedReadableProject.addToSurgeries(surgeryEmbargoedReadableProject)
+        tagEmbargoedReadableProject.addToSurgeries(surgeryEmbargoedReadableProject)
+        tagEmbargoedReadableProject.addToSensors(sensorEmbargoedReadableProject)
+        tagEmbargoedReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedReadableProject)
+        detectionEmbargoedReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedReadableProject)
+        
+        releaseEmbargoedNonReadableProject.addToSurgeries(surgeryEmbargoedNonReadableProject)
+        tagEmbargoedNonReadableProject.addToSurgeries(surgeryEmbargoedNonReadableProject)
+        tagEmbargoedNonReadableProject.addToSensors(sensorEmbargoedNonReadableProject)
+        tagEmbargoedNonReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedNonReadableProject)
+        detectionEmbargoedNonReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedNonReadableProject)
+        
+        releasePastEmbargoed.addToSurgeries(surgeryPastEmbargoed)
+        tagPastEmbargoed.addToSurgeries(surgeryPastEmbargoed)
+        tagPastEmbargoed.addToSensors(sensorPastEmbargoed)
+        tagPastEmbargoed.addToDetectionSurgeries(detectionSurgeryPastEmbargoed)
+        detectionPastEmbargoed.addToDetectionSurgeries(detectionSurgeryPastEmbargoed)
+        
+        detectionNonEmbargoed.metaClass.getProject = { project1 }
+        detectionEmbargoedReadableProject.metaClass.getProject = { project1 }
+        detectionEmbargoedNonReadableProject.metaClass.getProject = { project2 }
+        detectionPastEmbargoed.metaClass.getProject = { project2 }
+        
+        
+        tagList.each { it.save() }
+        sensorList.each { it.save() }
+        releaseList.each { it.save() }
+        surgeryList.each { it.save() }
+        detectionList.each { it.save() }
+        detectionSurgeryList.each { it.save() }
+    }        
+
+    protected void tearDown() 
+    {
+        super.tearDown()
+    }
+    
+    private Date now()
+    {
+        return new Date()
+    }
+    
+    private Date nextYear()
+    {
+        Calendar cal = Calendar.getInstance()
+        cal.add(Calendar.YEAR, 1)
+        return cal.getTime()
+    }
+
+    private Date lastYear()
+    {
+        Calendar cal = Calendar.getInstance()
+        cal.add(Calendar.YEAR, -1)
+        return cal.getTime()
+    }
+
+    void testAnimalReleaseList() 
+    {
+        checkList(releaseController, "animalRelease")
+    }
+
+    void testAnimalReleaseNotList() 
+    {
+        checkEmbargoed(releaseController, releaseNonEmbargoed, false, 'animalRelease')
+        checkEmbargoed(releaseController, releaseEmbargoedReadableProject, false, 'animalRelease')
+        checkEmbargoed(releaseController, releaseEmbargoedNonReadableProject, true, 'animalRelease')
+        checkEmbargoed(releaseController, releasePastEmbargoed, false, 'animalRelease')
+    }
+
+    void testTagList()
+    {
+        checkList(tagController, "tag")
+    }
+    
+    void testTagNotList()
+    {
+        checkEmbargoed(tagController, tagNonEmbargoed, false, 'tag')
+        checkEmbargoed(tagController, tagEmbargoedReadableProject, false, 'tag')
+        checkEmbargoed(tagController, tagEmbargoedNonReadableProject, true, 'tag')
+        checkEmbargoed(tagController, tagPastEmbargoed, false, 'tag')
+        
+    }
+    
+    void testSensorList()
+    {
+        checkList(sensorController, "sensor")
+    }
+    
+    void testSensorNotList()
+    {
+        checkEmbargoed(sensorController, sensorNonEmbargoed, false, 'sensor')
+        checkEmbargoed(sensorController, sensorEmbargoedReadableProject, false, 'sensor')
+        checkEmbargoed(sensorController, sensorEmbargoedNonReadableProject, true, 'sensor')
+        checkEmbargoed(sensorController, sensorPastEmbargoed, false, 'sensor')
+        
+    }
+    
+    void testDetectionList()
+    {
+        checkDetection(detectionNonEmbargoed, false)
+        checkDetection(detectionEmbargoedReadableProject, false)
+        checkDetection(detectionEmbargoedNonReadableProject, true)
+        checkDetection(detectionPastEmbargoed, false)
+    }
+    
+    // TODO: filter method not implemented
+//    void testDetectionNotList()
+    
+    private void checkDetection(def detection, boolean isEmbargoed)
+    {
+        assert(detection)
+        
+        detectionController.params.id = detection.id
+        def model = detectionController.show()
+        assertNotNull(model)
+        assertEquals(1, model.size())
+        
+        FilterConfig filter = getFilter("detectionNotList")
+        assertNotNull(filter)
+
+        // All entities should be there...
+        filter.after(model)
+        assertNotNull(model)
+        assertEquals(1, model.size())
+        assertNotNull(model.detectionInstance)
+
+        if (isEmbargoed)
+        {
+            // ... but not the associated detectionSurgeries (which links detection back to tag/release)
+            assertTrue(model.detectionInstance.detectionSurgeries.isEmpty())
+        }
+        else
+        {
+            assertEquals(1, model.detectionInstance.detectionSurgeries.size())
+        }
+    }
+    
+    private void checkList(def controller, def entityName)
+    {
+        def model = controller.list()
+        assertEquals(4, model[entityName + "InstanceList"].size())
+        assertEquals(4, model[entityName + "InstanceTotal"])
+
+        // Embargoed releases should not appear at all after filter.
+        FilterConfig filter = getFilter(entityName + 'List')
+        assertNotNull(filter)
+        
+        filter.after(model)
+        assertNotNull(model)
+        
+        assertEquals(3, model[entityName + "InstanceList"].size())
+        assertEquals(4, model[entityName + "InstanceTotal"])
+    }
+    
+    private void checkEmbargoed(def controller, def entity, boolean isEmbargoed, String entityName)
+    {
+        controller.params.id = entity.id
+        assert(controller.params)
+        
+        def model = controller.show()
+        assertNotNull(model)
+        assertEquals(1, model.size())
+        
+        FilterConfig filter = getFilter(entityName + "NotList")
+        assertNotNull(filter)
+        
+        Map redirectParams = [:] 
+        filter.metaClass.redirect = 
+        { Map m -> redirectParams.putAll m }
+
+        boolean result = filter.after(model)
+        
+        if (isEmbargoed)
+        {
+            // redirect auth/unauthorized
+            assertEquals("auth", redirectParams.controller)
+            assertEquals("unauthorized", redirectParams.action)
+        }
+        else
+        {
+            assertNull(result)
+        }
+    }
+}

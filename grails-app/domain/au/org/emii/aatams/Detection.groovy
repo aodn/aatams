@@ -76,6 +76,24 @@ class Detection
     {
         timestamp index:'timestamp_index'
     }
+
+    Detection()
+    {
+        
+    }
+    
+    Detection(Detection other)
+    {
+        timestamp = other.timestamp
+        receiverDeployment = other.receiverDeployment
+        detectionSurgeries = other.detectionSurgeries
+        receiverName = other.receiverName
+        stationName = other.stationName
+        transmitterId = other.transmitterId
+        transmitterName = other.transmitterName
+        transmitterSerialNumber = other.transmitterSerialNumber
+        location = other.location
+    }
     
     String toString()
     {

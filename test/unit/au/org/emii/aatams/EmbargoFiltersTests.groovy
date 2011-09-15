@@ -10,6 +10,7 @@ import org.codehaus.groovy.grails.plugins.web.filters.FilterConfig
 
 class EmbargoFiltersTests extends FiltersUnitTestCase 
 {
+    def embargoService
     def permissionUtilsService
     
     Project project1
@@ -47,10 +48,14 @@ class EmbargoFiltersTests extends FiltersUnitTestCase
     {
         super.setUp()
 
+        mockLogging(EmbargoService, true)
+        embargoService = new EmbargoService()
+        
         mockLogging(PermissionUtilsService, true)
         permissionUtilsService = new PermissionUtilsService()
 
-        filters.permissionUtilsService = permissionUtilsService
+        filters.embargoService = embargoService
+        embargoService.permissionUtilsService = permissionUtilsService
         
         project1 = new Project(name: "project 1")
         project2 = new Project(name: "project 2")
@@ -103,6 +108,13 @@ class EmbargoFiltersTests extends FiltersUnitTestCase
         mockController(TagController)
         mockLogging(TagController)
         tagController = new TagController()
+        
+        mockLogging(Tag)
+        mockLogging(Sensor)
+        mockLogging(AnimalRelease)
+        mockLogging(Surgery)
+        mockLogging(Detection)
+        mockLogging(DetectionSurgery)
         
         // Set up some data.
         tagNonEmbargoed = new Tag(project:project1, codeName:"A69-1303-1111", codeMap:"A69-1303", pingCode:1111)

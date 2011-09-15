@@ -11,7 +11,7 @@ import com.vividsolutions.jts.geom.Point
  * can include temperature, depth, acceleration, pH and potentially other
  * readings in the future.
  */
-class Detection 
+class Detection implements Embargoable
 {
     /**
      * UTC timestamp.
@@ -82,7 +82,7 @@ class Detection
         
     }
     
-    Detection(Detection other)
+    private Detection(Detection other)
     {
         timestamp = other.timestamp
         receiverDeployment = other.receiverDeployment
@@ -154,5 +154,22 @@ class Detection
         }
         
         return detectionSurgeries[0]
+    }
+    
+    Embargoable applyEmbargo()
+    {
+        // Return a temporary detection, with embargoed surgeries removed.
+        Detection retDetection = new Detection(this)
+        retDetection.detectionSurgeries = []
+
+        detectionSurgeries.each
+        {
+            if (!it.surgery.release.isEmbargoed())
+            {
+                retDetection.addToDetectionSurgeries(it)
+            }
+        }
+
+        return retDetection
     }
 }

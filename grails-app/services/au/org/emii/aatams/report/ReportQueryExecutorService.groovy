@@ -11,6 +11,8 @@ class ReportQueryExecutorService
 {
     static transactional = true
 
+    def embargoService
+    
     /**
      * Executes a query for the named domain class with given filter parameters
      * applied.
@@ -23,20 +25,27 @@ class ReportQueryExecutorService
     {
         log.debug("Executing report query, domain: " + domain + ", params: " + params)
         
+        def results = []
+        
         if (!params || params.isEmpty())
         {
             // No filter parameters specified, just return all.
-            return domain.list()
+            results = domain.list()
         }
-
-        // Filter parameters specified, need to build a criteria.
-        def criteria = domain.createCriteria()
-
-        def results = criteria.list
+        else
         {
-            buildCriteriaTree(criteria, null, params)
+            // Filter parameters specified, need to build a criteria.
+            def criteria = domain.createCriteria()
+
+            results = criteria.list
+            {
+                buildCriteriaTree(criteria, null, params)
+            }
         }
         
+        // Apply embargo filter if necessary
+        results = embargoService.applyEmbargo(domain, results)
+
         return results
     }
     

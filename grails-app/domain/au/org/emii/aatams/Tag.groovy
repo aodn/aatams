@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-class Tag extends Device
+class Tag extends Device implements Embargoable
 {
     List<Surgery> surgeries = new ArrayList<Surgery>()
     
@@ -60,5 +60,31 @@ class Tag extends Device
         }
         
         return String.valueOf(expectedLifeTimeDays)
+    }
+    
+    Embargoable applyEmbargo()
+    {
+        boolean embargoed = false
+        
+        surgeries.each
+        {
+            embargoed |= it.release.isEmbargoed()
+        }
+
+        if (this instanceof Sensor)
+        {
+            tag.surgeries.each
+            {
+                embargoed |= it.release.isEmbargoed()
+            }
+        }
+
+        if (!embargoed)
+        {
+            return this
+        }
+        
+        log.debug("Tag is embargoed, id: " + id)
+        return null
     }
 }

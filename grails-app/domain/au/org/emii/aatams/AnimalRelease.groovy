@@ -15,7 +15,7 @@ import org.joda.time.contrib.hibernate.*
  * hours or days) or where they may be expected to enter an area containing
  * receivers during future movements.
  */
-class AnimalRelease 
+class AnimalRelease implements Embargoable
 {
     static belongsTo = [project: Project, animal: Animal]
     static hasMany = [surgeries: Surgery, measurements: AnimalMeasurement]
@@ -99,5 +99,16 @@ class AnimalRelease
     boolean isEmbargoed()
     {
         return (embargoDate != null) && (embargoDate.compareTo(new Date()) > 0)
+    }
+    
+    Embargoable applyEmbargo()
+    {
+        if (isEmbargoed())
+        {
+            log.debug("AnimalRelease is embargoed, id: " + id)
+            return null
+        }
+        
+        return this
     }
 }

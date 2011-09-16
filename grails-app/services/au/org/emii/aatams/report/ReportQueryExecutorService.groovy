@@ -1,5 +1,7 @@
 package au.org.emii.aatams.report
 
+import au.org.emii.aatams.*
+
 import org.hibernate.criterion.Restrictions
 
 /**
@@ -12,6 +14,7 @@ class ReportQueryExecutorService
     static transactional = true
 
     def embargoService
+    def permissionUtilsService
     
     /**
      * Executes a query for the named domain class with given filter parameters
@@ -91,7 +94,18 @@ class ReportQueryExecutorService
     void buildCriteria(criteria, property, value)
     {
         // Add each filter value to the criteria.
-        criteria.add(Restrictions.eq(property, value))
+        if (value == ReportInfoService.MEMBER_PROJECTS)
+        {
+            def roles = ProjectRole.findAllByPerson(permissionUtilsService.principal())
+            
+            log.debug("Checking for member projects, property: " + property + ", project names: " + roles*.project.name)
+            def inCriterion = Restrictions.in(property, roles*.project.name)
+            criteria.add(inCriterion)
+        }
+        else
+        {
+            criteria.add(Restrictions.eq(property, value))
+        }
     }
 
     List executeQuery(String name, Map params)

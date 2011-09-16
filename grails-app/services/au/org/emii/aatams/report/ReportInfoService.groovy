@@ -12,6 +12,10 @@ class ReportInfoService
 {
     static transactional = true
 
+    def permissionUtilsService
+    
+    static final String MEMBER_PROJECTS = "My Projects"
+    
     /**
      * Mapping between report name and relevant domain class.
      * Saves clients from having to know anything about internal package
@@ -51,6 +55,12 @@ class ReportInfoService
     Map<Class, ReportInfo> getReportInfo() 
     {
         def projectRange = Project.list()*.name
+        
+        if (permissionUtilsService.isAuthenticated())
+        {
+            projectRange.add(0, MEMBER_PROJECTS)
+        }
+        
         def organisationRange = Organisation.list()*.name
         def installationRange = Installation.list()*.name
         

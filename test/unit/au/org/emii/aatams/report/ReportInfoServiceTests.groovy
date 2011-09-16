@@ -3,8 +3,13 @@ package au.org.emii.aatams.report
 import grails.test.*
 import au.org.emii.aatams.*
 
+import org.apache.shiro.subject.Subject
+import org.apache.shiro.util.ThreadContext
+import org.apache.shiro.SecurityUtils
+
 class ReportInfoServiceTests extends GrailsUnitTestCase 
 {
+    def permissionUtilsService
     def reportInfoService
     
     protected void setUp() 
@@ -13,6 +18,10 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         
         mockLogging(ReportInfoService, true)
         reportInfoService = new ReportInfoService()
+        
+        mockLogging(PermissionUtilsService, true)
+        permissionUtilsService = new PermissionUtilsService()
+        reportInfoService.permissionUtilsService = permissionUtilsService
         
         // Create a couple of projects and installations.
         Project project1 = new Project(name: "project 1")
@@ -28,6 +37,29 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         installationList.each { it.save() }
         
         mockDomain(Organisation)
+
+        Person user = new Person(username: 'user')
+        def subject = [ getPrincipal: { user.username },
+                        isAuthenticated: { true },
+                        hasRole: { true },
+                        isPermitted:
+                        {
+                            if (it == "project:" + project1.id + ":read")
+                            {
+                                return true
+                            }
+                            
+                            return false
+                        }
+                        
+                        
+                      ] as Subject
+
+        SecurityUtils.metaClass.static.getSubject = { subject }
+        
+        // Need this for "findByUsername()" etc.
+        mockDomain(Person, [user])
+        user.save()
     }
 
     protected void tearDown() 
@@ -58,8 +90,30 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         def filterParams = stationReportInfo.filterParams
         assertNotNull(filterParams)
         assertEquals("project", filterParams[0].label)
+        assertEquals("installation.project.name", filterParams[0].propertyName)
+        assertEquals(ReportInfoService.MEMBER_PROJECTS, filterParams[0].range[0])
+        assertTrue(filterParams[0].range.contains("project 1"))
+        assertTrue(filterParams[0].range.contains("project 2"))
+        
     }
+    
+    void testGetReportInfoInstallationStationLoggedIn()
+    {
+        ReportInfo stationReportInfo = reportInfoService.getReportInfo("installationStation")
+        def filterParams = stationReportInfo.filterParams
+        assertNotNull(filterParams)
+        assertEquals(ReportInfoService.MEMBER_PROJECTS, filterParams[0].range[0])
+    }
+     
+    void testGetReportInfoInstallationStationNotLoggedIn()
+    {
+        SecurityUtils.metaClass.static.getSubject = { null }
 
+        ReportInfo stationReportInfo = reportInfoService.getReportInfo("installationStation")
+        def filterParams = stationReportInfo.filterParams
+        assertNotNull(filterParams)
+        assertFalse(filterParams[0].range.contains(ReportInfoService.MEMBER_PROJECTS))
+    }
     
     void testFilterParamsToReportFormat()
     {

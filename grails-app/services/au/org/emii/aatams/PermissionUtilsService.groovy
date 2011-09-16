@@ -185,12 +185,17 @@ class PermissionUtilsService
     
     def principal()
     {
-        if (!SecurityUtils.subject?.isAuthenticated())
+        if (!isAuthenticated())
         {
             return null
         }
         
         return Person.findByUsername(SecurityUtils.subject?.principal)
+    }
+    
+    boolean isAuthenticated()
+    {
+        return SecurityUtils.subject?.isAuthenticated()
     }
     
     /**

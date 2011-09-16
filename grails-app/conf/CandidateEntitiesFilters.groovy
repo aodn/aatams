@@ -1,5 +1,7 @@
 import org.apache.shiro.SecurityUtils
 
+import au.org.emii.aatams.EmbargoFilters
+
 /**
  * This filter inserts "candidate" entities in the model sent to the view.
  * 
@@ -20,7 +22,7 @@ class CandidateEntitiesFilters
         all(controller:'*', action:'create|edit|save|update|addSurgery')
         {
             after = {model ->
-                
+            
                 if (   !SecurityUtils.subject.isAuthenticated()
                     && (controllerName == "person"))
                 {

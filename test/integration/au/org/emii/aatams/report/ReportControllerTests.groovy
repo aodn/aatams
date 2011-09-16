@@ -34,7 +34,8 @@ class ReportControllerTests extends ControllerUnitTestCase
          * Setup security manager.
          */
         def subject = [ getPrincipal: { "iamauser" },
-                        isAuthenticated: { true }
+                        isAuthenticated: { true },
+                        isPermitted: { true }
                       ] as Subject
 
         ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 

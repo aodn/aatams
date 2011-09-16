@@ -3,15 +3,26 @@ package au.org.emii.aatams.report
 import grails.test.*
 import au.org.emii.aatams.*
 
-class ReportQueryExecutorServiceTests extends GroovyTestCase
+class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 {
+    def embargoService
+    def permissionUtilsService
     def reportQueryExecutorService
     
     protected void setUp() 
     {
         super.setUp()
         
+        mockLogging(EmbargoService, true)
+        embargoService = new EmbargoService()
+        
+        mockLogging(PermissionUtilsService, true)
+        permissionUtilsService = new PermissionUtilsService()
+        embargoService.permissionUtilsService = permissionUtilsService
+        
+        mockLogging(ReportQueryExecutorService, true)
         reportQueryExecutorService = new ReportQueryExecutorService()
+        reportQueryExecutorService.embargoService = embargoService
         
         // Create a couple of projects and installations.
         Project project1 = Project.build(name: "project 1")

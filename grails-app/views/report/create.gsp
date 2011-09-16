@@ -22,7 +22,11 @@
       <h1>
         <g:message code="default.report.create.label" args="[displayName]" />        
       </h1>
-      
+
+      <g:if test="${flash.message}">
+        <div class="message">${flash.message}</div>
+      </g:if>
+
       <g:report name="${name}" formats="${formats}"/>
       
     </div>

@@ -60,13 +60,11 @@ class ReportController
                                                         params.filter)
         }
 
-        if (params._name == "detection")
+        if (!resultList || resultList.isEmpty())
         {
-            resultList.each
-            {
-                assert(it.firstDetectionSurgery.surgery.release.animal.species)
-//                log.debug("species name: " + it.firstDetectionSurgery.surgery.release.animal.species)
-            }
+            redirect(action:"create", params:[name:params._name, formats:[params._format]])
+            flash.message = "No matching records."
+            return
         }
         
         params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/" 

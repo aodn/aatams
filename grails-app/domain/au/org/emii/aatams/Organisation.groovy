@@ -34,6 +34,11 @@ class Organisation
         requestingUser(nullable:false)
     }
     
+    static mapping = 
+    {
+        status index:'status_index'
+    }
+    
     String toString()
     {
         return name
@@ -42,5 +47,10 @@ class Organisation
     String getProjects()
     {
         return ListUtils.fold(organisationProjects, "project")
+    }
+    
+    static List<Organisation> listActive()
+    {
+        return findAllByStatus(EntityStatus.ACTIVE)
     }
 }

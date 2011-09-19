@@ -73,7 +73,7 @@
                                   <label class="compulsory" for="codeMap"><g:message code="tag.codeMap.label" default="Code Map" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeMap', 'errors')}">
-                                    <g:textField name="codeMap" value="${tagInstance?.codeMap}" />
+                                    <g:textField name="codeMap" value="${tagInstance?.codeMap}" placeholder="e.g. 'A69-1303'" />
 
                                 </td>
                             </tr>
@@ -83,7 +83,7 @@
                                   <label class="compulsory" for="pingCode"><g:message code="tag.pingIDCode.label" default="Ping ID Code" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'pingCode', 'errors')}">
-                                    <g:textField name="pingCode" value="${tagInstance?.pingCode}" />
+                                    <g:textField name="pingCode" value="${tagInstance?.pingCode}" placeholder="e.g. '46601'" />
                                 </td>
                             </tr>
                         

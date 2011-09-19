@@ -131,18 +131,18 @@ class PermissionUtilsService
         return user
     }
     
-    private String buildPermission(Long id, Map cache, String permFormat)
+    private String buildPermission(def id, Map cache, String permFormat)
     {
         if (!id)
         {
             return NOT_PERMITTED
         }
         
-        String perm = cache.get(id)
+        String perm = cache.get(Long.valueOf(id))
         if (!perm)
         {
-            perm = String.format(permFormat, id)
-            cache[id] = perm
+            perm = String.format(permFormat, Long.valueOf(id))
+            cache[Long.valueOf(id)] = perm
         }
         
         assert(perm): "permission cannot be null"

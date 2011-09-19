@@ -47,6 +47,12 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
                      service.buildProjectReadPermission(project.id))
     }
 
+    void testBuildProjectReadPermissionStringId()
+    {
+        assertEquals("project:" + project.id + ":read",
+                     service.buildProjectReadPermission(String.valueOf(project.id)))
+    }
+
     void testBuildProjectReadPermissionBigID()
     {
         def id = Long.MAX_VALUE
@@ -66,6 +72,12 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
                      service.buildProjectWritePermission(project.id))
     }
     
+    void testBuildProjectWritePermissionStringId()
+    {
+        assertEquals("project:" + project.id + ":write",
+                     service.buildProjectWritePermission(String.valueOf(project.id)))
+    }
+    
     void testBuildProjectWritePermissionNullId()
     {
         assertEquals("notPermitted", service.buildProjectWritePermission(null))
@@ -82,6 +94,13 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         assertEquals(
             "principalInvestigator:" + project.id,
             service.buildPrincipalInvestigatorPermission(project.id))
+    }
+    
+    void testBuildPrincipalInvestigatorPermissionStringId()
+    {
+        assertEquals(
+            "principalInvestigator:" + project.id,
+            service.buildPrincipalInvestigatorPermission(String.valueOf(project.id)))
     }
     
     void testBuildPrincipalInvestigatorPermissionNullId()
@@ -111,6 +130,14 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         
         assertEquals("receiverUpdate:" + receiverId,
                      service.buildReceiverUpdatePermission(receiverId))
+    }
+    
+    void testBuildReceiverUpdatePermissionStringId()
+    {
+        Integer receiverId = 3
+        
+        assertEquals("receiverUpdate:" + receiverId,
+                     service.buildReceiverUpdatePermission(String.valueOf(receiverId)))
     }
     
     void testBuildReceiverUpdatePermissionNullId()

@@ -132,7 +132,8 @@ class AnimalReleaseControllerTests extends GroovyTestCase
         Tag tag = Tag.build(codeName:transmitterId,
                             project:project,
                             status:deployedStatus,
-                            model:model).save()
+                            model:model,
+                            serialNumber:"12345").save()
         SurgeryType surgeryType = SurgeryType.build().save()
         SurgeryTreatmentType surgeryTreatmentType = SurgeryTreatmentType.build().save()
         

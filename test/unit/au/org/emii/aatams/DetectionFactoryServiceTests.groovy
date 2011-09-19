@@ -129,7 +129,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
                           project:new Project(),
                           codeName:transmitterId,
                           model:new TagDeviceModel(),
-                          serialNumber:"1234",
+                          serialNumber:"11111",
                           status:new DeviceStatus())
         assertNotNull(tag1)              
                       
@@ -139,7 +139,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
                           project:new Project(),
                           codeName:transmitterId + "123",
                           model:new TagDeviceModel(),
-                          serialNumber:"1234",
+                          serialNumber:"22222",
                           status:new DeviceStatus())
                       
         def tagList = [tag1, tag2]

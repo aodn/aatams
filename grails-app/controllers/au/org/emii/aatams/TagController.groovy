@@ -124,11 +124,11 @@ class TagController {
     /**
      * Allows auto-complete functionality on front-end.
      */
-    def lookupByCodeName =
+    def lookupNonDeployedByCodeName =
     {
-        log.debug("Looking up tag, codeName: " + params.term)
+        log.debug("Looking up non-deployed tags, codeName: " + params.term)
         
-        def tags = Tag.findAllByCodeNameIlike(params.term + "%")
+        def tags = Tag.findAllByCodeNameIlikeAndStatusNotEqual(params.term + "%", DeviceStatus.findByStatus("DEPLOYED"))
         
         // Limit so that all results fit on screen.
         if (tags?.size() > 20)

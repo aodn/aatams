@@ -5,7 +5,7 @@
  */
 $(function()
 {
-    var dataSource = "/aatams/tag/lookupByCodeName"
+    var dataSource = "/aatams/tag/lookupNonDeployedByCodeName"
     $("#tagCodeName").autocomplete({source:dataSource});
 });
 

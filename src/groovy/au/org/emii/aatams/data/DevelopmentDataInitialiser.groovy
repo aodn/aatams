@@ -265,7 +265,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
         Receiver rx3 =
             new Receiver(codeName:'VR2W-101338',
-                         serialNumber:'1111',
+                         serialNumber:'1111r',
                          status:newStatus,
                          model:vemcoVR2,
                          organisation:imosOrg).save(failOnError: true)

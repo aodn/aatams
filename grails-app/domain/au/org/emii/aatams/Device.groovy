@@ -27,6 +27,7 @@ class Device
     static mapping =
     {
         codeName index:'code_name_index'
+        status index:'status_index'
     }
     
     static transients = ['deviceID']

@@ -71,7 +71,7 @@ class AnimalReleaseControllerTests extends GroovyTestCase
                                      location:(Point)reader.read("POINT(30.1234 30.1234)"))
         deployment.save(failOnError:true)
         
-        def person = Person.build(organisation:org).save(failOnError:true)
+        def person = Person.build(username:'jbloggs', organisation:org).save(failOnError:true)
         
         def recoverer = ProjectRole.build(project:project, person:person)
         recoverer.save(failOnError:true)

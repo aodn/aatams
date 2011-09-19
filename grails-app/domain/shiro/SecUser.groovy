@@ -7,6 +7,6 @@ class SecUser {
     static hasMany = [ roles: SecRole, permissions: String ]
 
     static constraints = {
-        username(nullable: false, blank: false)
+        username(nullable: false, blank: false, unique:true)
     }
 }

@@ -134,6 +134,7 @@ class ReferenceDataInitialiser extends AbstractDataInitialiser
         CaptureMethod longLine = new CaptureMethod(name:'LONG LINE').save(failOnError:true)
         CaptureMethod trap = new CaptureMethod(name:'TRAP').save(failOnError:true)
         CaptureMethod handCapture = new CaptureMethod(name:'HAND CAPTURE').save(failOnError:true)
+        CaptureMethod freeSwimming = new CaptureMethod(name:'FREE SWIMMING').save(failOnError:true)
         
         Sex male = new Sex(sex:'MALE').save(failOnError:true)
         Sex female = new Sex(sex:'FEMALE').save(failOnError:true)

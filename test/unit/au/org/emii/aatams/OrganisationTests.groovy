@@ -29,4 +29,19 @@ class OrganisationTests extends GrailsUnitTestCase
         assertTrue(activeOrgList.contains(activeOrg1))
         assertTrue(activeOrgList.contains(activeOrg2))
     }
+    
+    void testNullPostalAddress()
+    {
+        Organisation org = new Organisation(name:"org",
+                                            department:"asdf",
+                                            phoneNumber:"1234",
+                                            faxNumber:"234",
+                                            streetAddress:new Address(),
+                                            //postalAddress:null
+                                            requestingUser:new Person())
+                                        
+        mockForConstraintsTests(Organisation, [org])
+        
+        assertFalse(org.validate())
+    }
 }

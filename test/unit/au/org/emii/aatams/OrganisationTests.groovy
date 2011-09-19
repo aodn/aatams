@@ -44,4 +44,13 @@ class OrganisationTests extends GrailsUnitTestCase
         
         assertFalse(org.validate())
     }
+    
+    void testToString()
+    {
+        Organisation org = new Organisation(name: "CSIRO",
+                                            department: "CMAR")
+                                        
+        assertEquals("CSIRO (CMAR)", String.valueOf(org))
+    }
+    
 }

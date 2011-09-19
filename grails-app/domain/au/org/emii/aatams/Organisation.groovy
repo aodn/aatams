@@ -41,7 +41,7 @@ class Organisation
     
     String toString()
     {
-        return name
+        return name + " (" + department  + ")"
     }
     
     String getProjects()

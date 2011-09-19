@@ -26,7 +26,7 @@ class Tag extends Device
     static constraints =
     {
         codeMap(blank:false)
-        pingCode()
+        pingCode(unique:true)
         transmitterType()
         expectedLifeTimeDays(nullable:true)
     }

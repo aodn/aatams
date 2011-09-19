@@ -19,7 +19,7 @@ class Device
     static constraints =
     {
         codeName(blank:false)
-        serialNumber(blank:false)
+        serialNumber(blank:false, unique:true)
         status()
         comment(nullable:true, blank:true)
     }

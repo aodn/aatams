@@ -48,7 +48,7 @@
                                     <label class="compulsory" for="organisation"><g:message code="project.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createProjectCmd, field: 'organisation', 'errors')}">
-                                    <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.list()}" optionKey="id" value="${createProjectCmd?.organisation?.id}"  />
+                                    <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.listActive()}" optionKey="id" value="${createProjectCmd?.organisation?.id}"  />
 
                                 </td>
                             </tr>

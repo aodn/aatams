@@ -28,7 +28,7 @@ class Organisation
         phoneNumber(blank:false)
         faxNumber(nullable:true)
         streetAddress()
-        postalAddress(nullable:true)
+        postalAddress()
         status()    // Default to PENDING
         organisationProjects()
         requestingUser(nullable:false)

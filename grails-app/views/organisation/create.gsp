@@ -84,7 +84,7 @@
                             <!-- Postal address. -->
                             <tr class="prop">
                               <td valign="top" class="name">
-                                  <label for="postalAddress"><g:message code="organisation.streetAddress.label" default="Postal Address" /></label>
+                                  <label class="compulsory" for="postalAddress"><g:message code="organisation.streetAddress.label" default="Postal Address" /></label>
                               </td>
                               <td>
                                 <g:addressDetail addressName='postalAddress' asAboveElement="streetAddress"/>

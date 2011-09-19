@@ -77,27 +77,27 @@ class ReferenceDataInitialiser extends AbstractDataInitialiser
 
         // Receiver models.
         DeviceModel vemcoVR2 =
-            new DeviceModel(modelName:'VR2', manufacturer:vemco).save(failOnError: true)
+            new ReceiverDeviceModel(modelName:'VR2', manufacturer:vemco).save(failOnError: true)
         DeviceModel vemcoVR2W =
-            new DeviceModel(modelName:'VR2W', manufacturer:vemco).save(failOnError: true)
+            new ReceiverDeviceModel(modelName:'VR2W', manufacturer:vemco).save(failOnError: true)
         DeviceModel vemcoVR3UWM =
-            new DeviceModel(modelName:'VR3-UWM', manufacturer:vemco).save(failOnError: true)
+            new ReceiverDeviceModel(modelName:'VR3-UWM', manufacturer:vemco).save(failOnError: true)
             
         // Tag models.
         DeviceModel vemcoV6180 =
-            new DeviceModel(modelName:'V6-180kHz', manufacturer:vemco).save(failOnError: true)
+            new TagDeviceModel(modelName:'V6-180kHz', manufacturer:vemco).save(failOnError: true)
         DeviceModel vemcoV7 =
-            new DeviceModel(modelName:'V7', manufacturer:vemco).save(failOnError: true)
+            new TagDeviceModel(modelName:'V7', manufacturer:vemco).save(failOnError: true)
         DeviceModel vemcoV8 =
-            new DeviceModel(modelName:'V8', manufacturer:vemco).save(failOnError: true)
+            new TagDeviceModel(modelName:'V8', manufacturer:vemco).save(failOnError: true)
         DeviceModel vemcoV9 =
-            new DeviceModel(modelName:'V9', manufacturer:vemco).save(failOnError: true)
+            new TagDeviceModel(modelName:'V9', manufacturer:vemco).save(failOnError: true)
         DeviceModel vemcoV9AP =
-            new DeviceModel(modelName:'V9AP', manufacturer:vemco).save(failOnError: true)
+            new TagDeviceModel(modelName:'V9AP', manufacturer:vemco).save(failOnError: true)
         DeviceModel vemcoV13 =
-            new DeviceModel(modelName:'V13', manufacturer:vemco).save(failOnError: true)
+            new TagDeviceModel(modelName:'V13', manufacturer:vemco).save(failOnError: true)
         DeviceModel vemcoV16 =
-            new DeviceModel(modelName:'V16', manufacturer:vemco).save(failOnError: true)
+            new TagDeviceModel(modelName:'V16', manufacturer:vemco).save(failOnError: true)
 
         DeviceStatus newStatus = new DeviceStatus(status:'NEW').save(failOnError: true)
         DeviceStatus deployedStatus = new DeviceStatus(status:'DEPLOYED').save(failOnError: true)

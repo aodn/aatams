@@ -56,7 +56,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
     {
         receiver = new Receiver(codeName:receiverCodeName,
                                          organisation:new Organisation(),
-                                         model:new DeviceModel(),
+                                         model:new ReceiverDeviceModel(),
                                          serialNumber:"1234",
                                          status:new DeviceStatus()).save()
         deployment = 
@@ -128,7 +128,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
                           transmitterType:new TransmitterType(),
                           project:new Project(),
                           codeName:transmitterId,
-                          model:new DeviceModel(),
+                          model:new TagDeviceModel(),
                           serialNumber:"1234",
                           status:new DeviceStatus())
         assertNotNull(tag1)              
@@ -138,7 +138,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
                           transmitterType:new TransmitterType(),
                           project:new Project(),
                           codeName:transmitterId + "123",
-                          model:new DeviceModel(),
+                          model:new TagDeviceModel(),
                           serialNumber:"1234",
                           status:new DeviceStatus())
                       
@@ -268,7 +268,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
                 transmitterType:new TransmitterType(),
                 project:new Project(),
                 codeName:transmitterId,
-                model:new DeviceModel(),
+                model:new TagDeviceModel(),
                 serialNumber:"1234",
                 status:new DeviceStatus())
         tagList[0].addToSensors(sensor)
@@ -316,7 +316,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
                 transmitterType:new TransmitterType(),
                 project:new Project(),
                 codeName:transmitterId,
-                model:new DeviceModel(),
+                model:new TagDeviceModel(),
                 serialNumber:"1234",
                 status:new DeviceStatus())
         tagList[0].addToSensors(sensor)

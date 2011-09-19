@@ -63,7 +63,7 @@
                                     <label class="compulsory" for="modelId"><g:message code="tag.model.label" default="Model" /></label>
                                 </td>
                                 <td valign="top" class="value">
-                                    <g:select name="modelId" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" />
+                                    <g:select name="modelId" from="${au.org.emii.aatams.TagDeviceModel.list()}" optionKey="id" />
                                 </td>
                             </tr>
                         

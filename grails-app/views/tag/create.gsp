@@ -43,7 +43,7 @@
                                     <label class="compulsory" for="model"><g:message code="tag.model.label" default="Model" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'model', 'errors')}">
-                                    <g:select name="model.id" from="${au.org.emii.aatams.DeviceModel.list()}" optionKey="id" value="${tagInstance?.model?.id}"  />
+                                    <g:select name="model.id" from="${au.org.emii.aatams.TagDeviceModel.list()}" optionKey="id" value="${tagInstance?.model?.id}"  />
 
                                 </td>
                             </tr>

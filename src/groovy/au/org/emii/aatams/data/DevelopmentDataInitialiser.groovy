@@ -239,10 +239,10 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         DeviceManufacturer vemco = 
             new DeviceManufacturer(manufacturerName:'Vemco').save(failOnError: true)
 
-        DeviceModel vemcoXyz =
-            new DeviceModel(modelName:'XYZ', manufacturer:vemco).save(failOnError: true)
-        DeviceModel vemcoAbc =
-            new DeviceModel(modelName:'ABC', manufacturer:vemco).save(failOnError: true)
+        DeviceModel vemcoVR2 =
+            new ReceiverDeviceModel(modelName:'VR2', manufacturer:vemco).save(failOnError: true)
+        DeviceModel vemcoV8 =
+            new TagDeviceModel(modelName:'V8', manufacturer:vemco).save(failOnError: true)
 
         DeviceStatus newStatus = new DeviceStatus(status:'NEW').save(failOnError: true)
         DeviceStatus deployedStatus = new DeviceStatus(status:'DEPLOYED').save(failOnError: true)
@@ -252,7 +252,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new Receiver(codeName:'VR2W-101336',
                          serialNumber:'12345678',
                          status:deployedStatus,
-                         model:vemcoXyz,
+                         model:vemcoVR2,
                          organisation:csiroOrg,
                          comment:'RX 1 belonging to CSIRO').save(failOnError: true)
 
@@ -260,14 +260,14 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new Receiver(codeName:'VR2W-101337',
                          serialNumber:'87654321',
                          status:deployedStatus,
-                         model:vemcoXyz,
+                         model:vemcoVR2,
                          organisation:csiroOrg).save(failOnError: true)
 
         Receiver rx3 =
             new Receiver(codeName:'VR2W-101338',
                          serialNumber:'1111',
                          status:newStatus,
-                         model:vemcoXyz,
+                         model:vemcoVR2,
                          organisation:imosOrg).save(failOnError: true)
                      
         //
@@ -280,7 +280,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     serialNumber:'62339',
                     codeMap:'A69-1303',
                     pingCode:'62339',
-                    model:vemcoXyz,
+                    model:vemcoV8,
                     project:sealCountProject,
                     status:deployedStatus,
                     transmitterType:pinger).save(failOnError: true)
@@ -290,7 +290,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     serialNumber:'46601',
                     codeMap:'A69-1303',
                     pingCode:'46601',
-                    model:vemcoAbc,
+                    model:vemcoV8,
                     project:sealCountProject,
                     status:deployedStatus,
                     transmitterType:pinger).save(failOnError: true)
@@ -300,7 +300,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     serialNumber:'1111',
                     codeMap:'A69-1303',
                     pingCode:'11111',
-                    model:vemcoAbc,
+                    model:vemcoV8,
                     project:sealCountProject,
                     status:newStatus,
                     transmitterType:pinger).save(failOnError: true)
@@ -312,7 +312,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     serialNumber:'3333',
                     codeMap:'A70-1303',
                     pingCode:'3333',
-                    model:vemcoXyz,
+                    model:vemcoV8,
                     project:tunaProject,
                     status:newStatus,
                     transmitterType:pinger).save(failOnError: true)
@@ -322,7 +322,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     serialNumber:'4444',
                     codeMap:'A70-1303',
                     pingCode:'4444',
-                    model:vemcoXyz,
+                    model:vemcoV8,
                     project:tunaProject,
                     status:newStatus,
                     transmitterType:pinger).save(failOnError: true)
@@ -337,7 +337,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     serialNumber:'64000',
                     codeMap:'A69-1400',
                     pingCode:'64000',
-                    model:vemcoXyz,
+                    model:vemcoV8,
                     project:sealCountProject,
                     status:newStatus,
                     tag:tag1,
@@ -351,7 +351,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     serialNumber:'65000',
                     codeMap:'A69-1500',
                     pingCode:'65000',
-                    model:vemcoXyz,
+                    model:vemcoV8,
                     project:sealCountProject,
                     status:newStatus,
                     tag:tag1,

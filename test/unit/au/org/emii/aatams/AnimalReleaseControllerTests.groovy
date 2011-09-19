@@ -304,7 +304,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         mockDomain(AnimalRelease)
 
         // New tag - need to give DeviceModel
-        DeviceModel deviceModel = new DeviceModel()
+        DeviceModel deviceModel = new TagDeviceModel()
         mockDomain(DeviceModel, [deviceModel])
         deviceModel.save()
         mockDomain(Tag)

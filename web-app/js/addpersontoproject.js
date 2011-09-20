@@ -6,7 +6,7 @@ $(function() {
         width: 350,
         modal: true,
         buttons: {
-            'Add': function() 
+            'Create': function() 
             {
                 var projectId = $("#projectId").val();
                 var personId = $("#personId option:selected").val();

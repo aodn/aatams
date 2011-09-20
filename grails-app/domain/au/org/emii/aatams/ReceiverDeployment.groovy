@@ -96,7 +96,7 @@ class ReceiverDeployment
         station()
         deploymentNumber(nullable:true, min:0)
         deploymentDateTime()
-        recoveryDate(nullable:true)
+        recoveryDate(nullable:true, validator:recoveryDateValidator)
         acousticReleaseID(nullable:true)
         mooringType()
         mooringDescriptor(nullable:true, blank:true)
@@ -108,6 +108,18 @@ class ReceiverDeployment
         recovery(nullable:true)
         embargoDate(nullable:true)
         batteryLifeDays(nullable:true)
+    }
+    
+    static def recoveryDateValidator =
+    {
+        recoveryDate, obj ->
+        
+        if (recoveryDate)
+        {
+            return recoveryDate.after(obj.deploymentDateTime.toDate())
+        }
+        
+        return true
     }
     
     String toString()

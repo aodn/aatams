@@ -112,4 +112,18 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
                               retiredStatus.toString()]]}"
         assertEquals(message, controller.flash.message)
     }
+    
+    void testSaveScheduledRecoveryDateBeforeDeploymentDate() 
+    {
+        controller.params.receiver = newReceiver
+        controller.params.deploymentDateTime = new DateTime()
+        controller.params.mooringType = new MooringType()
+        controller.params.station = new InstallationStation()
+        controller.params.recoveryDate = controller.params.deploymentDateTime.minusDays(1).toDate()
+        
+        controller.save()
+        
+        assertEquals("create", controller.renderArgs.view)
+        assertNotNull(controller.renderArgs.model.receiverDeploymentInstance)
+    }
 }

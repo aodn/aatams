@@ -21,6 +21,8 @@
 <!--    <script type="text/javascript" src="${resource(dir:'js',file:'fileupload.js')}"></script>-->
 
     <g:javascript src="asAbove.js"/>
+    <g:javascript src="formChangedWarning.js"/>
+
     
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>
 <!--    <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui-lightness/jquery-ui-1.8.10.custom.css')}"/>-->

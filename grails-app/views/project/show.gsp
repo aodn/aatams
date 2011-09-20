@@ -59,6 +59,14 @@
                             <td >
 
                               <table class="nested">
+                                <thead>
+                                  <tr>
+                                    <th/>
+                                    <th>Name</th>
+                                    <th>Project Role</th>
+                                    <th>Access</th>
+                                  </tr>
+                                </thead>
                                 <tbody>
                                   <g:each in="${projectInstance?.projectRoles?}" var="p">
                                     <tr>

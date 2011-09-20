@@ -168,7 +168,8 @@ function updateMeasurementTable(data, projectId, idPrefix)
     var unitsColumn = $("<td>").attr("class", "value").html(data.instance.unit.unit);
     tableRow.append(unitsColumn);
 
-    var estimateColumn = $("<td>").attr("class", "value").html(data.instance.estimate.toString());
+    var estimateDisplay = data.instance.estimate ? 'yes' : 'no'
+    var estimateColumn = $("<td>").attr("class", "value").html(estimateDisplay);
     tableRow.append(estimateColumn);
 
     var commentsColumn = $("<td>").attr("class", "value").html(data.instance.comments);

@@ -230,7 +230,7 @@
                                           <td valign="top" class="value">${m?.type?.type}</td>
                                           <td valign="top" class="value">${m?.value}</td>
                                           <td valign="top" class="value">${m?.unit?.unit}</td>
-                                          <td valign="top" class="value">${m?.estimate}</td>
+                                          <td valign="top" class="value"><g:formatBoolean boolean="${m?.estimate}" true="yes" false="no"/></td>
                                           <td valign="top" class="value">${m?.comments}</td>
 
                                         </tr>

@@ -14,7 +14,7 @@ class TagController {
 
     def list = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [tagInstanceList: Tag.list(params), tagInstanceTotal: Tag.count()]
+        [tagInstanceList: Tag.list(params) - Sensor.list(), tagInstanceTotal: (Tag.count() - Sensor.count())]
     }
 
     def create = {

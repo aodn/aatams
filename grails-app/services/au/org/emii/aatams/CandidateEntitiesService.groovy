@@ -81,8 +81,11 @@ class CandidateEntitiesService
     {
         def candOrganisations = organisations()
         
-        def candidateReceivers = candOrganisations*.receivers?.flatten()
-        return candidateReceivers
+        // receivers.organisation in candOrganisations
+        // and receiver.status != DEPLOYED
+        return Receiver.findAllByOrganisationInListAndStatusNotEqual(
+                                candOrganisations, 
+                                DeviceStatus.findByStatus("DEPLOYED"))
     }
     
     def tags(Project project)

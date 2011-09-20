@@ -31,10 +31,19 @@ class ReceiverDeploymentController {
     def save = {
         def receiverDeploymentInstance = new ReceiverDeployment(params)
 
-        log.debug("params: " + params)
+        DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
+        if (receiverDeploymentInstance.receiver?.status == deployedStatus)
+        {
+            flash.message = "${message(code: 'default.invalidState.receiver', \
+                                       args: [receiverDeploymentInstance.receiver.toString(), \
+                                              receiverDeploymentInstance.receiver.status.toString()])}"
+            receiverDeploymentInstance.receiver = null
+            println ("*** invalid status ***")
+            render(view: "create", model: [receiverDeploymentInstance: receiverDeploymentInstance])
+            return
+        }
         
         // Need to update that status of the receiver to DEPLOYED.
-        DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
         receiverDeploymentInstance.receiver?.status = deployedStatus
 
         // Increment that station's number of deployments.
@@ -52,7 +61,8 @@ class ReceiverDeploymentController {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
             redirect(action: "show", id: receiverDeploymentInstance.id)
         }
-        else {
+        else 
+        {
             render(view: "create", model: [receiverDeploymentInstance: receiverDeploymentInstance])
         }
     }

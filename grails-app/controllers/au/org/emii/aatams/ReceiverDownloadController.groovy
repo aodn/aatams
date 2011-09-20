@@ -22,7 +22,7 @@ class ReceiverDownloadController {
     def save = {
         def receiverDownloadInstance = new ReceiverDownload(params)
         if (receiverDownloadInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDownload.label', default: 'ReceiverDownload'), receiverDownloadInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDownload.label', default: 'ReceiverDownload'), receiverDownloadInstance.toString()])}"
             redirect(action: "show", id: receiverDownloadInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class ReceiverDownloadController {
             }
             receiverDownloadInstance.properties = params
             if (!receiverDownloadInstance.hasErrors() && receiverDownloadInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDownload.label', default: 'ReceiverDownload'), receiverDownloadInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDownload.label', default: 'ReceiverDownload'), receiverDownloadInstance.toString()])}"
                 redirect(action: "show", id: receiverDownloadInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class ReceiverDownloadController {
         if (receiverDownloadInstance) {
             try {
                 receiverDownloadInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiverDownload.label', default: 'ReceiverDownload'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiverDownload.label', default: 'ReceiverDownload'), receiverDownloadInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'receiverDownload.label', default: 'ReceiverDownload'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'receiverDownload.label', default: 'ReceiverDownload'), receiverDownloadInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

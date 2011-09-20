@@ -22,7 +22,7 @@ class SexController {
     def save = {
         def sexInstance = new Sex(params)
         if (sexInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'sex.label', default: 'Sex'), sexInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'sex.label', default: 'Sex'), sexInstance.toString()])}"
             redirect(action: "show", id: sexInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class SexController {
             }
             sexInstance.properties = params
             if (!sexInstance.hasErrors() && sexInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sex.label', default: 'Sex'), sexInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sex.label', default: 'Sex'), sexInstance.toString()])}"
                 redirect(action: "show", id: sexInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class SexController {
         if (sexInstance) {
             try {
                 sexInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'sex.label', default: 'Sex'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'sex.label', default: 'Sex'), sexInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'sex.label', default: 'Sex'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'sex.label', default: 'Sex'), sexInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

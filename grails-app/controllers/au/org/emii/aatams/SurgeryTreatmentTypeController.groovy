@@ -22,7 +22,7 @@ class SurgeryTreatmentTypeController {
     def save = {
         def surgeryTreatmentTypeInstance = new SurgeryTreatmentType(params)
         if (surgeryTreatmentTypeInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'surgeryTreatmentType.label', default: 'SurgeryTreatmentType'), surgeryTreatmentTypeInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'surgeryTreatmentType.label', default: 'SurgeryTreatmentType'), surgeryTreatmentTypeInstance.toString()])}"
             redirect(action: "show", id: surgeryTreatmentTypeInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class SurgeryTreatmentTypeController {
             }
             surgeryTreatmentTypeInstance.properties = params
             if (!surgeryTreatmentTypeInstance.hasErrors() && surgeryTreatmentTypeInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'surgeryTreatmentType.label', default: 'SurgeryTreatmentType'), surgeryTreatmentTypeInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'surgeryTreatmentType.label', default: 'SurgeryTreatmentType'), surgeryTreatmentTypeInstance.toString()])}"
                 redirect(action: "show", id: surgeryTreatmentTypeInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class SurgeryTreatmentTypeController {
         if (surgeryTreatmentTypeInstance) {
             try {
                 surgeryTreatmentTypeInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'surgeryTreatmentType.label', default: 'SurgeryTreatmentType'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'surgeryTreatmentType.label', default: 'SurgeryTreatmentType'), surgeryTreatmentTypeInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'surgeryTreatmentType.label', default: 'SurgeryTreatmentType'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'surgeryTreatmentType.label', default: 'SurgeryTreatmentType'), surgeryTreatmentTypeInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

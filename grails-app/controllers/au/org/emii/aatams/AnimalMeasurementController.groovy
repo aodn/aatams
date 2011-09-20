@@ -25,7 +25,7 @@ class AnimalMeasurementController {
         def animalMeasurementInstance = new AnimalMeasurement(params)
         if (animalMeasurementInstance.save(flush: true)) 
         {
-            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance])}"
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.toString()])}"
             render ([instance:animalMeasurementInstance, message:flash] as JSON)
         }
         else 
@@ -72,7 +72,7 @@ class AnimalMeasurementController {
             animalMeasurementInstance.properties = params
             if (!animalMeasurementInstance.hasErrors() && animalMeasurementInstance.save(flush: true)) 
             {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.toString()])}"
                 def release = animalMeasurementInstance?.release
                 redirect(controller: "animalRelease", 
                          action: "edit", 
@@ -97,10 +97,10 @@ class AnimalMeasurementController {
             try 
             {
                 animalMeasurementInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.toString()])}"
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.toString()])}"
             }
             
             // Redirect to the "owning" animal release edit, since that is where

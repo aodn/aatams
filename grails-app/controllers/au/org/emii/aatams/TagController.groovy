@@ -38,7 +38,7 @@ class TagController {
         tagInstance.transmitterType = TransmitterType.findByTransmitterTypeName('PINGER')
         
         if (tagInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.toString()])}"
             redirect(action: "show", id: tagInstance.id)
         }
         else {
@@ -89,7 +89,7 @@ class TagController {
             tagInstance.codeName = codeName
 
             if (!tagInstance.hasErrors() && tagInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.toString()])}"
                 redirect(action: "show", id: tagInstance.id)
             }
             else {
@@ -107,11 +107,11 @@ class TagController {
         if (tagInstance) {
             try {
                 tagInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'tag.label', default: 'Tag'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'tag.label', default: 'Tag'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

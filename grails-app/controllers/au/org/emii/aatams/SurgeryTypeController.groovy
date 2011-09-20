@@ -22,7 +22,7 @@ class SurgeryTypeController {
     def save = {
         def surgeryTypeInstance = new SurgeryType(params)
         if (surgeryTypeInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'surgeryType.label', default: 'SurgeryType'), surgeryTypeInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'surgeryType.label', default: 'SurgeryType'), surgeryTypeInstance.toString()])}"
             redirect(action: "show", id: surgeryTypeInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class SurgeryTypeController {
             }
             surgeryTypeInstance.properties = params
             if (!surgeryTypeInstance.hasErrors() && surgeryTypeInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'surgeryType.label', default: 'SurgeryType'), surgeryTypeInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'surgeryType.label', default: 'SurgeryType'), surgeryTypeInstance.toString()])}"
                 redirect(action: "show", id: surgeryTypeInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class SurgeryTypeController {
         if (surgeryTypeInstance) {
             try {
                 surgeryTypeInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'surgeryType.label', default: 'SurgeryType'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'surgeryType.label', default: 'SurgeryType'), surgeryTypeInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'surgeryType.label', default: 'SurgeryType'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'surgeryType.label', default: 'SurgeryType'), surgeryTypeInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

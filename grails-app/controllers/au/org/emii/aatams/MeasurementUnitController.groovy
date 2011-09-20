@@ -22,7 +22,7 @@ class MeasurementUnitController {
     def save = {
         def measurementUnitInstance = new MeasurementUnit(params)
         if (measurementUnitInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'measurementUnit.label', default: 'MeasurementUnit'), measurementUnitInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'measurementUnit.label', default: 'MeasurementUnit'), measurementUnitInstance.toString()])}"
             redirect(action: "show", id: measurementUnitInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class MeasurementUnitController {
             }
             measurementUnitInstance.properties = params
             if (!measurementUnitInstance.hasErrors() && measurementUnitInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'measurementUnit.label', default: 'MeasurementUnit'), measurementUnitInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'measurementUnit.label', default: 'MeasurementUnit'), measurementUnitInstance.toString()])}"
                 redirect(action: "show", id: measurementUnitInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class MeasurementUnitController {
         if (measurementUnitInstance) {
             try {
                 measurementUnitInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'measurementUnit.label', default: 'MeasurementUnit'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'measurementUnit.label', default: 'MeasurementUnit'), measurementUnitInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'measurementUnit.label', default: 'MeasurementUnit'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'measurementUnit.label', default: 'MeasurementUnit'), measurementUnitInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

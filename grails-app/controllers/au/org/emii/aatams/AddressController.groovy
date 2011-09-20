@@ -22,7 +22,7 @@ class AddressController {
     def save = {
         def addressInstance = new Address(params)
         if (addressInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'address.label', default: 'Address'), addressInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'address.label', default: 'Address'), addressInstance.toString()])}"
             redirect(action: "show", id: addressInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class AddressController {
             }
             addressInstance.properties = params
             if (!addressInstance.hasErrors() && addressInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'address.label', default: 'Address'), addressInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'address.label', default: 'Address'), addressInstance.toString()])}"
                 redirect(action: "show", id: addressInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class AddressController {
         if (addressInstance) {
             try {
                 addressInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'address.label', default: 'Address'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'address.label', default: 'Address'), addressInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'address.label', default: 'Address'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'address.label', default: 'Address'), addressInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

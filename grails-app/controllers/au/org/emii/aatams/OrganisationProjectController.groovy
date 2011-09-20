@@ -26,9 +26,9 @@ class OrganisationProjectController {
         if (organisationProjectInstance.save(flush: true)) 
         {
             flash.message = "${message(code: 'default.added.message', args: [message(code: 'organisation.label', default: 'Organisation'), \
-                                                                             organisationProjectInstance.organisation, \
+                                                                             organisationProjectInstance.organisation.toString(), \
                                                                              message(code: 'project.label', default: 'Project'), \
-                                                                             organisationProjectInstance.project])}"
+                                                                             organisationProjectInstance.project.toString()])}"
                                                                  
             render ([instance:organisationProjectInstance, message:flash] as JSON)
         }
@@ -75,7 +75,7 @@ class OrganisationProjectController {
             }
             organisationProjectInstance.properties = params
             if (!organisationProjectInstance.hasErrors() && organisationProjectInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), organisationProjectInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), organisationProjectInstance.toString()])}"
                 def projectId = organisationProjectInstance?.project?.id
                 redirect(controller: "project", action: "edit", id: projectId, params: [projectId:projectId])
             }
@@ -94,10 +94,10 @@ class OrganisationProjectController {
         if (organisationProjectInstance) {
             try {
                 organisationProjectInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), organisationProjectInstance.toString()])}"
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), organisationProjectInstance.toString()])}"
             }
 
             def projectId = organisationProjectInstance?.project?.id

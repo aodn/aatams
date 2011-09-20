@@ -153,7 +153,7 @@ class AnimalReleaseController {
             if (   (animalInstance.save(flush:true))
                 && (animalReleaseInstance.save(flush: true)))
             {
-                flash.message = "${message(code: 'default.created.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.id])}"
+                flash.message = "${message(code: 'default.created.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.toString()])}"
                 redirect(action: "show", id: animalReleaseInstance.id)
             }
             else 
@@ -221,7 +221,7 @@ class AnimalReleaseController {
                 && !animal.hasErrors()
                 && animal.save(flush: true)) 
             {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.toString()])}"
                 redirect(action: "show", id: animalReleaseInstance.id)
             }
             else {
@@ -239,11 +239,11 @@ class AnimalReleaseController {
         if (animalReleaseInstance) {
             try {
                 animalReleaseInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

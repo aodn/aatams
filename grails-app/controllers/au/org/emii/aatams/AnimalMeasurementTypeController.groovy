@@ -22,7 +22,7 @@ class AnimalMeasurementTypeController {
     def save = {
         def animalMeasurementTypeInstance = new AnimalMeasurementType(params)
         if (animalMeasurementTypeInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'animalMeasurementType.label', default: 'AnimalMeasurementType'), animalMeasurementTypeInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'animalMeasurementType.label', default: 'AnimalMeasurementType'), animalMeasurementTypeInstance.toString()])}"
             redirect(action: "show", id: animalMeasurementTypeInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class AnimalMeasurementTypeController {
             }
             animalMeasurementTypeInstance.properties = params
             if (!animalMeasurementTypeInstance.hasErrors() && animalMeasurementTypeInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalMeasurementType.label', default: 'AnimalMeasurementType'), animalMeasurementTypeInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalMeasurementType.label', default: 'AnimalMeasurementType'), animalMeasurementTypeInstance.toString()])}"
                 redirect(action: "show", id: animalMeasurementTypeInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class AnimalMeasurementTypeController {
         if (animalMeasurementTypeInstance) {
             try {
                 animalMeasurementTypeInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'animalMeasurementType.label', default: 'AnimalMeasurementType'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'animalMeasurementType.label', default: 'AnimalMeasurementType'), animalMeasurementTypeInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'animalMeasurementType.label', default: 'AnimalMeasurementType'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'animalMeasurementType.label', default: 'AnimalMeasurementType'), animalMeasurementTypeInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

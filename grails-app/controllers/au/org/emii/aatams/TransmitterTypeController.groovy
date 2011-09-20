@@ -22,7 +22,7 @@ class TransmitterTypeController {
     def save = {
         def transmitterTypeInstance = new TransmitterType(params)
         if (transmitterTypeInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'transmitterType.label', default: 'TransmitterType'), transmitterTypeInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'transmitterType.label', default: 'TransmitterType'), transmitterTypeInstance.toString()])}"
             redirect(action: "show", id: transmitterTypeInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class TransmitterTypeController {
             }
             transmitterTypeInstance.properties = params
             if (!transmitterTypeInstance.hasErrors() && transmitterTypeInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'transmitterType.label', default: 'TransmitterType'), transmitterTypeInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'transmitterType.label', default: 'TransmitterType'), transmitterTypeInstance.toString()])}"
                 redirect(action: "show", id: transmitterTypeInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class TransmitterTypeController {
         if (transmitterTypeInstance) {
             try {
                 transmitterTypeInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'transmitterType.label', default: 'TransmitterType'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'transmitterType.label', default: 'TransmitterType'), transmitterTypeInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'transmitterType.label', default: 'TransmitterType'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'transmitterType.label', default: 'TransmitterType'), transmitterTypeInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

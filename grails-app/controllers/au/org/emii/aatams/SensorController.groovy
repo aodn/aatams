@@ -34,7 +34,7 @@ class SensorController {
         
         if (sensorInstance.save(flush: true)) 
         {
-            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance])}"
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance.toString()])}"
             
             render ([instance:sensorInstance, message:flash] as JSON)
         }
@@ -81,7 +81,7 @@ class SensorController {
             }
             sensorInstance.properties = params
             if (!sensorInstance.hasErrors() && sensorInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance.toString()])}"
                 def tagId = sensorInstance?.tag?.id
                 redirect(controller: "tag", action: "edit", id: tagId, params: [projectId:sensorInstance?.project?.id])
                 
@@ -101,10 +101,10 @@ class SensorController {
         if (sensorInstance) {
             try {
                 sensorInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'sensor.label', default: 'Sensor'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance.toString()])}"
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'sensor.label', default: 'Sensor'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance.toString()])}"
             }
             
             def tagId = sensorInstance?.tag?.id

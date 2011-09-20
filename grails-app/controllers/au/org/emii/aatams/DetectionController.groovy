@@ -27,7 +27,7 @@ class DetectionController {
     def save = {
         def detectionInstance = new Detection(params)
         if (detectionInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'detection.label', default: 'Detection'), detectionInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'detection.label', default: 'Detection'), detectionInstance.toString()])}"
             redirect(action: "show", id: detectionInstance.id)
         }
         else {
@@ -74,7 +74,7 @@ class DetectionController {
             }
             detectionInstance.properties = params
             if (!detectionInstance.hasErrors() && detectionInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'detection.label', default: 'Detection'), detectionInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'detection.label', default: 'Detection'), detectionInstance.toString()])}"
                 redirect(action: "show", id: detectionInstance.id)
             }
             else {
@@ -92,11 +92,11 @@ class DetectionController {
         if (detectionInstance) {
             try {
                 detectionInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'detection.label', default: 'Detection'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'detection.label', default: 'Detection'), detectionInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'detection.label', default: 'Detection'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'detection.label', default: 'Detection'), detectionInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

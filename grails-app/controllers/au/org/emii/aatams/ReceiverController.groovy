@@ -32,7 +32,7 @@ class ReceiverController
             // Need to add update permission to subject.
             permissionUtilsService.receiverCreated(receiverInstance)
             
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.toString()])}"
             redirect(action: "show", id: receiverInstance.id)
         }
         else {
@@ -80,7 +80,7 @@ class ReceiverController
             receiverInstance.codeName = codeName
         
             if (!receiverInstance.hasErrors() && receiverInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.toString()])}"
                 redirect(action: "show", id: receiverInstance.id)
             }
             else {
@@ -103,11 +103,11 @@ class ReceiverController
                 // Need to delete any update permissions for this receiver.
                 permissionUtilsService.receiverDeleted(receiverInstance)
                 
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiver.label', default: 'Receiver'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'receiver.label', default: 'Receiver'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

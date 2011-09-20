@@ -22,7 +22,7 @@ class InstallationConfigurationController {
     def save = {
         def installationConfigurationInstance = new InstallationConfiguration(params)
         if (installationConfigurationInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'installationConfiguration.label', default: 'InstallationConfiguration'), installationConfigurationInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'installationConfiguration.label', default: 'InstallationConfiguration'), installationConfigurationInstance.toString()])}"
             redirect(action: "show", id: installationConfigurationInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class InstallationConfigurationController {
             }
             installationConfigurationInstance.properties = params
             if (!installationConfigurationInstance.hasErrors() && installationConfigurationInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'installationConfiguration.label', default: 'InstallationConfiguration'), installationConfigurationInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'installationConfiguration.label', default: 'InstallationConfiguration'), installationConfigurationInstance.toString()])}"
                 redirect(action: "show", id: installationConfigurationInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class InstallationConfigurationController {
         if (installationConfigurationInstance) {
             try {
                 installationConfigurationInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'installationConfiguration.label', default: 'InstallationConfiguration'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'installationConfiguration.label', default: 'InstallationConfiguration'), installationConfigurationInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'installationConfiguration.label', default: 'InstallationConfiguration'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'installationConfiguration.label', default: 'InstallationConfiguration'), installationConfigurationInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

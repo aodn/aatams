@@ -27,7 +27,7 @@ class InstallationStationController {
     def save = {
         def installationStationInstance = new InstallationStation(params)
         if (installationStationInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'installationStation.label', default: 'InstallationStation'), installationStationInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'installationStation.label', default: 'InstallationStation'), installationStationInstance.toString()])}"
             redirect(action: "show", id: installationStationInstance.id)
         }
         else {
@@ -76,7 +76,7 @@ class InstallationStationController {
             }
             installationStationInstance.properties = params
             if (!installationStationInstance.hasErrors() && installationStationInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'installationStation.label', default: 'InstallationStation'), installationStationInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'installationStation.label', default: 'InstallationStation'), installationStationInstance.toString()])}"
                 redirect(action: "show", id: installationStationInstance.id)
             }
             else {
@@ -94,11 +94,11 @@ class InstallationStationController {
         if (installationStationInstance) {
             try {
                 installationStationInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'installationStation.label', default: 'InstallationStation'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'installationStation.label', default: 'InstallationStation'), installationStationInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'installationStation.label', default: 'InstallationStation'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'installationStation.label', default: 'InstallationStation'), installationStationInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

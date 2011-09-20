@@ -35,9 +35,9 @@ class ProjectRoleController {
             permissionUtilsService.setPermissions(projectRoleInstance)
             
             flash.message = "${message(code: 'default.added.message', args: [message(code: 'person.label', default: 'Person'), \
-                                                                             projectRoleInstance.person, \
+                                                                             projectRoleInstance.person.toString(), \
                                                                              message(code: 'project.label', default: 'Project'), \
-                                                                             projectRoleInstance.project])}"
+                                                                             projectRoleInstance.project.toString()])}"
                                                                      
             render ([instance:projectRoleInstance, message:flash] as JSON)
         }
@@ -84,7 +84,7 @@ class ProjectRoleController {
             }
             projectRoleInstance.properties = params
             if (!projectRoleInstance.hasErrors() && projectRoleInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), projectRoleInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), projectRoleInstance.toString()])}"
             
                 def projectId = projectRoleInstance?.project?.id
                 redirect(controller:"project", action: "edit", id: projectId, params: [projectId:projectId])
@@ -110,10 +110,10 @@ class ProjectRoleController {
                 // Delete permissions from associated user.
                 // TODO:
                 
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), projectRoleInstance.toString()])}"
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), projectRoleInstance.toString()])}"
             }
             
             def projectId = projectRoleInstance?.project?.id

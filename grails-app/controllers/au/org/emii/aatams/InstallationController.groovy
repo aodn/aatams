@@ -27,7 +27,7 @@ class InstallationController {
     def save = {
         def installationInstance = new Installation(params)
         if (installationInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'installation.label', default: 'Installation'), installationInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'installation.label', default: 'Installation'), installationInstance.toString()])}"
             redirect(action: "show", id: installationInstance.id)
         }
         else {
@@ -74,7 +74,7 @@ class InstallationController {
             }
             installationInstance.properties = params
             if (!installationInstance.hasErrors() && installationInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'installation.label', default: 'Installation'), installationInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'installation.label', default: 'Installation'), installationInstance.toString()])}"
                 redirect(action: "show", id: installationInstance.id)
             }
             else {
@@ -92,11 +92,11 @@ class InstallationController {
         if (installationInstance) {
             try {
                 installationInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'installation.label', default: 'Installation'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'installation.label', default: 'Installation'), installationInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'installation.label', default: 'Installation'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'installation.label', default: 'Installation'), installationInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

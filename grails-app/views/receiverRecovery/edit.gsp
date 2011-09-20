@@ -102,7 +102,11 @@
                                     <label class="compulsory" for="recoverer"><g:message code="receiverRecovery.recoverer.label" default="Recovered By" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoverer', 'errors')}">
-                                    <g:select name="recoverer.id" from="${receiverDeploymentInstance?.station?.installation?.project?.projectRoles}" optionKey="id" value="${receiverRecoveryInstance?.recoverer?.id}"  />
+                                    <g:select name="recoverer.id" 
+                                              from="${receiverDeploymentInstance?.station?.installation?.project?.projectRoles}" 
+                                              optionKey="id" 
+                                              optionValue="person"
+                                              value="${receiverRecoveryInstance?.recoverer?.id}"  />
 
                                 </td>
                             </tr>

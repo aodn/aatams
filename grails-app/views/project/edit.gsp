@@ -97,6 +97,17 @@
                                 <td valign="top" class="value">
                                   
                                   <table class="nested">
+                                    <thead>
+                                      <tr>
+                                        <th/>
+                                        <shiro:hasPermission permission="project:${projectInstance?.id}:write">
+                                          <th/>
+                                        </shiro:hasPermission>                                        
+                                        <th>Name</th>
+                                        <th>Project Role</th>
+                                        <th>Access</th>
+                                      </tr>
+                                    </thead>
                                     <tbody id="people_table_body">
                                       <g:each in="${projectInstance?.projectRoles?}" var="p">
                                         <tr>

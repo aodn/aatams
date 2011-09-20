@@ -47,7 +47,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></td>
                             
-                            <td valign="top" class="value"><g:formatBoolean boolean="${animalMeasurementInstance?.estimate}" /></td>
+                            <td valign="top" class="value"><g:formatBoolean boolean="${animalMeasurementInstance?.estimate}" true="yes" false="no" /></td>
                             
                         </tr>
                     

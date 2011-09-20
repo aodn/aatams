@@ -83,11 +83,11 @@ class PersonController {
                         sendCreationNotificationEmails(personInstance)
                     }
                     
-                    flash.message = "${message(code: 'default.requested.message', args: [message(code: 'person.label', default: 'Person'), personInstance.id])}"
+                    flash.message = "${message(code: 'default.requested.message', args: [message(code: 'person.label', default: 'Person'), personInstance.toString()])}"
                 }
                 else
                 {
-                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'person.label', default: 'Person'), personInstance.id])}"
+                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'person.label', default: 'Person'), personInstance.toString()])}"
                 }
                 redirect(action: "show", id: personInstance.id)
             }
@@ -183,7 +183,7 @@ class PersonController {
                     sendActivatedNotificationEmails(personInstance)
                 }
                 
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'person.label', default: 'Person'), personInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'person.label', default: 'Person'), personInstance.toString()])}"
                 redirect(action: "show", id: personInstance.id)
             }
             else {
@@ -226,11 +226,11 @@ class PersonController {
         if (personInstance) {
             try {
                 personInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'person.label', default: 'Person'), personInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'person.label', default: 'Person'), personInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

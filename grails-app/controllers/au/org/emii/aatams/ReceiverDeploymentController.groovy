@@ -49,7 +49,7 @@ class ReceiverDeploymentController {
         receiverDeploymentInstance?.deploymentNumber = receiverDeploymentInstance?.station?.numDeployments
         
         if (receiverDeploymentInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
             redirect(action: "show", id: receiverDeploymentInstance.id)
         }
         else {
@@ -100,7 +100,7 @@ class ReceiverDeploymentController {
             receiverDeploymentInstance.properties = params
             
             if (!receiverDeploymentInstance.hasErrors() && receiverDeploymentInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
                 redirect(action: "show", id: receiverDeploymentInstance.id)
             }
             else {
@@ -118,11 +118,11 @@ class ReceiverDeploymentController {
         if (receiverDeploymentInstance) {
             try {
                 receiverDeploymentInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

@@ -92,12 +92,12 @@ class ProjectController {
                 
                 if (SecurityUtils.getSubject().hasRole("SysAdmin"))
                 {
-                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.id])}"
+                    flash.message = "${message(code: 'default.created.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.toString()])}"
                 }
                 else
                 {
                     sendCreationNotificationEmails(projectInstance)
-                    flash.message = "${message(code: 'default.requested.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.id])}"
+                    flash.message = "${message(code: 'default.requested.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.toString()])}"
                 }
                 redirect(action: "show", id: projectInstance.id)
             }
@@ -163,7 +163,7 @@ class ProjectController {
                 {
                     sendActivatedNotificationEmails(projectInstance)
                 }
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.toString()])}"
                 redirect(action: "show", id: projectInstance.id)
             }
             else {
@@ -181,11 +181,11 @@ class ProjectController {
         if (projectInstance) {
             try {
                 projectInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'project.label', default: 'Project'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'project.label', default: 'Project'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

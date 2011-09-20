@@ -81,12 +81,12 @@ class OrganisationController
         {
             if (SecurityUtils.getSubject().hasRole("SysAdmin"))
             {
-                flash.message = "${message(code: 'default.created.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.id])}"
+                flash.message = "${message(code: 'default.created.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.toString()])}"
             }
             else
             {
                 sendCreationNotificationEmails(organisationInstance)
-                flash.message = "${message(code: 'default.requested.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.id])}"
+                flash.message = "${message(code: 'default.requested.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.toString()])}"
             }
             redirect(action: "show", id: organisationInstance.id)
         }
@@ -140,7 +140,7 @@ class OrganisationController
                     sendActivatedNotificationEmails(organisationInstance)
                 }
                 
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.toString()])}"
                 redirect(action: "show", id: organisationInstance.id)
             }
             else {
@@ -158,11 +158,11 @@ class OrganisationController
         if (organisationInstance) {
             try {
                 organisationInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'organisation.label', default: 'Organisation'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'organisation.label', default: 'Organisation'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

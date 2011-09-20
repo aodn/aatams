@@ -22,7 +22,7 @@ class DeviceStatusController {
     def save = {
         def deviceStatusInstance = new DeviceStatus(params)
         if (deviceStatusInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'deviceStatus.label', default: 'DeviceStatus'), deviceStatusInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'deviceStatus.label', default: 'DeviceStatus'), deviceStatusInstance.toString()])}"
             redirect(action: "show", id: deviceStatusInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class DeviceStatusController {
             }
             deviceStatusInstance.properties = params
             if (!deviceStatusInstance.hasErrors() && deviceStatusInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'deviceStatus.label', default: 'DeviceStatus'), deviceStatusInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'deviceStatus.label', default: 'DeviceStatus'), deviceStatusInstance.toString()])}"
                 redirect(action: "show", id: deviceStatusInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class DeviceStatusController {
         if (deviceStatusInstance) {
             try {
                 deviceStatusInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'deviceStatus.label', default: 'DeviceStatus'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'deviceStatus.label', default: 'DeviceStatus'), deviceStatusInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'deviceStatus.label', default: 'DeviceStatus'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'deviceStatus.label', default: 'DeviceStatus'), deviceStatusInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

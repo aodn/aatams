@@ -22,7 +22,7 @@ class SensorDetectionController {
     def save = {
         def sensorDetectionInstance = new SensorDetection(params)
         if (sensorDetectionInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'sensorDetection.label', default: 'SensorDetection'), sensorDetectionInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'sensorDetection.label', default: 'SensorDetection'), sensorDetectionInstance.toString()])}"
             redirect(action: "show", id: sensorDetectionInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class SensorDetectionController {
             }
             sensorDetectionInstance.properties = params
             if (!sensorDetectionInstance.hasErrors() && sensorDetectionInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensorDetection.label', default: 'SensorDetection'), sensorDetectionInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensorDetection.label', default: 'SensorDetection'), sensorDetectionInstance.toString()])}"
                 redirect(action: "show", id: sensorDetectionInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class SensorDetectionController {
         if (sensorDetectionInstance) {
             try {
                 sensorDetectionInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'sensorDetection.label', default: 'SensorDetection'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'sensorDetection.label', default: 'SensorDetection'), sensorDetectionInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'sensorDetection.label', default: 'SensorDetection'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'sensorDetection.label', default: 'SensorDetection'), sensorDetectionInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

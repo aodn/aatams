@@ -42,7 +42,7 @@ class SurgeryController {
         
         if (surgeryInstance.save(flush: true)) 
         {
-            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tagging.label', default: 'Tagging'), surgeryInstance])}"
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tagging.label', default: 'Tagging'), surgeryInstance.toString()])}"
             render ([instance:surgeryInstance, message:flash] as JSON)
         }
         else 
@@ -88,7 +88,7 @@ class SurgeryController {
             }
             surgeryInstance.properties = params
             if (!surgeryInstance.hasErrors() && surgeryInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'surgery.label', default: 'Surgery'), surgeryInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'surgery.label', default: 'Surgery'), surgeryInstance.toString()])}"
                 def release = surgeryInstance?.release
                 redirect(controller: "animalRelease", action: "edit", id: release?.id, params: [projectId:release?.project?.id])
             }
@@ -107,10 +107,10 @@ class SurgeryController {
         if (surgeryInstance) {
             try {
                 surgeryInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'surgery.label', default: 'Surgery'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'surgery.label', default: 'Surgery'), surgeryInstance.toString()])}"
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'surgery.label', default: 'Surgery'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'surgery.label', default: 'Surgery'), surgeryInstance.toString()])}"
             }
 
             def release = surgeryInstance?.release

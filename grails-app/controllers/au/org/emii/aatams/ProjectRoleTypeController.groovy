@@ -22,7 +22,7 @@ class ProjectRoleTypeController {
     def save = {
         def projectRoleTypeInstance = new ProjectRoleType(params)
         if (projectRoleTypeInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'projectRoleType.label', default: 'ProjectRoleType'), projectRoleTypeInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'projectRoleType.label', default: 'ProjectRoleType'), projectRoleTypeInstance.toString()])}"
             redirect(action: "show", id: projectRoleTypeInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class ProjectRoleTypeController {
             }
             projectRoleTypeInstance.properties = params
             if (!projectRoleTypeInstance.hasErrors() && projectRoleTypeInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'projectRoleType.label', default: 'ProjectRoleType'), projectRoleTypeInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'projectRoleType.label', default: 'ProjectRoleType'), projectRoleTypeInstance.toString()])}"
                 redirect(action: "show", id: projectRoleTypeInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class ProjectRoleTypeController {
         if (projectRoleTypeInstance) {
             try {
                 projectRoleTypeInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'projectRoleType.label', default: 'ProjectRoleType'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'projectRoleType.label', default: 'ProjectRoleType'), projectRoleTypeInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'projectRoleType.label', default: 'ProjectRoleType'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'projectRoleType.label', default: 'ProjectRoleType'), projectRoleTypeInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

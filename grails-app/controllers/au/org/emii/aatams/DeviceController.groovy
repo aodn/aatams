@@ -22,7 +22,7 @@ class DeviceController {
     def save = {
         def deviceInstance = new Device(params)
         if (deviceInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'device.label', default: 'Device'), deviceInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'device.label', default: 'Device'), deviceInstance.toString()])}"
             redirect(action: "show", id: deviceInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class DeviceController {
             }
             deviceInstance.properties = params
             if (!deviceInstance.hasErrors() && deviceInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'device.label', default: 'Device'), deviceInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'device.label', default: 'Device'), deviceInstance.toString()])}"
                 redirect(action: "show", id: deviceInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class DeviceController {
         if (deviceInstance) {
             try {
                 deviceInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'device.label', default: 'Device'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'device.label', default: 'Device'), deviceInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'device.label', default: 'Device'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'device.label', default: 'Device'), deviceInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

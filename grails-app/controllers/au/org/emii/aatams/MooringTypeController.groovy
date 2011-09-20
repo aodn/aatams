@@ -22,7 +22,7 @@ class MooringTypeController {
     def save = {
         def mooringTypeInstance = new MooringType(params)
         if (mooringTypeInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'mooringType.label', default: 'MooringType'), mooringTypeInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'mooringType.label', default: 'MooringType'), mooringTypeInstance.toString()])}"
             redirect(action: "show", id: mooringTypeInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class MooringTypeController {
             }
             mooringTypeInstance.properties = params
             if (!mooringTypeInstance.hasErrors() && mooringTypeInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'mooringType.label', default: 'MooringType'), mooringTypeInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'mooringType.label', default: 'MooringType'), mooringTypeInstance.toString()])}"
                 redirect(action: "show", id: mooringTypeInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class MooringTypeController {
         if (mooringTypeInstance) {
             try {
                 mooringTypeInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'mooringType.label', default: 'MooringType'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'mooringType.label', default: 'MooringType'), mooringTypeInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'mooringType.label', default: 'MooringType'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'mooringType.label', default: 'MooringType'), mooringTypeInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

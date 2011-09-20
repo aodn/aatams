@@ -137,7 +137,7 @@ class ReceiverDownloadFileController
             }
             receiverDownloadFileInstance.properties = params
             if (!receiverDownloadFileInstance.hasErrors() && receiverDownloadFileInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.toString()])}"
                 redirect(action: "show", id: receiverDownloadFileInstance.id)
             }
             else {
@@ -155,11 +155,11 @@ class ReceiverDownloadFileController
         if (receiverDownloadFileInstance) {
             try {
                 receiverDownloadFileInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

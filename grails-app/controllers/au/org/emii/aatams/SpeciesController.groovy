@@ -26,7 +26,7 @@ class SpeciesController {
     def save = {
         def speciesInstance = new Species(params)
         if (speciesInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'species.label', default: 'Species'), speciesInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'species.label', default: 'Species'), speciesInstance.toString()])}"
             redirect(action: "show", id: speciesInstance.id)
         }
         else {
@@ -70,7 +70,7 @@ class SpeciesController {
             }
             speciesInstance.properties = params
             if (!speciesInstance.hasErrors() && speciesInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'species.label', default: 'Species'), speciesInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'species.label', default: 'Species'), speciesInstance.toString()])}"
                 redirect(action: "show", id: speciesInstance.id)
             }
             else {
@@ -88,11 +88,11 @@ class SpeciesController {
         if (speciesInstance) {
             try {
                 speciesInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'species.label', default: 'Species'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'species.label', default: 'Species'), speciesInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'species.label', default: 'Species'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'species.label', default: 'Species'), speciesInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

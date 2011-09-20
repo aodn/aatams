@@ -22,7 +22,7 @@ class DetectionSurgeryController {
     def save = {
         def detectionSurgeryInstance = new DetectionSurgery(params)
         if (detectionSurgeryInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'detectionSurgery.label', default: 'DetectionSurgery'), detectionSurgeryInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'detectionSurgery.label', default: 'DetectionSurgery'), detectionSurgeryInstance.toString()])}"
             redirect(action: "show", id: detectionSurgeryInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class DetectionSurgeryController {
             }
             detectionSurgeryInstance.properties = params
             if (!detectionSurgeryInstance.hasErrors() && detectionSurgeryInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'detectionSurgery.label', default: 'DetectionSurgery'), detectionSurgeryInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'detectionSurgery.label', default: 'DetectionSurgery'), detectionSurgeryInstance.toString()])}"
                 redirect(action: "show", id: detectionSurgeryInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class DetectionSurgeryController {
         if (detectionSurgeryInstance) {
             try {
                 detectionSurgeryInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'detectionSurgery.label', default: 'DetectionSurgery'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'detectionSurgery.label', default: 'DetectionSurgery'), detectionSurgeryInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'detectionSurgery.label', default: 'DetectionSurgery'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'detectionSurgery.label', default: 'DetectionSurgery'), detectionSurgeryInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

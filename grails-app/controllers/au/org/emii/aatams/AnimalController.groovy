@@ -24,7 +24,7 @@ class AnimalController {
     def save = {
         def animalInstance = new Animal(params)
         if (animalInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'animal.label', default: 'Animal'), animalInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'animal.label', default: 'Animal'), animalInstance.toString()])}"
             redirect(action: "show", id: animalInstance.id)
         }
         else {
@@ -68,7 +68,7 @@ class AnimalController {
             }
             animalInstance.properties = params
             if (!animalInstance.hasErrors() && animalInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animal.label', default: 'Animal'), animalInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animal.label', default: 'Animal'), animalInstance.toString()])}"
                 redirect(action: "show", id: animalInstance.id)
             }
             else {
@@ -86,11 +86,11 @@ class AnimalController {
         if (animalInstance) {
             try {
                 animalInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'animal.label', default: 'Animal'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'animal.label', default: 'Animal'), animalInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'animal.label', default: 'Animal'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'animal.label', default: 'Animal'), animalInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

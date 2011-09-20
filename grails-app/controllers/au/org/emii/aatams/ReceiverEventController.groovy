@@ -22,7 +22,7 @@ class ReceiverEventController {
     def save = {
         def receiverEventInstance = new ReceiverEvent(params)
         if (receiverEventInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverEvent.label', default: 'ReceiverEvent'), receiverEventInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverEvent.label', default: 'ReceiverEvent'), receiverEventInstance.toString()])}"
             redirect(action: "show", id: receiverEventInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class ReceiverEventController {
             }
             receiverEventInstance.properties = params
             if (!receiverEventInstance.hasErrors() && receiverEventInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverEvent.label', default: 'ReceiverEvent'), receiverEventInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverEvent.label', default: 'ReceiverEvent'), receiverEventInstance.toString()])}"
                 redirect(action: "show", id: receiverEventInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class ReceiverEventController {
         if (receiverEventInstance) {
             try {
                 receiverEventInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiverEvent.label', default: 'ReceiverEvent'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiverEvent.label', default: 'ReceiverEvent'), receiverEventInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'receiverEvent.label', default: 'ReceiverEvent'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'receiverEvent.label', default: 'ReceiverEvent'), receiverEventInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

@@ -22,7 +22,7 @@ class DeviceManufacturerController {
     def save = {
         def deviceManufacturerInstance = new DeviceManufacturer(params)
         if (deviceManufacturerInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'deviceManufacturer.label', default: 'DeviceManufacturer'), deviceManufacturerInstance.id])}"
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'deviceManufacturer.label', default: 'DeviceManufacturer'), deviceManufacturerInstance.toString()])}"
             redirect(action: "show", id: deviceManufacturerInstance.id)
         }
         else {
@@ -66,7 +66,7 @@ class DeviceManufacturerController {
             }
             deviceManufacturerInstance.properties = params
             if (!deviceManufacturerInstance.hasErrors() && deviceManufacturerInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'deviceManufacturer.label', default: 'DeviceManufacturer'), deviceManufacturerInstance.id])}"
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'deviceManufacturer.label', default: 'DeviceManufacturer'), deviceManufacturerInstance.toString()])}"
                 redirect(action: "show", id: deviceManufacturerInstance.id)
             }
             else {
@@ -84,11 +84,11 @@ class DeviceManufacturerController {
         if (deviceManufacturerInstance) {
             try {
                 deviceManufacturerInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'deviceManufacturer.label', default: 'DeviceManufacturer'), params.id])}"
+                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'deviceManufacturer.label', default: 'DeviceManufacturer'), deviceManufacturerInstance.toString()])}"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'deviceManufacturer.label', default: 'DeviceManufacturer'), params.id])}"
+                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'deviceManufacturer.label', default: 'DeviceManufacturer'), deviceManufacturerInstance.toString()])}"
                 redirect(action: "show", id: params.id)
             }
         }

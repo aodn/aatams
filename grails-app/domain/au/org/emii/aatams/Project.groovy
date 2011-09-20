@@ -68,7 +68,7 @@ class Project
         // We also want to get a list of organisations which aren't 
         // associated with this project (so that when "adding organisation",
         // those already associated with project aren't shown).
-        def organisations = Organisation.list(sort:"name")
+        def organisations = Organisation.listActive()
 
         // Relates this project to any oranisations...
         def organisationProjects = OrganisationProject.findAllByProject(this)

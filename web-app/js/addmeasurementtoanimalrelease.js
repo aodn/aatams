@@ -10,7 +10,7 @@ $(function() {
         width: 420,
         modal: true,
         buttons: {
-            'Add': function() 
+            'Create': function() 
             {
                 
                 var animalReleaseId = $("#id").val();

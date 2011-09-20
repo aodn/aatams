@@ -6,7 +6,7 @@ $(function() {
         width: 350,
         modal: true,
         buttons: {
-            'Add': function() 
+            'Create': function() 
             {
                 var event = $("#id").val();
                 var tagId = $("#id").val();

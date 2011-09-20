@@ -10,7 +10,7 @@ $(function()
         height: 575,
         modal: true,
         buttons: {
-            'Add': function() 
+            'Create': function() 
             {
                 var animalReleaseId = $("#id").val();
                 var timestamp_year = $("#surgeryTimestamp_year").val();

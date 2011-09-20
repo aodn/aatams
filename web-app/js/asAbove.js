@@ -11,7 +11,7 @@ $(function()
         
         if (selected)
         {
-            addressTable.find("input:text").attr("disabled", "disabled");
+            addressTable.find("input:text").attr("readonly", "readonly");
             
             // Populate from above.
             var from = addressTable.find("[id*=asAboveElement]").val();
@@ -25,7 +25,7 @@ $(function()
         else
         {
             var elements = addressTable.find("input:text")
-            elements.attr("disabled", "");
+            elements.attr("readonly", "");
             elements.val("");
         }
     });

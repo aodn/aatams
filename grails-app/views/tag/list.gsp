@@ -34,8 +34,6 @@
                         
                             <g:sortableColumn property="project" title="${message(code: 'device.project.label', default: 'Project')}" />
 
-                            <g:sortableColumn property="transmitterType" title="${message(code: 'tag.transmitterType.label', default: 'Type')}" />
-
                             <g:sortableColumn property="codeMap" title="${message(code: 'tag.codeMap.label', default: 'Code Map')}" />
                         
                             <g:sortableColumn property="pingCode" title="${message(code: 'tag.pingCode.label', default: 'Ping ID Code')}" />
@@ -49,12 +47,7 @@
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
                             <td class="rowButton">
-                              <g:if test="${tagInstance instanceof au.org.emii.aatams.Sensor}">
-                                <g:link class="show" controller="sensor" action="show" id="${tagInstance.id}"></g:link>
-                              </g:if>
-                              <g:else>
-                                <g:link class="show" action="show" id="${tagInstance.id}"></g:link>
-                              </g:else>
+                              <g:link class="show" action="show" id="${tagInstance.id}"></g:link>
                             </td>
                     
                           
@@ -65,8 +58,6 @@
                             <td>${fieldValue(bean: tagInstance, field: "serialNumber")}</td>
                         
                             <td><g:link controller="project" action="show" id="${tagInstance?.project?.id}">${fieldValue(bean: tagInstance, field: "project")}</g:link></td>
-
-                            <td>${tagInstance?.transmitterType?.transmitterTypeName}</td>
 
                             <td>${fieldValue(bean: tagInstance, field: "codeMap")}</td>
                         

@@ -23,6 +23,7 @@ class ReceiverController
 
     def save = {
         def receiverInstance = new Receiver(params)
+        receiverInstance.status = DeviceStatus.findByStatus("NEW")
         
         String codeName = Receiver.constructCodeName(params)
         receiverInstance.codeName = codeName
@@ -35,7 +36,8 @@ class ReceiverController
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.toString()])}"
             redirect(action: "show", id: receiverInstance.id)
         }
-        else {
+        else 
+        {
             render(view: "create", model: [receiverInstance: receiverInstance])
         }
     }

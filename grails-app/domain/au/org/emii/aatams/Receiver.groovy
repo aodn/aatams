@@ -14,7 +14,23 @@ class Receiver extends Device
     
     static String constructCodeName(params)
     {
-        DeviceModel model = DeviceModel.get(params.model.id)
+//        DeviceModel model = DeviceModel.get(params.model.id)
+        DeviceModel model = params.model
+        assert(model): "model cannot be null"
+        
         return String.valueOf(model) + "-" + params.serialNumber
+    }
+    
+    boolean canDeploy()
+    {
+        DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
+        DeviceStatus retiredStatus = DeviceStatus.findByStatus('RETIRED')
+        
+        if ([deployedStatus, retiredStatus].contains(status))
+        {
+            return false
+        }
+        
+        return true
     }
 }

@@ -9,11 +9,13 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
     Receiver newReceiver
     Receiver deployedReceiver
     Receiver recoveredReceiver
+    Receiver retiredReceiver
     Receiver csiroReceiver
 
     DeviceStatus newStatus
     DeviceStatus deployedStatus
     DeviceStatus recoveredStatus
+    DeviceStatus retiredStatus
 
     protected void setUp() 
     {
@@ -22,8 +24,9 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         newStatus = new DeviceStatus(status:"NEW")
         deployedStatus = new DeviceStatus(status:"DEPLOYED")
         recoveredStatus = new DeviceStatus(status:"RECOVERED")
+        retiredStatus = new DeviceStatus(status:"RETIRED")
         
-        def statusList = [newStatus, deployedStatus, recoveredStatus]
+        def statusList = [newStatus, deployedStatus, recoveredStatus, retiredStatus]
         mockDomain(DeviceStatus, statusList)
         statusList.each { it.save() }
         
@@ -36,6 +39,7 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         newReceiver = new Receiver(codeName:"VRW2-111", status:newStatus, organisation:imos)
         deployedReceiver = new Receiver(codeName:"VRW2-222", status:deployedStatus, organisation:imos)
         recoveredReceiver = new Receiver(codeName:"VRW2-333", status:recoveredStatus, organisation:imos)
+        retiredReceiver = new Receiver(codeName:"VRW2-555", status:retiredStatus, organisation:imos)
         csiroReceiver = new Receiver(codeName:"VRW2-444", status:recoveredStatus, organisation:csiro)
 
         def receiverList = [newReceiver, deployedReceiver, recoveredReceiver]
@@ -87,6 +91,25 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         def message = "${[code: 'default.invalidState.receiver', \
                        args: [deployedReceiver.toString(), \
                               deployedStatus.toString()]]}"
+        assertEquals(message, controller.flash.message)
+    }
+
+    void testSaveRetiredReceiver() 
+    {
+        controller.params.receiver = retiredReceiver
+        controller.params.deploymentDateTime = new DateTime()
+        controller.params.mooringType = new MooringType()
+        controller.params.station = new InstallationStation()
+        
+        controller.save()
+        
+        assertEquals("create", controller.renderArgs.view)
+        assertNotNull(controller.renderArgs.model.receiverDeploymentInstance)
+        assertNull(controller.renderArgs.model.receiverDeploymentInstance.receiver)
+        
+        def message = "${[code: 'default.invalidState.receiver', \
+                       args: [retiredReceiver.toString(), \
+                              retiredStatus.toString()]]}"
         assertEquals(message, controller.flash.message)
     }
 }

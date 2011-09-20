@@ -72,16 +72,6 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="status"><g:message code="receiver.status.label" default="Status" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'status', 'errors')}">
-                                    <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverInstance?.status?.id}"  />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
                                   <label class="compulsory" for="comment"><g:message code="receiver.comment.label" default="Comment" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'comment', 'errors')}">

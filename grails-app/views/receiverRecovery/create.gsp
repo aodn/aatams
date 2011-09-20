@@ -140,7 +140,10 @@
                                     <label class="compulsory" for="status"><g:message code="receiverRecovery.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'status', 'errors')}">
-                                    <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${receiverRecoveryInstance?.status?.id}"  />
+                                    <g:select name="status.id" 
+                                              from="${au.org.emii.aatams.DeviceStatus.list()}" 
+                                              optionKey="id" 
+                                              value="${receiverRecoveryInstance?.status?.id ? receiverRecoveryInstance?.status?.id : au.org.emii.aatams.DeviceStatus.findByStatus('RECOVERED').id}"  />
 
                                 </td>
                             </tr>

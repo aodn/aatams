@@ -43,27 +43,7 @@ class CandidateEntitiesService
     
     def installations()
     {
-//        def candidateInstallations = 
-//            Installation.list().grep(
-//            {
-//                projects().contains(it.project)
-//            })
-//        
-//        return candidateInstallations
-        
-        def criteria = Installation.createCriteria()
-        def results = criteria.list
-        {
-            project
-            {
-                projects().each
-                {
-                    eq('id', it.id)
-                }
-            }
-        }
-        
-        return results
+        return Installation.findAllByProjectInList(projects())
     }
     
     def stations()

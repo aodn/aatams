@@ -40,10 +40,14 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="project"><g:message code="tag.project.label" default="Project" /></label>
+                                  <label for="project"><g:message code="tag.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${tagInstance?.project?.id}"  />
+                                    <g:select name="project.id" 
+                                              from="${candidateProjects}" 
+                                              optionKey="id" 
+                                              value="${tagInstance?.project?.id}" 
+                                              noSelection="['':'unassigned']" />
 
                                 </td>
                             </tr>

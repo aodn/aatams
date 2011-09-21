@@ -30,19 +30,27 @@ class TagFactoryService {
                               codeMap:codeMap,
                               pingCode:pingCode,
                               model:model,
-                              project:params.project,
                               status:params.status,
                               transmitterType:params.transmitterType)
-                
-                if (tag.save(flush:true))
-                {
-                    log.info("Created tag: " + String.valueOf(tag))
-                }
-                else
-                {
-                    log.error(tag.errors)
-                }
             }
+        }
+        
+        if (!tag.project)
+        {
+            tag.project = params.project
+        }
+        else if (tag.project != params.project)
+        {
+            log.warn("Tag released in different project, tag's project: " + tag.project + ", release project: " + params.project)
+        }
+        
+        if (tag.save(flush:true))
+        {
+            log.info("Created tag: " + String.valueOf(tag))
+        }
+        else
+        {
+            log.error(tag.errors)
         }
         
         return tag

@@ -17,6 +17,14 @@ class CandidateEntitiesServiceTests extends GrailsUnitTestCase
     Receiver recoveredReceiver
     Receiver csiroReceiver
     
+    Project notPermittedProject
+    Project permittedProject
+
+    Installation notPermittedInstallation1
+    Installation notPermittedInstallation2
+    Installation permittedInstallation1
+    Installation permittedInstallation2
+    
     protected void setUp()
     {
         super.setUp()
@@ -41,11 +49,39 @@ class CandidateEntitiesServiceTests extends GrailsUnitTestCase
         mockDomain(Person, [person])
         person.save()
         
+        notPermittedProject = new Project(name:"not permitted", status:EntityStatus.ACTIVE)
+        permittedProject = new Project(name:"permitted", status:EntityStatus.ACTIVE)
+        def projectList = [notPermittedProject, permittedProject]
+        mockDomain(Project, projectList)
+        
+        notPermittedInstallation1 = new Installation(name: "not permitted 1", project:notPermittedProject)
+        notPermittedInstallation2 = new Installation(name: "not permitted 2", project:notPermittedProject)
+        
+        permittedInstallation1 = new Installation(name: "permitted 1", project:permittedProject)
+        permittedInstallation2 = new Installation(name: "permitted 2", project:permittedProject)
+        
+        def installationList = [notPermittedInstallation1, notPermittedInstallation2, permittedInstallation1, permittedInstallation2]
+        mockDomain(Installation, installationList)
+        installationList.each { it.save() }
+        
+        notPermittedProject.addToInstallations(notPermittedInstallation1)
+        notPermittedProject.addToInstallations(notPermittedInstallation2)
+        permittedProject.addToInstallations(permittedInstallation1)
+        permittedProject.addToInstallations(permittedInstallation2)
+        
+        projectList.each { it.save() }
+        
         def subject = [ getPrincipal: { person.username },
                         isAuthenticated: { true },
                         hasRole: { false },
                         isPermitted:
                         {
+                            permission ->
+                            
+                            if (permission == "project:" + permittedProject.id + ":write")
+                            {
+                                return true
+                            }
                             return false
                         }
                       ] as Subject
@@ -96,5 +132,23 @@ class CandidateEntitiesServiceTests extends GrailsUnitTestCase
         assertTrue(receivers.contains(recoveredReceiver))
         assertFalse(receivers.contains(deployedReceiver))
         assertFalse(receivers.contains(csiroReceiver))
+    }
+    
+    void testInstallations()
+    {
+        def installations = candidateEntitiesService.installations()
+        assertEquals(2, installations.size())
+        assertTrue(installations.contains(permittedInstallation1))
+        assertTrue(installations.contains(permittedInstallation2))
+    }
+
+    void testProjects()
+    {
+        assertEquals(2, Project.list().size())
+        assertEquals(2, Project.findAllByStatus(EntityStatus.ACTIVE).size())
+        
+        def projects = candidateEntitiesService.projects()
+        assertEquals(1, projects.size())
+        assertTrue(projects.contains(permittedProject ))
     }
 }

@@ -41,9 +41,9 @@ environments {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'
             driverClassName = "org.postgresql.Driver"
-            url = "jdbc:postgresql://hudson.emii.org.au:5432/aatams_test"
+            url = "jdbc:postgresql://hudson.emii.org.au:5432/aatams_test?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
             username = "aatams"
-            password = "aatams"
+            password = "fishybusiness"
         }
 //        dataSource {
 //            dbCreate = "update"

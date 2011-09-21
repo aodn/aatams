@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import grails.converters.JSON
+
 class InstallationStationController {
 
     def candidateEntitiesService
@@ -36,13 +38,23 @@ class InstallationStationController {
     }
 
     def show = {
+        log.debug("params: " + params)
+        
         def installationStationInstance = InstallationStation.get(params.id)
         if (!installationStationInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'installationStation.label', default: 'InstallationStation'), params.id])}"
             redirect(action: "list")
         }
-        else {
-            [installationStationInstance: installationStationInstance]
+        else 
+        {
+            if (params.encoding && (params.encoding == 'json'))
+            {
+                render([installationStationInstance: installationStationInstance] as JSON)
+            }
+            else
+            {
+                [installationStationInstance: installationStationInstance]
+            }
         }
     }
 

@@ -124,6 +124,7 @@ class AnimalReleaseController {
                     surgery.tag = tag
 
                     tag.addToSurgeries(surgery)
+                    
                     tag.save()
                     animalReleaseInstance.addToSurgeries(surgery)
 

@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.command.*
+
 import org.apache.shiro.SecurityUtils
 
 class ProjectController {
@@ -226,25 +228,3 @@ class ProjectController {
         }
     }
 }
-
-
-/**
- * Provides two additional fields (i.e. organisation and PI) used for project
- * creation.
- */
-class ProjectCreateCommand
-{
-    Organisation organisation
-    Person person
-    String name
-    String description
-    
-    Project createProject()
-    {
-        def project = new Project(name:name, description:description)
-        project.addToOrganisationProjects(new OrganisationProject(organisation:organisation, project:project))
-        
-        return project
-    }
-}
-

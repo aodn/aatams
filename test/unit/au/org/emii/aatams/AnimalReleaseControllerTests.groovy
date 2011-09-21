@@ -175,7 +175,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         animal.save()
         controller.params.animal = [id:animal.id]
 
-        Project project = new Project()
+        Project project = new Project(name:"test project")
         mockDomain(Project, [project])
         project.save()
         controller.params.project = project     // Overrides setup()
@@ -221,6 +221,68 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
             assertEquals(tag.codeName, it.tag.codeName)
             assertEquals(new DeviceStatus(status:'DEPLOYED').status, it.tag.status.status)
         })
+    
+        assertEquals(project, tag.project)
+    }
+    
+    void testSaveTagInDifferentProject()
+    {
+        Animal animal = new Animal(species:new Species())
+        mockDomain(Animal, [animal])
+        animal.save()
+        controller.params.animal = [id:animal.id]
+
+        Project releaseProject = new Project(name:"release project")
+        Project tagProject = new Project(name:"tag project")
+        mockDomain(Project, [releaseProject, tagProject])
+        [releaseProject, tagProject].each { it.save() }
+        
+        controller.params.project = releaseProject     // Overrides setup()
+        
+        mockDomain(AnimalRelease)
+
+        Tag tag = new Tag(codeName:"A69-1303-11111",
+                          status:new DeviceStatus(status:'NEW'),
+                          project:tagProject)
+        mockDomain(Tag, [tag])
+        tag.save()
+        
+        // Surgery 0.
+        mockDomain(Surgery)
+        mockForConstraintsTests(Surgery)
+
+        def surgery0 = [
+            timestamp_day: 1,
+            timestamp_month: 6,
+            timestamp_year: 2009,
+            timestamp_hour: 12,
+            timestamp_minute: 34,
+            timestamp_zone: 45,
+            type: [id:1],
+            treatmentType : [id:1],
+            comments: "",
+            tag:[codeName: tag.codeName, serialNumber: "12345", model:[id: 1]]]
+        
+        controller.params.surgery = ['0':surgery0]
+        
+        controller.params.species = animal.species
+        
+        def model = controller.save()
+        assertEquals("show", controller.redirectArgs.action)
+        assertNotNull(controller.redirectArgs.id)
+
+        AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
+        assertNotNull(release)
+        assertEquals(1, release.surgeries.size())
+        
+        // tag should now be deployed
+        release.surgeries.each(
+        {
+            assertEquals(tag.codeName, it.tag.codeName)
+            assertEquals(new DeviceStatus(status:'DEPLOYED').status, it.tag.status.status)
+        })
+    
+        assertEquals(tagProject, tag.project)
     }
     
     void testSaveWithMultipleSurgeries()
@@ -348,6 +410,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
             assertNotNull(tag)
             assertEquals(codeName, tag.codeName)
             assertEquals(new DeviceStatus(status:'DEPLOYED').status, tag.status.status)
+            assertEquals(project, tag.project)
         })
     }
 

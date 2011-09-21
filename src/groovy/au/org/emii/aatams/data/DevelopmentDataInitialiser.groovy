@@ -327,6 +327,15 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     status:newStatus,
                     transmitterType:pinger).save(failOnError: true)
                 
+        Tag orphanTag =
+            new Tag(codeName:'A70-1303-55555',
+                    serialNumber:'5555',
+                    codeMap:'A70-1303',
+                    pingCode:'5555',
+                    model:vemcoV8,
+                    status:newStatus,
+                    transmitterType:pinger).save(failOnError: true)
+                
         TransmitterType depth =
             new TransmitterType(transmitterTypeName:"DEPTH").save(failOnError:true)
         TransmitterType temp =

@@ -7,8 +7,8 @@ class Tag extends Device
     static hasMany = [sensors:Sensor, 
                       surgeries:Surgery, 
                       detectionSurgeries:DetectionSurgery]
-    static belongsTo = [project: Project]
-    
+
+    Project project
     String codeMap
     Integer pingCode
 
@@ -25,6 +25,7 @@ class Tag extends Device
 
     static constraints =
     {
+        project(nullable:true)
         codeMap(blank:false)
         pingCode(unique:true)
         transmitterType()

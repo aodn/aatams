@@ -85,4 +85,52 @@ class TagTests extends GrailsUnitTestCase
             
         }
     }
+    
+    void testDeleteProject()
+    {
+        Project project = new Project(name:"some project")
+        mockDomain(Project, [project])
+        
+        Tag tag = new Tag(codeName:'A69-1303-2222',
+                          codeMap:'A69-1303', 
+                          pingCode:2222,
+                          model:new TagDeviceModel(),
+                          project:project,
+                          serialNumber:"1111",
+                          status:new DeviceStatus(),
+                          transmitterType:new TransmitterType())
+        mockDomain(Tag, [tag])
+        tag.save()
+        
+        project.addToTags(tag)
+        project.save()
+
+        assertTrue(project.tags.contains(tag))
+        assertEquals(project, tag.project)
+        
+        
+        project.delete(flush:true)
+        
+        project = Project.findByName("some project")
+        assertNull(project)
+        
+        tag = Tag.get(1)
+        assertNotNull(tag)
+        assertNull(Project.get(tag.project.id))
+    }
+    
+    void testNullProject()
+    {
+        Tag tag = new Tag(codeName:'A69-1303-2222',
+                          codeMap:'A69-1303', 
+                          pingCode:2222,
+                          model:new TagDeviceModel(),
+                          serialNumber:"1111",
+                          status:new DeviceStatus(),
+                          transmitterType:new TransmitterType())
+        mockDomain(Tag, [tag])
+        tag.save()
+        
+        assertFalse(tag.hasErrors())
+    }
 }

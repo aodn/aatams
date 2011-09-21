@@ -8,6 +8,7 @@
         <g:set var="entityName" value="${message(code: 'receiverDeployment.label', default: 'ReceiverDeployment')}" />
         <g:set var="projectId" value="${receiverDeploymentInstance?.station?.installation?.project?.id}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <g:javascript src="receiverDeployment.js"/>
     </head>
     <body>
         <div class="nav">

@@ -7,6 +7,7 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiverDeployment.label', default: 'ReceiverDeployment')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
+        <g:javascript src="receiverDeployment.js"/>
     </head>
     <body>
         <div class="nav">

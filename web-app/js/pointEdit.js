@@ -114,14 +114,13 @@ $(function()
             //
             // Register click event listener.
             //
-            pointInputTextField.click(function()
+            pointInputTextField.focus(function()
             {
                 // Set the parent name so that in the dialog handling we can
                 // refer back to it.
                 parentName = $(this).parent().attr("id");
                 
                 // Find the exact dialog...
-//                var editPointDialog = $('#dialog-form-edit-point').filter('[parent="' + parentName + '"]')
                 var editPointDialog = $('.pointEditDialog').filter('[parent="' + parentName + '"]')
                 
                 // Update the dialog.

@@ -111,59 +111,59 @@ $(function()
             var pointInputTextField = $(this).find('#pointInputTextField')
             pointInputTextField.val(pointAsString);
             
-            //
-            // Register click event listener.
-            //
             pointInputTextField.focus(function()
             {
-                // Set the parent name so that in the dialog handling we can
-                // refer back to it.
-                parentName = $(this).parent().attr("id");
-                
-                // Find the exact dialog...
-                var editPointDialog = $('.pointEditDialog').filter('[parent="' + parentName + '"]')
-                
-                // Update the dialog.
-                var lon = $(this).parent().find('input[name$="_lon"]').val();
-                var lat = $(this).parent().find('input[name$="_lat"]').val();
-                var srid = $(this).parent().find('input[name$="_srid"]').val();
-                
-                // Clear css class in case there was an error previously.
-                var editLon = editPointDialog.find('#editLon')
-                editLon.parent().attr("class", "value")
-                var editLat = editPointDialog.find('#editLat')
-                editLat.parent().attr("class", "value")
-
-                editLon.val(Math.abs(lon));
-                // If longitude is non-negative, select 'E'
-                if (lon >= 0)
-                {
-                    editPointDialog.find('#editEastWest').val('E')
-                }
-                else
-                {
-                    editPointDialog.find('#editEastWest').val('W')
-                }
-                
-                editLat.val(Math.abs(lat));
-                // If latitude is positive, select 'N'
-                if (lat > 0)
-                {
-                    editPointDialog.find('#editNorthSouth').val('N')
-                }
-                else
-                {
-                    editPointDialog.find('#editNorthSouth').val('S')
-                }
-
-                editPointDialog.find('#editSrid').val(srid);
-
-//                $('#dialog-form-edit-point').dialog('open');
-                editPointDialog.dialog('open');
+                showDialog($(this).parent())
             })
         });
     })
 });
+
+function showDialog(parent)
+{
+    // Set the parent name so that in the dialog handling we can
+    // refer back to it.
+    parentName = parent.attr("id");
+
+    // Find the exact dialog...
+    var editPointDialog = $('.pointEditDialog').filter('[parent="' + parentName + '"]')
+
+    // Update the dialog.
+    var lon = parent.find('input[name$="_lon"]').val();
+    var lat = parent.find('input[name$="_lat"]').val();
+    var srid = parent.find('input[name$="_srid"]').val();
+
+    // Clear css class in case there was an error previously.
+    var editLon = editPointDialog.find('#editLon')
+    editLon.parent().attr("class", "value")
+    var editLat = editPointDialog.find('#editLat')
+    editLat.parent().attr("class", "value")
+
+    editLon.val(Math.abs(lon));
+    // If longitude is non-negative, select 'E'
+    if (lon >= 0)
+    {
+        editPointDialog.find('#editEastWest').val('E')
+    }
+    else
+    {
+        editPointDialog.find('#editEastWest').val('W')
+    }
+
+    editLat.val(Math.abs(lat));
+    // If latitude is positive, select 'N'
+    if (lat > 0)
+    {
+        editPointDialog.find('#editNorthSouth').val('N')
+    }
+    else
+    {
+        editPointDialog.find('#editNorthSouth').val('S')
+    }
+
+    editPointDialog.find('#editSrid').val(srid);
+    editPointDialog.dialog('open');
+}
 
 function genPointString(lon, lat, srid)
 {

@@ -18,11 +18,6 @@ class InstallationStation
     
     static mapping =
     {
-        columns
-        {
-            location type:org.hibernatespatial.GeometryUserType
-        }
-        
         // Speed up candidateEntitiesService.
         cache: true
         installation cache:true

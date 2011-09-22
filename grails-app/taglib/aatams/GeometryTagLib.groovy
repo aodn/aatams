@@ -14,9 +14,9 @@ class GeometryTagLib
     def point = { attrs, body ->
         
         def pointAsString = ""
-        def lon
-        def lat
-        def srid
+        def lon = null
+        def lat = null
+        def srid = null
         
         if ((attrs.value == null) && !attrs.editable)
         {
@@ -27,9 +27,6 @@ class GeometryTagLib
             // Set defaults (because we must be editing to make it into this clause).
             if (attrs.value == null)
             {
-                lon = 0.0
-                lat = 0.0
-                srid = 4326
             }
             else
             {
@@ -63,8 +60,6 @@ class GeometryTagLib
         
         if (attrs.editable)
         {
-            log.debug("Datums: " + datumService.datums)
-
             out << render(template:"/common/geometry/pointInputTemplate", 
                           model:[parentName:attrs.name, 
                                  value:pointAsString,

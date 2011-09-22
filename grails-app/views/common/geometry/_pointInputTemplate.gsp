@@ -1,20 +1,20 @@
 <g:javascript src="pointEdit.js" />
 
-<div id="${parentName}" class="pointEdit">
+<div id="${pointName}_div" pointName="${pointName}" class="pointEdit">
   
-  <g:textField name="pointInputTextField" size="60" readonly="readonly" />
+  <g:textField name="${pointName}_pointInputTextField" size="60" readonly="readonly" />
 
   <!-- This is the value which is sent back to the server to be parsed. -->
-  <g:hiddenField name="${parentName}"/>
+  <g:hiddenField name="${pointName}"/>
 
   <!-- Point attributes are stored in the following hidden fields.  These
        are updated when the edit dialog is closed.
   -->
-  <g:hiddenField name="${parentName}_lon" value="${lon}"/>
-  <g:hiddenField name="${parentName}_lat" value="${lat}"/>
-  <g:hiddenField name="${parentName}_srid" value="${srid}"/>
+  <g:hiddenField name="${pointName}_lon" value="${lon}"/>
+  <g:hiddenField name="${pointName}_lat" value="${lat}"/>
+  <g:hiddenField name="${pointName}_srid" value="${srid}"/>
   
-  <div class="pointEditDialog" id="dialog-form-edit-point" parent="${parentName}" title="Edit Point">
+  <div class="pointEditDialog" id="${pointName}_dialog-form-edit-point" pointName="${pointName}" title="Edit Point">
 
           <div class="dialog">
               <table>
@@ -25,11 +25,11 @@
                               <label class="compulsory" for="value"><g:message code="point.latitude.label" default="Latitude" /></label>
                           </td>
                           <td valign="top" class="value">
-                              <g:textField name="editLat" value="${lat}" />
+                              <g:textField name="${pointName}_editLat" value="${lat}" />
 
                           </td>
                           <td valign="top" class="value">
-                              <g:select name="editNorthSouth" 
+                              <g:select name="${pointName}_editNorthSouth" 
                                         optionKey="key"
                                         optionValue="value"
                                         from="['S':'S', 'N':'N']"
@@ -43,11 +43,11 @@
                               <label class="compulsory" for="value"><g:message code="point.longitude.label" default="Longitude" /></label>
                           </td>
                           <td valign="top" class="value">
-                              <g:textField name="editLon" value="${lon}" />
+                              <g:textField name="${pointName}_editLon" value="${lon}" />
 
                           </td>
                           <td valign="top" class="value">
-                              <g:select name="editEastWest" 
+                              <g:select name="${pointName}_editEastWest" 
                                         optionKey="key"
                                         optionValue="value"
                                         from="['W':'W', 'E':'E']"
@@ -61,7 +61,7 @@
                               <label class="compulsory" for="value"><g:message code="point.srid.label" default="Datum" /></label>
                           </td>
                           <td valign="top" class="value">
-                              <g:select name="editSrid" 
+                              <g:select name="${pointName}_editSrid" 
                                         optionKey="key"
                                         optionValue="value"
                                         from="${datums}"

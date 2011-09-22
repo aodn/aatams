@@ -20,16 +20,15 @@ $(function()
             Ok: function() 
             {
                 // Get a reference to the div with id of parentName.
-                var parentName = $(this).attr("parent");
-                var parentDiv = $('#' + parentName);
+                var pointName = $(this).attr("pointName");
                 
                 // Update the hidden field values.
-                var lon = $(this).find('#editLon').val();
-                var lat = $(this).find('#editLat').val();
+                var lon = $('#' + pointName + '_editLon').val();
+                var lat = $('#' + pointName + '_editLat').val();
                 
-                var editLon = $(this).find('#editLon')
+                var editLon = $('#' + pointName + '_editLon')
                 editLon.parent().attr("class", "value")
-                var editLat = $(this).find('#editLat')
+                var editLat = $('#' + pointName + '_editLat')
                 editLat.parent().attr("class", "value")
                 
                 // Validate...
@@ -48,32 +47,32 @@ $(function()
                 else
                 {
                     // Negate the lat and lon values if necessary.
-                    if ($(this).find('#editEastWest').val() == 'W')
+                    if ($(this).find('#' + pointName + '_editEastWest').val() == 'W')
                     {
                         lon = -lon
                     }
 
-                    if ($(this).find('#editNorthSouth').val() == 'S')
+                    if ($(this).find('#' + pointName + '_editNorthSouth').val() == 'S')
                     {
                         lat = -lat
                     }
 
-                    var srid = $(this).find('#editSrid').val();
+                    var srid = $(this).find('#' + pointName + '_editSrid').val();
 
-                    parentDiv.find('input[name$="_lon"]').val(lon);
-                    parentDiv.find('input[name$="_lat"]').val(lat);
-                    parentDiv.find('input[name$="_srid"]').val(srid);
+                    $('#' + pointName + '_lon').val(lon);
+                    $('#' + pointName + '_lat').val(lat);
+                    $('#' + pointName + '_srid').val(srid);
 
                     // Save the point as a "coded" string.  This is then parsed on 
                     // by the PointEditor.
-                    var pointInput = parentDiv.find('#' + parentName);
+                    var pointInput = $('#' + pointName);
                     var pointCodedString = genCodedPointString(lon, lat, srid);
 
                     pointInput.val(pointCodedString)
 
                     // Update textfield.
                     var pointAsString = genPointString(lon, lat, srid);
-                    parentDiv.find('#pointInputTextField').val(pointAsString);
+                    $('#' + pointName + '_pointInputTextField').val(pointAsString);
                     $(this).dialog('close');
                 }
             },
@@ -102,19 +101,20 @@ function initPoints()
 {
     $(".pointEdit").each(function()
     {
-        var lon = $(this).find('input[name$="_lon"]').val();
-        var lat = $(this).find('input[name$="_lat"]').val();
-        var srid = $(this).find('input[name$="_srid"]').val();
+        pointName = $(this).attr("pointName");
+        
+        var lon = $('#' + pointName + '_lon').val();
+        var lat = $('#' + pointName + '_lat').val();
+        var srid = $('#' + pointName + '_srid').val();
 
         // Save the point as a "coded" string.  This is then parsed on 
         // by the PointEditor.
-        var parentName = $(this).attr("id");
-        var pointInput = $(this).find('#' + parentName);
+        var pointInput = $('#' + pointName);
         var pointCodedString = genCodedPointString(lon, lat, srid);
         pointInput.val(pointCodedString);
 
         var pointAsString = genPointString(lon, lat, srid);
-        var pointInputTextField = $(this).find('#pointInputTextField')
+        var pointInputTextField = $('#' + pointName + '_pointInputTextField')
         pointInputTextField.val(pointAsString);
 
         pointInputTextField.bind('focus click', function()
@@ -124,49 +124,49 @@ function initPoints()
     });
 }
 
-function showDialog(parent)
+function showDialog(pointDiv)
 {
     // Set the parent name so that in the dialog handling we can
     // refer back to it.
-    parentName = parent.attr("id");
+    var pointName = pointDiv.attr("pointName");
 
     // Find the exact dialog...
-    var editPointDialog = $('.pointEditDialog').filter('[parent="' + parentName + '"]')
+    var editPointDialog = $('.pointEditDialog').filter('[pointName="' + pointName + '"]')
 
     // Update the dialog.
-    var lon = parent.find('input[name$="_lon"]').val();
-    var lat = parent.find('input[name$="_lat"]').val();
-    var srid = parent.find('input[name$="_srid"]').val();
+    var lon = $('#' + pointName + '_lon').val();
+    var lat = $('#' + pointName + '_lat').val();
+    var srid = $('#' + pointName + '_srid').val();
     
     // Clear css class in case there was an error previously.
-    var editLon = editPointDialog.find('#editLon')
+    var editLon = $('#' + pointName + '_editLon')
     editLon.parent().attr("class", "value")
-    var editLat = editPointDialog.find('#editLat')
+    var editLat = $('#' + pointName + '_editLat')
     editLat.parent().attr("class", "value")
 
     editLon.val(Math.abs(lon));
     // If longitude is non-negative, select 'E'
     if (lon >= 0)
     {
-        editPointDialog.find('#editEastWest').val('E')
+        editPointDialog.find('#' + pointName + '_editEastWest').val('E')
     }
     else
     {
-        editPointDialog.find('#editEastWest').val('W')
+        editPointDialog.find('#' + pointName + '_editEastWest').val('W')
     }
 
     editLat.val(Math.abs(lat));
     // If latitude is positive, select 'N'
     if (lat > 0)
     {
-        editPointDialog.find('#editNorthSouth').val('N')
+        editPointDialog.find('#' + pointName + '_editNorthSouth').val('N')
     }
     else
     {
-        editPointDialog.find('#editNorthSouth').val('S')
+        editPointDialog.find('#' + pointName + '_editNorthSouth').val('S')
     }
 
-    editPointDialog.find('#editSrid').val(srid);
+    editPointDialog.find('#' + pointName + '_editSrid').val(srid);
     editPointDialog.dialog('open');
 }
 
@@ -217,5 +217,5 @@ function genCodedPointString(lon, lat, srid)
 
 function getName(srid)
 {
-    return $("#editSrid option[value='" + srid + "']").first().text()
+    return $('#' + pointName + "_editSrid option[value='" + srid + "']").first().text()
 }

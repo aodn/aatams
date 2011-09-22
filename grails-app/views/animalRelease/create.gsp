@@ -10,6 +10,7 @@
         
         <g:javascript src="speciesLookup.js" />
         <g:javascript src="animalLookup.js" />
+        <g:javascript src="animalRelease.js" />
         <g:javascript src="addsurgerytoanimalrelease.js"/>
         <g:javascript src="addmeasurementtoanimalrelease.js"/>
     </head>

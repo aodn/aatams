@@ -18,16 +18,16 @@ function updateLocation()
            'encoding':'json'},
           function(data) 
           {
-                $('input[name$="_lon"]').val(data.installationStationInstance.location.x);
-                $('input[name$="_lat"]').val(data.installationStationInstance.location.y);
-                $('input[name$="_srid"]').val(data.installationStationInstance.location.srid);
+                $('#location_lon').val(data.installationStationInstance.location.x);
+                $('#location_lat').val(data.installationStationInstance.location.y);
+                $('#location_srid').val(data.installationStationInstance.location.srid);
 
                 // TODO: cut and paste from pointEdit.js, refactor.
                 $(".pointEdit").each(function()
                 {
-                    var lon = $(this).find('input[name$="_lon"]').val();
-                    var lat = $(this).find('input[name$="_lat"]').val();
-                    var srid = $(this).find('input[name$="_srid"]').val();
+                    var lon = $(this).find('#location_lon').val();
+                    var lat = $(this).find('#location_lat').val();
+                    var srid = $(this).find('#location_srid').val();
 
                     // Save the point as a "coded" string.  This is then parsed on 
                     // by the PointEditor.
@@ -38,7 +38,7 @@ function updateLocation()
                     pointInput.val(pointCodedString);
 
                     var pointAsString = genPointStringX(lon, lat, srid);
-                    var pointInputTextField = $(this).find('#pointInputTextField')
+                    var pointInputTextField = $(this).find('#location_pointInputTextField')
                     pointInputTextField.val(pointAsString);
                 });
           },

@@ -51,8 +51,12 @@ class ReceiverControllerTests extends ControllerUnitTestCase
 
     void testReceiverSave() 
     {
+        def model = new DeviceModel(modelName:"model")
+        mockDomain(DeviceModel, [model])
+        model.save()
+        
         controller.params.organisation = imos
-        controller.params.model = new DeviceModel(modelName:"model")
+        controller.params.model = model
         controller.params.serialNumber = "12345"
         controller.params.comment = ""
         

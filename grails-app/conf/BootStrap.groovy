@@ -98,7 +98,9 @@ class BootStrap
 
         JSON.registerObjectMarshaller(Point.class)
         {
-            return "(" + it.coordinate.x + ", " + it.coordinate.y + ")"
+            return [x:it.coordinate.x,
+                    y:it.coordinate.y,
+                    srid:it.SRID]
         }
            
         JSON.registerObjectMarshaller(AnimalMeasurement.class)

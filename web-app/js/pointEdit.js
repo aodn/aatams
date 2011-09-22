@@ -94,30 +94,35 @@ $(function()
         
         loaded = true;
         
-        $(".pointEdit").each(function()
-        {
-            var lon = $(this).find('input[name$="_lon"]').val();
-            var lat = $(this).find('input[name$="_lat"]').val();
-            var srid = $(this).find('input[name$="_srid"]').val();
-
-            // Save the point as a "coded" string.  This is then parsed on 
-            // by the PointEditor.
-            var parentName = $(this).attr("id");
-            var pointInput = $(this).find('#' + parentName);
-            var pointCodedString = genCodedPointString(lon, lat, srid);
-            pointInput.val(pointCodedString);
-            
-            var pointAsString = genPointString(lon, lat, srid);
-            var pointInputTextField = $(this).find('#pointInputTextField')
-            pointInputTextField.val(pointAsString);
-            
-            pointInputTextField.focus(function()
-            {
-                showDialog($(this).parent())
-            })
-        });
-    })
+        initPoints()
+    });
 });
+
+function initPoints()
+{
+    $(".pointEdit").each(function()
+    {
+        var lon = $(this).find('input[name$="_lon"]').val();
+        var lat = $(this).find('input[name$="_lat"]').val();
+        var srid = $(this).find('input[name$="_srid"]').val();
+
+        // Save the point as a "coded" string.  This is then parsed on 
+        // by the PointEditor.
+        var parentName = $(this).attr("id");
+        var pointInput = $(this).find('#' + parentName);
+        var pointCodedString = genCodedPointString(lon, lat, srid);
+        pointInput.val(pointCodedString);
+
+        var pointAsString = genPointString(lon, lat, srid);
+        var pointInputTextField = $(this).find('#pointInputTextField')
+        pointInputTextField.val(pointAsString);
+
+        pointInputTextField.bind('focus click', function()
+        {
+            showDialog($(this).parent())
+        })
+    });
+}
 
 function showDialog(parent)
 {
@@ -132,7 +137,7 @@ function showDialog(parent)
     var lon = parent.find('input[name$="_lon"]').val();
     var lat = parent.find('input[name$="_lat"]').val();
     var srid = parent.find('input[name$="_srid"]').val();
-
+    
     // Clear css class in case there was an error previously.
     var editLon = editPointDialog.find('#editLon')
     editLon.parent().attr("class", "value")
@@ -170,6 +175,11 @@ function genPointString(lon, lat, srid)
     // Construct the string from lon, lat, srid values.
     var pointAsString = "";
     
+    if ((lon == "") || (lat == "") || (srid == ""))
+    {
+        return pointAsString;
+    }
+    
     pointAsString += Math.abs(lat) + "°"
     if (lat >= 0)
     {
@@ -197,6 +207,11 @@ function genPointString(lon, lat, srid)
 
 function genCodedPointString(lon, lat, srid)
 {
+    if ((lon == "") || (lat == "") || (srid == ""))
+    {
+        return "";
+    }
+    
     return "POINT(" + lon + " " + lat + ") , " + srid;
 }
 

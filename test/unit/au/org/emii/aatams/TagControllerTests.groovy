@@ -9,6 +9,11 @@ class TagControllerTests extends ControllerUnitTestCase
     DeviceStatus deployedStatus
     DeviceStatus recoveredStatus
     
+    def candidateEntitiesService
+    
+    def project1
+    def project2
+    
     protected void setUp() 
     {
         super.setUp()
@@ -19,6 +24,18 @@ class TagControllerTests extends ControllerUnitTestCase
         def statusList = [newStatus, deployedStatus, recoveredStatus]
         mockDomain(DeviceStatus, statusList)
         statusList.each { it.save() }
+        
+        project1 = new Project()
+        project2 = new Project()
+        
+        candidateEntitiesService = new CandidateEntitiesService()
+        candidateEntitiesService.metaClass.projects =
+        {
+            return [project1, project2]
+        }
+        
+        controller.candidateEntitiesService = candidateEntitiesService
+        mockDomain(Tag)
     }
 
     protected void tearDown() 
@@ -71,5 +88,29 @@ class TagControllerTests extends ControllerUnitTestCase
         assertEquals(2, model.tagInstanceTotal)
         assertTrue(model.tagInstanceList.contains(tag1))
         assertTrue(model.tagInstanceList.contains(tag2))
+    }
+    
+    void testCreate() 
+    {
+        def model = controller.create()
+        
+        assertNotNull(model.tagInstance)
+        assertEquals(2, model.candidateProjects.size())
+        assertTrue(model.candidateProjects.contains(project1))
+        assertTrue(model.candidateProjects.contains(project2))
+    }
+
+    void testSaveError() 
+    {
+        TransmitterType pinger = new TransmitterType(transmitterTypeName:"PINGER")
+        mockDomain(TransmitterType, [pinger])
+        pinger.save()
+        
+        def model = controller.save()
+        
+        assertNotNull(model.tagInstance)
+        assertEquals(2, model.candidateProjects.size())
+        assertTrue(model.candidateProjects.contains(project1))
+        assertTrue(model.candidateProjects.contains(project2))
     }
 }

@@ -22,9 +22,11 @@ class ReceiverDeploymentController {
         def receiverDeploymentInstance = new ReceiverDeployment()
         receiverDeploymentInstance.properties = params
         
-        def model = [receiverDeploymentInstance: receiverDeploymentInstance]
-        model.candidateStations = candidateEntitiesService.stations()
-        model.candidateReceivers = candidateEntitiesService.receivers()
+        def model =
+            [receiverDeploymentInstance: receiverDeploymentInstance] +
+            [candidateStations:candidateEntitiesService.stations(),
+             candidateReceivers:candidateEntitiesService.receivers()]
+         
         return model
     }
 
@@ -35,10 +37,15 @@ class ReceiverDeploymentController {
         if (!receiverDeploymentInstance.receiver?.canDeploy())
         {
             flash.message = "${message(code: 'default.invalidState.receiver', \
-                                       args: [receiverDeploymentInstance.receiver.toString(), \
-                                              receiverDeploymentInstance.receiver.status.toString()])}"
+                                       args: [receiverDeploymentInstance?.receiver?.toString(), \
+                                              receiverDeploymentInstance?.receiver?.status?.toString()])}"
             receiverDeploymentInstance.receiver = null
-            render(view: "create", model: [receiverDeploymentInstance: receiverDeploymentInstance])
+            def model =
+                [receiverDeploymentInstance: receiverDeploymentInstance] +
+                [candidateStations:candidateEntitiesService.stations(),
+                 candidateReceivers:candidateEntitiesService.receivers()]
+
+            render(view: "create", model: model)
             return
         }
         

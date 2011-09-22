@@ -12,11 +12,20 @@ import org.joda.time.format.DateTimeFormat
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
+import org.apache.shiro.subject.Subject
+import org.apache.shiro.util.ThreadContext
+import org.apache.shiro.SecurityUtils
+
 class AnimalReleaseControllerTests extends ControllerUnitTestCase 
 {
     WKTReader reader = new WKTReader()
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 
+    Project project1
+    Project project2
+    
+    def candidateEntitiesService
+    
     protected void setUp() 
     {
         super.setUp()
@@ -25,6 +34,15 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         
         // See http://jira.grails.org/browse/GRAILS-5926
         controller.metaClass.message = { Map map -> return "error message" }
+        
+        mockLogging(PermissionUtilsService)
+        def permService = new PermissionUtilsService()
+        
+        mockLogging(CandidateEntitiesService)
+        candidateEntitiesService = new CandidateEntitiesService()
+        candidateEntitiesService.permissionUtilsService = permService
+        
+        controller.candidateEntitiesService = candidateEntitiesService
         
         mockDomain(AnimalRelease)
         
@@ -64,6 +82,32 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         controller.params.releaseLocality = "Perth"
         controller.params.releaseLocation = (Point)reader.read("POINT(30.1234 30.1234)")
         controller.params.releaseDateTime = new DateTime("2011-05-15T14:12:00+10:00")
+        
+        def person = new Person(username:"person",
+                            organisation:new Organisation())
+                               
+        mockDomain(Person, [person])
+        person.save()
+        
+        def subject = [ getPrincipal: { person.username },
+                        isAuthenticated: { true },
+                        hasRole: { true },
+                        isPermitted:
+                        {
+                            return true
+                        }
+                      ] as Subject
+
+        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
+                            [ getSubject: { subject } ] as SecurityManager )
+
+        SecurityUtils.metaClass.static.getSubject = { subject }
+        
+        project1 = new Project(name:"project 1", status:EntityStatus.ACTIVE)
+        project2 = new Project(name:"project 2", status:EntityStatus.ACTIVE)
+        def projectList = [project1, project2]
+        mockDomain(Project, projectList)
+        projectList.each { it.save() }
     }
 
     protected void tearDown() 
@@ -625,4 +669,32 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         assertNull(release.embargoDate)
     }
     
+    void testCreate()
+    {
+        assertEquals(2, candidateEntitiesService.projects().size())
+
+        def model = controller.create()
+
+        assertEquals(2, model.candidateProjects.size())
+        assertTrue(model.candidateProjects.contains(project1))
+        assertTrue(model.candidateProjects.contains(project2))
+        
+        assertEquals("6 months", model.embargoPeriods[6])
+        assertEquals("12 months", model.embargoPeriods[12])
+    }
+
+    void testSaveWithError()
+    {
+        controller.params.animal = [id:null]
+        controller.params.speciesId = null
+        
+        def model = controller.save()
+        
+        assertEquals(2, model.candidateProjects.size())
+        assertTrue(model.candidateProjects.contains(project1))
+        assertTrue(model.candidateProjects.contains(project2))
+        
+        assertEquals("6 months", model.embargoPeriods[6])
+        assertEquals("12 months", model.embargoPeriods[12])
+    }
 }

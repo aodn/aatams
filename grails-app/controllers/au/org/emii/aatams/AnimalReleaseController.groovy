@@ -23,9 +23,10 @@ class AnimalReleaseController {
         def animalReleaseInstance = new AnimalRelease()
         animalReleaseInstance.properties = params
         
-        def model = [animalReleaseInstance: animalReleaseInstance]
-        addEmbargoPeriodsToModel(model)
-        model.candidateProjects = candidateEntitiesService.projects()
+        def model = 
+            [animalReleaseInstance: animalReleaseInstance] \
+          + [candidateProjects:candidateEntitiesService.projects()] \
+          + embargoPeriods()
 
         return model
     }
@@ -81,7 +82,12 @@ class AnimalReleaseController {
         // Either animal.id or speciesId must be specified.
         if ((params.animal?.id == null) && (params.speciesId == null))
         {
-            render(view: "create", model: [animalReleaseInstance: animalReleaseInstance])
+            def model = 
+                [animalReleaseInstance: animalReleaseInstance] \
+              + [candidateProjects:candidateEntitiesService.projects()] \
+              + embargoPeriods()
+            
+            render(view: "create", model: model)
         }
         else
         {
@@ -272,6 +278,11 @@ class AnimalReleaseController {
     {
         def embargoPeriods = [6: '6 months', 12: '12 months']
         model?.embargoPeriods = embargoPeriods.entrySet()
+    }
+
+    def embargoPeriods()
+    {
+        return [embargoPeriods:[6: '6 months', 12: '12 months']]
     }
 }
 

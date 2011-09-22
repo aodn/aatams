@@ -4,6 +4,11 @@ import grails.test.*
 
 class ReceiverRecoveryControllerTests extends ControllerUnitTestCase 
 {
+    def candidateEntitiesService
+
+    def project1
+    def project2
+
     protected void setUp() 
     {
         super.setUp()
@@ -14,14 +19,14 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
         mockLogging(CandidateEntitiesService)
         def candidateEntitiesService = new CandidateEntitiesService()
         
+        project1 = new Project(id:1, name:'Project 1')
+        project2 = new Project(id:2, name:'Project 2')
         def projectList = 
         [
-            new Project(id:1, name:'Project 1'),
-            new Project(id:2, name:'Project 2'),
+            project1, 
+            project2, 
             new Project(id:3, name:'Project 3'),
         ]
-//        mockDomain(Project, projectList)
-//        projectList.each { it.save() }
 
         candidateEntitiesService.metaClass.readableProjects =
         {
@@ -51,6 +56,8 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
 
         def recovery3 = new ReceiverRecovery(id:3, deployment:deployment3)
         deployment3.recovery = recovery3
+
+        mockDomain(ReceiverRecovery)
     }
 
     protected void tearDown() 
@@ -58,11 +65,13 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
         super.tearDown()
     }
 
-    void testMemberProjects()
+    void testList()
     {
         def model = controller.list()
         
         assertEquals(2, model.readableProjects.size())
+        assertTrue(model.readableProjects.contains(project1))
+        assertTrue(model.readableProjects.contains(project2))
         assertEquals(3, model.receiverDeploymentInstanceList.size())
         assertEquals(3, model.receiverDeploymentInstanceTotal)
     }
@@ -71,9 +80,11 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
     {
         def model = controller.filter()
         
-        assertEquals(2, model.readableProjects.size())
         assertEquals(3, model.receiverDeploymentInstanceList.size())
         assertEquals(3, model.receiverDeploymentInstanceTotal)
+        assertEquals(2, model.readableProjects.size())
+        assertTrue(model.readableProjects.contains(project1))
+        assertTrue(model.readableProjects.contains(project2))
         assertNull(model.selectedProjectId)
         assertNull(model.unrecoveredOnly)
     }
@@ -91,6 +102,9 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
         assertEquals(1, model.receiverDeploymentInstanceTotal)
         assertEquals(projectId, model.selectedProjectId)
         assertFalse(model.unrecoveredOnly)
+        assertEquals(2, model.readableProjects.size())
+        assertTrue(model.readableProjects.contains(project1))
+        assertTrue(model.readableProjects.contains(project2))
     }
     
     void testFilterByRecovered()
@@ -115,6 +129,9 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
         assertEquals(1, model.receiverDeploymentInstanceList.size())
         assertEquals(1, model.receiverDeploymentInstanceTotal)
         assertTrue(model.unrecoveredOnly)
+        assertEquals(2, model.readableProjects.size())
+        assertTrue(model.readableProjects.contains(project1))
+        assertTrue(model.readableProjects.contains(project2))
     }
 
     void testFilterByProjectAndRecovered()
@@ -144,5 +161,22 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
         assertEquals(0, model.receiverDeploymentInstanceTotal)
         assertEquals(projectId, model.selectedProjectId)
         assertTrue(model.unrecoveredOnly)
+        assertEquals(2, model.readableProjects.size())
+        assertTrue(model.readableProjects.contains(project1))
+        assertTrue(model.readableProjects.contains(project2))
+    }
+    
+    void testCreate() 
+    {
+        ReceiverDeployment deployment = new ReceiverDeployment()
+        mockDomain(ReceiverDeployment, [deployment])
+        deployment.save()
+        deployment.metaClass.toString = { "test deployment"}
+        
+        controller.params.deploymentId = deployment.id
+        def model = controller.create()
+        
+        assertNotNull(model.receiverRecoveryInstance)
+        assertEquals(deployment, model.receiverRecoveryInstance.deployment)
     }
 }

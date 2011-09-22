@@ -19,8 +19,8 @@ class InstallationController {
         def installationInstance = new Installation()
         installationInstance.properties = params
         
-        def model = [installationInstance: installationInstance]
-        model.candidateProjects = candidateEntitiesService.projects()
+        def model = 
+            [installationInstance: installationInstance] + [candidateProjects:candidateEntitiesService.projects()]
         return model
     }
 
@@ -31,7 +31,9 @@ class InstallationController {
             redirect(action: "show", id: installationInstance.id)
         }
         else {
-            render(view: "create", model: [installationInstance: installationInstance])
+            def model = 
+                [installationInstance: installationInstance] + [candidateProjects:candidateEntitiesService.projects()]
+            render(view: "create", model: model)
         }
     }
 

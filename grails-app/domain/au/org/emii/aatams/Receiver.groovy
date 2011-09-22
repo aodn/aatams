@@ -14,8 +14,7 @@ class Receiver extends Device
     
     static String constructCodeName(params)
     {
-//        DeviceModel model = DeviceModel.get(params.model.id)
-        DeviceModel model = params.model
+        DeviceModel model = DeviceModel.get(params.model.id)
         assert(model): "model cannot be null"
         
         return String.valueOf(model) + "-" + params.serialNumber

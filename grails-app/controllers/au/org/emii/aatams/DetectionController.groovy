@@ -19,9 +19,8 @@ class DetectionController {
         def detectionInstance = new Detection()
         detectionInstance.properties = params
         
-        def model = [detectionInstance: detectionInstance]
-        model.candidateDeployments = candidateEntitiesService.deployments()
-        return model
+        def model =
+            [detectionInstance: detectionInstance] + [candidateDeployments:candidateEntitiesService.deployments()]
     }
 
     def save = {
@@ -31,7 +30,9 @@ class DetectionController {
             redirect(action: "show", id: detectionInstance.id)
         }
         else {
-            render(view: "create", model: [detectionInstance: detectionInstance])
+            def model =
+                [detectionInstance: detectionInstance] + [candidateDeployments:candidateEntitiesService.deployments()]
+            render(view: "create", model: model)
         }
     }
 

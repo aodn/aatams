@@ -17,6 +17,13 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
     DeviceStatus recoveredStatus
     DeviceStatus retiredStatus
 
+    def candidateEntitiesService
+    
+    InstallationStation station1
+    InstallationStation station2
+    Receiver receiver1
+    Receiver receiver2
+    
     protected void setUp() 
     {
         super.setUp()
@@ -55,6 +62,19 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         mockDomain(ReceiverDeployment)
         
         controller.metaClass.message = { LinkedHashMap args -> return args }
+        
+        candidateEntitiesService = new CandidateEntitiesService()
+        candidateEntitiesService.metaClass.stations =
+        {
+            return [station1, station2]
+        }
+        candidateEntitiesService.metaClass.receivers =
+        {
+            return [receiver1, receiver2]
+        }
+        
+        controller.candidateEntitiesService = candidateEntitiesService
+        
     }
 
     protected void tearDown() 
@@ -125,5 +145,32 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         
         assertEquals("create", controller.renderArgs.view)
         assertNotNull(controller.renderArgs.model.receiverDeploymentInstance)
+    }
+    
+    void testCreate() 
+    {
+        def model = controller.create()
+        
+        assertNotNull(model.receiverDeploymentInstance)
+        assertEquals(2, model.candidateReceivers.size())
+        assertTrue(model.candidateReceivers.contains(receiver1))
+        assertTrue(model.candidateReceivers.contains(receiver2))
+        assertEquals(2, model.candidateStations.size())
+        assertTrue(model.candidateStations.contains(station1))
+        assertTrue(model.candidateStations.contains(station2))
+    }
+
+    void testSaveError() 
+    {
+        controller.save()
+        def model = controller.modelAndView.model
+        
+        assertNotNull(model.receiverDeploymentInstance)
+        assertEquals(2, model.candidateReceivers.size())
+        assertTrue(model.candidateReceivers.contains(receiver1))
+        assertTrue(model.candidateReceivers.contains(receiver2))
+        assertEquals(2, model.candidateStations.size())
+        assertTrue(model.candidateStations.contains(station1))
+        assertTrue(model.candidateStations.contains(station2))
     }
 }

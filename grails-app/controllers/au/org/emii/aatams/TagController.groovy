@@ -24,8 +24,9 @@ class TagController {
         // Default to NEW.
         tagInstance.status = DeviceStatus.findByStatus('NEW')
         
-        def model = [tagInstance: tagInstance]
-        model.candidateProjects = candidateEntitiesService.projects()
+        def model = 
+            [tagInstance: tagInstance] +
+            [candidateProjects:candidateEntitiesService.projects()]
         return model
     }
 
@@ -42,7 +43,10 @@ class TagController {
             redirect(action: "show", id: tagInstance.id)
         }
         else {
-            render(view: "create", model: [tagInstance: tagInstance])
+            def model = 
+                [tagInstance: tagInstance] +
+                [candidateProjects:candidateEntitiesService.projects()]
+            render(view: "create", model: model)
         }
     }
 

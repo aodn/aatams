@@ -13,19 +13,14 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.highlight.js')}"></script>
 
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.selectlist.js')}"></script>
-<!--    <script type="text/javascript" src="${resource(dir:'js',file:'jquery-custom-file-input.js')}"></script>-->
 
     <script type="text/javascript" src="${resource(dir:'js',file:'addorganisationtoproject.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'addpersontoproject.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'addsensortotag.js')}"></script>
-<!--    <script type="text/javascript" src="${resource(dir:'js',file:'fileupload.js')}"></script>-->
 
     <g:javascript src="asAbove.js"/>
-    <g:javascript src="formChangedWarning.js"/>
-
     
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>
-<!--    <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'ui-lightness/jquery-ui-1.8.10.custom.css')}"/>-->
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'custom-theme/jquery-ui-1.8.13.custom.css')}"/>
     <link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
 
@@ -169,6 +164,10 @@
       <g:layoutBody />
     </div>
 
+    <!-- Do this last, so that the code which updates point tag fields on page 
+         doesn't cause a warning to be issued even when the user hasn't actually
+         changed the form. -->
+    <g:javascript src="formChangedWarning.js"/>
   </body>
   
 </html>

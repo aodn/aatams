@@ -61,7 +61,7 @@ class GeometryTagLib
         if (attrs.editable)
         {
             out << render(template:"/common/geometry/pointInputTemplate", 
-                          model:[parentName:attrs.name, 
+                          model:[pointName:attrs.name, 
                                  value:pointAsString,
                                  lon:lon,
                                  lonEastOrWest:(lon >= 0 ? 'E' : 'W'),
@@ -73,7 +73,7 @@ class GeometryTagLib
         else
         {
             out << render(template:"/common/geometry/pointOutputTemplate", 
-                          model:[parentName:attrs.name, 
+                          model:[pointName:attrs.name, 
                                  value:pointAsString])  
         }
     }

@@ -35,7 +35,7 @@ class CandidateEntitiesService
         else
         {
             Person person = permissionUtilsService.principal()
-            subjectsOrganisations = person?.organisation
+            subjectsOrganisations = [person?.organisation]
         }
         
         return subjectsOrganisations

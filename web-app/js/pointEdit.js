@@ -168,6 +168,8 @@ function showDialog(pointDiv)
 
     editPointDialog.find('#' + pointName + '_editSrid').val(srid);
     editPointDialog.dialog('open');
+
+    editLat.select();
 }
 
 function genPointString(lon, lat, srid)

@@ -149,7 +149,7 @@
                                       <tr>
                                         <td colspan="5">
                                           <a href="#" 
-                                             id='add_surgery_to_animal_release'>${message(code: 'default.add.label', args: [message(code: 'surgery.label', default: 'Tagging...')])}</a>
+                                             id='add_surgery_to_animal_release'>${message(code: 'default.addModal.label', args: [message(code: 'surgery.label', default: 'Tagging')])}</a>
                                         </td>
                                       </tr>
 

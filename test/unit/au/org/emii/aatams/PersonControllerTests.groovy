@@ -7,13 +7,40 @@ import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
+import org.apache.shiro.subject.Subject
+import org.apache.shiro.util.ThreadContext
+import org.apache.shiro.SecurityUtils
+
 class PersonControllerTests extends ControllerUnitTestCase 
 {
+    def permissionUtilsService
+
     protected void setUp() 
     {
         super.setUp()
+        
         TestUtils.setupMessage(controller)
         initData()
+        
+        mockLogging(PermissionUtilsService)
+        permissionUtilsService = new PermissionUtilsService()
+        controller.permissionUtilsService = permissionUtilsService
+
+        controller.metaClass.sendMail = {}
+        
+        def subject = [ getPrincipal: { "username" },
+                        isAuthenticated: { true },
+                        hasRole: { true },
+                        isPermitted:
+                        {
+                            return true
+                        }
+                      ] as Subject
+
+        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
+                            [ getSubject: { subject } ] as SecurityManager )
+
+        SecurityUtils.metaClass.static.getSubject = { subject }
     }
 
     protected void tearDown() 
@@ -109,5 +136,50 @@ class PersonControllerTests extends ControllerUnitTestCase
         def returnValue = controller.show()
         
         assertSame(returnValue.personInstance, joeBloggs)
+    }
+    
+    void testSaveUsernameToLowerCase()
+    {
+        mockDomain(Person)
+        
+        def cmd = new PersonCreateCommand(
+                      name: "John",
+                      username: "John",
+                      password: "password",
+                      passwordConfirm: "password",
+                      organisation:new Organisation(),
+                      phoneNumber:"1234",
+                      emailAddress:"john@asdf.com")
+                  
+        mockForConstraintsTests(PersonCreateCommand, [cmd])
+        assertTrue(cmd.validate())
+
+        controller.save(cmd)
+        
+        assertEquals("john", Person.findByName("John").username)
+        assertEquals("show", controller.redirectArgs.action)
+        
+        // Try to save "john".
+        cmd.name = "john"
+        assertTrue(cmd.validate())
+        controller.save(cmd)
+        assertEquals("create", controller.renderArgs.view)
+    }
+    
+    void testUpdateUsernameToLowerCase()
+    {
+        Person person = new Person(name:"John",
+                                   username:"john")
+                               
+        mockDomain(Person, [person])
+        person.save()
+        
+        controller.params.id = person.id
+        controller.params.username = "Wayne"
+        
+        controller.update()
+        
+        def updatedPerson = Person.findByName("John")
+        assertEquals("wayne", updatedPerson.username)
     }
 }

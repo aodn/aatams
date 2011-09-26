@@ -174,6 +174,9 @@ class PersonController {
                     return
                 }
             }
+            
+            params.username = params.username.toLowerCase()
+            
             personInstance.properties = params
             if (!personInstance.hasErrors() && personInstance.save(flush: true)) 
             {
@@ -305,7 +308,7 @@ class PersonCreateCommand
     
     Person createPerson()
     {
-        def person = new Person(username:username,
+        def person = new Person(username:username.toLowerCase(),
                                 passwordHash:new Sha256Hash(password).toHex(),
                                 name:name,
                                 organisation:organisation,

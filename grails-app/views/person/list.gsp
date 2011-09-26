@@ -28,11 +28,15 @@
                             
                             <g:sortableColumn property="name" title="${message(code: 'person.name.label', default: 'Name')}" />
                         
-                            <g:sortableColumn property="username" title="${message(code: 'secUser.username.label', default: 'Username')}" />
+                            <shiro:hasRole name="SysAdmin">
+                              <g:sortableColumn property="username" title="${message(code: 'secUser.username.label', default: 'Username')}" />
+                            </shiro:hasRole>
 
-                            <g:sortableColumn property="phoneNumber" title="${message(code: 'person.phoneNumber.label', default: 'Phone Number')}" />
-                        
-                            <g:sortableColumn property="emailAddress" title="${message(code: 'person.emailAddress.label', default: 'Email Address')}" />
+                            <shiro:user>
+                              <g:sortableColumn property="phoneNumber" title="${message(code: 'person.phoneNumber.label', default: 'Phone Number')}" />
+
+                              <g:sortableColumn property="emailAddress" title="${message(code: 'person.emailAddress.label', default: 'Email Address')}" />
+                            </shiro:user>
                             
                             <g:sortableColumn property="organisation" title="${message(code: 'person.organisation.label', default: 'Organisation')}" />
 
@@ -52,11 +56,15 @@
                     
                             <td>${fieldValue(bean: personInstance, field: "name")}</td>
                         
-                            <td>${fieldValue(bean: personInstance, field: "username")}</td>
+                            <shiro:hasRole name="SysAdmin">
+                              <td>${fieldValue(bean: personInstance, field: "username")}</td>
+                            </shiro:hasRole>
 
-                            <td>${fieldValue(bean: personInstance, field: "phoneNumber")}</td>
-                        
-                            <td>${fieldValue(bean: personInstance, field: "emailAddress")}</td>
+                            <shiro:user>
+                              <td>${fieldValue(bean: personInstance, field: "phoneNumber")}</td>
+
+                              <td>${fieldValue(bean: personInstance, field: "emailAddress")}</td>
+                            </shiro:user>
                         
                             <td><g:link controller="organisation" action="show" id="${personInstance?.organisation?.id}">${fieldValue(bean: personInstance, field: "organisation")}</g:link></td>
                         

@@ -31,12 +31,14 @@
                             
                         </tr>
                     
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="secUser.username.label" default="Username" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: personInstance, field: "username")}</td>
-                            
-                        </tr>
+                        <shiro:hasRole name="SysAdmin">
+                          <tr class="prop">
+                              <td valign="top" class="name"><g:message code="secUser.username.label" default="Username" /></td>
+
+                              <td valign="top" class="value">${fieldValue(bean: personInstance, field: "username")}</td>
+
+                          </tr>
+                        </shiro:hasRole>
 
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="person.organisation.label" default="Organisation" /></td>
@@ -46,20 +48,22 @@
                             </td>
                             
                         </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="person.phoneNumber.label" default="Phone Number" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: personInstance, field: "phoneNumber")}</td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="person.emailAddress.label" default="Email Address" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: personInstance, field: "emailAddress")}</td>
-                            
-                        </tr>
+                        
+                        <shiro:user>
+                          <tr class="prop">
+                              <td valign="top" class="name"><g:message code="person.phoneNumber.label" default="Phone Number" /></td>
+
+                              <td valign="top" class="value">${fieldValue(bean: personInstance, field: "phoneNumber")}</td>
+
+                          </tr>
+
+                          <tr class="prop">
+                              <td valign="top" class="name"><g:message code="person.emailAddress.label" default="Email Address" /></td>
+
+                              <td valign="top" class="value">${fieldValue(bean: personInstance, field: "emailAddress")}</td>
+
+                          </tr>
+                        </shiro:user>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="person.projectRoles.label" default="Projects" /></td>

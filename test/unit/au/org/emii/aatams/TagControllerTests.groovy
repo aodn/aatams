@@ -43,17 +43,17 @@ class TagControllerTests extends ControllerUnitTestCase
         super.tearDown()
     }
 
-    void testLookupNonDeployedByCodeName() 
+    void testLookupNonDeployedBySerialNumber() 
     {
-        Tag newTag = new Tag(codeName:'A69-1303-1111', status:newStatus)
-        Tag deployedTag = new Tag(codeName:'A69-1303-2222', status:deployedStatus)
-        Tag recoveredTag = new Tag(codeName:'A69-1303-3333', status:recoveredStatus)
+        Tag newTag = new Tag(codeName:'A69-1303-1111', serialNumber:'1111-A', status:newStatus)
+        Tag deployedTag = new Tag(codeName:'A69-1303-2222', serialNumber:'2222', status:deployedStatus)
+        Tag recoveredTag = new Tag(codeName:'A69-1303-3333', serialNumber:'1111-B', status:recoveredStatus)
         def tagList = [newTag, deployedTag, recoveredTag]
         mockDomain(Tag, tagList)
         tagList.each { it.save() }
         
-        controller.params.term = 'A69-1303'
-        controller.lookupNonDeployedByCodeName()
+        controller.params.term = '1111'
+        controller.lookupNonDeployedBySerialNumber()
         
         def controllerResponse = controller.response.contentAsString
         def jsonResult = JSON.parse(controllerResponse)

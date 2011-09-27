@@ -107,43 +107,59 @@ class AnimalReleaseController {
 
             animalReleaseInstance.animal = animalInstance
             animalInstance.addToReleases(animalReleaseInstance)
-            
-            // Create any associated surgeries (and set associated tags' status to
-            // DEPLOYED).
-            DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
-            params.surgery.findAll
+
+            try
             {
-                k, v ->
-
-                // See http://stackoverflow.com/questions/1811395/grails-indexed-parameters
-                if (!k.contains("."))
+    
+                // Create any associated surgeries (and set associated tags' status to
+                // DEPLOYED).
+                DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
+                params.surgery.findAll
                 {
-                    // Lookup or create tag (after inserting some required parameters)...
-                    v.tag['project'] = Project.get(params.project.id)
-                    v.tag['status'] = DeviceStatus.findByStatus('DEPLOYED')
-                    v.tag['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
-                    
-                    def tag = tagFactoryService.lookupOrCreate(v.tag)
+                    k, v ->
 
-                    log.debug("Surgery parameters: " + v)
-                    Surgery surgery = new Surgery(v)
-                    surgery.tag = tag
+                    // See http://stackoverflow.com/questions/1811395/grails-indexed-parameters
+                    if (!k.contains("."))
+                    {
+                        // Lookup or create tag (after inserting some required parameters)...
+                        v.tag['project'] = Project.get(params.project.id)
+                        v.tag['status'] = DeviceStatus.findByStatus('DEPLOYED')
+                        v.tag['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
 
-                    tag.addToSurgeries(surgery)
-                    
-                    tag.save()
-                    animalReleaseInstance.addToSurgeries(surgery)
+                        def tag = tagFactoryService.lookupOrCreate(v.tag)
 
-                    // Need to update that status of the tag to DEPLOYED.
-                    surgery?.tag?.status = deployedStatus
-                    
-                    // Rescan detections in case they match this new surgery
-                    // (ref bug #364).
-                    log.debug("Rescanning existing detections for surgery: " + String.valueOf(surgery))
-                    detectionFactoryService.rescanForSurgery(surgery)
+                        log.debug("Surgery parameters: " + v)
+                        Surgery surgery = new Surgery(v)
+                        surgery.tag = tag
+
+                        tag.addToSurgeries(surgery)
+
+                        tag.save()
+                        animalReleaseInstance.addToSurgeries(surgery)
+
+                        // Need to update that status of the tag to DEPLOYED.
+                        surgery?.tag?.status = deployedStatus
+
+                        // Rescan detections in case they match this new surgery
+                        // (ref bug #364).
+                        log.debug("Rescanning existing detections for surgery: " + String.valueOf(surgery))
+                        detectionFactoryService.rescanForSurgery(surgery)
+                    }
                 }
             }
+            catch (IllegalArgumentException e)
+            {
+                log.error(e)
+                flash.message = e.message
+                def model = 
+                    [animalReleaseInstance: animalReleaseInstance, animal:animalInstance] \
+                  + [candidateProjects:candidateEntitiesService.projects()] \
+                  + embargoPeriods()
 
+                render(view: "create", model: model)
+                return
+            }
+            
             params.measurement.findAll
             {
                 k, v ->

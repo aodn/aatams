@@ -41,20 +41,20 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label class="compulsory" for="tag"><g:message code="surgery.tag.label" default="Tag ID" /></label>
+                                    <label class="compulsory" for="serialNumber"><g:message code="tag.serialNumber.label" default="Serial Number" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'tag', 'errors')}">
-                                    <g:textField name="tagCodeName" />
-
+                                <td valign="top" class="value">
+                                    <g:textField name="serialNumber" placeholder="autocomplete - start typing" size="60" />
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label class="compulsory" for="serialNumber"><g:message code="tag.serialNumber.label" default="Serial Number" /></label>
+                                    <label class="compulsory" for="tag"><g:message code="surgery.tag.label" default="Tag ID" /></label>
                                 </td>
-                                <td valign="top" class="value">
-                                    <g:textField name="serialNumber" />
+                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'tag', 'errors')}">
+                                    <g:textField name="tagCodeName" placeholder="e.g 'A69-1303-12345'" size="60" />
+
                                 </td>
                             </tr>
                         

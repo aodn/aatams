@@ -35,7 +35,7 @@ function updateHeader(data)
     }                               
     else if (data.errors && data.errors.localizedMessage)
     {
-        var errorElement = '<div class=\"errors\"><ul><li>' + data.localizedMessage + '</li></ul>'; 
+        var errorElement = '<div class=\"errors\"><ul><li>' + data.errors.localizedMessage + '</li></ul>'; 
         var heading = $(".body > h1");
         heading.after(errorElement);
     }

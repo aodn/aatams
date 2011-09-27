@@ -5,20 +5,20 @@
  */
 $(function()
 {
-    var dataSource = "/aatams/tag/lookupNonDeployedByCodeName"
-    $("#tagCodeName").autocomplete({source:dataSource});
+    var dataSource = "/aatams/tag/lookupNonDeployedBySerialNumber"
+    $("#serialNumber").autocomplete({source:dataSource});
 });
 
-$("#tagCodeName").autocomplete({
+$("#serialNumber").autocomplete({
     select:function(event, ui)
     {
         // Update the serialNumber and model select when a tag ID is selecetd.
-        $("#serialNumber").val(ui.item.serialNumber);
+        $("#tagCodeName").val(ui.item.codeName);
         $("#modelId").val(ui.item.model.id);
     }
 });
 
-$("#tagCodeName").autocomplete({
+$("#serialNumber").autocomplete({
     change:function(event, ui)
     {
         setExistingTag(ui.item != null)
@@ -29,15 +29,15 @@ function setExistingTag(existing)
 {
     if (existing)
     {
-        $("#serialNumber").attr("disabled", "disabled");
+        $("#tagCodeName").attr("disabled", "disabled");
         $("#modelId").attr("disabled", "disabled");
     }
     else
     {
-        $("#serialNumber").attr("disabled", "");
+        $("#tagCodeName").attr("disabled", "");
         $("#modelId").attr("disabled", "");
         
-        $("#serialNumber").val("");
+        $("#tagCodeName").val("");
         $("#modelId").val("");
     }
 }

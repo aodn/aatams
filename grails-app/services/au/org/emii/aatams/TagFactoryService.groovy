@@ -4,7 +4,7 @@ class TagFactoryService {
 
     static transactional = true
 
-    def lookupOrCreate(params) 
+    def lookupOrCreate(params) throws IllegalArgumentException
     {
         log.debug(params)
         
@@ -17,7 +17,9 @@ class TagFactoryService {
             String[] codeNameTokens = codeName.split("-")
             if (codeNameTokens.length != 3)
             {
-                log.error("Invalid tag code name: " + codeName)
+                String msg = "Invalid tag code name: " + codeName
+                log.error(msg)
+                throw new IllegalArgumentException(msg)
             }
             else
             {
@@ -25,13 +27,22 @@ class TagFactoryService {
                 
                 String codeMap = codeNameTokens[0] + "-" + codeNameTokens[1]
                 String pingCode = codeNameTokens[2]
-                tag = new Tag(codeName:codeName,
-                              serialNumber:params.serialNumber,
-                              codeMap:codeMap,
-                              pingCode:pingCode,
-                              model:model,
-                              status:params.status,
-                              transmitterType:params.transmitterType)
+                
+                try
+                {
+                    Integer pingCodeAsInt = Integer.valueOf(pingCode)
+                    tag = new Tag(codeName:codeName,
+                                  serialNumber:params.serialNumber,
+                                  codeMap:codeMap,
+                                  pingCode:pingCode,
+                                  model:model,
+                                  status:params.status,
+                                  transmitterType:params.transmitterType)
+                }
+                catch (NumberFormatException e)
+                {
+                    throw new IllegalArgumentException("Invalid tag code name: " + codeName, e)
+                }
             }
         }
         

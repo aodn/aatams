@@ -23,7 +23,6 @@ class ReceiverDownloadFileController
     {
         def receiverDownloadFileInstance = new ReceiverDownloadFile()
         receiverDownloadFileInstance.properties = params
-        receiverDownloadFileInstance.receiverDownload = ReceiverDownload.get(params.downloadId)
         
         return [receiverDownloadFileInstance: receiverDownloadFileInstance, projectId:params.projectId]
     }
@@ -31,6 +30,7 @@ class ReceiverDownloadFileController
     def save = 
     {
         log.debug("Processing receiver export, params: " + params)
+        def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
 
         // Save the file to disk.
         def fileMap = request.getFileMap()
@@ -38,13 +38,10 @@ class ReceiverDownloadFileController
         {
             // Error.
             flash.error = "Number of posted files must be exactly one, you posted: " + fileMap.size()
+            render(view: "create", model: [receiverDownloadFileInstance: receiverDownloadFileInstance])
         }
         else
         {
-            def receiverDownload = ReceiverDownload.get(params.downloadId)
-
-            def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
-            receiverDownloadFileInstance.receiverDownload = receiverDownload
             receiverDownloadFileInstance.errMsg = ""
             receiverDownloadFileInstance.importDate = new Date()
             receiverDownloadFileInstance.status = FileProcessingStatus.PROCESSING
@@ -52,14 +49,13 @@ class ReceiverDownloadFileController
             receiverDownloadFileInstance.requestingUser = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
             
             MultipartFile file = (fileMap.values() as List)[0]
-            def path = getPath(receiverDownload)
+            def path = getPath(receiverDownloadFileInstance)
             String fullPath = path + File.separator + file.getOriginalFilename()
 
             receiverDownloadFileInstance.path = fullPath
             receiverDownloadFileInstance.name = file.getOriginalFilename()
 
-            receiverDownload.addToDownloadFiles(receiverDownloadFileInstance)
-            receiverDownload.save(flush:true, failOnError:true)
+            receiverDownloadFileInstance.save(flush:true, failOnError:true)
 
             flash.message = "${message(code: 'default.processing.receiverUpload.message')}"
             
@@ -71,6 +67,7 @@ class ReceiverDownloadFileController
             {
                 try
                 {
+                    receiverDownloadFileInstance = ReceiverDownloadFile.get(downloadFileId)
                     fileProcessorService.process(downloadFileId, 
                                                  file,
                                                  showLink)
@@ -92,13 +89,9 @@ class ReceiverDownloadFileController
                     receiverDownloadFileInstance.save()
                 }
             }
-        }
         
-        // Go back to receiver recovery edit screen.
-        redirect(controller: "receiverRecovery", 
-                 action: "edit", 
-                 id: ReceiverDownload.get(params.downloadId).receiverRecovery?.id,
-                 params:[projectId:params.projectId])
+            redirect(action: "show", id: downloadFileId)
+        }
     }
 
     def show = {
@@ -194,9 +187,9 @@ class ReceiverDownloadFileController
     /**
      *  Files are stored at: 
      *  
-     *      <basepath>/<project>/<installation>/<station>/<receiver>/<filename>.
+     *      <basepath>/<downloadFile.id>.
      */
-    String getPath(ReceiverDownload download)
+    String getPath(ReceiverDownloadFile downloadFile)
     {
         // Save the file to disk.
 //        def path = config.path
@@ -207,16 +200,6 @@ class ReceiverDownloadFileController
             path = path + File.separator
         }
         
-        ReceiverRecovery recovery = download.receiverRecovery
-        ReceiverDeployment deployment = recovery.deployment
-        Receiver receiver = deployment.receiver
-        InstallationStation station = download.receiverRecovery.deployment.station
-        Installation installation = station.installation
-        Project project = installation.project
-        
-        path += project.name + File.separator
-        path += installation.name + File.separator
-        path += station.name + File.separator
-        path += receiver.codeName
+        path += downloadFile.id
     }
 }

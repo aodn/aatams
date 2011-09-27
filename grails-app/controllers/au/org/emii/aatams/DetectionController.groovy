@@ -16,11 +16,7 @@ class DetectionController {
     }
 
     def create = {
-        def detectionInstance = new Detection()
-        detectionInstance.properties = params
-        
-        def model =
-            [detectionInstance: detectionInstance] + [candidateDeployments:candidateEntitiesService.deployments()]
+        redirect(controller:"receiverDownloadFile", action:"create")
     }
 
     def save = {

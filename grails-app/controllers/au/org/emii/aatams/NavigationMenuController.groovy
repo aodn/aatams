@@ -33,25 +33,19 @@ class NavigationMenuController
         'receiver':"Receivers"
     ]
     
-//    def fieldDataControllers =
-//    [
-//        'tag':"Tags",
-//        'animalRelease':"Tag Releases",
-//        'detection':"Tag Detections",
-//        'receiverDeployment':"Receiver Deployment",
-//        'receiverRecovery':"Receiver Recovery",
-//        'receiverEvent':"Receiver Events"
-//    ]
-    
     def fieldDataControllers()
     {
+        boolean projectWriteAny = 
+            SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildProjectWriteAnyPermission())
+                
         [
-            new NavigationMenuItem(controllerName:'tag', label:'Tags', canCreateNew:SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildProjectWriteAnyPermission())),
-            new NavigationMenuItem(controllerName:'animalRelease', label:'Tag Releases', canCreateNew:SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildProjectWriteAnyPermission())),
-            new NavigationMenuItem(controllerName:'detection', label:'Tag Detections', canCreateNew:SecurityUtils.getSubject().hasRole("SysAdmin")),
-            new NavigationMenuItem(controllerName:'receiverDeployment', label:'Receiver Deployment', canCreateNew:SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildProjectWriteAnyPermission())),
-            new NavigationMenuItem(controllerName:'receiverRecovery', label:'Receiver Recovery', canCreateNew:SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildProjectWriteAnyPermission())),
-            new NavigationMenuItem(controllerName:'receiverEvent', label:'Receiver Events', canCreateNew:SecurityUtils.getSubject().hasRole("SysAdmin"))
+            new NavigationMenuItem(controllerName:'tag', label:'Tags', canCreateNew:projectWriteAny),
+            new NavigationMenuItem(controllerName:'animalRelease', label:'Tag Releases', canCreateNew:projectWriteAny),
+            new NavigationMenuItem(controllerName:'detection', label:'Tag Detections', canCreateNew:projectWriteAny),
+            new NavigationMenuItem(controllerName:'receiverDeployment', label:'Receiver Deployment', canCreateNew:projectWriteAny),
+            new NavigationMenuItem(controllerName:'receiverRecovery', label:'Receiver Recovery', canCreateNew:projectWriteAny),
+            new NavigationMenuItem(controllerName:'receiverEvent', label:'Receiver Events', canCreateNew:projectWriteAny),
+            new NavigationMenuItem(controllerName:'receiverDownloadFile', label:'Receiver Exports', canCreateNew:false)
         ]
     }
         

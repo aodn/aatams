@@ -596,9 +596,6 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  deployment:rx1Bondi,
                                  batteryLife:12.5f,
                                  batteryVoltage:3.7f)
-        ReceiverDownload download1 =
-            new ReceiverDownload(receiverRecovery:recovery1,
-                                 downloadDateTime:new DateTime("2011-05-17T12:34:56"))
         recovery1.save(failOnError:true)
                              
         ReceiverRecovery recovery2 = 
@@ -609,10 +606,6 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  deployment:rx2Bondi,
                                  batteryLife:12.5f,
                                  batteryVoltage:3.7f)
-        ReceiverDownload download2 =
-            new ReceiverDownload(receiverRecovery:recovery2,
-                                 downloadDateTime:new DateTime("2011-05-17T12:54:56"))
-        recovery2.save(failOnError:true)
                              
         // Detections.
         /**

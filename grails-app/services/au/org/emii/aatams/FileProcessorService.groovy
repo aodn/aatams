@@ -14,31 +14,15 @@ class FileProcessorService
     def grailsApplication
     def mailService
 
-//    void process(ReceiverDownloadFile receiverDownloadFile, MultipartFile file)
     void process(receiverDownloadFileId, MultipartFile file, showLink)
     {
         log.debug("Processing receiver export, download file ID: " + receiverDownloadFileId)
-        
-//        def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
-//        receiverDownloadFileInstance.receiverDownload = ReceiverDownload.get(params.downloadId)
-//        receiverDownloadFileInstance.errMsg = ""
-//        receiverDownloadFileInstance.importDate = new Date()
-//        receiverDownloadFileInstance.status = FileProcessingStatus.PENDING
-        
-//        receiverDownloadFileInstance.save(flush:true, failOnError:true)
-
-//        ReceiverDownload receiverDownload = ReceiverDownload.get(receiverDownloadId)
         
         def receiverDownloadFile = ReceiverDownloadFile.get(receiverDownloadFileId)
         assert(receiverDownloadFile != null): "receiverDownloadFile cannot be null"
         
         if (!file.isEmpty())
         {
-            def receiverDownload = receiverDownloadFile?.receiverDownload
-            assert (receiverDownload != null): "receiverDownload cannot be null"
-            
-            log.info("Adding file to receiver download, id: " + receiverDownload?.id)
-
             // Save the file to disk.
             def path = receiverDownloadFile.path
             File outFile = new File(path)
@@ -76,7 +60,6 @@ class FileProcessorService
 
                 log.info "Finished processing."
             }
-//            catch (FileProcessingException e)
             catch (Throwable e)
             {
                 log.error("Error processing file", e)

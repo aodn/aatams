@@ -31,16 +31,6 @@ class DetectionControllerTests extends ControllerUnitTestCase
         super.tearDown()
     }
 
-    void testCreate() 
-    {
-        def model = controller.create()
-        
-        assertNotNull(model.detectionInstance)
-        assertEquals(2, model.candidateDeployments.size())
-        assertTrue(model.candidateDeployments.contains(deployment1))
-        assertTrue(model.candidateDeployments.contains(deployment2))
-    }
-
     void testSaveError() 
     {
         def model = controller.save()
@@ -49,5 +39,13 @@ class DetectionControllerTests extends ControllerUnitTestCase
         assertEquals(2, model.candidateDeployments.size())
         assertTrue(model.candidateDeployments.contains(deployment1))
         assertTrue(model.candidateDeployments.contains(deployment2))
+    }
+
+    void testCreate() 
+    {
+        controller.create()
+        
+        assertEquals("receiverDownloadFile", controller.redirectArgs.controller)
+        assertEquals("create", controller.redirectArgs.action)
     }
 }

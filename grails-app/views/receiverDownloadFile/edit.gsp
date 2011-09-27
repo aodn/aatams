@@ -33,21 +33,64 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="type"><g:message code="receiverDownloadFile.type.label" default="Type" /></label>
+                                  <label for="type"><g:message code="receiverDownloadFile.type.label" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'type', 'errors')}">
-                                    <g:select name="type" from="${au.org.emii.aatams.ReceiverDownloadFileType?.values()}" keys="${au.org.emii.aatams.ReceiverDownloadFileType?.values()*.name()}" value="${receiverDownloadFileInstance?.type?.name()}"  />
-
+                                    <g:select  from="${au.org.emii.aatams.ReceiverDownloadFileType?.values()}" value="${receiverDownloadFileInstance?.type}" name="type" ></g:select>
                                 </td>
                             </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="path"><g:message code="receiverDownloadFile.path.label" default="Path" /></label>
+                                  <label for="path"><g:message code="receiverDownloadFile.path.label" default="Path" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'path', 'errors')}">
-                                    <g:textField name="path" value="${receiverDownloadFileInstance?.path}" />
-
+                                    <input type="text" id="path" name="path" value="${fieldValue(bean:receiverDownloadFileInstance,field:'path')}"/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="errMsg"><g:message code="receiverDownloadFile.errMsg.label" default="Err Msg" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'errMsg', 'errors')}">
+                                    <input type="text" id="errMsg" name="errMsg" value="${fieldValue(bean:receiverDownloadFileInstance,field:'errMsg')}"/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="importDate"><g:message code="receiverDownloadFile.importDate.label" default="Import Date" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'importDate', 'errors')}">
+                                    <g:datePicker name="importDate" value="${receiverDownloadFileInstance?.importDate}" ></g:datePicker>
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="name"><g:message code="receiverDownloadFile.name.label" default="Name" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'name', 'errors')}">
+                                    <input type="text" id="name" name="name" value="${fieldValue(bean:receiverDownloadFileInstance,field:'name')}"/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="requestingUser"><g:message code="receiverDownloadFile.requestingUser.label" default="Requesting User" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'requestingUser', 'errors')}">
+                                    <g:select optionKey="id" from="${au.org.emii.aatams.Person.list()}" name="requestingUser.id" value="${receiverDownloadFileInstance?.requestingUser?.id}" ></g:select>
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                  <label for="status"><g:message code="receiverDownloadFile.status.label" default="Status" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'status', 'errors')}">
+                                    <g:select  from="${au.org.emii.aatams.FileProcessingStatus?.values()}" value="${receiverDownloadFileInstance?.status}" name="status" ></g:select>
                                 </td>
                             </tr>
                         

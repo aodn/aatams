@@ -281,16 +281,6 @@ class CandidateEntitiesFilterTests extends GrailsUnitTestCase
         }
     }
     
-    void testDetectionCreate()
-    {
-        // candidateDeployments
-        def model = detectionController.create()
-        
-        assertNotNull(model.candidateDeployments)
-        assertEquals(1, model.candidateDeployments.size())
-        assertTrue(model.candidateDeployments.contains(activeDeployment))
-    }
-    
     void testDetectionEdit()
     {
         Detection detection = new Detection()

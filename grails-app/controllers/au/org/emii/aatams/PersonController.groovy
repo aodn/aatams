@@ -3,6 +3,8 @@ package au.org.emii.aatams
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.crypto.hash.Sha256Hash
 
+import org.joda.time.DateTimeZone
+
 class PersonController {
 
     def permissionUtilsService
@@ -289,6 +291,7 @@ class PersonCreateCommand
     Organisation organisation
     String phoneNumber
     String emailAddress
+    DateTimeZone defaultTimeZone
     
     static constraints =
     {
@@ -304,6 +307,7 @@ class PersonCreateCommand
         organisation(nullable:false)
         phoneNumber(blank:false)
         emailAddress(email:true)
+        defaultTimeZone(nullable:false)
     }
     
     Person createPerson()
@@ -313,7 +317,8 @@ class PersonCreateCommand
                                 name:name,
                                 organisation:organisation,
                                 phoneNumber:phoneNumber,
-                                emailAddress:emailAddress)
+                                emailAddress:emailAddress,
+                                defaultTimeZone:defaultTimeZone)
                             
         return person
     }

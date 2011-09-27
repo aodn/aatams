@@ -2,6 +2,10 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.util.ListUtils
 import shiro.*
+import org.apache.shiro.SecurityUtils
+import org.apache.shiro.UnavailableSecurityManagerException
+
+import org.joda.time.DateTimeZone
 
 class Person extends SecUser
 {
@@ -18,6 +22,8 @@ class Person extends SecUser
     EntityStatus status
     String registrationComment
     
+    DateTimeZone defaultTimeZone
+    
     static constraints = 
     {
         name(blank:false)
@@ -26,6 +32,7 @@ class Person extends SecUser
         emailAddress(email:true)
         status()
         registrationComment(nullable:true, blank:true)
+        defaultTimeZone()
     }
 
     static mapping = 
@@ -42,5 +49,23 @@ class Person extends SecUser
     String getProjects()
     {
         return ListUtils.fold(projectRoles, "project")
+    }
+    
+    static defaultTimeZone()
+    {
+        try
+        {
+            if (!SecurityUtils.subject?.isAuthenticated())
+            {
+                return DateTimeZone.getDefault()
+            }
+
+            Person principal = Person.findByUsername(SecurityUtils.subject?.principal, [cache:true])
+            return principal?.defaultTimeZone
+        }
+        catch (UnavailableSecurityManagerException e)
+        {
+            return DateTimeZone.getDefault()
+        }
     }
 }

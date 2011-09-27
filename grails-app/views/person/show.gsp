@@ -87,6 +87,12 @@
                           </tr>
                         </shiro:hasRole>
                         
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="person.defaultTimeZone.label" default="Default Time Zone" /></td>
+
+                            <td valign="top" class="value">${personInstance?.defaultTimeZone?.encodeAsHTML()}</td>
+
+                        </tr>
                     
                     </tbody>
                 </table>

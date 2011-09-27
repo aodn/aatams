@@ -57,7 +57,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                        //organisation:imosOrg,
                        phoneNumber:'1234',
                        emailAddress:'jkburges@utas.edu.au',
-                       status:EntityStatus.ACTIVE)
+                       status:EntityStatus.ACTIVE,
+                       defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
                    
         //
         // Organisations.
@@ -175,7 +176,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                        organisation:csiroOrg,
                        phoneNumber:'1234',
                        emailAddress:'jbloggs@blah.au',
-                       status:EntityStatus.ACTIVE).save(failOnError: true)
+                       status:EntityStatus.ACTIVE,
+                       defaultTimeZone:DateTimeZone.forID("Australia/Perth")).save(failOnError: true)
 
         Person johnCitizen =
             new Person(username:'jcitizen',
@@ -184,7 +186,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                        organisation:csiroOrg,
                        phoneNumber:'5678',
                        emailAddress:'jcitizen@blah.au',
-                       status:EntityStatus.ACTIVE).save(failOnError: true)
+                       status:EntityStatus.ACTIVE,
+                       defaultTimeZone:DateTimeZone.forID("Australia/Adelaide")).save(failOnError: true)
 
         //
         // Project Roles.

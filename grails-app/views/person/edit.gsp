@@ -95,6 +95,16 @@
                                 </td>
                             </tr>
                             
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label class="compulsory" for="defaultTimeZone"><g:message code="person.defaultTimeZone.label" default="Default Time Zone" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'defaultTimeZone', 'errors')}">
+                                    <joda:dateTimeZoneSelect name="defaultTimeZone" value="${personInstance?.defaultTimeZone}" />
+
+                                </td>
+                            </tr>
+                            
                             <shiro:hasRole name="SysAdmin">
                               <tr class="prop">
                                   <td valign="top" class="name">

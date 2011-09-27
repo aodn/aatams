@@ -22,7 +22,7 @@ class ReceiverDeployment
 
     Integer deploymentNumber
     
-    DateTime deploymentDateTime
+    DateTime deploymentDateTime = new DateTime(Person.defaultTimeZone())
 
     static mapping =
     {

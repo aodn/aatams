@@ -39,13 +39,13 @@ class AnimalRelease
 
     String captureLocality
     Point captureLocation
-    DateTime captureDateTime
+    DateTime captureDateTime = new DateTime(Person.defaultTimeZone())
     
     CaptureMethod captureMethod
     
     String releaseLocality
     Point releaseLocation
-    DateTime releaseDateTime
+    DateTime releaseDateTime = new DateTime(Person.defaultTimeZone())
 
     String comments
     

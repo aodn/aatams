@@ -31,7 +31,7 @@ class ReceiverRecovery
         comments type: 'text'
     }
     
-    DateTime recoveryDateTime
+    DateTime recoveryDateTime = new DateTime(Person.defaultTimeZone())
     Point location
     DeviceStatus status
     

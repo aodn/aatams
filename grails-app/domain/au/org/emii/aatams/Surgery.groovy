@@ -23,7 +23,7 @@ class Surgery
         comments type: 'text'
     }
     
-    DateTime timestamp
+    DateTime timestamp = new DateTime(Person.defaultTimeZone())
     SurgeryType type
     SurgeryTreatmentType treatmentType
     String comments

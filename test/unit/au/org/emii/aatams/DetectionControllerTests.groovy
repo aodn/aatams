@@ -13,6 +13,7 @@ class DetectionControllerTests extends ControllerUnitTestCase
     {
         super.setUp()
         
+        mockDomain(Person)
         deployment1 = new ReceiverDeployment()
         deployment2 = new ReceiverDeployment()
         

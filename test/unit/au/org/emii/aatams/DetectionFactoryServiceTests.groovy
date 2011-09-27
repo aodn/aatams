@@ -54,6 +54,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
     
     def setupBasicEntities()
     {
+        mockDomain(Person)
         receiver = new Receiver(codeName:receiverCodeName,
                                          organisation:new Organisation(),
                                          model:new ReceiverDeviceModel(),

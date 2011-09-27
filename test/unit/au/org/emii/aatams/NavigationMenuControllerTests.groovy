@@ -9,6 +9,7 @@ import org.apache.shiro.SecurityUtils
 class NavigationMenuControllerTests extends ControllerUnitTestCase 
 {
     def permissionUtilsService
+    def person
     
     protected void setUp() 
     {
@@ -20,7 +21,7 @@ class NavigationMenuControllerTests extends ControllerUnitTestCase
         
         controller.permissionUtilsService = permissionUtilsService
         
-        def person = new Person(username:"person")
+        person = new Person(username:"person")
                                
         mockDomain(Person, [person])
         person.save()

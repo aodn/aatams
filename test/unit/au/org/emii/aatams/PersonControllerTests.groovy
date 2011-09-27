@@ -2,6 +2,8 @@ package au.org.emii.aatams
 
 import grails.test.*
 
+import org.joda.time.DateTimeZone
+
 import org.apache.shiro.crypto.hash.Sha256Hash
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
@@ -149,7 +151,8 @@ class PersonControllerTests extends ControllerUnitTestCase
                       passwordConfirm: "password",
                       organisation:new Organisation(),
                       phoneNumber:"1234",
-                      emailAddress:"john@asdf.com")
+                      emailAddress:"john@asdf.com",
+                      defaultTimeZone:DateTimeZone.forID("Australia/Melbourne"))
                   
         mockForConstraintsTests(PersonCreateCommand, [cmd])
         assertTrue(cmd.validate())

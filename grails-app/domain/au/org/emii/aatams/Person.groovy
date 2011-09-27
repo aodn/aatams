@@ -50,7 +50,7 @@ class Person extends SecUser
     {
         return ListUtils.fold(projectRoles, "project")
     }
-    
+
     static defaultTimeZone()
     {
         try

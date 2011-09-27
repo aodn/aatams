@@ -28,8 +28,11 @@ class CachedDbRealmTests extends GrailsUnitTestCase
         Person userDiff = new Person(username:"userDiff", passwordHash:"asdf")
         def userList = [user, userDiff]
         mockDomain(Person, userList)
+        SecUser.metaClass.static.findByUsername =
+        {
+            return user
+        }
         
-        mockDomain(SecUser, userList)
         userList.each{ it.save() }
         
         SecUser.metaClass.static.executeQuery =

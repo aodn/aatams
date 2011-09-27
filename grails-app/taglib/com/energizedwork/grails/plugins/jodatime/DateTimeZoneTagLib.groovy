@@ -38,9 +38,7 @@ class DateTimeZoneTagLib {
 
 		// set the option value as a closure that formats the DateTimeZone for display
 		attrs.optionValue = {
-			DateTimeZone tz = DateTimeZone.forID(it)
-			def offset = ZONE_FORMATTER.withZone(tz).print(time)
-			return "$it $offset"
+			return "$it"
 		}
 
 		// use generic select

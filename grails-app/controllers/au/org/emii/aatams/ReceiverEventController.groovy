@@ -14,9 +14,7 @@ class ReceiverEventController {
     }
 
     def create = {
-        def receiverEventInstance = new ReceiverEvent()
-        receiverEventInstance.properties = params
-        return [receiverEventInstance: receiverEventInstance]
+        redirect(controller:"receiverDownloadFile", action:"create")
     }
 
     def save = {

@@ -25,8 +25,6 @@
             </div>
             </g:hasErrors>
             <g:uploadForm action="save" >
-                <g:hiddenField name="downloadId" value="${receiverDownloadFileInstance?.receiverDownload?.id}" />
-                <g:hiddenField name="projectId" value="${projectId}" />
                 <div class="dialog">
                     <table>
                         <tbody>

@@ -130,24 +130,24 @@ log4j = {
 //  File uploader configuration.
 //
 fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads"
-/**
-environments 
-{
-    production 
-    {
-        fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads"
-    }
-    
-    development 
-    {
-        fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
-    }
-    
-    test 
-    {
-    }
-}
-*/
+//environments 
+//{
+//    production 
+//    {
+//        fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads"
+//    }
+//    
+//    development 
+//    {
+//        fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
+//    }
+//    
+//    test 
+//    {
+//    }
+//}
+
+
 // Date formats.
 //jodatime.format.org.joda.time.DateTime = "yyyy-MM-dd'T'HH:mm:ssZ"
 jodatime.format.org.joda.time.DateTime = "dd/MM/yyyy HH:mm:ss zz"

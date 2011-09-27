@@ -65,24 +65,7 @@
           </li>
         </g:each>
       </ul>
-<%--      
-      <h3>${message(code: 'navigationMenu.section.field.label', default: 'Field Data')} </h3>
-      <ul>
-        <g:each var="c" in="${fieldDataControllers}">
-          
-          <li class="fieldDataControllers">
-            <g:link controller="${c.key}">${c.value}</g:link>
-
-            <shiro:hasPermission permission="projectWriteAny"> 
-              <span class="inline">
-                <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
-              </span>
-            </shiro:hasPermission>
-          </li>
-        </g:each>
-      </ul>
---%>
-      
+     
       <h3>${message(code: 'navigationMenu.section.field.label', default: 'Field Data')} </h3>
       <ul>
         <g:each var="c" in="${fieldDataControllers}">

@@ -57,10 +57,10 @@ class NavigationMenuControllerTests extends ControllerUnitTestCase
         
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'tag', label:'Tags', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'animalRelease', label:'Tag Releases', canCreateNew:true)))
-        assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'detection', label:'Tag Detections', canCreateNew:false)))
+        assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'detection', label:'Tag Detections', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'receiverDeployment', label:'Receiver Deployment', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'receiverRecovery', label:'Receiver Recovery', canCreateNew:true)))
-        assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'receiverEvent', label:'Receiver Events', canCreateNew:false)))
+        assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'receiverEvent', label:'Receiver Events', canCreateNew:true)))
     }
 
     void testFieldDataControllersAsSysAdmin() 

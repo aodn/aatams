@@ -10,7 +10,9 @@
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
-            <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
+            <shiro:user>
+              <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
+            </shiro:user>
         </div>
         <div class="body">
             <h1><g:message code="default.list.label" args="[entityName]" /></h1>
@@ -22,11 +24,19 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'receiverDownloadFile.id.label', default: 'Id')}" />
+                            <td/>
                         
                             <g:sortableColumn property="type" title="${message(code: 'receiverDownloadFile.type.label', default: 'Type')}" />
                         
-                            <g:sortableColumn property="path" title="${message(code: 'receiverDownloadFile.path.label', default: 'Path')}" />
+                            <shiro:hasRole name="SysAdmin">
+                              <g:sortableColumn property="path" title="${message(code: 'receiverDownloadFile.path.label', default: 'Path')}" />
+                            </shiro:hasRole>
+                            
+                            <g:sortableColumn property="errMsg" title="${message(code: 'receiverDownloadFile.errMsg.label', default: 'Err Msg')}" />
+                        
+                            <g:sortableColumn property="importDate" title="${message(code: 'receiverDownloadFile.importDate.label', default: 'Import Date')}" />
+                        
+                            <g:sortableColumn property="name" title="${message(code: 'receiverDownloadFile.name.label', default: 'Name')}" />
                         
                         </tr>
                     </thead>
@@ -34,11 +44,19 @@
                     <g:each in="${receiverDownloadFileInstanceList}" status="i" var="receiverDownloadFileInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${receiverDownloadFileInstance.id}">${fieldValue(bean: receiverDownloadFileInstance, field: "id")}</g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${receiverDownloadFileInstance.id}">.</g:link></td>
                         
                             <td>${fieldValue(bean: receiverDownloadFileInstance, field: "type")}</td>
                         
-                            <td>${fieldValue(bean: receiverDownloadFileInstance, field: "path")}</td>
+                            <shiro:hasRole name="SysAdmin">
+                              <td>${fieldValue(bean: receiverDownloadFileInstance, field: "path")}</td>
+                            </shiro:hasRole>
+                        
+                            <td>${fieldValue(bean: receiverDownloadFileInstance, field: "errMsg")}</td>
+                        
+                            <td><g:formatDate date="${receiverDownloadFileInstance.importDate}" /></td>
+                        
+                            <td>${fieldValue(bean: receiverDownloadFileInstance, field: "name")}</td>
                         
                         </tr>
                     </g:each>

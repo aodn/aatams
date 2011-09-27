@@ -34,7 +34,6 @@ class ReceiverRecovery
     DateTime recoveryDateTime
     Point location
     DeviceStatus status
-    ReceiverDownload download
     
     String comments
 
@@ -43,7 +42,6 @@ class ReceiverRecovery
         recoveryDateTime()
         location()
         status()
-        download(nullable:true)
         recoverer()
         deployment()
         comments(nullable:true)

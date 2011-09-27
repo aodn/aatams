@@ -357,8 +357,7 @@ class PerformanceDataInitialiser extends AbstractDataInitialiser
                                          recoverer:recoverer,
                                          recoveryDateTime:recoveryDateTime,
                                          location:(Point)reader.read("POINT(10.1234 10.1234)"),
-                                         status: deployedStatus,
-                                         download:new ReceiverDownload(downloadDateTime:recoveryDateTime))
+                                         status: deployedStatus)
                                              
                 receiverDeployment.recovery = receiverRecovery
                 receiver.save()

@@ -22,8 +22,6 @@ class ReceiverDownloadFile
     
     Person requestingUser
     
-    static belongsTo = [receiverDownload: ReceiverDownload]
-
     static constraints =
     {
         type()
@@ -34,15 +32,6 @@ class ReceiverDownloadFile
     {
         errMsg type: 'text'
     }
-    
-//    ReceiverDownloadFile(String fullPath, String name)
-//    {
-//        this.importDate = new Date()
-//        this.name = name
-//        this.path = fullPath
-//        this.type = ReceiverDownloadFileType.fromPath(fullPath)
-//        this.status = FileProcessingStatus.PENDING
-//    }
     
     String toString()
     {

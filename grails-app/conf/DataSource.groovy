@@ -16,7 +16,7 @@ environments {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'
             driverClassName = "org.postgresql.Driver"
-            url = "jdbc:postgresql://localhost:5433/aatams"
+            url = "jdbc:postgresql://localhost:5432/aatams"
             username = "aatams"
             password = "aatams"
             

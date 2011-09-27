@@ -86,7 +86,7 @@ class BootStrap
         {
             def returnArray = [:]
             returnArray['id'] = it.id
-            returnArray['label'] = it.getCodeMapPingCode()
+            returnArray['label'] = it.serialNumber
             returnArray['serialNumber'] = it.serialNumber
             returnArray['model'] = it.model
             returnArray['transmitterType'] = it.transmitterType

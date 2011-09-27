@@ -149,6 +149,12 @@ function isEditView(data)
 
 function updateSurgeryTable(data, projectId, idPrefix)
 {
+    if (!data.instance)
+    {
+        // Error condition, no instance was returned.
+        return
+    }
+    
     var tableRow = $("<tr>");
 
     // Only show info colum in edit screen (i.e. when the surgery instance

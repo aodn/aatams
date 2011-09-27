@@ -34,8 +34,20 @@ class SurgeryController {
         params.tag['project'] = Project.get(params.projectId)
         params.tag['status'] = DeviceStatus.findByStatus('DEPLOYED')
         params.tag['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
-                
-        def tag = tagFactoryService.lookupOrCreate(params.tag)
+    
+        def tag = null
+        try
+        {
+            tag = tagFactoryService.lookupOrCreate(params.tag)
+        }
+        catch (IllegalArgumentException e)
+        {
+            log.error(e)
+            render ([errors:[localizedMessage:"Invalid code name for tag: " + params.tag?.codeName]] as JSON)
+            return
+        }
+
+        assert(tag): "tag cannot be null"
         surgeryInstance.tag = tag
         tag.addToSurgeries(surgeryInstance)
         detectionFactoryService.rescanForSurgery(surgeryInstance)

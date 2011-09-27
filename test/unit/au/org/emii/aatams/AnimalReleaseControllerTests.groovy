@@ -44,6 +44,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         
         controller.candidateEntitiesService = candidateEntitiesService
         
+        mockDomain(Person)
         mockDomain(AnimalRelease)
         
         mockLogging(AnimalFactoryService)

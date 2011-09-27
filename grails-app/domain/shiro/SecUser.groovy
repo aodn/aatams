@@ -4,6 +4,8 @@ class SecUser {
     String username
     String passwordHash
     
+    def defaultTimeZone
+    
     static hasMany = [ roles: SecRole, permissions: String ]
 
     static constraints = {

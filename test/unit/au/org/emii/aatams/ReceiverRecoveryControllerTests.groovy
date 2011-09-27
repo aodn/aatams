@@ -13,6 +13,8 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
     {
         super.setUp()
         
+        mockDomain(Person)
+
         // See http://jira.grails.org/browse/GRAILS-5926
         controller.metaClass.message = { Map map -> return "error message" }
         

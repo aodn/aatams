@@ -28,6 +28,7 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
     {
         super.setUp()
 
+        mockDomain(Person)
         newStatus = new DeviceStatus(status:"NEW")
         deployedStatus = new DeviceStatus(status:"DEPLOYED")
         recoveredStatus = new DeviceStatus(status:"RECOVERED")

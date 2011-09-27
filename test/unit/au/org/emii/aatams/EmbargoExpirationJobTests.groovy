@@ -13,6 +13,7 @@ class EmbargoExpirationJobTests extends GrailsUnitTestCase
         super.setUp()
         
         mockConfig("animalRelease { embargoExpiration {warningPeriodMonths = 1}}")
+        mockDomain(Person)
 
         mockLogging(EmbargoExpirationJob, true)
         job = new EmbargoExpirationJob()

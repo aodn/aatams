@@ -15,7 +15,8 @@ class TimeZoneTests extends GrailsUnitTestCase
     protected void setUp() 
     {
         super.setUp()
-        
+
+        mockDomain(Person)
         def person = new Person(username:"person",
                                 organisation:new Organisation(),
                                 defaultTimeZone:userTZ)

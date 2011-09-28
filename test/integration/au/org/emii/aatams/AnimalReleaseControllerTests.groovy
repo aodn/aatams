@@ -41,7 +41,35 @@ class AnimalReleaseControllerTests extends GroovyTestCase
         controller.tagFactoryService = tagFactoryService
         
         project = Project.build().save(failOnError:true)
-        def org = Organisation.build().save(failOnError:true)
+        
+        Person personOrg =
+            new Person(username:'person',
+                       passwordHash:"asdf",
+                       name:'Person',
+                       //organisation:imosOrg,
+                       phoneNumber:'1234',
+                       emailAddress:'person@utas.edu.au',
+                       status:EntityStatus.ACTIVE,
+                       defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
+
+        Address csiroStreetAddress =
+            new Address(streetAddress:'12 Smith Street',
+                        suburbTown:'Hobart',
+                        state:'TAS',
+                        country:'Australia',
+                        postcode:'7000').save()
+        Organisation org = 
+            new Organisation(name:'CSIRO', 
+                             department:'CMAR',
+                             phoneNumber:'1234',
+                             faxNumber:'1234',
+                             streetAddress:csiroStreetAddress,
+                             postalAddress:csiroStreetAddress,
+                             status:EntityStatus.ACTIVE,
+                             requestingUser:personOrg).save(failOnError: true)
+
+        personOrg.organisation = org
+        personOrg.save()
         
         def pinger = TransmitterType.build(transmitterTypeName:'PINGER').save()
         deployedStatus = DeviceStatus.build(status:'DEPLOYED').save()
@@ -71,7 +99,7 @@ class AnimalReleaseControllerTests extends GroovyTestCase
                                      location:(Point)reader.read("POINT(30.1234 30.1234)"))
         deployment.save(failOnError:true)
         
-        def person = Person.build(username:'jbloggs', organisation:org).save(failOnError:true)
+        def person = Person.build(username:'jbloggs', organisation:org, defaultTimeZone:DateTimeZone.forID("Australia/Perth")).save(failOnError:true)
         
         def recoverer = ProjectRole.build(project:project, person:person)
         recoverer.save(failOnError:true)

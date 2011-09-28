@@ -1,6 +1,7 @@
 package au.org.emii.aatams.notification
 
 import grails.test.*
+import grails.converters.JSON
 
 import au.org.emii.aatams.*
 
@@ -10,7 +11,7 @@ import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
-class NotificationServiceTests extends GrailsUnitTestCase 
+class NotificationControllerTests extends ControllerUnitTestCase 
 {
     def notificationService
     def person
@@ -35,6 +36,8 @@ class NotificationServiceTests extends GrailsUnitTestCase
         mockLogging(PermissionUtilsService, true)
         permissionUtilsService = new PermissionUtilsService()
         notificationService.permissionUtilsService = permissionUtilsService
+        
+        controller.notificationService = notificationService
         
         person = new Person(name:"Joe Bloggs",
                             username:"person",
@@ -81,77 +84,58 @@ class NotificationServiceTests extends GrailsUnitTestCase
         mockDomain(Notification, notificationList)
         notificationList.each { it.save() }
     }
-
+    
     protected void tearDown() 
     {
         super.tearDown()
     }
 
-    void testActiveNotifications()
+    void testAcknowledgeNoKey() 
     {
-        def notificationList = notificationService.listActive()
+        controller.acknowledge()
+     
+        def jsonResponse = JSON.parse(controller.response.contentAsString)
+        println jsonResponse
         
-        assertTrue(notificationList.contains(gettingStarted))
-        assertTrue(notificationList.contains(receiverRecoveryCreate))
-        assertFalse(notificationList.contains(register))
+        assertFalse(jsonResponse.result)
+    }
+    
+    void testAcknowledgeValidKey() 
+    {
+        controller.params.key = "GETTING_STARTED"
+        controller.acknowledge()
+     
+        def jsonResponse = JSON.parse(controller.response.contentAsString)
+        println jsonResponse
         
-        subject = [ getPrincipal: { null },
+        assertTrue(jsonResponse.result)
+    }
+
+    void testAcknowledgeInvalidKey() 
+    {
+        controller.params.key = "XYZ"
+        controller.acknowledge()
+     
+        def jsonResponse = JSON.parse(controller.response.contentAsString)
+        println jsonResponse
+        
+        assertFalse(jsonResponse.result)
+    }
+    
+    void testAcknowledgeUnathenticated()
+    {
+        subject =     [ getPrincipal: { null },
                         isAuthenticated: { false },
                         hasRole: { false },
                         isPermitted: { false }
                       ] as Subject
-                      
-        notificationList = notificationService.listActive()
         
-        assertFalse(notificationList.contains(gettingStarted))
-        assertFalse(notificationList.contains(receiverRecoveryCreate))
-        assertTrue(notificationList.contains(register))
+        controller.params.key = "GETTING_STARTED"
+        controller.acknowledge()
+     
+        def jsonResponse = JSON.parse(controller.response.contentAsString)
+        println jsonResponse
+        
+        assertTrue(jsonResponse.result)
     }
-    
-    void testAcknowledgeNotifications()
-    {
-        def notificationList = notificationService.listActive()
-        assertTrue(notificationList.contains(gettingStarted))
-        assertTrue(notificationList.contains(receiverRecoveryCreate))
-        
-        notificationService.acknowledge(gettingStarted)
-        notificationList = notificationService.listActive()
-        assertFalse(notificationList.contains(gettingStarted))
-        assertTrue(notificationList.contains(receiverRecoveryCreate))
-        
-        subject =     [ getPrincipal: { otherPerson.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted: { true }
-                      ] as Subject
-
-        notificationList = notificationService.listActive()
-        assertTrue(notificationList.contains(gettingStarted))
-        assertTrue(notificationList.contains(receiverRecoveryCreate))
-
-    }
-    
-    void testAcknowledgeNotificationsByKey()
-    {
-        def notificationList = notificationService.listActive()
-        assertTrue(notificationList.contains(gettingStarted))
-        assertTrue(notificationList.contains(receiverRecoveryCreate))
-        
-        notificationService.acknowledge("GETTING_STARTED")
-        notificationList = notificationService.listActive()
-        assertFalse(notificationList.contains(gettingStarted))
-        assertTrue(notificationList.contains(receiverRecoveryCreate))
-        
-        subject =     [ getPrincipal: { otherPerson.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted: { true }
-                      ] as Subject
-
-        notificationList = notificationService.listActive()
-        assertTrue(notificationList.contains(gettingStarted))
-        assertTrue(notificationList.contains(receiverRecoveryCreate))
-
-    }
-    
 }

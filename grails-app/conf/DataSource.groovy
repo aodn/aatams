@@ -23,31 +23,21 @@ environments {
         }
     }
 
-    //
-    // data-entry copy
-    //
-//    development {
-//        dataSource {
-//            dbCreate = "update"
-//            driverClassName = "org.postgresql.Driver"
-////            url = "jdbc:postgresql://localhost:5432/aatams3"
-//            url = "jdbc:postgresql://localhost:5433/aatams3"
-//            username = "aatams"
-//            password = "aatams"
-//            
-//        }
-//    }
     test {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'
             driverClassName = "org.postgresql.Driver"
-            url = "jdbc:postgresql://hudson.emii.org.au:5432/aatams_test?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
+            url = "jdbc:postgresql://localhost:5432/aatams"
             username = "aatams"
-            password = "fishybusiness"
+            password = "aatams"
+            
         }
 //        dataSource {
-//            dbCreate = "update"
-//            url = "jdbc:hsqldb:mem:testDb"
+//            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
+//            driverClassName = "org.postgresql.Driver"
+//            url = "jdbc:postgresql://hudson.emii.org.au:5432/aatams_test?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
+//            username = "aatams"
+//            password = "fishybusiness"
 //        }
     }
     

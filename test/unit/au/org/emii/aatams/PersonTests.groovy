@@ -16,7 +16,6 @@ class PersonTests extends GrailsUnitTestCase
     {
         super.setUp()
 
-        mockDomain(Person)
         def person = new Person(username:"person",
                                 organisation:new Organisation(),
                                 defaultTimeZone:perthTZ)

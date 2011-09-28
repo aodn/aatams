@@ -6,10 +6,6 @@ class NotificationTagLib
     {
         attrs, body ->
         
-        println("attrs: " + attrs)
-        println("key: " + attrs.value.key)
-        println("htmlFragment: " + attrs.value.htmlFragment)
-        
         out << render(template:"/common/notificationTemplate",
                       model:[id:attrs.value.id,
                              key:attrs.value.key,

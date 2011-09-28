@@ -54,11 +54,12 @@ $(function()
                        when: 'click',
                        target: anchor
                    },
+                   data: {'key':$(this).attr("key")},
                    api : 
                    {
                        onHide : function()
                        {
-                           alert("onHide")
+                           acknowledge($(this)[0].options.data.key)
                        },
                        
                        onRender: function() 
@@ -73,3 +74,16 @@ $(function()
         });
     })
 });
+
+function acknowledge(key)
+{
+    console.log("key: " + key)
+    
+    $.post('/aatams/notification/acknowledge',
+           {'key':key},
+           function()
+           {
+               // Nothing to do.
+           },
+           'json');
+}

@@ -14,7 +14,8 @@ class ReceiverEventController {
     }
 
     def create = {
-        redirect(controller:"receiverDownloadFile", action:"create")
+        redirect(controller:"receiverDownloadFile", 
+                 action:"createEvents") 
     }
 
     def save = {

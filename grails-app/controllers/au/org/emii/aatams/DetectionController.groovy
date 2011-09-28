@@ -16,7 +16,8 @@ class DetectionController {
     }
 
     def create = {
-        redirect(controller:"receiverDownloadFile", action:"create")
+        redirect(controller:"receiverDownloadFile", 
+                 action:"createDetections") 
     }
 
     def save = {

@@ -21,6 +21,17 @@ enum ReceiverDownloadFileType
 
     static list()
     {
-        [DETECTIONS_CSV ,EVENTS_CSV, VRL('VRL'), RLD('RLD')]
+        [DETECTIONS_CSV, EVENTS_CSV, VRL, RLD]
     }
+    
+    static detectionTypes()
+    {
+        [DETECTIONS_CSV, VRL, RLD]
+    }
+    
+    static eventTypes()
+    {
+        [EVENTS_CSV]
+    }
+    
 }

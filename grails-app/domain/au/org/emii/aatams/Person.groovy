@@ -60,8 +60,13 @@ class Person extends SecUser
                 return DateTimeZone.getDefault()
             }
 
-            Person principal = Person.findByUsername(SecurityUtils.subject?.principal, [cache:true])
+            Person principal = Person.findByUsername(SecurityUtils.subject?.principal)
             return principal?.defaultTimeZone
+        }
+        // This is being thrown for findByUsername in cobertura coverage tests.
+        catch (MissingMethodException e)
+        {
+            return DateTimeZone.getDefault()
         }
         catch (UnavailableSecurityManagerException e)
         {

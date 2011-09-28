@@ -128,7 +128,7 @@
       <img src="${resource(dir:'images',file:'spinner.gif')}" alt="${message(code:'spinner.alt',default:'Loading...')}" />
     </div>
 
-    <div id="notifications">
+    <div id="notifications" style="display:none;">
       <g:each in="${notifications}">
         <g:notification value="${it}" />
       </g:each>

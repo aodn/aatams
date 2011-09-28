@@ -1,4 +1,4 @@
-<div id="notification_${id}" style="display:none;" anchorSelector="${anchorSelector}">
-  <pre class="tip">${htmlFragment}</pre>
-</div>
-                      
+<div id="notification_${id}" 
+     style="display:none;" 
+     anchorSelector="${anchorSelector}" 
+     htmlFragment="${htmlFragment}" ></div>

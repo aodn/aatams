@@ -47,6 +47,6 @@ class DetectionControllerTests extends ControllerUnitTestCase
         controller.create()
         
         assertEquals("receiverDownloadFile", controller.redirectArgs.controller)
-        assertEquals("create", controller.redirectArgs.action)
+        assertEquals("createDetections", controller.redirectArgs.action)
     }
 }

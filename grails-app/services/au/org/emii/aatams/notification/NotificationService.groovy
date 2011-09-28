@@ -14,8 +14,6 @@ class NotificationService
         {
             notification ->
             
-            log.debug("Checking notification: " + notification)
-            
             return notification.isActiveForPerson(permissionUtilsService.principal())
         }
         

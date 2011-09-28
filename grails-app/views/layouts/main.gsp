@@ -19,7 +19,9 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'addsensortotag.js')}"></script>
 
     <g:javascript src="asAbove.js"/>
+    <g:javascript src="jquery.qtip-1.0.0-rc3.min.js"/>
     <g:javascript src="notification.js"/>
+    <link ref="stylesheet" type="text/css" href="${resource(dir:'js/bubbletip', file:'bubbletip.css')}" />
     
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'custom-theme/jquery-ui-1.8.13.custom.css')}"/>
@@ -109,10 +111,10 @@
 
     </style>
 
-
   </head>
   <body>
 
+    
    <div id="boxes">
       <div id="dialog" class="window fixed">
         <a href="#" class="close right">Close</a>
@@ -126,7 +128,7 @@
       <img src="${resource(dir:'images',file:'spinner.gif')}" alt="${message(code:'spinner.alt',default:'Loading...')}" />
     </div>
 
-    <div class="notifications">
+    <div id="notifications">
       <g:each in="${notifications}">
         <g:notification value="${it}" />
       </g:each>
@@ -167,7 +169,9 @@
     </div>
 
     <div class="ui-layout-center">
+      
       <g:layoutBody />
+      
     </div>
 
     <!-- Do this last, so that the code which updates point tag fields on page 

@@ -19,12 +19,31 @@ class ReceiverDownloadFileController
         [receiverDownloadFileInstanceList: ReceiverDownloadFile.list(params), receiverDownloadFileInstanceTotal: ReceiverDownloadFile.count()]
     }
 
-    def create = 
+    def create()  
     {
         def receiverDownloadFileInstance = new ReceiverDownloadFile()
         receiverDownloadFileInstance.properties = params
         
-        return [receiverDownloadFileInstance: receiverDownloadFileInstance, projectId:params.projectId]
+        return [receiverDownloadFileInstance: receiverDownloadFileInstance]
+    }
+
+    def createDetections =  
+    {
+        return create()
+//        def receiverDownloadFileInstance = new ReceiverDownloadFile()
+//        receiverDownloadFileInstance.properties = params
+//        
+//        return [receiverDownloadFileInstance: receiverDownloadFileInstance]
+    }
+
+    def createEvents =  
+    {
+        return create()
+        
+//        def receiverDownloadFileInstance = new ReceiverDownloadFile()
+//        receiverDownloadFileInstance.properties = params
+//        
+//        return [receiverDownloadFileInstance: receiverDownloadFileInstance]
     }
 
     def save = 

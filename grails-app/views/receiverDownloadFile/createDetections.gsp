@@ -15,7 +15,7 @@
             <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
         </div>
         <div class="body">
-            <h1><g:message code="default.create.label" args="[entityName]" /></h1>
+            <h1><g:message code="default.upload.label" args="${['Tag Detections']}" /></h1>
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
@@ -34,7 +34,9 @@
                                     <label class="compulsory" for="type"><g:message code="receiverDownloadFile.type.label" default="Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'type', 'errors')}">
-                                    <g:select name="type" from="${au.org.emii.aatams.ReceiverDownloadFileType?.values()}" keys="${au.org.emii.aatams.ReceiverDownloadFileType?.values()*.name()}" value="${receiverDownloadFileInstance?.type?.name()}"  />
+                                    <g:select name="type" 
+                                              from="${au.org.emii.aatams.ReceiverDownloadFileType.detectionTypes()}" 
+                                              keys="${au.org.emii.aatams.ReceiverDownloadFileType.detectionTypes()*.name()}" />
 
                                 </td>
                             </tr>

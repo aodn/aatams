@@ -19,6 +19,7 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'addsensortotag.js')}"></script>
 
     <g:javascript src="asAbove.js"/>
+    <g:javascript src="notification.js"/>
     
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'custom-theme/jquery-ui-1.8.13.custom.css')}"/>
@@ -125,7 +126,12 @@
       <img src="${resource(dir:'images',file:'spinner.gif')}" alt="${message(code:'spinner.alt',default:'Loading...')}" />
     </div>
 
-
+    <div class="notifications">
+      <g:each in="${notifications}">
+        <g:notification value="${it}" />
+      </g:each>
+    </div>
+    
     <div class="ui-layout-north">
       <div id="logo">
         <img src="${resource(dir:'images',file:'IMOS-logo.png')}" alt="IMOS Logo"  />

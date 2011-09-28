@@ -2,6 +2,8 @@ package au.org.emii.aatams.data
 
 import au.org.emii.aatams.*
 
+import au.org.emii.aatams.notification.*
+
 import com.vividsolutions.jts.geom.Point
 import com.vividsolutions.jts.io.ParseException
 import com.vividsolutions.jts.io.WKTReader
@@ -33,6 +35,22 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
     
     def initData()
     {
+        Notification gettingStarted = 
+            new Notification(key:"GETTING_STARTED",
+                             htmlFragment:"Click here to get started",
+                             anchorSelector:"[href='/aatams/gettingStarted/index']").save(failOnError:true)
+    
+        Notification receiverRecoveryCreate =
+            new Notification(key:"RECEIVER_RECOVERY_CREATE",
+                             htmlFragment:"Click here to create a receiver recovery",
+                             anchorSelector:"td.rowButton > [href^='/aatams/receiverRecovery/create']").save(failOnError:true)
+
+        Notification register =
+            new Notification(key:"REGISTER",
+                             htmlFragment:"Click here to register to user AATAMS",
+                             anchorSelector:"#userlogin > [href^='/aatams/person/create']",
+                             unauthenticated:true).save(failOnError:true)
+        
         //
         // Addresses.
         //

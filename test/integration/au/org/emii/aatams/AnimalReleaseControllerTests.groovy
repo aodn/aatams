@@ -142,7 +142,7 @@ class AnimalReleaseControllerTests extends GroovyTestCase
         
         // Create the release/surgery etc...
         Animal animal = Animal.build().save()
-        controller.params.animal = [id:animal.id]
+        controller.params.animal = animal
         controller.params.species = animal.species
 
         controller.params.project = project

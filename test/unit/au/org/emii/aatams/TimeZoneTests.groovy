@@ -16,15 +16,7 @@ class TimeZoneTests extends GrailsUnitTestCase
     {
         super.setUp()
 
-        mockDomain(Person)
-        def person = new Person(username:"person",
-                                organisation:new Organisation(),
-                                defaultTimeZone:userTZ)
-                               
-        mockDomain(Person, [person])
-        person.save()
-        
-        def subject = [ getPrincipal: { person.username },
+        def subject = [ getPrincipal: { "person" },
                         isAuthenticated: { true },
                         hasRole: { true },
                         isPermitted: { true }
@@ -34,6 +26,14 @@ class TimeZoneTests extends GrailsUnitTestCase
                             [ getSubject: { subject } ] as SecurityManager )
 
         SecurityUtils.metaClass.static.getSubject = { subject }
+
+        def person = new Person(username:"person",
+                                organisation:new Organisation(),
+                                defaultTimeZone:userTZ)
+                               
+        mockDomain(Person, [person])
+        person.save()
+        
     }
 
     protected void tearDown() 

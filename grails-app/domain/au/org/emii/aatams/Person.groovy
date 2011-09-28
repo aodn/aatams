@@ -61,18 +61,15 @@ class Person extends SecUser
             }
 
             Person principal = Person.findByUsername(SecurityUtils.subject?.principal)
-            assert(principal.defaultTimeZone)
             return principal?.defaultTimeZone
         }
         // This is being thrown for findByUsername in cobertura coverage tests.
         catch (MissingMethodException e)
         {
-            assert(false)
             return DateTimeZone.getDefault()
         }
         catch (UnavailableSecurityManagerException e)
         {
-            assert(false)
             return DateTimeZone.getDefault()
         }
     }

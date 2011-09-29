@@ -17,9 +17,16 @@ class PersonControllerTests extends ControllerUnitTestCase
 {
     def permissionUtilsService
 
+    def hasRole = true
+    boolean mailSent
+    
     protected void setUp() 
     {
         super.setUp()
+        
+        mockDomain(Address)
+        mockDomain(Person)
+        mockDomain(Organisation)
         
         TestUtils.setupMessage(controller)
         initData()
@@ -28,21 +35,24 @@ class PersonControllerTests extends ControllerUnitTestCase
         permissionUtilsService = new PermissionUtilsService()
         controller.permissionUtilsService = permissionUtilsService
 
-        controller.metaClass.sendMail = {}
+        mailSent = false
+        controller.metaClass.sendMail = { mailSent = true }
         
-        def subject = [ getPrincipal: { "username" },
+        Person user = new Person(username: "username")
+        mockDomain(Person, [user])
+        user.save()
+        
+        def subject = [ getPrincipal: { user.username },
                         isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted:
-                        {
-                            return true
-                        }
+                        hasRole: { hasRole },
+                        isPermitted: { false },
                       ] as Subject
 
         ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
                             [ getSubject: { subject } ] as SecurityManager )
 
         SecurityUtils.metaClass.static.getSubject = { subject }
+        
     }
 
     protected void tearDown() 
@@ -185,4 +195,100 @@ class PersonControllerTests extends ControllerUnitTestCase
         def updatedPerson = Person.findByName("John")
         assertEquals("wayne", updatedPerson.username)
     }
+    
+    void testSaveExistingOrganisation()
+    {
+        hasRole = false
+        
+        Organisation org = new Organisation(name:"org", status:EntityStatus.ACTIVE)
+        mockDomain(Organisation, [org])
+        org.save()
+        
+        def cmd = new PersonCreateCommand(
+                      name: "John",
+                      username: "John",
+                      password: "password",
+                      passwordConfirm: "password",
+                      organisation:org,
+                      unlistedOrganisationName:null,
+                      phoneNumber:"1234",
+                      emailAddress:"john@asdf.com",
+                      defaultTimeZone:DateTimeZone.forID("Australia/Melbourne"))
+                  
+        mockForConstraintsTests(PersonCreateCommand, [cmd])
+        assertTrue(cmd.validate())
+
+        controller.save(cmd)
+        
+        assertEquals("john", Person.findByName("John").username)
+        assertEquals("show", controller.redirectArgs.action)
+        
+        assertTrue(mailSent)
+    }
+    
+    void testSaveUnlistedOrganisation()
+    {
+        hasRole = false
+        
+        mockDomain(Organisation)
+        
+        def cmd = new PersonCreateCommand(
+                      name: "John",
+                      username: "John",
+                      password: "password",
+                      passwordConfirm: "password",
+                      organisation:null,
+                      unlistedOrganisationName:"unlisted",
+                      phoneNumber:"1234",
+                      emailAddress:"john@asdf.com",
+                      defaultTimeZone:DateTimeZone.forID("Australia/Melbourne"))
+                  
+        mockForConstraintsTests(PersonCreateCommand, [cmd])
+        assertTrue(cmd.validate())
+
+        controller.save(cmd)
+        
+        assertEquals("john", Person.findByName("John").username)
+        assertEquals(EntityStatus.PENDING, Person.findByName("John").status)
+
+        assertNotNull(Organisation.findByName("unlisted"))
+        assertEquals(EntityStatus.PENDING, Organisation.findByName("unlisted").status)
+        assertEquals(Organisation.findByName("unlisted"), Person.findByName("John").organisation)
+        
+        assertEquals("show", controller.redirectArgs.action)
+    
+        assertTrue(mailSent)
+    }
+    
+    void testSaveBothOrganisationAndOrgName()
+    {
+        hasRole = false
+        
+        Organisation org = new Organisation(name:"org", status:EntityStatus.ACTIVE)
+        mockDomain(Organisation, [org])
+        org.save()
+        
+        def cmd = new PersonCreateCommand(
+                      name: "John",
+                      username: "John",
+                      password: "password",
+                      passwordConfirm: "password",
+                      organisation:org,
+                      unlistedOrganisationName:"unlisted",
+                      phoneNumber:"1234",
+                      emailAddress:"john@asdf.com",
+                      defaultTimeZone:DateTimeZone.forID("Australia/Melbourne"))
+                  
+        mockForConstraintsTests(PersonCreateCommand, [cmd])
+        assertFalse(cmd.validate())
+
+        controller.save(cmd)
+        
+        assertEquals("create", controller.renderArgs.view)
+        assertNull(Person.findByName("John"))
+        assertNull(Organisation.findByName("unlisted"))
+        assertFalse(mailSent)
+    }
 }
+
+

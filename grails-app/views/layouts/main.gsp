@@ -62,19 +62,19 @@
 
     var myLayout; // a var is required because this page utilizes: myLayout.allowOverflow() method
 
-    $(document).ready(function () {
-
-      myLayout = $('body').layout({
-      north__resizable:  false,
-      north__closable: false,
-      spacing_closed:			10,
-      // enable showOverflow on west-pane so popups will overlap north pane
-      west__showOverflowOnHover: false,
-      west__resizable:  false,
-      west__closable: false
-    });
-
-
+    $(document).ready(function () 
+    {
+      myLayout = $('body').layout(
+      {
+        north__resizable:  false,
+        north__closable: false,
+        spacing_closed:			10,
+        // enable showOverflow on west-pane so popups will overlap north pane
+        west__showOverflowOnHover: false,
+        west__resizable:  false,
+        west__closable: false,
+        west__size: 230
+      });
     });
 
     </script>

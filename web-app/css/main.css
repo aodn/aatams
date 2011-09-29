@@ -584,3 +584,30 @@ div.filter td {
     border: 0;
 }
 
+.mainTitle {
+    font-weight: bold;
+    float: left;
+/*    margin-top: 15px;    
+    margin-bottom: 5px;*/
+
+    padding-left:30px;
+    color: #3A728B;
+   /* font-weight: bold;*/
+    text-decoration: none;
+    font-size: xx-large;
+    vertical-align:middle;
+}
+
+#footerLogo
+{
+    text-align:center;margin:0 auto;
+    width:50%;
+}
+
+#footerLogo img
+{
+    padding-top:0px;
+    padding-bottom:10px;
+    padding-right:30px;
+    padding-left:30px;
+}

@@ -64,22 +64,14 @@
 
     $(document).ready(function () {
 
-    myLayout = $('body').layout({
-    north__resizable:  false,
-    north__closable: false,
-    spacing_closed:			10,
-    // enable showOverflow on west-pane so popups will overlap north pane
-    west__showOverflowOnHover: false,
-    west__size: 250,
-    west__minSize: 250,
-    west__maxSize: 950,
-    west__closable: false
-    //togglerLength_closed:  "100%",
-    //west__togglerTip_open:		"Close Menu",
-    //west__togglerTip_closed:		"Open Menu"
-
-    //west__fxSettings_open: { easing: "easeOutBounce", duration: 750 },
-
+      myLayout = $('body').layout({
+      north__resizable:  false,
+      north__closable: false,
+      spacing_closed:			10,
+      // enable showOverflow on west-pane so popups will overlap north pane
+      west__showOverflowOnHover: false,
+      west__resizable:  false,
+      west__closable: false
     });
 
 
@@ -138,25 +130,22 @@
     </div>
     
     <div class="ui-layout-north">
-      <div id="logo">
-        <img src="${resource(dir:'images',file:'IMOS-logo.png')}" alt="IMOS Logo"  />
-        <h1>${message(code: 'default.application.detailedTitle', default: 'AATAMS data entry')}</h1>
+      <div class="mainTitle">${message(code: 'default.application.detailedTitle', default: 'AATAMS data entry')}</div>
 
-        <div id="userlogin">
-          <!-- Shown if not logged in. -->
-          <shiro:guest>
-              <g:link controller="auth" params="[targetUri:request.getRequestURI() - request.getContextPath()]">Login</g:link> |
-              <g:link controller="person" action="create">Register</g:link>
-              
-          </shiro:guest>
+      <div id="userlogin">
+        <!-- Shown if not logged in. -->
+        <shiro:guest>
+            <g:link controller="auth" params="[targetUri:request.getRequestURI() - request.getContextPath()]">Login</g:link> |
+            <g:link controller="person" action="create">Register</g:link>
 
-          <!-- Shown if logged in. -->
-          <shiro:user>
-            <div id="userlogout">
-              Logged in as <shiro:principal/> (<g:link controller="auth" action="signOut">logout</g:link>)
-            </div>
-          </shiro:user>
-        </div>
+        </shiro:guest>
+
+        <!-- Shown if logged in. -->
+        <shiro:user>
+          <div id="userlogout">
+            Logged in as <shiro:principal/> (<g:link controller="auth" action="signOut">logout</g:link>)
+          </div>
+        </shiro:user>
       </div>
 
     </div>
@@ -176,11 +165,18 @@
       <g:layoutBody />
       
     </div>
+    
+    <div class="ui-layout-south"> 
 
-    <!-- Do this last, so that the code which updates point tag fields on page 
-         doesn't cause a warning to be issued even when the user hasn't actually
-         changed the form. -->
-    <g:javascript src="formChangedWarning.js"/>
-  </body>
-  
+      <div id="footerLogo">
+        <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS-logo.png')}" alt="IMOS Logo"  /></a>
+        <a href="http://www.innovation.gov.au/"><img src="${resource(dir:'images',file:'aus.jpg')}" width="121" height="78" alt="" /></a>
+        <a href="http://www.utas.edu.au/"><img src="${resource(dir:'images',file:'utas.jpg')}" width="61" height="76" alt="" /></a>       
+        <p>IMOS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy and the Super Science Initiative.
+        It is led by the University of Tasmania on behalf of the Australian marine &amp; climate science community.</p>
+      </div>
+      
+    </div>
+    
+    
 </html>

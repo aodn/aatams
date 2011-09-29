@@ -37,6 +37,7 @@ class Organisation
     static mapping = 
     {
         status index:'status_index'
+        sort "name"
     }
     
     String toString()

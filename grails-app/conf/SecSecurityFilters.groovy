@@ -12,7 +12,7 @@ class SecSecurityFilters
     def permissionUtilsService
     
     def accessibleControllersRegexp = 
-        "animal|animalMeasurement|" + \
+        "animal|animalMeasurement|notification|" + \
         "organisation|organisationProject|project|projectRole|person|" + \
         "installation|installationStation|receiver|species|tag|sensor|" + \
         "animalRelease|detection|receiverDeployment|receiverRecovery|" + \
@@ -84,7 +84,7 @@ class SecSecurityFilters
         // Anyone (including unauthenticated users) can list/index/show the 
         // accessible controllers.
         //
-        listIndexShow(controller:accessibleControllersRegexp, action:'list|index|show')
+        listIndexShow(controller:accessibleControllersRegexp, action:'list|index|show|acknowledge')
         {
             before = 
             {

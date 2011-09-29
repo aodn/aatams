@@ -19,7 +19,10 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'addsensortotag.js')}"></script>
 
     <g:javascript src="asAbove.js"/>
+    
+    
     <g:javascript src="jquery.qtip-1.0.0-rc3.min.js"/>
+    <g:javascript src="jquery.cookie.js"/>
     <g:javascript src="notification.js"/>
     <link ref="stylesheet" type="text/css" href="${resource(dir:'js/bubbletip', file:'bubbletip.css')}" />
     

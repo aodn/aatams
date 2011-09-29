@@ -21,6 +21,9 @@ class ProjectControllerTests extends ControllerUnitTestCase
         permissionUtilsService = new PermissionUtilsService()
         controller.permissionUtilsService = permissionUtilsService
         
+        mockConfig("grails.gorm.default.list.max = 10")
+        controller.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
+
         sealCountProject =
             new Project(name:'Seal Count',
                         description:'Counting seals',

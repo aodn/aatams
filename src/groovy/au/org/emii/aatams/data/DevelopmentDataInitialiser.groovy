@@ -12,8 +12,6 @@ import org.apache.shiro.crypto.hash.Sha256Hash
 import org.joda.time.*
 import org.joda.time.format.DateTimeFormat
 
-import com.vividsolutions.jts.geom.Point
-
 import shiro.*
 
 /**

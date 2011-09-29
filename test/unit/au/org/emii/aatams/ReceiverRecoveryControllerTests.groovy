@@ -2,6 +2,8 @@ package au.org.emii.aatams
 
 import grails.test.*
 
+import com.vividsolutions.jts.geom.*
+
 class ReceiverRecoveryControllerTests extends ControllerUnitTestCase 
 {
     def candidateEntitiesService
@@ -170,7 +172,10 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
     
     void testCreate() 
     {
-        ReceiverDeployment deployment = new ReceiverDeployment()
+        Point location = new GeometryFactory().createPoint(new Coordinate(12f, 34f))
+        location.setSRID(4326)
+        
+        ReceiverDeployment deployment = new ReceiverDeployment(location:location)
         mockDomain(ReceiverDeployment, [deployment])
         deployment.save()
         deployment.metaClass.toString = { "test deployment"}
@@ -180,5 +185,6 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
         
         assertNotNull(model.receiverRecoveryInstance)
         assertEquals(deployment, model.receiverRecoveryInstance.deployment)
+        assertEquals(location, model.receiverRecoveryInstance.location)
     }
 }

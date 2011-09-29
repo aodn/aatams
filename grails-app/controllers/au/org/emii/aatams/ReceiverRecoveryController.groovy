@@ -95,6 +95,7 @@ class ReceiverRecoveryController
         def receiverRecoveryInstance = new ReceiverRecovery()
         receiverRecoveryInstance.properties = params
         receiverRecoveryInstance.deployment = deployment
+        receiverRecoveryInstance.location = deployment.location
         
         return [receiverRecoveryInstance: receiverRecoveryInstance]
     }

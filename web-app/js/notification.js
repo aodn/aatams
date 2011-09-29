@@ -15,6 +15,13 @@ $(function()
             
             if (anchorSelector == "#userlogin > [href^='/aatams/person/create']")
             {
+                // If the (unauthenticated) user has previously acknowledged the
+                // register notification, there will be a register cookie.
+                if ($.cookie('REGISTER'))
+                {
+                    return
+                }
+                    
                 // Special case for register, as this tip must be displayed below the link.
                 target = 'bottomLeft'
                 tooltip = 'topRight'
@@ -68,8 +75,6 @@ $(function()
                        }
                    }
                 });
-                
-                anchor.qtip('api').show();
             }
         });
     })
@@ -77,13 +82,23 @@ $(function()
 
 function acknowledge(key)
 {
-    console.log("key: " + key)
-    
-    $.post('/aatams/notification/acknowledge',
-           {'key':key},
-           function()
-           {
-               // Nothing to do.
-           },
-           'json');
+    // Special case for register - store this in a cookie if user has acknowledged
+    // this one.
+    if (key == "REGISTER")
+    {
+        $.cookie('REGISTER', "acknowledged", { expires: 7, path: '/'});    
+    }
+    else
+    {
+        $.post('/aatams/notification/acknowledge',
+               {'key':key},
+               function(data)
+               {
+                   // Nothing to do.
+                   console.log(data)
+               },
+               'json');
+               
+        console.log("posted")
+    }
 }

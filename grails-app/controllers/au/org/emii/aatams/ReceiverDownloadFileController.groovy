@@ -30,20 +30,11 @@ class ReceiverDownloadFileController
     def createDetections =  
     {
         return create()
-//        def receiverDownloadFileInstance = new ReceiverDownloadFile()
-//        receiverDownloadFileInstance.properties = params
-//        
-//        return [receiverDownloadFileInstance: receiverDownloadFileInstance]
     }
 
     def createEvents =  
     {
         return create()
-        
-//        def receiverDownloadFileInstance = new ReceiverDownloadFile()
-//        receiverDownloadFileInstance.properties = params
-//        
-//        return [receiverDownloadFileInstance: receiverDownloadFileInstance]
     }
 
     def save = 
@@ -64,16 +55,16 @@ class ReceiverDownloadFileController
             receiverDownloadFileInstance.errMsg = ""
             receiverDownloadFileInstance.importDate = new Date()
             receiverDownloadFileInstance.status = FileProcessingStatus.PROCESSING
-
             receiverDownloadFileInstance.requestingUser = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
             
             MultipartFile file = (fileMap.values() as List)[0]
+            receiverDownloadFileInstance.name = file.getOriginalFilename()
+            receiverDownloadFileInstance.path = String.valueOf(System.currentTimeMillis())
+            receiverDownloadFileInstance.save()
+
             def path = getPath(receiverDownloadFileInstance)
             String fullPath = path + File.separator + file.getOriginalFilename()
-
             receiverDownloadFileInstance.path = fullPath
-            receiverDownloadFileInstance.name = file.getOriginalFilename()
-
             receiverDownloadFileInstance.save(flush:true, failOnError:true)
 
             flash.message = "${message(code: 'default.processing.receiverUpload.message')}"

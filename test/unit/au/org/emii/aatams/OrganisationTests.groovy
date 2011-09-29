@@ -53,4 +53,21 @@ class OrganisationTests extends GrailsUnitTestCase
         assertEquals("CSIRO (CMAR)", String.valueOf(org))
     }
     
+    void testSortListByName()
+    {
+        Organisation aaa = new Organisation(name: "aaa")
+        Organisation bbb = new Organisation(name: "bbb")
+        Organisation ccc = new Organisation(name: "ccc")
+        
+        // Save out-of-order.
+        def orgList = [ccc, aaa, bbb]
+        
+        mockDomain(Organisation, orgList)
+        orgList.each { it.save() }
+        
+        def retrievedOrgList = Organisation.list(sort:'name')
+        assertEquals(aaa, retrievedOrgList[0])
+        assertEquals(bbb, retrievedOrgList[1])
+        assertEquals(ccc, retrievedOrgList[2])
+    }
 }

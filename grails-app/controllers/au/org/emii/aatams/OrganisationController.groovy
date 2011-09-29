@@ -181,31 +181,25 @@ class OrganisationController
      */
     def sendCreationNotificationEmails(organisation)
     {
-        if (!GrailsUtil.getEnvironment().equals(GrailsApplication.ENV_TEST))
-        {
-            sendMail 
-            {  
-                to organisation?.requestingUser?.emailAddress
-                bcc grailsApplication.config.grails.mail.adminEmailAddress
-                from grailsApplication.config.grails.mail.systemEmailAddress
-                subject "${message(code: 'mail.request.organisation.create.subject', args: [organisation.name])}"     
-                body "${message(code: 'mail.request.organisation.create.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
-            }
+        sendMail 
+        {  
+            to organisation?.requestingUser?.emailAddress
+            bcc grailsApplication.config.grails.mail.adminEmailAddress
+            from grailsApplication.config.grails.mail.systemEmailAddress
+            subject "${message(code: 'mail.request.organisation.create.subject', args: [organisation.name])}"     
+            body "${message(code: 'mail.request.organisation.create.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
         }
     }
     
     def sendActivatedNotificationEmails(organisation)
     {
-        if (!GrailsUtil.getEnvironment().equals(GrailsApplication.ENV_TEST))
-        {
-            sendMail 
-            {     
-                to organisation?.requestingUser?.emailAddress
-                bcc grailsApplication.config.grails.mail.adminEmailAddress
-                from grailsApplication.config.grails.mail.systemEmailAddress
-                subject "${message(code: 'mail.request.organisation.activate.subject', args: [organisation.name])}"     
-                body "${message(code: 'mail.request.organisation.activate.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
-            }
+        sendMail 
+        {     
+            to organisation?.requestingUser?.emailAddress
+            bcc grailsApplication.config.grails.mail.adminEmailAddress
+            from grailsApplication.config.grails.mail.systemEmailAddress
+            subject "${message(code: 'mail.request.organisation.activate.subject', args: [organisation.name])}"     
+            body "${message(code: 'mail.request.organisation.activate.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
         }
     }
 }

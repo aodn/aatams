@@ -71,11 +71,25 @@
                                     <label class="compulsory" for="organisation"><g:message code="person.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'organisation', 'errors')}">
-                                    <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.listActive()}" optionKey="id" value="${createPersonCmd?.organisation?.id}"  />
+                                    <g:select name="organisation.id" 
+                                              from="${au.org.emii.aatams.Organisation.listActive()}" 
+                                              optionKey="id" 
+                                              value="${createPersonCmd?.organisation?.id}"
+                                              noSelection="${['null':'unlisted']}"/>
 
                                 </td>
                             </tr>
                             
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'unlistedOrganisationName', 'errors')}">
+                                    <g:textField name="unlistedOrganisationName" 
+                                                 value="${createPersonCmd?.unlistedOrganisationName}"
+                                                 placeholder="new organisation name" />
+
+                                </td>
+                            </tr>
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="phoneNumber"><g:message code="person.phoneNumber.label" default="Phone Number" /></label>

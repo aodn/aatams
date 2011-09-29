@@ -31,7 +31,7 @@ class Organisation
         postalAddress()
         status()    // Default to PENDING
         organisationProjects()
-        requestingUser(nullable:false)
+        requestingUser(nullable:true)
     }
     
     static mapping = 

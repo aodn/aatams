@@ -64,7 +64,6 @@ class PersonController {
             // of shiro permission wildcards was back-to-front, so the commented
             // out way of doing things doesn't work.
             if (   !SecurityUtils.getSubject().isAuthenticated()
-//                || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
                 || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission())) 
             {
                 personInstance.status = EntityStatus.PENDING
@@ -74,10 +73,14 @@ class PersonController {
                 personInstance.status = EntityStatus.ACTIVE
             }
             
+            if (createPersonCmd.unlistedOrganisationName)
+            {
+                personInstance.organisation = createUnlistedOrganisation(createPersonCmd)
+            }
+            
             if (personInstance.save(flush: true)) 
             {
                 if (   !SecurityUtils.getSubject().isAuthenticated()
-//                    || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission('*')))
                     || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission())) 
                 {
                     if (personInstance.status == EntityStatus.PENDING)
@@ -104,6 +107,50 @@ class PersonController {
         }
     }
 
+    def createUnlistedOrganisation(createPersonCommand)
+    {
+        String name = createPersonCommand.unlistedOrganisationName
+        log.debug("Creating unlisted organisation, name: " + name)
+        
+        def addressParams = 
+            [streetAddress:name,
+             suburbTown:name,
+             state:name,
+             postcode:name,
+             country:name]
+        Address unlistedPostalAddress = new Address(addressParams).save()
+        Address unlistedStreetAddress = new Address(addressParams).save()
+                    
+        Organisation unlisted = 
+            new Organisation(name:createPersonCommand.unlistedOrganisationName,
+                             department:name,
+                             phoneNumber:name,
+                             faxNumber:name,
+                             streetAddress:unlistedStreetAddress,
+                             postalAddress:unlistedPostalAddress,
+                             requestingUser:permissionUtilsService.principal(),
+                             status:EntityStatus.PENDING)
+                         
+        if (unlisted.save(flush:true))
+        {
+            sendMail 
+            {  
+                to grailsApplication.config.grails.mail.adminEmailAddress
+                from grailsApplication.config.grails.mail.systemEmailAddress
+                subject "${message(code: 'mail.unlisted.organisation.create.subject', args: [unlisted.name])}"     
+                body "${message(code: 'mail.unlisted.organisation.create.body', args: [unlisted.name, createLink(controller:'organisation', action:'show', id:unlisted.id, absolute:true)])}" 
+            }
+            
+            return unlisted
+        }
+        else
+        {
+            flash.message = "Error creating unlisted organisation"
+        }
+        
+        return null
+    }
+    
     def show = {
         def personInstance = Person.get(params.id)
         if (!personInstance) 
@@ -289,6 +336,7 @@ class PersonCreateCommand
     String password         // Plain-text password.
     String passwordConfirm
     Organisation organisation
+    String unlistedOrganisationName
     String phoneNumber
     String emailAddress
     DateTimeZone defaultTimeZone
@@ -303,8 +351,21 @@ class PersonCreateCommand
                 return "person.password.mismatch"
             }
         })
+    
         passwordConfirm(blank:false)
-        organisation(nullable:false)
+        organisation(validator:
+        {   
+            val, obj ->
+            
+            return !(val && obj.unlistedOrganisationName)
+        })
+        unlistedOrganisationName(validator:
+        {   
+            val, obj ->
+            
+            return !(val && obj.organisation)
+        })
+        
         phoneNumber(blank:false)
         emailAddress(email:true)
         defaultTimeZone(nullable:false)

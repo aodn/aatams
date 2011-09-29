@@ -203,6 +203,8 @@ environments
 
 }
 
+grails.gorm.default.list.max = 20
+
 // Added by the Joda-Time plugin:
 grails.gorm.default.mapping = {
 	"user-type" type: org.joda.time.contrib.hibernate.PersistentDateTime, class: org.joda.time.DateTime

@@ -14,7 +14,7 @@ class ReceiverDeploymentController {
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
         [receiverDeploymentInstanceList: ReceiverDeployment.list(params), receiverDeploymentInstanceTotal: ReceiverDeployment.count()]
     }
 

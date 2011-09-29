@@ -9,7 +9,7 @@ class MooringTypeController {
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
         [mooringTypeInstanceList: MooringType.list(params), mooringTypeInstanceTotal: MooringType.count()]
     }
 

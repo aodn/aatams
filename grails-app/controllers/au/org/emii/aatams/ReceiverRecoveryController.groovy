@@ -42,7 +42,7 @@ class ReceiverRecoveryController
     {
         log.debug("Filter parameters: " + params.filter)
 
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
 
         // We actually want to display a list of deployments (some with and some
         // without associated recoveries).
@@ -75,7 +75,7 @@ class ReceiverRecoveryController
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
 //        [receiverRecoveryInstanceList: ReceiverRecovery.list(params), receiverRecoveryInstanceTotal: ReceiverRecovery.count()]
 
         // We actually want to display a list of deployments (some with and some

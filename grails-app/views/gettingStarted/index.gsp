@@ -26,17 +26,7 @@
           <h1>Getting Started</h1>
           <br/>
 
-          <div id="accordion" style="height: 75%">
-
-            <h3 class="accordion_header"><a href="#">Register</a></h3>
-            <div>
-
-                <p>You must be a registered user to add data to AATAMS.</p>
-                <br/>
-                <p>Register <a href="/aatams/person/create">here</a>...</p>
-                <br/>
-
-            </div>
+          <div id="accordion" style="height: 75%;">
 
             <h3 class="accordion_header">
               <a href="#">Background Data</a>

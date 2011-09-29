@@ -9,7 +9,7 @@ class DeviceManufacturerController {
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
         [deviceManufacturerInstanceList: DeviceManufacturer.list(params), deviceManufacturerInstanceTotal: DeviceManufacturer.count()]
     }
 

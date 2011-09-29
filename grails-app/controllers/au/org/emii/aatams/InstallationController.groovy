@@ -11,7 +11,7 @@ class InstallationController {
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
         [installationInstanceList: Installation.list(params), installationInstanceTotal: Installation.count()]
     }
 

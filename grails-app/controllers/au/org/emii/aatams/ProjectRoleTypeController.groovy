@@ -9,7 +9,7 @@ class ProjectRoleTypeController {
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
         [projectRoleTypeInstanceList: ProjectRoleType.list(params), projectRoleTypeInstanceTotal: ProjectRoleType.count()]
     }
 

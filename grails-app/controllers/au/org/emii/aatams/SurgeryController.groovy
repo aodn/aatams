@@ -16,7 +16,7 @@ class SurgeryController {
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
         [surgeryInstanceList: Surgery.list(params), surgeryInstanceTotal: Surgery.count()]
     }
 

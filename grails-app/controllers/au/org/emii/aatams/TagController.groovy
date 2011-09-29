@@ -13,7 +13,7 @@ class TagController {
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
         [tagInstanceList: Tag.list(params) - Sensor.list(), tagInstanceTotal: (Tag.count() - Sensor.count())]
     }
 

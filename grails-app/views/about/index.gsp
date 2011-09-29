@@ -7,7 +7,66 @@
     <title>About AATAMS</title>
   </head>
   <body>
-    <h3>Application version: <g:meta name="app.version"/></h3>
-    <h3>Grails version: <g:meta name="app.grails.version"/></h3>
+      <div class="nav">
+          <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
+      </div>
+    
+      <div class="body">
+        <h1>Australian Animal Tagging and Monitoring System (AATAMS)</h1>
+        
+        <div class="dialog">
+          <div style="width: 80%; padding:20px 20px 20px 20px;" >
+            <p>The Australian Animal Tagging and Monitoring System (AATAMS)
+              is one of eleven facilities of the Integrated Marine Observing System (IMOS). 
+              AATAMS represents the higher biological monitoring of the marine environment 
+              for the IMOS program.<br/><br/>
+              Currently AATAMS uses acoustic technology, CTD satellite trackers and bio loggers 
+              to monitor costal and oceanic movements of marine animals from the Australian 
+              mainland to the sub-Antarctic islands and as far south as the Antarctic continent.<br/><br/>
+              AATAMS is set up to collect data over a long period of time. This sustained approach
+              will enable researchers to assess the effects of climate change, ocean acidification
+              and other physical changes that effect animals within the marine environment.<br/><br/>
+              Currently a large range of fish, sharks and mammals are collecting a wide range of data.
+              This includes behavioural and physical data such as the depth, temperature, salinity
+              and movement effort of individual marine animals.</p>
+          </div>
+        </div>
+        
+        <div class="dialog">
+            <table>
+                <tbody>
+                    <tr class="prop">
+                        <td valign="top" class="name">IMOS AATAMS site</td>
+
+                        <td valign="top" class="value"><a href="http://imos.org.au/aatams.html">http://imos.org.au/aatams.html</a></td>
+
+                    </tr>
+
+                    <tr class="prop">
+                        <td valign="top" class="name">Support</td>
+
+                        <td valign="top" class="value">aatams_admin(at)emii.org.au</td>
+
+                    </tr>
+
+                    <tr class="prop">
+                        <td valign="top" class="name">Application version</td>
+
+                        <td valign="top" class="value"><g:meta name="app.version"/></td>
+
+                    </tr>
+
+                    <tr class="prop">
+                        <td valign="top" class="name">Grails version</td>
+
+                        <td valign="top" class="value"><g:meta name="app.grails.version"/></td>
+
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+      </div>
+    
   </body>
 </html>

@@ -107,23 +107,13 @@
           </li>
         </g:each>
       </ul>
-      
-      <%--
-      <h3>${message(code: 'navigationMenu.section.admin.label', default: 'Administration')} </h3>
-      <ul>
-        <g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-          <g:unless test="${c.name == 'Home'}" >
-            <g:if test="${adminControllers.contains(c.name)}">
-              <li class="adminControllers"><g:link controller="${c.logicalPropertyName}">${c.name}</g:link>
-              <span class="inline">
-                <g:link controller="${c.logicalPropertyName}" action="create" class="modal ui-icon ui-icon-circlesmall-plus" >create</g:link>
-              </span>
-              </li>
-            </g:if>
-          </g:unless>
-        </g:each>
-      </ul>
-      --%>
-         
+
+    <!-- Do this last, so that the code which updates point tag fields on page 
+         doesn't cause a warning to be issued even when the user hasn't actually
+         changed the form. -->
+    <g:javascript src="formChangedWarning.js"/>
+  </body>
+  
+
     </div>
 

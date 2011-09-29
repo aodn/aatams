@@ -9,6 +9,11 @@ class OrganisationControllerTests extends ControllerUnitTestCase
         super.setUp()
         TestUtils.setupMessage(controller)
         initData()
+        
+        mockConfig("grails.gorm.default.list.max = 10")
+        controller.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
+        
+        controller.metaClass.sendMail = {}
     }
     
     protected void tearDown() 

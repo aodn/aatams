@@ -20,6 +20,9 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
         // See http://jira.grails.org/browse/GRAILS-5926
         controller.metaClass.message = { Map map -> return "error message" }
         
+        mockConfig("grails.gorm.default.list.max = 10")
+        controller.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
+        
         mockLogging(CandidateEntitiesService)
         def candidateEntitiesService = new CandidateEntitiesService()
         

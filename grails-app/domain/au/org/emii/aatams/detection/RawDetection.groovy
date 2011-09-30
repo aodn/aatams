@@ -39,7 +39,7 @@ class RawDetection
     Float sensorValue
     String sensorUnit
     
-    static transients = ['scrambledLocation']
+    static transients = ['scrambledLocation', 'valid']
     
     static constraints = 
     {

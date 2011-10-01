@@ -587,10 +587,9 @@ div.filter td {
 .mainTitle {
     font-weight: bold;
     float: left;
-/*    margin-top: 15px;    
-    margin-bottom: 5px;*/
 
-    padding-left:30px;
+    padding-left:60px;
+    padding-top:15px;
     color: #3A728B;
    /* font-weight: bold;*/
     text-decoration: none;
@@ -601,7 +600,7 @@ div.filter td {
 #footerLogo
 {
     text-align:center;margin:0 auto;
-    width:50%;
+    width:75%;
 }
 
 #footerLogo img

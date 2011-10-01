@@ -130,24 +130,27 @@
     </div>
     
     <div class="ui-layout-north">
-      <div class="mainTitle">${message(code: 'default.application.detailedTitle', default: 'AATAMS data entry')}</div>
+      <div id="logo">
+        <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS-logo.png')}" alt="IMOS Logo"  /></a>
+        <div class="mainTitle">${message(code: 'default.application.detailedTitle', default: 'AATAMS data entry')}</div>
 
-      <div id="userlogin">
-        <!-- Shown if not logged in. -->
-        <shiro:guest>
-            <g:link controller="auth" params="[targetUri:request.getRequestURI() - request.getContextPath()]">Login</g:link> |
-            <g:link controller="person" action="create">Register</g:link>
+        <div id="userlogin">
+          <!-- Shown if not logged in. -->
+          <shiro:guest>
+              <g:link controller="auth" params="[targetUri:request.getRequestURI() - request.getContextPath()]">Login</g:link> |
+              <g:link controller="person" action="create">Register</g:link>
 
-        </shiro:guest>
+          </shiro:guest>
 
-        <!-- Shown if logged in. -->
-        <shiro:user>
-          <div id="userlogout">
-            Logged in as <shiro:principal/> (<g:link controller="auth" action="signOut">logout</g:link>)
-          </div>
-        </shiro:user>
+          <!-- Shown if logged in. -->
+          <shiro:user>
+            <div id="userlogout">
+              Logged in as <shiro:principal/> (<g:link controller="auth" action="signOut">logout</g:link>)
+            </div>
+          </shiro:user>
+        </div>
       </div>
-
+      
     </div>
 
     <!-- allowOverflow auto-attached by option: west__showOverflowOnHover = true -->
@@ -165,18 +168,5 @@
       <g:layoutBody />
       
     </div>
-    
-    <div class="ui-layout-south"> 
-
-      <div id="footerLogo">
-        <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS-logo.png')}" alt="IMOS Logo"  /></a>
-        <a href="http://www.innovation.gov.au/"><img src="${resource(dir:'images',file:'aus.jpg')}" width="121" height="78" alt="" /></a>
-        <a href="http://www.utas.edu.au/"><img src="${resource(dir:'images',file:'utas.jpg')}" width="61" height="76" alt="" /></a>       
-        <p>IMOS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy and the Super Science Initiative.
-        It is led by the University of Tasmania on behalf of the Australian marine &amp; climate science community.</p>
-      </div>
-      
-    </div>
-    
     
 </html>

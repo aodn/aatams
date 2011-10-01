@@ -66,6 +66,19 @@
                 </tbody>
             </table>
         </div>
+        
+        <div class="dialog">
+          <br/><br/>
+          <div id="footerLogo">
+            <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS-logo.png')}" alt="IMOS Logo"  /></a>
+            <a href="http://www.innovation.gov.au/"><img src="${resource(dir:'images',file:'aus.jpg')}" width="121" height="78" alt="" /></a>
+            <a href="http://www.utas.edu.au/"><img src="${resource(dir:'images',file:'utas.jpg')}" width="61" height="76" alt="" /></a>       
+            <p>IMOS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy and the Super Science Initiative.
+            It is led by the University of Tasmania on behalf of the Australian marine &amp; climate science community.</p>
+          </div>
+          <br/><br/>
+        </div>
+        
       </div>
     
   </body>

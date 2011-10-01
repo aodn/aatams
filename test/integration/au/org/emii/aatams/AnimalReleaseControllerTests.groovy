@@ -135,7 +135,8 @@ class AnimalReleaseControllerTests extends GroovyTestCase
         ValidDetection detection = 
             ValidDetection.build(timestamp: detectionDate,
                                  transmitterId: transmitterId,
-                                 receiverDeployment: deployment)
+                                 receiverDeployment: deployment,
+                                 location:(Point)reader.read("POINT(30.1234 30.1234)"))
         detection.save(failOnError:true)
                         
         

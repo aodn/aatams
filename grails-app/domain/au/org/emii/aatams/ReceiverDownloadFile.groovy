@@ -26,6 +26,7 @@ class ReceiverDownloadFile
     
     Person requestingUser
     
+    Set<RawDetection> detections = new HashSet<RawDetection>()
     static hasMany = [detections:RawDetection]
     
     static constraints =
@@ -47,26 +48,12 @@ class ReceiverDownloadFile
     Number numDuplicates()
     {
         println("detections: " + detections)
-//        detections.each
-//        {
-//            println(it)
-//            println(it.reason)
-//            println(it.reason == InvalidDetectionReason.DUPLICATE)
-//        }
         
-        def numDuplicates = detections.count
+        def invalidDetections = detections.grep
         {
-            it ->
-            println "XXX"
-            if (!(it instanceof InvalidDetection))
-            {
-                return false
-            }
-            
-            println(it.reason == InvalidDetectionReason.DUPLICATE)
-            (it.reason == InvalidDetectionReason.DUPLICATE)
+            !it.isValid()
         }
         
-        return numDuplicates
+        return invalidDetections*.reason.count(InvalidDetectionReason.DUPLICATE)
     }
 }

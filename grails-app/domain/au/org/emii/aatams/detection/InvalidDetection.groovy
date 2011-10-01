@@ -18,6 +18,13 @@ class InvalidDetection extends RawDetection
     
     String toString()
     {
-        String.valueOf(reason) + ": " + message
+        StringBuilder buf = new StringBuilder(String.valueOf(reason))
+        if (message)
+        {
+            buf.append(": ")
+            buf.append(message)
+        }
+        
+        return buf.toString()
     }
 }

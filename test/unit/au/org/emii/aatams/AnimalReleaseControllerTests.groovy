@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.detection.*
+
 import grails.test.*
 
 import com.vividsolutions.jts.geom.Point;
@@ -26,6 +28,8 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
     
     def candidateEntitiesService
     
+    TransmitterType pinger
+    
     protected void setUp() 
     {
         super.setUp()
@@ -51,8 +55,8 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         def animalFactoryService = new AnimalFactoryService()
         controller.animalFactoryService = animalFactoryService
         
-        mockDomain(Detection)
-        Detection.metaClass.findAllByTransmitterId =
+        mockDomain(ValidDetection)
+        ValidDetection.metaClass.findAllByTransmitterId =
         {
             return null
         }
@@ -69,7 +73,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         mockDomain(DeviceStatus, [deployedStatus])
         deployedStatus.save()
         
-        TransmitterType pinger = new TransmitterType(transmitterTypeName:'PINGER')
+        pinger = new TransmitterType(transmitterTypeName:'PINGER')
         mockDomain(TransmitterType, [pinger])
         pinger.save()
         
@@ -213,6 +217,41 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         assertEquals(sex, release.animal.sex)
     }
     
+    def tag
+    def surgeryType
+    def surgeryTreatmentType
+    DeviceModel deviceModel
+    
+    private void initSurgeryObjects()
+    {
+        mockDomain(AnimalRelease)
+        
+        deviceModel = new TagDeviceModel()
+        mockDomain(DeviceModel, [deviceModel])
+        deviceModel.save()
+
+        tag = new Tag(codeMap:"A69-1303",
+                          pingCode:11111,
+                          codeName:"A69-1303-11111",
+                          serialNumber:"11111",
+                          transmitterType:pinger,
+                          model:deviceModel,
+                          status:new DeviceStatus(status:'NEW'))
+        mockDomain(Tag, [tag])
+        tag.save()
+        
+        surgeryType = new SurgeryType(type:"type")
+        mockDomain(SurgeryType, [surgeryType])
+        surgeryType.save()
+        
+        surgeryTreatmentType = new SurgeryTreatmentType(type:"type")
+        mockDomain(SurgeryTreatmentType, [surgeryTreatmentType])
+        surgeryTreatmentType.save()
+
+        mockDomain(Surgery)
+        mockForConstraintsTests(Surgery)
+    }
+    
     void testSaveWithOneSurgery()
     {
         Animal animal = new Animal(species:new Species())
@@ -225,17 +264,9 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         project.save()
         controller.params.project = project     // Overrides setup()
         
-        mockDomain(AnimalRelease)
-
-        Tag tag = new Tag(codeName:"A69-1303-11111",
-                          status:new DeviceStatus(status:'NEW'))
-        mockDomain(Tag, [tag])
-        tag.save()
+        initSurgeryObjects()
         
         // Surgery 0.
-        mockDomain(Surgery)
-        mockForConstraintsTests(Surgery)
-
         def surgery0 = [
             timestamp_day: 1,
             timestamp_month: 6,
@@ -243,10 +274,10 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
             timestamp_hour: 12,
             timestamp_minute: 34,
             timestamp_zone: 45,
-            type: [id:1],
-            treatmentType : [id:1],
+            type: [id:surgeryType.id],
+            treatmentType : [id:surgeryTreatmentType.id],
             comments: "",
-            tag:[codeName: tag.codeName, serialNumber: "12345", model:[id: 1]]]
+            tag:[codeName: tag.codeName, serialNumber: tag.serialNumber, model:[id: 1]]]
         
         controller.params.surgery = ['0':surgery0]
         
@@ -281,20 +312,12 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         Project tagProject = new Project(name:"tag project")
         mockDomain(Project, [releaseProject, tagProject])
         [releaseProject, tagProject].each { it.save() }
-        
-        controller.params.project = releaseProject     // Overrides setup()
-        
-        mockDomain(AnimalRelease)
 
-        Tag tag = new Tag(codeName:"A69-1303-11111",
-                          status:new DeviceStatus(status:'NEW'),
-                          project:tagProject)
-        mockDomain(Tag, [tag])
+        initSurgeryObjects()
+        tag.project = tagProject
         tag.save()
         
-        // Surgery 0.
-        mockDomain(Surgery)
-        mockForConstraintsTests(Surgery)
+        controller.params.project = releaseProject     // Overrides setup()
 
         def surgery0 = [
             timestamp_day: 1,
@@ -303,10 +326,10 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
             timestamp_hour: 12,
             timestamp_minute: 34,
             timestamp_zone: 45,
-            type: [id:1],
-            treatmentType : [id:1],
+            type: [id:surgeryType.id],
+            treatmentType : [id:surgeryTreatmentType.id],
             comments: "",
-            tag:[codeName: tag.codeName, serialNumber: "12345", model:[id: 1]]]
+            tag:[codeName: tag.codeName, serialNumber: tag.serialNumber, model:[id: 1]]]
         
         controller.params.surgery = ['0':surgery0]
         
@@ -350,12 +373,19 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         def surgeryMap = [:]
         def tags = []
         
+        initSurgeryObjects()
+        
         def numSurgeries = 3
         numSurgeries.times(
         {
-            Tag tag = new Tag(codeName:"A69-1303-" + it,
-                              status:new DeviceStatus(status:'NEW'))
-            tags.add(tag)              
+            Tag newTag = new Tag(codeMap:"A69-1303",
+                                 pingCode:it,
+                                 codeName:"A69-1303-" + it,
+                                 serialNumber:String.valueOf(it),
+                                 transmitterType:pinger,
+                                 model:deviceModel,
+                                 status:new DeviceStatus(status:'NEW'))
+            tags.add(newTag)              
             
             def surgery = [
                 timestamp_day: 1,
@@ -367,7 +397,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
                 type: [id:1],
                 treatmentType : [id:1],
                 comments: "",
-                tag:[codeName: tag.codeName, serialNumber: "12345", model:[id: 1]]]
+                tag:[codeName: newTag.codeName, serialNumber: newTag.serialNumber, model:[id: 1]]]
             
             surgeryMap.put(String.valueOf(it), surgery)
         })
@@ -410,19 +440,12 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         
         mockDomain(AnimalRelease)
 
-        // New tag - need to give DeviceModel
-        DeviceModel deviceModel = new TagDeviceModel()
-        mockDomain(DeviceModel, [deviceModel])
-        deviceModel.save()
-        mockDomain(Tag)
         def codeName = "A69-1303-12345"
         def serialNum = "12345"
         
+        initSurgeryObjects()
         
         // Surgery 0.
-        mockDomain(Surgery)
-        mockForConstraintsTests(Surgery)
-
         def surgery0 = [
             timestamp_day: 1,
             timestamp_month: 6,

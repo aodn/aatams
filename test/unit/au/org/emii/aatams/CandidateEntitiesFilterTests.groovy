@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.detection.*
+
 import grails.test.*
 
 import org.apache.shiro.subject.Subject
@@ -133,7 +135,7 @@ class CandidateEntitiesFilterTests extends GrailsUnitTestCase
         roles.each { permService.setPermissions(it) }
         
         mockDomain(AnimalRelease)
-        mockDomain(Detection)
+        mockDomain(RawDetection)
         
         activeInstallation = 
             new Installation(project:activeProj,
@@ -286,8 +288,8 @@ class CandidateEntitiesFilterTests extends GrailsUnitTestCase
     
     void testDetectionEdit()
     {
-        Detection detection = new Detection()
-        mockDomain(Detection, [detection])
+        RawDetection detection = new RawDetection()
+        mockDomain(RawDetection, [detection])
         detection.save()
         
         // candidateDeployments

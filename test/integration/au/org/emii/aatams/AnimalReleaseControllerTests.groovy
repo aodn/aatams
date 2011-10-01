@@ -2,6 +2,8 @@ package au.org.emii.aatams
 
 import grails.test.*
 
+import au.org.emii.aatams.detection.*
+
 import org.joda.time.*
 import org.joda.time.format.DateTimeFormat
 
@@ -130,10 +132,10 @@ class AnimalReleaseControllerTests extends GroovyTestCase
         def transmitterId = "A69-1303-1234"
         
         // Create the detection.
-        Detection detection = 
-            Detection.build(timestamp: detectionDate,
-                            transmitterId: transmitterId,
-                            receiverDeployment: deployment)
+        ValidDetection detection = 
+            ValidDetection.build(timestamp: detectionDate,
+                                 transmitterId: transmitterId,
+                                 receiverDeployment: deployment)
         detection.save(failOnError:true)
                         
         
@@ -158,6 +160,8 @@ class AnimalReleaseControllerTests extends GroovyTestCase
         controller.params.releaseDateTime = new DateTime("2011-06-01T12:34:45+10:00")
         
         Tag tag = Tag.build(codeName:transmitterId,
+                            codeMap:"A69-1303",
+                            pingCode:1234,
                             project:project,
                             status:deployedStatus,
                             model:model,

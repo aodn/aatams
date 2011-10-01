@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.detection.DetectionFactoryService
+
 class AnimalReleaseController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -129,8 +131,11 @@ class AnimalReleaseController {
                         def tag = tagFactoryService.lookupOrCreate(v.tag)
 
                         log.debug("Surgery parameters: " + v)
+                        v.tag = tag
+                        v.type = SurgeryType.get(v.type.id)
+                        v.treatmentType = SurgeryTreatmentType.get(v.treatmentType.id)
                         Surgery surgery = new Surgery(v)
-                        surgery.tag = tag
+                        surgery.release = animalReleaseInstance
 
                         tag.addToSurgeries(surgery)
 
@@ -143,6 +148,10 @@ class AnimalReleaseController {
                         // Rescan detections in case they match this new surgery
                         // (ref bug #364).
                         log.debug("Rescanning existing detections for surgery: " + String.valueOf(surgery))
+                        
+                        assert(!tag.hasErrors())
+                        assert(!surgery.hasErrors())
+                        
                         detectionFactoryService.rescanForSurgery(surgery)
                     }
                 }

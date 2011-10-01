@@ -1,4 +1,6 @@
-package au.org.emii.aatams
+package au.org.emii.aatams.detection
+
+import au.org.emii.aatams.*
 
 import grails.test.*
 
@@ -24,22 +26,11 @@ class DetectionControllerTests extends ControllerUnitTestCase
         }
         
         controller.candidateEntitiesService = candidateEntitiesService
-        mockDomain(Detection)
     }
 
     protected void tearDown() 
     {
         super.tearDown()
-    }
-
-    void testSaveError() 
-    {
-        def model = controller.save()
-        
-        assertNotNull(model.detectionInstance)
-        assertEquals(2, model.candidateDeployments.size())
-        assertTrue(model.candidateDeployments.contains(deployment1))
-        assertTrue(model.candidateDeployments.contains(deployment2))
     }
 
     void testCreate() 

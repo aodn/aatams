@@ -22,8 +22,6 @@ class VueDetectionFileProcessorService
         downloadFile.status = FileProcessingStatus.PROCESSING
         downloadFile.save()
         
-        detectionService.clearCache()
-        
         def startTimestamp = System.currentTimeMillis()
         
         //

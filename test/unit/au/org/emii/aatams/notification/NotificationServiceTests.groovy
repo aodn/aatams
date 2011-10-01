@@ -28,6 +28,7 @@ class NotificationServiceTests extends GrailsUnitTestCase
         super.setUp()
         
         mockDomain(Notification)
+        mockLogging(Notification, true)
         
         mockLogging(NotificationService, true)
         notificationService = new NotificationService()

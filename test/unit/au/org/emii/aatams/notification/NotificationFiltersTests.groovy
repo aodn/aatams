@@ -29,6 +29,7 @@ class NotificationFiltersTests extends FiltersUnitTestCase
         super.setUp()
         
         mockDomain(Notification)
+        mockLogging(Notification)
         
         mockLogging(NotificationService, true)
         notificationService = new NotificationService()

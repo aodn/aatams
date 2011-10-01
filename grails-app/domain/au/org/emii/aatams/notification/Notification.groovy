@@ -30,7 +30,7 @@ class Notification
             return unauthenticated
         }
         
-        return !(unauthenticated || (acknowledgers.contains(person)))
+        return (!unauthenticated && !acknowledgers*.username.contains(person.username))
     }
     
     String toString()

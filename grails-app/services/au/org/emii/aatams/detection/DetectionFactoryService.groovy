@@ -9,8 +9,6 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
 import org.joda.time.*
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.TimeZone
 
 /**
@@ -40,13 +38,6 @@ class DetectionFactoryService
     static final String TRANSMITTER_ID_DELIM = "-"
     static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
     
-    static DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-    
-    static
-    {
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT:00"))
-    }
-    
     /**
      * Creates a detection given a map of parameters (which originate from a line
      * in a CSV upload file).
@@ -68,38 +59,36 @@ class DetectionFactoryService
         return detection
     }
     
-    RawDetection initDetection(nativeParams)
+    Collection<RawDetection> rescanForSurgery(Surgery surgery)
+    {
+        DeviceStatus retiredStatus = DeviceStatus.findByStatus(DeviceStatus.RETIRED)
+        if (surgery.tag.status == retiredStatus)
+        {
+            return []
+        }
+        
+        def updatedDetections = []
+        
+        ValidDetection.findAllByTransmitterId(surgery.tag.codeName).each
+        {
+            detection ->
+            
+            if (surgery.isInWindow(detection.timestamp))
+            {
+                updatedDetections.add(detection)
+                DetectionSurgery.newSavedInstance(surgery, detection, surgery.tag)
+            }
+        }
+        
+        return updatedDetections
+    }
+    
+    private RawDetection initDetection(nativeParams)
     {
         DetectionValidator validator = new DetectionValidator(params:nativeParams)
         assert(validator)
         
-        if (validator.isDuplicate())
-        {
-            return new InvalidDetection(nativeParams + [reason:InvalidDetectionReason.DUPLICATE])
-        }
-        
-        if (validator.isUnknownReceiver())
-        {
-            return new InvalidDetection(nativeParams + 
-                                        [reason:InvalidDetectionReason.UNKNOWN_RECEIVER, 
-                                         message:"Unknown receiver code name " + nativeParams.receiverName])
-        }
-        
-        if (validator.hasNoDeploymentsAtDateTime())
-        {
-            return new InvalidDetection(nativeParams + 
-                                        [reason:InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME, 
-                                         message:"No deployment at time " + simpleDateFormat.format(nativeParams.timestamp) + " for receiver " + nativeParams.receiverName])
-        }
-
-        if (validator.hasNoRecoveriesAtDateTime())
-        {
-            return new InvalidDetection(nativeParams + 
-                                        [reason:InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME, 
-                                         message:"No recovery at time " + simpleDateFormat.format(nativeParams.timestamp) + " for receiver " + nativeParams.receiverName])
-        }
-        
-        return new ValidDetection(nativeParams + [receiverDeployment:validator.deployment]).save()
+        return validator.validate()
     }
     
     private static Map toNativeParams(params)
@@ -131,38 +120,43 @@ class DetectionFactoryService
     {
         assert(detection)
         
-        def tags = Tag.findAllByCodeName(detection.transmitterId) 
+        DeviceStatus retiredStatus = DeviceStatus.findByStatus(DeviceStatus.RETIRED)
+        
+        def tags = Tag.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus) 
         tags.each
         {
             tag -> tag.surgeries.each
             {
-                createDetectionSurgery(it, tag, detection)
+                surgery ->
+                
+                if (!surgery.isInWindow(detection.timestamp))
+                {
+                    return
+                }
+
+                DetectionSurgery.newSavedInstance(surgery, detection, tag)
             }
         }
 
-        def sensors = Sensor.findAllByCodeName(detection.transmitterId) 
+        def sensors = Sensor.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus) 
         sensors.each
         {
             sensor -> sensor.tag.surgeries.each
             {
-                createDetectionSurgery(it, sensor, detection)
+                surgery ->
+
+                if (!surgery.isInWindow(detection.timestamp))
+                {
+                    return
+                }
+                
+                DetectionSurgery.newSavedInstance(surgery, detection, sensor)
             }
         }
     }
     
     private void createDetectionSurgery(surgery, tag, detection)
     {
-        DetectionSurgery detectionSurgery =
-            new DetectionSurgery(surgery:surgery, 
-                                 tag:tag, 
-                                 detection:detection)
-
-        detection.addToDetectionSurgeries(detectionSurgery)
-        surgery.addToDetectionSurgeries(detectionSurgery)
-        tag.addToDetectionSurgeries(detectionSurgery)
-
-        detection.save()
-        surgery.save()
-        tag.save()
+        DetectionSurgery.newSavedInstance(surgery, detection, tag)
     }
 }

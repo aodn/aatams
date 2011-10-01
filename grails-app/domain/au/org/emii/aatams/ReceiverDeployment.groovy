@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.detection.RawDetection
+
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
@@ -18,7 +20,8 @@ class ReceiverDeployment
 {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
     static transients = ['scrambledLocation']
-    static hasMany = [detections: Detection, events: ReceiverEvent]
+    Set<RawDetection> detections = new HashSet<RawDetection>()
+    static hasMany = [detections: RawDetection, events: ReceiverEvent]
 
     Integer deploymentNumber
     

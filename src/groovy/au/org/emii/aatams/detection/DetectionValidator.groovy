@@ -7,8 +7,8 @@ import au.org.emii.aatams.*
 //import com.vividsolutions.jts.geom.Point;
 //
 //import org.joda.time.*
-//import java.text.DateFormat
-//import java.text.SimpleDateFormat
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 //import java.util.TimeZone
 
 /**
@@ -28,19 +28,26 @@ class DetectionValidator
     
     ReceiverDeployment deployment
     
-    boolean isDuplicate()
+    static DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    
+    static
+    {
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT:00"))
+    }
+    
+    private boolean isDuplicate()
     {
         return ValidDetection.isDuplicate(params)
     }
     
-    boolean isUnknownReceiver()
+    private boolean isUnknownReceiver()
     {
         receiver = Receiver.findByCodeName(params.receiverName)
         return (receiver == null)
     }
     
     
-    boolean hasNoDeploymentsAtDateTime()
+    private boolean hasNoDeploymentsAtDateTime()
     {
         assert(receiver)
         
@@ -64,7 +71,7 @@ class DetectionValidator
         return (!deployments || deployments.isEmpty())
     }
     
-    boolean hasNoRecoveriesAtDateTime()
+    private boolean hasNoRecoveriesAtDateTime()
     {
         assert(receiver)
         assert(deployments)
@@ -89,6 +96,47 @@ class DetectionValidator
         }
         
         return (!recoveries || recoveries.isEmpty())
+    }
+
+    RawDetection validate()
+    {
+        def validator = this
+        
+        if (validator.isDuplicate())
+        {
+            return new InvalidDetection(params + [reason:InvalidDetectionReason.DUPLICATE])
+        }
+        
+        if (validator.isUnknownReceiver())
+        {
+            return new InvalidDetection(params + 
+                                        [reason:InvalidDetectionReason.UNKNOWN_RECEIVER, 
+                                         message:"Unknown receiver code name " + params.receiverName])
+        }
+        
+        if (validator.hasNoDeploymentsAtDateTime())
+        {
+            return new InvalidDetection(params + 
+                                        [reason:InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME, 
+                                         message:"No deployment at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName])
+        }
+
+        if (validator.hasNoRecoveriesAtDateTime())
+        {
+            return new InvalidDetection(params + 
+                                        [reason:InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME, 
+                                         message:"No recovery at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName])
+        }
+        
+        def validDetection = new ValidDetection(params + [receiverDeployment:validator.deployment]).save()
+        
+        receiver.addToDetections(validDetection)
+        receiver.save()
+        
+        deployment.addToDetections(validDetection)
+        deployment.save()
+        
+        return validDetection
     }
 }
 

@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.detection.RawDetection
+
 /**
  * Models the relationship between a detection and a surgery.
  *
@@ -23,5 +25,29 @@ package au.org.emii.aatams
  */
 class DetectionSurgery 
 {
-    static belongsTo = [surgery:Surgery, detection:Detection, tag:Tag]
+    static belongsTo = [surgery:Surgery, detection:RawDetection, tag:Tag]
+    
+    static DetectionSurgery newSavedInstance(surgery, detection, tag)
+    {
+        DetectionSurgery detectionSurgery =
+            new DetectionSurgery(surgery:surgery, 
+                                 tag:tag, 
+                                 detection:detection)
+
+        detection.addToDetectionSurgeries(detectionSurgery)
+        surgery.addToDetectionSurgeries(detectionSurgery)
+        tag.addToDetectionSurgeries(detectionSurgery)
+
+        detection.save()
+        surgery.save()
+        tag.save()
+
+        detectionSurgery.save()
+        return detectionSurgery
+    }
+    
+    String toString()
+    {
+        return String.valueOf(tag) + "-" + String.valueOf(surgery) + "-" + String.valueOf(detection)
+    }
 }

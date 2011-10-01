@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.detection.RawDetection
+
 /**
  * A receiver is a device deployed in the ocean that is able to receive 'ping'
  * transmissions from tags attached or surgically implanted into fish.
@@ -9,7 +11,8 @@ class Receiver extends Device
     /**
      * Detection recorded at the receiver (may also include SensorDetections).
      */
-    static hasMany = [detections: Detection, deployments: ReceiverDeployment]
+    Set<RawDetection> detections = new HashSet<RawDetection>()
+    static hasMany = [detections: RawDetection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
     
     static String constructCodeName(params)

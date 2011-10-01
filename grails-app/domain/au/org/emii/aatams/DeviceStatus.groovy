@@ -9,6 +9,9 @@ package au.org.emii.aatams
  */
 class DeviceStatus
 {
+    static final String DEPLOYED = "DEPLOYED"
+    static final String RETIRED = "RETIRED"
+    
     String status
     
     static constraints =

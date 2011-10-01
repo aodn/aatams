@@ -28,8 +28,12 @@
                             
                             <g:sortableColumn property="timestamp" title="${message(code: 'detection.timestamp.label', default: 'Timestamp')}" />
                         
+                            <g:sortableColumn property="receiverName" title="${message(code: 'detection.receiverName.label', default: 'Receiver Name')}" />
+                        
                             <g:sortableColumn property="receiverDeployment" title="${message(code: 'detection.receiverDeployment.label', default: 'Receiver Deployment')}" />
                         
+                            <g:sortableColumn property="transmitterId" title="${message(code: 'detection.transmitterId.label', default: 'Transmitter ID')}" />
+
                             <g:sortableColumn property="transmitterName" title="${message(code: 'detection.transmitterName.label', default: 'Transmitter Name')}" />
                         
                             <g:sortableColumn property="transmitterSerialNumber" title="${message(code: 'detection.transmitterSerialNumber.label', default: 'Transmitter Serial Number')}" />
@@ -48,7 +52,11 @@
                                               format="yyyy-MM-dd'T'HH:mm:ssZ"
                                               timeZone='${TimeZone.getTimeZone("UTC")}'/></td>
                         
+                            <td>${fieldValue(bean: detectionInstance, field: "receiverName")}</td>
+
                             <td><g:link controller="receiverDeployment" action="show" id="${detectionInstance?.receiverDeployment?.id}">${fieldValue(bean: detectionInstance, field: "receiverDeployment")}</g:link></td>
+                        
+                            <td>${fieldValue(bean: detectionInstance, field: "transmitterId")}</td>
                         
                             <td>${fieldValue(bean: detectionInstance, field: "transmitterName")}</td>
                         

@@ -35,9 +35,23 @@
                         </tr>
                     
                         <tr class="prop">
+                            <td valign="top" class="name"><g:message code="detection.receiverName.label" default="Receiver Name" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "receiverName")}</td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.receiverDeployment.label" default="Receiver Deployment" /></td>
                             
                             <td valign="top" class="value"><g:link controller="receiverDeployment" action="show" id="${detectionInstance?.receiverDeployment?.id}">${detectionInstance?.receiverDeployment?.encodeAsHTML()}</g:link></td>
+                            
+                        </tr>
+                    
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="detection.transmitterId.label" default="Transmitter ID" /></td>
+                            
+                            <td valign="top" class="value">${fieldValue(bean: detectionInstance, field: "transmitterId")}</td>
                             
                         </tr>
                     

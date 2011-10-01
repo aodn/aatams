@@ -1,4 +1,6 @@
-package au.org.emii.aatams
+package au.org.emii.aatams.detection
+
+import au.org.emii.aatams.*
 
 import org.grails.plugins.csv.CSVMapReader
 import org.springframework.web.multipart.MultipartFile
@@ -8,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile
  */
 class VueDetectionFileProcessorService
 {
-    def cachedDetectionFactoryService
     def detectionFactoryService
     
     static transactional = true
@@ -18,9 +19,6 @@ class VueDetectionFileProcessorService
     
     void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
     {
-        def detectionService = cachedDetectionFactoryService
-//        def detectionService = detectionFactoryService
-    
         downloadFile.status = FileProcessingStatus.PROCESSING
         downloadFile.save()
         
@@ -53,7 +51,7 @@ class VueDetectionFileProcessorService
             
             log.debug("Processing record number: " + String.valueOf(i))
             
-            Detection detection = detectionService.newDetection(map)
+            RawDetection detection = detectionFactoryService.newDetection(map)
             
             def exactPercentComplete = i * 100 / numRecords
             if (exactPercentComplete > (percentComplete + percentCompleteInc))

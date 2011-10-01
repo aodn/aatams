@@ -41,7 +41,7 @@ class DetectionSurgery
         detection.save()
         surgery.save()
         tag.save()
-
+        
         detectionSurgery.save()
         return detectionSurgery
     }

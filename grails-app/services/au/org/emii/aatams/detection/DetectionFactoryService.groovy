@@ -51,6 +51,7 @@ class DetectionFactoryService
         
         if (!detection.isValid())
         {
+            detection.save()
             return detection
         }
         

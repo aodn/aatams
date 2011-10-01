@@ -38,7 +38,7 @@ class VueDetectionFileProcessorService
         //      Latitude	
         //      Longitude
         //
-        def records = new File(downloadFile.path).toCsvMapReader().toList()
+        def records = getRecords(downloadFile)
         def numRecords = records.size()
         
         // Provide more frequent updates when there are many records to process.
@@ -50,6 +50,7 @@ class VueDetectionFileProcessorService
             log.debug("Processing record number: " + String.valueOf(i))
             
             RawDetection detection = detectionFactoryService.newDetection(map)
+            downloadFile.addToDetections(detection)
             
             def exactPercentComplete = i * 100 / numRecords
             if (exactPercentComplete > (percentComplete + percentCompleteInc))
@@ -67,5 +68,10 @@ class VueDetectionFileProcessorService
         downloadFile.status = FileProcessingStatus.PROCESSED
         downloadFile.errMsg = ""
         downloadFile.save()
-    }   
+    } 
+    
+    List<Map<String, String>> getRecords(downloadFile)
+    {
+        return new File(downloadFile.path).toCsvMapReader().toList()
+    }
 }

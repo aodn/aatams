@@ -15,4 +15,9 @@ class InvalidDetection extends RawDetection
     {
         return false
     }
+    
+    String toString()
+    {
+        String.valueOf(reason) + ": " + message
+    }
 }

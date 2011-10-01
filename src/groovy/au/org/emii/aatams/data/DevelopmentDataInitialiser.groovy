@@ -588,7 +588,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         timestamp:new DateTime("2011-05-15T14:13:00"),
                         type:external,
                         treatmentType:antibiotic)
-        tag2.addToSurgeries(surgery1).save(failOnError:true)
+        tag2.addToSurgeries(surgery2).save(failOnError:true)
         
         Surgery surgery3 = 
             new Surgery(release:whiteShark2Release,
@@ -605,7 +605,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         type:external,
                         treatmentType:antibiotic)
         tag1.addToSurgeries(surgery4).save(failOnError:true)
-                    
+
         // Receiver Recovery.
         ReceiverRecovery recovery1 = 
             new ReceiverRecovery(recoveryDateTime: new DateTime("2011-07-25T12:34:56"),

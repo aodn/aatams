@@ -125,7 +125,13 @@ class DetectionFactoryService
         def tags = Tag.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus) 
         tags.each
         {
-            tag -> tag.surgeries.each
+            tag -> 
+
+            println("tag: " + tag)
+            println("tag.surgeries.size(): " + tag.surgeries.size())
+            println("tag.surgeries: " + tag.surgeries)
+            
+            tag.surgeries.each
             {
                 surgery ->
                 

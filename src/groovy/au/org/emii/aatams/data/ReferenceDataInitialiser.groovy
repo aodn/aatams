@@ -58,29 +58,32 @@ class ReferenceDataInitialiser extends AbstractDataInitialiser
                        emailAddress:'jkburges@utas.edu.au',
                        status:EntityStatus.ACTIVE)
         
-        Address imosAddress =
+        Address eMIIAddress =
             new Address(streetAddress:'University of Tasmania, Private Bag 110',
                         suburbTown:'Hobart',
                         state:'TAS',
                         country:'Australia',
                         postcode:'7001').save()
 
-        Organisation imosOrg = 
+        Organisation eMIIOrg = 
             new Organisation(name:'IMOS', 
                              department:'eMII',
                              phoneNumber:'+61 (03) 6226 7549',
                              faxNumber:'+61 (03) 6226 2107',
-                             streetAddress:imosAddress,
-                             postalAddress:imosAddress,
+                             streetAddress:eMIIAddress,
+                             postalAddress:eMIIAddress,
                              status:EntityStatus.ACTIVE,
-                             requestingUser:admin).save(failOnError: true)
+                             requestingUser:jkburges)
 
         SecRole sysAdmin = new SecRole(name:"SysAdmin")
         sysAdmin.addToPermissions("*:*")
         sysAdmin.save(failOnError: true)
         
-        admin.addToRoles(sysAdmin)
-        admin.save(failOnError:true)
+        jkburges.addToRoles(sysAdmin)
+        jkburges.organisation = eMIIOrg
+        jkburges.save(failOnError:true)
+        
+        eMIIOrg.save(failOnError:true)
         
         ProjectRoleType principalInvestigator = new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save(failOnError: true)
         ProjectRoleType coInvestigator = new ProjectRoleType(displayName:"Co-Investigator").save(failOnError: true)

@@ -56,7 +56,8 @@ class ReferenceDataInitialiser extends AbstractDataInitialiser
                        //organisation:imosOrg,
                        phoneNumber:'+61 3 6226 8507',
                        emailAddress:'jkburges@utas.edu.au',
-                       status:EntityStatus.ACTIVE)
+                       status:EntityStatus.ACTIVE,
+                       defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
         
         Address eMIIAddress =
             new Address(streetAddress:'University of Tasmania, Private Bag 110',

@@ -31,6 +31,7 @@ class AnimalReleaseControllerTests extends GroovyTestCase
     def model
     
     def controller
+    Person personOrg
     
     protected void setUp() 
     {
@@ -44,7 +45,7 @@ class AnimalReleaseControllerTests extends GroovyTestCase
         
         project = Project.build().save(failOnError:true)
         
-        Person personOrg =
+        personOrg =
             new Person(username:'person',
                        passwordHash:"asdf",
                        name:'Person',
@@ -126,6 +127,18 @@ class AnimalReleaseControllerTests extends GroovyTestCase
      */
     void testExistingDetections()
     {
+        ReceiverDownloadFile download = 
+            new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
+                                     status:FileProcessingStatus.PROCESSING,
+                                     path:"asdf",
+                                     name:"asdf",
+                                     importDate:new Date(),
+                                     errMsg:"asdf",
+                                     requestingUser:personOrg).save(failOnError:true)
+                      
+        assert(download)
+        assert(!download.hasErrors())
+                                   
         def dateString = "2011-08-17 12:34:56" + " " + "UTC"
         def DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss Z")
         def detectionDate = dateFormat.parse(dateString)
@@ -136,7 +149,8 @@ class AnimalReleaseControllerTests extends GroovyTestCase
             ValidDetection.build(timestamp: detectionDate,
                                  transmitterId: transmitterId,
                                  receiverDeployment: deployment,
-                                 location:(Point)reader.read("POINT(30.1234 30.1234)"))
+                                 location:(Point)reader.read("POINT(30.1234 30.1234)"),
+                                 receiverDownload:download)
         detection.save(failOnError:true)
                         
         

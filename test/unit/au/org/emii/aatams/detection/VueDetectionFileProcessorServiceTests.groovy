@@ -49,7 +49,8 @@ class VueDetectionFileProcessorServiceTests extends GrailsUnitTestCase
         receiver.addToDeployments(deployment)
         mockDomain(ReceiverDeployment, [deployment])
 
-        recovery = new ReceiverRecovery(deployment:deployment)
+        recovery = new ReceiverRecovery(deployment:deployment,
+                                        recoveryDateTime:new DateTime("2010-12-08T06:44:24"))
         mockDomain(ReceiverRecovery, [recovery])
         recovery.save()
         
@@ -73,8 +74,17 @@ class VueDetectionFileProcessorServiceTests extends GrailsUnitTestCase
         vueDetectionFileProcessorService.process(download)
         
         assertEquals(getRecords(download).size(), download.detections.size())
-        assertEquals(2, download.detections.size())
-        assertEquals(1, download.numDuplicates())
+        assertEquals(6, download.detections.size())
+        
+        assertEquals(1, download.validDetections().size())
+        assertEquals(5, download.invalidDetections().size())
+            
+        assertEquals(1, download.invalidDetections(InvalidDetectionReason.DUPLICATE).size())
+        assertEquals(2, download.invalidDetections(InvalidDetectionReason.UNKNOWN_RECEIVER).size())
+        assertTrue(download.invalidDetections(InvalidDetectionReason.UNKNOWN_RECEIVER)*.receiverName.contains("AAA"))
+        assertTrue(download.invalidDetections(InvalidDetectionReason.UNKNOWN_RECEIVER)*.receiverName.contains("BBB"))
+        assertEquals(1, download.invalidDetections(InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME).size())
+        assertEquals(1, download.invalidDetections(InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME).size())
     }
     
     List<Map<String, String>> getRecords(downloadFile)
@@ -92,6 +102,18 @@ class VueDetectionFileProcessorServiceTests extends GrailsUnitTestCase
         def validDetection = [:] + standardParams
         def duplicateDetection = [:] + validDetection
         
-        return [validDetection, duplicateDetection]
+        def unknownReceiver1 = [:] + validDetection
+        unknownReceiver1[(DetectionFactoryService.RECEIVER_COLUMN)] = "AAA"
+        
+        def unknownReceiver2 = [:] + validDetection
+        unknownReceiver2[(DetectionFactoryService.RECEIVER_COLUMN)] = "BBB"
+        
+        def noDeploymentDetection = [:] + standardParams
+        noDeploymentDetection[(DetectionFactoryService.DATE_AND_TIME_COLUMN)] = "2007-12-08 06:44:24"
+        
+        def noRecoveryDetection = [:] + standardParams
+        noRecoveryDetection[(DetectionFactoryService.DATE_AND_TIME_COLUMN)] = "2010-12-08 06:44:24"
+        
+        return [validDetection, duplicateDetection, unknownReceiver1, unknownReceiver2, noDeploymentDetection, noRecoveryDetection]
     }
 }

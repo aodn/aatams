@@ -25,7 +25,8 @@ class ValidDetectionTests extends GrailsUnitTestCase
         Point location = new GeometryFactory().createPoint(new Coordinate(45.1234f, -40.1234f))
         Date timestamp = new Date().parse(DATE_FORMAT, "2009-12-08 06:44:24 UTC")
         def params = 
-                [timestamp:timestamp,
+                [receiverDownload:new ReceiverDownloadFile(),
+                 timestamp:timestamp,
                  receiverName:"VR3UWM-354",
                  transmitterId:"A69-1303-62347",
                  transmitterName:"shark tag",

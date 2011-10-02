@@ -2,14 +2,8 @@ package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
 
-//import com.vividsolutions.jts.geom.Coordinate;
-//import com.vividsolutions.jts.geom.GeometryFactory;
-//import com.vividsolutions.jts.geom.Point;
-//
-//import org.joda.time.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-//import java.util.TimeZone
 
 /**
  * Detection validation utilities.
@@ -21,6 +15,8 @@ import java.text.SimpleDateFormat
 class DetectionValidator
 {
     def params
+    
+    ReceiverDownloadFile receiverDownload
     
     Receiver receiver
     Collection<ReceiverDeployment> deployments
@@ -104,31 +100,36 @@ class DetectionValidator
         
         if (validator.isDuplicate())
         {
-            return new InvalidDetection(params + [reason:InvalidDetectionReason.DUPLICATE])
+            return new InvalidDetection(params + [receiverDownload:receiverDownload, reason:InvalidDetectionReason.DUPLICATE])
         }
         
         if (validator.isUnknownReceiver())
         {
             return new InvalidDetection(params + 
-                                        [reason:InvalidDetectionReason.UNKNOWN_RECEIVER, 
+                                        [receiverDownload:receiverDownload, 
+                                         reason:InvalidDetectionReason.UNKNOWN_RECEIVER, 
                                          message:"Unknown receiver code name " + params.receiverName])
         }
         
         if (validator.hasNoDeploymentsAtDateTime())
         {
             return new InvalidDetection(params + 
-                                        [reason:InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME, 
+                                        [receiverDownload:receiverDownload, 
+                                         reason:InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME, 
                                          message:"No deployment at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName])
         }
 
         if (validator.hasNoRecoveriesAtDateTime())
         {
             return new InvalidDetection(params + 
-                                        [reason:InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME, 
+                                        [receiverDownload:receiverDownload, 
+                                         reason:InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME, 
                                          message:"No recovery at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName])
         }
         
-        def validDetection = new ValidDetection(params + [receiverDeployment:validator.deployment]).save()
+        def validDetection = new ValidDetection(params + 
+                                                [receiverDownload:receiverDownload, 
+                                                receiverDeployment:validator.deployment]).save()
         
         receiver.addToDetections(validDetection)
         receiver.save()

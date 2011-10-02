@@ -2,6 +2,7 @@ package au.org.emii.aatams.detection
 
 import grails.test.*
 
+import au.org.emii.aatams.*
 import com.vividsolutions.jts.geom.*
 
 class InvalidDetectionTests extends GrailsUnitTestCase 
@@ -27,7 +28,9 @@ class InvalidDetectionTests extends GrailsUnitTestCase
         Date timestamp = new Date().parse(DATE_FORMAT, "2009-12-08 06:44:24 UTC")
         
         def invalidDetection = 
-            new InvalidDetection(timestamp:timestamp,
+            new InvalidDetection(
+                             receiverDownload:new ReceiverDownloadFile(),
+                             timestamp:timestamp,
                              receiverName:"VR3UWM-354",
                              transmitterId:"A69-1303-62347",
                              transmitterName:"shark tag",

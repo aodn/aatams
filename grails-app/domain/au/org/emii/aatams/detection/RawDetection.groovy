@@ -1,5 +1,6 @@
 package au.org.emii.aatams.detection
 
+import au.org.emii.aatams.ReceiverDownloadFile
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.*
@@ -51,6 +52,8 @@ class RawDetection
         location(nullable:true)
     }
 
+    static belongsTo = [receiverDownload:ReceiverDownloadFile]
+    
     static mapping =
     {
         timestamp index:'timestamp_index'

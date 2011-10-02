@@ -1,5 +1,6 @@
 package au.org.emii.aatams.detection
 
+import au.org.emii.aatams.*
 import grails.test.*
 
 import com.vividsolutions.jts.geom.*
@@ -26,7 +27,8 @@ class RawDetectionTests extends GrailsUnitTestCase
         Date timestamp = new Date().parse(DATE_FORMAT, "2009-12-08 06:44:24 UTC")
         
         def rawDetection = 
-            new RawDetection(timestamp:timestamp,
+            new RawDetection(receiverDownload:new ReceiverDownloadFile(),
+                             timestamp:timestamp,
                              receiverName:"VR3UWM-354",
                              transmitterId:"A69-1303-62347",
                              transmitterName:"shark tag",
@@ -45,7 +47,8 @@ class RawDetectionTests extends GrailsUnitTestCase
         Date timestamp = new Date().parse(DATE_FORMAT, "2009-12-08 06:44:24 UTC")
 
         def rawDetection = 
-            new RawDetection(timestamp:timestamp,
+            new RawDetection(receiverDownload:new ReceiverDownloadFile(),
+                             timestamp:timestamp,
                                      receiverName:"VR3UWM-354",
                                      transmitterId:"A69-1303-62347",
                                      transmitterName:"shark tag",
@@ -66,7 +69,8 @@ class RawDetectionTests extends GrailsUnitTestCase
         Date timestamp = new Date().parse(DATE_FORMAT, "2009-12-08 06:44:24 UTC")
 
         def rawDetection = 
-                new RawDetection(receiverName:"VR3UWM-354",
+                new RawDetection(receiverDownload:new ReceiverDownloadFile(),
+                             receiverName:"VR3UWM-354",
                                     transmitterId:"A69-1303-62347",
                                     transmitterName:"shark tag",
                                     transmitterSerialNumber:"1234",
@@ -84,7 +88,8 @@ class RawDetectionTests extends GrailsUnitTestCase
         Date timestamp = new Date().parse(DATE_FORMAT, "2009-12-08 06:44:24 UTC")
 
         def rawDetection = 
-            new RawDetection(timestamp:timestamp,
+            new RawDetection(receiverDownload:new ReceiverDownloadFile(),
+                             timestamp:timestamp,
                              transmitterId:"A69-1303-62347",
                              transmitterName:"shark tag",
                              transmitterSerialNumber:"1234",
@@ -104,7 +109,8 @@ class RawDetectionTests extends GrailsUnitTestCase
         Date timestamp = new Date().parse(DATE_FORMAT, "2009-12-08 06:44:24 UTC")
 
         def rawDetection = 
-            new RawDetection(timestamp:timestamp,
+            new RawDetection(receiverDownload:new ReceiverDownloadFile(),
+                             timestamp:timestamp,
                              receiverName:"VR3UWM-354",
                              transmitterName:"shark tag",
                              transmitterSerialNumber:"1234",
@@ -124,7 +130,8 @@ class RawDetectionTests extends GrailsUnitTestCase
         Date timestamp = new Date().parse(DATE_FORMAT, "2009-12-08 06:44:24 UTC")
 
         def rawDetection = 
-            new RawDetection(timestamp:timestamp,
+            new RawDetection(receiverDownload:new ReceiverDownloadFile(),
+                             timestamp:timestamp,
                              receiverName:"VR3UWM-354",
                              transmitterId:"A69-1303-62347",
                              transmitterSerialNumber:"1234",
@@ -144,7 +151,8 @@ class RawDetectionTests extends GrailsUnitTestCase
         Date timestamp = new Date().parse(DATE_FORMAT, "2009-12-08 06:44:24 UTC")
 
         def rawDetection = 
-            new RawDetection(timestamp:timestamp,
+            new RawDetection(receiverDownload:new ReceiverDownloadFile(),
+                             timestamp:timestamp,
                              receiverName:"VR3UWM-354",
                              transmitterId:"A69-1303-62347",
                              transmitterName:"shark tag",
@@ -164,7 +172,8 @@ class RawDetectionTests extends GrailsUnitTestCase
         Date timestamp = new Date().parse(DATE_FORMAT, "2009-12-08 06:44:24 UTC")
 
         def rawDetection = 
-            new RawDetection(timestamp:timestamp,
+            new RawDetection(receiverDownload:new ReceiverDownloadFile(),
+                             timestamp:timestamp,
                              receiverName:"VR3UWM-354",
                              transmitterId:"A69-1303-62347",
                              transmitterName:"shark tag",
@@ -184,7 +193,8 @@ class RawDetectionTests extends GrailsUnitTestCase
         Date timestamp = new Date().parse(DATE_FORMAT, "2009-12-08 06:44:24 UTC")
 
         def rawDetection = 
-            new RawDetection(timestamp:timestamp,
+            new RawDetection(receiverDownload:new ReceiverDownloadFile(),
+                             timestamp:timestamp,
                              receiverName:"VR3UWM-354",
                              transmitterId:"A69-1303-62347",
                              transmitterName:"shark tag",

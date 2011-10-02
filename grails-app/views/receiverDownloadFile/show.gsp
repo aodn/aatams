@@ -1,6 +1,7 @@
 
 <%@ page import="au.org.emii.aatams.FileProcessingStatus" %>
 <%@ page import="au.org.emii.aatams.ReceiverDownloadFile" %>
+<%@ page import="au.org.emii.aatams.ReceiverDownloadFileType" %>
 <%@ page import="au.org.emii.aatams.detection.InvalidDetectionReason" %>
 
 <html>
@@ -75,7 +76,8 @@
                             
                         </tr>
                     
-                        <g:if test="${receiverDownloadFileInstance.status != FileProcessingStatus.PROCESSING}">
+                        <g:if test="${   (receiverDownloadFileInstance.status != FileProcessingStatus.PROCESSING) 
+                                      && (receiverDownloadFileInstance.type == ReceiverDownloadFileType.DETECTIONS_CSV)}">
                           <!-- Total -->
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.totalDetections.label" default="Total Detections" /></td>

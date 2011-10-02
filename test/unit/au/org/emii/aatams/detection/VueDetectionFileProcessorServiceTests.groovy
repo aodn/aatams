@@ -24,6 +24,8 @@ class VueDetectionFileProcessorServiceTests extends GrailsUnitTestCase
         mockLogging(DetectionFactoryService, true)
         detectionFactoryService = new DetectionFactoryService()
         mockLogging(VueDetectionFileProcessorService, true)
+        
+        AbstractBatchProcessor.metaClass.getRecords = { getRecords(it) }
         vueDetectionFileProcessorService = new VueDetectionFileProcessorService()
         vueDetectionFileProcessorService.detectionFactoryService = detectionFactoryService
         vueDetectionFileProcessorService.metaClass.getRecords = { getRecords(it) }

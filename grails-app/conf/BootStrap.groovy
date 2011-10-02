@@ -178,9 +178,9 @@ class BootStrap
             
             production
             {
-                initialiser = new ReferenceDataInitialiser(permissionUtilsService)
-                assert(initialiser): "Initialiser cannot be null"
-                initialiser.execute()
+//                initialiser = new ReferenceDataInitialiser(permissionUtilsService)
+//                assert(initialiser): "Initialiser cannot be null"
+//                initialiser.execute()
             }
             
             performance

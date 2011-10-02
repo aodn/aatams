@@ -38,7 +38,7 @@ class DetectionValidator
     
     private boolean isUnknownReceiver()
     {
-        receiver = Receiver.findByCodeName(params.receiverName)
+        receiver = Receiver.findByCodeName(params.receiverName, [cache:true])
         return (receiver == null)
     }
     

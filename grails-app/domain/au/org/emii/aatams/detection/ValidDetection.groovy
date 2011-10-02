@@ -22,14 +22,10 @@ class ValidDetection extends RawDetection
     List<DetectionSurgery> detectionSurgeries = new ArrayList<DetectionSurgery>()
     static hasMany = [detectionSurgeries:DetectionSurgery]
     
-    static constraints = 
-    {
-    }
-    
     static boolean isDuplicate(other)
     {
         boolean duplicate = false
-        ValidDetection.findByTimestamp(other.timestamp).each
+        ValidDetection.findByTimestamp(other.timestamp, [cache:true]).each
         {
             if (it.duplicate(other))
             {

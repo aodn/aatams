@@ -21,6 +21,7 @@ class Surgery
         }
         
         comments type: 'text'
+        cache true
     }
     
     static transients = ['inWindow']

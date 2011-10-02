@@ -26,6 +26,7 @@ class Device
     
     static mapping =
     {
+        cache true
         codeName index:'code_name_index'
         status index:'status_index'
     }

@@ -88,7 +88,9 @@ class FileProcessorService
     def sendNotification(receiverDownloadFile, showLink)
     {
         mailService.sendMail 
-        {     
+        {
+            // Required to avoid hibernate exception, since session is flushed and cleared above.
+            receiverDownloadFile = ReceiverDownloadFile.get(receiverDownloadFile.id)
             to receiverDownloadFile?.requestingUser?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress

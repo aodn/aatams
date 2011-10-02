@@ -124,6 +124,8 @@ log4j = {
 //            "grails.buildtestdata",
             "grails.app.filter"//,
             //"grails.app.tagLib.com.energizedwork.grails.plugins.jodatime"
+            
+    info    "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService"
 }
 
 //

@@ -109,7 +109,7 @@
                           <!-- unknown receivers -->
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.unknownReceivers.label" default="Unknown Receivers" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetections(InvalidDetectionReason.UNKNOWN_RECEIVER)*.receiverName}</td>
+                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetections(InvalidDetectionReason.UNKNOWN_RECEIVER)*.receiverName.unique()}</td>
                           </tr>
 
                           <!-- Num no deployment -->

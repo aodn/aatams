@@ -72,6 +72,14 @@ class CaabSpecies extends Species
         INFRAORDER(nullable:true)
     }
     
+    static mapping =
+    {
+        cache true
+        spcode index:"spcode_index"
+        common_name index:"common_name_index"
+        scientific_name index:"scientific_name_index"
+    }
+    
     String toString()
     {
         return SPCODE + " - " + SCIENTIFIC_NAME + " (" + COMMON_NAME + ")"

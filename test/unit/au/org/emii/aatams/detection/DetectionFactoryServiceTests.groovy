@@ -75,7 +75,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
     void testValid()
     {
         def validDetection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
          
         assertNotNull(validDetection)
         assertTrue(validDetection instanceof ValidDetection)
@@ -90,7 +90,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
     void testValidSensor()
     {
         def validDetection = 
-            detectionFactoryService.newDetection(
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), 
                 standardParams + [(DetectionFactoryService.SENSOR_VALUE_COLUMN):123, (DetectionFactoryService.SENSOR_UNIT_COLUMN):"ADC"])
          
         assertNotNull(validDetection)
@@ -105,10 +105,10 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
 
     void testDuplicate()
     {
-        def validDetection = detectionFactoryService.newDetection(standardParams)
+        def validDetection = detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
         assertNotNull(validDetection)
         
-        def duplicateDetection = detectionFactoryService.newDetection(standardParams)
+        def duplicateDetection = detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
         assertNotNull(duplicateDetection)
         assertTrue(duplicateDetection instanceof InvalidDetection)
         assertEquals(InvalidDetectionReason.DUPLICATE, duplicateDetection.reason)
@@ -121,7 +121,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         assertFalse(deployment.detections.contains(duplicateDetection))
 
         standardParams[(DetectionFactoryService.DATE_AND_TIME_COLUMN)] = "2009-12-08 06:45:24"
-        def validDetection2 = detectionFactoryService.newDetection(standardParams)
+        def validDetection2 = detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
         assertNotNull(validDetection2)
         assertEquals(2, ValidDetection.count())
     }
@@ -130,7 +130,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
     {
         standardParams[(DetectionFactoryService.RECEIVER_COLUMN)] = "XYZ"
         def unknownReceiverDetection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
             
         assertNotNull(unknownReceiverDetection)
         assertTrue(unknownReceiverDetection instanceof InvalidDetection)
@@ -149,7 +149,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         deployment.save()
         
         def noDeploymentAtTimeDetection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
             
         assertNotNull(noDeploymentAtTimeDetection)
         assertTrue(noDeploymentAtTimeDetection instanceof InvalidDetection)
@@ -168,7 +168,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         recovery.save()
 
         def noRecoveryAtDateTimeDetection =
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
         
         assertNotNull(noRecoveryAtDateTimeDetection)
         assertTrue(noRecoveryAtDateTimeDetection instanceof InvalidDetection)
@@ -184,7 +184,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
     void testNoMatchingSurgeries() 
     {
         def detection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -257,7 +257,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         setupData()
         
         def detection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -274,7 +274,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         standardParams[(DetectionFactoryService.TRANSMITTER_COLUMN)] = "A69-1609-12345"
         
         def detection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -291,7 +291,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         standardParams[(DetectionFactoryService.TRANSMITTER_COLUMN)] = "A69-1303-1111"
         
         def detection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -311,7 +311,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         release.status = AnimalReleaseStatus.FINISHED
         
         def detection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -332,7 +332,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         tag1.save()
         
         def detection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -354,7 +354,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         release1.save()
         
         def detection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -382,7 +382,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         release1.save()
 
         def detection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -403,7 +403,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
 
         // "2009-12-08 06:44:24"
         detection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
             
         assertEquals(2, detection.detectionSurgeries.size())      
         assertTrue(detection.detectionSurgeries*.tag.contains(tag1))
@@ -413,7 +413,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
     void testRescan()
     {
         def detection = 
-            detectionFactoryService.newDetection(standardParams)
+            detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)

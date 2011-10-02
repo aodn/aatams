@@ -3,6 +3,7 @@ package au.org.emii.aatams
 import au.org.emii.aatams.detection.InvalidDetection
 import au.org.emii.aatams.detection.InvalidDetectionReason
 import au.org.emii.aatams.detection.RawDetection
+import au.org.emii.aatams.detection.ValidDetection
 
 /**
  * Index (and meta-data) to a file which has been downloaded from a receiver as
@@ -45,15 +46,33 @@ class ReceiverDownloadFile
         return String.valueOf(path)
     }
     
-    Number numDuplicates()
+    Collection<ValidDetection> validDetections()
     {
-        println("detections: " + detections)
+        def validDetections = detections.grep
+        {
+            it.isValid()
+        }
         
+        return validDetections
+    }
+    
+    Collection<InvalidDetection> invalidDetections()
+    {
         def invalidDetections = detections.grep
         {
             !it.isValid()
         }
         
-        return invalidDetections*.reason.count(InvalidDetectionReason.DUPLICATE)
+        return invalidDetections
+    }
+
+    Collection<InvalidDetection> invalidDetections(reason)
+    {
+        def invalidWithReason = invalidDetections().grep
+        {
+            it.reason == reason
+        }
+        
+        return invalidWithReason
     }
 }

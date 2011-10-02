@@ -42,11 +42,11 @@ class DetectionFactoryService
      * Creates a detection given a map of parameters (which originate from a line
      * in a CSV upload file).
      */
-    RawDetection newDetection(params) throws FileProcessingException 
+    RawDetection newDetection(downloadFile, params) throws FileProcessingException 
     {
         def nativeParams = toNativeParams(params)
         
-        RawDetection detection = initDetection(nativeParams)
+        RawDetection detection = initDetection(downloadFile, nativeParams)
         assert(detection)
         
         if (!detection.isValid())
@@ -84,9 +84,9 @@ class DetectionFactoryService
         return updatedDetections
     }
     
-    private RawDetection initDetection(nativeParams)
+    private RawDetection initDetection(downloadFile, nativeParams)
     {
-        DetectionValidator validator = new DetectionValidator(params:nativeParams)
+        DetectionValidator validator = new DetectionValidator(receiverDownload:downloadFile, params:nativeParams)
         assert(validator)
         
         return validator.validate()

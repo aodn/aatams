@@ -49,7 +49,7 @@ class VueDetectionFileProcessorService
             
             log.debug("Processing record number: " + String.valueOf(i))
             
-            RawDetection detection = detectionFactoryService.newDetection(map)
+            RawDetection detection = detectionFactoryService.newDetection(downloadFile, map)
             downloadFile.addToDetections(detection)
             
             def exactPercentComplete = i * 100 / numRecords

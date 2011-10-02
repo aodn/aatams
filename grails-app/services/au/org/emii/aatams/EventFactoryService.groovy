@@ -17,13 +17,12 @@ class EventFactoryService
      * Creates a receiver event given a map of parameters (which originate from a line
      * in a CSV upload file).
      */
-    ReceiverEvent newEvent(eventParams) throws FileProcessingException 
+    ReceiverEvent newEvent(downloadFile, eventParams) throws FileProcessingException 
     {
         String dateString = eventParams[DATE_AND_TIME_COLUMN] + " " + "UTC"
-        log.debug("Parsing date string: " + dateString)
         Date eventDate = new Date().parse(DATE_FORMAT, dateString)
         
-        Receiver receiver = Receiver.findByCodeName(eventParams[RECEIVER_COLUMN])
+        Receiver receiver = Receiver.findByCodeName(eventParams[RECEIVER_COLUMN], [cache:true])
         String errMsg = "Unknown receiver name: " + eventParams[RECEIVER_COLUMN]
         //assert(receiver != null): errMsg
         if (receiver == null)
@@ -36,7 +35,8 @@ class EventFactoryService
         ReceiverDeployment deployment = findReceiverDeployment(receiver, eventDate)
 
         ReceiverEvent event = 
-            new ReceiverEvent(receiverDeployment:deployment,
+            new ReceiverEvent(receiverDownload:downloadFile,
+                              receiverDeployment:deployment,
                               timestamp:eventDate)
        
         String description = eventParams[DESCRIPTION_COLUMN]

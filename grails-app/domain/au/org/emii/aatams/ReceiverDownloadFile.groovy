@@ -28,7 +28,9 @@ class ReceiverDownloadFile
     Person requestingUser
     
     Set<RawDetection> detections = new HashSet<RawDetection>()
-    static hasMany = [detections:RawDetection]
+    Set<ReceiverEvent> events = new HashSet<ReceiverEvent>()
+    
+    static hasMany = [detections:RawDetection, events:ReceiverEvent]
     
     static constraints =
     {

@@ -13,7 +13,7 @@ class ReceiverEvent
      */
     Date timestamp
     
-    static belongsTo = [receiverDeployment: ReceiverDeployment]
+    static belongsTo = [receiverDeployment: ReceiverDeployment, receiverDownload:ReceiverDownloadFile]
     
     String description
     

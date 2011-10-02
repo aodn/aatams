@@ -22,7 +22,7 @@
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
         </div>
-        <div class="body">
+        <div style="width:99%">
           <h1>Getting Started</h1>
           <br/>
 

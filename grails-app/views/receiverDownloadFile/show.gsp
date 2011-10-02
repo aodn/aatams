@@ -50,7 +50,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.importDate.label" default="Import Date" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${receiverDownloadFileInstance?.importDate}" /></td>
+                            <td valign="top" class="value"><g:formatDate format="dd/MM/yyyy HH:mm:ss" date="${receiverDownloadFileInstance?.importDate}" /></td>
                             
                         </tr>
                     

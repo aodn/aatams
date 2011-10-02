@@ -57,6 +57,7 @@ class RawDetection
     static mapping =
     {
         timestamp index:'timestamp_index'
+        cache true
     }
     
     boolean isValid()

@@ -51,7 +51,7 @@
                         
                             <td>${fieldValue(bean: receiverDownloadFileInstance, field: "errMsg")}</td>
                         
-                            <td><g:formatDate date="${receiverDownloadFileInstance.importDate}" /></td>
+                            <td><g:formatDate format="dd/MM/yyyy HH:mm:ss" date="${receiverDownloadFileInstance.importDate}" /></td>
                         
                             <td>${fieldValue(bean: receiverDownloadFileInstance, field: "name")}</td>
                         

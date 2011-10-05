@@ -201,7 +201,7 @@ class PermissionUtilsService
     
     def principal()
     {
-        if (!SecurityUtils.subject?.isAuthenticated())
+        if (!isAuthenticated())
         {
             return null
         }
@@ -210,6 +210,11 @@ class PermissionUtilsService
         Person principal = Person.findByUsername(SecurityUtils.subject?.principal, [cache:true])
         assert(principal): "principal cannot be null"
         return principal
+    }
+    
+    boolean isAuthenticated()
+    {
+        return SecurityUtils.subject?.isAuthenticated()
     }
     
     /**

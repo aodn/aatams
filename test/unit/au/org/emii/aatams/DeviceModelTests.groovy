@@ -33,7 +33,7 @@ class DeviceModelTests extends GrailsUnitTestCase
         vemcoVR3UWM =
             new ReceiverDeviceModel(modelName:'VR3-UWM', manufacturer:vemco)
         def receiverModels = [vemcoVR2, vemcoVR2W, vemcoVR3UWM]
-        mockDomain(DeviceModel, receiverModels)
+        mockDomain(ReceiverDeviceModel, receiverModels)
         receiverModels.each { it.save() }
             
         // Tag models.

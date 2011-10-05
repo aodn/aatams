@@ -84,13 +84,20 @@
       
       <h3>${message(code: 'navigationMenu.section.report.label', default: 'Reports')} </h3>
       <ul>
-        <g:each var="c" in="${reportControllers}">
+        <g:each var="c" in="${reportActions}">
           
-          <li class="reportControllers">
-            <g:link controller="${c.key}">${c.value}</g:link>
-            <span class="inline">
-              <g:link controller="${c.key}" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
-            </span>
+          <li class="reportActions">
+            <g:link controller="report" action="${c.key}">${c.value}</g:link>
+          </li>
+        </g:each>
+      </ul>
+      
+      <h3>${message(code: 'navigationMenu.section.dataExtract.label', default: 'Data Extract')} </h3>
+      <ul>
+        <g:each var="c" in="${dataExtractActions}">
+          
+          <li class="dataExtractActions">
+            <g:link controller="report" action="${c.key}">${c.value}</g:link>
           </li>
         </g:each>
       </ul>

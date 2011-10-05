@@ -24,8 +24,8 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
         def listInvalidCodeNames =
             ["A69-1303", "A69", "A69-1303 12345", "1303-12345", "A69 1303-234", "A69-1303-sadds"]
             
-        DeviceModel model = new DeviceModel()
-        mockDomain(DeviceModel, [model])
+        TagDeviceModel model = new TagDeviceModel()
+        mockDomain(TagDeviceModel, [model])
         model.save()
         
         DeviceStatus status = new DeviceStatus()

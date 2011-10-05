@@ -472,6 +472,15 @@ th.desc a {
     padding-left: 28px;
 }
 
+.buttons input.PDF {
+    background: transparent url(../images/skin/PDF.gif) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+.buttons input.CSV {
+    background: transparent url(../images/skin/CSV.gif) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+
 
 /* extras for jQuery_ui */
 .ui-datepicker {

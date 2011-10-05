@@ -7,16 +7,11 @@ import au.org.emii.aatams.PermissionUtilsService
  * 
  * @author jburgess
  */
-class TestDataInitialiser extends AbstractDataInitialiser
+class TestDataInitialiser extends DevelopmentDataInitialiser
 {
     TestDataInitialiser(def service)
     {
         super(service)
-    }
-    
-    void execute()
-    {
-        // Does nothing currently.
     }
 }
 

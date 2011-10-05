@@ -10,7 +10,7 @@ import org.apache.shiro.SecurityUtils
  */
 class EmbargoFilters
 {
-    def permissionUtilsService
+    def embargoService
 
     def notListActions = 'create|save|show|edit|update|delete'
     def filters = 
@@ -22,15 +22,8 @@ class EmbargoFilters
                 model ->
 
                 // Filter out releases which are embargoed.
-                model.animalReleaseInstanceList =
-                    model?.animalReleaseInstanceList.grep
-                    {
-                        String permissionString = permissionUtilsService.buildProjectReadPermission(it?.project?.id)
-                        boolean hasReadPermission = SecurityUtils.subject.isPermitted(permissionString)
-                        boolean embargoed = isEmbargoed(it)
-                        
-                        (!embargoed || hasReadPermission)
-                    }
+                model.animalReleaseInstanceList = 
+                    embargoService.applyEmbargo(model.animalReleaseInstanceList)
             }
         }
 
@@ -40,12 +33,7 @@ class EmbargoFilters
             {
                 model ->
 
-                def animalReleaseInstance = model?.animalReleaseInstance
-                String permissionString = permissionUtilsService.buildProjectReadPermission(animalReleaseInstance?.project?.id)
-                boolean hasReadPermission = SecurityUtils.subject.isPermitted(permissionString)
-                boolean embargoed = isEmbargoed(animalReleaseInstance)
-                        
-                if (embargoed && !hasReadPermission)
+                if (embargoService.isEmbargoed(model?.animalReleaseInstance))
                 {
                     // Redirect.
                     redirect(controller:"auth", action:"unauthorized")
@@ -60,20 +48,8 @@ class EmbargoFilters
                 model ->
 
                 // Filter out tag which have associated embargoed releases.
-                model.tagInstanceList =
-                    model?.tagInstanceList.grep
-                    {
-                        String permissionString = permissionUtilsService.buildProjectReadPermission(it?.project?.id)
-                        boolean hasReadPermission = SecurityUtils.subject.isPermitted(permissionString)
-                        boolean embargoed = isEmbargoed(it?.surgeries*.release)
-                            
-                        if (it instanceof Sensor)
-                        {
-                            embargoed |= isEmbargoed(it?.tag?.surgeries*.release)
-                        }
-                        
-                        (!embargoed || hasReadPermission)
-                    }
+                model.tagInstanceList = 
+                    embargoService.applyEmbargo(model.tagInstanceList)
             }
         }
 
@@ -83,17 +59,7 @@ class EmbargoFilters
             {
                 model ->
 
-                def tagInstance = model?.tagInstance
-                String permissionString = permissionUtilsService.buildProjectReadPermission(tagInstance?.project?.id)
-                boolean hasReadPermission = SecurityUtils.subject.isPermitted(permissionString)
-                boolean embargoed = isEmbargoed(tagInstance?.surgeries*.release)
-
-                if (tagInstance instanceof Sensor)
-                {
-                    embargoed |= isEmbargoed(tagInstance?.tag?.surgeries*.release)
-                }
-                        
-                if (embargoed && !hasReadPermission)
+                if (embargoService.isEmbargoed(model?.tagInstance))
                 {
                     // Redirect.
                     redirect(controller:"auth", action:"unauthorized")
@@ -107,16 +73,8 @@ class EmbargoFilters
             {
                 model ->
 
-                // Filter out sensor which have associated embargoed releases.
-                model.sensorInstanceList =
-                    model?.sensorInstanceList.grep
-                    {
-                        String permissionString = permissionUtilsService.buildProjectReadPermission(it?.project?.id)
-                        boolean hasReadPermission = SecurityUtils.subject.isPermitted(permissionString)
-                        boolean embargoed = isEmbargoed(it?.tag?.surgeries*.release)
-                        
-                        (!embargoed || hasReadPermission)
-                    }
+                model.sensorInstanceList = 
+                    embargoService.applyEmbargo(model.sensorInstanceList)
             }
         }
 
@@ -126,12 +84,7 @@ class EmbargoFilters
             {
                 model ->
 
-                def sensorInstance = model?.sensorInstance
-                String permissionString = permissionUtilsService.buildProjectReadPermission(sensorInstance?.project?.id)
-                boolean hasReadPermission = SecurityUtils.subject.isPermitted(permissionString)
-                boolean embargoed = isEmbargoed(sensorInstance?.tag?.surgeries*.release)
-                        
-                if (embargoed && !hasReadPermission)
+                if (embargoService.isEmbargoed(model?.sensorInstance))
                 {
                     // Redirect.
                     redirect(controller:"auth", action:"unauthorized")
@@ -139,78 +92,16 @@ class EmbargoFilters
             }
         }
 
-        // TODO: check for transmitter name which matches a tag name - and remove
-        // if it matches an embargoed tag.
-//        detectionList(controller:'detection', action:'list')
-//        {
-//            after =
-//            {
-//                model ->
-//
-//                // Remove any embargoed surgeries.
-//                model.detectionInstanceList =
-//                    model?.detectionInstanceList.each
-//                    {
-//                        String permissionString = permissionUtilsService.buildProjectReadPermission(it?.project?.id)
-//                        boolean hasReadPermission = SecurityUtils.subject.isPermitted(permissionString)
-//                        boolean embargoed = isEmbargoed(it?.surgeries*.release)
-//                            
-//                        if (   !embargoed
-//                            || (   embargoed 
-//                                && hasReadPermission))
-//                        {
-//                            asdf
-//                        }
-//                    }
-//            }
-//        }
-
         detectionNotList(controller:'detection', action:notListActions)
         {
             after =
             {
                 model ->
-
+                
                 def detectionInstance = model?.detectionInstance
-                
-                String permissionString = permissionUtilsService.buildProjectReadPermission(detectionInstance?.project?.id)
-                boolean hasReadPermission = SecurityUtils.subject.isPermitted(permissionString)
-                
-                model?.surgeries = detectionInstance?.detectionSurgeries*.surgery?.grep
-                {
-                    boolean embargoed = isEmbargoed(it.release)
-
-                    (!embargoed || hasReadPermission)
-                }
+                model.detectionInstance = embargoService.applyEmbargo(detectionInstance)
             }
         }
-    }
-
-    def isEmbargoed(Collection<AnimalRelease> animalReleases)
-    {
-        Date now = new Date()
-
-        for (AnimalRelease animalRelease : animalReleases)
-        {
-            if (animalRelease?.embargoDate?.after(now))
-            {
-                return true
-            }
-        }
-        
-        return false
-    }
-    
-    def isEmbargoed(AnimalRelease animalRelease)
-    {
-        Date now = new Date()
-        
-        if (animalRelease?.embargoDate?.after(now))
-        {
-            return true
-        }
-        
-        return false
     }
 }
 

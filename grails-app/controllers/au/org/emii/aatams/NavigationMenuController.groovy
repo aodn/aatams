@@ -49,9 +49,25 @@ class NavigationMenuController
         ]
     }
         
-    def reportControllers =
+    /**
+     * All reports use the same controller, just a different action.
+     */
+    def reportActions = 
     [
-        // TODO
+        'installationStationCreate':"Installations",
+        'receiverCreate':"Receivers",
+        'receiverDeploymentCreate':"Receiver Deployments",
+        'animalReleaseSummaryCreate':"Tag Summary"
+    ]
+
+    def dataExtractActions = 
+    [
+        'detectionExtract':"Detections",
+        'installationExtract':"Installations",
+        'installationStationExtract':"Installation Stations",
+        'receiverExtract':"Receivers",
+        'receiverEventExtract':"Receiver Events",
+        'tagExtract':"Tags"
     ]
     
     def helpControllers =
@@ -99,7 +115,8 @@ class NavigationMenuController
         [backgroundDataControllers: backgroundDataControllers,
          installationDataControllers: installationDataControllers,
          fieldDataControllers: fieldDataControllers(),
-         reportControllers: reportControllers,
+         reportActions: reportActions,
+         dataExtractActions: dataExtractActions,
          helpControllers: helpControllers,
          adminControllers: adminControllers,
          blacklistControllers: blacklistControllers

@@ -23,7 +23,7 @@ class TagFactoryService {
             }
             else
             {
-                DeviceModel model = DeviceModel.get(params.model.id)
+                TagDeviceModel model = TagDeviceModel.get(params.model.id)
                 
                 String codeMap = codeNameTokens[0] + "-" + codeNameTokens[1]
                 String pingCode = codeNameTokens[2]

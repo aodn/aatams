@@ -2,10 +2,10 @@ package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
 
-class ValidDetection extends RawDetection
+class ValidDetection extends RawDetection implements Embargoable
 {
     static belongsTo = [receiverDeployment: ReceiverDeployment]
-    static transients = ['project']
+    static transients = ['project', 'firstDetectionSurgery']
     
     /**
      * This is modelled as a many-to-many relationship, due to the fact that tags
@@ -21,6 +21,24 @@ class ValidDetection extends RawDetection
     // is called but apparently not.
     List<DetectionSurgery> detectionSurgeries = new ArrayList<DetectionSurgery>()
     static hasMany = [detectionSurgeries:DetectionSurgery]
+    
+    ValidDetection()
+    {
+        
+    }
+    
+    private ValidDetection(ValidDetection other)
+    {
+        timestamp = other.timestamp
+        receiverDeployment = other.receiverDeployment
+        detectionSurgeries = other.detectionSurgeries
+        receiverName = other.receiverName
+        stationName = other.stationName
+        transmitterId = other.transmitterId
+        transmitterName = other.transmitterName
+        transmitterSerialNumber = other.transmitterSerialNumber
+        location = other.location
+    }
     
     static boolean isDuplicate(other)
     {
@@ -60,5 +78,51 @@ class ValidDetection extends RawDetection
     Project getProject()
     {
         return receiverDeployment?.station?.installation?.project
+    }
+
+    /**
+     * Null object used where a detection has no associated surgeries.
+     */
+    static DetectionSurgery NULL_DETECTION_SURGERY = null
+
+    DetectionSurgery getFirstDetectionSurgery()
+    {
+        if (detectionSurgeries.isEmpty())
+        {
+            if (!NULL_DETECTION_SURGERY)
+            {
+                // Employ the null object pattern so that we don't have to have
+                // conditionals in the extract report.
+                Species species = new Species(name:" ")
+                Animal animal = new Animal(species:species)
+                AnimalRelease release = new AnimalRelease(animal:animal)
+                Surgery surgery = new Surgery(release:release)
+
+                Tag tag = new Tag(codeName:" ")
+
+                NULL_DETECTION_SURGERY = new DetectionSurgery(surgery:surgery, tag:tag)
+            }
+
+            return NULL_DETECTION_SURGERY
+        }
+
+        return detectionSurgeries[0]
+    }
+   
+    Embargoable applyEmbargo()
+    {
+        // Return a temporary detection, with embargoed surgeries removed.
+        ValidDetection retDetection = new ValidDetection(this)
+        retDetection.detectionSurgeries = []
+
+        detectionSurgeries.each
+        {
+            if (!it.surgery.release.isEmbargoed())
+            {
+                retDetection.addToDetectionSurgeries(it)
+            }
+        }
+
+        return retDetection
     }
 }

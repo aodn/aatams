@@ -18,7 +18,7 @@ class SecSecurityFilters
         "animalRelease|detection|receiverDeployment|receiverRecovery|" + \
         "receiverEvent|navigationMenu|receiverDownloadFile|" + \
         "surgery|detectionSurgery|" + \
-        "gettingStarted|about"
+        "gettingStarted|about|report|jasper"
 
     //
     // Only Sys Admins can delete (except for the following child/association 

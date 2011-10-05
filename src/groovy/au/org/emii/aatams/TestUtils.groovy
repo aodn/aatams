@@ -11,6 +11,11 @@ import org.apache.shiro.SecurityUtils
  */
 class TestUtils 
 {
+    static setupSecurityManager(subject)
+    {
+        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
+                            [ getSubject: { subject } ] as SecurityManager )
+    }
     static loginSysAdmin(caller)
     {
         Person jkburges = new Person(username: 'jkburges')
@@ -19,9 +24,7 @@ class TestUtils
                         hasRole: { true } 
                       ] as Subject
 
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
+        setupSecurityManager(subject)
         SecurityUtils.metaClass.static.getSubject = { subject }
         
         // Need this for "findByUsername()" etc.
@@ -46,8 +49,7 @@ class TestUtils
                         }
                       ] as Subject
 
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
+        setupSecurityManager(subject)
 
         SecurityUtils.metaClass.static.getSubject = { subject }
 

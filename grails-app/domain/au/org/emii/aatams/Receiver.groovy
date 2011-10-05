@@ -15,9 +15,14 @@ class Receiver extends Device
     static hasMany = [detections: RawDetection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
     
+    static mapping = 
+    {
+        organisation sort:'name'
+    }
+    
     static String constructCodeName(params)
     {
-        DeviceModel model = DeviceModel.get(params.model.id)
+        ReceiverDeviceModel model = ReceiverDeviceModel.get(params.model.id)
         assert(model): "model cannot be null"
         
         return String.valueOf(model) + "-" + params.serialNumber

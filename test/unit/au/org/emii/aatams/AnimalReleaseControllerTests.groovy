@@ -220,14 +220,14 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
     def tag
     def surgeryType
     def surgeryTreatmentType
-    DeviceModel deviceModel
+    TagDeviceModel deviceModel
     
     private void initSurgeryObjects()
     {
         mockDomain(AnimalRelease)
         
         deviceModel = new TagDeviceModel()
-        mockDomain(DeviceModel, [deviceModel])
+        mockDomain(TagDeviceModel, [deviceModel])
         deviceModel.save()
 
         tag = new Tag(codeMap:"A69-1303",

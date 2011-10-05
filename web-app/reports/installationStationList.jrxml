@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="installationStationList" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<template><![CDATA["/Users/jburgess/NetBeansProjects/aatams_reports/web-app/reports/aatamsStyle.jrtx"]]></template>
+	<parameter name="REPORT_USER" class="java.lang.String"/>
+	<parameter name="FILTER_PARAMS" class="java.util.Collection" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/Users/jburgess/NetBeansProjects/aatams_reports/web-app/reports/"]]></defaultValueExpression>
+	</parameter>
+	<field name="installation.project.name" class="java.lang.String"/>
+	<field name="installation.name" class="java.lang.String"/>
+	<field name="installation.configuration.type" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="curtainPosition" class="java.lang.Integer"/>
+	<field name="latitude" class="java.lang.Double"/>
+	<field name="longitude" class="java.lang.Double"/>
+
+	<sortField name="installation.project.name" order="Ascending"/>
+	<sortField name="installation.name" order="Ascending"/>
+	<sortField name="name" order="Ascending"/>
+	<sortField name="curtainPosition" order="Ascending"/>
+
+	<group name="projectGroup">
+		<groupExpression><![CDATA[$F{installation.project.name}]]></groupExpression>
+		<groupHeader>
+			<band height="27">
+				<textField>
+					<reportElement style="fieldValue" x="91" y="7" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{installation.project.name}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="fieldNameText" x="18" y="7" width="73" height="20"/>
+					<textElement/>
+					<text><![CDATA[project:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="installationGroup">
+		<groupExpression><![CDATA[$F{installation.name}]]></groupExpression>
+		<groupHeader>
+			<band height="27">
+				<textField>
+					<reportElement style="fieldValue" x="91" y="7" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{installation.name}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="fieldNameText" x="18" y="7" width="73" height="20"/>
+					<textElement/>
+					<text><![CDATA[installation:]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<rectangle>
+				<reportElement style="titleBackground" x="0" y="0" width="802" height="79"/>
+			</rectangle>
+			<staticText>
+				<reportElement style="titleText" mode="Transparent" x="26" y="23" width="262" height="33"/>
+				<textElement/>
+				<text><![CDATA[AATAMS Installations]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="53" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="17" width="802" height="22"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{FILTER_PARAMS})]]></dataSourceExpression>
+				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "filterParamsSubreport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<rectangle>
+				<reportElement style="columnHeaderBackground" x="0" y="0" width="802" height="21"/>
+			</rectangle>
+			<staticText>
+				<reportElement style="fieldNameText" mode="Transparent" x="32" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[configuration]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="fieldNameText" mode="Transparent" x="132" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[station name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="fieldNameText" mode="Transparent" x="232" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[curtain position]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="fieldNameText" mode="Transparent" x="332" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[latitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="fieldNameText" mode="Transparent" x="432" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[longitude]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="fieldValue" x="32" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{installation.configuration.type}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="fieldValue" x="132" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="fieldValue" x="232" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{curtainPosition} == null ? "" : $F{curtainPosition}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="fieldValue" x="332" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{latitude}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="fieldValue" x="432" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{longitude}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy HH:mm">
+				<reportElement x="11" y="34" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="678" y="34" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="762" y="34" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

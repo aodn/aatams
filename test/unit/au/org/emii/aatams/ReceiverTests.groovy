@@ -34,8 +34,8 @@ class ReceiverTests extends GrailsUnitTestCase
     
     void testConstructCodeName()
     {
-        DeviceModel model = new ReceiverDeviceModel(modelName:"VR2W")
-        mockDomain(DeviceModel, [model])
+        ReceiverDeviceModel model = new ReceiverDeviceModel(modelName:"VR2W")
+        mockDomain(ReceiverDeviceModel, [model])
         model.save()
         
         def params = [serialNumber: "12345",

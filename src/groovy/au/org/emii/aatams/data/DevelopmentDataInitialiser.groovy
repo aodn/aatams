@@ -260,6 +260,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
         DeviceModel vemcoVR2 =
             new ReceiverDeviceModel(modelName:'VR2', manufacturer:vemco).save(failOnError: true)
+        assert(!vemcoVR2.hasErrors())
+        
         DeviceModel vemcoV8 =
             new TagDeviceModel(modelName:'V8', manufacturer:vemco).save(failOnError: true)
 
@@ -274,7 +276,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                          model:vemcoVR2,
                          organisation:csiroOrg,
                          comment:'RX 1 belonging to CSIRO').save(failOnError: true)
-
+        
         Receiver rx2 =
             new Receiver(codeName:'VR2W-101337',
                          serialNumber:'87654321',
@@ -285,6 +287,20 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         Receiver rx3 =
             new Receiver(codeName:'VR2W-101338',
                          serialNumber:'1111r',
+                         status:newStatus,
+                         model:vemcoVR2,
+                         organisation:imosOrg).save(failOnError: true)
+                     
+        Receiver rx4 =
+            new Receiver(codeName:'VR2W-101344',
+                         serialNumber:'4444r',
+                         status:newStatus,
+                         model:vemcoVR2,
+                         organisation:imosOrg).save(failOnError: true)
+                     
+        Receiver rx5 =
+            new Receiver(codeName:'VR2W-101355',
+                         serialNumber:'5555r',
                          status:newStatus,
                          model:vemcoVR2,
                          organisation:imosOrg).save(failOnError: true)
@@ -334,7 +350,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     model:vemcoV8,
                     project:tunaProject,
                     status:newStatus,
-                    transmitterType:pinger).save(failOnError: true)
+                    transmitterType:pinger,
+                    expectedLifeTimeDays:100).save(failOnError: true)
           
         Tag tag6 =
             new Tag(codeName:'A70-1303-44444',
@@ -405,6 +422,11 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new Installation(name:'Ningaloo Array',
                              configuration:array,
                              project:tunaProject).save(failOnError:true)
+                         
+        Installation heronCurtain =
+            new Installation(name:'Heron Island Curtain',
+                             configuration:curtain,
+                             project:sealCountProject).save(failOnError:true)
 
         WKTReader reader = new WKTReader();
 
@@ -440,7 +462,19 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                     name:'Ningaloo S2',
                                     curtainPosition:2,
                                     location:(Point)reader.read("POINT(20.1234 20.1234)")).save(failOnError:true)
-            
+
+        InstallationStation heronS1 =
+            new InstallationStation(installation:heronCurtain,
+                                    name:'Heron S1',
+                                    curtainPosition:1,
+                                    location:(Point)reader.read("POINT(12.34 -42.30)")).save(failOnError:true)
+
+        InstallationStation heronS2 =
+            new InstallationStation(installation:heronCurtain,
+                                    name:'Heron S2',
+                                    curtainPosition:2,
+                                    location:(Point)reader.read("POINT(76.02 -20.1234)")).save(failOnError:true)
+        
 
         //
         //  Receiver Deployments.
@@ -486,6 +520,33 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                    batteryLifeDays:90,
                                    location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
                                
+        ReceiverDeployment rx4Heron =
+            new ReceiverDeployment(station:heronS1,
+                                   receiver:rx4,
+                                   deploymentNumber:1,
+                                   deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
+                                   acousticReleaseID:"asdf",
+                                   mooringType:concreteMooring,
+                                   bottomDepthM:12f,
+                                   depthBelowSurfaceM:5f,
+                                   receiverOrientation:ReceiverOrientation.UP,
+                                   batteryLifeDays:90,
+                                   location:(Point)reader.read("POINT(10.1234 10.1234)"),
+                                   comments:"This was fun to deploy").save(failOnError:true)
+
+        ReceiverDeployment rx5Heron =
+            new ReceiverDeployment(station:heronS2,
+                                   receiver:rx5,
+                                   deploymentNumber:1,
+                                   deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
+                                   acousticReleaseID:"asdf",
+                                   mooringType:concreteMooring,
+                                   bottomDepthM:12f,
+                                   depthBelowSurfaceM:5f,
+                                   receiverOrientation:ReceiverOrientation.UP,
+                                   batteryLifeDays:90,
+                                   location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
+        
         //
         // Animals and Animal Releases etc.
         //
@@ -556,8 +617,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                               captureMethod:net,
                               releaseLocality:'Neptune Islands',
                               releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
-                              releaseDateTime:new DateTime("2011-05-15T14:15:00"),
-                              embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2015-05-15 12:34:56")).save(failOnError:true)
+                              releaseDateTime:new DateTime("2011-05-15T14:15:00")).save(failOnError:true)
                           
         AnimalMeasurement whiteShark1Length = 
             new AnimalMeasurement(release:whiteShark1Release,
@@ -607,49 +667,23 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         tag1.addToSurgeries(surgery4).save(failOnError:true)
 
         // Receiver Recovery.
-        ReceiverRecovery recovery1 = 
-            new ReceiverRecovery(recoveryDateTime: new DateTime("2011-07-25T12:34:56"),
+        ReceiverRecovery recovery1 =
+            new ReceiverRecovery(recoveryDateTime: new DateTime("2013-07-25T12:34:56"),
                                  location:(Point)reader.read("POINT(10.1234 10.1234)"),
                                  status:recoveredStatus,
                                  recoverer:sealProjectInvestigator,
                                  deployment:rx1Bondi,
                                  batteryLife:12.5f,
-                                 batteryVoltage:3.7f)
-        recovery1.save(failOnError:true)
-                             
-        ReceiverRecovery recovery2 = 
-            new ReceiverRecovery(recoveryDateTime: new DateTime("2011-05-17T12:54:56"),
+                                 batteryVoltage:3.7f).save(failOnError:true)
+
+        ReceiverRecovery recovery2 =
+            new ReceiverRecovery(recoveryDateTime: new DateTime("2013-05-17T12:54:56"),
                                  location:(Point)reader.read("POINT(20.1234 20.1234)"),
                                  status:recoveredStatus,
                                  recoverer:sealProjectInvestigator,
                                  deployment:rx2Bondi,
                                  batteryLife:12.5f,
-                                 batteryVoltage:3.7f)
-                             
-        // Detections.
-        /**
-        Detection detection1 =
-            new Detection(timestamp:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-20 14:10:00"),
-                          receiverDeployment:rx1Bondi,
-                          stationName:'Bondi SW1',
-                          transmitterName:'A69-1303-62339',
-                          transmitterSerialNumber:'12345678',
-                          location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
-        DetectionSurgery detSurg1 = 
-            new DetectionSurgery(detection:detection1,
-                                 surgery:surgery1).save(failOnError:true)
-        
-        Detection detection2 =
-            new Detection(timestamp:Date.parse("yyyy-MM-dd hh:mm:ss", "2011-05-20 15:10:00"),
-                          receiverDeployment:rx2Bondi,
-                          stationName:'Bondi SW2',
-                          transmitterName:'A69-1303-62339',
-                          transmitterSerialNumber:'12345678',
-                          location:(Point)reader.read("POINT(20.1234 20.1234)")).save(failOnError:true)
-        DetectionSurgery detSurg2 = 
-            new DetectionSurgery(detection:detection2,
-                                 surgery:surgery2).save(failOnError:true)
-                                 */
+                                 batteryVoltage:3.7f).save(failOnError:true)
     }
 }
 

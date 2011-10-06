@@ -33,11 +33,6 @@ class ReferenceDataInitialiser extends AbstractDataInitialiser
     
     def initReferenceData()
     {
-        Notification gettingStarted = 
-            new Notification(key:"GETTING_STARTED",
-                             htmlFragment:"Click here to get started",
-                             anchorSelector:"[href='/aatams/gettingStarted/index']").save(failOnError:true)
-    
         Notification receiverRecoveryCreate =
             new Notification(key:"RECEIVER_RECOVERY_CREATE",
                              htmlFragment:"Click here to create a receiver recovery",

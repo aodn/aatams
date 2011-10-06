@@ -25,11 +25,24 @@ class SearchableController
         
         try 
         {
-            return [searchResult: searchableService.search(params.q, params)]
+            // Results are lazy-loaded, hence associations are null.
+            def searchResult = searchableService.search(params.q, params)
+            searchResult.results = refresh(searchResult.results)
+            return [searchResult: searchResult]
         } 
         catch (SearchEngineQueryParseException ex) 
         {
             return [parseException: true]
+        }
+    }
+    
+    def refresh(results)
+    {
+        results.collect
+        {
+            result ->
+            
+            result.get(result.id)
         }
     }
 }

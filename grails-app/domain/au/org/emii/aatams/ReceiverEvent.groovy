@@ -21,6 +21,12 @@ class ReceiverEvent
     
     String units
     
+    static searchable =
+    {
+//        root:false
+        receiverDeployment component:true
+    }
+    
     static constraints = 
     {
         timestamp()

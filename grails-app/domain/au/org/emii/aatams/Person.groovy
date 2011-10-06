@@ -14,6 +14,11 @@ class Person extends SecUser
     
     static transients = ['projects']
     
+    static searchable =
+    {
+        spellCheck "include"
+    }
+    
     String name;
     String emailAddress;
     String phoneNumber;

@@ -17,6 +17,7 @@ class SecSecurityFilters
         "installation|installationStation|receiver|species|tag|sensor|" + \
         "animalRelease|detection|receiverDeployment|receiverRecovery|" + \
         "receiverEvent|navigationMenu|receiverDownloadFile|" + \
+        "searchable|" + \
         "surgery|detectionSurgery|" + \
         "gettingStarted|about|report|jasper"
 

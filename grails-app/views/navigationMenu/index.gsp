@@ -5,8 +5,16 @@
 
     <div id="controllerList" >
 
+      <h3>${message(code: 'navigationMenu.section.search.label', default: 'Search')} </h3>
+      <ul>
+        <li>
+          <g:form url='[controller: "searchable", action: "index"]' id="searchableForm" name="searchableForm" method="get">
+            <g:textField name="q" value="${params.q}" size="25"/>
+          </g:form>
+        </li>
+      </ul>
+
       <h3>${message(code: 'navigationMenu.section.background.label', default: 'Background Data')} </h3>
-      
       <ul>
           <li class="backgroundDataControllers">
             <g:link controller="organisation">Organisations</g:link>

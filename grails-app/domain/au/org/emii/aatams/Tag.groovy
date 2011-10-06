@@ -8,6 +8,11 @@ class Tag extends Device implements Embargoable
                       surgeries:Surgery, 
                       detectionSurgeries:DetectionSurgery]
 
+    static searchable =
+    {
+        spellCheck "include"
+    }
+    
     Project project
     String codeMap
     Integer pingCode

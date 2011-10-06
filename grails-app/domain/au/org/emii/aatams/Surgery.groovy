@@ -9,6 +9,8 @@ import org.joda.time.contrib.hibernate.*
  */
 class Surgery 
 {
+    def sessionFactory
+    
     static belongsTo = [release: AnimalRelease, tag: Tag]
     static hasMany = [detectionSurgeries: DetectionSurgery]
     
@@ -26,6 +28,10 @@ class Surgery
     
     static transients = ['inWindow']
     
+    static searchable =
+    {
+        tag component:true
+    }
     
     DateTime timestamp = new DateTime(Person.defaultTimeZone())
     SurgeryType type

@@ -31,6 +31,11 @@ class ReceiverRecovery
         comments type: 'text'
     }
     
+    static searchable =
+    {
+        deployment component:true
+    }
+    
     DateTime recoveryDateTime = new DateTime(Person.defaultTimeZone())
     Point location
     DeviceStatus status

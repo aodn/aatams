@@ -2,6 +2,7 @@ package au.org.emii.aatams.data
 
 import au.org.emii.aatams.*
 
+import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.notification.*
 
 import com.vividsolutions.jts.geom.Point
@@ -33,11 +34,6 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
     
     def initData()
     {
-        Notification gettingStarted = 
-            new Notification(key:"GETTING_STARTED",
-                             htmlFragment:"Click here to get started",
-                             anchorSelector:"[href='/aatams/gettingStarted/index']").save(failOnError:true)
-    
         Notification receiverRecoveryCreate =
             new Notification(key:"RECEIVER_RECOVERY_CREATE",
                              htmlFragment:"Click here to create a receiver recovery",
@@ -641,6 +637,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         type:external,
                         treatmentType:antibiotic)
         tag1.addToSurgeries(surgery1).save(failOnError:true)
+        whiteShark1Release.addToSurgeries(surgery1).save(failOnError:true)
 
         Surgery surgery2 = 
             new Surgery(release:whiteShark1Release,
@@ -649,6 +646,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         type:external,
                         treatmentType:antibiotic)
         tag2.addToSurgeries(surgery2).save(failOnError:true)
+        whiteShark1Release.addToSurgeries(surgery2).save(failOnError:true)
         
         Surgery surgery3 = 
             new Surgery(release:whiteShark2Release,
@@ -657,7 +655,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         type:external,
                         treatmentType:antibiotic)
         tag1.addToSurgeries(surgery3).save(failOnError:true)
-                    
+        whiteShark2Release.addToSurgeries(surgery3).save(failOnError:true)
+        
         Surgery surgery4 = 
             new Surgery(release:blueFinTuna1Release,
                         tag:tag1,   // Can't really have a tag on two different animals.
@@ -665,7 +664,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         type:external,
                         treatmentType:antibiotic)
         tag1.addToSurgeries(surgery4).save(failOnError:true)
-
+        blueFinTuna1Release.addToSurgeries(surgery4).save(failOnError:true)
+        
         // Receiver Recovery.
         ReceiverRecovery recovery1 =
             new ReceiverRecovery(recoveryDateTime: new DateTime("2013-07-25T12:34:56"),
@@ -684,6 +684,37 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  deployment:rx2Bondi,
                                  batteryLife:12.5f,
                                  batteryVoltage:3.7f).save(failOnError:true)
+                             
+        ReceiverDownloadFile export1 = 
+            new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
+                                     path:"/tmp/export1.csv",
+                                     name:"export1.csv",
+                                     importDate:new DateTime("2013-05-17T12:54:56").toDate(),
+                                     status:FileProcessingStatus.PROCESSED,
+                                     errMsg:"",
+                                     requestingUser:jonBurgess).save(failOnError:true)
+                                 
+        10.times
+        {
+            ValidDetection detection = 
+                new ValidDetection(receiverDeployment:rx1Bondi,
+                                   timestamp:new Date(),
+                                   receiverName:rx1.codeName,
+                                   transmitterId:tag1.codeName,
+                                   receiverDownload:export1)
+
+            export1.addToDetections(detection)
+        }
+        export1.save(failOnError:true)
+                             
+        ReceiverDownloadFile export2 = 
+            new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
+                                     path:"/tmp/export2.csv",
+                                     name:"export2.csv",
+                                     importDate:new DateTime("2013-05-17T12:54:56").toDate(),
+                                     status:FileProcessingStatus.PROCESSED,
+                                     errMsg:"",
+                                     requestingUser:jonBurgess).save(failOnError:true)
     }
 }
 

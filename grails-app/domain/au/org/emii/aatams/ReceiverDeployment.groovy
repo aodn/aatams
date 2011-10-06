@@ -41,6 +41,12 @@ class ReceiverDeployment
         cache: true
         station cache:true
     }
+
+    static searchable =
+    {
+        receiver component:true
+        station component:true
+    }
     
     /**
      * Date the receiver is scheduled to be recovered.

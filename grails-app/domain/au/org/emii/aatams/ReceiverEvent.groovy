@@ -23,7 +23,7 @@ class ReceiverEvent
     
     static searchable =
     {
-//        root:false
+        root false
         receiverDeployment component:true
     }
     

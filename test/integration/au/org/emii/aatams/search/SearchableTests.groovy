@@ -66,7 +66,6 @@ class SearchableTests extends GrailsUnitTestCase
     void testSearchRecoveriesByReceiver()
     {
         def rx1 = Receiver.findByCodeName('VR2W-101336')
-        def rx2 = Receiver.findByCodeName('VR2W-101337')
 
         def rx1BondiRecovery = ReceiverRecovery.findByRecoveryDateTime(new DateTime("2013-07-25T12:34:56"))
         def rx2BondiRecovery = ReceiverRecovery.findByRecoveryDateTime(new DateTime("2013-05-17T12:54:56"))
@@ -77,10 +76,9 @@ class SearchableTests extends GrailsUnitTestCase
         assertFalse(searchResult.results*.id.contains(rx2BondiRecovery.id))
     }
     
-    void testSearchExportsByReceiver()
+    void testSearchExportsByReceiverViaDetection()
     {
         def rx1 = Receiver.findByCodeName('VR2W-101336')
-        def rx2 = Receiver.findByCodeName('VR2W-101337')
 
         def export1 = ReceiverDownloadFile.findByName("export1.csv")
         def export2 = ReceiverDownloadFile.findByName("export2.csv")
@@ -95,6 +93,26 @@ class SearchableTests extends GrailsUnitTestCase
     void testSearchExportsByTag()
     {
         def tag1 = Tag.findByCodeName('A69-1303-62339')
-        def tag2 = Tag.findByCodeName('A69-1303-46601')
+        
+        def export1 = ReceiverDownloadFile.findByName("export1.csv")
+        def export2 = ReceiverDownloadFile.findByName("export2.csv")
+
+        def searchResult = ReceiverDownloadFile.search(tag1.serialNumber)
+        
+        assertTrue(searchResult.results*.id.contains(export1.id))
+        assertFalse(searchResult.results*.id.contains(export2.id))
+    }
+
+    void testSearchExportsByReceiverViaEvent()
+    {
+        def rx2 = Receiver.findByCodeName('VR2W-101337')
+
+        def export1 = ReceiverDownloadFile.findByName("export1.csv")
+        def export2 = ReceiverDownloadFile.findByName("export2.csv")
+        
+        def searchResult = ReceiverDownloadFile.search(rx2.codeName)
+        
+        assertFalse(searchResult.results*.id.contains(export1.id))
+        assertTrue(searchResult.results*.id.contains(export2.id))
     }
 }

@@ -102,8 +102,9 @@
                 <g:set var="className" value="${ClassUtils.getShortName(result.getClass())}" />
                 <g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />
                 <g:set var="desc" value="${result.toString()}" />
+                <g:set var="classNameI18N" value="${message(code: className[0].toLowerCase() + className.substring(1) + '.label', default: className)}"/>
                 <g:if test="${desc.size() > 120}"><g:set var="desc" value="${desc[0..120] + '...'}" /></g:if>
-                <div class="name"><a href="${link}">${String.valueOf(desc)} (${message(code: className.toLowerCase() + '.label', default: className)})</a></div>
+                <div class="name"><a href="${link}">${String.valueOf(desc)} (${classNameI18N})</a></div>
               </div>
             </g:each>
           </div>

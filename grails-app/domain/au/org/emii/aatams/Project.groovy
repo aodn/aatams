@@ -20,13 +20,6 @@ class Project
     EntityStatus status = EntityStatus.PENDING
     Person requestingUser
     
-    // Default mapping throws error on BootStrap.
-//    static searchable =
-//    {
-//        only:['name', 'description']
-//        spellCheck "include"
-//    }
-    
     static constraints = 
     {
         name(blank:false, unique:true)

@@ -702,11 +702,16 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                    receiverName:rx1.codeName,
                                    transmitterId:tag1.codeName,
                                    receiverDownload:export1)
-
+                               
+            DetectionSurgery detSurgery =
+                new DetectionSurgery(surgery:surgery1,
+                                     detection:detection,
+                                     tag:tag1)
+            detection.addToDetectionSurgeries(detSurgery)
             export1.addToDetections(detection)
         }
         export1.save(failOnError:true)
-                             
+        
         ReceiverDownloadFile export2 = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
                                      path:"/tmp/export2.csv",
@@ -715,6 +720,19 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                      status:FileProcessingStatus.PROCESSED,
                                      errMsg:"",
                                      requestingUser:jonBurgess).save(failOnError:true)
+                                 
+        10.times
+        {
+            ReceiverEvent event =
+                new ReceiverEvent(timestamp:new Date(),
+                                  receiverDeployment:rx2Bondi,
+                                  description:"desc",
+                                  data:"123",
+                                  unit:"m")
+                              
+            export2.addToEvents(event)
+        }
+        export2.save(failOnError:true)
     }
 }
 

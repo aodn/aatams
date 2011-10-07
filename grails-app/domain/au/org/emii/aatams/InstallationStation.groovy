@@ -16,11 +16,6 @@ class InstallationStation
     static hasMany = [receivers:Receiver, deployments:ReceiverDeployment]
     static transients = ['curtainPositionAsString', 'scrambledLocation', 'latitude', 'longitude']
     
-    static searchable =
-    {
-        spellCheck "include"
-    }
-    
     static mapping =
     {
         // Speed up candidateEntitiesService.

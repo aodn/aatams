@@ -15,11 +15,6 @@ class Receiver extends Device
     static hasMany = [detections: RawDetection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
     
-    static searchable =
-    {
-        spellCheck "include"
-    }
-    
     static mapping = 
     {
         organisation sort:'name'

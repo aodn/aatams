@@ -11,7 +11,14 @@ class SearchableTests extends GrailsUnitTestCase
     
     protected void setUp() 
     {
+        log.info("before super.setUp()")
         super.setUp()
+        
+        log.info("before unindex()")
+        searchableService.unindex()
+        log.info("before index()")
+        searchableService.index()
+        log.info("after index()")
     }
 
     protected void tearDown() 

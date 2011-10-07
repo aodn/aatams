@@ -47,6 +47,11 @@ class ReceiverRecovery
         comments(nullable:true)
     }
     
+    static searchable =
+    {
+        deployment(component:true)
+    }
+    
     String toString()
     {
         return String.valueOf(deployment?.receiver) + " recovered on " + String.valueOf(recoveryDateTime)

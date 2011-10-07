@@ -35,6 +35,8 @@ class Project
 	status index:'status_index'
     }
     
+    static searchable = true
+    
     String toString()
     {
         return name

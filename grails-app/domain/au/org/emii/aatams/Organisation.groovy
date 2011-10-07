@@ -40,6 +40,8 @@ class Organisation
         sort "name"
     }
     
+    static searchable = true
+    
     String toString()
     {
         return name + " (" + department  + ")"

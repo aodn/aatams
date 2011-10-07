@@ -34,6 +34,8 @@ class Tag extends Device implements Embargoable
     
     static transients = ['codeMapPingCode', 'expectedLifeTimeDaysAsString']
     
+    static searchable = true
+    
     String toString()
     {
         return getCodeMapPingCode()

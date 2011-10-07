@@ -20,6 +20,8 @@ class Receiver extends Device
         organisation sort:'name'
     }
     
+    static searchable = true
+    
     static String constructCodeName(params)
     {
         ReceiverDeviceModel model = ReceiverDeviceModel.get(params.model.id)

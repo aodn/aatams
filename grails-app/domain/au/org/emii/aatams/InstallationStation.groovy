@@ -23,6 +23,8 @@ class InstallationStation
         installation cache:true
     }
     
+    static searchable = true
+    
     String name
     
     /**

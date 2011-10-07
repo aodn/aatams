@@ -80,7 +80,6 @@ class AnimalReleaseSummaryServiceTests extends GrailsUnitTestCase
 
     void testCountBySpecies()
     {
-        
         def result = service.countBySpecies()
 
         assertEquals(3, result.size())
@@ -89,16 +88,20 @@ class AnimalReleaseSummaryServiceTests extends GrailsUnitTestCase
         assertEquals("white shark", count0.species.name)
         assertEquals(3, count0.currentReleases)
         assertEquals(5, count0.totalReleases)
+        println(count0.percentEmbargoed)
+        assertTrue(count0.percentEmbargoed - 40.0f < 0.01)
         
         AnimalReleaseCount count1 = result[1]
         assertEquals("flathead", count1.species.name)
         assertEquals(2, count1.currentReleases)
         assertEquals(2, count1.totalReleases)
+        assertTrue(count1.percentEmbargoed - 100.0f < 0.01)
         
         AnimalReleaseCount count2 = result[2]
         assertEquals("stingray", count2.species.name)
         assertEquals(0, count2.currentReleases)
         assertEquals(1, count2.totalReleases)
+        assertTrue(count2.percentEmbargoed - 0 < 0.01)
     }
     
     void testSummary()

@@ -14,5 +14,9 @@ class AnimalReleaseCount
     Long currentReleases
     
     Long totalReleases
+    
+    Long totalEmbargoed
+    
+    Float percentEmbargoed
 }
 

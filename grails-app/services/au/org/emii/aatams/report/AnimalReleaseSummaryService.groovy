@@ -22,7 +22,9 @@ class AnimalReleaseSummaryService
             {
                 countsBySpecies[species] = new AnimalReleaseCount(species:species, 
                                                                   currentReleases:0, 
-                                                                  totalReleases:0)
+                                                                  totalReleases:0,
+                                                                  totalEmbargoed:0,
+                                                                  percentEmbargoed:0.0f)
             }
             
             // Increment total
@@ -32,6 +34,13 @@ class AnimalReleaseSummaryService
             {
                 countsBySpecies[species].currentReleases = countsBySpecies[species].currentReleases + 1
             }
+            
+            if (release.isEmbargoed())
+            {
+                countsBySpecies[species].totalEmbargoed = countsBySpecies[species].totalEmbargoed + 1
+            }
+            
+            countsBySpecies[species].percentEmbargoed = (float)countsBySpecies[species].totalEmbargoed / countsBySpecies[species].totalReleases * 100
         }
         
         return sortByTotalReleases(countsBySpecies.values())

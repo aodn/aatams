@@ -21,7 +21,7 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
     protected void setUp() 
     {
         super.setUp()
-        
+     
         embargoService = new EmbargoService()
         mockLogging(PermissionUtilsService, true)
         permissionUtilsService = new PermissionUtilsService()

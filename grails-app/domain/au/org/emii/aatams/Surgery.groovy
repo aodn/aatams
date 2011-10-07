@@ -28,11 +28,6 @@ class Surgery
     
     static transients = ['inWindow']
     
-    static searchable =
-    {
-        tag component:true
-    }
-    
     DateTime timestamp = new DateTime(Person.defaultTimeZone())
     SurgeryType type
     SurgeryTreatmentType treatmentType

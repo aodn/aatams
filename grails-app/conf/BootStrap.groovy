@@ -18,8 +18,7 @@ import shiro.*
 class BootStrap 
 {
     def permissionUtilsService
-    def searchableService
-    
+
     def init = 
     { 
         servletContext ->
@@ -157,10 +156,6 @@ class BootStrap
             return returnArray
         }
         
-        assert(searchableService)
-        searchableService.stopMirroring()
-        searchableService.unindex()
-        
         assert(permissionUtilsService): "permissionUtilsService cannot be null"
         DataInitialiser initialiser  //= new DevelopmentDataInitialiser(permissionUtilsService)
             
@@ -195,9 +190,6 @@ class BootStrap
                 initialiser.execute()
             }
         }
-        
-        searchableService.index()        
-        searchableService.startMirroring()
     }
     
     def destroy = 

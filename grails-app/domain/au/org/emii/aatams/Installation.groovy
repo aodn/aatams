@@ -10,11 +10,6 @@ class Installation
     static hasMany = [stations:InstallationStation]
     static belongsTo = [project:Project]
     
-    static searchable =
-    {
-        spellCheck "include"
-    }
-    
     String name
     InstallationConfiguration configuration
     

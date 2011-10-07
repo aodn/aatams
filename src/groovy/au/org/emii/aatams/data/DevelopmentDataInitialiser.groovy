@@ -154,11 +154,21 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
         OrganisationProject csiroSeals =
             new OrganisationProject(organisation:csiroOrg,
-                                    project:sealCountProject).save(failOnError: true)
-
+                                    project:sealCountProject)
+                                
+        sealCountProject.addToOrganisationProjects(csiroSeals)
+        csiroOrg.addToOrganisationProjects(csiroSeals)
+        sealCountProject.save(failOnError:true)
+        csiroOrg.save(failOnError:true)
+        
         OrganisationProject csiroTuna =
             new OrganisationProject(organisation:csiroOrg,
-                                    project:tunaProject).save(failOnError: true)
+                                    project:tunaProject)
+                                
+        tunaProject.addToOrganisationProjects(csiroTuna)
+        csiroOrg.addToOrganisationProjects(csiroTuna)
+        tunaProject.save(failOnError:true)
+        csiroOrg.save(failOnError:true)
 
         //
         // Security/people.
@@ -189,8 +199,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                        phoneNumber:'1234',
                        emailAddress:'jbloggs@blah.au',
                        status:EntityStatus.ACTIVE,
-                       defaultTimeZone:DateTimeZone.forID("Australia/Perth")).save(failOnError: true)
-
+                       defaultTimeZone:DateTimeZone.forID("Australia/Perth"))
+                   
         Person johnCitizen =
             new Person(username:'jcitizen',
                        passwordHash:new Sha256Hash("password").toHex(),
@@ -199,7 +209,12 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                        phoneNumber:'5678',
                        emailAddress:'jcitizen@blah.au',
                        status:EntityStatus.ACTIVE,
-                       defaultTimeZone:DateTimeZone.forID("Australia/Adelaide")).save(failOnError: true)
+                       defaultTimeZone:DateTimeZone.forID("Australia/Adelaide"))
+        
+        csiroOrg.addToPeople(joeBloggs)
+        csiroOrg.addToPeople(johnCitizen)
+        csiroOrg.save(failOnError:true)
+        
 
         //
         // Project Roles.
@@ -222,29 +237,33 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new ProjectRole(project:tunaProject,
                             person: joeBloggs,
                             roleType: administrator,
-                            access:ProjectAccess.READ_WRITE).save(failOnError: true)
+                            access:ProjectAccess.READ_WRITE)
+        tunaProject.addToProjectRoles(tunaAdmin).save(failOnError:true)           
+        joeBloggs.addToProjectRoles(tunaAdmin).save(failOnError:true, flush:true)   // flush required to keep compass happy
         permissionUtilsService.setPermissions(tunaAdmin)
         
         ProjectRole sealProjectInvestigator =
             new ProjectRole(project:sealCountProject,
                             person: joeBloggs,
                             roleType: principalInvestigator,
-                            access:ProjectAccess.READ_WRITE).save(failOnError: true)
-        joeBloggs.save(failOnError:true)
+                            access:ProjectAccess.READ_WRITE)
+                        
+        sealCountProject.addToProjectRoles(sealProjectInvestigator).save(failOnError:true, flush:true)
+        joeBloggs.addToProjectRoles(sealProjectInvestigator).save(failOnError:true, flush:true)
         permissionUtilsService.setPermissions(sealProjectInvestigator)
 
         ProjectRole sealAdmin =
             new ProjectRole(project:sealCountProject,
                             person: johnCitizen,
                             roleType: administrator,
-                            access:ProjectAccess.READ_ONLY).save(failOnError: true)
+                            access:ProjectAccess.READ_ONLY).save(failOnError: true, flush:true)
         permissionUtilsService.setPermissions(sealAdmin)
 
         ProjectRole tunaWrite =
             new ProjectRole(project:tunaProject,
                             person: johnCitizen,
                             roleType: administrator,
-                            access:ProjectAccess.READ_WRITE).save(failOnError: true)
+                            access:ProjectAccess.READ_WRITE).save(failOnError: true, flush:true)
         permissionUtilsService.setPermissions(tunaWrite)
 
 

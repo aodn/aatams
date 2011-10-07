@@ -10,11 +10,6 @@ class Organisation
                   
     static transients = ['projects']
     
-    static searchable =
-    {
-        spellCheck "include"
-    }
-    
     String name
     String department
     String phoneNumber

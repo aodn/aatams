@@ -27,12 +27,6 @@ class DetectionSurgery
 {
     static belongsTo = [surgery:Surgery, detection:RawDetection, tag:Tag]
     
-    static searchable = 
-    {
-        root false
-        tag component:true
-    }
-    
     static DetectionSurgery newSavedInstance(surgery, detection, tag)
     {
         DetectionSurgery detectionSurgery =

@@ -42,6 +42,11 @@ class Surgery
         comments(nullable:true, blank:true)
     }
     
+//    static searchable =
+//    {
+////        tag(component:true)
+//    }
+    
     String toString()
     {
         return "Tag (" + String.valueOf(tag) + "): " + String.valueOf(type)

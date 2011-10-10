@@ -35,7 +35,10 @@ class Project
 	status index:'status_index'
     }
     
-    static searchable = true
+    static searchable = 
+    {
+        only = ['name', 'description']
+    }
     
     String toString()
     {

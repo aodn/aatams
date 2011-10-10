@@ -152,6 +152,11 @@ environments {
 
     test {
         searchable {
+            
+            compassSettings = ['compass.engine.optimizer.schedule.period':'60']
+            
+            
+
             // disable bulk index on startup
             bulkIndexOnStartup = false
 
@@ -162,7 +167,7 @@ environments {
             mirrorChanges = false
             
             // use faster in-memory index
-            compassConnection = "ram://test-index"
+//            compassConnection = "ram://test-index"
         }
     }
 

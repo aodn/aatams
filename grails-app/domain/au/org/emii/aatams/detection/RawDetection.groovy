@@ -60,10 +60,10 @@ class RawDetection
         cache true
     }
     
-    static searchable =
-    {
-        root(false)
-    }
+//    static searchable =
+//    {
+//        root(false)
+//    }
     
     boolean isValid()
     {

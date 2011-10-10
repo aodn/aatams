@@ -34,7 +34,11 @@ class Tag extends Device implements Embargoable
     
     static transients = ['codeMapPingCode', 'expectedLifeTimeDaysAsString']
     
-    static searchable = true
+    // Default searchable mapping is causing hang in intetgration tests.
+//    static searchable = 
+//    {
+//        only = ['project', 'codeName', 'serialNumber', 'pingCode', 'codeMap']
+//    }
     
     String toString()
     {

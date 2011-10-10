@@ -47,10 +47,10 @@ class ReceiverRecovery
         comments(nullable:true)
     }
     
-    static searchable =
-    {
-        deployment(component:true)
-    }
+//    static searchable =
+//    {
+//        deployment(component:true)
+//    }
     
     String toString()
     {

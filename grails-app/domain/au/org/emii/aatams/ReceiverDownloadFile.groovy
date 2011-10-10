@@ -43,11 +43,11 @@ class ReceiverDownloadFile
         errMsg type: 'text'
     }
     
-    static searchable =
-    {
-        detections(component:true)
-        events(component:true)
-    }
+//    static searchable =
+//    {
+//        detections(component:true)
+//        events(component:true)
+//    }
     
     String toString()
     {

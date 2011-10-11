@@ -24,7 +24,7 @@ class SecDbRealm {
         // Get the user with the given username. If the user is not
         // found, then they don't have an account and we throw an
         // exception.
-        def user = SecUser.findByUsername(username)
+        def user = SecUser.findByUsername(username, [cache:true])
         if (!user) {
             throw new UnknownAccountException("No account found for user [${username}]")
         }
@@ -71,7 +71,7 @@ class SecDbRealm {
         //
         // First find all the permissions that the user has that match
         // the required permission's type and project code.
-        def user = SecUser.findByUsername(principal)
+        def user = SecUser.findByUsername(principal, [cache:true])
         def permissions = user.permissions
         
         // Try each of the permissions found and see whether any of
@@ -100,7 +100,7 @@ class SecDbRealm {
         // If not, does he gain it through a role?
         //
         // Get the permissions from the roles that the user does have.
-        def results = SecUser.executeQuery("select distinct p from SecUser as user join user.roles as role join role.permissions as p where user.username = '$principal'")
+        def results = SecUser.executeQuery("select distinct p from SecUser as user join user.roles as role join role.permissions as p where user.username = '$principal'", [cache:true])
 
         // There may be some duplicate entries in the results, but
         // at this stage it is not worth trying to remove them. Now,

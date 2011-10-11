@@ -12,11 +12,12 @@ class ProjectRole
     static transients = ['projectAndRole']
     static hasMany = [recoveries:ReceiverRecovery]
     
-//    static searchable =
-//    {
-//        root(false)
-////        project(component:true)
-//    }
+    static searchable =
+    {
+        root(false)
+        person(component:true)
+        project(component:true)
+    }
     
     ProjectRoleType roleType
     

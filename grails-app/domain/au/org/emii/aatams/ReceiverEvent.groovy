@@ -29,9 +29,9 @@ class ReceiverEvent
         units(nullable:true, blank:true)
     }
     
-//    static searchable =
-//    {
-//        root(false)
-//        receiverDeployment(component:true)
-//    }
+    static searchable =
+    {
+        root(false)
+        receiverDeployment(component:true)
+    }
 }

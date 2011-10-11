@@ -153,21 +153,17 @@ environments {
     test {
         searchable {
             
-            compassSettings = ['compass.engine.optimizer.schedule.period':'60']
-            
-            
-
             // disable bulk index on startup
-            bulkIndexOnStartup = false
+//            bulkIndexOnStartup = false
 
             // Mirroring is causing "org.springframework.orm.hibernate3.HibernateSystemException: Found two representations of same collection"
             // in tests.
             //
             // Instead, call "searchableService.index()" in tests that require search.
-            mirrorChanges = false
+//            mirrorChanges = false
             
             // use faster in-memory index
-//            compassConnection = "ram://test-index"
+            compassConnection = "ram://test-index"
         }
     }
 

@@ -1,6 +1,6 @@
 package au.org.emii.aatams.search
 
-//import org.compass.core.engine.SearchEngineQueryParseException
+import org.compass.core.engine.SearchEngineQueryParseException
 
 /**
  * Basic web interface for Grails Searchable Plugin
@@ -9,8 +9,8 @@ package au.org.emii.aatams.search
  */
 class SearchableController 
 {
-    def elasticSearchService
-//    def searchableService
+//    def elasticSearchService
+    def searchableService
 
     /**
      * Index page with search form and results
@@ -24,17 +24,17 @@ class SearchableController
             return [:]
         }
         
-//        try 
-//        {
+        try 
+        {
             // Results are lazy-loaded, hence associations are null.
-            def res = elasticSearchService.search(params.q, params)
-            res.searchResults = refresh(res.searchResults)
+            def res = searchableService.search(params.q, params)
+            res.searchResults = refresh(res.results)
             return [searchResult: res]
-//        } 
-//        catch (SearchEngineQueryParseException ex) 
-//        {
-//            return [parseException: true]
-//        }
+        } 
+        catch (SearchEngineQueryParseException ex) 
+        {
+            return [parseException: true]
+        }
     }
     
     def refresh(results)

@@ -40,10 +40,7 @@ class Organisation
         sort "name"
     }
     
-    static searchable = 
-    {
-        only = ['name', 'department']
-    }
+    static searchable = true
     
     String toString()
     {

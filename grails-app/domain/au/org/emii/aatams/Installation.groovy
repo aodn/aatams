@@ -27,6 +27,11 @@ class Installation
         project cache:true
     }
     
+    static searchable =
+    {
+        project(component:true)
+    }
+    
     String toString()
     {
         return name

@@ -23,7 +23,10 @@ class InstallationStation
         installation cache:true
     }
     
-//    static searchable = true
+    static searchable = 
+    {
+        installation(component:true)
+    }
     
     String name
     

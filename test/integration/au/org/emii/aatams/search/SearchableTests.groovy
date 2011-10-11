@@ -7,20 +7,9 @@ import grails.test.*
 
 class SearchableTests extends GrailsUnitTestCase 
 {
-//    def searchableService
-    def elasticSearchService
-    
     protected void setUp() 
     {
-//        log.info("before super.setUp()")
         super.setUp()
-        
-//        log.info("before unindex()")
-//        searchableService.unindex()
-//        log.info("before index()")
-        assert(elasticSearchService)
-//        elasticSearchService.index()
-//        log.info("after index()")
     }
 
     protected void tearDown() 
@@ -28,9 +17,6 @@ class SearchableTests extends GrailsUnitTestCase
         super.tearDown()
     }
 
-    void testNothing()
-    {}
-    
     void testSearchOrganisationByName() 
     {
         def csiro = Organisation.findByName("CSIRO")
@@ -38,8 +24,8 @@ class SearchableTests extends GrailsUnitTestCase
         
         def searchResult = Organisation.search("CSIRO")
         
-        assertTrue(searchResult.searchResults*.name.contains(csiro.name))
-        assertFalse(searchResult.searchResults*.name.contains(imos.name))
+        assertTrue(searchResult.results*.name.contains(csiro.name))
+        assertFalse(searchResult.results*.name.contains(imos.name))
     }
     
     void testSearchProjects()
@@ -47,7 +33,7 @@ class SearchableTests extends GrailsUnitTestCase
         def sealCount = Project.findByName('Seal Count')
         def searchResult = Project.search(sealCount.name)
         
-        assertTrue(searchResult.searchResults*.id.contains(sealCount.id))
+        assertTrue(searchResult.results*.id.contains(sealCount.id))
     }
 
     void testSearchProjectsByOrgName()
@@ -56,24 +42,29 @@ class SearchableTests extends GrailsUnitTestCase
         def whale = Project.findByName('Whale')
         def searchResult = Project.search('CSIRO')
         
-        assertTrue(searchResult.searchResults*.id.contains(sealCount.id))
-        assertFalse(searchResult.searchResults*.id.contains(whale.id))
+        assertTrue(searchResult.results*.id.contains(sealCount.id))
+        assertFalse(searchResult.results*.id.contains(whale.id))
     }
     
     void testSearchPeopleByProjectName()
     {
+        def jcitizen = Person.findByUsername('jcitizen')
         def joeBloggs = Person.findByUsername('jbloggs')
         
         def searchResult = Person.search('Seal Count')
-        assertTrue(searchResult.searchResults*.id.contains(joeBloggs.id))
+        assertTrue(searchResult.results*.id.contains(jcitizen.id))
+        assertTrue(searchResult.results*.id.contains(joeBloggs.id))
     }
     
     void testSearchPeopleByOrganisationName()
     {
+        def jcitizen = Person.findByUsername('jcitizen')
         def joeBloggs = Person.findByUsername('jbloggs')
         
         def searchResult = Person.search('CSIRO')
-        assertTrue(searchResult.searchResults*.id.contains(joeBloggs.id))
+        println("searchResult: " + searchResult)
+        assertTrue(searchResult.results*.id.contains(jcitizen.id))
+        assertTrue(searchResult.results*.id.contains(joeBloggs.id))
     }
     
     void testSearchDeploymentsByReceiver()
@@ -86,8 +77,8 @@ class SearchableTests extends GrailsUnitTestCase
         
         def searchResult = ReceiverDeployment.search(rx1.codeName)
         
-        assertTrue(searchResult.searchResults*.id.contains(rx1Bondi.id))
-        assertFalse(searchResult.searchResults*.id.contains(rx2Bondi.id))
+        assertTrue(searchResult.results*.id.contains(rx1Bondi.id))
+        assertFalse(searchResult.results*.id.contains(rx2Bondi.id))
     }
     
     void testSearchDeploymentsByStations()
@@ -100,8 +91,8 @@ class SearchableTests extends GrailsUnitTestCase
 
         def searchResult = ReceiverDeployment.search(bondiSW1.name)
         
-        assertTrue(searchResult.searchResults*.id.contains(rx1Bondi.id))
-        assertFalse(searchResult.searchResults*.id.contains(rx2Bondi.id))
+        assertTrue(searchResult.results*.id.contains(rx1Bondi.id))
+        assertFalse(searchResult.results*.id.contains(rx2Bondi.id))
     }
     
     void testSearchRecoveriesByReceiver()
@@ -113,8 +104,8 @@ class SearchableTests extends GrailsUnitTestCase
         
         def searchResult = ReceiverRecovery.search(rx1.codeName)
         
-        assertTrue(searchResult.searchResults*.id.contains(rx1BondiRecovery.id))
-        assertFalse(searchResult.searchResults*.id.contains(rx2BondiRecovery.id))
+        assertTrue(searchResult.results*.id.contains(rx1BondiRecovery.id))
+        assertFalse(searchResult.results*.id.contains(rx2BondiRecovery.id))
     }
     
     void testSearchExportsByReceiverViaDetection()
@@ -126,8 +117,8 @@ class SearchableTests extends GrailsUnitTestCase
         
         def searchResult = ReceiverDownloadFile.search(rx1.codeName)
         
-        assertTrue(searchResult.searchResults*.id.contains(export1.id))
-        assertFalse(searchResult.searchResults*.id.contains(export2.id))
+        assertTrue(searchResult.results*.id.contains(export1.id))
+        assertFalse(searchResult.results*.id.contains(export2.id))
     }
     
 
@@ -140,8 +131,8 @@ class SearchableTests extends GrailsUnitTestCase
 
         def searchResult = ReceiverDownloadFile.search(tag1.serialNumber)
         
-        assertTrue(searchResult.searchResults*.id.contains(export1.id))
-        assertFalse(searchResult.searchResults*.id.contains(export2.id))
+        assertTrue(searchResult.results*.id.contains(export1.id))
+        assertFalse(searchResult.results*.id.contains(export2.id))
     }
 
     void testSearchExportsByReceiverViaEvent()
@@ -153,7 +144,7 @@ class SearchableTests extends GrailsUnitTestCase
         
         def searchResult = ReceiverDownloadFile.search(rx2.codeName)
         
-        assertFalse(searchResult.searchResults*.id.contains(export1.id))
-        assertTrue(searchResult.searchResults*.id.contains(export2.id))
+        assertFalse(searchResult.results*.id.contains(export1.id))
+        assertTrue(searchResult.results*.id.contains(export2.id))
     }
 }

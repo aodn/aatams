@@ -35,9 +35,9 @@ class Project
 	status index:'status_index'
     }
     
-    static searchable = 
+    static searchable =
     {
-        only = ['name', 'description']
+        except = 'installations'
     }
     
     String toString()

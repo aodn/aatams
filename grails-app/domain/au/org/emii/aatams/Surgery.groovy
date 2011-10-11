@@ -42,10 +42,10 @@ class Surgery
         comments(nullable:true, blank:true)
     }
     
-//    static searchable =
-//    {
-////        tag(component:true)
-//    }
+    static searchable =
+    {
+//        tag(component:true)
+    }
     
     String toString()
     {

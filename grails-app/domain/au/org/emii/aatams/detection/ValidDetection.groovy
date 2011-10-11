@@ -22,12 +22,12 @@ class ValidDetection extends RawDetection implements Embargoable
     List<DetectionSurgery> detectionSurgeries = new ArrayList<DetectionSurgery>()
     static hasMany = [detectionSurgeries:DetectionSurgery]
     
-//    static searchable =
-//    {
-//        root(false)
-//        receiverDeployment(component:true)
-//        detectionSurgeries(component:true)
-//    }
+    static searchable =
+    {
+        root(false)
+        receiverDeployment(component:true)
+        detectionSurgeries(component:true)
+    }
     
     ValidDetection()
     {

@@ -14,47 +14,55 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
     def embargoService
     def permissionUtilsService
     def reportQueryExecutorService
+    def searchableService
     
     Installation installation1
     Installation installation2
+    Installation installation3
+    
+    Person user
+    
+    ProjectRole project1Pi
+    ProjectRole project2Pi
     
     protected void setUp() 
     {
         super.setUp()
+        
+        // Hibernate is getting its knickers in a knot for some reason in this test, so turn off mirroring:
+        // org.hibernate.HibernateException: Found two representations of same collection: shiro.SecUser.permissions
+        searchableService.stopMirroring()
      
-        embargoService = new EmbargoService()
-        mockLogging(PermissionUtilsService, true)
-        permissionUtilsService = new PermissionUtilsService()
-        embargoService.permissionUtilsService = permissionUtilsService
-        
-        reportQueryExecutorService = new ReportQueryExecutorService()
-        reportQueryExecutorService.embargoService = embargoService
-        reportQueryExecutorService.permissionUtilsService = permissionUtilsService
-        
         // Create some projects and installations.
-        Project project1 = Project.buildLazy(name: "project 1")
-        Project project2 = Project.buildLazy(name: "project 2")
-        Project project3 = Project.buildLazy(name: "project 3")
+        Person requester = Person.findByUsername("jkburges")
+        Project project1 = new Project(name: "project 1", description: "desc", status:EntityStatus.ACTIVE, requestingUser:requester)
+        Project project2 = new Project(name: "project 2", description: "desc", status:EntityStatus.ACTIVE, requestingUser:requester)
+        Project project3 = new Project(name: "project 3", description: "desc", status:EntityStatus.ACTIVE, requestingUser:requester)
         def projectList = [project1, project2, project3]
         projectList.each{ it.save()}
         
-        InstallationConfiguration config = InstallationConfiguration.buildLazy(type:"CURTAIN").save()
+        InstallationConfiguration config = InstallationConfiguration.findByType("CURTAIN")
         
-        installation1 = Installation.buildLazy(name: "installation 1",
-                                                        project: project1,
-                                                        configuration:config)
-        installation2 = Installation.buildLazy(name: "installation 2",
-                                                        project: project2,
-                                                        configuration:config)
-        Installation installation3 = Installation.buildLazy(name: "installation 3",
-                                                        project: project3,
-                                                        configuration:config)
+        installation1 = new Installation(name: "installation 1",
+                                         project: project1,
+                                         configuration:config)
+        installation2 = new Installation(name: "installation 2",
+                                         project: project2,
+                                         configuration:config)
+        installation3 = new Installation(name: "installation 3",
+                                         project: project3,
+                                         configuration:config)
         def installationList = [installation1, installation2, installation3]
         installationList.each { it.save() }
         
-        Person user = Person.build(username: 'user', 
-                                   name: "A User", 
-                                   organisation:Organisation.build(name:"Some Org"),
+        def imos = Organisation.findByName('IMOS')
+        user = new Person(username: 'user', 
+                                   passwordHash: 'password',
+                                   name: "A User",
+                                   emailAddress:"auser@auser.com",
+                                   phoneNumber:"1234",
+                                   status:EntityStatus.ACTIVE,
+                                   organisation:imos,
                                    defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
         def subject = [ getPrincipal: { user.username },
                         isAuthenticated: { true },
@@ -75,20 +83,19 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
         SecurityUtils.metaClass.static.getSubject = { subject }
         
         // Add roles on project 1 and 2, but not 3
-        ProjectRoleType piRoleType = ProjectRoleType.buildLazy(displayName: ProjectRoleType.PRINCIPAL_INVESTIGATOR)
+        ProjectRoleType piRoleType = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
        
-        ProjectRole project1Pi = ProjectRole.buildLazy(project:project1, person:user, roleType:piRoleType, access:ProjectAccess.READ_ONLY)
-        ProjectRole project2Pi = ProjectRole.buildLazy(project:project2, person:user, roleType:piRoleType, access:ProjectAccess.READ_WRITE)
+        project1Pi = new ProjectRole(project:project1, person:user, roleType:piRoleType, access:ProjectAccess.READ_ONLY)
+        project2Pi = new ProjectRole(project:project2, person:user, roleType:piRoleType, access:ProjectAccess.READ_WRITE)
         def projectRoleList = [project1Pi, project2Pi]
         
         projectRoleList.each { user.addToProjectRoles(it) }
         user.save()
-        
-        println ("Roles: " + ProjectRole.list())
     }
 
     protected void tearDown() 
     {
+        searchableService.startMirroring()
         super.tearDown()
     }
 

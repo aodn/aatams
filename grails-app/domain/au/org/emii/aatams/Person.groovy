@@ -41,12 +41,12 @@ class Person extends SecUser
         cache:true
     }
     
-//    static searchable = true
-//    static searchable = 
-//    {
-//        organisation(component:true)
-////        projectRoles(component:true)
-//    }
+    static searchable = 
+    {
+        organisation(component:true)
+        projectRoles(component:true)
+        except = ['passwordHash', 'permissions', 'roles']
+    }
 
     String toString()
     {

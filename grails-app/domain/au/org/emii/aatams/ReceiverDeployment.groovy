@@ -19,7 +19,7 @@ import org.joda.time.contrib.hibernate.*
 class ReceiverDeployment 
 {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
-    static transients = ['scrambledLocation']
+    static transients = ['scrambledLocation', 'active']
     Set<RawDetection> detections = new HashSet<RawDetection>()
     static hasMany = [detections: RawDetection, events: ReceiverEvent]
 
@@ -142,5 +142,17 @@ class ReceiverDeployment
     Point getScrambledLocation()
     {
         return GeometryUtils.scrambleLocation(location)
+    }
+    
+    boolean isActive()
+    {
+        if (!recovery)
+        {
+            return true
+        }
+        
+        def now = new DateTime()
+        
+        return deploymentDateTime.isBefore(now) && now.isBefore(recovery?.recoveryDateTime)
     }
 }

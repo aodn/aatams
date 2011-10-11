@@ -19,6 +19,7 @@
 	<field name="curtainPosition" class="java.lang.Integer"/>
 	<field name="latitude" class="java.lang.Double"/>
 	<field name="longitude" class="java.lang.Double"/>
+	<field name="active" class="java.lang.Boolean"/>
 	<sortField name="installation.project.name"/>
 	<sortField name="installation.name"/>
 	<sortField name="name"/>
@@ -97,29 +98,34 @@
 				<reportElement style="columnHeaderBackground" x="0" y="0" width="802" height="21"/>
 			</rectangle>
 			<staticText>
-				<reportElement style="fieldNameText" mode="Transparent" x="32" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="52" y="1" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[configuration]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" mode="Transparent" x="132" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="152" y="1" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[station name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" mode="Transparent" x="232" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="252" y="1" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[curtain position]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" mode="Transparent" x="332" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="352" y="1" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[latitude]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" mode="Transparent" x="432" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="452" y="1" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[longitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="fieldNameText" mode="Transparent" x="552" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[active]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -135,10 +141,10 @@
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement style="fieldValue" x="252" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{curtainPosition} == null ? "" : $F{curtainPosition}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{curtainPosition}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="fieldValue" x="352" y="0" width="100" height="20"/>
@@ -149,6 +155,11 @@
 				<reportElement style="fieldValue" x="452" y="0" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{longitude}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="fieldValue" x="552" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{active} ? "yes" : "no"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

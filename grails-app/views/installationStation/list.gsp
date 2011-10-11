@@ -36,6 +36,8 @@
                         
                             <g:sortableColumn property="installation.project" title="${message(code: 'installationStation.installation.project.label', default: 'Project')}" />
 
+                            <th><g:message code="installationStation.active.label" default="Active" /></th>
+                        
                         </tr>
                     </thead>
                     <tbody>
@@ -57,6 +59,8 @@
 
                             <td><g:link controller="project" action="show" id="${installationStationInstance?.installation?.project?.id}">${fieldValue(bean: installationStationInstance?.installation?.project, field: "name")}</g:link></td>
                     
+                            <td><g:formatBoolean boolean="${installationStationInstance?.active}" true="yes" false="no" /></td>
+                        
                         </tr>
                     </g:each>
                     </tbody>

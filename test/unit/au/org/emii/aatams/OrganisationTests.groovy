@@ -70,4 +70,24 @@ class OrganisationTests extends GrailsUnitTestCase
         assertEquals(bbb, retrievedOrgList[1])
         assertEquals(ccc, retrievedOrgList[2])
     }
+    
+    void testTotalReceivers()
+    {
+        Organisation aaa = new Organisation(name: "aaa")
+        Receiver r1 = new Receiver()
+        Receiver r2 = new Receiver()
+        def receiverList = [r1, r2]
+        
+        mockDomain(Organisation, [aaa])
+        mockDomain(Receiver, receiverList)
+        
+        receiverList.each
+        {
+            aaa.addToReceivers(it)
+        }
+       
+        aaa.save()
+        
+        assertEquals(2, aaa.getTotalReceivers())
+    }
 }

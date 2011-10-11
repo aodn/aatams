@@ -1,9 +1,9 @@
-,,AATAMS Receivers,,,,,,,,,
-,Parameters,,,,,,,,,,
-,user:,,,,Jon Burgess,,,,,,
-,,,code name,,,status,manufacturer,model,serial number,,
-,organisation:,,,IMOS,,,,,,,
-,,,VR2W-101338,,,NEW,Vemco,VR2,1111r,,
-,,,VR2W-101344,,,NEW,Vemco,VR2,4444r,,
-,,,VR2W-101355,,,NEW,Vemco,VR2,5555r,,
-03/10/2011 16:51,,,,,,,,,,Page 1 of, 1
+,,AATAMS Receivers,,,,,,,,,,,
+,Parameters,,,,,,,,,,,,
+,user:,,,,Jon Burgess,,,,,,,,
+,,,code name,,,status,,manufacturer,,model,serial number,,
+,organisation:,,,IMOS,,,total receivers:,,3,,,,
+,,,VR2W-101338,,,NEW,,Vemco,,VR2,1111r,,
+,,,VR2W-101344,,,NEW,,Vemco,,VR2,4444r,,
+,,,VR2W-101355,,,NEW,,Vemco,,VR2,5555r,,
+12/10/2011 10:42,,,,,,,,,,,,Page 1 of, 1

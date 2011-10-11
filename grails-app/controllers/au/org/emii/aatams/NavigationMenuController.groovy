@@ -54,7 +54,7 @@ class NavigationMenuController
      */
     def reportActions = 
     [
-        'installationStationCreate':"Installations",
+        'installationStationCreate':"Installation Stations",
         'receiverCreate':"Receivers",
         'receiverDeploymentCreate':"Receiver Deployments",
         'animalReleaseSummaryCreate':"Tag Summary"

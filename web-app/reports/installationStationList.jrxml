@@ -3,17 +3,14 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-
 	<style name="titleBackground" forecolor="#FFFFFF" backcolor="#006699" radius="4"/>
 	<style name="columnHeaderBackground" forecolor="#FFFFFF" backcolor="#E6E6E6" radius="4"/>
 	<style name="titleText" forecolor="#FFFFFF" fontSize="24" pdfFontName="Helvetica-Bold"/>
 	<style name="fieldNameText" vAlign="Middle" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold"/>
 	<style name="fieldValue" forecolor="#000000" vAlign="Middle" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
-
 	<parameter name="REPORT_USER" class="java.lang.String"/>
 	<parameter name="FILTER_PARAMS" class="java.util.Collection" isForPrompting="false"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false"/>
 	<field name="installation.project.name" class="java.lang.String"/>
 	<field name="installation.name" class="java.lang.String"/>
 	<field name="installation.configuration.type" class="java.lang.String"/>
@@ -21,12 +18,10 @@
 	<field name="curtainPosition" class="java.lang.Integer"/>
 	<field name="latitude" class="java.lang.Double"/>
 	<field name="longitude" class="java.lang.Double"/>
-
-	<sortField name="installation.project.name" order="Ascending"/>
-	<sortField name="installation.name" order="Ascending"/>
-	<sortField name="name" order="Ascending"/>
-	<sortField name="curtainPosition" order="Ascending"/>
-
+	<sortField name="installation.project.name"/>
+	<sortField name="installation.name"/>
+	<sortField name="name"/>
+	<sortField name="curtainPosition"/>
 	<group name="projectGroup">
 		<groupExpression><![CDATA[$F{installation.project.name}]]></groupExpression>
 		<groupHeader>
@@ -70,9 +65,9 @@
 				<reportElement style="titleBackground" x="0" y="0" width="802" height="79"/>
 			</rectangle>
 			<staticText>
-				<reportElement style="titleText" mode="Transparent" x="26" y="23" width="262" height="33"/>
+				<reportElement style="titleText" mode="Transparent" x="26" y="23" width="351" height="33"/>
 				<textElement/>
-				<text><![CDATA[AATAMS Installations]]></text>
+				<text><![CDATA[AATAMS Installation Stations]]></text>
 			</staticText>
 		</band>
 	</title>

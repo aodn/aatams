@@ -85,7 +85,7 @@ class ReportInfoService
                 (Installation.class):new ReportInfo(displayName:"Installations",
                                                     jrxmlFilename:["extract":"installationExtract"],
                                                     filterParams:[]),
-                (InstallationStation.class):new ReportInfo(displayName:"Installations",
+                (InstallationStation.class):new ReportInfo(displayName:"Installation Stations",
                                                            jrxmlFilename:["report":"installationStationList",
                                                                           "extract":"installationStationExtract"],
                                                            filterParams:installationStationFilterParams),

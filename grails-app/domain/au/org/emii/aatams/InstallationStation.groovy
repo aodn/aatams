@@ -14,7 +14,7 @@ class InstallationStation
 {
     static belongsTo = [installation:Installation]
     static hasMany = [receivers:Receiver, deployments:ReceiverDeployment]
-    static transients = ['curtainPositionAsString', 'scrambledLocation', 'latitude', 'longitude']
+    static transients = ['curtainPositionAsString', 'scrambledLocation', 'latitude', 'longitude', 'active']
     
     static mapping =
     {
@@ -90,5 +90,19 @@ class InstallationStation
         }
         
         return String.valueOf(curtainPosition)
+    }
+    
+    /**
+     * Station is active if there is one or more active deployments at this
+     * station.
+     */
+    boolean isActive()
+    {
+        def activeDeployments = deployments.grep 
+        {
+            it.isActive()
+        }
+        
+        return activeDeployments.size() >= 1
     }
 }

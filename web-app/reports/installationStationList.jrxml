@@ -12,6 +12,7 @@
 	<parameter name="FILTER_PARAMS" class="java.util.Collection" isForPrompting="false"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false"/>
 	<field name="installation.project.name" class="java.lang.String"/>
+	<field name="installation.project.organisations" class="java.lang.String"/>
 	<field name="installation.name" class="java.lang.String"/>
 	<field name="installation.configuration.type" class="java.lang.String"/>
 	<field name="name" class="java.lang.String"/>
@@ -26,16 +27,26 @@
 		<groupExpression><![CDATA[$F{installation.project.name}]]></groupExpression>
 		<groupHeader>
 			<band height="27">
+				<staticText>
+					<reportElement style="fieldNameText" x="18" y="7" width="73" height="20"/>
+					<textElement/>
+					<text><![CDATA[project:]]></text>
+				</staticText>
 				<textField>
 					<reportElement style="fieldValue" x="91" y="7" width="100" height="20"/>
 					<textElement/>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{installation.project.name}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement style="fieldNameText" x="18" y="7" width="73" height="20"/>
+					<reportElement style="fieldNameText" x="191" y="7" width="83" height="20"/>
 					<textElement/>
-					<text><![CDATA[project:]]></text>
+					<text><![CDATA[organisations:]]></text>
 				</staticText>
+				<textField>
+					<reportElement style="fieldValue" x="274" y="7" width="297" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{installation.project.organisations}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupHeader>
 	</group>

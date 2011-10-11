@@ -10,4 +10,10 @@ class SecUser {
     static constraints = {
         username(nullable: false, blank: false, unique:true)
     }
+
+    static mapping = 
+    {
+        // Speed up candidate entities service/permission utils service.
+        cache:true
+    }
 }

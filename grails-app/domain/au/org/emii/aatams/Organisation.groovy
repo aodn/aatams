@@ -8,7 +8,7 @@ class Organisation
                       receivers:Receiver,
                       people:Person]
                   
-    static transients = ['projects']
+    static transients = ['projects', 'totalReceivers']
     
     String name
     String department
@@ -55,5 +55,15 @@ class Organisation
     static List<Organisation> listActive()
     {
         return findAllByStatus(EntityStatus.ACTIVE)
+    }
+    
+    Integer getTotalReceivers()
+    {
+        if (!receivers)
+        {
+            return 0
+        }
+        
+        return receivers.size()
     }
 }

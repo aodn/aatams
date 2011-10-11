@@ -85,7 +85,7 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
     {
         ReportInfo stationReportInfo = reportInfoService.getReportInfo("installationStation")
         assertNotNull(stationReportInfo)
-        assertEquals("Installations", stationReportInfo.displayName)
+        assertEquals("Installation Stations", stationReportInfo.displayName)
 
         def filterParams = stationReportInfo.filterParams
         assertNotNull(filterParams)

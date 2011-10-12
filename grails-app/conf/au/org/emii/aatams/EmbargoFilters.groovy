@@ -12,7 +12,7 @@ class EmbargoFilters
 {
     def embargoService
 
-    def notListActions = 'save|show|edit|update|delete'
+    def notListActions = 'show|edit|update|delete'
     def filters = 
     {
         animalReleaseList(controller:'animalRelease', action:'list')
@@ -58,7 +58,7 @@ class EmbargoFilters
             after =
             {
                 model ->
-
+                
                 if (embargoService.isEmbargoed(model?.tagInstance))
                 {
                     // Redirect.

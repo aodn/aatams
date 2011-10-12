@@ -20,6 +20,8 @@ class PersonControllerTests extends ControllerUnitTestCase
     def hasRole = true
     boolean mailSent
     
+    def user
+    
     protected void setUp() 
     {
         super.setUp()
@@ -38,11 +40,11 @@ class PersonControllerTests extends ControllerUnitTestCase
         mailSent = false
         controller.metaClass.sendMail = { mailSent = true }
         
-        Person user = new Person(username: "username")
+        user = new Person(username: "username")
         mockDomain(Person, [user])
         user.save()
         
-        def subject = [ getPrincipal: { user.username },
+        def subject = [ getPrincipal: { user?.username },
                         isAuthenticated: { true },
                         hasRole: { hasRole },
                         isPermitted: { false },
@@ -229,6 +231,7 @@ class PersonControllerTests extends ControllerUnitTestCase
     void testSaveUnlistedOrganisation()
     {
         hasRole = false
+        user = null
         
         mockDomain(Organisation)
         
@@ -248,12 +251,14 @@ class PersonControllerTests extends ControllerUnitTestCase
 
         controller.save(cmd)
         
+        assertNotNull(Person.findByName("John"))
         assertEquals("john", Person.findByName("John").username)
         assertEquals(EntityStatus.PENDING, Person.findByName("John").status)
 
         assertNotNull(Organisation.findByName("unlisted"))
         assertEquals(EntityStatus.PENDING, Organisation.findByName("unlisted").status)
         assertEquals(Organisation.findByName("unlisted"), Person.findByName("John").organisation)
+        assertEquals(Person.findByName("John").username, Organisation.findByName("unlisted").requestingUser.username)
         
         assertEquals("show", controller.redirectArgs.action)
     

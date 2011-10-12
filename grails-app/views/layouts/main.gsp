@@ -51,9 +51,9 @@
     <script>
       $(document).ready(function()
       {
-          // Set focus to seoncd visible element (the first is the search
+          // Set focus to second visible element (the first is the search
           // textfield at top left of navigation panel).
-          $("input:text:visible:eq(1)").focus();   
+          $(':input:enabled:visible:eq(1)').focus();          
       });
     </script>
 

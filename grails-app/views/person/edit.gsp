@@ -159,12 +159,12 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label class="compulsory" for="personId"><g:message code="person.label" default="Person" /></label>
+                                    <label for="personId"><g:message code="person.label" default="Person" /></label>
                                     <g:hiddenField name="personId" value="${personInstance?.id}" />
 
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: personInstance, field: 'name', 'errors')}">
-                                  <label class="compulsory" id="project">${personInstance?.name}</label>
+                                  <label id="project">${personInstance?.name}</label>
                                 </td>
                             </tr>
                         

@@ -23,7 +23,7 @@ class EmbargoService
      * Filter embargoed entities from the given list, where the user doesn't
      * have sufficient permissions.
      */
-    List<Embargoable> applyEmbargo(List<Embargoable> embargoees) 
+    List applyEmbargo(List embargoees) 
     {
         def retList = embargoees.collect
         {
@@ -38,8 +38,13 @@ class EmbargoService
         return retList
     }
     
-    Embargoable applyEmbargo(Embargoable embargoee)
+    Object applyEmbargo(Object embargoee)
     {
+        if (!(embargoee instanceof Embargoable))
+        {
+            return embargoee
+        }
+        
         String permissionString = permissionUtilsService.buildProjectReadPermission(embargoee.project?.id)
         boolean hasReadPermission = SecurityUtils.subject.isPermitted(permissionString)
 
@@ -49,6 +54,7 @@ class EmbargoService
         }
         else
         {
+            def embargoedVal = embargoee.applyEmbargo()
             return embargoee.applyEmbargo()
         }
     }

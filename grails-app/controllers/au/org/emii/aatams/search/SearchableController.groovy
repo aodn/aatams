@@ -9,7 +9,7 @@ import org.compass.core.engine.SearchEngineQueryParseException
  */
 class SearchableController 
 {
-//    def elasticSearchService
+    def embargoService
     def searchableService
 
     /**
@@ -28,7 +28,9 @@ class SearchableController
         {
             // Results are lazy-loaded, hence associations are null.
             def res = searchableService.search(params.q, params)
-            res.searchResults = refresh(res.results)
+            def hibernateAttachedResults = refresh(res.results)
+            res.results = embargoService.applyEmbargo(hibernateAttachedResults)
+            
             return [searchResult: res]
         } 
         catch (SearchEngineQueryParseException ex) 

@@ -43,7 +43,7 @@ class NavigationMenuController
             new NavigationMenuItem(controllerName:'animalRelease', label:'Tag Releases', canCreateNew:projectWriteAny),
             new NavigationMenuItem(controllerName:'detection', label:'Tag Detections', canCreateNew:projectWriteAny),
             new NavigationMenuItem(controllerName:'receiverDeployment', label:'Receiver Deployment', canCreateNew:projectWriteAny),
-            new NavigationMenuItem(controllerName:'receiverRecovery', label:'Receiver Recovery', canCreateNew:projectWriteAny),
+            new NavigationMenuItem(controllerName:'receiverRecovery', label:'Receiver Recovery', canCreateNew:false),
             new NavigationMenuItem(controllerName:'receiverEvent', label:'Receiver Events', canCreateNew:projectWriteAny),
             new NavigationMenuItem(controllerName:'receiverDownloadFile', label:'Receiver Exports', canCreateNew:false)
         ]

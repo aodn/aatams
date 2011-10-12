@@ -37,7 +37,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         Notification receiverRecoveryCreate =
             new Notification(key:"RECEIVER_RECOVERY_CREATE",
                              htmlFragment:"Click here to create a receiver recovery",
-                             anchorSelector:"td.rowButton > [href^='/aatams/receiverRecovery/create']").save(failOnError:true)
+                             anchorSelector:"td.rowButton > [href^='/aatams/receiverRecovery/create']:first").save(failOnError:true)
 
         Notification register =
             new Notification(key:"REGISTER",

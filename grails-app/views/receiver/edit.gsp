@@ -42,7 +42,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="project"><g:message code="receiver.organisation.label" default="Project" /></label>
+                                  <label class="compulsory" for="project"><g:message code="receiver.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'organisation', 'errors')}">
                                     <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.listActive()}" optionKey="id" value="${receiverInstance?.organisation?.id}"  />

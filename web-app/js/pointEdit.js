@@ -192,7 +192,7 @@ function genPointString(lon, lat, srid)
         pointAsString += 'S'
     }
 
-    pointAsString += ' ' + Math.abs(lon) + "° "
+    pointAsString += ' ' + Math.abs(lon) + "°"
     if (lon >= 0)
     {
         pointAsString += 'E'

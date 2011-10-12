@@ -75,9 +75,9 @@ class PersonController {
             
             if (createPersonCmd.unlistedOrganisationName)
             {
-                personInstance.organisation = createUnlistedOrganisation(createPersonCmd)
+                personInstance.organisation = createUnlistedOrganisation(createPersonCmd, personInstance)
             }
-            
+
             if (personInstance.save(flush: true)) 
             {
                 if (   !SecurityUtils.getSubject().isAuthenticated()
@@ -107,7 +107,7 @@ class PersonController {
         }
     }
 
-    def createUnlistedOrganisation(createPersonCommand)
+    def createUnlistedOrganisation(createPersonCommand, requester)
     {
         String name = createPersonCommand.unlistedOrganisationName
         log.debug("Creating unlisted organisation, name: " + name)
@@ -128,7 +128,7 @@ class PersonController {
                              faxNumber:name,
                              streetAddress:unlistedStreetAddress,
                              postalAddress:unlistedPostalAddress,
-                             requestingUser:permissionUtilsService.principal(),
+                             requestingUser: requester,
                              status:EntityStatus.PENDING)
                          
         if (unlisted.save(flush:true))

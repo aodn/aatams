@@ -2,6 +2,7 @@ package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
 import grails.test.*
+import grails.plugin.searchable.*
 
 import com.vividsolutions.jts.geom.*
 
@@ -12,6 +13,7 @@ class VueDetectionFileProcessorServiceTests extends GrailsUnitTestCase
 {
     def detectionFactoryService
     def vueDetectionFileProcessorService
+    def searchableService
     
     Receiver receiver
     ReceiverDeployment deployment
@@ -23,11 +25,18 @@ class VueDetectionFileProcessorServiceTests extends GrailsUnitTestCase
         
         mockLogging(DetectionFactoryService, true)
         detectionFactoryService = new DetectionFactoryService()
+        mockLogging(SearchableService, true)
+        searchableService = new SearchableService()
+        searchableService.metaClass.startMirroring = {}
+        searchableService.metaClass.stopMirroring = {}
+        assert(searchableService)
+        
         mockLogging(VueDetectionFileProcessorService, true)
         
         AbstractBatchProcessor.metaClass.getRecords = { getRecords(it) }
         vueDetectionFileProcessorService = new VueDetectionFileProcessorService()
         vueDetectionFileProcessorService.detectionFactoryService = detectionFactoryService
+        vueDetectionFileProcessorService.searchableService = searchableService
         vueDetectionFileProcessorService.metaClass.getRecords = { getRecords(it) }
        
         mockLogging(Surgery)

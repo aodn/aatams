@@ -12,7 +12,7 @@ class EmbargoFilters
 {
     def embargoService
 
-    def notListActions = 'create|save|show|edit|update|delete'
+    def notListActions = 'save|show|edit|update|delete'
     def filters = 
     {
         animalReleaseList(controller:'animalRelease', action:'list')
@@ -99,6 +99,7 @@ class EmbargoFilters
                 model ->
                 
                 def detectionInstance = model?.detectionInstance
+                
                 model.detectionInstance = embargoService.applyEmbargo(detectionInstance)
             }
         }

@@ -276,6 +276,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         DeviceModel vemcoVR2 =
             new ReceiverDeviceModel(modelName:'VR2', manufacturer:vemco).save(failOnError: true)
         assert(!vemcoVR2.hasErrors())
+        DeviceModel vemcoVR2W =
+            new ReceiverDeviceModel(modelName:'VR2W', manufacturer:vemco).save(failOnError: true)
         
         DeviceModel vemcoV8 =
             new TagDeviceModel(modelName:'V8', manufacturer:vemco).save(failOnError: true)
@@ -318,6 +320,13 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                          serialNumber:'5555r',
                          status:newStatus,
                          model:vemcoVR2,
+                         organisation:imosOrg).save(failOnError: true)
+
+        Receiver rx6 =
+            new Receiver(codeName:'VR2W-103355',
+                         serialNumber:'103355',
+                         status:newStatus,
+                         model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
                      
         //
@@ -561,6 +570,19 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                    receiverOrientation:ReceiverOrientation.UP,
                                    batteryLifeDays:90,
                                    location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
+
+        ReceiverDeployment rx6Heron =
+            new ReceiverDeployment(station:heronS2,
+                                   receiver:rx6,
+                                   deploymentNumber:1,
+                                   deploymentDateTime:new DateTime("2000-05-15T12:34:56+10:00"),
+                                   acousticReleaseID:"asdf",
+                                   mooringType:concreteMooring,
+                                   bottomDepthM:12f,
+                                   depthBelowSurfaceM:5f,
+                                   receiverOrientation:ReceiverOrientation.UP,
+                                   batteryLifeDays:90,
+                                   location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
         
         //
         // Animals and Animal Releases etc.
@@ -701,6 +723,15 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  status:recoveredStatus,
                                  recoverer:sealProjectInvestigator,
                                  deployment:rx2Bondi,
+                                 batteryLife:12.5f,
+                                 batteryVoltage:3.7f).save(failOnError:true)
+                             
+        ReceiverRecovery recovery3 =
+            new ReceiverRecovery(recoveryDateTime: new DateTime("2023-05-17T12:54:56"),
+                                 location:(Point)reader.read("POINT(20.1234 20.1234)"),
+                                 status:recoveredStatus,
+                                 recoverer:sealProjectInvestigator,
+                                 deployment:rx6Heron,
                                  batteryLife:12.5f,
                                  batteryVoltage:3.7f).save(failOnError:true)
                              

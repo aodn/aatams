@@ -80,7 +80,22 @@ class AnimalRelease implements Embargoable
     
     String toString()
     {
-        return String.valueOf(project) + " - " + String.valueOf(animal?.species) + " - " + String.valueOf(releaseDateTime)
+        StringBuilder buf = new StringBuilder()
+        if (project)
+        {
+            buf.append(String.valueOf(project))
+            buf.append(" - ")
+        }
+        
+        if (animal?.species)
+        {
+            buf.append(String.valueOf(animal?.species))
+            buf.append(" - ")
+        }
+        
+        buf.append(String.valueOf(releaseDateTime))
+        
+        return buf.toString()
     }
     
     /**

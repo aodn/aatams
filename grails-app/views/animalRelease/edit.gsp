@@ -240,7 +240,7 @@
                                       <tr>
                                         <td colspan="5">
                                           <a href="#" 
-                                             id='add_measurement_to_animal_release'>${message(code: 'default.add.label', args: [message(code: 'measurement.label', default: 'Measurement...')])}</a>
+                                             id='add_measurement_to_animal_release'>${message(code: 'default.addModal.label', args: [message(code: 'measurement.label', default: 'Measurement...')])}</a>
                                         </td>
                                       </tr>
 

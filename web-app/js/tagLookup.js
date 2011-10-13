@@ -5,7 +5,7 @@
  */
 $(function()
 {
-    var dataSource = "/" + contextPath + "/tag/lookupNonDeployedBySerialNumber";
+    var dataSource = contextPath + "/tag/lookupNonDeployedBySerialNumber";
     $("#serialNumber").autocomplete({source:dataSource});
 });
 

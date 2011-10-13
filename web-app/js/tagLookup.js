@@ -5,7 +5,7 @@
  */
 $(function()
 {
-    var dataSource = "/aatams/tag/lookupNonDeployedBySerialNumber"
+    var dataSource = "/" + contextPath + "/tag/lookupNonDeployedBySerialNumber";
     $("#serialNumber").autocomplete({source:dataSource});
 });
 
@@ -21,7 +21,7 @@ $("#serialNumber").autocomplete({
 $("#serialNumber").autocomplete({
     change:function(event, ui)
     {
-        setExistingTag(ui.item != null)
+        setExistingTag(ui.item != null);
     }
 });
 

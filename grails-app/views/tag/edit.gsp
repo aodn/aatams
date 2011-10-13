@@ -7,6 +7,7 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'tag.label', default: 'Tag')}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <script type="text/javascript" src="${resource(dir:'js',file:'addsensortotag.js')}"></script>
     </head>
     <body>
         <div class="nav">

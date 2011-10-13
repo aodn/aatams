@@ -14,10 +14,6 @@
 
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.selectlist.js')}"></script>
 
-    <script type="text/javascript" src="${resource(dir:'js',file:'addorganisationtoproject.js')}"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'addpersontoproject.js')}"></script>
-    <script type="text/javascript" src="${resource(dir:'js',file:'addsensortotag.js')}"></script>
-
     <g:javascript src="asAbove.js"/>
     
     
@@ -34,18 +30,21 @@
     <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
     
     <script>
-    // important. leave here for main_extras.js
-    var grailsServerURL = "${grailsApplication.config.grails.serverURL}";
+      
+      var contextPath = "${request.contextPath}";
+      
+      // important. leave here for main_extras.js
+      var grailsServerURL = "${grailsApplication.config.grails.serverURL}";
 
-    <g:if test="${params.popup}" >
-    $(document).ready(function () {
-    // this is a popup than we dont want all the links and logos etc
-    // the popup code 'modalMask()' apends the variable popup=true to the iframe URL
-    $('#boxes').hide();
-    $('#logo').hide();
-    $('.nav').hide();
-    });
-    </g:if>
+      <g:if test="${params.popup}" >
+        $(document).ready(function () {
+        // this is a popup than we dont want all the links and logos etc
+        // the popup code 'modalMask()' apends the variable popup=true to the iframe URL
+        $('#boxes').hide();
+        $('#logo').hide();
+        $('.nav').hide();
+        });
+      </g:if>
     </script>
     
     <script>

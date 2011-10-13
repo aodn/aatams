@@ -27,10 +27,10 @@ class SensorController {
         // We need to get some additional parameters from the owning Tag.
         Tag owningTag = Tag.get(params.tag.id)
         sensorInstance.codeMap = owningTag.codeMap
-        sensorInstance.codeName = owningTag.codeName
+        sensorInstance.codeName = owningTag.codeName + "-" + params.pingCode
         sensorInstance.model = owningTag.model
         sensorInstance.project = owningTag.project
-        sensorInstance.serialNumber = owningTag.serialNumber
+        sensorInstance.serialNumber = owningTag.serialNumber + "-" + params.pingCode
         
         if (sensorInstance.save(flush: true)) 
         {

@@ -31,7 +31,7 @@ $(function()
             var speciesId = $("#speciesId").attr("value");
             var sexId = $("#sex\\.id option:selected").val();
 
-            $.post('/aatams/animal/lookup',
+            $.post(contextPath + '/animal/lookup',
             {
                 'project.id':projectId,
                 'species.id':speciesId,

@@ -29,7 +29,7 @@ $(function() {
                 // or send an AJAX post respectively).
                 //
                 var mainForm = $("div.body > form")
-                var isCreate = mainForm.attr("action") == "/aatams/animalRelease/save"
+                var isCreate = mainForm.attr("action") == "/" + contextPath + "/animalRelease/save"
                  
                 if (isCreate)
                 {
@@ -58,7 +58,7 @@ $(function() {
                 }
                 else
                 {
-                    $.post('/aatams/animalMeasurement/save',
+                    $.post(contextPath + "/animalMeasurement/save",
                     {
                        'event.id':event,
                        'projectId':projectId,
@@ -90,7 +90,7 @@ $(function() {
     
     $('#add_measurement_to_animal_release').click(function() 
     {
-        var addMeasurementUrl = '/aatams/animalRelease/addMeasurement';
+        var addMeasurementUrl = contextPath + '/animalRelease/addMeasurement';
         var animalReleaseId = $("#animalReleaseId").val();
         if (animalReleaseId)
         {
@@ -121,13 +121,13 @@ function updateMeasurementTable(data, projectId, idPrefix)
     if (isEditView(data))
     {
         var infoColumn = $("<td>").attr("class", "rowButton");
-        var infoLink = $("<a>").attr("href", '/aatams/animalMeasurement/show/' + data.instance.id);
+        var infoLink = $("<a>").attr("href", contextPath + '/animalMeasurement/show/' + data.instance.id);
         infoLink.attr("class", "show");
         infoColumn.append(infoLink);
         tableRow.append(infoColumn);
 
         var deleteColumn = $("<td>").attr("class", "rowButton");
-        var deleteLink = $("<a>").attr("href", '/aatams/animalMeasurement/delete/' + data.instance.id + "?projectId=" + projectId);
+        var deleteLink = $("<a>").attr("href", contextPath + '/animalMeasurement/delete/' + data.instance.id + "?projectId=" + projectId);
         deleteLink.attr("class", "delete");
         deleteLink.click(function() { return confirm('Are you sure?'); });
         deleteColumn.append(deleteLink);

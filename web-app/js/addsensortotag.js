@@ -19,7 +19,7 @@ $(function() {
                 var status = $("#statusId option:selected").val();
                 var projectId = $("#project\\.id option:selected").val();
                 
-                $.post('/aatams/sensor/save', 
+                $.post(contextPath + '/sensor/save', 
                        {'event.id':event,
                         'projectId':projectId,
                         'tag.id':tagId,
@@ -37,13 +37,13 @@ $(function() {
                            var tableRow = $("<tr>");
                            
                            var infoColumn = $("<td>").attr("class", "rowButton");
-                           var infoLink = $("<a>").attr("href", '/aatams/sensor/show/' + data.instance.id);
+                           var infoLink = $("<a>").attr("href", contextPath + '/sensor/show/' + data.instance.id);
                            infoLink.attr("class", "show");
                            infoColumn.append(infoLink);
                            tableRow.append(infoColumn);
 
                            var deleteColumn = $("<td>").attr("class", "rowButton");
-                           var deleteLink = $("<a>").attr("href", '/aatams/sensor/delete/' + data.instance.id + "?projectId=" + projectId);
+                           var deleteLink = $("<a>").attr("href", contextPath + '/sensor/delete/' + data.instance.id + "?projectId=" + projectId);
                            deleteLink.attr("class", "delete");
                            deleteLink.click(function() { return confirm('Are you sure?'); });
                            deleteColumn.append(deleteLink);

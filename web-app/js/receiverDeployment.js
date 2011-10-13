@@ -13,7 +13,7 @@ $(function()
 
 function updateLocation()
 {
-    $.post('/aatams/installationStation/show', 
+    $.post(contextPath + '/installationStation/show', 
           {'id':$('#station\\.id').val(),
            'encoding':'json'},
           function(data) 

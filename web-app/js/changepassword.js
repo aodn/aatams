@@ -14,7 +14,7 @@ $(function() {
                 
                 var event = $("#id").val();
                 
-                $.post('/aatams/person/updatePassword', 
+                $.post(contextPath + '/person/updatePassword', 
                        {'event.id':event, 
                         "id":personId, 
                         "password":password, 

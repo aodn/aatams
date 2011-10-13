@@ -14,7 +14,7 @@ $(function() {
                 var access = $("#access option:selected").val();
                 var event = $("#id").val();
                 
-                $.post('/aatams/projectRole/save', 
+                $.post(contextPath + '/projectRole/save', 
                        {'event.id':event, 
                         "project.id":projectId, 
                         "person.id":personId,
@@ -27,13 +27,13 @@ $(function() {
                            var tableRow = $("<tr>");
                            
                            var infoColumn = $("<td>").attr("class", "rowButton");
-                           var infoLink = $("<a>").attr("href", '/aatams/projectRole/show/' + data.instance.id);
+                           var infoLink = $("<a>").attr("href", contextPath + '/projectRole/show/' + data.instance.id);
                            infoLink.attr("class", "show");
                            infoColumn.append(infoLink);
                            tableRow.append(infoColumn);
                            
                            var deleteColumn = $("<td>").attr("class", "rowButton");
-                           var deleteLink = $("<a>").attr("href", '/aatams/projectRole/delete/' + data.instance.id + "?projectId=" + projectId);
+                           var deleteLink = $("<a>").attr("href", contextPath + '/projectRole/delete/' + data.instance.id + "?projectId=" + projectId);
                            deleteLink.attr("class", "delete");
                            deleteLink.click(function() { return confirm('Are you sure?'); });
                            deleteColumn.append(deleteLink);
@@ -41,7 +41,7 @@ $(function() {
 
                            var personColumn = $("<td>").attr("class", "value");
                            tableRow.append(personColumn);
-                           var personLink = $("<a>").attr("href", '/aatams/person/show/' + data.instance.person.id).html(data.instance.person.name);
+                           var personLink = $("<a>").attr("href", contextPath + '/person/show/' + data.instance.person.id).html(data.instance.person.name);
                            personColumn.append(personLink);
                            tableRow.append(personColumn);
                            

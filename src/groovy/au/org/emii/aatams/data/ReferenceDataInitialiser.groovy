@@ -36,12 +36,12 @@ class ReferenceDataInitialiser extends AbstractDataInitialiser
         Notification receiverRecoveryCreate =
             new Notification(key:"RECEIVER_RECOVERY_CREATE",
                              htmlFragment:"Click here to create a receiver recovery",
-                             anchorSelector:"td.rowButton > [href^='/aatams/receiverRecovery/create']").save(failOnError:true)
+                             anchorSelector:"td.rowButton > [href*='/receiverRecovery/create']:first").save(failOnError:true)
 
         Notification register =
             new Notification(key:"REGISTER",
                              htmlFragment:"Click here to register to user AATAMS",
-                             anchorSelector:"#userlogin > [href^='/aatams/person/create']",
+                             anchorSelector:"#userlogin > [href\$='/person/create']",
                              unauthenticated:true).save(failOnError:true)
 
         Person admin =

@@ -7,6 +7,8 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'project.label', default: 'Project')}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <g:javascript src="addpersontoproject.js" />
+        <g:javascript src="addorganisationtoproject.js" />
     </head>
     <body>
         <div class="nav">

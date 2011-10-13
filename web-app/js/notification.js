@@ -13,7 +13,7 @@ $(function()
             var tooltip = 'leftMiddle'
             var tip = 'leftMiddle'
             
-            if (anchorSelector == "#userlogin > [href^='/aatams/person/create']")
+            if (anchorSelector == "#userlogin > [href$='/person/create']")
             {
                 // If the (unauthenticated) user has previously acknowledged the
                 // register notification, there will be a register cookie.
@@ -90,7 +90,7 @@ function acknowledge(key)
     }
     else
     {
-        $.post('/aatams/notification/acknowledge',
+        $.post(contextPath + '/notification/acknowledge',
                {'key':key},
                function(data)
                {

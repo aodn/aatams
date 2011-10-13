@@ -1,6 +1,6 @@
 $(function()
 {
-    var dataSource = "/aatams/species/lookupByName"
+    var dataSource = contextPath + '/species/lookupByName'
     $("#speciesName").autocomplete({source:dataSource});
 
     $("#speciesName").autocomplete({

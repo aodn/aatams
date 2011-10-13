@@ -44,7 +44,7 @@ $(function()
                 // or send an AJAX post respectively).
                 //
                 var mainForm = $("div.body > form")
-                var isCreate = mainForm.attr("action") == '/' + contextPath + '/animalRelease/save'
+                var isCreate = mainForm.attr("action") == contextPath + '/animalRelease/save'
                  
                 if (isCreate)
                 {

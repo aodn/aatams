@@ -31,9 +31,11 @@ searchable {
      *
      * The default is "${user.home}/.grails/projects/${app.name}/searchable-index/${grails.env}"
      */
-    compassConnection = new File(
-        "${userHome}/.grails/projects/${appName}/searchable-index/${grailsEnv}"
-    ).absolutePath
+    compassConnection = "ram://prod-index"
+//    
+//    compassConnection = new File(
+//        "${userHome}/.grails/projects/${appName}/searchable-index/${grailsEnv}"
+//    ).absolutePath
 
     /**
      * Any settings you wish to pass to Compass
@@ -134,7 +136,7 @@ searchable {
      * If you use BootStrap.groovy to insert your data then you should use "true",
      * which means do a non-forking, otherwise "fork" is recommended
      */
-    bulkIndexOnStartup = true
+    bulkIndexOnStartup = fork
 
     /**
      * Should index locks be removed (if present) at startup?

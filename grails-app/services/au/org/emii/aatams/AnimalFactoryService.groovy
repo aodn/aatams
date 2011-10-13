@@ -19,6 +19,7 @@ class AnimalFactoryService
         Species species = lookupOrCreateSpecies(params)
         
         Animal animalInstance = new Animal(sex:sex, species:species).save()
+        assert(animalInstance)
         
         if (animalInstance?.hasErrors())
         {

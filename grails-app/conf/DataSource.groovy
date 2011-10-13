@@ -50,6 +50,7 @@ environments {
 //        }
         // This is just so that 3.3.3 and 3.4.0 can run in parallel on preview.emii.org.au
         dataSource {
+//            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
             driverClassName = "org.postgresql.Driver"
             url = "jdbc:postgresql://dbdev.emii.org.au:5432/aatams_reports?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
             username = "aatams"

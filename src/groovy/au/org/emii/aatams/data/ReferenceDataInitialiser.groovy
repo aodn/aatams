@@ -33,11 +33,6 @@ class ReferenceDataInitialiser extends AbstractDataInitialiser
     
     def initReferenceData()
     {
-        Notification gettingStarted = 
-            new Notification(key:"GETTING_STARTED",
-                             htmlFragment:"Click here to get started",
-                             anchorSelector:"[href='/aatams/gettingStarted/index']").save(failOnError:true)
-    
         Notification receiverRecoveryCreate =
             new Notification(key:"RECEIVER_RECOVERY_CREATE",
                              htmlFragment:"Click here to create a receiver recovery",
@@ -49,10 +44,10 @@ class ReferenceDataInitialiser extends AbstractDataInitialiser
                              anchorSelector:"#userlogin > [href^='/aatams/person/create']",
                              unauthenticated:true).save(failOnError:true)
 
-        Person jkburges =
-            new Person(username:'jkburges',
+        Person admin =
+            new Person(username:'admin',
                        passwordHash:new Sha256Hash("password").toHex(),
-                       name:'Jon Burgess',
+                       name:'admin',
                        //organisation:imosOrg,
                        phoneNumber:'+61 3 6226 8507',
                        emailAddress:'jkburges@utas.edu.au',
@@ -74,15 +69,15 @@ class ReferenceDataInitialiser extends AbstractDataInitialiser
                              streetAddress:eMIIAddress,
                              postalAddress:eMIIAddress,
                              status:EntityStatus.ACTIVE,
-                             requestingUser:jkburges)
+                             requestingUser:admin)
 
         SecRole sysAdmin = new SecRole(name:"SysAdmin")
         sysAdmin.addToPermissions("*:*")
         sysAdmin.save(failOnError: true)
         
-        jkburges.addToRoles(sysAdmin)
-        jkburges.organisation = eMIIOrg
-        jkburges.save(failOnError:true)
+        admin.addToRoles(sysAdmin)
+        admin.organisation = eMIIOrg
+        admin.save(failOnError:true)
         
         eMIIOrg.save(failOnError:true)
         

@@ -28,7 +28,7 @@ class Device
     {
         cache true
         codeName index:'code_name_index'
-        status index:'status_index'
+        status index:'device_status_index'
     }
     
     static transients = ['deviceID']

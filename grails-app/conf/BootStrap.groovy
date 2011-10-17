@@ -1,5 +1,6 @@
 import au.org.emii.aatams.*
 import au.org.emii.aatams.data.*
+import au.org.emii.aatams.detection.*
 
 import grails.converters.JSON
 
@@ -173,10 +174,10 @@ class BootStrap
             
             development
             {
-                initialiser = new DevelopmentDataInitialiser(permissionUtilsService)
-
-                assert(initialiser): "Initialiser cannot be null"
-                initialiser.execute()
+//                initialiser = new DevelopmentDataInitialiser(permissionUtilsService)
+//
+//                assert(initialiser): "Initialiser cannot be null"
+//                initialiser.execute()
             }
             
             production
@@ -193,9 +194,8 @@ class BootStrap
                 initialiser.execute()
             }
         }
-
+        
         searchableService.startMirroring()
-        searchableService.index()
     }
     
     def destroy = 

@@ -32,7 +32,7 @@ class Project
     {
         // Speed up the candidateEntitiesService (that reads user's projects).
 	cache true
-	status index:'status_index'
+	status index:'project_status_index'
     }
     
     static searchable =

@@ -36,7 +36,7 @@ class Organisation
     
     static mapping = 
     {
-        status index:'status_index'
+        status index:'organisation_status_index'
         sort "name"
     }
     

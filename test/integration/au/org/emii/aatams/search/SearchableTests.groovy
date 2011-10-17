@@ -121,30 +121,29 @@ class SearchableTests extends GrailsUnitTestCase
         assertFalse(searchResult.results*.id.contains(export2.id))
     }
     
-
-    void testSearchExportsByTag()
-    {
-        def tag1 = Tag.findByCodeName('A69-1303-62339')
-        
-        def export1 = ReceiverDownloadFile.findByName("export1.csv")
-        def export2 = ReceiverDownloadFile.findByName("export2.csv")
-
-        def searchResult = ReceiverDownloadFile.search(tag1.serialNumber)
-        
-        assertTrue(searchResult.results*.id.contains(export1.id))
-        assertFalse(searchResult.results*.id.contains(export2.id))
-    }
-
-    void testSearchExportsByReceiverViaEvent()
-    {
-        def rx2 = Receiver.findByCodeName('VR2W-101337')
-
-        def export1 = ReceiverDownloadFile.findByName("export1.csv")
-        def export2 = ReceiverDownloadFile.findByName("export2.csv")
-        
-        def searchResult = ReceiverDownloadFile.search(rx2.codeName)
-        
-        assertFalse(searchResult.results*.id.contains(export1.id))
-        assertTrue(searchResult.results*.id.contains(export2.id))
-    }
+//    void testSearchExportsByTag()
+//    {
+//        def tag1 = Tag.findByCodeName('A69-1303-62339')
+//        
+//        def export1 = ReceiverDownloadFile.findByName("export1.csv")
+//        def export2 = ReceiverDownloadFile.findByName("export2.csv")
+//
+//        def searchResult = ReceiverDownloadFile.search(tag1.serialNumber)
+//        
+//        assertTrue(searchResult.results*.id.contains(export1.id))
+//        assertFalse(searchResult.results*.id.contains(export2.id))
+//    }
+//
+//    void testSearchExportsByReceiverViaEvent()
+//    {
+//        def rx2 = Receiver.findByCodeName('VR2W-101337')
+//
+//        def export1 = ReceiverDownloadFile.findByName("export1.csv")
+//        def export2 = ReceiverDownloadFile.findByName("export2.csv")
+//        
+//        def searchResult = ReceiverDownloadFile.search(rx2.codeName)
+//        
+//        assertFalse(searchResult.results*.id.contains(export1.id))
+//        assertTrue(searchResult.results*.id.contains(export2.id))
+//    }
 }

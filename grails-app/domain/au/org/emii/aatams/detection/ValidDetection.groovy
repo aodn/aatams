@@ -21,7 +21,6 @@ class ValidDetection extends RawDetection implements Embargoable
     // is called but apparently not.
     List<DetectionSurgery> detectionSurgeries = new ArrayList<DetectionSurgery>()
     static hasMany = [detectionSurgeries:DetectionSurgery]
-    
     static searchable =
     {
         root(false)

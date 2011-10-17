@@ -136,7 +136,7 @@ searchable {
      * If you use BootStrap.groovy to insert your data then you should use "true",
      * which means do a non-forking, otherwise "fork" is recommended
      */
-    bulkIndexOnStartup = fork
+    bulkIndexOnStartup = "fork"
 
     /**
      * Should index locks be removed (if present) at startup?
@@ -146,32 +146,36 @@ searchable {
 
 // per-environment settings
 environments {
-    development {
-        searchable {
-            // development is default; inherits from above
+    development 
+    {
+        searchable 
+        {
+            compassConnection = new File(
+                "${userHome}/.grails/projects/${appName}/searchable-index/${grailsEnv}"
+            ).absolutePath
         }
     }
 
-    test {
-        searchable {
-            
-            // disable bulk index on startup
-//            bulkIndexOnStartup = false
-
-            // Mirroring is causing "org.springframework.orm.hibernate3.HibernateSystemException: Found two representations of same collection"
-            // in tests.
-            //
-            // Instead, call "searchableService.index()" in tests that require search.
-//            mirrorChanges = false
+    test 
+    {
+        searchable 
+        {
+            // Make sure things are in the index before tests are run (by doing
+            // on main thread).
+            bulkIndexOnStartup = true
             
             // use faster in-memory index
             compassConnection = "ram://test-index"
         }
     }
 
-    production {
-        searchable {
-            // add your production settings here
+    production 
+    {
+        searchable 
+        {
+            compassConnection = new File(
+                "${userHome}/.grails/projects/${appName}/searchable-index/${grailsEnv}"
+            ).absolutePath
         }
     }
 }

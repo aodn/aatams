@@ -45,7 +45,8 @@ class ReceiverDownloadFile
     
     static searchable =
     {
-        detections(component:true)
+        // Temp commented out, as causing compass to baulk on start-up.
+//        detections(component:true)
         events(component:true)
     }
     

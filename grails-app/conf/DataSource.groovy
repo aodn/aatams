@@ -14,12 +14,16 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
+//            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
             driverClassName = "org.postgresql.Driver"
             url = "jdbc:postgresql://localhost:5432/aatams"
             username = "aatams"
             password = "fishybusiness"
             
+            properties 
+            {
+                maxActive = 20
+            }
         }
     }
 
@@ -30,31 +34,25 @@ environments {
             url = "jdbc:postgresql://dbtest.emii.org.au:5432/aatams_test?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
             username = "aatams"
             password = "fishybusiness"
+
+            properties 
+            {
+                maxActive = 20
+            }
         }
-//        dataSource {
-//            dbCreate = "create" // one of 'create', 'create-drop','update'
-//            driverClassName = "org.postgresql.Driver"
-//            url = "jdbc:postgresql://localhost:5432/aatams"
-//            username = "aatams"
-//            password = "fishybusiness"
-//        }
     }
     
     production 
     {
         // Problems with connecting to database in test/production? 
         // Make *sure* you've got Grails Environment set to "production"!!
-//        dataSource 
-//        {
-//            jndiName = "java:comp/env/jdbc/aatams3"
-//        }
-        // This is just so that 3.3.3 and 3.4.0 can run in parallel on preview.emii.org.au
-        dataSource {
-//            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-            driverClassName = "org.postgresql.Driver"
-            url = "jdbc:postgresql://dbdev.emii.org.au:5432/aatams_reports?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
-            username = "aatams"
-            password = "fishybusiness"
+        dataSource 
+        {
+            jndiName = "java:comp/env/jdbc/aatams3"
+            properties 
+            {
+                maxActive = 20
+            }
         }
     }
 }

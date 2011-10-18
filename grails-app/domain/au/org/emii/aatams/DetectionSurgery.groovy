@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.detection.RawDetection
+import au.org.emii.aatams.detection.ValidDetection
 
 /**
  * Models the relationship between a detection and a surgery.
@@ -25,7 +25,7 @@ import au.org.emii.aatams.detection.RawDetection
  */
 class DetectionSurgery 
 {
-    static belongsTo = [surgery:Surgery, detection:RawDetection, tag:Tag]
+    static belongsTo = [surgery:Surgery, detection:ValidDetection, tag:Tag]
     
     static searchable =
     {

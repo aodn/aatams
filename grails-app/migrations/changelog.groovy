@@ -1517,4 +1517,6 @@ databaseChangeLog = {
 			column(name: "status_id")
 		}
    	}
+
+	include file: 'deployment_has_one_recovery.groovy'
 }

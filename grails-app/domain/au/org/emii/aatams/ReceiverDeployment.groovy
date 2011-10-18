@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.detection.RawDetection
+import au.org.emii.aatams.detection.ValidDetection
 
 import au.org.emii.aatams.util.GeometryUtils
 
@@ -20,8 +20,8 @@ class ReceiverDeployment
 {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
     static transients = ['scrambledLocation', 'active']
-    Set<RawDetection> detections = new HashSet<RawDetection>()
-    static hasMany = [detections: RawDetection, events: ReceiverEvent]
+    Set<ValidDetection> detections = new HashSet<ValidDetection>()
+    static hasMany = [detections: ValidDetection, events: ReceiverEvent]
 
     Integer deploymentNumber
     
@@ -90,7 +90,7 @@ class ReceiverDeployment
      * of receiver deployments, including those with and without associated
      * recoveries.
      */
-    ReceiverRecovery recovery
+    static hasOne = [recovery:ReceiverRecovery]
     
     /**
      * Date when data from this deployment is no longer embargoed (may be null to

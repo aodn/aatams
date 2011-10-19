@@ -64,8 +64,7 @@ class ProjectControllerTests extends ControllerUnitTestCase
                              faxNumber:'1234',
                              streetAddress:address,
                              postalAddress:address,
-                             status:EntityStatus.ACTIVE,
-                             requestingUser:somePerson)
+                             status:EntityStatus.ACTIVE)
 
         Organisation pendingOrg = 
             new Organisation(name:'IMOS', 
@@ -74,8 +73,7 @@ class ProjectControllerTests extends ControllerUnitTestCase
                              faxNumber:'1234',
                              streetAddress:address,
                              postalAddress:address,
-                             status:EntityStatus.PENDING,
-                             requestingUser:somePerson)
+                             status:EntityStatus.PENDING)
 
         Organisation deactivatedOrg = 
             new Organisation(name:'SIMS', 
@@ -84,8 +82,7 @@ class ProjectControllerTests extends ControllerUnitTestCase
                              faxNumber:'1234',
                              streetAddress:address,
                              postalAddress:address,
-                             status:EntityStatus.DEACTIVATED,
-                             requestingUser:somePerson)
+                             status:EntityStatus.DEACTIVATED)
                          
         def orgList = [activeOrg, pendingOrg, deactivatedOrg]
         mockDomain(Organisation, orgList)

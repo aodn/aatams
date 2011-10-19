@@ -78,8 +78,22 @@ class PersonController {
                 personInstance.organisation = createUnlistedOrganisation(createPersonCmd, personInstance)
             }
 
-            if (personInstance.save(flush: true)) 
+            assert(personInstance.organisation)
+            personInstance.organisation.addToPeople(personInstance)
+            
+            if (personInstance.organisation.save(flush: true)) 
             {
+                if (createPersonCmd.unlistedOrganisationName)
+                {
+                    sendMail 
+                    {  
+                        to grailsApplication.config.grails.mail.adminEmailAddress
+                        from grailsApplication.config.grails.mail.systemEmailAddress
+                        subject "${message(code: 'mail.unlisted.organisation.create.subject', args: [personInstance.organisation.name])}"     
+                        body "${message(code: 'mail.unlisted.organisation.create.body', args: [personInstance.organisation.name, createLink(controller:'organisation', action:'show', id:personInstance.organisation.id, absolute:true)])}" 
+                    }
+                }
+                
                 if (   !SecurityUtils.getSubject().isAuthenticated()
                     || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission())) 
                 {
@@ -120,35 +134,17 @@ class PersonController {
              country:name]
         Address unlistedPostalAddress = new Address(addressParams).save()
         Address unlistedStreetAddress = new Address(addressParams).save()
-                    
-        Organisation unlisted = 
-            new Organisation(name:createPersonCommand.unlistedOrganisationName,
+          
+        Request request = new Request(requester:requester)
+        requester.addToRequests(request)
+        return new Organisation(name:createPersonCommand.unlistedOrganisationName,
                              department:name,
                              phoneNumber:name,
                              faxNumber:name,
                              streetAddress:unlistedStreetAddress,
                              postalAddress:unlistedPostalAddress,
-                             requestingUser: requester,
+                             request:request,
                              status:EntityStatus.PENDING)
-                         
-        if (unlisted.save(flush:true))
-        {
-            sendMail 
-            {  
-                to grailsApplication.config.grails.mail.adminEmailAddress
-                from grailsApplication.config.grails.mail.systemEmailAddress
-                subject "${message(code: 'mail.unlisted.organisation.create.subject', args: [unlisted.name])}"     
-                body "${message(code: 'mail.unlisted.organisation.create.body', args: [unlisted.name, createLink(controller:'organisation', action:'show', id:unlisted.id, absolute:true)])}" 
-            }
-            
-            return unlisted
-        }
-        else
-        {
-            flash.message = "Error creating unlisted organisation"
-        }
-        
-        return null
     }
     
     def show = {

@@ -1,0 +1,8 @@
+Notes:
+
+receiverRecovery -> receiverDeployment: 
+142:141
+213:137
+238:237
+
+grails -Dgrails.env=dbdiff dbm-diff development requester_refactor.groovy --add

@@ -77,7 +77,7 @@
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="organisation.requestingUser.label" default="Requester" /></td>
 
-                              <td valign="top" class="value"><g:link controller="person" action="show" id="${organisationInstance?.requestingUser?.id}">${organisationInstance?.requestingUser?.encodeAsHTML()}</g:link></td>
+                              <td valign="top" class="value"><g:link controller="person" action="show" id="${organisationInstance?.request?.requester?.id}">${organisationInstance?.request?.encodeAsHTML()}</g:link></td>
 
                           </tr>
                         </shiro:hasRole>

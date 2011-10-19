@@ -1519,4 +1519,6 @@ databaseChangeLog = {
    	}
 
 	include file: 'deployment_has_one_recovery.groovy'
+
+	include file: 'requester_refactor.groovy'
 }

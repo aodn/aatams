@@ -17,6 +17,17 @@ class OrganisationTests extends GroovyTestCase
 
     void testDelete() 
     {
+        Organisation personsOrg = 
+            new Organisation(name:'personsOrg', 
+                             department:'dep',
+                             phoneNumber:'1234',
+                             faxNumber:'1234',
+                             streetAddress:Address.build(),
+                             postalAddress:Address.build())
+                         
+        personsOrg.save()
+        assertFalse(personsOrg.hasErrors())
+        
         Person person = 
             new Person(username:'name',
                        passwordHash:'asdf',
@@ -24,7 +35,10 @@ class OrganisationTests extends GroovyTestCase
                        emailAddress:'person@asdf.com',
                        phoneNumber:'1234',
                        defaultTimeZone:DateTimeZone.forID("Australia/Hobart"),
-                       status:EntityStatus.ACTIVE)
+                       status:EntityStatus.ACTIVE,
+                       organisation:personsOrg).save()
+        assertFalse(person.hasErrors())
+                   
                    
         Organisation org1 = 
             new Organisation(name:'org1', 
@@ -33,7 +47,8 @@ class OrganisationTests extends GroovyTestCase
                              faxNumber:'1234',
                              streetAddress:Address.build(),
                              postalAddress:Address.build(),
-                             requestingUser:person)
+                             request:new Request(requester:person))
+//                             requestingUser:person)
                              
         
         Organisation org2 = 
@@ -43,7 +58,8 @@ class OrganisationTests extends GroovyTestCase
                              faxNumber:'1234',
                              streetAddress:Address.build(),
                              postalAddress:Address.build(),
-                             requestingUser:person)
+                             request:new Request(requester:person))
+//                             requestingUser:person)
              
         def orgList = [org1, org2]
         orgList.each { it.save() }

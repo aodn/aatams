@@ -55,6 +55,7 @@ class OrganisationController
 
     def save = 
     {
+        println(params)
         def streetAddress = new Address(params['streetAddress']).save()
         def postalAddress = new Address(params['postalAddress']).save()
 
@@ -66,7 +67,7 @@ class OrganisationController
         // If SysAdmin, then set Organisation's status to ACTIVE, otherwise,
         // set to PENDING.
         Person user = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
-        organisationInstance.requestingUser = user
+        organisationInstance.request = new Request(requester:user)
         
         if (SecurityUtils.getSubject().hasRole("SysAdmin"))
         {
@@ -183,7 +184,7 @@ class OrganisationController
     {
         sendMail 
         {  
-            to organisation?.requestingUser?.emailAddress
+            to organisation?.request?.requester?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
             subject "${message(code: 'mail.request.organisation.create.subject', args: [organisation.name])}"     
@@ -195,7 +196,7 @@ class OrganisationController
     {
         sendMail 
         {     
-            to organisation?.requestingUser?.emailAddress
+            to organisation?.request?.requester?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
             subject "${message(code: 'mail.request.organisation.activate.subject', args: [organisation.name])}"     

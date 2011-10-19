@@ -38,7 +38,7 @@ class OrganisationTests extends GrailsUnitTestCase
                                             faxNumber:"234",
                                             streetAddress:new Address(),
                                             //postalAddress:null
-                                            requestingUser:new Person())
+                                            )
                                         
         mockForConstraintsTests(Organisation, [org])
         

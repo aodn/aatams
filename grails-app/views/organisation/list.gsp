@@ -71,7 +71,7 @@
                               <shiro:hasRole name="SysAdmin">
                                 <td>${fieldValue(bean: organisationInstance, field: "status")}</td>
                                 
-                                <td><g:link controller="person" action="show" id="${organisationInstance?.requestingUser?.id}">${fieldValue(bean: organisationInstance, field: "requestingUser")}</g:link></td>
+                                <td><g:link controller="person" action="show" id="${organisationInstance?.request?.requester?.id}">${fieldValue(bean: organisationInstance, field: "request")}</g:link></td>
                               </shiro:hasRole>
                               
                               <td>${fieldValue(bean: organisationInstance, field: "projects")}</td>

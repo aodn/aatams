@@ -4,16 +4,42 @@ import grails.test.*
 
 class OrganisationControllerTests extends ControllerUnitTestCase 
 {
+    String toAddress
+    boolean mailSent
+    
     protected void setUp() 
     {
         super.setUp()
+
+        mockDomain(Request)
+        
         TestUtils.setupMessage(controller)
         initData()
         
         mockConfig("grails.gorm.default.list.max = 10")
         controller.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
         
-        controller.metaClass.sendMail = {}
+        toAddress = null
+        mailSent = false
+        controller.metaClass.sendMail = 
+        {
+            it ->
+            
+            it.call()
+            
+            mailSent = true
+        }
+        
+        controller.metaClass.to = 
+        {
+            toAddress = it
+        }
+
+        controller.metaClass.bcc = {}
+        controller.metaClass.from = {}
+        controller.metaClass.subject = {}
+        controller.metaClass.body = {}
+        controller.metaClass.createLink = {}
     }
     
     protected void tearDown() 
@@ -44,7 +70,7 @@ class OrganisationControllerTests extends ControllerUnitTestCase
                              streetAddress:address,
                              postalAddress:address,
                              status:EntityStatus.ACTIVE,
-                             requestingUser:somePerson)
+                             request:new Request(requester:somePerson))
 
         Organisation pendingOrg = 
             new Organisation(name:'IMOS', 
@@ -54,7 +80,7 @@ class OrganisationControllerTests extends ControllerUnitTestCase
                              streetAddress:address,
                              postalAddress:address,
                              status:EntityStatus.PENDING,
-                             requestingUser:somePerson)
+                             request:new Request(requester:somePerson))
 
         Organisation deactivatedOrg = 
             new Organisation(name:'SIMS', 
@@ -64,7 +90,7 @@ class OrganisationControllerTests extends ControllerUnitTestCase
                              streetAddress:address,
                              postalAddress:address,
                              status:EntityStatus.DEACTIVATED,
-                             requestingUser:somePerson)
+                             request:new Request(requester:somePerson))
                          
         def orgList = [activeOrg, pendingOrg, deactivatedOrg]
         
@@ -142,6 +168,7 @@ class OrganisationControllerTests extends ControllerUnitTestCase
         
         assertEquals("show", redirectArgs['action'])
         assertEquals(EntityStatus.ACTIVE, Organisation.get(redirectArgs['id']).status) 
+        assertFalse(mailSent)
     }
     
     void testSaveAsNonSysAdmin()
@@ -170,5 +197,7 @@ class OrganisationControllerTests extends ControllerUnitTestCase
         
         assertEquals("show", redirectArgs['action'])
         assertEquals(EntityStatus.PENDING, Organisation.get(redirectArgs['id'])?.status) 
+        assertTrue(mailSent)
+        assertEquals("jbloggs@test.com", toAddress)
     }
 }

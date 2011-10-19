@@ -9,7 +9,7 @@ import org.joda.time.DateTimeZone
 
 class Person extends SecUser
 {
-    static hasMany = [projectRoles:ProjectRole]
+    static hasMany = [projectRoles:ProjectRole, requests:Request]
     static belongsTo = [organisation:Organisation]
     
     static transients = ['projects']

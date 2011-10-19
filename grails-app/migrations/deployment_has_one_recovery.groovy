@@ -24,18 +24,6 @@ databaseChangeLog = {
 		addUniqueConstraint(columnNames: "deployment_id", constraintName: "receiver_recovery_deployment_id_key", deferrable: "false", disabled: "false", initiallyDeferred: "false", tableName: "receiver_recovery")
 	}
 
-	changeSet(author: "jburgess (generated)", id: "1318897991574-6") {
-		createIndex(indexName: "organisation_status_index", tableName: "organisation", unique: "false") {
-			column(name: "status")
-		}
-	}
-
-	changeSet(author: "jburgess (generated)", id: "1318897991574-7") {
-		createIndex(indexName: "project_status_index", tableName: "project", unique: "false") {
-			column(name: "status")
-		}
-	}
-
 	changeSet(author: "jburgess (generated)", id: "1318897991574-8") {
 		addForeignKeyConstraint(baseColumnNames: "deployment_id", baseTableName: "receiver_recovery", baseTableSchemaName: "public", constraintName: "fk82de83e579a96182", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_deployment", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
 	}

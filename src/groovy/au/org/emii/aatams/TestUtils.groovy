@@ -18,7 +18,7 @@ class TestUtils
     }
     static loginSysAdmin(caller)
     {
-        Person jkburges = new Person(username: 'jkburges')
+        Person jkburges = new Person(username: 'jkburges', emailAddress:'jkburges@test.com')
         def subject = [ getPrincipal: { jkburges.username },
                         isAuthenticated: { true },
                         hasRole: { true } 
@@ -33,7 +33,7 @@ class TestUtils
     
     static loginJoeBloggs(caller)
     {
-        Person jbloggs = new Person(username: 'jbloggs')
+        Person jbloggs = new Person(username: 'jbloggs', emailAddress:'jbloggs@test.com')
         def subject = [ getPrincipal: { jbloggs.username },
                         isAuthenticated: { true },
                         hasRole:

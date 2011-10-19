@@ -62,16 +62,6 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         country:'Australia',
                         postcode:'3000').save()
 
-        Person jonBurgess =
-            new Person(username:'jkburges',
-                       passwordHash:new Sha256Hash("password").toHex(),
-                       name:'Jon Burgess',
-                       //organisation:imosOrg,
-                       phoneNumber:'1234',
-                       emailAddress:'jkburges@utas.edu.au',
-                       status:EntityStatus.ACTIVE,
-                       defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
-                   
         //
         // Organisations.
         //
@@ -82,8 +72,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                              faxNumber:'1234',
                              streetAddress:csiroStreetAddress,
                              postalAddress:csiroPostalAddress,
-                             status:EntityStatus.ACTIVE,
-                             requestingUser:jonBurgess).save(failOnError: true)
+                             status:EntityStatus.ACTIVE).save(failOnError: true)
 
         Address imosStreetAddress =
             new Address(streetAddress:'12 Smith Street',
@@ -106,8 +95,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                              faxNumber:'5678',
                              streetAddress:imosStreetAddress,
                              postalAddress:imosPostalAddress,
-                             status:EntityStatus.PENDING,
-                             requestingUser:jonBurgess).save(failOnError: true)
+                             status:EntityStatus.PENDING).save(failOnError: true)
 
         Address imosStreetAddress2 =
             new Address(streetAddress:'12 Smith Street',
@@ -130,8 +118,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                              faxNumber:'5678',
                              streetAddress:imosStreetAddress2,
                              postalAddress:imosPostalAddress2,
-                             status:EntityStatus.PENDING,
-                             requestingUser:jonBurgess).save(failOnError: true)
+                             status:EntityStatus.PENDING).save(failOnError: true)
 
 
         //
@@ -180,14 +167,15 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         //
         // People.
         //
-//        Person jonBurgess =
-//            new Person(username:'jkburges',
-//                       passwordHash:new Sha256Hash("password").toHex(),
-//                       name:'Jon Burgess',
-//                       organisation:imosOrg,
-//                       phoneNumber:'1234',
-//                       emailAddress:'jkburges@utas.edu.au',
-//                       status:EntityStatus.ACTIVE)
+        Person jonBurgess =
+            new Person(username:'jkburges',
+                       passwordHash:new Sha256Hash("password").toHex(),
+                       name:'Jon Burgess',
+                       organisation:imosOrg,
+                       phoneNumber:'1234',
+                       emailAddress:'jkburges@utas.edu.au',
+                       status:EntityStatus.ACTIVE,
+                       defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
         jonBurgess.addToRoles(sysAdmin)
         jonBurgess.save(failOnError: true)
 

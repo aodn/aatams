@@ -35,6 +35,8 @@
                         
                             <g:sortableColumn property="name" title="${message(code: 'receiverDownloadFile.name.label', default: 'Name')}" />
                         
+                            <g:sortableColumn property="requestingUser" title="${message(code: 'receiverDownloadFile.requestingUser.label', default: 'Uploader')}" />
+                        
                         </tr>
                     </thead>
                     <tbody>
@@ -54,6 +56,8 @@
                             <td><g:formatDate format="dd/MM/yyyy HH:mm:ss" date="${receiverDownloadFileInstance.importDate}" /></td>
                         
                             <td>${fieldValue(bean: receiverDownloadFileInstance, field: "name")}</td>
+                        
+                        	<td><g:link controller="person" action="show" id="${receiverDownloadFileInstance?.requestingUser?.id}">${receiverDownloadFileInstance?.requestingUser?.encodeAsHTML()}</g:link></td>
                         
                         </tr>
                     </g:each>

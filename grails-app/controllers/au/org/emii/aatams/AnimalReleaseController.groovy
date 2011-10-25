@@ -25,12 +25,7 @@ class AnimalReleaseController {
         def animalReleaseInstance = new AnimalRelease()
         animalReleaseInstance.properties = params
         
-        def model = 
-            [animalReleaseInstance: animalReleaseInstance] \
-          + [candidateProjects:candidateEntitiesService.projects()] \
-          + embargoPeriods()
-
-        return model
+		renderDefaultModel(animalReleaseInstance)
     }
     
     def addDependantEntity(params)
@@ -84,12 +79,7 @@ class AnimalReleaseController {
         // Either animal.id or speciesId must be specified.
         if ((params.animal?.id == null) && (params.speciesId == null))
         {
-            def model = 
-                [animalReleaseInstance: animalReleaseInstance] \
-              + [candidateProjects:candidateEntitiesService.projects()] \
-              + embargoPeriods()
-            
-            render(view: "create", model: model)
+            return renderDefaultModel(animalReleaseInstance)
         }
         else
         {
@@ -110,6 +100,12 @@ class AnimalReleaseController {
             animalReleaseInstance.animal = animalInstance
             animalInstance.addToReleases(animalReleaseInstance)
 
+			if (!params.surgery || params.surgery.isEmpty())
+			{
+				flash.message = "Animal release must have at least one tagging."
+				return renderDefaultModel(animalReleaseInstance)
+			}
+			
             try
             {
     
@@ -196,6 +192,16 @@ class AnimalReleaseController {
             }
         }
     }
+
+	private renderDefaultModel(AnimalRelease animalReleaseInstance) 
+	{
+		def model =
+				[animalReleaseInstance: animalReleaseInstance] \
+              + [candidateProjects:candidateEntitiesService.projects()] \
+              + embargoPeriods()
+
+		render(view: "create", model: model)
+	}
 
     def show = {
         def animalReleaseInstance = AnimalRelease.get(params.id)

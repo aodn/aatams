@@ -32,7 +32,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label class="compulsory" for="path"><g:message code="receiverDownloadFile.path.label" default="Path" /></label>
+                                    <label class="compulsory" for="path"><g:message code="receiverDownloadFile.path.label" default="Events file (CSV)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDownloadFileInstance, field: 'path', 'errors')}">
                                     <input type="file" name="path" accept="*" />

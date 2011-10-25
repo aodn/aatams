@@ -106,7 +106,7 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         controller.save()
         
         assertEquals("create", controller.renderArgs.view)
-        assertNotNull(controller.renderArgs.model.receiverDeploymentInstance)
+		assertDefaultValues(controller.renderArgs.model)
         assertNull(controller.renderArgs.model.receiverDeploymentInstance.receiver)
         
         def message = "${[code: 'default.invalidState.receiver', \
@@ -125,7 +125,7 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         controller.save()
         
         assertEquals("create", controller.renderArgs.view)
-        assertNotNull(controller.renderArgs.model.receiverDeploymentInstance)
+		assertDefaultValues(controller.renderArgs.model)
         assertNull(controller.renderArgs.model.receiverDeploymentInstance.receiver)
         
         def message = "${[code: 'default.invalidState.receiver', \
@@ -145,33 +145,33 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         controller.save()
         
         assertEquals("create", controller.renderArgs.view)
-        assertNotNull(controller.renderArgs.model.receiverDeploymentInstance)
+		assertDefaultValues(controller.renderArgs.model)
     }
     
     void testCreate() 
     {
         def model = controller.create()
         
-        assertNotNull(model.receiverDeploymentInstance)
-        assertEquals(2, model.candidateReceivers.size())
-        assertTrue(model.candidateReceivers.contains(receiver1))
-        assertTrue(model.candidateReceivers.contains(receiver2))
-        assertEquals(2, model.candidateStations.size())
-        assertTrue(model.candidateStations.contains(station1))
-        assertTrue(model.candidateStations.contains(station2))
+		assertNull(model.receiverDeploymentInstance.recoveryDate)
+		assertDefaultValues(model)
     }
+
+	private assertDefaultValues(def model) 
+	{
+		assertNotNull(model.receiverDeploymentInstance)
+		assertEquals(2, model.candidateReceivers.size())
+		assertTrue(model.candidateReceivers.contains(receiver1))
+		assertTrue(model.candidateReceivers.contains(receiver2))
+		assertEquals(2, model.candidateStations.size())
+		assertTrue(model.candidateStations.contains(station1))
+		assertTrue(model.candidateStations.contains(station2))
+	}
 
     void testSaveError() 
     {
         controller.save()
         def model = controller.modelAndView.model
         
-        assertNotNull(model.receiverDeploymentInstance)
-        assertEquals(2, model.candidateReceivers.size())
-        assertTrue(model.candidateReceivers.contains(receiver1))
-        assertTrue(model.candidateReceivers.contains(receiver2))
-        assertEquals(2, model.candidateStations.size())
-        assertTrue(model.candidateStations.contains(station1))
-        assertTrue(model.candidateStations.contains(station2))
+		assertDefaultValues(model)
     }
 }

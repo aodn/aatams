@@ -40,12 +40,7 @@ class ReceiverDeploymentController {
                                        args: [receiverDeploymentInstance?.receiver?.toString(), \
                                               receiverDeploymentInstance?.receiver?.status?.toString()])}"
             receiverDeploymentInstance.receiver = null
-            def model =
-                [receiverDeploymentInstance: receiverDeploymentInstance] +
-                [candidateStations:candidateEntitiesService.stations(),
-                 candidateReceivers:candidateEntitiesService.receivers()]
-
-            render(view: "create", model: model)
+            renderDefaultModel(receiverDeploymentInstance)
             return
         }
         
@@ -69,9 +64,19 @@ class ReceiverDeploymentController {
         }
         else 
         {
-            render(view: "create", model: [receiverDeploymentInstance: receiverDeploymentInstance])
+            renderDefaultModel(receiverDeploymentInstance)
         }
     }
+
+	private renderDefaultModel(ReceiverDeployment receiverDeploymentInstance) 
+	{
+		def model =
+				[receiverDeploymentInstance: receiverDeploymentInstance] +
+				[candidateStations:candidateEntitiesService.stations(),
+				 candidateReceivers:candidateEntitiesService.receivers()]
+
+		render(view: "create", model: model)
+	}
 
     def show = {
         def receiverDeploymentInstance = ReceiverDeployment.get(params.id)

@@ -63,7 +63,7 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiverDownloadFile.requestingUser.label" default="Requesting User" /></td>
+                            <td valign="top" class="name"><g:message code="receiverDownloadFile.requestingUser.label" default="Uploader" /></td>
                             
                             <td valign="top" class="value"><g:link controller="person" action="show" id="${receiverDownloadFileInstance?.requestingUser?.id}">${receiverDownloadFileInstance?.requestingUser?.encodeAsHTML()}</g:link></td>
                             

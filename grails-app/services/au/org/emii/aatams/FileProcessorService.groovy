@@ -14,69 +14,64 @@ class FileProcessorService
     def grailsApplication
     def mailService
 
-    void process(receiverDownloadFileId, MultipartFile file, showLink)
+    void process(receiverDownloadFileId, MultipartFile file, showLink) throws FileProcessingException
     {
-        log.debug("Processing receiver export, download file ID: " + receiverDownloadFileId)
+        log.debug("Processing receiver export, download file ID: " + receiverDownloadFileId + ", content type: " + file.getContentType())
         
         def receiverDownloadFile = ReceiverDownloadFile.get(receiverDownloadFileId)
         assert(receiverDownloadFile != null): "receiverDownloadFile cannot be null"
         
-        if (!file.isEmpty())
+		validateContent(receiverDownloadFile, file)
+			
+        // Save the file to disk.
+		log.debug("Creating file at path: " + receiverDownloadFile.path)
+        File outFile = new File(receiverDownloadFile.path)
+        
+        // Create the directory structure first...
+        outFile.mkdirs()
+        
+        // ... then transfer the data.
+        file.transferTo(outFile)
+        
+        try
         {
-            // Save the file to disk.
-            def path = receiverDownloadFile.path
-            File outFile = new File(path)
-            
-            // Create the directory structure first...
-            outFile.mkdirs()
-            
-            // ... then transfer the data.
-            file.transferTo(outFile)
-            
-            try
+            switch (receiverDownloadFile.type)
             {
-                switch (receiverDownloadFile.type)
-                {
-                    case ReceiverDownloadFileType.DETECTIONS_CSV:
-                    
-                        // Delegate to VUE Detection Processor...
-                        log.debug("Delegating to VUE detection file processor...")
-                        vueDetectionFileProcessorService.process(receiverDownloadFile)
-                        break;
-                    
-                    case ReceiverDownloadFileType.EVENTS_CSV:
+                case ReceiverDownloadFileType.DETECTIONS_CSV:
+                
+                    // Delegate to VUE Detection Processor...
+                    log.debug("Delegating to VUE detection file processor...")
+                    vueDetectionFileProcessorService.process(receiverDownloadFile)
+                    break;
+                
+                case ReceiverDownloadFileType.EVENTS_CSV:
 
-                        // Delegate to VUE Event Processor...
-                        log.debug("Processing events...")
-                        vueEventFileProcessorService.process(receiverDownloadFile)
-                        break;
-                    
-                    default:
+                    // Delegate to VUE Event Processor...
+                    log.debug("Processing events...")
+                    vueEventFileProcessorService.process(receiverDownloadFile)
+                    break;
+                
+                default:
 
-                        // No processing - just update the status.
-                        receiverDownloadFile.status = FileProcessingStatus.PROCESSED
-                        receiverDownloadFile.save()
-                }
-
-                log.info "Finished processing."
+                    // No processing - just update the status.
+                    receiverDownloadFile.status = FileProcessingStatus.PROCESSED
+                    receiverDownloadFile.save()
             }
-            catch (Throwable e)
-            {
-                log.error("Error processing file", e)
-                receiverDownloadFile.status = FileProcessingStatus.ERROR
-                receiverDownloadFile.errMsg = String.valueOf(e)
-                receiverDownloadFile.save()
 
-                throw e
-            }
-            finally 
-            {
-                sendNotification(receiverDownloadFile, showLink)
-            }
+            log.info "Finished processing."
         }
-        else
+        catch (Throwable e)
         {
-            log.warn("File is empty.")
+            log.error("Error processing file", e)
+            receiverDownloadFile.status = FileProcessingStatus.ERROR
+            receiverDownloadFile.errMsg = String.valueOf(e)
+            receiverDownloadFile.save()
+
+            throw e
+        }
+        finally 
+        {
+            sendNotification(receiverDownloadFile, showLink)
         }
     }
     
@@ -100,4 +95,46 @@ class FileProcessorService
                  + showLink
         }
     }
+	
+	private void validateContent(ReceiverDownloadFile receiverDownloadFile, MultipartFile file) throws FileProcessingException
+	{
+		if (file.isEmpty())
+		{
+			def errMsg = "File is empty"
+			log.error(errMsg)
+			throw new FileProcessingException(errMsg)
+		}
+
+        switch (receiverDownloadFile.type)
+        {
+            case ReceiverDownloadFileType.DETECTIONS_CSV:
+			
+				if (!file.getContentType().equals("text/csv"))
+				{
+					throw new FileProcessingException("Invalid file content - detections must be imported in CSV file format")
+				}
+                break;
+
+            case ReceiverDownloadFileType.EVENTS_CSV:
+
+				if (!file.getContentType().equals("text/csv"))
+				{
+					throw new FileProcessingException("Invalid file content - events must be imported in CSV file format")
+				}
+                break;
+            
+			case ReceiverDownloadFileType.VRL:
+			case ReceiverDownloadFileType.RLD:
+			
+				if (!file.getContentType().equals("application/octet-stream"))
+				{
+					throw new FileProcessingException("Invalid file content for VRL/RLD file")
+				}
+                break;
+				
+            default:
+
+				assert(false)
+        }
+	}
 }

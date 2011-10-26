@@ -67,11 +67,11 @@ class AnimalRelease implements Embargoable
     {
         project()
         animal()
-        captureLocality()
+        captureLocality(blank:false)
         captureLocation(nullable:true)
         captureDateTime()
         captureMethod()
-        releaseLocality()
+        releaseLocality(blank:false)
         releaseLocation(nullable:true)
         releaseDateTime()
         comments(nullable:true)

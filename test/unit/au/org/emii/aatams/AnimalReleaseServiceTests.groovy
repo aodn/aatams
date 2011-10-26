@@ -424,7 +424,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 						comments: "",
 						tag:[codeName: tag.codeName, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
 
-			params.surgery += [(it):surgery]
+			params.surgery += [(String.valueOf(it)):surgery]
 		}
 
 		assertNoExceptionAfterSave()
@@ -464,7 +464,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 				comments:"some comment"
 			]
 
-			params.measurement += [(it):measurement]
+			params.measurement += [(String.valueOf(it)):measurement]
 		}
 
 		assertNoExceptionAfterSave()
@@ -494,7 +494,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 						comments: "",
 						tag:[codeName: codeName, serialNumber: serialNum, model:[id: 1]]]
 
-			params.surgery += [(it):surgery]
+			params.surgery += [(String.valueOf(it)):surgery]
 		}
 
 		assertNoExceptionAfterSave()

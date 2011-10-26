@@ -1499,7 +1499,7 @@ databaseChangeLog = {
 	changeSet(author: "jburgess (generated)", id: "1318566800479-128") {
 		createView("SELECT current_database() AS f_table_catalog, n.nspname AS f_table_schema, c.relname AS f_table_name, a.attname AS f_geography_column, geography_typmod_dims(a.atttypmod) AS coord_dimension, geography_typmod_srid(a.atttypmod) AS srid, geography_typmod_type(a.atttypmod) AS type FROM pg_class c, pg_attribute a, pg_type t, pg_namespace n WHERE ((((((t.typname = 'geography'::name) AND (a.attisdropped = false)) AND (a.atttypid = t.oid)) AND (a.attrelid = c.oid)) AND (c.relnamespace = n.oid)) AND (NOT pg_is_other_temp_schema(c.relnamespace)));", schemaName: "public", viewName: "geography_columns")
 	}
-
+	
 	changeSet(author: "jburgess (generated)", id: "1318566460667-1") {
 		createIndex(indexName: "organisation_status_index", tableName: "organisation", unique: "false") {
 			column(name: "status")
@@ -1521,4 +1521,6 @@ databaseChangeLog = {
 	include file: 'deployment_has_one_recovery.groovy'
 
 	include file: 'requester_refactor.groovy'
+
+	include file: '3_4_1_changes.groovy'
 }

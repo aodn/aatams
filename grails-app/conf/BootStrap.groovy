@@ -174,10 +174,10 @@ class BootStrap
             
             development
             {
-                initialiser = new DevelopmentDataInitialiser(permissionUtilsService)
-
-                assert(initialiser): "Initialiser cannot be null"
-                initialiser.execute()
+//                initialiser = new DevelopmentDataInitialiser(permissionUtilsService)
+//
+//                assert(initialiser): "Initialiser cannot be null"
+//                initialiser.execute()
             }
             
             production

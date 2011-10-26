@@ -25,5 +25,4 @@ class Animal
         
         return buf.toString()
     }
-    
 }

@@ -95,7 +95,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="captureLocation"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></label>
+                                  <label for="captureLocation"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureLocation', 'errors')}">
                                   <g:point name="captureLocation" 
@@ -262,7 +262,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="releaseLocation"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></label>
+                                  <label for="releaseLocation"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></label>
                                 </td>
 
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseLocation', 'errors')}">

@@ -26,9 +26,13 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
     Project project1
     Project project2
     
+	def animalReleaseService
     def candidateEntitiesService
     
-    TransmitterType pinger
+	def animalFactoryService
+	def tagFactoryService
+
+	TransmitterType pinger
     
     protected void setUp() 
     {
@@ -45,9 +49,20 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         mockLogging(CandidateEntitiesService)
         candidateEntitiesService = new CandidateEntitiesService()
         candidateEntitiesService.permissionUtilsService = permService
-        
         controller.candidateEntitiesService = candidateEntitiesService
         
+		mockLogging(AnimalFactoryService, true)
+		animalFactoryService = new AnimalFactoryService()
+		
+		mockLogging(TagFactoryService, true)
+		tagFactoryService = new TagFactoryService()
+
+		mockLogging(AnimalReleaseService, true)
+		animalReleaseService = new AnimalReleaseService()
+		animalReleaseService.animalFactoryService = animalFactoryService
+		animalReleaseService.tagFactoryService = tagFactoryService
+		controller.animalReleaseService = animalReleaseService
+		
         mockDomain(Person)
         mockDomain(AnimalRelease)
         
@@ -113,6 +128,10 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         def projectList = [project1, project2]
         mockDomain(Project, projectList)
         projectList.each { it.save() }
+		
+		mockDomain(Animal)
+		mockDomain(Sex)
+		mockDomain(Species)
     }
 
     protected void tearDown() 
@@ -147,8 +166,11 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
     
     void testSaveNoAnimalOrSpecies()
     {
+		addOneSurgeryToParams()
         def model = controller.save()
+		
         assertNull(model.animalReleaseInstance.animal)
+		assertEquals("animalRelease.noSpeciesOrAnimal", model.animalReleaseInstance.errors.getGlobalError().getCode())
     }
     
     void testSaveWithAnimalNoSurgery()
@@ -163,7 +185,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         
         def model = controller.save()
         
-        assertEquals("Animal release must have at least one tagging.", controller.flash.message)
+		assertEquals("animalRelease.noTaggings", model.animalReleaseInstance.errors.getGlobalError().getCode())
     }
     
     void testSaveWithAnimal()
@@ -183,6 +205,27 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         assertNotNull(controller.redirectArgs.id)
     }
     
+	void testSaveWithSpeciesNoSexNoSurgery()
+	{
+		Species species = new Species(name:"white shark")
+		mockDomain(Species, [species])
+		species.save()
+		
+		mockDomain(Animal)
+		mockDomain(AnimalRelease)
+		mockDomain(Sex)
+		
+		// speciesId
+		controller.params.speciesId = species.id
+		controller.params.speciesName = species.name
+		
+		def model = controller.save()
+		
+		assertEquals("animalRelease.noTaggings", model.animalReleaseInstance.errors.getGlobalError().getCode())
+		assertEquals(species.id, model.species.id)
+		assertEquals("white shark", model.species.name)
+	}
+
     void testSaveWithSpeciesNoSex()
     {
         Species species = new Species()

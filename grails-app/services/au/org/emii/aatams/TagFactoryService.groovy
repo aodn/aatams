@@ -28,6 +28,8 @@ class TagFactoryService {
                 String codeMap = codeNameTokens[0] + "-" + codeNameTokens[1]
                 String pingCode = codeNameTokens[2]
                 
+				initDefaults(params)
+				
                 try
                 {
                     Integer pingCodeAsInt = Integer.valueOf(pingCode)
@@ -66,4 +68,16 @@ class TagFactoryService {
         
         return tag
     }
+
+	private initDefaults(params) {
+		if (!params.status)
+		{
+			params.status = DeviceStatus.findByStatus('NEW')
+		}
+
+		if (!params.transmitterType)
+		{
+			params.transmitterType = TransmitterType.findByTransmitterTypeName('PINGER')
+		}
+	}
 }

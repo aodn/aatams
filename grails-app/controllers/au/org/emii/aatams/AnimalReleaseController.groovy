@@ -7,9 +7,10 @@ class AnimalReleaseController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     
     def animalFactoryService
+	def animalReleaseService
     def candidateEntitiesService
     def detectionFactoryService
-    
+	
     def tagFactoryService
     
     def index = {
@@ -25,7 +26,7 @@ class AnimalReleaseController {
         def animalReleaseInstance = new AnimalRelease()
         animalReleaseInstance.properties = params
         
-		renderDefaultModel(animalReleaseInstance)
+		renderDefaultModel(animalReleaseInstance, params)
     }
     
     def addDependantEntity(params)
@@ -72,14 +73,41 @@ class AnimalReleaseController {
         addDependantEntity(params)
     }
 
+	def save =
+	{
+		def animalReleaseInstance = new AnimalRelease()
+		
+		try 
+		{
+			animalReleaseService.save(animalReleaseInstance, params)
+			flash.message = "${message(code: 'default.created.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.toString()])}"
+			redirect(action: "show", id: animalReleaseInstance.id)
+		}
+		catch (IllegalArgumentException e)
+		{
+			renderDefaultModel(animalReleaseInstance, params)
+		}
+	}
+
+/**
     def save = 
     {
+		log.debug("params: " + params)
+		
         def animalReleaseInstance = new AnimalRelease(params)
         
+		if (!params.surgery || params.surgery.isEmpty())
+		{
+			animalReleaseInstance.errors.reject("animalRelease.noTaggings")
+			
+			return renderDefaultModel(animalReleaseInstance, params)
+		}
+			
         // Either animal.id or speciesId must be specified.
-        if ((params.animal?.id == null) && (params.speciesId == null))
+        if ((!params.animal || params.animal?.id == null) && (params.speciesId == null))
         {
-            return renderDefaultModel(animalReleaseInstance)
+			animalReleaseInstance.errors.reject("animalRelease.noSpeciesOrAnimal")
+            return renderDefaultModel(animalReleaseInstance, params)
         }
         else
         {
@@ -100,15 +128,8 @@ class AnimalReleaseController {
             animalReleaseInstance.animal = animalInstance
             animalInstance.addToReleases(animalReleaseInstance)
 
-			if (!params.surgery || params.surgery.isEmpty())
-			{
-				flash.message = "Animal release must have at least one tagging."
-				return renderDefaultModel(animalReleaseInstance)
-			}
-			
             try
             {
-    
                 // Create any associated surgeries (and set associated tags' status to
                 // DEPLOYED).
                 DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
@@ -192,13 +213,19 @@ class AnimalReleaseController {
             }
         }
     }
-
-	private renderDefaultModel(AnimalRelease animalReleaseInstance) 
+*/
+	private renderDefaultModel(AnimalRelease animalReleaseInstance, params) 
 	{
 		def model =
 				[animalReleaseInstance: animalReleaseInstance] \
               + [candidateProjects:candidateEntitiesService.projects()] \
               + embargoPeriods()
+			  
+		if (params.speciesId && params.speciesName)	  
+		{
+			def species = [id:params.speciesId, name:params.speciesName]
+			model.species = species
+		}
 
 		render(view: "create", model: model)
 	}

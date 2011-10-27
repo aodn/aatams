@@ -43,7 +43,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="tag.model.label" default="Model" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="deviceModel" action="show" id="${tagInstance?.model?.id}">${tagInstance?.model?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${tagInstance?.model?.encodeAsHTML()}</td>
                             
                         </tr>
                     
@@ -77,7 +77,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="tag.status.label" default="Status" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${tagInstance?.status?.id}">${tagInstance?.status?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${tagInstance?.status?.encodeAsHTML()}</td>
                             
                         </tr>
                     

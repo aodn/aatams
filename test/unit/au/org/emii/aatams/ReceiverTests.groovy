@@ -4,8 +4,25 @@ import grails.test.*
 
 class ReceiverTests extends GrailsUnitTestCase 
 {
-    protected void setUp() {
+	Receiver rx1
+	Receiver rx2
+	
+    protected void setUp() 
+	{
         super.setUp()
+        rx1 = new Receiver(codeName: "VRW2-1111",
+                                    serialNumber:"1111",
+                                    status:new DeviceStatus(),
+                                    model:new DeviceModel(),
+                                    organisation:new Organisation())
+        rx2 = new Receiver(codeName: "VRW2-2222",
+                                    serialNumber:"2222",
+                                    status:new DeviceStatus(),
+                                    model:new DeviceModel(),
+                                    organisation:new Organisation())
+                                
+        mockDomain(Receiver, [rx1, rx2])
+        mockForConstraintsTests(Receiver, [rx1, rx2])
     }
 
     protected void tearDown() 
@@ -15,20 +32,14 @@ class ReceiverTests extends GrailsUnitTestCase
 
     void testNonUniqueCodeName() 
     {
-        Receiver rx1 = new Receiver(codeName: "VRW2-1111",
-                                    serialNumber:"1111",
-                                    status:new DeviceStatus(),
-                                    model:new DeviceModel(),
-                                    organisation:new Organisation())
-        Receiver rx2 = new Receiver(codeName: "VRW2-1111",
-                                    serialNumber:"2222",
-                                    status:new DeviceStatus(),
-                                    model:new DeviceModel(),
-                                    organisation:new Organisation())
-                                
-        mockDomain(Receiver, [rx1, rx2])
-        mockForConstraintsTests(Receiver, [rx1, rx2])
-        
+		rx2.codeName = rx1.codeName
+        assertFalse(rx2.validate())
+		println(rx2.errors)
+    }
+    
+    void testNonUniqueSerialNumber() 
+    {
+		rx2.serialNumber = rx1.serialNumber
         assertFalse(rx2.validate())
     }
     

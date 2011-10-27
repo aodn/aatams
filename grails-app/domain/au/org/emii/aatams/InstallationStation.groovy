@@ -39,8 +39,8 @@ class InstallationStation
     /**
      * Number of deployments at this particular station.
      */
-    
     Integer numDeployments = 0
+	
     /**
      * Geographic position of this station.
      */

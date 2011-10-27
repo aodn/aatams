@@ -62,12 +62,18 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         
         mockDomain(ReceiverDeployment)
         
+		station1 = new InstallationStation(name:'station1')
+		station2 = new InstallationStation(name:'station2')
+		def stationList = [station1, station2]
+		mockDomain(InstallationStation, stationList)
+		stationList.each { it.save() }
+		
         controller.metaClass.message = { LinkedHashMap args -> return args }
         
         candidateEntitiesService = new CandidateEntitiesService()
         candidateEntitiesService.metaClass.stations =
         {
-            return [station1, station2]
+            return stationList
         }
         candidateEntitiesService.metaClass.receivers =
         {
@@ -76,7 +82,10 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         
         controller.candidateEntitiesService = candidateEntitiesService
         
-    }
+        controller.params.deploymentDateTime = new DateTime()
+        controller.params.mooringType = new MooringType()
+        controller.params.station = station1
+	}
 
     protected void tearDown() 
     {
@@ -85,24 +94,24 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
 
     void testSaveNewReceiver() 
     {
+		assertEquals(0, station1.numDeployments)
+		
         controller.params.receiver = newReceiver
-        controller.params.deploymentDateTime = new DateTime()
-        controller.params.mooringType = new MooringType()
-        controller.params.station = new InstallationStation()
-        
         controller.save()
         
         assertEquals("show", controller.redirectArgs.action)
         assertEquals(deployedStatus, newReceiver.status)
+		
+		assertEquals(1, station1.numDeployments)
+
+		def deployment = ReceiverDeployment.get(controller.redirectArgs.id)
+		assertNotNull(deployment)
+		assertEquals(1, deployment.deploymentNumber)
     }
 
     void testSaveDeployedReceiver() 
     {
         controller.params.receiver = deployedReceiver
-        controller.params.deploymentDateTime = new DateTime()
-        controller.params.mooringType = new MooringType()
-        controller.params.station = new InstallationStation()
-        
         controller.save()
         
         assertEquals("create", controller.renderArgs.view)
@@ -118,10 +127,6 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
     void testSaveRetiredReceiver() 
     {
         controller.params.receiver = retiredReceiver
-        controller.params.deploymentDateTime = new DateTime()
-        controller.params.mooringType = new MooringType()
-        controller.params.station = new InstallationStation()
-        
         controller.save()
         
         assertEquals("create", controller.renderArgs.view)
@@ -137,9 +142,6 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
     void testSaveScheduledRecoveryDateBeforeDeploymentDate() 
     {
         controller.params.receiver = newReceiver
-        controller.params.deploymentDateTime = new DateTime()
-        controller.params.mooringType = new MooringType()
-        controller.params.station = new InstallationStation()
         controller.params.recoveryDate = controller.params.deploymentDateTime.minusDays(1).toDate()
         
         controller.save()

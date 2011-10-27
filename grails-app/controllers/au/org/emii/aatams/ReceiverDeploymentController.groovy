@@ -47,7 +47,7 @@ class ReceiverDeploymentController {
         // Need to update that status of the receiver to DEPLOYED.
         receiverDeploymentInstance.receiver?.status = DeviceStatus.findByStatus('DEPLOYED')
 
-        incNumDeployments(receiverDeploymentInstance)
+		incNumDeployments(receiverDeploymentInstance)
         
         if (receiverDeploymentInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
@@ -59,17 +59,29 @@ class ReceiverDeploymentController {
         }
     }
 
-	private void incNumDeployments(ReceiverDeployment receiverDeploymentInstance) 
+	private void incNumDeployments(ReceiverDeployment deployment) 
 	{
-		if (receiverDeploymentInstance?.station?.numDeployments != null)
+		if (deployment?.station?.numDeployments != null)
 		{
-			receiverDeploymentInstance?.station?.numDeployments =
-					receiverDeploymentInstance?.station?.numDeployments + 1
-			receiverDeploymentInstance?.station?.save()
+			deployment?.station?.numDeployments =
+					deployment?.station?.numDeployments + 1
+			deployment?.station?.save()
 		}
 
 		// And record the deployment number against the actual deployment.
-		receiverDeploymentInstance?.deploymentNumber = receiverDeploymentInstance?.station?.numDeployments
+		deployment?.deploymentNumber = deployment?.station?.numDeployments
+		
+		addReceiverToStation(deployment)
+	}
+
+	private addReceiverToStation(ReceiverDeployment deployment) 
+	{
+		deployment.station.addToReceivers(deployment.receiver)
+	}
+
+	private removeReceiverFromStation(ReceiverDeployment deployment) 
+	{
+		deployment.station.removeFromReceivers(deployment.receiver)
 	}
 
 	private renderDefaultModel(ReceiverDeployment receiverDeploymentInstance) 
@@ -109,8 +121,6 @@ class ReceiverDeploymentController {
 
     def update = {
         
-        log.debug("params: " + params)
-        
         def receiverDeploymentInstance = ReceiverDeployment.get(params.id)
         if (receiverDeploymentInstance) {
             if (params.version) {
@@ -122,8 +132,11 @@ class ReceiverDeploymentController {
                     return
                 }
             }
+			
+			removeReceiverFromStation(receiverDeploymentInstance)
             receiverDeploymentInstance.properties = params
-            
+			addReceiverToStation(receiverDeploymentInstance)
+			
             if (!receiverDeploymentInstance.hasErrors() && receiverDeploymentInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
                 redirect(action: "show", id: receiverDeploymentInstance.id)

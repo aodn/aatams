@@ -62,8 +62,8 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         
         mockDomain(ReceiverDeployment)
         
-		station1 = new InstallationStation(name:'station1')
-		station2 = new InstallationStation(name:'station2')
+		station1 = new InstallationStation(name:'station1', receivers:new HashSet<Receiver>())
+		station2 = new InstallationStation(name:'station2', receivers:new HashSet<Receiver>())
 		def stationList = [station1, station2]
 		mockDomain(InstallationStation, stationList)
 		stationList.each { it.save() }
@@ -176,4 +176,42 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         
 		assertDefaultValues(model)
     }
+	
+	void testSaveCheckStationsReceivers()
+	{
+		assertFalse(station1.receivers.contains(newReceiver))		
+		assertFalse(station1.receivers.contains(csiroReceiver))
+		
+		controller.params.receiver = newReceiver
+		controller.save()
+
+		assertTrue(station1.receivers.contains(newReceiver))		
+		assertFalse(station1.receivers.contains(csiroReceiver))
+
+		controller.params.receiver = csiroReceiver
+		controller.save()
+
+		assertTrue(station1.receivers.contains(newReceiver))		
+		assertTrue(station1.receivers.contains(csiroReceiver))
+	}
+
+	void testUpdateCheckStationsReceivers()
+	{
+		assertFalse(station1.receivers.contains(newReceiver))		
+		assertFalse(station1.receivers.contains(csiroReceiver))
+		
+		controller.params.receiver = newReceiver
+		controller.save()
+
+		assertTrue(station1.receivers.contains(newReceiver))		
+		assertFalse(station1.receivers.contains(csiroReceiver))
+
+		controller.params.clear()
+		controller.params.id = controller.redirectArgs.id
+		controller.params.receiver = csiroReceiver
+		controller.update()
+
+		assertFalse(station1.receivers.contains(newReceiver))		
+		assertTrue(station1.receivers.contains(csiroReceiver))
+	}
 }

@@ -173,21 +173,54 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
         assertTrue(model.readableProjects.contains(project2))
     }
     
-    void testCreate() 
-    {
-        Point location = new GeometryFactory().createPoint(new Coordinate(12f, 34f))
-        location.setSRID(4326)
-        
-        ReceiverDeployment deployment = new ReceiverDeployment(location:location)
-        mockDomain(ReceiverDeployment, [deployment])
-        deployment.save()
-        deployment.metaClass.toString = { "test deployment"}
-        
-        controller.params.deploymentId = deployment.id
-        def model = controller.create()
-        
-        assertNotNull(model.receiverRecoveryInstance)
-        assertEquals(deployment, model.receiverRecoveryInstance.deployment)
-        assertEquals(location, model.receiverRecoveryInstance.location)
-    }
+	void testCreateUseDeploymentsLocation()
+	{
+		Point deploymentLocation = new GeometryFactory().createPoint(new Coordinate(34f, 34f))
+		deploymentLocation.setSRID(4326)
+
+		InstallationStation station = createStation()
+		
+		ReceiverDeployment deployment = createDeployment(station, deploymentLocation)
+		
+		def model = controller.create()
+		
+		assertRecoveryDefaults(model, deployment, deploymentLocation)
+	}
+
+	void testCreateUseStationsLocation()
+	{
+		InstallationStation station = createStation()
+		ReceiverDeployment deployment = createDeployment(station, null)
+		
+		def model = controller.create()
+		
+		assertRecoveryDefaults(model, deployment, station.location)
+	}
+
+	private InstallationStation createStation() {
+		InstallationStation station = new InstallationStation(location:new GeometryFactory().createPoint(new Coordinate(12f, 34f)))
+		station.location.setSRID(4326)
+		mockDomain(InstallationStation, [station])
+		station.save()
+		return station
+	}
+
+	private ReceiverDeployment createDeployment(InstallationStation station, location) 
+	{
+		ReceiverDeployment deployment = new ReceiverDeployment(location:location, station:station)
+		mockDomain(ReceiverDeployment, [deployment])
+		deployment.save()
+		deployment.metaClass.toString = { "test deployment"}
+
+		controller.params.deploymentId = deployment.id
+		
+		return deployment
+	}
+
+	private void assertRecoveryDefaults(model, ReceiverDeployment deployment, Point deploymentLocation) 
+	{
+		assertNotNull(model.receiverRecoveryInstance)
+		assertEquals(deployment, model.receiverRecoveryInstance.deployment)
+		assertEquals(deploymentLocation, model.receiverRecoveryInstance.location)
+	}
 }

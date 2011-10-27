@@ -25,7 +25,9 @@
                               <label class="compulsory" for="value"><g:message code="point.latitude.label" default="Latitude" /></label>
                           </td>
                           <td valign="top" class="value">
-                              <g:textField name="${pointName}_editLat" value="${lat}" />
+                              <g:textField name="${pointName}_editLat" 
+                                           value="${lat}" 
+                                           placeholder="decimal degrees, e.g. 34.1234"/>
 
                           </td>
                           <td valign="top" class="value">
@@ -43,7 +45,9 @@
                               <label class="compulsory" for="value"><g:message code="point.longitude.label" default="Longitude" /></label>
                           </td>
                           <td valign="top" class="value">
-                              <g:textField name="${pointName}_editLon" value="${lon}" />
+                              <g:textField name="${pointName}_editLon" 
+                                           value="${lon}" 
+                                           placeholder="decimal degrees, e.g. 34.1234"/>
 
                           </td>
                           <td valign="top" class="value">

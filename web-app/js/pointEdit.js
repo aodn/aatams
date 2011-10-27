@@ -13,7 +13,7 @@ $(function()
     {
         autoOpen: false,
         height: 225,
-        width: 350,
+        width: 525,
         modal: true,
         buttons: 
         {
@@ -144,7 +144,7 @@ function showDialog(pointDiv)
     var editLat = $('#' + pointName + '_editLat')
     editLat.parent().attr("class", "value")
 
-    editLon.val(Math.abs(lon));
+    editLon.val(abs(lon));
     // If longitude is non-negative, select 'E'
     if (lon >= 0)
     {
@@ -155,7 +155,7 @@ function showDialog(pointDiv)
         editPointDialog.find('#' + pointName + '_editEastWest').val('W')
     }
 
-    editLat.val(Math.abs(lat));
+    editLat.val(abs(lat));
     // If latitude is positive, select 'N'
     if (lat > 0)
     {
@@ -170,6 +170,16 @@ function showDialog(pointDiv)
     editPointDialog.dialog('open');
 
     editLat.select();
+}
+
+function abs(val)
+{
+	if ((val == null) || (val == ""))
+	{
+		return null
+	}
+	
+	return Math.abs(val)
 }
 
 function genPointString(lon, lat, srid)

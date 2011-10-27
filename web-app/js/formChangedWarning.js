@@ -6,7 +6,7 @@
 
 var catcher = function() {
   var changed = false;
-  $('form').each(function() {
+    $('form').each(function() {
     if ($(this).data('initialForm') != $(this).serialize()) {
       changed = true;
       $(this).addClass('changed');
@@ -21,7 +21,7 @@ var catcher = function() {
 
 $(function() {
   $('form').each(function() {
-    $(this).data('initialForm', $(this).serialize());
+	  $(this).data('initialForm', $(this).serialize());
   }).submit(function(e) {
     var formEl = this;
     var changed = false;
@@ -33,11 +33,7 @@ $(function() {
         $(this).removeClass('changed');
       }
     });
-    if (changed && !confirm('Another form has been changed. Continue with submission?')) {
-      e.preventDefault();
-    } else {
-      $(window).unbind('beforeunload', catcher);
-    }
+    $(window).unbind('beforeunload', catcher);
   });
   $(window).bind('beforeunload', catcher);
 });

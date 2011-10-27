@@ -1,6 +1,7 @@
 package au.org.emii.aatams
 
 import org.joda.time.*
+import com.vividsolutions.jts.geom.Point
 
 class ReceiverRecoveryController 
 {
@@ -95,11 +96,24 @@ class ReceiverRecoveryController
         def receiverRecoveryInstance = new ReceiverRecovery()
         receiverRecoveryInstance.properties = params
         receiverRecoveryInstance.deployment = deployment
-        receiverRecoveryInstance.location = deployment.location
-        
+		
+		receiverRecoveryInstance.location = determineDefaultLocation(deployment)
+		
         return [receiverRecoveryInstance: receiverRecoveryInstance]
     }
 
+	private Point determineDefaultLocation(deployment)
+	{
+		assert(deployment)
+		
+		if (deployment.location)
+		{
+			return deployment.location
+		}
+		
+		return deployment.station?.location
+	}
+	
     def save = 
     {
         ReceiverDeployment deployment = ReceiverDeployment.get(params.deploymentId)

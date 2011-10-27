@@ -45,7 +45,7 @@ class DateTimeTagLib {
 	}
 
 	def renderPicker = {List fields, attrs ->
-		def precision = attrs.precision ?: (grailsApplication.config.grails.tags.datePicker.default.precision ?: 'minute')
+		def precision = attrs.precision ?: (grailsApplication.config.grails.tags.datePicker.default.precision ?: 'second')
 		log.debug "precision = $precision"
 
 		log.debug "fields = $fields"

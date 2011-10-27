@@ -22,12 +22,7 @@ class ReceiverDeploymentController {
         def receiverDeploymentInstance = new ReceiverDeployment()
         receiverDeploymentInstance.properties = params
         
-        def model =
-            [receiverDeploymentInstance: receiverDeploymentInstance] +
-            [candidateStations:candidateEntitiesService.stations(),
-             candidateReceivers:candidateEntitiesService.receivers()]
-         
-        return model
+        renderCreateWithDefaultModel(receiverDeploymentInstance)
     }
 
     def save = 
@@ -40,7 +35,7 @@ class ReceiverDeploymentController {
                                        args: [receiverDeploymentInstance?.receiver?.toString(), \
                                               receiverDeploymentInstance?.receiver?.status?.toString()])}"
             receiverDeploymentInstance.receiver = null
-            renderDefaultModel(receiverDeploymentInstance)
+            renderCreateWithDefaultModel(receiverDeploymentInstance)
             return
         }
         
@@ -55,7 +50,7 @@ class ReceiverDeploymentController {
         }
         else 
         {
-            renderDefaultModel(receiverDeploymentInstance)
+            renderCreateWithDefaultModel(receiverDeploymentInstance)
         }
     }
 
@@ -84,14 +79,32 @@ class ReceiverDeploymentController {
 		deployment.station.removeFromReceivers(deployment.receiver)
 	}
 
-	private renderDefaultModel(ReceiverDeployment receiverDeploymentInstance) 
+	private renderCreateWithDefaultModel(ReceiverDeployment receiverDeploymentInstance) 
+	{
+		def model = renderDefaultModel(receiverDeploymentInstance)
+
+		render(view: "create", model: model)
+	}
+
+	private Map renderDefaultModel(ReceiverDeployment receiverDeploymentInstance) 
 	{
 		def model =
 				[receiverDeploymentInstance: receiverDeploymentInstance] +
 				[candidateStations:candidateEntitiesService.stations(),
-				 candidateReceivers:candidateEntitiesService.receivers()]
-
-		render(view: "create", model: model)
+				 candidateReceivers:getCandidateReceivers(receiverDeploymentInstance)]
+		return model
+	}
+	
+	private Collection<Receiver> getCandidateReceivers(deployment)
+	{
+		def retList = candidateEntitiesService.receivers()
+		if (deployment.receiver)
+		{
+			retList += deployment.receiver
+		}
+		
+		return retList.unique({ a, b -> a.id <=> b.id })
+		
 	}
 
     def show = {
@@ -108,14 +121,11 @@ class ReceiverDeploymentController {
     def edit = {
         def receiverDeploymentInstance = ReceiverDeployment.get(params.id)
         if (!receiverDeploymentInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), params.id])}"
+			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), params.id])}"
             redirect(action: "list")
         }
         else {
-            def model = [receiverDeploymentInstance: receiverDeploymentInstance]
-            model.candidateStations = candidateEntitiesService.stations()
-            model.candidateReceivers = candidateEntitiesService.receivers()
-            return model
+			renderDefaultModel(receiverDeploymentInstance)
         }
     }
 

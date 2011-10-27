@@ -7,7 +7,7 @@ $(function() {
     $('#dialog-form-add-measurement').dialog({
         autoOpen: false,
         height: 390,
-        width: 420,
+        width: 475,
         modal: true,
         buttons: {
             'Create': function() 

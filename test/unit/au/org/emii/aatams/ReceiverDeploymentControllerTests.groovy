@@ -49,8 +49,10 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         recoveredReceiver = new Receiver(codeName:"VRW2-333", status:recoveredStatus, organisation:imos)
         retiredReceiver = new Receiver(codeName:"VRW2-555", status:retiredStatus, organisation:imos)
         csiroReceiver = new Receiver(codeName:"VRW2-444", status:recoveredStatus, organisation:csiro)
-
-        def receiverList = [newReceiver, deployedReceiver, recoveredReceiver]
+		receiver1 = new Receiver(codeName:"receiver1", status:newStatus, organisation:imos)
+		receiver2 = new Receiver(codeName:"receiver2", status:newStatus, organisation:imos)
+		
+        def receiverList = [newReceiver, deployedReceiver, recoveredReceiver, retiredReceiver, csiroReceiver, receiver1, receiver2]
         mockDomain(Receiver, receiverList)
         receiverList.each 
         {
@@ -147,7 +149,14 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         controller.save()
         
         assertEquals("create", controller.renderArgs.view)
-		assertDefaultValues(controller.renderArgs.model)
+		def model = controller.renderArgs.model
+		assertNotNull(model.receiverDeploymentInstance)
+		assertEquals(3, model.candidateReceivers.size())
+		assertTrue(model.candidateReceivers.contains(receiver1))
+		assertTrue(model.candidateReceivers.contains(receiver2))
+		assertEquals(2, model.candidateStations.size())
+		assertTrue(model.candidateStations.contains(station1))
+		assertTrue(model.candidateStations.contains(station2))
     }
     
     void testCreate() 
@@ -213,5 +222,20 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
 
 		assertFalse(station1.receivers.contains(newReceiver))		
 		assertTrue(station1.receivers.contains(csiroReceiver))
+	}
+	
+	void testEditIncludesCurrentlyDeployedReceiver()
+	{
+        def model = controller.create()
+		assertEquals(2, model.candidateReceivers.size())
+
+		controller.params.receiver = newReceiver
+		controller.save()
+		
+		controller.params.clear()
+		controller.params.id = controller.redirectArgs.id
+		model = controller.edit()
+		assertEquals(3, model.candidateReceivers.size())
+		assertTrue(model.candidateReceivers.contains(newReceiver))
 	}
 }

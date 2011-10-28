@@ -28,24 +28,6 @@ class ValidDetection extends RawDetection implements Embargoable
         detectionSurgeries(component:true)
     }
     
-    ValidDetection()
-    {
-        
-    }
-    
-    private ValidDetection(ValidDetection other)
-    {
-        timestamp = other.timestamp
-        receiverDeployment = other.receiverDeployment
-        detectionSurgeries = other.detectionSurgeries
-        receiverName = other.receiverName
-        stationName = other.stationName
-        transmitterId = other.transmitterId
-        transmitterName = other.transmitterName
-        transmitterSerialNumber = other.transmitterSerialNumber
-        location = other.location
-    }
-    
     static boolean isDuplicate(other)
     {
         boolean duplicate = false
@@ -118,7 +100,9 @@ class ValidDetection extends RawDetection implements Embargoable
     Embargoable applyEmbargo()
     {
         // Return a temporary detection, with embargoed surgeries removed.
-        ValidDetection retDetection = new ValidDetection(this)
+        ValidDetection retDetection = new ValidDetection()
+		retDetection.properties  += this.properties
+		
         retDetection.detectionSurgeries = []
 
         detectionSurgeries.each

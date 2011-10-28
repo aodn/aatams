@@ -34,7 +34,8 @@ class ReportInfoService
          ]
 
     static def propertyToLabel =
-        ["receiverDeployment.station.installation.project.name": "project",
+        ["detectionSurgeries.tag.codeName":"tag ID",
+		 "receiverDeployment.station.installation.project.name": "project",
 		 "receiverDeployment.station.installation.name": "installation",
 		 "receiverDeployment.station.name": "station",
 		 "organisation.name": "organisation",
@@ -68,6 +69,7 @@ class ReportInfoService
         def organisationRange = Organisation.list()*.name
         def installationRange = Installation.list()*.name
 		def stationRange = InstallationStation.list()*.name
+		def tagRange = Tag.list()*.codeName
 		
         def detectionFilterParams = 
             [new ListReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"], 
@@ -78,8 +80,12 @@ class ReportInfoService
 				 range:installationRange),
 			 new ListReportParameter(label: propertyToLabel["receiverDeployment.station.name"],
 				 propertyName:"receiverDeployment.station.name",
-				 range:stationRange)]
+				 range:stationRange),
+ 			 new ListReportParameter(label: propertyToLabel["detectionSurgeries.tag.codeName"],
+			 	 propertyName:"detectionSurgeries.tag.codeName",
+				 range:tagRange)]
 
+			
         def installationStationFilterParams = 
             [new ListReportParameter(label: propertyToLabel["installation.project.name"], propertyName:"installation.project.name", range:projectRange)]
 
@@ -121,7 +127,7 @@ class ReportInfoService
     }
     
     /**
-     * Return reoprt info for a particular domain class.
+     * Return report info for a particular domain class.
      */
     ReportInfo getReportInfo(Class domain)
     {

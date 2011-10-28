@@ -168,6 +168,12 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 		assertDetectionsMatchingFilter(0, [receiverDeployment:[station:[name:"Bondi SW1", installation:[name:"Ningaloo Array"]]]])
 	}
 
+	void testDetectionFilterByTagCodeName()
+	{
+		assertDetectionsMatchingFilter(10, [detectionSurgeries:[tag:[codeName:"A69-1303-62339"]]])
+		assertDetectionsMatchingFilter(3, [detectionSurgeries:[tag:[codeName:"A69-1303-46601"]]])
+	}
+	
 	private assertDetectionsMatchingFilter(int expectedNumDetections, filterParams) 
 	{
 		assertEquals(expectedNumDetections, reportQueryExecutorService.executeQuery(ValidDetection.class, filterParams).size())

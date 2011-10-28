@@ -63,6 +63,7 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         user.save()
 		
 		mockDomain(InstallationStation)
+		mockDomain(Tag)
     }
 
     protected void tearDown() 

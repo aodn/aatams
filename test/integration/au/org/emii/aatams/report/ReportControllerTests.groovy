@@ -174,7 +174,17 @@ class ReportControllerTests extends ControllerUnitTestCase
         
         checkResponse("testExecuteTag")
     }
-    
+	
+	void testExecuteDetection()
+	{
+		controller.params._name = "detection"
+		controller.params._file = "detectionExtract"
+		controller.params.filter = [:]
+				 
+		controller.execute()
+		
+		checkResponse("testExecuteDetection")
+	}
 
     private void checkResponse(def expectedFileName)
     {

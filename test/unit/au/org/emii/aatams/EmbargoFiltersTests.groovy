@@ -45,7 +45,6 @@ class EmbargoFiltersTests extends FiltersUnitTestCase
     ValidDetection detectionEmbargoedNonReadableProject
     ValidDetection detectionPastEmbargoed
     
-    
     protected void setUp() 
     {
         super.setUp()
@@ -68,8 +67,8 @@ class EmbargoFiltersTests extends FiltersUnitTestCase
         ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
                             [ getSubject: { subject } ] as SecurityManager )
                         
-        Person jkburges = new Person(username: 'jkburges')
-        def subject = [ getPrincipal: { jkburges.username },
+        Person user = new Person(username: 'jbloggs')
+        def subject = [ getPrincipal: { user.username },
                         isAuthenticated: { true },
                         hasRole: { true },
                         isPermitted:
@@ -88,8 +87,8 @@ class EmbargoFiltersTests extends FiltersUnitTestCase
         SecurityUtils.metaClass.static.getSubject = { subject }
         
         // Need this for "findByUsername()" etc.
-        mockDomain(Person, [jkburges])
-        jkburges.save()
+        mockDomain(Person, [user])
+        user.save()
         
         // Check permissions are behaving correctly.
         assertTrue(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(project1.id)))
@@ -145,10 +144,14 @@ class EmbargoFiltersTests extends FiltersUnitTestCase
         Surgery surgeryEmbargoedNonReadableProject = new Surgery(tag:tagEmbargoedNonReadableProject, release:releaseEmbargoedNonReadableProject)
         Surgery surgeryPastEmbargoed = new Surgery(tag:tagPastEmbargoed, release:releasePastEmbargoed)
 
-        detectionNonEmbargoed = new ValidDetection()
-        detectionEmbargoedReadableProject = new ValidDetection()
-        detectionEmbargoedNonReadableProject = new ValidDetection()
-        detectionPastEmbargoed = new ValidDetection()
+		ReceiverDownloadFile receiverDownload = new ReceiverDownloadFile(requestingUser:user)
+		mockDomain(ReceiverDownloadFile, [receiverDownload])
+		receiverDownload.save()
+		
+        detectionNonEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
+        detectionEmbargoedReadableProject = new ValidDetection(receiverDownload:receiverDownload)
+        detectionEmbargoedNonReadableProject = new ValidDetection(receiverDownload:receiverDownload)
+        detectionPastEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
 
         DetectionSurgery detectionSurgeryNonEmbargoed = new DetectionSurgery(surgery:surgeryNonEmbargoed, detection:detectionNonEmbargoed, tag:tagNonEmbargoed)
         DetectionSurgery detectionSurgeryEmbargoedReadableProject = new DetectionSurgery(surgery:surgeryEmbargoedReadableProject, detection:detectionEmbargoedReadableProject, tag:tagEmbargoedReadableProject)
@@ -278,16 +281,13 @@ class EmbargoFiltersTests extends FiltersUnitTestCase
         
     }
     
-    void testDetectionList()
+    void testDetectionNotList()
     {
         checkDetection(detectionNonEmbargoed, false)
         checkDetection(detectionEmbargoedReadableProject, false)
         checkDetection(detectionEmbargoedNonReadableProject, true)
         checkDetection(detectionPastEmbargoed, false)
     }
-    
-    // TODO: filter method not implemented
-//    void testDetectionNotList()
     
     private void checkDetection(def detection, boolean isEmbargoed)
     {
@@ -306,7 +306,11 @@ class EmbargoFiltersTests extends FiltersUnitTestCase
         assertNotNull(model)
         assertEquals(1, model.size())
         assertNotNull(model.detectionInstance)
-
+        assertNotNull(model.detectionInstance.receiverDownload)
+        assertNotNull(model.detectionInstance.receiverDownload.requestingUser)
+        assertEquals('jbloggs', model.detectionInstance.receiverDownload.requestingUser.username)
+		assertEquals(detection.timestamp, model.detectionInstance.timestamp)
+		
         if (isEmbargoed)
         {
             // ... but not the associated detectionSurgeries (which links detection back to tag/release)

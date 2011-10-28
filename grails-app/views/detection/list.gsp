@@ -40,6 +40,8 @@
                         
                             <g:sortableColumn property="stationName" title="${message(code: 'detection.stationName.label', default: 'Station Name')}" />
                         
+                            <g:sortableColumn property="receiverDownload?.requestingUser" title="${message(code: 'receiverDownloadFile.requestingUser.label', default: 'Uploader')}" />
+
                         </tr>
                     </thead>
                     <tbody>
@@ -64,6 +66,8 @@
                         
                             <td>${fieldValue(bean: detectionInstance, field: "stationName")}</td>
                         
+                            <td><g:link controller="person" action="show" id="${detectionInstance?.receiverDownload?.requestingUser?.id}">${fieldValue(bean: detectionInstance.receiverDownload, field: "requestingUser")}</g:link></td>
+
                         </tr>
                     </g:each>
                     </tbody>

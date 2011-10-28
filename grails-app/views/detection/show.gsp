@@ -33,6 +33,15 @@
                                                                          timeZone='${TimeZone.getTimeZone("UTC")}'/></td>
                             
                         </tr>
+                        
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDownloadFile.requestingUser.label" default="Uploader" /></td>
+                            
+                            <td valign="top" class="value"><g:link controller="person" 
+                                                                   action="show" 
+                                                                   id="${detectionInstance?.receiverDownload?.requestingUser?.id}">${detectionInstance?.receiverDownload?.requestingUser}</g:link></td>
+                            
+                        </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.receiverName.label" default="Receiver Name" /></td>

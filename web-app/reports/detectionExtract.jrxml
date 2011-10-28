@@ -12,6 +12,7 @@
 	<field name="receiverDeployment.receiver.deviceID" class="java.lang.String"/>
     <field name="firstDetectionSurgery.tag.deviceID" class="java.lang.String"/>
     <field name="firstDetectionSurgery.surgery.release.animal.species.name" class="java.lang.String"/>
+    <field name="receiverDownload.requestingUser.name" class="java.lang.String"/>
 
 	<sortField name="receiverDeployment.station.name"/>
 	<sortField name="receiverDeployment.receiver.deviceID"/>
@@ -60,6 +61,11 @@
 				<textElement/>
 				<text><![CDATA[species]]></text>
 			</staticText>
+            <staticText>
+                <reportElement mode="Transparent" x="832" y="1" width="100" height="20"/>
+                <textElement/>
+                <text><![CDATA[uploader]]></text>
+            </staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -100,6 +106,11 @@
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{firstDetectionSurgery.surgery.release.animal.species.name}]]></textFieldExpression>
 			</textField>
+            <textField>
+                <reportElement x="832" y="0" width="100" height="20"/>
+                <textElement/>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{receiverDownload.requestingUser.name}]]></textFieldExpression>
+            </textField>
 		</band>
 	</detail>
 </jasperReport>

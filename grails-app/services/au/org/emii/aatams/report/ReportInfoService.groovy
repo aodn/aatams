@@ -34,7 +34,10 @@ class ReportInfoService
          ]
 
     static def propertyToLabel =
-        ["organisation.name": "organisation",
+        ["receiverDeployment.station.installation.project.name": "project",
+		 "receiverDeployment.station.installation.name": "installation",
+		 "receiverDeployment.station.name": "station",
+		 "organisation.name": "organisation",
          "installation.project.name": "project",
          "station.installation.project.name": "project",
          "station.installation.name": "installation"]
@@ -64,7 +67,19 @@ class ReportInfoService
         
         def organisationRange = Organisation.list()*.name
         def installationRange = Installation.list()*.name
-        
+		def stationRange = InstallationStation.list()*.name
+		
+        def detectionFilterParams = 
+            [new ListReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"], 
+									 propertyName:"receiverDeployment.station.installation.project.name", 
+									 range:projectRange),
+			 new ListReportParameter(label: propertyToLabel["receiverDeployment.station.installation.name"],
+				 propertyName:"receiverDeployment.station.installation.name",
+				 range:installationRange),
+			 new ListReportParameter(label: propertyToLabel["receiverDeployment.station.name"],
+				 propertyName:"receiverDeployment.station.name",
+				 range:stationRange)]
+
         def installationStationFilterParams = 
             [new ListReportParameter(label: propertyToLabel["installation.project.name"], propertyName:"installation.project.name", range:projectRange)]
 
@@ -81,7 +96,7 @@ class ReportInfoService
                                                           filterParams:[]),
                 (ValidDetection.class):new ReportInfo(displayName:"Detections",
                                                     jrxmlFilename:["extract":"detectionExtract"],
-                                                    filterParams:[]),
+                                                    filterParams:detectionFilterParams),
                 (Installation.class):new ReportInfo(displayName:"Installations",
                                                     jrxmlFilename:["extract":"installationExtract"],
                                                     filterParams:[]),

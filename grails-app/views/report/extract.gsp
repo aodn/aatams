@@ -23,6 +23,10 @@
         <g:message code="default.extract.create.label" args="[displayName]" />        
       </h1>
       
+      <g:if test="${flash.message}">
+        <div class="message">${flash.message}</div>
+      </g:if>
+
       <g:extract name="${name}" formats="${formats}"/>
       
     </div>

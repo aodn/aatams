@@ -82,6 +82,7 @@ class ReportControllerTests extends ControllerUnitTestCase
         controller.params._file = "receiverList"
         controller.params.filter = [:]
         controller.params._format = "PDF"
+		controller.params._type = "report"
 
         def model = controller.execute()
         

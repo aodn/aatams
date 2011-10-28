@@ -2,6 +2,7 @@ package au.org.emii.aatams.report
 
 import grails.test.*
 import au.org.emii.aatams.*
+import au.org.emii.aatams.detection.*
 
 import org.joda.time.*
 
@@ -143,4 +144,32 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
         assertTrue(results.contains(installation1))
         assertTrue(results.contains(installation2))
     }
+	
+	void testDetectionNoFilter()
+	{
+		assertDetectionsMatchingFilter(16, [:])
+	}
+	
+	void testDetectionFilterByProject()
+	{
+		assertDetectionsMatchingFilter(13, [receiverDeployment:[station:[installation:[project:[name:'Seal Count']]]]])
+		assertDetectionsMatchingFilter(3, [receiverDeployment:[station:[installation:[project:[name:'Tuna']]]]])
+	}
+	void testDetectionFilterByInstallation()
+	{
+		assertDetectionsMatchingFilter(3, [receiverDeployment:[station:[installation:[name:"Ningaloo Array"]]]])
+		assertDetectionsMatchingFilter(13, [receiverDeployment:[station:[installation:[name:"Bondi Line"]]]])
+	}
+
+	void testDetectionFilterByStation()
+	{
+		assertDetectionsMatchingFilter(3, [receiverDeployment:[station:[name:"Bondi SW2"]]])
+		assertDetectionsMatchingFilter(10, [receiverDeployment:[station:[name:"Bondi SW1"]]])
+		assertDetectionsMatchingFilter(0, [receiverDeployment:[station:[name:"Bondi SW1", installation:[name:"Ningaloo Array"]]]])
+	}
+
+	private assertDetectionsMatchingFilter(int expectedNumDetections, filterParams) 
+	{
+		assertEquals(expectedNumDetections, reportQueryExecutorService.executeQuery(ValidDetection.class, filterParams).size())
+	}
 }

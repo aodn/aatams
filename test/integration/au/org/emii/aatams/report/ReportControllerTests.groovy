@@ -48,6 +48,7 @@ class ReportControllerTests extends ControllerUnitTestCase
 
         controller.params.pdf = "PDF"
         controller.params._format = "CSV"
+		controller.params._type = "report"
     }
 
     protected void tearDown() 
@@ -169,7 +170,8 @@ class ReportControllerTests extends ControllerUnitTestCase
         controller.params._name = "tag"
         controller.params._file = "tagExtract"
         controller.params.filter = [:]
-                 
+		controller.params._type = "extract"
+		
         controller.execute()
         
         checkResponse("testExecuteTag")
@@ -180,11 +182,31 @@ class ReportControllerTests extends ControllerUnitTestCase
 		controller.params._name = "detection"
 		controller.params._file = "detectionExtract"
 		controller.params.filter = [:]
-				 
+		controller.params._type = "extract"
+		
 		controller.execute()
 		
 		checkResponse("testExecuteDetection")
 	}
+
+//	void testExecuteDetectionWithNonMatchingFilter()
+//	{
+//		controller.params._name = "detection"
+//		controller.params._file = "detectionExtract"
+//
+//		try
+//		{
+//			controller.params.filter = [receiverDeployment:[station:[name:"no match"]]]
+//			controller.execute()
+//			
+//			controller.params.filter = [receiverDeployment:[station:[name:"Bondi SW2"]]]
+//			controller.execute()
+//		}
+//		catch (Exception e)
+//		{
+//			fail()
+//		}
+//	}
 
     private void checkResponse(def expectedFileName)
     {

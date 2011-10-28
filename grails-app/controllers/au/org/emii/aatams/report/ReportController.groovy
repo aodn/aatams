@@ -17,17 +17,21 @@ class ReportController
     
     def create =
     {
-        return [name:params.name,
-                displayName:reportInfoService.getReportInfo(params.name).displayName,
-                formats:params.formats]
+        renderDefaultModel(params)
     }
-    
+
     def extract =
     {
-        return [name:params.name,
-                displayName:reportInfoService.getReportInfo(params.name).displayName,
-                formats:params.formats]
+        renderDefaultModel(params)
     }
+    
+	private renderDefaultModel(Map params) 
+	{
+		def model = 
+			[name:params.name,
+			 displayName:reportInfoService.getReportInfo(params.name).displayName,
+			 formats:params.formats]
+	}
     
     def execute =
     {
@@ -62,9 +66,21 @@ class ReportController
 
         if (!resultList || resultList.isEmpty())
         {
-            redirect(action:"create", params:[name:params._name, formats:[params._format]])
             flash.message = "No matching records."
-            return
+			
+			def redirectParams = [name:params._name, formats:[params._format]]
+			def action
+			if (params._type == "report")
+			{
+				action = "create"
+			}
+			else
+			{
+				action = "extract"
+			}
+			
+			redirect(action:action, params:redirectParams)
+			return
         }
         
         params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/" 

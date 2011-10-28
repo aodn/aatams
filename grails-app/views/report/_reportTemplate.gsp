@@ -10,6 +10,7 @@
       
       <g:hiddenField name="_file" value="${jrxmlFilename}"/>
       <g:hiddenField name="_name" value="${name}"/>
+      <g:hiddenField name="_type" value="${type}"/>
       
       <span class="button">
         <g:each in="${params.list('formats')}" var="format">

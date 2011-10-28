@@ -2,6 +2,7 @@ package au.org.emii.aatams.report
 
 import grails.test.*
 import au.org.emii.aatams.*
+import au.org.emii.aatams.detection.ValidDetection
 
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
@@ -60,6 +61,8 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         // Need this for "findByUsername()" etc.
         mockDomain(Person, [user])
         user.save()
+		
+		mockDomain(InstallationStation)
     }
 
     protected void tearDown() 
@@ -114,6 +117,33 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         assertNotNull(filterParams)
         assertFalse(filterParams[0].range.contains(ReportInfoService.MEMBER_PROJECTS))
     }
+    
+    void testGetReportInfoDetection() 
+    {
+        def reportInfos = reportInfoService.getReportInfo()
+        
+        assertEquals(8, reportInfos.size())
+
+        ReportInfo detectionReportInfo = reportInfos.get(ValidDetection.class)
+        
+        assertNotNull(detectionReportInfo)
+        assertEquals("Detections", detectionReportInfo.getDisplayName())
+        assertEquals("detectionExtract", detectionReportInfo.getJrxmlFilename()["extract"])
+		
+		def filterParams = detectionReportInfo.filterParams
+		assertNotNull(filterParams)
+		
+		// Project
+		assertEquals("project", filterParams[0].label)
+		assertEquals("receiverDeployment.station.installation.project.name", filterParams[0].propertyName)
+		assertTrue(filterParams[0].range.contains(ReportInfoService.MEMBER_PROJECTS))
+
+   		assertEquals("installation", filterParams[1].label)
+		assertEquals("receiverDeployment.station.installation.name", filterParams[1].propertyName)
+
+   		assertEquals("station", filterParams[2].label)
+		assertEquals("receiverDeployment.station.name", filterParams[2].propertyName)
+	}
     
     void testFilterParamsToReportFormat()
     {

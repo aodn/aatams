@@ -723,33 +723,10 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  batteryLife:12.5f,
                                  batteryVoltage:3.7f).save(failOnError:true)
                              
-        ReceiverDownloadFile export1 = 
-            new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
-                                     path:"/tmp/export1.csv",
-                                     name:"export1.csv",
-                                     importDate:new DateTime("2013-05-17T12:54:56").toDate(),
-                                     status:FileProcessingStatus.PROCESSED,
-                                     errMsg:"",
-                                     requestingUser:jonBurgess).save(failOnError:true)
-                                 
-        10.times
-        {
-            ValidDetection detection = 
-                new ValidDetection(receiverDeployment:rx1Bondi,
-                                   timestamp:new DateTime("2011-05-17T12:54:00").plusSeconds(it).toDate(),
-                                   receiverName:rx1.codeName,
-                                   transmitterId:tag1.codeName,
-                                   receiverDownload:export1)
-                               
-            DetectionSurgery detSurgery =
-                new DetectionSurgery(surgery:surgery1,
-                                     detection:detection,
-                                     tag:tag1)
-            detection.addToDetectionSurgeries(detSurgery)
-            export1.addToDetections(detection)
-        }
-        export1.save(failOnError:true)
-        
+        createExportWithDetections("export1.csv", jonBurgess, rx1Bondi, rx1, tag1, surgery1, 10)
+        createExportWithDetections("export3.csv", jonBurgess, rx2Bondi, rx2, tag1, surgery1, 3)
+		createExportWithDetections("export4.csv", jonBurgess, rx3Ningaloo, rx3, tag1, surgery1, 3)
+		
         ReceiverDownloadFile export2 = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
                                      path:"/tmp/export2.csv",
@@ -772,5 +749,40 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         }
         export2.save(failOnError:true)
     }
+
+	private void createExportWithDetections(String exportName, Person uploader, ReceiverDeployment deployment, Receiver receiver, Tag tag, Surgery surgery, int numDetections)
+	{
+        ReceiverDownloadFile export = 
+            new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
+                                     path:"/tmp/export.csv",
+                                     name:exportName,
+                                     importDate:new DateTime("2013-05-17T12:54:56").toDate(),
+                                     status:FileProcessingStatus.PROCESSED,
+                                     errMsg:"",
+                                     requestingUser:uploader).save(failOnError:true)
+                                 
+        createDetections(deployment, receiver, tag, export, surgery, numDetections)
+        export.save(failOnError:true)
+	}
+	
+	private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, Tag tag1, ReceiverDownloadFile export1, Surgery surgery1, int numDetections) 
+	{
+		numDetections.times
+		{
+			ValidDetection detection =
+					new ValidDetection(receiverDeployment:rx1Bondi,
+					timestamp:new DateTime("2011-05-17T12:54:00").plusSeconds(it).toDate(),
+					receiverName:rx1.codeName,
+					transmitterId:tag1.codeName,
+					receiverDownload:export1)
+
+			DetectionSurgery detSurgery =
+					new DetectionSurgery(surgery:surgery1,
+					detection:detection,
+					tag:tag1)
+			detection.addToDetectionSurgeries(detSurgery)
+			export1.addToDetections(detection)
+		}
+	}
 }
 

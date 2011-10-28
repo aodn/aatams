@@ -46,7 +46,7 @@ class ReportTagLib
     {
         attrs, body ->
 
-        delegateTemplate(attrs, body, false, "extract")
+        delegateTemplate(attrs, body, true, "extract")
     }
     
     def delegateTemplate(attrs, body, showFilter, type)
@@ -74,6 +74,7 @@ class ReportTagLib
                                      formats:attrs.formats,
                                      controller:"report",
                                      action:"execute",
+									 type:type,
                                      showFilter:showFilter])
             }
         }

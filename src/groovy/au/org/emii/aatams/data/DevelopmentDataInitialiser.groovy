@@ -575,9 +575,9 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         //
         // Animals and Animal Releases etc.
         //
-        Species whiteShark = new Species(name:'White Shark').save(failOnError:true)
-        Species blueFinTuna = new Species(name:'Blue Fin Tuna').save(failOnError:true)
-        Species blueEyeTrevalla = new Species(name:'Blue Eye Trevalla').save(failOnError:true)
+        CaabSpecies whiteShark = new CaabSpecies(SCIENTIFIC_NAME:"Carcharodon carcharias", COMMON_NAME:"White Shark", SPCODE:"37010003").save(failOnError:true)
+        CaabSpecies blueFinTuna = new CaabSpecies(SCIENTIFIC_NAME:"Thunnus maccoyii", COMMON_NAME:"Southern Bluefin Tuna", SPCODE:"37441004").save(failOnError:true)
+        CaabSpecies blueEyeTrevalla = new CaabSpecies(SCIENTIFIC_NAME:"Hyperoglyphe antarctica", COMMON_NAME:"Blue-eye Trevalla", SPCODE:"37445001").save(failOnError:true)
 
         Sex male = new Sex(sex:'MALE').save(failOnError:true)
         Sex female = new Sex(sex:'FEMALE').save(failOnError:true)
@@ -724,8 +724,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  batteryVoltage:3.7f).save(failOnError:true)
                              
         createExportWithDetections("export1.csv", jonBurgess, rx1Bondi, rx1, tag1, surgery1, 10)
-        createExportWithDetections("export3.csv", jonBurgess, rx2Bondi, rx2, tag2, surgery1, 3)
-		createExportWithDetections("export4.csv", jonBurgess, rx3Ningaloo, rx3, tag3, surgery1, 3)
+        createExportWithDetections("export3.csv", jonBurgess, rx2Bondi, rx2, tag2, surgery4, 3)
+		createExportWithDetections("export4.csv", jonBurgess, rx3Ningaloo, rx3, tag3, surgery4, 3)
 		
         ReceiverDownloadFile export2 = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,

@@ -174,6 +174,33 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 		assertDetectionsMatchingFilter(3, [detectionSurgeries:[tag:[codeName:"A69-1303-46601"]]])
 	}
 	
+	void testDetectionFilterBySpeciesCommonName()
+	{
+		assertDetectionsMatchingFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[COMMON_NAME:"White Shark"]]]]]])
+		assertDetectionsMatchingFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[COMMON_NAME:"Southern Bluefin Tuna"]]]]]])
+		assertDetectionsMatchingFilter(0, [detectionSurgeries:[surgery:[release:[animal:[species:[COMMON_NAME:"Blue-eye Trevalla"]]]]]])
+	}
+	
+	void testDetectionFilterBySpeciesScientificName()
+	{
+		assertDetectionsMatchingFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[SCIENTIFIC_NAME:"Carcharodon carcharias"]]]]]])
+		assertDetectionsMatchingFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[SCIENTIFIC_NAME:"Thunnus maccoyii"]]]]]])
+		assertDetectionsMatchingFilter(0, [detectionSurgeries:[surgery:[release:[animal:[species:[SCIENTIFIC_NAME:"Hyperoglyphe antarctica"]]]]]])
+	}
+	
+	void testDetectionFilterBySpeciesCaabCode()
+	{
+		assertDetectionsMatchingFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:"37010003"]]]]]])
+		assertDetectionsMatchingFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:"37441004"]]]]]])
+		assertDetectionsMatchingFilter(0, [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:"37445001"]]]]]])
+	}
+	
+	void testDetectionFilterByTimestamp()
+	{
+		assertDetectionsMatchingFilter(3, [timestamp:new DateTime("2011-05-17T12:54:00").toDate()])
+		assertDetectionsMatchingFilter(1, [timestamp:new DateTime("2011-05-17T12:54:03").toDate()])
+	}
+	
 	private assertDetectionsMatchingFilter(int expectedNumDetections, filterParams) 
 	{
 		assertEquals(expectedNumDetections, reportQueryExecutorService.executeQuery(ValidDetection.class, filterParams).size())

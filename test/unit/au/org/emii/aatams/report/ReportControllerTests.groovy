@@ -3,6 +3,7 @@ package au.org.emii.aatams.report
 import grails.test.*
 
 import au.org.emii.aatams.*
+import au.org.emii.aatams.report.filter.*
 
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
@@ -15,6 +16,7 @@ class ReportControllerTests extends ControllerUnitTestCase
     def embargoService
     def jasperService
     def permissionUtilsService
+    def reportFilterFactoryService
     def reportInfoService
     def reportQueryExecutorService
 
@@ -32,6 +34,9 @@ class ReportControllerTests extends ControllerUnitTestCase
         mockLogging(PermissionUtilsService)
         permissionUtilsService = new PermissionUtilsService()
         
+		mockLogging(ReportFilterFactoryService, true)
+		reportFilterFactoryService = new ReportFilterFactoryService()
+		
         mockLogging(ReportInfoService)
         reportInfoService = new ReportInfoService()
         
@@ -42,6 +47,7 @@ class ReportControllerTests extends ControllerUnitTestCase
         
         controller.jasperService = jasperService
         controller.permissionUtilsService = permissionUtilsService
+		controller.reportFilterFactoryService = reportFilterFactoryService
         controller.reportInfoService = reportInfoService
         controller.reportQueryExecutorService = reportQueryExecutorService
         

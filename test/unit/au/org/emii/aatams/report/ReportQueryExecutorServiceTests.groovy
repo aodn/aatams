@@ -1,8 +1,10 @@
 package au.org.emii.aatams.report
 
 import grails.test.*
+
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.report.filter.*
 
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
@@ -177,7 +179,6 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
         detectionEmbargoedNonReadableProject.metaClass.getProject = { project2 }
         detectionPastEmbargoed.metaClass.getProject = { project2 }
         
-        
         tagList.each { it.save() }
         sensorList.each { it.save() }
         releaseList.each { it.save() }
@@ -191,67 +192,19 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
         super.tearDown()
     }
     
-    void testNullFilter()
-    {
-        def results = reportQueryExecutorService.executeQuery(Project, null)
-        assertEquals(2, results.size())
-    }
-    
-    void testMapFilterParam()
-    {
-        def filterParams = [project:[name:"Seal Count"]]
-        assertTrue(reportQueryExecutorService.isMap(filterParams.project))
-        
-        filterParams = [name:"Seal Count"]
-        assertFalse(reportQueryExecutorService.isMap(filterParams.name))
-
-        filterParams = [name:""]
-        assertFalse(reportQueryExecutorService.isMap(filterParams.name))
-
-        filterParams = [name:null]
-        assertFalse(reportQueryExecutorService.isMap(filterParams.name))
-    }
-
-    void testLeafFilterParam()
-    {
-        def filterParams = [project:[name:"Seal Count"]]
-        assertFalse(reportQueryExecutorService.isLeaf("project", filterParams.project))
-        
-        filterParams = [name:"Seal Count"]
-        assertTrue(reportQueryExecutorService.isLeaf("name", filterParams.name))
-
-        filterParams = [name:""]
-        assertFalse(reportQueryExecutorService.isLeaf("name", filterParams.name))
-
-        filterParams = [name:null]
-        assertFalse(reportQueryExecutorService.isLeaf("name", filterParams.name))
-
-        filterParams = ["project.name":[project:"sdfg"]]
-        filterParams.each
-        {
-            key, value ->
-    
-            assertFalse(reportQueryExecutorService.isLeaf(key, value))
-        }
-    }
-    
     void testTagEmbargoFiltering()
     {
         // Check permissions are behaving correctly.
         assertTrue(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(project1.id)))
         assertFalse(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(project2.id)))
         
-        def tags = reportQueryExecutorService.executeQuery(Tag.class, [:])
+		ReportFilter filter = new ReportFilter(Tag)
+        def tags = reportQueryExecutorService.executeQuery(filter)
         assertEquals(3, tags.size())
         assertTrue(tags.contains(tagNonEmbargoed))
         assertTrue(tags.contains(tagEmbargoedReadableProject))
         assertFalse(tags.contains(tagEmbargoedNonReadableProject))
         assertTrue(tags.contains(tagPastEmbargoed))
-    }
-    
-    void testDetectionEmbargoFiltering()
-    {
-        
     }
     
     private Date now()

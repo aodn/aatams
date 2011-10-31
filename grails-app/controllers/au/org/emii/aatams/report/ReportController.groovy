@@ -1,6 +1,8 @@
 package au.org.emii.aatams.report
 
 import au.org.emii.aatams.*
+import au.org.emii.aatams.report.filter.ReportFilterFactoryService
+
 import org.apache.shiro.SecurityUtils
 
 import org.codehaus.groovy.grails.plugins.jasper.*
@@ -10,6 +12,7 @@ class ReportController
     def animalReleaseSummaryService
     def jasperService
     def permissionUtilsService
+	def reportFilterFactoryService
     def reportInfoService
     def reportQueryExecutorService
     
@@ -60,8 +63,9 @@ class ReportController
         }
         else
         {
-            resultList = reportQueryExecutorService.executeQuery(reportInfoService.getClassForName(params._name), 
-                                                        params.filter)
+            resultList = reportQueryExecutorService.executeQuery(
+							reportFilterFactoryService.newFilter(reportInfoService.getClassForName(params._name), 
+																 params.filter))
         }
 
         if (!resultList || resultList.isEmpty())

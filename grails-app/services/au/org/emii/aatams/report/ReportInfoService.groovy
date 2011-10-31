@@ -226,9 +226,27 @@ class ReportInfoService
         {
             key, val ->
             
+			key = removeParamTypePrefix(key)
+			
             retVals[propertyToLabel.get(key, key)] = val
         }
         
         return retVals
     }
+
+	private String removeParamTypePrefix(String key) {
+		if (key.startsWith("eq."))
+		{
+			key = key.substring("eq.".length())
+		}
+		if (key.startsWith("in."))
+		{
+			key = key.substring("in".length())
+		}
+		if (key.startsWith("between."))
+		{
+			key = key.substring("between.".length())
+		}
+		return key
+	}
 }

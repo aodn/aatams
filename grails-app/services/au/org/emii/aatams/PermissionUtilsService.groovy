@@ -195,7 +195,7 @@ class PermissionUtilsService
         return buildPermission(receiverId, RECEIVER, "receiverUpdate:%d")
     }
     
-    def principal()
+    static def principal()
     {
         if (!isAuthenticated())
         {
@@ -208,7 +208,7 @@ class PermissionUtilsService
         return principal
     }
     
-    boolean isAuthenticated()
+    static boolean isAuthenticated()
     {
         return SecurityUtils.subject?.isAuthenticated()
     }

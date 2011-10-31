@@ -4,16 +4,14 @@ import org.hibernate.criterion.Restrictions
 
 class InReportFilterCriterion extends AbstractReportFilterCriterion
 {
-	Collection<Object> valuesToMatch
-	
-	InReportFilterCriterion(String domainClassProperty, Collection<Object> valuesToMatch)
+	InReportFilterCriterion(filterParams)
 	{
-		super(domainClassProperty)
-		this.valuesToMatch = valuesToMatch
+		super(filterParams)
 	}
 	
-	protected void addRestriction(operandCriteria)
+	protected void addRestriction(operandCriteria, property, valuesToMatch)
 	{
-		operandCriteria.add(Restrictions.in(getDomainClassProperty(), valuesToMatch))
+		println("Adding in restriction, property: "+ property + ", values: " + valuesToMatch)
+		operandCriteria.add(Restrictions.in(property, valuesToMatch))
 	}
 }

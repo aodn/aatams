@@ -103,46 +103,30 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 
     void testExecuteQueryNullFilter()
     {
-        def results = reportQueryExecutorService.executeQuery(Project, null)
-        assertEquals(6, results.size())
+		assertReportFilter(6, Project)
     }
     
     void testExecuteQueryFilterByProjectName()
     {
-        def results = reportQueryExecutorService.executeQuery(Project, ["name":"project 1"])
-        
-        assertEquals(1, results.size())
+		def results = assertReportFilter(1, Project, [name:"project 1"])
         assertEquals("project 1", results[0].name)
     }
-    
+
     void testExecuteQueryInstallationNullFilter()
     {
-        def results = reportQueryExecutorService.executeQuery(Installation, null)
-        assertEquals(6, results.size())
+		assertReportFilter(6, Installation)
     }
    
-//    
-//    An indirect filter parameter is one that refers to an associated entity
-//    property, e.g. the associated project's name.
-//    
     void testExecuteQueryIndirectFilter()
     {
-        def filterParams = [project:[name: "project 1"]]
-        def results = 
-            reportQueryExecutorService.executeQuery(Installation, filterParams)
-            
-        assertEquals(1, results.size())
+		def results = assertReportFilter(1, Installation, [project:[name: "project 1"]])
         assertEquals("installation 1", results[0].name)
     }
 
     void testExecuteQueryFilterByMemberProjects()
     {
-        def filterParams = [project:[name: ReportInfoService.MEMBER_PROJECTS]]
-        def results = 
-            reportQueryExecutorService.executeQuery(Installation, filterParams)
-            
-        assertEquals(2, results.size())
-        assertTrue(results.contains(installation1))
+		def results = assertReportFilter(2, Installation, [project:[name: ReportInfoService.MEMBER_PROJECTS]])
+		assertTrue(results.contains(installation1))
         assertTrue(results.contains(installation2))
     }
 	
@@ -210,73 +194,90 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 	
 	void testDetectionFilterByEqualsSpeciesCommonName()
 	{
-		assertDetectionsMatchingEqualsFilter(10, "detectionSurgeries.surgery.release.animal.species.COMMON_NAME", "White Shark")
-		assertDetectionsMatchingEqualsFilter(6, "detectionSurgeries.surgery.release.animal.species.COMMON_NAME", "Southern Bluefin Tuna")
-		assertDetectionsMatchingEqualsFilter(0, "detectionSurgeries.surgery.release.animal.species.COMMON_NAME", "Blue-eye Trevalla")
+		assertDetectionsMatchingEqualsFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[COMMON_NAME:"White Shark"]]]]]])
+		assertDetectionsMatchingEqualsFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[COMMON_NAME:"Southern Bluefin Tuna"]]]]]])
+		assertDetectionsMatchingEqualsFilter(0, [detectionSurgeries:[surgery:[release:[animal:[species:[COMMON_NAME:"Blue-eye Trevalla"]]]]]])
 	}
 	
 	void testDetectionFilterByEqualsSpeciesScientificName()
 	{
-		assertDetectionsMatchingEqualsFilter(10, "detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME", "Carcharodon carcharias")
-		assertDetectionsMatchingEqualsFilter(6, "detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME", "Thunnus maccoyii")
-		assertDetectionsMatchingEqualsFilter(0, "detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME", "Hyperoglyphe antarctica")
+		assertDetectionsMatchingEqualsFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[SCIENTIFIC_NAME:"Carcharodon carcharias"]]]]]])
+		assertDetectionsMatchingEqualsFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[SCIENTIFIC_NAME:"Thunnus maccoyii"]]]]]])
+		assertDetectionsMatchingEqualsFilter(0, [detectionSurgeries:[surgery:[release:[animal:[species:[SCIENTIFIC_NAME:"Hyperoglyphe antarctica"]]]]]])
 	}
 	
 	void testDetectionFilterByEqualsSpeciesCaabCode()
 	{
-		assertDetectionsMatchingEqualsFilter(10, "detectionSurgeries.surgery.release.animal.species.SPCODE", "37010003")
-		assertDetectionsMatchingEqualsFilter(6, "detectionSurgeries.surgery.release.animal.species.SPCODE", "37441004")
-		assertDetectionsMatchingEqualsFilter(0, "detectionSurgeries.surgery.release.animal.species.SPCODE", "37445001")
+		assertDetectionsMatchingEqualsFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:"37010003"]]]]]])
+		assertDetectionsMatchingEqualsFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:"37441004"]]]]]])
+		assertDetectionsMatchingEqualsFilter(0, [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:"37445001"]]]]]])
 	}
 	
-	private void assertDetectionsMatchingEqualsFilter(expectedCount, property, value)
+	private void assertDetectionsMatchingEqualsFilter(expectedCount, filterParams)
 	{
 		ReportFilter filter = new ReportFilter(ValidDetection)
-		filter.addCriterion(new EqualsReportFilterCriterion(property, value))
+		filter.addCriterion(new EqualsReportFilterCriterion(filterParams))
 		assertDetectionsMatchingFilter(expectedCount, filter)
 	}
 	
 	void testDetectionFilterByInSpeciesCommonName()
 	{
-		assertDetectionsMatchingInFilter(16, "detectionSurgeries.surgery.release.animal.species.SPCODE", ["37010003", "37441004"])
-		assertDetectionsMatchingInFilter(6, "detectionSurgeries.surgery.release.animal.species.SPCODE", ["37445001", "37441004"])
+		assertDetectionsMatchingInFilter(16, [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:["37010003", "37441004"]]]]]]])
+		assertDetectionsMatchingInFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:["37445001", "37441004"]]]]]]])
 	}
 
-	private void assertDetectionsMatchingInFilter(expectedCount, property, values)
+	private void assertDetectionsMatchingInFilter(expectedCount, filterParams)
 	{
 		ReportFilter filter = new ReportFilter(ValidDetection)
-		filter.addCriterion(new InReportFilterCriterion(property, values))
+		filter.addCriterion(new InReportFilterCriterion(filterParams))
 		assertDetectionsMatchingFilter(expectedCount, filter)
 	}
 	
 	void testDetectionFilterByBetweenTimestamp()
 	{
-		assertDetectionsMatchingBetweenFilter(9, "timestamp", [new DateTime("2011-05-17T12:54:00").toDate(), new DateTime("2011-05-17T12:54:02").toDate()])
-		assertDetectionsMatchingBetweenFilter(2, "timestamp", [new DateTime("2011-05-17T12:54:03").toDate(), new DateTime("2011-05-17T12:54:04").toDate()])
+		assertDetectionsMatchingBetweenFilter(9, [timestamp: [new DateTime("2011-05-17T12:54:00").toDate(), new DateTime("2011-05-17T12:54:02").toDate()]])
+		assertDetectionsMatchingBetweenFilter(2, [timestamp: [new DateTime("2011-05-17T12:54:03").toDate(), new DateTime("2011-05-17T12:54:04").toDate()]])
 	}
 	
-	private void assertDetectionsMatchingBetweenFilter(expectedCount, property, values)
+	private void assertDetectionsMatchingBetweenFilter(expectedCount, filterParams)
 	{
 		ReportFilter filter = new ReportFilter(ValidDetection)
-		filter.addCriterion(new BetweenReportFilterCriterion(property, values))
+		filter.addCriterion(new BetweenReportFilterCriterion(filterParams))
 		assertDetectionsMatchingFilter(expectedCount, filter)
 	}
 	
 	void testDetectionFilterByEqualsSpeciesCaabCodeAndBetweenTimestamp()
 	{
 		ReportFilter filter = new ReportFilter(ValidDetection)
-		filter.addCriterion(new EqualsReportFilterCriterion("detectionSurgeries.surgery.release.animal.species.SPCODE", "37010003"))
-		filter.addCriterion(new BetweenReportFilterCriterion("timestamp", [new DateTime("2011-05-17T12:54:00").toDate(), new DateTime("2011-05-17T12:54:02").toDate()]))
+		filter.addCriterion(new EqualsReportFilterCriterion([detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:"37010003"]]]]]]))
+		filter.addCriterion(new BetweenReportFilterCriterion([timestamp: [new DateTime("2011-05-17T12:54:00").toDate(), new DateTime("2011-05-17T12:54:02").toDate()]]))
 		assertDetectionsMatchingFilter(3, filter)
 	}
 	
 	private void assertDetectionsMatchingFilter(int expectedNumDetections, Map filterParams) 
 	{
-		assertEquals(expectedNumDetections, reportQueryExecutorService.executeQuery(ValidDetection.class, filterParams).size())
+		assertReportFilter(expectedNumDetections, ValidDetection, filterParams)
 	}
 
 	private void assertDetectionsMatchingFilter(int expectedNumDetections, ReportFilter filterParams) 
 	{
 		assertEquals(expectedNumDetections, reportQueryExecutorService.executeQuery(filterParams).size())
+	}
+	
+	private List assertReportFilter(expectedResultCount, clazz, params) 
+	{
+		ReportFilter filter = new ReportFilter(clazz)
+		filter.addCriterion(new EqualsReportFilterCriterion(params))
+		def results = reportQueryExecutorService.executeQuery(filter)
+		assertEquals(expectedResultCount, results.size())
+		return results
+	}
+    
+	private List assertReportFilter(expectedResultCount, clazz) 
+	{
+		ReportFilter filter = new ReportFilter(clazz)
+		def results = reportQueryExecutorService.executeQuery(filter)
+		assertEquals(expectedResultCount, results.size())
+		return results
 	}
 }

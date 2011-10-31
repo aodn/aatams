@@ -1,6 +1,7 @@
 ,,AATAMS Installation Stations,,,,,,,,,,,,,,
 ,Parameters,,,,,,,,,,,,,,,
 ,user:,,,,,,Jon Burgess,,,,,,,,,
+,project:,,,,,,Seal Count,,,,,,,,,
 ,,,,configuration,,,,station name,,curtain position,,latitude,longitude,active,,
 ,project:,,,,Seal Count,,,,organisations:,,CSIRO (CMAR),,,,,
 ,,,installation:,,,Bondi Line,,,,,,,,,,
@@ -10,4 +11,4 @@
 ,,,installation:,,,Heron Island ,,,,,,,,,,
 ,,,,CURTAIN,,,,Heron S1,,1,,-42.3,12.34,yes,,
 ,,,,CURTAIN,,,,Heron S2,,2,,-20.1234,76.02,yes,,
-12/10/2011 09:44,,,,,,,,,,,,,,,Page 1 of, 1
+01/11/2011 09:49,,,,,,,,,,,,,,,Page 1 of, 1

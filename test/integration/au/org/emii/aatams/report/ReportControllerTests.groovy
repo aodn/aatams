@@ -62,8 +62,8 @@ class ReportControllerTests extends ControllerUnitTestCase
         controller.params."filter.organisation.name" = null
         controller.params._file = "receiverList"
         controller.params.filter = 
-                    ["organisation.name":null, 
-                     organisation:[name:null]]
+                    ["eq.organisation.name":null, 
+                     eq:[organisation:[name:null]]]
                  
         controller.execute()
         
@@ -75,7 +75,8 @@ class ReportControllerTests extends ControllerUnitTestCase
         controller.params._name = "receiver"
         controller.params._file = "receiverList"
         controller.params.filter = 
-                    [organisation:[name:"IMOS"]]
+                    [eq:[organisation:[name:"IMOS"]],
+				     "eq.organisation.name":"IMOS"]
                  
         controller.execute()
         
@@ -87,8 +88,9 @@ class ReportControllerTests extends ControllerUnitTestCase
         controller.params._name = "installationStation"
         controller.params._file = "installationStationList"
         controller.params.filter = 
-                    [installation:[project:[name:null]]] 
-                 
+                    [eq:[installation:[project:[name:null]]],
+					 "eq.installation.project.name":null]
+					
         controller.execute()
         
         checkResponse("testExecuteInstallationStationNoFilter")
@@ -99,8 +101,9 @@ class ReportControllerTests extends ControllerUnitTestCase
         controller.params._name = "installationStation"
         controller.params._file = "installationStationList"
         controller.params.filter = 
-                    [installation:[project:[name:"Seal Count"]]] 
-                 
+                    [eq:[installation:[project:[name:"Seal Count"]]],
+					"eq.installation.project.name":"Seal Count"]
+					
         controller.execute()
         
         checkResponse("testExecuteInstallationStationByProject")
@@ -111,7 +114,8 @@ class ReportControllerTests extends ControllerUnitTestCase
         controller.params._name = "receiverDeployment"
         controller.params._file = "receiverDeploymentList"
         controller.params.filter = 
-            [station:[installation:[project:[name:null], name:null]]]
+            [eq:[station:[installation:[project:[name:null], name:null]]],
+			 "eq.station.installation.project.name":null]
                  
         controller.execute()
         
@@ -123,7 +127,8 @@ class ReportControllerTests extends ControllerUnitTestCase
         controller.params._name = "receiverDeployment"
         controller.params._file = "receiverDeploymentList"
         controller.params.filter = 
-            [station:[installation:[project:[name:"Seal Count"], name:null]]]
+            [eq:[station:[installation:[project:[name:"Seal Count"], name:null]]],
+			"eq.station.installation.project.name":"Seal Count"]
                  
         controller.execute()
         
@@ -135,7 +140,8 @@ class ReportControllerTests extends ControllerUnitTestCase
         controller.params._name = "receiverDeployment"
         controller.params._file = "receiverDeploymentList"
         controller.params.filter = 
-            [station:[installation:[project:[name:null], name:"Ningaloo Array"]]]
+            [eq:[station:[installation:[project:[name:null], name:"Ningaloo Array"]]],
+			 "eq.station.installation.project.name":null]
                  
         controller.execute()
         
@@ -147,7 +153,9 @@ class ReportControllerTests extends ControllerUnitTestCase
         controller.params._name = "receiverDeployment"
         controller.params._file = "receiverDeploymentList"
         controller.params.filter = 
-            [station:[installation:[project:[name:"Seal Count"], name:"Heron Island"]]]
+            [eq:[station:[installation:[project:[name:"Seal Count"], name:"Heron Island"]]],
+			 "eq.station.installation.project.name":"Seal Count",
+			 "eq.station.installation.name":"Heron Island"]
                  
         controller.execute()
         

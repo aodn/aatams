@@ -4,20 +4,14 @@ import org.hibernate.criterion.Restrictions
 
 class BetweenReportFilterCriterion extends AbstractReportFilterCriterion
 {
-	Object minValue
-	Object maxValue
-	
-	BetweenReportFilterCriterion(String domainClassProperty, List<Object> valuesToMatch)
+	BetweenReportFilterCriterion(filterParams)
 	{
-		super(domainClassProperty)
-		
-		assert(valuesToMatch.size() == 2)
-		minValue = valuesToMatch.get(0)
-		maxValue = valuesToMatch.get(1)
+		super(filterParams)
 	}
 	
-	protected void addRestriction(operandCriteria)
+	protected void addRestriction(operandCriteria, property, valuesToMatch)
 	{
-		operandCriteria.add(Restrictions.between(getDomainClassProperty(), minValue, maxValue))
+		println("Adding between restriction, property: "+ property + ", values: " + valuesToMatch)
+		operandCriteria.add(Restrictions.between(property, valuesToMatch.get(0), valuesToMatch.get(1)))
 	}
 }

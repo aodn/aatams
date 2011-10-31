@@ -1,6 +1,7 @@
 package au.org.emii.aatams.report
 
 import au.org.emii.aatams.*
+import au.org.emii.aatams.report.filter.*
 
 import org.hibernate.criterion.Restrictions
 
@@ -16,6 +17,13 @@ class ReportQueryExecutorService
     def embargoService
     def permissionUtilsService
     
+	List executeQuery(ReportFilter filter)
+	{
+		List results = filter.apply()
+		results = embargoService.applyEmbargo(results)
+		return results
+	}
+	
     /**
      * Executes a query for the named domain class with given filter parameters
      * applied.

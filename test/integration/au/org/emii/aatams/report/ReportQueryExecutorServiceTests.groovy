@@ -3,6 +3,7 @@ package au.org.emii.aatams.report
 import grails.test.*
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.report.filter.*
 
 import org.joda.time.*
 
@@ -120,10 +121,10 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
         assertEquals(6, results.size())
     }
    
-    /**
-     * An indirect filter parameter is one that refers to an associated entity
-     * property, e.g. the associated project's name.
-     */
+//    
+//    An indirect filter parameter is one that refers to an associated entity
+//    property, e.g. the associated project's name.
+//    
     void testExecuteQueryIndirectFilter()
     {
         def filterParams = [project:[name: "project 1"]]
@@ -201,8 +202,81 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 		assertDetectionsMatchingFilter(1, [timestamp:new DateTime("2011-05-17T12:54:03").toDate()])
 	}
 	
-	private assertDetectionsMatchingFilter(int expectedNumDetections, filterParams) 
+	void testDetectionFilterEmpty()
+	{
+		ReportFilter filter = new ReportFilter(ValidDetection)
+		assertDetectionsMatchingFilter(16, filter)	
+	}
+	
+	void testDetectionFilterByEqualsSpeciesCommonName()
+	{
+		assertDetectionsMatchingEqualsFilter(10, "detectionSurgeries.surgery.release.animal.species.COMMON_NAME", "White Shark")
+		assertDetectionsMatchingEqualsFilter(6, "detectionSurgeries.surgery.release.animal.species.COMMON_NAME", "Southern Bluefin Tuna")
+		assertDetectionsMatchingEqualsFilter(0, "detectionSurgeries.surgery.release.animal.species.COMMON_NAME", "Blue-eye Trevalla")
+	}
+	
+	void testDetectionFilterByEqualsSpeciesScientificName()
+	{
+		assertDetectionsMatchingEqualsFilter(10, "detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME", "Carcharodon carcharias")
+		assertDetectionsMatchingEqualsFilter(6, "detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME", "Thunnus maccoyii")
+		assertDetectionsMatchingEqualsFilter(0, "detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME", "Hyperoglyphe antarctica")
+	}
+	
+	void testDetectionFilterByEqualsSpeciesCaabCode()
+	{
+		assertDetectionsMatchingEqualsFilter(10, "detectionSurgeries.surgery.release.animal.species.SPCODE", "37010003")
+		assertDetectionsMatchingEqualsFilter(6, "detectionSurgeries.surgery.release.animal.species.SPCODE", "37441004")
+		assertDetectionsMatchingEqualsFilter(0, "detectionSurgeries.surgery.release.animal.species.SPCODE", "37445001")
+	}
+	
+	private void assertDetectionsMatchingEqualsFilter(expectedCount, property, value)
+	{
+		ReportFilter filter = new ReportFilter(ValidDetection)
+		filter.addCriterion(new EqualsReportFilterCriterion(property, value))
+		assertDetectionsMatchingFilter(expectedCount, filter)
+	}
+	
+	void testDetectionFilterByInSpeciesCommonName()
+	{
+		assertDetectionsMatchingInFilter(16, "detectionSurgeries.surgery.release.animal.species.SPCODE", ["37010003", "37441004"])
+		assertDetectionsMatchingInFilter(6, "detectionSurgeries.surgery.release.animal.species.SPCODE", ["37445001", "37441004"])
+	}
+
+	private void assertDetectionsMatchingInFilter(expectedCount, property, values)
+	{
+		ReportFilter filter = new ReportFilter(ValidDetection)
+		filter.addCriterion(new InReportFilterCriterion(property, values))
+		assertDetectionsMatchingFilter(expectedCount, filter)
+	}
+	
+	void testDetectionFilterByBetweenTimestamp()
+	{
+		assertDetectionsMatchingBetweenFilter(9, "timestamp", [new DateTime("2011-05-17T12:54:00").toDate(), new DateTime("2011-05-17T12:54:02").toDate()])
+		assertDetectionsMatchingBetweenFilter(2, "timestamp", [new DateTime("2011-05-17T12:54:03").toDate(), new DateTime("2011-05-17T12:54:04").toDate()])
+	}
+	
+	private void assertDetectionsMatchingBetweenFilter(expectedCount, property, values)
+	{
+		ReportFilter filter = new ReportFilter(ValidDetection)
+		filter.addCriterion(new BetweenReportFilterCriterion(property, values))
+		assertDetectionsMatchingFilter(expectedCount, filter)
+	}
+	
+	void testDetectionFilterByEqualsSpeciesCaabCodeAndBetweenTimestamp()
+	{
+		ReportFilter filter = new ReportFilter(ValidDetection)
+		filter.addCriterion(new EqualsReportFilterCriterion("detectionSurgeries.surgery.release.animal.species.SPCODE", "37010003"))
+		filter.addCriterion(new BetweenReportFilterCriterion("timestamp", [new DateTime("2011-05-17T12:54:00").toDate(), new DateTime("2011-05-17T12:54:02").toDate()]))
+		assertDetectionsMatchingFilter(3, filter)
+	}
+	
+	private void assertDetectionsMatchingFilter(int expectedNumDetections, Map filterParams) 
 	{
 		assertEquals(expectedNumDetections, reportQueryExecutorService.executeQuery(ValidDetection.class, filterParams).size())
+	}
+
+	private void assertDetectionsMatchingFilter(int expectedNumDetections, ReportFilter filterParams) 
+	{
+		assertEquals(expectedNumDetections, reportQueryExecutorService.executeQuery(filterParams).size())
 	}
 }

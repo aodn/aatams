@@ -35,9 +35,6 @@ abstract class ReportParameter
     /**
      * Returns the model which can be passed to GSP/render.
      */
-    /**
-     * Returns the model which can be passed to GSP/render.
-     */
     Map getModel()
     {
         return [label:label,

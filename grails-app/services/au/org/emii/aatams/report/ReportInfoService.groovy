@@ -34,14 +34,18 @@ class ReportInfoService
          ]
 
     static def propertyToLabel =
-        ["detectionSurgeries.tag.codeName":"tag ID",
+        ["detectionSurgeries.surgery.release.animal.species.SPCODE": "species CAAB code",
+		 "detectionSurgeries.surgery.release.animal.species.COMMON_NAME": "species common name",
+		 "detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME": "species scientific name",
+		 "detectionSurgeries.tag.codeName": "tag ID",
 		 "receiverDeployment.station.installation.project.name": "project",
 		 "receiverDeployment.station.installation.name": "installation",
 		 "receiverDeployment.station.name": "station",
 		 "organisation.name": "organisation",
          "installation.project.name": "project",
          "station.installation.project.name": "project",
-         "station.installation.name": "installation"]
+         "station.installation.name": "installation",
+		 "timestamp": "timestamp"]
     
     static def reportNameToClass =
         ["animalReleaseSummary": AnimalReleaseSummaryService.class,
@@ -68,8 +72,12 @@ class ReportInfoService
         
         def organisationRange = Organisation.list()*.name
         def installationRange = Installation.list()*.name
+		def speciesCaabCodeRange = CaabSpecies.list(max:20)*.SPCODE
+		def speciesCommonNameRange = CaabSpecies.list(max:20)*.COMMON_NAME
+		def speciesScientificNameRange = CaabSpecies.list(max:20)*.SCIENTIFIC_NAME
 		def stationRange = InstallationStation.list()*.name
 		def tagRange = Tag.list()*.codeName
+		def timestampRange = ValidDetection.list(max:20)*.timestamp
 		
         def detectionFilterParams = 
             [new ListReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"], 
@@ -83,8 +91,19 @@ class ReportInfoService
 				 range:stationRange),
  			 new ListReportParameter(label: propertyToLabel["detectionSurgeries.tag.codeName"],
 			 	 propertyName:"detectionSurgeries.tag.codeName",
-				 range:tagRange)]
-
+				 range:tagRange),
+			 new ListReportParameter(label: propertyToLabel["detectionSurgeries.surgery.release.animal.species.SPCODE"],
+				 propertyName:"detectionSurgeries.surgery.release.animal.species.SPCODE",
+				 range:speciesCaabCodeRange),
+			 new ListReportParameter(label: propertyToLabel["detectionSurgeries.surgery.release.animal.species.COMMON_NAME"],
+				 propertyName:"detectionSurgeries.surgery.release.animal.species.COMMON_NAME",
+				 range:speciesCommonNameRange),
+			 new ListReportParameter(label: propertyToLabel["detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME"],
+				 propertyName:"detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME",
+				 range:speciesScientificNameRange),
+			 new ListReportParameter(label: propertyToLabel["timestamp"],
+				 propertyName:"timestamp",
+				 range:timestampRange)]
 			
         def installationStationFilterParams = 
             [new ListReportParameter(label: propertyToLabel["installation.project.name"], propertyName:"installation.project.name", range:projectRange)]

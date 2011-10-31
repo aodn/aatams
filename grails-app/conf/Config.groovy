@@ -223,5 +223,19 @@ grails.gorm.default.mapping = {
 }
 
 // Database migration.    
-grails.plugin.databasemigration.updateOnStart = true
-grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+environments 
+{
+	production 
+	{
+		grails.plugin.databasemigration.updateOnStart = true
+		grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+	}
+	development 
+	{
+		grails.plugin.databasemigration.updateOnStart = true
+		grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+	}
+	test 
+	{
+	}
+}

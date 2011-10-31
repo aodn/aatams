@@ -3,13 +3,11 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-
 	<style name="titleBackground" forecolor="#FFFFFF" backcolor="#006699" radius="4"/>
 	<style name="columnHeaderBackground" forecolor="#FFFFFF" backcolor="#E6E6E6" radius="4"/>
 	<style name="titleText" forecolor="#FFFFFF" fontSize="24" pdfFontName="Helvetica-Bold"/>
 	<style name="fieldNameText" vAlign="Middle" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold"/>
 	<style name="fieldValue" forecolor="#000000" vAlign="Middle" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
-
 	<parameter name="REPORT_USER" class="java.lang.String"/>
 	<parameter name="FILTER_PARAMS" class="java.util.Collection" isForPrompting="false"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false"/>
@@ -93,22 +91,22 @@
 				<reportElement style="columnHeaderBackground" x="0" y="0" width="802" height="21"/>
 			</rectangle>
 			<staticText>
-				<reportElement style="fieldNameText" mode="Transparent" x="32" y="1" width="150" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="32" y="1" width="369" height="20"/>
 				<textElement/>
 				<text><![CDATA[species]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" mode="Transparent" x="182" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="401" y="0" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[current releases]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" mode="Transparent" x="282" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="501" y="0" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[total releases]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" mode="Transparent" x="382" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" mode="Transparent" x="601" y="0" width="100" height="20"/>
 				<textElement/>
 				<text><![CDATA[% embargoed]]></text>
 			</staticText>
@@ -117,22 +115,22 @@
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement style="fieldValue" x="32" y="0" width="150" height="20"/>
+				<reportElement style="fieldValue" x="32" y="0" width="369" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{species}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="fieldValue" x="182" y="0" width="100" height="20"/>
+				<reportElement style="fieldValue" x="401" y="0" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.Long"><![CDATA[$F{currentReleases}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="fieldValue" x="282" y="0" width="100" height="20"/>
+				<reportElement style="fieldValue" x="501" y="0" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.Long"><![CDATA[$F{totalReleases}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#0.00">
-				<reportElement style="fieldValue" x="382" y="0" width="100" height="20"/>
+				<reportElement style="fieldValue" x="601" y="0" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.Long"><![CDATA[$F{percentEmbargoed}]]></textFieldExpression>
 			</textField>

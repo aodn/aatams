@@ -211,10 +211,7 @@ class ReportControllerTests extends ControllerUnitTestCase
     private void checkResponse(def expectedFileName)
     {
         // Compare the response content with expected.
-        String expectedFilePath = \
-            System.getProperty("user.dir") + \
-            "/test/integration/au/org/emii/aatams/report/resources/" + \
-            expectedFileName + ".expected.csv"
+        String expectedFilePath = constructFilePath(expectedFileName)
             
         File expectedFile = new File(expectedFilePath)
             
@@ -230,6 +227,14 @@ class ReportControllerTests extends ControllerUnitTestCase
             StringUtils.difference(removeLastLine(expectedFile.getText().trim()), 
                                    removeLastLine(controller.response.contentAsString.trim())))
     }
+
+	private String constructFilePath(expectedFileName) {
+		String expectedFilePath = \
+            System.getProperty("user.dir") + \
+            "/test/integration/au/org/emii/aatams/report/resources/" + \
+            expectedFileName + ".expected.csv"
+		return expectedFilePath
+	}
     
     String removeLastLine(String s)
     {

@@ -1,29 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="receiverEventExtract" language="groovy" pageWidth="1042" pageHeight="1000000" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="receiverEventExtract" language="groovy" pageWidth="2042" pageHeight="1000000" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="386"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="REPORT_USER" class="java.lang.String"/>
-
 	<field name="timestamp" class="java.util.Date"/>
 	<field name="receiverDeployment.station.name" class="java.lang.String"/>
 	<field name="receiverDeployment.station.latitude" class="java.lang.Double"/>
 	<field name="receiverDeployment.station.longitude" class="java.lang.Double"/>
 	<field name="receiverDeployment.receiver.deviceID" class="java.lang.String"/>
-    <field name="firstDetectionSurgery.tag.deviceID" class="java.lang.String"/>
-    <field name="firstDetectionSurgery.surgery.release.animal.species.name" class="java.lang.String"/>
-    <field name="receiverDownload.requestingUser.name" class="java.lang.String"/>
-
+	<field name="firstDetectionSurgery.tag.deviceID" class="java.lang.String"/>
+	<field name="firstDetectionSurgery.surgery.release.animal.species" class="java.lang.String"/>
+	<field name="receiverDownload.requestingUser.name" class="java.lang.String"/>
 	<sortField name="receiverDeployment.station.name"/>
 	<sortField name="receiverDeployment.receiver.deviceID"/>
 	<sortField name="timestamp"/>
-    <sortField name="firstDetectionSurgery.surgery.release.animal.species.name"/>
-    <sortField name="firstDetectionSurgery.tag.deviceID"/>
-
+	<sortField name="firstDetectionSurgery.surgery.release.animal.species"/>
+	<sortField name="firstDetectionSurgery.tag.deviceID"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-
 	<columnHeader>
 		<band height="21" splitType="Stretch">
 			<staticText>
@@ -57,20 +53,19 @@
 				<text><![CDATA[tag ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="732" y="1" width="100" height="20"/>
+				<reportElement mode="Transparent" x="732" y="1" width="333" height="20"/>
 				<textElement/>
 				<text><![CDATA[species]]></text>
 			</staticText>
-            <staticText>
-                <reportElement mode="Transparent" x="832" y="1" width="100" height="20"/>
-                <textElement/>
-                <text><![CDATA[uploader]]></text>
-            </staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="1065" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[uploader]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-
 			<textField pattern="yyyy-MM-dd HH:mm:ss z">
 				<reportElement x="32" y="0" width="200" height="20"/>
 				<textElement/>
@@ -102,15 +97,15 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{firstDetectionSurgery.tag.deviceID}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="732" y="0" width="100" height="20"/>
+				<reportElement x="732" y="0" width="333" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{firstDetectionSurgery.surgery.release.animal.species.name}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{firstDetectionSurgery.surgery.release.animal.species}]]></textFieldExpression>
 			</textField>
-            <textField>
-                <reportElement x="832" y="0" width="100" height="20"/>
-                <textElement/>
-                <textFieldExpression class="java.lang.String"><![CDATA[$F{receiverDownload.requestingUser.name}]]></textFieldExpression>
-            </textField>
+			<textField>
+				<reportElement x="1065" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{receiverDownload.requestingUser.name}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

@@ -13,6 +13,10 @@ class ReportFilterFactoryService
 			return filter
 		}
 		
+		println("raw params: " + params)
+		removeEmptyFilterParameters(params)
+		println("cleaned params: " + params)
+		
 		if (params.eq)
 		{
 			filter.addCriterion(new EqualsReportFilterCriterion(params.eq))
@@ -30,4 +34,65 @@ class ReportFilterFactoryService
 		
 		return filter
     }
+	
+	private void removeEmptyFilterParameters(Map params)
+	{
+		def propertiesToRemove = []
+		
+		params.each
+		{
+			property, value ->
+			
+			if (AbstractReportFilterCriterion.isMap(value))
+			{
+				removeEmptyFilterParameters(value)
+				if (!hasLeaf(value))
+				{
+					propertiesToRemove.add(property)
+				}
+			}
+			else if (AbstractReportFilterCriterion.isLeaf(property, value))
+			{
+				// Do nothing.
+			}
+			else
+			{
+				propertiesToRemove.add(property)
+			}
+		}
+		
+		propertiesToRemove.each 
+		{
+			params.remove(it)
+		}
+	}
+	
+	private boolean hasLeaf(Map params)
+	{
+		if (params == [:])
+		{
+			return false
+		}
+		
+		boolean retVal = false
+		params.each 
+		{ 
+			property, value ->
+			
+			if (AbstractReportFilterCriterion.isMap(value))
+			{
+				retVal |= hasLeaf(value)
+			}
+			else if (AbstractReportFilterCriterion.isLeaf(property, value))
+			{
+				retVal |= true
+			}
+			else
+			{
+			
+			}
+		}
+		
+		return retVal
+	}
 }

@@ -7,6 +7,8 @@ import org.apache.shiro.SecurityUtils
 
 import org.codehaus.groovy.grails.plugins.jasper.*
 
+import org.joda.time.*
+
 class ReportController 
 {
     def animalReleaseSummaryService
@@ -51,27 +53,44 @@ class ReportController
             }
         }
         
-        def resultList = []
-        
-        // Special handling for animal release summary.
-        // TODO: refactor to remove dependency of this controller on to 
-        // AnimalReleaseSummaryService.
-        if (params._name == "animalReleaseSummary")
-        {
-            resultList = animalReleaseSummaryService.countBySpecies()
-            params.putAll(animalReleaseSummaryService.summary())
-        }
-        else
-        {
-            resultList = reportQueryExecutorService.executeQuery(
-							reportFilterFactoryService.newFilter(reportInfoService.getClassForName(params._name), 
-																 params.filter))
-        }
+        def resultList = generateResultList(params)
 
-        if (!resultList || resultList.isEmpty())
-        {
-            flash.message = "No matching records."
-			
+        if (!checkResultList(resultList, flash, params))
+		{
+			return
+		}
+        
+        params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/" 
+        
+        generateReport(params, log, request, resultList)
+    }
+
+	private generateReport(Map params, org.apache.commons.logging.Log log, javax.servlet.http.HttpServletRequest request, List resultList) {
+		def filterParams = [:]
+
+		Person person = permissionUtilsService.principal()
+		if (person)
+		{
+			filterParams.user = person.name
+		}
+
+		filterParams = filterParams + reportInfoService.filterParamsToReportFormat(params.filter)
+
+		log.debug("Filter params: " + filterParams)
+
+		params.FILTER_PARAMS = filterParams.entrySet()
+
+		// Delegate to report controller, including our wrapped data.
+		JasperReportDef report = jasperService.buildReportDefinition(params, request.getLocale(), [data:resultList])
+		generateResponse(report)
+	}
+
+	private boolean checkResultList(resultList, Map flash, Map params)
+	{
+		if (!resultList || resultList.isEmpty())
+		{
+			flash.message = "No matching records."
+
 			def redirectParams = [name:params._name, formats:[params._format]]
 			def action
 			if (params._type == "report")
@@ -82,34 +101,54 @@ class ReportController
 			{
 				action = "extract"
 			}
-			
-			redirect(action:action, params:redirectParams)
-			return
-        }
-        
-        params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/" 
-        
-        // Put the filter params in flash scope, since the controller chaining
-        // below converts everything in "params" to its toString() representation
-        // (whereas we want an actual Map delivered to Jasper).
-        def filterParams = [:]
-        
-        Person person = permissionUtilsService.principal()
-        if (person)
-        {
-            filterParams.user = person.name
-        }
 
-        filterParams = filterParams + reportInfoService.filterParamsToReportFormat(params.filter)
-        
-        log.debug("Filter params: " + filterParams)
-        
-        params.FILTER_PARAMS = filterParams.entrySet()
-        
-        // Delegate to report controller, including our wrapped data.
-        JasperReportDef report = jasperService.buildReportDefinition(params, request.getLocale(), [data:resultList])
-        generateResponse(report)
-    }
+			redirect(action:action, params:redirectParams)
+			return false
+		}
+		
+		return true
+	}
+
+	private List generateResultList(Map params) {
+		def resultList = []
+
+		// Special handling for animal release summary.
+		// TODO: refactor to remove dependency of this controller on to
+		// AnimalReleaseSummaryService.
+		if (params._name == "animalReleaseSummary")
+		{
+			resultList = animalReleaseSummaryService.countBySpecies()
+			params.putAll(animalReleaseSummaryService.summary())
+		}
+		else
+		{
+			def filterParams = [:]
+			if (params.filter.between)
+			{
+		 		filterParams = [between:[timestamp:[params.filter.between.min.timestamp, params.filter.between.max.timestamp]]]
+			}
+			
+			if (params.filter.eq)
+			{
+				println("params.filter.eq: " + params.filter.eq)
+				filterParams.eq = params.filter.eq
+
+//				filterParams.eq = [detectionSurgeries:['surgery.release.animal.species.SPCODE':'']]
+//				filterParams.eq = [receiverDeployment:[station:[installation:[project:[name:'']]]]]
+				
+			}
+			
+			if (params.filter.in)
+			{
+				filterParams.in = params.filter.in
+			}
+			
+			resultList = reportQueryExecutorService.executeQuery(
+					reportFilterFactoryService.newFilter(reportInfoService.getClassForName(params._name),
+					filterParams))
+		}
+		return resultList
+	}
 
     /**
     * Generate a html response.

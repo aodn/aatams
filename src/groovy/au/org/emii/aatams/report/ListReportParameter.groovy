@@ -12,11 +12,6 @@ class ListReportParameter extends ReportParameter
      */
     List range
     
-    Class getType()
-    {
-        return List.class
-    }
-    
     String getTemplate()
     {
         return "/report/filter/listTemplate"

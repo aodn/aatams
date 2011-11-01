@@ -185,7 +185,7 @@ class ReportControllerTests extends ControllerUnitTestCase
         checkResponse("testExecuteTag")
     }
 	
-	void testExecuteDetection()
+	void testExecuteDetectionExtract()
 	{
 		controller.params._name = "detection"
 		controller.params._file = "detectionExtract"
@@ -197,6 +197,37 @@ class ReportControllerTests extends ControllerUnitTestCase
 		checkResponse("testExecuteDetection")
 	}
 
+//	void testExecuteDetectionExtractWithTimestampFilter()
+//	{
+//		controller.params.putAll( 
+//			[CSV:'CSV', 
+//			 "filter.between.timestamp_day":["17", "17"], 
+//			 "filter:[between.timestamp_day":['17', '17'], 
+//		     between:[timestamp_day:['17', '17'], 
+// 				      timestamp_minute:['08', '10'], 
+// 					  timestamp_year:['2009', '2009'], 
+////					  timestamp:[date.struct, date.struct], 
+//					  timestamp_hour:['14', '14'], 
+//					  timestamp_month:['1', '1']], 
+//			 "between.timestamp_minute":['08', '10'], 
+//			 "between.timestamp_year":['2009', '2009'], 
+////			 between.timestamp:[date.struct, date.struct], 
+//			 "between.timestamp_hour":['14', '14'], 
+//			 "between.timestamp_month":['1', '1'], 
+//		 	 "filter.between.timestamp_minute":['08', '10'], 
+//			 _name:'detection', 
+//			 "filter.between.timestamp_year":['2009', '2009'], 
+////			 "filter.between.timestamp":[date.struct, date.struct], 
+//			 _type:'extract', 
+//			 "filter.between.timestamp_hour":['14', '14'], 
+//			 "filter.between.timestamp_month":['1', '1'], 
+//			 _file:'detectionExtract'])
+//		
+//		controller.execute()
+//		checkResponse("testExecuteDetectionExtractWithTimestampFilter")
+//	}
+
+	
 //	void testExecuteDetectionWithNonMatchingFilter()
 //	{
 //		controller.params._name = "detection"

@@ -2,6 +2,7 @@ package au.org.emii.aatams.report.filter
 
 import java.util.List
 import org.apache.log4j.Logger
+import org.hibernate.criterion.Restrictions;
 
 abstract class AbstractReportFilterCriterion 
 {
@@ -34,17 +35,20 @@ abstract class AbstractReportFilterCriterion
 
 			if (isMap(value))
 			{
+				println("Building criteria tree for property: " + property + ", value: " + value)
 				log.debug("Building criteria tree for property: " + property + ", value: " + value)
 				createAssociationCriteria(criteria, property, value)
 			}
 			else if (isLeaf(property, value))
 			{
+				println("Building criteria for property: " + property + ", value: " + value)
 				log.debug("Building criteria for property: " + property + ", value: " + value)
 				addRestriction(criteria, property, value)
 			}
 			else
 			{
 				// Ignore
+				println("Ignoring null or blank property: " + property + ", value: " + value)
 				log.debug("Ignoring null or blank property: " + property + ", value: " + value)
 			}
 		}
@@ -79,7 +83,7 @@ abstract class AbstractReportFilterCriterion
     /**
      * Returns true if the given parameter is a Map (of parameters).
      */
-    boolean isMap(param)
+    static boolean isMap(param)
     {
         if (!param)
         {
@@ -93,7 +97,7 @@ abstract class AbstractReportFilterCriterion
      * Returns true if the given parameter is a single, non-null, non-empty
      * value.
      */
-    boolean isLeaf(property, value)
+    static boolean isLeaf(property, value)
     {
         log.debug("Checking value: " + value)
         
@@ -120,7 +124,7 @@ abstract class AbstractReportFilterCriterion
             log.debug("Not a leaf")
             return false
         }
-        
+		
         log.debug("Is a leaf")
         return true
     }

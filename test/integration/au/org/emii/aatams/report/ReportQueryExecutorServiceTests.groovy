@@ -15,7 +15,8 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 {
     def embargoService
     def permissionUtilsService
-    def reportQueryExecutorService
+	def reportFilterFactoryService
+	def reportQueryExecutorService
     def searchableService
     
     Installation installation1
@@ -132,14 +133,21 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 	
 	void testDetectionNoFilter()
 	{
-		assertDetectionsMatchingFilter(16, [:])
+		assertDetectionsMatchingFilter(19, [:])
 	}
 	
 	void testDetectionFilterByProject()
 	{
-		assertDetectionsMatchingFilter(13, [receiverDeployment:[station:[installation:[project:[name:'Seal Count']]]]])
+		assertDetectionsMatchingFilter(16, [receiverDeployment:[station:[installation:[project:[name:'Seal Count']]]]])
 		assertDetectionsMatchingFilter(3, [receiverDeployment:[station:[installation:[project:[name:'Tuna']]]]])
 	}
+	
+	void testDetectionFilterByProjectAndEmptyDetectionSurgeries()
+	{
+		assertDetectionsMatchingFilter(16, [receiverDeployment:[station:[installation:[project:[name:'Seal Count']]]], detectionSurgeries:['surgery.release.animal.species.SPCODE':'']])
+		assertDetectionsMatchingFilter(3, [receiverDeployment:[station:[installation:[project:[name:'Tuna']]]], detectionSurgeries:['surgery.release.animal.species.SPCODE':'']])
+	}
+	
 	void testDetectionFilterByInstallation()
 	{
 		assertDetectionsMatchingFilter(3, [receiverDeployment:[station:[installation:[name:"Ningaloo Array"]]]])
@@ -182,14 +190,14 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 	
 	void testDetectionFilterByTimestamp()
 	{
-		assertDetectionsMatchingFilter(3, [timestamp:new DateTime("2011-05-17T12:54:00").toDate()])
+		assertDetectionsMatchingFilter(4, [timestamp:new DateTime("2011-05-17T12:54:00").toDate()])
 		assertDetectionsMatchingFilter(1, [timestamp:new DateTime("2011-05-17T12:54:03").toDate()])
 	}
 	
 	void testDetectionFilterEmpty()
 	{
 		ReportFilter filter = new ReportFilter(ValidDetection)
-		assertDetectionsMatchingFilter(16, filter)	
+		assertDetectionsMatchingFilter(19, filter)	
 	}
 	
 	void testDetectionFilterByEqualsSpeciesCommonName()
@@ -235,7 +243,7 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 	
 	void testDetectionFilterByBetweenTimestamp()
 	{
-		assertDetectionsMatchingBetweenFilter(9, [timestamp: [new DateTime("2011-05-17T12:54:00").toDate(), new DateTime("2011-05-17T12:54:02").toDate()]])
+		assertDetectionsMatchingBetweenFilter(12, [timestamp: [new DateTime("2011-05-17T12:54:00").toDate(), new DateTime("2011-05-17T12:54:02").toDate()]])
 		assertDetectionsMatchingBetweenFilter(2, [timestamp: [new DateTime("2011-05-17T12:54:03").toDate(), new DateTime("2011-05-17T12:54:04").toDate()]])
 	}
 	
@@ -266,8 +274,8 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 	
 	private List assertReportFilter(expectedResultCount, clazz, params) 
 	{
-		ReportFilter filter = new ReportFilter(clazz)
-		filter.addCriterion(new EqualsReportFilterCriterion(params))
+		ReportFilter filter = reportFilterFactoryService.newFilter(clazz, [eq:params])
+//		filter.addCriterion(new EqualsReportFilterCriterion(params))
 		def results = reportQueryExecutorService.executeQuery(filter)
 		assertEquals(expectedResultCount, results.size())
 		return results

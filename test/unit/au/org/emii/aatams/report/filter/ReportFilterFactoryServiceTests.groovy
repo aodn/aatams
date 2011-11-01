@@ -57,4 +57,14 @@ class ReportFilterFactoryServiceTests extends GrailsUnitTestCase
 		
 		assertEquals(expectedFilter, factoryFilter)
 	}
+	
+	void testRemoveEmptyFilterParameters()
+	{
+		def params = [receiverDeployment:[station:[installation:[project:[name:'Seal Count']]]], 
+				      detectionSurgeries:['surgery.release.animal.species.SPCODE':'']]
+		reportFilterFactoryService.removeEmptyFilterParameters(params)
+		
+		assertEquals([receiverDeployment:[station:[installation:[project:[name:'Seal Count']]]]], 
+					 params)
+	}
 }

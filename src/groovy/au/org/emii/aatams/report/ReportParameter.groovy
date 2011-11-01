@@ -25,8 +25,6 @@ abstract class ReportParameter
      */
     String propertyName
     
-    abstract Class getType()
-    
     /**
      * Returns the associated GSP template (used to render this parameter as GSP).
      */
@@ -43,7 +41,7 @@ abstract class ReportParameter
     
     String toString()
     {
-        return label + ":" + propertyName + ":" + type + ":" + template + ":" + model
+        return label + ":" + propertyName + ":" + template + ":" + model
     }
 }
 

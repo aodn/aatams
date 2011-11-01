@@ -726,6 +726,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         createExportWithDetections("export1.csv", jonBurgess, rx1Bondi, rx1, tag1, surgery1, 10)
         createExportWithDetections("export3.csv", jonBurgess, rx2Bondi, rx2, tag2, surgery4, 3)
 		createExportWithDetections("export4.csv", jonBurgess, rx3Ningaloo, rx3, tag3, surgery4, 3)
+		createExportWithDetections("export5.csv", jonBurgess, rx4Heron, rx4, tag5, null, 3)
 		
         ReceiverDownloadFile export2 = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
@@ -776,11 +777,14 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 					transmitterId:tag1.codeName,
 					receiverDownload:export1)
 
-			DetectionSurgery detSurgery =
-					new DetectionSurgery(surgery:surgery1,
-					detection:detection,
-					tag:tag1)
-			detection.addToDetectionSurgeries(detSurgery)
+			if (surgery1)
+			{	
+				DetectionSurgery detSurgery =
+						new DetectionSurgery(surgery:surgery1,
+						detection:detection,
+						tag:tag1)
+				detection.addToDetectionSurgeries(detSurgery)
+			}
 			export1.addToDetections(detection)
 		}
 	}

@@ -8,6 +8,8 @@ import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
+import org.joda.time.*
+
 class ReportInfoServiceTests extends GrailsUnitTestCase 
 {
     def permissionUtilsService
@@ -65,7 +67,12 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
 		mockDomain(CaabSpecies)
 		mockDomain(InstallationStation)
 		mockDomain(Tag)
-		mockDomain(ValidDetection)
+		
+		ValidDetection detFirst = new ValidDetection(timestamp:new DateTime("2011-03-01T12:34:56").toDate())
+		ValidDetection detLast = new ValidDetection(timestamp:new DateTime("2012-03-01T12:34:56").toDate())
+		def detectionList = [detFirst, detLast]
+		mockDomain(ValidDetection, detectionList)
+		detectionList.each { it.save() }
     }
 
     protected void tearDown() 
@@ -123,6 +130,7 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
     
     void testGetReportInfoDetection() 
     {
+		
         def reportInfos = reportInfoService.getReportInfo()
         
         assertEquals(8, reportInfos.size())
@@ -146,6 +154,12 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
 
    		assertEquals("station", filterParams[2].label)
 		assertEquals("receiverDeployment.station.name", filterParams[2].propertyName)
+
+   		assertEquals("timestamp", filterParams[7].label)
+		assertEquals("timestamp", filterParams[7].propertyName)
+		assertTrue(filterParams[7] instanceof DateRangeReportParameter)
+		assertEquals(new DateTime("2011-03-01T12:34:56").toDate(), filterParams[7].minRange)
+		assertEquals(new DateTime("2012-03-01T12:34:56").toDate(), filterParams[7].maxRange)
 	}
     
     void testFilterParamsToReportFormat()

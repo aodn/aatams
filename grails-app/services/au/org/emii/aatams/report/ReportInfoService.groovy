@@ -77,7 +77,8 @@ class ReportInfoService
 		def speciesScientificNameRange = CaabSpecies.list(max:20)*.SCIENTIFIC_NAME
 		def stationRange = InstallationStation.list()*.name
 		def tagRange = Tag.list()*.codeName
-		def timestampRange = ValidDetection.list(max:20)*.timestamp
+		def timestampMin = ValidDetection.list()*.timestamp.min()
+		def timestampMax = ValidDetection.list()*.timestamp.max()
 		
         def detectionFilterParams = 
             [new ListReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"], 
@@ -101,9 +102,10 @@ class ReportInfoService
 			 new ListReportParameter(label: propertyToLabel["detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME"],
 				 propertyName:"detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME",
 				 range:speciesScientificNameRange),
-			 new ListReportParameter(label: propertyToLabel["timestamp"],
-				 propertyName:"timestamp",
-				 range:timestampRange)]
+			 new DateRangeReportParameter(label: propertyToLabel["timestamp"],
+				 						  propertyName:"timestamp",
+										  minRange:timestampMin,
+										  maxRange:timestampMax)]
 			
         def installationStationFilterParams = 
             [new ListReportParameter(label: propertyToLabel["installation.project.name"], propertyName:"installation.project.name", range:projectRange)]

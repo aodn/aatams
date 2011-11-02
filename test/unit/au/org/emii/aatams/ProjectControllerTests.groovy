@@ -222,8 +222,6 @@ class ProjectControllerTests extends ControllerUnitTestCase
 		controller.lookupByName()
 
 		def jsonResponse = JSON.parse(controller.response.contentAsString)
-		println(jsonResponse)
-		
 		assertEquals(expectedNumResults, jsonResponse.size())
 		
 		// Need to reset the response so that this method can be called multiple times within a single test case.

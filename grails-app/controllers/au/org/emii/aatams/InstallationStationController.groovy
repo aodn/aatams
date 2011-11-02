@@ -121,4 +121,10 @@ class InstallationStationController {
             redirect(action: "list")
         }
     }
+
+	def lookupByName =
+	{
+		def matches = InstallationStation.findAllByNameIlike('%' + params.term + '%')
+		render(matches as JSON) 
+	}
 }

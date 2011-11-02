@@ -63,7 +63,17 @@ class BootStrap
 			returnArray['label'] = it.name
 			return returnArray
 		}
-		
+
+		JSON.registerObjectMarshaller(InstallationStation.class)
+		{
+			def returnArray = [:]
+			returnArray['id'] = it.id
+			returnArray['name'] = it.name
+			returnArray['label'] = it.name
+			returnArray['location'] = it.location
+			return returnArray
+		}
+
 		JSON.registerObjectMarshaller(Project.class)
 		{
 			def returnArray = [:]

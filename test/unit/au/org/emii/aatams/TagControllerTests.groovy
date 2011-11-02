@@ -39,6 +39,13 @@ class TagControllerTests extends ControllerUnitTestCase
         
         mockConfig("grails.gorm.default.list.max = 10")
         controller.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
+
+		Tag newTag = new Tag(codeName:'A69-1303-1111', serialNumber:'1111-A', status:newStatus)
+        Tag deployedTag = new Tag(codeName:'A69-1303-2222', serialNumber:'2222', status:deployedStatus)
+        Tag recoveredTag = new Tag(codeName:'A69-1303-3333', serialNumber:'1111-B', status:recoveredStatus)
+        def tagList = [newTag, deployedTag, recoveredTag]
+        mockDomain(Tag, tagList)
+        tagList.each { it.save() }
     }
 
     protected void tearDown() 
@@ -48,13 +55,6 @@ class TagControllerTests extends ControllerUnitTestCase
 
     void testLookupNonDeployedBySerialNumber() 
     {
-        Tag newTag = new Tag(codeName:'A69-1303-1111', serialNumber:'1111-A', status:newStatus)
-        Tag deployedTag = new Tag(codeName:'A69-1303-2222', serialNumber:'2222', status:deployedStatus)
-        Tag recoveredTag = new Tag(codeName:'A69-1303-3333', serialNumber:'1111-B', status:recoveredStatus)
-        def tagList = [newTag, deployedTag, recoveredTag]
-        mockDomain(Tag, tagList)
-        tagList.each { it.save() }
-        
         controller.params.term = '1111'
         controller.lookupNonDeployedBySerialNumber()
         
@@ -116,4 +116,31 @@ class TagControllerTests extends ControllerUnitTestCase
         assertTrue(model.candidateProjects.contains(project1))
         assertTrue(model.candidateProjects.contains(project2))
     }
+	
+	void testLookupByCodeName()
+	{
+//		Tag newTag = new Tag(codeName:'A69-1303-1111', serialNumber:'1111-A', status:newStatus)
+//        Tag deployedTag = new Tag(codeName:'A69-1303-2222', serialNumber:'2222', status:deployedStatus)
+//        Tag recoveredTag = new Tag(codeName:'A69-1303-3333', serialNumber:'1111-B', status:recoveredStatus)
+		
+		assertLookupWithTerm(0, 'X')
+		assertLookupWithTerm(1, '11')
+		assertLookupWithTerm(1, 'A69-1303-1')
+		assertLookupWithTerm(3, 'A69-')
+		assertLookupWithTerm(3, '1303')
+	}
+	
+	private void assertLookupWithTerm(expectedNumResults, term) 
+	{
+		controller.params.term = term
+		controller.lookupByCodeName()
+
+		def jsonResponse = JSON.parse(controller.response.contentAsString)
+		assertEquals(expectedNumResults, jsonResponse.size())
+		
+		// Need to reset the response so that this method can be called multiple times within a single test case.
+		// Also requires workaround to avoid exception, see: http://jira.grails.org/browse/GRAILS-6483
+		mockResponse?.committed = false // Current workaround
+		reset()
+	}
 }

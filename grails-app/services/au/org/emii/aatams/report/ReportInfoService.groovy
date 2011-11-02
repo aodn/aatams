@@ -72,8 +72,6 @@ class ReportInfoService
         
         def organisationRange = Organisation.list()*.name
         def installationRange = Installation.list()*.name
-		def stationRange = InstallationStation.list()*.name
-		def tagRange = Tag.list()*.codeName
 		def timestampMin = ValidDetection.list()*.timestamp.min()
 		def timestampMax = ValidDetection.list()*.timestamp.max()
 		
@@ -87,10 +85,9 @@ class ReportInfoService
 			 new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.name"], 
 									 			propertyName:"receiverDeployment.station.name", 
 												lookupPath:"/installationStation/lookupByName"),
- 			 new ListReportParameter(label: propertyToLabel["detectionSurgeries.tag.codeName"],
-			 	 propertyName:"detectionSurgeries.tag.codeName",
-				 range:tagRange),
-			 
+			 new AjaxMultiSelectReportParameter(label: propertyToLabel["detectionSurgeries.tag.codeName"], 
+									 			propertyName:"detectionSurgeries.tag.codeName", 
+												lookupPath:"/tag/lookupByCodeName"),
 			 new AjaxMultiSelectReportParameter(label: propertyToLabel["detectionSurgeries.surgery.release.animal.species.spcode"], 
 									 			propertyName:"detectionSurgeries.surgery.release.animal.species.spcode", 
 												lookupPath:"/species/lookupByNameAndReturnSpcode"),

@@ -143,4 +143,14 @@ class TagController {
         log.debug("Returning: " + (tags as JSON))
         render tags as JSON
     }
+	
+	def lookupByCodeName = 
+	{
+		def tags = Tag.findAllByCodeNameIlike("%" + params.term + "%", [max:20, sort:"codeName", order:"asc"])
+		def jsonResults = tags.collect
+		{
+			[label:it.toString(), value:it.codeName]
+		}
+		render(jsonResults as JSON)
+	}
 }

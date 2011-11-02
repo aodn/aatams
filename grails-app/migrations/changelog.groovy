@@ -1523,4 +1523,6 @@ databaseChangeLog = {
 	include file: 'requester_refactor.groovy'
 
 	include file: '3_4_1_changes.groovy'
+
+	include file: 'caab_attributes_to_lowercase.groovy'
 }

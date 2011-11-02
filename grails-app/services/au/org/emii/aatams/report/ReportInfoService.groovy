@@ -34,9 +34,9 @@ class ReportInfoService
          ]
 
     static def propertyToLabel =
-        ["detectionSurgeries.surgery.release.animal.species.SPCODE": "species CAAB code",
-		 "detectionSurgeries.surgery.release.animal.species.COMMON_NAME": "species common name",
-		 "detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME": "species scientific name",
+        ["detectionSurgeries.surgery.release.animal.species.spcode": "species (CAAB, common or scientific name)",
+		 "detectionSurgeries.surgery.release.animal.species.commonName": "species common name",
+		 "detectionSurgeries.surgery.release.animal.species.scientificName": "species scientific name",
 		 "detectionSurgeries.tag.codeName": "tag ID",
 		 "receiverDeployment.station.installation.project.name": "project",
 		 "receiverDeployment.station.installation.name": "installation",
@@ -72,9 +72,6 @@ class ReportInfoService
         
         def organisationRange = Organisation.list()*.name
         def installationRange = Installation.list()*.name
-		def speciesCaabCodeRange = CaabSpecies.list(max:20)*.SPCODE
-		def speciesCommonNameRange = CaabSpecies.list(max:20)*.COMMON_NAME
-		def speciesScientificNameRange = CaabSpecies.list(max:20)*.SCIENTIFIC_NAME
 		def stationRange = InstallationStation.list()*.name
 		def tagRange = Tag.list()*.codeName
 		def timestampMin = ValidDetection.list()*.timestamp.min()
@@ -93,15 +90,10 @@ class ReportInfoService
  			 new ListReportParameter(label: propertyToLabel["detectionSurgeries.tag.codeName"],
 			 	 propertyName:"detectionSurgeries.tag.codeName",
 				 range:tagRange),
-			 new ListReportParameter(label: propertyToLabel["detectionSurgeries.surgery.release.animal.species.SPCODE"],
-				 propertyName:"detectionSurgeries.surgery.release.animal.species.SPCODE",
-				 range:speciesCaabCodeRange),
-			 new ListReportParameter(label: propertyToLabel["detectionSurgeries.surgery.release.animal.species.COMMON_NAME"],
-				 propertyName:"detectionSurgeries.surgery.release.animal.species.COMMON_NAME",
-				 range:speciesCommonNameRange),
-			 new ListReportParameter(label: propertyToLabel["detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME"],
-				 propertyName:"detectionSurgeries.surgery.release.animal.species.SCIENTIFIC_NAME",
-				 range:speciesScientificNameRange),
+			 
+			 new AjaxMultiSelectReportParameter(label: propertyToLabel["detectionSurgeries.surgery.release.animal.species.spcode"], 
+									 			propertyName:"detectionSurgeries.surgery.release.animal.species.spcode", 
+												lookupPath:"/species/lookupByNameAndReturnSpcode"),
 			 new DateRangeReportParameter(label: propertyToLabel["timestamp"],
 				 						  propertyName:"timestamp",
 										  minRange:timestampMin,

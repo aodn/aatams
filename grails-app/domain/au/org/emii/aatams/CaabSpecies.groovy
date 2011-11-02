@@ -10,10 +10,13 @@ class CaabSpecies extends Species
     /**
      * Naming conventions have been kept same as CAAB export file for ease of
      * import in to database.
+     * 
+     * (except for the first three, because uppercase attributes are causing
+     * grails dynamic finder problems).
      */
-    String SPCODE
-    String COMMON_NAME 
-    String SCIENTIFIC_NAME 
+    String spcode
+    String commonName 
+    String scientificName 
     String AUTHORITY 
     String FAMILY 
     String FAMILY_SEQUENCE 
@@ -42,9 +45,9 @@ class CaabSpecies extends Species
     
     static constraints = 
     {
-        SPCODE(unique:true)
-        COMMON_NAME(nullable:true)
-        SCIENTIFIC_NAME(nullable:true)
+        spcode(unique:true)
+        commonName(nullable:true)
+        scientificName(nullable:true)
         AUTHORITY(nullable:true)
         FAMILY(nullable:true)
         FAMILY_SEQUENCE(nullable:true)
@@ -82,6 +85,6 @@ class CaabSpecies extends Species
     
     String toString()
     {
-        return SPCODE + " - " + SCIENTIFIC_NAME + " (" + COMMON_NAME + ")"
+        return spcode + " - " + scientificName + " (" + commonName + ")"
     }
 }

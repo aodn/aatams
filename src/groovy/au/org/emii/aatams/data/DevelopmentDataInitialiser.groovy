@@ -575,9 +575,9 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         //
         // Animals and Animal Releases etc.
         //
-        CaabSpecies whiteShark = new CaabSpecies(SCIENTIFIC_NAME:"Carcharodon carcharias", COMMON_NAME:"White Shark", SPCODE:"37010003").save(failOnError:true)
-        CaabSpecies blueFinTuna = new CaabSpecies(SCIENTIFIC_NAME:"Thunnus maccoyii", COMMON_NAME:"Southern Bluefin Tuna", SPCODE:"37441004").save(failOnError:true)
-        CaabSpecies blueEyeTrevalla = new CaabSpecies(SCIENTIFIC_NAME:"Hyperoglyphe antarctica", COMMON_NAME:"Blue-eye Trevalla", SPCODE:"37445001").save(failOnError:true)
+        CaabSpecies whiteShark = new CaabSpecies(scientificName:"Carcharodon carcharias", commonName:"White Shark", spcode:"37010003").save(failOnError:true)
+        CaabSpecies blueFinTuna = new CaabSpecies(scientificName:"Thunnus maccoyii", commonName:"Southern Bluefin Tuna", spcode:"37441004").save(failOnError:true)
+        CaabSpecies blueEyeTrevalla = new CaabSpecies(scientificName:"Hyperoglyphe antarctica", commonName:"Blue-eye Trevalla", spcode:"37445001").save(failOnError:true)
 
         Sex male = new Sex(sex:'MALE').save(failOnError:true)
         Sex female = new Sex(sex:'FEMALE').save(failOnError:true)

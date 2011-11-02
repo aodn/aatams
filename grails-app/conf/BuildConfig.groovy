@@ -8,6 +8,8 @@ grails.war.resources =
 { 
     stagingDir ->
     
+	  // Container provided...
+      delete(file:"${stagingDir}/WEB-INF/lib/mail-1.4.3.jar")
       delete(file:"${stagingDir}/WEB-INF/lib/postgis-jdbc-1.3.3.jar")
       delete(file:"${stagingDir}/WEB-INF/lib/postgresql-9.0-801.jdbc4.jar")
 

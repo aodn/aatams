@@ -67,14 +67,12 @@ class InstallationControllerTests extends ControllerUnitTestCase
 		assertLookupWithTerm(2, 'i')
 	}
 	
-	private assertLookupWithTerm(expectedNumResults, term) 
+	private void assertLookupWithTerm(expectedNumResults, term) 
 	{
 		controller.params.term = term
 		controller.lookupByName()
 
 		def jsonResponse = JSON.parse(controller.response.contentAsString)
-		println(jsonResponse)
-		
 		assertEquals(expectedNumResults, jsonResponse.size())
 		
 		// Need to reset the response so that this method can be called multiple times within a single test case.

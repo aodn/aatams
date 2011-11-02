@@ -112,7 +112,6 @@ class InstallationController {
 	
 	def lookupByName =
 	{
-		log.debug("lookup")
 		def matches = Installation.findAllByNameIlike('%' + params.term + '%')
 		render(matches as JSON) 
 	}

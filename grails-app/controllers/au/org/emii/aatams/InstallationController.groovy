@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import grails.converters.JSON
+
 class InstallationController {
 
     def candidateEntitiesService
@@ -107,4 +109,11 @@ class InstallationController {
             redirect(action: "list")
         }
     }
+	
+	def lookupByName =
+	{
+		log.debug("lookup")
+		def matches = Installation.findAllByNameIlike('%' + params.term + '%')
+		render(matches as JSON) 
+	}
 }

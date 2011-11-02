@@ -13,9 +13,7 @@ class ReportFilterFactoryService
 			return filter
 		}
 		
-		println("raw params: " + params)
 		removeEmptyFilterParameters(params)
-		println("cleaned params: " + params)
 		
 		if (params.eq)
 		{

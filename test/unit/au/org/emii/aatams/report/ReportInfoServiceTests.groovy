@@ -66,6 +66,7 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
 		
 		mockDomain(CaabSpecies)
 		mockDomain(InstallationStation)
+		mockDomain(ReceiverEvent)
 		mockDomain(Tag)
 		
 		ValidDetection detFirst = new ValidDetection(timestamp:new DateTime("2011-03-01T12:34:56").toDate())

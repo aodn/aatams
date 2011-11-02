@@ -93,9 +93,24 @@ class ReportInfoService
 												lookupPath:"/species/lookupByNameAndReturnSpcode"),
 			 new DateRangeReportParameter(label: propertyToLabel["timestamp"],
 				 						  propertyName:"timestamp",
-										  minRange:timestampMin,
-										  maxRange:timestampMax)]
-			
+										   minRange:timestampMin,
+										   maxRange:timestampMax)]
+ 
+		def eventFilterParams =
+			[new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"],
+												 propertyName:"receiverDeployment.station.installation.project.name",
+												lookupPath:"/project/lookupByName"),
+			 new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.name"],
+												 propertyName:"receiverDeployment.station.installation.name",
+												lookupPath:"/installation/lookupByName"),
+			 new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.name"],
+												 propertyName:"receiverDeployment.station.name",
+												lookupPath:"/installationStation/lookupByName"),
+			 new DateRangeReportParameter(label: propertyToLabel["timestamp"],
+										   propertyName:"timestamp",
+										  minRange:ReceiverEvent.list()*.timestamp.min(),
+										  maxRange:ReceiverEvent.list()*.timestamp.max())]
+
         def installationStationFilterParams = 
             [new ListReportParameter(label: propertyToLabel["installation.project.name"], propertyName:"installation.project.name", range:projectRange)]
 
@@ -129,7 +144,7 @@ class ReportInfoService
                                                           filterParams:receiverDeploymentFilterParams),
                 (ReceiverEvent.class):new ReportInfo(displayName:"Receiver Events", 
                                                      jrxmlFilename:["extract":"receiverEventExtract"], 
-                                                     filterParams:[]),
+                                                     filterParams:eventFilterParams),
                 (Tag.class):new ReportInfo(displayName:"Tags", 
                                            jrxmlFilename:["extract":"tagExtract"], 
                                            filterParams:[])

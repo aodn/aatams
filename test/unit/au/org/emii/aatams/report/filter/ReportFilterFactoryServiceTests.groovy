@@ -24,7 +24,7 @@ class ReportFilterFactoryServiceTests extends GrailsUnitTestCase
 
     void testNewFilterEquals()
 	{
-		def params = [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:"37010003"]]]]]]
+		def params = [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37010003"]]]]]]
 		assertNewFilter(
 			ValidDetection, 
 			new EqualsReportFilterCriterion(params), 
@@ -33,7 +33,7 @@ class ReportFilterFactoryServiceTests extends GrailsUnitTestCase
 
     void testNewFilterIn()
 	{
-		def params = [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:["37010003", "37010004"]]]]]]]
+		def params = [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:["37010003", "37010004"]]]]]]]
 		assertNewFilter(
 			ValidDetection, 
 			new InReportFilterCriterion(params),
@@ -42,7 +42,7 @@ class ReportFilterFactoryServiceTests extends GrailsUnitTestCase
 	
 	void testNewFilterBetween()
 	{
-		def params = [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:["37010003", "37010004"]]]]]]]
+		def params = [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:["37010003", "37010004"]]]]]]]
 		assertNewFilter(
 			ValidDetection, 
 			new BetweenReportFilterCriterion(params),
@@ -61,7 +61,7 @@ class ReportFilterFactoryServiceTests extends GrailsUnitTestCase
 	void testRemoveEmptyFilterParameters()
 	{
 		def params = [receiverDeployment:[station:[installation:[project:[name:'Seal Count']]]], 
-				      detectionSurgeries:['surgery.release.animal.species.SPCODE':'']]
+				      detectionSurgeries:['surgery.release.animal.species.spcode':'']]
 		reportFilterFactoryService.removeEmptyFilterParameters(params)
 		
 		assertEquals([receiverDeployment:[station:[installation:[project:[name:'Seal Count']]]]], 

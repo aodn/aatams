@@ -157,11 +157,11 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
    		assertEquals("station", filterParams[2].label)
 		assertEquals("receiverDeployment.station.name", filterParams[2].propertyName)
 
-   		assertEquals("timestamp", filterParams[7].label)
-		assertEquals("timestamp", filterParams[7].propertyName)
-		assertTrue(filterParams[7] instanceof DateRangeReportParameter)
-		assertEquals(new DateTime("2011-03-01T12:34:56").toDate(), filterParams[7].minRange)
-		assertEquals(new DateTime("2012-03-01T12:34:56").toDate(), filterParams[7].maxRange)
+   		assertEquals("timestamp", filterParams[5].label)
+		assertEquals("timestamp", filterParams[5].propertyName)
+		assertTrue(filterParams[5] instanceof DateRangeReportParameter)
+		assertEquals(new DateTime("2011-03-01T12:34:56").toDate(), filterParams[5].minRange)
+		assertEquals(new DateTime("2012-03-01T12:34:56").toDate(), filterParams[5].maxRange)
 	}
     
     void testFilterParamsToReportFormat()

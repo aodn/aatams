@@ -120,4 +120,14 @@ class SpeciesController {
         log.debug("Returning: " + (species as JSON))
         render species as JSON
     }
+	
+	def lookupByNameAndReturnSpcode =
+	{
+        def species = speciesService.lookup(params.term)
+		def jsonResults = species.collect 
+		{
+			[label:it.toString(), value:it.spcode]
+		}
+		render(jsonResults as JSON)
+	}
 }

@@ -230,8 +230,8 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 	
 	void testDetectionFilterByInSpeciesCommonName()
 	{
-		assertDetectionsMatchingInFilter(16, [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:["37010003", "37441004"]]]]]]])
-		assertDetectionsMatchingInFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:["37445001", "37441004"]]]]]]])
+		assertDetectionsMatchingInFilter(16, [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:"37010003, 37441004"]]]]]])
+		assertDetectionsMatchingInFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[SPCODE:"37445001, 37441004"]]]]]])
 	}
 
 	private void assertDetectionsMatchingInFilter(expectedCount, filterParams)

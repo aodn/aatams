@@ -40,3 +40,8 @@ function updateHeader(data)
         heading.after(errorElement);
     }
 }
+
+function escapeId(myid) 
+{ 
+	return '#' + myid.replace(/(:|\.)/g,'\\$1');
+}

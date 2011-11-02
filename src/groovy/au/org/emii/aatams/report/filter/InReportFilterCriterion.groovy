@@ -9,9 +9,10 @@ class InReportFilterCriterion extends AbstractReportFilterCriterion
 		super(filterParams)
 	}
 	
-	protected void addRestriction(operandCriteria, property, valuesToMatch)
+	protected void addRestriction(operandCriteria, property, commaSeparatedListOfValues)
 	{
-		println("Adding in restriction, property: "+ property + ", values: " + valuesToMatch)
+		List<String> valuesToMatch = Arrays.asList(commaSeparatedListOfValues.split(","))
+		valuesToMatch = valuesToMatch.collect { it.trim() }
 		operandCriteria.add(Restrictions.in(property, valuesToMatch))
 	}
 }

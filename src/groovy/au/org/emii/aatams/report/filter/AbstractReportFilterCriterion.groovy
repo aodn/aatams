@@ -35,20 +35,17 @@ abstract class AbstractReportFilterCriterion
 
 			if (isMap(value))
 			{
-				println("Building criteria tree for property: " + property + ", value: " + value)
 				log.debug("Building criteria tree for property: " + property + ", value: " + value)
 				createAssociationCriteria(criteria, property, value)
 			}
 			else if (isLeaf(property, value))
 			{
-				println("Building criteria for property: " + property + ", value: " + value)
 				log.debug("Building criteria for property: " + property + ", value: " + value)
 				addRestriction(criteria, property, value)
 			}
 			else
 			{
 				// Ignore
-				println("Ignoring null or blank property: " + property + ", value: " + value)
 				log.debug("Ignoring null or blank property: " + property + ", value: " + value)
 			}
 		}

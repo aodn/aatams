@@ -3,6 +3,7 @@ package au.org.emii.aatams
 import au.org.emii.aatams.command.*
 
 import org.apache.shiro.SecurityUtils
+import grails.converters.JSON
 
 class ProjectController {
 
@@ -227,4 +228,12 @@ class ProjectController {
             body "${message(code: 'mail.request.project.activate.body', args: [project.name, createLink(action:'show', id:project.id, absolute:true)])}" 
         }
     }
+	
+	def lookupByName =
+	{
+		log.debug("Looking up projects matching: " + params.term)
+		def projectsMatchingName = Project.findAllByNameIlike('%' + params.term + '%')
+		log.debug("Matching projects: " + projectsMatchingName)
+		render(projectsMatchingName as JSON) 
+	}
 }

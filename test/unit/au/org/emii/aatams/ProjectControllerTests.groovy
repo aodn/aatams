@@ -4,6 +4,7 @@ import au.org.emii.aatams.command.*
 
 import grails.test.*
 import org.apache.shiro.crypto.hash.Sha256Hash
+import grails.converters.JSON
 
 class ProjectControllerTests extends ControllerUnitTestCase 
 {
@@ -203,4 +204,31 @@ class ProjectControllerTests extends ControllerUnitTestCase
         assertEquals(EntityStatus.PENDING, Project.get(redirectArgs['id']).status) 
         assertTrue(mailSent)
     }
+
+	void testLookupByName()
+	{
+		assertLookupWithTerm(0, 'X')
+		assertLookupWithTerm(1, 'S')
+		assertLookupWithTerm(1, 's')
+		assertLookupWithTerm(2, 'T')
+		assertLookupWithTerm(2, 't')
+		assertLookupWithTerm(3, 'A')
+		assertLookupWithTerm(3, 'a')
+	}
+
+	private assertLookupWithTerm(expectedNumResults, term) 
+	{
+		controller.params.term = term
+		controller.lookupByName()
+
+		def jsonResponse = JSON.parse(controller.response.contentAsString)
+		println(jsonResponse)
+		
+		assertEquals(expectedNumResults, jsonResponse.size())
+		
+		// Need to reset the response so that this method can be called multiple times within a single test case.
+		// Also requires workaround to avoid exception, see: http://jira.grails.org/browse/GRAILS-6483
+		mockResponse?.committed = false // Current workaround
+		reset()
+	}
 }

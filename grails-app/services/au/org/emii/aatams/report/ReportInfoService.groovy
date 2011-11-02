@@ -81,9 +81,9 @@ class ReportInfoService
 		def timestampMax = ValidDetection.list()*.timestamp.max()
 		
         def detectionFilterParams = 
-            [new ListReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"], 
-									 propertyName:"receiverDeployment.station.installation.project.name", 
-									 range:projectRange),
+            [new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"], 
+									 			propertyName:"receiverDeployment.station.installation.project.name", 
+												lookupPath:"/project/lookupByName"),
 			 new ListReportParameter(label: propertyToLabel["receiverDeployment.station.installation.name"],
 				 propertyName:"receiverDeployment.station.installation.name",
 				 range:installationRange),

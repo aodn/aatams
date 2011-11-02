@@ -146,9 +146,11 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
 		
 		// Project
 		assertEquals("project", filterParams[0].label)
+		assertTrue(filterParams[0] instanceof AjaxMultiSelectReportParameter)
 		assertEquals("receiverDeployment.station.installation.project.name", filterParams[0].propertyName)
-		assertTrue(filterParams[0].range.contains(ReportInfoService.MEMBER_PROJECTS))
-
+		assertEquals('/project/lookupByName', filterParams[0].lookupPath)
+		assertEquals("/report/filter/ajaxMultiSelectTemplate", filterParams[0].template)
+		
    		assertEquals("installation", filterParams[1].label)
 		assertEquals("receiverDeployment.station.installation.name", filterParams[1].propertyName)
 

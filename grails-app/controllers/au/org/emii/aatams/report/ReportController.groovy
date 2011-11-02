@@ -130,16 +130,12 @@ class ReportController
 			
 			if (params.filter.eq)
 			{
-				println("params.filter.eq: " + params.filter.eq)
 				filterParams.eq = params.filter.eq
-
-//				filterParams.eq = [detectionSurgeries:['surgery.release.animal.species.SPCODE':'']]
-//				filterParams.eq = [receiverDeployment:[station:[installation:[project:[name:'']]]]]
-				
 			}
 			
 			if (params.filter.in)
 			{
+				log.debug("params.filter.in: " + params.filter.in)
 				filterParams.in = params.filter.in
 			}
 			

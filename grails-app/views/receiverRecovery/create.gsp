@@ -159,40 +159,6 @@
                                 </td>
                             </tr>
                         
-                            <!-- Import data file(s) -->
-<%-- Import is now done in pop-up on separate screen                             
-                            <tr><td/></tr>
-                            
-                            <tr class="prop">
-                                <td valign="top" class="name">Import Data Files</td>
-                                <td valign="top" class="name">
-                                    <label class="compulsory" for="import">Import VRL</label>
-                                </td>
-                                <td>
-                                    <input type="file" name="vrlFile" accept="vrl" />
-                                </td>
-                            </tr>
-
-                            <tr class="prop">
-                                <td/>
-                                <td valign="top" class="name">
-                                    <label class="compulsory" for="import">Import RLD</label>
-                                </td>
-                                <td>
-                                    <input type="file" name="rldFile" accept="rld" />
-                                </td>
-                            </tr>
-                            
-                            <tr class="prop">
-                                <td/>
-                                <td valign="top" class="name">
-                                    <label class="compulsory" for="import">Import CSV</label>
-                                </td>
-                                <td>
-                                    <input type="file" name="csvFile" accept="csv" />
-                                </td>
-                            </tr>
---%>                            
                         </tbody>
                     </table>
                 </div>

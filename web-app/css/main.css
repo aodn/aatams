@@ -114,7 +114,9 @@ a:hover {
     text-decoration: none;
 }
 
-
+a img {
+    border:0;
+}
 
 ul  {
 		list-style: none;

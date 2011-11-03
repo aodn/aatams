@@ -123,6 +123,21 @@
                                 <td valign="top" class="value">${fieldValue(bean: receiverRecoveryInstance, field: "comments")}</td>
                             </tr>
                         
+
+                            <tr class="prop">
+                                <td valign="top" class="name">Receiver Exports</td>
+                                <td valign="top" class="value" colspan="2">
+                                    <g:link controller="detection" action="create">Upload tag detections...</g:link>
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="value" colspan="2">
+                                    <g:link controller="receiverEvent" action="create">Upload receiver events...</g:link>
+                                </td>
+                            </tr>
+                            
                         </tbody>
                       
                     </tbody>

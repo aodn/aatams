@@ -316,7 +316,12 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                          status:newStatus,
                          model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
-                     
+         
+		// CodeMaps.
+		createCodeMaps()
+			
+		def a69_1303 = CodeMap.findByCodeMap('A69-1303')	
+			 				             
         //
         // Tags.
         //
@@ -325,74 +330,83 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         Tag tag1 =
             new Tag(codeName:'A69-1303-62339',
                     serialNumber:'62339',
-                    codeMap:'A69-1303',
+                    codeMap:a69_1303,
                     pingCode:'62339',
                     model:vemcoV8,
                     project:sealCountProject,
                     status:deployedStatus,
-                    transmitterType:pinger).save(failOnError: true)
+                    transmitterType:pinger)
+		a69_1303.addToTags(tag1)
+		
 
         Tag tag2 =
             new Tag(codeName:'A69-1303-46601',
                     serialNumber:'46601',
-                    codeMap:'A69-1303',
+                    codeMap:a69_1303,
                     pingCode:'46601',
                     model:vemcoV8,
                     project:sealCountProject,
                     status:deployedStatus,
-                    transmitterType:pinger).save(failOnError: true)
-
+                    transmitterType:pinger)
+		a69_1303.addToTags(tag2)
+					
         Tag tag3 =
             new Tag(codeName:'A69-1303-11111',
                     serialNumber:'1111',
-                    codeMap:'A69-1303',
+                    codeMap:a69_1303,
                     pingCode:'11111',
                     model:vemcoV8,
                     project:sealCountProject,
                     status:newStatus,
-                    transmitterType:pinger).save(failOnError: true)
-              
+                    transmitterType:pinger)
+		a69_1303.addToTags(tag3)
+			
         // Bug #352 - this tag won't be selectable if animal release project
         // set to "tuna".
         Tag tag5 =
-            new Tag(codeName:'A70-1303-33333',
+            new Tag(codeName:'A69-1303-33333',
                     serialNumber:'3333',
-                    codeMap:'A70-1303',
+                    codeMap:CodeMap.findByCodeMap('A69-1303'),
                     pingCode:'3333',
                     model:vemcoV8,
                     project:tunaProject,
                     status:newStatus,
                     transmitterType:pinger,
-                    expectedLifeTimeDays:100).save(failOnError: true)
-          
+                    expectedLifeTimeDays:100)
+		a69_1303.addToTags(tag5)
+					
         Tag tag6 =
-            new Tag(codeName:'A70-1303-44444',
+            new Tag(codeName:'A69-1303-44444',
                     serialNumber:'4444',
-                    codeMap:'A70-1303',
+                    codeMap:a69_1303,
                     pingCode:'4444',
                     model:vemcoV8,
                     project:tunaProject,
                     status:newStatus,
-                    transmitterType:pinger).save(failOnError: true)
-                
+                    transmitterType:pinger)
+		a69_1303.addToTags(tag6)
+			
         Tag orphanTag =
-            new Tag(codeName:'A70-1303-55555',
+            new Tag(codeName:'A69-1303-55555',
                     serialNumber:'5555',
-                    codeMap:'A70-1303',
+                    codeMap:a69_1303,
                     pingCode:'5555',
                     model:vemcoV8,
                     status:newStatus,
-                    transmitterType:pinger).save(failOnError: true)
-                
+                    transmitterType:pinger)
+		a69_1303.addToTags(orphanTag)
+		a69_1303.save(failOnError:true)
+			
         TransmitterType depth =
             new TransmitterType(transmitterTypeName:"DEPTH").save(failOnError:true)
         TransmitterType temp =
             new TransmitterType(transmitterTypeName:"TEMP").save(failOnError:true)
 
+		def a69_1105 = CodeMap.findByCodeMap('A69-1303')	
         Sensor sensor1 =
-            new Sensor(codeName:'A69-1400-64000',
+            new Sensor(codeName:'A69-1105-64000',
                     serialNumber:'64000',
-                    codeMap:'A69-1400',
+                    codeMap:a69_1105,
                     pingCode:'64000',
                     model:vemcoV8,
                     project:sealCountProject,
@@ -401,12 +415,13 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     transmitterType:depth,
                     unit:'m',
                     slope:1,
-                    intercept:0).save(failOnError: true)
-
+                    intercept:0)
+		a69_1105.addToTags(sensor1)
+		
         Sensor sensor2 =
-            new Sensor(codeName:'A69-1500-65000',
+            new Sensor(codeName:'A69-1105-65000',
                     serialNumber:'65000',
-                    codeMap:'A69-1500',
+                    codeMap:a69_1105,
                     pingCode:'65000',
                     model:vemcoV8,
                     project:sealCountProject,
@@ -415,8 +430,10 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     transmitterType:temp,
                     unit:'k',
                     slope:1,
-                    intercept:0).save(failOnError: true)
-
+                    intercept:0)
+		a69_1105.addToTags(sensor2)
+		a69_1105.save(failOnError:true)
+			
         //
         // Installation data.
         //
@@ -786,6 +803,21 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 				detection.addToDetectionSurgeries(detSurgery)
 			}
 			export1.addToDetections(detection)
+		}
+	}
+	
+	private void createCodeMaps()
+	{
+		["A69", "A180"].each
+		{
+			freq ->
+			
+			["1303", "1601", "9001", "9003", "1206", "1105", "9002", "9004"].each
+			{
+				codeSpace ->
+				
+				CodeMap codeMap = new CodeMap(codeMap:freq + "-" + codeSpace).save(failOnError:true, flush:true)
+			}
 		}
 	}
 }

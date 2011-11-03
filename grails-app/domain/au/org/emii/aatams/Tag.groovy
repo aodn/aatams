@@ -9,7 +9,8 @@ class Tag extends Device implements Embargoable
                       detectionSurgeries:DetectionSurgery]
 
     Project project
-    String codeMap
+	static belongsTo = [codeMap: CodeMap]
+	
     Integer pingCode
 
     TransmitterType transmitterType
@@ -26,7 +27,6 @@ class Tag extends Device implements Embargoable
     static constraints =
     {
         project(nullable:true)
-        codeMap(blank:false)
         pingCode(unique:true)
         transmitterType()
         expectedLifeTimeDays(nullable:true)
@@ -49,12 +49,13 @@ class Tag extends Device implements Embargoable
      */
     String getCodeMapPingCode()
     {
-        return codeMap + "-" + String.valueOf(pingCode)
+        return String.valueOf(codeMap) + "-" + String.valueOf(pingCode)
     }
     
     static String constructCodeName(params)
     {
-        return params.codeMap + "-" + params.pingCode
+		CodeMap codeMap = CodeMap.get(params.codeMap?.id)
+        return String.valueOf(codeMap) + "-" + params.pingCode
     }
     
     // For reports...

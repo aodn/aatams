@@ -67,8 +67,7 @@
                                     <label class="compulsory" for="codeMap"><g:message code="tag.codeMap.label" default="Code Map" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeMap', 'errors')}">
-                                  <g:textField name="codeMap" value="${tagInstance?.codeMap}" placeholder="e.g. 'A69-1303'"/>
-
+                                  <g:select name="codeMap.id" from="${au.org.emii.aatams.CodeMap.list()}" optionKey="id" value="${tagInstance?.codeMap?.id}"  />
                                 </td>
                             </tr>
                         

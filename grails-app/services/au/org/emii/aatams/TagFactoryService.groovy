@@ -6,46 +6,12 @@ class TagFactoryService {
 
     def lookupOrCreate(params) throws IllegalArgumentException
     {
-        log.debug(params)
-        
-        String codeName = params.codeName
-        log.debug("Parsing codeName: " + codeName)
-        def tag = Tag.findByCodeName(codeName)
-
+		CodeMap codeMap = CodeMap.get(params.codeMap.id)
+		def tag = Tag.findByCodeMapAndPingCode(codeMap, params.pingCode)
+		
         if (tag == null)
         {
-            String[] codeNameTokens = codeName.split("-")
-            if (codeNameTokens.length != 3)
-            {
-                String msg = "Invalid tag code name: " + codeName
-                log.error(msg)
-                throw new IllegalArgumentException(msg)
-            }
-            else
-            {
-                TagDeviceModel model = TagDeviceModel.get(params.model.id)
-                
-                String codeMap = codeNameTokens[0] + "-" + codeNameTokens[1]
-                String pingCode = codeNameTokens[2]
-                
-				initDefaults(params)
-				
-                try
-                {
-                    Integer pingCodeAsInt = Integer.valueOf(pingCode)
-                    tag = new Tag(codeName:codeName,
-                                  serialNumber:params.serialNumber,
-                                  codeMap:codeMap,
-                                  pingCode:pingCode,
-                                  model:model,
-                                  status:params.status,
-                                  transmitterType:params.transmitterType)
-                }
-                catch (NumberFormatException e)
-                {
-                    throw new IllegalArgumentException("Invalid tag code name: " + codeName, e)
-                }
-            }
+            tag = createNewTag(params)
         }
         
         if (!tag.project)
@@ -69,7 +35,42 @@ class TagFactoryService {
         return tag
     }
 
-	private initDefaults(params) {
+	private Tag createNewTag(params) 
+	{
+		def tag
+		
+		initDefaults(params)
+
+		def codeMap = CodeMap.get(params.codeMap.id)
+		if (!codeMap)
+		{
+			throw new IllegalArgumentException("Unknown code map ID: " + params.codeMap.id)
+		}
+
+		def pingCode
+
+		try
+		{
+			pingCode = Integer.valueOf(params.pingCode)
+		}
+		catch (NumberFormatException e)
+		{
+			throw new IllegalArgumentException("Invalid ping code ID: " + params.pingCode, e)
+		}
+
+		tag = new Tag(codeName:Tag.constructCodeName(params),
+				codeMap:codeMap,
+				serialNumber:params.serialNumber,
+				pingCode:pingCode,
+				model:TagDeviceModel.get(params.model.id),
+				status:params.status,
+				transmitterType:params.transmitterType)
+		codeMap.addToTags(tag)
+		return tag
+	}
+
+	private initDefaults(params) 
+	{
 		if (!params.status)
 		{
 			params.status = DeviceStatus.findByStatus('NEW')

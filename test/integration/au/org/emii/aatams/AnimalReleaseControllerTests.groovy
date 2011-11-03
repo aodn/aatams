@@ -37,7 +37,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
 //		2011-10-26 09:40:34,694 [http-8080-3] DEBUG grails.app.controller.au.org.emii.aatams.AnimalReleaseController - params:
 		controller.params.releaseDateTime_hour = '9'
 		
-		def tag = [serialNumber:"1111", codeName:"A69-1303-11111", model:TagDeviceModel.findByModelName('V8')]
+		def tag = [codeMap:CodeMap.findByCodeMap("A69-1303"), pingCode:"11111", serialNumber:"1111", model:TagDeviceModel.findByModelName('V8')]
 		def surgery = [0:[timestamp_minute:"40", 
 						  tag:tag, 
 						  timestamp_year:"2011", 
@@ -74,8 +74,10 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
 		controller.params.captureDateTime_hour = '9'
 		
 		controller.params.project = Project.findByName('Whale')
-		controller.params.speciesName = "Blue Fin Tuna"
-		controller.params.speciesId = '71'
+		
+		CaabSpecies species = CaabSpecies.findByCommonName("White Shark")
+		controller.params.speciesName = species.name
+		controller.params.speciesId = species.id
 		controller.params.sex = Sex.findBySex('MALE')
 		controller.params.animal = [id:null]
 		controller.params.embargoPeriod = null

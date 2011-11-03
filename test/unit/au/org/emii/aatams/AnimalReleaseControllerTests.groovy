@@ -34,6 +34,8 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
 
 	TransmitterType pinger
     
+	CodeMap codeMap
+	
     protected void setUp() 
     {
         super.setUp()
@@ -132,6 +134,10 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
 		mockDomain(Animal)
 		mockDomain(Sex)
 		mockDomain(Species)
+		
+		codeMap = new CodeMap(codeMap:"A69-1303")
+		mockDomain(CodeMap, [codeMap])
+		codeMap.save()
     }
 
     protected void tearDown() 
@@ -291,7 +297,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         mockDomain(TagDeviceModel, [deviceModel])
         deviceModel.save()
 
-        tag = new Tag(codeMap:"A69-1303",
+		tag = new Tag(codeMap:codeMap,
                           pingCode:11111,
                           codeName:"A69-1303-11111",
                           serialNumber:"11111",
@@ -361,7 +367,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
 					type: [id:surgeryType.id],
 					treatmentType : [id:surgeryTreatmentType.id],
 					comments: "",
-					tag:[codeName: tag.codeName, serialNumber: tag.serialNumber, model:[id: 1]]]
+					tag:[codeMap: tag.codeMap, pingCode: tag.pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
 
 		controller.params.surgery = ['0':surgery0]
 	}
@@ -394,7 +400,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
             type: [id:surgeryType.id],
             treatmentType : [id:surgeryTreatmentType.id],
             comments: "",
-            tag:[codeName: tag.codeName, serialNumber: tag.serialNumber, model:[id: 1]]]
+            tag:[codeMap: tag.codeMap, pingCode: tag.pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
         
         controller.params.surgery = ['0':surgery0]
         
@@ -443,7 +449,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         def numSurgeries = 3
         numSurgeries.times(
         {
-            Tag newTag = new Tag(codeMap:"A69-1303",
+            Tag newTag = new Tag(codeMap:codeMap,
                                  pingCode:it,
                                  codeName:"A69-1303-" + it,
                                  serialNumber:String.valueOf(it),
@@ -462,7 +468,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
                 type: [id:1],
                 treatmentType : [id:1],
                 comments: "",
-                tag:[codeName: newTag.codeName, serialNumber: newTag.serialNumber, model:[id: 1]]]
+                tag:[codeMap: tag.codeMap, pingCode: tag.pingCode, serialNumber: newTag.serialNumber, model:[id: 1]]]
             
             surgeryMap.put(String.valueOf(it), surgery)
         })
@@ -521,7 +527,7 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
             type: [id:1],
             treatmentType : [id:1],
             comments: "",
-            tag:[codeName: codeName, serialNumber: serialNum, model:[id: deviceModel.id]]]
+            tag:[codeMap: codeMap, pingCode: "12345", serialNumber: serialNum, model:[id: deviceModel.id]]]
         
         controller.params.surgery = ['0':surgery0]
         

@@ -78,7 +78,7 @@
                                   <label class="compulsory" for="codeMap"><g:message code="tag.codeMap.label" default="Code Map" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeMap', 'errors')}">
-                                    <g:textField name="codeMap" value="${tagInstance?.codeMap}" placeholder="e.g. 'A69-1303'" />
+                                    <g:select name="codeMap.id" from="${au.org.emii.aatams.CodeMap.list()}" optionKey="id" value="${tagInstance?.codeMap?.id}"  />
 
                                 </td>
                             </tr>
@@ -199,16 +199,6 @@
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
                                 <g:select name="transmitterTypeId" from="${au.org.emii.aatams.TransmitterType.list()}" optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
-
-                            </td>
-                        </tr>
-
-                        <tr class="prop">
-                            <td valign="top" class="name">
-                                <label class="compulsory" for="sensorCodeMap"><g:message code="sensor.codeMap.label" default="Code Map" /></label>
-                            </td>
-                            <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'codeMap', 'errors')}">
-                                <g:textField name="sensorCodeMap" value="${fieldValue(bean: sensorInstance, field: 'codeMap')}" />
 
                             </td>
                         </tr>

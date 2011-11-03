@@ -38,6 +38,18 @@
 
                                 </td>
                             </tr>
+                            
+                            <tr>
+                                <td/>
+                            </tr>
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label>Tag Details</label>
+                                </td>
+                                <td valign="top" class="value">
+                                    <label>Enter an existing serial number, or enter new tag details:</label>
+                                </td>
+                            </tr>
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -50,11 +62,19 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label class="compulsory" for="tag"><g:message code="surgery.tag.label" default="Tag ID" /></label>
+                                    <label class="compulsory" for=tagCodeMapId><g:message code="surgery.tag.codeMap.label" default="Code Map" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'tag', 'errors')}">
-                                    <g:textField name="tagCodeName" placeholder="e.g 'A69-1303-12345'" size="60" />
-
+                                <td valign="top" class="value">
+                                    <g:select name="tagCodeMapId" from="${au.org.emii.aatams.CodeMap.list()}" optionKey="id" />
+                                </td>
+                            </tr>
+                            
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label class="compulsory" for="pingCode"><g:message code="tag.pingCode.label" default="Ping Code ID" /></label>
+                                </td>
+                                <td valign="top" class="value">
+                                    <g:textField name="pingCode" />
                                 </td>
                             </tr>
                         
@@ -67,6 +87,9 @@
                                 </td>
                             </tr>
                         
+                            <tr>
+                                <td/>
+                            </tr>
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="type"><g:message code="surgery.type.label" default="Placement" /></label>

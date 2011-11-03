@@ -61,6 +61,11 @@ class EmbargoService
     
     boolean isEmbargoed(Embargoable embargoee)
     {
+		if (embargoee == null)
+		{
+			return false
+		}
+		
         return (applyEmbargo(embargoee) == null)
     }
 }

@@ -12,6 +12,8 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 	def animalFactoryService
 	def tagFactoryService
 	
+	def codeMap
+	
     protected void setUp()
 	{
         super.setUp()
@@ -27,6 +29,10 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 		releaseService.animalFactoryService = animalFactoryService
 		releaseService.tagFactoryService = tagFactoryService
 		
+		codeMap = new CodeMap(codeMap:"A69-1303")
+		mockDomain(CodeMap, [codeMap])
+		codeMap.save()
+
 		params = setupParams()
 		
 		animalReleaseInstance = new AnimalRelease()
@@ -127,11 +133,11 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 					type: [id:SurgeryType.get(1).id],
 					treatmentType : [id:SurgeryTreatmentType.get(1).id],
 					comments: "",
-					tag:[codeName: tag.codeName, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
+					tag:[codeMap:tag.codeMap, pingCode:tag.pingCode, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
 
 		params.surgery += ['0':surgeryExisting]
 
-		def codeName = "A69-1111-3333"
+		def codeName = "A69-1303-3333"
 		def serialNum = "3333"
 
 		def surgeryNew = [
@@ -144,7 +150,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 					type: [id:1],
 					treatmentType : [id:1],
 					comments: "",
-					tag:[codeName: codeName, serialNumber: serialNum, model:[id: 1]]]
+					tag:[codeMap:codeMap, pingCode:"3333", , serialNumber: serialNum, model:[id: 1]]]
 
 		params.surgery += ['1':surgeryNew]
 
@@ -378,8 +384,8 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 		mockDomain(TransmitterType, [pinger])
 		pinger.save()
 		
-		Tag tag1 = new Tag(codeMap:"A69-1303", pingCode:12345, codeName:"A69-1303-12345", serialNumber:"12345", transmitterType:pinger, model:tagModel, status:newStatus)
-		Tag tag2 = new Tag(codeMap:"A69-1303", pingCode:22222, codeName:"A69-1303-22222", serialNumber:"22222", transmitterType:pinger, model:tagModel, status:newStatus)
+		Tag tag1 = new Tag(codeMap:codeMap, pingCode:12345, codeName:"A69-1303-12345", serialNumber:"12345", transmitterType:pinger, model:tagModel, status:newStatus)
+		Tag tag2 = new Tag(codeMap:codeMap, pingCode:22222, codeName:"A69-1303-22222", serialNumber:"22222", transmitterType:pinger, model:tagModel, status:newStatus)
 		def tagList = [tag1, tag2]
 		mockDomain(Tag, tagList)
 		tagList.each { it.save() }
@@ -422,7 +428,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 						type: [id:SurgeryType.get(1).id],
 						treatmentType : [id:SurgeryTreatmentType.get(1).id],
 						comments: "",
-						tag:[codeName: tag.codeName, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
+						tag:[codeMap: tag.codeMap, pingCode: tag.pingCode, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
 
 			params.surgery += [(String.valueOf(it)):surgery]
 		}
@@ -479,7 +485,6 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 
 		numNewTags.times
 		{
-			def codeName = "A69-1111-3333" + it
 			def serialNum = "3333" + it
 
 			def surgery = [
@@ -492,7 +497,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 						type: [id:1],
 						treatmentType : [id:1],
 						comments: "",
-						tag:[codeName: codeName, serialNumber: serialNum, model:[id: 1]]]
+						tag:[codeMap:[id: 1], pingCode:it, serialNumber: serialNum, model:[id: 1]]]
 
 			params.surgery += [(String.valueOf(it)):surgery]
 		}

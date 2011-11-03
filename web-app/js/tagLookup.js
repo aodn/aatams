@@ -5,39 +5,41 @@
  */
 $(function()
 {
-    var dataSource = contextPath + "/tag/lookupNonDeployedBySerialNumber";
-    $("#serialNumber").autocomplete({source:dataSource});
-});
-
-$("#serialNumber").autocomplete({
-    select:function(event, ui)
+    $("#serialNumber").autocomplete(
     {
-        // Update the serialNumber and model select when a tag ID is selecetd.
-        $("#tagCodeName").val(ui.item.codeName);
-        $("#modelId").val(ui.item.model.id);
-    }
-});
-
-$("#serialNumber").autocomplete({
-    change:function(event, ui)
-    {
-        setExistingTag(ui.item != null);
-    }
+    	source:contextPath + "/tag/lookupNonDeployedBySerialNumber",
+    	select:function(event, ui)
+	    {
+    		console.log(ui.item)
+    		
+    		// Update the code name, ping code and model select when a tag ID is selected.
+	        $("#tagCodeMapId").val(ui.item.codeMap.id);
+	        $("#pingCode").val(ui.item.pingCode);
+	        $("#modelId").val(ui.item.model.id);
+	    },
+	    change:function(event, ui)
+	    {
+	        setExistingTag(ui.item != null);
+	    }
+	});
 });
 
 function setExistingTag(existing)
 {
     if (existing)
     {
-        $("#tagCodeName").attr("disabled", "disabled");
+        $("#tagCodeMapId").attr("disabled", "disabled");
+        $("#pingCode").attr("disabled", "disabled");
         $("#modelId").attr("disabled", "disabled");
     }
     else
     {
-        $("#tagCodeName").attr("disabled", "");
+        $("#tagCodeMapId").attr("disabled", "");
+        $("#pingCode").attr("disabled", "");
         $("#modelId").attr("disabled", "");
-        
-        $("#tagCodeName").val("");
+    	
+        $("#tagCodeMapId").val("");
+        $("#pingCode").val("");
         $("#modelId").val("");
     }
 }

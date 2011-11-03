@@ -103,15 +103,15 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
         mockLogging(DetectionSurgery)
 
         // Set up some data.
-        tagNonEmbargoed = new Tag(project:project1, codeName:"A69-1303-1111", codeMap:"A69-1303", pingCode:1111)
-        tagEmbargoedReadableProject = new Tag(project:project1, codeName:"A69-1303-2222", codeMap:"A69-1303", pingCode:2222)
-        tagEmbargoedNonReadableProject = new Tag(project:project2, codeName:"A69-1303-3333", codeMap:"A69-1303", pingCode:3333)
-        tagPastEmbargoed = new Tag(project:project2, codeName:"A69-1303-4444", codeMap:"A69-1303", pingCode:4444)
+        tagNonEmbargoed = new Tag(project:project1, codeName:"A69-1303-1111", codeMap:new CodeMap(codeMap:"A69-1303"), pingCode:1111)
+        tagEmbargoedReadableProject = new Tag(project:project1, codeName:"A69-1303-2222", codeMap:new CodeMap(codeMap:"A69-1303"), pingCode:2222)
+        tagEmbargoedNonReadableProject = new Tag(project:project2, codeName:"A69-1303-3333", codeMap:new CodeMap(codeMap:"A69-1303"), pingCode:3333)
+        tagPastEmbargoed = new Tag(project:project2, codeName:"A69-1303-4444", codeMap:new CodeMap(codeMap:"A69-1303"), pingCode:4444)
 
-        sensorNonEmbargoed = new Sensor(project:project1, tag:tagNonEmbargoed, codeName:"sensor-1111", codeMap:"sensor", pingCode:1111)
-        sensorEmbargoedReadableProject = new Sensor(project:project1, tag:tagEmbargoedReadableProject, codeName:"sensor-2222", codeMap:"sensor", pingCode:2222)
-        sensorEmbargoedNonReadableProject = new Sensor(project:project2, tag:tagEmbargoedNonReadableProject, codeName:"sensor-3333", codeMap:"sensor", pingCode:3333)
-        sensorPastEmbargoed = new Sensor(project:project2, tag:tagPastEmbargoed, codeName:"sensor-4444", codeMap:"sensor", pingCode:4444)
+        sensorNonEmbargoed = new Sensor(project:project1, tag:tagNonEmbargoed, codeName:"sensor-1111", codeMap:new CodeMap(codeMap:"sensor"), pingCode:1111)
+        sensorEmbargoedReadableProject = new Sensor(project:project1, tag:tagEmbargoedReadableProject, codeName:"sensor-2222", codeMap:new CodeMap(codeMap:"sensor"), pingCode:2222)
+        sensorEmbargoedNonReadableProject = new Sensor(project:project2, tag:tagEmbargoedNonReadableProject, codeName:"sensor-3333", codeMap:new CodeMap(codeMap:"sensor"), pingCode:3333)
+        sensorPastEmbargoed = new Sensor(project:project2, tag:tagPastEmbargoed, codeName:"sensor-4444", codeMap:new CodeMap(codeMap:"sensor"), pingCode:4444)
 
         releaseNonEmbargoed = new AnimalRelease(project:project1)
         releaseEmbargoedReadableProject = new AnimalRelease(project:project1, embargoDate:nextYear())

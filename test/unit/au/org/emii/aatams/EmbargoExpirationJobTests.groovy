@@ -31,7 +31,7 @@ class EmbargoExpirationJobTests extends GrailsUnitTestCase
         Calendar tomorrow = Calendar.getInstance()
         tomorrow.add(Calendar.DAY_OF_YEAR, 1)
 
-        Tag tag = new Tag(codeMap:'A69-1303', pingCode:1234)
+        Tag tag = new Tag(codeMap:new CodeMap(codeMap:'A69-1303'), pingCode:1234)
         mockDomain(Tag, [tag])
         tag.save()
         

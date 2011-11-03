@@ -6,8 +6,8 @@ $(function()
 {
     $('#dialog-form-add-surgery').dialog({
         autoOpen: false,
-        width: 750,
-        height: 575,
+        width: 755,
+        height: 630,
         modal: true,
         buttons: {
             'Create': function() 
@@ -31,8 +31,9 @@ $(function()
                 // Leave it up to the controller to determine whether or not to
                 // create a new tag.
                 //
-                var tagCodeName = $("#tagCodeName").val();
+                var tagCodeMapId = $("#tagCodeMapId").val();
                 var tagSerialNumber = $("#serialNumber").val();
+                var tagPingCode = $("#pingCode").val();
                 var tagModelId = $("#modelId option:selected").val();
 
                 var projectId = $("#project\\.id option:selected").val();
@@ -55,7 +56,7 @@ $(function()
                                    timestamp_hour + ":" + 
                                    timestamp_minute + " " + 
                                    timestamp_zone;
-                    var tag = {codeName:tagCodeName};
+                    var tag = {codeMap:{id:tagCodeMapId, serialNumber:tagSerialNumber, pingCode:tagPingCode}};
                     var type = {type:$("#surgeryTypeId option:selected").text()};
                     var treatmentType = {type:$("#treatmentTypeId option:selected").text()};
                     var instance = {timestamp:dateTime, 
@@ -80,7 +81,8 @@ $(function()
                     mainForm.append(hiddenField(idPrefix + "type.id", typeId));
                     mainForm.append(hiddenField(idPrefix + "treatmentType.id", treatmentTypeId));
                     mainForm.append(hiddenField(idPrefix + "comments", comments));
-                    mainForm.append(hiddenField(idPrefix + "tag.codeName", tagCodeName));
+                    mainForm.append(hiddenField(idPrefix + "tag.codeMap.id", tagCodeMapId));
+                    mainForm.append(hiddenField(idPrefix + "tag.pingCode", tagPingCode));
                     mainForm.append(hiddenField(idPrefix + "tag.serialNumber", tagSerialNumber));
                     mainForm.append(hiddenField(idPrefix + "tag.model.id", tagModelId));
                 }
@@ -97,7 +99,8 @@ $(function()
                        'timestamp_hour':timestamp_hour,
                        'timestamp_minute':timestamp_minute,
                        'timestamp_zone':timestamp_zone,
-                       'tag.codeName':tagCodeName,
+                       'tag.codeMap.id':tagCodeMapId,
+                       'tag.pingCode':tagPingCode,
                        'tag.serialNumber':tagSerialNumber,
                        'tag.model.id':tagModelId,
                        'type.id':typeId,

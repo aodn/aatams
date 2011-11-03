@@ -59,9 +59,9 @@ class EmbargoFilters
             {
                 model ->
                 
-                if (embargoService.isEmbargoed(model?.tagInstance))
+				if (embargoService.isEmbargoed(model?.tagInstance))
                 {
-                    // Redirect.
+					// Redirect.
                     redirect(controller:"auth", action:"unauthorized")
                 }
             }

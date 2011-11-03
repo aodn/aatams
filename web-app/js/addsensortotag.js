@@ -3,7 +3,7 @@ $(function() {
     $('#dialog-form-add-sensor').dialog({
         autoOpen: false,
         height: 375,
-        width: 350,
+        width: 500,
         modal: true,
         buttons: {
             'Create': function() 
@@ -11,7 +11,6 @@ $(function() {
                 var event = $("#id").val();
                 var tagId = $("#id").val();
                 var transmitterTypeId = $("#transmitterTypeId option:selected").val();
-                var codeMap = $("#sensorCodeMap").val();
                 var pingCode = $("#sensorPingCode").val();
                 var slope = $("#slope").val();
                 var intercept = $("#intercept").val();
@@ -24,7 +23,6 @@ $(function() {
                         'projectId':projectId,
                         'tag.id':tagId,
                         'transmitterType.id':transmitterTypeId,
-                        'codeMap':codeMap,
                         'pingCode':pingCode,
                         'slope':slope,
                         'intercept':intercept,
@@ -49,12 +47,10 @@ $(function() {
                            deleteColumn.append(deleteLink);
                            tableRow.append(deleteColumn);
 
-                           var tagTypeColumn = $("<td>").attr("class", "value");
+                           var tagTypeColumn = $("<td>").attr("class", "value").html(data.instance.transmitterType.transmitterTypeName);
                            tableRow.append(tagTypeColumn);
-                           var sensorLink = $("<a>").attr("href", '../sensor/show/' + data.instance.id).html(data.instance.transmitterType.transmitterTypeName);
-                           tagTypeColumn.append(sensorLink);
                            
-                           var codeMapColumn = $("<td>").attr("class", "value").html(data.instance.codeMap);
+                           var codeMapColumn = $("<td>").attr("class", "value").html(data.instance.codeMap.codeMap);
                            tableRow.append(codeMapColumn);
 
                            var pingCodeColumn = $("<td>").attr("class", "value").html(data.instance.pingCode);

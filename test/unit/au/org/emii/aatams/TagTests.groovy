@@ -19,7 +19,7 @@ class TagTests extends GrailsUnitTestCase
         mockDomain(Tag)
         
         Tag tag1 = new Tag(codeName:'A69-1303-1111',
-                           codeMap:'A69-1303', 
+                           codeMap:new CodeMap(codeMap:'A69-1303'), 
                            pingCode:"1111",
                            model:new TagDeviceModel(),
                            project:new Project(),
@@ -33,7 +33,7 @@ class TagTests extends GrailsUnitTestCase
         try
         {
             Tag tag2 = new Tag(codeName:'A69-1303-1111',
-                               codeMap:'A69-1303', 
+                               codeMap:new CodeMap(codeMap:'A69-1303'), 
                                pingCode:"1111",
                                model:new TagDeviceModel(),
                                project:new Project(),
@@ -55,7 +55,7 @@ class TagTests extends GrailsUnitTestCase
         mockDomain(Tag)
         
         Tag tag1 = new Tag(codeName:'A69-1303-1111',
-                           codeMap:'A69-1303', 
+                           codeMap:new CodeMap(codeMap:'A69-1303'), 
                            pingCode:"1111",
                            model:new TagDeviceModel(),
                            project:new Project(),
@@ -69,7 +69,7 @@ class TagTests extends GrailsUnitTestCase
         try
         {
             Tag tag2 = new Tag(codeName:'A69-1303-2222',
-                               codeMap:'A69-1303', 
+							   codeMap:new CodeMap(codeMap:'A69-1303'), 
                                pingCode:"2222",
                                model:new TagDeviceModel(),
                                project:new Project(),
@@ -92,7 +92,7 @@ class TagTests extends GrailsUnitTestCase
         mockDomain(Project, [project])
         
         Tag tag = new Tag(codeName:'A69-1303-2222',
-                          codeMap:'A69-1303', 
+                          codeMap:new CodeMap(codeMap:'A69-1303'), 
                           pingCode:2222,
                           model:new TagDeviceModel(),
                           project:project,
@@ -122,7 +122,7 @@ class TagTests extends GrailsUnitTestCase
     void testNullProject()
     {
         Tag tag = new Tag(codeName:'A69-1303-2222',
-                          codeMap:'A69-1303', 
+                          codeMap:new CodeMap(codeMap:'A69-1303'), 
                           pingCode:2222,
                           model:new TagDeviceModel(),
                           serialNumber:"1111",

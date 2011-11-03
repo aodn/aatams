@@ -121,7 +121,9 @@ class BootStrap
             returnArray['model'] = it.model
             returnArray['transmitterType'] = it.transmitterType
             returnArray['codeName'] = it.codeName
-
+			returnArray['pingCode'] = it.pingCode
+			returnArray['codeMap'] = it.codeMap
+			
             return returnArray
         }
         

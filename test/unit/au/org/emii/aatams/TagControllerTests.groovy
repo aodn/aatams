@@ -40,9 +40,13 @@ class TagControllerTests extends ControllerUnitTestCase
         mockConfig("grails.gorm.default.list.max = 10")
         controller.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
 
-		Tag newTag = new Tag(codeName:'A69-1303-1111', serialNumber:'1111-A', status:newStatus)
-        Tag deployedTag = new Tag(codeName:'A69-1303-2222', serialNumber:'2222', status:deployedStatus)
-        Tag recoveredTag = new Tag(codeName:'A69-1303-3333', serialNumber:'1111-B', status:recoveredStatus)
+		CodeMap codeMap = new CodeMap(codeMap:"A69-1303")
+		mockDomain(CodeMap, [codeMap])
+		codeMap.save()
+
+		Tag newTag = new Tag(codeMap:codeMap, codeName:'A69-1303-1111', serialNumber:'1111-A', status:newStatus)
+        Tag deployedTag = new Tag(codeMap:codeMap, codeName:'A69-1303-2222', serialNumber:'2222', status:deployedStatus)
+        Tag recoveredTag = new Tag(codeMap:codeMap, codeName:'A69-1303-3333', serialNumber:'1111-B', status:recoveredStatus)
         def tagList = [newTag, deployedTag, recoveredTag]
         mockDomain(Tag, tagList)
         tagList.each { it.save() }

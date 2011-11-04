@@ -10,8 +10,6 @@ $(function()
     	source:contextPath + "/tag/lookupNonDeployedBySerialNumber",
     	select:function(event, ui)
 	    {
-    		console.log(ui.item)
-    		
     		// Update the code name, ping code and model select when a tag ID is selected.
 	        $("#tagCodeMapId").val(ui.item.codeMap.id);
 	        $("#pingCode").val(ui.item.pingCode);

@@ -95,10 +95,7 @@ function acknowledge(key)
                function(data)
                {
                    // Nothing to do.
-                   console.log(data)
                },
                'json');
-               
-        console.log("posted")
     }
 }

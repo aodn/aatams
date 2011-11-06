@@ -14,6 +14,11 @@ class FileProcessorService
     def grailsApplication
     def mailService
 
+	/**
+	 * When uploading CSV, firefox and chrome report "text/csv", IE reports "text/plain".
+	 */
+	private static final CSV_CONTENT_TYPES = ["text/csv", "text/plain"]
+	
     void process(receiverDownloadFileId, MultipartFile file, showLink) throws FileProcessingException
     {
         log.debug("Processing receiver export, download file ID: " + receiverDownloadFileId + ", content type: " + file.getContentType())
@@ -105,11 +110,14 @@ class FileProcessorService
 			throw new FileProcessingException(errMsg)
 		}
 
+		log.debug("Validating file with content type: " + file.getContentType())
+		
         switch (receiverDownloadFile.type)
         {
             case ReceiverDownloadFileType.DETECTIONS_CSV:
 			
-				if (!file.getContentType().equals("text/csv"))
+			
+				if (!CSV_CONTENT_TYPES.contains(file.getContentType()))
 				{
 					throw new FileProcessingException("Invalid file content - detections must be imported in CSV file format")
 				}
@@ -117,7 +125,7 @@ class FileProcessorService
 
             case ReceiverDownloadFileType.EVENTS_CSV:
 
-				if (!file.getContentType().equals("text/csv"))
+				if (!CSV_CONTENT_TYPES.contains(file.getContentType()))
 				{
 					throw new FileProcessingException("Invalid file content - events must be imported in CSV file format")
 				}

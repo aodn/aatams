@@ -12,7 +12,7 @@ $(function()
     $('.pointEditDialog').dialog(
     {
         autoOpen: false,
-        height: 225,
+        height: 270,
         width: 525,
         modal: true,
         buttons: 

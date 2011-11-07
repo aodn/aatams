@@ -5,19 +5,20 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title>Getting Started</title>
-            
+        <g:javascript src="jquery.iframe-auto-height.plugin.1.5.0.min.js" />
         <script>
             $(document).ready(function() 
             {
                 $("#accordion").accordion({collapsible:true, 
-                                           active:false, 
-                                           clearStyle: true,
-                                           header:".accordion_header"});
+                    active:false, 
+                    clearStyle: true,
+                    header:".accordion_header"});
                 $("#accordion").accordion({active:0});
             });
+            
         </script>
-
     </head>
+    
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
@@ -26,14 +27,14 @@
           <h1>Getting Started</h1>
           <br/>
 
-          <div id="accordion" style="height: 75%;">
+          <div id="accordion" style="height: 100%;">
 
             <h3 class="accordion_header">
               <a href="#">Background Data</a>
               <a>View or create organisations, projects and people</a> </h3>
             <div>
               <iframe src="${resource(dir:'html/gettingStarted',file:'background_data.html')}" 
-                      width="99%" height="100%" frameborder="0">
+                      frameborder="0" style="width:100%; height:600px;" >
                 Background Data Diagram
               </iframe>
             </div>
@@ -44,7 +45,7 @@
             </h3>
             <div>
               <iframe src="${resource(dir:'html/gettingStarted',file:'installation_data.html')}" 
-                      width="99%" height="100%" frameborder="0">
+                      frameborder="0" style="width:100%; height:600px;" >
                 Installation Data Diagram
               </iframe>
             </div>
@@ -55,8 +56,8 @@
             </h3>
             <div>
               <iframe src="${resource(dir:'html/gettingStarted',file:'receiver.html')}" 
-                      width="99%" height="100%" frameborder="0">
-                Installation Data Diagram
+                      frameborder="0" style="width:100%; height:750px;" >
+                Receiver Data Diagram
               </iframe>
             </div>
 
@@ -66,8 +67,8 @@
             </h3>
             <div>
               <iframe src="${resource(dir:'html/gettingStarted',file:'tag.html')}" 
-                      width="99%" height="100%" frameborder="0">
-                Installation Data Diagram
+                      frameborder="0" style="width:100%; height:600px;" >
+                Tag Data Diagram
               </iframe>
             </div>
 

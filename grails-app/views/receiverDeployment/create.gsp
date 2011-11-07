@@ -55,6 +55,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'deploymentDateTime', 'errors')}">
                                     <joda:dateTimePicker name="deploymentDateTime" 
+                                                         class="remember"
                                                          value="${receiverDeploymentInstance?.deploymentDateTime}"
                                                          useZone="true"/>
 
@@ -67,6 +68,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'location', 'errors')}">
                                   <g:point name="location"
+                                           class="remember"
                                            value="${receiverDeploymentInstance?.location}"
                                            editable="${true}"/>
                             
@@ -78,7 +80,7 @@
                                     <label for="recoveryDate"><g:message code="receiverDeployment.recoveryDate.label" default="Scheduled Recovery Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'recoveryDate', 'errors')}">
-                                    <g:datePicker name="recoveryDate" precision="day" value="${receiverDeploymentInstance?.recoveryDate}"  />
+                                    <g:datePicker name="recoveryDate" class="remember" precision="day" value="${receiverDeploymentInstance?.recoveryDate}"  />
 
                                 </td>
                             </tr>
@@ -98,7 +100,7 @@
                                     <label class="compulsory" for="mooringType"><g:message code="receiverDeployment.mooringType.label" default="Mooring Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'mooringType', 'errors')}">
-                                    <g:select name="mooringType.id" from="${au.org.emii.aatams.MooringType.list()}" optionKey="id" value="${receiverDeploymentInstance?.mooringType?.id}"  />
+                                    <g:select name="mooringType.id" class="remember" from="${au.org.emii.aatams.MooringType.list()}" optionKey="id" value="${receiverDeploymentInstance?.mooringType?.id}"  />
 
                                 </td>
                             </tr>
@@ -108,7 +110,7 @@
                                     <label for="mooringDescriptor"><g:message code="receiverDeployment.mooringDescriptor.label" default="Mooring Descriptor" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'mooringDescriptor', 'errors')}">
-                                    <g:textField name="mooringDescriptor" 
+                                    <g:textField name="mooringDescriptor" class="remember"
                                                  value="${fieldValue(bean: receiverDeploymentInstance, field: 'mooringDescriptor')}" 
                                                  placeholder="e.g. car type, concrete block, navigation aid etc." />
 
@@ -120,7 +122,7 @@
                                     <label for="bottomDepthM"><g:message code="receiverDeployment.bottomDepthM.label" default="Bottom Depth (m)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'bottomDepthM', 'errors')}">
-                                    <g:textField name="bottomDepthM" value="${fieldValue(bean: receiverDeploymentInstance, field: 'bottomDepthM')}" />
+                                    <g:textField name="bottomDepthM" class="remember" value="${fieldValue(bean: receiverDeploymentInstance, field: 'bottomDepthM')}" />
 
                                 </td>
                             </tr>
@@ -130,7 +132,7 @@
                                     <label for="depthBelowSurfaceM"><g:message code="receiverDeployment.depthBelowSurfaceM.label" default="Depth Below Surface (m)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'depthBelowSurfaceM', 'errors')}">
-                                    <g:textField name="depthBelowSurfaceM" value="${fieldValue(bean: receiverDeploymentInstance, field: 'depthBelowSurfaceM')}" />
+                                    <g:textField name="depthBelowSurfaceM" class="remember" value="${fieldValue(bean: receiverDeploymentInstance, field: 'depthBelowSurfaceM')}" />
 
                                 </td>
                             </tr>
@@ -140,7 +142,7 @@
                                     <label for="receiverOrientation"><g:message code="receiverDeployment.receiverOrientation.label" default="Receiver Orientation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'receiverOrientation', 'errors')}">
-                                    <g:select name="receiverOrientation" from="${au.org.emii.aatams.ReceiverOrientation?.values()}" keys="${au.org.emii.aatams.ReceiverOrientation?.values()}" value="${receiverDeploymentInstance?.receiverOrientation}" />
+                                    <g:select name="receiverOrientation" class="remember" from="${au.org.emii.aatams.ReceiverOrientation?.values()}" keys="${au.org.emii.aatams.ReceiverOrientation?.values()}" value="${receiverDeploymentInstance?.receiverOrientation}" />
 
                                 </td>
                             </tr>
@@ -150,7 +152,7 @@
                                     <label for="batteryLifeDays"><g:message code="receiverDeployment.batteryLifeDays.label" default="Battery Life (days)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'batteryLifeDays', 'errors')}">
-                                    <g:textField name="batteryLifeDays" value="${fieldValue(bean: receiverDeploymentInstance, field: 'batteryLifeDays')}" />
+                                    <g:textField name="batteryLifeDays" class="remember" value="${fieldValue(bean: receiverDeploymentInstance, field: 'batteryLifeDays')}" />
 
                                 </td>
                             </tr>

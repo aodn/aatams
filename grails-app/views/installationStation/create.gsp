@@ -65,7 +65,7 @@
                                     <label class="compulsory" for="installation"><g:message code="installationStation.installation.label" default="Installation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'installation', 'errors')}">
-                                    <g:select name="installation.id" from="${candidateInstallations}" optionKey="id" value="${installationStationInstance?.installation?.id}"  />
+                                    <g:select name="installation.id" class="remember" from="${candidateInstallations}" optionKey="id" value="${installationStationInstance?.installation?.id}"  />
 
                                 </td>
                             </tr>

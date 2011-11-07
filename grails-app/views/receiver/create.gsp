@@ -33,7 +33,7 @@
                                   <label class="compulsory" for="organisation"><g:message code="receiver.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'organisation', 'errors')}">
-                                    <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.listActive()}" optionKey="id" value="${receiverInstance?.organisation?.id}"  />
+                                    <g:select name="organisation.id" class="remember" from="${au.org.emii.aatams.Organisation.listActive()}" optionKey="id" value="${receiverInstance?.organisation?.id}"  />
 
                                 </td>
                             </tr>
@@ -43,7 +43,7 @@
                                     <label class="compulsory" for="model"><g:message code="receiver.model.label" default="Model" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'model', 'errors')}">
-                                    <g:select name="model.id" from="${au.org.emii.aatams.ReceiverDeviceModel.list()}" optionKey="id" value="${receiverInstance?.model?.id}"  />
+                                    <g:select name="model.id" class="remember"from="${au.org.emii.aatams.ReceiverDeviceModel.list()}" optionKey="id" value="${receiverInstance?.model?.id}"  />
 
                                 </td>
                             </tr>

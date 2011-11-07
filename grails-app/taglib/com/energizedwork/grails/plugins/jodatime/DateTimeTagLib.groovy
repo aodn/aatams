@@ -106,7 +106,7 @@ class DateTimeTagLib {
 		// create day select
 		if (fields.contains(DateTimeFieldType.dayOfMonth())) {
 			log.debug "rendering day"
-			out.println "<select name=\"${name}_day\" id=\"${id}_day\">"
+			out.println "<select name=\"${name}_day\" id=\"${id}_day\" class=\"${attrs.class}\">"
 
 			if (noSelection) {
 				renderNoSelectionOption(noSelection.key, noSelection.value, '')
@@ -126,7 +126,7 @@ class DateTimeTagLib {
 		// create month select
 		if (fields.contains(DateTimeFieldType.monthOfYear())) {
 			log.debug "rendering month"
-			out.println "<select name=\"${name}_month\" id=\"${id}_month\">"
+			out.println "<select name=\"${name}_month\" id=\"${id}_month\" class=\"${attrs.class}\">"
 
 			if (noSelection) {
 				renderNoSelectionOption(noSelection.key, noSelection.value, '')
@@ -149,7 +149,7 @@ class DateTimeTagLib {
 		// create year select
 		if (fields.contains(DateTimeFieldType.year())) {
 			log.debug "rendering year"
-			out.println "<select name=\"${name}_year\" id=\"${id}_year\">"
+			out.println "<select name=\"${name}_year\" id=\"${id}_year\" class=\"${attrs.class}\">"
 
 			if (noSelection) {
 				renderNoSelectionOption(noSelection.key, noSelection.value, '')
@@ -169,7 +169,7 @@ class DateTimeTagLib {
 		// do hour select
 		if (fields.contains(DateTimeFieldType.hourOfDay())) {
 			log.debug "rendering hour"
-			out.println "<select name=\"${name}_hour\" id=\"${id}_hour\">"
+			out.println "<select name=\"${name}_hour\" id=\"${id}_hour\" class=\"${attrs.class}\">"
 
 			if (noSelection) {
 				renderNoSelectionOption(noSelection.key, noSelection.value, '')
@@ -194,7 +194,7 @@ class DateTimeTagLib {
 		// do minute select
 		if (fields.contains(DateTimeFieldType.minuteOfHour())) {
 			log.debug "rendering minute"
-			out.println "<select name=\"${name}_minute\" id=\"${id}_minute\">"
+			out.println "<select name=\"${name}_minute\" id=\"${id}_minute\" class=\"${attrs.class}\">"
 
 			if (noSelection) {
 				renderNoSelectionOption(noSelection.key, noSelection.value, '')
@@ -219,7 +219,7 @@ class DateTimeTagLib {
 		// do second select
 		if (fields.contains(DateTimeFieldType.secondOfMinute())) {
 			log.debug "rendering second"
-			out.println "<select name=\"${name}_second\" id=\"${id}_second\">"
+			out.println "<select name=\"${name}_second\" id=\"${id}_second\" class=\"${attrs.class}\">"
 
 			if (noSelection) {
 				renderNoSelectionOption(noSelection.key, noSelection.value, '')
@@ -240,7 +240,7 @@ class DateTimeTagLib {
 		if (attrs.useZone == "true") {
 			log.debug "rendering time zone"
 			
-			out.println dateTimeZoneSelect(name: "${name}_zone", value: DateTimeZone.forID(value?.chronology?.zone?.ID))
+			out.println dateTimeZoneSelect(name: "${name}_zone", value: DateTimeZone.forID(value?.chronology?.zone?.ID), "class": "${attrs.class}")
 
 		}
 

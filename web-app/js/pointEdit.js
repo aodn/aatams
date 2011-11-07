@@ -70,9 +70,10 @@ $(function()
 
                     pointInput.val(pointCodedString)
 
-                    // Update textfield.
+                    // Update textfield (some other scripts depend on the change event (e.g. rememberFormFields.js)).
                     var pointAsString = genPointString(lon, lat, srid);
-                    $('#' + pointName + '_pointInputTextField').val(pointAsString);
+                    $('#' + pointName + '_pointInputTextField').val(pointAsString).change();
+                    
                     $(this).dialog('close');
                 }
             },

@@ -34,6 +34,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" 
+                                              class="remember"
                                               from="${candidateProjects}" 
                                               optionKey="id" 
                                               value="${tagInstance?.project?.id}" 
@@ -47,7 +48,7 @@
                                     <label class="compulsory" for="model"><g:message code="tag.model.label" default="Model" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'model', 'errors')}">
-                                    <g:select name="model.id" from="${au.org.emii.aatams.TagDeviceModel.list()}" optionKey="id" value="${tagInstance?.model?.id}"  />
+                                    <g:select name="model.id" class="remember" from="${au.org.emii.aatams.TagDeviceModel.list()}" optionKey="id" value="${tagInstance?.model?.id}"  />
 
                                 </td>
                             </tr>
@@ -67,7 +68,7 @@
                                     <label class="compulsory" for="codeMap"><g:message code="tag.codeMap.label" default="Code Map" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeMap', 'errors')}">
-                                  <g:select name="codeMap.id" from="${au.org.emii.aatams.CodeMap.list()}" optionKey="id" value="${tagInstance?.codeMap?.id}"  />
+                                  <g:select name="codeMap.id" class="remember" from="${au.org.emii.aatams.CodeMap.list()}" optionKey="id" value="${tagInstance?.codeMap?.id}"  />
                                 </td>
                             </tr>
                         
@@ -87,7 +88,7 @@
                                     <label for="expectedLifeTimeDays"><g:message code="tag.expectedLifeTimeDays.label" default="Expected Life Time (days)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'expectedLifeTimeDays', 'errors')}">
-                                    <g:textField name="expectedLifeTimeDays" value="${fieldValue(bean: tagInstance, field: 'expectedLifeTimeDays')}" />
+                                    <g:textField name="expectedLifeTimeDays" class="remember" value="${fieldValue(bean: tagInstance, field: 'expectedLifeTimeDays')}" />
 
                                 </td>
                             </tr>
@@ -97,7 +98,7 @@
                                     <label class="compulsory" for="status"><g:message code="tag.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'status', 'errors')}">
-                                    <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${tagInstance?.status?.id}"  />
+                                    <g:select name="status.id" class="remember" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${tagInstance?.status?.id}"  />
 
                                 </td>
                             </tr>

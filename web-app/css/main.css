@@ -185,7 +185,7 @@ input, select, textarea {
     padding: 2px 4px;
 }
 
-input[type=text], textarea {
+input[type=text]:not(.manualSizing), textarea {
 	width:300px;
 }
 select {

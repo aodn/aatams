@@ -4,6 +4,6 @@
         <label for="filter.eq.${propertyName}">${label}</label>
     </td>
     <td valign="top" class="value">
-        <g:select name="filter.eq.${propertyName}" from="${range}" noSelection="['':' - any - ']" />
+        <g:select name="filter.eq.${propertyName}" from="${range}" noSelection="['':' - all - ']" />
     </td>
 </tr>

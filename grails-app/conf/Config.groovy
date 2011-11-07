@@ -134,7 +134,8 @@ log4j = {
 //
 //  File uploader configuration.
 //
-fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads"
+fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod"
+
 //environments 
 //{
 //    production 

@@ -2,7 +2,7 @@
 
 <div id="${pointName}_div" pointName="${pointName}" class="pointEdit">
   
-  <g:textField name="${pointName}_pointInputTextField" size="60" readonly="readonly" />
+  <g:textField name="${pointName}_pointInputTextField" class="${clazz}" size="60" readonly="readonly" />
 
   <!-- This is the value which is sent back to the server to be parsed. -->
   <g:hiddenField name="${pointName}"/>

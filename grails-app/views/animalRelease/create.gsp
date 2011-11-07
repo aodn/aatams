@@ -44,7 +44,7 @@
                                     <label class="compulsory" for="project"><g:message code="animalRelease.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${animalReleaseInstance?.project?.id}"  />
+                                    <g:select name="project.id" class="remember" from="${candidateProjects}" optionKey="id" value="${animalReleaseInstance?.project?.id}"  />
 
                                 </td>
                             </tr>
@@ -87,7 +87,7 @@
                                     <label class="compulsory" for="captureLocality"><g:message code="animalRelease.captureLocality.label" default="Capture Locality" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureLocality', 'errors')}">
-                                    <g:textField name="captureLocality" value="${animalReleaseInstance?.captureLocality}" />
+                                    <g:textField name="captureLocality" class="remember" value="${animalReleaseInstance?.captureLocality}" />
 
                                 </td>
                             </tr>
@@ -109,6 +109,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureDateTime', 'errors')}">
                                     <joda:dateTimePicker name="captureDateTime" 
+                                                         class="remember"
                                                          value="${animalReleaseInstance?.captureDateTime}"
                                                          useZone="true"/>
 
@@ -120,7 +121,7 @@
                                     <label class="compulsory" for="captureMethod"><g:message code="animalRelease.captureMethod.label" default="Capture Method" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureMethod', 'errors')}">
-                                    <g:select name="captureMethod.id" from="${au.org.emii.aatams.CaptureMethod.list()}" optionKey="id" value="${animalReleaseInstance?.captureMethod?.id}"  />
+                                    <g:select name="captureMethod.id" class="remember" from="${au.org.emii.aatams.CaptureMethod.list()}" optionKey="id" value="${animalReleaseInstance?.captureMethod?.id}"  />
                                 </td>
                             </tr>
                         
@@ -210,7 +211,7 @@
                                     <label for="releaseLocation"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseLocation', 'errors')}">
-                                  <g:point name="releaseLocation" 
+                                  <g:point name="releaseLocation"
                                            value="${animalReleaseInstance?.releaseLocation}"
                                            editable="${true}"/>
                                 </td>
@@ -245,6 +246,7 @@
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'embargoDate', 'errors')}">
                                     <g:select from="${embargoPeriods}"
                                               name="embargoPeriod" 
+                                              class="remember"
                                               optionKey="key"
                                               optionValue="value"
                                               noSelection="['':'No embargo']"/>

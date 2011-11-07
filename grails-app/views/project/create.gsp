@@ -48,7 +48,7 @@
                                     <label class="compulsory" for="organisation"><g:message code="project.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createProjectCmd, field: 'organisation', 'errors')}">
-                                    <g:select name="organisation.id" from="${au.org.emii.aatams.Organisation.listActive()}" optionKey="id" value="${createProjectCmd?.organisation?.id}"  />
+                                    <g:select name="organisation.id" class="remember" from="${au.org.emii.aatams.Organisation.listActive()}" optionKey="id" value="${createProjectCmd?.organisation?.id}"  />
 
                                 </td>
                             </tr>
@@ -58,7 +58,7 @@
                                     <label class="compulsory" for="person"><g:message code="project.organisation.label" default="Project Investigator" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'person', 'errors')}">
-                                    <g:select name="person.id" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${createProjectCmd?.person?.id}"  />
+                                    <g:select name="person.id" class="remember" from="${au.org.emii.aatams.Person.list()}" optionKey="id" value="${createProjectCmd?.person?.id}"  />
 
                                 </td>
                             </tr>

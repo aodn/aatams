@@ -34,7 +34,7 @@ class GeometryTagLib
                 lat = attrs.value?.getCoordinate()?.y
                 srid = attrs.value?.getSRID()
 
-                pointAsString += Math.abs(lat) + "Â°"
+                pointAsString += Math.abs(lat) + "¡"
                 if (lat >= 0)
                 {
                     pointAsString += 'N'
@@ -44,7 +44,7 @@ class GeometryTagLib
                     pointAsString += 'S'
                 }
 
-                pointAsString += ' ' + Math.abs(lon) + "Â°"
+                pointAsString += ' ' + Math.abs(lon) + "¡"
                 if (lon >= 0)
                 {
                     pointAsString += 'E'
@@ -68,7 +68,8 @@ class GeometryTagLib
                                  lat:lat,
                                  latNorthOrSouth:(lat > 0 ? 'N' : 'S'),
                                  srid:srid,
-                                 datums:datumService.datums]) 
+                                 datums:datumService.datums,
+								 clazz:attrs.class]) 
         }
         else
         {

@@ -99,7 +99,7 @@
                                     <label class="compulsory" for="recoverer"><g:message code="receiverRecovery.recoverer.label" default="Recovered By" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoverer', 'errors')}">
-                                    <g:select name="recoverer.id" 
+                                    <g:select name="recoverer.id" class="remember"
                                               from="${receiverDeploymentInstance?.station?.installation?.project?.projectRoles}" 
                                               optionKey="id" 
                                               optionValue="person"
@@ -127,7 +127,7 @@
                                     <label class="compulsory" for="recoveryDateTime"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDateTime', 'errors')}">
-                                    <joda:dateTimePicker name="recoveryDateTime" 
+                                    <joda:dateTimePicker name="recoveryDateTime" class="remember"
                                                          value="${receiverRecoveryInstance?.recoveryDateTime}"
                                                          useZone="true"/>
 

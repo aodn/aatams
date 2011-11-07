@@ -32,7 +32,7 @@
                                     <label class="compulsory" for="surgeryTimestamp"><g:message code="surgery.timestamp.label" default="Timestamp" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'timestamp', 'errors')}">
-                                    <joda:dateTimePicker name="surgeryTimestamp" 
+                                    <joda:dateTimePicker name="surgeryTimestamp" class="remember"
                                                          value="${surgeryInstance?.timestamp}"
                                                          useZone="true"/>
 
@@ -95,7 +95,7 @@
                                     <label class="compulsory" for="type"><g:message code="surgery.type.label" default="Placement" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'type', 'errors')}">
-                                    <g:select name="surgeryTypeId" from="${au.org.emii.aatams.SurgeryType.list()}" optionKey="id" value="${surgeryInstance?.type?.id}"  />
+                                    <g:select name="surgeryTypeId" class="remember" from="${au.org.emii.aatams.SurgeryType.list()}" optionKey="id" value="${surgeryInstance?.type?.id}"  />
 
                                 </td>
                             </tr>
@@ -105,7 +105,7 @@
                                     <label class="compulsory" for="treatmentType"><g:message code="surgery.treatmentType.label" default="Treatment" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: surgeryInstance, field: 'treatmentType', 'errors')}">
-                                    <g:select name="treatmentTypeId" from="${au.org.emii.aatams.SurgeryTreatmentType.list()}" optionKey="id" value="${surgeryInstance?.treatmentType?.id}"  />
+                                    <g:select name="treatmentTypeId" class="remember" from="${au.org.emii.aatams.SurgeryTreatmentType.list()}" optionKey="id" value="${surgeryInstance?.treatmentType?.id}"  />
 
                                 </td>
                             </tr>

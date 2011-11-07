@@ -7,7 +7,7 @@
 
     <script type="text/javascript" src="${resource(dir:'js',file:'utils.js')}"></script>
 
-    <script type="text/javascript" src="${resource(dir:'js',file:'jquery-1.4.4.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir:'js',file:'jquery-1.7.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery-ui-1.8.10.custom.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.layout.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.highlight.js')}"></script>
@@ -16,10 +16,11 @@
 
     <g:javascript src="asAbove.js"/>
     
-    
     <g:javascript src="jquery.qtip-1.0.0-rc3.min.js"/>
     <g:javascript src="jquery.cookie.js"/>
     <g:javascript src="notification.js"/>
+    <g:javascript src="rememberFormFields.js"/>
+    
     <link ref="stylesheet" type="text/css" href="${resource(dir:'js/bubbletip', file:'bubbletip.css')}" />
     
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>

@@ -43,7 +43,7 @@
                                     <label class="compulsory" for="configuration"><g:message code="installation.configuration.label" default="Configuration" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'configuration', 'errors')}">
-                                    <g:select name="configuration.id" from="${au.org.emii.aatams.InstallationConfiguration.list()}" optionKey="id" value="${installationInstance?.configuration?.id}"  />
+                                    <g:select name="configuration.id" class="remember" from="${au.org.emii.aatams.InstallationConfiguration.list()}" optionKey="id" value="${installationInstance?.configuration?.id}"  />
 
                                 </td>
                             </tr>
@@ -53,7 +53,7 @@
                                     <label class="compulsory" for="project"><g:message code="installation.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: installationInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" from="${candidateProjects}" optionKey="id" value="${installationInstance?.project?.id}"  />
+                                    <g:select name="project.id" class="remember" from="${candidateProjects}" optionKey="id" value="${installationInstance?.project?.id}"  />
 
                                 </td>
                             </tr>

@@ -9,7 +9,7 @@
       <ul>
         <li>
           <g:form url='[controller: "searchable", action: "index"]' id="searchableForm" name="searchableForm" method="get">
-            <g:textField name="q" value="${params.q}" size="25"/>
+            <g:textField name="q" value="${params.q}" class="manualSizing" style="width:150px;"/>
           </g:form>
         </li>
       </ul>

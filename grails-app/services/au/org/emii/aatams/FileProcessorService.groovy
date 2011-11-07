@@ -111,38 +111,39 @@ class FileProcessorService
 		}
 
 		log.debug("Validating file with content type: " + file.getContentType())
-		
-        switch (receiverDownloadFile.type)
-        {
-            case ReceiverDownloadFileType.DETECTIONS_CSV:
-			
-			
-				if (!CSV_CONTENT_TYPES.contains(file.getContentType()))
-				{
-					throw new FileProcessingException("Invalid file content - detections must be imported in CSV file format")
-				}
-                break;
 
-            case ReceiverDownloadFileType.EVENTS_CSV:
-
-				if (!CSV_CONTENT_TYPES.contains(file.getContentType()))
-				{
-					throw new FileProcessingException("Invalid file content - events must be imported in CSV file format")
-				}
-                break;
-            
-			case ReceiverDownloadFileType.VRL:
-			case ReceiverDownloadFileType.RLD:
-			
-				if (!file.getContentType().equals("application/octet-stream"))
-				{
-					throw new FileProcessingException("Invalid file content for VRL/RLD file")
-				}
-                break;
-				
-            default:
-
-				assert(false)
-        }
+		// See: http://blog.futtta.be/2009/08/24/http-upload-mime-type-hell/		
+//        switch (receiverDownloadFile.type)
+//        {
+//            case ReceiverDownloadFileType.DETECTIONS_CSV:
+//			
+//			
+//				if (!CSV_CONTENT_TYPES.contains(file.getContentType()))
+//				{
+//					throw new FileProcessingException("Invalid file content - detections must be imported in CSV file format")
+//				}
+//                break;
+//
+//            case ReceiverDownloadFileType.EVENTS_CSV:
+//
+//				if (!CSV_CONTENT_TYPES.contains(file.getContentType()))
+//				{
+//					throw new FileProcessingException("Invalid file content - events must be imported in CSV file format")
+//				}
+//                break;
+//            
+//			case ReceiverDownloadFileType.VRL:
+//			case ReceiverDownloadFileType.RLD:
+//			
+//				if (!file.getContentType().equals("application/octet-stream"))
+//				{
+//					throw new FileProcessingException("Invalid file content for VRL/RLD file")
+//				}
+//                break;
+//				
+//            default:
+//
+//				assert(false)
+//        }
 	}
 }

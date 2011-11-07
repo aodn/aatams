@@ -43,27 +43,6 @@ class FileProcessorServiceTests extends GrailsUnitTestCase
 		} 
 	}
 
-	void testProcessEventsVRL()
-	{
-		ReceiverDownloadFile export = createExport()
-		
-		def vrlFile =
-			new MockMultipartFile("vrlFile",
-								  "vrlFile.vrl",
-								  "application/octet-stream",
-								  (0..1).toList() as byte[])
-			
-		try
-		{
-			fileProcessorService.process(export.id, vrlFile, "some link")
-			fail("Exception should be thrown")
-		}
-		catch (FileProcessingException e)
-		{
-			assertEquals("Invalid file content - events must be imported in CSV file format", e.getMessage())
-		} 
-	}
-
 	private ReceiverDownloadFile createExport() 
 	{
 		ReceiverDownloadFile export =

@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiverRecovery.label', default: 'ReceiverRecovery')}" />
+        <g:set var="receiverDeploymentInstance" value="${receiverRecoveryInstance?.deployment}"/>
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -19,11 +20,15 @@
             <div class="message">${flash.message}</div>
             </g:if>
             <g:hasErrors bean="${receiverRecoveryInstance}">
-            <div class="errors">
-                <g:renderErrors bean="${receiverRecoveryInstance}" as="list" />
-            </div>
+	            <div class="errors">
+	                <g:renderErrors bean="${receiverRecoveryInstance}" as="list" />
+	            </div>
             </g:hasErrors>
-            <g:set var="receiverDeploymentInstance" value="${receiverRecoveryInstance?.deployment}"/>
+            <g:hasErrors bean="${receiverDeploymentInstance}">
+                <div class="errors">
+                    <g:renderErrors bean="${receiverDeploymentInstance}" as="list" />
+                </div>
+            </g:hasErrors>
             <g:form action="save" >
               <g:hiddenField name="deploymentId" value="${receiverDeploymentInstance?.id}"/>
               <g:hiddenField name="projectId" value="${receiverDeploymentInstance?.station?.installation?.project?.id}"/>

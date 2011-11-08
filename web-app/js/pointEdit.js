@@ -95,7 +95,7 @@ function isValid(editLat, editLon)
 	var lat = removeTrailingDegreeSymbol(editLat);
 	var lon = removeTrailingDegreeSymbol(editLon);
 	
-    if (!isNumber(lat))
+    if (("" != lat) && !isNumber(lat))
     {
         editLat.parent().attr("class", "value errors");
     	alert("Invalid latitude: " + lat + ", latitude must be expressed in decimal degrees.");
@@ -109,7 +109,7 @@ function isValid(editLat, editLon)
         editLat.focus();
         return false;
     }
-    else if (!isNumber(lon))
+    else if (("" != lon) && !isNumber(lon))
     {
         editLon.parent().attr("class", "value errors");
     	alert("Invalid longitude: " + lon + ", longitude must be expressed in decimal degrees.");
@@ -134,7 +134,6 @@ function removeTrailingDegreeSymbol(valueTextField)
 		return valueTextField.val();
 	}
 	
-//	var trimmedVal = valueTextField.val().substring(0, valueTextField.val().length-1);
 	var trimmedVal = valueTextField.val().slice(0, -1);
 	valueTextField.val(trimmedVal);
 	return trimmedVal;
@@ -230,7 +229,7 @@ function genPointString(lon, lat, srid)
     // Construct the string from lon, lat, srid values.
     var pointAsString = "";
     
-    if ((lon == "") || (lat == "") || (srid == ""))
+    if ((String(lon) == "") || (String(lat) == "") || (String(srid) == ""))
     {
         return pointAsString;
     }
@@ -262,7 +261,7 @@ function genPointString(lon, lat, srid)
 
 function genCodedPointString(lon, lat, srid)
 {
-    if ((lon == "") || (lat == "") || (srid == ""))
+    if ((String(lon) == "") || (String(lat) == "") || (String(srid) == ""))
     {
         return "";
     }

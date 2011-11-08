@@ -39,6 +39,8 @@ class Person extends SecUser
     {
         // Speed up candidate entities service/permission utils service.
         cache:true
+		
+		sort name:"asc"
     }
     
     static searchable = 

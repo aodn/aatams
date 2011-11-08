@@ -23,41 +23,21 @@ $(function()
                 var pointName = $(this).attr("pointName");
                 
                 // Update the hidden field values.
-                var lon = $('#' + pointName + '_editLon').val();
-                var lat = $('#' + pointName + '_editLat').val();
-                
                 var editLon = $('#' + pointName + '_editLon')
                 editLon.parent().attr("class", "value")
                 var editLat = $('#' + pointName + '_editLat')
                 editLat.parent().attr("class", "value")
                 
                 // Validate...
-                if ((lon > 180) || (lon < -180))
-                {
-                    editLon.parent().attr("class", "value errors")
-                    alert("Longitude must be in the range +/- 180")
-                    editLon.focus();
-                }
-                else if ((lat > 90) || (lat < -90))
-                {
-                    editLat.parent().attr("class", "value errors")
-                    alert("Latitude must be in the range +/- 90")
-                    editLat.focus();
-                }
-                else if (!isNumber(lon))
-                {
-                    editLon.parent().attr("class", "value errors")
-                	alert("Invalid longitude: " + lon + ", longitude must be expressed in decimal degrees.")
-                    editLon.focus();
-                }
-                else if (!isNumber(lat))
-                {
-                    editLat.parent().attr("class", "value errors")
-                	alert("Invalid latitude: " + lat + ", latitude must be expressed in decimal degrees.")
-                    editLat.focus();
-                }
+                if (!isValid(editLat, editLon))
+               	{
+
+               	}
                 else
                 {
+                    var lon = editLon.val();
+                    var lat = editLat.val();
+                    
                     // Negate the lat and lon values if necessary.
                     if ($(this).find('#' + pointName + '_editEastWest').val() == 'W')
                     {
@@ -109,6 +89,56 @@ $(function()
         initPoints()
     });
 });
+
+function isValid(editLat, editLon)
+{
+	var lat = removeTrailingDegreeSymbol(editLat);
+	var lon = removeTrailingDegreeSymbol(editLon);
+	
+    if (!isNumber(lat))
+    {
+        editLat.parent().attr("class", "value errors");
+    	alert("Invalid latitude: " + lat + ", latitude must be expressed in decimal degrees.");
+        editLat.focus();
+        return false;
+    }
+    else if ((lat > 90) || (lat < -90))
+    {
+        editLat.parent().attr("class", "value errors");
+        alert("Latitude must be in the range +/- 90");
+        editLat.focus();
+        return false;
+    }
+    else if (!isNumber(lon))
+    {
+        editLon.parent().attr("class", "value errors");
+    	alert("Invalid longitude: " + lon + ", longitude must be expressed in decimal degrees.");
+        editLon.focus();
+        return false;
+    }
+    else if ((lon > 180) || (lon < -180))
+    {
+        editLon.parent().attr("class", "value errors");
+        alert("Longitude must be in the range +/- 180");
+        editLon.focus();
+        return false;
+    }
+    
+    return true;
+}
+
+function removeTrailingDegreeSymbol(valueTextField)
+{
+	if (!valueTextField.val().endsWith("\u00b0"))
+	{
+		return valueTextField.val();
+	}
+	
+//	var trimmedVal = valueTextField.val().substring(0, valueTextField.val().length-1);
+	var trimmedVal = valueTextField.val().slice(0, -1);
+	valueTextField.val(trimmedVal);
+	return trimmedVal;
+}
 
 function initPoints()
 {
@@ -205,7 +235,7 @@ function genPointString(lon, lat, srid)
         return pointAsString;
     }
     
-    pointAsString += Math.abs(lat) + "°"
+    pointAsString += Math.abs(lat) + "\u00b0"
     if (lat >= 0)
     {
         pointAsString += 'N'
@@ -215,7 +245,7 @@ function genPointString(lon, lat, srid)
         pointAsString += 'S'
     }
 
-    pointAsString += ' ' + Math.abs(lon) + "°"
+    pointAsString += ' ' + Math.abs(lon) + "\u00b0"
     if (lon >= 0)
     {
         pointAsString += 'E'

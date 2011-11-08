@@ -45,3 +45,8 @@ function escapeId(myid)
 { 
 	return '#' + myid.replace(/(:|\.)/g,'\\$1');
 }
+
+function isNumber(n) 
+{
+	return !isNaN(parseFloat(n)) && isFinite(n);
+}

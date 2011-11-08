@@ -67,4 +67,14 @@ class ReceiverControllerTests extends ControllerUnitTestCase
         assertEquals("model-12345", receiver.codeName)
         assertEquals(newStatus, receiver.status)
     }
+	
+	void testDefaultModelIsVR2W()
+	{
+		ReceiverDeviceModel model = new ReceiverDeviceModel(modelName:"VR2W")
+		mockDomain(ReceiverDeviceModel, [model])
+		model.save()
+		
+		def controllerModel = controller.create()
+		assertEquals(model.id, controllerModel.receiverInstance.model.id)
+	}
 }

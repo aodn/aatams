@@ -18,6 +18,13 @@ class ReceiverController
     def create = {
         def receiverInstance = new Receiver()
         receiverInstance.properties = params
+		
+		def defaultModel = ReceiverDeviceModel.findByModelName("VR2W")
+		if (defaultModel)
+		{
+			receiverInstance.model = defaultModel
+		}
+		
         return [receiverInstance: receiverInstance]
     }
 

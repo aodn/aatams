@@ -34,7 +34,7 @@ class GeometryTagLib
                 lat = attrs.value?.getCoordinate()?.y
                 srid = attrs.value?.getSRID()
 
-                pointAsString += Math.abs(lat) + "¡"
+                pointAsString += Math.abs(lat) + "\u00b0"
                 if (lat >= 0)
                 {
                     pointAsString += 'N'
@@ -44,7 +44,7 @@ class GeometryTagLib
                     pointAsString += 'S'
                 }
 
-                pointAsString += ' ' + Math.abs(lon) + "¡"
+                pointAsString += ' ' + Math.abs(lon) + "\u00b0"
                 if (lon >= 0)
                 {
                     pointAsString += 'E'

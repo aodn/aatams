@@ -44,6 +44,18 @@ $(function()
                     alert("Latitude must be in the range +/- 90")
                     editLat.focus();
                 }
+                else if (!isNumber(lon))
+                {
+                    editLon.parent().attr("class", "value errors")
+                	alert("Invalid longitude: " + lon + ", longitude must be expressed in decimal degrees.")
+                    editLon.focus();
+                }
+                else if (!isNumber(lat))
+                {
+                    editLat.parent().attr("class", "value errors")
+                	alert("Invalid latitude: " + lat + ", latitude must be expressed in decimal degrees.")
+                    editLat.focus();
+                }
                 else
                 {
                     // Negate the lat and lon values if necessary.

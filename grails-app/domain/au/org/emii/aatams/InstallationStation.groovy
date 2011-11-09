@@ -4,6 +4,10 @@ import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
 
+import de.micromata.opengis.kml.v_2_2_0.ExtendedData
+import de.micromata.opengis.kml.v_2_2_0.KmlFactory
+import de.micromata.opengis.kml.v_2_2_0.Placemark
+
 /**
  * An Installation Station is a location within an Installation where a 
  * receiver is deployed.  A single Installation Station will only have one 
@@ -105,4 +109,20 @@ class InstallationStation
         
         return activeDeployments.size() >= 1
     }
+	
+	
+	Placemark toPlacemark()
+	{
+		final Placemark placemark = new Placemark()
+		placemark.setName(name)
+		placemark.setOpen(Boolean.TRUE)
+		placemark.createAndSetPoint().addToCoordinates(getLongitude(), getLatitude())
+		
+		ExtendedData data = placemark.createAndSetExtendedData()
+		data.addToData(KmlFactory.createData(installation.project.name).withName("Project"))
+		data.addToData(KmlFactory.createData(installation.name).withName("Installation"))
+		data.addToData(KmlFactory.createData(String.valueOf(isActive())).withName("Active"))
+		
+		return placemark
+	}
 }

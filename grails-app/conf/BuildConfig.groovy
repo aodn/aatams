@@ -38,7 +38,7 @@ grails.project.dependency.resolution = {
         //mavenCentral()
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
-        //mavenRepo "http://download.java.net/maven/2/"
+        mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
     }
     dependencies {
@@ -46,6 +46,8 @@ grails.project.dependency.resolution = {
 
         // runtime 'mysql:mysql-connector-java:5.1.13'
         runtime 'postgresql:postgresql:9.0-801.jdbc4'
-        
+		
+		// KML
+		compile 'de.micromata.jak:JavaAPIforKml:2.2.0-SNAPSHOT'
     }
 }

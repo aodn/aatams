@@ -486,6 +486,10 @@ th.desc a {
     background: transparent url(../images/skin/CSV.gif) 5px 50% no-repeat;
     padding-left: 28px;
 }
+.buttons input.KML {
+    background: transparent url(../images/skin/KML.gif) 5px 50% no-repeat;
+    padding-left: 28px;
+}
 
 
 /* extras for jQuery_ui */

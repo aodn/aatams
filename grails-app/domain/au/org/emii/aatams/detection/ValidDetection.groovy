@@ -1,5 +1,6 @@
 package au.org.emii.aatams.detection
 
+import de.micromata.opengis.kml.v_2_2_0.Placemark;
 import au.org.emii.aatams.*
 
 class ValidDetection extends RawDetection implements Embargoable

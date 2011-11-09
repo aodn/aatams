@@ -2,6 +2,13 @@ package au.org.emii.aatams.report
 
 import au.org.emii.aatams.*
 import au.org.emii.aatams.report.filter.ReportFilterFactoryService
+import de.micromata.opengis.kml.v_2_2_0.Data
+import de.micromata.opengis.kml.v_2_2_0.Document
+import de.micromata.opengis.kml.v_2_2_0.ExtendedData
+import de.micromata.opengis.kml.v_2_2_0.Folder
+import de.micromata.opengis.kml.v_2_2_0.Kml
+import de.micromata.opengis.kml.v_2_2_0.KmlFactory;
+import de.micromata.opengis.kml.v_2_2_0.Placemark;
 
 import org.apache.shiro.SecurityUtils
 
@@ -43,7 +50,7 @@ class ReportController
         log.debug("Executing report, params: " + params)
 
         // Test which button was clicked (which tells us the format.
-        def possibleFormats = ["PDF", "CSV"]
+        def possibleFormats = ["PDF", "CSV", "KML"]
         possibleFormats.each
         {
             format ->
@@ -60,12 +67,39 @@ class ReportController
 			return
 		}
         
-        params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/" 
-        
-        generateReport(params, log, request, resultList)
-    }
+		if (params._format == "KML")
+		{
+			assert(!resultList.isEmpty())
+			generateKml(params, resultList)
+		}
+		else
+		{
+	        params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/" 
+	        
+	        generateReport(params, log, request, resultList)
+		}
+	}
 
-	private generateReport(Map params, org.apache.commons.logging.Log log, javax.servlet.http.HttpServletRequest request, List resultList) {
+	private generateKml(params, resultList)
+	{
+		response.setHeader("Content-disposition", "attachment; filename=" + params._name + ".kml");
+		response.contentType = "application/vnd.google-earth.kml+xml"
+		response.characterEncoding = "UTF-8"
+		
+		final Kml kml = new Kml()
+		Document doc = kml.createAndSetDocument().withName(reportInfoService.getReportInfo(params._name).displayName)
+		 
+		resultList.each 
+		{
+			doc.getFeature().add(it.toPlacemark())
+		}
+		
+		kml.marshal(response.outputStream)
+		response.outputStream.flush()
+	}
+	
+	private generateReport(Map params, org.apache.commons.logging.Log log, javax.servlet.http.HttpServletRequest request, List resultList)
+	{
 		def filterParams = [:]
 
 		Person person = permissionUtilsService.principal()
@@ -198,7 +232,7 @@ class ReportController
     
     def installationStationExtract =
     {
-        redirect(action:"extract", params:[name:"installationStation", formats:["CSV"]])
+        redirect(action:"extract", params:[name:"installationStation", formats:["CSV", "KML"]])
     }
     
     def receiverExtract =

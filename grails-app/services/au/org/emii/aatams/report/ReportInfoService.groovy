@@ -34,13 +34,15 @@ class ReportInfoService
          ]
 
     static def propertyToLabel =
-        ["detectionSurgeries.surgery.release.animal.species.spcode": "species (CAAB, common or scientific name)",
+		["codeName": "tag ID",
+         "detectionSurgeries.surgery.release.animal.species.spcode": "species (CAAB, common or scientific name)",
 		 "detectionSurgeries.surgery.release.animal.species.commonName": "species common name",
 		 "detectionSurgeries.surgery.release.animal.species.scientificName": "species scientific name",
 		 "detectionSurgeries.tag.codeName": "tag ID",
 		 "receiverDeployment.station.installation.project.name": "project",
 		 "receiverDeployment.station.installation.name": "installation",
 		 "receiverDeployment.station.name": "station",
+         "project.name": "project",
 		 "organisation.name": "organisation",
          "installation.project.name": "project",
          "station.installation.project.name": "project",
@@ -111,6 +113,9 @@ class ReportInfoService
 										  minRange:ReceiverEvent.list()*.timestamp.min(),
 										  maxRange:ReceiverEvent.list()*.timestamp.max())]
 
+		def installationFilterParams =
+			[new ListReportParameter(label: propertyToLabel["project.name"], propertyName:"project.name", range:projectRange)]
+
         def installationStationFilterParams = 
             [new ListReportParameter(label: propertyToLabel["installation.project.name"], propertyName:"installation.project.name", range:projectRange)]
 
@@ -120,7 +125,13 @@ class ReportInfoService
         def receiverDeploymentFilterParams = 
             [new ListReportParameter(label: propertyToLabel["station.installation.project.name"], propertyName:"station.installation.project.name", range:projectRange),
              new ListReportParameter(label: propertyToLabel["station.installation.name"], propertyName:"station.installation.name", range:installationRange)]
-        
+			
+		def tagFilterParams =
+			[new ListReportParameter(label: propertyToLabel["project.name"], propertyName:"project.name", range:projectRange),
+			 new AjaxMultiSelectReportParameter(label: propertyToLabel["codeName"], 
+									 			propertyName:"codeName", 
+												lookupPath:"/tag/lookupByCodeName")]
+
             
         return [(AnimalReleaseSummaryService.class):new ReportInfo(displayName:"Tag Summary", 
                                                           jrxmlFilename:["report":"animalReleaseSummary"], 
@@ -130,7 +141,7 @@ class ReportInfoService
                                                     filterParams:detectionFilterParams),
                 (Installation.class):new ReportInfo(displayName:"Installations",
                                                     jrxmlFilename:["extract":"installationExtract"],
-                                                    filterParams:[]),
+                                                    filterParams:installationFilterParams),
                 (InstallationStation.class):new ReportInfo(displayName:"Installation Stations",
                                                            jrxmlFilename:["report":"installationStationList",
                                                                           "extract":"installationStationExtract"],
@@ -147,7 +158,7 @@ class ReportInfoService
                                                      filterParams:eventFilterParams),
                 (Tag.class):new ReportInfo(displayName:"Tags", 
                                            jrxmlFilename:["extract":"tagExtract"], 
-                                           filterParams:[])
+                                           filterParams:tagFilterParams)
                 ]
     }
     

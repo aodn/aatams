@@ -62,26 +62,43 @@ grails.exceptionresolver.params.exclude = ['password']
 // This is required to avoid org.codehaus.groovy.grails.web.json.JSONException: Misplaced key.
 grails.converters.json.circular.reference.behaviour = "INSERT_NULL"
 
+// Mail plugin config
+grails.mail.adminEmailAddress = "aatams_admin@emii.org.au"
+grails.mail.systemEmailAddress = "aatams_system@emii.org.au"
+grails.mail.port = 25
+grails.mail.username = "aatams_system@utas.edu.au"
+grails.mail.props = ["mail.smtp.auth":"false"]
+
+// Database migration.
+grails.plugin.databasemigration.updateOnStart = true
+grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+
 // set per-environment serverURL stem for creating absolute links
-environments {
-    production {
+environments 
+{
+    production 
+	{
         grails.serverURL = "http://preview.emii.org.au/${appName}"
-
-        // This is used in the embargo notification job.
         grails.serverHost = "http://preview.emii.org.au"
+		fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod"
+		
+		grails.mail.host = "localhost"
     }
-    development {
+    development 
+	{
         grails.serverURL = "http://localhost:8080/${appName}"
         grails.serverHost = "http://localhost:8080"
+        fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
+		
+		grails.mail.host = "postoffice.utas.edu.au"
     }
-    test {
+    test 
+	{
         grails.serverURL = "http://localhost:8080/${appName}"
         grails.serverHost = "http://localhost:8080"
+		grails.plugin.databasemigration.updateOnStart = false
     }
-
 }
-
-
 
 // log4j configuration
 log4j = {
@@ -131,28 +148,6 @@ log4j = {
     info    "grails.app.service.au.org.emii.aatams.VueEventFileProcessorService"
 }
 
-//
-//  File uploader configuration.
-//
-fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod"
-
-//environments 
-//{
-//    production 
-//    {
-//        fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads"
-//    }
-//    
-//    development 
-//    {
-//        fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
-//    }
-//    
-//    test 
-//    {
-//    }
-//}
-
 
 // Date formats.
 //jodatime.format.org.joda.time.DateTime = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -163,51 +158,6 @@ tag.expectedLifeTime.gracePeriodDays = 182 // 6 months
 // Warning period for release embargo expiration.
 animalRelease.embargoExpiration.warningPeriodMonths = 1
 
-//
-// Email configuration.
-//
-environments 
-{
-    production 
-    {
-        grails 
-        {
-           mail 
-           {
-             adminEmailAddress = "aatams_admin@emii.org.au"
-             systemEmailAddress = "aatams_system@emii.org.au"
-             
-             host = "localhost"
-             port = 25
-             username = "aatams_system@utas.edu.au"
-//             password = 
-             props = ["mail.smtp.auth":"false"] 					   
-           }
-        }        
-    }
-    
-    development 
-    {
-        grails 
-        {
-           mail 
-           {
-             adminEmailAddress = "aatams_admin@emii.org.au"
-             systemEmailAddress = "aatams_system@emii.org.au"
-             
-             host = "postoffice.utas.edu.au"
-             port = 25
-             username = "aatams_system@utas.edu.au"
-             props = ["mail.smtp.auth":"false"] 					   
-           }
-        }        
-    }
-    
-    test 
-    {
-    }
-
-}
 
 grails.gorm.default.list.max = 20
 
@@ -221,22 +171,4 @@ grails.gorm.default.mapping = {
 	"user-type" type: org.joda.time.contrib.hibernate.PersistentLocalTimeAsString, class: org.joda.time.LocalTime
 	"user-type" type: org.joda.time.contrib.hibernate.PersistentLocalDateTime, class: org.joda.time.LocalDateTime
 	"user-type" type: org.joda.time.contrib.hibernate.PersistentPeriod, class: org.joda.time.Period
-}
-
-// Database migration.    
-environments 
-{
-	production 
-	{
-		grails.plugin.databasemigration.updateOnStart = true
-		grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
-	}
-	development 
-	{
-		grails.plugin.databasemigration.updateOnStart = true
-		grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
-	}
-	test 
-	{
-	}
 }

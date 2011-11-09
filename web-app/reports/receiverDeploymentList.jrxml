@@ -8,11 +8,9 @@
 	<style name="titleText" forecolor="#FFFFFF" fontSize="24" pdfFontName="Helvetica-Bold"/>
 	<style name="fieldNameText" vAlign="Middle" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold"/>
 	<style name="fieldValue" forecolor="#000000" vAlign="Middle" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
-
 	<parameter name="REPORT_USER" class="java.lang.String"/>
 	<parameter name="FILTER_PARAMS" class="java.util.Collection" isForPrompting="false"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false"/>
 	<field name="receiver.codeName" class="java.lang.String"/>
 	<field name="station.name" class="java.lang.String"/>
 	<field name="station.latitude" class="java.lang.Double"/>
@@ -24,12 +22,10 @@
 	<field name="comments" class="java.lang.String"/>
 	<field name="station.installation.project.name" class="java.lang.String"/>
 	<field name="station.installation.name" class="java.lang.String"/>
-
-    <sortField name="station.installation.project.name" order="Ascending"/>
-    <sortField name="station.installation.name" order="Ascending"/>
-    <sortField name="receiver.codeName" order="Ascending"/>
-
-
+	<field name="active" class="java.lang.Boolean"/>
+	<sortField name="station.installation.project.name"/>
+	<sortField name="station.installation.name"/>
+	<sortField name="receiver.codeName"/>
 	<group name="projectGroup">
 		<groupExpression><![CDATA[$F{station.installation.project.name}]]></groupExpression>
 		<groupHeader>
@@ -44,7 +40,7 @@
 					<textElement/>
 					<text><![CDATA[project:]]></text>
 				</staticText>
-            </band>
+			</band>
 		</groupHeader>
 	</group>
 	<group name="installationGroup">
@@ -61,7 +57,7 @@
 					<textElement/>
 					<text><![CDATA[installation:]]></text>
 				</staticText>
-            </band>
+			</band>
 		</groupHeader>
 	</group>
 	<background>
@@ -119,24 +115,29 @@
 				<text><![CDATA[deployment date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" x="374" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" x="374" y="1" width="81" height="20"/>
 				<textElement/>
-				<text><![CDATA[acoustic release ID]]></text>
+				<text><![CDATA[acoustic rls ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" x="474" y="1" width="100" height="20"/>
+				<reportElement style="fieldNameText" x="455" y="1" width="86" height="20"/>
 				<textElement/>
 				<text><![CDATA[mooring type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" x="574" y="1" width="68" height="20"/>
+				<reportElement style="fieldNameText" x="541" y="1" width="56" height="20"/>
 				<textElement/>
 				<text><![CDATA[depth (m)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="fieldNameText" x="644" y="1" width="158" height="20"/>
+				<reportElement style="fieldNameText" x="599" y="1" width="160" height="20"/>
 				<textElement/>
 				<text><![CDATA[comments]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="fieldNameText" x="759" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[active]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -168,24 +169,29 @@
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{deploymentDateTime}.toDate()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="fieldValue" x="374" y="0" width="100" height="20"/>
+				<reportElement style="fieldValue" x="374" y="0" width="81" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{acousticReleaseID} == null?"":$F{acousticReleaseID}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="fieldValue" x="474" y="0" width="100" height="20"/>
+				<reportElement style="fieldValue" x="455" y="0" width="86" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{mooringType.type}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#0.00">
-				<reportElement style="fieldValue" x="574" y="0" width="68" height="20"/>
+				<reportElement style="fieldValue" x="541" y="0" width="56" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{depthBelowSurfaceM}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="fieldValue" x="642" y="0" width="160" height="20"/>
+				<reportElement style="fieldValue" x="597" y="0" width="160" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{comments} == null?"":$F{comments}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="fieldValue" x="759" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{active} ? "yes" : "no"]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

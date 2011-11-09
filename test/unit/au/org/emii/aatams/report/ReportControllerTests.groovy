@@ -3,6 +3,7 @@ package au.org.emii.aatams.report
 import grails.test.*
 
 import au.org.emii.aatams.*
+import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.report.filter.*
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
@@ -37,12 +38,13 @@ class ReportControllerTests extends ControllerUnitTestCase
         
         mockLogging(PermissionUtilsService)
         permissionUtilsService = new PermissionUtilsService()
-        
+		
 		mockLogging(ReportFilterFactoryService, true)
 		reportFilterFactoryService = new ReportFilterFactoryService()
 		
         mockLogging(ReportInfoService)
         reportInfoService = new ReportInfoService()
+		reportInfoService.permissionUtilsService = permissionUtilsService
         
         mockLogging(ReportQueryExecutorService)
         reportQueryExecutorService = new ReportQueryExecutorService()
@@ -55,8 +57,13 @@ class ReportControllerTests extends ControllerUnitTestCase
         controller.reportInfoService = reportInfoService
         controller.reportQueryExecutorService = reportQueryExecutorService
         
+		mockDomain(Installation)
+		mockDomain(Organisation)
+		mockDomain(Project)
         mockDomain(Receiver)
-
+        mockDomain(ReceiverEvent)
+		mockDomain(ValidDetection)
+		
         Person user = new Person(username: 'user')
         def subject = [ getPrincipal: { user.username },
                         isAuthenticated: { true },

@@ -1,6 +1,10 @@
 package au.org.emii.aatams.report
 
+import java.util.Map;
+
 import au.org.emii.aatams.InstallationStation
+import au.org.emii.aatams.Species;
+import au.org.emii.aatams.Tag
 
 import com.vividsolutions.jts.geom.*
 
@@ -25,9 +29,14 @@ class InstallationStationReportWrapper
     
     public static final String NULL_CURTAIN_POSITION = "-"
     
+	private final TreeMap<Integer, String> speciesDetectionsByReverseCount = new TreeMap<Integer, String>(Collections.reverseOrder())
+	private final TreeMap<Integer, String> tagsDetectionsByReverseCount = new TreeMap<Integer, String>(Collections.reverseOrder())
+	
     public InstallationStationReportWrapper(InstallationStation station)
     {
         this.station = station
+		
+		initDetectionCountMaps()
     }
     
     public String getInstallationName()
@@ -79,5 +88,74 @@ class InstallationStationReportWrapper
     {
         return Collections.EMPTY_LIST
     }
+	
+	private void initDetectionCountMaps()
+	{
+		Map<Species, Integer> countBySpecies = [:]
+		Map<Tag, Integer> countByTag = [:]
+		
+		station.deployments.each
+		{
+			deployment ->
+			
+			deployment.detections.each
+			{
+				detection ->
+				
+				detection.detectionSurgeries.each
+				{
+					detSurgery ->
+					
+					def species = detSurgery.surgery.release.animal.species
+					incCountForSpecies(countBySpecies, species)
+					
+					def tag = detSurgery.tag
+					incCountForTag(countByTag, tag)
+				}
+			}
+		}
+
+		countBySpecies.each
+		{
+			k, v ->
+			speciesDetectionsByReverseCount.put(v, k)
+		}
+
+		countByTag.each
+		{
+			k, v ->
+			tagsDetectionsByReverseCount.put(v, k)
+		}
+	}
+	
+	Map<Integer, Species> detectionCountsBySpecies()
+	{
+		return speciesDetectionsByReverseCount
+	}
+	
+	Map<Integer, Species> detectionCountsByTag()
+	{
+		return tagsDetectionsByReverseCount
+	}
+	
+	private void incCountForSpecies(Map countBySpecies, Species species)
+	{
+		if (!countBySpecies.get(species))
+		{
+			countBySpecies.put(species, 0)
+		}
+		
+		countBySpecies[species] = countBySpecies[species] + 1
+	}
+	
+	private void incCountForTag(Map countByTag, Tag tag)
+	{
+		if (!countByTag.get(tag))
+		{
+			countByTag.put(tag, 0)
+		}
+		
+		countByTag[tag] = countByTag[tag] + 1
+	}
 }
 

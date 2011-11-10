@@ -15,7 +15,6 @@
 	<sortField name="receiverDeployment.station.name"/>
 	<sortField name="receiverDeployment.receiver.deviceID"/>
 	<sortField name="timestamp"/>
-	<sortField name="firstDetectionSurgery.surgery.release.animal.species"/>
 	<sortField name="firstDetectionSurgery.tag.deviceID"/>
 	<background>
 		<band splitType="Stretch"/>

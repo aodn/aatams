@@ -91,7 +91,10 @@ class ReportController
 		 
 		resultList.each 
 		{
-			doc.getFeature().add(it.toPlacemark())
+			Placemark placemark = it.toPlacemark()
+			placemark.setDescription(g.render(template:"kmlDescriptionTemplate", model:[installationStationInstance:it]).toString())
+	
+			doc.getFeature().add(placemark)
 		}
 		
 		kml.marshal(response.outputStream)

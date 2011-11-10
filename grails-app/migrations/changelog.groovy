@@ -1527,4 +1527,6 @@ databaseChangeLog = {
 	include file: 'caab_attributes_to_lowercase.groovy'
 
 	include file: 'introduce_code_map_table.groovy'
+	
+	include file: 'new_reference_data_3.5.0.groovy'
 }

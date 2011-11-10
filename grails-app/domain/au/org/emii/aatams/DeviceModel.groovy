@@ -3,7 +3,7 @@ package au.org.emii.aatams
 class DeviceModel 
 {
     static belongsTo = [manufacturer:DeviceManufacturer]
-    String modelName;
+    String modelName
     
     static constraints =
     {
@@ -11,6 +11,11 @@ class DeviceModel
         manufacturer()
     }
     
+	static mapping =
+	{
+		sort "modelName"
+	}
+	
     String toString()
     {
         return modelName

@@ -741,6 +741,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  batteryVoltage:3.7f).save(failOnError:true)
                              
         createExportWithDetections("export1.csv", jonBurgess, rx1Bondi, rx1, tag1, surgery1, 10)
+        createExportWithDetections("export6.csv", jonBurgess, rx1Bondi, rx1, tag2, surgery4, 3)
         createExportWithDetections("export3.csv", jonBurgess, rx2Bondi, rx2, tag2, surgery4, 3)
 		createExportWithDetections("export4.csv", jonBurgess, rx3Ningaloo, rx3, tag3, surgery4, 3)
 		createExportWithDetections("export5.csv", jonBurgess, rx4Heron, rx4, tag5, null, 3)

@@ -144,22 +144,6 @@ class ReportControllerTests extends ControllerUnitTestCase
 		assertEquals(1, placemark.Point.size())
 		def point = placemark.Point[0]
 		assertEquals("34.012298583984375,-42.34560012817383", point.coordinates[0].text())
-		
-		assertEquals(1, placemark.ExtendedData.size())
-		def extendedData = placemark.ExtendedData[0]
-		
-		def projectData = extendedData.Data[0]
-		assertEquals("Project", projectData.@name.text())
-		assertEquals("Whale Sharks", projectData.value[0].text())
-		
-		def installationData = extendedData.Data[1]
-		assertEquals("Installation", installationData.@name.text())
-		assertEquals("Ningaloo", installationData.value[0].text())
-		
-//		- receiver(s) deployed
-		def activeData = extendedData.Data[2]
-		assertEquals("Active", activeData.@name.text())
-		assertEquals("false", activeData.value[0].text())
 	}
 	
 	private void generateStationsKml(stationList) 

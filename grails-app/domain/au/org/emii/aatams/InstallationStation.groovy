@@ -1,5 +1,6 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.report.InstallationStationReportWrapper
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
@@ -110,19 +111,23 @@ class InstallationStation
         return activeDeployments.size() >= 1
     }
 	
-	
 	Placemark toPlacemark()
 	{
 		final Placemark placemark = new Placemark()
 		placemark.setName(name)
 		placemark.setOpen(Boolean.TRUE)
 		placemark.createAndSetPoint().addToCoordinates(getLongitude(), getLatitude())
-		
+/**		
 		ExtendedData data = placemark.createAndSetExtendedData()
 		data.addToData(KmlFactory.createData(installation.project.name).withName("Project"))
 		data.addToData(KmlFactory.createData(installation.name).withName("Installation"))
 		data.addToData(KmlFactory.createData(String.valueOf(isActive())).withName("Active"))
-		
+*/		
 		return placemark
+	}
+	
+	InstallationStationReportWrapper summary()
+	{
+		return new InstallationStationReportWrapper(this)
 	}
 }

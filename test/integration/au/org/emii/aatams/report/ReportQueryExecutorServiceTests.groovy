@@ -133,91 +133,91 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 	
 	void testDetectionNoFilter()
 	{
-		assertDetectionsMatchingFilter(19, [:])
+		assertDetectionsMatchingFilter(22, [:])
 	}
 	
 	void testDetectionFilterByProject()
 	{
-		assertDetectionsMatchingFilter(16, [receiverDeployment:[station:[installation:[project:[name:'Seal Count']]]]])
+		assertDetectionsMatchingFilter(19, [receiverDeployment:[station:[installation:[project:[name:'Seal Count']]]]])
 		assertDetectionsMatchingFilter(3, [receiverDeployment:[station:[installation:[project:[name:'Tuna']]]]])
 	}
 	
 	void testDetectionFilterByProjectAndEmptyDetectionSurgeries()
 	{
-		assertDetectionsMatchingFilter(16, [receiverDeployment:[station:[installation:[project:[name:'Seal Count']]]], detectionSurgeries:['surgery.release.animal.species.spcode':'']])
+		assertDetectionsMatchingFilter(19, [receiverDeployment:[station:[installation:[project:[name:'Seal Count']]]], detectionSurgeries:['surgery.release.animal.species.spcode':'']])
 		assertDetectionsMatchingFilter(3, [receiverDeployment:[station:[installation:[project:[name:'Tuna']]]], detectionSurgeries:['surgery.release.animal.species.spcode':'']])
 	}
 	
 	void testDetectionFilterByInstallation()
 	{
 		assertDetectionsMatchingFilter(3, [receiverDeployment:[station:[installation:[name:"Ningaloo Array"]]]])
-		assertDetectionsMatchingFilter(13, [receiverDeployment:[station:[installation:[name:"Bondi Line"]]]])
+		assertDetectionsMatchingFilter(16, [receiverDeployment:[station:[installation:[name:"Bondi Line"]]]])
 	}
 
 	void testDetectionFilterByStation()
 	{
 		assertDetectionsMatchingFilter(3, [receiverDeployment:[station:[name:"Bondi SW2"]]])
-		assertDetectionsMatchingFilter(10, [receiverDeployment:[station:[name:"Bondi SW1"]]])
+		assertDetectionsMatchingFilter(13, [receiverDeployment:[station:[name:"Bondi SW1"]]])
 		assertDetectionsMatchingFilter(0, [receiverDeployment:[station:[name:"Bondi SW1", installation:[name:"Ningaloo Array"]]]])
 	}
 
 	void testDetectionFilterByTagCodeName()
 	{
 		assertDetectionsMatchingFilter(10, [detectionSurgeries:[tag:[codeName:"A69-1303-62339"]]])
-		assertDetectionsMatchingFilter(3, [detectionSurgeries:[tag:[codeName:"A69-1303-46601"]]])
+		assertDetectionsMatchingFilter(6, [detectionSurgeries:[tag:[codeName:"A69-1303-46601"]]])
 	}
 	
 	void testDetectionFilterBySpeciesCommonName()
 	{
 		assertDetectionsMatchingFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[commonName:"White Shark"]]]]]])
-		assertDetectionsMatchingFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[commonName:"Southern Bluefin Tuna"]]]]]])
+		assertDetectionsMatchingFilter(9, [detectionSurgeries:[surgery:[release:[animal:[species:[commonName:"Southern Bluefin Tuna"]]]]]])
 		assertDetectionsMatchingFilter(0, [detectionSurgeries:[surgery:[release:[animal:[species:[commonName:"Blue-eye Trevalla"]]]]]])
 	}
 	
 	void testDetectionFilterBySpeciesScientificName()
 	{
 		assertDetectionsMatchingFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[scientificName:"Carcharodon carcharias"]]]]]])
-		assertDetectionsMatchingFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[scientificName:"Thunnus maccoyii"]]]]]])
+		assertDetectionsMatchingFilter(9, [detectionSurgeries:[surgery:[release:[animal:[species:[scientificName:"Thunnus maccoyii"]]]]]])
 		assertDetectionsMatchingFilter(0, [detectionSurgeries:[surgery:[release:[animal:[species:[scientificName:"Hyperoglyphe antarctica"]]]]]])
 	}
 	
 	void testDetectionFilterBySpeciesCaabCode()
 	{
 		assertDetectionsMatchingFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37010003"]]]]]])
-		assertDetectionsMatchingFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37441004"]]]]]])
+		assertDetectionsMatchingFilter(9, [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37441004"]]]]]])
 		assertDetectionsMatchingFilter(0, [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37445001"]]]]]])
 	}
 	
 	void testDetectionFilterByTimestamp()
 	{
-		assertDetectionsMatchingFilter(4, [timestamp:new DateTime("2011-05-17T12:54:00").toDate()])
+		assertDetectionsMatchingFilter(5, [timestamp:new DateTime("2011-05-17T12:54:00").toDate()])
 		assertDetectionsMatchingFilter(1, [timestamp:new DateTime("2011-05-17T12:54:03").toDate()])
 	}
 	
 	void testDetectionFilterEmpty()
 	{
 		ReportFilter filter = new ReportFilter(ValidDetection)
-		assertDetectionsMatchingFilter(19, filter)	
+		assertDetectionsMatchingFilter(22, filter)	
 	}
 	
 	void testDetectionFilterByEqualsSpeciesCommonName()
 	{
 		assertDetectionsMatchingEqualsFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[commonName:"White Shark"]]]]]])
-		assertDetectionsMatchingEqualsFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[commonName:"Southern Bluefin Tuna"]]]]]])
+		assertDetectionsMatchingEqualsFilter(9, [detectionSurgeries:[surgery:[release:[animal:[species:[commonName:"Southern Bluefin Tuna"]]]]]])
 		assertDetectionsMatchingEqualsFilter(0, [detectionSurgeries:[surgery:[release:[animal:[species:[commonName:"Blue-eye Trevalla"]]]]]])
 	}
 	
 	void testDetectionFilterByEqualsSpeciesScientificName()
 	{
 		assertDetectionsMatchingEqualsFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[scientificName:"Carcharodon carcharias"]]]]]])
-		assertDetectionsMatchingEqualsFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[scientificName:"Thunnus maccoyii"]]]]]])
+		assertDetectionsMatchingEqualsFilter(9, [detectionSurgeries:[surgery:[release:[animal:[species:[scientificName:"Thunnus maccoyii"]]]]]])
 		assertDetectionsMatchingEqualsFilter(0, [detectionSurgeries:[surgery:[release:[animal:[species:[scientificName:"Hyperoglyphe antarctica"]]]]]])
 	}
 	
 	void testDetectionFilterByEqualsSpeciesCaabCode()
 	{
 		assertDetectionsMatchingEqualsFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37010003"]]]]]])
-		assertDetectionsMatchingEqualsFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37441004"]]]]]])
+		assertDetectionsMatchingEqualsFilter(9, [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37441004"]]]]]])
 		assertDetectionsMatchingEqualsFilter(0, [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37445001"]]]]]])
 	}
 	
@@ -230,8 +230,8 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 	
 	void testDetectionFilterByInSpeciesCommonName()
 	{
-		assertDetectionsMatchingInFilter(16, [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37010003, 37441004"]]]]]])
-		assertDetectionsMatchingInFilter(6, [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37445001, 37441004"]]]]]])
+		assertDetectionsMatchingInFilter(19, [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37010003, 37441004"]]]]]])
+		assertDetectionsMatchingInFilter(9, [detectionSurgeries:[surgery:[release:[animal:[species:[spcode:"37445001, 37441004"]]]]]])
 	}
 
 	private void assertDetectionsMatchingInFilter(expectedCount, filterParams)
@@ -243,7 +243,7 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
 	
 	void testDetectionFilterByBetweenTimestamp()
 	{
-		assertDetectionsMatchingBetweenFilter(12, [timestamp: [new DateTime("2011-05-17T12:54:00").toDate(), new DateTime("2011-05-17T12:54:02").toDate()]])
+		assertDetectionsMatchingBetweenFilter(15, [timestamp: [new DateTime("2011-05-17T12:54:00").toDate(), new DateTime("2011-05-17T12:54:02").toDate()]])
 		assertDetectionsMatchingBetweenFilter(2, [timestamp: [new DateTime("2011-05-17T12:54:03").toDate(), new DateTime("2011-05-17T12:54:04").toDate()]])
 	}
 	

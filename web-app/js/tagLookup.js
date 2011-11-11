@@ -32,12 +32,8 @@ function setExistingTag(existing)
     }
     else
     {
-        $("#tagCodeMapId").attr("disabled", "");
-        $("#pingCode").attr("disabled", "");
-        $("#modelId").attr("disabled", "");
-    	
-        $("#tagCodeMapId").val("");
-        $("#pingCode").val("");
-        $("#modelId").val("");
+        $("#tagCodeMapId").removeAttr("disabled");
+        $("#pingCode").removeAttr("disabled");
+        $("#modelId").removeAttr("disabled");
     }
 }

@@ -201,7 +201,7 @@
                                     <label class="compulsory" for="releaseLocality"><g:message code="animalRelease.releaseLocality.label" default="Release Locality" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseLocality', 'errors')}">
-                                    <g:textField name="releaseLocality" value="${animalReleaseInstance?.releaseLocality}" />
+                                    <g:textField name="releaseLocality" class="remember" value="${animalReleaseInstance?.releaseLocality}" />
 
                                 </td>
                             </tr>
@@ -223,6 +223,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseDateTime', 'errors')}">
                                     <joda:dateTimePicker name="releaseDateTime" 
+                                                         class="remember"
                                                          value="${animalReleaseInstance?.releaseDateTime}"
                                                          useZone="true"/>
 

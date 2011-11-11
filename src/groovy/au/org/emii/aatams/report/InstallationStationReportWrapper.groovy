@@ -128,6 +128,11 @@ class InstallationStationReportWrapper
 		}
 	}
 	
+	boolean hasDetections()
+	{
+		return !speciesDetectionsByReverseCount.isEmpty()
+	}
+	
 	Map<Integer, Species> detectionCountsBySpecies()
 	{
 		return speciesDetectionsByReverseCount

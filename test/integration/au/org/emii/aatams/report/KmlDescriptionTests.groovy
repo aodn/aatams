@@ -87,7 +87,6 @@ class KmlDescriptionTests extends GroovyPagesTestCase
 		assertNotNull(kmlDescTemplate)
 
 		def html = applyTemplate(kmlDescTemplate.text, model)
-		println html
 		
 		def div = slurper.parseText(html)
 		return div

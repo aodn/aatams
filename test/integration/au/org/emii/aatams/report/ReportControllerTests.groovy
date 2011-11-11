@@ -9,6 +9,7 @@ import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
  
 import org.codehaus.groovy.grails.plugins.jasper.*
+import org.codehaus.groovy.grails.web.pages.GroovyPagesTemplateEngine;
 import org.apache.commons.lang.StringUtils
 
 import javax.servlet.ServletContext
@@ -22,9 +23,14 @@ class ReportControllerTests extends ControllerUnitTestCase
     def reportInfoService
     def reportQueryExecutorService
     
+	def grailsApplication
+	def grailsTemplateEngineService
     def jasperService
-    
-    protected void setUp() 
+	def kmlService
+	
+	def slurper = new XmlSlurper()
+
+	protected void setUp() 
     {
         super.setUp()
         
@@ -197,55 +203,35 @@ class ReportControllerTests extends ControllerUnitTestCase
 		checkResponse("testExecuteDetection")
 	}
 
-//	void testExecuteDetectionExtractWithTimestampFilter()
-//	{
-//		controller.params.putAll( 
-//			[CSV:'CSV', 
-//			 "filter.between.timestamp_day":["17", "17"], 
-//			 "filter:[between.timestamp_day":['17', '17'], 
-//		     between:[timestamp_day:['17', '17'], 
-// 				      timestamp_minute:['08', '10'], 
-// 					  timestamp_year:['2009', '2009'], 
-////					  timestamp:[date.struct, date.struct], 
-//					  timestamp_hour:['14', '14'], 
-//					  timestamp_month:['1', '1']], 
-//			 "between.timestamp_minute":['08', '10'], 
-//			 "between.timestamp_year":['2009', '2009'], 
-////			 between.timestamp:[date.struct, date.struct], 
-//			 "between.timestamp_hour":['14', '14'], 
-//			 "between.timestamp_month":['1', '1'], 
-//		 	 "filter.between.timestamp_minute":['08', '10'], 
-//			 _name:'detection', 
-//			 "filter.between.timestamp_year":['2009', '2009'], 
-////			 "filter.between.timestamp":[date.struct, date.struct], 
-//			 _type:'extract', 
-//			 "filter.between.timestamp_hour":['14', '14'], 
-//			 "filter.between.timestamp_month":['1', '1'], 
-//			 _file:'detectionExtract'])
-//		
-//		controller.execute()
-//		checkResponse("testExecuteDetectionExtractWithTimestampFilter")
-//	}
+	void testExecuteDetectionKmlExtract()
+	{
+		InstallationStation.metaClass.toKmlDescription = { "some description" }
+		
+		controller.params._name = "detection"
+		controller.params.filter = [:]
+		controller.params._type = "extract"
+		controller.params._format = "KML"
+		
+		controller.execute()
 
-	
-//	void testExecuteDetectionWithNonMatchingFilter()
-//	{
-//		controller.params._name = "detection"
-//		controller.params._file = "detectionExtract"
-//
-//		try
+		def div = slurper.parseText(controller.response.contentAsString)
+		assertNotNull(div)
+		
+		def allNodes = div.depthFirst().collect{ it }
+		def folderNodes = allNodes.findAll { it.name() == "Folder" }
+		
+//		println controller.response.contentAsString
+//		["Whale", "Seal Count", "Heron Island Curtain", "Bondi Line", "Tuna", "Ningaloo Array"].each
 //		{
-//			controller.params.filter = [receiverDeployment:[station:[name:"no match"]]]
-//			controller.execute()
+//			folderName ->
 //			
-//			controller.params.filter = [receiverDeployment:[station:[name:"Bondi SW2"]]]
-//			controller.execute()
+//			if (!folderNodes*.name*.text().contains(folderName))
+//			{
+//				println "No folder name: " + folderName
+//			}
+//			assertTrue(folderNodes*.name*.text().contains(folderName))
 //		}
-//		catch (Exception e)
-//		{
-//			fail()
-//		}
-//	}
+	}
 
     private void checkResponse(def expectedFileName)
     {

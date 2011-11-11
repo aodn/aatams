@@ -1,5 +1,8 @@
 package au.org.emii.aatams
 
+import groovy.text.GStringTemplateEngine
+import groovy.text.SimpleTemplateEngine;
+import au.org.emii.aatams.detection.ValidDetection
 import au.org.emii.aatams.report.InstallationStationReportWrapper
 import au.org.emii.aatams.util.GeometryUtils
 
@@ -9,6 +12,8 @@ import de.micromata.opengis.kml.v_2_2_0.ExtendedData
 import de.micromata.opengis.kml.v_2_2_0.KmlFactory
 import de.micromata.opengis.kml.v_2_2_0.Placemark
 
+import org.codehaus.groovy.grails.web.pages.GroovyPagesTemplateEngine;
+
 /**
  * An Installation Station is a location within an Installation where a 
  * receiver is deployed.  A single Installation Station will only have one 
@@ -17,6 +22,8 @@ import de.micromata.opengis.kml.v_2_2_0.Placemark
  */
 class InstallationStation 
 {
+	def grailsTemplateEngineService
+	
     static belongsTo = [installation:Installation]
     static hasMany = [receivers:Receiver, deployments:ReceiverDeployment]
     static transients = ['curtainPositionAsString', 'scrambledLocation', 'latitude', 'longitude', 'active']
@@ -111,23 +118,38 @@ class InstallationStation
         return activeDeployments.size() >= 1
     }
 	
+	InstallationStation toKmlClone(List<ValidDetection> detections)
+	{
+		InstallationStation kmlClone = new InstallationStation(name: this.name, location: this.location)
+		
+		deployments.each
+		{
+			deployment ->
+			
+			kmlClone.addToDeployments(deployment.toKmlClone(detections))	
+		}
+		
+		return kmlClone
+	}
+	
 	Placemark toPlacemark()
 	{
 		final Placemark placemark = new Placemark()
 		placemark.setName(name)
 		placemark.setOpen(Boolean.TRUE)
 		placemark.createAndSetPoint().addToCoordinates(getLongitude(), getLatitude())
-/**		
-		ExtendedData data = placemark.createAndSetExtendedData()
-		data.addToData(KmlFactory.createData(installation.project.name).withName("Project"))
-		data.addToData(KmlFactory.createData(installation.name).withName("Installation"))
-		data.addToData(KmlFactory.createData(String.valueOf(isActive())).withName("Active"))
-*/		
+		placemark.setDescription(toKmlDescription())
+		
 		return placemark
 	}
 	
 	InstallationStationReportWrapper summary()
 	{
 		return new InstallationStationReportWrapper(this)
+	}
+	
+	String toKmlDescription()
+	{
+		return grailsTemplateEngineService.renderView("/report/_kmlDescriptionTemplate", [installationStationInstance:this])
 	}
 }

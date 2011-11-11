@@ -1,6 +1,9 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.detection.ValidDetection
 import au.org.emii.aatams.util.ListUtils
+import de.micromata.opengis.kml.v_2_2_0.Folder
+import de.micromata.opengis.kml.v_2_2_0.Placemark
 
 class Project 
 {
@@ -87,4 +90,28 @@ class Project
         return organisations
     }
 
+	Project toKmlClone(List<ValidDetection> detections)
+	{
+		Project kmlClone = new Project(name: this.name)
+		installations.each 
+		{
+			kmlClone.addToInstallations(it.toKmlClone(detections))
+		}
+		
+		return kmlClone
+	}
+	
+	Folder toKmlFolder()
+	{
+		Folder projectFolder = new Folder().withName(name)
+		
+		installations.each
+		{
+			installation ->
+			
+			projectFolder.getFeature().add(installation.toKmlFolder())
+		}
+		
+		return projectFolder
+	}
 }

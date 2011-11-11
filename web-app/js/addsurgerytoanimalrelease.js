@@ -44,10 +44,7 @@ $(function()
                 // determines whether we store user entered data in hidden fields
                 // or send an AJAX post respectively).
                 //
-                var mainForm = $("div.body > form")
-                var isCreate = mainForm.attr("action") == contextPath + '/animalRelease/save'
-                 
-                if (isCreate)
+                if (isCreate())
                 {
                     // Create a JSON map which can be passed to the "updateSurgeryTable" function.
                     var dateTime = timestamp_day + "/" + 
@@ -71,6 +68,7 @@ $(function()
                     
                     // Add variables as hidden fields so that the parameters are
                     // sent to the controller on form submit.
+                    var mainForm = $("div.body > form")
 
                     mainForm.append(hiddenField(idPrefix + "timestamp_day", timestamp_day));
                     mainForm.append(hiddenField(idPrefix + "timestamp_month", timestamp_month));
@@ -140,10 +138,26 @@ $(function()
                                            {projectId:projectId}, 
                                            function()
         {
+            if (isCreate())
+            {
+				$("#surgeryTimestamp_year").val($("#captureDateTime_year").val());
+				$("#surgeryTimestamp_month").val($("#captureDateTime_month").val());
+				$("#surgeryTimestamp_day").val($("#captureDateTime_day").val());
+				$("#surgeryTimestamp_hour").val($("#captureDateTime_hour").val());
+				$("#surgeryTimestamp_minute").val($("#captureDateTime_minute").val());
+				$("#surgeryTimestamp_zone").val($("#captureDateTime_zone").val());
+            }
+            
             $('#dialog-form-add-surgery').dialog('open');
         });
     });
 });
+
+function isCreate()
+{
+    var mainForm = $("div.body > form")
+    return mainForm.attr("action") == contextPath + '/animalRelease/save'
+}
 
 function isEditView(data)
 {

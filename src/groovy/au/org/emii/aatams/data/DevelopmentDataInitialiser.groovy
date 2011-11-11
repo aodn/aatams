@@ -445,8 +445,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         Installation bondiLine =
             new Installation(name:'Bondi Line',
                              configuration:curtain,
-                             project:sealCountProject).save(failOnError:true)
-                         
+                             project:sealCountProject).save(failOnError:true)					 
+		                 
         Installation ningalooArray =
             new Installation(name:'Ningaloo Array',
                              configuration:array,

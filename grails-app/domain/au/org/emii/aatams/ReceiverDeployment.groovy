@@ -155,4 +155,13 @@ class ReceiverDeployment
         
         return deploymentDateTime.isBefore(now) && now.isBefore(recovery?.recoveryDateTime)
     }
+	
+	ReceiverDeployment toKmlClone(List<ValidDetection> detections)
+	{
+		ReceiverDeployment kmlClone = new ReceiverDeployment(receiver: this.receiver, deploymentDateTime: this.deploymentDateTime)
+		
+		kmlClone.detections.addAll(detections.grep { it.receiverDeployment.id == this.id })
+		
+		return kmlClone
+	}
 }

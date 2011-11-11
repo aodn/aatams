@@ -75,7 +75,7 @@ class ReportInfoService
         def organisationRange = Organisation.list()*.name
         def installationRange = Installation.list()*.name
 		def timestampMin = ValidDetection.list()*.timestamp.min()
-		def timestampMax = ValidDetection.list()*.timestamp.max()
+		def timestampMax = new Date()
 		
         def detectionFilterParams = 
             [new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"], 

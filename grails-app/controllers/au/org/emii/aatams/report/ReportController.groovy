@@ -20,6 +20,7 @@ class ReportController
 {
     def animalReleaseSummaryService
     def jasperService
+	def kmlService
     def permissionUtilsService
 	def reportFilterFactoryService
     def reportInfoService
@@ -86,17 +87,7 @@ class ReportController
 		response.contentType = "application/vnd.google-earth.kml+xml"
 		response.characterEncoding = "UTF-8"
 		
-		final Kml kml = new Kml()
-		Document doc = kml.createAndSetDocument().withName(reportInfoService.getReportInfo(params._name).displayName)
-		 
-		resultList.each 
-		{
-			Placemark placemark = it.toPlacemark()
-			placemark.setDescription(g.render(template:"kmlDescriptionTemplate", model:[installationStationInstance:it]).toString())
-	
-			doc.getFeature().add(placemark)
-		}
-		
+		final Kml kml = kmlService.toKml(resultList)
 		kml.marshal(response.outputStream)
 		response.outputStream.flush()
 	}
@@ -225,7 +216,7 @@ class ReportController
 
     def detectionExtract =
     {
-        redirect(action:"extract", params:[name:"detection", formats:["CSV"]])
+        redirect(action:"extract", params:[name:"detection", formats:["CSV", "KML"]])
     }
     
     def installationExtract =
@@ -235,7 +226,7 @@ class ReportController
     
     def installationStationExtract =
     {
-        redirect(action:"extract", params:[name:"installationStation", formats:["CSV", "KML"]])
+        redirect(action:"extract", params:[name:"installationStation", formats:["CSV"]])
     }
     
     def receiverExtract =

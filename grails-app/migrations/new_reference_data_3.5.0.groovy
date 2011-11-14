@@ -60,6 +60,15 @@ databaseChangeLog =
 			column(name:"model_name", value:"V16AP")
 			column(name:"class", value:"au.org.emii.aatams.TagDeviceModel")
 		}
+		
+		insert(tableName: "device_model")
+		{
+			column(name:"id", valueNumeric:27)
+			column(name:"version", valueNumeric:0)
+			column(name:"manufacturer_id", valueNumeric:14)
+			column(name:"model_name", value:"VR4")
+			column(name:"class", value:"au.org.emii.aatams.ReceiverDeviceModel")
+		}
 	}
 	
 	changeSet(author: "jburgess", id: "1320969080-4") 

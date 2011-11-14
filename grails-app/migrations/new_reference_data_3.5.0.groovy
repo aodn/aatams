@@ -61,4 +61,21 @@ databaseChangeLog =
 			column(name:"class", value:"au.org.emii.aatams.TagDeviceModel")
 		}
 	}
+	
+	changeSet(author: "jburgess", id: "1320969080-4") 
+	{
+		insert(tableName: "measurement_unit")
+		{
+			column(name:"id", valueNumeric:46)
+			column(name:"version", valueNumeric:0)
+			column(name:"unit", value:"cm")
+		}
+		
+		insert(tableName: "measurement_unit")
+		{
+			column(name:"id", valueNumeric:47)
+			column(name:"version", valueNumeric:0)
+			column(name:"unit", value:"m")
+		}
+	}
 }

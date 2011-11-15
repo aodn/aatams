@@ -1,8 +1,9 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.test.*
 
-class OrganisationControllerTests extends ControllerUnitTestCase 
+class OrganisationControllerTests extends AbstractControllerUnitTestCase 
 {
     String toAddress
     boolean mailSent
@@ -11,8 +12,9 @@ class OrganisationControllerTests extends ControllerUnitTestCase
     {
         super.setUp()
 
+        mockDomain(Person)
         mockDomain(Request)
-        
+		
         TestUtils.setupMessage(controller)
         initData()
         
@@ -44,7 +46,6 @@ class OrganisationControllerTests extends ControllerUnitTestCase
     
     protected void tearDown() 
     {
-        TestUtils.logout()
         super.tearDown()
     }
 
@@ -59,6 +60,11 @@ class OrganisationControllerTests extends ControllerUnitTestCase
         
         Person somePerson = new Person()
 
+		Person.metaClass.static.findByUsername =
+		{
+			new Person(username: "jbloggs", emailAddress: "jbloggs@test.com")
+		}
+		
         //
         // Organisations.
         //
@@ -114,7 +120,7 @@ class OrganisationControllerTests extends ControllerUnitTestCase
     
     void testListAsSysAdmin()
     {
-        TestUtils.loginSysAdmin(this)
+		hasRole = true
         
         // There list of organisations should include non-active.
         def retVal = controller.list()
@@ -125,7 +131,7 @@ class OrganisationControllerTests extends ControllerUnitTestCase
     
     void testListAsNonSysAdmin()
     {
-        TestUtils.loginJoeBloggs(this)
+		hasRole = false
         
         // There list of organisations should include non-active.
         def retVal = controller.list()
@@ -136,6 +142,9 @@ class OrganisationControllerTests extends ControllerUnitTestCase
     
     void testListAsNoone()
     {
+		hasRole = false
+		permitted = false
+		
         // There list of organisations should include non-active.
         def retVal = controller.list()
         assertEquals(1, retVal.organisationInstanceTotal)
@@ -144,7 +153,7 @@ class OrganisationControllerTests extends ControllerUnitTestCase
     
     void testSaveAsSysAdmin()
     {
-        TestUtils.loginSysAdmin(this)
+		hasRole = true
 
         // Status should be set to ACTIVE.
         def address = 
@@ -174,7 +183,7 @@ class OrganisationControllerTests extends ControllerUnitTestCase
     void testSaveAsNonSysAdmin()
     {
         // Status should be set to PENDING.
-        TestUtils.loginJoeBloggs(this)
+		hasRole = false
 
         def address = 
                     [streetAddress:'12 Smith Street',

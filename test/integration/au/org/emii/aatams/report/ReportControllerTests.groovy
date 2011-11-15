@@ -1,13 +1,11 @@
 package au.org.emii.aatams.report
 
 import grails.test.*
+import groovy.lang.MetaClass;
 
 import au.org.emii.aatams.*
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
- 
 import org.codehaus.groovy.grails.plugins.jasper.*
 import org.codehaus.groovy.grails.web.pages.GroovyPagesTemplateEngine;
 import org.apache.commons.lang.StringUtils
@@ -18,7 +16,7 @@ import javax.servlet.ServletContext
  * Report formats are CSV, so that we can easily compare controller output to
  * an expected CSV output. (as opposed to PDF).
  */
-class ReportControllerTests extends ControllerUnitTestCase 
+class ReportControllerTests extends AbstractControllerUnitTestCase 
 {
     def reportInfoService
     def reportQueryExecutorService
@@ -35,29 +33,18 @@ class ReportControllerTests extends ControllerUnitTestCase
         super.setUp()
         
         mockLogging(ReportController, true)
-        
-        /**
-         * Setup security manager.
-         */
-        def subject = [ getPrincipal: { "jkburges" },
-                        isAuthenticated: { true },
-                        isPermitted: { true }
-                      ] as Subject
 
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
-        
         controller.metaClass.servletContext = 
             [ getRealPath: {System.getProperty("user.dir") + "/web-app" + it }] as ServletContext
 
         controller.params.pdf = "PDF"
         controller.params._format = "CSV"
 		controller.params._type = "report"
+		
+		permitted = true
     }
 
-    protected void tearDown() 
+	protected void tearDown() 
     {
         super.tearDown()
     }

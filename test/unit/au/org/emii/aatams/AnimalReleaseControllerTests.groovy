@@ -1,6 +1,7 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import grails.test.*
 
@@ -14,11 +15,7 @@ import org.joda.time.format.DateTimeFormat
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
-
-class AnimalReleaseControllerTests extends ControllerUnitTestCase 
+class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase 
 {
     WKTReader reader = new WKTReader()
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd")
@@ -35,6 +32,8 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
 	TransmitterType pinger
     
 	CodeMap codeMap
+	
+	def person
 	
     protected void setUp() 
     {
@@ -105,25 +104,11 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         controller.params.releaseLocation = (Point)reader.read("POINT(30.1234 30.1234)")
         controller.params.releaseDateTime = new DateTime("2011-05-15T14:12:00+10:00")
         
-        def person = new Person(username:"person",
+        person = new Person(username:"person",
                             organisation:new Organisation())
                                
         mockDomain(Person, [person])
         person.save()
-        
-        def subject = [ getPrincipal: { person.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted:
-                        {
-                            return true
-                        }
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
         
         project1 = new Project(name:"project 1", status:EntityStatus.ACTIVE)
         project2 = new Project(name:"project 2", status:EntityStatus.ACTIVE)
@@ -138,6 +123,8 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
 		codeMap = new CodeMap(codeMap:"A69-1303")
 		mockDomain(CodeMap, [codeMap])
 		codeMap.save()
+		
+		permitted = true
     }
 
     protected void tearDown() 
@@ -145,6 +132,16 @@ class AnimalReleaseControllerTests extends ControllerUnitTestCase
         super.tearDown()
     }
 
+	protected boolean isPermitted()
+	{
+		return true
+	}
+	
+	protected def getPrincipal()
+	{
+		return person?.username
+	}
+	
     void testAddSurgeryNoExistingRelease()
     {
         Project project = new Project()

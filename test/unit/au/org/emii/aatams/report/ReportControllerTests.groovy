@@ -5,18 +5,16 @@ import grails.test.*
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.report.filter.*
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase
+
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
 
 import net.sourceforge.cobertura.coveragedata.ProjectData;
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
-
 import org.codehaus.groovy.grails.plugins.jasper.*
 
-class ReportControllerTests extends ControllerUnitTestCase 
+class ReportControllerTests extends AbstractControllerUnitTestCase 
 {
     def embargoService
     def jasperService
@@ -24,7 +22,8 @@ class ReportControllerTests extends ControllerUnitTestCase
     def reportFilterFactoryService
     def reportInfoService
     def reportQueryExecutorService
-
+	Person user
+	
     protected void setUp() 
     {
         super.setUp()
@@ -64,24 +63,8 @@ class ReportControllerTests extends ControllerUnitTestCase
         mockDomain(ReceiverEvent)
 		mockDomain(ValidDetection)
 		
-        Person user = new Person(username: 'user')
-        def subject = [ getPrincipal: { user.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted:
-                        {
-                            if (it == "project:" + project1.id + ":read")
-                            {
-                                return true
-                            }
-                            
-                            return false
-                        }
-                        
-                        
-                      ] as Subject
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
+        user = new Person(username: 'user')
+		hasRole = true
         
         // Need this for "findByUsername()" etc.
         mockDomain(Person, [user])
@@ -93,6 +76,20 @@ class ReportControllerTests extends ControllerUnitTestCase
         super.tearDown()
     }
 
+	protected def getPrincipal()
+	{
+		return user?.username
+	}
+	
+	protected boolean isPermitted(permission)
+	{
+		if (permission == "project:" + project1.id + ":read")
+		{
+			return true
+		}
+		
+		return false
+	}
     void testNoResults()
     {
         controller.params._name = "receiver"

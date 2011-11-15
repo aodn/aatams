@@ -4,18 +4,14 @@ import grails.test.*
 import grails.converters.JSON
 
 import au.org.emii.aatams.*
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import org.joda.time.*
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
-
-class NotificationControllerTests extends ControllerUnitTestCase 
+class NotificationControllerTests extends AbstractControllerUnitTestCase 
 {
     def notificationService
     def person
-    def subject
     def otherPerson
     
     Notification gettingStarted 
@@ -52,17 +48,7 @@ class NotificationControllerTests extends ControllerUnitTestCase
         mockDomain(Person, personList)
         personList.each { it.save() }
         
-        subject =     [ getPrincipal: { person.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted: { true }
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
-        
+		permitted = true
         
         gettingStarted = 
             new Notification(key:"GETTING_STARTED",
@@ -90,6 +76,11 @@ class NotificationControllerTests extends ControllerUnitTestCase
         super.tearDown()
     }
 
+	protected def getPrincipal()
+	{
+		return person.username
+	}
+	
     void testAcknowledgeNoKey() 
     {
         controller.acknowledge()
@@ -124,11 +115,9 @@ class NotificationControllerTests extends ControllerUnitTestCase
     
     void testAcknowledgeUnathenticated()
     {
-        subject =     [ getPrincipal: { null },
-                        isAuthenticated: { false },
-                        hasRole: { false },
-                        isPermitted: { false }
-                      ] as Subject
+		authenticated = false
+		hasRole = false
+		permitted = false
         
         controller.params.key = "GETTING_STARTED"
         controller.acknowledge()

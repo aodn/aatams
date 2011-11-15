@@ -1,30 +1,13 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
 import grails.test.*
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
-
-class AnimalReleaseControllerTests extends ControllerUnitTestCase 
+class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase 
 {
     protected void setUp() 
 	{
         super.setUp()
-		
-        def subject = [ getPrincipal: { "username" },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted:
-                        {
-                            return true
-                        }
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
     }
 
     protected void tearDown() 

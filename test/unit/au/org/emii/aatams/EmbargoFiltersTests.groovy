@@ -1,16 +1,15 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.test.AbstractFiltersUnitTestCase
 
 import grails.test.*
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
-
 import org.codehaus.groovy.grails.plugins.web.filters.FilterConfig
 
-class EmbargoFiltersTests extends FiltersUnitTestCase 
+import org.apache.shiro.SecurityUtils
+
+class EmbargoFiltersTests extends AbstractFiltersUnitTestCase 
 {
     def embargoService
     def permissionUtilsService
@@ -64,27 +63,7 @@ class EmbargoFiltersTests extends FiltersUnitTestCase
         mockDomain(Project, projectList)
         projectList.each{ it.save()}
         
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-                        
         Person user = new Person(username: 'jbloggs')
-        def subject = [ getPrincipal: { user.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted:
-                        {
-                            if (it == "project:" + project1.id + ":read")
-                            {
-                                return true
-                            }
-                            
-                            return false
-                        }
-                        
-                        
-                      ] as Subject
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
         
         // Need this for "findByUsername()" etc.
         mockDomain(Person, [user])
@@ -217,7 +196,22 @@ class EmbargoFiltersTests extends FiltersUnitTestCase
     {
         super.tearDown()
     }
-    
+   
+	protected def getPrincipal()
+	{
+		return 'jbloggs'
+	}
+	
+	protected boolean isPermitted(String permString)
+	{
+		if (permString == "project:" + project1.id + ":read")
+		{
+			return true
+		}
+		
+		return false
+	}
+	
     private Date now()
     {
         return new Date()

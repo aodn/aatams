@@ -1,13 +1,10 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import grails.test.*
 import org.joda.time.*
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
-
-class TimeZoneTests extends GrailsUnitTestCase 
+class TimeZoneTests extends AbstractGrailsUnitTestCase 
 {
     def specifiedTZ = DateTimeZone.forID("Australia/Adelaide")
     def userTZ = DateTimeZone.forID("Australia/Perth")
@@ -16,16 +13,7 @@ class TimeZoneTests extends GrailsUnitTestCase
     {
         super.setUp()
 
-        def subject = [ getPrincipal: { "person" },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted: { true }
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
+		permitted = true
 
         def person = new Person(username:"person",
                                 organisation:new Organisation(),
@@ -40,6 +28,11 @@ class TimeZoneTests extends GrailsUnitTestCase
     {
         super.tearDown()
     }
+	
+	protected def getPrincipal()
+	{
+		return "person"
+	}
 
     void testAnimalRelease() 
     {

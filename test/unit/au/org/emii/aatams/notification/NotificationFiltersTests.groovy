@@ -1,21 +1,17 @@
 package au.org.emii.aatams.notification
 
 import au.org.emii.aatams.*
+import au.org.emii.aatams.test.AbstractFiltersUnitTestCase
 
 import grails.test.*
-
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
 
 import org.codehaus.groovy.grails.plugins.web.filters.FilterConfig
 import org.joda.time.*
 
-class NotificationFiltersTests extends FiltersUnitTestCase 
+class NotificationFiltersTests extends AbstractFiltersUnitTestCase 
 {
     def notificationService
     def person
-    def subject
     def otherPerson
     
     Notification gettingStarted 
@@ -53,17 +49,7 @@ class NotificationFiltersTests extends FiltersUnitTestCase
         mockDomain(Person, personList)
         personList.each { it.save() }
         
-        subject =     [ getPrincipal: { person.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted: { true }
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
-        
+		permitted = true
         
         gettingStarted = 
             new Notification(key:"GETTING_STARTED",
@@ -91,6 +77,11 @@ class NotificationFiltersTests extends FiltersUnitTestCase
         super.tearDown()
     }
 
+	protected def getPrincipal()
+	{
+		return person.username
+	}
+	
     void testInsertNotifications()
     {
         def model = [:]
@@ -105,11 +96,9 @@ class NotificationFiltersTests extends FiltersUnitTestCase
         assertTrue(model.notifications.contains(receiverRecoveryCreate))
         assertFalse(model.notifications.contains(register))
         
-        subject = [ getPrincipal: { null },
-                        isAuthenticated: { false },
-                        hasRole: { false },
-                        isPermitted: { false }
-                      ] as Subject
+		authenticated = false
+		hasRole = false
+		permitted = false
 
         model = [:]
         filter.after(model)

@@ -5,12 +5,11 @@ import grails.test.*
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.report.filter.*
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
-class ReportQueryExecutorServiceTests extends GrailsUnitTestCase 
+class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase 
 {
     def embargoService
     def permissionUtilsService
@@ -41,6 +40,8 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
     ValidDetection detectionEmbargoedNonReadableProject
     ValidDetection detectionPastEmbargoed
 
+	Person jkburges
+	
     protected void setUp() 
     {
         super.setUp()
@@ -69,27 +70,7 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
         mockDomain(Installation, installationList)
         installationList.each { it.save() }
         
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-                        
-        Person jkburges = new Person(username: 'jkburges')
-        def subject = [ getPrincipal: { jkburges.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted:
-                        {
-                            if (it == "project:" + project1.id + ":read")
-                            {
-                                return true
-                            }
-                            
-                            return false
-                        }
-                        
-                        
-                      ] as Subject
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
+        jkburges = new Person(username: 'jkburges')
         
         // Need this for "findByUsername()" etc.
         mockDomain(Person, [jkburges])
@@ -191,7 +172,22 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
     {
         super.tearDown()
     }
-    
+
+	protected def getPrincipal()
+	{
+		return jkburges.username
+	}    
+	
+	protected boolean isPermitted(permission)
+	{
+		if (permission == "project:" + project1.id + ":read")
+		{
+			return true
+		}
+		
+		return false
+	}
+
     void testTagEmbargoFiltering()
     {
         // Check permissions are behaving correctly.

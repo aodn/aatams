@@ -1,12 +1,9 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import grails.test.*
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
-
-class CandidateEntitiesServiceTests extends GrailsUnitTestCase 
+class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase 
 {
     def candidateEntitiesService
     def permService
@@ -71,26 +68,6 @@ class CandidateEntitiesServiceTests extends GrailsUnitTestCase
         
         projectList.each { it.save() }
         
-        def subject = [ getPrincipal: { person.username },
-                        isAuthenticated: { true },
-                        hasRole: { false },
-                        isPermitted:
-                        {
-                            permission ->
-                            
-                            if (permission == "project:" + permittedProject.id + ":write")
-                            {
-                                return true
-                            }
-                            return false
-                        }
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
-        
         DeviceStatus newStatus = new DeviceStatus(status:"NEW")
         DeviceStatus deployedStatus = new DeviceStatus(status:"DEPLOYED")
         DeviceStatus recoveredStatus = new DeviceStatus(status:"RECOVERED")
@@ -115,7 +92,21 @@ class CandidateEntitiesServiceTests extends GrailsUnitTestCase
         imos.save()
     }
 
-    protected void tearDown() 
+	protected def getPrincipal()
+	{
+		return person.username
+	}
+	
+	protected boolean isPermitted(String permission)
+	{
+        if (permission == "project:" + permittedProject.id + ":write")
+        {
+            return true
+        }
+        return false
+	}
+
+	protected void tearDown() 
     {
         super.tearDown()
     }

@@ -1,20 +1,13 @@
 import grails.test.*
 
 import au.org.emii.aatams.*
-
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
+import au.org.emii.aatams.test.AbstractFiltersUnitTestCase
 
 import org.codehaus.groovy.grails.plugins.web.filters.FilterConfig
 
-class SecSecurityFiltersTests extends FiltersUnitTestCase 
+class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase 
 {
     def permissionUtilsService
-    
-    boolean hasRole
-    boolean isAuthenticated
-    boolean isPermitted
 
     protected void setUp() 
     {
@@ -24,18 +17,6 @@ class SecSecurityFiltersTests extends FiltersUnitTestCase
         permissionUtilsService = new PermissionUtilsService()
 
         filters.permissionUtilsService = permissionUtilsService
-
-        hasRole = false
-        isAuthenticated = false
-        isPermitted = false
-        
-        def subject = [ getPrincipal: { "username" },
-                        isAuthenticated: { isAuthenticated },
-                        hasRole: { hasRole },
-                        isPermitted: { isPermitted }
-                      ] as Subject
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
     }
 
     protected void tearDown() 
@@ -109,7 +90,7 @@ class SecSecurityFiltersTests extends FiltersUnitTestCase
     {
         FilterConfig deleteFilter = getFilter("delete")
 
-        isAuthenticated = true
+        authenticated = true
         [true, false].each
         {
             hasSysAdminRole ->
@@ -120,7 +101,7 @@ class SecSecurityFiltersTests extends FiltersUnitTestCase
             {
                 hasProjectWritePermission ->
                 
-                isPermitted = hasProjectWritePermission
+                permitted = hasProjectWritePermission
                 
                 (allControllers - deleteControllers).each
                 {
@@ -138,7 +119,7 @@ class SecSecurityFiltersTests extends FiltersUnitTestCase
 
 //                        assertFalse(retVal)
                         
-                        println("hasRole: " + hasRole + ", isPermitted: " + isPermitted + ", controller: " + controllerName + ", action: " + actionName)
+                        println("hasRole: " + hasRole + ", isPermitted: " + permitted + ", controller: " + controllerName + ", action: " + actionName)
                         println("redirectArgs: " + String.valueOf(redirectArgs))
 //                        println("renderArgs: " + renderArgs)
                     }

@@ -1,12 +1,13 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.command.*
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import grails.test.*
 import org.apache.shiro.crypto.hash.Sha256Hash
 import grails.converters.JSON
 
-class ProjectControllerTests extends ControllerUnitTestCase 
+class ProjectControllerTests extends AbstractControllerUnitTestCase 
 {
     Project sealCountProject    
     Person joeBloggs
@@ -129,13 +130,12 @@ class ProjectControllerTests extends ControllerUnitTestCase
 
     protected void tearDown() 
     {
-        TestUtils.logout()
         super.tearDown()
     }
 
     void testListAsSysAdmin()
     {
-        TestUtils.loginSysAdmin(this)
+		hasRole = true
         
         def retVal = controller.list()
         assertEquals(3,
@@ -144,7 +144,7 @@ class ProjectControllerTests extends ControllerUnitTestCase
     
     void testListAsNonSysAdmin()
     {
-        TestUtils.loginJoeBloggs(this)
+		hasRole = false
         
         def retVal = controller.list()
         assertEquals(1, 
@@ -154,7 +154,7 @@ class ProjectControllerTests extends ControllerUnitTestCase
     
     void testSaveAsSysAdmin()
     {
-        TestUtils.loginSysAdmin(this)
+		hasRole = true
 
         boolean mailSent = false
         
@@ -181,7 +181,7 @@ class ProjectControllerTests extends ControllerUnitTestCase
     void testSaveAsNonSysAdmin()
     {
         // Status should be set to PENDING and mail sent.
-        TestUtils.loginJoeBloggs(this)
+		hasRole = false
 
         boolean mailSent = false
         

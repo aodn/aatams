@@ -3,18 +3,13 @@ package au.org.emii.aatams
 import grails.test.*
 import org.joda.time.DateTimeZone
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
 
-class PersonControllerTests extends ControllerUnitTestCase 
+class PersonControllerTests extends AbstractControllerUnitTestCase 
 {
-    def hasRole = true
     boolean mailSent
     String toAddress
     
-    def user
-
     protected void setUp()
     {
         super.setUp()
@@ -27,19 +22,6 @@ class PersonControllerTests extends ControllerUnitTestCase
         }
 
         controller.metaClass.message = { LinkedHashMap args -> return "${args.code}" }
-        
-        user = Person.findByUsername("jkburges")
-        
-        def subject = [ getPrincipal: { user?.username },
-                        isAuthenticated: { true },
-                        hasRole: { hasRole },
-                        isPermitted: { false },
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
     }
 
     protected void tearDown() 

@@ -1,12 +1,9 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.test.*
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
-
-class NavigationMenuControllerTests extends ControllerUnitTestCase 
+class NavigationMenuControllerTests extends AbstractControllerUnitTestCase 
 {
     def permissionUtilsService
     def person
@@ -32,27 +29,25 @@ class NavigationMenuControllerTests extends ControllerUnitTestCase
         super.tearDown()
     }
 
+	protected def getPrincipal()
+	{
+		return person.username
+	}
+
+	protected boolean isPermitted(String permission)
+	{
+	    if (permission == "projectWriteAny")
+	    {
+	        return true
+	    }
+	    
+	    return false
+	}	
+	
     void testFieldDataControllersAsNonSysAdmin() 
     {
-        def subject = [ getPrincipal: { person.username },
-                        isAuthenticated: { true },
-                        hasRole: { false },
-                        isPermitted:
-                        {
-                            if (it == "projectWriteAny")
-                            {
-                                return true
-                            }
-                            
-                            return false
-                        }
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
-        
+		hasRole = false
+		
         def fieldDataControllers =
             controller.index().fieldDataControllers
         
@@ -66,24 +61,7 @@ class NavigationMenuControllerTests extends ControllerUnitTestCase
 
     void testFieldDataControllersAsSysAdmin() 
     {
-        def subject = [ getPrincipal: { person.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted:
-                        {
-                            if (it == "projectWriteAny")
-                            {
-                                return true
-                            }
-                            
-                            return false
-                        }
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
+		hasRole = true
 
         def fieldDataControllers =
             controller.index().fieldDataControllers

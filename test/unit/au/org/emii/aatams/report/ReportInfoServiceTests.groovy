@@ -3,18 +3,19 @@ package au.org.emii.aatams.report
 import grails.test.*
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.ValidDetection
-
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import org.joda.time.*
 
-class ReportInfoServiceTests extends GrailsUnitTestCase 
+class ReportInfoServiceTests extends AbstractGrailsUnitTestCase 
 {
     def permissionUtilsService
     def reportInfoService
-    
+	Person user
+	Project project1
+	
+	Person authUser
+	
     protected void setUp() 
     {
         super.setUp()
@@ -27,7 +28,7 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         reportInfoService.permissionUtilsService = permissionUtilsService
         
         // Create a couple of projects and installations.
-        Project project1 = new Project(name: "project 1")
+        project1 = new Project(name: "project 1")
         Project project2 = new Project(name: "project 2")
         def projectList = [project1, project2]
         mockDomain(Project, projectList)
@@ -41,25 +42,10 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         
         mockDomain(Organisation)
 
-        Person user = new Person(username: 'user')
-        def subject = [ getPrincipal: { user.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted:
-                        {
-                            if (it == "project:" + project1.id + ":read")
-                            {
-                                return true
-                            }
-                            
-                            return false
-                        }
-                        
-                        
-                      ] as Subject
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
-        
+        user = new Person(username: 'user')
+		hasRole = true
+		authUser = user
+		
         // Need this for "findByUsername()" etc.
         mockDomain(Person, [user])
         user.save()
@@ -81,6 +67,21 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
         super.tearDown()
     }
 
+	protected def getPrincipal()
+	{
+		return authUser?.username
+	}
+	
+	protected boolean isPermitted(permission)
+	{
+		if (permission == "project:" + project1.id + ":read")
+		{
+			return true
+		}
+		
+		return false
+	}
+	
     void testGetReportInfoReceiver() 
     {
         def reportInfos = reportInfoService.getReportInfo()
@@ -121,8 +122,9 @@ class ReportInfoServiceTests extends GrailsUnitTestCase
      
     void testGetReportInfoInstallationStationNotLoggedIn()
     {
-        SecurityUtils.metaClass.static.getSubject = { null }
-
+		authUser = null
+		authenticated = false
+		
         ReportInfo stationReportInfo = reportInfoService.getReportInfo("installationStation")
         def filterParams = stationReportInfo.filterParams
         assertNotNull(filterParams)

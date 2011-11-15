@@ -1,38 +1,28 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import grails.test.*
 
 import org.joda.time.*
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
-
-class PersonTests extends GrailsUnitTestCase 
+class PersonTests extends AbstractGrailsUnitTestCase 
 {
     def perthTZ = DateTimeZone.forID("Australia/Perth")
-    
+	def person
+	
     protected void setUp() 
     {
         super.setUp()
 
-        def person = new Person(username:"person",
+        person = new Person(username:"person",
                                 organisation:new Organisation(),
                                 defaultTimeZone:perthTZ)
                                
         mockDomain(Person, [person])
         person.save()
         
-        def subject = [ getPrincipal: { person.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted: { true }
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
+		permitted = true
+		hasRole = true
     }
 
     protected void tearDown() 
@@ -40,6 +30,11 @@ class PersonTests extends GrailsUnitTestCase
         super.tearDown()
     }
 
+	protected def getPrincipal()
+	{
+		return person?.username
+	}
+	
     void testDefaultTimeZone() 
     {
 //        assertEquals(perthTZ, Person.defaultTimeZone())

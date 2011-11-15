@@ -1,19 +1,16 @@
 package au.org.emii.aatams
 
 import grails.test.*
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import org.joda.time.DateTimeZone
 
 import org.apache.shiro.crypto.hash.Sha256Hash
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
 
-class PersonControllerTests extends ControllerUnitTestCase 
+class PersonControllerTests extends AbstractControllerUnitTestCase 
 {
     def permissionUtilsService
 
-    def hasRole = true
     boolean mailSent
     
     def user
@@ -39,26 +36,18 @@ class PersonControllerTests extends ControllerUnitTestCase
         user = new Person(username: "username")
         mockDomain(Person, [user])
         user.save()
-        
-        def subject = [ getPrincipal: { user?.username },
-                        isAuthenticated: { true },
-                        hasRole: { hasRole },
-                        isPermitted: { false },
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
-        
     }
 
     protected void tearDown() 
     {
-        TestUtils.logout()
         super.tearDown()
     }
 
+	protected def getPrincipal()
+	{
+		return user?.username
+	}
+	
     static def createDataList()
     {
         Organisation csiro = Organisation.findByName('CSIRO')
@@ -108,7 +97,7 @@ class PersonControllerTests extends ControllerUnitTestCase
     
     void testShow() 
     {
-        TestUtils.loginSysAdmin(this)
+		hasRole = true
         
         def address = new Address(id:1,
                                   streetAddress:'1 Smith Street',

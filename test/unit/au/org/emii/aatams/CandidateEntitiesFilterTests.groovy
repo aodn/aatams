@@ -1,14 +1,11 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import grails.test.*
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
-
-class CandidateEntitiesFilterTests extends GrailsUnitTestCase 
+class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase 
 {
     PermissionUtilsService permService
     Project activeProj
@@ -73,43 +70,6 @@ class CandidateEntitiesFilterTests extends GrailsUnitTestCase
                                
         mockDomain(Person, [person])
         person.save()
-        
-        def subject = [ getPrincipal: { person.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted:
-                        {
-                            permString ->
-                            
-                            if (permString == "project:" + activeProj.id + ":write")
-                            {
-                                return true
-                            }
-                            else if (permString == "project:" + pendingProj.id + ":write")
-                            {
-                                return true
-                            }
-                            else if (permString == "project:" + activeProj.id + ":read")
-                            {
-                                return true
-                            }
-                            else if (permString == "project:" + pendingProj.id + ":read")
-                            {
-                                return true
-                            }
-                            else if (permString == "project:" + nonWriteProj.id + ":read")
-                            {
-                                return true
-                            }
-                            
-                            return false
-                        }
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
         
         ProjectRoleType roleType = new ProjectRoleType(displayName:"some role")
         ProjectRoleType piRoleType = new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR)
@@ -244,6 +204,37 @@ class CandidateEntitiesFilterTests extends GrailsUnitTestCase
         super.tearDown()
     }
 
+	protected def getPrincipal()
+	{
+		return person.username
+	}
+	
+	protected boolean isPermitted(String permString)
+	{
+        if (permString == "project:" + activeProj.id + ":write")
+        {
+            return true
+        }
+        else if (permString == "project:" + pendingProj.id + ":write")
+        {
+            return true
+        }
+        else if (permString == "project:" + activeProj.id + ":read")
+        {
+            return true
+        }
+        else if (permString == "project:" + pendingProj.id + ":read")
+        {
+            return true
+        }
+        else if (permString == "project:" + nonWriteProj.id + ":read")
+        {
+            return true
+        }
+        
+        return false
+	}
+	
     void testAnimalReleaseCreate()
     {
         def model = animalReleaseController.create()
@@ -454,29 +445,6 @@ class CandidateEntitiesFilterTests extends GrailsUnitTestCase
     
     private void setNonAdminUser()
     {
-        def subject = [ getPrincipal: { person.username },
-                        isAuthenticated: { true },
-                        hasRole: { false },
-                        isPermitted:
-                        {
-                            permString ->
-                            
-                            if (permString == "project:" + activeProj.id + ":write")
-                            {
-                                return true
-                            }
-                            else if (permString == "project:" + pendingProj.id + ":write")
-                            {
-                                return true
-                            }
-                            
-                            return false
-                        }
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
+		hasRole = false
     }
 }

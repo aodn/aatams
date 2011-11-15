@@ -4,14 +4,11 @@ import grails.test.*
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.report.filter.*
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase;
 
 import org.joda.time.*
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
-
-class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
+class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase
 {
     def embargoService
     def permissionUtilsService
@@ -23,11 +20,11 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
     Installation installation2
     Installation installation3
     
-    Person user
-    
     ProjectRole project1Pi
     ProjectRole project2Pi
     
+	Project project1
+	
     protected void setUp() 
     {
         super.setUp()
@@ -38,7 +35,7 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
      
         // Create some projects and installations.
         Person requester = Person.findByUsername("jkburges")
-        Project project1 = new Project(name: "project 1", description: "desc", status:EntityStatus.ACTIVE, requestingUser:requester)
+        project1 = new Project(name: "project 1", description: "desc", status:EntityStatus.ACTIVE, requestingUser:requester)
         Project project2 = new Project(name: "project 2", description: "desc", status:EntityStatus.ACTIVE, requestingUser:requester)
         Project project3 = new Project(name: "project 3", description: "desc", status:EntityStatus.ACTIVE, requestingUser:requester)
         def projectList = [project1, project2, project3]
@@ -58,33 +55,6 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
         def installationList = [installation1, installation2, installation3]
         installationList.each { it.save() }
         
-        def imos = Organisation.findByName('IMOS')
-        user = new Person(username: 'user', 
-                                   passwordHash: 'password',
-                                   name: "A User",
-                                   emailAddress:"auser@auser.com",
-                                   phoneNumber:"1234",
-                                   status:EntityStatus.ACTIVE,
-                                   organisation:imos,
-                                   defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
-        def subject = [ getPrincipal: { user.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted:
-                        {
-                            if (it == "project:" + project1.id + ":read")
-                            {
-                                return true
-                            }
-                            
-                            return false
-                        }
-                        
-                        
-                      ] as Subject
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
-        
         // Add roles on project 1 and 2, but not 3
         ProjectRoleType piRoleType = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
        
@@ -96,6 +66,37 @@ class ReportQueryExecutorServiceTests extends GrailsUnitTestCase
         user.save()
     }
 
+	def customUser = null
+	
+	protected Person getUser()
+	{
+		if (!customUser)
+		{
+			def imos = Organisation.findByName('IMOS')
+			
+			customUser = new Person(username: 'user',
+			passwordHash: 'password',
+			name: "A User",
+			emailAddress:"auser@auser.com",
+			phoneNumber:"1234",
+			status:EntityStatus.ACTIVE,
+			organisation:imos,
+			defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
+		}
+		
+		return customUser
+	}
+	
+	protected boolean isPermitted(String permission)
+	{
+		if (permission == "project:" + project1.id + ":read")
+		{
+		    return true
+		}
+		
+		return false
+	}
+	
     protected void tearDown() 
     {
         searchableService.startMirroring()

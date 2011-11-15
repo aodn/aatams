@@ -3,18 +3,14 @@ package au.org.emii.aatams.notification
 import grails.test.*
 
 import au.org.emii.aatams.*
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import org.joda.time.*
 
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
-import org.apache.shiro.SecurityUtils
-
-class NotificationServiceTests extends GrailsUnitTestCase 
+class NotificationServiceTests extends AbstractGrailsUnitTestCase 
 {
     def notificationService
     def person
-    def subject
     def otherPerson
     
     Notification gettingStarted 
@@ -23,6 +19,8 @@ class NotificationServiceTests extends GrailsUnitTestCase
     
     def permissionUtilsService
 
+	def authorisedPerson
+	
     protected void setUp() 
     {
         super.setUp()
@@ -50,18 +48,9 @@ class NotificationServiceTests extends GrailsUnitTestCase
         mockDomain(Person, personList)
         personList.each { it.save() }
         
-        subject =     [ getPrincipal: { person.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted: { true }
-                      ] as Subject
-
-        ThreadContext.put( ThreadContext.SECURITY_MANAGER_KEY, 
-                            [ getSubject: { subject } ] as SecurityManager )
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
-        
-        
+		permitted = true
+		authorisedPerson = person
+		
         gettingStarted = 
             new Notification(key:"GETTING_STARTED",
                              htmlFragment:"Click here to get started",
@@ -88,6 +77,11 @@ class NotificationServiceTests extends GrailsUnitTestCase
         super.tearDown()
     }
 
+	protected def getPrincipal()
+	{
+		return authorisedPerson?.username
+	}
+	
     void testActiveNotifications()
     {
         def notificationList = notificationService.listActive()
@@ -96,12 +90,11 @@ class NotificationServiceTests extends GrailsUnitTestCase
         assertTrue(notificationList.contains(receiverRecoveryCreate))
         assertFalse(notificationList.contains(register))
         
-        subject = [ getPrincipal: { null },
-                        isAuthenticated: { false },
-                        hasRole: { false },
-                        isPermitted: { false }
-                      ] as Subject
-                      
+		authenticated = false
+		hasRole = false
+		authorisedPerson = null
+		permitted = false
+		
         notificationList = notificationService.listActive()
         
         assertFalse(notificationList.contains(gettingStarted))
@@ -119,12 +112,11 @@ class NotificationServiceTests extends GrailsUnitTestCase
         notificationList = notificationService.listActive()
         assertFalse(notificationList.contains(gettingStarted))
         assertTrue(notificationList.contains(receiverRecoveryCreate))
-        
-        subject =     [ getPrincipal: { otherPerson.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted: { true }
-                      ] as Subject
+       
+		authorisedPerson = otherPerson
+		authenticated = true
+		hasRole = true
+		permitted = true
 
         notificationList = notificationService.listActive()
         assertTrue(notificationList.contains(gettingStarted))
@@ -143,16 +135,14 @@ class NotificationServiceTests extends GrailsUnitTestCase
         assertFalse(notificationList.contains(gettingStarted))
         assertTrue(notificationList.contains(receiverRecoveryCreate))
         
-        subject =     [ getPrincipal: { otherPerson.username },
-                        isAuthenticated: { true },
-                        hasRole: { true },
-                        isPermitted: { true }
-                      ] as Subject
+		authorisedPerson = otherPerson
+		authenticated = true
+		hasRole = true
+		permitted = true
 
         notificationList = notificationService.listActive()
         assertTrue(notificationList.contains(gettingStarted))
         assertTrue(notificationList.contains(receiverRecoveryCreate))
 
     }
-    
 }

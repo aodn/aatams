@@ -23,19 +23,19 @@ class HomePageTests extends GroovyTestCase
 		assertEquals("Login", homePage.getBannerPage().getLoginText())
 	}
 
-	void testAcknowledgeRegisterNotification()
-	{
-		homePage.undoAcknowledgeRegisterNotification()
-		homePage.refresh()
-		homePage.waitForRegisterNotification()
-		assertTrue(homePage.isRegisterNotificationPresent())
-		assertTrue(homePage.getNotificationMessages().contains("Click here to register to use AATAMS"))
-
-		homePage.acknowledgeRegisterNotification()
-		homePage.refresh()
-		assertFalse(homePage.isRegisterNotificationPresent())
-		assertFalse(homePage.getNotificationMessages().contains("Click here to register to use AATAMS"))
-	}
+//	void testAcknowledgeRegisterNotification()
+//	{
+//		homePage.undoAcknowledgeRegisterNotification()
+//		homePage.refresh()
+//		homePage.waitForRegisterNotification()
+//		assertTrue(homePage.isRegisterNotificationPresent())
+//		assertTrue(homePage.getNotificationMessages().contains("Click here to register to use AATAMS"))
+//
+//		homePage.acknowledgeRegisterNotification()
+//		homePage.refresh()
+//		assertFalse(homePage.isRegisterNotificationPresent())
+//		assertFalse(homePage.getNotificationMessages().contains("Click here to register to use AATAMS"))
+//	}
 	
 	void testLoginAsSysadmin()
 	{

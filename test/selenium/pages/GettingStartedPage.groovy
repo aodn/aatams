@@ -1,12 +1,12 @@
 package pages
 
-import grails.plugins.selenium.pageobjects.Page;
 import grails.plugins.selenium.pageobjects.UnexpectedPageException;
 
-class GettingStartedPage extends Page 
+class GettingStartedPage extends LayoutPage 
 {
 	public GettingStartedPage() throws UnexpectedPageException 
 	{
+		super()
 	}
 
 	public GettingStartedPage(String uri) throws UnexpectedPageException 

@@ -84,4 +84,17 @@ abstract class LayoutPage extends Page
 //		selenium.deleteAllVisibleCookies()
 		giveJavaScriptTimeToExecute()
 	}
+	
+	public List<String> getCreateLinks()
+	{
+		String[] allLinks = selenium.getAllLinks()
+		println(allLinks)
+		
+		List<String> createLinks = allLinks.grep 
+		{
+			it.contains("create")
+		}
+		
+		return createLinks
+	}
 }

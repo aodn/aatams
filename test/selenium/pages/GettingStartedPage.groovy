@@ -1,4 +1,4 @@
-package au.org.emii.aatams.test
+package pages
 
 import grails.plugins.selenium.pageobjects.Page;
 import grails.plugins.selenium.pageobjects.UnexpectedPageException;

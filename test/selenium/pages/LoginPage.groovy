@@ -1,5 +1,6 @@
-package au.org.emii.aatams.test
+package pages
 
+import pages.GettingStartedPage;
 import grails.plugins.selenium.pageobjects.Page;
 import grails.plugins.selenium.pageobjects.UnexpectedPageException;
 
@@ -33,7 +34,7 @@ class LoginPage extends Page
 		selenium.type("name=password", password)
 	}
 	
-	public Page clickSignIn()
+	public GettingStartedPage clickSignIn()
 	{
 		selenium.click("css=input[type=\"submit\"]")
 		selenium.waitForPageToLoad("30000")

@@ -1,12 +1,11 @@
-package au.org.emii.aatams.test
+package pages
 
 import grails.plugins.selenium.pageobjects.Page;
 import grails.plugins.selenium.pageobjects.UnexpectedPageException;
 
-class AboutPage extends Page 
+class AboutPage extends LayoutPage 
 {
-	private static final String URL = "/aatams/about"
-	
+	protected static final String URL = "/aatams/about"
 	
 	public AboutPage() throws UnexpectedPageException 
 	{

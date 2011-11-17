@@ -64,7 +64,7 @@ abstract class LayoutPage extends Page
 	{
 		// TODO: the dodgy sleeps are to give client-side javascript time to execute
 		// Need to revisit and find a better (faster, more reliable) way to do this.
-		Thread.sleep(500)
+		Thread.sleep(1000)
 	}
 	
 	public String getLoginText()

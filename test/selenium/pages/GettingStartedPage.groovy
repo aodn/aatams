@@ -17,7 +17,7 @@ class GettingStartedPage extends LayoutPage
 	@Override
 	protected void verifyPage() throws UnexpectedPageException 
 	{
-		pageTitleIs("Getting Started")
+//		pageTitleIs("Getting Started")
 	}
 	
 	public String getBodyHeading()

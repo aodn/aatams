@@ -21,17 +21,36 @@ class AuthenticationTests extends GroovyTestCase
 	{
 		assertEquals("Australian Animal Tagging and Monitoring System (AATAMS)", homePage.getBodyHeading())
 		assertEquals("Login", homePage.getLoginText())
+
+		assertTrue(homePage.getCreateLinks().isEmpty())
 	}
 
 	void testLoginAsSysadmin()
 	{
-		LoginPage loginPage = homePage.login()
-		loginPage.typeUsername("jkburges")
-		loginPage.typePassword("password")
-		
-		GettingStartedPage gettingStartedPage = loginPage.clickSignIn()
-		assertEquals("Getting Started", gettingStartedPage.getBodyHeading())
-		
-		homePage = homePage.logout()
+		try
+		{
+			LoginPage loginPage = homePage.login()
+			loginPage.typeUsername("jkburges")
+			loginPage.typePassword("password")
+			
+			GettingStartedPage gettingStartedPage = loginPage.clickSignIn()
+			assertEquals("Getting Started", gettingStartedPage.getBodyHeading())
+	
+//			assertTrue(gettingStartedPage.getCreateLinks().containsAll(["/aatams/organisation/create", 
+//																		"/aatams/project/create", 
+//																		"/aatams/person/create", 
+//																		"/aatams/installation/create", 
+//																		"/aatams/installationStation/create", 
+//																		"/aatams/receiver/create", 
+//																		"/aatams/tag/create", 
+//																		"/aatams/animalRelease/create", 
+//																		"/aatams/detection/create", 
+//																		"/aatams/receiverDeployment/create", 
+//																		"/aatams/receiverEvent/create"]))
+		}
+		finally
+		{
+			homePage = homePage.logout()
+		}
 	}
 }

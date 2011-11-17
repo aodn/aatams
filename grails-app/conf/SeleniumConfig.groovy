@@ -1,5 +1,10 @@
 selenium {
-//	browser = "*googlechrome"
+	browser = "*firefox"
+	
+	screenshot {
+		dir = "./target/test-reports/screenshots"	// directory where screenshots are placed relative to project root
+		onFail = true								// true to capture screenshots on test failures
+	}
 /*
 	slow = false									// true to run tests in slow resources mode
 	singleWindow = true								// true for single window mode, false for multi-window mode

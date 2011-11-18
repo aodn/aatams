@@ -94,11 +94,12 @@ environments
     }
     test 
 	{
-        grails.serverURL = "http://localhost:8090/${appName}"
+        grails.serverURL = "http://localhost:8090/${appName}/"
         grails.serverHost = "http://localhost:8090"
 		grails.plugin.databasemigration.updateOnStart = false
     }
 }
+
 
 // log4j configuration
 log4j = {

@@ -1,7 +1,8 @@
+package au.org.emii.aatams.test
+
 import geb.Configuration;
 import geb.ConfigurationLoader
 import geb.junit4.GebReportingTest
-
 
 class BaseTests extends GebReportingTest 
 {

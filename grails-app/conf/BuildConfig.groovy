@@ -27,15 +27,19 @@ grails.project.dependency.resolution = {
         // excludes 'ehcache'
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+	
+	def gebVersion = "0.6.1"
+	def seleniumVersion = "2.12.0"
+
     repositories {
         grailsPlugins()
         grailsHome()
         grailsCentral()
+		mavenLocal()
+		mavenCentral()
 
         // uncomment the below to enable remote dependency resolution
         // from public Maven repositories
-        //mavenLocal()
-        //mavenCentral()
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         mavenRepo "http://download.java.net/maven/2/"
@@ -49,5 +53,24 @@ grails.project.dependency.resolution = {
 		
 		// KML
 		compile 'de.micromata.jak:JavaAPIforKml:2.2.0-SNAPSHOT'
+		
+		test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion")
+		{
+			exclude "xml-apis"
+		}
+		test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion")
+		test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion")
+
+		// You usually only need one of these, but this project uses both
+//		test "org.codehaus.geb:geb-spock:$gebVersion"
+		test "org.codehaus.geb:geb-junit4:$gebVersion"
     }
+	plugins {
+//		test ":tomcat:$grailsVersion"
+//		test ":hibernate:$grailsVersion"
+//
+		test ":geb:$gebVersion"
+//		test ":spock:0.5-groovy-1.7"
+	}
+
 }

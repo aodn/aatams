@@ -1,21 +1,20 @@
 package pages
 
-import geb.Page
-
-class LoginPage extends Page 
+class LoginPage extends LayoutPage 
 {
-	static url = "/auth/login"
+	static url = "auth/login"
 	
 	static at =
 	{
-//		title == "Login"
+		title == "Login"
 		true
 	}
 	
 	static content =
 	{
-		usernameTextField { $("input[@name='username']") }
-		passwordTextField { $("input[@name='password']") }
-		signInButton(to: GettingStartedPage) { "Sign In"() }
+		usernameTextField { $("input", name: "username") }
+		passwordTextField { $("input", name: "password") }
+		
+		signInButton { $("input", type: "submit") }
 	}
 }

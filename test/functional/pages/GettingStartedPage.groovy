@@ -1,8 +1,6 @@
 package pages
 
-import geb.Page;
-
-class GettingStartedPage extends Page 
+class GettingStartedPage extends LayoutPage 
 {
 	static url = "gettingStarted"
 	

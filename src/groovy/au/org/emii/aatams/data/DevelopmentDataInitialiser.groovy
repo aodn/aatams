@@ -198,11 +198,21 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                        emailAddress:'jcitizen@blah.au',
                        status:EntityStatus.ACTIVE,
                        defaultTimeZone:DateTimeZone.forID("Australia/Adelaide"))
-        
+
+		Person mrPending =
+			new Person(username:'pending',
+					   passwordHash:new Sha256Hash("pending").toHex(),
+					   name:'Pending Pending',
+					   organisation:csiroOrg,
+					   phoneNumber:'5678',
+					   emailAddress:'pending@blah.au',
+					   status:EntityStatus.PENDING,
+					   defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
+
         csiroOrg.addToPeople(joeBloggs)
         csiroOrg.addToPeople(johnCitizen)
+        csiroOrg.addToPeople(mrPending)
         csiroOrg.save(failOnError:true)
-        
 
         //
         // Project Roles.

@@ -7,7 +7,6 @@ class LoginPage extends LayoutPage
 	static at =
 	{
 		title == "Login"
-		true
 	}
 	
 	static content =
@@ -15,6 +14,6 @@ class LoginPage extends LayoutPage
 		usernameTextField { $("input", name: "username") }
 		passwordTextField { $("input", name: "password") }
 		
-		signInButton { $("input", type: "submit") }
+		signInButton (to: [GettingStartedPage, LoginPage]) { $("input", type: "submit") }
 	}
 }

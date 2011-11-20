@@ -9,12 +9,27 @@ class AuthenticationTests extends BaseTests
 	@Test
 	void signInUnknownUsername()
 	{
-		String unknownUsername = "asdf"
-		signInWithUsernameAndPassword(unknownUsername, "password")
+		assertFailedLogin("asdf", "password")
+	}
+	
+	@Test
+	void signInIncorrectPassword()
+	{
+		assertFailedLogin("jkburges", "xyz")
+	}
+	
+	@Test
+	void signInPendingUser()
+	{
+		assertFailedLogin("pending", "pending")
+	}
+	
+	private void assertFailedLogin(username, password)
+	{
+		signInWithUsernameAndPassword(username, password)
 		assert at(LoginPage)
 		assert message == "Invalid username and/or password"
-		report("after failed login")
-		assert usernameTextField.value() == unknownUsername
+		assert usernameTextField.value() == username
 		assert passwordTextField.value() == ""
 	}
 	

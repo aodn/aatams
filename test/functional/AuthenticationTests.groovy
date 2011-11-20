@@ -13,8 +13,9 @@ class AuthenticationTests extends BaseTests
 		signInWithUsernameAndPassword(unknownUsername, "password")
 		assert at(LoginPage)
 		assert message == "Invalid username and/or password"
-//		assert usernameTextField.text() == unknownUsername
-		assert passwordTextField.text() == ""
+		report("after failed login")
+		assert usernameTextField.value() == unknownUsername
+		assert passwordTextField.value() == ""
 	}
 	
 	@Test

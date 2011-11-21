@@ -4,6 +4,8 @@ import geb.Configuration;
 import geb.ConfigurationLoader
 import geb.junit4.GebReportingTest
 
+import pages.*
+
 class BaseTests extends GebReportingTest 
 {
 	Configuration createConf()
@@ -27,5 +29,24 @@ class BaseTests extends GebReportingTest
 		}
 		
 		return config
+	}
+
+	protected void login(username, password) 
+	{
+		to HomePage
+		
+		assert heading.text() == "Australian Animal Tagging and Monitoring System (AATAMS)"
+		loginLink.click()
+		
+		assert at(LoginPage)
+		usernameTextField << username
+		passwordTextField << password
+	
+		signInButton.click()
+	}
+
+	protected void loginAsSysAdmin() 
+	{
+		login("jkburges", "password")
 	}
 }

@@ -26,7 +26,7 @@ class AuthenticationTests extends BaseTests
 	
 	private void assertFailedLogin(username, password)
 	{
-		signInWithUsernameAndPassword(username, password)
+		login(username, password)
 		assert at(LoginPage)
 		assert message == "Invalid username and/or password"
 		assert usernameTextField.value() == username
@@ -36,21 +36,7 @@ class AuthenticationTests extends BaseTests
 	@Test
 	void signInAsSysAdmin()
 	{
-		signInWithUsernameAndPassword("jkburges", "password")
+		loginAsSysAdmin()
 		assert at(GettingStartedPage)
-	}
-	
-	private void signInWithUsernameAndPassword(username, password)
-	{
-		to HomePage
-		
-		assert heading.text() == "Australian Animal Tagging and Monitoring System (AATAMS)"
-		loginLink.click()
-		
-		assert at(LoginPage)
-		usernameTextField << username
-		passwordTextField << password
-
-		signInButton.click()
 	}
 }

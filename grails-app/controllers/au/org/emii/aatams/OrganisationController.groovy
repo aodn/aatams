@@ -67,7 +67,7 @@ class OrganisationController
         // If SysAdmin, then set Organisation's status to ACTIVE, otherwise,
         // set to PENDING.
         Person user = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
-        organisationInstance.request = new Request(requester:user)
+        organisationInstance.request = new Request(requester:user, organisation: organisationInstance)
         
         if (SecurityUtils.getSubject().hasRole("SysAdmin"))
         {

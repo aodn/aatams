@@ -53,36 +53,36 @@ class OrganisationTests extends BaseTests
 		assertShowPageDetails("CSIRO", "CMAR", "1234", "1234", "12 Smith Street, Hobart, TAS, Australia, 7000", "34 Queen Street, Melbourne, VIC, Australia, 3000", 3)
 	}
 	
-//	@Test
-//	void createOrganisation()
-//	{
-//		loginAsSysAdmin()
-//		to OrganisationListPage
-//		newButton.click()
-//		
-//		assert at(OrganisationCreatePage)
-//		
-//		nameTextField << "Some New Organisation"
-//		departmentTextField << "Marine"
-//		phoneNumberTextField << "1234"
-//		faxNumberTextField << "4321"
-//
-//		streetAddressStreetAddressTextField << "12 Smith Street"
-//		streetAddressSuburbTownTextField << "Hobart"
-//		streetAddressStateTextField << "TAS"
-//		streetAddressPostcodeTextField << "7000"
-//		streetAddressCountryTextField << "Australia"
-//
-//		postalAddressStreetAddressTextField << "PO Box 1234"
-//		postalAddressSuburbTownTextField << "Melbourne"
-//		postalAddressStateTextField << "VIC"
-//		postalAddressPostcodeTextField << "3000"
-//		postalAddressCountryTextField << "Australia"
-//
-//		createButton.click()
-//		assert at(OrganisationShowPage)
-//		
-//	}
+	@Test
+	void createOrganisation()
+	{
+		loginAsSysAdmin()
+		to OrganisationListPage
+		newButton.click()
+		
+		assert at(OrganisationCreatePage)
+		
+		nameTextField << "Some New Organisation"
+		departmentTextField << "Marine"
+		phoneNumberTextField << "1234"
+		faxNumberTextField << "4321"
+
+		streetAddressStreetAddressTextField << "12 Smith Street"
+		streetAddressSuburbTownTextField << "Hobart"
+		streetAddressStateTextField << "TAS"
+		streetAddressPostcodeTextField << "7000"
+		streetAddressCountryTextField << "Australia"
+
+		postalAddressStreetAddressTextField << "PO Box 1234"
+		postalAddressSuburbTownTextField << "Melbourne"
+		postalAddressStateTextField << "VIC"
+		postalAddressPostcodeTextField << "3000"
+		postalAddressCountryTextField << "Australia"
+
+		createButton.click()
+		report("After create")
+		assert at(OrganisationShowPage)
+	}
 	
 	private void assertShowPageDetails(name, department, phoneNumber, faxNumber, streetAddress, postalAddress, numPeopleLinks)
 	{

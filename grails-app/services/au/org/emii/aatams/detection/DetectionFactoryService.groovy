@@ -24,7 +24,7 @@ class DetectionFactoryService
 {
     static transactional = true
 
-    static final String DATE_AND_TIME_COLUMN = "\uFEFFDate and Time (UTC)"  // \uFEFF is a zero-width non-breaking space.
+    static final String DATE_AND_TIME_COLUMN = "Date and Time (UTC)"
     static final String RECEIVER_COLUMN = "Receiver"
     static final String TRANSMITTER_COLUMN = "Transmitter"
     static final String TRANSMITTER_NAME_COLUMN = "Transmitter Name"
@@ -94,7 +94,7 @@ class DetectionFactoryService
     
     private static Map toNativeParams(params)
     {
-        def timestamp = new Date().parse(DATE_FORMAT, params[DATE_AND_TIME_COLUMN]+ " " + "UTC")
+        def timestamp = new Date().parse(DATE_FORMAT, params[DATE_AND_TIME_COLUMN] + " " + "UTC")
         
         def retMap =
                [timestamp:timestamp,

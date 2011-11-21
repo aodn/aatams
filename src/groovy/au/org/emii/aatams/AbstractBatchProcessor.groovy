@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import org.apache.commons.io.input.BOMInputStream;
+
 /**
  *
  * @author jburgess
@@ -71,7 +73,9 @@ abstract class AbstractBatchProcessor
     
     List<Map<String, String>> getRecords(downloadFile)
     {
-        return new File(downloadFile.path).toCsvMapReader().toList()
+		// Wrap in BOMInputStream, to handle the byte-order marker present in VUE exports
+		// (see http://stackoverflow.com/questions/1835430/byte-order-mark-screws-up-file-reading-in-java/7390288#7390288)
+        return new InputStreamReader(new BOMInputStream(new FileInputStream(new File(downloadFile.path)))).toCsvMapReader().toList()
     }
     
     abstract void processSingleRecord(downloadFile, map)

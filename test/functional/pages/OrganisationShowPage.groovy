@@ -11,7 +11,7 @@ class OrganisationShowPage extends ShowPage
 	
 	static content =
 	{
-//		editButton(to: EditPage) { $("input", value: "Edit") }
+		editButton(to: OrganisationEditPage) { $("input", value: "Edit") }
 		deleteButton(to: OrganisationListPage) { $("input", value: "Delete") }
 		
 		row { $("td.name", text: it).parent() }

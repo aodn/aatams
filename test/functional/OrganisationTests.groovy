@@ -6,10 +6,34 @@ import org.junit.Test
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.Keys
 
-class OrganisationTests extends TestBase 
+class OrganisationTests extends GrailsCrudTest 
 {
 	@Test
-	void listOrganisationsAsUnauthorised()
+	void testList()
+	{
+		listOrganisationsAsUnauthorised()
+		listOrganisationsAsSysAdmin()
+	}
+	
+	@Test
+	void testShow()
+	{
+		showOrganisation()
+	}
+	
+	@Test
+	void testEdit()
+	{
+		editOrganisation()
+	}
+	
+	@Test
+	void testCreate()
+	{
+		createOrganisation()
+	}
+	
+	private void listOrganisationsAsUnauthorised()
 	{
 		to OrganisationListPage
 		
@@ -29,8 +53,7 @@ class OrganisationTests extends TestBase
 		assert !newButton
 	}
 	
-	@Test
-	void listOrganisationsAsSysAdmin()
+	private void listOrganisationsAsSysAdmin()
 	{
 		loginAsSysAdmin()
 		to OrganisationListPage
@@ -45,8 +68,7 @@ class OrganisationTests extends TestBase
 		assert newButton
 	}
 	
-	@Test
-	void showOrganisation()
+	private void showOrganisation()
 	{
 		to OrganisationListPage
 		def csiroRow = organisationRows[0]
@@ -55,7 +77,6 @@ class OrganisationTests extends TestBase
 		assertShowPageDetails("CSIRO", "CMAR", "1234", "1234", "12 Smith Street, Hobart, TAS, Australia, 7000", "34 Queen Street, Melbourne, VIC, Australia, 3000", 3)
 	}
 	
-	@Test
 	void editOrganisation()
 	{
 		loginAsSysAdmin()
@@ -88,7 +109,6 @@ class OrganisationTests extends TestBase
 		assert name == newName
 	}
 	
-	@Test
 	void createOrganisation()
 	{
 		loginAsSysAdmin()

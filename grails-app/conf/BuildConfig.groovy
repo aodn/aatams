@@ -60,7 +60,8 @@ grails.project.dependency.resolution = {
 		}
 		test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion")
 		test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion")
-
+		test("org.seleniumhq.selenium:selenium-support:$seleniumVersion")
+		
 		// You usually only need one of these, but this project uses both
 //		test "org.codehaus.geb:geb-spock:$gebVersion"
 		test "org.codehaus.geb:geb-junit4:$gebVersion"

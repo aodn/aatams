@@ -5,7 +5,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
         <title>Getting Started</title>
-        <g:javascript src="jquery.iframe-auto-height.plugin.1.5.0.min.js" />
         <script>
             $(document).ready(function() 
             {

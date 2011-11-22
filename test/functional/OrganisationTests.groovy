@@ -1,10 +1,12 @@
-import au.org.emii.aatams.test.BaseTests
 import pages.*
 import module.*
 
 import org.junit.Test
 
-class OrganisationTests extends BaseTests 
+import org.openqa.selenium.JavascriptExecutor
+import org.openqa.selenium.Keys
+
+class OrganisationTests extends TestBase 
 {
 	@Test
 	void listOrganisationsAsUnauthorised()
@@ -79,8 +81,11 @@ class OrganisationTests extends BaseTests
 		postalAddressPostcodeTextField << "3000"
 		postalAddressCountryTextField << "Australia"
 
-		createButton.click()
-		report("After create")
+		// Workaround for: http://code.google.com/p/selenium/issues/detail?id=2700
+		JavascriptExecutor js = (JavascriptExecutor) driver
+		js.executeScript( "document.getElementById('create').click();" );
+//		createButton.click()
+		
 		assert at(OrganisationShowPage)
 	}
 	

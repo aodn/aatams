@@ -1,10 +1,9 @@
 import org.junit.Test
 
-import au.org.emii.aatams.test.BaseTests
 
 import pages.*
 
-class AuthenticationTests extends BaseTests
+class AuthenticationTests extends TestBase
 {
 	@Test
 	void signInUnknownUsername()

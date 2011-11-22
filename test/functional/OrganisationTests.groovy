@@ -56,6 +56,39 @@ class OrganisationTests extends TestBase
 	}
 	
 	@Test
+	void editOrganisation()
+	{
+		loginAsSysAdmin()
+		to OrganisationListPage
+		def csiroRow = organisationRows[0]
+		csiroRow.showLink.click()
+
+		String currName = name
+		String newName = "different name"
+		assertNameUpdate(newName)
+		
+		// Cleanup.
+		assertNameUpdate(currName)
+	}
+	
+	private void assertNameUpdate(newName)
+	{
+		assert at(OrganisationShowPage)
+		editButton.click()
+		assert at(OrganisationEditPage)
+		
+		nameTextField.value(newName)
+
+		// Workaround for: http://code.google.com/p/selenium/issues/detail?id=2700
+		JavascriptExecutor js = (JavascriptExecutor) driver
+		js.executeScript( "document.getElementsByName('_action_update')[0].click();" );
+//		updateButton.click()
+
+		assert at(OrganisationShowPage)
+		assert name == newName
+	}
+	
+	@Test
 	void createOrganisation()
 	{
 		loginAsSysAdmin()
@@ -64,22 +97,22 @@ class OrganisationTests extends TestBase
 		
 		assert at(OrganisationCreatePage)
 		
-		nameTextField << "Some New Organisation"
-		departmentTextField << "Marine"
-		phoneNumberTextField << "1234"
-		faxNumberTextField << "4321"
+		nameTextField.value("Some New Organisation")
+		departmentTextField.value("Marine")
+		phoneNumberTextField.value("1234")
+		faxNumberTextField.value("4321")
 
-		streetAddressStreetAddressTextField << "12 Smith Street"
-		streetAddressSuburbTownTextField << "Hobart"
-		streetAddressStateTextField << "TAS"
-		streetAddressPostcodeTextField << "7000"
-		streetAddressCountryTextField << "Australia"
+		streetAddressStreetAddressTextField.value("12 Smith Street")
+		streetAddressSuburbTownTextField.value("Hobart")
+		streetAddressStateTextField.value("TAS")
+		streetAddressPostcodeTextField.value("7000")
+		streetAddressCountryTextField.value("Australia")
 
-		postalAddressStreetAddressTextField << "PO Box 1234"
-		postalAddressSuburbTownTextField << "Melbourne"
-		postalAddressStateTextField << "VIC"
-		postalAddressPostcodeTextField << "3000"
-		postalAddressCountryTextField << "Australia"
+		postalAddressStreetAddressTextField.value("PO Box 1234")
+		postalAddressSuburbTownTextField.value("Melbourne")
+		postalAddressStateTextField.value("VIC")
+		postalAddressPostcodeTextField.value("3000")
+		postalAddressCountryTextField.value("Australia")
 
 		// Workaround for: http://code.google.com/p/selenium/issues/detail?id=2700
 		JavascriptExecutor js = (JavascriptExecutor) driver

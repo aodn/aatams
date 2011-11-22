@@ -45,23 +45,18 @@ class ProjectTests extends GrailsCrudTest
 		
 		return retRow
 	}
+	
 	private void assertShowPageDetails(name, organisations, roles)
 	{
 		assert at(ProjectShowPage)
 		assert name == name
-		
-//		assert nestedRowsAsTr("Organisations").size() == organisations.size()
-//		assert nestedRowsAsTr("People").size() == roles.size()
 		
 		assert projectRoleRows.size() == roles.size()
 		roles.each
 		{
 			expectedRole ->
 			
-			def actualRole = projectRoleRows.find 
-			{
-				expectedRole.name == it.name
-			}
+			def actualRole = findProjectRoleByName(projectRoleRows, expectedRole.name)
 			
 			assert actualRole.name == expectedRole.name
 			assert actualRole.projectRole == expectedRole.projectRole
@@ -71,6 +66,14 @@ class ProjectTests extends GrailsCrudTest
 		assert organisationProjectRows.size() == organisations.size()
 		assert organisations == organisationProjectRows*.orgName
 	}
+	
+	private def findProjectRoleByName(roles, name)
+	{
+		def actualRole = projectRoleRows.find 
+		{
+			it.name == name
+		}
+	}	
 	
 	@Test
 	void testCreate()
@@ -100,21 +103,58 @@ class ProjectTests extends GrailsCrudTest
 		def sealCountRow = findRowByName(projectRows, "Seal Count")
 		sealCountRow.showLink.click()
 
-		String currName = name
-		String newName = "different name"
-		assertNameUpdate(newName)
-		
-		// Cleanup.
-		assertNameUpdate(currName)
+		navigateToEditPageFromShowPage()
+		assertNameChange()
 
+		navigateToEditPageFromShowPage()
+		assertAddPerson()
 	}
 
-	private void assertNameUpdate(newName)
+	private navigateToEditPageFromShowPage() 
 	{
 		assert at(ProjectShowPage)
 		editButton.click()
 		assert at(ProjectEditPage)
+	}
+
+	private void assertNameChange() 
+	{
+		assert at(ProjectEditPage)
 		
+		String currName = name
+		String newName = "different name"
+		assertNameUpdate(newName)
+
+		// Cleanup.
+		navigateToEditPageFromShowPage()
+		assertNameUpdate(currName)
+	}
+
+	private void assertAddPerson()
+	{
+		assert at(ProjectEditPage)
+		
+		addPersonLink.click()
+		
+		assert addPersonDialog.rows.size() == 4
+		assert addPersonDialog.projectLabel.text() == "Seal Count"
+		addPersonDialog.personSelect.value("19")	// Joe Bloggs
+		addPersonDialog.roleTypeSelect.value("18")	// Administrator
+		addPersonDialog.accessSelect.value("READ_WRITE")
+		
+//		addPersonDialog.createButton.click()
+//		
+//		assertShowPageDetails("Seal Count", ["CSIRO (CMAR)"], 
+//							  [[name:"John Citizen", projectRole:"Administrator", access:"Read Only"],
+//							   [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"],
+//							   [name:"Joe Bloggs", projectRole:"Administrator", access:"Read/Write"]])
+
+		// Cleanup.
+									   
+	}
+	
+	private void assertNameUpdate(newName)
+	{
 		nameTextField.value(newName)
 
 		updateButton.click()

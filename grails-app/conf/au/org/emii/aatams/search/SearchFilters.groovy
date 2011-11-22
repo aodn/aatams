@@ -11,7 +11,7 @@ class SearchFilters
  
     def filters = 
     {
-        save(controller:'*', action:'save')
+        save(controller:'*', action:'save|delete|update')
         {
             before =
             {

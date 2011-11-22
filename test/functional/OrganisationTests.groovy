@@ -87,6 +87,9 @@ class OrganisationTests extends TestBase
 //		createButton.click()
 		
 		assert at(OrganisationShowPage)
+		
+		// Clean up.
+		withConfirm { deleteButton.click() }
 	}
 	
 	private void assertShowPageDetails(name, department, phoneNumber, faxNumber, streetAddress, postalAddress, numPeopleLinks)

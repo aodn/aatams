@@ -55,7 +55,6 @@ class OrganisationController
 
     def save = 
     {
-        println(params)
         def streetAddress = new Address(params['streetAddress']).save()
         def postalAddress = new Address(params['postalAddress']).save()
 

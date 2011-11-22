@@ -12,7 +12,7 @@ class OrganisationShowPage extends ShowPage
 	static content =
 	{
 //		editButton(to: EditPage) { $("input", value: "Edit") }
-//		deleteButton(to: ListPage) { $("input", value: "Delete") }
+		deleteButton(to: OrganisationListPage) { $("input", value: "Delete") }
 		
 		row { $("td.name", text: it).parent() }
 		value { row(it).find("td.value").text() }

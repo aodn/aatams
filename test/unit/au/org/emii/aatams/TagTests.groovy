@@ -32,21 +32,37 @@ class TagTests extends GrailsUnitTestCase
         
         try
         {
-            Tag tag2 = new Tag(codeName:'A69-1303-1111',
-                               codeMap:new CodeMap(codeMap:'A69-1303'), 
+            Tag tag2 = new Tag(codeName:'A69-9002-1111',
+                               codeMap:new CodeMap(codeMap:'A69-9002'), 
                                pingCode:"1111",
                                model:new TagDeviceModel(),
                                project:new Project(),
-                               serialNumber:"1111",
+                               serialNumber:"2222",
                                status:new DeviceStatus(),
                                transmitterType:new TransmitterType())
             tag2.save(failOnError:true)
-            
+			assertFalse(tag2.hasErrors())
+        }
+        catch (Throwable)
+        {
+            fail()
+        }
+		
+        try
+        {
+            Tag tag3 = new Tag(codeName:'A69-9002-1111',
+                               codeMap:new CodeMap(codeMap:'A69-9002'), 
+                               pingCode:"1111",
+                               model:new TagDeviceModel(),
+                               project:new Project(),
+                               serialNumber:"3333",
+                               status:new DeviceStatus(),
+                               transmitterType:new TransmitterType())
+            tag3.save(failOnError:true)
             fail()
         }
         catch (Throwable)
         {
-            
         }
     }
 

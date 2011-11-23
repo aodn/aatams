@@ -182,7 +182,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></td>
                             
-                            <td valign="top" class="value"><joda:format date="${animalReleaseInstance?.releaseDateTime}" /></td>
+                            <td valign="top" class="value"><joda:format value="${animalReleaseInstance?.releaseDateTime}" /></td>
                             
                         </tr>
                     

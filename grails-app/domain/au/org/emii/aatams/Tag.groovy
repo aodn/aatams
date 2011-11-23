@@ -27,7 +27,7 @@ class Tag extends Device implements Embargoable
     static constraints =
     {
         project(nullable:true)
-        pingCode(unique:true)
+        pingCode()
         transmitterType()
         expectedLifeTimeDays(nullable:true)
     }

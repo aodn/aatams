@@ -15,7 +15,7 @@ class ProjectShowPage extends ShowPage
 	{
 		editButton(to: ProjectEditPage) { $("input", value: "Edit") }
 		deleteButton(to: ProjectListPage) { $("input", value: "Delete") }
-//		
+
 		row { $("td.name", text: it).parent() }
 		value { row(it).find("td.value").text() }
 		

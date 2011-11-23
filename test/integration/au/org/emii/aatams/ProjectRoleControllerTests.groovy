@@ -8,6 +8,8 @@ import grails.converters.JSON
 class ProjectRoleControllerTests extends AbstractControllerUnitTestCase 
 {
 	def permissionUtilsService
+	def searchableService
+	def sessionFactory
 	
     protected void setUp() 
 	{
@@ -40,13 +42,30 @@ class ProjectRoleControllerTests extends AbstractControllerUnitTestCase
 		controller.params.roleType = administrator
 		controller.params.access = readWriteAccess
 		
+		beforeFilter()
 		controller.save()
+		afterFilter()
+		
 		def jsonResponse = JSON.parse(controller.response.contentAsString)
 		
 		assertNotNull(jsonResponse.instance)
 		def projectRoleId = jsonResponse.instance.id
 		
 		controller.params.id = projectRoleId
+		
+		beforeFilter()
 		controller.delete()
+		afterFilter()
     }
+	
+	private void beforeFilter()
+	{
+		searchableService.stopMirroring()
+	}
+	
+	private void afterFilter()
+	{
+		sessionFactory.getCurrentSession().flush()
+		searchableService.startMirroring()
+	}
 }

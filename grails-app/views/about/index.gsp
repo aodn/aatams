@@ -25,7 +25,7 @@
               mainland to the sub-Antarctic islands and as far south as the Antarctic continent.<br/><br/>
               AATAMS is set up to collect data over a long period of time. This sustained approach
               will enable researchers to assess the effects of climate change, ocean acidification
-              and other physical changes that effect animals within the marine environment.<br/><br/>
+              and other physical changes that affect animals within the marine environment.<br/><br/>
               Currently a large range of fish, sharks and mammals are collecting a wide range of data.
               This includes behavioural and physical data such as the depth, temperature, salinity
               and movement effort of individual marine animals.</p>

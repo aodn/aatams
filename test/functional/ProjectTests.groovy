@@ -32,7 +32,7 @@ class ProjectTests extends GrailsCrudTest
 		def sealCountRow = findRowByName(projectRows, "Seal Count")
 		sealCountRow.showLink.click()
 		
-		assertShowPageDetails("Seal Count", ["CSIRO (CMAR)"], [[name:"John Citizen", projectRole:"Administrator", access:"Read Only"], 
+		assertShowOrEditPageDetails("Seal Count", ["CSIRO (CMAR)"], [[name:"John Citizen", projectRole:"Administrator", access:"Read Only"], 
 															   [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"]])
 	}
 
@@ -46,9 +46,9 @@ class ProjectTests extends GrailsCrudTest
 		return retRow
 	}
 	
-	private void assertShowPageDetails(name, organisations, roles)
+	private void assertShowOrEditPageDetails(name, organisations, roles)
 	{
-		assert at(ProjectShowPage)
+		assert (at(ProjectShowPage) || at(ProjectEditPage))
 		assert name == name
 		
 		assert projectRoleRows.size() == roles.size()
@@ -56,7 +56,7 @@ class ProjectTests extends GrailsCrudTest
 		{
 			expectedRole ->
 			
-			def actualRole = findProjectRoleByName(projectRoleRows, expectedRole.name)
+			def actualRole = findProjectRoleByNameAndRole(projectRoleRows, expectedRole.name, expectedRole.projectRole)
 			
 			assert actualRole.name == expectedRole.name
 			assert actualRole.projectRole == expectedRole.projectRole
@@ -67,11 +67,11 @@ class ProjectTests extends GrailsCrudTest
 		assert organisations == organisationProjectRows*.orgName
 	}
 	
-	private def findProjectRoleByName(roles, name)
+	private def findProjectRoleByNameAndRole(roles, name, projectRole)
 	{
 		def actualRole = projectRoleRows.find 
 		{
-			it.name == name
+			(it.name == name) && (it.projectRole == projectRole)
 		}
 	}	
 	
@@ -142,15 +142,16 @@ class ProjectTests extends GrailsCrudTest
 		addPersonDialog.roleTypeSelect.value("18")	// Administrator
 		addPersonDialog.accessSelect.value("READ_WRITE")
 		
-//		addPersonDialog.createButton.click()
-//		
-//		assertShowPageDetails("Seal Count", ["CSIRO (CMAR)"], 
-//							  [[name:"John Citizen", projectRole:"Administrator", access:"Read Only"],
-//							   [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"],
-//							   [name:"Joe Bloggs", projectRole:"Administrator", access:"Read/Write"]])
+		addPersonDialog.createButton.click()
+		
+		assertShowOrEditPageDetails("Seal Count", ["CSIRO (CMAR)"], 
+							  [[name:"John Citizen", projectRole:"Administrator", access:"Read Only"],
+							   [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"],
+							   [name:"Joe Bloggs", projectRole:"Administrator", access:"Read/Write"]])
 
 		// Cleanup.
-									   
+		def newRoleRow = findProjectRoleByNameAndRole(projectRoleRows, "Joe Bloggs", "Administrator")
+		newRoleRow.deleteLink.click()
 	}
 	
 	private void assertNameUpdate(newName)

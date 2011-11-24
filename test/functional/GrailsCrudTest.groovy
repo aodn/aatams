@@ -134,20 +134,31 @@ abstract class GrailsCrudTest extends TestBase
 	
 	@Test
 	abstract void testEdit()
-
-	protected void doTestEdit(detailRowName)
+	
+	protected void doTestEdit(detailRowName, value, fieldToEdit)
 	{
 		loginAsSysAdmin()
 		to getListPage()
 		def detailRow = findRowByName(detailRows, detailRowName)
 		detailRow.showLink.click()
 
-		String currName = name
-		String newName = "different name"
-		assertNameUpdate(newName)
+		String currValue = this[value]
+		String newValue = "different name"
 		
-		// Cleanup.
-		assertNameUpdate(currName)
+		try
+		{
+			assertFieldUpdate(newValue, value, fieldToEdit)
+		}
+		finally
+		{
+			// Cleanup.
+			assertFieldUpdate(currValue, value, fieldToEdit)
+		}
+	}
+	
+	protected void doTestEdit(detailRowName)
+	{
+		doTestEdit(detailRowName, "name", "nameTextField")
 	}
 	
 	@Test
@@ -164,13 +175,13 @@ abstract class GrailsCrudTest extends TestBase
 		}
 	}
 
-	protected void assertNameUpdate(newName) 
+	protected void assertFieldUpdate(newValue, value, fieldToEdit) 
 	{
 		assert at(getShowPage())
 		editButton.click()
 		assert at(getEditPage())
 		
-		nameTextField.value(newName)
+		this[fieldToEdit].value(newValue)
 
 		// Workaround for: http://code.google.com/p/selenium/issues/detail?id=2700
 		JavascriptExecutor js = (JavascriptExecutor) driver
@@ -178,7 +189,7 @@ abstract class GrailsCrudTest extends TestBase
 //		updateButton.click()
 
 		assert at(getShowPage())
-		assert name == newName
+		assert name == newValue
 	}
 	
 	protected void navigateToEditPageFromShowPage() 

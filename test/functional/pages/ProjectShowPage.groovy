@@ -23,6 +23,21 @@ class ProjectShowPage extends ShowPage
 		
 		nestedRowsAsTr { row(it).find("table.nested").find("tbody").find("tr") }
 		organisationProjectRows { nestedRowsAsTr("Organisations").collect { module OrganisationProjectRow, it } }
+		organisations
+		{
+			organisationProjectRows.collect 
+			{
+				[name: it.orgName]
+			}
+		}
+		
 		projectRoleRows { nestedRowsAsTr("People").collect { module ProjectRoleRow, it } }
+		projectRoles 
+		{
+			projectRoleRows.collect 
+			{
+				[name: it.name, projectRole: it.projectRole, access: it.access]
+			}
+		}
 	}
 }

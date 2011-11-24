@@ -19,6 +19,9 @@ class InstallationShowPage extends ShowPage
 		
 		name { value("Name") }
 		configurationLink { row("Configuration").find("a") }
+		configuration { configurationLink.text() }
+		
 		projectLink { row("Project").find("a") }
+		project { projectLink.text() }
 	}
 }

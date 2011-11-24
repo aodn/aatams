@@ -7,6 +7,5 @@ class InstallationCreateEditPage extends LayoutPage
 		nameTextField { $("input", name: "name") }
 		configurationSelect { $("select", name: "configuration.id") }
 		projectSelect { $("select", name: "project.id") }
-
 	}
 }

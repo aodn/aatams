@@ -15,7 +15,7 @@ class PersonListPage extends ListPage
 	{
 		peopleTable { $("div.list table", 0) }
 		rowsAsTr(required: false) { peopleTable.find("tbody").find("tr") }
-		peopleRows { rowsAsTr.collect { module PersonRow, it } }
+		detailRows { rowsAsTr.collect { module PersonRow, it } }
 		
 		newButton (required: false, to: PersonCreatePage) { $("a", text: "New Person") }
 	}

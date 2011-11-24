@@ -15,7 +15,7 @@ class OrganisationListPage extends ListPage
 	{
 		organisationTable { $("div.list table", 0) }
 		rowsAsTr(required: false) { organisationTable.find("tbody").find("tr") }
-		organisationRows { rowsAsTr.collect { module OrganisationRow, it } }
+		detailRows { rowsAsTr.collect { module OrganisationRow, it } }
 		
 		newButton (required: false, to: OrganisationCreatePage) { $("a", text: "New Organisation") }
 	}

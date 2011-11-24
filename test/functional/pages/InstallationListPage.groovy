@@ -15,7 +15,7 @@ class InstallationListPage extends ListPage
 	{
 		installationTable { $("div.list table", 0) }
 		rowsAsTr(required: false) { installationTable.find("tbody").find("tr") }
-		installationRows { rowsAsTr.collect { module InstallationRow, it } }
+		detailRows { rowsAsTr.collect { module InstallationRow, it } }
 		
 		newButton (required: false, to: InstallationCreatePage) { $("a", text: "New Installation") }
 	}

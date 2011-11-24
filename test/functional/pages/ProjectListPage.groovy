@@ -15,7 +15,7 @@ class ProjectListPage extends ListPage
 	{
 		projectTable { $("div.list table", 0) }
 		rowsAsTr(required: false) { projectTable.find("tbody").find("tr") }
-		projectRows { rowsAsTr.collect { module ProjectRow, it } }
+		detailRows { rowsAsTr.collect { module ProjectRow, it } }
 		
 		newButton (required: false, to: ProjectCreatePage) { $("a", text: "New Project") }
 	}

@@ -16,7 +16,14 @@ class PersonShowPage extends ShowPage
 		
 		name { value("Name") }
 		organisationLink { row("Organisation").find("a") }
+		organisation { organisationLink.text() }
+		
 		projectLinks { row("Projects").find("a") }
+		projects
+		{
+			projectLinks.collect { it.text() }
+		}
+		
 		defaultTimeZone { value("Default Time Zone") }
 		
 		// These elements should only be visible to sys admin.

@@ -11,7 +11,7 @@ class OrganisationRow extends Module
 		cellText { cell(it).text() }
 		
 		showLink (to: OrganisationShowPage) { cell(0).find("a") }
-		orgName { cellText(1) }
+		name { cellText(1) }
 		department { cellText(2) }
 		phoneNumber { cellText(3) }
 		faxNumber{ cellText(4) }

@@ -4,135 +4,52 @@ import pages.*
 
 class ProjectTests extends GrailsCrudTest 
 {
+	def listPage = ProjectListPage
+	def showPage = ProjectShowPage
+	def createPage = ProjectCreatePage
+	def editPage = ProjectEditPage
+	
 	@Test
 	void testList()
 	{
-		to ProjectListPage
-		
-		assert projectRows.size() == 3
-		
-		def sealCountRow = findRowByName(projectRows, "Seal Count")
-		assert sealCountRow
-		assert sealCountRow.name == "Seal Count"
-		assert sealCountRow.organisations == "CSIRO (CMAR)"
-		assert sealCountRow.principalInvestigator == "Joe Bloggs"
-		
-		assert !newButton
-		
-		loginAsSysAdmin()
-		to ProjectListPage
-		assert newButton
+		doTestList(3,
+				   [name:"Seal Count", organisations:"CSIRO (CMAR)", principalInvestigator:"Joe Bloggs"],
+				   [],
+				   [])
 	}
 
 	@Test
 	void testShow()
 	{
-		to ProjectListPage
-		
-		def sealCountRow = findRowByName(projectRows, "Seal Count")
-		sealCountRow.showLink.click()
-		
-		assertShowOrEditPageDetails("Seal Count", ["CSIRO (CMAR)"], [[name:"John Citizen", projectRole:"Administrator", access:"Read Only"], 
-															   [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"]])
+		doTestShow("Seal Count",  
+				   [name:"Seal Count", 
+					projectRoles:[[name:"John Citizen", projectRole:"Administrator", access:"Read Only"], 
+								  [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"]],
+					organisations:[[name:"CSIRO (CMAR)"]]])
 	}
-
-	private def findRowByName(rows, name)
-	{
-		def retRow = rows.find
-		{
-			it.name == name
-		}
-		
-		return retRow
-	}
-	
-	private void assertShowOrEditPageDetails(name, organisations, roles)
-	{
-		assert (at(ProjectShowPage) || at(ProjectEditPage))
-		assert name == name
-		
-		assert projectRoleRows.size() == roles.size()
-		roles.each
-		{
-			expectedRole ->
-			
-			def actualRole = findProjectRoleByNameAndRole(projectRoleRows, expectedRole.name, expectedRole.projectRole)
-			
-			assert actualRole.name == expectedRole.name
-			assert actualRole.projectRole == expectedRole.projectRole
-			assert actualRole.access == expectedRole.access
-		}
-		
-		assert organisationProjectRows.size() == organisations.size()
-		assert organisations == organisationProjectRows*.orgName
-	}
-	
-	private def findProjectRoleByNameAndRole(roles, name, projectRole)
-	{
-		def actualRole = projectRoleRows.find 
-		{
-			(it.name == name) && (it.projectRole == projectRole)
-		}
-	}	
 	
 	@Test
 	void testCreate()
 	{
-		loginAsSysAdmin()
-		to ProjectListPage
-		newButton.click()
-		
-		assert at(ProjectCreatePage)
-		
-		nameTextField.value("Prawns")
-		organisationSelect.value("5")
-		personSelect.value("23")
-		createButton.click()
-		
-		assert at(ProjectShowPage)
-		
-		// Clean up.
-		withConfirm { deleteButton.click() }
+		doTestCreate(
+			[nameTextField:"Prawns",
+			 organisationSelect:"5",
+			 personSelect:"23"],
+		 	[name: "Prawns"])
 	}
 
 	@Test
 	void testEdit()
 	{
-		loginAsSysAdmin()
-		to ProjectListPage
-		def sealCountRow = findRowByName(projectRows, "Seal Count")
-		sealCountRow.showLink.click()
-
-		navigateToEditPageFromShowPage()
-		assertNameChange()
+		doTestEdit("Seal Count")
 
 		navigateToEditPageFromShowPage()
 		assertAddPerson()
 	}
 
-	private navigateToEditPageFromShowPage() 
-	{
-		assert at(ProjectShowPage)
-		editButton.click()
-		assert at(ProjectEditPage)
-	}
-
-	private void assertNameChange() 
-	{
-		assert at(ProjectEditPage)
-		
-		String currName = name
-		String newName = "different name"
-		assertNameUpdate(newName)
-
-		// Cleanup.
-		navigateToEditPageFromShowPage()
-		assertNameUpdate(currName)
-	}
-
 	private void assertAddPerson()
 	{
-		assert at(ProjectEditPage)
+		assert at(getEditPage())
 		
 		addPersonLink.click()
 		
@@ -142,25 +59,29 @@ class ProjectTests extends GrailsCrudTest
 		addPersonDialog.roleTypeSelect.value("18")	// Administrator
 		addPersonDialog.accessSelect.value("READ_WRITE")
 		
-		addPersonDialog.createButton.click()
-		
-		assertShowOrEditPageDetails("Seal Count", ["CSIRO (CMAR)"], 
-							  [[name:"John Citizen", projectRole:"Administrator", access:"Read Only"],
-							   [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"],
-							   [name:"Joe Bloggs", projectRole:"Administrator", access:"Read/Write"]])
-
-		// Cleanup.
-		def newRoleRow = findProjectRoleByNameAndRole(projectRoleRows, "Joe Bloggs", "Administrator")
-		newRoleRow.deleteLink.click()
+		report("before add person click")
+		try
+		{
+			addPersonDialog.createButton.click()
+			
+			assertEditPageDetails(
+				[projectRoles:[[name:"John Citizen", projectRole:"Administrator", access:"Read Only"],
+				               [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"],
+							   [name:"Joe Bloggs", projectRole:"Administrator", access:"Read/Write"]]])
+		}
+		finally
+		{
+			// Cleanup.
+			def newRoleRow = findProjectRoleByNameAndRole(projectRoleRows, "Joe Bloggs", "Administrator")
+			newRoleRow.deleteLink.click()
+		}
 	}
-	
-	private void assertNameUpdate(newName)
+
+	private def findProjectRoleByNameAndRole(roles, name, projectRole)
 	{
-		nameTextField.value(newName)
-
-		updateButton.click()
-
-		assert at(ProjectShowPage)
-		assert name == newName
-	}
+		def actualRole = projectRoleRows.find 
+		{
+			(it.name == name) && (it.projectRole == projectRole)
+		}
+	}	
 }

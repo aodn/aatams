@@ -24,5 +24,6 @@ class OrganisationShowPage extends ShowPage
 		streetAddress { value("Street Address") }
 		postalAddress { value("Postal Address") }
 		peopleLinks { row("People").find("a") }
+		people { peopleLinks.collect { it.text() } }
 	}
 }

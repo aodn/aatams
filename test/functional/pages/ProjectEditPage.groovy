@@ -28,6 +28,14 @@ class ProjectEditPage extends ProjectCreateEditPage
 			return retVal
 		}
 		
+		projectRoles 
+		{
+			projectRoleRows.collect
+			{
+				[name: it.name, projectRole: it.projectRole, access: it.access]
+			}
+		}
+
 		organisationProjectRows
 		{
 			def retVal = nestedRowsAsTr("Organisations").collect { module EditableOrganisationProjectRow, it }

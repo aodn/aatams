@@ -189,7 +189,8 @@ abstract class GrailsCrudTest extends TestBase
 //		updateButton.click()
 
 		assert at(getShowPage())
-		assert name == newValue
+//		assert name == newValue
+		assert this[value] == newValue
 	}
 	
 	protected void navigateToEditPageFromShowPage() 

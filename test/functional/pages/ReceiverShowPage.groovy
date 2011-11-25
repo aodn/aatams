@@ -11,6 +11,9 @@ class ReceiverShowPage extends ShowPage
 	
 	static content =
 	{
+		editButton(to: ReceiverEditPage) { $("input", value: "Edit") }
+		deleteButton(to: ReceiverListPage) { $("input", value: "Delete") }
+		
 		row { $("td.name", text: it).parent() }
 		value { row(it).find("td.value").text() }
 		

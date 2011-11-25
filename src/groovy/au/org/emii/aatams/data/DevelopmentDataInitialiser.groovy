@@ -288,7 +288,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new Receiver(codeName:'VR2W-101336',
                          serialNumber:'12345678',
                          status:deployedStatus,
-                         model:vemcoVR2,
+                         model:vemcoVR2W,
                          organisation:csiroOrg,
                          comment:'RX 1 belonging to CSIRO').save(failOnError: true)
         
@@ -301,9 +301,9 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
         Receiver rx3 =
             new Receiver(codeName:'VR2W-101338',
-                         serialNumber:'1111r',
+                         serialNumber:'101338',
                          status:newStatus,
-                         model:vemcoVR2,
+                         model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
                      
         Receiver rx4 =

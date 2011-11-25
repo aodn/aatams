@@ -1,7 +1,8 @@
 package au.org.emii.aatams.search
 
 /**
- *
+ * Need to flush and temporarily disable mirroring to avoid hibernate errors.
+ * 
  * @author jburgess
  */
 class SearchFilters 
@@ -16,6 +17,7 @@ class SearchFilters
             before =
             {
                 searchableService.stopMirroring()
+                sessionFactory.getCurrentSession().flush()
             }
             
             after =

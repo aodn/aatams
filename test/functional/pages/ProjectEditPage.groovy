@@ -18,7 +18,8 @@ class ProjectEditPage extends ProjectCreateEditPage
 		updateButton (to: [ProjectShowPage]) { $("input", value:"Update") }
 		deleteButton (to: [ProjectListPage]) { $("input", value:"Delete") }
 		
-		row { $("td.name", text: it).parent() }
+		row { $("label", text: it).parent().parent() }
+		
 		nestedRowsAsTr { row(it).find("table.nested").find("tbody").find("tr") }
 		projectRoleRows 
 		{ 

@@ -56,7 +56,6 @@ abstract class AbstractBatchProcessor
                 {
                     cleanUpGorm()
 					log.debug(String.valueOf(i) + " records processed, average time per record: " + (float)(System.currentTimeMillis() - startTime) / (i + 1) + "ms")
-					logStats()
                 }
 				
 				float progress = (float)i/numRecords * 100
@@ -66,7 +65,7 @@ abstract class AbstractBatchProcessor
 					log.debug("Progress: " + percentProgress + "%")
 				}
 
-//				if (i == 1300)
+//				if (i == 1000)
 //				{
 //					throw new RuntimeException("test finished")
 //				}

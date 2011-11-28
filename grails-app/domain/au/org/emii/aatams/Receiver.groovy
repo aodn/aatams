@@ -18,6 +18,8 @@ class Receiver extends Device
     static mapping = 
     {
         organisation sort:'name'
+		cache true
+		detections cache:true
     }
     
     static searchable = true

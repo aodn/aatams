@@ -3,6 +3,11 @@ package au.org.emii.aatams.detection
 import de.micromata.opengis.kml.v_2_2_0.Placemark;
 import au.org.emii.aatams.*
 
+import java.util.Date;
+
+import com.vividsolutions.jts.geom.Point;
+
+
 class ValidDetection extends RawDetection implements Embargoable
 {
     static belongsTo = [receiverDeployment: ReceiverDeployment]
@@ -17,10 +22,11 @@ class ValidDetection extends RawDetection implements Embargoable
      * Additionally, the relationship is modelled via surgery, due to the fact
      * that a tag could potentially be reused on several animals.
      */
-    // Note: initialise with empty list so that detectionSurgeries.isEmpty()
+    // Note: initialise with empty set so that detectionSurgeries.isEmpty()
     // returns true (I thought that the initialisation should happen when save()
     // is called but apparently not.
-    List<DetectionSurgery> detectionSurgeries = new ArrayList<DetectionSurgery>()
+//    List<DetectionSurgery> detectionSurgeries = new ArrayList<DetectionSurgery>()
+    Set<DetectionSurgery> detectionSurgeries = new HashSet<DetectionSurgery>()
     static hasMany = [detectionSurgeries:DetectionSurgery]
     static searchable =
     {
@@ -29,6 +35,11 @@ class ValidDetection extends RawDetection implements Embargoable
         detectionSurgeries(component:true)
     }
     
+	static mapping =
+	{
+		cache true
+	}
+	
     static boolean isDuplicate(other)
     {
         boolean duplicate = false
@@ -95,25 +106,23 @@ class ValidDetection extends RawDetection implements Embargoable
             return NULL_DETECTION_SURGERY
         }
 
-        return detectionSurgeries[0]
+        return new ArrayList(detectionSurgeries)[0]
     }
    
     Embargoable applyEmbargo()
     {
         // Return a temporary detection, with embargoed surgeries removed.
-        ValidDetection retDetection = new ValidDetection()
-		retDetection.properties  += this.properties
-		
-        retDetection.detectionSurgeries = []
+		def detectionProperties = new HashMap(this.properties)
+		detectionProperties["detectionSurgeries"] = new HashSet<DetectionSurgery>()
 
         detectionSurgeries.each
         {
             if (!it.surgery.release.isEmbargoed())
             {
-                retDetection.addToDetectionSurgeries(it)
+				detectionProperties["detectionSurgeries"].add(it)
             }
         }
 
-        return retDetection
+		return (detectionProperties as ValidDetection)
     }
 }

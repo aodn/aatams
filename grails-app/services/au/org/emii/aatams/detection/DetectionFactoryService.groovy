@@ -38,6 +38,8 @@ class DetectionFactoryService
     static final String TRANSMITTER_ID_DELIM = "-"
     static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
     
+	def detectionValidatorService
+	
     /**
      * Creates a detection given a map of parameters (which originate from a line
      * in a CSV upload file).
@@ -45,7 +47,7 @@ class DetectionFactoryService
     RawDetection newDetection(downloadFile, params) throws FileProcessingException 
     {
         def nativeParams = toNativeParams(params)
-        
+
         RawDetection detection = initDetection(downloadFile, nativeParams)
         assert(detection)
         
@@ -62,7 +64,7 @@ class DetectionFactoryService
     
     Collection<RawDetection> rescanForSurgery(Surgery surgery)
     {
-        DeviceStatus retiredStatus = DeviceStatus.findByStatus(DeviceStatus.RETIRED)
+        DeviceStatus retiredStatus = DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true])
         if (surgery.tag.status == retiredStatus)
         {
             return []
@@ -70,14 +72,17 @@ class DetectionFactoryService
         
         def updatedDetections = []
         
-        ValidDetection.findAllByTransmitterId(surgery.tag.codeName).each
+        ValidDetection.findAllByTransmitterId(surgery.tag.codeName, [cache:true]).each
         {
             detection ->
             
             if (surgery.isInWindow(detection.timestamp))
             {
                 updatedDetections.add(detection)
-                DetectionSurgery.newSavedInstance(surgery, detection, surgery.tag)
+//                DetectionSurgery.newSavedInstance(surgery, detection, tag)
+				(new DetectionSurgery(surgery:surgery,
+									 tag:surgery.tag,
+									 detection:detection)).save()
             }
         }
         
@@ -86,10 +91,8 @@ class DetectionFactoryService
     
     private RawDetection initDetection(downloadFile, nativeParams)
     {
-        DetectionValidator validator = new DetectionValidator(receiverDownload:downloadFile, params:nativeParams)
-        assert(validator)
-        
-        return validator.validate()
+        assert(detectionValidatorService)
+        return detectionValidatorService.validate(downloadFile, nativeParams)
     }
     
     private static Map toNativeParams(params)
@@ -121,9 +124,9 @@ class DetectionFactoryService
     {
         assert(detection)
         
-        DeviceStatus retiredStatus = DeviceStatus.findByStatus(DeviceStatus.RETIRED)
+        DeviceStatus retiredStatus = DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true])
         
-        def tags = Tag.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus) 
+        def tags = Tag.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus, [cache:true]) 
         tags.each
         {
             tag -> 
@@ -137,11 +140,15 @@ class DetectionFactoryService
                     return
                 }
 
-                DetectionSurgery.newSavedInstance(surgery, detection, tag)
+//                DetectionSurgery.newSavedInstance(surgery, detection, tag)
+				(new DetectionSurgery(surgery:surgery,
+									 tag:tag,
+									 detection:detection)).save()
+	
             }
         }
 
-        def sensors = Sensor.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus) 
+        def sensors = Sensor.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus, [cache:true]) 
         sensors.each
         {
             sensor -> sensor.tag.surgeries.each
@@ -153,13 +160,19 @@ class DetectionFactoryService
                     return
                 }
                 
-                DetectionSurgery.newSavedInstance(surgery, detection, sensor)
+//                DetectionSurgery.newSavedInstance(surgery, detection, tag)
+				(new DetectionSurgery(surgery:surgery,
+									 tag:sensor,
+									 detection:detection)).save()
             }
         }
     }
     
     private void createDetectionSurgery(surgery, tag, detection)
     {
-        DetectionSurgery.newSavedInstance(surgery, detection, tag)
+//                DetectionSurgery.newSavedInstance(surgery, detection, tag)
+		(new DetectionSurgery(surgery:surgery,
+							 tag:tag,
+							 detection:detection)).save()
     }
 }

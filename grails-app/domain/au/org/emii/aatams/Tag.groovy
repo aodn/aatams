@@ -39,6 +39,13 @@ class Tag extends Device implements Embargoable
         project(component:true)
     }
     
+	static mapping =
+	{
+		cache true
+		surgeries cache:true
+		detectionSurgeries cache:true
+	}
+	
     String toString()
     {
         return getCodeMapPingCode()

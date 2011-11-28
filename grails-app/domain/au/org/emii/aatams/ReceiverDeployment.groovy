@@ -40,6 +40,7 @@ class ReceiverDeployment
         // Speed up candidateEntitiesService.
         cache: true
         station cache:true
+		detections cache:true
     }
 
     static searchable =

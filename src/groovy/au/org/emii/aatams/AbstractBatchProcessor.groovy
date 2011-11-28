@@ -22,6 +22,7 @@ abstract class AbstractBatchProcessor
         def session = sessionFactory?.currentSession
         session?.flush()
         session?.clear()
+		
         propertyInstanceMap?.get().clear()
     }
     
@@ -39,6 +40,10 @@ abstract class AbstractBatchProcessor
             def records = getRecords(downloadFile)
             def numRecords = records.size()
 
+			int percentProgress = 0
+			
+			long startTime = System.currentTimeMillis()
+			
             records.eachWithIndex
             {
                 map, i ->
@@ -50,9 +55,21 @@ abstract class AbstractBatchProcessor
                 if ((i % batchSize) == 0)
                 {
                     cleanUpGorm()
+					log.debug(String.valueOf(i) + " records processed, average time per record: " + (float)(System.currentTimeMillis() - startTime) / (i + 1) + "ms")
+					logStats()
                 }
+				
+				float progress = (float)i/numRecords * 100
+				if ((int)progress > percentProgress)
+				{
+					percentProgress = (int)progress
+					log.debug("Progress: " + percentProgress + "%")
+				}
 
-                log.debug("Successfully processed record number: " + String.valueOf(i))
+//				if (i == 1300)
+//				{
+//					throw new RuntimeException("test finished")
+//				}
             }
 
             long elapsedTime = System.currentTimeMillis() - startTimestamp

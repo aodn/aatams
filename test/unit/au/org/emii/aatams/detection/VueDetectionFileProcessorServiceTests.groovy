@@ -25,6 +25,8 @@ class VueDetectionFileProcessorServiceTests extends GrailsUnitTestCase
         
         mockLogging(DetectionFactoryService, true)
         detectionFactoryService = new DetectionFactoryService()
+		mockLogging(DetectionValidatorService, true)
+		detectionFactoryService.detectionValidatorService = new DetectionValidatorService()
         mockLogging(SearchableService, true)
         searchableService = new SearchableService()
         searchableService.metaClass.startMirroring = {}

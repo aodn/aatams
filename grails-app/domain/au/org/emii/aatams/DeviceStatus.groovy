@@ -18,6 +18,11 @@ class DeviceStatus
     {
         status(blank:false, unique:true)
     }
+	
+	static mapping =
+	{
+		cache true
+	}
     
     String toString()
     {

@@ -71,7 +71,5 @@ grails.project.dependency.resolution = {
 //		test ":hibernate:$grailsVersion"
 //
 		test ":geb:$gebVersion"
-//		test ":spock:0.5-groovy-1.7"
 	}
-
 }

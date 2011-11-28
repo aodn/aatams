@@ -36,4 +36,9 @@ class Sensor extends Tag
         slope(nullable:true)
         intercept(nullable:true)
     }
+	
+	static mapping = 
+	{
+		cache true
+	}
 }

@@ -12,14 +12,15 @@ import java.text.SimpleDateFormat
  * 
  * @author jburgess
  */
-class DetectionValidator
+class DetectionValidatorService
 {
     def params
     
     ReceiverDownloadFile receiverDownload
     
     Receiver receiver
-    Collection<ReceiverDeployment> deployments
+//    Collection<ReceiverDeployment> deployments
+    Collection<ReceiverDeployment> deploymentsByDateTime
     Collection<ReceiverRecovery> recoveries
     
     ReceiverDeployment deployment
@@ -38,7 +39,7 @@ class DetectionValidator
     
     private boolean isUnknownReceiver()
     {
-        receiver = Receiver.findByCodeName(params.receiverName, [cache:true])
+//        receiver = Receiver.findByCodeName(params.receiverName, [cache:true])
         return (receiver == null)
     }
     
@@ -47,7 +48,7 @@ class DetectionValidator
     {
         assert(receiver)
         
-        deployments = receiver.deployments?.grep
+        deploymentsByDateTime = receiver.deployments?.grep
         {
             deployment ->
             
@@ -64,16 +65,16 @@ class DetectionValidator
             return true
         }
         
-        return (!deployments || deployments.isEmpty())
+        return (!deploymentsByDateTime || deploymentsByDateTime.isEmpty())
     }
     
     private boolean hasNoRecoveriesAtDateTime()
     {
         assert(receiver)
-        assert(deployments)
-        assert(!deployments.isEmpty())
+        assert(deploymentsByDateTime)
+        assert(!deploymentsByDateTime.isEmpty())
         
-        recoveries = deployments*.recovery.grep
+        recoveries = deploymentsByDateTime*.recovery.grep
         {
             recovery ->
 
@@ -94,24 +95,24 @@ class DetectionValidator
         return (!recoveries || recoveries.isEmpty())
     }
 
-    RawDetection validate()
+    RawDetection validate(theReceiverDownload, theParams)
     {
-        def validator = this
-        
-        if (validator.isDuplicate())
+		reset(theReceiverDownload, theParams)
+	
+        if (isDuplicate())
         {
             return new InvalidDetection(params + [receiverDownload:receiverDownload, reason:InvalidDetectionReason.DUPLICATE])
         }
         
-        if (validator.isUnknownReceiver())
+        if (isUnknownReceiver())
         {
             return new InvalidDetection(params + 
                                         [receiverDownload:receiverDownload, 
                                          reason:InvalidDetectionReason.UNKNOWN_RECEIVER, 
                                          message:"Unknown receiver code name " + params.receiverName])
         }
-        
-        if (validator.hasNoDeploymentsAtDateTime())
+		
+        if (hasNoDeploymentsAtDateTime())
         {
             return new InvalidDetection(params + 
                                         [receiverDownload:receiverDownload, 
@@ -119,25 +120,39 @@ class DetectionValidator
                                          message:"No deployment at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName])
         }
 
-        if (validator.hasNoRecoveriesAtDateTime())
+        if (hasNoRecoveriesAtDateTime())
         {
             return new InvalidDetection(params + 
                                         [receiverDownload:receiverDownload, 
                                          reason:InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME, 
                                          message:"No recovery at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName])
         }
-        
+
         def validDetection = new ValidDetection(params + 
                                                 [receiverDownload:receiverDownload, 
-                                                receiverDeployment:validator.deployment]).save()
-        
-        receiver.addToDetections(validDetection)
-        receiver.save()
-        
-        deployment.addToDetections(validDetection)
-        deployment.save()
+                                                receiverDeployment:deployment,
+												receiver:receiver]).save()
+//		def validDetection = new ValidDetection(params +
+//			[receiverDownload:receiverDownload])
+
+//        receiver.addToDetections(validDetection)
+//        receiver.save()
+//
+//		deployment.addToDetections(validDetection)
+//        deployment.save(failOnError:true)
         
         return validDetection
     }
+	
+	private void reset(theReceiverDownload, theParams) 
+	{
+		receiverDownload = theReceiverDownload
+		params = theParams
+		
+		receiver = Receiver.findByCodeName(params.receiverName, [cache:true])
+		deploymentsByDateTime?.clear()
+		recoveries?.clear()
+		deployment = null
+	}
 }
 

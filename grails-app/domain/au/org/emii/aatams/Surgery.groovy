@@ -9,6 +9,7 @@ import org.joda.time.contrib.hibernate.*
  */
 class Surgery 
 {
+	def grailsApplication
     def sessionFactory
     
     static belongsTo = [release: AnimalRelease, tag: Tag]
@@ -78,6 +79,7 @@ class Surgery
         }
         
         def endWindow = startWindow.plusDays(tag?.expectedLifeTimeDays).plusDays(grailsApplication.config.tag.expectedLifeTime.gracePeriodDays)
+		
         if (new DateTime(timestamp).isAfter(endWindow))
         {
             return false

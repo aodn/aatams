@@ -19,8 +19,8 @@ class CandidateEntitiesService
             {
 				SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(it.id))
             }
-        
-        return candidateProjects
+			
+        return candidateProjects 
     }
     
     def organisations()
@@ -54,6 +54,12 @@ class CandidateEntitiesService
                 projects().contains(it?.installation?.project)
             })
         
+		candidateStations = candidateStations.sort
+		{
+			a, b ->
+			
+			a.name <=> b.name
+		}
         return candidateStations
     }
     

@@ -21,6 +21,10 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
     Installation notPermittedInstallation2
     Installation permittedInstallation1
     Installation permittedInstallation2
+	
+	InstallationStation stationAAA
+	InstallationStation stationBBB
+	InstallationStation stationCCC
     
     protected void setUp()
     {
@@ -90,6 +94,14 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
         }
         
         imos.save()
+		
+		stationAAA = new InstallationStation(name:'AAA', installation:permittedInstallation1)
+		stationBBB = new InstallationStation(name:'BBB', installation:permittedInstallation1)
+		stationCCC = new InstallationStation(name:'CCC', installation:permittedInstallation1)
+		// save out of order
+		def stationList = [stationBBB, stationCCC, stationAAA]
+		mockDomain(InstallationStation, stationList)
+		stationList.each { it.save() }
     }
 
 	protected def getPrincipal()
@@ -142,4 +154,11 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
         assertEquals(1, projects.size())
         assertTrue(projects.contains(permittedProject ))
     }
+	
+	void testStations()
+	{
+		assertEquals(stationAAA.name, candidateEntitiesService.stations()[0].name, )
+		assertEquals(stationBBB.name, candidateEntitiesService.stations()[1].name, )
+		assertEquals(stationCCC.name, candidateEntitiesService.stations()[2].name, )
+	}
 }

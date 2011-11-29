@@ -19,7 +19,6 @@ class DetectionValidatorService
     ReceiverDownloadFile receiverDownload
     
     Receiver receiver
-//    Collection<ReceiverDeployment> deployments
     Collection<ReceiverDeployment> deploymentsByDateTime
     Collection<ReceiverRecovery> recoveries
     
@@ -39,7 +38,6 @@ class DetectionValidatorService
     
     private boolean isUnknownReceiver()
     {
-//        receiver = Receiver.findByCodeName(params.receiverName, [cache:true])
         return (receiver == null)
     }
     
@@ -132,14 +130,6 @@ class DetectionValidatorService
                                                 [receiverDownload:receiverDownload, 
                                                 receiverDeployment:deployment,
 												receiver:receiver]).save()
-//		def validDetection = new ValidDetection(params +
-//			[receiverDownload:receiverDownload])
-
-//        receiver.addToDetections(validDetection)
-//        receiver.save()
-//
-//		deployment.addToDetections(validDetection)
-//        deployment.save(failOnError:true)
         
         return validDetection
     }

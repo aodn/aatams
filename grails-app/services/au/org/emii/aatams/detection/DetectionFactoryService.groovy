@@ -79,7 +79,6 @@ class DetectionFactoryService
             if (surgery.isInWindow(detection.timestamp))
             {
                 updatedDetections.add(detection)
-//                DetectionSurgery.newSavedInstance(surgery, detection, tag)
 				(new DetectionSurgery(surgery:surgery,
 									 tag:surgery.tag,
 									 detection:detection)).save()
@@ -125,8 +124,9 @@ class DetectionFactoryService
         assert(detection)
         
         DeviceStatus retiredStatus = DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true])
-        
-        def tags = Tag.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus, [cache:true]) 
+
+        def tags = Tag.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus, [cache:true])
+
         tags.each
         {
             tag -> 
@@ -139,16 +139,14 @@ class DetectionFactoryService
                 {
                     return
                 }
-
-//                DetectionSurgery.newSavedInstance(surgery, detection, tag)
+                
 				(new DetectionSurgery(surgery:surgery,
 									 tag:tag,
 									 detection:detection)).save()
-	
             }
         }
 
-        def sensors = Sensor.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus, [cache:true]) 
+		def sensors = Sensor.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus, [cache:true]) 
         sensors.each
         {
             sensor -> sensor.tag.surgeries.each
@@ -160,7 +158,6 @@ class DetectionFactoryService
                     return
                 }
                 
-//                DetectionSurgery.newSavedInstance(surgery, detection, tag)
 				(new DetectionSurgery(surgery:surgery,
 									 tag:sensor,
 									 detection:detection)).save()
@@ -170,7 +167,6 @@ class DetectionFactoryService
     
     private void createDetectionSurgery(surgery, tag, detection)
     {
-//                DetectionSurgery.newSavedInstance(surgery, detection, tag)
 		(new DetectionSurgery(surgery:surgery,
 							 tag:tag,
 							 detection:detection)).save()

@@ -14,6 +14,6 @@ class SecUser {
     static mapping = 
     {
         // Speed up candidate entities service/permission utils service.
-        cache:true
+        cache true
     }
 }

@@ -69,9 +69,19 @@ class CandidateEntitiesService
         
         // receivers.organisation in candOrganisations
         // and receiver.status != DEPLOYED
-        return Receiver.findAllByOrganisationInListAndStatusNotEqual(
+		def receivers = 
+        	Receiver.findAllByOrganisationInListAndStatusNotEqual(
                                 candOrganisations, 
                                 DeviceStatus.findByStatus("DEPLOYED"))
+			
+		receivers = receivers.sort
+		{
+			a, b ->
+			
+			a.codeName <=> b.codeName
+		}
+	
+		return receivers
     }
     
     def tags(Project project)

@@ -85,7 +85,7 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
         recoveredReceiver = new Receiver(codeName:"VRW2-333", status:recoveredStatus, organisation:imos)
         csiroReceiver = new Receiver(codeName:"VRW2-444", status:recoveredStatus, organisation:csiro)
 
-        def receiverList = [newReceiver, deployedReceiver, recoveredReceiver]
+        def receiverList = [recoveredReceiver, newReceiver, deployedReceiver]
         mockDomain(Receiver, receiverList)
         receiverList.each 
         {
@@ -127,12 +127,10 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
     {
         def receivers = candidateEntitiesService.receivers()
         
-        println "receivers: " + receivers
-        
         assertEquals(2, receivers.size())
         
-        assertTrue(receivers.contains(newReceiver))
-        assertTrue(receivers.contains(recoveredReceiver))
+        assertEquals(newReceiver.codeName, receivers[0].codeName)
+        assertEquals(recoveredReceiver.codeName, receivers[1].codeName)
         assertFalse(receivers.contains(deployedReceiver))
         assertFalse(receivers.contains(csiroReceiver))
     }

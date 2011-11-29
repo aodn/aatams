@@ -48,8 +48,6 @@ abstract class AbstractBatchProcessor
             {
                 map, i ->
 
-                log.debug("Processing record number: " + String.valueOf(i))
-
                 processSingleRecord(downloadFile, map)
 
                 if ((i % batchSize) == 0)
@@ -62,13 +60,10 @@ abstract class AbstractBatchProcessor
 				if ((int)progress > percentProgress)
 				{
 					percentProgress = (int)progress
-					log.debug("Progress: " + percentProgress + "%")
+					log.info(  "Download file processing, id: " + downloadFile.id 
+						     + ", progress: " + percentProgress 
+							 + "%, average time per record: " + (float)(System.currentTimeMillis() - startTime) / (i + 1) + "ms")
 				}
-
-//				if (i == 1000)
-//				{
-//					throw new RuntimeException("test finished")
-//				}
             }
 
             long elapsedTime = System.currentTimeMillis() - startTimestamp

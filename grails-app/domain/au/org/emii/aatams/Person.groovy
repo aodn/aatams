@@ -38,7 +38,7 @@ class Person extends SecUser
     static mapping = 
     {
         // Speed up candidate entities service/permission utils service.
-        cache:true
+        cache true
 		
 		sort name:"asc"
     }
@@ -69,7 +69,7 @@ class Person extends SecUser
                 return DateTimeZone.getDefault()
             }
 
-            Person principal = Person.findByUsername(SecurityUtils.subject?.principal)
+            Person principal = Person.findByUsername(SecurityUtils.subject?.principal, [cache:true])
             return principal?.defaultTimeZone
         }
         // This is being thrown for findByUsername in cobertura coverage tests.

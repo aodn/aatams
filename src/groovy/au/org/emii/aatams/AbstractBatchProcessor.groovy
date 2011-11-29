@@ -11,9 +11,9 @@ abstract class AbstractBatchProcessor
     def sessionFactory
     def propertyInstanceMap = org.codehaus.groovy.grails.plugins.DomainClassGrailsPlugin.PROPERTY_INSTANCE_MAP
     
-    // This has been tuned with a "suck-it-and-see" approach, with a dataset
+    // This has been  tuned with a "suck-it-and-see" approach, with a dataset
     // of 3000 records.
-    int batchSize = 50
+    int batchSize = 30
     
     def searchableService
  
@@ -44,6 +44,8 @@ abstract class AbstractBatchProcessor
 			
 			long startTime = System.currentTimeMillis()
 			
+			cleanUpGorm()
+			
             records.eachWithIndex
             {
                 map, i ->
@@ -53,7 +55,7 @@ abstract class AbstractBatchProcessor
                 if ((i % batchSize) == 0)
                 {
                     cleanUpGorm()
-					log.debug(String.valueOf(i) + " records processed, average time per record: " + (float)(System.currentTimeMillis() - startTime) / (i + 1) + "ms")
+//					log.debug(String.valueOf(i) + " records processed, average time per record: " + (float)(System.currentTimeMillis() - startTime) / (i + 1) + "ms")
                 }
 				
 				float progress = (float)i/numRecords * 100

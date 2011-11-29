@@ -146,7 +146,7 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'status', 'errors')}">
                                     <g:select name="status.id" 
-                                              from="${au.org.emii.aatams.DeviceStatus.list()}" 
+                                              from="${au.org.emii.aatams.DeviceStatus.listRecoveryStatuses()}" 
                                               optionKey="id" 
                                               value="${receiverRecoveryInstance?.status?.id ? receiverRecoveryInstance?.status?.id : au.org.emii.aatams.DeviceStatus.findByStatus('RECOVERED').id}"  />
 

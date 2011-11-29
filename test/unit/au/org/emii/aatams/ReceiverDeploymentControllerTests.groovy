@@ -94,6 +94,13 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         super.tearDown()
     }
 
+	void testSaveNoReceiver()
+	{
+		controller.save()
+		def model = controller.renderArgs.model
+		assertEquals("nullable",  model.receiverDeploymentInstance.errors.getFieldError("receiver").getCode())
+	}
+	
     void testSaveNewReceiver() 
     {
 		assertEquals(0, station1.numDeployments)

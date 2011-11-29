@@ -29,21 +29,24 @@ class ReceiverDeploymentController {
     {
         def receiverDeploymentInstance = new ReceiverDeployment(params)
 
-        if (!receiverDeploymentInstance.receiver?.canDeploy())
-        {
-            flash.message = "${message(code: 'default.invalidState.receiver', \
-                                       args: [receiverDeploymentInstance?.receiver?.toString(), \
-                                              receiverDeploymentInstance?.receiver?.status?.toString()])}"
-            receiverDeploymentInstance.receiver = null
-            renderCreateWithDefaultModel(receiverDeploymentInstance)
-            return
-        }
-        
-        // Need to update that status of the receiver to DEPLOYED.
-        receiverDeploymentInstance.receiver?.status = DeviceStatus.findByStatus('DEPLOYED')
-
-		incNumDeployments(receiverDeploymentInstance)
-        
+		if (receiverDeploymentInstance.receiver)
+		{
+	        if (!receiverDeploymentInstance.receiver?.canDeploy())
+	        {
+	            flash.message = "${message(code: 'default.invalidState.receiver', \
+	                                       args: [receiverDeploymentInstance?.receiver?.toString(), \
+	                                              receiverDeploymentInstance?.receiver?.status?.toString()])}"
+	            receiverDeploymentInstance.receiver = null
+	            renderCreateWithDefaultModel(receiverDeploymentInstance)
+	            return
+	        }
+	        
+	        // Need to update that status of the receiver to DEPLOYED.
+	        receiverDeploymentInstance.receiver?.status = DeviceStatus.findByStatus('DEPLOYED')
+	
+			incNumDeployments(receiverDeploymentInstance)
+		}
+		
         if (receiverDeploymentInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
             redirect(action: "show", id: receiverDeploymentInstance.id)

@@ -44,7 +44,11 @@
                                     <label class="compulsory" for="receiver"><g:message code="receiverDeployment.receiver.label" default="Receiver" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'receiver', 'errors')}">
-                                    <g:select name="receiver.id" from="${candidateReceivers}" optionKey="id" value="${receiverDeploymentInstance?.receiver?.id}"  />
+                                    <g:select name="receiver.id" 
+                                              from="${candidateReceivers}" 
+                                              optionKey="id" 
+                                              value="${receiverDeploymentInstance?.receiver?.id}"
+                                              noSelection="['': 'Please choose...']"  />
 
                                 </td>
                             </tr>

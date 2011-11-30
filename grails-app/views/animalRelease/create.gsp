@@ -223,7 +223,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseDateTime', 'errors')}">
                                     <joda:dateTimePicker name="releaseDateTime" 
-                                                         class="remember"
                                                          value="${animalReleaseInstance?.releaseDateTime}"
                                                          useZone="true"/>
 

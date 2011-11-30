@@ -1,3 +1,4 @@
+import org.apache.log4j.Logger
 import org.junit.Test
 
 import pages.*
@@ -50,7 +51,7 @@ class ProjectTests extends GrailsCrudTest
 	private void assertAddPerson()
 	{
 		assert at(getEditPage())
-/**		
+		
 		addPersonLink.click()
 		
 		assert addPersonDialog.rows.size() == 4
@@ -77,10 +78,13 @@ class ProjectTests extends GrailsCrudTest
 			
 			// Cleanup.
 			def newRoleRow = findProjectRoleByNameAndRole(projectRoleRows, "Joe Bloggs", "Administrator")
+			
+			// This fails on firefox 3.6 - the link is clicked twice.
+			// See: http://code.google.com/p/selenium/issues/detail?id=2628
 			withConfirm { newRoleRow.deleteLink.click() }
-			report("after delete")
+			
+			assert at(getEditPage())
 		}
-*/		
 	}
 
 	private def findProjectRoleByNameAndRole(roles, name, projectRole)

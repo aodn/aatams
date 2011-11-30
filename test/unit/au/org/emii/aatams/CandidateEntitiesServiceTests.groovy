@@ -25,7 +25,8 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
 	InstallationStation stationAAA
 	InstallationStation stationBBB
 	InstallationStation stationCCC
-    
+	InstallationStation stationDDD
+	
     protected void setUp()
     {
         super.setUp()
@@ -98,8 +99,9 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
 		stationAAA = new InstallationStation(name:'AAA', installation:permittedInstallation1)
 		stationBBB = new InstallationStation(name:'BBB', installation:permittedInstallation1)
 		stationCCC = new InstallationStation(name:'CCC', installation:permittedInstallation1)
+		stationDDD = new InstallationStation(name:'DDD', installation:permittedInstallation1)
 		// save out of order
-		def stationList = [stationBBB, stationCCC, stationAAA]
+		def stationList = [stationBBB, stationCCC, stationAAA, stationDDD]
 		mockDomain(InstallationStation, stationList)
 		stationList.each { it.save() }
     }
@@ -155,8 +157,16 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
 	
 	void testStations()
 	{
+		[stationAAA, stationBBB, stationCCC].each 
+		{
+			it.metaClass.isActive = { false }
+		}
+		stationDDD.metaClass.isActive = { true }
+		
 		assertEquals(stationAAA.name, candidateEntitiesService.stations()[0].name, )
 		assertEquals(stationBBB.name, candidateEntitiesService.stations()[1].name, )
 		assertEquals(stationCCC.name, candidateEntitiesService.stations()[2].name, )
+		
+		assertFalse(candidateEntitiesService.stations()*.name.contains(stationDDD.name))
 	}
 }

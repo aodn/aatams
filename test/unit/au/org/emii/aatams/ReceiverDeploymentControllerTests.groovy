@@ -245,4 +245,29 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
 		assertEquals(3, model.candidateReceivers.size())
 		assertTrue(model.candidateReceivers.contains(newReceiver))
 	}
+	
+	void testReceiverStatusBackToNewOnUndeploy()
+	{
+		Receiver prevDeployed = new Receiver(codeName:"1111", status:deployedStatus)
+		Receiver editDeployed = new Receiver(codeName:"2222", status:newStatus)
+		
+		def receiverList = [prevDeployed, editDeployed]
+		mockDomain(Receiver, receiverList)
+		receiverList.each { it.save() }
+		
+		ReceiverDeployment deployment = new ReceiverDeployment(receiver: prevDeployed, station:station1)
+		mockDomain(ReceiverDeployment, [deployment])
+		deployment.save()
+		
+		assertEquals(deployedStatus, prevDeployed.status)
+		assertEquals(newStatus, editDeployed.status)
+		
+		controller.params.id = deployment.id
+		controller.params.putAll(deployment.properties)
+		controller.params.receiver = editDeployed
+		controller.update()
+		
+		assertEquals(newStatus, prevDeployed.status)
+		assertEquals(deployedStatus, editDeployed.status)
+	}
 }

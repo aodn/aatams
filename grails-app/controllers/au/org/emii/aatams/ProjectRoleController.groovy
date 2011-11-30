@@ -32,8 +32,10 @@ class ProjectRoleController {
         
         if (projectRoleInstance.save(flush: true)) 
         {
+			log.debug("Project role saved: " + projectRoleInstance)
             permissionUtilsService.setPermissions(projectRoleInstance)
-            
+			log.debug("Permissions updated for project role: " + projectRoleInstance)
+			
             flash.message = "${message(code: 'default.added.message', args: [message(code: 'person.label', default: 'Person'), \
                                                                              projectRoleInstance.person.toString(), \
                                                                              message(code: 'project.label', default: 'Project'), \
@@ -101,14 +103,18 @@ class ProjectRoleController {
 
     def delete = {
         def projectRoleInstance = ProjectRole.get(params.id)
-        if (projectRoleInstance) {
+		
+        if (projectRoleInstance) 
+		{
+			def projectId = projectRoleInstance?.project?.id
+			
             try 
             {
+				log.debug("Removing permissions related to project role: " + projectRoleInstance)
                 permissionUtilsService.removePermissions(projectRoleInstance)
+				log.debug("Removing project role: " + projectRoleInstance)
                 projectRoleInstance.delete(flush: true)
-                
-                // Delete permissions from associated user.
-                // TODO:
+				log.debug("Project role removed")
                 
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), projectRoleInstance.toString()])}"
             }
@@ -116,10 +122,12 @@ class ProjectRoleController {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), projectRoleInstance.toString()])}"
             }
             
-            def projectId = projectRoleInstance?.project?.id
+			log.debug("Redirecting to project page, project ID: " + projectId)
             redirect(controller:"project", action: "edit", id: projectId, params: [projectId:projectId])
         }
-        else {
+        else 
+		{
+			log.error("Project role not found, id: " + params.id)
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), params.id])}"
             redirect(action: "list")
         }

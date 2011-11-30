@@ -51,7 +51,7 @@ class CandidateEntitiesService
         def candidateStations = 
             InstallationStation.list().grep(
             {
-                projects().contains(it?.installation?.project)
+                projects().contains(it?.installation?.project) && !it.isActive()
             })
         
 		candidateStations = candidateStations.sort

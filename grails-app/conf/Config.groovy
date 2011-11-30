@@ -132,10 +132,11 @@ log4j = {
 
 //    info    "grails.app.service.au.org.emii"
 
-    debug   "grails.app.controller.au.org.emii",
-            "grails.app.service.au.org.emii",
-//            "grails.app.service.aatams",
-            "grails.app.domain.au.org.emii",
+    debug   "grails.app.controller.au.org.emii.aatams.ProjectRoleController",
+//            "grails.app.service.au.org.emii",
+			"grails.app.service.au.org.emii.aatams.detection.DetectionValidatorService",
+            //"grails.app.controller.au.org.emii",
+//	        "grails.app.domain.au.org.emii",
             "grails.app.tagLib.au.org.emii",
             "grails.app.task",
 //           'org.hibernate',
@@ -145,7 +146,7 @@ log4j = {
             "grails.app.filter"//,
             //"grails.app.tagLib.com.energizedwork.grails.plugins.jodatime"
             
-    info    "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService"
+    debug   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService"
     info    "grails.app.service.au.org.emii.aatams.VueEventFileProcessorService"
 }
 

@@ -99,11 +99,13 @@ class DetectionValidatorService
 	
         if (isDuplicate())
         {
+			log.debug("Invalid detection: duplicate")
             return new InvalidDetection(params + [receiverDownload:receiverDownload, reason:InvalidDetectionReason.DUPLICATE])
         }
         
         if (isUnknownReceiver())
         {
+			log.debug("Invalid detection: unknown receiver code name " + params.receiverName)
             return new InvalidDetection(params + 
                                         [receiverDownload:receiverDownload, 
                                          reason:InvalidDetectionReason.UNKNOWN_RECEIVER, 
@@ -112,6 +114,7 @@ class DetectionValidatorService
 		
         if (hasNoDeploymentsAtDateTime())
         {
+			log.debug("Invalid detection: no deployment at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName)
             return new InvalidDetection(params + 
                                         [receiverDownload:receiverDownload, 
                                          reason:InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME, 
@@ -120,6 +123,7 @@ class DetectionValidatorService
 
         if (hasNoRecoveriesAtDateTime())
         {
+			log.debug("Invalid detection: no recovery at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName)
             return new InvalidDetection(params + 
                                         [receiverDownload:receiverDownload, 
                                          reason:InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME, 
@@ -129,7 +133,7 @@ class DetectionValidatorService
         def validDetection = new ValidDetection(params + 
                                                 [receiverDownload:receiverDownload, 
                                                 receiverDeployment:deployment,
-												receiver:receiver]).save()
+												receiver:receiver]).save(failOnError:true)
         
         return validDetection
     }

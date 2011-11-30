@@ -295,18 +295,35 @@
                                 </td>
                             </tr>
                         
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="embargoPeriod"><g:message code="animalRelease.embargoDate.label" default="Embargo Period" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'embargoDate', 'errors')}">
-                                    <g:select from="${embargoPeriods}"
-                                              name="embargoPeriod" 
-                                              optionKey="key"
-                                              optionValue="value"
-                                              noSelection="['':'No embargo']"/>
-                                </td>
-                            </tr>
+                            <shiro:hasRole name="SysAdmin">
+	                            <tr class="prop">
+	                                <td valign="top" class="name">
+	                                    <label for="embargoDate"><g:message code="animalRelease.embargoDate.label" default="Embargo Date" /></label>
+	                                </td>
+	                                
+                                    <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'embargoDate', 'errors')}">
+                                        <g:datePicker name="embargoDate" precision="day" value="${animalReleaseInstance?.embargoDate}" default="none" noSelection="['': '']" />
+    
+                                    </td>
+	                                
+	                            </tr>
+                            </shiro:hasRole>                                
+                            <shiro:lacksRole name="SysAdmin">
+	                            <tr class="prop">
+	                                <td valign="top" class="name">
+	                                    <label for="embargoPeriod"><g:message code="animalRelease.embargoDate.label" default="Embargo Period" /></label>
+	                                </td>
+	                                
+                                    <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'embargoDate', 'errors')}">
+                                        <g:select from="${embargoPeriods}"
+                                                  name="embargoPeriod" 
+                                                  optionKey="key"
+                                                  optionValue="value"
+                                                  noSelection="['':'']"/>
+                                    </td>
+	                                
+                                </tr>
+                            </shiro:lacksRole>
                         
                         </tbody>
                     </table>

@@ -201,10 +201,6 @@ class AnimalReleaseController {
             def embargoDate = releaseCalendar.add(Calendar.MONTH, Integer.valueOf(params.embargoPeriod))
             animalReleaseInstance.embargoDate = releaseCalendar.getTime()
         }
-        else
-        {
-            animalReleaseInstance.embargoDate = null
-        }
     }
     
     def addEmbargoPeriodsToModel(def model)

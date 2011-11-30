@@ -756,7 +756,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertTrue("year", expectedCal.get(Calendar.YEAR) == releaseCal.get(Calendar.YEAR))
         assertTrue("day", expectedCal.get(Calendar.DAY_OF_YEAR) == releaseCal.get(Calendar.DAY_OF_YEAR))
         
-        // Now set embargo period back to null and update.
+        // Now set embargo period back to null and update (embargo date should be left unchanged).
         controller.params.embargoPeriod = null
         controller.params.id = release.id
         
@@ -764,7 +764,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         
         release = AnimalRelease.get(controller.redirectArgs.id)
         assertNotNull(release)
-        assertNull(release.embargoDate)
+        assertNotNull(release.embargoDate)
     }
     
     void testCreate()

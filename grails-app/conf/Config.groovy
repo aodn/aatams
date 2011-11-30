@@ -134,7 +134,7 @@ log4j = {
 
     debug   "grails.app.controller.au.org.emii.aatams.ProjectRoleController",
 //            "grails.app.service.au.org.emii",
-			"grails.app.service.au.org.emii.aatams.detection.DetectionValidatorService",
+//			"grails.app.service.au.org.emii.aatams.detection.DetectionValidatorService",
             //"grails.app.controller.au.org.emii",
 //	        "grails.app.domain.au.org.emii",
             "grails.app.tagLib.au.org.emii",

@@ -27,7 +27,7 @@ class SearchableController
         try 
         {
             // Results are lazy-loaded, hence associations are null.
-            def res = searchableService.search(params.q, params)
+            def res = searchableService.search(addImplicitWildCards(params.q), params)
             def hibernateAttachedResults = refresh(res.results)
             res.results = embargoService.applyEmbargo(hibernateAttachedResults)
             
@@ -48,4 +48,9 @@ class SearchableController
             result.get(result.id)
         }
     }
+	
+	def addImplicitWildCards(searchTerm)
+	{
+		return '*' + searchTerm + '*'
+	}
 }

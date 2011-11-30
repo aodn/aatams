@@ -41,9 +41,6 @@ class ReceiverDeploymentController {
 	            return
 	        }
 	        
-	        // Need to update that status of the receiver to DEPLOYED.
-	        receiverDeploymentInstance.receiver?.status = DeviceStatus.findByStatus('DEPLOYED')
-	
 			incNumDeployments(receiverDeploymentInstance)
 		}
 		
@@ -75,11 +72,16 @@ class ReceiverDeploymentController {
 	private addReceiverToStation(ReceiverDeployment deployment) 
 	{
 		deployment.station.addToReceivers(deployment.receiver)
+		
+		// Need to update that status of the receiver to DEPLOYED.
+		deployment.receiver?.status = DeviceStatus.findByStatus('DEPLOYED')
 	}
 
 	private removeReceiverFromStation(ReceiverDeployment deployment) 
 	{
 		deployment.station.removeFromReceivers(deployment.receiver)
+		deployment.receiver.status = DeviceStatus.findByStatus("NEW")
+		deployment.receiver.save()
 	}
 
 	private renderCreateWithDefaultModel(ReceiverDeployment receiverDeploymentInstance) 

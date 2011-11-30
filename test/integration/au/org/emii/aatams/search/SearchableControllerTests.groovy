@@ -57,4 +57,37 @@ class SearchableControllerTests extends AbstractControllerUnitTestCase
         
         assertTrue(model.searchResult.results*.id.contains(tag.id))
     }
+	
+	void testSearchReceiverCodeName()
+	{
+		assertSearchReceiver("VR2W-101336", ["VR2W-101336"])
+	}
+	
+	void testSearchReceiverSerialNumber()
+	{
+		assertSearchReceiver("12345678", ["VR2W-101336"])
+	}
+	
+	void testSearchReceiverCodeNameImplicitWildCard()
+	{
+		assertSearchReceiver("101336", ["VR2W-101336"])
+	}
+	
+	void testSearchReceiverSerialNumberImplicitWildCard()
+	{
+		assertSearchReceiver("5678", ["VR2W-101336"])
+	}
+	
+	private void assertSearchReceiver(searchTerm, expectedCodeNames)
+	{
+		controller.params.q = searchTerm
+		def model = controller.index()
+		
+		def receiverResults = model.searchResult.results.grep
+		{
+			it instanceof Receiver
+		}
+		
+		assertEquals(expectedCodeNames, receiverResults*.codeName)
+	}
 }

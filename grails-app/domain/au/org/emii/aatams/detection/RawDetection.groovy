@@ -50,6 +50,10 @@ class RawDetection
         sensorUnit(nullable:true, blank:true)
         stationName(nullable:true, blank:true)
         location(nullable:true)
+		
+		// Workaround for problem where jenkins build is failing - not sure why.
+		// Getting "ValidationException" when trying to save ValidDetection.
+		scrambledLocation(nullable:true)
     }
 
     static belongsTo = [receiverDownload:ReceiverDownloadFile]

@@ -109,7 +109,7 @@ class DetectionValidatorService
             return new InvalidDetection(params + 
                                         [receiverDownload:receiverDownload, 
                                          reason:InvalidDetectionReason.UNKNOWN_RECEIVER, 
-                                         message:"Unknown receiver code name " + params.receiverName])
+                                         message:"Unknown receiver code name " + params.receiverName]).save()
         }
 		
         if (hasNoDeploymentsAtDateTime())
@@ -118,7 +118,7 @@ class DetectionValidatorService
             return new InvalidDetection(params + 
                                         [receiverDownload:receiverDownload, 
                                          reason:InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME, 
-                                         message:"No deployment at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName])
+                                         message:"No deployment at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName]).save()
         }
 
         if (hasNoRecoveriesAtDateTime())
@@ -127,13 +127,13 @@ class DetectionValidatorService
             return new InvalidDetection(params + 
                                         [receiverDownload:receiverDownload, 
                                          reason:InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME, 
-                                         message:"No recovery at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName])
+                                         message:"No recovery at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName]).save()
         }
 
         def validDetection = new ValidDetection(params + 
                                                 [receiverDownload:receiverDownload, 
                                                 receiverDeployment:deployment,
-												receiver:receiver]).save(failOnError:true)
+												receiver:receiver]).save()
         
         return validDetection
     }

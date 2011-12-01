@@ -40,6 +40,9 @@ class DetectionFactoryService
     
 	def detectionValidatorService
 	
+	private Map<String, List<Tag>> tagCache = new WeakHashMap<String, List<Tag>>()
+	private Map<String, List<Tag>> sensorCache = new WeakHashMap<String, List<Sensor>>()
+	
     /**
      * Creates a detection given a map of parameters (which originate from a line
      * in a CSV upload file).
@@ -53,7 +56,7 @@ class DetectionFactoryService
         
         if (!detection.isValid())
         {
-            detection.save()
+//            detection.save()
             return detection
         }
         
@@ -79,9 +82,8 @@ class DetectionFactoryService
             if (surgery.isInWindow(detection.timestamp))
             {
                 updatedDetections.add(detection)
-				(new DetectionSurgery(surgery:surgery,
-									 tag:surgery.tag,
-									 detection:detection)).save()
+				
+				createDetectionSurgery(surgery, surgery.tag, detection)
             }
         }
         
@@ -123,10 +125,7 @@ class DetectionFactoryService
     {
         assert(detection)
         
-        DeviceStatus retiredStatus = DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true])
-
-        def tags = Tag.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus, [cache:true])
-
+		def tags = findTags(detection.transmitterId)
         tags.each
         {
             tag -> 
@@ -140,13 +139,11 @@ class DetectionFactoryService
                     return
                 }
                 
-				(new DetectionSurgery(surgery:surgery,
-									 tag:tag,
-									 detection:detection)).save()
+				createDetectionSurgery(surgery, tag, detection)
             }
         }
-
-		def sensors = Sensor.findAllByCodeNameAndStatusNotEqual(detection.transmitterId, retiredStatus, [cache:true]) 
+		
+		def sensors = findSensors(detection.transmitterId)
         sensors.each
         {
             sensor -> sensor.tag.surgeries.each
@@ -158,13 +155,35 @@ class DetectionFactoryService
                     return
                 }
                 
-				(new DetectionSurgery(surgery:surgery,
-									 tag:sensor,
-									 detection:detection)).save()
+				createDetectionSurgery(surgery, sensor, detection)
             }
         }
     }
     
+	private List<Tag> findTags(transmitterId)
+	{
+		return findDevice(Tag, tagCache, transmitterId)
+	}
+	
+	private List<Sensor> findSensors(transmitterId)
+	{
+		return findDevice(Sensor, sensorCache, transmitterId)
+	}
+	
+	private List findDevice(clazz, cache, transmitterId)
+	{
+		if (!cache.containsKey(transmitterId))
+		{
+			cache.put(transmitterId, 
+					  clazz.findAllByCodeNameAndStatusNotEqual(
+						  transmitterId, 
+						  DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true]), 
+						  [cache:true]))
+		}
+		
+		return cache[transmitterId]
+	}
+	
     private void createDetectionSurgery(surgery, tag, detection)
     {
 		(new DetectionSurgery(surgery:surgery,

@@ -84,11 +84,8 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         assertTrue(validDetection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(validDetection.timestamp))
         
-//        assertEquals(1, receiver.detections.size())
-//        assertTrue(receiver.detections.contains(validDetection))
-//		
-//        assertEquals(1, deployment.detections.size())
-//        assertTrue(deployment.detections.contains(validDetection))
+		assertEquals(deployment.id, validDetection.receiverDeployment.id)
+		assertEquals(receiver.id, validDetection.receiverDeployment.receiver.id)
     }
 
     void testValidSensor()
@@ -101,10 +98,8 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         assertTrue(validDetection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(validDetection.timestamp))
         
-//        assertEquals(1, receiver.detections.size())
-//        assertTrue(receiver.detections.contains(validDetection))
-//        assertEquals(1, deployment.detections.size())
-//        assertTrue(deployment.detections.contains(validDetection))
+		assertEquals(deployment.id, validDetection.receiverDeployment.id)
+		assertEquals(receiver.id, validDetection.receiverDeployment.receiver.id)
     }
 
     void testDuplicate()
@@ -117,12 +112,8 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         assertTrue(duplicateDetection instanceof InvalidDetection)
         assertEquals(InvalidDetectionReason.DUPLICATE, duplicateDetection.reason)
         
-//        assertEquals(1, receiver.detections.size())
-//        assertTrue(receiver.detections.contains(validDetection))
-//        assertFalse(receiver.detections.contains(duplicateDetection))
-//        assertEquals(1, deployment.detections.size())
-//        assertTrue(deployment.detections.contains(validDetection))
-//        assertFalse(deployment.detections.contains(duplicateDetection))
+		assertEquals(deployment.id, validDetection.receiverDeployment.id)
+		assertEquals(receiver.id, validDetection.receiverDeployment.receiver.id)
 
         standardParams[(DetectionFactoryService.DATE_AND_TIME_COLUMN)] = "2009-12-08 06:45:24"
         def validDetection2 = detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
@@ -267,9 +258,10 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-//        assertEquals(1, detection.detectionSurgeries.size())      
-//        assertEquals(tag, detection.detectionSurgeries[0].tag)
-//        assertEquals(surgery, detection.detectionSurgeries[0].surgery)
+		def detectionSurgery = DetectionSurgery.list()[0]
+        assertEquals(1, DetectionSurgery.count())      
+        assertEquals(tag, detectionSurgery.tag)
+        assertEquals(surgery, detectionSurgery.surgery)
     }
     
     void testOneMatchingSensorSurgery() 
@@ -284,9 +276,10 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-//        assertEquals(1, detection.detectionSurgeries.size())      
-//        assertEquals(sensor, detection.detectionSurgeries[0].tag)
-//        assertEquals(surgery, detection.detectionSurgeries[0].surgery)
+		def detectionSurgery = DetectionSurgery.list()[0]
+        assertEquals(1, DetectionSurgery.count())      
+        assertEquals(sensor, detectionSurgery.tag)
+        assertEquals(surgery, detectionSurgery.surgery)
     }
     
     void testMultipleMatchingSurgeries() 
@@ -301,11 +294,15 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-//        assertEquals(2, detection.detectionSurgeries.size())      
-//        assertTrue(detection.detectionSurgeries*.tag.contains(tag1))
-//        assertTrue(detection.detectionSurgeries*.tag.contains(tag2))
-//        assertTrue(detection.detectionSurgeries*.surgery.contains(surgery1))
-//        assertTrue(detection.detectionSurgeries*.surgery.contains(surgery2))
+		assertEquals(2, DetectionSurgery.count())
+		
+		def detectionSurgery1 = DetectionSurgery.list()[0]
+		assertEquals(tag1, detectionSurgery1.tag)
+		assertEquals(surgery1, detectionSurgery1.surgery)
+
+		def detectionSurgery2 = DetectionSurgery.list()[1]
+		assertEquals(tag2, detectionSurgery2.tag)
+		assertEquals(surgery2, detectionSurgery2.surgery)
     }
     
     void testReleaseStatusNonCurrent()
@@ -342,11 +339,10 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-//        assertEquals(1, detection.detectionSurgeries.size())      
-//        assertFalse(detection.detectionSurgeries*.tag.contains(tag1))
-//        assertTrue(detection.detectionSurgeries*.tag.contains(tag2))
-//        assertFalse(detection.detectionSurgeries*.surgery.contains(surgery1))
-//        assertTrue(detection.detectionSurgeries*.surgery.contains(surgery2))
+		assertEquals(1, DetectionSurgery.count())
+		def detectionSurgery = DetectionSurgery.list()[0]
+		assertEquals(tag2, detectionSurgery.tag)
+		assertEquals(surgery2, detectionSurgery.surgery)
     }
     
     void testBeforeTagWindow()
@@ -364,11 +360,10 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-//        assertEquals(1, detection.detectionSurgeries.size())      
-//        assertFalse(detection.detectionSurgeries*.tag.contains(tag1))
-//        assertTrue(detection.detectionSurgeries*.tag.contains(tag2))
-//        assertFalse(detection.detectionSurgeries*.surgery.contains(surgery1))
-//        assertTrue(detection.detectionSurgeries*.surgery.contains(surgery2))
+   		assertEquals(1, DetectionSurgery.count())
+		def detectionSurgery = DetectionSurgery.list()[0]
+		assertEquals(tag2, detectionSurgery.tag)
+		assertEquals(surgery2, detectionSurgery.surgery)
     }
     
     void testAfterTagWindow()
@@ -385,6 +380,8 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         release1.releaseDateTime = new DateTime("2009-11-18T06:44:24")
         release1.save()
 
+		assertEquals(0, DetectionSurgery.count())
+		
         def detection = 
             detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
          
@@ -392,26 +389,32 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-//        assertEquals(1, detection.detectionSurgeries.size())      
-//        assertFalse(detection.detectionSurgeries*.tag.contains(tag1))
-//        assertTrue(detection.detectionSurgeries*.tag.contains(tag2))
-//        assertFalse(detection.detectionSurgeries*.surgery.contains(surgery1))
-//        assertTrue(detection.detectionSurgeries*.surgery.contains(surgery2))
+		assertEquals(1, DetectionSurgery.count())
+		def detectionSurgery = DetectionSurgery.list()[0]
+		assertEquals(tag2, detectionSurgery.tag)
+		assertEquals(surgery2, detectionSurgery.surgery)
 
         // So we don't get a duplicate.
         detection.setTimestamp(new Date())
         detection.save()
-        
+		
+		// Move the release time so that detection is now within the window.
         release1.releaseDateTime = new DateTime("2009-11-19T06:44:24")
         release1.save()
 
+		assertEquals(1, DetectionSurgery.count())
+		
         // "2009-12-08 06:44:24"
         detection = 
             detectionFactoryService.newDetection(new ReceiverDownloadFile(), standardParams)
-            
-//        assertEquals(2, detection.detectionSurgeries.size())      
-//        assertTrue(detection.detectionSurgeries*.tag.contains(tag1))
-//        assertTrue(detection.detectionSurgeries*.tag.contains(tag2))
+           
+		assertEquals(3, DetectionSurgery.count())
+		def detectionSurgery1 = DetectionSurgery.list()[1]
+		assertEquals(tag1, detectionSurgery1.tag)
+		assertEquals(surgery1, detectionSurgery1.surgery)
+		def detectionSurgery2 = DetectionSurgery.list()[2]
+		assertEquals(tag2, detectionSurgery2.tag)
+		assertEquals(surgery2, detectionSurgery2.surgery)
     }
     
     void testRescan()
@@ -430,8 +433,10 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
         assertEquals(1, updatedDetections.size())
         def updatedDetection = updatedDetections[0]
         assertEquals(detection, updatedDetection)
-//        assertEquals(1, updatedDetection.detectionSurgeries.size())
-//        assertTrue(updatedDetection.detectionSurgeries*.tag.contains(tag))
-//        assertTrue(updatedDetection.detectionSurgeries*.surgery.contains(surgery))
+		
+		assertEquals(1, DetectionSurgery.count())
+		def detectionSurgery = DetectionSurgery.list()[0]
+		assertEquals(tag, detectionSurgery.tag)
+		assertEquals(surgery, detectionSurgery.surgery)
     }
 }

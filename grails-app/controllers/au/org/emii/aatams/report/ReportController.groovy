@@ -70,14 +70,21 @@ class ReportController
         
 		if (params._format == "KML")
 		{
+			long startTime = System.currentTimeMillis()
+			
 			assert(!resultList.isEmpty())
 			generateKml(params, resultList)
+
+			log.debug("KML generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
 		}
 		else
 		{
-	        params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/" 
-	        
-	        generateReport(params, log, request, resultList)
+			long startTime = System.currentTimeMillis()
+			
+			params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/"
+			generateReport(params, log, request, resultList)
+
+			log.debug("Report generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
 		}
 	}
 
@@ -137,7 +144,8 @@ class ReportController
 		return true
 	}
 
-	private List generateResultList(Map params) {
+	private List generateResultList(Map params) 
+	{
 		def resultList = []
 
 		// Special handling for animal release summary.
@@ -167,10 +175,15 @@ class ReportController
 				filterParams.in = params.filter.in
 			}
 			
+			long startTime = System.currentTimeMillis()
+			
 			resultList = reportQueryExecutorService.executeQuery(
 					reportFilterFactoryService.newFilter(reportInfoService.getClassForName(params._name),
 					filterParams))
+			
+			log.debug("Report query executed, time: " + (System.currentTimeMillis() - startTime) + "ms.")
 		}
+		
 		return resultList
 	}
 

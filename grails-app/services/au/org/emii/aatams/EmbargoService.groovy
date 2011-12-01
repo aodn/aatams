@@ -8,7 +8,9 @@ class EmbargoService
     static transactional = true
 
     def permissionUtilsService
-    
+   
+	private Map<Integer, Boolean> projectPermissionCache = [:]
+	 
     List applyEmbargo(Class domain, List embargoees)
     {
         if (!Arrays.asList(domain.getInterfaces()).contains(Embargoable.class))
@@ -25,6 +27,8 @@ class EmbargoService
      */
     List applyEmbargo(List embargoees) 
     {
+		projectPermissionCache.clear()
+		
         def retList = embargoees.collect
         {
             applyEmbargo(it)
@@ -37,7 +41,21 @@ class EmbargoService
         
         return retList
     }
-    
+
+	private boolean hasReadPermission(embargoee)
+	{
+		def projectId = embargoee.project?.id
+
+		if (!projectPermissionCache.containsKey(projectId))
+		{
+	        String permissionString = permissionUtilsService.buildProjectReadPermission(projectId)
+	        projectPermissionCache.put(projectId, SecurityUtils.subject.isPermitted(permissionString))
+		}
+		
+		assert(projectPermissionCache.containsKey(projectId))
+		return projectPermissionCache[projectId]
+	}
+	    
     Object applyEmbargo(Object embargoee)
     {
         if (!(embargoee instanceof Embargoable))
@@ -45,10 +63,7 @@ class EmbargoService
             return embargoee
         }
         
-        String permissionString = permissionUtilsService.buildProjectReadPermission(embargoee.project?.id)
-        boolean hasReadPermission = SecurityUtils.subject.isPermitted(permissionString)
-
-        if (hasReadPermission)
+        if (hasReadPermission(embargoee))
         {
             return embargoee
         }

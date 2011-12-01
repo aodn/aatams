@@ -132,7 +132,7 @@ log4j = {
 
 //    info    "grails.app.service.au.org.emii"
 
-    debug   "grails.app.controller.au.org.emii.aatams.ProjectRoleController",
+    debug   "grails.app.controller.au.org.emii.aatams.report.ReportController",
 //            "grails.app.service.au.org.emii",
 //			"grails.app.service.au.org.emii.aatams.detection.DetectionValidatorService",
             //"grails.app.controller.au.org.emii",

@@ -1529,4 +1529,6 @@ databaseChangeLog = {
 	include file: 'introduce_code_map_table.groovy'
 	
 	include file: 'new_reference_data_3.5.0.groovy'
+
+	include file: 'jdbc_template_detection_upload.groovy'
 }

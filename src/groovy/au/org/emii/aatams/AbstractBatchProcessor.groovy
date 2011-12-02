@@ -11,13 +11,21 @@ abstract class AbstractBatchProcessor
     def sessionFactory
     def propertyInstanceMap = org.codehaus.groovy.grails.plugins.DomainClassGrailsPlugin.PROPERTY_INSTANCE_MAP
     
-    // This has been  tuned with a "suck-it-and-see" approach, with a dataset
-    // of 3000 records.
-    int batchSize = 30
-    
     def searchableService
  
-    protected void cleanUpGorm() 
+	protected int getBatchSize()
+	{
+	    // This has been  tuned with a "suck-it-and-see" approach, with a dataset
+	    // of 3000 records.
+		return 30
+	}
+	
+	protected void startBatch()
+	{
+		
+	}
+	
+    protected void endBatch() 
     {
         def session = sessionFactory?.currentSession
         session?.flush()
@@ -44,20 +52,21 @@ abstract class AbstractBatchProcessor
 			
 			long startTime = System.currentTimeMillis()
 			
-			cleanUpGorm()
+			startBatch()
 			
             records.eachWithIndex
             {
                 map, i ->
 
-                processSingleRecord(downloadFile, map)
-
-                if ((i % batchSize) == 0)
+                if ((i != 0) && ((i % batchSize) == 0))
                 {
-                    cleanUpGorm()
+                    endBatch()
+					startBatch()
 //					log.debug(String.valueOf(i) + " records processed, average time per record: " + (float)(System.currentTimeMillis() - startTime) / (i + 1) + "ms")
                 }
 				
+                processSingleRecord(downloadFile, map)
+
 				float progress = (float)i/numRecords * 100
 				if ((int)progress > percentProgress)
 				{
@@ -66,8 +75,15 @@ abstract class AbstractBatchProcessor
 						     + ", progress: " + percentProgress 
 							 + "%, average time per record: " + (float)(System.currentTimeMillis() - startTime) / (i + 1) + "ms")
 				}
+				
+//				if (i == 2000)
+//				{
+//					throw new RuntimeException("test finished")
+//				}
             }
 
+			endBatch()
+			
             long elapsedTime = System.currentTimeMillis() - startTimestamp
             log.info("Batch details, size: " + batchSize + ", time per record (ms) : " + (float)elapsedTime / numRecords)    
             log.info("Records processed: (" + numRecords + ") in (ms): " +  elapsedTime)

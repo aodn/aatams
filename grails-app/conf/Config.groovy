@@ -146,7 +146,8 @@ log4j = {
             "grails.app.filter"//,
             //"grails.app.tagLib.com.energizedwork.grails.plugins.jodatime"
             
-    debug   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService"
+    debug   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
+	        "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService"
     info    "grails.app.service.au.org.emii.aatams.VueEventFileProcessorService"
 }
 

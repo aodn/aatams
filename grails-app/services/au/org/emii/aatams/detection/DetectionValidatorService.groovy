@@ -23,7 +23,10 @@ class DetectionValidatorService
     Collection<ReceiverRecovery> recoveries
     
     ReceiverDeployment deployment
-    
+	
+	InvalidDetectionReason invalidReason
+    String invalidMessage
+	
     static DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     
     static
@@ -93,53 +96,54 @@ class DetectionValidatorService
         return (!recoveries || recoveries.isEmpty())
     }
 
-    RawDetection validate(theReceiverDownload, theParams)
+    boolean validate(theReceiverDownload, theParams)
     {
 		reset(theReceiverDownload, theParams)
 	
         if (isDuplicate())
         {
 			log.debug("Invalid detection: duplicate")
-            return new InvalidDetection(params + [receiverDownload:receiverDownload, reason:InvalidDetectionReason.DUPLICATE])
+			invalidMessage = ""
+			invalidReason = InvalidDetectionReason.DUPLICATE
+			
+			return false
         }
         
         if (isUnknownReceiver())
         {
 			log.debug("Invalid detection: unknown receiver code name " + params.receiverName)
-            return new InvalidDetection(params + 
-                                        [receiverDownload:receiverDownload, 
-                                         reason:InvalidDetectionReason.UNKNOWN_RECEIVER, 
-                                         message:"Unknown receiver code name " + params.receiverName]).save()
+			invalidMessage = "Unknown receiver code name " + params.receiverName
+			invalidReason = InvalidDetectionReason.UNKNOWN_RECEIVER
+			
+			return false
         }
 		
         if (hasNoDeploymentsAtDateTime())
         {
 			log.debug("Invalid detection: no deployment at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName)
-            return new InvalidDetection(params + 
-                                        [receiverDownload:receiverDownload, 
-                                         reason:InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME, 
-                                         message:"No deployment at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName]).save()
+			invalidMessage = "No deployment at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName
+			invalidReason = InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME
+			
+			return false
         }
 
         if (hasNoRecoveriesAtDateTime())
         {
 			log.debug("Invalid detection: no recovery at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName)
-            return new InvalidDetection(params + 
-                                        [receiverDownload:receiverDownload, 
-                                         reason:InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME, 
-                                         message:"No recovery at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName]).save()
+			invalidMessage = "No recovery at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName
+			invalidReason = InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME
+			
+			return false
         }
 
-        def validDetection = new ValidDetection(params + 
-                                                [receiverDownload:receiverDownload, 
-                                                receiverDeployment:deployment,
-												receiver:receiver]).save()
-        
-        return validDetection
+		return true
     }
 	
 	private void reset(theReceiverDownload, theParams) 
 	{
+		invalidMessage = null
+		invalidReason = null
+		
 		receiverDownload = theReceiverDownload
 		params = theParams
 		

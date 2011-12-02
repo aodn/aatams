@@ -47,22 +47,27 @@ class DetectionFactoryService
      * Creates a detection given a map of parameters (which originate from a line
      * in a CSV upload file).
      */
-    RawDetection newDetection(downloadFile, params) throws FileProcessingException 
+	Map newDetection(downloadFile, params) throws FileProcessingException
     {
+		Map newDetectionObjects = [:]
+		
         def nativeParams = toNativeParams(params)
 
-        RawDetection detection = initDetection(downloadFile, nativeParams)
+        def detection = initDetection(downloadFile, nativeParams)
         assert(detection)
         
-        if (!detection.isValid())
+		newDetectionObjects["detection"] = detection
+		
+        if (!detection.valid)
         {
-//            detection.save()
-            return detection
+			newDetectionObjects["detectionSurgeries"] = []
         }
+		else
+		{
+			newDetectionObjects["detectionSurgeries"] = matchToTags(detection)
+		}
         
-        matchToTags(detection)
-        
-        return detection
+        return newDetectionObjects
     }
     
     Collection<RawDetection> rescanForSurgery(Surgery surgery)
@@ -83,17 +88,31 @@ class DetectionFactoryService
             {
                 updatedDetections.add(detection)
 				
-				createDetectionSurgery(surgery, surgery.tag, detection)
+				createDetectionSurgery(surgery, surgery.tag, detection).save()
             }
         }
         
         return updatedDetections
     }
     
-    private RawDetection initDetection(downloadFile, nativeParams)
+    private def initDetection(downloadFile, nativeParams)
     {
         assert(detectionValidatorService)
-        return detectionValidatorService.validate(downloadFile, nativeParams)
+		
+		if (detectionValidatorService.validate(downloadFile, nativeParams))
+		{
+			return createValidDetection(nativeParams + 
+					   	                [receiverDownload:downloadFile, 
+										 receiverDeployment:detectionValidatorService.deployment,
+										 receiver:detectionValidatorService.receiver])
+		}
+		else
+		{
+			return createInvalidDetection(nativeParams + 
+                                          [receiverDownload:downloadFile, 
+                                           reason:detectionValidatorService.invalidReason, 
+                                           message:detectionValidatorService.invalidMessage])
+		}
     }
     
     private static Map toNativeParams(params)
@@ -106,7 +125,7 @@ class DetectionFactoryService
                 transmitterId:params[TRANSMITTER_COLUMN],
                 transmitterName:params[TRANSMITTER_NAME_COLUMN],
                 transmitterSerialNumber:params[TRANSMITTER_SERIAL_NUMBER_COLUMN],
-                sensorValue:params[SENSOR_VALUE_COLUMN],
+                sensorValue:params[SENSOR_VALUE_COLUMN] == null ? null : Float.valueOf(params[SENSOR_VALUE_COLUMN]),
                 sensorUnit:params[SENSOR_UNIT_COLUMN],
                 stationName:params[STATION_NAME_COLUMN]] 
 
@@ -117,14 +136,20 @@ class DetectionFactoryService
             location.setSRID(4326)
             retMap.location = location
         }
+		else
+		{
+			retMap.location = null
+		}
         
         return retMap
     }
     
-    private void matchToTags(detection)
+    private List matchToTags(detection)
     {
         assert(detection)
         
+		def detectionSurgeryList = []
+		
 		def tags = findTags(detection.transmitterId)
         tags.each
         {
@@ -139,7 +164,7 @@ class DetectionFactoryService
                     return
                 }
                 
-				createDetectionSurgery(surgery, tag, detection)
+				detectionSurgeryList.add(createDetectionSurgery(surgery, tag, detection))
             }
         }
 		
@@ -155,9 +180,11 @@ class DetectionFactoryService
                     return
                 }
                 
-				createDetectionSurgery(surgery, sensor, detection)
+				detectionSurgeryList.add(createDetectionSurgery(surgery, sensor, detection))
             }
         }
+		
+		return detectionSurgeryList
     }
     
 	private List<Tag> findTags(transmitterId)
@@ -184,10 +211,21 @@ class DetectionFactoryService
 		return cache[transmitterId]
 	}
 	
-    private void createDetectionSurgery(surgery, tag, detection)
+    protected def createDetectionSurgery(surgery, tag, detection)
     {
-		(new DetectionSurgery(surgery:surgery,
-							 tag:tag,
-							 detection:detection)).save()
+		return new DetectionSurgery(
+			surgery:surgery,
+			tag:tag,
+			detection:detection)
     }
+	
+	protected def createValidDetection(params)
+	{
+		return new ValidDetection(params)
+	}
+	
+	protected def createInvalidDetection(params)
+	{
+		return new InvalidDetection(params)
+	}
 }

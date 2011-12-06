@@ -29,57 +29,62 @@ class FileProcessorService
 		validateContent(receiverDownloadFile, file)
 			
         // Save the file to disk.
-		log.debug("Creating file at path: " + receiverDownloadFile.path)
-        File outFile = new File(receiverDownloadFile.path)
-        
-        // Create the directory structure first...
-        outFile.mkdirs()
-        
-        // ... then transfer the data.
-        file.transferTo(outFile)
-        
-        try
-        {
-            switch (receiverDownloadFile.type)
-            {
-                case ReceiverDownloadFileType.DETECTIONS_CSV:
-                
-                    // Delegate to VUE Detection Processor...
-                    log.debug("Delegating to VUE detection file processor...")
-					jdbcTemplateVueDetectionFileProcessorService.process(receiverDownloadFile)
-					
-                    break;
-                
-                case ReceiverDownloadFileType.EVENTS_CSV:
-
-                    // Delegate to VUE Event Processor...
-                    log.debug("Processing events...")
-                    jdbcTemplateVueEventFileProcessorService.process(receiverDownloadFile)
-                    break;
-                
-                default:
-
-                    // No processing - just update the status.
-                    receiverDownloadFile.status = FileProcessingStatus.PROCESSED
-                    receiverDownloadFile.save()
-            }
-
-            log.info "Finished processing."
-        }
-        catch (Throwable e)
-        {
-            log.error("Error processing file", e)
-            receiverDownloadFile.status = FileProcessingStatus.ERROR
-            receiverDownloadFile.errMsg = String.valueOf(e)
-            receiverDownloadFile.save()
-
-            throw e
-        }
-        finally 
-        {
-            sendNotification(receiverDownloadFile, showLink)
-        }
+		saveToDiskAndProcess(receiverDownloadFile, file,showLink)
     }
+
+	private void saveToDiskAndProcess(ReceiverDownloadFile receiverDownloadFile, MultipartFile file, showLink) 
+	{
+		log.debug("Creating file at path: " + receiverDownloadFile.path)
+		File outFile = new File(receiverDownloadFile.path)
+
+		// Create the directory structure first...
+		outFile.mkdirs()
+
+		// ... then transfer the data.
+		file.transferTo(outFile)
+
+		try
+		{
+			switch (receiverDownloadFile.type)
+			{
+				case ReceiverDownloadFileType.DETECTIONS_CSV:
+
+				// Delegate to VUE Detection Processor...
+					log.debug("Delegating to VUE detection file processor...")
+					jdbcTemplateVueDetectionFileProcessorService.process(receiverDownloadFile)
+
+					break;
+
+				case ReceiverDownloadFileType.EVENTS_CSV:
+
+				// Delegate to VUE Event Processor...
+					log.debug("Processing events...")
+					jdbcTemplateVueEventFileProcessorService.process(receiverDownloadFile)
+					break;
+
+				default:
+
+				// No processing - just update the status.
+					receiverDownloadFile.status = FileProcessingStatus.PROCESSED
+					receiverDownloadFile.save()
+			}
+
+			log.info "Finished processing."
+		}
+		catch (Throwable e)
+		{
+			log.error("Error processing file", e)
+			receiverDownloadFile.status = FileProcessingStatus.ERROR
+			receiverDownloadFile.errMsg = String.valueOf(e)
+			receiverDownloadFile.save()
+
+			throw e
+		}
+		finally
+		{
+			sendNotification(receiverDownloadFile, showLink)
+		}
+	}
     
     boolean isParseable(downloadFile)
     {
@@ -113,38 +118,13 @@ class FileProcessorService
 
 		log.debug("Validating file with content type: " + file.getContentType())
 
-		// See: http://blog.futtta.be/2009/08/24/http-upload-mime-type-hell/		
-//        switch (receiverDownloadFile.type)
-//        {
-//            case ReceiverDownloadFileType.DETECTIONS_CSV:
-//			
-//			
-//				if (!CSV_CONTENT_TYPES.contains(file.getContentType()))
-//				{
-//					throw new FileProcessingException("Invalid file content - detections must be imported in CSV file format")
-//				}
-//                break;
-//
-//            case ReceiverDownloadFileType.EVENTS_CSV:
-//
-//				if (!CSV_CONTENT_TYPES.contains(file.getContentType()))
-//				{
-//					throw new FileProcessingException("Invalid file content - events must be imported in CSV file format")
-//				}
-//                break;
-//            
-//			case ReceiverDownloadFileType.VRL:
-//			case ReceiverDownloadFileType.RLD:
-//			
-//				if (!file.getContentType().equals("application/octet-stream"))
-//				{
-//					throw new FileProcessingException("Invalid file content for VRL/RLD file")
-//				}
-//                break;
-//				
-//            default:
-//
-//				assert(false)
-//        }
+		// See: http://blog.futtta.be/2009/08/24/http-upload-mime-type-hell/ as to why we're no longer validating mime-type
+			
+		if (!file.getOriginalFilename().endsWith(ReceiverDownloadFileType.getExtension(receiverDownloadFile.type)))
+		{
+			def errMsg = "Invalid " + ReceiverDownloadFileType.getCategory(receiverDownloadFile.type) + \
+						 " filename (" + file.getOriginalFilename() + ") - must have extension \"." + ReceiverDownloadFileType.getExtension(receiverDownloadFile.type) + "\"."
+			throw new FileProcessingException(errMsg)
+		}
 	}
 }

@@ -7,14 +7,6 @@ class JdbcTemplateDetectionFactoryService extends DetectionFactoryService
 	// TODO: use hibernate sequence
 	static count = System.currentTimeMillis()
 	
-	protected def createDetectionSurgery(surgery, tag, detection)
-	{
-		return
-			 [surgeryId:surgery.id,
-			  tagId:tag.id,
-			  detectionId: 1]//detection.id]
-	}
-	
 	protected def createValidDetection(params)
 	{
 		return (params 
@@ -23,17 +15,27 @@ class JdbcTemplateDetectionFactoryService extends DetectionFactoryService
 				   "receiverDownloadId": params.receiverDownload.id,
 				   "receiverDeploymentId": params.receiverDeployment.id,
 				   "message": "",
-				   "reason": ""])
+				   "reason": "",
+				   "detectionSurgeries": new ArrayList()])
 	}
 	
 	protected def createInvalidDetection(params)
 	{
-//		return new InvalidDetection(params)
 		return (params 
 			    + ["valid": false,
 				   "clazz": "au.org.emii.aatams.detection.InvalidDetection", 
-				   "receiverDownloadId": "",
-				   "receiverDownloadId": params.receiverDownload.id
-				   ])
+//				   "receiverDeploymentId": ,
+				   "receiverDownloadId": params.receiverDownload.id,
+				   "detectionSurgeries": new ArrayList()])
+	}
+	
+	protected def createDetectionSurgery(surgery, tag, detection)
+	{
+		def detectionSurgery = 
+			 [surgeryId:surgery.id,
+			  tagId:tag.id]
+			
+		detection["detectionSurgeries"].add(detectionSurgery) 
+		return detectionSurgery	 
 	}
 }

@@ -14,12 +14,6 @@ class VueDetectionFileProcessorService extends AbstractBatchProcessor
 	
     void processSingleRecord(downloadFile, map)
     {
-        Map newDetectionObjects = detectionFactoryService.newDetection(downloadFile, map)
-		newDetectionObjects.each 
-		{
-			k, v -> 
-			
-			v.each { it.save() } 
-		}
+        detectionFactoryService.newDetection(downloadFile, map)
     }
 }

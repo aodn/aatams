@@ -47,27 +47,23 @@ class DetectionFactoryService
      * Creates a detection given a map of parameters (which originate from a line
      * in a CSV upload file).
      */
-	Map newDetection(downloadFile, params) throws FileProcessingException
+	def newDetection(downloadFile, params) throws FileProcessingException
     {
-		Map newDetectionObjects = [:]
-		
-        def nativeParams = toNativeParams(params)
+		def nativeParams = toNativeParams(params)
 
         def detection = initDetection(downloadFile, nativeParams)
         assert(detection)
-        
-		newDetectionObjects["detection"] = detection
 		
         if (!detection.valid)
         {
-			newDetectionObjects["detectionSurgeries"] = []
+			;
         }
 		else
 		{
-			newDetectionObjects["detectionSurgeries"] = matchToTags(detection)
+			matchToTags(detection)
 		}
         
-        return newDetectionObjects
+        return detection
     }
     
     Collection<RawDetection> rescanForSurgery(Surgery surgery)
@@ -144,12 +140,10 @@ class DetectionFactoryService
         return retMap
     }
     
-    private List matchToTags(detection)
+    private void matchToTags(detection)
     {
         assert(detection)
         
-		def detectionSurgeryList = []
-		
 		def tags = findTags(detection.transmitterId)
         tags.each
         {
@@ -164,7 +158,7 @@ class DetectionFactoryService
                     return
                 }
                 
-				detectionSurgeryList.add(createDetectionSurgery(surgery, tag, detection))
+				createDetectionSurgery(surgery, tag, detection)
             }
         }
 		
@@ -180,11 +174,9 @@ class DetectionFactoryService
                     return
                 }
                 
-				detectionSurgeryList.add(createDetectionSurgery(surgery, sensor, detection))
+				createDetectionSurgery(surgery, sensor, detection)
             }
         }
-		
-		return detectionSurgeryList
     }
     
 	private List<Tag> findTags(transmitterId)
@@ -216,16 +208,16 @@ class DetectionFactoryService
 		return new DetectionSurgery(
 			surgery:surgery,
 			tag:tag,
-			detection:detection)
+			detection:detection).save()
     }
 	
 	protected def createValidDetection(params)
 	{
-		return new ValidDetection(params)
+		return new ValidDetection(params).save()
 	}
 	
 	protected def createInvalidDetection(params)
 	{
-		return new InvalidDetection(params)
+		return new InvalidDetection(params).save()
 	}
 }

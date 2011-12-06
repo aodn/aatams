@@ -1532,3 +1532,4 @@ databaseChangeLog = {
 
 	include file: 'jdbc_template_detection_upload.groovy'
 }
+

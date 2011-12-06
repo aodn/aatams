@@ -4,9 +4,6 @@ import au.org.emii.aatams.DetectionSurgery;
 
 class JdbcTemplateDetectionFactoryService extends DetectionFactoryService 
 {
-	// TODO: use hibernate sequence
-	static count = System.currentTimeMillis()
-	
 	protected def createValidDetection(params)
 	{
 		return (params 
@@ -24,7 +21,6 @@ class JdbcTemplateDetectionFactoryService extends DetectionFactoryService
 		return (params 
 			    + ["valid": false,
 				   "clazz": "au.org.emii.aatams.detection.InvalidDetection", 
-//				   "receiverDeploymentId": ,
 				   "receiverDownloadId": params.receiverDownload.id,
 				   "detectionSurgeries": new ArrayList()])
 	}

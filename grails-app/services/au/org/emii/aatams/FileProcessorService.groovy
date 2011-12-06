@@ -8,11 +8,9 @@ class FileProcessorService
 {
     static transactional = true
 
-    def vueDetectionFileProcessorService
 	def jdbcTemplateVueDetectionFileProcessorService
+	def jdbcTemplateVueEventFileProcessorService
 	
-    def vueEventFileProcessorService
-    
     def grailsApplication
     def mailService
 
@@ -48,17 +46,15 @@ class FileProcessorService
                 
                     // Delegate to VUE Detection Processor...
                     log.debug("Delegating to VUE detection file processor...")
-//                    vueDetectionFileProcessorService.process(receiverDownloadFile)
 					jdbcTemplateVueDetectionFileProcessorService.process(receiverDownloadFile)
 					
-//					throw new RuntimeException("test finished")
                     break;
                 
                 case ReceiverDownloadFileType.EVENTS_CSV:
 
                     // Delegate to VUE Event Processor...
                     log.debug("Processing events...")
-                    vueEventFileProcessorService.process(receiverDownloadFile)
+                    jdbcTemplateVueEventFileProcessorService.process(receiverDownloadFile)
                     break;
                 
                 default:
@@ -92,7 +88,6 @@ class FileProcessorService
     
     def sendNotification(receiverDownloadFile, showLink)
     {
-/*		
         mailService.sendMail 
         {
             // Required to avoid hibernate exception, since session is flushed and cleared above.
@@ -105,7 +100,6 @@ class FileProcessorService
                  + ": " + receiverDownloadFile?.status + "\n\n" \
                  + showLink
         }
-*/        
     }
 	
 	private void validateContent(ReceiverDownloadFile receiverDownloadFile, MultipartFile file) throws FileProcessingException

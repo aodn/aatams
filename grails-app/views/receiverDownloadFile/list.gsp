@@ -10,6 +10,10 @@
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
+            <shiro:hasPermission permission="projectWriteAny">
+              <span class="menuButton"><g:link class="create" controller="detection" action="create"><g:message code="default.upload.label" args="['Tag Detection']" /></g:link></span>
+              <span class="menuButton"><g:link class="create" controller="receiverEvent" action="create"><g:message code="default.upload.label" args="['Receiver Event']" /></g:link></span>
+            </shiro:hasPermission>
         </div>
         <div class="body">
             <h1><g:message code="default.list.label" args="[entityName]" /></h1>

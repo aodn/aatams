@@ -40,15 +40,12 @@ class AuthController {
         try
         {
             // Don't let PENDING users log in.
-            if (Person.findByUsername(params.username)?.status == EntityStatus.PENDING)
-            {
-                throw new AuthenticationException("Attempted login by PENDING user: " + params.username)
-            }
+            checkForPendingUser(params)
             
             // Perform the actual login. An AuthenticationException
             // will be thrown if the username is unrecognised or the
             // password is incorrect.
-            SecurityUtils.subject.login(authToken)
+            doLogin(authToken)
 
             log.info "Redirecting to '${targetUri}'."
             redirect(uri: targetUri)
@@ -75,6 +72,17 @@ class AuthController {
             redirect(action: "login", params: m)
         }
     }
+
+	private doLogin(UsernamePasswordToken authToken) {
+		SecurityUtils.subject.login(authToken)
+	}
+
+	private checkForPendingUser(Map params) {
+		if (Person.findByUsername(params.username)?.status == EntityStatus.PENDING)
+		{
+			throw new AuthenticationException("Attempted login by PENDING user: " + params.username)
+		}
+	}
 
     def signOut = {
         // Log the user out of the application.

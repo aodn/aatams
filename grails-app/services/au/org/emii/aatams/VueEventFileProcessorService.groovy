@@ -12,7 +12,6 @@ class VueEventFileProcessorService extends AbstractBatchProcessor
     
     void processSingleRecord(downloadFile, map)
     {
-        ReceiverEvent event = eventFactoryService.newEvent(downloadFile, map).save(failOnError: true)
-        downloadFile.addToEvents(event)
+        eventFactoryService.newEvent(downloadFile, map)
     }
 }

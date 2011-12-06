@@ -17,7 +17,7 @@ class EventFactoryService
      * Creates a receiver event given a map of parameters (which originate from a line
      * in a CSV upload file).
      */
-    ReceiverEvent newEvent(downloadFile, eventParams) throws FileProcessingException 
+    def newEvent(downloadFile, eventParams) throws FileProcessingException 
     {
         String dateString = eventParams[DATE_AND_TIME_COLUMN] + " " + "UTC"
         Date eventDate = new Date().parse(DATE_FORMAT, dateString)
@@ -34,24 +34,29 @@ class EventFactoryService
         // the detection and the deployment/recovery timestamps.
         ReceiverDeployment deployment = findReceiverDeployment(receiver, eventDate)
 
-        ReceiverEvent event = 
-            new ReceiverEvent(receiverDownload:downloadFile,
-                              receiverDeployment:deployment,
-                              timestamp:eventDate)
-       
-        String description = eventParams[DESCRIPTION_COLUMN]
-        event.description = description
-        
-        String data = eventParams[DATA_COLUMN]
-        event.data = data
-
-        String units = eventParams[UNITS_COLUMN]
-        event.units = units
-        
-        deployment.save()
-        
-        return event
+        return createEvent(downloadFile, deployment, eventDate, eventParams)
     }
+
+	protected def createEvent(downloadFile, deployment, eventDate, eventParams) 
+	{
+		ReceiverEvent event =
+			new ReceiverEvent(
+						receiverDownload:downloadFile,
+						receiverDeployment:deployment,
+						timestamp:eventDate)
+
+		String description = eventParams[DESCRIPTION_COLUMN]
+		event.description = description
+
+		String data = eventParams[DATA_COLUMN]
+		event.data = data
+
+		String units = eventParams[UNITS_COLUMN]
+		event.units = units
+
+		event.save()
+		return event
+	}
    
     ReceiverDeployment findReceiverDeployment(receiver, eventDate)
     {

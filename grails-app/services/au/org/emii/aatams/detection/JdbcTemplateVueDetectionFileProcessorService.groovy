@@ -1,6 +1,9 @@
 package au.org.emii.aatams.detection
 
+import java.util.Map;
+
 import au.org.emii.aatams.DetectionSurgery
+import au.org.emii.aatams.util.SqlUtils
 
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate
@@ -21,7 +24,6 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 	def jdbcTemplateDetectionFactoryService
 	
 	List<Map> detectionBatch
-	List<Map> detectionSurgeryBatch
 	
 	protected int getBatchSize()
 	{
@@ -34,55 +36,44 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 		
 		// Create lists
 		detectionBatch = new ArrayList<Map>()
-		detectionSurgeryBatch = new ArrayList<Map>()
 	}
 	
 	protected void endBatch()
 	{
 		log.debug("End batch, inserting detections...")
 		insertDetections()
-		insertDetectionSurgeries()
 	}
 	
 	private void insertDetections()
 	{
-		SqlParameterSource[] detectionsBatch = SqlParameterSourceUtils.createBatch(detectionBatch.toArray(new Map[0]))
-		def insertDetectionsStatement = 
-			"INSERT INTO RAW_DETECTION (LOCATION, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, " +
-			"STATION_NAME, TIMESTAMP, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, CLASS, RECEIVER_DEPLOYMENT_ID, MESSAGE, REASON) " +
-			" VALUES(:location, :receiverDownloadId, :receiverName, :sensorUnit, :sensorValue, :stationName, :timestamp, :transmitterId, " +
-			":transmitterName, :transmitterSerialNumber, :clazz, :receiverDeploymentId, :message, :reason)"
+		def insertStatementList = []
 		
-		doInsert(detectionsBatch, insertDetectionsStatement)
-	}
+		detectionBatch.each
+		{
+			insertStatementList.add(RawDetection.toSqlInsert(it))
+			
+			it.detectionSurgeries.each
+			{
+				detSurgery ->
 
-	private void insertDetectionSurgeries()
-	{
-		SqlParameterSource[] detectionSurgeriesBatch = SqlParameterSourceUtils.createBatch(detectionSurgeryBatch.toArray(new Map[0]))
-		def insertDetectionsStatement = 
-			"INSERT INTO DETECTION_SURGERY (DETECTION_ID, SURGERY_ID, TAG_ID) " +
-			" VALUES(:detectionId, :surgeryId, :tagId)"
+				insertStatementList.add(DetectionSurgery.toSqlInsert(detSurgery))
+			}
+		}
 		
-		doInsert(detectionSurgeriesBatch, insertDetectionsStatement)
+		batchUpdate(insertStatementList.toArray(new String[0]))
 	}
 	
-	private void doInsert(batch, statement)
+	void batchUpdate(String[] statements)
 	{
-		log.debug("Inserting " + batch.size() + " records...")
-		log.debug("Statement: " + statement)
-		
-		SimpleJdbcTemplate insert = new SimpleJdbcTemplate(dataSource)
-		int[] updateCounts = insert.batchUpdate(
-			statement,
-			batch)
-
+		log.debug("Inserting " + statements.size() + " records...")
+		JdbcTemplate insert = new JdbcTemplate(dataSource)
+		insert.batchUpdate(statements)
 		log.debug("Batch successfully inserted")	
 	}
 	
     void processSingleRecord(downloadFile, map)
     {
-		def newDetectionObjects = jdbcTemplateDetectionFactoryService.newDetection(downloadFile, map)
-        detectionBatch.addAll(newDetectionObjects["detection"])
-		detectionSurgeryBatch.addAll(newDetectionObjects["detectionSurgeries"])
+		def detection = jdbcTemplateDetectionFactoryService.newDetection(downloadFile, map)
+        detectionBatch.addAll(detection)
     }
 }

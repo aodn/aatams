@@ -77,17 +77,7 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
     
 	private RawDetection newDetection(downloadFile, params)
 	{
-		def newDetectionObjects =
-			detectionFactoryService.newDetection(downloadFile, params)
-			
-		newDetectionObjects.each
-		{
-			k,v ->
-			
-			v.each { it.save() }
-		}
-		
-		return newDetectionObjects["detection"]
+		return detectionFactoryService.newDetection(downloadFile, params)
 	}
 	
     void testValid()

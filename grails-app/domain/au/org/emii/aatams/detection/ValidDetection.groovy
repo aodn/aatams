@@ -38,6 +38,7 @@ class ValidDetection extends RawDetection implements Embargoable
 	static mapping =
 	{
 		cache true
+		detectionSurgeries cache:true
 	}
 	
     static boolean isDuplicate(other)
@@ -109,7 +110,7 @@ class ValidDetection extends RawDetection implements Embargoable
         return new ArrayList(detectionSurgeries)[0]
     }
    
-    Embargoable applyEmbargo()
+    def applyEmbargo()
     {
         // Return a temporary detection, with embargoed surgeries removed.
 		def detectionProperties = new HashMap(this.properties)
@@ -123,6 +124,6 @@ class ValidDetection extends RawDetection implements Embargoable
             }
         }
 
-		return (detectionProperties as ValidDetection)
+		return detectionProperties
     }
 }

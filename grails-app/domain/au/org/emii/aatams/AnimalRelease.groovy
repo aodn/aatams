@@ -117,7 +117,7 @@ class AnimalRelease implements Embargoable
         return (embargoDate != null) && (embargoDate.compareTo(new Date()) > 0)
     }
     
-    Embargoable applyEmbargo()
+    def applyEmbargo()
     {
         if (isEmbargoed())
         {

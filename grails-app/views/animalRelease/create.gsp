@@ -246,7 +246,7 @@
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'embargoDate', 'errors')}">
                                     <g:select from="${embargoPeriods}"
                                               name="embargoPeriod" 
-                                              class="remember"
+                                              value="12"
                                               optionKey="key"
                                               optionValue="value"
                                               noSelection="['':'No embargo']"/>

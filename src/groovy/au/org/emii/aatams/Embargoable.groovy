@@ -10,6 +10,6 @@ interface Embargoable
      * Applies embargoing rules, e.g. remove embargoed child entities.
      * May return null if the object itself is embargoed.
      */
-    Embargoable applyEmbargo()
+    def applyEmbargo()
 }
 

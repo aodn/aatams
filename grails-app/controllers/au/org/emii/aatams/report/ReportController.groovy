@@ -171,7 +171,6 @@ class ReportController
 			
 			if (params.filter.in)
 			{
-				log.debug("params.filter.in: " + params.filter.in)
 				filterParams.in = params.filter.in
 			}
 			

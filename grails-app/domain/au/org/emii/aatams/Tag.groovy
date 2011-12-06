@@ -76,7 +76,7 @@ class Tag extends Device implements Embargoable
         return String.valueOf(expectedLifeTimeDays)
     }
     
-    Embargoable applyEmbargo()
+    def applyEmbargo()
     {
         boolean embargoed = false
         

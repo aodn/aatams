@@ -34,4 +34,35 @@ enum ReceiverDownloadFileType
         [EVENTS_CSV]
     }
     
+	static String getExtension(ReceiverDownloadFileType type)
+	{
+		switch (type)
+		{
+			case EVENTS_CSV: 
+				return "csv"
+			case DETECTIONS_CSV:
+				return "csv"
+			case VRL: 
+				return "vrl"
+			case RLD:
+				return "rld"
+			default:
+				return null
+		}
+	}
+	
+	static String getCategory(ReceiverDownloadFileType type)
+	{
+		switch (type)
+		{
+			case EVENTS_CSV:
+				return "events"
+			case DETECTIONS_CSV:
+			case VRL:
+			case RLD:
+				return "detections"
+			default:
+				return null
+		}
+	}
 }

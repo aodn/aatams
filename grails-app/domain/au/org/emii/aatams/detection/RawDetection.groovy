@@ -110,12 +110,17 @@ class RawDetection
 	
 	String getFormattedTimestamp()
 	{
-		if (!formatter)
+		if (timestamp)
 		{
-			formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-			formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+			if (!formatter)
+			{
+				formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+				formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+			}
+			
+			return formatter.format(timestamp)
 		}
 		
-		return formatter.format(timestamp)
+		return null
 	}
 }

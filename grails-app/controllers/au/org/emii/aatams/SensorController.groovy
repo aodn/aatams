@@ -26,16 +26,17 @@ class SensorController {
         
         // We need to get some additional parameters from the owning Tag.
         Tag owningTag = Tag.get(params.tag.id)
-        sensorInstance.codeMap = owningTag.codeMap
-        sensorInstance.codeName = owningTag.codeName + "-" + params.pingCode
+		assert(owningTag)
+		
+        sensorInstance.codeName = String.valueOf(owningTag.codeMap) + "-" + params.pingCode
         sensorInstance.model = owningTag.model
         sensorInstance.project = owningTag.project
+		sensorInstance.status = owningTag.status
         sensorInstance.serialNumber = owningTag.serialNumber + "-" + params.pingCode
         
         if (sensorInstance.save(flush: true)) 
         {
             flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance.toString()])}"
-            
             render ([instance:sensorInstance, message:flash] as JSON)
         }
         else 

@@ -1,23 +1,23 @@
-timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader
-2011-05-17 12:54:00 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-46601,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess
-2011-05-17 12:54:00 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess
-2011-05-17 12:54:01 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-46601,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess
-2011-05-17 12:54:01 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess
-2011-05-17 12:54:02 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-46601,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess
-2011-05-17 12:54:02 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess
-2011-05-17 12:54:03 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess
-2011-05-17 12:54:04 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess
-2011-05-17 12:54:05 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess
-2011-05-17 12:54:06 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess
-2011-05-17 12:54:07 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess
-2011-05-17 12:54:08 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess
-2011-05-17 12:54:09 EST,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess
-2011-05-17 12:54:00 EST,Bondi SW2,-10.1234,-10.1234,VR2W-101337,A69-1303-46601,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess
-2011-05-17 12:54:01 EST,Bondi SW2,-10.1234,-10.1234,VR2W-101337,A69-1303-46601,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess
-2011-05-17 12:54:02 EST,Bondi SW2,-10.1234,-10.1234,VR2W-101337,A69-1303-46601,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess
-2011-05-17 12:54:00 EST,Heron S1,-42.3,12.34,VR2W-101344, , ,Jon Burgess
-2011-05-17 12:54:01 EST,Heron S1,-42.3,12.34,VR2W-101344, , ,Jon Burgess
-2011-05-17 12:54:02 EST,Heron S1,-42.3,12.34,VR2W-101344, , ,Jon Burgess
-2011-05-17 12:54:00 EST,Ningaloo S1,10.1234,10.1234,VR2W-101338,A69-1303-11111,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess
-2011-05-17 12:54:01 EST,Ningaloo S1,10.1234,10.1234,VR2W-101338,A69-1303-11111,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess
-2011-05-17 12:54:02 EST,Ningaloo S1,10.1234,10.1234,VR2W-101338,A69-1303-11111,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess
+timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
+2011-05-17 02:54:00,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-46601,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess,A69-1303-46601,CSIRO
+2011-05-17 02:54:00,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess,A69-1303-62339,CSIRO
+2011-05-17 02:54:01,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-46601,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess,A69-1303-46601,CSIRO
+2011-05-17 02:54:01,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess,A69-1303-62339,CSIRO
+2011-05-17 02:54:02,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-46601,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess,A69-1303-46601,CSIRO
+2011-05-17 02:54:02,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess,A69-1303-62339,CSIRO
+2011-05-17 02:54:03,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess,A69-1303-62339,CSIRO
+2011-05-17 02:54:04,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess,A69-1303-62339,CSIRO
+2011-05-17 02:54:05,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess,A69-1303-62339,CSIRO
+2011-05-17 02:54:06,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess,A69-1303-62339,CSIRO
+2011-05-17 02:54:07,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess,A69-1303-62339,CSIRO
+2011-05-17 02:54:08,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess,A69-1303-62339,CSIRO
+2011-05-17 02:54:09,Bondi SW1,30.1234,30.1234,VR2W-101336,A69-1303-62339,37010003 - Carcharodon carcharias (White Shark),Jon Burgess,A69-1303-62339,CSIRO
+2011-05-17 02:54:00,Bondi SW2,-10.1234,-10.1234,VR2W-101337,A69-1303-46601,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess,A69-1303-46601,CSIRO
+2011-05-17 02:54:01,Bondi SW2,-10.1234,-10.1234,VR2W-101337,A69-1303-46601,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess,A69-1303-46601,CSIRO
+2011-05-17 02:54:02,Bondi SW2,-10.1234,-10.1234,VR2W-101337,A69-1303-46601,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess,A69-1303-46601,CSIRO
+2011-05-17 02:54:00,Heron S1,-42.3,12.34,VR2W-101344, , ,Jon Burgess,A69-1303-33333,IMOS
+2011-05-17 02:54:01,Heron S1,-42.3,12.34,VR2W-101344, , ,Jon Burgess,A69-1303-33333,IMOS
+2011-05-17 02:54:02,Heron S1,-42.3,12.34,VR2W-101344, , ,Jon Burgess,A69-1303-33333,IMOS
+2011-05-17 02:54:00,Ningaloo S1,10.1234,10.1234,VR2W-101338,A69-1303-11111,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess,A69-1303-11111,IMOS
+2011-05-17 02:54:01,Ningaloo S1,10.1234,10.1234,VR2W-101338,A69-1303-11111,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess,A69-1303-11111,IMOS
+2011-05-17 02:54:02,Ningaloo S1,10.1234,10.1234,VR2W-101338,A69-1303-11111,37441004 - Thunnus maccoyii (Southern Bluefin Tuna),Jon Burgess,A69-1303-11111,IMOS

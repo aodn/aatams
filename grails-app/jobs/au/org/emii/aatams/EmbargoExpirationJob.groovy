@@ -139,7 +139,7 @@ class EmbargoExpirationJob implements ApplicationContextAware
     
     def createExpiringSubject(release)
     {
-        return "AATAMS tag embargo expiring today: " + release*.surgeries?.tag
+        return "AATAMS tag embargoes expiring today: " + (release*.surgeries?.tag).flatten()
     }
 
     def createExpiringBody(release)
@@ -190,26 +190,13 @@ class EmbargoExpirationJob implements ApplicationContextAware
         applicationContext = theApplicationContext
     }
     
-    def createLink(Map urlAttrs)
-    {
-        def controller = urlAttrs.remove("controller")
-        def action = urlAttrs.remove("action")
-        def id = urlAttrs.remove("id")
-        def frag = urlAttrs.remove('fragment')
-        def params = urlAttrs.params && urlAttrs.params instanceof Map ? urlAttrs.remove('params') : [:]
-
-        def url
-        if (id != null) params.id = id
-        def urlMappings = applicationContext.getBean("grailsUrlMappingsHolder")
-        def mapping = urlMappings.getReverseMapping(controller, action, params)
-        url = mapping.createURL(controller, action, params, "UTF-8", frag)
-
-        log.debug("url: " + url)
-        
-//        if(!url.startsWith(ServletContextHolder.servletContext.contextPath)) {
-//            url = "$ServletContextHolder.servletContext.contextPath$url".toString()
-//        }
-
-        return "${ConfigurationHolder.config.grails.serverHost}$url".toString()
-    }
+	def createLink(Map urlAttrs)
+	{
+		return getServerUrl() + "/" + urlAttrs.controller + "/" + urlAttrs.action + "/" + urlAttrs.id
+	}
+	
+	def getServerUrl()
+	{
+		return grailsApplication.config.grails.serverURL
+	}
 }

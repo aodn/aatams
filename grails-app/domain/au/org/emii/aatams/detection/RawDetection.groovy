@@ -5,7 +5,9 @@ import au.org.emii.aatams.util.GeometryUtils
 import au.org.emii.aatams.util.SqlUtils
 
 import com.vividsolutions.jts.geom.*
+import java.text.DateFormat
 import java.text.ParseException
+import java.text.SimpleDateFormat;
 import java.util.Map
 
 
@@ -43,7 +45,7 @@ class RawDetection
     Float sensorValue
     String sensorUnit
     
-    static transients = ['scrambledLocation', 'valid']
+    static transients = ['scrambledLocation', 'valid', 'formattedTimestamp']
     
     static constraints = 
     {
@@ -57,6 +59,7 @@ class RawDetection
 		// Workaround for problem where jenkins build is failing - not sure why.
 		// Getting "ValidationException" when trying to save ValidDetection.
 		scrambledLocation(nullable:true)
+		formattedTimestamp(nullable:true)
     }
 
     static belongsTo = [receiverDownload:ReceiverDownloadFile]
@@ -102,4 +105,17 @@ class RawDetection
     {
         return GeometryUtils.scrambleLocation(location)
     }
+	
+	static DateFormat formatter
+	
+	String getFormattedTimestamp()
+	{
+		if (!formatter)
+		{
+			formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+			formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+		}
+		
+		return formatter.format(timestamp)
+	}
 }

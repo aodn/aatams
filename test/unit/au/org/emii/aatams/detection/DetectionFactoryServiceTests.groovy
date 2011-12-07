@@ -84,6 +84,8 @@ class DetectionFactoryServiceTests extends GrailsUnitTestCase
     {
         def validDetection = newDetection(new ReceiverDownloadFile(), standardParams)
          
+		assertEquals("2009-12-08 06:44:24", validDetection.formattedTimestamp)
+		 
         assertNotNull(validDetection)
         assertTrue(validDetection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(validDetection.timestamp))

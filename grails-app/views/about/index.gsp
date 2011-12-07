@@ -12,8 +12,8 @@
       </div>
     
       <div class="body">
+      
         <h1>Australian Animal Tagging and Monitoring System (AATAMS)</h1>
-        
         <div class="dialog">
           <div style="width: 80%; padding:20px 20px 20px 20px;" >
             <p>The Australian Animal Tagging and Monitoring System (AATAMS)
@@ -32,6 +32,26 @@
           </div>
         </div>
         
+        <h1>Acknowledgements</h1>
+        <div class="dialog">
+            <table>
+                <tbody>
+
+                    <tr class="prop">
+                        <td valign="top" class="name">Codes for Australian Aquatic Biota (CAAB)</td>
+
+                        <td valign="top" class="value"><b>Rees, A.J.J., Yearsley, G.K., Gowlett-Holmes, K. and Pogonoski, J.</b><br/>
+                            Codes for Australian Aquatic Biota (on-line version).<br/>
+                            CSIRO Marine and Atmospheric Research, World Wide Web electronic publication, 1999 onwards.<br/>
+                            Available at: <a href="http://www.cmar.csiro.au/caab/">http://www.cmar.csiro.au/caab/</a></td>
+
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+        
+        <h1>Miscellaneous</h1>
         <div class="dialog">
             <table>
                 <tbody>
@@ -66,7 +86,8 @@
                 </tbody>
             </table>
         </div>
-        
+ 
+        <h1></h1>
         <div class="dialog">
           <br/><br/>
           <div id="footerLogo">

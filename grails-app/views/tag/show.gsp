@@ -95,7 +95,6 @@
                                     <th>Slope</th>
                                     <th>Intercept</th>
                                     <th>Unit</th>
-                                    <th>Status</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -110,7 +109,6 @@
                                       <td>${s?.slope}</td>
                                       <td>${s?.intercept}</td>
                                       <td>${s?.unit}</td>
-                                      <td>${s?.status}</td>
                                     </tr>
 
                                   </g:each>

@@ -17,6 +17,8 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 	
 	private MetaClass originalSecurityUtilsMetaClass
 	
+	protected Map flashMsgParams
+	
 	protected void setUp()
 	{
 		super.setUp()
@@ -38,6 +40,8 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 		registry.removeMetaClass(SecurityUtils)
 
 		SecurityUtils.metaClass.static.getSubject = { subject }
+		
+		controller.metaClass.message = { Map params -> flashMsgParams = params }
 	}
 
 	protected void tearDown()

@@ -1,6 +1,7 @@
 
 
 <%@ page import="au.org.emii.aatams.Tag" %>
+<%@ page import="au.org.emii.aatams.TransmitterType" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -129,7 +130,6 @@
                                         <th>Slope</th>
                                         <th>Intercept</th>
                                         <th>Unit</th>
-                                        <th>Status</th>
                                       </tr>
                                     </thead>
                                     <tbody id="sensor_table_body">
@@ -154,7 +154,6 @@
                                           <td>${s?.slope}</td>
                                           <td>${s?.intercept}</td>
                                           <td>${s?.unit}</td>
-                                          <td>${s?.status}</td>
                                         </tr>
 
                                       </g:each>
@@ -198,7 +197,10 @@
                                 <label class="compulsory" for="transmitterType"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
-                                <g:select name="transmitterTypeId" from="${au.org.emii.aatams.TransmitterType.list()}" optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
+                                <g:select name="transmitterTypeId" 
+                                          from="${TransmitterType.sensorTypes()}" 
+                                          optionKey="id" 
+                                          value="${sensorInstance?.transmitterType?.id}"  />
 
                             </td>
                         </tr>
@@ -239,16 +241,6 @@
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'unit', 'errors')}">
                                 <g:textField name="unit" value="${sensorInstance?.unit}" />
-
-                            </td>
-                        </tr>
-
-                        <tr class="prop">
-                            <td valign="top" class="name">
-                                <label class="compulsory" for="status"><g:message code="sensor.status.label" default="Status" /></label>
-                            </td>
-                            <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'status', 'errors')}">
-                                <g:select name="statusId" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${sensorInstance?.status?.id}"  />
 
                             </td>
                         </tr>

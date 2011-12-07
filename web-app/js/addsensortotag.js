@@ -15,7 +15,6 @@ $(function() {
                 var slope = $("#slope").val();
                 var intercept = $("#intercept").val();
                 var unit = $("#unit").val();
-                var status = $("#statusId option:selected").val();
                 var projectId = $("#project\\.id option:selected").val();
                 
                 $.post(contextPath + '/sensor/save', 
@@ -26,8 +25,7 @@ $(function() {
                         'pingCode':pingCode,
                         'slope':slope,
                         'intercept':intercept,
-                        'unit':unit,
-                        'status.id':status},
+                        'unit':unit},
                        function(data) 
                        {
                            updateHeader(data);
@@ -64,9 +62,6 @@ $(function() {
                            
                            var unitColumn = $("<td>").attr("class", "value").html(data.instance.unit);
                            tableRow.append(unitColumn);
-                           
-                           var statusColumn = $("<td>").attr("class", "value").html(data.instance.status.status);
-                           tableRow.append(statusColumn);
                            
                            var lastRow = $("#sensor_table_body > tr:last");
                            lastRow.prev().before(tableRow);

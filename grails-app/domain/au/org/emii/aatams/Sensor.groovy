@@ -29,16 +29,32 @@ class Sensor extends Tag
     static constraints =
     {
         tag()
-        codeMap(blank:false)
+        codeMap(nullable:true)
         pingCode(min:0)
         transmitterType()
         unit(nullable:true)
         slope(nullable:true)
         intercept(nullable:true)
+		status()
     }
 	
 	static mapping = 
 	{
 		cache true
+	}
+	
+	DeviceStatus getStatus()
+	{
+		return tag?.getStatus()
+	}
+	
+	CodeMap getCodeMap()
+	{
+		return tag?.getCodeMap()
+	}
+	
+	String toString()
+	{
+		return codeName
 	}
 }

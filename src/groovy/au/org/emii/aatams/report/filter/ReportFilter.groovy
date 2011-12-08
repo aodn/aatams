@@ -8,6 +8,9 @@ class ReportFilter
 	
 	List<AbstractReportFilterCriterion> criteria = new ArrayList<AbstractReportFilterCriterion>()
 	
+	Integer max
+	Integer offset
+	
 	ReportFilter(Class domainClass)
 	{
 		this.domainClass = domainClass
@@ -22,10 +25,13 @@ class ReportFilter
 	{
 		if (criteria.isEmpty())
 		{
-			return domainClass.list()
+			return domainClass.list(max:max, offset:offset)
 		}
 		
 		def hibernateCriteria = domainClass.createCriteria()
+		hibernateCriteria.getInstance()?.setCacheable(true)
+		
+		paginate(hibernateCriteria)
 		
 		def results =  hibernateCriteria.list
 		{
@@ -33,6 +39,19 @@ class ReportFilter
 		}
 		
 		return results
+	}
+
+	private def paginate( hibernateCriteria) 
+	{
+		if (max)
+		{
+			hibernateCriteria.getInstance()?.setMaxResult(max)
+		}
+
+		if (offset)
+		{
+			hibernateCriteria.getInstance()?.setFirstResult(offset)
+		}
 	}
 
 	private applyCriteria(hibernateCriteria) 

@@ -58,6 +58,8 @@
     </script>
 
     <g:layoutHead />
+    
+    <g:listFilterIncludes/>
 
     <script type="text/javascript">
 

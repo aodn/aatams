@@ -13,6 +13,16 @@ class ReportFilterFactoryService
 			return filter
 		}
 		
+		if (params.max)
+		{
+			filter.max = params.max 
+		}
+		
+		if (params.offset)
+		{
+			filter.offset = params.offset
+		}
+		
 		removeEmptyFilterParameters(params)
 		
 		if (params.eq)

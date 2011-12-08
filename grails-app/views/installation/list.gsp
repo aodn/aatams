@@ -19,6 +19,9 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
+            
+            <g:listFilter name="installation" />
+            
             <div class="list">
                 <table>
                     <thead>

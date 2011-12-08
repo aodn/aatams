@@ -2,8 +2,8 @@ package au.org.emii.aatams
 
 import grails.converters.JSON
 
-class InstallationController {
-
+class InstallationController extends AbstractController
+{
     def candidateEntitiesService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -12,9 +12,15 @@ class InstallationController {
         redirect(action: "list", params: params)
     }
 
-    def list = {
+    def list = 
+	{
         params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [installationInstanceList: Installation.list(params), installationInstanceTotal: Installation.count()]
+        [installationInstanceList: generateResultList(params + [_name:"installation"]), 
+		 installationInstanceTotal: Installation.count(),
+		 filter: params.filter]
+		
+//        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
+//        [installationInstanceList: Installation.list(params), installationInstanceTotal: Installation.count()]
     }
 
     def create = {

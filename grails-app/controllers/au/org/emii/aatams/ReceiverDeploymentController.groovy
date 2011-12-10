@@ -3,8 +3,8 @@ package au.org.emii.aatams
 import org.joda.time.*
 import org.joda.time.contrib.hibernate.*
 
-class ReceiverDeploymentController {
-
+class ReceiverDeploymentController extends AbstractController
+{
     def candidateEntitiesService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -13,11 +13,11 @@ class ReceiverDeploymentController {
         redirect(action: "list", params: params)
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [receiverDeploymentInstanceList: ReceiverDeployment.list(params), receiverDeploymentInstanceTotal: ReceiverDeployment.count()]
-    }
-
+    def list = 
+	{
+		doList("receiverDeployment")
+	}
+	
     def create = {
         def receiverDeploymentInstance = new ReceiverDeployment()
         receiverDeploymentInstance.properties = params

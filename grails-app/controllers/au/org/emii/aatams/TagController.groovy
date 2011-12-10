@@ -2,8 +2,8 @@ package au.org.emii.aatams
 
 import grails.converters.JSON
 
-class TagController {
-
+class TagController extends AbstractController 
+{
     def candidateEntitiesService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -12,10 +12,12 @@ class TagController {
         redirect(action: "list", params: params)
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [tagInstanceList: Tag.list(params) - Sensor.list(), tagInstanceTotal: (Tag.count() - Sensor.count())]
-    }
+    def list = 
+	{
+		println("filter: " + params.filter)
+		
+		doList("tag")
+	}
 
     def create = {
         def tagInstance = new Tag()

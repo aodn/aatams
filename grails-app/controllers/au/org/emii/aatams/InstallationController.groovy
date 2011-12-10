@@ -15,17 +15,9 @@ class InstallationController extends AbstractController
 
     def list = 
 	{
-		log.debug("filter params: " + params.filter)
-		
-		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-		def resultList = generateResultList(params + [_name:"installation"])
-		
-        [installationInstanceList: resultList.results, 
-		 installationInstanceTotal: resultList.count,
-		 filter: params.filter,
-		 executedFilter: resultList.filter]
-    }
-
+		doList("installation")
+	}
+	
     def create = {
         def installationInstance = new Installation()
         installationInstance.properties = params

@@ -19,6 +19,9 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
+            
+            <g:listFilter name="tag" />
+            
             <div class="list">
                 <table>
                     <thead>
@@ -26,24 +29,24 @@
                         
                             <td/>
                             
-                            <g:sortableColumn property="codeName" title="${message(code: 'tag.codeName.label', default: 'ID')}" />
+                            <g:sortableColumn property="codeName" title="${message(code: 'tag.codeName.label', default: 'ID')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="model" title="${message(code: 'tag.model.label', default: 'Model')}" />
+                            <g:sortableColumn property="model" title="${message(code: 'tag.model.label', default: 'Model')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="serialNumber" title="${message(code: 'tag.serialNumber.label', default: 'Serial Number')}" />
+                            <g:sortableColumn property="serialNumber" title="${message(code: 'tag.serialNumber.label', default: 'Serial Number')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="project" title="${message(code: 'device.project.label', default: 'Project')}" />
+                            <g:sortableColumn property="project.name" title="${message(code: 'device.project.label', default: 'Project')}" params="${executedFilter}"/>
 
-                            <g:sortableColumn property="codeMap" title="${message(code: 'tag.codeMap.label', default: 'Code Map')}" />
+                            <g:sortableColumn property="codeMap" title="${message(code: 'tag.codeMap.label', default: 'Code Map')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="pingCode" title="${message(code: 'tag.pingCode.label', default: 'Ping ID Code')}" />
+                            <g:sortableColumn property="pingCode" title="${message(code: 'tag.pingCode.label', default: 'Ping ID Code')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="status" title="${message(code: 'tag.status.label', default: 'Status')}" />
+                            <g:sortableColumn property="status" title="${message(code: 'tag.status.label', default: 'Status')}" params="${executedFilter}"/>
                             
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${tagInstanceList}" status="i" var="tagInstance">
+                    <g:each in="${entityList}" status="i" var="tagInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
                             <td class="rowButton">
@@ -71,7 +74,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${tagInstanceTotal}" />
+                <g:paginate total="${total}" params="${executedFilter}"/>
             </div>
         </div>
     </body>

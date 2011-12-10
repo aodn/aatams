@@ -8,6 +8,17 @@ abstract class AbstractController
 	def reportFilterFactoryService
 	def reportInfoService
 
+	protected def doList(queryName)
+	{
+		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
+		def resultList = generateResultList(params + [_name:queryName])
+		
+		[entityList: resultList.results,
+		 total: resultList.count,
+		 filter: params.filter,
+		 executedFilter: resultList.filter]
+	}
+
 	protected Map generateResultList(Map params)
 	{
 		def resultList = []
@@ -37,12 +48,9 @@ abstract class AbstractController
 			
 			if (v instanceof Map)
 			{
-				println("cleaning k: " + k + ", v: " + v)
-				
 			}
 			else
 			{
-				println("adding k: " + k + ", v: " + v)
 				cleanedFilterParams.put('filter.' + k, v)
 			}
 		}

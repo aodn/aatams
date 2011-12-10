@@ -29,22 +29,22 @@
                         
                             <td/>
                             
-                            <g:sortableColumn property="name" title="${message(code: 'installationStation.name.label', default: 'Name')}"/>
+                            <g:sortableColumn property="name" title="${message(code: 'installationStation.name.label', default: 'Name')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="curtainPosition" title="${message(code: 'installationStation.curtainPosition.label', default: 'Curtain Position')}" />
+                            <g:sortableColumn property="curtainPosition" title="${message(code: 'installationStation.curtainPosition.label', default: 'Curtain Position')}" params="${executedFilter}"/>
                         
                             <th><g:message code="installationStation.location.label" default="Location" /></th>
                         
-                            <g:sortableColumn property="installation" title="${message(code: 'installationStation.installation.label', default: 'Installation')}" />
+                            <g:sortableColumn property="installation" title="${message(code: 'installationStation.installation.label', default: 'Installation')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="installation.project" title="${message(code: 'installationStation.installation.project.label', default: 'Project')}" />
+                            <g:sortableColumn property="installation.project" title="${message(code: 'installationStation.installation.project.label', default: 'Project')}" params="${executedFilter}"/>
 
                             <th><g:message code="installationStation.active.label" default="Active" /></th>
                         
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${installationStationInstanceList}" status="i" var="installationStationInstance">
+                    <g:each in="${entityList}" status="i" var="installationStationInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
                             <td class="rowButton"><g:link class="show" action="show" id="${installationStationInstance.id}">.</g:link></td>
@@ -70,7 +70,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${installationStationInstanceTotal}" />
+                <g:paginate total="${total}" params="${executedFilter}"/>
             </div>
         </div>
     </body>

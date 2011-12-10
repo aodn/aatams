@@ -35,7 +35,7 @@
                         
                             <th><g:message code="installation.configuration.label" default="Configuration" /></th>
                         
-                            <g:sortableColumn property="project.name" title="${message(code: 'installation.project.label', default: 'Project')}" />
+                            <g:sortableColumn property="project.name" title="${message(code: 'installation.project.label', default: 'Project')}" params="${executedFilter}" />
                         
                             <th><g:message code="installation.stationCount.label" default="No. Stations" /></th>
                             
@@ -44,7 +44,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${installationInstanceList}" status="i" var="installationInstance">
+                    <g:each in="${entityList}" status="i" var="installationInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
                             <td class="rowButton"><g:link class="show" action="show" id="${installationInstance.id}">.</g:link></td>
@@ -65,7 +65,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${installationInstanceTotal}" />
+                <g:paginate total="${total}" params="${executedFilter}"/>
             </div>
         </div>
     </body>

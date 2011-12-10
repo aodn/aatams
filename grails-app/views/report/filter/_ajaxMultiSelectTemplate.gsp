@@ -6,6 +6,14 @@
         <label for="filter.in.${propertyName}">${label}</label>
     </td>
     <td valign="top" class="value">
-        <g:textField name="filter.in.${propertyName}" placeholder="autocomplete - start typing"/>
+    
+        <g:if test="${filter}">
+            <g:set var="value" value="${filter['in.' + propertyName]}" />
+        </g:if>
+        <g:else>
+            <g:set var="value" value="" />
+        </g:else>
+    
+        <g:textField name="filter.in.${propertyName}" placeholder="autocomplete - start typing" value="${value}" />
     </td>
 </tr>

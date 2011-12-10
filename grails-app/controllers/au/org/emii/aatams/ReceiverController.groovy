@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-class ReceiverController 
+class ReceiverController extends AbstractController
 {
     def permissionUtilsService
     
@@ -10,10 +10,10 @@ class ReceiverController
         redirect(action: "list", params: params)
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [receiverInstanceList: Receiver.list(params), receiverInstanceTotal: Receiver.count()]
-    }
+    def list = 
+	{
+		doList("receiver")
+	}
 
     def create = {
         def receiverInstance = new Receiver()

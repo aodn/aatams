@@ -13,12 +13,10 @@ class InstallationStationController  extends AbstractController
         redirect(action: "list", params: params)
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-		[installationStationInstanceList: generateResultList(params + [_name:"installationStation"]),
-		 installationStationInstanceTotal: InstallationStation.count(),
-		 filter: params.filter]
-    }
+    def list = 
+	{
+		doList("installationStation")
+	}
 
     def create = {
         def installationStationInstance = new InstallationStation()

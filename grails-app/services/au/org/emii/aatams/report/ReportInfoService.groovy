@@ -28,6 +28,9 @@ class ReportInfoService
          "detection": "au.org.emii.aatams.detection.ValidDetection",
          "installation": "au.org.emii.aatams.Installation",
          "installationStation": "au.org.emii.aatams.InstallationStation",
+		 "person": "au.org.emii.aatams.Person",
+		 "project": "au.org.emii.aatams.Project",
+		 "organisation": "au.org.emii.aatams.Organisation",
          "receiver": "au.org.emii.aatams.Receiver",
          "receiverDeployment": "au.org.emii.aatams.ReceiverDeployment",
          "receiverEvent": "au.org.emii.aatams.ReceiverEvent",
@@ -53,7 +56,10 @@ class ReportInfoService
 		 "receiverDeployment.station.installation.name": "installation",
 		 "receiverDeployment.station.name": "station",
          "project.name": "project",
+		 "projectRoles.project.name": "project",
 		 "organisation.name": "organisation",
+		 "organisationProject.project.name": "project",
+		 "organisationProject.organisation.name": "organisation",
          "installation.project.name": "project",
          "station.installation.project.name": "project",
          "station.installation.name": "installation",
@@ -66,6 +72,9 @@ class ReportInfoService
          "detection": ValidDetection.class,
          "installation": Installation.class,
          "installationStation": InstallationStation.class,
+		 "organisation": Organisation.class,
+		 "person": Person.class,
+		 "project": Project.class,
          "receiver": Receiver.class,
          "receiverDeployment": ReceiverDeployment.class,
          "receiverEvent": ReceiverEvent.class,
@@ -142,6 +151,10 @@ class ReportInfoService
         def installationStationFilterParams = 
             [new ListReportParameter(label: propertyToLabel["installation.project.name"], propertyName:"installation.project.name", range:projectRange)]
 
+		def personFilterParams =
+			[new ListReportParameter(label: propertyToLabel["organisation.name"], propertyName:"organisation.name", range:organisationRange),
+			 new ListReportParameter(label: propertyToLabel["projectRoles.project.name"], propertyName:"projectRoles.project.name", range:projectRange)]
+		
         def receiverFilterParams = 
             [new ListReportParameter(label: propertyToLabel["organisation.name"], propertyName:"organisation.name", range:organisationRange)]
             
@@ -172,6 +185,9 @@ class ReportInfoService
                                                            jrxmlFilename:["report":"installationStationList",
                                                                           "extract":"installationStationExtract"],
                                                            filterParams:installationStationFilterParams),
+                (Person.class):new ReportInfo(displayName:"People",
+                                                           jrxmlFilename:[:],
+                                                           filterParams:personFilterParams),
                 (Receiver.class):new ReportInfo(displayName:"Receivers", 
                                                 jrxmlFilename:["report":"receiverList",
                                                                "extract":"receiverExtract"], 

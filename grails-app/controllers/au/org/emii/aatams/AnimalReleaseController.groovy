@@ -2,8 +2,8 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.DetectionFactoryService
 
-class AnimalReleaseController {
-
+class AnimalReleaseController extends AbstractController
+{
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     
     def animalFactoryService
@@ -17,10 +17,10 @@ class AnimalReleaseController {
         redirect(action: "list", params: params)
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [animalReleaseInstanceList: AnimalRelease.list(params), animalReleaseInstanceTotal: AnimalRelease.count()]
-    }
+    def list = 
+	{
+		doList("animalRelease")
+	}
 
     def create = {
         def animalReleaseInstance = new AnimalRelease()

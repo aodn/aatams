@@ -57,10 +57,10 @@
       });
     </script>
 
-    <g:layoutHead />
-    
     <g:listFilterIncludes/>
 
+    <g:layoutHead />
+    
     <script type="text/javascript">
 
     var myLayout; // a var is required because this page utilizes: myLayout.allowOverflow() method
@@ -170,5 +170,7 @@
       <g:layoutBody />
       
     </div>
+    
+  </body>    
     
 </html>

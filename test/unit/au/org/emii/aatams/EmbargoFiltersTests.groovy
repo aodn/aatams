@@ -1,6 +1,8 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.report.*
+import au.org.emii.aatams.report.filter.ReportFilterFactoryService;
 import au.org.emii.aatams.test.AbstractFiltersUnitTestCase
 
 import grails.test.*
@@ -44,6 +46,9 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     ValidDetection detectionEmbargoedNonReadableProject
     ValidDetection detectionPastEmbargoed
     
+	def reportFilterFactoryService
+	def reportInfoService
+	
     protected void setUp() 
     {
         super.setUp()
@@ -75,10 +80,17 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 
         mockConfig("grails.gorm.default.list.max = 10")
 
+		mockLogging(ReportFilterFactoryService)
+		reportFilterFactoryService = new ReportFilterFactoryService()
+		mockLogging(ReportInfoService)
+		reportInfoService = new ReportInfoService()
+		
         mockController(AnimalReleaseController)
         mockLogging(AnimalReleaseController)
         releaseController = new AnimalReleaseController()
         releaseController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
+		releaseController.reportInfoService = reportInfoService
+		releaseController.reportFilterFactoryService = reportFilterFactoryService
         
         mockController(DetectionController)
         mockLogging(DetectionController)
@@ -89,12 +101,14 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         mockLogging(SensorController)
         sensorController = new SensorController()
         sensorController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
-        
+
         mockController(TagController)
         mockLogging(TagController)
         tagController = new TagController()
         tagController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
-        
+		tagController.reportInfoService = reportInfoService
+		tagController.reportFilterFactoryService = reportFilterFactoryService
+
         mockLogging(Tag)
         mockLogging(Sensor)
         mockLogging(AnimalRelease)
@@ -147,7 +161,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         def detectionSurgeryList =
                           [detectionSurgeryNonEmbargoed, detectionSurgeryEmbargoedReadableProject, detectionSurgeryEmbargoedNonReadableProject, detectionSurgeryPastEmbargoed]
         
-        mockDomain(Tag, tagList + sensorList)
+        mockDomain(Tag, tagList)
         mockDomain(Sensor, sensorList)
         mockDomain(AnimalRelease, releaseList)
         mockDomain(Surgery, surgeryList)
@@ -318,9 +332,11 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     
     private void checkList(def controller, def entityName)
     {
+		controller.params._name = "entityName"
+		
         def model = controller.list()
-        assertEquals(4, model[entityName + "InstanceList"].size())
-        assertEquals(4, model[entityName + "InstanceTotal"])
+        assertEquals(4, model.entityList.size())
+        assertEquals(4, model.total)
 
         // Embargoed releases should not appear at all after filter.
         FilterConfig filter = getFilter(entityName + 'List')
@@ -329,8 +345,8 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         filter.after(model)
         assertNotNull(model)
         
-        assertEquals(3, model[entityName + "InstanceList"].size())
-        assertEquals(4, model[entityName + "InstanceTotal"])
+        assertEquals(3, model.entityList.size())
+        assertEquals(4, model.total)
     }
     
     private void checkEmbargoed(def controller, def entity, boolean isEmbargoed, String entityName)

@@ -12,7 +12,8 @@ class SensorController {
 
     def list = {
         params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [sensorInstanceList: Sensor.list(params), sensorInstanceTotal: Sensor.count()]
+        [sensorInstanceList: Sensor.list(params), sensorInstanceTotal: Sensor.count(),
+        entityList: Sensor.list(params), total: Sensor.count()]
     }
 
     def create = {

@@ -5,7 +5,8 @@ import grails.converters.JSON
 class InstallationController extends AbstractController
 {
     def candidateEntitiesService
-
+	def grailsApplication
+	
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -14,13 +15,15 @@ class InstallationController extends AbstractController
 
     def list = 
 	{
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [installationInstanceList: generateResultList(params + [_name:"installation"]), 
-		 installationInstanceTotal: Installation.count(),
-		 filter: params.filter]
+		log.debug("filter params: " + params.filter)
 		
-//        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-//        [installationInstanceList: Installation.list(params), installationInstanceTotal: Installation.count()]
+		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
+		def resultList = generateResultList(params + [_name:"installation"])
+		
+        [installationInstanceList: resultList.results, 
+		 installationInstanceTotal: resultList.count,
+		 filter: params.filter,
+		 executedFilter: resultList.filter]
     }
 
     def create = {

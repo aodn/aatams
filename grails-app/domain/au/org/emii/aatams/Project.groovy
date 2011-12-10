@@ -34,8 +34,9 @@ class Project
     static mapping =
     {
         // Speed up the candidateEntitiesService (that reads user's projects).
-	cache true
-	status index:'project_status_index'
+		cache true
+		status index:'project_status_index'
+		sort "name"
     }
     
     static searchable =

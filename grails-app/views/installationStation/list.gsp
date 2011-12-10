@@ -19,6 +19,9 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
+            
+            <g:listFilter name="installationStation" />
+            
             <div class="list">
                 <table>
                     <thead>
@@ -26,7 +29,7 @@
                         
                             <td/>
                             
-                            <g:sortableColumn property="name" title="${message(code: 'installationStation.name.label', default: 'Name')}" />
+                            <g:sortableColumn property="name" title="${message(code: 'installationStation.name.label', default: 'Name')}"/>
                         
                             <g:sortableColumn property="curtainPosition" title="${message(code: 'installationStation.curtainPosition.label', default: 'Curtain Position')}" />
                         

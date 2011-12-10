@@ -27,7 +27,7 @@ class Installation
     static mapping =
     {
         // Speed up candidateEntitiesService.
-        cache: true
+        cache true
         project cache:true
     }
     

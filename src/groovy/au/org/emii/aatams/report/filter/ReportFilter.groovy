@@ -5,11 +5,7 @@ import org.hibernate.criterion.Restrictions
 class ReportFilter 
 {
 	Class domainClass
-	
 	List<AbstractReportFilterCriterion> criteria = new ArrayList<AbstractReportFilterCriterion>()
-	
-	Integer max
-	Integer offset
 	
 	ReportFilter(Class domainClass)
 	{
@@ -21,39 +17,40 @@ class ReportFilter
 		criteria.add(criterion)
 	}
 	
-	List apply()
+	private def createCriteria()
+	{
+		def hibernateCriteria = domainClass.createCriteria()
+		hibernateCriteria.getInstance()?.setCacheable(true)
+		return hibernateCriteria
+	}
+	
+	List list(params)
 	{
 		if (criteria.isEmpty())
 		{
-			return domainClass.list(max:max, offset:offset)
+			return domainClass.list(params)
 		}
 		
-		def hibernateCriteria = domainClass.createCriteria()
-		hibernateCriteria.getInstance()?.setCacheable(true)
-		
-		paginate(hibernateCriteria)
-		
-		def results =  hibernateCriteria.list
+		def criteria = createCriteria()
+		def results = criteria.list(params)
 		{
-			applyCriteria(hibernateCriteria)
+			applyCriteria(criteria)
 		}
 		
 		return results
 	}
 
-	private def paginate( hibernateCriteria) 
+	Long count()
 	{
-		if (max)
+		if (criteria.isEmpty())
 		{
-			hibernateCriteria.getInstance()?.setMaxResult(max)
+			return domainClass.count()
 		}
-
-		if (offset)
-		{
-			hibernateCriteria.getInstance()?.setFirstResult(offset)
-		}
+		
+		def criteria = createCriteria()
+		return criteria.count { applyCriteria(criteria) }
 	}
-
+	
 	private applyCriteria(hibernateCriteria) 
 	{
 		criteria.each

@@ -1,18 +1,18 @@
 package au.org.emii.aatams
 
-class ReceiverEventController {
-
+class ReceiverEventController extends AbstractController
+{
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [receiverEventInstanceList: ReceiverEvent.list(params), receiverEventInstanceTotal: ReceiverEvent.count()]
-    }
-
+    def list = 
+	{
+		doList("receiverEvent")
+	}
+	
     def create = {
         redirect(controller:"receiverDownloadFile", 
                  action:"createEvents") 

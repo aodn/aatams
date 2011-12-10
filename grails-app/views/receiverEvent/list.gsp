@@ -19,6 +19,9 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
+            
+            <g:listFilter name="receiverEvent" />
+            
             <div class="list">
                 <table>
                     <thead>
@@ -26,20 +29,20 @@
                         
                             <th></th>
 
-                            <g:sortableColumn property="timestamp" title="${message(code: 'receiverEvent.timestamp.label', default: 'Timestamp')}" />
+                            <g:sortableColumn property="timestamp" title="${message(code: 'receiverEvent.timestamp.label', default: 'Timestamp')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="description" title="${message(code: 'receiverEvent.description.label', default: 'Description')}" />
+                            <g:sortableColumn property="description" title="${message(code: 'receiverEvent.description.label', default: 'Description')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="data" title="${message(code: 'receiverEvent.data.label', default: 'Data')}" />
+                            <g:sortableColumn property="data" title="${message(code: 'receiverEvent.data.label', default: 'Data')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="units" title="${message(code: 'receiverEvent.units.label', default: 'Units')}" />
+                            <g:sortableColumn property="units" title="${message(code: 'receiverEvent.units.label', default: 'Units')}" params="${executedFilter}"/>
                         
                             <th><g:message code="receiverEvent.receiverDeployment.label" default="Receiver Deployment" /></th>
                         
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${receiverEventInstanceList}" status="i" var="receiverEventInstance">
+                    <g:each in="${entityList}" status="i" var="receiverEventInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
                             <td class="rowButton"><g:link class="show" action="show" id="${receiverEventInstance.id}">.</g:link></td>
@@ -62,7 +65,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${receiverEventInstanceTotal}" />
+                <g:paginate total="${total}" params="${executedFilter}"/>
             </div>
         </div>
     </body>

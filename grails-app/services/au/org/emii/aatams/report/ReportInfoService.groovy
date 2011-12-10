@@ -24,6 +24,7 @@ class ReportInfoService
      */
     static def reportMapping =
         ["animalReleaseSummary": "au.org.emii.aatams.report.AnimalReleaseSummaryService",
+		 "animalRelease": "au.org.emii.aatams.AnimalRelease",
          "detection": "au.org.emii.aatams.detection.ValidDetection",
          "installation": "au.org.emii.aatams.Installation",
          "installationStation": "au.org.emii.aatams.InstallationStation",
@@ -33,12 +34,21 @@ class ReportInfoService
          "tag": "au.org.emii.aatams.Tag"
          ]
 
+	static def speciesCaabLabel = "species (CAAB, common or scientific name)"
+	static def speciesCommonName = "species common name"
+	static def speciesScientificName = "species scientific name"
+	static def tagId = "tag ID"
+	
     static def propertyToLabel =
-		["codeName": "tag ID",
-         "detectionSurgeries.surgery.release.animal.species.spcode": "species (CAAB, common or scientific name)",
-		 "detectionSurgeries.surgery.release.animal.species.commonName": "species common name",
-		 "detectionSurgeries.surgery.release.animal.species.scientificName": "species scientific name",
-		 "detectionSurgeries.tag.codeName": "tag ID",
+		["animal.species.spcode": speciesCaabLabel,
+		 "animal.species.commonName": speciesCommonName,
+		 "animal.species.scientificName": speciesScientificName,
+		 "codeName": tagId,
+         "detectionSurgeries.surgery.release.animal.species.spcode": speciesCaabLabel,
+		 "detectionSurgeries.surgery.release.animal.species.commonName": speciesCommonName,
+		 "detectionSurgeries.surgery.release.animal.species.scientificName": speciesScientificName,
+		 "detectionSurgeries.tag.codeName": tagId,
+		 "releaseDateTime": "release date/time",
 		 "receiverDeployment.station.installation.project.name": "project",
 		 "receiverDeployment.station.installation.name": "installation",
 		 "receiverDeployment.station.name": "station",
@@ -47,10 +57,12 @@ class ReportInfoService
          "installation.project.name": "project",
          "station.installation.project.name": "project",
          "station.installation.name": "installation",
+		 "surgeries.tag.codeName": tagId,
 		 "timestamp": "timestamp"]
     
     static def reportNameToClass =
         ["animalReleaseSummary": AnimalReleaseSummaryService.class,
+		 "animalRelease": AnimalRelease.class,
          "detection": ValidDetection.class,
          "installation": Installation.class,
          "installationStation": InstallationStation.class,
@@ -76,6 +88,17 @@ class ReportInfoService
         def installationRange = Installation.list()*.name
 		def timestampMin = ValidDetection.list()*.timestamp.min()
 		def timestampMax = new Date()
+		
+		def animalReleaseFilterParams =
+		[
+			new ListReportParameter(label: propertyToLabel["project.name"], propertyName:"project.name", range:projectRange),
+			new AjaxMultiSelectReportParameter(label: propertyToLabel["surgeries.tag.codeName"],
+											   propertyName:"surgeries.tag.codeName",
+											   lookupPath:"/tag/lookupByCodeName"),
+			new AjaxMultiSelectReportParameter(label: propertyToLabel["animal.species.spcode"],
+											   propertyName:"animal.species.spcode",
+											   lookupPath:"/species/lookupByNameAndReturnSpcode")
+		]
 		
         def detectionFilterParams = 
             [new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"], 
@@ -136,6 +159,9 @@ class ReportInfoService
         return [(AnimalReleaseSummaryService.class):new ReportInfo(displayName:"Tag Summary", 
                                                           jrxmlFilename:["report":"animalReleaseSummary"], 
                                                           filterParams:[]),
+				(AnimalRelease.class): new ReportInfo(displayName:"Tag Releases",
+													  jrxmlFilename:[:],
+													  filterParams:animalReleaseFilterParams),
                 (ValidDetection.class):new ReportInfo(displayName:"Detections",
                                                     jrxmlFilename:["extract":"detectionExtract"],
                                                     filterParams:detectionFilterParams),

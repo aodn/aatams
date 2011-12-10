@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.report.ReportInfoService
+import au.org.emii.aatams.report.filter.ReportFilterFactoryService
 import grails.test.*
 import grails.converters.JSON
 
@@ -14,7 +16,10 @@ class TagControllerTests extends ControllerUnitTestCase
     def project1
     def project2
     
-    protected void setUp() 
+	def reportFilterFactoryService
+	def reportInfoService
+
+	protected void setUp() 
     {
         super.setUp()
 
@@ -33,7 +38,14 @@ class TagControllerTests extends ControllerUnitTestCase
         {
             return [project1, project2]
         }
-        
+		
+		mockLogging(ReportFilterFactoryService)
+		reportFilterFactoryService = new ReportFilterFactoryService()
+		mockLogging(ReportInfoService)
+		reportInfoService = new ReportInfoService()
+		controller.reportInfoService = reportInfoService
+		controller.reportFilterFactoryService = reportFilterFactoryService
+
         controller.candidateEntitiesService = candidateEntitiesService
         mockDomain(Tag)
         
@@ -75,26 +87,29 @@ class TagControllerTests extends ControllerUnitTestCase
     
     void testNoSensorsInList()
     {
-        Tag tag1 = new Tag(codeName:"1111", status:newStatus)
-        Tag tag2 = new Tag(codeName:"2222", status:newStatus)
+        Tag tag1 = new Tag(codeMap:"A69-9002", pingCode: 1111, codeName:"A69-9002-1111", status:newStatus)
+        Tag tag2 = new Tag(codeMap:"A69-9002", pingCode: 2222, codeName:"A69-9002-2222", status:newStatus)
         def tagList = [tag1, tag2]
+		mockDomain(Tag, tagList)
+		tagList.each { it.save() }
 
-        Sensor sensor1 = new Sensor(tag:tag1)
-        Sensor sensor2 = new Sensor(tag:tag1)
+        Sensor sensor1 = new Sensor(codeName: "sensor1", tag:tag1)
+        Sensor sensor2 = new Sensor(codeName: "sensor2", tag:tag1)
         def sensorList = [sensor1, sensor2]
-        mockDomain(Tag, tagList + sensorList)
-        
-        tagList.each { it.save() }
+		mockDomain(Sensor, sensorList)
         sensorList.each { it.save() }
         
         tag1.addToSensors(sensor1)
         tag1.addToSensors(sensor2)
         
         def model = controller.list()
-        assertEquals(2, model.tagInstanceList.size())
-        assertEquals(2, model.tagInstanceTotal)
-        assertTrue(model.tagInstanceList.contains(tag1))
-        assertTrue(model.tagInstanceList.contains(tag2))
+		
+		println(model.entityList)
+		
+        assertEquals(2, model.entityList.size())
+        assertEquals(2, model.total)
+        assertTrue(model.entityList.contains(tag1))
+        assertTrue(model.entityList.contains(tag2))
     }
     
     void testCreate() 

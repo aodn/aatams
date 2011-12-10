@@ -137,10 +137,8 @@ class InstallationControllerTests extends AbstractControllerUnitTestCase
 
 		def model = controller.list()
 		
-		println("offset: " + offset + ", max: " + max + ", total: " + model.installationInstanceTotal + ", results: " + model.installationInstanceList)
-		
-		assertEquals(maxResults, model.installationInstanceList.size())
-		assertEquals(matchingInstallations.size(), model.installationInstanceTotal)
-		assertEquals(matchingInstallations[offsetResults..(offsetResults + maxResults - 1)]*.name, model.installationInstanceList*.name)
+		assertEquals(maxResults, model.entityList.size())
+		assertEquals(matchingInstallations.size(), model.total)
+		assertEquals(matchingInstallations[offsetResults..(offsetResults + maxResults - 1)]*.name, model.entityList*.name)
 	}
 }

@@ -14,8 +14,6 @@ class TagController extends AbstractController
 
     def list = 
 	{
-		println("filter: " + params.filter)
-		
 		doList("tag")
 	}
 

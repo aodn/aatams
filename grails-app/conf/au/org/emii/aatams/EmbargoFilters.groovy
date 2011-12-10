@@ -21,9 +21,9 @@ class EmbargoFilters
             {
                 model ->
 
-                // Filter out releases which are embargoed.
-                model.animalReleaseInstanceList = 
-                    embargoService.applyEmbargo(model.animalReleaseInstanceList)
+                // Filter out entities which are embargoed.
+                model.entityList = 
+                    embargoService.applyEmbargo(model.entityList)
             }
         }
 
@@ -48,8 +48,8 @@ class EmbargoFilters
                 model ->
 
                 // Filter out tag which have associated embargoed releases.
-                model.tagInstanceList = 
-                    embargoService.applyEmbargo(model.tagInstanceList)
+                model.entityList = 
+                    embargoService.applyEmbargo(model.entityList)
             }
         }
 
@@ -75,6 +75,7 @@ class EmbargoFilters
 
                 model.sensorInstanceList = 
                     embargoService.applyEmbargo(model.sensorInstanceList)
+				model.entityList = model.sensorInstanceList
             }
         }
 

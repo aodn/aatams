@@ -1,7 +1,9 @@
 package au.org.emii.aatams.detection
 
-class DetectionController {
+import au.org.emii.aatams.AbstractController;
 
+class DetectionController extends AbstractController
+{
     def candidateEntitiesService
 
     static allowedMethods = [update: "POST", delete: "POST"]
@@ -10,10 +12,10 @@ class DetectionController {
         redirect(action: "list", params: params)
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [detectionInstanceList: ValidDetection.list(params), detectionInstanceTotal: ValidDetection.count()]
-    }
+    def list = 
+	{
+		doList("detection")
+	}
 
     def create = 
     {

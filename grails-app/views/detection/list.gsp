@@ -19,6 +19,9 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
+            
+            <g:listFilter name="detection" />
+            
             <div class="list">
                 <table>
                     <thead>
@@ -26,26 +29,26 @@
                         
                             <td/>
                             
-                            <g:sortableColumn property="timestamp" title="${message(code: 'detection.timestamp.label', default: 'Timestamp')}" />
+                            <g:sortableColumn property="timestamp" title="${message(code: 'detection.timestamp.label', default: 'Timestamp')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="receiverName" title="${message(code: 'detection.receiverName.label', default: 'Receiver Name')}" />
+                            <g:sortableColumn property="receiverName" title="${message(code: 'detection.receiverName.label', default: 'Receiver Name')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="receiverDeployment" title="${message(code: 'detection.receiverDeployment.label', default: 'Receiver Deployment')}" />
+                            <g:sortableColumn property="receiverDeployment" title="${message(code: 'detection.receiverDeployment.label', default: 'Receiver Deployment')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="transmitterId" title="${message(code: 'detection.transmitterId.label', default: 'Transmitter ID')}" />
+                            <g:sortableColumn property="transmitterId" title="${message(code: 'detection.transmitterId.label', default: 'Transmitter ID')}" params="${executedFilter}"/>
 
-                            <g:sortableColumn property="transmitterName" title="${message(code: 'detection.transmitterName.label', default: 'Transmitter Name')}" />
+                            <g:sortableColumn property="transmitterName" title="${message(code: 'detection.transmitterName.label', default: 'Transmitter Name')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="transmitterSerialNumber" title="${message(code: 'detection.transmitterSerialNumber.label', default: 'Transmitter Serial Number')}" />
+                            <g:sortableColumn property="transmitterSerialNumber" title="${message(code: 'detection.transmitterSerialNumber.label', default: 'Transmitter Serial Number')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="stationName" title="${message(code: 'detection.stationName.label', default: 'Station Name')}" />
+                            <g:sortableColumn property="stationName" title="${message(code: 'detection.stationName.label', default: 'Station Name')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="receiverDownload?.requestingUser" title="${message(code: 'receiverDownloadFile.requestingUser.label', default: 'Uploader')}" />
+                            <g:sortableColumn property="receiverDownload?.requestingUser" title="${message(code: 'receiverDownloadFile.requestingUser.label', default: 'Uploader')}" params="${executedFilter}"/>
 
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${detectionInstanceList}" status="i" var="detectionInstance">
+                    <g:each in="${entityList}" status="i" var="detectionInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
                             <td class="rowButton"><g:link class="show" action="show" id="${detectionInstance.id}">.</g:link></td>
@@ -74,7 +77,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${detectionInstanceTotal}" />
+                <g:paginate total="${total}" params="${executedFilter}"/>
             </div>
         </div>
     </body>

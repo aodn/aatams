@@ -7,52 +7,46 @@ abstract class AbstractController
 {
 	def reportFilterFactoryService
 	def reportInfoService
-	def reportQueryExecutorService
-	
 
-	protected List generateResultList(Map params)
+	protected Map generateResultList(Map params)
 	{
 		def resultList = []
 
-		// Special handling for animal release summary.
-		// TODO: refactor to remove dependency of this controller on to
-		// AnimalReleaseSummaryService.
-		if (params._name == "animalReleaseSummary")
+		def filterParams = [:]
+		if (params.filter?.between)
 		{
-			resultList = animalReleaseSummaryService.countBySpecies()
-			params.putAll(animalReleaseSummaryService.summary())
-		}
-		else
-		{
-			def filterParams = [:]
-			if (params.filter?.between)
-			{
-				 filterParams = [between:[timestamp:[params.filter.between.min.timestamp, params.filter.between.max.timestamp]]]
-			}
-			
-			if (params.filter?.eq)
-			{
-				filterParams.eq = params.filter.eq
-			}
-			
-			if (params.filter?.in)
-			{
-				filterParams.in = params.filter.in
-			}
-			
-			filterParams.max = Integer.valueOf(params.max)
-			filterParams.offset = Integer.valueOf(params.offset ?: 0)
-			log.debug("filterParams: " + filterParams)
-			
-			long startTime = System.currentTimeMillis()
-			
-			resultList = reportQueryExecutorService.executeQuery(
-					reportFilterFactoryService.newFilter(reportInfoService.getClassForName(params._name),
-					filterParams))
-			
-			log.debug("Report query executed, time: " + (System.currentTimeMillis() - startTime) + "ms.")
+			 filterParams = [between:[timestamp:[params.filter.between.min.timestamp, params.filter.between.max.timestamp]]]
 		}
 		
-		return resultList
+		if (params.filter?.eq)
+		{
+			filterParams.eq = params.filter.eq
+		}
+		
+		if (params.filter?.in)
+		{
+			filterParams.in = params.filter.in
+		}
+		
+		def filter = reportFilterFactoryService.newFilter(reportInfoService.getClassForName(params._name), filterParams)
+		
+		def cleanedFilterParams = [:]
+		params.filter?.each
+		{
+			k, v ->
+			
+			if (v instanceof Map)
+			{
+				println("cleaning k: " + k + ", v: " + v)
+				
+			}
+			else
+			{
+				println("adding k: " + k + ", v: " + v)
+				cleanedFilterParams.put('filter.' + k, v)
+			}
+		}
+		
+		return [results:filter.list(params), count:filter.count(), filter:cleanedFilterParams]
 	}
 }

@@ -19,7 +19,7 @@ class ReportQueryExecutorService
     
 	List executeQuery(ReportFilter filter)
 	{
-		List results = filter.apply()
+		List results = filter.list([:])
 		results = embargoService.applyEmbargo(results)
 		return results
 	}

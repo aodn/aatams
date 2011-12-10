@@ -2,7 +2,8 @@ package au.org.emii.aatams
 
 import grails.converters.JSON
 
-class InstallationStationController {
+class InstallationStationController  extends AbstractController
+{
 
     def candidateEntitiesService
 
@@ -14,7 +15,9 @@ class InstallationStationController {
 
     def list = {
         params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [installationStationInstanceList: InstallationStation.list(params), installationStationInstanceTotal: InstallationStation.count()]
+		[installationStationInstanceList: generateResultList(params + [_name:"installationStation"]),
+		 installationStationInstanceTotal: InstallationStation.count(),
+		 filter: params.filter]
     }
 
     def create = {

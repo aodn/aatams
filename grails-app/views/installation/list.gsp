@@ -21,7 +21,7 @@
             </g:if>
             
             <g:listFilter name="installation" />
-            
+
             <div class="list">
                 <table>
                     <thead>
@@ -29,11 +29,13 @@
                         
                             <td/>
                             
-                            <g:sortableColumn property="name" title="${message(code: 'installation.name.label', default: 'Name')}" />
+                            <g:sortableColumn property="name" 
+                                              title="${message(code: 'installation.name.label', default: 'Name')}" 
+                                              params="${executedFilter}" />
                         
                             <th><g:message code="installation.configuration.label" default="Configuration" /></th>
                         
-                            <g:sortableColumn property="project" title="${message(code: 'installation.project.label', default: 'Project')}" />
+                            <g:sortableColumn property="project.name" title="${message(code: 'installation.project.label', default: 'Project')}" />
                         
                             <th><g:message code="installation.stationCount.label" default="No. Stations" /></th>
                             

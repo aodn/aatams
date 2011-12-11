@@ -7,7 +7,8 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
 {
     String toAddress
     boolean mailSent
-    
+    def permissionUtilsService
+	
     protected void setUp() 
     {
         super.setUp()
@@ -42,6 +43,10 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
         controller.metaClass.subject = {}
         controller.metaClass.body = {}
         controller.metaClass.createLink = {}
+		
+		permissionUtilsService = new PermissionUtilsService()
+		permissionUtilsService.metaClass.principal = { getUser() }
+		controller.permissionUtilsService = permissionUtilsService
     }
     
     protected void tearDown() 

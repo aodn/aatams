@@ -315,7 +315,7 @@ class PersonController {
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
             subject "${message(code: 'mail.request.person.activate.subject', args: [person.name])}"     
-            body "${message(code: 'mail.request.person.activate.body', args: [person.name, createLink(action:'show', id:person.id, absolute:true)])}" 
+            body "${message(code: 'mail.request.person.activate.body', args: [person.name, createLink(controller:'auth', action:'login', absolute:true), createLink(controller:'gettingStarted', action:'index', absolute:true), grailsApplication.config.grails.mail.adminEmailAddress])}" 
         }
     }
 }

@@ -112,7 +112,7 @@ class PersonController {
             }
             else 
             {
-                render(view: "create", model: [createPersonCmd:createPersonCmd])
+                render(view: "create", model: [createPersonCmd:createPersonCmd, organisation: personInstance.organisation])
             }
         }
         else

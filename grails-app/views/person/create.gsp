@@ -19,9 +19,14 @@
             <div class="message">${flash.message}</div>
             </g:if>
             <g:hasErrors bean="${createPersonCmd}">
-            <div class="errors">
-                <g:renderErrors bean="${createPersonCmd}" as="list" />
-            </div>
+	            <div class="errors">
+	                <g:renderErrors bean="${createPersonCmd}" as="list" />
+	            </div>
+            </g:hasErrors>
+            <g:hasErrors bean="${organisation}">
+                <div class="errors">
+                    <g:renderErrors bean="${organisation}" as="list" />
+                </div>
             </g:hasErrors>
             <g:form action="save" >
                 <div class="dialog">

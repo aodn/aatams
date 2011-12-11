@@ -6,6 +6,8 @@ import grails.util.GrailsUtil
 
 class OrganisationController
 {
+	def permissionUtilsService
+	
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -187,7 +189,7 @@ class OrganisationController
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
             subject "${message(code: 'mail.request.organisation.create.subject', args: [organisation.name])}"     
-            body "${message(code: 'mail.request.organisation.create.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
+            body "${message(code: 'mail.request.organisation.create.body', args: [organisation.name, permissionUtilsService.principal().name])}" 
         }
     }
     
@@ -199,7 +201,7 @@ class OrganisationController
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
             subject "${message(code: 'mail.request.organisation.activate.subject', args: [organisation.name])}"     
-            body "${message(code: 'mail.request.organisation.activate.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true)])}" 
+            body "${message(code: 'mail.request.organisation.activate.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true), organisation?.request?.requester?.name])}" 
         }
     }
 }

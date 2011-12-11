@@ -213,7 +213,7 @@ class ProjectController {
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
             subject "${message(code: 'mail.request.project.create.subject', args: [project.name])}"     
-            body "${message(code: 'mail.request.project.create.body', args: [project.name, createLink(action:'show', id:project.id, absolute:true)])}" 
+            body "${message(code: 'mail.request.project.create.body', args: [project.name, createLink(action:'show', id:project.id, absolute:true), permissionUtilsService.principal().name])}" 
         }
     }
     
@@ -225,7 +225,7 @@ class ProjectController {
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
             subject "${message(code: 'mail.request.project.activate.subject', args: [project.name])}"     
-            body "${message(code: 'mail.request.project.activate.body', args: [project.name, createLink(action:'show', id:project.id, absolute:true)])}" 
+            body "${message(code: 'mail.request.project.activate.body', args: [project.name, createLink(action:'show', id:project.id, absolute:true), project?.requestingUser?.name])}" 
         }
     }
 	

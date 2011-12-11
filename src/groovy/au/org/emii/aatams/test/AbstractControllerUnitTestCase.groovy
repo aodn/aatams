@@ -54,7 +54,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 	
 	protected Person getUser()
 	{
-		return new Person(username:"jkburges")
+		return new Person(username:"jkburges", name: "Joe Bloggs")
 	}
 	
 	protected def getPrincipal()

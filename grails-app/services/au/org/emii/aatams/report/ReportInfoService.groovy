@@ -15,6 +15,9 @@ class ReportInfoService
 
     def permissionUtilsService
     
+	def detectionTimestampMin
+	def eventTimestampMin
+	
     static final String MEMBER_PROJECTS = "My Projects"
     
     /**
@@ -95,7 +98,13 @@ class ReportInfoService
         
         def organisationRange = Organisation.list()*.name
         def installationRange = Installation.list()*.name
-		def timestampMin = ValidDetection.list()*.timestamp.min()
+		
+		if (!detectionTimestampMin)
+		{
+			detectionTimestampMin = ValidDetection.list()*.timestamp.min()
+		}
+		
+		def timestampMin = detectionTimestampMin
 		def timestampMax = new Date()
 		
 		def animalReleaseFilterParams =
@@ -130,6 +139,11 @@ class ReportInfoService
 										   minRange:timestampMin,
 										   maxRange:timestampMax)]
  
+		if (!eventTimestampMin)
+		{
+			eventTimestampMin = ReceiverEvent.list()*.timestamp.min()
+		}
+		
 		def eventFilterParams =
 			[new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"],
 												 propertyName:"receiverDeployment.station.installation.project.name",
@@ -142,8 +156,8 @@ class ReportInfoService
 												lookupPath:"/installationStation/lookupByName"),
 			 new DateRangeReportParameter(label: propertyToLabel["timestamp"],
 										   propertyName:"timestamp",
-										  minRange:ReceiverEvent.list()*.timestamp.min(),
-										  maxRange:ReceiverEvent.list()*.timestamp.max())]
+										  minRange:eventTimestampMin,
+										  maxRange:new Date())]
 
 		def installationFilterParams =
 			[new ListReportParameter(label: propertyToLabel["project.name"], propertyName:"project.name", range:projectRange)]

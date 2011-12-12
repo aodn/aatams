@@ -78,8 +78,8 @@ environments
 {
     production 
 	{
-        grails.serverURL = "http://preview.emii.org.au/${appName}"
-        grails.serverHost = "http://preview.emii.org.au"
+        grails.serverURL = "http://aatams.emii.org.au/${appName}"
+        grails.serverHost = "http://aatams.emii.org.au"
 		fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod"
 		
 		grails.mail.host = "localhost"
@@ -126,9 +126,9 @@ log4j = {
 
     warn   'org.mortbay.log'
     
-//    debug  'org.springframework',
-//           'org.hibernate',
-//           'org.codehaus.groovy.grails.orm.hibernate'
+//    debug  'org.hibernate',
+//           'org.codehaus.groovy.grails.orm.hibernate',
+//		   'org.postgres'
 
 //    info    "grails.app.service.au.org.emii"
 
@@ -137,7 +137,7 @@ log4j = {
 //			"grails.app.service.au.org.emii.aatams.detection.DetectionValidatorService",
             //"grails.app.controller.au.org.emii",
 //	        "grails.app.domain.au.org.emii",
-            "grails.app.tagLib.au.org.emii",
+//            "grails.app.tagLib.au.org.emii",
             "grails.app.task",
 //           'org.hibernate',
 //            "grails.buildtestdata",
@@ -146,7 +146,7 @@ log4j = {
             "grails.app.filter"//,
             //"grails.app.tagLib.com.energizedwork.grails.plugins.jodatime"
             
-    debug   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
+    info    "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
 	        "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService"
     info    "grails.app.service.au.org.emii.aatams.VueEventFileProcessorService"
 }

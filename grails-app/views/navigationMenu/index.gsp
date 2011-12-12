@@ -111,8 +111,12 @@
       </ul>
       
       <h3>${message(code: 'navigationMenu.section.fieldSheets.label', default: 'Field Sheets')} </h3>
-      <ul/></ul>
-    
+      <ul>
+        <li>
+            <a href="${resource(dir: 'fieldsheets', file:'AATAMS Field Sheets.xlsx', absolute:'true')}" >Download</a>
+        </li>
+      </ul>
+      
       <h3>${message(code: 'navigationMenu.section.help.label', default: 'Help')} </h3>
       <ul>
         <g:each var="c" in="${helpControllers}">

@@ -11,7 +11,6 @@ class BetweenReportFilterCriterion extends AbstractReportFilterCriterion
 	
 	protected void addRestriction(operandCriteria, property, valuesToMatch)
 	{
-		println("property: " + property + ", valuesToMatch: " + valuesToMatch)
 		operandCriteria.add(Restrictions.between(property, valuesToMatch.get(0), valuesToMatch.get(1)))
 	}
 }

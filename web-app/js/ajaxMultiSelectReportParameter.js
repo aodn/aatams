@@ -47,7 +47,8 @@ $(function() {
 	                // prevent value inserted on focus
 	                return false;
 	            },
-	            change: function() {
+	            change: function() 
+	            {
 	                return false;
 	            },
 	            select: function( event, ui ) {
@@ -59,6 +60,7 @@ $(function() {
 	                // add placeholder to get the comma-and-space at the end
 	                terms.push( "" );
 	                this.value = terms.join( ", " );
+	                
 	                return false;
 	            }
 	        });

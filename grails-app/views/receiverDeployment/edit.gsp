@@ -111,7 +111,8 @@
                                     <label for="mooringDescriptor"><g:message code="receiverDeployment.mooringDescriptor.label" default="Mooring Descriptor" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'mooringDescriptor', 'errors')}">
-                                    <g:textField name="mooringDescriptor" value="${fieldValue(bean: receiverDeploymentInstance, field: 'mooringDescriptor')}" />
+                                    <g:textField name="mooringDescriptor" value="${fieldValue(bean: receiverDeploymentInstance, field: 'mooringDescriptor')}" 
+                                                 placeholder="e.g. car type, concrete block, navigation aid etc." />
 
                                 </td>
                             </tr>

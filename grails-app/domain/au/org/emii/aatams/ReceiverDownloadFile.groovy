@@ -43,13 +43,6 @@ class ReceiverDownloadFile
         errMsg type: 'text'
     }
     
-//    static searchable =
-//    {
-//        // Temp commented out, as causing compass to baulk on start-up.
-////        detections(component:true)
-//        events(component:true)
-//    }
-//    
     String toString()
     {
         return String.valueOf(path)

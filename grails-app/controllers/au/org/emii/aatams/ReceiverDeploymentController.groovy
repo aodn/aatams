@@ -97,6 +97,7 @@ class ReceiverDeploymentController extends AbstractController
 				[receiverDeploymentInstance: receiverDeploymentInstance] +
 				[candidateStations:candidateEntitiesService.stations(),
 				 candidateReceivers:getCandidateReceivers(receiverDeploymentInstance)]
+
 		return model
 	}
 	

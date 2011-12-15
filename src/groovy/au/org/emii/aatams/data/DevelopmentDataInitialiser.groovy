@@ -524,6 +524,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new ReceiverDeployment(station:bondiSW1,
                                    receiver:rx1,
                                    deploymentNumber:1,
+                                   initialisationDateTime:new DateTime("2010-02-15T00:34:56+10:00"),
                                    deploymentDateTime:new DateTime("2010-02-15T12:34:56+10:00"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
@@ -537,6 +538,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new ReceiverDeployment(station:bondiSW2,
                                    receiver:rx2,
                                    deploymentNumber:1,
+                                   initialisationDateTime:new DateTime("2010-02-15T00:34:56+10:00"),
                                    deploymentDateTime:new DateTime("2011-05-15T14:12:00+10:00"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
@@ -550,6 +552,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new ReceiverDeployment(station:ningalooS1,
                                    receiver:rx3,
                                    deploymentNumber:1,
+                                   initialisationDateTime:new DateTime("2010-02-15T00:34:56+10:00"),
                                    deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
@@ -563,6 +566,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new ReceiverDeployment(station:heronS1,
                                    receiver:rx4,
                                    deploymentNumber:1,
+                                   initialisationDateTime:new DateTime("2010-02-15T00:34:56+10:00"),
                                    deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
@@ -577,6 +581,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new ReceiverDeployment(station:heronS2,
                                    receiver:rx5,
                                    deploymentNumber:1,
+                                   initialisationDateTime:new DateTime("2010-02-15T00:34:56+10:00"),
                                    deploymentDateTime:new DateTime("2011-05-15T12:34:56+10:00"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
@@ -590,6 +595,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new ReceiverDeployment(station:heronS2,
                                    receiver:rx6,
                                    deploymentNumber:1,
+                                   initialisationDateTime:new DateTime("2010-02-15T00:34:56+10:00"),
                                    deploymentDateTime:new DateTime("2000-05-15T12:34:56+10:00"),
                                    acousticReleaseID:"asdf",
                                    mooringType:concreteMooring,
@@ -767,9 +773,10 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  
         10.times
         {
-            ReceiverEvent event =
-                new ReceiverEvent(timestamp:new Date(),
+            ValidReceiverEvent event =
+                new ValidReceiverEvent(timestamp:new Date(),
                                   receiverDeployment:rx2Bondi,
+								  receiverName:"VR2W-101337",
                                   description:"desc",
                                   data:"123",
                                   unit:"m")

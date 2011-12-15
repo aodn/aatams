@@ -48,12 +48,14 @@ class CandidateEntitiesService
     
     def stations()
     {
+		def projects = projects()
+		
         def candidateStations = 
             InstallationStation.list().grep(
             {
-                projects().contains(it?.installation?.project) && !it.isActive()
+                projects.contains(it?.installation?.project) && !it.isActive()
             })
-        
+		
 		candidateStations = candidateStations.sort
 		{
 			a, b ->
@@ -122,10 +124,12 @@ class CandidateEntitiesService
     
     def deployments()
     {
+		def projects = projects()
+		
         def candidateDeployments =
             ReceiverDeployment.list().grep(
             {
-                projects().contains(it?.station?.installation?.project)
+                projects.contains(it?.station?.installation?.project)
             })
         
         return candidateDeployments
@@ -133,10 +137,12 @@ class CandidateEntitiesService
     
     def surgeries()
     {
+		def projects = projects()
+		
         def candidateSurgeries =
             Surgery.list().grep(
             {
-                projects().contains(it?.tag?.project)
+                projects.contains(it?.tag?.project)
             })
         
         return candidateSurgeries

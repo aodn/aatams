@@ -109,7 +109,6 @@ class ReceiverDeploymentController extends AbstractController
 		}
 		
 		return retList.unique({ a, b -> a.id <=> b.id })
-		
 	}
 
     def show = {

@@ -58,7 +58,7 @@ abstract class AbstractBatchProcessor
             {
                 map, i ->
 
-                if ((i != 0) && ((i % batchSize) == 0))
+				if ((i != 0) && ((i % batchSize) == 0))
                 {
                     endBatch()
 					startBatch()

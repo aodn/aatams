@@ -34,14 +34,21 @@ abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestC
 		mockDomain(ReceiverRecovery, [recovery])
 		recovery.save()
 		
-		ReceiverDeployment deployment = new ReceiverDeployment(recovery: recovery, receiver: receiver, deploymentDateTime: new DateTime("2009-12-08T01:45:29"))
+		ReceiverDeployment deployment = new ReceiverDeployment(recovery: recovery, receiver: receiver, 
+															   deploymentDateTime: new DateTime("2009-12-08T01:45:29"),
+															   initialisationDateTime: new DateTime("2009-12-08T00:45:29"))
 		mockDomain(ReceiverDeployment, [deployment])
 		deployment.save()
+		
+		recovery.deployment = deployment
+		recovery.save()
 		
 		receiver.addToDeployments(deployment)
 		receiverList.each { it.save() }
 		
 		mockDomain(ReceiverEvent)
+		mockDomain(ValidReceiverEvent)
+		mockDomain(InvalidReceiverEvent)
 		
 		download = new ReceiverDownloadFile()
 		mockDomain(ReceiverDownloadFile, [download])

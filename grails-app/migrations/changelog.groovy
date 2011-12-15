@@ -1531,5 +1531,7 @@ databaseChangeLog = {
 	include file: 'new_reference_data_3.5.0.groovy'
 
 	include file: 'jdbc_template_detection_upload.groovy'
+
+	include file: 'deployment_init_datetime.groovy'
 }
 

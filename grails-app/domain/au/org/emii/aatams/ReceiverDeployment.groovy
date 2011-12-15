@@ -20,15 +20,24 @@ class ReceiverDeployment
 {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
     static transients = ['scrambledLocation', 'active']
+	
     Set<ValidDetection> detections = new HashSet<ValidDetection>()
-    static hasMany = [detections: ValidDetection, events: ReceiverEvent]
+    static hasMany = [detections: ValidDetection, events: ValidReceiverEvent]
 
     Integer deploymentNumber
     
+	DateTime initialisationDateTime = new DateTime(Person.defaultTimeZone())
+	
     DateTime deploymentDateTime = new DateTime(Person.defaultTimeZone())
 
     static mapping =
     {
+        initialisationDateTime type: PersistentDateTimeTZ,
+        {
+            column name: "initialisationDateTime_timestamp"
+            column name: "initialisationDateTime_zone"
+        }
+
         deploymentDateTime type: PersistentDateTimeTZ,
         {
             column name: "deploymentDateTime_timestamp"
@@ -104,6 +113,7 @@ class ReceiverDeployment
     {
         receiver()
         station()
+		initialisationDateTime(nullable:true)
         deploymentNumber(nullable:true, min:0)
         deploymentDateTime()
         recoveryDate(nullable:true, validator:recoveryDateValidator)

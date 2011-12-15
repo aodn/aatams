@@ -13,75 +13,61 @@ class EventFactoryService
     static final String UNITS_COLUMN = "Units"
     static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
     
+	def eventValidatorService
+	
     /**
      * Creates a receiver event given a map of parameters (which originate from a line
      * in a CSV upload file).
      */
-    def newEvent(downloadFile, eventParams) throws FileProcessingException 
+    def newEvent(downloadFile, params) throws FileProcessingException 
     {
-        String dateString = eventParams[DATE_AND_TIME_COLUMN] + " " + "UTC"
-        Date eventDate = new Date().parse(DATE_FORMAT, dateString)
-        
-        Receiver receiver = Receiver.findByCodeName(eventParams[RECEIVER_COLUMN], [cache:true])
-        String errMsg = "Unknown receiver name: " + eventParams[RECEIVER_COLUMN]
-        //assert(receiver != null): errMsg
-        if (receiver == null)
-        {
-            throw new FileProcessingException(errMsg)
-        }
-        
-        // Find the appropriate receiver deployment (based on the timestamp of
-        // the detection and the deployment/recovery timestamps.
-        ReceiverDeployment deployment = findReceiverDeployment(receiver, eventDate)
-
-        return createEvent(downloadFile, deployment, eventDate, eventParams)
+		def nativeParams = toNativeParams(params)
+		
+		return initEvent(downloadFile, nativeParams)
     }
-
-	protected def createEvent(downloadFile, deployment, eventDate, eventParams) 
+	
+	private def initEvent(downloadFile, nativeParams)
 	{
-		ReceiverEvent event =
-			new ReceiverEvent(
-						receiverDownload:downloadFile,
-						receiverDeployment:deployment,
-						timestamp:eventDate)
+		assert(eventValidatorService)
+		
+		if (eventValidatorService.validate(downloadFile, nativeParams))
+		{
+			return createValidEvent(nativeParams +
+									[receiverDownload: downloadFile,
+									 receiverDeployment: eventValidatorService.deployment])
+		}
+		else
+		{
+			return createInvalidEvent(nativeParams +
+									  [receiverDownload:downloadFile, 
+                                       reason:eventValidatorService.invalidReason, 
+                                       message:eventValidatorService.invalidMessage])
+		}
+	}
+	
+	private static Map toNativeParams(params)
+	{
+		def timestamp = new Date().parse(DATE_FORMAT, params[DATE_AND_TIME_COLUMN] + " " + "UTC")
+		
+		// nullable string properties which are blank are saved as null, so do that here too
+		// so that the comparison when checking for duplicates works properly.
+		def data = params[DATA_COLUMN] == "" ? null : params[DATA_COLUMN]
+		def units = params[UNITS_COLUMN] == "" ? null : params[UNITS_COLUMN]
+		
+		return [timestamp: timestamp,
+			 	receiverName: params[RECEIVER_COLUMN],
+				description: params[DESCRIPTION_COLUMN],
+				data: data,
+				units: units]
+	}
 
-		String description = eventParams[DESCRIPTION_COLUMN]
-		event.description = description
-
-		String data = eventParams[DATA_COLUMN]
-		event.data = data
-
-		String units = eventParams[UNITS_COLUMN]
-		event.units = units
-
-		event.save()
-		return event
+	protected def createValidEvent(params) 
+	{
+		return new ValidReceiverEvent(params).save()
 	}
    
-    ReceiverDeployment findReceiverDeployment(receiver, eventDate)
-    {
-        List<ReceiverDeployment> deployments = receiver.deployments.grep(
-        {
-            // Check that the receiver was deployed before the event and
-            // that there is a valid recovery and that the recovery date is
-            // after the detection.
-            if (   (it.deploymentDateTime.toDate() <= eventDate)
-                && (it?.recovery.recoveryDateTime?.toDate() >= eventDate))
-            {
-                return true
-            }
-            else
-            {
-                return false
-            }
-        }).sort{it.deploymentDateTime}
-        
-        // There should be one and only one matching deployment.
-        if (deployments.size() != 1)
-        {
-            log.warn("There are not exactly one matching deployment for receiver: " + receiver + ", event date: " + eventDate)
-        }
-        
-        return deployments?.first()
-    }
+	protected def createInvalidEvent(params) 
+	{
+		return new InvalidReceiverEvent(params).save()
+	}
 }

@@ -19,6 +19,10 @@ class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorSer
 		mockLogging(VueEventFileProcessorService, true)
 		vueEventFileProcessorService = new VueEventFileProcessorService()
 		vueEventFileProcessorService.eventFactoryService = eventFactoryService
+		
+		mockLogging(EventValidatorService, true)
+		vueEventFileProcessorService.eventFactoryService.eventValidatorService = new EventValidatorService()
+
 		vueEventFileProcessorService.searchableService = searchableService
 		vueEventFileProcessorService.metaClass.getRecords = { getRecords(it) }
 	}
@@ -33,16 +37,17 @@ class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorSer
 		vueEventFileProcessorService.process(download)
 
 		def records = getRecords(download)
-		assertEquals (records.size(), ReceiverEvent.count())
+		
+		assertEquals (records.size(), ValidReceiverEvent.count())
 		
 		records.eachWithIndex
 		{
 			record, i ->
 			
-			assertEquals(record[EventFactoryService.RECEIVER_COLUMN], ReceiverEvent.list()[i].receiverDeployment.receiver.codeName)
-			assertEquals(record[EventFactoryService.DESCRIPTION_COLUMN], ReceiverEvent.list()[i].description)
-			assertEquals(record[EventFactoryService.DATA_COLUMN], ReceiverEvent.list()[i].data)
-			assertEquals(record[EventFactoryService.UNITS_COLUMN], ReceiverEvent.list()[i].units)
+			assertEquals(record[EventFactoryService.RECEIVER_COLUMN], ValidReceiverEvent.list()[i].receiverDeployment.receiver.codeName)
+			assertEquals(record[EventFactoryService.DESCRIPTION_COLUMN], ValidReceiverEvent.list()[i].description)
+			assertEquals(record[EventFactoryService.DATA_COLUMN], ValidReceiverEvent.list()[i].data)
+			assertEquals(record[EventFactoryService.UNITS_COLUMN], ValidReceiverEvent.list()[i].units)
 		}
     }
 }

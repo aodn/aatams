@@ -36,7 +36,7 @@ class ReportInfoService
 		 "organisation": "au.org.emii.aatams.Organisation",
          "receiver": "au.org.emii.aatams.Receiver",
          "receiverDeployment": "au.org.emii.aatams.ReceiverDeployment",
-         "receiverEvent": "au.org.emii.aatams.ReceiverEvent",
+         "receiverEvent": "au.org.emii.aatams.ValidReceiverEvent",
          "tag": "au.org.emii.aatams.Tag"
          ]
 
@@ -80,7 +80,7 @@ class ReportInfoService
 		 "project": Project.class,
          "receiver": Receiver.class,
          "receiverDeployment": ReceiverDeployment.class,
-         "receiverEvent": ReceiverEvent.class,
+         "receiverEvent": ValidReceiverEvent.class,
          "tag": Tag.class
          ]
         
@@ -141,7 +141,7 @@ class ReportInfoService
  
 		if (!eventTimestampMin)
 		{
-			eventTimestampMin = ReceiverEvent.list()*.timestamp.min()
+			eventTimestampMin = ValidReceiverEvent.list()*.timestamp.min()
 		}
 		
 		def eventFilterParams =
@@ -209,7 +209,7 @@ class ReportInfoService
                 (ReceiverDeployment.class):new ReportInfo(displayName:"Receiver Deployments", 
                                                           jrxmlFilename:["report":"receiverDeploymentList"], 
                                                           filterParams:receiverDeploymentFilterParams),
-                (ReceiverEvent.class):new ReportInfo(displayName:"Receiver Events", 
+                (ValidReceiverEvent.class):new ReportInfo(displayName:"Receiver Events", 
                                                      jrxmlFilename:["extract":"receiverEventExtract"], 
                                                      filterParams:eventFilterParams),
                 (Tag.class):new ReportInfo(displayName:"Tags", 

@@ -45,13 +45,21 @@
                             <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "deploymentNumber")}</td>
                             
                         </tr>
+                        
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDeployment.initialisationDateTime.label" default="Initialisation Date" /></td>
+                            
+                            <td valign="top" class="value">
+                              <joda:format value="${receiverDeploymentInstance?.initialisationDateTime}" />
+                            </td>
+                        </tr>
+                        
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDeployment.deploymentDate.label" default="Deployment Date" /></td>
                             
                             <td valign="top" class="value">
                               <joda:format value="${receiverDeploymentInstance?.deploymentDateTime}" />
                             </td>
-                            
                         </tr>
                     
                         <tr class="prop">

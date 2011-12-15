@@ -54,6 +54,17 @@
 
                             <tr class="prop">
                                 <td valign="top" class="name">
+                                  <label class="compulsory" for="initialisationDateTime"><g:message code="receiverDeployment.initialisationDateTime.label" default="Initialisation Date" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'initialisationDateTime', 'errors')}">
+                                    <joda:dateTimePicker name="initialisationDateTime"
+                                                         value="${receiverDeploymentInstance?.initialisationDateTime}"
+                                                         useZone="true"/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
                                   <label class="compulsory" for="deploymentDateTime"><g:message code="receiverDeployment.deploymentDateTime.label" default="Deployment Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'deploymentDateTime', 'errors')}">

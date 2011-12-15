@@ -2,13 +2,20 @@ package au.org.emii.aatams
 
 class JdbcTemplateEventFactoryService extends EventFactoryService 
 {
-	protected def createEvent(downloadFile, deployment, eventDate, eventParams)
+	protected def createValidEvent(params)
 	{
-		return ["data": eventParams[DATA_COLUMN],
-				"description" : eventParams[DESCRIPTION_COLUMN],
-				"receiverDeploymentId": deployment.id,
-				"receiverDownloadId": downloadFile.id,
-				"timestamp": eventDate,
-				"units": eventParams[UNITS_COLUMN]]
+		return (params
+				+ ["clazz" : "au.org.emii.aatams.ValidReceiverEvent",
+				   "receiverDownloadId": params.receiverDownload.id,
+				   "receiverDeploymentId": params.receiverDeployment.id,
+				   "message": "",
+				   "reason": ""])
+	}
+	
+	protected def createInvalidEvent(params)
+	{
+		return (params
+				+ ["clazz" : "au.org.emii.aatams.InvalidReceiverEvent",
+				   "receiverDownloadId": params.receiverDownload.id])
 	}
 }

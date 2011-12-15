@@ -15,7 +15,9 @@ class ReceiverEvent
      */
     Date timestamp
     
-    static belongsTo = [receiverDeployment: ReceiverDeployment, receiverDownload:ReceiverDownloadFile]
+	String receiverName
+	
+    static belongsTo = [receiverDownload:ReceiverDownloadFile]
     
     String description
     
@@ -27,20 +29,21 @@ class ReceiverEvent
     {
         timestamp()
         description()
+		receiverName()
         data(nullable:true, blank:true)
         units(nullable:true, blank:true)
     }
     
-    static searchable =
+    static mapping =
     {
-        root(false)
-        receiverDeployment(component:true)
+        timestamp index:'event_timestamp_index'
+        cache true
     }
 	
 	static String toSqlInsert(Map event)
 	{
 		StringBuilder eventBuff = new StringBuilder(
-				"INSERT INTO RECEIVER_EVENT (ID, VERSION, TIMESTAMP, RECEIVER_DEPLOYMENT_ID, RECEIVER_DOWNLOAD_ID, DATA, DESCRIPTION, UNITS)" +
+				"INSERT INTO RECEIVER_EVENT (ID, VERSION, TIMESTAMP, RECEIVER_DEPLOYMENT_ID, RECEIVER_DOWNLOAD_ID, DATA, DESCRIPTION, RECEIVER_NAME, UNITS, CLASS, MESSAGE, REASON)" +
 				" VALUES(")
 
 		eventBuff.append("nextval('hibernate_sequence'),")
@@ -48,7 +51,7 @@ class ReceiverEvent
 		eventBuff.append("'" + new java.sql.Timestamp(event["timestamp"].getTime()) + "',")
 		
 		SqlUtils.appendIntegerParams(eventBuff, event, ["receiverDeploymentId", "receiverDownloadId"])
-		SqlUtils.appendStringParams(eventBuff, event, ["data", "description", "units"])
+		SqlUtils.appendStringParams(eventBuff, event, ["data", "description", "receiverName", "units", "clazz", "message", "reason"])
 		SqlUtils.removeTrailingCommaAndAddBracket(eventBuff)
 		
 		return eventBuff.toString()

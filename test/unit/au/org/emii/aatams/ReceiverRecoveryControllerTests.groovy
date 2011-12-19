@@ -10,6 +10,8 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
 
     def project1
     def project2
+	
+	def receiver
 
     protected void setUp() 
     {
@@ -65,6 +67,16 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
         deployment3.recovery = recovery3
 
         mockDomain(ReceiverRecovery)
+		
+		DeviceStatus deployed = new DeviceStatus(status: 'DEPLOYED')
+		DeviceStatus recovered = new DeviceStatus(status: 'RECOVERED')
+		def statusList = [deployed, recovered]
+		mockDomain(DeviceStatus, statusList)
+		statusList.each { it.save() }
+		
+		receiver = new Receiver(status:deployed, codeName: "VR2W-1234")
+		mockDomain(Receiver, [receiver])
+		receiver.save()
     }
 
     protected void tearDown() 
@@ -207,7 +219,7 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
 
 	private ReceiverDeployment createDeployment(InstallationStation station, location) 
 	{
-		ReceiverDeployment deployment = new ReceiverDeployment(location:location, station:station)
+		ReceiverDeployment deployment = new ReceiverDeployment(location:location, station:station, receiver:receiver)
 		mockDomain(ReceiverDeployment, [deployment])
 		deployment.save()
 		deployment.metaClass.toString = { "test deployment"}
@@ -222,5 +234,21 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
 		assertNotNull(model.receiverRecoveryInstance)
 		assertEquals(deployment, model.receiverRecoveryInstance.deployment)
 		assertEquals(deploymentLocation, model.receiverRecoveryInstance.location)
+	}
+	
+	void testSaveReceiverStatusMatchesRecoveryStatus()
+	{
+		Point deploymentLocation = new GeometryFactory().createPoint(new Coordinate(34f, 34f))
+		deploymentLocation.setSRID(4326)
+		InstallationStation station = createStation()
+		ReceiverDeployment deployment = createDeployment(station, deploymentLocation)
+
+		assertEquals(DeviceStatus.findByStatus('DEPLOYED'), receiver.status)
+			
+		controller.params.status = DeviceStatus.findByStatus('RECOVERED')
+		controller.params.receiver = receiver
+		controller.save()
+		
+		assertEquals(DeviceStatus.findByStatus('RECOVERED'), receiver.status)
 	}
 }

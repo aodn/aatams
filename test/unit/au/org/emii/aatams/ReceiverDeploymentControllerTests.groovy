@@ -21,6 +21,8 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
     
     InstallationStation station1
     InstallationStation station2
+	InstallationStation newStation
+	
     Receiver receiver1
     Receiver receiver2
     
@@ -66,7 +68,8 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         
 		station1 = new InstallationStation(name:'station1', receivers:new HashSet<Receiver>())
 		station2 = new InstallationStation(name:'station2', receivers:new HashSet<Receiver>())
-		def stationList = [station1, station2]
+		newStation = new InstallationStation(name:'newStation', receivers:new HashSet<Receiver>())
+		def stationList = [station1, station2, newStation]
 		mockDomain(InstallationStation, stationList)
 		stationList.each { it.save() }
 		
@@ -75,7 +78,7 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         candidateEntitiesService = new CandidateEntitiesService()
         candidateEntitiesService.metaClass.stations =
         {
-            return stationList
+            return stationList - newStation
         }
         candidateEntitiesService.metaClass.receivers =
         {
@@ -231,12 +234,15 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
 		assertTrue(station1.receivers.contains(csiroReceiver))
 	}
 	
-	void testEditIncludesCurrentlyDeployedReceiver()
+	void testEditIncludesCurrentlyDeployedReceiverAndStation()
 	{
         def model = controller.create()
 		assertEquals(2, model.candidateReceivers.size())
-
+		assertEquals(2, model.candidateStations.size())
+		
 		controller.params.receiver = newReceiver
+		controller.params.station = newStation
+		
 		controller.save()
 		
 		controller.params.clear()
@@ -244,6 +250,9 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
 		model = controller.edit()
 		assertEquals(3, model.candidateReceivers.size())
 		assertTrue(model.candidateReceivers.contains(newReceiver))
+		assertEquals(3, model.candidateStations.size())
+		assertTrue(model.candidateStations.contains(newStation))
+		
 	}
 	
 	void testReceiverStatusBackToNewOnUndeploy()

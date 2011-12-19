@@ -95,7 +95,7 @@ class ReceiverDeploymentController extends AbstractController
 	{
 		def model =
 				[receiverDeploymentInstance: receiverDeploymentInstance] +
-				[candidateStations:candidateEntitiesService.stations(),
+				[candidateStations:getCandidateStations(receiverDeploymentInstance),
 				 candidateReceivers:getCandidateReceivers(receiverDeploymentInstance)]
 
 		return model
@@ -111,6 +111,18 @@ class ReceiverDeploymentController extends AbstractController
 		
 		return retList.unique({ a, b -> a.id <=> b.id })
 	}
+
+	private Collection<InstallationStation> getCandidateStations(deployment)
+	{
+		def retList = candidateEntitiesService.stations()
+		if (deployment.station)
+		{
+			retList.add(0, deployment.station)
+		}
+		
+		return retList.unique({ a, b -> a.id <=> b.id })
+	}
+
 
     def show = {
         def receiverDeploymentInstance = ReceiverDeployment.get(params.id)

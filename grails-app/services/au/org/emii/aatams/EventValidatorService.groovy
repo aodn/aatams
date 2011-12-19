@@ -6,13 +6,20 @@ class EventValidatorService extends VueExportValidatorService
 	{
 		assert(theDeployment)
 		
-		if (!theDeployment.initialisationDateTime)
+		// Use the intialisation date/time, if it's configured.
+		def comparisonDateTime
+		if (theDeployment.initialisationDateTime)
+		{
+			comparisonDateTime = theDeployment.initialisationDateTime
+		}
+		else
 		{
 			log.debug("Receiver deployment does not have configured initialisation date/time, deployment: " + theDeployment)
-			return true
+			comparisonDateTime = theDeployment.deploymentDateTime
 		}
 		
-		return theDeployment.initialisationDateTime?.toDate().after(params.timestamp)
+		assert(comparisonDateTime)
+		return comparisonDateTime?.toDate().after(params.timestamp)
 	}
 	
 	protected boolean isDuplicate()

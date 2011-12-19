@@ -39,6 +39,11 @@ abstract class AbstractController
 			filterParams.in = params.filter.in
 		}
 		
+		if (params.filter?.isNull)
+		{
+			filterParams.isNull = params.filter.isNull
+		}
+		
 		def filter = reportFilterFactoryService.newFilter(reportInfoService.getClassForName(params._name), filterParams)
 		
 		def cleanedFilterParams = [:]

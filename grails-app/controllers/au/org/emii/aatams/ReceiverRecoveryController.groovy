@@ -3,7 +3,7 @@ package au.org.emii.aatams
 import org.joda.time.*
 import com.vividsolutions.jts.geom.Point
 
-class ReceiverRecoveryController 
+class ReceiverRecoveryController extends AbstractController
 {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -24,6 +24,7 @@ class ReceiverRecoveryController
             if (it.station?.installation?.project?.id != projectId)
             {
                 // Wrong project, filter out.
+				println("false")
                 return false
             }
         }
@@ -33,9 +34,11 @@ class ReceiverRecoveryController
         if (unrecoveredOnly && it.recovery)
         {
             // This deployment has been recovered, filter out.
+			println("false")
             return false
         }
 
+		println("true")
         return true
     }
     
@@ -43,7 +46,7 @@ class ReceiverRecoveryController
     {
         log.debug("Filter parameters: " + params.filter)
 
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
+//        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
 
         // We actually want to display a list of deployments (some with and some
         // without associated recoveries).
@@ -51,6 +54,7 @@ class ReceiverRecoveryController
         def receiverDeploymentList = ReceiverDeployment.list(params)
 
         // Filter...
+		println("Num receiver deployments: " + receiverDeploymentList.size())
         receiverDeploymentList = receiverDeploymentList.grep
         {
             return passesFilter(it, params)
@@ -58,13 +62,13 @@ class ReceiverRecoveryController
         
         // Determine total matching deployments.
         def receiverDeploymentInstanceTotal = 0
-        ReceiverDeployment.list().each
-        {
-            if (passesFilter(it, params))
-            {
-                receiverDeploymentInstanceTotal++
-            }
-        }
+//        ReceiverDeployment.list().each
+//        {
+//            if (passesFilter(it, params))
+//            {
+//                receiverDeploymentInstanceTotal++
+//            }
+//        }
         
         render(view:"list", model:
         [receiverDeploymentInstanceList: receiverDeploymentList, 
@@ -74,7 +78,7 @@ class ReceiverRecoveryController
          unrecoveredOnly:params.filter?.unrecoveredOnly])
         
     }
-
+/**
     def list = {
         params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
 //        [receiverRecoveryInstanceList: ReceiverRecovery.list(params), receiverRecoveryInstanceTotal: ReceiverRecovery.count()]
@@ -88,7 +92,12 @@ class ReceiverRecoveryController
          receiverDeploymentInstanceTotal: ReceiverDeployment.count(),
          readableProjects:candidateEntitiesService.readableProjects()]
     }
-
+*/
+    def list = 
+	{
+		doList("receiverRecovery")
+	}
+	
     def create = 
     {
         ReceiverDeployment deployment = ReceiverDeployment.get(params.deploymentId)

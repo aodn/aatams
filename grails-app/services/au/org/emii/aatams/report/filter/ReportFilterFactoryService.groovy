@@ -30,6 +30,11 @@ class ReportFilterFactoryService
 			filter.addCriterion(new BetweenReportFilterCriterion(params.between))
 		}
 		
+		if (params.isNull)
+		{
+			filter.addCriterion(new IsNullReportFilterCriterion(params.isNull))
+		}
+		
 		return filter
     }
 	

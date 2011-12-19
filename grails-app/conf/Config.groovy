@@ -90,6 +90,7 @@ environments
         grails.serverHost = "http://localhost:8080"
         fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
 		
+		grails.mail.adminEmailAddress = "jkburges@utas.edu.au"
 		grails.mail.host = "postoffice.utas.edu.au"
     }
     test 
@@ -132,23 +133,28 @@ log4j = {
 
 //    info    "grails.app.service.au.org.emii"
 
-    debug   "grails.app.controller.au.org.emii.aatams.report.ReportController",
+//    debug   "grails.app.controller.au.org.emii.aatams.report.ReportController",
+//			"grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService",
+//			"grails.app.service.au.org.emii.aatams.detection.DetectionFactoryService",
+			
 //            "grails.app.service.au.org.emii",
 //			"grails.app.service.au.org.emii.aatams.detection.DetectionValidatorService",
             //"grails.app.controller.au.org.emii",
 //	        "grails.app.domain.au.org.emii",
 //            "grails.app.tagLib.au.org.emii",
-            "grails.app.task",
+//            "grails.app.task",
 //           'org.hibernate',
 //            "grails.buildtestdata",
 //            "net.sf.jasperreports",
 //            "org.codehaus.groovy.grails.plugins.jasper",
-            "grails.app.filter"//,
+//            "grails.app.filter"//,
             //"grails.app.tagLib.com.energizedwork.grails.plugins.jodatime"
             
     info    "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
 	        "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService"
     info    "grails.app.service.au.org.emii.aatams.VueEventFileProcessorService"
+//			'org.hibernate'
+	
 }
 
 

@@ -99,6 +99,17 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 		saveMultipleSurgeries(1)
 	}
 
+	void testDeleteTagStatusRevertsToNew()
+	{
+		saveMultipleSurgeries(1)
+		assertEquals(DeviceStatus.findByStatus('DEPLOYED'), Tag.get(1).status)
+		assertEquals(1, AnimalRelease.count())
+		
+		releaseService.delete(animalReleaseInstance)
+		assertEquals(DeviceStatus.findByStatus('NEW'), Tag.get(1).status)
+		assertEquals(0, AnimalRelease.count())
+	}
+
 	void testSaveWithTwoSurgeriesExistingTags()
 	{
 		saveMultipleSurgeries(2)

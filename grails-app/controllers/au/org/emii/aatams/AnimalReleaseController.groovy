@@ -179,7 +179,7 @@ class AnimalReleaseController extends AbstractController
         def animalReleaseInstance = AnimalRelease.get(params.id)
         if (animalReleaseInstance) {
             try {
-                animalReleaseInstance.delete(flush: true)
+				animalReleaseService.delete(animalReleaseInstance)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.toString()])}"
                 redirect(action: "list")
             }

@@ -172,4 +172,15 @@ class AnimalReleaseService
             animalReleaseInstance.embargoDate = null
         }
     }
+	
+	void delete(AnimalRelease animalReleaseInstance)
+	{
+		animalReleaseInstance.surgeries.each
+		{
+			it.tag.status = DeviceStatus.findByStatus('NEW', [cache:true])
+			it.tag.save()
+		}
+		
+		animalReleaseInstance.delete(flush: true)
+	}
 }

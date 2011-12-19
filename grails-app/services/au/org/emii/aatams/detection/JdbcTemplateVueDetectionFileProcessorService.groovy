@@ -56,7 +56,7 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 			{
 				detSurgery ->
 
-				insertStatementList.add(DetectionSurgery.toSqlInsert(detSurgery))
+				insertStatementList.add(DetectionSurgery.toSqlInsert(detSurgery, true))
 			}
 		}
 		

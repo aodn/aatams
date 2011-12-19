@@ -85,6 +85,7 @@ class AnimalReleaseController extends AbstractController
 		}
 		catch (IllegalArgumentException e)
 		{
+			log.error("Error saving animal release", e)
 			renderDefaultModel(animalReleaseInstance, params)
 		}
 	}

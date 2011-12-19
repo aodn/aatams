@@ -61,7 +61,7 @@ class DetectionSurgery
         return detectionSurgery
     }
     
-	static String toSqlInsert(Map detSurgery)
+	static String toSqlInsert(Map detSurgery, boolean useHibernateSeqForDetectionId)
 	{
 		StringBuilder detSurgeryBuff = new StringBuilder(
 				"INSERT INTO DETECTION_SURGERY (ID, VERSION, DETECTION_ID, SURGERY_ID, TAG_ID) " +
@@ -69,8 +69,17 @@ class DetectionSurgery
 
 		detSurgeryBuff.append("nextval('detection_surgery_sequence'),")
 		detSurgeryBuff.append("0,")
-		detSurgeryBuff.append("currval('hibernate_sequence'),")
-		SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["surgeryId", "tagId"])
+		
+		if (useHibernateSeqForDetectionId)
+		{
+			detSurgeryBuff.append("currval('hibernate_sequence'),")
+			SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["surgeryId", "tagId"])
+		}
+		else
+		{
+			assert(detSurgery.detectionId)
+			SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["detectionId", "surgeryId", "tagId"])
+		}
 		SqlUtils.removeTrailingCommaAndAddBracket(detSurgeryBuff)
 		
 		return detSurgeryBuff.toString()

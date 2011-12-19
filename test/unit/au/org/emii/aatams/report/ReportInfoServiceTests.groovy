@@ -22,6 +22,7 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         
         mockLogging(ReportInfoService, true)
         reportInfoService = new ReportInfoService()
+		reportInfoService.metaClass.getDetectionTimestampMin = { return new DateTime("2011-03-01T12:34:56").toDate() }
         
         mockLogging(PermissionUtilsService, true)
         permissionUtilsService = new PermissionUtilsService()

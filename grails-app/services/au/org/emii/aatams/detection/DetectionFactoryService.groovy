@@ -66,7 +66,7 @@ class DetectionFactoryService
         return detection
     }
     
-    Collection<RawDetection> rescanForSurgery(Surgery surgery)
+    Collection rescanForSurgery(Surgery surgery)
     {
         DeviceStatus retiredStatus = DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true])
         if (surgery.tag.status == retiredStatus)
@@ -74,23 +74,56 @@ class DetectionFactoryService
             return []
         }
         
-        def updatedDetections = []
+        def newDetectionSurgeries = []
         
-        ValidDetection.findAllByTransmitterId(surgery.tag.codeName, [cache:true]).each
+		def matchingDetections = ValidDetection.findAllByTransmitterId(surgery.tag.codeName, [cache:true])
+		def numRecords = matchingDetections.size()
+		log.info("Rescanning for surgery on tag: " + surgery.tag + ", " + numRecords + " detections match tag.")
+		int percentProgress = 0
+		long startTime = System.currentTimeMillis()
+		
+        matchingDetections.eachWithIndex
         {
-            detection ->
+            detection, i ->
             
             if (surgery.isInWindow(detection.timestamp))
             {
-                updatedDetections.add(detection)
-				
-				createDetectionSurgery(surgery, surgery.tag, detection).save()
+				def newDetSurgery = createDetectionSurgery(surgery, surgery.tag, detection)
+				newDetectionSurgeries.add(newDetSurgery)
             }
+			
+			percentProgress = logProgress(i, numRecords, percentProgress, surgery, startTime)
         }
         
-        return updatedDetections
+		log.debug("Num new detection surgeries: " + newDetectionSurgeries.size())
+        return newDetectionSurgeries
     }
     
+	private int logProgress(i, numRecords, percentProgress, surgery, startTime)
+	{
+		float progress = (float)i/numRecords * 100
+		if ((int)progress > percentProgress)
+		{
+			percentProgress = (int)progress
+			
+			String progressMsg =
+				"Surgery processing, id: " + surgery.id +
+				", progress: " + percentProgress +
+				"%, average time per record: " + (float)(System.currentTimeMillis() - startTime) / (i + 1) + "ms"
+				
+			if ((percentProgress % 10) == 0)
+			{
+				log.info(progressMsg)
+			}
+			else
+			{
+				log.debug(progressMsg)
+			}
+		}
+		
+		return percentProgress
+	}
+	
     private def initDetection(downloadFile, nativeParams)
     {
         assert(detectionValidatorService)

@@ -5,6 +5,7 @@ class AnimalReleaseService
     static transactional = true
 
 	def animalFactoryService
+	def jdbcTemplateDetectionFactoryService
     def tagFactoryService
 
 	void save(AnimalRelease animalReleaseInstance, Map params) throws IllegalArgumentException 
@@ -21,10 +22,32 @@ class AnimalReleaseService
 		setEmbargoDate(animalReleaseInstance, params)
 		
 		saveAnimalRelease(animalReleaseInstance)
+		
+		rescanExistingDetections(animalReleaseInstance)
     }
 
-	private saveAnimalRelease(AnimalRelease animalReleaseInstance) {
-		animalReleaseInstance.save()
+	private void rescanExistingDetections(animalReleaseInstance)
+	{
+		runAsync
+		{
+			animalReleaseInstance.surgeries.each
+			{
+				try
+				{
+					jdbcTemplateDetectionFactoryService.rescanForSurgery(it)
+				}
+				catch (Throwable t)
+				{
+					log.error("Error saving detection surgery", t)
+					throw t
+				}
+			}
+		}	
+	}
+	
+	private saveAnimalRelease(AnimalRelease animalReleaseInstance) 
+	{
+		animalReleaseInstance.save(flush:true)	// Flush so that everything is in DB for the JDBC template detectionSurgery stuff.
 	}
 
 	private updateAnimalRelease(AnimalRelease animalReleaseInstance, Map params) {

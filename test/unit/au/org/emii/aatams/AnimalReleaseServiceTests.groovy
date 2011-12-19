@@ -28,6 +28,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 		releaseService = new AnimalReleaseService()
 		releaseService.animalFactoryService = animalFactoryService
 		releaseService.tagFactoryService = tagFactoryService
+		releaseService.metaClass.runAsync = { Closure c -> }
 		
 		codeMap = new CodeMap(codeMap:"A69-1303")
 		mockDomain(CodeMap, [codeMap])

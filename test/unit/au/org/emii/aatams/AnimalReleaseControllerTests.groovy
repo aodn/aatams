@@ -62,6 +62,8 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 		animalReleaseService = new AnimalReleaseService()
 		animalReleaseService.animalFactoryService = animalFactoryService
 		animalReleaseService.tagFactoryService = tagFactoryService
+		animalReleaseService.metaClass.runAsync = { Closure c -> }
+		
 		controller.animalReleaseService = animalReleaseService
 		
         mockDomain(Person)

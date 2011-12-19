@@ -83,7 +83,23 @@ class ReportInfoService
          "receiverEvent": ValidReceiverEvent.class,
          "tag": Tag.class
          ]
-        
+     
+	private def getDetectionTimestampMin()
+	{
+		if (!detectionTimestampMin)
+		{
+			detectionTimestampMin = ValidDetection.createCriteria().get
+			{
+				projections
+				{
+					min('timestamp')
+				}
+			}
+		}
+		
+		return detectionTimestampMin
+	}	   
+	
     /**
      * Return info for all available reports (keyed by the domain class).
      */
@@ -99,12 +115,7 @@ class ReportInfoService
         def organisationRange = Organisation.list()*.name
         def installationRange = Installation.list()*.name
 		
-		if (!detectionTimestampMin)
-		{
-			detectionTimestampMin = ValidDetection.list()*.timestamp.min()
-		}
-		
-		def timestampMin = detectionTimestampMin
+		def timestampMin = getDetectionTimestampMin()
 		def timestampMax = new Date()
 		
 		def animalReleaseFilterParams =

@@ -87,8 +87,9 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         def tagFactoryService = new TagFactoryService()
         controller.tagFactoryService = tagFactoryService
         
+        DeviceStatus newStatus = new DeviceStatus(status:"NEW")
         DeviceStatus deployedStatus = new DeviceStatus(status:"DEPLOYED")
-        mockDomain(DeviceStatus, [deployedStatus])
+        mockDomain(DeviceStatus, [newStatus, deployedStatus])
         deployedStatus.save()
         
         pinger = new TransmitterType(transmitterTypeName:'PINGER')

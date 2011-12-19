@@ -57,7 +57,7 @@ class GeometryUtils
         double lat = truncate2(origPoint.getCoordinate().y)
 
         return new GeometryFactory().createPoint(
-                    new Coordinate(lon, lat));
+                    new Coordinate(lon, lat, origPoint.SRID));
     }
 }
 

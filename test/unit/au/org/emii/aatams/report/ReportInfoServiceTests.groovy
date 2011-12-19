@@ -87,7 +87,7 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
     {
         def reportInfos = reportInfoService.getReportInfo()
         
-        assertEquals(10, reportInfos.size())
+        assertEquals(11, reportInfos.size())
 
         ReportInfo receiverReportInfo = reportInfos.get(Receiver.class)
         
@@ -137,7 +137,7 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
 		
         def reportInfos = reportInfoService.getReportInfo()
         
-        assertEquals(10, reportInfos.size())
+        assertEquals(11, reportInfos.size())
 
         ReportInfo detectionReportInfo = reportInfos.get(ValidDetection.class)
         

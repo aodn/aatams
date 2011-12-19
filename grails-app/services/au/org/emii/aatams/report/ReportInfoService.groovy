@@ -36,6 +36,7 @@ class ReportInfoService
 		 "organisation": "au.org.emii.aatams.Organisation",
          "receiver": "au.org.emii.aatams.Receiver",
          "receiverDeployment": "au.org.emii.aatams.ReceiverDeployment",
+         "receiverRecovery": "au.org.emii.aatams.ReceiverRecovery",
          "receiverEvent": "au.org.emii.aatams.ValidReceiverEvent",
          "tag": "au.org.emii.aatams.Tag"
          ]
@@ -50,7 +51,7 @@ class ReportInfoService
 		 "animal.species.commonName": speciesCommonName,
 		 "animal.species.scientificName": speciesScientificName,
 		 "codeName": tagId,
-         "detectionSurgeries.surgery.release.animal.species.spcode": speciesCaabLabel,
+		 "detectionSurgeries.surgery.release.animal.species.spcode": speciesCaabLabel,
 		 "detectionSurgeries.surgery.release.animal.species.commonName": speciesCommonName,
 		 "detectionSurgeries.surgery.release.animal.species.scientificName": speciesScientificName,
 		 "detectionSurgeries.tag.codeName": tagId,
@@ -58,6 +59,7 @@ class ReportInfoService
 		 "receiverDeployment.station.installation.project.name": "project",
 		 "receiverDeployment.station.installation.name": "installation",
 		 "receiverDeployment.station.name": "station",
+		 "recovery": "unrecovered deployments only",
          "project.name": "project",
 		 "projectRoles.project.name": "project",
 		 "organisation.name": "organisation",
@@ -80,6 +82,7 @@ class ReportInfoService
 		 "project": Project.class,
          "receiver": Receiver.class,
          "receiverDeployment": ReceiverDeployment.class,
+         "receiverRecovery": ReceiverDeployment.class,	// This is deliberate - the "recovery" list view is actually a list of deployments and associated recovery (if there is one)
          "receiverEvent": ValidReceiverEvent.class,
          "tag": Tag.class
          ]
@@ -187,6 +190,10 @@ class ReportInfoService
             [new ListReportParameter(label: propertyToLabel["station.installation.project.name"], propertyName:"station.installation.project.name", range:projectRange),
              new ListReportParameter(label: propertyToLabel["station.installation.name"], propertyName:"station.installation.name", range:installationRange)]
 			
+        def receiverRecoveryFilterParams = 
+            [new ListReportParameter(label: propertyToLabel["station.installation.project.name"], propertyName:"station.installation.project.name", range:projectRange),
+             new IsNullReportParameter(label: propertyToLabel["recovery"], propertyName:"recovery")]
+			
 		def tagFilterParams =
 			[new ListReportParameter(label: propertyToLabel["project.name"], propertyName:"project.name", range:projectRange),
 			 new AjaxMultiSelectReportParameter(label: propertyToLabel["codeName"], 
@@ -220,6 +227,9 @@ class ReportInfoService
                 (ReceiverDeployment.class):new ReportInfo(displayName:"Receiver Deployments", 
                                                           jrxmlFilename:["report":"receiverDeploymentList"], 
                                                           filterParams:receiverDeploymentFilterParams),
+                (ReceiverRecovery.class):new ReportInfo(displayName:"Receiver Recoveries", 
+                                                          jrxmlFilename:[:], 
+                                                          filterParams:receiverRecoveryFilterParams),
                 (ValidReceiverEvent.class):new ReportInfo(displayName:"Receiver Events", 
                                                      jrxmlFilename:["extract":"receiverEventExtract"], 
                                                      filterParams:eventFilterParams),

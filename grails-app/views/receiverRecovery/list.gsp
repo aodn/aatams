@@ -17,8 +17,11 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
+            
+            <g:listFilter name="receiverRecovery" />
+            
             <div class="list">
-                
+<%--                
                 <!-- Filter by project -->
                 <div class="filter">
                   <g:form name="filterForm" action="filter" method="post">
@@ -60,11 +63,13 @@
                     </table>
                   </g:form>
                 </div>
-                
+--%>                
                 <table>
                     <thead>
-                      <th colspan="7">Deployment Details</th>
-                      <th colspan="5">Recovery Details</th>
+                      <tr>
+	                      <th colspan="7">Deployment Details</th>
+	                      <th colspan="5">Recovery Details</th>
+                      </tr>
                     </thead>
                     <thead>
                         <tr>
@@ -72,57 +77,41 @@
                             <td/>
                             
                             <g:sortableColumn property="deploymentDateTime" title="${message(code: 'receiverDeployment.deploymentDateTime.label', default: 'Deployment Date')}"
-                                              action="filter"
-                                              params="${['filter.project.id':selectedProjectId,
-                                                         'filter.unrecoveredOnly':unrecoveredOnly]}"/>
+                                              params="${executedFilter}"/>
 
                             <g:sortableColumn property="station.installation" title="${message(code: 'receiverDeployment.installation.label', default: 'Installation')}"
-                                              action="filter"
-                                              params="${['filter.project.id':selectedProjectId,
-                                                         'filter.unrecoveredOnly':unrecoveredOnly]}"/>
+                                              params="${executedFilter}"/>
                                               
                         
                             <g:sortableColumn property="station" title="${message(code: 'receiverDeployment.station.label', default: 'Station')}"
-                                              action="filter"
-                                              params="${['filter.project.id':selectedProjectId,
-                                                         'filter.unrecoveredOnly':unrecoveredOnly]}"/>
+                                              params="${executedFilter}"/>
                         
                             <th><g:message code="receiverDeployment.station.location.label" default="Location" /></th>
                         
                             <g:sortableColumn property="receiver" title="${message(code: 'receiverDeployment.receiver.label', default: 'Receiver')}"
-                                              action="filter"
-                                              params="${['filter.project.id':selectedProjectId,
-                                                         'filter.unrecoveredOnly':unrecoveredOnly]}"/>
+                                              params="${executedFilter}"/>
                         
                             <th><g:message code="receiverDeployment.station.depth.label" default="Depth" /></th>
                         
                             <!-- New/edit column -->
                             <g:sortableColumn property="recovery" title="${message(code: 'receiverRecovery.label', default: 'Recovery')}"
-                                              action="filter"
-                                              params="${['filter.project.id':selectedProjectId,
-                                                         'filter.unrecoveredOnly':unrecoveredOnly]}"/>
+                                              params="${executedFilter}"/>
                             
                             <g:sortableColumn property="recovery.recoverer" title="${message(code: 'receiverRecovery.recoverer.label', default: 'Recovered By')}"
-                                              action="filter"
-                                              params="${['filter.project.id':selectedProjectId,
-                                                         'filter.unrecoveredOnly':unrecoveredOnly]}"/>
+                                              params="${executedFilter}"/>
 
                             <th><g:message code="receiverRecovery.location" default="Location" /></th>
                         
                             <g:sortableColumn property="recovery.recoveryDateTime" title="${message(code: 'receiverRecovery.recoveryDateTime.label', default: 'Recovery Date')}"
-                                              action="filter"
-                                              params="${['filter.project.id':selectedProjectId,
-                                                         'filter.unrecoveredOnly':unrecoveredOnly]}"/>
+                                              params="${executedFilter}"/>
                         
                             <g:sortableColumn property="recovery.status" title="${message(code: 'receiverRecovery.status.label', default: 'Status')}"
-                                              action="filter"
-                                              params="${['filter.project.id':selectedProjectId,
-                                                         'filter.unrecoveredOnly':unrecoveredOnly]}"/>
+                                              params="${executedFilter}"/>
                         
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${receiverDeploymentInstanceList}" status="i" var="receiverDeployment">
+                    <g:each in="${entityList}" status="i" var="receiverDeployment">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 
                             <td class="rowButton"><g:link class="show" controller="receiverDeployment" action="show" id="${receiverDeployment.id}">.</g:link></td>
@@ -172,7 +161,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${receiverDeploymentInstanceTotal}" />
+                <g:paginate total="${total}" params="${executedFilter}" />
             </div>
         </div>
     </body>

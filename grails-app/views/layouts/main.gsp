@@ -57,8 +57,6 @@
       });
     </script>
 
-    <g:listFilterIncludes/>
-
     <g:layoutHead />
     
     <script type="text/javascript">
@@ -170,6 +168,8 @@
       <g:layoutBody />
       
     </div>
+    
+    <g:listFilterIncludes/>
     
   </body>    
     

@@ -2,9 +2,10 @@ package au.org.emii.aatams
 
 import grails.test.*
 
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import com.vividsolutions.jts.geom.*
 
-class ReceiverRecoveryControllerTests extends ControllerUnitTestCase 
+class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase 
 {
     def candidateEntitiesService
 
@@ -91,98 +92,8 @@ class ReceiverRecoveryControllerTests extends ControllerUnitTestCase
         assertEquals(2, model.readableProjects.size())
         assertTrue(model.readableProjects.contains(project1))
         assertTrue(model.readableProjects.contains(project2))
-        assertEquals(3, model.receiverDeploymentInstanceList.size())
-        assertEquals(3, model.receiverDeploymentInstanceTotal)
-    }
-    
-    void testFilterNone() 
-    {
-        def model = controller.filter()
-        
-        assertEquals(3, model.receiverDeploymentInstanceList.size())
-        assertEquals(3, model.receiverDeploymentInstanceTotal)
-        assertEquals(2, model.readableProjects.size())
-        assertTrue(model.readableProjects.contains(project1))
-        assertTrue(model.readableProjects.contains(project2))
-        assertNull(model.selectedProjectId)
-        assertNull(model.unrecoveredOnly)
-    }
-    
-    void testFilterByProject()
-    {
-        def projectId = 1
-        controller.params.filter = 
-            [project:[id:projectId],
-             unrecoveredOnly:false]
-             
-        def model = controller.filter()
-        
-        assertEquals(1, model.receiverDeploymentInstanceList.size())
-        assertEquals(1, model.receiverDeploymentInstanceTotal)
-        assertEquals(projectId, model.selectedProjectId)
-        assertFalse(model.unrecoveredOnly)
-        assertEquals(2, model.readableProjects.size())
-        assertTrue(model.readableProjects.contains(project1))
-        assertTrue(model.readableProjects.contains(project2))
-    }
-    
-    void testFilterByRecovered()
-    {
-        // Get all...
-        controller.params.filter = 
-            [project:null,
-             unrecoveredOnly:false]
-             
-        def model = controller.filter()
-        
-        assertEquals(3, model.receiverDeploymentInstanceList.size())
-        assertFalse(model.unrecoveredOnly)
-
-        // Get unrecovered only
-        controller.params.filter = 
-            [project:null,
-             unrecoveredOnly:true]
-             
-        model = controller.filter()
-        
-        assertEquals(1, model.receiverDeploymentInstanceList.size())
-        assertEquals(1, model.receiverDeploymentInstanceTotal)
-        assertTrue(model.unrecoveredOnly)
-        assertEquals(2, model.readableProjects.size())
-        assertTrue(model.readableProjects.contains(project1))
-        assertTrue(model.readableProjects.contains(project2))
-    }
-
-    void testFilterByProjectAndRecovered()
-    {
-        // Get project 2, including recovered.
-        def projectId = 2
-        controller.params.filter = 
-            [project:[id:projectId],
-            unrecoveredOnly:false]
-            
-        def model = controller.filter()
-        
-        assertEquals(1, model.receiverDeploymentInstanceList.size())
-        assertEquals(1, model.receiverDeploymentInstanceTotal)
-        assertEquals(projectId, model.selectedProjectId)
-        assertFalse(model.unrecoveredOnly)
-        
-        // Get project 1, unrecovered (should be no result).
-        controller.params.filter = 
-            [project:[id:projectId],
-            unrecoveredOnly:true]
-        
-        model = controller.filter()
-
-        println model.receiverDeploymentInstanceList
-        assertTrue(model.receiverDeploymentInstanceList.isEmpty())
-        assertEquals(0, model.receiverDeploymentInstanceTotal)
-        assertEquals(projectId, model.selectedProjectId)
-        assertTrue(model.unrecoveredOnly)
-        assertEquals(2, model.readableProjects.size())
-        assertTrue(model.readableProjects.contains(project1))
-        assertTrue(model.readableProjects.contains(project2))
+        assertEquals(3, model.entityList.size())
+        assertEquals(3, model.total)
     }
     
 	void testCreateUseDeploymentsLocation()

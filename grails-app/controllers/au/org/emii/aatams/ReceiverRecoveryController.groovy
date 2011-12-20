@@ -1,6 +1,9 @@
 package au.org.emii.aatams
 
+import org.hibernate.criterion.CriteriaSpecification
+import org.hibernate.criterion.Restrictions
 import org.joda.time.*
+
 import com.vividsolutions.jts.geom.Point
 
 class ReceiverRecoveryController extends AbstractController
@@ -8,94 +11,15 @@ class ReceiverRecoveryController extends AbstractController
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def candidateEntitiesService
-    
+    def sessionFactory
+	
     def index = {
         redirect(action: "list", params: params)
     }
-    
-    def passesFilter(it, params)
-    {
-        // Filter by project (if specified).
-        def projectId = params.filter?.project?.id
-        if (projectId)
-        {
-            projectId = Integer.valueOf(projectId)  // Not sure why it's a String initially?
-            
-            if (it.station?.installation?.project?.id != projectId)
-            {
-                // Wrong project, filter out.
-				println("false")
-                return false
-            }
-        }
-
-        // Filter by recovery status (if specified).
-        def unrecoveredOnly = params.filter?.unrecoveredOnly
-        if (unrecoveredOnly && it.recovery)
-        {
-            // This deployment has been recovered, filter out.
-			println("false")
-            return false
-        }
-
-		println("true")
-        return true
-    }
-    
-    def filter = 
-    {
-        log.debug("Filter parameters: " + params.filter)
-
-//        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-
-        // We actually want to display a list of deployments (some with and some
-        // without associated recoveries).
-        // TODO: sort(hasRecovery, date)
-        def receiverDeploymentList = ReceiverDeployment.list(params)
-
-        // Filter...
-		println("Num receiver deployments: " + receiverDeploymentList.size())
-        receiverDeploymentList = receiverDeploymentList.grep
-        {
-            return passesFilter(it, params)
-        }
-        
-        // Determine total matching deployments.
-        def receiverDeploymentInstanceTotal = 0
-//        ReceiverDeployment.list().each
-//        {
-//            if (passesFilter(it, params))
-//            {
-//                receiverDeploymentInstanceTotal++
-//            }
-//        }
-        
-        render(view:"list", model:
-        [receiverDeploymentInstanceList: receiverDeploymentList, 
-         receiverDeploymentInstanceTotal: receiverDeploymentInstanceTotal,
-         readableProjects:candidateEntitiesService.readableProjects(),
-         selectedProjectId:params.filter?.project?.id,
-         unrecoveredOnly:params.filter?.unrecoveredOnly])
-        
-    }
-/**
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-//        [receiverRecoveryInstanceList: ReceiverRecovery.list(params), receiverRecoveryInstanceTotal: ReceiverRecovery.count()]
-
-        // We actually want to display a list of deployments (some with and some
-        // without associated recoveries).
-        // TODO: sort(hasRecovery, date)
-        def receiverDeploymentList = ReceiverDeployment.list(params)
-                                   
-        [receiverDeploymentInstanceList: receiverDeploymentList, 
-         receiverDeploymentInstanceTotal: ReceiverDeployment.count(),
-         readableProjects:candidateEntitiesService.readableProjects()]
-    }
-*/
+	
     def list = 
 	{
-		doList("receiverRecovery")
+		doList("receiverRecovery") + [readableProjects:candidateEntitiesService.readableProjects()]
 	}
 	
     def create = 

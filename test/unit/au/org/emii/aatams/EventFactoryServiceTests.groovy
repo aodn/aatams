@@ -29,7 +29,7 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 		eventFactoryService.eventValidatorService = new EventValidatorService()
 		
 		standardParams =
-				[(EventFactoryService.DATE_AND_TIME_COLUMN):"2009-12-08 06:44:24",
+				[(EventFactoryService.DATE_AND_TIME_COLUMN):"2008-12-08 12:44:24",
 				 (EventFactoryService.RECEIVER_COLUMN):"VR3UWM-354",
 				 (EventFactoryService.DESCRIPTION_COLUMN):"Initialization",
 				 (EventFactoryService.DATA_COLUMN):"",
@@ -40,7 +40,7 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 		
 		deployment = new ReceiverDeployment(receiver:receiver,
 											initialisationDateTime:new DateTime("2008-12-08T02:00:00"),
-											deploymentDateTime:new DateTime("2008-12-08T06:44:24"))
+											deploymentDateTime:new DateTime("2008-12-09T06:44:24"))
 										
 		receiver.addToDeployments(deployment)
 		mockDomain(ReceiverDeployment, [deployment])
@@ -95,11 +95,13 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 		
 		// test deployment.initializationDateTime
 		def notInitialisedEvent = newEvent(new ReceiverDownloadFile(), standardParams)
-		
+//		initialisationDateTime:new DateTime("2008-12-08T02:00:00"),
+//		deploymentDateTime:new DateTime("2008-12-09T06:44:24"))
+
 		assertNotNull(notInitialisedEvent)
 		assertTrue(notInitialisedEvent instanceof InvalidReceiverEvent)
 		assertEquals(InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME, notInitialisedEvent.reason)
-		assertEquals("No deployment at time 2009-12-08 06:44:24 for receiver VR3UWM-354", notInitialisedEvent.message)
+		assertEquals("No deployment at time 2008-12-08 12:44:24 for receiver VR3UWM-354", notInitialisedEvent.message)
 	}
 	
 	void testInitializedDateTimeAfterEventDateTime()
@@ -112,7 +114,7 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 		assertNotNull(notInitialisedEvent)
 		assertTrue(notInitialisedEvent instanceof InvalidReceiverEvent)
 		assertEquals(InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME, notInitialisedEvent.reason)
-		assertEquals("No deployment at time 2009-12-08 06:44:24 for receiver VR3UWM-354", notInitialisedEvent.message)
+		assertEquals("No deployment at time 2008-12-08 12:44:24 for receiver VR3UWM-354", notInitialisedEvent.message)
 	}
 	
 	void testNoRecoveryAtDateTime()
@@ -126,7 +128,7 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 		assertNotNull(noRecoveryAtDateTimeEvent)
 		assertTrue(noRecoveryAtDateTimeEvent instanceof InvalidReceiverEvent)
 		assertEquals(InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME, noRecoveryAtDateTimeEvent.reason)
-		assertEquals("No recovery at time 2009-12-08 06:44:24 for receiver VR3UWM-354", noRecoveryAtDateTimeEvent.message)
+		assertEquals("No recovery at time 2008-12-08 12:44:24 for receiver VR3UWM-354", noRecoveryAtDateTimeEvent.message)
 	}
 	
 	void testValidEvent()

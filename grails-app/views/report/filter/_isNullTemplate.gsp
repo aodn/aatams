@@ -5,9 +5,16 @@
         <label for="filter.isNull.${propertyName}">${label}</label>
     </td>
     <td valign="top" class="value">
+    
+        <g:if test="${filter}">
+            <g:set var="value" value="${filter['isNull.' + propertyName]}" />
+        </g:if>
+        <g:else>
+            <g:set var="value" value="${false}" />
+        </g:else>
         
         <g:checkBox name="filter.isNull.${propertyName}" 
-                    value="${selectedValue}" />
+                    value="${value}" />
   
     </td>
 </tr>

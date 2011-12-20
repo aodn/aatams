@@ -7,6 +7,8 @@ import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
 import au.org.emii.aatams.Person;
+import au.org.emii.aatams.report.ReportInfoService
+import au.org.emii.aatams.report.filter.ReportFilterFactoryService
 
 abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase 
 {
@@ -42,6 +44,18 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 		SecurityUtils.metaClass.static.getSubject = { subject }
 		
 		controller.metaClass.message = { Map params -> flashMsgParams = params }
+		
+		try
+		{
+			mockLogging(ReportFilterFactoryService, true)
+			mockLogging(ReportInfoService, true)
+			controller.reportFilterFactoryService = new ReportFilterFactoryService()
+			controller.reportInfoService = new ReportInfoService()
+		}
+		catch (MissingPropertyException e)
+		{
+			// Some controllers don't have these properties, just ignore.
+		}
 	}
 
 	protected void tearDown()

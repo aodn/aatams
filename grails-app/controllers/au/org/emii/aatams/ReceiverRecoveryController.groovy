@@ -106,6 +106,12 @@ class ReceiverRecoveryController extends AbstractController
                 }
             }
             receiverRecoveryInstance.properties = params
+			
+			// Update receiver's status.
+			def deployment = ReceiverDeployment.get(params.deploymentId)
+			deployment?.receiver?.status = receiverRecoveryInstance.status
+			deployment?.receiver?.save(flush: true)
+			
             if (!receiverRecoveryInstance.hasErrors() && receiverRecoveryInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.toString()])}"
                 redirect(action: "show", id: receiverRecoveryInstance.id)

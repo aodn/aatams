@@ -44,6 +44,7 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
         
         assertEquals(getRecords(download).size(), ValidDetection.count() + InvalidDetection.count())
         
+		println (ValidDetection.list())
         assertEquals(1, ValidDetection.count())
         assertEquals(6, InvalidDetection.count())
             

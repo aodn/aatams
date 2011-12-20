@@ -1,9 +1,10 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.detection.*
-import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
-
 import grails.test.*
+import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.report.ReportInfoService
+import au.org.emii.aatams.report.filter.ReportFilterFactoryService
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase 
 {
@@ -185,9 +186,13 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
 
         mockController(ReceiverRecoveryController)
         mockLogging(ReceiverRecoveryController, true)
+		mockLogging(ReportFilterFactoryService, true)
+		mockLogging(ReportInfoService, true)
         receiverRecoveryController = new ReceiverRecoveryController()
         receiverRecoveryController.metaClass.message = { Map map -> return "error message" }
         receiverRecoveryController.candidateEntitiesService = candEntitiesService
+		receiverRecoveryController.reportFilterFactoryService = new ReportFilterFactoryService()
+		receiverRecoveryController.reportInfoService = new ReportInfoService()
         mockConfig("grails.gorm.default.list.max = 10")
         receiverRecoveryController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
         
@@ -391,17 +396,6 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         assertNotNull(model.candidateReceivers)
         assertEquals(1, model.candidateReceivers.size())
         assertTrue(model.candidateReceivers.contains(imosReceiver))
-    }
-    
-    void testReceiverRecoveryFilter()
-    {
-        // readableProjects
-        def model = receiverRecoveryController.filter()
-        
-        assertNotNull(model.readableProjects)
-        assertEquals(2, model.readableProjects.size())
-        assertTrue(model.readableProjects.contains(activeProj))
-        assertTrue(model.readableProjects.contains(nonWriteProj))
     }
     
     void testReceiverRecoveryList()

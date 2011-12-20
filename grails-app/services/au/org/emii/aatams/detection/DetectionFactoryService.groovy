@@ -144,6 +144,22 @@ class DetectionFactoryService
 		}
     }
     
+	private static def getFloat(stringVal)
+	{
+		try
+		{
+			return Float.valueOf(stringVal)
+		}
+		catch (NullPointerException e)
+		{
+			return null
+		}
+		catch (NumberFormatException e)
+		{
+			return null
+		}
+	}
+	
     private static Map toNativeParams(params)
     {
         def timestamp = new Date().parse(DATE_FORMAT, params[DATE_AND_TIME_COLUMN] + " " + "UTC")
@@ -154,14 +170,14 @@ class DetectionFactoryService
                 transmitterId:params[TRANSMITTER_COLUMN],
                 transmitterName:params[TRANSMITTER_NAME_COLUMN],
                 transmitterSerialNumber:params[TRANSMITTER_SERIAL_NUMBER_COLUMN],
-                sensorValue:params[SENSOR_VALUE_COLUMN] == null ? null : Float.valueOf(params[SENSOR_VALUE_COLUMN]),
+                sensorValue:getFloat(params[SENSOR_VALUE_COLUMN]),
                 sensorUnit:params[SENSOR_UNIT_COLUMN],
                 stationName:params[STATION_NAME_COLUMN]] 
 
         // Latitude and longitude are optional.
         if ((params[LATITUDE_COLUMN] != null) && (params[LONGITUDE_COLUMN] != null))
         {
-            Point location = new GeometryFactory().createPoint(new Coordinate(params[LONGITUDE_COLUMN], params[LATITUDE_COLUMN]))
+            Point location = new GeometryFactory().createPoint(new Coordinate(getFloat(params[LONGITUDE_COLUMN]), getFloat(params[LATITUDE_COLUMN])))
             location.setSRID(4326)
             retMap.location = location
         }

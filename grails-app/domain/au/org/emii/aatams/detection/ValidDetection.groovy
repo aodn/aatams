@@ -56,18 +56,25 @@ class ValidDetection extends RawDetection implements Embargoable
         return duplicate
     }
     
+	private boolean duplicateProperty(property, other)
+	{
+		// null property is considered equal to empty string.
+		(this[property] == other[property]) ||
+		((this[property] == null) && (other[property] == "")) ||
+		((this[property] == "") && (other[property] == null))
+	}
+	
     private boolean duplicate(other)
     {
-        return (
-            this.timestamp == other.timestamp
-         && this.receiverName == other.receiverName
-         && this.stationName == other.stationName
-         && this.transmitterId == other.transmitterId
-         && this.transmitterName == other.transmitterName
-         && this.transmitterSerialNumber == other.transmitterSerialNumber
-         && this.location == other.location
-         && this.sensorValue == other.sensorValue
-         && this.sensorUnit == other.sensorUnit)
+		 return (
+			 this.timestamp == other.timestamp
+		  && duplicateProperty("receiverName", other)
+		  && duplicateProperty("transmitterId", other)
+		  && duplicateProperty("transmitterName", other)
+		  && duplicateProperty("transmitterSerialNumber", other)
+		  && duplicateProperty("sensorUnit", other)
+		  && this.location == other.location
+		  && this.sensorValue == other.sensorValue)
     }
     
     String toString()

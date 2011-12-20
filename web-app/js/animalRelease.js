@@ -21,6 +21,15 @@ $(function()
                 $("#releaseLocation_srid").val($("#captureLocation_srid").val())
             }
         });
+
+        // Capture Date/Time is a "remembered" field, so make sure we init the release data/time accordingly.
+        $("[id^='captureDateTime_']").each(function()
+        {
+            var srcId = $(this).attr("id")
+            var destId = srcId.replace("capture", "release")
+            
+            $("#" + destId).val($("#" + srcId).val())
+        });
         
         $("[id^='captureDateTime_']").change(function()
         {

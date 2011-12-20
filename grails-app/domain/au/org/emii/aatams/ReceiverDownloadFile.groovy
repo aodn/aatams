@@ -48,33 +48,77 @@ class ReceiverDownloadFile
         return String.valueOf(path)
     }
     
-    Collection<ValidDetection> validDetections()
+	def totalDetectionCount()
+	{
+		return executeCountCriteria(RawDetection)
+	}
+	
+    def validDetectionCount()
     {
-        def validDetections = detections.grep
-        {
-            it.isValid()
-        }
-        
-        return validDetections
+		return executeCountCriteria(ValidDetection)
     }
     
-    Collection<InvalidDetection> invalidDetections()
+    def invalidDetectionCount()
     {
-        def invalidDetections = detections.grep
-        {
-            !it.isValid()
-        }
-        
-        return invalidDetections
+		return executeCountCriteria(InvalidDetection)
     }
 
-    Collection<InvalidDetection> invalidDetections(reason)
+    def invalidDetectionCount(reason)
     {
-        def invalidWithReason = invalidDetections().grep
-        {
-            it.reason == reason
-        }
-        
-        return invalidWithReason
+		return executeCountCriteria(InvalidDetection, 
+		{
+			eq("reason", reason)
+		})
     }
+	
+	def unknownReceivers()
+	{
+		def c = InvalidDetection.createCriteria()
+		def results = c.list
+		{
+			receiverDownload
+			{
+				eq("id", Long.valueOf(id))
+			}
+
+			eq("reason", InvalidDetectionReason.UNKNOWN_RECEIVER)
+			
+			projections
+			{
+				distinct("receiverName")
+			}
+		}
+		
+		return results
+	}
+	
+	private def executeCountCriteria(clazz)
+	{
+		executeCountCriteria(clazz, null)
+	}
+	
+	private def executeCountCriteria(clazz, customRestriction)
+	{
+		def c = clazz.createCriteria()
+		def count = c.get()
+		{
+			projections
+			{
+				rowCount()
+			}
+
+			receiverDownload
+			{
+				eq("id", Long.valueOf(id))
+			}
+			
+			if (customRestriction)
+			{
+				customRestriction.delegate = delegate
+				customRestriction.call()
+			}
+		}
+		
+		return count
+	}
 }

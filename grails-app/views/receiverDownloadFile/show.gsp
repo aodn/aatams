@@ -82,53 +82,55 @@
                     
                         <g:if test="${   (receiverDownloadFileInstance.status != FileProcessingStatus.PROCESSING) 
                                       && (receiverDownloadFileInstance.type == ReceiverDownloadFileType.DETECTIONS_CSV)}">
+                                      
                           <!-- Total -->
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.totalDetections.label" default="Total Detections" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.detections.size()}</td>
+                              <td valign="top" class="value">${receiverDownloadFileInstance?.totalDetectionCount()}</td>
                           </tr>
 
                           <!-- Num valid -->
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.validCount.label" default="Valid Count" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.validDetections().size()}</td>
+                              <td valign="top" class="value">${receiverDownloadFileInstance?.validDetectionCount()}</td>
                           </tr>
 
                           <!-- Num invalid -->
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.invalidCount.label" default="Invalid Count" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetections().size()}</td>
+                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetectionCount()}</td>
                           </tr>
 
                           <!-- Num duplicate -->
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.duplicateCount.label" default="Duplicate Count" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetections(InvalidDetectionReason.DUPLICATE).size()}</td>
+                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetectionCount(InvalidDetectionReason.DUPLICATE)}</td>
                           </tr>
 
                           <!-- Num unknown receiver -->
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.unknownReceiverCount.label" default="Unknown Receiver Count" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetections(InvalidDetectionReason.UNKNOWN_RECEIVER).size()}</td>
+                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetectionCount(InvalidDetectionReason.UNKNOWN_RECEIVER)}</td>
                           </tr>
 
                           <!-- unknown receivers -->
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.unknownReceivers.label" default="Unknown Receivers" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetections(InvalidDetectionReason.UNKNOWN_RECEIVER)*.receiverName.unique()}</td>
+                              <td valign="top" class="value">${receiverDownloadFileInstance?.unknownReceivers()}</td>
                           </tr>
 
                           <!-- Num no deployment -->
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.noDeploymentsCount.label" default="No Deployment at Time  Count" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetections(InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME).size()}</td>
+                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetectionCount(InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME)}</td>
                           </tr>
 
                           <!-- Num no recovery -->
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.noRecoveryCount.label" default="No Recovery at Time Count" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetections(InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME).size()}</td>
+                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetectionCount(InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME)}</td>
                           </tr>
+                          
                         </g:if>
                         
 

@@ -102,7 +102,23 @@ class ReportInfoService
 		
 		return detectionTimestampMin
 	}	   
-	
+
+	private def getEventTimestampMin()
+	{
+		if (!eventTimestampMin)
+		{
+			eventTimestampMin = ValidReceiverEvent.createCriteria().get
+			{
+				projections
+				{
+					min('timestamp')
+				}
+			}
+		}
+		
+		return detectionTimestampMin
+	}
+
     /**
      * Return info for all available reports (keyed by the domain class).
      */
@@ -170,7 +186,7 @@ class ReportInfoService
 												lookupPath:"/installationStation/lookupByName"),
 			 new DateRangeReportParameter(label: propertyToLabel["timestamp"],
 										   propertyName:"timestamp",
-										  minRange:eventTimestampMin,
+										  minRange:getEventTimestampMin(),
 										  maxRange:new Date())]
 
 		def installationFilterParams =

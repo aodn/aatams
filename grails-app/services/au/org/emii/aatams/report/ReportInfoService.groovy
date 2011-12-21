@@ -169,11 +169,6 @@ class ReportInfoService
 										   minRange:timestampMin,
 										   maxRange:timestampMax)]
  
-		if (!eventTimestampMin)
-		{
-			eventTimestampMin = ValidReceiverEvent.list()*.timestamp.min()
-		}
-		
 		def eventFilterParams =
 			[new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"],
 												 propertyName:"receiverDeployment.station.installation.project.name",

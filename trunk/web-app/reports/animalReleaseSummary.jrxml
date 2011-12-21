@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="animalReleaseSummary" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="titleBackground" forecolor="#FFFFFF" backcolor="#006699" radius="4"/>
+	<style name="columnHeaderBackground" forecolor="#FFFFFF" backcolor="#E6E6E6" radius="4"/>
+	<style name="titleText" forecolor="#FFFFFF" fontSize="24" pdfFontName="Helvetica-Bold"/>
+	<style name="fieldNameText" vAlign="Middle" fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold"/>
+	<style name="fieldValue" forecolor="#000000" vAlign="Middle" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<parameter name="REPORT_USER" class="java.lang.String"/>
+	<parameter name="FILTER_PARAMS" class="java.util.Collection" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="total" class="java.lang.Long" isForPrompting="false"/>
+	<parameter name="this year" class="java.lang.Long" isForPrompting="false"/>
+	<parameter name="last 30 days" class="java.lang.Long" isForPrompting="false"/>
+	<parameter name="% embargoed" class="java.lang.Float" isForPrompting="false"/>
+	<field name="species" class="java.lang.String"/>
+	<field name="currentReleases" class="java.lang.Long"/>
+	<field name="totalReleases" class="java.lang.Long"/>
+	<field name="percentEmbargoed" class="java.lang.Float"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="220" splitType="Stretch">
+			<rectangle>
+				<reportElement style="columnHeaderBackground" x="0" y="98" width="802" height="20"/>
+			</rectangle>
+			<rectangle>
+				<reportElement style="titleBackground" x="0" y="0" width="802" height="79"/>
+			</rectangle>
+			<staticText>
+				<reportElement style="titleText" mode="Transparent" x="26" y="23" width="406" height="33"/>
+				<textElement/>
+				<text><![CDATA[AATAMS Tag Summary]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="fieldNameText" x="0" y="98" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Tag releases]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="fieldNameText" x="18" y="130" width="93" height="20"/>
+				<textElement/>
+				<text><![CDATA[total:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="fieldValue" x="111" y="130" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$P{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="fieldNameText" x="18" y="150" width="93" height="20"/>
+				<textElement/>
+				<text><![CDATA[this year:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="fieldValue" x="111" y="150" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$P{this year}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="fieldNameText" x="18" y="170" width="93" height="20"/>
+				<textElement/>
+				<text><![CDATA[last 30 days:]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="fieldValue" x="111" y="170" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$P{last 30 days}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="fieldNameText" x="18" y="190" width="93" height="20"/>
+				<textElement/>
+				<text><![CDATA[% embargoed:]]></text>
+			</staticText>
+			<textField pattern="#0.00">
+				<reportElement style="fieldValue" x="111" y="190" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Float"><![CDATA[$P{% embargoed}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="20" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21" splitType="Stretch">
+			<rectangle>
+				<reportElement style="columnHeaderBackground" x="0" y="0" width="802" height="21"/>
+			</rectangle>
+			<staticText>
+				<reportElement style="fieldNameText" mode="Transparent" x="32" y="1" width="369" height="20"/>
+				<textElement/>
+				<text><![CDATA[species]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="fieldNameText" mode="Transparent" x="401" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[current releases]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="fieldNameText" mode="Transparent" x="501" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[total releases]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="fieldNameText" mode="Transparent" x="601" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[% embargoed]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="fieldValue" x="32" y="0" width="369" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{species}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="fieldValue" x="401" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{currentReleases}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="fieldValue" x="501" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{totalReleases}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#0.00">
+				<reportElement style="fieldValue" x="601" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{percentEmbargoed}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy HH:mm">
+				<reportElement x="11" y="34" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="678" y="34" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="762" y="34" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

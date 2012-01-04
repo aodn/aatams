@@ -47,10 +47,6 @@ $(function() {
 	                // prevent value inserted on focus
 	                return false;
 	            },
-	            change: function() 
-	            {
-	                return false;
-	            },
 	            select: function( event, ui ) {
 	                var terms = split( this.value );
 	                // remove the current input
@@ -61,6 +57,10 @@ $(function() {
 	                terms.push( "" );
 	                this.value = terms.join( ", " );
 	                
+	                return false;
+	            },
+	            change: function() 
+	            {
 	                return false;
 	            }
 	        });

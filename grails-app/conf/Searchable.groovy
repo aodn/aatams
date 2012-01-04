@@ -142,19 +142,14 @@ searchable {
      * Should index locks be removed (if present) at startup?
      */
     releaseLocksOnStartup = true
+	
+    compassConnection = new File(
+        "/var/lib/tomcat/instance_8083_aatams3/searchable-index/${grailsEnv}"
+    ).absolutePath
 }
 
 // per-environment settings
 environments {
-    development 
-    {
-        searchable 
-        {
-            compassConnection = new File(
-                "${userHome}/.grails/projects/${appName}/searchable-index/${grailsEnv}"
-            ).absolutePath
-        }
-    }
 
     test 
     {
@@ -166,16 +161,6 @@ environments {
             
             // use faster in-memory index
             compassConnection = "ram://test-index"
-        }
-    }
-
-    production 
-    {
-        searchable 
-        {
-            compassConnection = new File(
-                "${userHome}/.grails/projects/${appName}/searchable-index/${grailsEnv}"
-            ).absolutePath
         }
     }
 }

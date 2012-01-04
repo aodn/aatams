@@ -5,16 +5,6 @@ $(function()
     }
 	
 	$(".reportFilter").find(".ui-autocomplete-input").autocomplete({
-        change: function() 
-        {
-        	if ($(this).val() === "")
-        	{
-        		$("#listFilterForm").submit();
-        	}
-        	
-            return false;
-        },
-        
         // Override the version in ajaxMultiSelectReportParameter.js, to also submit the form
         // (because we don't want to do it in change() below, see: http://redmine.emii.org.au/issues/937
         select: function( event, ui ) 
@@ -31,7 +21,13 @@ $(function()
             $("#listFilterForm").submit();
             
             return false;
-        }
+        },
+	    change: function(event, ui) 
+	    {
+			$("#listFilterForm").submit();
+	    	
+	        return false;
+	    }
 	});
 	
 	$(".reportFilter").find(":input").not(".ui-autocomplete-input").change(function()

@@ -6,7 +6,7 @@
 
 var catcher = function() {
   var changed = false;
-    $('form').each(function() {
+    $('form').not('[action$="list"]').not('[action$="execute"]').each(function() {
     if ($(this).data('initialForm') != $(this).serialize()) {
       changed = true;
       $(this).addClass('changed');
@@ -20,12 +20,12 @@ var catcher = function() {
 };
 
 $(function() {
-  $('form').each(function() {
+  $('form').not('[action$="list"]').not('[action$="execute"]').each(function() {
 	  $(this).data('initialForm', $(this).serialize());
   }).submit(function(e) {
     var formEl = this;
     var changed = false;
-    $('form').each(function() {
+    $('form').not('[action$="list"]').not('[action$="execute"]').each(function() {
       if (this != formEl && $(this).data('initialForm') != $(this).serialize()) {
         changed = true;
         $(this).addClass('changed');

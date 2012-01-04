@@ -48,15 +48,6 @@
       </g:if>
     </script>
     
-    <script>
-      $(document).ready(function()
-      {
-          // Set focus to second visible element (the first is the search
-          // textfield at top left of navigation panel).
-          $(':input:enabled:visible:eq(1)').focus();          
-      });
-    </script>
-
     <g:layoutHead />
     
     <script type="text/javascript">
@@ -170,6 +161,18 @@
     </div>
     
     <g:listFilterIncludes/>
+    <script>
+      $(document).ready(function()
+      {
+          if (window.location.href.indexOf("list") === -1)
+          {
+              // Set focus to second visible element (the first is the search
+              // textfield at top left of navigation panel).
+              $(':input:enabled:visible:eq(1)').focus();          
+          }
+      });
+    </script>
+
     
   </body>    
     

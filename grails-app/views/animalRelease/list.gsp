@@ -31,7 +31,7 @@
                             
                             <g:sortableColumn property="id" title="${message(code: 'animalRelease.id.label', default: 'Tag(s)')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="animalRelease.animal.species" title="${message(code: 'animalRelease.animal.species.label', default: 'Species')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="animal.species" title="${message(code: 'animalRelease.animal.species.label', default: 'Species')}" params="${executedFilter}"/>
 
                             <g:sortableColumn property="releaseDateTime" title="${message(code: 'animalRelease.releaseDateTime.label', default: 'Release Date Time')}" params="${executedFilter}"/>
                         

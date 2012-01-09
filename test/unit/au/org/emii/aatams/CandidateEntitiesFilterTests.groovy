@@ -250,11 +250,12 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         
         // embargoPeriods
         assertNotNull(model.embargoPeriods)
-        assertEquals(2, model.embargoPeriods.size())
+        assertEquals(3, model.embargoPeriods.size())
         model.embargoPeriods.each
         {
             if (it.key == 6) assertEquals("6 months", it.value)
             if (it.key == 12) assertEquals("12 months", it.value)
+            if (it.key == 36) assertEquals("3 years", it.value)
         }
     }
     
@@ -274,11 +275,12 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
 
         // embargoPeriods
         assertNotNull(model.embargoPeriods)
-        assertEquals(2, model.embargoPeriods.size())
+        assertEquals(3, model.embargoPeriods.size())
         model.embargoPeriods.each
         {
             if (it.key == 6) assertEquals("6 months", it.value)
             if (it.key == 12) assertEquals("12 months", it.value)
+            if (it.key == 36) assertEquals("3 years", it.value)
         }
     }
     

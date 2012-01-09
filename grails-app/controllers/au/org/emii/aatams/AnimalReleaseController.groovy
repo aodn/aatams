@@ -206,13 +206,13 @@ class AnimalReleaseController extends AbstractController
     
     def addEmbargoPeriodsToModel(def model)
     {
-        def embargoPeriods = [6: '6 months', 12: '12 months']
+        def embargoPeriods = [6: '6 months', 12: '12 months', 36: '3 years']
         model?.embargoPeriods = embargoPeriods.entrySet()
     }
 
     def embargoPeriods()
     {
-        return [embargoPeriods:[6: '6 months', 12: '12 months']]
+        return [embargoPeriods:[6: '6 months', 12: '12 months', 36: '3 years']]
     }
 }
 

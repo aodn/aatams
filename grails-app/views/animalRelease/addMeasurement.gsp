@@ -14,7 +14,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label class="compulsory" for="animalReleaseId"><g:message code="animalRelease.label" default="Animal Release" /></label>
+                                    <label for="animalReleaseId"><g:message code="animalRelease.label" default="Animal Release" /></label>
                                     <g:hiddenField name="animalReleaseId" value="${animalReleaseInstance?.id}" />
 
                                 </td>
@@ -55,7 +55,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label class="compulsory" for="estimate"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></label>
+                                    <label for="estimate"><g:message code="animalMeasurement.estimate.label" default="Estimate" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalMeasurementInstance, field: 'estimate', 'errors')}">
                                     <g:checkBox name="estimate" value="${animalMeasurementInstance?.estimate}" />

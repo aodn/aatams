@@ -260,9 +260,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 
     void testTagList()
     {
-        println(Tag.list())
-        println(Sensor.list())
-
+		tagController.metaClass.insertNoSensorRestriction = {}
         checkList(tagController, "tag")
     }
     

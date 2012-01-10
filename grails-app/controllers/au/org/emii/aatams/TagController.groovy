@@ -12,8 +12,24 @@ class TagController extends AbstractController
         redirect(action: "list", params: params)
     }
 
+	private void insertNoSensorRestriction()
+	{
+		if (!params.filter)
+		{
+			params.filter = [:]
+		}
+		
+		if (!params.filter.eq)
+		{
+			params.filter.eq = [:]
+		}
+		
+		params.filter.eq += [class:"au.org.emii.aatams.Tag"]
+	}
+	
     def list = 
 	{
+		insertNoSensorRestriction()
 		doList("tag")
 	}
 

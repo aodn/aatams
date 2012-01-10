@@ -102,9 +102,8 @@ class TagControllerTests extends ControllerUnitTestCase
         tag1.addToSensors(sensor1)
         tag1.addToSensors(sensor2)
         
+		controller.metaClass.insertNoSensorRestriction = {}
         def model = controller.list()
-		
-		println(model.entityList)
 		
         assertEquals(2, model.entityList.size())
         assertEquals(2, model.total)

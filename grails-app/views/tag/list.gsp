@@ -41,6 +41,8 @@
                         
                             <g:sortableColumn property="pingCode" title="${message(code: 'tag.pingCode.label', default: 'Ping ID Code')}" params="${executedFilter}"/>
                         
+                            <th>Sensors</th>
+                            
                             <g:sortableColumn property="status" title="${message(code: 'tag.status.label', default: 'Status')}" params="${executedFilter}"/>
                             
                         </tr>
@@ -66,6 +68,8 @@
                         
                             <td>${tagInstance?.pingCode}</td>
                         
+                            <td>${tagInstance?.sensors*.transmitterType.transmitterTypeName}</td>
+                            
                             <td>${fieldValue(bean: tagInstance, field: "status")}</td>
 
                         </tr>

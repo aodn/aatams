@@ -38,7 +38,7 @@
                               <g:sortableColumn property="emailAddress" title="${message(code: 'person.emailAddress.label', default: 'Email Address')}" />
                             </shiro:user>
                             
-                            <g:sortableColumn property="organisation" title="${message(code: 'person.organisation.label', default: 'Organisation')}" />
+                            <g:sortableColumn property="organisation.name" title="${message(code: 'person.organisation.label', default: 'Organisation')}" />
 
                             <th><g:message code="person.projects.label" default="Projects" />
                             

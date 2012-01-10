@@ -7,8 +7,6 @@ package au.org.emii.aatams
  */
 class Device 
 {
-    String codeName
-    
     DeviceModel model       
     String serialNumber
     
@@ -18,7 +16,6 @@ class Device
     
     static constraints =
     {
-        codeName(blank:false, unique:true)
         serialNumber(blank:false, unique:true)
         status()
         comment(nullable:true, blank:true)
@@ -32,19 +29,6 @@ class Device
     }
     
     static transients = ['deviceID']
-    
-    String toString()
-    {
-        return getDeviceID()
-    }
-    
-    /**
-     * The ID dynamically constructed from Device's properties.
-     */
-    String getDeviceID()
-    {
-        return codeName
-    }
     
     String getComment()
     {

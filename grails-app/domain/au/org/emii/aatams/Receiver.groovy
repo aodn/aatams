@@ -24,14 +24,11 @@ class Receiver extends Device
     
     static searchable = true
     
-    static String constructCodeName(params)
-    {
-        ReceiverDeviceModel model = ReceiverDeviceModel.get(params.model.id)
-        assert(model): "model cannot be null"
-        
-        return String.valueOf(model) + "-" + params.serialNumber
-    }
-    
+	String toString()
+	{
+		return String.valueOf(model) + "-" + serialNumber
+	}
+	
     boolean canDeploy()
     {
         DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')

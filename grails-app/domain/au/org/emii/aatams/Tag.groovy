@@ -1,9 +1,16 @@
 package au.org.emii.aatams
 
+/**
+ * Represents a physical tag (which may be attached at any one time to an animal via a surgery).
+ * 
+ * @author jburgess
+ *
+ */
 class Tag extends Device implements Embargoable
 {
     List<Surgery> surgeries = new ArrayList<Surgery>()
-    
+	List<Sensor> sensors = new ArrayList<Sensor>()
+	
     static hasMany = [sensors:Sensor, 
                       surgeries:Surgery, 
                       detectionSurgeries:DetectionSurgery]
@@ -11,10 +18,6 @@ class Tag extends Device implements Embargoable
     Project project
 	static belongsTo = [codeMap: CodeMap]
 	
-    Integer pingCode
-
-    TransmitterType transmitterType
-    
     /**
      * The expected lifetime (in days) of a tag once is it deployed.  This
      * value is used to derive the "window of operation" of a Surgery when 
@@ -27,8 +30,6 @@ class Tag extends Device implements Embargoable
     static constraints =
     {
         project(nullable:true)
-        pingCode()
-        transmitterType()
         expectedLifeTimeDays(nullable:true)
     }
     
@@ -46,25 +47,6 @@ class Tag extends Device implements Embargoable
 		detectionSurgeries cache:true
 	}
 	
-    String toString()
-    {
-        return getCodeMapPingCode()
-    }
-    
-    /**
-     * The ID dynamically constructed from Device's properties.
-     */
-    String getCodeMapPingCode()
-    {
-        return String.valueOf(codeMap) + "-" + String.valueOf(pingCode)
-    }
-    
-    static String constructCodeName(params)
-    {
-		CodeMap codeMap = CodeMap.get(params.codeMap?.id)
-        return String.valueOf(codeMap) + "-" + params.pingCode
-    }
-    
     // For reports...
     String getExpectedLifeTimeDaysAsString()
     {

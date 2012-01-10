@@ -6,8 +6,7 @@ class TagFactoryService {
 
     def lookupOrCreate(params) throws IllegalArgumentException
     {
-		CodeMap codeMap = CodeMap.get(params.codeMap.id)
-		def tag = Tag.findByCodeMapAndPingCode(codeMap, params.pingCode)
+		def tag = Tag.findBySerialNumber(params.serialNumber)
 		
         if (tag == null)
         {
@@ -58,13 +57,15 @@ class TagFactoryService {
 			throw new IllegalArgumentException("Invalid ping code ID: " + params.pingCode, e)
 		}
 
-		tag = new Tag(codeName:Tag.constructCodeName(params),
+		tag = new Tag(
 				codeMap:codeMap,
 				serialNumber:params.serialNumber,
-				pingCode:pingCode,
 				model:TagDeviceModel.get(params.model.id),
-				status:params.status,
-				transmitterType:params.transmitterType)
+				status:params.status)
+		
+		def sensor = new Sensor(pingCode: pingCode, transmitterType: TransmitterType.findByTransmitterTypeName('PINGER'))
+		tag.addToSensors(sensor)
+		
 		codeMap.addToTags(tag)
 		return tag
 	}

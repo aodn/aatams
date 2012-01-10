@@ -3,14 +3,16 @@ package au.org.emii.aatams
 /**
  * Represents a single sensor belonging to a tag (there can be more than one
  * sensor on each tag).
- * 
- * Sensors are themselves modelled as tags, as that's how they appear to users
- * (i.e. as separate tags) even though they physically belong to a Tag.
  */
 class Sensor extends Tag
 {
     static belongsTo = [tag:Tag]
-    
+	
+	static hasMany = [detectionSurgeries:DetectionSurgery]
+
+	Integer pingCode
+	TransmitterType transmitterType
+
     /**
      * Sensor units.
      */
@@ -29,13 +31,11 @@ class Sensor extends Tag
     static constraints =
     {
         tag()
-        codeMap(nullable:true)
-        pingCode(min:0)
-        transmitterType()
+        pingCode()
+		transmitterType()
         unit(nullable:true)
         slope(nullable:true)
         intercept(nullable:true)
-		status()
     }
 	
 	static mapping = 
@@ -43,6 +43,11 @@ class Sensor extends Tag
 		cache true
 	}
 	
+	static searchable =
+	{
+		tag(component:true)
+	}
+
 	DeviceStatus getStatus()
 	{
 		return tag?.getStatus()
@@ -55,6 +60,6 @@ class Sensor extends Tag
 	
 	String toString()
 	{
-		return codeName
+		return String.valueOf(tag.codeMap) + "-" + pingCode
 	}
 }

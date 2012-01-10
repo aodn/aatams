@@ -29,7 +29,7 @@ import au.org.emii.aatams.util.SqlUtils
  */
 class DetectionSurgery 
 {
-    static belongsTo = [surgery:Surgery, detection:ValidDetection, tag:Tag]
+    static belongsTo = [surgery:Surgery, detection:ValidDetection, sensor:Sensor]
     
 	static mapping =
 	{
@@ -42,20 +42,20 @@ class DetectionSurgery
         tag(component:true)
     }
     
-    static DetectionSurgery newSavedInstance(surgery, detection, tag)
+    static DetectionSurgery newSavedInstance(surgery, detection, sensor)
     {
         DetectionSurgery detectionSurgery =
             new DetectionSurgery(surgery:surgery, 
-                                 tag:tag, 
+                                 sensor:sensor, 
                                  detection:detection)
 
         detection.addToDetectionSurgeries(detectionSurgery)
         surgery.addToDetectionSurgeries(detectionSurgery)
-        tag.addToDetectionSurgeries(detectionSurgery)
+        sensor.addToDetectionSurgeries(detectionSurgery)
 
         detection.save()
         surgery.save()
-        tag.save()
+        sensor.save()
         
         detectionSurgery.save()
         return detectionSurgery
@@ -87,6 +87,6 @@ class DetectionSurgery
 
     String toString()
     {
-        return String.valueOf(tag) + "-" + String.valueOf(surgery) + "-" + String.valueOf(detection)
+        return String.valueOf(sensor) + "-" + String.valueOf(surgery) + "-" + String.valueOf(detection)
     }
 }

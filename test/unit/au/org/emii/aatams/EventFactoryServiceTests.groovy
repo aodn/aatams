@@ -35,7 +35,7 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 				 (EventFactoryService.DATA_COLUMN):"",
 				 (EventFactoryService.UNITS_COLUMN):""]
 			 
-		receiver = new Receiver(codeName:"VR3UWM-354")
+		receiver = new Receiver(serialNumber:"VR3UWM-354")
 		mockDomain(Receiver, [receiver])
 		
 		deployment = new ReceiverDeployment(receiver:receiver,

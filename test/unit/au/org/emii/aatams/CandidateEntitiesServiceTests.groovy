@@ -81,10 +81,10 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
         mockDomain(DeviceStatus, statusList)
         statusList.each { it.save() }
         
-        newReceiver = new Receiver(codeName:"VRW2-111", status:newStatus, organisation:imos)
-        deployedReceiver = new Receiver(codeName:"VRW2-222", status:deployedStatus, organisation:imos)
-        recoveredReceiver = new Receiver(codeName:"VRW2-333", status:recoveredStatus, organisation:imos)
-        csiroReceiver = new Receiver(codeName:"VRW2-444", status:recoveredStatus, organisation:csiro)
+        newReceiver = new Receiver(serialNumber:"111", status:newStatus, organisation:imos)
+        deployedReceiver = new Receiver(serialNumber:"222", status:deployedStatus, organisation:imos)
+        recoveredReceiver = new Receiver(serialNumber:"333", status:recoveredStatus, organisation:imos)
+        csiroReceiver = new Receiver(serialNumber:"444", status:recoveredStatus, organisation:csiro)
 
         def receiverList = [recoveredReceiver, newReceiver, deployedReceiver]
         mockDomain(Receiver, receiverList)
@@ -131,8 +131,8 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
         
         assertEquals(2, receivers.size())
         
-        assertEquals(newReceiver.codeName, receivers[0].codeName)
-        assertEquals(recoveredReceiver.codeName, receivers[1].codeName)
+        assertEquals(newReceiver.serialNumber, receivers[0].serialNumber)
+        assertEquals(recoveredReceiver.serialNumber, receivers[1].serialNumber)
         assertFalse(receivers.contains(deployedReceiver))
         assertFalse(receivers.contains(csiroReceiver))
     }

@@ -80,7 +80,7 @@ class CandidateEntitiesService
 		{
 			a, b ->
 			
-			a.codeName <=> b.codeName
+			a.toString() <=> b.toString()
 		}
 	
 		return receivers

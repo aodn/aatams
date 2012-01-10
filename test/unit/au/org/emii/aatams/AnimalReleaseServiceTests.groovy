@@ -145,7 +145,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 					type: [id:SurgeryType.get(1).id],
 					treatmentType : [id:SurgeryTreatmentType.get(1).id],
 					comments: "",
-					tag:[codeMap:tag.codeMap, pingCode:tag.pingCode, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
+					tag:[codeMap:tag.codeMap, pingCode:tag.sensors[0].pingCode, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
 
 		params.surgery += ['0':surgeryExisting]
 
@@ -162,7 +162,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 					type: [id:1],
 					treatmentType : [id:1],
 					comments: "",
-					tag:[codeMap:codeMap, pingCode:"3333", , serialNumber: serialNum, model:[id: 1]]]
+					tag:[codeMap:codeMap, pingCode:"3333", serialNumber: serialNum, model:[id: 1]]]
 
 		params.surgery += ['1':surgeryNew]
 
@@ -396,10 +396,19 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 		mockDomain(TransmitterType, [pinger])
 		pinger.save()
 		
-		Tag tag1 = new Tag(codeMap:codeMap, pingCode:12345, codeName:"A69-1303-12345", serialNumber:"12345", transmitterType:pinger, model:tagModel, status:newStatus)
-		Tag tag2 = new Tag(codeMap:codeMap, pingCode:22222, codeName:"A69-1303-22222", serialNumber:"22222", transmitterType:pinger, model:tagModel, status:newStatus)
+		Tag tag1 = new Tag(codeMap:codeMap, serialNumber:"12345", model:tagModel, status:newStatus)
+		Tag tag2 = new Tag(codeMap:codeMap, serialNumber:"22222", model:tagModel, status:newStatus)
 		def tagList = [tag1, tag2]
 		mockDomain(Tag, tagList)
+		
+		Sensor sensor1 = new Sensor(pingCode:12345, transmitterType:pinger, tag:tag1)
+		Sensor sensor2 = new Sensor(pingCode:22222, transmitterType:pinger, tag:tag2)
+		def sensorList = [sensor1, sensor2]
+		mockDomain(Sensor, sensorList)
+		
+		tag1.addToSensors(sensor1)
+		tag2.addToSensors(sensor2)
+		
 		tagList.each { it.save() }
 
 		def surgeryParams = [timestamp:new DateTime(),
@@ -440,7 +449,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 						type: [id:SurgeryType.get(1).id],
 						treatmentType : [id:SurgeryTreatmentType.get(1).id],
 						comments: "",
-						tag:[codeMap: tag.codeMap, pingCode: tag.pingCode, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
+						tag:[codeMap: tag.codeMap, pingCode: tag.sensors[0].pingCode, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
 
 			params.surgery += [(String.valueOf(it)):surgery]
 		}
@@ -515,7 +524,6 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 		}
 
 		assertNoExceptionAfterSave()
-
 		assertEquals(numNewTags, animalReleaseInstance.surgeries.size())
 		assertEquals(2 + numNewTags, Tag.count())
 	}

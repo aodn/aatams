@@ -123,8 +123,8 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         mockDomain(InstallationStation, stationList)
         stationList.each { it.save() }
         
-        imosReceiver = new Receiver(organisation:imos, codeName:"imosReceiver")
-        csiroReceiver = new Receiver(organisation:csiro, codeName:"csiroReceiver")
+        imosReceiver = new Receiver(organisation:imos)
+        csiroReceiver = new Receiver(organisation:csiro)
         def receiverList = [imosReceiver, csiroReceiver]
         mockDomain(Receiver, receiverList)
         receiverList.each { it.save() }

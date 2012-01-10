@@ -19,12 +19,12 @@ class Sensor extends Tag
     /**
      * Calibration slope.
      */
-    Integer slope
+    Float slope
     
     /**
      * Calibration intercept.
      */
-    Integer intercept
+    Float intercept
 
     static constraints =
     {

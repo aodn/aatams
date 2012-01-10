@@ -1533,5 +1533,7 @@ databaseChangeLog = {
 	include file: 'jdbc_template_detection_upload.groovy'
 
 	include file: 'deployment_init_datetime.groovy'
+
+	include file: 'sensor_params_as_float.groovy'
 }
 

@@ -34,6 +34,11 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
     
     def initData()
     {
+		TransmitterType pinger =
+			new TransmitterType(transmitterTypeName:"PINGER").save(failOnError:true)
+		assert(!pinger.hasErrors())
+		
+
         Notification receiverRecoveryCreate =
             new Notification(key:"RECEIVER_RECOVERY_CREATE",
                              htmlFragment:"Click here to create a receiver recovery",
@@ -285,165 +290,135 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         DeviceStatus recoveredStatus = new DeviceStatus(status:'RECOVERED').save(failOnError: true)
 
         Receiver rx1 =
-            new Receiver(codeName:'VR2W-101336',
-                         serialNumber:'12345678',
+            new Receiver(serialNumber:'101336',
                          status:deployedStatus,
                          model:vemcoVR2W,
                          organisation:csiroOrg,
                          comment:'RX 1 belonging to CSIRO').save(failOnError: true)
         
         Receiver rx2 =
-            new Receiver(codeName:'VR2W-101337',
-                         serialNumber:'87654321',
+            new Receiver(serialNumber:'101337',
                          status:deployedStatus,
                          model:vemcoVR2,
                          organisation:csiroOrg).save(failOnError: true)
-
+		csiroOrg.addToReceivers(rx1)
+		csiroOrg.addToReceivers(rx2)
+		
         Receiver rx3 =
-            new Receiver(codeName:'VR2W-101338',
-                         serialNumber:'101338',
+            new Receiver(serialNumber:'101338',
                          status:newStatus,
                          model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
                      
         Receiver rx4 =
-            new Receiver(codeName:'VR2W-101344',
-                         serialNumber:'4444r',
+            new Receiver(serialNumber:'101344',
                          status:newStatus,
                          model:vemcoVR2,
                          organisation:imosOrg).save(failOnError: true)
                      
         Receiver rx5 =
-            new Receiver(codeName:'VR2W-101355',
-                         serialNumber:'5555r',
+            new Receiver(serialNumber:'101355',
                          status:newStatus,
                          model:vemcoVR2,
                          organisation:imosOrg).save(failOnError: true)
 
         Receiver rx6 =
-            new Receiver(codeName:'VR2W-103355',
-                         serialNumber:'103355',
+            new Receiver(serialNumber:'103366',
                          status:newStatus,
                          model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
-         
+		imosOrg.addToReceivers(rx3)
+		imosOrg.addToReceivers(rx4)
+		imosOrg.addToReceivers(rx5)
+		imosOrg.addToReceivers(rx6)
+		
+		csiroOrg.save(failOnError:true)
+		imosOrg.save(failOnError:true)
+		
 		// CodeMaps.
 		createCodeMaps()
 			
-		def a69_1303 = CodeMap.findByCodeMap('A69-1303')	
-			 				             
+		def a69_111053 = CodeMap.findByCodeMap('A69-1105')	
+		def a69_1303 = CodeMap.findByCodeMap('A69-1303')
+		
         //
         // Tags.
         //
-        TransmitterType pinger =
-            new TransmitterType(transmitterTypeName:"PINGER").save(failOnError:true)
-        Tag tag1 =
-            new Tag(codeName:'A69-1303-62339',
-                    serialNumber:'62339',
-                    codeMap:a69_1303,
-                    pingCode:'62339',
-                    model:vemcoV8,
-                    project:sealCountProject,
-                    status:deployedStatus,
-                    transmitterType:pinger)
-		a69_1303.addToTags(tag1)
+		Tag tag1 = createTag(
+			[serialNumber:'62339',
+			 codeMap:a69_1303,
+			 pingCode:'62339',
+             model:vemcoV8,
+             project:sealCountProject,
+             status:deployedStatus])
 		
-
-        Tag tag2 =
-            new Tag(codeName:'A69-1303-46601',
-                    serialNumber:'46601',
-                    codeMap:a69_1303,
-                    pingCode:'46601',
-                    model:vemcoV8,
-                    project:sealCountProject,
-                    status:deployedStatus,
-                    transmitterType:pinger)
-		a69_1303.addToTags(tag2)
+		Tag tag2 = createTag(
+			[serialNumber:'46601',
+			 codeMap:a69_1303,
+			 pingCode:'46601',
+			 model:vemcoV8,
+			 project:sealCountProject,
+			 status:deployedStatus])
 					
-        Tag tag3 =
-            new Tag(codeName:'A69-1303-11111',
-                    serialNumber:'1111',
-                    codeMap:a69_1303,
-                    pingCode:'11111',
-                    model:vemcoV8,
-                    project:sealCountProject,
-                    status:newStatus,
-                    transmitterType:pinger)
-		a69_1303.addToTags(tag3)
+		Tag tag3 = createTag(
+			[serialNumber:'1111',
+			 codeMap:a69_1303,
+			 pingCode:'11111',
+			 model:vemcoV8,
+			 project:sealCountProject,
+			 status:newStatus])
 			
         // Bug #352 - this tag won't be selectable if animal release project
         // set to "tuna".
-        Tag tag5 =
-            new Tag(codeName:'A69-1303-33333',
-                    serialNumber:'3333',
-                    codeMap:CodeMap.findByCodeMap('A69-1303'),
-                    pingCode:'3333',
-                    model:vemcoV8,
-                    project:tunaProject,
-                    status:newStatus,
-                    transmitterType:pinger,
-                    expectedLifeTimeDays:100)
-		a69_1303.addToTags(tag5)
+		Tag tag5 = createTag(
+			[serialNumber:'3333',
+			 codeMap:a69_1303,
+			 pingCode:'3333',
+			 model:vemcoV8,
+			 project:tunaProject,
+			 status:newStatus,
+			 expectedLifeTimeDays:100])
 					
-        Tag tag6 =
-            new Tag(codeName:'A69-1303-44444',
-                    serialNumber:'4444',
-                    codeMap:a69_1303,
-                    pingCode:'4444',
-                    model:vemcoV8,
-                    project:tunaProject,
-                    status:newStatus,
-                    transmitterType:pinger)
-		a69_1303.addToTags(tag6)
+		Tag tag6 = createTag(
+			[serialNumber:'4444',
+			 codeMap:a69_1303,
+			 pingCode:'4444',
+			 model:vemcoV8,
+			 project:tunaProject,
+			 status:newStatus])
 			
-        Tag orphanTag =
-            new Tag(codeName:'A69-1303-55555',
-                    serialNumber:'5555',
-                    codeMap:a69_1303,
-                    pingCode:'5555',
-                    model:vemcoV8,
-                    status:newStatus,
-                    transmitterType:pinger)
-		a69_1303.addToTags(orphanTag)
-		a69_1303.save(failOnError:true)
+		Tag orphanTag = createTag(
+			[serialNumber:'5555',
+			 codeMap:a69_1303,
+			 pingCode:'5555',
+			 model:vemcoV8,
+			 status:newStatus])
+
 			
         TransmitterType depth =
             new TransmitterType(transmitterTypeName:"DEPTH").save(failOnError:true)
         TransmitterType temp =
             new TransmitterType(transmitterTypeName:"TEMP").save(failOnError:true)
 
-		def a69_1105 = CodeMap.findByCodeMap('A69-1303')	
-        Sensor sensor1 =
-            new Sensor(codeName:'A69-1105-64000',
-                    serialNumber:'64000',
-                    codeMap:a69_1105,
-                    pingCode:'64000',
-                    model:vemcoV8,
-                    project:sealCountProject,
-                    status:newStatus,
+		Sensor sensor1 =
+            new Sensor(pingCode:'64000',
                     tag:tag1,
                     transmitterType:depth,
                     unit:'m',
                     slope:1,
                     intercept:0)
-		a69_1105.addToTags(sensor1)
+		
 		
         Sensor sensor2 =
-            new Sensor(codeName:'A69-1105-65000',
-                    serialNumber:'65000',
-                    codeMap:a69_1105,
-                    pingCode:'65000',
-                    model:vemcoV8,
-                    project:sealCountProject,
-                    status:newStatus,
+            new Sensor(pingCode:'65000',
                     tag:tag1,
                     transmitterType:temp,
                     unit:'k',
                     slope:1,
                     intercept:0)
-		a69_1105.addToTags(sensor2)
-		a69_1105.save(failOnError:true)
 			
+		a69_1303.save(failOnError:true)
+		
         //
         // Installation data.
         //
@@ -514,7 +489,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                     curtainPosition:2,
                                     location:(Point)reader.read("POINT(76.02 -20.1234)")).save(failOnError:true)
         
-
+									
         //
         //  Receiver Deployments.
         //
@@ -801,15 +776,15 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         export.save(failOnError:true)
 	}
 	
-	private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, Tag tag1, ReceiverDownloadFile export1, Surgery surgery1, int numDetections) 
+	private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, Tag tag, ReceiverDownloadFile export1, Surgery surgery1, int numDetections) 
 	{
 		numDetections.times
 		{
 			ValidDetection detection =
 					new ValidDetection(receiverDeployment:rx1Bondi,
 					timestamp:new DateTime("2011-05-17T12:54:00").plusSeconds(it).toDate(),
-					receiverName:rx1.codeName,
-					transmitterId:tag1.codeName,
+					receiverName:rx1.name,
+					transmitterId:tag.sensors[0].transmitterId,
 					receiverDownload:export1)
 
 			if (surgery1)
@@ -817,7 +792,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 				DetectionSurgery detSurgery =
 						new DetectionSurgery(surgery:surgery1,
 						detection:detection,
-						tag:tag1)
+						sensor:tag.sensors[0])
 				detection.addToDetectionSurgeries(detSurgery)
 			}
 			export1.addToDetections(detection)
@@ -837,6 +812,29 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 				CodeMap codeMap = new CodeMap(codeMap:freq + "-" + codeSpace).save(failOnError:true, flush:true)
 			}
 		}
+	}
+	
+	private Tag createTag(params)
+	{
+		TransmitterType pinger =
+			TransmitterType.findByTransmitterTypeName("PINGER")
+		assert(pinger)
+		
+		Tag tag =
+			new Tag(serialNumber:params.serialNumber,
+					codeMap:params.codeMap,
+					model:params.model,
+					project:params.project,
+					status:params.status,
+					expectedLifeTimeDays:params.expectedLifeTimeDays)
+			
+		Sensor sensor = new Sensor(tag:tag, pingCode: params.pingCode, transmitterType: pinger)
+		tag.addToSensors(sensor)
+		
+		tag.save(failOnError:true, flush:true)
+		params.codeMap.addToTags(tag)
+		
+		return tag
 	}
 }
 

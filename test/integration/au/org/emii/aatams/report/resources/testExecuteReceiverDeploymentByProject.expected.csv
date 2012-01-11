@@ -5,10 +5,10 @@
 ,,,station,,code name,,latitude,longitude,deployment date,acoustic rls ID,mooring type,depth (m),,comments,,active,
 ,project:,,,Seal Count,,,,,,,,,,,,,
 ,installation:,,,Bondi Line,,,,,,,,,,,,,
+,,,Bondi SW2,,VR2-101337,,-10.1234,-10.1234,15/05/2011 14:12,asdf,CONCRETE ,7.40,,,,yes,
 ,,,Bondi SW1,,VR2W-101336,,30.1234,30.1234,15/02/2010 13:34,asdf,CONCRETE ,5.00,,,,yes,
-,,,Bondi SW2,,VR2W-101337,,-10.1234,-10.1234,15/05/2011 14:12,asdf,CONCRETE ,7.40,,,,yes,
 ,installation:,,,Heron Island ,,,,,,,,,,,,,
-,,,Heron S1,,VR2W-101344,,-42.3,12.34,15/05/2011 12:34,asdf,CONCRETE ,5.00,This was fun to deploy,,,yes,
-,,,Heron S2,,VR2W-101355,,-20.1234,76.02,15/05/2011 12:34,asdf,CONCRETE ,5.00,,,,yes,
-,,,Heron S2,,VR2W-103355,,-20.1234,76.02,15/05/2000 12:34,asdf,CONCRETE ,5.00,,,,yes,
-09/11/2011 16:42,,,,,,,,,,,,,,,Page 1 of,, 1
+,,,Heron S1,,VR2-101344,,-42.3,12.34,15/05/2011 12:34,asdf,CONCRETE ,5.00,This was fun to deploy,,,yes,
+,,,Heron S2,,VR2-101355,,-20.1234,76.02,15/05/2011 12:34,asdf,CONCRETE ,5.00,,,,yes,
+,,,Heron S2,,VR2W-103366,,-20.1234,76.02,15/05/2000 12:34,asdf,CONCRETE ,5.00,,,,yes,
+11/01/2012 17:06,,,,,,,,,,,,,,,Page 1 of,, 1

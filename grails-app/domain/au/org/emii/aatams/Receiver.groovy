@@ -9,12 +9,12 @@ import au.org.emii.aatams.detection.RawDetection
 class Receiver extends Device
 {
     /**
-     * Detection recorded at the receiver (may also include SensorDetections).
+     * Detections recorded at the receiver.
      */
     Set<RawDetection> detections = new HashSet<RawDetection>()
     static hasMany = [detections: RawDetection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
-    static transients = ['name']
+    static transients = ['name', 'deviceID']
 	
     static mapping = 
     {
@@ -28,6 +28,11 @@ class Receiver extends Device
 	String getName()
 	{
 		return String.valueOf(model) + "-" + serialNumber
+	}
+	
+	String getDeviceID()
+	{
+		return getName()
 	}
 	
 	String toString()

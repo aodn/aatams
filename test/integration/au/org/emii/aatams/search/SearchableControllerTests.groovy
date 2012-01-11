@@ -21,10 +21,10 @@ class SearchableControllerTests extends AbstractControllerUnitTestCase
         authenticated = false
         permitted = false
         
-        def tag = Tag.findByCodeName('A69-1303-62339')
+        def tag = Tag.findBySerialNumber('62339')
         assert(tag)
         
-        controller.params.q = "A69-1303-62339"
+        controller.params.q = "62339"
         def model = controller.index()
         
         assertFalse(model.searchResult.results*.id.contains(tag.id))
@@ -35,10 +35,10 @@ class SearchableControllerTests extends AbstractControllerUnitTestCase
         authenticated = true
         permitted = false
         
-        def tag = Tag.findByCodeName('A69-1303-62339')
+        def tag = Tag.findBySerialNumber('62339')
         assert(tag)
         
-        controller.params.q = "A69-1303-62339"
+        controller.params.q = "62339"
         def model = controller.index()
         
         assertFalse(model.searchResult.results*.id.contains(tag.id))
@@ -49,36 +49,36 @@ class SearchableControllerTests extends AbstractControllerUnitTestCase
         authenticated = true
         permitted = true
         
-        def tag = Tag.findByCodeName('A69-1303-62339')
+        def tag = Tag.findBySerialNumber('62339')
         assert(tag)
         
-        controller.params.q = "A69-1303-62339"
+        controller.params.q = "62339"
         def model = controller.index()
         
         assertTrue(model.searchResult.results*.id.contains(tag.id))
     }
 	
-	void testSearchReceiverCodeName()
+	void testSearchReceiverName()
 	{
 		assertSearchReceiver("VR2W-101336", ["VR2W-101336"])
 	}
 	
 	void testSearchReceiverSerialNumber()
 	{
-		assertSearchReceiver("12345678", ["VR2W-101336"])
+		assertSearchReceiver("101336", ["VR2W-101336"])
 	}
 	
-	void testSearchReceiverCodeNameImplicitWildCard()
+	void testSearchReceiverNameImplicitWildCard()
 	{
 		assertSearchReceiver("101336", ["VR2W-101336"])
 	}
 	
 	void testSearchReceiverSerialNumberImplicitWildCard()
 	{
-		assertSearchReceiver("5678", ["VR2W-101336"])
+		assertSearchReceiver("1336", ["VR2W-101336"])
 	}
 	
-	private void assertSearchReceiver(searchTerm, expectedCodeNames)
+	private void assertSearchReceiver(searchTerm, expectedNames)
 	{
 		controller.params.q = searchTerm
 		def model = controller.index()
@@ -88,6 +88,6 @@ class SearchableControllerTests extends AbstractControllerUnitTestCase
 			it instanceof Receiver
 		}
 		
-		assertEquals(expectedCodeNames, receiverResults*.codeName)
+		assertEquals(expectedNames, receiverResults*.name)
 	}
 }

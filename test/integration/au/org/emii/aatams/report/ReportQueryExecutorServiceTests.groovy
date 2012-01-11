@@ -164,8 +164,8 @@ class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase
 
 	void testDetectionFilterByTagCodeName()
 	{
-		assertDetectionsMatchingFilter(10, [detectionSurgeries:[tag:[codeName:"A69-1303-62339"]]])
-		assertDetectionsMatchingFilter(6, [detectionSurgeries:[tag:[codeName:"A69-1303-46601"]]])
+		assertDetectionsMatchingFilter(10, [detectionSurgeries:[sensor:[transmitterId:"A69-1303-62339"]]])
+		assertDetectionsMatchingFilter(6, [detectionSurgeries:[sensor:[transmitterId:"A69-1303-46601"]]])
 	}
 	
 	void testDetectionFilterBySpeciesCommonName()

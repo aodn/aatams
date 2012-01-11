@@ -39,7 +39,7 @@ class DetectionSurgery
     static searchable =
     {
         root(false)
-        tag(component:true)
+        sensor(component:true)
     }
     
     static DetectionSurgery newSavedInstance(surgery, detection, sensor)

@@ -19,7 +19,6 @@ class Organisation
     EntityStatus status = EntityStatus.PENDING
     
     // The person requesting creation of Organisation.
-//    Person requestingUser
     static hasOne = [request:Request]
     
     static constraints =
@@ -33,7 +32,6 @@ class Organisation
         status()    // Default to PENDING
         organisationProjects()
         request(nullable:true)
-//        requestingUser(nullable:true)
     }
     
     static mapping = 

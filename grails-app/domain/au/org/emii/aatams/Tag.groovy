@@ -33,7 +33,7 @@ class Tag extends Device implements Embargoable
         expectedLifeTimeDays(nullable:true)
     }
     
-    static transients = ['codeMapPingCode', 'expectedLifeTimeDaysAsString']
+    static transients = ['expectedLifeTimeDaysAsString', 'deviceID', 'pingCodes', 'transmitterTypeNames']
     
     static searchable =
     {
@@ -60,9 +60,24 @@ class Tag extends Device implements Embargoable
     
 	String toString()
 	{
+		return getDeviceID()
+	}
+	
+	String getDeviceID()
+	{
 		return removeSurroundingBrackets(String.valueOf(sensors*.toString()))
 	}
 	
+	String getPingCodes()
+	{
+		return removeSurroundingBrackets(String.valueOf(sensors*.pingCode))
+	}
+	
+	String getTransmitterTypeNames()
+	{
+		return removeSurroundingBrackets(String.valueOf(sensors*.transmitterType.transmitterTypeName))
+	}
+
 	private String removeSurroundingBrackets(listAsString)
 	{
 		return listAsString[1..listAsString.size() - 2]

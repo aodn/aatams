@@ -15,7 +15,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         super.tearDown()
     }
 
-    void pingerType() 
+    void testPingerType() 
 	{
 //		2011-10-26 09:40:34,694 [http-8080-3] DEBUG grails.app.controller.au.org.emii.aatams.AnimalReleaseController - params:
 		controller.params.releaseDateTime_hour = '9'
@@ -68,7 +68,6 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
 		def model = controller.save()
 
-		println(model.animalReleaseInstance.errors)
 		assertEquals("nullable", model.animalReleaseInstance.errors.getFieldError("captureLocality").getCode())
     }
 }

@@ -109,7 +109,7 @@ class InstallationStationReportWrapper
 					def species = detSurgery.surgery.release.animal.species
 					incCountForSpecies(countBySpecies, species)
 					
-					def tag = detSurgery.tag
+					def tag = detSurgery.sensor.tag
 					incCountForTag(countByTag, tag)
 				}
 			}

@@ -9,7 +9,7 @@ class Sensor implements Embargoable
     static belongsTo = [tag:Tag]
 	
 	static hasMany = [detectionSurgeries:DetectionSurgery]
-	static transients = ['transmitterId', 'project', 'codeName']
+	static transients = ['transmitterId', 'project', 'codeName', 'codeMap', 'status']
 	
 	Integer pingCode
 	TransmitterType transmitterType

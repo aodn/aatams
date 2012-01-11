@@ -8,9 +8,9 @@
 	
 	<field name="deviceID" class="java.lang.String"/>
 	<field name="codeMap" class="java.lang.String"/>
-	<field name="pingCode" class="java.lang.Long"/>
+	<field name="pingCodes" class="java.lang.String"/>
 	<field name="serialNumber" class="java.lang.String"/>
-	<field name="transmitterType.transmitterTypeName" class="java.lang.String"/>
+	<field name="transmitterTypeNames" class="java.lang.String"/>
 	<field name="model.manufacturer.manufacturerName" class="java.lang.String"/>
 	<field name="model.modelName" class="java.lang.String"/>
 	<field name="status" class="java.lang.String"/>
@@ -19,9 +19,9 @@
 
     <sortField name="deviceID" order="Ascending"/>
 	<sortField name="codeMap" order="Ascending"/>
-	<sortField name="pingCode" order="Ascending"/>
+	<sortField name="pingCodes" order="Ascending"/>
 	<sortField name="serialNumber" order="Ascending"/>
-	<sortField name="transmitterType.transmitterTypeName" order="Ascending"/>
+	<sortField name="transmitterTypeNames" order="Ascending"/>
 	<sortField name="model.manufacturer.manufacturerName" order="Ascending"/>
 	<sortField name="model.modelName" order="Ascending"/>
 	<sortField name="status" order="Ascending"/>
@@ -102,7 +102,7 @@
 			<textField>
 				<reportElement x="212" y="0" width="80" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Long"><![CDATA[$F{pingCode}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pingCodes}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="292" y="0" width="80" height="20"/>
@@ -112,7 +112,7 @@
 			<textField>
 				<reportElement x="372" y="0" width="80" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{transmitterType.transmitterTypeName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{transmitterTypeNames}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="452" y="0" width="80" height="20"/>

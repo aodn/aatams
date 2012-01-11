@@ -46,13 +46,14 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
         mockDomain(Organisation, orgList)
         orgList.each { it.save() }
 
-        newReceiver = new Receiver(codeName:"VRW2-111", status:newStatus, organisation:imos)
-        deployedReceiver = new Receiver(codeName:"VRW2-222", status:deployedStatus, organisation:imos)
-        recoveredReceiver = new Receiver(codeName:"VRW2-333", status:recoveredStatus, organisation:imos)
-        retiredReceiver = new Receiver(codeName:"VRW2-555", status:retiredStatus, organisation:imos)
-        csiroReceiver = new Receiver(codeName:"VRW2-444", status:recoveredStatus, organisation:csiro)
-		receiver1 = new Receiver(codeName:"receiver1", status:newStatus, organisation:imos)
-		receiver2 = new Receiver(codeName:"receiver2", status:newStatus, organisation:imos)
+		ReceiverDeviceModel model = new ReceiverDeviceModel(modelName: "VRW2")
+        newReceiver = new Receiver(model: model, serialNumber:"111", status:newStatus, organisation:imos)
+        deployedReceiver = new Receiver(model: model, serialNumber:"222", status:deployedStatus, organisation:imos)
+        recoveredReceiver = new Receiver(model: model, serialNumber:"333", status:recoveredStatus, organisation:imos)
+        retiredReceiver = new Receiver(model: model, serialNumber:"555", status:retiredStatus, organisation:imos)
+        csiroReceiver = new Receiver(model: model, serialNumber:"444", status:recoveredStatus, organisation:csiro)
+		receiver1 = new Receiver(model: model, serialNumber:"receiver1", status:newStatus, organisation:imos)
+		receiver2 = new Receiver(model: model, serialNumber:"receiver2", status:newStatus, organisation:imos)
 		
         def receiverList = [newReceiver, deployedReceiver, recoveredReceiver, retiredReceiver, csiroReceiver, receiver1, receiver2]
         mockDomain(Receiver, receiverList)
@@ -257,8 +258,8 @@ class ReceiverDeploymentControllerTests extends ControllerUnitTestCase
 	
 	void testReceiverStatusBackToNewOnUndeploy()
 	{
-		Receiver prevDeployed = new Receiver(codeName:"1111", status:deployedStatus)
-		Receiver editDeployed = new Receiver(codeName:"2222", status:newStatus)
+		Receiver prevDeployed = new Receiver(serialNumber:"1111", status:deployedStatus)
+		Receiver editDeployed = new Receiver(serialNumber:"2222", status:newStatus)
 		
 		def receiverList = [prevDeployed, editDeployed]
 		mockDomain(Receiver, receiverList)

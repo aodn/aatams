@@ -139,7 +139,7 @@ abstract class VueExportValidatorService
 		receiverDownload = theReceiverDownload
 		params = theParams
 		
-		receiver = Receiver.findByCodeName(params.receiverName, [cache:true])
+		receiver = Receiver.findByName(params.receiverName, [cache:true])
 		deploymentsByDateTime?.clear()
 		recoveries?.clear()
 		deployment = null

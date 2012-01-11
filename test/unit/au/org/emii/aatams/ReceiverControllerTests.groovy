@@ -64,7 +64,7 @@ class ReceiverControllerTests extends ControllerUnitTestCase
         def receiver = Receiver.get(controller.redirectArgs.id)
         
         assertEquals("show", controller.redirectArgs.action)
-        assertEquals("model-12345", receiver.codeName)
+        assertEquals("model-12345", receiver.name)
         assertEquals(newStatus, receiver.status)
     }
 	

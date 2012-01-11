@@ -49,11 +49,6 @@ class TagController extends AbstractController
     def save = {
         def tagInstance = new Tag(params)
         
-        // codeName is derived from code space and ping code.
-        String codeName = Tag.constructCodeName(params)
-        tagInstance.codeName = codeName
-        tagInstance.transmitterType = TransmitterType.findByTransmitterTypeName('PINGER')
-        
         if (tagInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.toString()])}"
             redirect(action: "show", id: tagInstance.id)

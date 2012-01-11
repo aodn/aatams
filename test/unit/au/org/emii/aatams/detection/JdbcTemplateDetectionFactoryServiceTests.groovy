@@ -36,7 +36,7 @@ class JdbcTemplateDetectionFactoryServiceTests extends AbstractDetectionFactoryS
 	
 	void batchUpdate(String[] statements)
 	{
-		assertEquals('''INSERT INTO DETECTION_SURGERY (ID, VERSION, DETECTION_ID, SURGERY_ID, TAG_ID)  VALUES(nextval('detection_surgery_sequence'),0,1,1,1)''',
+		assertEquals('''INSERT INTO DETECTION_SURGERY (ID, VERSION, DETECTION_ID, SURGERY_ID, SENSOR_ID)  VALUES(nextval('detection_surgery_sequence'),0,1,1,2)''',
 					 statements[0])
 	}
 }

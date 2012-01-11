@@ -24,7 +24,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
 		TagDeviceModel model = new TagDeviceModel(modelName:"V16")
 		mockDomain(TagDeviceModel, [model])
 		
-		owningTag = new Tag(codeMap:a69_1303, pingCode: 1111, codeName: "A69-1303-1111", model:model, status:newStatus)
+		owningTag = new Tag(codeMap:a69_1303, model:model, status:newStatus)
 		mockDomain(Tag, [owningTag])
 		owningTag.save()
 		

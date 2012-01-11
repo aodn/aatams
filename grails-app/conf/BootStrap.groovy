@@ -119,9 +119,6 @@ class BootStrap
             returnArray['label'] = it.serialNumber
             returnArray['serialNumber'] = it.serialNumber
             returnArray['model'] = it.model
-            returnArray['transmitterType'] = it.transmitterType
-            returnArray['codeName'] = it.codeName
-			returnArray['pingCode'] = it.pingCode
 			returnArray['codeMap'] = it.codeMap
 			
             return returnArray
@@ -174,16 +171,16 @@ class BootStrap
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['transmitterType'] = it.transmitterType
-            returnArray['codeMap'] = it.codeMap
+            returnArray['codeMap'] = it.tag.codeMap
             returnArray['pingCode'] = it.pingCode
             returnArray['slope'] = it.slope
             returnArray['intercept'] = it.intercept
             returnArray['unit'] = it.unit
             returnArray['status'] = it.status
 
-            returnArray['label'] = it.getCodeMapPingCode()
-            returnArray['serialNumber'] = it.serialNumber
-            returnArray['model'] = it.model
+            returnArray['label'] = it.transmitterId
+            returnArray['serialNumber'] = it.tag.serialNumber
+            returnArray['model'] = it.tag.model
             
             return returnArray
         }

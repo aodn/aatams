@@ -112,9 +112,6 @@ class EmbargoExpirationJob implements ApplicationContextAware
                                                        
         log.debug("Sending embargo notification email to PIs: " + String.valueOf(pis))
         
-        // Problems having the framework inject this.
-//        def mailService  //= new MailService()
-
         mailService.sendMail 
         {     
             to pis*.person*.emailAddress

@@ -75,7 +75,8 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
 		mockDomain(DeviceStatus, statusList)
 		statusList.each { it.save() }
 		
-		receiver = new Receiver(status:deployed, codeName: "VR2W-1234")
+		ReceiverDeviceModel model = new ReceiverDeviceModel(modelName: "VR2W")
+		receiver = new Receiver(status:deployed, model: model, serialNumber: "1234")
 		mockDomain(Receiver, [receiver])
 		receiver.save()
     }

@@ -139,7 +139,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         assertTrue(detection.detectionSurgeries?.isEmpty())        
     }
     
-    void testOneMatchingTagSurgery() 
+    void testOneMatchingPingerSurgery() 
     {
         setupData()
         
@@ -152,14 +152,14 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 
 		def detectionSurgery = DetectionSurgery.list()[0]
         assertEquals(1, DetectionSurgery.count())      
-        assertEquals(tag, detectionSurgery.tag)
+        assertEquals(sensor0, detectionSurgery.sensor)
         assertEquals(surgery, detectionSurgery.surgery)
     }
     
     void testOneMatchingSensorSurgery() 
     {
         setupData()
-        standardParams[(DetectionFactoryService.TRANSMITTER_COLUMN)] = "A69-1609-12345"
+        standardParams[(DetectionFactoryService.TRANSMITTER_COLUMN)] = "A69-1303-12345"
         
         def detection = 
             newDetection(new ReceiverDownloadFile(), standardParams)
@@ -170,7 +170,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 
 		def detectionSurgery = DetectionSurgery.list()[0]
         assertEquals(1, DetectionSurgery.count())      
-        assertEquals(sensor, detectionSurgery.tag)
+        assertEquals(sensor, detectionSurgery.sensor)
         assertEquals(surgery, detectionSurgery.surgery)
     }
     
@@ -189,11 +189,11 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		assertEquals(2, DetectionSurgery.count())
 		
 		def detectionSurgery1 = DetectionSurgery.list()[0]
-		assertEquals(tag1, detectionSurgery1.tag)
+		assertEquals(sensor1, detectionSurgery1.sensor)
 		assertEquals(surgery1, detectionSurgery1.surgery)
 
 		def detectionSurgery2 = DetectionSurgery.list()[1]
-		assertEquals(tag2, detectionSurgery2.tag)
+		assertEquals(sensor2, detectionSurgery2.sensor)
 		assertEquals(surgery2, detectionSurgery2.surgery)
     }
     
@@ -233,7 +233,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 
 		assertEquals(1, DetectionSurgery.count())
 		def detectionSurgery = DetectionSurgery.list()[0]
-		assertEquals(tag2, detectionSurgery.tag)
+		assertEquals(sensor2, detectionSurgery.sensor)
 		assertEquals(surgery2, detectionSurgery.surgery)
     }
     
@@ -254,7 +254,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 
    		assertEquals(1, DetectionSurgery.count())
 		def detectionSurgery = DetectionSurgery.list()[0]
-		assertEquals(tag2, detectionSurgery.tag)
+		assertEquals(sensor2, detectionSurgery.sensor)
 		assertEquals(surgery2, detectionSurgery.surgery)
     }
     
@@ -283,7 +283,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 
 		assertEquals(1, DetectionSurgery.count())
 		def detectionSurgery = DetectionSurgery.list()[0]
-		assertEquals(tag2, detectionSurgery.tag)
+		assertEquals(sensor2, detectionSurgery.sensor)
 		assertEquals(surgery2, detectionSurgery.surgery)
 
         // So we don't get a duplicate.
@@ -302,10 +302,10 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
            
 		assertEquals(3, DetectionSurgery.count())
 		def detectionSurgery1 = DetectionSurgery.list()[1]
-		assertEquals(tag1, detectionSurgery1.tag)
+		assertEquals(sensor1, detectionSurgery1.sensor)
 		assertEquals(surgery1, detectionSurgery1.surgery)
 		def detectionSurgery2 = DetectionSurgery.list()[2]
-		assertEquals(tag2, detectionSurgery2.tag)
+		assertEquals(sensor2, detectionSurgery2.sensor)
 		assertEquals(surgery2, detectionSurgery2.surgery)
     }
     
@@ -327,7 +327,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		
 		assertEquals(1, DetectionSurgery.count())
 		def detectionSurgery = DetectionSurgery.list()[0]
-		assertEquals(tag, detectionSurgery.tag)
+		assertEquals(sensor0, detectionSurgery.sensor)
 		assertEquals(surgery, detectionSurgery.surgery)
     }
 }

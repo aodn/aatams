@@ -44,7 +44,7 @@ class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorSer
 		{
 			record, i ->
 			
-			assertEquals(record[EventFactoryService.RECEIVER_COLUMN], ValidReceiverEvent.list()[i].receiverDeployment.receiver.codeName)
+			assertEquals(record[EventFactoryService.RECEIVER_COLUMN], ValidReceiverEvent.list()[i].receiverDeployment.receiver.name)
 			assertEquals(record[EventFactoryService.DESCRIPTION_COLUMN], ValidReceiverEvent.list()[i].description)
 			assertEquals(record[EventFactoryService.DATA_COLUMN], ValidReceiverEvent.list()[i].data)
 			assertEquals(record[EventFactoryService.UNITS_COLUMN], ValidReceiverEvent.list()[i].units)

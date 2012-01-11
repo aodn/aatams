@@ -14,7 +14,8 @@ class Receiver extends Device
     Set<RawDetection> detections = new HashSet<RawDetection>()
     static hasMany = [detections: RawDetection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
-    
+    static transients = ['name']
+	
     static mapping = 
     {
         organisation sort:'name'
@@ -24,9 +25,14 @@ class Receiver extends Device
     
     static searchable = true
     
-	String toString()
+	String getName()
 	{
 		return String.valueOf(model) + "-" + serialNumber
+	}
+	
+	String toString()
+	{
+		return getName()
 	}
 	
     boolean canDeploy()

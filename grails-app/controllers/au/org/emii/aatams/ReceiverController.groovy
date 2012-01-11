@@ -32,9 +32,6 @@ class ReceiverController extends AbstractController
         def receiverInstance = new Receiver(params)
         receiverInstance.status = DeviceStatus.findByStatus("NEW")
         
-        String codeName = Receiver.constructCodeName(params)
-        receiverInstance.codeName = codeName
-        
         if (receiverInstance.save(flush: true)) 
         {
             // Need to add update permission to subject.

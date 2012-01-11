@@ -58,6 +58,16 @@ class Tag extends Device implements Embargoable
         return String.valueOf(expectedLifeTimeDays)
     }
     
+	String toString()
+	{
+		return removeSurroundingBrackets(String.valueOf(sensors*.toString()))
+	}
+	
+	private String removeSurroundingBrackets(listAsString)
+	{
+		return listAsString[1..listAsString.size() - 2]
+	}
+	
     def applyEmbargo()
     {
         boolean embargoed = false

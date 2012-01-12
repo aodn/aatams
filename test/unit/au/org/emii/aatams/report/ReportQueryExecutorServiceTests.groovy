@@ -150,28 +150,28 @@ class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase
         tagNonEmbargoed.addToSurgeries(surgeryNonEmbargoed)
         tagNonEmbargoed.addToSensors(sensorNonEmbargoed)
         tagNonEmbargoed.addToSensors(sensorPingerNonEmbargoed)
-        tagNonEmbargoed.addToDetectionSurgeries(detectionSurgeryNonEmbargoed)
+        sensorNonEmbargoed.addToDetectionSurgeries(detectionSurgeryNonEmbargoed)
         detectionNonEmbargoed.addToDetectionSurgeries(detectionSurgeryNonEmbargoed)
         
         releaseEmbargoedReadableProject.addToSurgeries(surgeryEmbargoedReadableProject)
         tagEmbargoedReadableProject.addToSurgeries(surgeryEmbargoedReadableProject)
         tagEmbargoedReadableProject.addToSensors(sensorEmbargoedReadableProject)
         tagEmbargoedReadableProject.addToSensors(sensorPingerEmbargoedReadableProject)
-        tagEmbargoedReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedReadableProject)
+        sensorEmbargoedReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedReadableProject)
         detectionEmbargoedReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedReadableProject)
         
         releaseEmbargoedNonReadableProject.addToSurgeries(surgeryEmbargoedNonReadableProject)
         tagEmbargoedNonReadableProject.addToSurgeries(surgeryEmbargoedNonReadableProject)
         tagEmbargoedNonReadableProject.addToSensors(sensorEmbargoedNonReadableProject)
         tagEmbargoedNonReadableProject.addToSensors(sensorPingerEmbargoedNonReadableProject)
-        tagEmbargoedNonReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedNonReadableProject)
+        sensorEmbargoedNonReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedNonReadableProject)
         detectionEmbargoedNonReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedNonReadableProject)
         
         releasePastEmbargoed.addToSurgeries(surgeryPastEmbargoed)
         tagPastEmbargoed.addToSurgeries(surgeryPastEmbargoed)
         tagPastEmbargoed.addToSensors(sensorPastEmbargoed)
         tagPastEmbargoed.addToSensors(sensorPingerPastEmbargoed)
-        tagPastEmbargoed.addToDetectionSurgeries(detectionSurgeryPastEmbargoed)
+        sensorPastEmbargoed.addToDetectionSurgeries(detectionSurgeryPastEmbargoed)
         detectionPastEmbargoed.addToDetectionSurgeries(detectionSurgeryPastEmbargoed)
         
         detectionNonEmbargoed.metaClass.getProject = { project1 }

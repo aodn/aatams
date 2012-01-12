@@ -1535,5 +1535,7 @@ databaseChangeLog = {
 	include file: 'deployment_init_datetime.groovy'
 
 	include file: 'sensor_params_as_float.groovy'
+
+	include file: 'tag_sensor_refactor.groovy'
 }
 

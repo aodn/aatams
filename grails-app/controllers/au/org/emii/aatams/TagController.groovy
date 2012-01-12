@@ -98,11 +98,6 @@ class TagController extends AbstractController
                 }
             }
             tagInstance.properties = params
-
-            // codeName is derived from code space and ping code.
-            String codeName = Tag.constructCodeName(params)
-            tagInstance.codeName = codeName
-
             if (!tagInstance.hasErrors() && tagInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.toString()])}"
                 redirect(action: "show", id: tagInstance.id)

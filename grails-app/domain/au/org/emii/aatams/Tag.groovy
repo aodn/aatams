@@ -12,8 +12,7 @@ class Tag extends Device implements Embargoable
 	List<Sensor> sensors = new ArrayList<Sensor>()
 	
     static hasMany = [sensors:Sensor, 
-                      surgeries:Surgery, 
-                      detectionSurgeries:DetectionSurgery]
+                      surgeries:Surgery]
 
     Project project
 	static belongsTo = [codeMap: CodeMap]

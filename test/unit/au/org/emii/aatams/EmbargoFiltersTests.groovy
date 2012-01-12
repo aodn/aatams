@@ -352,6 +352,9 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 		
 		int expectedNum = (entityName == 'sensor') ? 8 : 4
         def model = controller.list()
+		
+println ("model: " + model)
+		
         assertEquals(expectedNum, model.entityList.size())
         assertEquals(expectedNum, model.total)
 

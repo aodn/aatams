@@ -56,7 +56,7 @@ class KmlDescriptionTests extends GroovyPagesTestCase
 		assertNotNull(stationInstance)
 		
 		def div = executeTemplate([installationStationInstance:stationInstance])
-
+println div
 		def allNodes = div.depthFirst().collect{ it }
 		def vals = allNodes.grep { it.name() == "td"}
 

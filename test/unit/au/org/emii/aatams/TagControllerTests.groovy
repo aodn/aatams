@@ -105,7 +105,7 @@ class TagControllerTests extends ControllerUnitTestCase
         
 		controller.metaClass.insertNoSensorRestriction = {}
         def model = controller.list()
-		
+println("model: " + model)		
         assertEquals(2, model.entityList.size())
         assertEquals(2, model.total)
         assertTrue(model.entityList.contains(tag1))

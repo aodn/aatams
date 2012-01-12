@@ -28,7 +28,7 @@ databaseChangeLog =
 
 			column(name: "unit", type: "VARCHAR(255)")
 
-//			column(name: "sensors_idx", type: "int4")
+			column(name: "sensors_idx", type: "int4", defaultValueNumeric: 0)
 		}
 	}
 
@@ -42,8 +42,10 @@ databaseChangeLog =
 	// Move au.org.emii.Sensor in existing tag table to sensors.
 	changeSet(author: "jburgess (generated)", id: "1326330938494-1-2")
 	{
-		sql('''insert into sensor (id, version, intercept, ping_code, slope, tag_id, transmitter_type_id, unit)
-			   select nextval('hibernate_sequence'), 0, intercept, ping_code, slope, tag_id, transmitter_type_id, unit from device where class = 'au.org.emii.aatams.Sensor';''')
+		sql('''insert into sensor (id, version, intercept, ping_code, slope, tag_id, transmitter_type_id, unit, sensors_idx)
+		select nextval('hibernate_sequence'), 0, intercept, ping_code, slope, tag_id, transmitter_type_id, unit, (select max(sensors_idx) + 1 from sensor where tag_id = tag_id) from device where class = 'au.org.emii.aatams.Sensor';''')
+
+		//select max(sensors_idx) + 1 from sensor where tag_id = tag_id
 		
 		// Delete the records in device table.
 		delete(tableName: "device")

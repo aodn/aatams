@@ -32,7 +32,7 @@ class Tag extends Device implements Embargoable
         expectedLifeTimeDays(nullable:true)
     }
     
-    static transients = ['expectedLifeTimeDaysAsString', 'deviceID', 'pingCodes', 'transmitterTypeNames']
+    static transients = ['expectedLifeTimeDaysAsString', 'deviceID', 'pinger', 'pingCode', 'pingCodes', 'transmitterTypeNames', 'nonPingerSensors']
     
     static searchable =
     {
@@ -67,6 +67,32 @@ class Tag extends Device implements Embargoable
 		return removeSurroundingBrackets(String.valueOf(sensors*.toString()))
 	}
 	
+	Sensor getPinger()
+	{
+		return Sensor.findByTagAndTransmitterType(this, TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]), [cache:true])
+	}
+	
+	void setPingCode(Integer newPingCode)
+	{
+		if (!pinger)
+		{
+			Sensor newPinger = new Sensor(tag: this, pingCode: newPingCode, transmitterType: TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]))
+			addToSensors(newPinger)
+			newPinger.save(failOnError:true)
+			this.save()
+		}
+		else
+		{
+			assert(pinger)
+			pinger.pingCode = newPingCode
+		}	
+	}
+	
+	Integer getPingCode()
+	{
+		return pinger?.pingCode
+	}
+	
 	String getPingCodes()
 	{
 		return removeSurroundingBrackets(String.valueOf(sensors*.pingCode))
@@ -77,6 +103,16 @@ class Tag extends Device implements Embargoable
 		return removeSurroundingBrackets(String.valueOf(sensors*.transmitterType.transmitterTypeName))
 	}
 
+	List<Sensor> getNonPingerSensors()
+	{
+		def nonPingers = sensors.grep
+		{
+			it.transmitterType != TransmitterType.findByTransmitterTypeName('PINGER', [cache:true])
+		}
+		
+		return nonPingers	
+	}
+	
 	private String removeSurroundingBrackets(listAsString)
 	{
 		return listAsString[1..listAsString.size() - 2]

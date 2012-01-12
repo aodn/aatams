@@ -35,9 +35,9 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="codeName"><g:message code="tag.codeName.label" default="ID" /></label>
+                                  <label for="deviceID"><g:message code="tag.deviceID.label" default="IDs" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeName', 'errors')}">${tagInstance?.codeName}</td>
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'deviceID', 'errors')}">${tagInstance?.deviceID}</td>
                             </tr>
                         
                             <tr class="prop">

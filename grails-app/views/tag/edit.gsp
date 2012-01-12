@@ -98,7 +98,7 @@
                                     <label for="expectedLifeTimeDays"><g:message code="tag.expectedLifeTimeDays.label" default="Expected Life Time (days)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'pingCode', 'errors')}">
-                                    <g:textField name="expectedLifeTimeDays" value="${fieldValue(bean: tagInstance, field: 'expectedLifeTimeDays')}" />
+                                    <g:textField name="expectedLifeTimeDays" value="${tagInstance?.expectedLifeTimeDays}" />
 
                                 </td>
                             </tr>
@@ -133,7 +133,7 @@
                                       </tr>
                                     </thead>
                                     <tbody id="sensor_table_body">
-                                      <g:each in="${tagInstance.sensors}" var="s">
+                                      <g:each in="${tagInstance.nonPingerSensors}" var="s">
                                         <tr>
                                           <td class="rowButton">
                                             <g:link class="show" controller="sensor" action="show" id="${s?.id}"></g:link>

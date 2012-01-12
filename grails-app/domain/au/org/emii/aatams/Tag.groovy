@@ -69,7 +69,12 @@ class Tag extends Device implements Embargoable
 	
 	Sensor getPinger()
 	{
-		return Sensor.findByTagAndTransmitterType(this, TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]), [cache:true])
+		def searchPinger = sensors.find
+		{
+			it.transmitterType == TransmitterType.findByTransmitterTypeName('PINGER', [cache:true])
+		}
+		return searchPinger
+//		return Sensor.findByTagAndTransmitterType(this, TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]), [cache:true])
 	}
 	
 	void setPingCode(Integer newPingCode)
@@ -78,8 +83,8 @@ class Tag extends Device implements Embargoable
 		{
 			Sensor newPinger = new Sensor(tag: this, pingCode: newPingCode, transmitterType: TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]))
 			addToSensors(newPinger)
-			newPinger.save(failOnError:true)
-			this.save()
+//			newPinger.save(failOnError:true)
+//			this.save()
 		}
 		else
 		{

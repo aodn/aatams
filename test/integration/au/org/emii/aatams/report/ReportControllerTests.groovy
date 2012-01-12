@@ -167,16 +167,16 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 //        checkResponse("testExecuteAnimalReleaseSummary")
     }
     
-    void testExecuteTag()
+    void testExecuteSensor()
     {
-        controller.params._name = "tag"
-        controller.params._file = "tagExtract"
+        controller.params._name = "sensor"
+        controller.params._file = "sensorExtract"
         controller.params.filter = [:]
 		controller.params._type = "extract"
 		
         controller.execute()
         
-        checkResponse("testExecuteTag")
+        checkResponse("testExecuteSensor")
     }
 	
 	void testExecuteDetectionExtract()

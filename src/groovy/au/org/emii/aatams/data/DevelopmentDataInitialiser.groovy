@@ -416,7 +416,10 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     unit:'k',
                     slope:1,
                     intercept:0)
-			
+		tag1.addToSensors(sensor1)	
+		tag1.addToSensors(sensor2)
+		tag1.save(failOnError:true)
+		
 		a69_1303.save(failOnError:true)
 		
         //

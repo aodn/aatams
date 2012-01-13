@@ -162,7 +162,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 					type: [id:1],
 					treatmentType : [id:1],
 					comments: "",
-					tag:[codeMap:codeMap, pingCode:"3333", serialNumber: serialNum, model:[id: 1]]]
+					tag:[codeMap:codeMap, pingCode:"3333", serialNumber: serialNum, model:new TagDeviceModel()]]
 
 		params.surgery += ['1':surgeryNew]
 
@@ -518,7 +518,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 						type: [id:1],
 						treatmentType : [id:1],
 						comments: "",
-						tag:[codeMap:[id: 1], pingCode:it, serialNumber: serialNum, model:[id: 1]]]
+						tag:[codeMap:new CodeMap(), pingCode:it, serialNumber: serialNum, model:new TagDeviceModel()]]
 
 			params.surgery += [(String.valueOf(it)):surgery]
 		}

@@ -105,7 +105,7 @@ class TagControllerTests extends ControllerUnitTestCase
         
 		controller.metaClass.insertNoSensorRestriction = {}
         def model = controller.list()
-println("model: " + model)		
+
         assertEquals(2, model.entityList.size())
         assertEquals(2, model.total)
         assertTrue(model.entityList.contains(tag1))
@@ -135,4 +135,27 @@ println("model: " + model)
         assertTrue(model.candidateProjects.contains(project1))
         assertTrue(model.candidateProjects.contains(project2))
     }
+	
+	
+	void testLookupBySerialNumber()
+	{
+		assertLookupWithTerm(2, "11")
+		assertLookupWithTerm(1, "1111-A")
+		assertLookupWithTerm(0, "1111-AB")
+		assertLookupWithTerm(1, "22")
+	}
+	
+	private void assertLookupWithTerm(expectedNumResults, term)
+	{
+		controller.params.term = term
+		controller.lookupBySerialNumber()
+
+		def jsonResponse = JSON.parse(controller.response.contentAsString)
+		assertEquals(expectedNumResults, jsonResponse.size())
+
+		// Need to reset the response so that this method can be called multiple times within a single test case.
+		// Also requires workaround to avoid exception, see: http://jira.grails.org/browse/GRAILS-6483
+		mockResponse?.committed = false // Current workaround
+		reset()
+	}
 }

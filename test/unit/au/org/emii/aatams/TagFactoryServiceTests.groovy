@@ -28,10 +28,10 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
 		mockDomain(TransmitterType)
 		
 		params = 
-		    [codeMap:[id:codeMap.id],
+		    [codeMap:codeMap,
 			pingCode:1234,
 			serialNumber:"1111",
-			model:[id:model.id],
+			model:model,
 			status:new DeviceStatus(),
 			transmitterType:new TransmitterType()]
     }
@@ -40,36 +40,6 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
     {
         super.tearDown()
     }
-	
-	void testInvalidCodeMapId()
-	{
-		params.codeMap = [id:123]
-		
-		try
-		{
-			tagService.lookupOrCreate(params)
-			fail("Expecting exception")
-		}
-		catch (IllegalArgumentException e)
-		{
-			assertEquals("Unknown code map ID: 123", e.getMessage())
-		}
-	}
-	
-	void testInvalidPingCode()
-	{
-		params.pingCode = "asdf"
-		
-		try
-		{
-			tagService.lookupOrCreate(params)
-			fail("Expecting exception")
-		}
-		catch (IllegalArgumentException e)
-		{
-			assertEquals("Invalid ping code ID: asdf", e.getMessage())
-		}
-	}
 	
 	void testValidParamsNew()
 	{
@@ -122,8 +92,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
 
 		assertFalse(tag.hasErrors())
 		assertNotNull(Tag.get(tag.id))
-		assertTrue(codeMap.tags*.id.contains(tag.id))
-		assertTrue(CodeMap.get(tag.codeMap.id).tags*.id.contains(tag.id))
+		assertEquals(codeMap, tag.codeMap)
 		
 		return tag
 	}

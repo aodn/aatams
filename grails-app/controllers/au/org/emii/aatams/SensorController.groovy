@@ -2,19 +2,20 @@ package au.org.emii.aatams
 
 import grails.converters.JSON
 
-class SensorController {
-
+class SensorController extends AbstractController 
+{
+	def tagFactoryService
+	
     static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
     def index = {
         redirect(action: "list", params: params)
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [sensorInstanceList: Sensor.list(params), sensorInstanceTotal: Sensor.count(),
-        entityList: Sensor.list(params), total: Sensor.count()]
-    }
+    def list = 
+	{
+		doList("sensor")
+	}
 
     def create = {
         def sensorInstance = new Sensor()
@@ -22,16 +23,26 @@ class SensorController {
         return [sensorInstance: sensorInstance]
     }
 
-    def save = {
+    def save = 
+	{
+		def tag = tagFactoryService.lookupOrCreate(params.tag)
+		assert(tag)
+		
+		params.tag = tag
+		
         def sensorInstance = new Sensor(params)
         
-        if (sensorInstance.save(flush: true)) 
+		if (sensorInstance.save(flush: true)) 
         {
+			sensorInstance.save()
+			
             flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance.toString()])}"
-            render ([instance:sensorInstance, message:flash] as JSON)
+//            render ([instance:sensorInstance, message:flash] as JSON)
+            redirect(controller: "tag", action: "show", id: sensorInstance.tag?.id)
         }
         else 
         {
+			println(tag.errors)
             log.error(sensorInstance.errors)
             render ([errors:sensorInstance.errors] as JSON)
         }

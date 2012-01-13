@@ -149,7 +149,21 @@ class TagController extends AbstractController
         log.debug("Returning: " + (tags as JSON))
         render tags as JSON
     }
-	
+
+	def lookupBySerialNumber =
+	{
+		def tags = Tag.findAllBySerialNumberIlike(params.term + "%")
+		
+		// Limit so that all results fit on screen.
+		if (tags?.size() > 20)
+		{
+			tags = tags[0..19]
+		}
+		
+		log.debug("Returning: " + (tags as JSON))
+		render tags as JSON
+	}
+
 	def lookupByCodeName = 
 	{
 		def tags = Tag.findAllByCodeNameIlike("%" + params.term + "%", [max:20, sort:"codeName", order:"asc"])

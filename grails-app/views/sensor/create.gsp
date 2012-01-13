@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'sensor.label', default: 'Sensor')}" />
+        <g:set var="entityName" value="${message(code: 'tag.label', default: 'Tag')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -14,7 +14,7 @@
             <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
         </div>
         <div class="body">
-            <h1><g:message code="default.create.label" args="[entityName]" /></h1>
+            <h1><g:message code="default.create.label" args="[entityName]" /> (or Sensor)</h1>
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>

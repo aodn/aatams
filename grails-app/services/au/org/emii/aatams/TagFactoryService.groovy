@@ -36,38 +36,9 @@ class TagFactoryService {
 
 	private Tag createNewTag(params) 
 	{
-		def tag
-		
 		initDefaults(params)
-
-		def codeMap = CodeMap.get(params.codeMap.id)
-		if (!codeMap)
-		{
-			throw new IllegalArgumentException("Unknown code map ID: " + params.codeMap.id)
-		}
-
-		def pingCode
-
-		try
-		{
-			pingCode = Integer.valueOf(params.pingCode)
-		}
-		catch (NumberFormatException e)
-		{
-			throw new IllegalArgumentException("Invalid ping code ID: " + params.pingCode, e)
-		}
-
-		tag = new Tag(
-				codeMap:codeMap,
-				serialNumber:params.serialNumber,
-				model:TagDeviceModel.get(params.model.id),
-				status:params.status)
 		
-		def sensor = new Sensor(pingCode: pingCode, transmitterType: TransmitterType.findByTransmitterTypeName('PINGER'))
-		tag.addToSensors(sensor)
-		
-		codeMap.addToTags(tag)
-		return tag
+		return new Tag(params)
 	}
 
 	private initDefaults(params) 
@@ -75,11 +46,6 @@ class TagFactoryService {
 		if (!params.status)
 		{
 			params.status = DeviceStatus.findByStatus('NEW')
-		}
-
-		if (!params.transmitterType)
-		{
-			params.transmitterType = TransmitterType.findByTransmitterTypeName('PINGER')
 		}
 	}
 }

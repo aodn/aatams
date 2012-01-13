@@ -105,6 +105,8 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         mockLogging(SensorController)
         sensorController = new SensorController()
         sensorController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
+		sensorController.reportInfoService = reportInfoService
+		sensorController.reportFilterFactoryService = reportFilterFactoryService
 
         mockController(TagController)
         mockLogging(TagController)

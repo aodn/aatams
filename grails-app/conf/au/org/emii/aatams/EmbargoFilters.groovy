@@ -73,9 +73,8 @@ class EmbargoFilters
             {
                 model ->
 
-                model.sensorInstanceList = 
-                    embargoService.applyEmbargo(model.sensorInstanceList)
-				model.entityList = model.sensorInstanceList
+                model.entityList = 
+                    embargoService.applyEmbargo(model.entityList)
             }
         }
 

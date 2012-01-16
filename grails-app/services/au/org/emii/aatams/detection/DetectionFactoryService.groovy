@@ -40,8 +40,7 @@ class DetectionFactoryService
     
 	def detectionValidatorService
 	
-	private Map<String, List<Tag>> tagCache = new WeakHashMap<String, List<Tag>>()
-	private Map<String, List<Tag>> sensorCache = new WeakHashMap<String, List<Sensor>>()
+	private Map<String, List<Sensor>> sensorCache = new WeakHashMap<String, List<Sensor>>()
 	
     /**
      * Creates a detection given a map of parameters (which originate from a line
@@ -76,25 +75,31 @@ class DetectionFactoryService
         
         def newDetectionSurgeries = []
         
-		def matchingDetections = ValidDetection.findAllByTransmitterId(surgery.tag.codeName, [cache:true])
-		def numRecords = matchingDetections.size()
-		log.info("Rescanning for surgery on tag: " + surgery.tag + ", " + numRecords + " detections match tag.")
-		int percentProgress = 0
-		long startTime = System.currentTimeMillis()
-		
-        matchingDetections.eachWithIndex
-        {
-            detection, i ->
-            
-            if (surgery.isInWindow(detection.timestamp))
-            {
-				def newDetSurgery = createDetectionSurgery(surgery, surgery.tag, detection)
-				newDetectionSurgeries.add(newDetSurgery)
-            }
+		surgery.tag.sensors.each
+		{
+			sensor ->
+
+			def matchingDetections = ValidDetection.findAllByTransmitterId(sensor.transmitterId, [cache:true])
+			def numRecords = matchingDetections.size()
+			log.info("Rescanning for surgery on sensor: " + sensor + ", " + numRecords + " detections match tag.")
+			int percentProgress = 0
+			long startTime = System.currentTimeMillis()
 			
-			percentProgress = logProgress(i, numRecords, percentProgress, surgery, startTime)
-        }
-        
+			matchingDetections.eachWithIndex
+			{
+				detection, i ->
+				
+				if (surgery.isInWindow(detection.timestamp))
+				{
+					def newDetSurgery = createDetectionSurgery(surgery, sensor, detection)
+					newDetectionSurgeries.add(newDetSurgery)
+				}
+				
+				percentProgress = logProgress(i, numRecords, percentProgress, surgery, startTime)
+			}
+	
+		}
+		
 		log.debug("Num new detection surgeries: " + newDetectionSurgeries.size())
         return newDetectionSurgeries
     }
@@ -192,25 +197,7 @@ class DetectionFactoryService
     private void matchToTags(detection)
     {
         assert(detection)
-        
-		def tags = findTags(detection.transmitterId)
-        tags.each
-        {
-            tag -> 
 
-            tag.surgeries.each
-            {
-                surgery ->
-                
-                if (!surgery.isInWindow(detection.timestamp))
-                {
-                    return
-                }
-                
-				createDetectionSurgery(surgery, tag, detection)
-            }
-        }
-		
 		def sensors = findSensors(detection.transmitterId)
         sensors.each
         {
@@ -227,36 +214,55 @@ class DetectionFactoryService
             }
         }
     }
-    
-	private List<Tag> findTags(transmitterId)
+	
+	protected String parseCodeMapFromTransmitterId(transmitterId)
 	{
-		return findDevice(Tag, tagCache, transmitterId)
+		return parseTransmitterId(transmitterId).codeMap
+	}
+	
+	protected Integer parsePingCodeFromTransmitterId(transmitterId)
+	{
+		return parseTransmitterId(transmitterId).pingCode
+	}
+	
+	protected Map parseTransmitterId(transmitterId)
+	{
+		// TransmitterId - "A69-1303-62347"
+		List tokens = transmitterId.tokenize('-')
+		assert(tokens.size() == 3)
+		String codeMap = tokens[0] + "-" + tokens[1]
+		Integer pingCode = Integer.valueOf(tokens[2])
+		
+		return [codeMap: codeMap, pingCode: pingCode]
 	}
 	
 	private List<Sensor> findSensors(transmitterId)
 	{
-		return findDevice(Sensor, sensorCache, transmitterId)
-	}
-	
-	private List findDevice(clazz, cache, transmitterId)
-	{
-		if (!cache.containsKey(transmitterId))
+		if (!sensorCache.containsKey(transmitterId))
 		{
-			cache.put(transmitterId, 
-					  clazz.findAllByCodeNameAndStatusNotEqual(
-						  transmitterId, 
-						  DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true]), 
-						  [cache:true]))
+			def sensorsWithPingCode = 
+				Sensor.findAllByPingCode(
+					parsePingCodeFromTransmitterId(transmitterId),
+					[cache:true])
+				
+			sensorsWithPingCode = sensorsWithPingCode.grep
+			{
+				(   (it.tag.codeMap.codeMap == parseCodeMapFromTransmitterId(transmitterId))
+				 && (it.tag.status != DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true])))
+			}
+			
+			sensorCache.put(transmitterId, 
+					  	    sensorsWithPingCode)
 		}
 		
-		return cache[transmitterId]
+		return sensorCache[transmitterId]
 	}
 	
-    protected def createDetectionSurgery(surgery, tag, detection)
+    protected def createDetectionSurgery(surgery, sensor, detection)
     {
 		return new DetectionSurgery(
 			surgery:surgery,
-			tag:tag,
+			sensor:sensor,
 			detection:detection).save()
     }
 	

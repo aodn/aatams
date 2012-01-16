@@ -28,7 +28,8 @@
                         <tr>
                             <td/>
                             
-                            <g:sortableColumn property="codeName" title="${message(code: 'receiver.codeName.label', default: 'ID')}" params="${executedFilter}"/>
+                            <%--<g:sortableColumn property="name" title="${message(code: 'receiver.name.label', default: 'ID')}" params="${executedFilter}"/> --%>
+                            <th><g:message code="name.label" default="ID" /></th>
                         
                             <th><g:message code="receiver.model.label" default="Model" /></th>
                         
@@ -46,7 +47,7 @@
                         
                             <td class="rowButton"><g:link class="show" action="show" id="${receiverInstance.id}">.</g:link></td>
                     
-                            <td>${fieldValue(bean: receiverInstance, field: "codeName")}</td>
+                            <td>${fieldValue(bean: receiverInstance, field: "name")}</td>
                         
                             <td>${fieldValue(bean: receiverInstance, field: "model")}</td>
                         

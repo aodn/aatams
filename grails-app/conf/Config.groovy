@@ -133,7 +133,7 @@ log4j = {
 
 //    info    "grails.app.service.au.org.emii"
 
-//    debug   "grails.app.controller.au.org.emii.aatams.report.ReportController",
+    debug   "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController"
 //			"grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService",
 //			"grails.app.service.au.org.emii.aatams.detection.DetectionFactoryService",
 			
@@ -143,7 +143,7 @@ log4j = {
 //	        "grails.app.domain.au.org.emii",
 //            "grails.app.tagLib.au.org.emii",
 //            "grails.app.task",
-//           'org.hibernate',
+//           'org.hibernate'
 //            "grails.buildtestdata",
 //            "net.sf.jasperreports",
 //            "org.codehaus.groovy.grails.plugins.jasper",

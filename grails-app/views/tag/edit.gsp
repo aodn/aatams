@@ -14,7 +14,9 @@
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
             <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
-            <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
+            <shiro:hasPermission permission="projectWriteAny">
+              <span class="menuButton"><g:link class="create" controller="sensor" action="create"><g:message code="default.new.label" args="[entityName]" /> (or Sensor)</g:link></span>
+            </shiro:hasPermission>
         </div>
         <div class="body">
             <h1><g:message code="default.edit.label" args="[entityName]" /></h1>
@@ -35,9 +37,9 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="codeName"><g:message code="tag.codeName.label" default="ID" /></label>
+                                  <label for="deviceID"><g:message code="tag.deviceID.label" default="IDs" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'codeName', 'errors')}">${tagInstance?.codeName}</td>
+                                <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'deviceID', 'errors')}">${tagInstance?.deviceID}</td>
                             </tr>
                         
                             <tr class="prop">
@@ -98,7 +100,7 @@
                                     <label for="expectedLifeTimeDays"><g:message code="tag.expectedLifeTimeDays.label" default="Expected Life Time (days)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'pingCode', 'errors')}">
-                                    <g:textField name="expectedLifeTimeDays" value="${fieldValue(bean: tagInstance, field: 'expectedLifeTimeDays')}" />
+                                    <g:textField name="expectedLifeTimeDays" value="${tagInstance?.expectedLifeTimeDays}" />
 
                                 </td>
                             </tr>
@@ -133,7 +135,7 @@
                                       </tr>
                                     </thead>
                                     <tbody id="sensor_table_body">
-                                      <g:each in="${tagInstance.sensors}" var="s">
+                                      <g:each in="${tagInstance.nonPingerSensors}" var="s">
                                         <tr>
                                           <td class="rowButton">
                                             <g:link class="show" controller="sensor" action="show" id="${s?.id}"></g:link>

@@ -29,7 +29,7 @@ import au.org.emii.aatams.util.SqlUtils
  */
 class DetectionSurgery 
 {
-    static belongsTo = [surgery:Surgery, detection:ValidDetection, tag:Tag]
+    static belongsTo = [surgery:Surgery, detection:ValidDetection, sensor:Sensor]
     
 	static mapping =
 	{
@@ -39,23 +39,23 @@ class DetectionSurgery
     static searchable =
     {
         root(false)
-        tag(component:true)
+        sensor(component:true)
     }
     
-    static DetectionSurgery newSavedInstance(surgery, detection, tag)
+    static DetectionSurgery newSavedInstance(surgery, detection, sensor)
     {
         DetectionSurgery detectionSurgery =
             new DetectionSurgery(surgery:surgery, 
-                                 tag:tag, 
+                                 sensor:sensor, 
                                  detection:detection)
 
         detection.addToDetectionSurgeries(detectionSurgery)
         surgery.addToDetectionSurgeries(detectionSurgery)
-        tag.addToDetectionSurgeries(detectionSurgery)
+        sensor.addToDetectionSurgeries(detectionSurgery)
 
         detection.save()
         surgery.save()
-        tag.save()
+        sensor.save()
         
         detectionSurgery.save()
         return detectionSurgery
@@ -64,7 +64,7 @@ class DetectionSurgery
 	static String toSqlInsert(Map detSurgery, boolean useHibernateSeqForDetectionId)
 	{
 		StringBuilder detSurgeryBuff = new StringBuilder(
-				"INSERT INTO DETECTION_SURGERY (ID, VERSION, DETECTION_ID, SURGERY_ID, TAG_ID) " +
+				"INSERT INTO DETECTION_SURGERY (ID, VERSION, DETECTION_ID, SURGERY_ID, SENSOR_ID) " +
 				" VALUES(")
 
 		detSurgeryBuff.append("nextval('detection_surgery_sequence'),")
@@ -73,12 +73,12 @@ class DetectionSurgery
 		if (useHibernateSeqForDetectionId)
 		{
 			detSurgeryBuff.append("currval('hibernate_sequence'),")
-			SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["surgeryId", "tagId"])
+			SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["surgeryId", "sensorId"])
 		}
 		else
 		{
 			assert(detSurgery.detectionId)
-			SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["detectionId", "surgeryId", "tagId"])
+			SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["detectionId", "surgeryId", "sensorId"])
 		}
 		SqlUtils.removeTrailingCommaAndAddBracket(detSurgeryBuff)
 		
@@ -87,6 +87,6 @@ class DetectionSurgery
 
     String toString()
     {
-        return String.valueOf(tag) + "-" + String.valueOf(surgery) + "-" + String.valueOf(detection)
+        return String.valueOf(sensor) + "-" + String.valueOf(surgery) + "-" + String.valueOf(detection)
     }
 }

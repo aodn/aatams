@@ -14,7 +14,7 @@ class CandidateEntitiesService
     
     def projects()
     {
-        def candidateProjects = 
+		def candidateProjects = 
             Project.findAllByStatus(EntityStatus.ACTIVE).grep
             {
 				SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(it.id))
@@ -80,7 +80,7 @@ class CandidateEntitiesService
 		{
 			a, b ->
 			
-			a.codeName <=> b.codeName
+			a.toString() <=> b.toString()
 		}
 	
 		return receivers

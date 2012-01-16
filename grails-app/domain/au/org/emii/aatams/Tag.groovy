@@ -1,20 +1,22 @@
 package au.org.emii.aatams
 
+/**
+ * Represents a physical tag (which may be attached at any one time to an animal via a surgery).
+ * 
+ * @author jburgess
+ *
+ */
 class Tag extends Device implements Embargoable
 {
     List<Surgery> surgeries = new ArrayList<Surgery>()
-    
+	List<Sensor> sensors = new ArrayList<Sensor>()
+	
     static hasMany = [sensors:Sensor, 
-                      surgeries:Surgery, 
-                      detectionSurgeries:DetectionSurgery]
+                      surgeries:Surgery]
 
     Project project
 	static belongsTo = [codeMap: CodeMap]
 	
-    Integer pingCode
-
-    TransmitterType transmitterType
-    
     /**
      * The expected lifetime (in days) of a tag once is it deployed.  This
      * value is used to derive the "window of operation" of a Surgery when 
@@ -27,12 +29,10 @@ class Tag extends Device implements Embargoable
     static constraints =
     {
         project(nullable:true)
-        pingCode()
-        transmitterType()
         expectedLifeTimeDays(nullable:true)
     }
     
-    static transients = ['codeMapPingCode', 'expectedLifeTimeDaysAsString']
+    static transients = ['expectedLifeTimeDaysAsString', 'deviceID', 'pinger', 'pingCode', 'pingCodes', 'transmitterTypeNames', 'nonPingerSensors']
     
     static searchable =
     {
@@ -46,25 +46,6 @@ class Tag extends Device implements Embargoable
 		detectionSurgeries cache:true
 	}
 	
-    String toString()
-    {
-        return getCodeMapPingCode()
-    }
-    
-    /**
-     * The ID dynamically constructed from Device's properties.
-     */
-    String getCodeMapPingCode()
-    {
-        return String.valueOf(codeMap) + "-" + String.valueOf(pingCode)
-    }
-    
-    static String constructCodeName(params)
-    {
-		CodeMap codeMap = CodeMap.get(params.codeMap?.id)
-        return String.valueOf(codeMap) + "-" + params.pingCode
-    }
-    
     // For reports...
     String getExpectedLifeTimeDaysAsString()
     {
@@ -76,6 +57,72 @@ class Tag extends Device implements Embargoable
         return String.valueOf(expectedLifeTimeDays)
     }
     
+	String toString()
+	{
+		return getDeviceID()
+	}
+	
+	String getDeviceID()
+	{
+		return removeSurroundingBrackets(String.valueOf(sensors*.toString()))
+	}
+	
+	Sensor getPinger()
+	{
+		def searchPinger = sensors.find
+		{
+			it.transmitterType == TransmitterType.findByTransmitterTypeName('PINGER', [cache:true])
+		}
+		return searchPinger
+//		return Sensor.findByTagAndTransmitterType(this, TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]), [cache:true])
+	}
+	
+	void setPingCode(Integer newPingCode)
+	{
+		if (!pinger)
+		{
+			Sensor newPinger = new Sensor(tag: this, pingCode: newPingCode, transmitterType: TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]))
+			addToSensors(newPinger)
+//			newPinger.save(failOnError:true)
+//			this.save()
+		}
+		else
+		{
+			assert(pinger)
+			pinger.pingCode = newPingCode
+		}	
+	}
+	
+	Integer getPingCode()
+	{
+		return pinger?.pingCode
+	}
+	
+	String getPingCodes()
+	{
+		return removeSurroundingBrackets(String.valueOf(sensors*.pingCode))
+	}
+	
+	String getTransmitterTypeNames()
+	{
+		return removeSurroundingBrackets(String.valueOf(sensors*.transmitterType.transmitterTypeName))
+	}
+
+	List<Sensor> getNonPingerSensors()
+	{
+		def nonPingers = sensors.grep
+		{
+			it?.transmitterType != TransmitterType.findByTransmitterTypeName('PINGER', [cache:true])
+		}
+		
+		return nonPingers	
+	}
+	
+	private String removeSurroundingBrackets(listAsString)
+	{
+		return listAsString[1..listAsString.size() - 2]
+	}
+	
     def applyEmbargo()
     {
         boolean embargoed = false

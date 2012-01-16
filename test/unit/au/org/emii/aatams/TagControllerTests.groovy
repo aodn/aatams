@@ -56,9 +56,9 @@ class TagControllerTests extends ControllerUnitTestCase
 		mockDomain(CodeMap, [codeMap])
 		codeMap.save()
 
-		Tag newTag = new Tag(codeMap:codeMap, codeName:'A69-1303-1111', serialNumber:'1111-A', status:newStatus)
-        Tag deployedTag = new Tag(codeMap:codeMap, codeName:'A69-1303-2222', serialNumber:'2222', status:deployedStatus)
-        Tag recoveredTag = new Tag(codeMap:codeMap, codeName:'A69-1303-3333', serialNumber:'1111-B', status:recoveredStatus)
+		Tag newTag = new Tag(codeMap:codeMap, serialNumber:'1111-A', status:newStatus)
+        Tag deployedTag = new Tag(codeMap:codeMap, serialNumber:'2222', status:deployedStatus)
+        Tag recoveredTag = new Tag(codeMap:codeMap, serialNumber:'1111-B', status:recoveredStatus)
         def tagList = [newTag, deployedTag, recoveredTag]
         mockDomain(Tag, tagList)
         tagList.each { it.save() }
@@ -77,24 +77,25 @@ class TagControllerTests extends ControllerUnitTestCase
         def controllerResponse = controller.response.contentAsString
         def jsonResult = JSON.parse(controllerResponse)
         
-        assertEquals(2, jsonResult.size())
+		assertEquals(2, jsonResult.size())
         
-        assertEquals('A69-1303-1111', jsonResult[0].codeName)
+        assertEquals('1111-A', jsonResult[0].serialNumber)
         assertEquals(newStatus.status, jsonResult[0].status.status)
-        assertEquals('A69-1303-3333', jsonResult[1].codeName)
+        assertEquals('1111-B', jsonResult[1].serialNumber)
         assertEquals(recoveredStatus.status, jsonResult[1].status.status)
     }
     
     void testNoSensorsInList()
     {
-        Tag tag1 = new Tag(codeMap:"A69-9002", pingCode: 1111, codeName:"A69-9002-1111", status:newStatus)
-        Tag tag2 = new Tag(codeMap:"A69-9002", pingCode: 2222, codeName:"A69-9002-2222", status:newStatus)
+		CodeMap a69_9002 = new CodeMap(codeMap: "A69-9002")
+        Tag tag1 = new Tag(codeMap:a69_9002, status:newStatus)
+        Tag tag2 = new Tag(codeMap:a69_9002, status:newStatus)
         def tagList = [tag1, tag2]
 		mockDomain(Tag, tagList)
 		tagList.each { it.save() }
 
-        Sensor sensor1 = new Sensor(codeName: "sensor1", tag:tag1)
-        Sensor sensor2 = new Sensor(codeName: "sensor2", tag:tag1)
+        Sensor sensor1 = new Sensor(tag:tag1)
+        Sensor sensor2 = new Sensor(tag:tag1)
         def sensorList = [sensor1, sensor2]
 		mockDomain(Sensor, sensorList)
         sensorList.each { it.save() }
@@ -104,7 +105,7 @@ class TagControllerTests extends ControllerUnitTestCase
         
 		controller.metaClass.insertNoSensorRestriction = {}
         def model = controller.list()
-		
+
         assertEquals(2, model.entityList.size())
         assertEquals(2, model.total)
         assertTrue(model.entityList.contains(tag1))
@@ -135,27 +136,23 @@ class TagControllerTests extends ControllerUnitTestCase
         assertTrue(model.candidateProjects.contains(project2))
     }
 	
-	void testLookupByCodeName()
+	
+	void testLookupBySerialNumber()
 	{
-//		Tag newTag = new Tag(codeName:'A69-1303-1111', serialNumber:'1111-A', status:newStatus)
-//        Tag deployedTag = new Tag(codeName:'A69-1303-2222', serialNumber:'2222', status:deployedStatus)
-//        Tag recoveredTag = new Tag(codeName:'A69-1303-3333', serialNumber:'1111-B', status:recoveredStatus)
-		
-		assertLookupWithTerm(0, 'X')
-		assertLookupWithTerm(1, '11')
-		assertLookupWithTerm(1, 'A69-1303-1')
-		assertLookupWithTerm(3, 'A69-')
-		assertLookupWithTerm(3, '1303')
+		assertLookupWithTerm(2, "11")
+		assertLookupWithTerm(1, "1111-A")
+		assertLookupWithTerm(0, "1111-AB")
+		assertLookupWithTerm(1, "22")
 	}
 	
-	private void assertLookupWithTerm(expectedNumResults, term) 
+	private void assertLookupWithTerm(expectedNumResults, term)
 	{
 		controller.params.term = term
-		controller.lookupByCodeName()
+		controller.lookupBySerialNumber()
 
 		def jsonResponse = JSON.parse(controller.response.contentAsString)
 		assertEquals(expectedNumResults, jsonResponse.size())
-		
+
 		// Need to reset the response so that this method can be called multiple times within a single test case.
 		// Also requires workaround to avoid exception, see: http://jira.grails.org/browse/GRAILS-6483
 		mockResponse?.committed = false // Current workaround

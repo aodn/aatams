@@ -11,7 +11,7 @@
 	<parameter name="REPORT_USER" class="java.lang.String"/>
 	<parameter name="FILTER_PARAMS" class="java.util.Collection" isForPrompting="false"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false"/>
-	<field name="receiver.codeName" class="java.lang.String"/>
+	<field name="receiver.name" class="java.lang.String"/>
 	<field name="station.name" class="java.lang.String"/>
 	<field name="station.latitude" class="java.lang.Double"/>
 	<field name="station.longitude" class="java.lang.Double"/>
@@ -25,7 +25,7 @@
 	<field name="active" class="java.lang.Boolean"/>
 	<sortField name="station.installation.project.name"/>
 	<sortField name="station.installation.name"/>
-	<sortField name="receiver.codeName"/>
+	<sortField name="receiver.name"/>
 	<group name="projectGroup">
 		<groupExpression><![CDATA[$F{station.installation.project.name}]]></groupExpression>
 		<groupHeader>
@@ -151,7 +151,7 @@
 			<textField>
 				<reportElement style="fieldValue" x="94" y="0" width="78" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{receiver.codeName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{receiver.name}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="fieldValue" x="172" y="0" width="51" height="20"/>

@@ -38,6 +38,7 @@ class ReportInfoService
          "receiverDeployment": "au.org.emii.aatams.ReceiverDeployment",
          "receiverRecovery": "au.org.emii.aatams.ReceiverRecovery",
          "receiverEvent": "au.org.emii.aatams.ValidReceiverEvent",
+         "sensor": "au.org.emii.aatams.Sensor",
          "tag": "au.org.emii.aatams.Tag"
          ]
 
@@ -60,6 +61,7 @@ class ReportInfoService
 		 "receiverDeployment.station.installation.name": "installation",
 		 "receiverDeployment.station.name": "station",
 		 "recovery": "unrecovered deployments only",
+		 "pingCode": "ping code",
          "project.name": "project",
 		 "projectRoles.project.name": "project",
 		 "organisation.name": "organisation",
@@ -69,6 +71,7 @@ class ReportInfoService
          "station.installation.project.name": "project",
          "station.installation.name": "installation",
 		 "surgeries.tag.codeName": tagId,
+		 "tag.project.name": "project",
 		 "timestamp": "timestamp"]
     
     static def reportNameToClass =
@@ -84,6 +87,7 @@ class ReportInfoService
          "receiverDeployment": ReceiverDeployment.class,
          "receiverRecovery": ReceiverDeployment.class,	// This is deliberate - the "recovery" list view is actually a list of deployments and associated recovery (if there is one)
          "receiverEvent": ValidReceiverEvent.class,
+         "sensor": Sensor.class,
          "tag": Tag.class
          ]
      
@@ -205,6 +209,12 @@ class ReportInfoService
             [new ListReportParameter(label: propertyToLabel["station.installation.project.name"], propertyName:"station.installation.project.name", range:projectRange),
              new IsNullReportParameter(label: propertyToLabel["recovery"], propertyName:"recovery")]
 			
+		def sensorFilterParams =
+			[new ListReportParameter(label: propertyToLabel["tag.project.name"], propertyName:"tag.project.name", range:projectRange),
+			 new AjaxMultiSelectReportParameter(label: propertyToLabel["pingCode"], 
+									 			propertyName:"pingCode", 
+												lookupPath:"/sensor/lookupByPingCode")]
+			
 		def tagFilterParams =
 			[new ListReportParameter(label: propertyToLabel["project.name"], propertyName:"project.name", range:projectRange),
 			 new AjaxMultiSelectReportParameter(label: propertyToLabel["codeName"], 
@@ -244,6 +254,9 @@ class ReportInfoService
                 (ValidReceiverEvent.class):new ReportInfo(displayName:"Receiver Events", 
                                                      jrxmlFilename:["extract":"receiverEventExtract"], 
                                                      filterParams:eventFilterParams),
+                (Sensor.class):new ReportInfo(displayName:"Tags", 
+                                              jrxmlFilename:["extract":"sensorExtract"], 
+                                              filterParams:sensorFilterParams),
                 (Tag.class):new ReportInfo(displayName:"Tags", 
                                            jrxmlFilename:["extract":"tagExtract"], 
                                            filterParams:tagFilterParams)

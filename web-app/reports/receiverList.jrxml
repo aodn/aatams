@@ -11,7 +11,7 @@
 	<parameter name="REPORT_USER" class="java.lang.String"/>
 	<parameter name="FILTER_PARAMS" class="java.util.Collection" isForPrompting="false"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false"/>
-	<field name="codeName" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
 	<field name="status.status" class="java.lang.String"/>
 	<field name="model.modelName" class="java.lang.String"/>
 	<field name="model.manufacturer.manufacturerName" class="java.lang.String"/>
@@ -19,7 +19,7 @@
 	<field name="organisation.name" class="java.lang.String"/>
 	<field name="organisation.totalReceivers" class="java.lang.Integer"/>
 	<sortField name="organisation.name"/>
-	<sortField name="codeName"/>
+	<sortField name="name"/>
 	<group name="organisationGroup">
 		<groupExpression><![CDATA[$F{organisation.name}]]></groupExpression>
 		<groupHeader>
@@ -108,7 +108,7 @@
 			<textField>
 				<reportElement style="fieldValue" x="32" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{codeName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="fieldValue" x="132" y="0" width="100" height="20"/>

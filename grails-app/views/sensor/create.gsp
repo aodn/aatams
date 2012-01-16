@@ -1,11 +1,10 @@
-
-
 <%@ page import="au.org.emii.aatams.Sensor" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
-        <g:set var="entityName" value="${message(code: 'sensor.label', default: 'Sensor')}" />
+        <g:javascript src="sensorCreate.js"/>
+        <g:set var="entityName" value="${message(code: 'tag.label', default: 'Tag')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
@@ -14,19 +13,92 @@
             <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
         </div>
         <div class="body">
-            <h1><g:message code="default.create.label" args="[entityName]" /></h1>
+            <h1><g:message code="default.create.label" args="[entityName]" /> (or Sensor)</h1>
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
             <g:hasErrors bean="${sensorInstance}">
-            <div class="errors">
-                <g:renderErrors bean="${sensorInstance}" as="list" />
-            </div>
+	            <div class="errors">
+	                <g:renderErrors bean="${sensorInstance}" as="list" />
+	            </div>
+            </g:hasErrors>
+            <g:hasErrors bean="${sensorInstance?.tag}">
+	            <div class="errors">
+	                <g:renderErrors bean="${sensorInstance?.tag}" as="list" />
+	            </div>
             </g:hasErrors>
             <g:form action="save" >
                 <div class="dialog">
                     <table>
                         <tbody>
+                        
+                            <!--  Parent tag properties. -->
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label class="compulsory" for="tag.serialNumber"><g:message code="tag.serialNumber.label" default="Serial Number" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sensorInstance.tag, field: 'serialNumber', 'errors')}">
+                                    <g:textField name="tag.serialNumber" value="${sensorInstance.tag?.serialNumber}" placeholder="autocomplete - start typing"/>
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="tag.project"><g:message code="tag.project.label" default="Project" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sensorInstance.tag, field: 'project', 'errors')}">
+                                    <g:select name="tag.project.id" 
+                                              class="remember"
+                                              from="${candidateProjects}" 
+                                              optionKey="id" 
+                                              value="${sensorInstance.tag?.project?.id}" 
+                                              noSelection="['':'unassigned']" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label class="compulsory" for="tag.model"><g:message code="tag.model.label" default="Model" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sensorInstance.tag, field: 'model', 'errors')}">
+                                    <g:select name="tag.model.id" class="remember" from="${au.org.emii.aatams.TagDeviceModel.list()}" optionKey="id" value="${sensorInstance.tag?.model?.id}"  />
+
+                                </td>
+                            </tr>
+
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label class="compulsory" for="tag.codeMap"><g:message code="tag.codeMap.label" default="Code Map" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sensorInstance.tag, field: 'codeMap', 'errors')}">
+                                  <g:select name="tag.codeMap.id" class="remember" from="${au.org.emii.aatams.CodeMap.list()}" optionKey="id" value="${sensorInstance.tag?.codeMap?.id}"  />
+                                </td>
+                            </tr>
+
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label for="tag.expectedLifeTimeDays"><g:message code="tag.expectedLifeTimeDays.label" default="Expected Life Time (days)" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sensorInstance.tag, field: 'expectedLifeTimeDays', 'errors')}">
+                                    <g:textField name="tag.expectedLifeTimeDays" class="remember" value="${sensorInstance.tag?.expectedLifeTimeDays}" />
+
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td valign="top" class="name">
+                                    <label class="compulsory" for="tag.status"><g:message code="tag.status.label" default="Status" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: sensorInstance.tag, field: 'status', 'errors')}">
+                                    <g:select name="tag.status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${sensorInstance.tag?.status?.id}"  />
+
+                                </td>
+                            </tr>
+
+
+                            <!--  Sensor specific properties. -->
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -74,16 +146,6 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'unit', 'errors')}">
                                     <g:textField name="unit" value="${sensorInstance?.unit}" />
-
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label class="compulsory" for="status"><g:message code="sensor.status.label" default="Status" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'status', 'errors')}">
-                                    <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${sensorInstance?.status?.id}"  />
 
                                 </td>
                             </tr>

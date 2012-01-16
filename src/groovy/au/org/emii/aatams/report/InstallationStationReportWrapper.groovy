@@ -1,9 +1,8 @@
 package au.org.emii.aatams.report
 
-import java.util.Map;
-
 import au.org.emii.aatams.InstallationStation
-import au.org.emii.aatams.Species;
+import au.org.emii.aatams.Sensor
+import au.org.emii.aatams.Species
 import au.org.emii.aatams.Tag
 
 import com.vividsolutions.jts.geom.*
@@ -30,7 +29,7 @@ class InstallationStationReportWrapper
     public static final String NULL_CURTAIN_POSITION = "-"
     
 	private final TreeMap<Integer, String> speciesDetectionsByReverseCount = new TreeMap<Integer, String>(Collections.reverseOrder())
-	private final TreeMap<Integer, String> tagsDetectionsByReverseCount = new TreeMap<Integer, String>(Collections.reverseOrder())
+	private final TreeMap<Integer, String> sensorDetectionsByReverseCount = new TreeMap<Integer, String>(Collections.reverseOrder())
 	
     public InstallationStationReportWrapper(InstallationStation station)
     {
@@ -92,7 +91,7 @@ class InstallationStationReportWrapper
 	private void initDetectionCountMaps()
 	{
 		Map<Species, Integer> countBySpecies = [:]
-		Map<Tag, Integer> countByTag = [:]
+		Map<Tag, Integer> countBySensor = [:]
 		
 		station.deployments.each
 		{
@@ -109,8 +108,8 @@ class InstallationStationReportWrapper
 					def species = detSurgery.surgery.release.animal.species
 					incCountForSpecies(countBySpecies, species)
 					
-					def tag = detSurgery.tag
-					incCountForTag(countByTag, tag)
+					def sensor = detSurgery.sensor
+					incCountForSensor(countBySensor, sensor)
 				}
 			}
 		}
@@ -121,10 +120,10 @@ class InstallationStationReportWrapper
 			speciesDetectionsByReverseCount.put(v, k)
 		}
 
-		countByTag.each
+		countBySensor.each
 		{
 			k, v ->
-			tagsDetectionsByReverseCount.put(v, k)
+			sensorDetectionsByReverseCount.put(v, k)
 		}
 	}
 	
@@ -140,7 +139,7 @@ class InstallationStationReportWrapper
 	
 	Map<Integer, Species> detectionCountsByTag()
 	{
-		return tagsDetectionsByReverseCount
+		return sensorDetectionsByReverseCount
 	}
 	
 	private void incCountForSpecies(Map countBySpecies, Species species)
@@ -153,14 +152,14 @@ class InstallationStationReportWrapper
 		countBySpecies[species] = countBySpecies[species] + 1
 	}
 	
-	private void incCountForTag(Map countByTag, Tag tag)
+	private void incCountForSensor(Map countBySensor, Sensor sensor)
 	{
-		if (!countByTag.get(tag))
+		if (!countBySensor.get(sensor))
 		{
-			countByTag.put(tag, 0)
+			countBySensor.put(sensor, 0)
 		}
 		
-		countByTag[tag] = countByTag[tag] + 1
+		countBySensor[sensor] = countBySensor[sensor] + 1
 	}
 }
 

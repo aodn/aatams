@@ -4,7 +4,8 @@ import grails.converters.JSON
 
 class SensorController extends AbstractController 
 {
-	def tagFactoryService
+	def candidateEntitiesService
+    def tagFactoryService
 	
     static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
@@ -20,7 +21,8 @@ class SensorController extends AbstractController
     def create = {
         def sensorInstance = new Sensor()
         sensorInstance.properties = params
-        return [sensorInstance: sensorInstance]
+        return [sensorInstance: sensorInstance, 
+                candidateProjects:candidateEntitiesService.projects()]
     }
 
     def save = 
@@ -31,20 +33,38 @@ class SensorController extends AbstractController
 		params.tag = tag
 		
         def sensorInstance = new Sensor(params)
-        
+		
+		// Workaround for http://jira.grails.org/browse/GRAILS-3783
+		tag.addToSensors(sensorInstance)
+
 		if (sensorInstance.save(flush: true)) 
         {
-			sensorInstance.save()
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
 			
-            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance.toString()])}"
-//            render ([instance:sensorInstance, message:flash] as JSON)
-            redirect(controller: "tag", action: "show", id: sensorInstance.tag?.id)
+			if (params.responseType == 'json')
+			{
+				render ([instance:sensorInstance, message:flash, tag:[id: tag.id]] as JSON)
+			}
+			else
+			{
+				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
+				redirect(controller: "tag", action: "show", id: sensorInstance.tag?.id)
+			}
         }
         else 
         {
-			println(tag.errors)
             log.error(sensorInstance.errors)
-            render ([errors:sensorInstance.errors] as JSON)
+			
+			if (params.responseType == 'json')
+			{
+				render ([errors:sensorInstance.errors] as JSON)
+			}
+			else
+			{
+				def model =  [sensorInstance: sensorInstance,
+							  candidateProjects:candidateEntitiesService.projects()]
+				render(view: "create", model: model)
+			}
         }
     }
 
@@ -66,7 +86,7 @@ class SensorController extends AbstractController
             redirect(action: "list")
         }
         else {
-            return [sensorInstance: sensorInstance]
+            return [sensorInstance: sensorInstance, candidateProjects: candidateEntitiesService.projects()]
         }
     }
 
@@ -97,7 +117,7 @@ class SensorController extends AbstractController
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'sensor.label', default: 'Sensor'), params.id])}"
             redirect(action: "list")
         }
-}
+	}
 
     def delete = {
         def sensorInstance = Sensor.get(params.id)

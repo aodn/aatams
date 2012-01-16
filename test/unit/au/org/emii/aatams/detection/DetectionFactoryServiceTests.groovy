@@ -74,14 +74,14 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
     
     void testUnknownReceiver()
     {
-        standardParams[(DetectionFactoryService.RECEIVER_COLUMN)] = "XYZ"
+        standardParams[(DetectionFactoryService.RECEIVER_COLUMN)] = "VR2W-1234"
         def unknownReceiverDetection = 
             newDetection(new ReceiverDownloadFile(), standardParams)
             
         assertNotNull(unknownReceiverDetection)
         assertTrue(unknownReceiverDetection instanceof InvalidDetection)
         assertEquals(InvalidDetectionReason.UNKNOWN_RECEIVER, unknownReceiverDetection.reason)
-        assertEquals("Unknown receiver code name XYZ", unknownReceiverDetection.message)
+        assertEquals("Unknown receiver code name VR2W-1234", unknownReceiverDetection.message)
         
         assertTrue(receiver.detections.isEmpty())
         assertFalse(receiver.detections.contains(unknownReceiverDetection))

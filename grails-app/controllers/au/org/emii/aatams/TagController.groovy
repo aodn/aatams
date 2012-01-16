@@ -103,7 +103,7 @@ class TagController extends AbstractController
                 redirect(action: "show", id: tagInstance.id)
             }
             else {
-                render(view: "edit", model: [tagInstance: tagInstance])
+                render(view: "edit", model: [tagInstance: tagInstance, candidateProjects: candidateEntitiesService.projects()])
             }
         }
         else {
@@ -152,7 +152,7 @@ class TagController extends AbstractController
 
 	def lookupBySerialNumber =
 	{
-		def tags = Tag.findAllBySerialNumberIlike(params.term + "%")
+		def tags = Tag.findAllBySerialNumberIlike(params.term + "%", [sort: "serialNumber"])
 		
 		// Limit so that all results fit on screen.
 		if (tags?.size() > 20)

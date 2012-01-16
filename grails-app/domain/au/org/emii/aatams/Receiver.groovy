@@ -52,4 +52,16 @@ class Receiver extends Device
         
         return true
     }
+	
+	/**
+	 * Backward compatibility.
+	 */
+	static Receiver findByName(name, params=[:])
+	{
+		def tokens = name.tokenize("-")
+		assert(tokens.size() == 2): "Invalid receiver name: " + name
+		
+		return Receiver.findByModelAndSerialNumber(ReceiverDeviceModel.findByModelName(tokens[0], params), 
+												   tokens[1], params)
+	}
 }

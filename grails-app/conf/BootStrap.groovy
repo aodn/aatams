@@ -120,6 +120,9 @@ class BootStrap
             returnArray['serialNumber'] = it.serialNumber
             returnArray['model'] = it.model
 			returnArray['codeMap'] = it.codeMap
+			returnArray['project'] = it.project
+			returnArray['expectedLifeTimeDays'] = it.expectedLifeTimeDays
+			returnArray['status'] = it.status
 			
             return returnArray
         }

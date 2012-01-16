@@ -197,25 +197,7 @@ class DetectionFactoryService
     private void matchToTags(detection)
     {
         assert(detection)
-/* I think this is redundant now        
-		def tags = findTags(detection.transmitterId)
-        tags.each
-        {
-            tag -> 
 
-            tag.surgeries.each
-            {
-                surgery ->
-                
-                if (!surgery.isInWindow(detection.timestamp))
-                {
-                    return
-                }
-                
-				createDetectionSurgery(surgery, tag, detection)
-            }
-        }
-*/		
 		def sensors = findSensors(detection.transmitterId)
         sensors.each
         {
@@ -232,11 +214,6 @@ class DetectionFactoryService
             }
         }
     }
-    
-//	private List<Tag> findTags(transmitterId)
-//	{
-//		return findDevice(Tag, tagCache, transmitterId)
-//	}
 	
 	protected String parseCodeMapFromTransmitterId(transmitterId)
 	{
@@ -264,14 +241,14 @@ class DetectionFactoryService
 		if (!sensorCache.containsKey(transmitterId))
 		{
 			def sensorsWithPingCode = 
-				Sensor.findAllByPingCodeAndStatusNotEqual(
+				Sensor.findAllByPingCode(
 					parsePingCodeFromTransmitterId(transmitterId),
-					DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true]),
 					[cache:true])
 				
 			sensorsWithPingCode = sensorsWithPingCode.grep
 			{
-				it.tag.codeMap.codeMap == parseCodeMapFromTransmitterId(transmitterId)
+				(   (it.tag.codeMap.codeMap == parseCodeMapFromTransmitterId(transmitterId))
+				 && (it.tag.status != DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true])))
 			}
 			
 			sensorCache.put(transmitterId, 
@@ -279,20 +256,6 @@ class DetectionFactoryService
 		}
 		
 		return sensorCache[transmitterId]
-	}
-	
-	private List findDevice(clazz, cache, transmitterId)
-	{
-		if (!cache.containsKey(transmitterId))
-		{
-			cache.put(transmitterId, 
-					  clazz.findAllByCodeNameAndStatusNotEqual(
-						  transmitterId, 
-						  DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true]), 
-						  [cache:true]))
-		}
-		
-		return cache[transmitterId]
 	}
 	
     protected def createDetectionSurgery(surgery, sensor, detection)

@@ -253,6 +253,6 @@ class ReportController
 
     def tagExtract =
     {
-        redirect(action:"extract", params:[name:"tag", formats:["CSV"]])
+        redirect(action:"extract", params:[name:"sensor", formats:["CSV"]])
     }
 }

@@ -112,7 +112,7 @@ class Tag extends Device implements Embargoable
 	{
 		def nonPingers = sensors.grep
 		{
-			it.transmitterType != TransmitterType.findByTransmitterTypeName('PINGER', [cache:true])
+			it?.transmitterType != TransmitterType.findByTransmitterTypeName('PINGER', [cache:true])
 		}
 		
 		return nonPingers	

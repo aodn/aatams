@@ -27,6 +27,9 @@ abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestC
 		AbstractBatchProcessor.metaClass.getRecords = { getRecords(it) }
 		
 		ReceiverDeviceModel model = new ReceiverDeviceModel(modelName:"VR2W")
+		mockDomain(ReceiverDeviceModel, [model])
+		model.save()
+		
 		Receiver receiver = new Receiver(model: model, serialNumber: "103335")
 		def receiverList = [receiver]
 		mockDomain(Receiver, receiverList)

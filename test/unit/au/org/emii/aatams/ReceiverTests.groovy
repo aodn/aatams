@@ -10,15 +10,18 @@ class ReceiverTests extends GrailsUnitTestCase
     protected void setUp() 
 	{
         super.setUp()
-        rx1 = new Receiver(codeName: "VRW2-1111",
-                                    serialNumber:"1111",
+		
+		ReceiverDeviceModel model = new ReceiverDeviceModel(modelName: "VR2W")
+		mockDomain(ReceiverDeviceModel, [model])
+		model.save()
+		
+        rx1 = new Receiver(serialNumber:"1111",
                                     status:new DeviceStatus(),
-                                    model:new DeviceModel(),
+                                    model:model,
                                     organisation:new Organisation())
-        rx2 = new Receiver(codeName: "VRW2-2222",
-                                    serialNumber:"2222",
+        rx2 = new Receiver(serialNumber:"2222",
                                     status:new DeviceStatus(),
-                                    model:new DeviceModel(),
+                                    model:model,
                                     organisation:new Organisation())
                                 
         mockDomain(Receiver, [rx1, rx2])
@@ -30,29 +33,37 @@ class ReceiverTests extends GrailsUnitTestCase
         super.tearDown()
     }
 
-    void testNonUniqueCodeName() 
-    {
-		rx2.codeName = rx1.codeName
-        assertFalse(rx2.validate())
-		println(rx2.errors)
-    }
-    
     void testNonUniqueSerialNumber() 
     {
 		rx2.serialNumber = rx1.serialNumber
         assertFalse(rx2.validate())
     }
     
-    void testConstructCodeName()
+    void testName()
     {
         ReceiverDeviceModel model = new ReceiverDeviceModel(modelName:"VR2W")
         mockDomain(ReceiverDeviceModel, [model])
         model.save()
+		
+		def rxr = new Receiver(serialNumber: "12345", model: model)
         
-        def params = [serialNumber: "12345",
-                      model:[id:model.id],
-                      "model.id":model.id]
-        
-        assertEquals("VR2W-12345", Receiver.constructCodeName(params))
+		assertEquals("VR2W-12345", rxr.name)
     }
+	
+	void testFindByName()
+	{
+		assertNotNull(Receiver.findByName("VR2W-1111"))
+		assertNotNull(Receiver.findByName("VR2W-1111", [cache:true]))
+		assertNull(Receiver.findByName("VR2W-3333"))
+		
+		try
+		{
+			Receiver.findByName("VR2W111")
+			fail()
+		}
+		catch (AssertionError e)
+		{
+			assertEquals("Invalid receiver name: VR2W111. Expression: (tokens.size() == 2)", e.getMessage())
+		}
+	}
 }

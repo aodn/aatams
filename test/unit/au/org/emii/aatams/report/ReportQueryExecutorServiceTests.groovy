@@ -34,6 +34,10 @@ class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase
     Sensor sensorEmbargoedReadableProject
     Sensor sensorEmbargoedNonReadableProject
     Sensor sensorPastEmbargoed
+	Sensor sensorPingerNonEmbargoed
+	Sensor sensorPingerEmbargoedReadableProject
+	Sensor sensorPingerEmbargoedNonReadableProject
+	Sensor sensorPingerPastEmbargoed
     
     ValidDetection detectionNonEmbargoed
     ValidDetection detectionEmbargoedReadableProject
@@ -84,15 +88,21 @@ class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase
         mockLogging(DetectionSurgery)
 
         // Set up some data.
-        tagNonEmbargoed = new Tag(project:project1, codeName:"A69-1303-1111", codeMap:new CodeMap(codeMap:"A69-1303"), pingCode:1111)
-        tagEmbargoedReadableProject = new Tag(project:project1, codeName:"A69-1303-2222", codeMap:new CodeMap(codeMap:"A69-1303"), pingCode:2222)
-        tagEmbargoedNonReadableProject = new Tag(project:project2, codeName:"A69-1303-3333", codeMap:new CodeMap(codeMap:"A69-1303"), pingCode:3333)
-        tagPastEmbargoed = new Tag(project:project2, codeName:"A69-1303-4444", codeMap:new CodeMap(codeMap:"A69-1303"), pingCode:4444)
+		CodeMap codeMap = new CodeMap(codeMap:"A69-1303")
+        tagNonEmbargoed = new Tag(project:project1, codeMap:codeMap)
+        tagEmbargoedReadableProject = new Tag(project:project1, codeMap:codeMap)
+        tagEmbargoedNonReadableProject = new Tag(project:project2, codeMap:codeMap)
+        tagPastEmbargoed = new Tag(project:project2, codeMap:codeMap)
 
-        sensorNonEmbargoed = new Sensor(project:project1, tag:tagNonEmbargoed, codeName:"sensor-1111", codeMap:new CodeMap(codeMap:"sensor"), pingCode:1111)
-        sensorEmbargoedReadableProject = new Sensor(project:project1, tag:tagEmbargoedReadableProject, codeName:"sensor-2222", codeMap:new CodeMap(codeMap:"sensor"), pingCode:2222)
-        sensorEmbargoedNonReadableProject = new Sensor(project:project2, tag:tagEmbargoedNonReadableProject, codeName:"sensor-3333", codeMap:new CodeMap(codeMap:"sensor"), pingCode:3333)
-        sensorPastEmbargoed = new Sensor(project:project2, tag:tagPastEmbargoed, codeName:"sensor-4444", codeMap:new CodeMap(codeMap:"sensor"), pingCode:4444)
+        sensorNonEmbargoed = new Sensor(tag:tagNonEmbargoed, pingCode:1111)
+        sensorEmbargoedReadableProject = new Sensor(tag:tagEmbargoedReadableProject, pingCode:2222)
+        sensorEmbargoedNonReadableProject = new Sensor(tag:tagEmbargoedNonReadableProject, pingCode:3333)
+        sensorPastEmbargoed = new Sensor(tag:tagPastEmbargoed, pingCode:4444)
+
+        sensorPingerNonEmbargoed = new Sensor(tag:tagNonEmbargoed, pingCode:5555)
+        sensorPingerEmbargoedReadableProject = new Sensor(tag:tagEmbargoedReadableProject, pingCode:6666)
+        sensorPingerEmbargoedNonReadableProject = new Sensor(tag:tagEmbargoedNonReadableProject, pingCode:7777)
+        sensorPingerPastEmbargoed = new Sensor(tag:tagPastEmbargoed, pingCode:8888)
 
         releaseNonEmbargoed = new AnimalRelease(project:project1)
         releaseEmbargoedReadableProject = new AnimalRelease(project:project1, embargoDate:nextYear())
@@ -104,19 +114,24 @@ class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase
         Surgery surgeryEmbargoedNonReadableProject = new Surgery(tag:tagEmbargoedNonReadableProject, release:releaseEmbargoedNonReadableProject)
         Surgery surgeryPastEmbargoed = new Surgery(tag:tagPastEmbargoed, release:releasePastEmbargoed)
 
-        detectionNonEmbargoed = new ValidDetection()
-        detectionEmbargoedReadableProject = new ValidDetection()
-        detectionEmbargoedNonReadableProject = new ValidDetection()
-        detectionPastEmbargoed = new ValidDetection()
+		ReceiverDownloadFile receiverDownload = new ReceiverDownloadFile(requestingUser:user)
+		mockDomain(ReceiverDownloadFile, [receiverDownload])
+		receiverDownload.save()
+		
+        detectionNonEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
+        detectionEmbargoedReadableProject = new ValidDetection(receiverDownload:receiverDownload)
+        detectionEmbargoedNonReadableProject = new ValidDetection(receiverDownload:receiverDownload)
+        detectionPastEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
 
-        DetectionSurgery detectionSurgeryNonEmbargoed = new DetectionSurgery(surgery:surgeryNonEmbargoed, detection:detectionNonEmbargoed, tag:tagNonEmbargoed)
-        DetectionSurgery detectionSurgeryEmbargoedReadableProject = new DetectionSurgery(surgery:surgeryEmbargoedReadableProject, detection:detectionEmbargoedReadableProject, tag:tagEmbargoedReadableProject)
-        DetectionSurgery detectionSurgeryEmbargoedNonReadableProject = new DetectionSurgery(surgery:surgeryEmbargoedNonReadableProject, detection:detectionEmbargoedNonReadableProject, tag:tagEmbargoedNonReadableProject)
-        DetectionSurgery detectionSurgeryPastEmbargoed = new DetectionSurgery(surgery:surgeryPastEmbargoed, detection:detectionPastEmbargoed, tag:tagPastEmbargoed)
+        DetectionSurgery detectionSurgeryNonEmbargoed = new DetectionSurgery(surgery:surgeryNonEmbargoed, detection:detectionNonEmbargoed, sensor:sensorPingerNonEmbargoed)
+        DetectionSurgery detectionSurgeryEmbargoedReadableProject = new DetectionSurgery(surgery:surgeryEmbargoedReadableProject, detection:detectionEmbargoedReadableProject, sensor:sensorPingerEmbargoedReadableProject)
+        DetectionSurgery detectionSurgeryEmbargoedNonReadableProject = new DetectionSurgery(surgery:surgeryEmbargoedNonReadableProject, detection:detectionEmbargoedNonReadableProject, sensor:sensorPingerEmbargoedNonReadableProject)
+        DetectionSurgery detectionSurgeryPastEmbargoed = new DetectionSurgery(surgery:surgeryPastEmbargoed, detection:detectionPastEmbargoed, sensor:sensorPingerPastEmbargoed)
 
         
         def tagList =     [tagNonEmbargoed,     tagEmbargoedReadableProject,     tagEmbargoedNonReadableProject,     tagPastEmbargoed]
         def sensorList =  [sensorNonEmbargoed,  sensorEmbargoedReadableProject,  sensorEmbargoedNonReadableProject,  sensorPastEmbargoed]
+        sensorList +=  [sensorPingerNonEmbargoed,  sensorPingerEmbargoedReadableProject,  sensorPingerEmbargoedNonReadableProject,  sensorPingerPastEmbargoed]
         releaseList =     [releaseNonEmbargoed, releaseEmbargoedReadableProject, releaseEmbargoedNonReadableProject, releasePastEmbargoed]
         def surgeryList = [surgeryNonEmbargoed, surgeryEmbargoedReadableProject, surgeryEmbargoedNonReadableProject, surgeryPastEmbargoed]
         def detectionList =
@@ -134,25 +149,29 @@ class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase
         releaseNonEmbargoed.addToSurgeries(surgeryNonEmbargoed)
         tagNonEmbargoed.addToSurgeries(surgeryNonEmbargoed)
         tagNonEmbargoed.addToSensors(sensorNonEmbargoed)
-        tagNonEmbargoed.addToDetectionSurgeries(detectionSurgeryNonEmbargoed)
+        tagNonEmbargoed.addToSensors(sensorPingerNonEmbargoed)
+        sensorNonEmbargoed.addToDetectionSurgeries(detectionSurgeryNonEmbargoed)
         detectionNonEmbargoed.addToDetectionSurgeries(detectionSurgeryNonEmbargoed)
         
         releaseEmbargoedReadableProject.addToSurgeries(surgeryEmbargoedReadableProject)
         tagEmbargoedReadableProject.addToSurgeries(surgeryEmbargoedReadableProject)
         tagEmbargoedReadableProject.addToSensors(sensorEmbargoedReadableProject)
-        tagEmbargoedReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedReadableProject)
+        tagEmbargoedReadableProject.addToSensors(sensorPingerEmbargoedReadableProject)
+        sensorEmbargoedReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedReadableProject)
         detectionEmbargoedReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedReadableProject)
         
         releaseEmbargoedNonReadableProject.addToSurgeries(surgeryEmbargoedNonReadableProject)
         tagEmbargoedNonReadableProject.addToSurgeries(surgeryEmbargoedNonReadableProject)
         tagEmbargoedNonReadableProject.addToSensors(sensorEmbargoedNonReadableProject)
-        tagEmbargoedNonReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedNonReadableProject)
+        tagEmbargoedNonReadableProject.addToSensors(sensorPingerEmbargoedNonReadableProject)
+        sensorEmbargoedNonReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedNonReadableProject)
         detectionEmbargoedNonReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedNonReadableProject)
         
         releasePastEmbargoed.addToSurgeries(surgeryPastEmbargoed)
         tagPastEmbargoed.addToSurgeries(surgeryPastEmbargoed)
         tagPastEmbargoed.addToSensors(sensorPastEmbargoed)
-        tagPastEmbargoed.addToDetectionSurgeries(detectionSurgeryPastEmbargoed)
+        tagPastEmbargoed.addToSensors(sensorPingerPastEmbargoed)
+        sensorPastEmbargoed.addToDetectionSurgeries(detectionSurgeryPastEmbargoed)
         detectionPastEmbargoed.addToDetectionSurgeries(detectionSurgeryPastEmbargoed)
         
         detectionNonEmbargoed.metaClass.getProject = { project1 }

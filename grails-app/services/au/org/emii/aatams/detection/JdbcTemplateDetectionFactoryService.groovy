@@ -31,11 +31,11 @@ class JdbcTemplateDetectionFactoryService extends DetectionFactoryService
 				   "detectionSurgeries": new ArrayList()])
 	}
 	
-	protected def createDetectionSurgery(surgery, tag, detection)
+	protected def createDetectionSurgery(surgery, sensor, detection)
 	{
 		def detectionSurgery = 
 			 [surgeryId:surgery.id,
-			  tagId:tag.id,
+			  sensorId:sensor.id,
 			  detectionId:detection.id]
 		
 		if (detection instanceof RawDetection)

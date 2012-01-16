@@ -41,7 +41,12 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
         mockDomain(Surgery)
         mockDomain(Tag)
         
-        receiver = new Receiver(codeName:"VR3UWM-354")
+		
+		ReceiverDeviceModel vr3uwm = new ReceiverDeviceModel(modelName: "VR3UWM")
+		mockDomain(ReceiverDeviceModel, [vr3uwm])
+		vr3uwm.save()
+		
+        receiver = new Receiver(serialNumber:"354", model: vr3uwm)
         mockDomain(Receiver, [receiver])
         
         deployment = new ReceiverDeployment(receiver:receiver,
@@ -72,9 +77,9 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
 	{
 		return '''2009-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2009-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
-2009-12-08 06:44:24,AAA,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
-2009-12-08 06:44:24,BBB,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
-2009-12-08 06:47:24,BBB,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+2009-12-08 06:44:24,AAA-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+2009-12-08 06:44:24,BBB-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+2009-12-08 06:47:24,BBB-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2007-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2010-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234'''
 	}
@@ -115,38 +120,4 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
 		
 		return retList
 	}
-	
-//    List<Map<String, String>> getRecords(downloadFile)
-//    {
-//        def standardParams = 
-//                [(DetectionFactoryService.DATE_AND_TIME_COLUMN):"2009-12-08 06:44:24",
-//                 (DetectionFactoryService.RECEIVER_COLUMN):"VR3UWM-354",
-//                 (DetectionFactoryService.TRANSMITTER_COLUMN):"A69-1303-62347",
-//                 (DetectionFactoryService.TRANSMITTER_NAME_COLUMN):"shark tag",
-//                 (DetectionFactoryService.TRANSMITTER_SERIAL_NUMBER_COLUMN):"1234",
-//                 (DetectionFactoryService.STATION_NAME_COLUMN):"Neptune SW 1",
-//                 (DetectionFactoryService.LATITUDE_COLUMN):-40.1234f,
-//                 (DetectionFactoryService.LONGITUDE_COLUMN):45.1234f]   
-//             
-//        def validDetection = [:] + standardParams
-//        def duplicateDetection = [:] + validDetection
-//        
-//        def unknownReceiver1 = [:] + validDetection
-//        unknownReceiver1[(DetectionFactoryService.RECEIVER_COLUMN)] = "AAA"
-//        
-//        def unknownReceiver2 = [:] + validDetection
-//        unknownReceiver2[(DetectionFactoryService.RECEIVER_COLUMN)] = "BBB"
-//        
-//        def unknownReceiver3 = [:] + validDetection
-//        unknownReceiver3[(DetectionFactoryService.DATE_AND_TIME_COLUMN)] = "2009-12-08 06:47:24"
-//        unknownReceiver3[(DetectionFactoryService.RECEIVER_COLUMN)] = "BBB"
-//
-//        def noDeploymentDetection = [:] + standardParams
-//        noDeploymentDetection[(DetectionFactoryService.DATE_AND_TIME_COLUMN)] = "2007-12-08 06:44:24"
-//        
-//        def noRecoveryDetection = [:] + standardParams
-//        noRecoveryDetection[(DetectionFactoryService.DATE_AND_TIME_COLUMN)] = "2010-12-08 06:44:24"
-//        
-//        return [validDetection, duplicateDetection, unknownReceiver1, unknownReceiver2, unknownReceiver3, noDeploymentDetection, noRecoveryDetection]
-//    }
 }

@@ -39,7 +39,7 @@ class NavigationMenuController
             SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildProjectWriteAnyPermission())
                 
         [
-            new NavigationMenuItem(controllerName:'tag', label:'Tags', canCreateNew:projectWriteAny),
+            new NavigationMenuItem(controllerName:'sensor', label:'Tags', canCreateNew:projectWriteAny),
             new NavigationMenuItem(controllerName:'animalRelease', label:'Tag Releases', canCreateNew:projectWriteAny),
             new NavigationMenuItem(controllerName:'detection', label:'Tag Detections', canCreateNew:projectWriteAny),
             new NavigationMenuItem(controllerName:'receiverDeployment', label:'Receiver Deployment', canCreateNew:projectWriteAny),

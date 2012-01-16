@@ -12,9 +12,9 @@
     <body>
         <div class="nav">
             <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></span>
-            <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
+            <span class="menuButton"><g:link controller="sensor" class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
             <shiro:hasPermission permission="projectWriteAny">
-              <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
+              <span class="menuButton"><g:link controller="sensor" class="create" action="create"><g:message code="default.new.label" args="[entityName]" /> (or Sensor)</g:link></span>
             </shiro:hasPermission>
         </div>
         <div class="body">
@@ -27,9 +27,9 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="tag.codeName.label" default="ID" /></td>
+                            <td valign="top" class="name"><g:message code="tag.deviceID.label" default="IDs" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: tagInstance, field: "codeName")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: tagInstance, field: "deviceID")}</td>
                             
                         </tr>
                     
@@ -62,9 +62,9 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="tag.pingCode.label" default="Ping ID Code" /></td>
+                            <td valign="top" class="name"><g:message code="tag.pingCodes.label" default="Ping ID Codes" /></td>
                             
-                            <td valign="top" class="value">${tagInstance?.pingCode}</td>
+                            <td valign="top" class="value">${tagInstance?.pingCodes}</td>
                             
                         </tr>
                     
@@ -98,7 +98,7 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <g:each in="${tagInstance.sensors}" var="s">
+                                  <g:each in="${tagInstance.nonPingerSensors}" var="s">
                                     <tr>
                                       <td class="rowButton">
                                         <g:link class="show" controller="sensor" action="show" id="${s?.id}"></g:link>

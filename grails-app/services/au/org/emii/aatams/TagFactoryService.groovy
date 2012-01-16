@@ -6,8 +6,7 @@ class TagFactoryService {
 
     def lookupOrCreate(params) throws IllegalArgumentException
     {
-		CodeMap codeMap = CodeMap.get(params.codeMap.id)
-		def tag = Tag.findByCodeMapAndPingCode(codeMap, params.pingCode)
+		def tag = Tag.findBySerialNumber(params.serialNumber)
 		
         if (tag == null)
         {
@@ -37,36 +36,9 @@ class TagFactoryService {
 
 	private Tag createNewTag(params) 
 	{
-		def tag
-		
 		initDefaults(params)
-
-		def codeMap = CodeMap.get(params.codeMap.id)
-		if (!codeMap)
-		{
-			throw new IllegalArgumentException("Unknown code map ID: " + params.codeMap.id)
-		}
-
-		def pingCode
-
-		try
-		{
-			pingCode = Integer.valueOf(params.pingCode)
-		}
-		catch (NumberFormatException e)
-		{
-			throw new IllegalArgumentException("Invalid ping code ID: " + params.pingCode, e)
-		}
-
-		tag = new Tag(codeName:Tag.constructCodeName(params),
-				codeMap:codeMap,
-				serialNumber:params.serialNumber,
-				pingCode:pingCode,
-				model:TagDeviceModel.get(params.model.id),
-				status:params.status,
-				transmitterType:params.transmitterType)
-		codeMap.addToTags(tag)
-		return tag
+		
+		return new Tag(params)
 	}
 
 	private initDefaults(params) 
@@ -74,11 +46,6 @@ class TagFactoryService {
 		if (!params.status)
 		{
 			params.status = DeviceStatus.findByStatus('NEW')
-		}
-
-		if (!params.transmitterType)
-		{
-			params.transmitterType = TransmitterType.findByTransmitterTypeName('PINGER')
 		}
 	}
 }

@@ -51,7 +51,7 @@ class NavigationMenuControllerTests extends AbstractControllerUnitTestCase
         def fieldDataControllers =
             controller.index().fieldDataControllers
         
-        assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'tag', label:'Tags', canCreateNew:true)))
+        assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'sensor', label:'Tags', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'animalRelease', label:'Tag Releases', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'detection', label:'Tag Detections', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'receiverDeployment', label:'Receiver Deployment', canCreateNew:true)))
@@ -66,7 +66,7 @@ class NavigationMenuControllerTests extends AbstractControllerUnitTestCase
         def fieldDataControllers =
             controller.index().fieldDataControllers
         
-        assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'tag', label:'Tags', canCreateNew:true)))
+        assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'sensor', label:'Tags', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'animalRelease', label:'Tag Releases', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'detection', label:'Tag Detections', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'receiverDeployment', label:'Receiver Deployment', canCreateNew:true)))

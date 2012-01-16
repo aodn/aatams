@@ -297,14 +297,19 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         mockDomain(TagDeviceModel, [deviceModel])
         deviceModel.save()
 
+		
 		tag = new Tag(codeMap:codeMap,
-                          pingCode:11111,
-                          codeName:"A69-1303-11111",
-                          serialNumber:"11111",
-                          transmitterType:pinger,
-                          model:deviceModel,
-                          status:new DeviceStatus(status:'NEW'))
+                      serialNumber:"11111",
+                      model:deviceModel,
+                      status:new DeviceStatus(status:'NEW'))
         mockDomain(Tag, [tag])
+		
+		def pinger = new Sensor(pingCode:11111,
+                          		transmitterType:pinger)
+		
+		mockDomain(Sensor, [pinger])
+		tag.addToSensors(pinger)
+		
         tag.save()
         
         surgeryType = new SurgeryType(type:"type")
@@ -346,7 +351,6 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         // tag should now be deployed
         release.surgeries.each(
         {
-            assertEquals(tag.codeName, it.tag.codeName)
             assertEquals(new DeviceStatus(status:'DEPLOYED').status, it.tag.status.status)
         })
     
@@ -367,7 +371,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 					type: [id:surgeryType.id],
 					treatmentType : [id:surgeryTreatmentType.id],
 					comments: "",
-					tag:[codeMap: tag.codeMap, pingCode: tag.pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
+					tag:[codeMap: tag.codeMap, pingCode: tag.sensors[0].pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
 
 		controller.params.surgery = ['0':surgery0]
 	}
@@ -400,7 +404,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
             type: [id:surgeryType.id],
             treatmentType : [id:surgeryTreatmentType.id],
             comments: "",
-            tag:[codeMap: tag.codeMap, pingCode: tag.pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
+            tag:[codeMap: tag.codeMap, pingCode: tag.sensors[0].pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
         
         controller.params.surgery = ['0':surgery0]
         
@@ -417,7 +421,6 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         // tag should now be deployed
         release.surgeries.each(
         {
-            assertEquals(tag.codeName, it.tag.codeName)
             assertEquals(new DeviceStatus(status:'DEPLOYED').status, it.tag.status.status)
         })
     
@@ -468,7 +471,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
                 type: [id:1],
                 treatmentType : [id:1],
                 comments: "",
-                tag:[codeMap: tag.codeMap, pingCode: tag.pingCode, serialNumber: newTag.serialNumber, model:[id: 1]]]
+                tag:[codeMap: tag.codeMap, pingCode: tag.sensors[0].pingCode, serialNumber: newTag.serialNumber, model:[id: 1]]]
             
             surgeryMap.put(String.valueOf(it), surgery)
         })
@@ -547,7 +550,6 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         {
             Tag tag = it.tag
             assertNotNull(tag)
-            assertEquals(codeName, tag.codeName)
             assertEquals(new DeviceStatus(status:'DEPLOYED').status, tag.status.status)
             assertEquals(project, tag.project)
         })

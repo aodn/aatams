@@ -10,6 +10,7 @@ $(function() {
             {
                 var event = $("#id").val();
                 var tagId = $("#id").val();
+                var tagSerialNumber = $("#serialNumber").val();
                 var transmitterTypeId = $("#transmitterTypeId option:selected").val();
                 var pingCode = $("#sensorPingCode").val();
                 var slope = $("#slope").val();
@@ -19,52 +20,22 @@ $(function() {
                 
                 $.post(contextPath + '/sensor/save', 
                        {'event.id':event,
-                        'projectId':projectId,
+                        'tag.project.id':projectId,
+                        'tag.serialNumber':tagSerialNumber,
                         'tag.id':tagId,
                         'transmitterType.id':transmitterTypeId,
                         'pingCode':pingCode,
                         'slope':slope,
                         'intercept':intercept,
-                        'unit':unit},
+                        'unit':unit,
+                        'responseType': 'json'},
                        function(data) 
                        {
-                           updateHeader(data);
-                           
-                           var tableRow = $("<tr>");
-                           
-                           var infoColumn = $("<td>").attr("class", "rowButton");
-                           var infoLink = $("<a>").attr("href", contextPath + '/sensor/show/' + data.instance.id);
-                           infoLink.attr("class", "show");
-                           infoColumn.append(infoLink);
-                           tableRow.append(infoColumn);
-
-                           var deleteColumn = $("<td>").attr("class", "rowButton");
-                           var deleteLink = $("<a>").attr("href", contextPath + '/sensor/delete/' + data.instance.id + "?projectId=" + projectId);
-                           deleteLink.attr("class", "delete");
-                           deleteLink.click(function() { return confirm('Are you sure?'); });
-                           deleteColumn.append(deleteLink);
-                           tableRow.append(deleteColumn);
-
-                           var tagTypeColumn = $("<td>").attr("class", "value").html(data.instance.transmitterType.transmitterTypeName);
-                           tableRow.append(tagTypeColumn);
-                           
-                           var codeMapColumn = $("<td>").attr("class", "value").html(data.instance.codeMap.codeMap);
-                           tableRow.append(codeMapColumn);
-
-                           var pingCodeColumn = $("<td>").attr("class", "value").html(data.instance.pingCode);
-                           tableRow.append(pingCodeColumn);
-
-                           var slopeColumn = $("<td>").attr("class", "value").html(data.instance.slope);
-                           tableRow.append(slopeColumn);
-                           
-                           var interceptColumn = $("<td>").attr("class", "value").html(data.instance.intercept);
-                           tableRow.append(interceptColumn);
-                           
-                           var unitColumn = $("<td>").attr("class", "value").html(data.instance.unit);
-                           tableRow.append(unitColumn);
-                           
-                           var lastRow = $("#sensor_table_body > tr:last");
-                           lastRow.prev().before(tableRow);
+							$('form').each(function () 
+							{
+								$(this).data('initialForm', $(this).serialize());
+							});
+							window.location = contextPath + '/tag/edit/' + data.tag.id;
                        }, 
                        'json');
                        

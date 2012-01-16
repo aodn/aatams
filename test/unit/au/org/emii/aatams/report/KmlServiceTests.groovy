@@ -62,10 +62,10 @@ class KmlServiceTests extends GrailsUnitTestCase
 		[tasmanSW1, tasmanSW2].each { tasmanIsland.addToStations(it) }
 		[ningalooW, ningalooE].each { ningaloo.addToStations(it) }
 			
-		rx1 = new Receiver(codeName: "VR2W-111")
-		rx2 = new Receiver(codeName: "VR2W-222")
-		rx3 = new Receiver(codeName: "VR2W-333")
-		rx4 = new Receiver(codeName: "VR2W-444")
+		rx1 = new Receiver(serialNumber: "VR2W-111")
+		rx2 = new Receiver(serialNumber: "VR2W-222")
+		rx3 = new Receiver(serialNumber: "VR2W-333")
+		rx4 = new Receiver(serialNumber: "VR2W-444")
 		def receiverList = [rx1, rx2, rx3, rx4]
 
 		mockDomain(Receiver, receiverList)

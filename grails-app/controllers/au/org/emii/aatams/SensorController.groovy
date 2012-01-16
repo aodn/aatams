@@ -2,48 +2,69 @@ package au.org.emii.aatams
 
 import grails.converters.JSON
 
-class SensorController {
-
+class SensorController extends AbstractController 
+{
+	def candidateEntitiesService
+    def tagFactoryService
+	
     static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
     def index = {
         redirect(action: "list", params: params)
     }
 
-    def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [sensorInstanceList: Sensor.list(params), sensorInstanceTotal: Sensor.count(),
-        entityList: Sensor.list(params), total: Sensor.count()]
-    }
+    def list = 
+	{
+		doList("sensor")
+	}
 
     def create = {
         def sensorInstance = new Sensor()
         sensorInstance.properties = params
-        return [sensorInstance: sensorInstance]
+        return [sensorInstance: sensorInstance, 
+                candidateProjects:candidateEntitiesService.projects()]
     }
 
-    def save = {
-        def sensorInstance = new Sensor(params)
-        
-        // We need to get some additional parameters from the owning Tag.
-        Tag owningTag = Tag.get(params.tag.id)
-		assert(owningTag)
+    def save = 
+	{
+		def tag = tagFactoryService.lookupOrCreate(params.tag)
+		assert(tag)
 		
-        sensorInstance.codeName = String.valueOf(owningTag.codeMap) + "-" + params.pingCode
-        sensorInstance.model = owningTag.model
-        sensorInstance.project = owningTag.project
-		sensorInstance.status = owningTag.status
-        sensorInstance.serialNumber = owningTag.serialNumber + "-" + params.pingCode
-        
-        if (sensorInstance.save(flush: true)) 
+		params.tag = tag
+		
+        def sensorInstance = new Sensor(params)
+		
+		// Workaround for http://jira.grails.org/browse/GRAILS-3783
+		tag.addToSensors(sensorInstance)
+
+		if (sensorInstance.save(flush: true)) 
         {
-            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Sensor'), sensorInstance.toString()])}"
-            render ([instance:sensorInstance, message:flash] as JSON)
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
+			
+			if (params.responseType == 'json')
+			{
+				render ([instance:sensorInstance, message:flash, tag:[id: tag.id]] as JSON)
+			}
+			else
+			{
+				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
+				redirect(controller: "tag", action: "show", id: sensorInstance.tag?.id)
+			}
         }
         else 
         {
             log.error(sensorInstance.errors)
-            render ([errors:sensorInstance.errors] as JSON)
+			
+			if (params.responseType == 'json')
+			{
+				render ([errors:sensorInstance.errors] as JSON)
+			}
+			else
+			{
+				def model =  [sensorInstance: sensorInstance,
+							  candidateProjects:candidateEntitiesService.projects()]
+				render(view: "create", model: model)
+			}
         }
     }
 
@@ -65,7 +86,7 @@ class SensorController {
             redirect(action: "list")
         }
         else {
-            return [sensorInstance: sensorInstance]
+            return [sensorInstance: sensorInstance, candidateProjects: candidateEntitiesService.projects()]
         }
     }
 
@@ -96,7 +117,7 @@ class SensorController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'sensor.label', default: 'Sensor'), params.id])}"
             redirect(action: "list")
         }
-}
+	}
 
     def delete = {
         def sensorInstance = Sensor.get(params.id)

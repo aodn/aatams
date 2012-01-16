@@ -88,7 +88,7 @@
                                     <label for="expectedLifeTimeDays"><g:message code="tag.expectedLifeTimeDays.label" default="Expected Life Time (days)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'expectedLifeTimeDays', 'errors')}">
-                                    <g:textField name="expectedLifeTimeDays" class="remember" value="${fieldValue(bean: tagInstance, field: 'expectedLifeTimeDays')}" />
+                                    <g:textField name="expectedLifeTimeDays" class="remember" value="${tagInstance?.expectedLifeTimeDays}" />
 
                                 </td>
                             </tr>

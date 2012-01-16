@@ -32,9 +32,6 @@ class ReceiverController extends AbstractController
         def receiverInstance = new Receiver(params)
         receiverInstance.status = DeviceStatus.findByStatus("NEW")
         
-        String codeName = Receiver.constructCodeName(params)
-        receiverInstance.codeName = codeName
-        
         if (receiverInstance.save(flush: true)) 
         {
             // Need to add update permission to subject.
@@ -84,10 +81,6 @@ class ReceiverController extends AbstractController
                 }
             }
             receiverInstance.properties = params
-
-            String codeName = Receiver.constructCodeName(params)
-            receiverInstance.codeName = codeName
-        
             if (!receiverInstance.hasErrors() && receiverInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.toString()])}"
                 redirect(action: "show", id: receiverInstance.id)

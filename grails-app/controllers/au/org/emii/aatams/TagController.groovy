@@ -49,11 +49,6 @@ class TagController extends AbstractController
     def save = {
         def tagInstance = new Tag(params)
         
-        // codeName is derived from code space and ping code.
-        String codeName = Tag.constructCodeName(params)
-        tagInstance.codeName = codeName
-        tagInstance.transmitterType = TransmitterType.findByTransmitterTypeName('PINGER')
-        
         if (tagInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.toString()])}"
             redirect(action: "show", id: tagInstance.id)
@@ -103,17 +98,12 @@ class TagController extends AbstractController
                 }
             }
             tagInstance.properties = params
-
-            // codeName is derived from code space and ping code.
-            String codeName = Tag.constructCodeName(params)
-            tagInstance.codeName = codeName
-
             if (!tagInstance.hasErrors() && tagInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.toString()])}"
                 redirect(action: "show", id: tagInstance.id)
             }
             else {
-                render(view: "edit", model: [tagInstance: tagInstance])
+                render(view: "edit", model: [tagInstance: tagInstance, candidateProjects: candidateEntitiesService.projects()])
             }
         }
         else {
@@ -159,7 +149,21 @@ class TagController extends AbstractController
         log.debug("Returning: " + (tags as JSON))
         render tags as JSON
     }
-	
+
+	def lookupBySerialNumber =
+	{
+		def tags = Tag.findAllBySerialNumberIlike(params.term + "%", [sort: "serialNumber"])
+		
+		// Limit so that all results fit on screen.
+		if (tags?.size() > 20)
+		{
+			tags = tags[0..19]
+		}
+		
+		log.debug("Returning: " + (tags as JSON))
+		render tags as JSON
+	}
+
 	def lookupByCodeName = 
 	{
 		def tags = Tag.findAllByCodeNameIlike("%" + params.term + "%", [max:20, sort:"codeName", order:"asc"])

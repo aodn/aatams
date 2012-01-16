@@ -40,8 +40,12 @@ abstract class AbstractDetectionFactoryServiceTests extends GrailsUnitTestCase
 				 (DetectionFactoryService.STATION_NAME_COLUMN):"Neptune SW 1",
 				 (DetectionFactoryService.LATITUDE_COLUMN):-40.1234f,
 				 (DetectionFactoryService.LONGITUDE_COLUMN):45.1234f]
+		
+		ReceiverDeviceModel rxrModel = new ReceiverDeviceModel(modelName:"VR3UWM")
+		mockDomain(ReceiverDeviceModel, [rxrModel])
+		rxrModel.save()		
 			 
-		receiver = new Receiver(codeName:"VR3UWM-354")
+		receiver = new Receiver(serialNumber:"354", model:rxrModel)
 		mockDomain(Receiver, [receiver])
 		
 		deployment = new ReceiverDeployment(receiver:receiver,
@@ -76,7 +80,10 @@ abstract class AbstractDetectionFactoryServiceTests extends GrailsUnitTestCase
 	def tag2
 	
 	def sensor
-	
+	def sensor0
+	def sensor1
+	def sensor2
+
 	def surgery
 	def surgery1
 	def surgery2
@@ -91,15 +98,29 @@ abstract class AbstractDetectionFactoryServiceTests extends GrailsUnitTestCase
 		mockDomain(DeviceStatus, [deployed])
 		deployed.save()
 		
-		tag = new Tag(codeName:"A69-1303-62347", codeMap:"A69-1303", pingCode:62347, status:deployed)
+		CodeMap a69_1303 = new CodeMap(codeMap: "A69-1303")
+		mockDomain(CodeMap, [a69_1303])
+		a69_1303.save()
 		
-		tag1 = new Tag(codeName:"A69-1303-1111", codeMap:"A69-1303", pingCode:1111, status:deployed)
-		tag2 = new Tag(codeName:"A69-1303-1111", codeMap:"A69-1303", pingCode:1111, status:deployed)
+		tag = new Tag(codeMap:a69_1303, status:deployed)
+		sensor0 = new Sensor(pingCode:62347, tag:tag)
+		sensor = new Sensor(tag:tag, pingCode:12345)
+		tag.addToSensors(sensor0)
+		tag.addToSensors(sensor)
+		
+		tag1 = new Tag(codeMap:a69_1303, pingCode:1111, status:deployed)
+		sensor1 = new Sensor(pingCode:1111, tag:tag1)
+		tag1.addToSensors(sensor1)
+		
+		tag2 = new Tag(codeMap:a69_1303, pingCode:1111, status:deployed)
+		sensor2 = new Sensor(pingCode:1111, tag:tag2)
+		tag2.addToSensors(sensor2)
+		
 		def tagList = [tag, tag1, tag2]
 		mockDomain(Tag, tagList)
 		
-		sensor = new Sensor(codeName:"A69-1609-12345", tag:tag, codeMap:"A69-1609", pingCode:12345, status:deployed)
-		mockDomain(Sensor, [sensor])
+		def sensorList = [sensor, sensor0, sensor1, sensor2]
+		mockDomain(Sensor, sensorList)
 		
 		release = new AnimalRelease(releaseDateTime:new DateTime("2009-12-07T06:44:24"))
 		release1 = new AnimalRelease(releaseDateTime:new DateTime("2009-12-07T06:44:24"))
@@ -126,7 +147,6 @@ abstract class AbstractDetectionFactoryServiceTests extends GrailsUnitTestCase
 		release.addToSurgeries(surgery2)
 		releaseList.each { it.save() }
 		
-		sensor.save()
-		
+		sensorList.each { it.save() }
 	}
 }

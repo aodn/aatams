@@ -9,12 +9,13 @@ import au.org.emii.aatams.detection.RawDetection
 class Receiver extends Device
 {
     /**
-     * Detection recorded at the receiver (may also include SensorDetections).
+     * Detections recorded at the receiver.
      */
     Set<RawDetection> detections = new HashSet<RawDetection>()
     static hasMany = [detections: RawDetection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
-    
+    static transients = ['name', 'deviceID']
+	
     static mapping = 
     {
         organisation sort:'name'
@@ -24,14 +25,21 @@ class Receiver extends Device
     
     static searchable = true
     
-    static String constructCodeName(params)
-    {
-        ReceiverDeviceModel model = ReceiverDeviceModel.get(params.model.id)
-        assert(model): "model cannot be null"
-        
-        return String.valueOf(model) + "-" + params.serialNumber
-    }
-    
+	String getName()
+	{
+		return String.valueOf(model) + "-" + serialNumber
+	}
+	
+	String getDeviceID()
+	{
+		return getName()
+	}
+	
+	String toString()
+	{
+		return getName()
+	}
+	
     boolean canDeploy()
     {
         DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
@@ -44,4 +52,16 @@ class Receiver extends Device
         
         return true
     }
+	
+	/**
+	 * Backward compatibility.
+	 */
+	static Receiver findByName(name, params=[:])
+	{
+		def tokens = name.tokenize("-")
+		assert(tokens.size() == 2): "Invalid receiver name: " + name
+		
+		return Receiver.findByModelAndSerialNumber(ReceiverDeviceModel.findByModelName(tokens[0], params), 
+												   tokens[1], params)
+	}
 }

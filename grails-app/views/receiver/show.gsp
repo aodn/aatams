@@ -25,9 +25,9 @@
                     <tbody>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.codeName.label" default="ID" /></td>
+                            <td valign="top" class="name"><g:message code="receiver.code.label" default="ID" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "codeName")}</td>
+                            <td valign="top" class="value">${fieldValue(bean: receiverInstance, field: "name")}</td>
                             
                         </tr>
                     

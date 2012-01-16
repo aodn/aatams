@@ -35,9 +35,9 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="codeName"><g:message code="receiver.codeName.label" default="ID" /></label>
+                                  <label for="name"><g:message code="receiver.name.label" default="ID" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'codeName', 'errors')}">${receiverInstance?.codeName}</td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverInstance, field: 'name', 'errors')}">${receiverInstance?.name}</td>
                             </tr>
                         
                             <tr class="prop">

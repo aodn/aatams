@@ -7,11 +7,20 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
 {
 	CodeMap a69_1303
 	Tag owningTag
+	Project project
+	
+	TransmitterType pinger
+	TransmitterType temp
 	TransmitterType pressure
+
+	TagDeviceModel model
 	
     protected void setUp() 
 	{
         super.setUp()
+		
+		mockLogging(TagFactoryService)
+		controller.tagFactoryService = new TagFactoryService()
 		
 		a69_1303 = new CodeMap(codeMap: "A69-1303")
 		mockDomain(CodeMap, [a69_1303])
@@ -21,18 +30,24 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
 		mockDomain(DeviceStatus, [newStatus])
 		newStatus.save()
 		
-		TagDeviceModel model = new TagDeviceModel(modelName:"V16")
+		model = new TagDeviceModel(modelName:"V16")
 		mockDomain(TagDeviceModel, [model])
 		
-		owningTag = new Tag(codeMap:a69_1303, pingCode: 1111, codeName: "A69-1303-1111", model:model, status:newStatus)
+		owningTag = new Tag(codeMap:a69_1303, model:model, status:newStatus)
 		mockDomain(Tag, [owningTag])
 		owningTag.save()
 		
-		pressure = new TransmitterType(transmitterTypeName:"PRESSURE")
-		mockDomain(TransmitterType, [pressure])
-		pressure.save()
-		
 		mockDomain(Sensor)
+		
+		project = new Project(name: "Hammerheads")
+		mockDomain(Project, [project])
+		
+		pinger = new TransmitterType(transmitterTypeName: 'PINGER')
+		temp = new TransmitterType(transmitterTypeName: 'TEMP')
+		pressure = new TransmitterType(transmitterTypeName: 'PRESSURE')
+		def transmitterTypeList = [pinger, temp, pressure]
+		mockDomain(TransmitterType, transmitterTypeList)
+		transmitterTypeList.each { it.save() }
     }
 
     protected void tearDown() 
@@ -40,19 +55,65 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
         super.tearDown()
     }
 
-    void testSaveValid() 
+	void testSavePingerNoMatchingSerialNumber()
 	{
-		controller.params.tag = owningTag
-		controller.params.transmitterType = pressure
-		controller.params.pingCode = 2222
-		controller.params.slope = "1"
-		controller.params.intercept = "2"
-		controller.params.unit = "ADC"
+		assertSaveTag(1111, pinger)
+	}	
+	
+	void testSaveSensorExistingSerialNumber()
+	{
+		createTag("12345")
+		
+		assertSaveTag(2222, pressure)		
+	}
+
+	private void createTag(serialNumber) 
+	{
+		Tag tag = new Tag(serialNumber:serialNumber,
+				project:project,
+				model:model,
+				codeMap:a69_1303,
+				expectedLifeTimeDays:100,
+				status:new DeviceStatus())
+		tag.save()
+		assertFalse(tag.hasErrors())
+	}
+	
+	private assertSaveTag(pingCode, transmitterType)
+	{
+		assertEquals(0, Sensor.count())
+		
+		def saveParams = [tag: [serialNumber:"12345",
+								project:project,
+								model:model,
+								codeMap:a69_1303,
+								expectedLifeTimeDays:100,
+								status:new DeviceStatus()],
+						  transmitterType:transmitterType,
+						  pingCode:pingCode]
+		
+		controller.params.putAll(saveParams)
 		
 		controller.save()
+	
+		assertEquals("tag", controller.redirectArgs.controller)
+		assertEquals("show", controller.redirectArgs.action)
+		
+		def tagId = controller.redirectArgs.id
+		def tag = Tag.get(tagId)
+		assertNotNull(tag)
+		
+		assertEquals("12345", tag.serialNumber)
 		
 		assertEquals(1, Sensor.count())
-		assertEquals("A69-1303-2222", Sensor.list()[0].codeName)
-		assertEquals([code:"default.updated.message", args:[[code:"sensor.label", default:"Sensor"], "A69-1303-2222"]], flashMsgParams)
-    }
+		Sensor sensor = Sensor.findByPingCode(pingCode)
+		assertNotNull(sensor)
+		assertEquals(tag, sensor.tag)
+	}
+	
+	void testUpdateWithNullPingCode()
+	{
+		// should remove PINGER sensor from tag.
+	}
+	
 }

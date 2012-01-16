@@ -29,17 +29,20 @@
                         
                             <td/>
                             
-                            <g:sortableColumn property="codeName" title="${message(code: 'tag.codeName.label', default: 'ID')}" params="${executedFilter}"/>
+                            <%--<g:sortableColumn property="deviceID" title="${message(code: 'tag.codeName.label', default: 'IDs')}" params="${executedFilter}"/> --%>
+                            <th><g:message code="deviceID.label" default="IDs" /></th>
                         
                             <g:sortableColumn property="model" title="${message(code: 'tag.model.label', default: 'Model')}" params="${executedFilter}"/>
                         
                             <g:sortableColumn property="serialNumber" title="${message(code: 'tag.serialNumber.label', default: 'Serial Number')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="project.name" title="${message(code: 'device.project.label', default: 'Project')}" params="${executedFilter}"/>
+                            <%--<g:sortableColumn property="project.name" title="${message(code: 'device.project.label', default: 'Project')}" params="${executedFilter}"/> --%>
+                            <th><g:message code="project.name.label" default="Project" /></th>
 
                             <g:sortableColumn property="codeMap" title="${message(code: 'tag.codeMap.label', default: 'Code Map')}" params="${executedFilter}"/>
                         
-                            <g:sortableColumn property="pingCode" title="${message(code: 'tag.pingCode.label', default: 'Ping ID Code')}" params="${executedFilter}"/>
+                            <%--<g:sortableColumn property="pingCodes" title="${message(code: 'tag.pingCodes.label', default: 'Ping ID Codes')}" params="${executedFilter}"/> --%>
+                            <th><g:message code="pingCodes.label" default="Ping Codes" /></th>
                         
                             <th>Sensors</th>
                             
@@ -56,7 +59,7 @@
                             </td>
                     
                           
-                            <td>${fieldValue(bean: tagInstance, field: "codeName")}</td>
+                            <td>${fieldValue(bean: tagInstance, field: "deviceID")}</td>
                             
                             <td>${fieldValue(bean: tagInstance, field: "model")}</td>
 
@@ -66,7 +69,7 @@
 
                             <td>${fieldValue(bean: tagInstance, field: "codeMap")}</td>
                         
-                            <td>${tagInstance?.pingCode}</td>
+                            <td>${tagInstance?.pingCodes}</td>
                         
                             <td>${tagInstance?.sensors*.transmitterType.transmitterTypeName}</td>
                             

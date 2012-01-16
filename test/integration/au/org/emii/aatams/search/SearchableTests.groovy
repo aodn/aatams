@@ -69,13 +69,13 @@ class SearchableTests extends GrailsUnitTestCase
     
     void testSearchDeploymentsByReceiver()
     {
-        def rx1 = Receiver.findByCodeName('VR2W-101336')
-        def rx2 = Receiver.findByCodeName('VR2W-101337')
+        def rx1 = Receiver.findBySerialNumber('101336')
+        def rx2 = Receiver.findBySerialNumber('101337')
 
         def rx1Bondi = ReceiverDeployment.findByReceiver(rx1)
         def rx2Bondi = ReceiverDeployment.findByReceiver(rx2)
         
-        def searchResult = ReceiverDeployment.search(rx1.codeName)
+        def searchResult = ReceiverDeployment.search(rx1.name)
         
         assertTrue(searchResult.results*.id.contains(rx1Bondi.id))
         assertFalse(searchResult.results*.id.contains(rx2Bondi.id))
@@ -97,12 +97,12 @@ class SearchableTests extends GrailsUnitTestCase
     
     void testSearchRecoveriesByReceiver()
     {
-        def rx1 = Receiver.findByCodeName('VR2W-101336')
+        def rx1 = Receiver.findBySerialNumber('101336')
 
         def rx1BondiRecovery = ReceiverRecovery.findByRecoveryDateTime(new DateTime("2013-07-25T12:34:56"))
         def rx2BondiRecovery = ReceiverRecovery.findByRecoveryDateTime(new DateTime("2013-05-17T12:54:56"))
         
-        def searchResult = ReceiverRecovery.search(rx1.codeName)
+        def searchResult = ReceiverRecovery.search(rx1.name)
         
         assertTrue(searchResult.results*.id.contains(rx1BondiRecovery.id))
         assertFalse(searchResult.results*.id.contains(rx2BondiRecovery.id))

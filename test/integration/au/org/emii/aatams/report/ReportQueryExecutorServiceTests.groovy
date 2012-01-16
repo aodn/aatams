@@ -162,12 +162,12 @@ class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase
 		assertDetectionsMatchingFilter(0, [receiverDeployment:[station:[name:"Bondi SW1", installation:[name:"Ningaloo Array"]]]])
 	}
 
-	void testDetectionFilterByTagCodeName()
+	void testDetectionFilterByPingCode()
 	{
-		assertDetectionsMatchingFilter(10, [detectionSurgeries:[tag:[codeName:"A69-1303-62339"]]])
-		assertDetectionsMatchingFilter(6, [detectionSurgeries:[tag:[codeName:"A69-1303-46601"]]])
+		assertDetectionsMatchingFilter(10, [detectionSurgeries:[sensor:[pingCode:62339]]])
+		assertDetectionsMatchingFilter(6, [detectionSurgeries:[sensor:[pingCode:46601]]])
 	}
-	
+
 	void testDetectionFilterBySpeciesCommonName()
 	{
 		assertDetectionsMatchingFilter(10, [detectionSurgeries:[surgery:[release:[animal:[species:[commonName:"White Shark"]]]]]])

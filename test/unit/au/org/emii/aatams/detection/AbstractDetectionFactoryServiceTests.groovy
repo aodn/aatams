@@ -105,6 +105,10 @@ abstract class AbstractDetectionFactoryServiceTests extends GrailsUnitTestCase
 		tag = new Tag(codeMap:a69_1303, status:deployed)
 		sensor0 = new Sensor(pingCode:62347, tag:tag)
 		sensor = new Sensor(tag:tag, pingCode:12345)
+		
+		assertEquals("A69-1303-62347", sensor0.transmitterId)
+		assertEquals("A69-1303-12345", sensor.transmitterId)
+		
 		tag.addToSensors(sensor0)
 		tag.addToSensors(sensor)
 		

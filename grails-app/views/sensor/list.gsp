@@ -29,7 +29,7 @@
                         
                             <td/>
                             
-                            <th><g:message code="transmitterId.label" default="ID" /></th>
+                            <g:sortableColumn property="transmitterId" title="${message(code: 'transmitterId.label', default: 'ID')}" params="${executedFilter}"/>
                             
                             <g:sortableColumn property="tag.model" title="${message(code: 'tag.model.label', default: 'Model')}" params="${executedFilter}"/>
                         

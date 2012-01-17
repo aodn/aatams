@@ -72,7 +72,8 @@ class ReportInfoService
          "station.installation.name": "installation",
 		 "surgeries.tag.codeName": tagId,
 		 "tag.project.name": "project",
-		 "timestamp": "timestamp"]
+		 "timestamp": "timestamp",
+		 "transmitterId": "transmitter ID"]
     
     static def reportNameToClass =
         ["animalReleaseSummary": AnimalReleaseSummaryService.class,
@@ -211,9 +212,9 @@ class ReportInfoService
 			
 		def sensorFilterParams =
 			[new ListReportParameter(label: propertyToLabel["tag.project.name"], propertyName:"tag.project.name", range:projectRange),
-			 new AjaxMultiSelectReportParameter(label: propertyToLabel["pingCode"], 
-									 			propertyName:"pingCode", 
-												lookupPath:"/sensor/lookupByPingCode")]
+			 new AjaxMultiSelectReportParameter(label: propertyToLabel["transmitterId"], 
+									 			propertyName:"transmitterId", 
+												lookupPath:"/sensor/lookupByTransmitterId")]
 			
 		def tagFilterParams =
 			[new ListReportParameter(label: propertyToLabel["project.name"], propertyName:"project.name", range:projectRange),

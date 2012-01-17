@@ -9,7 +9,7 @@ class Sensor implements Embargoable
     static belongsTo = [tag:Tag]
 	
 	static hasMany = [detectionSurgeries:DetectionSurgery]
-	static transients = ['transmitterId', 'project', 'codeName', 'codeMap', 'status']
+	static transients = ['project', 'codeName', 'codeMap', 'status']
 	
 	Integer pingCode
 	TransmitterType transmitterType
@@ -28,6 +28,11 @@ class Sensor implements Embargoable
      * Calibration intercept.
      */
     Float intercept
+	
+	/**
+	 * Concatenation of code map and ping code, e.g. "A69-9002-1234".
+	 */
+	String transmitterId
 
     static constraints =
     {
@@ -37,6 +42,7 @@ class Sensor implements Embargoable
         unit(nullable:true)
         slope(nullable:true)
         intercept(nullable:true)
+		transmitterId(nullable:true)
     }
 	
 	static mapping = 
@@ -50,14 +56,26 @@ class Sensor implements Embargoable
 		tag(component:true)
 	}
 
-	String getTransmitterId()
+	void setPingCode(Integer pingCode)
 	{
-		return tag?.codeMap?.codeMap + "-" + pingCode
+		this.pingCode = pingCode
+		refreshTransmitterId()
+	}
+	
+	void setTag(Tag tag)
+	{
+		this.tag = tag
+		refreshTransmitterId()
+	}
+	
+	private void refreshTransmitterId()
+	{
+		transmitterId = codeMap?.codeMap + '-' + pingCode
 	}
 	
 	String getCodeName()
 	{
-		return getTransmitterId()
+		return transmitterId
 	}
 	
 	DeviceStatus getStatus()
@@ -72,7 +90,7 @@ class Sensor implements Embargoable
 	
 	String toString()
 	{
-		return getTransmitterId()
+		return transmitterId
 	}
 	
 	Project getProject()

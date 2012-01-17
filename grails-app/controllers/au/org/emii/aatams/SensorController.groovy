@@ -138,4 +138,17 @@ class SensorController extends AbstractController
             redirect(action: "list")
         }
     }
+	
+	def lookupByTransmitterId =
+	{
+		def sensors = Sensor.findAllByTransmitterIdIlike(params.term + "%", [sort: "transmitterId"])
+		
+		// Limit so that all results fit on screen.
+		if (sensors?.size() > 20)
+		{
+			sensors = sensors[0..19]
+		}
+		
+		render sensors as JSON
+	}
 }

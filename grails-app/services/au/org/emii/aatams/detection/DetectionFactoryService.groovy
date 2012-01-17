@@ -215,44 +215,20 @@ class DetectionFactoryService
         }
     }
 	
-	protected String parseCodeMapFromTransmitterId(transmitterId)
-	{
-		return parseTransmitterId(transmitterId).codeMap
-	}
-	
-	protected Integer parsePingCodeFromTransmitterId(transmitterId)
-	{
-		return parseTransmitterId(transmitterId).pingCode
-	}
-	
-	protected Map parseTransmitterId(transmitterId)
-	{
-		// TransmitterId - "A69-1303-62347"
-		List tokens = transmitterId.tokenize('-')
-		assert(tokens.size() == 3)
-		String codeMap = tokens[0] + "-" + tokens[1]
-		Integer pingCode = Integer.valueOf(tokens[2])
-		
-		return [codeMap: codeMap, pingCode: pingCode]
-	}
-	
 	private List<Sensor> findSensors(transmitterId)
 	{
 		if (!sensorCache.containsKey(transmitterId))
 		{
-			def sensorsWithPingCode = 
-				Sensor.findAllByPingCode(
-					parsePingCodeFromTransmitterId(transmitterId),
-					[cache:true])
+			def sensorsWithId = 
+				Sensor.findAllByTransmitterId(transmitterId, [cache:true])
 				
-			sensorsWithPingCode = sensorsWithPingCode.grep
+			sensorsWithId = sensorsWithId.grep
 			{
-				(   (it.tag.codeMap.codeMap == parseCodeMapFromTransmitterId(transmitterId))
-				 && (it.tag.status != DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true])))
+				it.tag.status != DeviceStatus.findByStatus(DeviceStatus.RETIRED, [cache:true])
 			}
 			
 			sensorCache.put(transmitterId, 
-					  	    sensorsWithPingCode)
+					  	    sensorsWithId)
 		}
 		
 		return sensorCache[transmitterId]

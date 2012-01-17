@@ -2,6 +2,7 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.test.*
+import grails.converters.JSON
 
 class SensorControllerTests extends AbstractControllerUnitTestCase
 {
@@ -116,4 +117,27 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
 		// should remove PINGER sensor from tag.
 	}
 	
+	void testLookupByTransmitterId()
+	{
+		Sensor sensor = new Sensor(tag: owningTag, pingCode: 123, transmitterType: pinger)
+		sensor.save()
+		
+		assertLookupWithTerm(0, "A7")
+		assertLookupWithTerm(1, "A69")
+		assertLookupWithTerm(1, "A69-1303-123")
+	}
+	
+	private void assertLookupWithTerm(expectedNumResults, term)
+	{
+		controller.params.term = term
+		controller.lookupByTransmitterId()
+
+		def jsonResponse = JSON.parse(controller.response.contentAsString)
+		assertEquals(expectedNumResults, jsonResponse.size())
+
+		// Need to reset the response so that this method can be called multiple times within a single test case.
+		// Also requires workaround to avoid exception, see: http://jira.grails.org/browse/GRAILS-6483
+		mockResponse?.committed = false // Current workaround
+		reset()
+	}
 }

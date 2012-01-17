@@ -29,21 +29,32 @@ databaseChangeLog =
 			column(name: "unit", type: "VARCHAR(255)")
 
 			column(name: "sensors_idx", type: "int4", defaultValueNumeric: 0)
+			
+			column(name: "transmitter_id", type: "VARCHAR(255)")
+			{
+				constraints(nullable: "false")
+			}
 		}
 	}
 
 	// Create all pinger sensors.
 	changeSet(author: "jburgess (generated)", id: "1326330938494-1-1") 
 	{
-		sql('''insert into sensor (id, version, intercept, ping_code, slope, tag_id, transmitter_type_id, unit) 
-               select nextval('hibernate_sequence'), 0, intercept, ping_code, slope, id, transmitter_type_id, unit from device where class = 'au.org.emii.aatams.Tag';''')
+		sql('''insert into sensor (id, version, intercept, ping_code, slope, tag_id, transmitter_type_id, unit, transmitter_id) 
+               select nextval('hibernate_sequence'), 0, intercept, ping_code, slope, device.id, transmitter_type_id, unit, code_map.code_map || '-' || ping_code 
+			   from device 
+			   join code_map on code_map.id = device.code_map_id
+			   where class = 'au.org.emii.aatams.Tag';''')
 	}
 
 	// Move au.org.emii.Sensor in existing tag table to sensors.
 	changeSet(author: "jburgess (generated)", id: "1326330938494-1-2")
 	{
-		sql('''insert into sensor (id, version, intercept, ping_code, slope, tag_id, transmitter_type_id, unit, sensors_idx)
-		select nextval('hibernate_sequence'), 0, intercept, ping_code, slope, tag_id, transmitter_type_id, unit, (select max(sensors_idx) + 1 from sensor where tag_id = tag_id) from device where class = 'au.org.emii.aatams.Sensor';''')
+		sql('''insert into sensor (id, version, intercept, ping_code, slope, tag_id, transmitter_type_id, unit, sensors_idx, transmitter_id)
+		       select nextval('hibernate_sequence'), 0, intercept, ping_code, slope, tag_id, transmitter_type_id, unit, (select max(sensors_idx) + 1 from sensor where tag_id = tag_id), code_map.code_map || '-' || ping_code
+			   from device 
+			   join code_map on code_map.id = device.code_map_id
+               where class = 'au.org.emii.aatams.Sensor';''')
 
 		//select max(sensors_idx) + 1 from sensor where tag_id = tag_id
 		

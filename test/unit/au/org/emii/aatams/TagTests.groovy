@@ -38,11 +38,14 @@ class TagTests extends GrailsUnitTestCase
 		mockDomain(TransmitterType, transmitterTypeList)
 		transmitterTypeList.each { it.save() }
 		
+println "before setup"		
 		pingerSensor = new Sensor(tag: tag, transmitterType: pinger, pingCode: 1111)
 		tempSensor = new Sensor(tag: tag, transmitterType: temp, pingCode: 2222)
 		pressureSensor = new Sensor(tag: tag, transmitterType: pressure, pingCode: 3333)
 		def sensorList = [pingerSensor, tempSensor, pressureSensor]
+println "before mockDomain"		
 		mockDomain(Sensor, sensorList)
+println "after setup"
 		
 		sensorList.each
 		{
@@ -150,7 +153,7 @@ class TagTests extends GrailsUnitTestCase
 	void testSetPingCodeNoExistingPinger()
 	{
 		Tag newTag =
-			new Tag(codeMap:new CodeMap(codeMap:'A69-1303'),
+			new Tag(codeMap:a69_1303,
 					model:new TagDeviceModel(),
 					serialNumber:"1111",
 					status:new DeviceStatus())

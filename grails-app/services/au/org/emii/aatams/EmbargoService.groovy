@@ -5,7 +5,7 @@ import java.util.Arrays
 
 class EmbargoService 
 {
-    static transactional = true
+    static transactional = false
 
     def permissionUtilsService
    

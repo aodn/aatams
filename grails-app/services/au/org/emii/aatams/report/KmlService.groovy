@@ -9,7 +9,7 @@ import de.micromata.opengis.kml.v_2_2_0.Placemark
 
 class KmlService 
 {
-    static transactional = true
+    static transactional = false
 
     Kml toKml(List<ValidDetection> detections) 
 	{

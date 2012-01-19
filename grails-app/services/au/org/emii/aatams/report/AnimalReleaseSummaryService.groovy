@@ -5,7 +5,7 @@ import org.joda.time.*
 
 class AnimalReleaseSummaryService 
 {
-    static transactional = true
+    static transactional = false
 
     
     List<AnimalReleaseCount> countBySpecies() 

@@ -61,7 +61,7 @@ class DetectionFactoryService
 		{
 			matchToTags(detection)
 		}
-        
+		
         return detection
     }
     

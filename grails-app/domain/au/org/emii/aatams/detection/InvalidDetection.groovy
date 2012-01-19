@@ -11,6 +11,11 @@ class InvalidDetection extends RawDetection
         message(nullable:true, blank:true)
     }
     
+	static mapping =
+	{
+		cache true
+	}
+	
     boolean isValid()
     {
         return false

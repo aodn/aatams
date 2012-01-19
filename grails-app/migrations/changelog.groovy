@@ -1537,5 +1537,7 @@ databaseChangeLog = {
 	include file: 'sensor_params_as_float.groovy'
 
 	include file: 'tag_sensor_refactor.groovy'
+
+	include file: 'transmitter_id_index.groovy'
 }
 

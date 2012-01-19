@@ -11,7 +11,7 @@ import au.org.emii.aatams.detection.ValidDetection
  */
 class ReportInfoService 
 {
-    static transactional = true
+    static transactional = false
 
     def permissionUtilsService
     

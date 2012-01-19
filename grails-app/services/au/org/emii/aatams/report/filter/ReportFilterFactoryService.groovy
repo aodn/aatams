@@ -2,7 +2,7 @@ package au.org.emii.aatams.report.filter
 
 class ReportFilterFactoryService 
 {
-    static transactional = true
+    static transactional = false
 	
     ReportFilter newFilter(Class domain, Map params) 
 	{

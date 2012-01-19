@@ -12,7 +12,7 @@ import org.hibernate.criterion.Restrictions
  */
 class ReportQueryExecutorService 
 {
-    static transactional = true
+    static transactional = false
 
     def embargoService
     def permissionUtilsService

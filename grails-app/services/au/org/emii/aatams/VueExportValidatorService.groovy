@@ -91,7 +91,7 @@ abstract class VueExportValidatorService
 	boolean validate(theReceiverDownload, theParams)
 	{
 		reset(theReceiverDownload, theParams)
-	
+		
 		if (isDuplicate())
 		{
 			log.debug("Invalid detection: duplicate")
@@ -118,7 +118,7 @@ abstract class VueExportValidatorService
 			
 			return false
 		}
-
+		
 		if (hasNoRecoveriesAtDateTime())
 		{
 			log.debug("Invalid detection: no recovery at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName)
@@ -127,7 +127,7 @@ abstract class VueExportValidatorService
 			
 			return false
 		}
-
+		
 		return true
 	}
 	

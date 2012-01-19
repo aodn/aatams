@@ -44,13 +44,14 @@ class ValidDetection extends RawDetection implements Embargoable
     static boolean isDuplicate(other)
     {
         boolean duplicate = false
-        ValidDetection.findByTimestamp(other.timestamp, [cache:true]).each
+        ValidDetection.findAllByTimestamp(other.timestamp).each
         {
             if (it.duplicate(other))
             {
                 duplicate = true
                 return
             }
+			return false
         }
         
         return duplicate

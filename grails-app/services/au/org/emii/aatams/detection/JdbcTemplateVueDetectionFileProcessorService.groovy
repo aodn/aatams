@@ -27,7 +27,7 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 	
 	protected int getBatchSize()
 	{
-		return 10000
+		return 500
 	}
 	
 	protected void startBatch()
@@ -40,8 +40,46 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 	
 	protected void endBatch()
 	{
+		log.debug("Start mark duplicates...")
+		markDuplicates()
+		log.debug("End mark duplicates.")
+		
 		log.debug("End batch, inserting detections...")
 		insertDetections()
+		
+		
+		super.endBatch()
+	}
+	
+	private void markDuplicates()
+	{
+		detectionBatch.each 
+		{
+			newDetection ->
+			
+			def c = ValidDetection.createCriteria()
+			def duplicateCount = c.get() 
+			{
+				projections
+				{
+					rowCount()
+				}
+				
+				and
+				{
+					eq("receiverName", newDetection.receiverName)
+					eq("timestamp", newDetection.timestamp)
+					eq("transmitterId", newDetection.transmitterId)
+				}
+			}
+			
+			if (duplicateCount > 0)
+			{
+				newDetection["clazz"] = "au.org.emii.aatams.detection.InvalidDetection"
+				newDetection["message"] = "Invalid detection: duplicate"
+				newDetection["reason"] = InvalidDetectionReason.DUPLICATE
+			}
+		}
 	}
 	
 	private void insertDetections()

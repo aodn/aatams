@@ -44,11 +44,10 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
         
         assertEquals(getRecords(download).size(), ValidDetection.count() + InvalidDetection.count())
         
-		println (ValidDetection.list())
-        assertEquals(1, ValidDetection.count())
-        assertEquals(6, InvalidDetection.count())
+		assertEquals(2, ValidDetection.count())
+        assertEquals(5, InvalidDetection.count())
             
-        assertEquals(1, InvalidDetection.findAllByReason(InvalidDetectionReason.DUPLICATE).size())
+        assertEquals(0, InvalidDetection.findAllByReason(InvalidDetectionReason.DUPLICATE).size())
         assertEquals(3, InvalidDetection.findAllByReason(InvalidDetectionReason.UNKNOWN_RECEIVER).size())
 		
 		assertTrue(InvalidDetection.findAllByReason(InvalidDetectionReason.UNKNOWN_RECEIVER)*.receiverName.contains("AAA-111"))

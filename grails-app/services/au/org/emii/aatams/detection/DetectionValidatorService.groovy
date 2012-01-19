@@ -23,7 +23,9 @@ class DetectionValidatorService extends VueExportValidatorService
 	
 	protected boolean isDuplicate()
 	{
-		return ValidDetection.isDuplicate(params)
+		return false
+		// This is now checked at the end of each batch in JdbcTemplateVueDetectionFileProcessorService.
+//		return ValidDetection.isDuplicate(params)
 	}
 }
 

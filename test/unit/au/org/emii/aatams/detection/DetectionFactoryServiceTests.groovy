@@ -53,24 +53,28 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		assertEquals(receiver.id, validDetection.receiverDeployment.receiver.id)
     }
 
-    void testDuplicate()
-    {
-        def validDetection = newDetection(new ReceiverDownloadFile(), standardParams)
-        assertNotNull(validDetection)
-        
-        def duplicateDetection = newDetection(new ReceiverDownloadFile(), standardParams)
-        assertNotNull(duplicateDetection)
-        assertTrue(duplicateDetection instanceof InvalidDetection)
-        assertEquals(InvalidDetectionReason.DUPLICATE, duplicateDetection.reason)
-        
-		assertEquals(deployment.id, validDetection.receiverDeployment.id)
-		assertEquals(receiver.id, validDetection.receiverDeployment.receiver.id)
-
-        standardParams[(DetectionFactoryService.DATE_AND_TIME_COLUMN)] = "2009-12-08 06:45:24"
-        def validDetection2 = newDetection(new ReceiverDownloadFile(), standardParams)
-        assertNotNull(validDetection2)
-        assertEquals(2, ValidDetection.count())
-    }
+	/**
+	 * Testing for duplicates is now done immediately before a batch of new detections is committed
+	 * (rather than in the validator/detection factory).
+	 */
+//    void testDuplicate()
+//    {
+//        def validDetection = newDetection(new ReceiverDownloadFile(), standardParams)
+//        assertNotNull(validDetection)
+//        
+//        def duplicateDetection = newDetection(new ReceiverDownloadFile(), standardParams)
+//        assertNotNull(duplicateDetection)
+//        assertTrue(duplicateDetection instanceof InvalidDetection)
+//        assertEquals(InvalidDetectionReason.DUPLICATE, duplicateDetection.reason)
+//        
+//		assertEquals(deployment.id, validDetection.receiverDeployment.id)
+//		assertEquals(receiver.id, validDetection.receiverDeployment.receiver.id)
+//
+//        standardParams[(DetectionFactoryService.DATE_AND_TIME_COLUMN)] = "2009-12-08 06:45:24"
+//        def validDetection2 = newDetection(new ReceiverDownloadFile(), standardParams)
+//        assertNotNull(validDetection2)
+//        assertEquals(2, ValidDetection.count())
+//    }
     
     void testUnknownReceiver()
     {

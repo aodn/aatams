@@ -67,6 +67,8 @@ class RawDetection
     static mapping =
     {
         timestamp index:'timestamp_index'
+        transmitterId index:'transmitterId_index'
+        receiverName index:'receiverName_index'
         cache true
     }
     

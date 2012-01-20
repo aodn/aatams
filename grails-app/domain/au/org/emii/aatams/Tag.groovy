@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.util.StringUtils
+
 /**
  * Represents a physical tag (which may be attached at any one time to an animal via a surgery).
  * 
@@ -64,7 +66,7 @@ class Tag extends Device implements Embargoable
 	
 	String getDeviceID()
 	{
-		return removeSurroundingBrackets(String.valueOf(sensors*.toString()))
+		return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.toString()))
 	}
 	
 	Sensor getPinger()
@@ -97,12 +99,12 @@ class Tag extends Device implements Embargoable
 	
 	String getPingCodes()
 	{
-		return removeSurroundingBrackets(String.valueOf(sensors*.pingCode))
+		return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.pingCode))
 	}
 	
 	String getTransmitterTypeNames()
 	{
-		return removeSurroundingBrackets(String.valueOf(sensors*.transmitterType.transmitterTypeName))
+		return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.transmitterType.transmitterTypeName))
 	}
 
 	List<Sensor> getNonPingerSensors()
@@ -113,11 +115,6 @@ class Tag extends Device implements Embargoable
 		}
 		
 		return nonPingers	
-	}
-	
-	private String removeSurroundingBrackets(listAsString)
-	{
-		return listAsString[1..listAsString.size() - 2]
 	}
 	
     def applyEmbargo()

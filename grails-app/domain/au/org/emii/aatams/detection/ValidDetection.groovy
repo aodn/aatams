@@ -2,6 +2,7 @@ package au.org.emii.aatams.detection
 
 import de.micromata.opengis.kml.v_2_2_0.Placemark;
 import au.org.emii.aatams.*
+import au.org.emii.aatams.util.StringUtils;
 
 import java.util.Date;
 
@@ -11,7 +12,7 @@ import com.vividsolutions.jts.geom.Point;
 class ValidDetection extends RawDetection implements Embargoable
 {
     static belongsTo = [receiverDeployment: ReceiverDeployment]
-    static transients = ['project', 'firstDetectionSurgery']
+    static transients = ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames']
     
     /**
      * This is modelled as a many-to-many relationship, due to the fact that tags
@@ -102,14 +103,14 @@ class ValidDetection extends RawDetection implements Embargoable
             {
                 // Employ the null object pattern so that we don't have to have
                 // conditionals in the extract report.
-                Species species = new Species(name:" ")
+                Species species = new Species(name:"")
                 Animal animal = new Animal(species:species)
                 AnimalRelease release = new AnimalRelease(animal:animal)
                 Surgery surgery = new Surgery(release:release)
 
-                Tag tag = new Tag(codeName:" ")
+                def sensor = new Sensor(transmitterId:"")
 
-                NULL_DETECTION_SURGERY = new DetectionSurgery(surgery:surgery, tag:tag)
+                NULL_DETECTION_SURGERY = new DetectionSurgery(surgery:surgery, sensor:sensor)
             }
 
             return NULL_DETECTION_SURGERY
@@ -117,6 +118,26 @@ class ValidDetection extends RawDetection implements Embargoable
 
         return new ArrayList(detectionSurgeries)[0]
     }
+	
+	String getSensorIds()
+	{
+		return getSensorIds(detectionSurgeries)
+	}
+	
+	private String getSensorIds(theDetectionSurgeries)
+	{
+		return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.sensor.transmitterId)
+	}
+	
+	String getSpeciesNames()
+	{
+		return getSpeciesNames(detectionSurgeries)
+	}
+   
+	private String getSpeciesNames(theDetectionSurgeries)
+	{
+		return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.surgery.release.animal.species.name)
+	}
    
     def applyEmbargo()
     {
@@ -129,8 +150,16 @@ class ValidDetection extends RawDetection implements Embargoable
             if (!it.surgery.release.isEmbargoed())
             {
 				detectionProperties["detectionSurgeries"].add(it)
+				println "release is not embargoed: " + String.valueOf(it)
             }
+			else
+			{
+				println "release is embargoed: " + String.valueOf(it)
+			}
         }
+		
+		detectionProperties["sensorIds"] = getSensorIds(detectionProperties["detectionSurgeries"])
+		detectionProperties["speciesNames"] = getSpeciesNames(detectionProperties["detectionSurgeries"])
 
 		return detectionProperties
     }

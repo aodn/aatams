@@ -10,15 +10,15 @@
 	<field name="receiverDeployment.station.latitude" class="java.lang.Double"/>
 	<field name="receiverDeployment.station.longitude" class="java.lang.Double"/>
 	<field name="receiverDeployment.receiver.deviceID" class="java.lang.String"/>
-	<field name="firstDetectionSurgery.sensor.transmitterId" class="java.lang.String"/>
-	<field name="firstDetectionSurgery.surgery.release.animal.species" class="java.lang.String"/>
+    <field name="sensorIds" class="java.lang.String"/>
+	<field name="speciesNames" class="java.lang.String"/>
 	<field name="receiverDownload.requestingUser.name" class="java.lang.String"/>
     <field name="transmitterId" class="java.lang.String"/>
     <field name="receiverDeployment.receiver.organisation.name" class="java.lang.String"/>
 	<sortField name="receiverDeployment.station.name"/>
 	<sortField name="receiverDeployment.receiver.deviceID"/>
 	<sortField name="timestamp"/>
-	<sortField name="firstDetectionSurgery.sensor.transmitterId"/>
+    <sortField name="sensorIds"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -103,15 +103,15 @@
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{receiverDeployment.receiver.deviceID}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="632" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{firstDetectionSurgery.sensor.transmitterId}]]></textFieldExpression>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{sensorIds}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="732" y="0" width="333" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{firstDetectionSurgery.surgery.release.animal.species}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{speciesNames}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1065" y="0" width="100" height="20"/>

@@ -327,10 +327,17 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                          status:newStatus,
                          model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
+						 
+        Receiver rxWhale =
+            new Receiver(serialNumber:'103377',
+                         status:deployedStatus,
+                         model:vemcoVR2W,
+                         organisation:imosOrg).save(failOnError: true)
 		imosOrg.addToReceivers(rx3)
 		imosOrg.addToReceivers(rx4)
 		imosOrg.addToReceivers(rx5)
 		imosOrg.addToReceivers(rx6)
+		imosOrg.addToReceivers(rxWhale)
 		
 		csiroOrg.save(failOnError:true)
 		imosOrg.save(failOnError:true)
@@ -393,8 +400,21 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 			 pingCode:'5555',
 			 model:vemcoV8,
 			 status:newStatus])
+		
+		Tag nonEmbargoedTag = createTag(
+			[serialNumber:'6666',
+				codeMap:a69_1303,
+				pingCode:'6666',
+				model:vemcoV8,
+				status:deployedStatus])
 
-			
+		Tag embargoedTag = createTag(
+			[serialNumber:'7777',
+				codeMap:a69_1303,
+				pingCode:'7777',
+				model:vemcoV8,
+				status:deployedStatus])
+
         TransmitterType depth =
             new TransmitterType(transmitterTypeName:"DEPTH").save(failOnError:true)
         TransmitterType temp =
@@ -445,6 +465,11 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                              configuration:curtain,
                              project:sealCountProject).save(failOnError:true)
 
+        Installation whaleInstallation =
+            new Installation(name:'Whale Curtain',
+                             configuration:curtain,
+                             project:whaleProject).save(failOnError:true)
+							 
         WKTReader reader = new WKTReader();
 
         Point location = (Point)reader.read("POINT(30.1234 30.1234)")
@@ -492,6 +517,11 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                     curtainPosition:2,
                                     location:(Point)reader.read("POINT(76.02 -20.1234)")).save(failOnError:true)
         
+        InstallationStation whaleStation =
+            new InstallationStation(installation:whaleInstallation,
+                                    name:'Whale Station',
+                                    curtainPosition:1,
+                                    location:(Point)reader.read("POINT(76.02 -20.1234)")).save(failOnError:true)
 									
         //
         //  Receiver Deployments.
@@ -583,13 +613,29 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                    batteryLifeDays:90,
                                    location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
         
+        ReceiverDeployment whaleDeployment =
+            new ReceiverDeployment(station:whaleStation,
+                                   receiver:rxWhale,
+                                   deploymentNumber:1,
+                                   initialisationDateTime:new DateTime("2010-02-15T00:34:56+10:00"),
+                                   deploymentDateTime:new DateTime("2000-05-15T12:34:56+10:00"),
+                                   acousticReleaseID:"asdf",
+                                   mooringType:concreteMooring,
+                                   bottomDepthM:12f,
+                                   depthBelowSurfaceM:5f,
+                                   receiverOrientation:ReceiverOrientation.UP,
+                                   batteryLifeDays:90,
+                                   location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
+								   
         //
         // Animals and Animal Releases etc.
         //
         CaabSpecies whiteShark = new CaabSpecies(scientificName:"Carcharodon carcharias", commonName:"White Shark", spcode:"37010003").save(failOnError:true)
         CaabSpecies blueFinTuna = new CaabSpecies(scientificName:"Thunnus maccoyii", commonName:"Southern Bluefin Tuna", spcode:"37441004").save(failOnError:true)
         CaabSpecies blueEyeTrevalla = new CaabSpecies(scientificName:"Hyperoglyphe antarctica", commonName:"Blue-eye Trevalla", spcode:"37445001").save(failOnError:true)
-
+		CaabSpecies southernRightWhale = new CaabSpecies(scientificName:"Eubalaena australis", commonName:"southern right whale", spcode:"41110001").save(failOnError:true)
+		
+		
         Sex male = new Sex(sex:'MALE').save(failOnError:true)
         Sex female = new Sex(sex:'FEMALE').save(failOnError:true)
 
@@ -599,6 +645,12 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                         sex:male).save(failOnError:true)
         Animal blueFinTuna1 = new Animal(species:blueFinTuna,
                                          sex:female).save(failOnError:true)
+										 
+		Animal nonEmbargoedWhale = new Animal(species:southernRightWhale,
+			 								  sex:female).save(failOnError:true)
+	    Animal embargoedWhale = new Animal(species:southernRightWhale,
+										   sex:female).save(failOnError:true)
+
 
         AnimalMeasurementType length = new AnimalMeasurementType(type:'LENGTH').save(failOnError:true)
         AnimalMeasurementType weight = new AnimalMeasurementType(type:'WEIGHT').save(failOnError:true)
@@ -654,7 +706,34 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                               releaseLocality:'Neptune Islands',
                               releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
                               releaseDateTime:new DateTime("2011-05-15T14:15:00")).save(failOnError:true)
-                          
+    
+	    AnimalRelease nonEmbargoedWhaleRelease =
+	        new AnimalRelease(project:whaleProject,
+						surgeries:[],
+						measurements:[],
+						animal:nonEmbargoedWhale,
+						captureLocality:'Neptune Islands',
+						captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
+						captureDateTime:new DateTime("2011-05-15T14:10:00"),
+						captureMethod:net,
+						releaseLocality:'Neptune Islands',
+						releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
+						releaseDateTime:new DateTime("2011-05-15T14:15:00")).save(failOnError:true)
+				  
+	    AnimalRelease embargoedWhaleRelease =
+	        new AnimalRelease(project:whaleProject,
+						surgeries:[],
+						measurements:[],
+						animal:embargoedWhale,
+						captureLocality:'Neptune Islands',
+						captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
+						captureDateTime:new DateTime("2011-05-15T14:10:00"),
+						captureMethod:net,
+						releaseLocality:'Neptune Islands',
+						releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
+						releaseDateTime:new DateTime("2011-05-15T14:15:00"),
+						embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2020-05-15 12:34:56")).save(failOnError:true)
+						
         AnimalMeasurement whiteShark1Length = 
             new AnimalMeasurement(release:whiteShark1Release,
                                   type:length,
@@ -706,6 +785,24 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         tag1.addToSurgeries(surgery4).save(failOnError:true)
         blueFinTuna1Release.addToSurgeries(surgery4).save(failOnError:true)
         
+        Surgery nonEmbargoedWhaleSurgery = 
+            new Surgery(release:nonEmbargoedWhaleRelease,
+                        tag:nonEmbargoedTag,
+                        timestamp:new DateTime("2011-05-15T14:15:00"),
+                        type:external,
+                        treatmentType:antibiotic)
+        nonEmbargoedTag.addToSurgeries(nonEmbargoedWhaleSurgery).save(failOnError:true)
+        nonEmbargoedWhaleRelease.addToSurgeries(nonEmbargoedWhaleSurgery).save(failOnError:true)
+		
+        Surgery embargoedWhaleSurgery = 
+            new Surgery(release:embargoedWhaleRelease,
+                        tag:embargoedTag,
+                        timestamp:new DateTime("2011-05-15T14:15:00"),
+                        type:external,
+                        treatmentType:antibiotic)
+        embargoedTag.addToSurgeries(embargoedWhaleSurgery).save(failOnError:true)
+        embargoedWhaleRelease.addToSurgeries(embargoedWhaleSurgery).save(failOnError:true)
+		
         // Receiver Recovery.
         ReceiverRecovery recovery1 =
             new ReceiverRecovery(recoveryDateTime: new DateTime("2013-07-25T12:34:56"),
@@ -734,11 +831,24 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  batteryLife:12.5f,
                                  batteryVoltage:3.7f).save(failOnError:true)
                              
+        ReceiverRecovery recoveryWhale =
+            new ReceiverRecovery(recoveryDateTime: new DateTime("2023-05-17T12:54:56"),
+                                 location:(Point)reader.read("POINT(20.1234 20.1234)"),
+                                 status:recoveredStatus,
+                                 recoverer:sealProjectInvestigator,
+                                 deployment:whaleDeployment,
+                                 batteryLife:12.5f,
+                                 batteryVoltage:3.7f).save(failOnError:true)
+								 
         createExportWithDetections("export1.csv", jonBurgess, rx1Bondi, rx1, tag1, surgery1, 10)
         createExportWithDetections("export6.csv", jonBurgess, rx1Bondi, rx1, tag2, surgery4, 3)
         createExportWithDetections("export3.csv", jonBurgess, rx2Bondi, rx2, tag2, surgery4, 3)
 		createExportWithDetections("export4.csv", jonBurgess, rx3Ningaloo, rx3, tag3, surgery4, 3)
 		createExportWithDetections("export5.csv", jonBurgess, rx4Heron, rx4, tag5, null, 3)
+
+		createExportWithDetections("nonEmbargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, nonEmbargoedTag, nonEmbargoedWhaleSurgery, 3)
+		createExportWithDetections("embargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, embargoedTag, embargoedWhaleSurgery, 3)
+		createExportWithDetections("unknownTagWhale.csv", joeBloggs, whaleDeployment, rxWhale, [sensors:[[transmitterId:"A69-1303-8888"]]], null, 3)
 		
         ReceiverDownloadFile export2 = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
@@ -764,7 +874,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         export2.save(failOnError:true)
     }
 
-	private void createExportWithDetections(String exportName, Person uploader, ReceiverDeployment deployment, Receiver receiver, Tag tag, Surgery surgery, int numDetections)
+	private void createExportWithDetections(String exportName, Person uploader, ReceiverDeployment deployment, Receiver receiver, tag, Surgery surgery, int numDetections)
 	{
         ReceiverDownloadFile export = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
@@ -779,7 +889,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         export.save(failOnError:true)
 	}
 	
-	private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, Tag tag, ReceiverDownloadFile export1, Surgery surgery1, int numDetections) 
+	private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, tag, ReceiverDownloadFile export1, Surgery surgery1, int numDetections) 
 	{
 		numDetections.times
 		{

@@ -13,4 +13,11 @@
 ,project:,,,Tuna,,,,,,,,,,,,,
 ,installation:,,,Ningaloo Array,,,,,,,,,,,,,
 ,,,Ningaloo S1,,VR2W-101338,,10.1234,10.1234,15/05/2011 12:34,asdf,CONCRETE ,5.00,,,,yes,
-11/01/2012 17:06,,,,,,,,,,,,,,,Page 1 of,, 2
+,project:,,,Whale,,,,,,,,,,,,,
+0/01/2012 11:32,,,,,,,,,,,,,,,Page 1 of,, 2
+,Parameters,,,,,,,,,,,,,,,
+,user:,,,,Jon Burgess,,,,,,,,,,,
+,,station,,code name,,latitude,longitude,deployment date,acoustic rls ID,mooring type,depth (m),,comments,,active,
+,installation:,,Whale Curtain,,,,,,,,,,,,,
+,,Whale ,,VR2W-103377,,-20.1234,76.02,15/05/2000 12:34,asdf,CONCRETE ,5.00,,,,yes,
+20/01/2012 11:32,,,,,,,,,,,,,,Page 2 of,, 2

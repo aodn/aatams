@@ -85,6 +85,11 @@ class CaabSpecies extends Species
     
     String toString()
     {
-        return spcode + " - " + scientificName + " (" + commonName + ")"
+        return name
     }
+	
+	String getName()
+	{
+		return spcode + " - " + scientificName + " (" + commonName + ")"
+	}	
 }

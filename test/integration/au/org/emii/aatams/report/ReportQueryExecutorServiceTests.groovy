@@ -116,7 +116,7 @@ class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase
 
     void testExecuteQueryInstallationNullFilter()
     {
-		assertReportFilter(6, Installation)
+		assertReportFilter(7, Installation)
     }
    
     void testExecuteQueryIndirectFilter()
@@ -134,7 +134,7 @@ class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase
 	
 	void testDetectionNoFilter()
 	{
-		assertDetectionsMatchingFilter(22, [:])
+		assertDetectionsMatchingFilter(31, [:])
 	}
 	
 	void testDetectionFilterByProject()
@@ -191,14 +191,14 @@ class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase
 	
 	void testDetectionFilterByTimestamp()
 	{
-		assertDetectionsMatchingFilter(5, [timestamp:new DateTime("2011-05-17T12:54:00").toDate()])
+		assertDetectionsMatchingFilter(8, [timestamp:new DateTime("2011-05-17T12:54:00").toDate()])
 		assertDetectionsMatchingFilter(1, [timestamp:new DateTime("2011-05-17T12:54:03").toDate()])
 	}
 	
 	void testDetectionFilterEmpty()
 	{
 		ReportFilter filter = new ReportFilter(ValidDetection)
-		assertDetectionsMatchingFilter(22, filter)	
+		assertDetectionsMatchingFilter(31, filter)	
 	}
 	
 	void testDetectionFilterByEqualsSpeciesCommonName()
@@ -244,7 +244,7 @@ class ReportQueryExecutorServiceTests extends AbstractGrailsUnitTestCase
 	
 	void testDetectionFilterByBetweenTimestamp()
 	{
-		assertDetectionsMatchingBetweenFilter(15, [timestamp: [new DateTime("2011-05-17T12:54:00").toDate(), new DateTime("2011-05-17T12:54:02").toDate()]])
+		assertDetectionsMatchingBetweenFilter(24, [timestamp: [new DateTime("2011-05-17T12:54:00").toDate(), new DateTime("2011-05-17T12:54:02").toDate()]])
 		assertDetectionsMatchingBetweenFilter(2, [timestamp: [new DateTime("2011-05-17T12:54:03").toDate(), new DateTime("2011-05-17T12:54:04").toDate()]])
 	}
 	

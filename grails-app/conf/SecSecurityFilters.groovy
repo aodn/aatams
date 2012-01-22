@@ -237,7 +237,7 @@ class SecSecurityFilters
         // principal has write access to the associated project.
         //
         def projectAccessWriteControllers = 
-            "animalMeasurement|installation|installationStation|tag|animalRelease|detection|detectionSurgery" + \
+            "animalMeasurement|installation|installationStation|tag|animalRelease|detection|detectionSurgery|" + \
             "projectRole|receiverDeployment|receiverDownloadFile|receiverRecovery|receiverEvent|" + \
             "organisationProject|sensor|surgery"
         

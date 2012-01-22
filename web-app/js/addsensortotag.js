@@ -20,6 +20,7 @@ $(function() {
                 
                 $.post(contextPath + '/sensor/save', 
                        {'event.id':event,
+                    	'projectId':projectId,
                         'tag.project.id':projectId,
                         'tag.serialNumber':tagSerialNumber,
                         'tag.id':tagId,
@@ -35,7 +36,7 @@ $(function() {
 							{
 								$(this).data('initialForm', $(this).serialize());
 							});
-							window.location = contextPath + '/tag/edit/' + data.tag.id;
+							window.location = contextPath + '/tag/edit/' + data.tag.id + "?projectId=" + projectId;
                        }, 
                        'json');
                        

@@ -7,8 +7,6 @@
 	<parameter name="FILTER_PARAMS" class="java.util.Collection" isForPrompting="false"/>
 	
 	<field name="transmitterId" class="java.lang.String"/>
-	<field name="codeMap" class="java.lang.String"/>
-	<field name="pingCode" class="java.lang.Long"/>
 	<field name="tag.serialNumber" class="java.lang.String"/>
 	<field name="transmitterType.transmitterTypeName" class="java.lang.String"/>
 	<field name="tag.model.manufacturer.manufacturerName" class="java.lang.String"/>
@@ -18,8 +16,6 @@
 	<field name="tag.comment" class="java.lang.String"/>
 
     <sortField name="transmitterId" order="Ascending"/>
-	<sortField name="codeMap" order="Ascending"/>
-	<sortField name="pingCode" order="Ascending"/>
 	<sortField name="tag.serialNumber" order="Ascending"/>
 	<sortField name="transmitterType.transmitterTypeName" order="Ascending"/>
 	<sortField name="tag.model.manufacturer.manufacturerName" order="Ascending"/>
@@ -42,45 +38,35 @@
 			<staticText>
 				<reportElement mode="Transparent" x="132" y="1" width="80" height="20"/>
 				<textElement/>
-				<text><![CDATA[code map]]></text>
+				<text><![CDATA[serial number]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="212" y="1" width="80" height="20"/>
 				<textElement/>
-				<text><![CDATA[ping code]]></text>
+				<text><![CDATA[type]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="292" y="1" width="80" height="20"/>
 				<textElement/>
-				<text><![CDATA[serial number]]></text>
+				<text><![CDATA[manufacturer]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="372" y="1" width="80" height="20"/>
 				<textElement/>
-				<text><![CDATA[type]]></text>
+				<text><![CDATA[model]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="452" y="1" width="80" height="20"/>
 				<textElement/>
-				<text><![CDATA[manufacturer]]></text>
+				<text><![CDATA[status]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="532" y="1" width="80" height="20"/>
 				<textElement/>
-				<text><![CDATA[model]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Transparent" x="612" y="1" width="80" height="20"/>
-				<textElement/>
-				<text><![CDATA[status]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Transparent" x="692" y="1" width="80" height="20"/>
-				<textElement/>
 				<text><![CDATA[life (days)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="772" y="1" width="80" height="20"/>
+				<reportElement mode="Transparent" x="612" y="1" width="80" height="20"/>
 				<textElement/>
 				<text><![CDATA[comment]]></text>
 			</staticText>
@@ -97,45 +83,35 @@
 			<textField>
 				<reportElement x="132" y="0" width="80" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{codeMap}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tag.serialNumber}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="212" y="0" width="80" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Long"><![CDATA[$F{pingCode}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{transmitterType.transmitterTypeName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="292" y="0" width="80" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{tag.serialNumber}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tag.model.manufacturer.manufacturerName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="372" y="0" width="80" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{transmitterType.transmitterTypeName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tag.model.modelName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="452" y="0" width="80" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{tag.model.manufacturer.manufacturerName}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{status}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="532" y="0" width="80" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{tag.model.modelName}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="612" y="0" width="80" height="20"/>
-				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{status}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="692" y="0" width="80" height="20"/>
-				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{tag.expectedLifeTimeDaysAsString}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="772" y="0" width="80" height="20"/>
+				<reportElement x="612" y="0" width="80" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{tag.comment}]]></textFieldExpression>
 			</textField>

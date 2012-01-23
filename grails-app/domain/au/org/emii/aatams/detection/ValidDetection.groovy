@@ -150,12 +150,7 @@ class ValidDetection extends RawDetection implements Embargoable
             if (!it.surgery.release.isEmbargoed())
             {
 				detectionProperties["detectionSurgeries"].add(it)
-				println "release is not embargoed: " + String.valueOf(it)
             }
-			else
-			{
-				println "release is embargoed: " + String.valueOf(it)
-			}
         }
 		
 		detectionProperties["sensorIds"] = getSensorIds(detectionProperties["detectionSurgeries"])

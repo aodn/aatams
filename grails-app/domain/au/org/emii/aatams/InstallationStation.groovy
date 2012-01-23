@@ -1,18 +1,14 @@
 package au.org.emii.aatams
 
-import groovy.text.GStringTemplateEngine
-import groovy.text.SimpleTemplateEngine;
+import org.hibernatespatial.GeometryUserType
+
 import au.org.emii.aatams.detection.ValidDetection
 import au.org.emii.aatams.report.InstallationStationReportWrapper
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
 
-import de.micromata.opengis.kml.v_2_2_0.ExtendedData
-import de.micromata.opengis.kml.v_2_2_0.KmlFactory
 import de.micromata.opengis.kml.v_2_2_0.Placemark
-
-import org.codehaus.groovy.grails.web.pages.GroovyPagesTemplateEngine;
 
 /**
  * An Installation Station is a location within an Installation where a 
@@ -33,6 +29,7 @@ class InstallationStation
         // Speed up candidateEntitiesService.
         cache: true
         installation cache:true
+		location type: GeometryUserType
     }
     
     static searchable = 

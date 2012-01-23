@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import org.hibernatespatial.GeometryUserType
+
 import au.org.emii.aatams.util.GeometryUtils
 import au.org.emii.aatams.util.ListUtils
 
@@ -36,6 +38,8 @@ class AnimalRelease implements Embargoable
         }
         
         comments type: 'text'
+		captureLocation type: GeometryUserType
+		releaseLocation type: GeometryUserType
     }
 
     String captureLocality

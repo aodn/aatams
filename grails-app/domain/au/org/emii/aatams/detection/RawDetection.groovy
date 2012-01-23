@@ -1,5 +1,7 @@
 package au.org.emii.aatams.detection
 
+import org.hibernatespatial.GeometryUserType
+
 import au.org.emii.aatams.ReceiverDownloadFile
 import au.org.emii.aatams.util.GeometryUtils
 import au.org.emii.aatams.util.SqlUtils
@@ -70,6 +72,7 @@ class RawDetection
         transmitterId index:'transmitterId_index'
         receiverName index:'receiverName_index'
         cache true
+		location type: GeometryUserType
     }
     
     static searchable =

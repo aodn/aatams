@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import org.hibernatespatial.GeometryUserType
+
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
@@ -29,7 +31,8 @@ class ReceiverRecovery
         }
 
         comments type: 'text'
-    }
+		location type: GeometryUserType
+	}
     
     DateTime recoveryDateTime = new DateTime(Person.defaultTimeZone())
     Point location

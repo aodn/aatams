@@ -133,13 +133,13 @@ log4j = {
 
 //    info    "grails.app.service.au.org.emii"
 
-    debug   "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController"
+    debug   "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",
 //			"grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService",
 //			"grails.app.service.au.org.emii.aatams.detection.DetectionFactoryService",
 			
 //            "grails.app.service.au.org.emii",
 //			"grails.app.service.au.org.emii.aatams.detection.DetectionValidatorService",
-            //"grails.app.controller.au.org.emii",
+            "grails.app.controller.au.org.emii.report"
 //	        "grails.app.domain.au.org.emii",
 //            "grails.app.tagLib.au.org.emii",
 //            "grails.app.task",
@@ -150,10 +150,12 @@ log4j = {
 //            "grails.app.filter"//,
             //"grails.app.tagLib.com.energizedwork.grails.plugins.jodatime"
             
-    info    "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
+    debug   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
 	        "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService"
     info    "grails.app.service.au.org.emii.aatams.VueEventFileProcessorService"
 //			'org.hibernate'
+	
+//	trace	"liquibase"
 	
 }
 
@@ -172,6 +174,19 @@ grails.gorm.default.list.max = 20
 
 // Added by the Joda-Time plugin:
 grails.gorm.default.mapping = {
+   /* Added by the Hibernate Spatial Plugin. */
+   'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.Geometry)
+   'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.GeometryCollection)
+   'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.LineString)
+   'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.Point)
+   'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.Polygon)
+   'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.MultiLineString)
+   'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.MultiPoint)
+   'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.MultiPolygon)
+   'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.LinearRing)
+   'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.Puntal)
+   'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.Lineal)
+   'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.Polygonal)
 	"user-type" type: org.joda.time.contrib.hibernate.PersistentDateTime, class: org.joda.time.DateTime
 	"user-type" type: org.joda.time.contrib.hibernate.PersistentDuration, class: org.joda.time.Duration
 	"user-type" type: org.joda.time.contrib.hibernate.PersistentInstant, class: org.joda.time.Instant

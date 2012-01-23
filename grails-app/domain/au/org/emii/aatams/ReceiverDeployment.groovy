@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import org.hibernatespatial.GeometryUserType
+
 import au.org.emii.aatams.detection.ValidDetection
 
 import au.org.emii.aatams.util.GeometryUtils
@@ -50,6 +52,8 @@ class ReceiverDeployment
         cache: true
         station cache:true
 		detections cache:true
+		
+		location type: GeometryUserType
     }
 
     static searchable =

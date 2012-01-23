@@ -1539,5 +1539,7 @@ databaseChangeLog = {
 	include file: 'tag_sensor_refactor.groovy'
 
 	include file: 'transmitter_id_index.groovy'
+
+	include file: 'location_migration.groovy'
 }
 

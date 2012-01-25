@@ -895,7 +895,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 		{
 			ValidDetection detection =
 					new ValidDetection(receiverDeployment:rx1Bondi,
-					timestamp:new DateTime("2011-05-17T12:54:00").plusSeconds(it).toDate(),
+					timestamp:new DateTime("2011-05-17T02:54:00+00:00").plusSeconds(it).toDate(),
 					receiverName:rx1.name,
 					transmitterId:tag.sensors[0].transmitterId,
 					receiverDownload:export1)

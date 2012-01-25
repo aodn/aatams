@@ -2,6 +2,7 @@ package au.org.emii.aatams.report
 
 import grails.test.*
 import groovy.lang.MetaClass;
+import groovy.sql.Sql;
 
 import au.org.emii.aatams.*
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
@@ -11,6 +12,7 @@ import org.codehaus.groovy.grails.web.pages.GroovyPagesTemplateEngine;
 import org.apache.commons.lang.StringUtils
 
 import javax.servlet.ServletContext
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 /**
  * Report formats are CSV, so that we can easily compare controller output to
@@ -25,6 +27,8 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 	def grailsTemplateEngineService
     def jasperService
 	def kmlService
+	
+	def dataSource
 	
 	def slurper = new XmlSlurper()
 
@@ -42,6 +46,13 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 		controller.params._type = "report"
 		
 		permitted = true
+		
+		def sql = new Sql(dataSource)
+		
+		def viewName = ConfigurationHolder.config.rawDetection.extract.view.name
+		def viewSelect = ConfigurationHolder.config.rawDetection.extract.view.select
+		sql.execute ('create view ' + viewName + ' as ' + viewSelect)
+			
     }
 
 	protected void tearDown() 
@@ -227,17 +238,34 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 		
 		setupAndExecuteWhaleDetectionExtract()
 		
-		assertEquals('''timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
-2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
+		// order is unspecified (as this is a very expensive DB operation for large queries).
+		'''timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
 2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
-2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
 2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
-2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
 2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS''', 
-					 controller.response.contentAsString.trim())
+2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
+2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
+2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
+2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
+2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
+2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS'''.eachLine
+		{
+			expectedLine ->
+			
+			assertTrue(controller.response.contentAsString.trim().readLines().contains(expectedLine.trim()))
+		}
+		
+//		assertEquals('''timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
+//2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
+//2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
+//2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
+//2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
+//2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
+//2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS 
+//2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
+//2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
+//2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS''',
+//					 controller.response.contentAsString.trim())
 	}
 
 	void testDetectionExtractWithoutReadPermission()

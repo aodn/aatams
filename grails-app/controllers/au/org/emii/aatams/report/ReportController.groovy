@@ -19,6 +19,7 @@ import org.joda.time.*
 class ReportController 
 {
     def animalReleaseSummaryService
+	def detectionExtractService
     def jasperService
 	def kmlService
     def permissionUtilsService
@@ -115,9 +116,52 @@ class ReportController
 
 		params.FILTER_PARAMS = filterParams.entrySet()
 
-		// Delegate to report controller, including our wrapped data.
-		JasperReportDef report = jasperService.buildReportDefinition(params, request.getLocale(), [data:resultList])
-		generateResponse(report)
+		if (params._name == "detection")
+		{
+			response.setHeader("Content-disposition", "attachment; filename=" + "detectionExtract.csv")
+			response.contentType = "text/csv"
+			response.characterEncoding = "UTF-8"
+			
+			response.outputStream << "timestamp,"
+			response.outputStream << "station name,"
+			response.outputStream << "latitude,"
+			response.outputStream << "longitude,"
+			response.outputStream << "receiver ID,"
+			response.outputStream << "tag ID,"
+			response.outputStream << "species,"
+			response.outputStream << "uploader,"
+			response.outputStream << "transmitter ID,"
+			response.outputStream << "organisation"
+			
+			response.outputStream << "\n"
+
+			resultList.each
+			{
+				row ->
+				
+				response.outputStream << row.formatted_timestamp << ","
+				response.outputStream << row.station << ","
+				response.outputStream << row.latitude << ","
+				response.outputStream << row.longitude << ","
+				response.outputStream << row.receiver_name << ","
+				response.outputStream << row.sensor_id << ","
+				response.outputStream << row.species_name << ","
+				response.outputStream << row.uploader << ","
+				response.outputStream << row.transmitter_id << ","
+				response.outputStream << row.organisation
+				
+				response.outputStream << "\n"
+				
+			}
+//			response.outputStream << new FileInputStream(resultList)
+
+		}
+		else
+		{
+			// Delegate to report controller, including our wrapped data.
+			JasperReportDef report = jasperService.buildReportDefinition(params, request.getLocale(), [data:resultList])
+			generateResponse(report)
+		}
 	}
 
 	private boolean checkResultList(resultList, Map flash, Map params)
@@ -148,6 +192,24 @@ class ReportController
 	{
 		def resultList = []
 
+		def filterParams = [:]
+		if (params.filter.between)
+		{
+	 		filterParams = [between:[timestamp:[params.filter.between.min.timestamp, params.filter.between.max.timestamp]]]
+		}
+		
+		if (params.filter.eq)
+		{
+			filterParams.eq = params.filter.eq
+		}
+		
+		if (params.filter.in)
+		{
+			filterParams.in = params.filter.in
+		}
+			
+		long startTime = System.currentTimeMillis()
+		
 		// Special handling for animal release summary.
 		// TODO: refactor to remove dependency of this controller on to
 		// AnimalReleaseSummaryService.
@@ -156,32 +218,19 @@ class ReportController
 			resultList = animalReleaseSummaryService.countBySpecies()
 			params.putAll(animalReleaseSummaryService.summary())
 		}
+		else if (params._name == "detection")
+		{
+			resultList = detectionExtractService.extract(filterParams)
+		}
 		else
 		{
-			def filterParams = [:]
-			if (params.filter.between)
-			{
-		 		filterParams = [between:[timestamp:[params.filter.between.min.timestamp, params.filter.between.max.timestamp]]]
-			}
-			
-			if (params.filter.eq)
-			{
-				filterParams.eq = params.filter.eq
-			}
-			
-			if (params.filter.in)
-			{
-				filterParams.in = params.filter.in
-			}
-			
-			long startTime = System.currentTimeMillis()
 			
 			resultList = reportQueryExecutorService.executeQuery(
 					reportFilterFactoryService.newFilter(reportInfoService.getClassForName(params._name),
 					filterParams))
-			
-			log.debug("Report query executed, time: " + (System.currentTimeMillis() - startTime) + "ms.")
 		}
+		
+		log.debug("Report query executed, time: " + (System.currentTimeMillis() - startTime) + "ms.")
 		
 		return resultList
 	}

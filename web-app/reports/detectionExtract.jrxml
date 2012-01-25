@@ -4,21 +4,23 @@
 	<property name="ireport.x" value="386"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="REPORT_USER" class="java.lang.String"/>
-    <field name="timestamp" class="java.util.Date"/>
-	<field name="formattedTimestamp" class="java.lang.String"/>
-	<field name="receiverDeployment.station.name" class="java.lang.String"/>
-	<field name="receiverDeployment.station.latitude" class="java.lang.Double"/>
-	<field name="receiverDeployment.station.longitude" class="java.lang.Double"/>
-	<field name="receiverDeployment.receiver.deviceID" class="java.lang.String"/>
-    <field name="sensorIds" class="java.lang.String"/>
-	<field name="speciesNames" class="java.lang.String"/>
-	<field name="receiverDownload.requestingUser.name" class="java.lang.String"/>
-    <field name="transmitterId" class="java.lang.String"/>
-    <field name="receiverDeployment.receiver.organisation.name" class="java.lang.String"/>
+<!--    <field name="timestamp" class="java.util.Date"/>  -->
+	<field name="formatted_timestamp" class="java.lang.String"/>
+	<field name="station_name" class="java.lang.String"/>
+	<field name="latitude" class="java.lang.Double"/>
+	<field name="longitude" class="java.lang.Double"/>
+	<field name="receiver_name" class="java.lang.String"/>
+    <field name="sensor_id" class="java.lang.String"/>
+	<field name="species_name" class="java.lang.String"/>
+	<field name="uploader" class="java.lang.String"/>
+    <field name="transmitter_id" class="java.lang.String"/>
+    <field name="organisation_name" class="java.lang.String"/>
+<!--    
 	<sortField name="receiverDeployment.station.name"/>
 	<sortField name="receiverDeployment.receiver.deviceID"/>
 	<sortField name="timestamp"/>
     <sortField name="sensorIds"/>
+-->    
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -81,52 +83,52 @@
 			<textField>
 				<reportElement x="32" y="0" width="200" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{formattedTimestamp}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{formatted_timestamp}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="232" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{receiverDeployment.station.name}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{station_name}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="332" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{receiverDeployment.station.latitude}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{latitude}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="432" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{receiverDeployment.station.longitude}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{longitude}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="532" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{receiverDeployment.receiver.deviceID}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{receiver_name}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="632" y="0" width="100" height="20"/>
 				<textElement/>
-                <textFieldExpression class="java.lang.String"><![CDATA[$F{sensorIds}]]></textFieldExpression>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{sensor_id}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="732" y="0" width="333" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{speciesNames}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{species_name}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1065" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{receiverDownload.requestingUser.name}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{uploader}]]></textFieldExpression>
 			</textField>
             <textField>
                 <reportElement x="1165" y="0" width="100" height="20"/>
                 <textElement/>
-                <textFieldExpression class="java.lang.String"><![CDATA[$F{transmitterId}]]></textFieldExpression>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{transmitter_id}]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="1265" y="0" width="100" height="20"/>
                 <textElement/>
-                <textFieldExpression class="java.lang.String"><![CDATA[$F{receiverDeployment.receiver.organisation.name}]]></textFieldExpression>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{organisation_name}]]></textFieldExpression>
             </textField>
 		</band>
 	</detail>

@@ -1541,5 +1541,7 @@ databaseChangeLog = {
 	include file: 'transmitter_id_index.groovy'
 
 	include file: 'location_migration.groovy'
+	
+	include file: 'detection_extract_view.groovy'
 }
 

@@ -9,6 +9,7 @@ import de.micromata.opengis.kml.v_2_2_0.Folder
 import de.micromata.opengis.kml.v_2_2_0.Kml
 import de.micromata.opengis.kml.v_2_2_0.KmlFactory;
 import de.micromata.opengis.kml.v_2_2_0.Placemark;
+import groovy.sql.Sql
 
 import org.apache.shiro.SecurityUtils
 
@@ -62,30 +63,37 @@ class ReportController
             }
         }
         
-        def resultList = generateResultList(params)
-
-        if (!checkResultList(resultList, flash, params))
+		if (params._name == "detection")
 		{
-			return
-		}
-        
-		if (params._format == "KML")
-		{
-			long startTime = System.currentTimeMillis()
-			
-			assert(!resultList.isEmpty())
-			generateKml(params, resultList)
-
-			log.debug("KML generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
+			detectionExtractService.generateReport(getFilterParams(params), response)
 		}
 		else
 		{
-			long startTime = System.currentTimeMillis()
-			
-			params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/"
-			generateReport(params, log, request, resultList)
-
-			log.debug("Report generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
+	        def resultList = generateResultList(params)
+	
+	        if (!checkResultList(resultList, flash, params))
+			{
+				return
+			}
+	        
+			if (params._format == "KML")
+			{
+				long startTime = System.currentTimeMillis()
+				
+				assert(!resultList.isEmpty())
+				generateKml(params, resultList)
+	
+				log.debug("KML generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
+			}
+			else
+			{
+				long startTime = System.currentTimeMillis()
+				
+				params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/"
+				generateReport(params, log, request, resultList)
+	
+				log.debug("Report generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
+			}
 		}
 	}
 
@@ -116,52 +124,9 @@ class ReportController
 
 		params.FILTER_PARAMS = filterParams.entrySet()
 
-		if (params._name == "detection")
-		{
-			response.setHeader("Content-disposition", "attachment; filename=" + "detectionExtract.csv")
-			response.contentType = "text/csv"
-			response.characterEncoding = "UTF-8"
-			
-			response.outputStream << "timestamp,"
-			response.outputStream << "station name,"
-			response.outputStream << "latitude,"
-			response.outputStream << "longitude,"
-			response.outputStream << "receiver ID,"
-			response.outputStream << "tag ID,"
-			response.outputStream << "species,"
-			response.outputStream << "uploader,"
-			response.outputStream << "transmitter ID,"
-			response.outputStream << "organisation"
-			
-			response.outputStream << "\n"
-
-			resultList.each
-			{
-				row ->
-				
-				response.outputStream << row.formatted_timestamp << ","
-				response.outputStream << row.station << ","
-				response.outputStream << row.latitude << ","
-				response.outputStream << row.longitude << ","
-				response.outputStream << row.receiver_name << ","
-				response.outputStream << row.sensor_id << ","
-				response.outputStream << row.species_name << ","
-				response.outputStream << row.uploader << ","
-				response.outputStream << row.transmitter_id << ","
-				response.outputStream << row.organisation
-				
-				response.outputStream << "\n"
-				
-			}
-//			response.outputStream << new FileInputStream(resultList)
-
-		}
-		else
-		{
-			// Delegate to report controller, including our wrapped data.
-			JasperReportDef report = jasperService.buildReportDefinition(params, request.getLocale(), [data:resultList])
+		// Delegate to report controller, including our wrapped data.
+		JasperReportDef report = jasperService.buildReportDefinition(params, request.getLocale(), [data:resultList])
 			generateResponse(report)
-		}
 	}
 
 	private boolean checkResultList(resultList, Map flash, Map params)
@@ -192,21 +157,7 @@ class ReportController
 	{
 		def resultList = []
 
-		def filterParams = [:]
-		if (params.filter.between)
-		{
-	 		filterParams = [between:[timestamp:[params.filter.between.min.timestamp, params.filter.between.max.timestamp]]]
-		}
-		
-		if (params.filter.eq)
-		{
-			filterParams.eq = params.filter.eq
-		}
-		
-		if (params.filter.in)
-		{
-			filterParams.in = params.filter.in
-		}
+		def filterParams = getFilterParams(params)
 			
 		long startTime = System.currentTimeMillis()
 		
@@ -217,10 +168,6 @@ class ReportController
 		{
 			resultList = animalReleaseSummaryService.countBySpecies()
 			params.putAll(animalReleaseSummaryService.summary())
-		}
-		else if (params._name == "detection")
-		{
-			resultList = detectionExtractService.extract(filterParams)
 		}
 		else
 		{
@@ -233,6 +180,26 @@ class ReportController
 		log.debug("Report query executed, time: " + (System.currentTimeMillis() - startTime) + "ms.")
 		
 		return resultList
+	}
+
+	private Map getFilterParams(params) 
+	{
+		def filterParams = [:]
+		if (params.filter.between)
+		{
+			filterParams = [between:[timestamp:[params.filter.between.min.timestamp, params.filter.between.max.timestamp]]]
+		}
+
+		if (params.filter.eq)
+		{
+			filterParams.eq = params.filter.eq
+		}
+
+		if (params.filter.in)
+		{
+			filterParams.in = params.filter.in
+		}
+		return filterParams
 	}
 
     /**

@@ -134,12 +134,13 @@ log4j = {
 //    info    "grails.app.service.au.org.emii"
 
     debug   "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",
+	        "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService"
 //			"grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService",
 //			"grails.app.service.au.org.emii.aatams.detection.DetectionFactoryService",
 			
 //            "grails.app.service.au.org.emii",
 //			"grails.app.service.au.org.emii.aatams.detection.DetectionValidatorService",
-            "grails.app.controller.au.org.emii.report"
+//            "grails.app.controller.au.org.emii.report.ReportController"
 //	        "grails.app.domain.au.org.emii",
 //            "grails.app.tagLib.au.org.emii",
 //            "grails.app.task",
@@ -197,6 +198,7 @@ grails.gorm.default.mapping = {
 	"user-type" type: org.joda.time.contrib.hibernate.PersistentPeriod, class: org.joda.time.Period
 }
 
+rawDetection.extract.limit = 100000
 rawDetection.extract.view.name = 'detection_extract_view'
 rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp, installation_station.name as station, 
 			st_y(installation_station.location) as latitude, st_x(installation_station.location) as longitude,
@@ -230,5 +232,5 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			left join animal on animal_release.animal_id = animal.id
 			left join species on animal.species_id = species.id
 			
-			where raw_detection.class = 'au.org.emii.aatams.detection.ValidDetection'
-			order by timestamp ''' //, installation_station.name, receiver_name, sensor_id'''
+			where raw_detection.class = 'au.org.emii.aatams.detection.ValidDetection' '''
+//			order by timestamp ''' //, installation_station.name, receiver_name, sensor_id'''

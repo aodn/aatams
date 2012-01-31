@@ -2,6 +2,7 @@ package au.org.emii.aatams.detection
 
 import groovy.sql.Sql
 import org.joda.time.DateTime
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class DetectionExtractService 
 {
@@ -9,55 +10,130 @@ class DetectionExtractService
 	
 	def dataSource
 	
-    def extract(filterParams) 
+	def extractPage(filterParams, sql, limit, offset)
 	{
-		long startTime = System.currentTimeMillis()
+		return sql.rows(constructQuery(filterParams, limit, offset))
+	}
+	
+	private String constructQuery(filterParams, limit, offset)
+	{
+		String query = '''select * from detection_extract_view '''
+		List<String> whereClauses = []
 		
+		["project": filterParams?.in?.receiverDeployment?.station?.installation?.project?.name,
+		 "installation": filterParams?.in?.receiverDeployment?.station?.installation?.name,
+		 "station": filterParams?.in?.receiverDeployment?.station?.name,
+		 "sensor_id": filterParams?.in?.detectionSurgeries?.tag?.codeName,
+		 "spcode": filterParams?.in?.detectionSurgeries?.surgery?.release?.animal?.species?.spcode
+		 ].each
+	 	{
+		    k, v ->
+			
+			if (v)
+			{
+				whereClauses += (k + " in (" + toSqlFormat(v) + ") ")
+			}
+		}
+		 
+		["timestamp": filterParams?.between?.timestamp].each
+		{
+			k, v ->
+			
+			if (v)
+			{
+				whereClauses += (k + " between '" + new java.sql.Timestamp(v[0].getTime()) + "' and '" + new java.sql.Timestamp(v[1].getTime()) + "' ")
+			}
+		}
+			 
+		if (whereClauses.size() > 0)
+		{
+			query += "where "
+			
+			whereClauses.eachWithIndex
+			{
+				clause, i ->
+				
+				if (i != 0)
+				{
+					query += "and "
+				}
+				
+				query += clause
+			}
+		}
+		
+		query += "limit " + limit + " offset " + offset
+		
+		log.debug("Query: " + query)
+		
+		return query
+	}
+	
+	def generateReport(filterParams, response)
+	{
+		response.setHeader("Content-disposition", "attachment; filename=" + "detectionExtract.csv")
+		response.contentType = "text/csv"
+		response.characterEncoding = "UTF-8"
+		
+		response.outputStream << "timestamp,"
+		response.outputStream << "station name,"
+		response.outputStream << "latitude,"
+		response.outputStream << "longitude,"
+		response.outputStream << "receiver ID,"
+		response.outputStream << "tag ID,"
+		response.outputStream << "species,"
+		response.outputStream << "uploader,"
+		response.outputStream << "transmitter ID,"
+		response.outputStream << "organisation"
+		
+		response.outputStream << "\n"
+
 		def sql = new Sql(dataSource)
+		def offset = 0
+		def limit = ConfigurationHolder.config.rawDetection.extract.limit
 		
-		sql.execute("set work_mem = '1GB'")
-		def result = sql.rows('''select * from detection_extract_view where 
-							project like '%' || :project_name || '%' 
-			            and installation like '%' || :installation_name || '%'
-			            and station like '%' || :station_name || '%'
-			            and sensor_id like '%' || :sensor_id || '%' 
-						and spcode like '%' || :spcode || '%' 
-						and timestamp between :min_timestamp and :max_timestamp ''',
-						
-						[project_name: filterParams?.eq?.receiverDeployment?.station?.installation?.project?.name ?: '',
-						 installation_name: filterParams?.eq?.receiverDeployment?.station?.installation?.name ?: '',
-						 station_name: filterParams?.eq?.receiverDeployment?.station?.name ?: '',
-						 sensor_id: filterParams?.eq?.detectionSurgeries?.tag?.codeName ?: '',
-						 spcode: filterParams?.eq?.detectionSurgeries?.surgery?.release?.animal?.species?.spcode ?: '',
-						 min_timestamp: filterParams?.between?.timestamp?.getAt(0) ? new java.sql.Timestamp(filterParams?.between?.timestamp?.getAt(0).getTime()) : new java.sql.Timestamp(new DateTime("1970-01-01").getMillis()),
-						 max_timestamp: filterParams?.between?.timestamp?.getAt(1) ? new java.sql.Timestamp(filterParams?.between?.timestamp?.getAt(1).getTime()) : new java.sql.Timestamp(new DateTime("2100-01-01").getMillis())])
+		def resultList = extractPage(filterParams, sql, limit, offset)
+		while (resultList.size() > 0)
+		{
+			log.debug ("num rows: " + resultList.size() + ", offset: " + offset)
+
+			resultList.each
+			{
+				row ->
+				
+				response.outputStream << row.formatted_timestamp << ","
+				response.outputStream << row.station << ","
+				response.outputStream << row.latitude << ","
+				response.outputStream << row.longitude << ","
+				response.outputStream << row.receiver_name << ","
+				response.outputStream << row.sensor_id << ","
+				response.outputStream << row.species_name << ","
+				response.outputStream << row.uploader << ","
+				response.outputStream << row.transmitter_id << ","
+				response.outputStream << row.organisation
+				
+				response.outputStream << "\n"
+			}
+			
+			offset += resultList.size()
+			resultList = extractPage(filterParams, sql, limit, offset)
+		}
 		
-//		File detectionExtractFile = File.createTempFile("detectionExtract", "csv")
-//		detectionExtractFile.deleteOnExit()
-//		
-//		def result = sql.rows('''COPY (select * from detection_extract_view where 
-//							project like '%' || :project_name || '%' 
-//			            and installation like '%' || :installation_name || '%'
-//			            and station like '%' || :station_name || '%'
-//			            and sensor_id like '%' || :sensor_id || '%' 
-//						and spcode like '%' || :spcode || '%' 
-//						and timestamp between :min_timestamp and :max_timestamp) To ' ''' + detectionExtractFile.getAbsolutePath() + ''' ' WITH CSV ''',
-//						
-//						[project_name: filterParams?.eq?.receiverDeployment?.station?.installation?.project?.name ?: '',
-//						 installation_name: filterParams?.eq?.receiverDeployment?.station?.installation?.name ?: '',
-//						 station_name: filterParams?.eq?.receiverDeployment?.station?.name ?: '',
-//						 sensor_id: filterParams?.eq?.detectionSurgeries?.tag?.codeName ?: '',
-//						 spcode: filterParams?.eq?.detectionSurgeries?.surgery?.release?.animal?.species?.spcode ?: '',
-//						 min_timestamp: filterParams?.between?.timestamp?.getAt(0) ? new java.sql.Timestamp(filterParams?.between?.timestamp?.getAt(0).getTime()) : new java.sql.Timestamp(new DateTime("1970-01-01").getMillis()),
-//						 max_timestamp: filterParams?.between?.timestamp?.getAt(1) ? new java.sql.Timestamp(filterParams?.between?.timestamp?.getAt(1).getTime()) : new java.sql.Timestamp(new DateTime("2100-01-01").getMillis())])
-		
-		
-		sql.execute("reset work_mem")
 		sql.close()
+	}
+	
+	private String toSqlFormat(String formParam)
+	{
+		List<String> values = Arrays.asList(formParam.trim().split(",")).collect { it.trim() }
 		
-		println "Detection extract query time (ms): " + (System.currentTimeMillis() - startTime)
-		return result
+		String sqlFormat = ""
+		values.eachWithIndex
+		{
+			value, i ->
+			
+			sqlFormat += "'" + value + "'" + ", "
+		}
 		
-//		return detectionExtractFile
-    }
+		return sqlFormat[0..sqlFormat.length() - 3]
+	}
 }

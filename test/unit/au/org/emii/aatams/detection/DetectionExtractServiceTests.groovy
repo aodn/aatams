@@ -2,11 +2,15 @@ package au.org.emii.aatams.detection
 
 import org.joda.time.DateTime;
 
+import au.org.emii.aatams.PermissionUtilsService;
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
+
 import grails.test.*
 
-class DetectionExtractServiceTests extends GrailsUnitTestCase 
+class DetectionExtractServiceTests extends AbstractGrailsUnitTestCase 
 {
 	def detectionExtractService
+	def permissionUtilsService
 	
     protected void setUp() 
 	{
@@ -14,6 +18,9 @@ class DetectionExtractServiceTests extends GrailsUnitTestCase
 		
 		mockLogging(DetectionExtractService, true)
 		detectionExtractService = new DetectionExtractService()
+		
+		mockLogging(PermissionUtilsService, true)
+		detectionExtractService.permissionUtilsService = new PermissionUtilsService()
     }
 
     protected void tearDown() 

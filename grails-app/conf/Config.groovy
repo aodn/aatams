@@ -211,8 +211,10 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			organisation.name as organisation,
 			project.name as project,
 			installation.name as installation,
-			COALESCE(species.spcode, '') as spcode
-			
+			COALESCE(species.spcode, '') as spcode,
+			animal_release.embargo_date as embargo_date,
+			project.id as project_id			
+
 			from raw_detection
 			
 			left join receiver_deployment on receiver_deployment_id = receiver_deployment.id

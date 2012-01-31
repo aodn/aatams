@@ -13,6 +13,19 @@ import com.vividsolutions.jts.geom.Point;
  */
 class GeometryUtils 
 {
+	static double scrambleCoordinate(double coord)
+	{
+        if (!SecurityUtils.subject.isAuthenticated())
+        {
+            return truncate2(coord)
+
+        }
+        else
+        {
+            return coord
+        }
+	}
+	
     static Point scrambleLocation(Point origPoint)
     {
         if (origPoint == null)

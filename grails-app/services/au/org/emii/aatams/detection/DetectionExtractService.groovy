@@ -1,18 +1,44 @@
 package au.org.emii.aatams.detection
 
+import java.util.Map;
+
 import groovy.sql.Sql
 import org.joda.time.DateTime
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
+
+import org.apache.shiro.SecurityUtils
+
+import au.org.emii.aatams.util.GeometryUtils;
 
 class DetectionExtractService 
 {
     static transactional = false
 	
 	def dataSource
-	
+	def permissionUtilsService
+	private Map<Integer, Boolean> projectPermissionCache = [:]
+ 
 	def extractPage(filterParams, sql, limit, offset)
 	{
-		return sql.rows(constructQuery(filterParams, limit, offset))
+		def results = sql.rows(constructQuery(filterParams, limit, offset))
+		def now = new Date()
+		
+		results.each
+		{
+			row ->
+			
+			if (row.embargo_date && row.embargo_date.after(now))
+			{
+				if (!hasReadPermission(row.project_id))
+				{
+					row.species_name = ""
+					row.spcode = ""
+					row.sensor_id = ""
+				}
+			}
+		}
+		
+		return results
 	}
 	
 	private String constructQuery(filterParams, limit, offset)
@@ -71,6 +97,8 @@ class DetectionExtractService
 	
 	def generateReport(filterParams, response)
 	{
+		projectPermissionCache = [:]
+		
 		response.setHeader("Content-disposition", "attachment; filename=" + "detectionExtract.csv")
 		response.contentType = "text/csv"
 		response.characterEncoding = "UTF-8"
@@ -103,8 +131,8 @@ class DetectionExtractService
 				
 				response.outputStream << row.formatted_timestamp << ","
 				response.outputStream << row.station << ","
-				response.outputStream << row.latitude << ","
-				response.outputStream << row.longitude << ","
+				response.outputStream << GeometryUtils.scrambleCoordinate(row.latitude) << ","
+				response.outputStream << GeometryUtils.scrambleCoordinate(row.longitude) << ","
 				response.outputStream << row.receiver_name << ","
 				response.outputStream << row.sensor_id << ","
 				response.outputStream << row.species_name << ","
@@ -135,5 +163,17 @@ class DetectionExtractService
 		}
 		
 		return sqlFormat[0..sqlFormat.length() - 3]
+	}
+	
+	private boolean hasReadPermission(projectId)
+	{
+		if (!projectPermissionCache.containsKey(projectId))
+		{
+	        String permissionString = permissionUtilsService.buildProjectReadPermission(projectId)
+	        projectPermissionCache.put(projectId, SecurityUtils.subject.isPermitted(permissionString))
+		}
+		
+		assert(projectPermissionCache.containsKey(projectId))
+		return projectPermissionCache[projectId]
 	}
 }

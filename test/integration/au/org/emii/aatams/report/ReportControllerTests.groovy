@@ -235,11 +235,12 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 	void testDetectionExtractWithReadPermission()
 	{
 		permitted = true
+		authenticated = true
 		
 		setupAndExecuteWhaleDetectionExtract()
 		
-		// order is unspecified (as this is a very expensive DB operation for large queries).
-		'''timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
+		assertContainsAllLines(controller.response.contentAsString,
+			'''timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
 2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
 2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
 2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
@@ -248,29 +249,13 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
 2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
 2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
-2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS'''.eachLine
-		{
-			expectedLine ->
-			
-			assertTrue(controller.response.contentAsString.trim().readLines().contains(expectedLine.trim()))
-		}
-		
-//		assertEquals('''timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
-//2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-//2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-//2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-//2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
-//2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
-//2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS 
-//2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
-//2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
-//2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS''',
-//					 controller.response.contentAsString.trim())
+2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS''')
 	}
 
 	void testDetectionExtractWithoutReadPermission()
 	{
 		permitted = false
+		authenticated = true
 		
 		setupAndExecuteWhaleDetectionExtract()
 		def expected = '''timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
@@ -284,8 +269,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
 2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS'''
 		
-		assertEquals(expected, 
-					 controller.response.contentAsString.trim())
+		assertContainsAllLines(controller.response.contentAsString, expected)
 	}
 
 	void testDetectionExtractWithoutAuthentication()
@@ -295,7 +279,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 		
 		setupAndExecuteWhaleDetectionExtract()
 		
-		assertEquals('''timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
+		assertContainsAllLines(controller.response.contentAsString, '''timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
 2011-05-17 02:54:00,Whale Station,-20.12,76.01,VR2W-103377,,,Joe Bloggs,A69-1303-7777,IMOS
 2011-05-17 02:54:00,Whale Station,-20.12,76.01,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
 2011-05-17 02:54:00,Whale Station,-20.12,76.01,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
@@ -304,15 +288,22 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 2011-05-17 02:54:01,Whale Station,-20.12,76.01,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
 2011-05-17 02:54:02,Whale Station,-20.12,76.01,VR2W-103377,,,Joe Bloggs,A69-1303-7777,IMOS
 2011-05-17 02:54:02,Whale Station,-20.12,76.01,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
-2011-05-17 02:54:02,Whale Station,-20.12,76.01,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS''', 
-					 controller.response.contentAsString.trim())
+2011-05-17 02:54:02,Whale Station,-20.12,76.01,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS''')
 	}
 
+	private void assertContainsAllLines(actual, expected)
+	{
+println "expected:\n" + expected
+println "actual:\n" + actual
+		
+		assertTrue(expected.trim().readLines().containsAll(actual.readLines().collect { it.trim() }))
+	}
+	
 	private void setupAndExecuteWhaleDetectionExtract() 
 	{
 		hasRole = false
 		
-		controller.params.filter = [eq:[receiverDeployment:[station:[installation:[project:[name:"Whale"]]]]]]
+		controller.params.filter = [in:[receiverDeployment:[station:[installation:[project:[name:"Whale"]]]]]]
 		controller.params._name = "detection"
 		controller.params._file = "detectionExtract"
 		controller.params._type = "extract"
@@ -334,10 +325,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         
         // Compare all but the last line (which includes a date, and therefore
         // won't match).
-        assertEquals(
-            "", 
-            StringUtils.difference(removeLastLine(expectedFile.getText().trim()), 
-                                   removeLastLine(controller.response.contentAsString.trim())))
+		assertContainsAllLines(removePageFooter(controller.response.contentAsString.trim()), removePageFooter(expectedFile.getText()))
     }
 
 	private String constructFilePath(expectedFileName) {
@@ -348,7 +336,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 		return expectedFilePath
 	}
     
-    String removeLastLine(String s)
+    String removePageFooter(String s)
     {
         def lineCount = 0
         s.eachLine { lineCount ++}
@@ -358,11 +346,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         
         s.eachLine
         {
-            if (index == (lineCount - 1))
-            {
-                // last line
-            }
-			else if (it.contains("Page"))
+            if (it.contains("Page"))
 			{
 				// remove page footer
 			}

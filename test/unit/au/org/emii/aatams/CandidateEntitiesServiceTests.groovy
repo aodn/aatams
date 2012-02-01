@@ -103,7 +103,11 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
 		// save out of order
 		def stationList = [stationBBB, stationCCC, stationAAA, stationDDD]
 		mockDomain(InstallationStation, stationList)
-		stationList.each { it.save() }
+		stationList.each 
+		{
+			permittedInstallation1.addToStations(it)
+			it.save()
+		}
     }
 
 	protected def getPrincipal()
@@ -167,6 +171,8 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
 		assertEquals(stationBBB.name, candidateEntitiesService.stations()[1].name, )
 		assertEquals(stationCCC.name, candidateEntitiesService.stations()[2].name, )
 		
-		assertFalse(candidateEntitiesService.stations()*.name.contains(stationDDD.name))
+		// active stations are now allowed in station list (as user may be entering historical
+		// deployment data).
+		assertEquals(stationDDD.name, candidateEntitiesService.stations()[3].name, )
 	}
 }

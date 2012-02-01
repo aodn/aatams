@@ -48,20 +48,8 @@ class CandidateEntitiesService
     
     def stations()
     {
-		def projects = projects()
-		
-        def candidateStations = 
-            InstallationStation.list().grep(
-            {
-                projects.contains(it?.installation?.project) && !it.isActive()
-            })
-		
-		candidateStations = candidateStations.sort
-		{
-			a, b ->
-			
-			a.name <=> b.name
-		}
+		def candidateStations = InstallationStation.findAllByInstallationInList(installations(), [sort:"name"])
+
         return candidateStations
     }
     

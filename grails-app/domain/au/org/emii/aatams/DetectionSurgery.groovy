@@ -36,11 +36,11 @@ class DetectionSurgery
 		id generator:'sequence', params:[sequence:'detection_surgery_sequence']
 	}
 
-    static searchable =
-    {
-        root(false)
-        sensor(component:true)
-    }
+//    static searchable =
+//    {
+//        root(false)
+//        sensor(component:true)
+//    }
     
     static DetectionSurgery newSavedInstance(surgery, detection, sensor)
     {

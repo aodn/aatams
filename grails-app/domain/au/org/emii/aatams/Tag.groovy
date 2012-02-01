@@ -36,10 +36,7 @@ class Tag extends Device implements Embargoable
     
     static transients = ['expectedLifeTimeDaysAsString', 'deviceID', 'pinger', 'pingCode', 'pingCodes', 'transmitterTypeNames', 'nonPingerSensors']
     
-    static searchable =
-    {
-        project(component:true)
-    }
+    static searchable = [only: ['serialNumber']]
     
 	static mapping =
 	{

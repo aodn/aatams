@@ -36,37 +36,6 @@ class SearchableTests extends GrailsUnitTestCase
         assertTrue(searchResult.results*.id.contains(sealCount.id))
     }
 
-    void testSearchProjectsByOrgName()
-    {
-        def sealCount = Project.findByName('Seal Count')
-        def whale = Project.findByName('Whale')
-        def searchResult = Project.search('CSIRO')
-        
-        assertTrue(searchResult.results*.id.contains(sealCount.id))
-        assertFalse(searchResult.results*.id.contains(whale.id))
-    }
-    
-    void testSearchPeopleByProjectName()
-    {
-        def jcitizen = Person.findByUsername('jcitizen')
-        def joeBloggs = Person.findByUsername('jbloggs')
-        
-        def searchResult = Person.search('Seal Count')
-        assertTrue(searchResult.results*.id.contains(jcitizen.id))
-        assertTrue(searchResult.results*.id.contains(joeBloggs.id))
-    }
-    
-    void testSearchPeopleByOrganisationName()
-    {
-        def jcitizen = Person.findByUsername('jcitizen')
-        def joeBloggs = Person.findByUsername('jbloggs')
-        
-        def searchResult = Person.search('CSIRO')
-        println("searchResult: " + searchResult)
-        assertTrue(searchResult.results*.id.contains(jcitizen.id))
-        assertTrue(searchResult.results*.id.contains(joeBloggs.id))
-    }
-    
     void testSearchDeploymentsByReceiver()
     {
         def rx1 = Receiver.findBySerialNumber('101336')

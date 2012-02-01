@@ -4,12 +4,6 @@ class ValidReceiverEvent extends ReceiverEvent
 {
 	static belongsTo = [receiverDeployment: ReceiverDeployment]
 	
-	static searchable =
-	{
-		root(false)
-		receiverDeployment(component:true)
-	}
-
     static boolean isDuplicate(other)
     {
         boolean duplicate = false

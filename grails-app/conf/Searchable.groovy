@@ -25,19 +25,6 @@
 searchable {
 
     /**
-     * The location of the Compass index
-     *
-     * Examples: "/home/app/compassindex", "ram://app-index" or null to use the default
-     *
-     * The default is "${user.home}/.grails/projects/${app.name}/searchable-index/${grails.env}"
-     */
-    compassConnection = "ram://prod-index"
-//    
-//    compassConnection = new File(
-//        "${userHome}/.grails/projects/${appName}/searchable-index/${grailsEnv}"
-//    ).absolutePath
-
-    /**
      * Any settings you wish to pass to Compass
      *
      * Use this to configure custom/override default analyzers, query parsers, eg
@@ -136,17 +123,18 @@ searchable {
      * If you use BootStrap.groovy to insert your data then you should use "true",
      * which means do a non-forking, otherwise "fork" is recommended
      */
-//    bulkIndexOnStartup = "fork"
-	bulkIndexOnStartup = false
+    bulkIndexOnStartup = "fork"
+//	bulkIndexOnStartup = false
 	
     /**
      * Should index locks be removed (if present) at startup?
      */
     releaseLocksOnStartup = true
 	
-    compassConnection = new File(
-        "/var/lib/tomcat/instance_8083_aatams3/searchable-index/${grailsEnv}"
-    ).absolutePath
+    compassConnection = "ram://test-index"
+//    compassConnection = new File(
+//        "/var/lib/tomcat/instance_8083_aatams3/searchable-index/${grailsEnv}"
+//    ).absolutePath
 }
 
 // per-environment settings

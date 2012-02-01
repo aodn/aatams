@@ -23,7 +23,7 @@ class Receiver extends Device
 		detections cache:true
     }
     
-    static searchable = true
+    static searchable = [only: ['name']]
     
 	String getName()
 	{

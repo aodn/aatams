@@ -63,7 +63,7 @@ class ReportController
             }
         }
         
-		if (params._name == "detection")
+		if (params._name == "detection"  && params._format == "CSV")
 		{
 			detectionExtractService.generateReport(getFilterParams(params), response)
 		}

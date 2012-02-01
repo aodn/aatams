@@ -244,7 +244,8 @@ class ReportController
 
     def detectionExtract =
     {
-        redirect(action:"extract", params:[name:"detection", formats:["CSV", "KML"]])
+//        redirect(action:"extract", params:[name:"detection", formats:["CSV", "KML"]])
+        redirect(action:"extract", params:[name:"detection", formats:["CSV"]])
     }
     
     def installationExtract =

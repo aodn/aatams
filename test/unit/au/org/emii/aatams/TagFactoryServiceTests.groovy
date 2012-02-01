@@ -83,7 +83,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
 		def retTag = lookupOrCreate()
 		assertEquals(1, Tag.count())
 		assertEquals(1, Sensor.count())
-		assertEquals(existingSensor, retTag.sensors[0])
+		assertEquals(existingSensor, retTag.pinger)
 	}
 	
 	private Tag lookupOrCreate()

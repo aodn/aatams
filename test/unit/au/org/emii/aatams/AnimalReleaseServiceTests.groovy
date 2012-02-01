@@ -145,7 +145,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 					type: [id:SurgeryType.get(1).id],
 					treatmentType : [id:SurgeryTreatmentType.get(1).id],
 					comments: "",
-					tag:[codeMap:tag.codeMap, pingCode:tag.sensors[0].pingCode, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
+					tag:[codeMap:tag.codeMap, pingCode:tag.pinger.pingCode, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
 
 		params.surgery += ['0':surgeryExisting]
 
@@ -449,7 +449,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 						type: [id:SurgeryType.get(1).id],
 						treatmentType : [id:SurgeryTreatmentType.get(1).id],
 						comments: "",
-						tag:[codeMap: tag.codeMap, pingCode: tag.sensors[0].pingCode, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
+						tag:[codeMap: tag.codeMap, pingCode: tag.pinger.pingCode, serialNumber: tag.serialNumber, model:[id: tag.model.id]]]
 
 			params.surgery += [(String.valueOf(it)):surgery]
 		}

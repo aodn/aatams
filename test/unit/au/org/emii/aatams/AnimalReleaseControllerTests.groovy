@@ -371,7 +371,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 					type: [id:surgeryType.id],
 					treatmentType : [id:surgeryTreatmentType.id],
 					comments: "",
-					tag:[codeMap: tag.codeMap, pingCode: tag.sensors[0].pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
+					tag:[codeMap: tag.codeMap, pingCode: tag.pinger.pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
 
 		controller.params.surgery = ['0':surgery0]
 	}
@@ -404,7 +404,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
             type: [id:surgeryType.id],
             treatmentType : [id:surgeryTreatmentType.id],
             comments: "",
-            tag:[codeMap: tag.codeMap, pingCode: tag.sensors[0].pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
+            tag:[codeMap: tag.codeMap, pingCode: tag.pinger.pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
         
         controller.params.surgery = ['0':surgery0]
         
@@ -471,7 +471,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
                 type: [id:1],
                 treatmentType : [id:1],
                 comments: "",
-                tag:[codeMap: tag.codeMap, pingCode: tag.sensors[0].pingCode, serialNumber: newTag.serialNumber, model:[id: 1]]]
+                tag:[codeMap: tag.codeMap, pingCode: tag.pinger.pingCode, serialNumber: newTag.serialNumber, model:[id: 1]]]
             
             surgeryMap.put(String.valueOf(it), surgery)
         })

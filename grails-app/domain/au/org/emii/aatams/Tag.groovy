@@ -11,7 +11,7 @@ import au.org.emii.aatams.util.StringUtils
 class Tag extends Device implements Embargoable
 {
     List<Surgery> surgeries = new ArrayList<Surgery>()
-	List<Sensor> sensors = new ArrayList<Sensor>()
+	Set<Sensor> sensors = new HashSet<Sensor>()
 	
     static hasMany = [sensors:Sensor, 
                       surgeries:Surgery]
@@ -97,6 +97,15 @@ class Tag extends Device implements Embargoable
 		return pinger?.pingCode
 	}
 	
+	void setCodeMap(CodeMap codeMap)
+	{
+		this.codeMap = codeMap
+		sensors.each
+		{
+			it?.refreshTransmitterId()
+		}	
+	}
+	
 	String getPingCodes()
 	{
 		return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.pingCode))
@@ -104,17 +113,12 @@ class Tag extends Device implements Embargoable
 	
 	String getTransmitterTypeNames()
 	{
-		return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.transmitterType.transmitterTypeName))
+		return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.transmitterType?.transmitterTypeName))
 	}
 
 	List<Sensor> getNonPingerSensors()
 	{
-		def nonPingers = sensors.grep
-		{
-			it?.transmitterType != TransmitterType.findByTransmitterTypeName('PINGER', [cache:true])
-		}
-		
-		return nonPingers	
+		return Sensor.findAllByTagAndTransmitterTypeNotEqual(this, TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]), [sort:"transmitterId"])
 	}
 	
     def applyEmbargo()

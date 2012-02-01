@@ -62,6 +62,10 @@ class TagControllerTests extends ControllerUnitTestCase
         def tagList = [newTag, deployedTag, recoveredTag]
         mockDomain(Tag, tagList)
         tagList.each { it.save() }
+		
+		mockDomain(Sensor)
+		mockDomain(TransmitterType)
+		
     }
 
     protected void tearDown() 

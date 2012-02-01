@@ -98,7 +98,7 @@
 -->
           <div class="results">
             <g:each var="result" in="${searchResult.results}" status="index">
-              <div class="result">
+              <div class="result" style="line-height:175%">
                 <g:set var="className" value="${ClassUtils.getShortName(result.getClass())}" />
                 <g:set var="link" value="${createLink(controller: className[0].toLowerCase() + className[1..-1], action: 'show', id: result.id)}" />
                 <g:set var="desc" value="${result.toString()}" />

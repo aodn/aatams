@@ -39,10 +39,7 @@ class Project
 		sort "name"
     }
     
-    static searchable =
-    {
-        except = 'installations'
-    }
+    static searchable = [only: ['name', 'description']]
     
     String toString()
     {

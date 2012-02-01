@@ -42,6 +42,11 @@ class AnimalRelease implements Embargoable
 		releaseLocation type: GeometryUserType
     }
 
+	static searchable =
+	{
+		surgeries(component:true)
+	}
+
     String captureLocality
     Point captureLocation
     DateTime captureDateTime = new DateTime(Person.defaultTimeZone())

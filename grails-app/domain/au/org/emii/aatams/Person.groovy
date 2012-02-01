@@ -43,12 +43,7 @@ class Person extends SecUser
 		sort name:"asc"
     }
     
-    static searchable = 
-    {
-        organisation(component:true)
-        projectRoles(component:true)
-        except = ['passwordHash', 'permissions', 'roles']
-    }
+    static searchable = [only: ['name', 'description'], except: ['passwordHash', 'permissions', 'roles']]
 
     String toString()
     {

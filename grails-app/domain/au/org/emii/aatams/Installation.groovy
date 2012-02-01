@@ -31,10 +31,7 @@ class Installation
         project cache:true
     }
     
-    static searchable =
-    {
-        project(component:true)
-    }
+    static searchable = [only: ['name']]
     
     String toString()
     {

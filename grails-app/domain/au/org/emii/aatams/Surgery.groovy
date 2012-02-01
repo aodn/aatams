@@ -45,7 +45,8 @@ class Surgery
     
     static searchable =
     {
-//        tag(component:true)
+		root false
+        tag(component:true)
     }
     
     String toString()

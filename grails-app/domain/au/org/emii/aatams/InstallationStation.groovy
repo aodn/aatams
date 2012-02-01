@@ -32,10 +32,7 @@ class InstallationStation
 		location type: GeometryUserType
     }
     
-    static searchable = 
-    {
-        installation(component:true)
-    }
+    static searchable = [only: ['name']]
     
     String name
     

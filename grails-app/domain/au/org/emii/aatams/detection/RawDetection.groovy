@@ -75,11 +75,6 @@ class RawDetection
 		location type: GeometryUserType
     }
     
-    static searchable =
-    {
-        root(false)
-    }
-    
 	static String toSqlInsert(Map detection)
 	{
 		StringBuilder detectionBuff = new StringBuilder(

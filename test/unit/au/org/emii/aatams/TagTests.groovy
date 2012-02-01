@@ -23,7 +23,7 @@ class TagTests extends GrailsUnitTestCase
 		codeMapList.each { it.save() }
 		
 		tag = 
-			new Tag(codeMap:new CodeMap(codeMap:'A69-1303'),
+			new Tag(codeMap:a69_1303,
 					model:new TagDeviceModel(),
 					serialNumber:"1111",
 					status:new DeviceStatus())
@@ -38,14 +38,11 @@ class TagTests extends GrailsUnitTestCase
 		mockDomain(TransmitterType, transmitterTypeList)
 		transmitterTypeList.each { it.save() }
 		
-println "before setup"		
 		pingerSensor = new Sensor(tag: tag, transmitterType: pinger, pingCode: 1111)
 		tempSensor = new Sensor(tag: tag, transmitterType: temp, pingCode: 2222)
 		pressureSensor = new Sensor(tag: tag, transmitterType: pressure, pingCode: 3333)
 		def sensorList = [pingerSensor, tempSensor, pressureSensor]
-println "before mockDomain"		
 		mockDomain(Sensor, sensorList)
-println "after setup"
 		
 		sensorList.each
 		{
@@ -163,5 +160,20 @@ println "after setup"
 		
 		assertEquals(1, newTag.sensors.size())
 		assertEquals(1234, newTag.pinger.pingCode)
+	}
+	
+	void testSetCodeMapUpdatesSensorIds()
+	{
+		tag.sensors.each
+		{
+			assertTrue(it.transmitterId.startsWith("A69-1303"))
+		}
+		
+		tag.setCodeMap(a69_9002)
+
+		tag.sensors.each
+		{
+			assertTrue(it.transmitterId.startsWith("A69-9002"))
+		}
 	}
 }

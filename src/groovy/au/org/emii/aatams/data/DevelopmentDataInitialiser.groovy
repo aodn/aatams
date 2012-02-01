@@ -848,7 +848,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
 		createExportWithDetections("nonEmbargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, nonEmbargoedTag, nonEmbargoedWhaleSurgery, 3)
 		createExportWithDetections("embargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, embargoedTag, embargoedWhaleSurgery, 3)
-		createExportWithDetections("unknownTagWhale.csv", joeBloggs, whaleDeployment, rxWhale, [sensors:[[transmitterId:"A69-1303-8888"]]], null, 3)
+		createExportWithDetections("unknownTagWhale.csv", joeBloggs, whaleDeployment, rxWhale, [pinger:[transmitterId:"A69-1303-8888"]], null, 3)
 		
         ReceiverDownloadFile export2 = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
@@ -897,7 +897,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 					new ValidDetection(receiverDeployment:rx1Bondi,
 					timestamp:new DateTime("2011-05-17T02:54:00+00:00").plusSeconds(it).toDate(),
 					receiverName:rx1.name,
-					transmitterId:tag.sensors[0].transmitterId,
+					transmitterId:tag.pinger.transmitterId,
 					receiverDownload:export1)
 
 			if (surgery1)
@@ -905,7 +905,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 				DetectionSurgery detSurgery =
 						new DetectionSurgery(surgery:surgery1,
 						detection:detection,
-						sensor:tag.sensors[0])
+						sensor:tag.pinger)
 				detection.addToDetectionSurgeries(detSurgery)
 			}
 			export1.addToDetections(detection)

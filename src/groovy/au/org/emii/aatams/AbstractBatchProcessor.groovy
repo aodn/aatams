@@ -1,6 +1,7 @@
 package au.org.emii.aatams
 
 import org.apache.commons.io.input.BOMInputStream;
+import org.grails.plugins.csv.CSVMapReader
 
 /**
  *
@@ -105,13 +106,23 @@ abstract class AbstractBatchProcessor
         }
     }
     
-    List<Map<String, String>> getRecords(downloadFile)
-    {
+	Reader getReader(downloadFile)
+	{
 		// Wrap in BOMInputStream, to handle the byte-order marker present in VUE exports
 		// (see http://stackoverflow.com/questions/1835430/byte-order-mark-screws-up-file-reading-in-java/7390288#7390288)
-        return new InputStreamReader(new BOMInputStream(new FileInputStream(new File(downloadFile.path)))).toCsvMapReader().toList()
+		return new InputStreamReader(new BOMInputStream(new FileInputStream(new File(downloadFile.path))))
+	}
+	
+    List<Map<String, String>> getRecords(downloadFile)
+    {
+		return getMapReader(downloadFile).toList()
     }
     
+	protected CSVMapReader getMapReader(downloadFile)
+	{
+		return new CSVMapReader(getReader(downloadFile))
+	}
+	
     abstract void processSingleRecord(downloadFile, map)
 }
 

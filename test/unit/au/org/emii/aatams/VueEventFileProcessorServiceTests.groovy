@@ -24,7 +24,7 @@ class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorSer
 		vueEventFileProcessorService.eventFactoryService.eventValidatorService = new EventValidatorService()
 
 		vueEventFileProcessorService.searchableService = searchableService
-		vueEventFileProcessorService.metaClass.getRecords = { getRecords(it) }
+		vueEventFileProcessorService.metaClass.getReader = { getReader(it) }
 	}
 
     protected void tearDown() 
@@ -36,7 +36,7 @@ class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorSer
 	{
 		vueEventFileProcessorService.process(download)
 
-		def records = getRecords(download)
+		def records = vueEventFileProcessorService.getRecords(download)
 		
 		assertEquals (records.size(), ValidReceiverEvent.count())
 		
@@ -46,8 +46,17 @@ class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorSer
 			
 			assertEquals(record[EventFactoryService.RECEIVER_COLUMN], ValidReceiverEvent.list()[i].receiverDeployment.receiver.name)
 			assertEquals(record[EventFactoryService.DESCRIPTION_COLUMN], ValidReceiverEvent.list()[i].description)
-			assertEquals(record[EventFactoryService.DATA_COLUMN], ValidReceiverEvent.list()[i].data)
-			assertEquals(record[EventFactoryService.UNITS_COLUMN], ValidReceiverEvent.list()[i].units)
+			assertEquals(record[EventFactoryService.DATA_COLUMN], ValidReceiverEvent.list()[i].data ?: "")
+			
+			// Special case for #1016
+			if (ValidReceiverEvent.list()[i].units?.startsWith("Shad Bay"))
+			{
+				assertEquals("Shad Bay, NS, Canada", ValidReceiverEvent.list()[i].units)
+			}
+			else
+			{
+				assertEquals(record[EventFactoryService.UNITS_COLUMN], ValidReceiverEvent.list()[i].units ?: "")
+			}
 		}
     }
 }

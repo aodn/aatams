@@ -26,7 +26,7 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
 		vueDetectionFileProcessorService = new VueDetectionFileProcessorService()
 		vueDetectionFileProcessorService.detectionFactoryService = detectionFactoryService
 		vueDetectionFileProcessorService.searchableService = searchableService
-		vueDetectionFileProcessorService.metaClass.getRecords = { getRecords(it) }
+		vueDetectionFileProcessorService.metaClass.getReader = { getReader(it) }
     }
 
     protected void tearDown() 
@@ -42,7 +42,7 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
 
         vueDetectionFileProcessorService.process(download)
         
-        assertEquals(getRecords(download).size(), ValidDetection.count() + InvalidDetection.count())
+        assertEquals(vueDetectionFileProcessorService.getRecords(download).size(), ValidDetection.count() + InvalidDetection.count())
         
 		assertEquals(2, ValidDetection.count())
         assertEquals(5, InvalidDetection.count())

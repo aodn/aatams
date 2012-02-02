@@ -26,7 +26,7 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 		vueDetectionFileProcessorService = new JdbcTemplateVueDetectionFileProcessorService()
 		vueDetectionFileProcessorService.jdbcTemplateDetectionFactoryService = jdbcTemplateDetectionFactoryService
 		vueDetectionFileProcessorService.searchableService = searchableService
-		vueDetectionFileProcessorService.metaClass.getRecords = { getRecords(it) }
+		vueDetectionFileProcessorService.metaClass.getReader = { getReader(it) }
 		vueDetectionFileProcessorService.metaClass.markDuplicates = { }
 		
 		DeviceStatus status = new DeviceStatus(status: "DEPLOYED")
@@ -76,7 +76,7 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 		vueDetectionFileProcessorService.process(download)
 	}
 
-	protected def getData() {
+	protected String getData() {
 		return super.getData() + '''
 2009-12-08 06:50:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2009-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234

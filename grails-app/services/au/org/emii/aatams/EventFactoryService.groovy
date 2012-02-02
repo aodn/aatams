@@ -11,6 +11,8 @@ class EventFactoryService
     static final String DESCRIPTION_COLUMN = "Description"
     static final String DATA_COLUMN = "Data"
     static final String UNITS_COLUMN = "Units"
+	static final List UNITS_DETAILS_COLUMNS = ["Units detail 1", "Units detail 2", "Units detail 3"]
+
     static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
     
 	def eventValidatorService
@@ -53,6 +55,16 @@ class EventFactoryService
 		// so that the comparison when checking for duplicates works properly.
 		def data = params[DATA_COLUMN] == "" ? null : params[DATA_COLUMN]
 		def units = params[UNITS_COLUMN] == "" ? null : params[UNITS_COLUMN]
+		
+		UNITS_DETAILS_COLUMNS.each
+		{
+			columnName ->
+
+			if (params[columnName])
+			{
+				units += "," + params[columnName]
+			}
+		}
 		
 		return [timestamp: timestamp,
 			 	receiverName: params[RECEIVER_COLUMN],

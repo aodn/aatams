@@ -65,7 +65,7 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
         deployment.recovery = recovery
         deployment.save()
 		
-		AbstractBatchProcessor.metaClass.getRecords = { getRecords(it) }
+		AbstractBatchProcessor.metaClass.getReader = { getReader(it) }
     }
 
     protected void tearDown() 
@@ -73,51 +73,20 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
         super.tearDown()
     }
 
-	protected def getData()
+	public Reader getReader(downloadFile)
 	{
-		return '''2009-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+		return new StringReader(getData())
+	}
+	
+	protected String getData() 
+	{
+		return '''Date and Time (UTC),Receiver,Transmitter,Transmitter Name,Transmitter Serial,Sensor Value,Sensor Unit,Station Name,Latitude,Longitude,
+2009-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2009-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2009-12-08 06:44:24,AAA-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2009-12-08 06:44:24,BBB-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2009-12-08 06:47:24,BBB-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2007-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2010-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234'''
-	}
-	
-	List<Map<String, String>> getRecords(downloadFile)
-	{
-		def columnNames = 
-		 [0:DetectionFactoryService.DATE_AND_TIME_COLUMN,
-		  1:DetectionFactoryService.RECEIVER_COLUMN,
-		  2:DetectionFactoryService.TRANSMITTER_COLUMN,
-		  3:DetectionFactoryService.TRANSMITTER_NAME_COLUMN,
-		  4:DetectionFactoryService.TRANSMITTER_SERIAL_NUMBER_COLUMN,
-		  5:DetectionFactoryService.SENSOR_VALUE_COLUMN,
-		  6:DetectionFactoryService.SENSOR_UNIT_COLUMN,
-		  7:DetectionFactoryService.STATION_NAME_COLUMN,
-		  8:DetectionFactoryService.LATITUDE_COLUMN,
-		  9:DetectionFactoryService.LONGITUDE_COLUMN]
-
-		def retList = []
-		
-		String data = getData()
-		
-		data.eachLine
-		{
-			line ->
-			
-			def record = [:]
-			
-			line.split(',').eachWithIndex
-			{
-				value, i ->
-				
-				record.put(columnNames[i], value)
-			}
-			
-			retList.add(record)
-		}
-		
-		return retList
 	}
 }

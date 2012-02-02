@@ -33,4 +33,20 @@ class AuthControllerTests extends ControllerUnitTestCase
 		
 		assertEquals(targetUri, controller.redirectArgs.uri)
     }
+	
+	void testLoginWithUpperCaseName()
+	{
+		controller.params.username = "FredSmith"
+		controller.params.password = "paSSwoRD"
+		
+		controller.metaClass.doLogin = 
+		{ 
+			UsernamePasswordToken token ->
+			
+			assertEquals("fredsmith", token.username)
+			assertEquals("paSSwoRD".toCharArray(), token.password)
+		}
+			
+		controller.signIn()
+	}
 }

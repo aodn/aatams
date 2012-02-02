@@ -74,28 +74,39 @@ class ProjectRoleController {
 
     def update = {
         def projectRoleInstance = ProjectRole.get(params.id)
-        if (projectRoleInstance) {
-            if (params.version) {
+        if (projectRoleInstance) 
+		{
+            if (params.version) 
+			{
                 def version = params.version.toLong()
-                if (projectRoleInstance.version > version) {
+                if (projectRoleInstance.version > version) 
+				{
                     
                     projectRoleInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'projectRole.label', default: 'ProjectRole')] as Object[], "Another user has updated this ProjectRole while you were editing")
                     render(view: "edit", model: [projectRoleInstance: projectRoleInstance])
                     return
                 }
             }
+			
+			permissionUtilsService.removePermissions(projectRoleInstance)
             projectRoleInstance.properties = params
-            if (!projectRoleInstance.hasErrors() && projectRoleInstance.save(flush: true)) {
+			
+            if (!projectRoleInstance.hasErrors() && projectRoleInstance.save(flush: true)) 
+			{
+				permissionUtilsService.setPermissions(projectRoleInstance)
+				
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), projectRoleInstance.toString()])}"
             
                 def projectId = projectRoleInstance?.project?.id
                 redirect(controller:"project", action: "edit", id: projectId, params: [projectId:projectId])
             }
-            else {
+            else 
+			{
                 render(view: "edit", model: [projectRoleInstance: projectRoleInstance])
             }
         }
-        else {
+        else 
+		{
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), params.id])}"
             redirect(action: "list")
         }

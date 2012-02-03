@@ -153,6 +153,7 @@ log4j = {
             
     debug   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
 	        "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService"
+//			"grails.app.service.au.org.emii.aatams.detection.DetectionExtractService"
     info    "grails.app.service.au.org.emii.aatams.VueEventFileProcessorService"
 //			'org.hibernate'
 	
@@ -198,9 +199,13 @@ grails.gorm.default.mapping = {
 	"user-type" type: org.joda.time.contrib.hibernate.PersistentPeriod, class: org.joda.time.Period
 }
 
-rawDetection.extract.limit = 100000
+//rawDetection.extract.limit = 200000
+rawDetection.extract.limit = 50000
+rawDetection.extract.queryQueueSize = 4
 rawDetection.extract.view.name = 'detection_extract_view'
-rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp, installation_station.name as station, 
+rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp, 
+			installation_station.name as station,
+			installation_station.id as station_id, 
 			st_y(installation_station.location) as latitude, st_x(installation_station.location) as longitude,
 			(device_model.model_name || '-' || device.serial_number) as receiver_name,
 			COALESCE(sensor.transmitter_id, '') as sensor_id,

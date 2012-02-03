@@ -65,7 +65,7 @@ class ReportController
         
 		if (params._name == "detection"  && params._format == "CSV")
 		{
-			detectionExtractService.generateReport(getFilterParams(params), response)
+			detectionExtractService.generateReport(getFilterParams(params), request, response)
 		}
 		else
 		{

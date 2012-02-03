@@ -112,12 +112,7 @@ class KmlServiceTests extends GrailsUnitTestCase
 	
 	void testOneValidDetection()
 	{
-		ValidDetection detection = new ValidDetection(receiverDeployment: deploymentTasmanSW1, timestamp: new DateTime("2011-11-15T10:20:30").toDate())
-		mockDomain(ValidDetection, [detection])
-		
-		List<ValidDetection> detections = [detection]
-		
-		def parsedKml = convertToParsedKml(detections)
+		def parsedKml = convertToParsedKml(InstallationStation.list())
 		assertNotNull(parsedKml)
 		
 		def allNodes = parsedKml.depthFirst().collect{ it }
@@ -128,7 +123,6 @@ class KmlServiceTests extends GrailsUnitTestCase
 			name, i ->
 			
 			assertEquals(name, folderNodes[i].name.text())
-			
 		}
 		
 		def placemarkNodes = allNodes.findAll { it.name() == "Placemark" }
@@ -144,21 +138,14 @@ class KmlServiceTests extends GrailsUnitTestCase
 
 	void testTwoDetectionsDifferentStations()
 	{
-		ValidDetection detection1 = new ValidDetection(receiverDeployment: deploymentTasmanSW1, timestamp: new DateTime("2011-11-15T10:20:30").toDate())
-		ValidDetection detection2 = new ValidDetection(receiverDeployment: deploymentTasmanSW2, timestamp: new DateTime("2011-11-15T10:20:30").toDate())
-		def detectionList = [detection1, detection2]
-
-		mockDomain(ValidDetection, detectionList)
-		
-		def parsedKml = convertToParsedKml(detectionList)
+		def parsedKml = convertToParsedKml(InstallationStation.list())
 		assertNotNull(parsedKml)
 		
 		def allNodes = parsedKml.depthFirst().collect{ it }
 		
-/**		
 		def placemarkNodes = allNodes.findAll { it.name() == "Placemark" }
 		
-		assertEquals(2, placemarkNodes.size())
+		assertEquals(4, placemarkNodes.size())
 		
 		def tasmanSW1Node = placemarkNodes.find { it.name == tasmanSW1.name }
 		assertNotNull(tasmanSW1Node)
@@ -169,12 +156,11 @@ class KmlServiceTests extends GrailsUnitTestCase
 		assertNotNull(tasmanSW2Node)
 		assertEquals("1", tasmanSW2Node.open.text())
 		assertEquals("12.0,12.0", tasmanSW2Node.Point.coordinates.text())
-*/		
 	}
 
-	private def convertToParsedKml(List detections) 
+	private def convertToParsedKml(List stations) 
 	{
-		def kml = service.toKml(detections)
+		def kml = service.toKml(stations)
 
 		OutputStream kmlStream = new ByteArrayOutputStream()
 		kml.marshal(kmlStream)

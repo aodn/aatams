@@ -80,6 +80,7 @@ class ReportController
 			{
 				long startTime = System.currentTimeMillis()
 				
+				InstallationStation.refreshDetectionCounts()
 				assert(!resultList.isEmpty())
 				generateKml(params, resultList)
 	
@@ -255,7 +256,7 @@ class ReportController
     
     def installationStationExtract =
     {
-        redirect(action:"extract", params:[name:"installationStation", formats:["CSV"]])
+        redirect(action:"extract", params:[name:"installationStation", formats:["CSV", "KML"]])
     }
     
     def receiverExtract =

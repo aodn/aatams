@@ -30,8 +30,8 @@ class KmlDescriptionTests extends GroovyPagesTestCase
 		def div = executeTemplate([:])
 		
 		def allNodes = div.depthFirst().collect{ it }
-		assertEquals(3, allNodes.grep { it.name() == "tr"}.size())
-		assertEquals(6, allNodes.grep { it.name() == "td"}.size())
+		assertEquals(4, allNodes.grep { it.name() == "tr"}.size())
+		assertEquals(8, allNodes.grep { it.name() == "td"}.size())
     }
 	
 	void testHeaderData()
@@ -48,29 +48,8 @@ class KmlDescriptionTests extends GroovyPagesTestCase
 		assertEquals(installationName, vals[3].text())
 		assertEquals("Active", vals[4].text())
 		assertEquals("false", vals[5].text())
-	}
-
-	void testDetectionCounts()
-	{
-		InstallationStation stationInstance = InstallationStation.findByName('Bondi SW1')
-		assertNotNull(stationInstance)
-		
-		def div = executeTemplate([installationStationInstance:stationInstance])
-println div
-		def allNodes = div.depthFirst().collect{ it }
-		def vals = allNodes.grep { it.name() == "td"}
-
-		assertEquals("37010003 - Carcharodon carcharias (White Shark)", vals[6].text())
-		assertEquals("10", vals[7].text())
-
-		assertEquals("37441004 - Thunnus maccoyii (Southern Bluefin Tuna)", vals[8].text())
-		assertEquals("3", vals[9].text())
-
-		assertEquals("A69-1303-62339", vals[10].text())
-		assertEquals("10", vals[11].text())
-
-		assertEquals("A69-1303-46601", vals[12].text())
-		assertEquals("3", vals[13].text())
+		assertEquals("Detection Count", vals[6].text())
+		assertEquals("0", vals[7].text())
 	}
 
 	private InstallationStation setupStation() 

@@ -11,12 +11,17 @@ class KmlService
 {
     static transactional = false
 
-    Kml toKml(List<ValidDetection> detections) 
+    Kml toKml(List<InstallationStation> stations) 
 	{
 		final Kml kml = new Kml()
 		Document doc = kml.createAndSetDocument()
 
-		List<Project> projects = subsetModel(detections)
+		def projects = stations*.installation*.project.unique().sort()
+		{
+			a, b ->
+			
+			a.name <=> b.name
+		}
 		
 		projects.each
 		{
@@ -28,15 +33,4 @@ class KmlService
 		
 		return kml 
     }
-	
-	/**
-	 * Build a subset of the GORM model based on the given list of detections.
-	 * 
-	 * @param detections
-	 * @return
-	 */
-	private List<Project> subsetModel(List<ValidDetection> detections)
-	{
-		return Project.list().collect { it.toKmlClone(detections) }
-	}
 }

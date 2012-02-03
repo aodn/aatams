@@ -28,14 +28,9 @@ class InstallationStationReportWrapper
     
     public static final String NULL_CURTAIN_POSITION = "-"
     
-	private final TreeMap<Integer, String> speciesDetectionsByReverseCount = new TreeMap<Integer, String>(Collections.reverseOrder())
-	private final TreeMap<Integer, String> sensorDetectionsByReverseCount = new TreeMap<Integer, String>(Collections.reverseOrder())
-	
     public InstallationStationReportWrapper(InstallationStation station)
     {
         this.station = station
-		
-		initDetectionCountMaps()
     }
     
     public String getInstallationName()
@@ -88,78 +83,14 @@ class InstallationStationReportWrapper
         return Collections.EMPTY_LIST
     }
 	
-	private void initDetectionCountMaps()
-	{
-		Map<Species, Integer> countBySpecies = [:]
-		Map<Tag, Integer> countBySensor = [:]
-		
-		station.deployments.each
-		{
-			deployment ->
-			
-			deployment.detections.each
-			{
-				detection ->
-				
-				detection.detectionSurgeries.each
-				{
-					detSurgery ->
-					
-					def species = detSurgery.surgery.release.animal.species
-					incCountForSpecies(countBySpecies, species)
-					
-					def sensor = detSurgery.sensor
-					incCountForSensor(countBySensor, sensor)
-				}
-			}
-		}
-
-		countBySpecies.each
-		{
-			k, v ->
-			speciesDetectionsByReverseCount.put(v, k)
-		}
-
-		countBySensor.each
-		{
-			k, v ->
-			sensorDetectionsByReverseCount.put(v, k)
-		}
-	}
-	
 	boolean hasDetections()
 	{
-		return !speciesDetectionsByReverseCount.isEmpty()
+		return (detectionCount() != 0) 
 	}
 	
-	Map<Integer, Species> detectionCountsBySpecies()
+	long getDetectionCount()
 	{
-		return speciesDetectionsByReverseCount
-	}
-	
-	Map<Integer, Species> detectionCountsByTag()
-	{
-		return sensorDetectionsByReverseCount
-	}
-	
-	private void incCountForSpecies(Map countBySpecies, Species species)
-	{
-		if (!countBySpecies.get(species))
-		{
-			countBySpecies.put(species, 0)
-		}
-		
-		countBySpecies[species] = countBySpecies[species] + 1
-	}
-	
-	private void incCountForSensor(Map countBySensor, Sensor sensor)
-	{
-		if (!countBySensor.get(sensor))
-		{
-			countBySensor.put(sensor, 0)
-		}
-		
-		countBySensor[sensor] = countBySensor[sensor] + 1
+		return 73
 	}
 }
 

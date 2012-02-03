@@ -1,6 +1,9 @@
 package au.org.emii.aatams.detection
 
 import java.util.Map;
+import java.util.zip.GZIPOutputStream
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 import groovy.sql.Sql
 import org.joda.time.DateTime
@@ -95,26 +98,55 @@ class DetectionExtractService
 		return query
 	}
 	
-	def generateReport(filterParams, response)
+	def generateReport(filterParams, req, res)
 	{
+		long startTime = System.currentTimeMillis()
+		
 		projectPermissionCache = [:]
 		
-		response.setHeader("Content-disposition", "attachment; filename=" + "detectionExtract.csv")
-		response.contentType = "text/csv"
-		response.characterEncoding = "UTF-8"
+		OutputStream out = null
 		
-		response.outputStream << "timestamp,"
-		response.outputStream << "station name,"
-		response.outputStream << "latitude,"
-		response.outputStream << "longitude,"
-		response.outputStream << "receiver ID,"
-		response.outputStream << "tag ID,"
-		response.outputStream << "species,"
-		response.outputStream << "uploader,"
-		response.outputStream << "transmitter ID,"
-		response.outputStream << "organisation"
+		// Select the appropriate content encoding based on the
+		// client's Accept-Encoding header. Choose GZIP if the header
+		// includes "gzip". Choose ZIP if the header includes "compress".
+		// Choose no compression otherwise.
+		String encodings = req.getHeader("Accept-Encoding");
+		if (encodings != null && encodings.indexOf("gzip") != -1) 
+		{
+			// Go with GZIP
+			res.setHeader("Content-Encoding", "gzip");
+			out = new GZIPOutputStream(res.getOutputStream());
+		}
+		else if (encodings != null && encodings.indexOf("compress") != -1) 
+		{
+			// Go with ZIP
+			res.setHeader("Content-Encoding", "x-compress");
+			out = new ZipOutputStream(res.getOutputStream());
+			((ZipOutputStream)out).putNextEntry(new ZipEntry("dummy name"));
+		}
+		else 
+		{
+			// No compression
+			out = res.getOutputStream();
+		}
+
+		res.setHeader("Vary", "Accept-Encoding");
+		res.setHeader("Content-disposition", "attachment; filename=" + "detectionExtract.csv")
+		res.contentType = "text/csv"
+		res.characterEncoding = "UTF-8"
+
+		out << "timestamp,"
+		out << "station name,"
+		out << "latitude,"
+		out << "longitude,"
+		out << "receiver ID,"
+		out << "tag ID,"
+		out << "species,"
+		out << "uploader,"
+		out << "transmitter ID,"
+		out << "organisation"
 		
-		response.outputStream << "\n"
+		out << "\n"
 
 		def sql = new Sql(dataSource)
 		def offset = 0
@@ -129,18 +161,18 @@ class DetectionExtractService
 			{
 				row ->
 				
-				response.outputStream << row.formatted_timestamp << ","
-				response.outputStream << row.station << ","
-				response.outputStream << GeometryUtils.scrambleCoordinate(row.latitude) << ","
-				response.outputStream << GeometryUtils.scrambleCoordinate(row.longitude) << ","
-				response.outputStream << row.receiver_name << ","
-				response.outputStream << row.sensor_id << ","
-				response.outputStream << row.species_name << ","
-				response.outputStream << row.uploader << ","
-				response.outputStream << row.transmitter_id << ","
-				response.outputStream << row.organisation
+				out << row.formatted_timestamp << ","
+				out << row.station << ","
+				out << GeometryUtils.scrambleCoordinate(row.latitude) << ","
+				out << GeometryUtils.scrambleCoordinate(row.longitude) << ","
+				out << row.receiver_name << ","
+				out << row.sensor_id << ","
+				out << row.species_name << ","
+				out << row.uploader << ","
+				out << row.transmitter_id << ","
+				out << row.organisation
 				
-				response.outputStream << "\n"
+				out << "\n"
 			}
 			
 			offset += resultList.size()
@@ -148,6 +180,8 @@ class DetectionExtractService
 		}
 		
 		sql.close()
+		
+		log.error("Elapsed time (ms): " + (System.currentTimeMillis() - startTime))
 	}
 	
 	private String toSqlFormat(String formParam)

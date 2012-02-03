@@ -87,23 +87,17 @@ class Project
         
         return organisations
     }
-
-	Project toKmlClone(List<ValidDetection> detections)
-	{
-		Project kmlClone = new Project(name: this.name)
-		installations.each 
-		{
-			kmlClone.addToInstallations(it.toKmlClone(detections))
-		}
-		
-		return kmlClone
-	}
 	
 	Folder toKmlFolder()
 	{
 		Folder projectFolder = new Folder().withName(name)
 		
-		installations.each
+		installations.sort
+		{
+			a, b ->
+			
+			a.name <=> b.name
+		}.each
 		{
 			installation ->
 			

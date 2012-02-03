@@ -9,6 +9,9 @@ import au.org.emii.aatams.util.GeometryUtils
 import com.vividsolutions.jts.geom.Point
 
 import de.micromata.opengis.kml.v_2_2_0.Placemark
+import groovy.sql.Sql
+
+import org.codehaus.groovy.grails.commons.ApplicationHolder as AH
 
 /**
  * An Installation Station is a location within an Installation where a 
@@ -18,11 +21,12 @@ import de.micromata.opengis.kml.v_2_2_0.Placemark
  */
 class InstallationStation 
 {
+	def dataSource
 	def grailsTemplateEngineService
 	
     static belongsTo = [installation:Installation]
     static hasMany = [receivers:Receiver, deployments:ReceiverDeployment]
-    static transients = ['curtainPositionAsString', 'scrambledLocation', 'latitude', 'longitude', 'active']
+    static transients = ['curtainPositionAsString', 'scrambledLocation', 'latitude', 'longitude', 'active', 'detectionCount']
     
     static mapping =
     {
@@ -34,6 +38,8 @@ class InstallationStation
     
     static searchable = [only: ['name']]
     
+	static Map<Long, Long> detectionCounts = [:]
+	
     String name
     
     /**
@@ -111,21 +117,7 @@ class InstallationStation
         
         return activeDeployments.size() >= 1
     }
-	
-	InstallationStation toKmlClone(List<ValidDetection> detections)
-	{
-		InstallationStation kmlClone = new InstallationStation(name: this.name, location: this.location)
-		
-		deployments.each
-		{
-			deployment ->
-			
-			kmlClone.addToDeployments(deployment.toKmlClone(detections))	
-		}
-		
-		return kmlClone
-	}
-	
+
 	Placemark toPlacemark()
 	{
 		final Placemark placemark = new Placemark()
@@ -137,13 +129,32 @@ class InstallationStation
 		return placemark
 	}
 	
-	InstallationStationReportWrapper summary()
-	{
-		return new InstallationStationReportWrapper(this)
-	}
-	
 	String toKmlDescription()
 	{
 		return grailsTemplateEngineService.renderView("/report/_kmlDescriptionTemplate", [installationStationInstance:this])
+	}
+	
+	boolean hasDetections()
+	{
+		return (detectionCount() != 0)
+	}
+	
+	long getDetectionCount()
+	{
+		return detectionCounts.get(id) ?: 0
+	}
+	
+	static void refreshDetectionCounts()
+	{
+		detectionCounts = [:]
+		
+		def sql = new Sql(AH.application.mainContext.dataSource)
+		
+		sql.eachRow('''select station_id, count(*) from detection_extract_view group by station_id''')
+		{
+			row ->
+			
+			detectionCounts[row.station_id] = row.count
+		}
 	}
 }

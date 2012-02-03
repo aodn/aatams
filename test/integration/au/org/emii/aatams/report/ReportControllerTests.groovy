@@ -202,11 +202,11 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 		checkResponse("testExecuteDetection")
 	}
 
-	void testExecuteDetectionKmlExtract()
+	void testExecuteStationKmlExtract()
 	{
 		InstallationStation.metaClass.toKmlDescription = { "some description" }
 		
-		controller.params._name = "detection"
+		controller.params._name = "installationStation"
 		controller.params.filter = [:]
 		controller.params._type = "extract"
 		controller.params._format = "KML"
@@ -219,17 +219,17 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 		def allNodes = div.depthFirst().collect{ it }
 		def folderNodes = allNodes.findAll { it.name() == "Folder" }
 		
-//		println controller.response.contentAsString
-//		["Whale", "Seal Count", "Heron Island Curtain", "Bondi Line", "Tuna", "Ningaloo Array"].each
-//		{
-//			folderName ->
-//			
-//			if (!folderNodes*.name*.text().contains(folderName))
-//			{
-//				println "No folder name: " + folderName
-//			}
-//			assertTrue(folderNodes*.name*.text().contains(folderName))
-//		}
+		println controller.response.contentAsString
+		["Bondi Line", "Heron Island Curtain", "Ningaloo Array", "Seal Count", "Tuna", "Whale"].each
+		{
+			folderName ->
+			
+			if (!folderNodes*.name*.text().contains(folderName))
+			{
+				println "No folder name: " + folderName
+			}
+			assertTrue(folderNodes*.name*.text().contains(folderName))
+		}
 	}
 
 	void testDetectionExtractWithReadPermission()

@@ -37,26 +37,17 @@ class Installation
     {
         return name
     }
-	
-	Installation toKmlClone(List<ValidDetection> detections)
-	{
-		Installation kmlClone = new Installation(name: this.name)
-		
-		stations.each
-		{
-			station ->
-			
-			kmlClone.addToStations(station.toKmlClone(detections))
-		}
-		
-		return kmlClone
-	}
-	
+
 	Folder toKmlFolder()
 	{
 		Folder installationFolder = new Folder().withName(name)
 		
-		stations.each
+		stations.sort()
+		{
+			a, b ->
+			
+			a.name <=> b.name
+		}.each
 		{
 			station ->
 

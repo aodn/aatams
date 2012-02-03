@@ -1,17 +1,22 @@
 package au.org.emii.aatams.detection
 
-import java.util.Map;
+import groovy.sql.Sql
+
+import java.util.Map
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.FutureTask
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.TimeUnit
 import java.util.zip.GZIPOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
-import groovy.sql.Sql
-import org.joda.time.DateTime
+import org.apache.shiro.SecurityUtils
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
-import org.apache.shiro.SecurityUtils
-
-import au.org.emii.aatams.util.GeometryUtils;
+import au.org.emii.aatams.util.GeometryUtils
 
 class DetectionExtractService 
 {
@@ -23,13 +28,21 @@ class DetectionExtractService
  
 	def extractPage(filterParams, sql, limit, offset)
 	{
+		log.debug("Querying database, offset: " + offset)
 		def results = sql.rows(constructQuery(filterParams, limit, offset))
+		log.debug("Query finished, num results: " + results.size())
+		
+		return results
+	}
+
+	private applyEmbargo(results) 
+	{
 		def now = new Date()
 		
 		results.each
 		{
 			row ->
-			
+
 			if (row.embargo_date && row.embargo_date.after(now))
 			{
 				if (!hasReadPermission(row.project_id))
@@ -40,8 +53,6 @@ class DetectionExtractService
 				}
 			}
 		}
-		
-		return results
 	}
 	
 	private String constructQuery(filterParams, limit, offset)
@@ -135,6 +146,110 @@ class DetectionExtractService
 		res.contentType = "text/csv"
 		res.characterEncoding = "UTF-8"
 
+		try
+		{
+			writeCsvHeader(out)
+			writeCsvData(filterParams, out)
+		}
+		finally
+		{
+			// Write the compression trailer and close the output stream
+			out.close()
+			log.info("Elapsed time (ms): " + (System.currentTimeMillis() - startTime))
+		}
+	}
+
+	ExecutorService executor = Executors.newCachedThreadPool()
+	 
+	private void writeCsvData(filterParams, OutputStream out) 
+	{
+		def sql = new Sql(dataSource)
+		def limit = ConfigurationHolder.config.rawDetection.extract.limit
+		
+		def resultListQueue = new LinkedBlockingQueue<List>(ConfigurationHolder.config.rawDetection.extract.queryQueueSize)
+		volatile finishedQuery = false
+		
+		// Start reading thread.
+		executor.execute(new Runnable() 
+		{
+			public void run()
+			{
+				try
+				{
+					def offset = 0
+					
+					def resultList = extractPage(filterParams, sql, limit, offset)
+					
+					while (resultList.size() > 0)
+					{
+						resultListQueue.put(resultList)
+						
+						offset += resultList.size()
+						resultList = extractPage(filterParams, sql, limit, offset)
+					}
+				}
+				catch (InterruptedException e)
+				{
+//					System.out.println("Database query interrupted", e)
+				}
+				finally
+				{
+					finishedQuery = true
+				}
+			}
+		})
+		
+		// Write data...
+		try
+		{
+			while (!resultListQueue.isEmpty() || !finishedQuery)
+			{
+				def resultList = resultListQueue.poll(2, TimeUnit.SECONDS)
+				
+				if (resultList)
+				{
+					applyEmbargo(resultList)
+					writeCsvChunk(resultList, out)
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			log.warn("Data extract exception, cancelling database query...", e)
+			executor.shutdownNow()
+			executor = Executors.newCachedThreadPool()
+		}
+		finally
+		{
+			sql.close()
+		}
+	}
+
+	private def writeCsvChunk(resultList, OutputStream out) 
+	{
+		resultList.each
+		{
+			row ->
+
+			out << row.formatted_timestamp << ","
+			out << row.station << ","
+			out << GeometryUtils.scrambleCoordinate(row.latitude) << ","
+			out << GeometryUtils.scrambleCoordinate(row.longitude) << ","
+			out << row.receiver_name << ","
+			out << row.sensor_id << ","
+			out << row.species_name << ","
+			out << row.uploader << ","
+			out << row.transmitter_id << ","
+			out << row.organisation
+
+			out << "\n"
+		}
+		
+		return resultList.size()
+	}
+
+	private void writeCsvHeader(OutputStream out) 
+	{
 		out << "timestamp,"
 		out << "station name,"
 		out << "latitude,"
@@ -145,43 +260,8 @@ class DetectionExtractService
 		out << "uploader,"
 		out << "transmitter ID,"
 		out << "organisation"
-		
+
 		out << "\n"
-
-		def sql = new Sql(dataSource)
-		def offset = 0
-		def limit = ConfigurationHolder.config.rawDetection.extract.limit
-		
-		def resultList = extractPage(filterParams, sql, limit, offset)
-		while (resultList.size() > 0)
-		{
-			log.debug ("num rows: " + resultList.size() + ", offset: " + offset)
-
-			resultList.each
-			{
-				row ->
-				
-				out << row.formatted_timestamp << ","
-				out << row.station << ","
-				out << GeometryUtils.scrambleCoordinate(row.latitude) << ","
-				out << GeometryUtils.scrambleCoordinate(row.longitude) << ","
-				out << row.receiver_name << ","
-				out << row.sensor_id << ","
-				out << row.species_name << ","
-				out << row.uploader << ","
-				out << row.transmitter_id << ","
-				out << row.organisation
-				
-				out << "\n"
-			}
-			
-			offset += resultList.size()
-			resultList = extractPage(filterParams, sql, limit, offset)
-		}
-		
-		sql.close()
-		
-		log.error("Elapsed time (ms): " + (System.currentTimeMillis() - startTime))
 	}
 	
 	private String toSqlFormat(String formParam)

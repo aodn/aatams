@@ -71,7 +71,7 @@ class DetectionExtractService
 			
 			if (v)
 			{
-				whereClauses += (k + " in (" + toSqlFormat(v) + ") ")
+				whereClauses += ("trim(" + k + ") in (" + toSqlFormat(v) + ") ")
 			}
 		}
 		 

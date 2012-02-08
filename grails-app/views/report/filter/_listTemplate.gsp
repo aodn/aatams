@@ -1,19 +1,18 @@
 <!-- GSP template for a filter parameter whose value is chosen from a select list -->
 <tr class="prop">
 
+    
     <td valign="top" class="name">
-        <label for="filter.eq.${propertyName}">${label}</label>
+        <label for="${qualifiedParameterName}">${label}</label>
     </td>
+    
+    <g:hiddenField name="${qualifiedParameterName}" value="${propertyName}" />
+    
     <td valign="top" class="value">
-        
-        <g:if test="${filter}">
-            <g:set var="selectedValue" value="${filter['eq.' + propertyName]}" />
-        </g:if>
-        <g:else>
-            <g:set var="selectedValue" value="" />
-        </g:else>
-        
-        <g:select name="filter.eq.${propertyName}" 
+
+        <g:set var="selectedValue" value="${params[qualifiedParameterName]?.getAt(1)}" />
+
+        <g:select name="${qualifiedParameterName}" 
                   from="${range}"
                   value="${selectedValue}"
                   noSelection="['':' - all - ']" />

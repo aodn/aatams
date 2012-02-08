@@ -19,6 +19,8 @@ class AnimalReleaseController extends AbstractController
 
     def list = 
 	{
+println "params: " + params
+		
 		doList("animalRelease")
 	}
 

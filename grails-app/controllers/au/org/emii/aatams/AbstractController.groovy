@@ -5,61 +5,16 @@ import java.util.Map;
 
 abstract class AbstractController 
 {
-	def reportFilterFactoryService
+	def queryService
 	def reportInfoService
 
 	protected def doList(queryName)
 	{
 		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-		def resultList = generateResultList(params + [_name:queryName])
+		
+		def resultList = queryService.query(reportInfoService.getClassForName(queryName), params)
 		
 		[entityList: resultList.results,
-		 total: resultList.count,
-		 filter: params.filter,
-		 executedFilter: resultList.filter]
-	}
-
-	protected Map generateResultList(Map params)
-	{
-		def resultList = []
-
-		def filterParams = [:]
-		if (params.filter?.between)
-		{
-			 filterParams = [between:[timestamp:[params.filter.between.min.timestamp, params.filter.between.max.timestamp]]]
-		}
-		
-		if (params.filter?.eq)
-		{
-			filterParams.eq = params.filter.eq
-		}
-		
-		if (params.filter?.in)
-		{
-			filterParams.in = params.filter.in
-		}
-		
-		if (params.filter?.isNull)
-		{
-			filterParams.isNull = params.filter.isNull
-		}
-		
-		def filter = reportFilterFactoryService.newFilter(reportInfoService.getClassForName(params._name), filterParams)
-		
-		def cleanedFilterParams = [:]
-		params.filter?.each
-		{
-			k, v ->
-			
-			if (v instanceof Map)
-			{
-			}
-			else
-			{
-				cleanedFilterParams.put('filter.' + k, v)
-			}
-		}
-		
-		return [results:filter.list(params), count:filter.count(), filter:cleanedFilterParams]
+		 total: resultList.count]
 	}
 }

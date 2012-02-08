@@ -70,7 +70,7 @@ class ReportInfoService
          "installation.project.name": "project",
          "station.installation.project.name": "project",
          "station.installation.name": "installation",
-		 "surgeries.tag.codeName": tagId,
+		 "surgeries.detectionSurgeries.sensor.codeName": tagId,
 		 "tag.project.name": "project",
 		 "timestamp": "timestamp",
 		 "transmitterId": "transmitter ID"]
@@ -144,12 +144,14 @@ class ReportInfoService
 		
 		def animalReleaseFilterParams =
 		[
-			new ListReportParameter(label: propertyToLabel["project.name"], propertyName:"project.name", range:projectRange),
-			new AjaxMultiSelectReportParameter(label: propertyToLabel["surgeries.tag.codeName"],
-											   propertyName:"surgeries.tag.codeName",
-											   lookupPath:"/tag/lookupByCodeName"),
+			new ListReportParameter(label: propertyToLabel["project.name"], associationName: "project", propertyName:"name", range:projectRange),
+			new AjaxMultiSelectReportParameter(label: propertyToLabel["surgeries.sensor.codeName"],
+											   associationName: "surgeries.detectionSurgeries.sensor",
+											   propertyName:"codeName",
+											   lookupPath:"/sensor/lookupByTransmitterId"),
 			new AjaxMultiSelectReportParameter(label: propertyToLabel["animal.species.spcode"],
-											   propertyName:"animal.species.spcode",
+											   associationName: "animal.species",
+											   propertyName:"spcode",
 											   lookupPath:"/species/lookupByNameAndReturnSpcode")
 		]
 		
@@ -190,7 +192,7 @@ class ReportInfoService
 										  maxRange:new Date())]
 
 		def installationFilterParams =
-			[new ListReportParameter(label: propertyToLabel["project.name"], propertyName:"project.name", range:projectRange)]
+			[new ListReportParameter(label: propertyToLabel["project.name"], associationName: "project", propertyName:"name", range:projectRange)]
 
         def installationStationFilterParams = 
             [new ListReportParameter(label: propertyToLabel["installation.project.name"], propertyName:"installation.project.name", range:projectRange)]

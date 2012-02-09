@@ -75,26 +75,52 @@ class QueryServiceTests extends GrailsUnitTestCase
 		[
 			filter:
 			[
-				"station.installation.project.eq": ["name", "Seal Count"],
 				station:
 				[
-					"installation.project.eq": ["name", "Seal Count"],
 					installation:
 					[
-						"project.eq": ["name", "Seal Count"],
 						project:
 						[
 							"eq":["name", "Seal Count"],
 							"order": ["name", "asc"]
 						],
-					 	"eq": ""
 					], 
-				    "installation.name.eq": ""
 				], 
-				"station.installation.name.eq": ""
 			]
 		]
 		
 		assertEquals(expectedTransformedParams, queryService.transformParams(params))
+	}
+	
+	void testRemoveDottedKeyNames()
+	{
+		def params = [filter: ["station.eq": ["name", "Seal Count"], station: [eq: ["name", "Seal Count"]]]]
+		def expectedParams = [filter: [station: [eq: ["name", "Seal Count"]]]]
+		
+		assertEquals(expectedParams, queryService.transformParams(params))
+	}
+
+	void testRemoveBlankValues()
+	{
+		def params = [filter: [station: [eq: ["name", "Bondi SW1"], installation: [eq: ["name", ""] as Object[]]]]]
+		def expectedParams = [filter: [station: [eq: ["name", "Bondi SW1"]]]]
+		
+		assertEquals(expectedParams, queryService.transformParams(params))
+	}
+
+	void testRemoveNullValues()
+	{
+		def params = [filter: [station: [installation: [eq: ["name", null]]]], action:"list", controller:"installation", max:20]
+		def expectedParams = [action:"list", controller:"installation", max:20]
+		
+		assertEquals(expectedParams, queryService.transformParams(params))
+	}
+
+	void testIntegerValues()
+	{
+		def params = [filter: [station: [eq: ["curtainPosition", 1]]], max: 1]
+		def expectedParams = [filter: [station: [eq: ["curtainPosition", 1]]], max: 1]
+		
+		assertEquals(expectedParams, queryService.transformParams(params))
 	}
 }

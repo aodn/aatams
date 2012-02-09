@@ -31,11 +31,11 @@
                             
                             <g:sortableColumn property="name" 
                                               title="${message(code: 'installation.name.label', default: 'Name')}" 
-                                              params="${executedFilter}" />
+                                              params="${params}" />
                         
                             <th><g:message code="installation.configuration.label" default="Configuration" /></th>
                         
-                            <g:sortableColumn property="project.name" title="${message(code: 'installation.project.label', default: 'Project')}" params="${executedFilter}" />
+                            <g:sortableColumn property="project.name" title="${message(code: 'installation.project.label', default: 'Project')}" params="${params}" />
                         
                             <th><g:message code="installation.stationCount.label" default="No. Stations" /></th>
                             
@@ -65,7 +65,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${total}" params="${executedFilter}"/>
+                <g:paginate total="${total}" params="${params}"/>
             </div>
         </div>
     </body>

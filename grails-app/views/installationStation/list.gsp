@@ -29,15 +29,15 @@
                         
                             <td/>
                             
-                            <g:sortableColumn property="name" title="${message(code: 'installationStation.name.label', default: 'Name')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="name" title="${message(code: 'installationStation.name.label', default: 'Name')}" params="${params}"/>
                         
-                            <g:sortableColumn property="curtainPosition" title="${message(code: 'installationStation.curtainPosition.label', default: 'Curtain Position')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="curtainPosition" title="${message(code: 'installationStation.curtainPosition.label', default: 'Curtain Position')}" params="${params}"/>
                         
                             <th><g:message code="installationStation.location.label" default="Location" /></th>
                         
-                            <g:sortableColumn property="installation" title="${message(code: 'installationStation.installation.label', default: 'Installation')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="installation" title="${message(code: 'installationStation.installation.label', default: 'Installation')}" params="${params}"/>
                         
-                            <g:sortableColumn property="installation.project" title="${message(code: 'installationStation.installation.project.label', default: 'Project')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="installation.project" title="${message(code: 'installationStation.installation.project.label', default: 'Project')}" params="${params}"/>
 
                             <th><g:message code="installationStation.active.label" default="Active" /></th>
                         
@@ -70,7 +70,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${total}" params="${executedFilter}"/>
+                <g:paginate total="${total}" params="${params}"/>
             </div>
         </div>
     </body>

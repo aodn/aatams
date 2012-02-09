@@ -1,6 +1,5 @@
 <!-- GSP template for a filter parameter whose value is chosen from a select list -->
 <tr class="prop">
-
     
     <td valign="top" class="name">
         <label for="${qualifiedParameterName}">${label}</label>

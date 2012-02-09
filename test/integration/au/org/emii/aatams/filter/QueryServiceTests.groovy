@@ -4,6 +4,7 @@ import grails.test.*
 import org.joda.time.DateTime
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.report.ReportInfoService
 
 class QueryServiceTests extends GrailsUnitTestCase 
 {
@@ -24,6 +25,11 @@ class QueryServiceTests extends GrailsUnitTestCase
 	{
 		assertQuery(InstallationStation, InstallationStation.list(), null)
 		assertQuery(InstallationStation, InstallationStation.list(), [:])
+		
+		assertQuery(
+			Installation, 
+			Installation.list(),
+			["filter.project.eq":["name", ""] as Object[], filter:["project.eq":["name", ""] as Object[], project:[eq:["name", ""] as Object[]]], action:"list", controller:"installation"])
 	}
 	
 	void testOneEqualsRestriction()
@@ -53,7 +59,18 @@ class QueryServiceTests extends GrailsUnitTestCase
 			{
 				InstallationStation.findByName(it)
 			},
-			[filter: [in: ["name", ["Bondi SW1", "Ningaloo S1"]]]])
+			[filter: [in: ["name", "Bondi SW1, Ningaloo S1"]]])
+		
+		assertQuery(
+			InstallationStation,
+			InstallationStation.createCriteria().list
+			{
+				installation
+				{
+					"in"("name", "Bondi Line", "Whale Curtain")
+				}
+			},
+			[filter: [installation: ["in": ["name", "Bondi Line ,  Whale Curtain, "]]]])
 	}
 
 	void testBetweenRestriction()
@@ -63,7 +80,6 @@ class QueryServiceTests extends GrailsUnitTestCase
 					[filter: [between: ["timestamp", new DateTime("2011-05-17T02:53:00+00:00").toDate(), new DateTime("2011-05-17T02:54:00+00:00").toDate()]]])
 	}
 	
-/*
  	void testIsNullRestriction()
 	{
 		assertQuery(ReceiverDeployment,
@@ -71,9 +87,9 @@ class QueryServiceTests extends GrailsUnitTestCase
 					{
 						it.recovery == null
 					},
-					[filter:[recovery: [isNull: null]]])
+					[filter:[isNull: ["recovery"]]])
 	}
-*/
+
 	void testOneAssociation()
 	{
 		assertQuery(InstallationStation, 
@@ -176,55 +192,79 @@ class QueryServiceTests extends GrailsUnitTestCase
 		}
 	}
 	
-	void testRealQueryOneParameter()
+	void testMemberProjectsRestriction()
 	{
-		def params = 
+		def projects = Project.findAllByNameInList(["Seal Count", "Tuna"])
+		queryService.metaClass.getMemberProjects =
+		{
+			return projects
+		}
+		
+		assertQuery(Installation, 
+					Installation.findAllByProjectInList(projects), 
+					[filter: [project: [eq: ["name", ReportInfoService.MEMBER_PROJECTS]]]])
+		
+		queryService.metaClass.getMemberProjects =
+		{
+			return []
+		}
+		
+		assertQuery(Installation,
+					[],
+					[filter: [project: [eq: ["name", ReportInfoService.MEMBER_PROJECTS]]]])
+	}
+
+	def realParams = 
+	[
+		codeName_textFieldId: "filter.in.codeName",
+		"filter.project.eq": ["name", "Tuna"],
+		filter:
 		[
-			codeName_textFieldId: "filter.in.codeName", 
-			"filter.project.eq": ["name", "Tuna"], 
-			filter:
+			"project.eq":["name", "Tuna"],
+			project:
 			[
-				"project.eq":["name", "Tuna"], 
-				project:
+				eq:["name", "Tuna"]
+			],
+		
+		
+			"surgeries.detectionSurgeries.sensor.in":["transmitterId", ""],
+			 
+			surgeries:
+			[
+				"detectionSurgeries.sensor.in":["transmitterId", ""],
+				
+				detectionSurgeries:
 				[
-					eq:["name", "Tuna"]
-				], 
-			
-			
-				"surgeries.detectionSurgeries.sensor.in":["codeName", ""],
-				 
-				surgeries:
-				[
-					"detectionSurgeries.sensor.in":["codeName", ""],
-					
-					detectionSurgeries:
+					sensor:
 					[
-						sensor:
-						[
-							in:["codeName", ""]
-						]
-					]
-				], 
-			
-				"animal.species.in":["spcode", ""], 
-				animal:
-				[
-					"species.in":["spcode", ""], 
-					species:
-					[
-						in:["spcode", ""]
+						in:["transmitterId", ""]
 					]
 				]
-			], 
-			spcode_textFieldId:"filter.in.spcode", 
-			"filter.surgeries.detectionSurgeries.sensor.in":["codeName", ""], 
-			spcode_lookupPath:"/species/lookupByNameAndReturnSpcode", 
-			codeName_lookupPath:"/sensor/lookupByTransmitterId", 
-			"filter.animal.species.in":["spcode", ""], 
-			action:"list", 
-			controller:"animalRelease"
-		]
-			
+			],
+		
+			"animal.species.in":["spcode", ""],
+			animal:
+			[
+				"species.in":["spcode", ""],
+				species:
+				[
+					in:["spcode", ""]
+				]
+			]
+		],
+		spcode_textFieldId:"filter.in.spcode",
+		"filter.surgeries.detectionSurgeries.sensor.in":["codeName", ""],
+		spcode_lookupPath:"/species/lookupByNameAndReturnSpcode",
+		codeName_lookupPath:"/sensor/lookupByTransmitterId",
+		"filter.animal.species.in":["spcode", ""],
+		action:"list",
+		controller:"animalRelease"
+	]
+	
+	void testRealQueryOneParameter()
+	{
+		def params = realParams
+		
 		assertQuery(AnimalRelease,
 					AnimalRelease.createCriteria().list
 					{
@@ -235,74 +275,61 @@ class QueryServiceTests extends GrailsUnitTestCase
 					},
 					params)
 	}
-/**
+	
 	void testRealQueryOneParameterWithSort()
 	{
-		def params =
-			[sort: "station.installation.project.name", order: "asc",
-			 filter:
-			["station.installation.project.name.eq":"Seal Count",
-			station:["installation.project.name.eq":"Seal Count",
-				installation:["project.name.eq":"Seal Count",
-					project:["name.eq":"Seal Count",
-						name:[eq:"Seal Count"]],
-					"name.eq":"", name:[eq:""]], "installation.name.eq":""], "station.installation.name.eq":""]]
-//		def params =
-//		[filter:
-//		["station.installation.project.name.eq":"Seal Count",
-//		station:["installation.project.name.eq":"Seal Count",
-//			installation:["project.name.eq":"Seal Count",
-//				project:["name.eq":"Seal Count",
-//					name:[eq:"Seal Count"]],
-//				"name.eq":"", name:[eq:""]], "installation.name.eq":""], "station.installation.name.eq":""]]
+		def params = realParams + [sort: "project.name", order: "asc"]
 
-		assertQuery(ReceiverDeployment,
-					ReceiverDeployment.createCriteria().list
+		assertQuery(AnimalRelease,
+					AnimalRelease.createCriteria().list
 					{
-						station
+						project
 						{
-							installation
-							{
-								project
-								{
-									eq("name", "Seal Count")
-									order("name")
-								}
-							}
+							eq("name", "Tuna")
+							order("name", "asc")
 						}
 					},
 					params)
+		
+		params.order = "desc"
+		assertQuery(AnimalRelease,
+					AnimalRelease.createCriteria().list
+					{
+						project
+						{
+							eq("name", "Tuna")
+							order("name", "desc")
+						}
+					},
+					params)
+		
 	}
 
 	void testRealQueryTwoParameters()
 	{
-		def params = 
-			[filter:["station.installation.project.name.eq":"Seal Count", 
-			station:["installation.project.name.eq":"Seal Count", 
-				installation:["project.name.eq":"Seal Count", 
-					project:["name.eq":"Seal Count", 
-						name:[eq:"Seal Count"]], 
-					"name.eq":"Bondi Line", name:[eq:"Bondi Line"]], "installation.name.eq":"Bondi Line"], "station.installation.name.eq":"Bondi Line"]]
-			
-		assertQuery(ReceiverDeployment,
-					ReceiverDeployment.createCriteria().list
+		def params = realParams + [sort: "project.name", order: "asc"]
+		params.filter += [animal:[sex:[eq: ["sex", "MALE"]]]]
+
+		assertQuery(AnimalRelease,
+					AnimalRelease.createCriteria().list
 					{
-						station
+						project
 						{
-							installation
+							eq("name", "Tuna")
+							order("name", "asc")
+						}
+						
+						animal
+						{
+							sex
 							{
-								project
-								{
-									eq("name", "Seal Count")
-								}
-								
-								eq("name", "Bondi Line")
+								eq("sex", "MALE")
 							}
 						}
 					},
 					params)
 	}
-*/	
+
 	private def assertQuery(clazz, expectedResults, queryParams)
 	{
 		def actualResults = new ArrayList(queryService.query(clazz, queryParams).results)

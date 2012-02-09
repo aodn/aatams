@@ -33,9 +33,9 @@ class QueryService
 		def results
 		def count
 		
-		if (!params || params.isEmpty())
+		if (!params || params.isEmpty() || params?.filter == null)
 		{
-			results = clazz.list()
+			results = clazz.list(params)
 			count = clazz.count()
 		}
 		else
@@ -44,6 +44,9 @@ class QueryService
 			criteria.getInstance()?.setCacheable(true)
 		
 			def transformedParams = transformParams(params)
+			
+			log.debug("transformed params: " + transformedParams)
+			
 			results = criteria.list(transformedParams, buildCriteriaClosure(transformedParams.filter))
 			
 			count = results.totalCount
@@ -64,8 +67,10 @@ class QueryService
 				{
 					// Doesn't work, see: http://community.jboss.org/wiki/HibernateFAQ-AdvancedProblems#The_query_language_IS_NULL_syntax_wont_work_with_a_onetoone_association
 					// criteria.add(Restrictions.isNull(property))
-					def alias = criteria.createAlias("recovery", "listRecovery", CriteriaSpecification.LEFT_JOIN)
-					alias.add(Restrictions.sqlRestriction("recoverer_id IS NULL"))
+//					def alias = criteria.createAlias("recovery", "listRecovery", CriteriaSpecification.LEFT_JOIN)
+//					alias.add(Restrictions.sqlRestriction("recoverer_id IS NULL"))
+					
+					criteria.add(Restrictions.sqlRestriction("recoverer_id IS NULL"))
 				}
 				else if (method == "in")
 				{
@@ -114,6 +119,11 @@ class QueryService
 	private Map transformParams(params)
 	{
 		def transformedParams = cleanParams(params)
+		if (transformedParams.filter == null)
+		{
+			transformedParams.filter = [:]
+		}
+		
 		def sortKey = transformedParams.remove("sort")
 		def order = transformedParams.remove("order")
 		

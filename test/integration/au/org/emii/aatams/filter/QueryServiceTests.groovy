@@ -32,6 +32,13 @@ class QueryServiceTests extends GrailsUnitTestCase
 			["filter.project.eq":["name", ""] as Object[], filter:["project.eq":["name", ""] as Object[], project:[eq:["name", ""] as Object[]]], action:"list", controller:"installation"])
 	}
 	
+	void testSortAndOrderWithoutFilter()
+	{
+		assertQuery(InstallationStation,
+					InstallationStation.list(sort: "name", order: "asc"),
+					[filter: [installation: [project: [eq: ["name", ""]]]],	sort: "name", order: "asc"])
+	}
+
 	void testOneEqualsRestriction()
 	{
 		assertQuery(InstallationStation, InstallationStation.findAllByName("Bondi SW1"), [filter:[eq: ["name", "Bondi SW1"]]])
@@ -87,7 +94,7 @@ class QueryServiceTests extends GrailsUnitTestCase
 					{
 						it.recovery == null
 					},
-					[filter:[isNull: ["recovery"]]])
+					[filter:[recovery: [isNull: true]]])
 	}
 
 	void testOneAssociation()
@@ -326,6 +333,23 @@ class QueryServiceTests extends GrailsUnitTestCase
 								eq("sex", "MALE")
 							}
 						}
+					},
+					params)
+	}
+
+	void testDuplicateAssociationPath()
+	{
+		def params = 
+		[
+			sort:"recovery.recoverer.person.name", 
+			order:"asc", 
+			filter: [recovery: [isNull: true]]
+		]
+		
+		assertQuery(ReceiverDeployment,
+					ReceiverDeployment.list().grep
+					{
+						it.recovery == null
 					},
 					params)
 	}

@@ -70,7 +70,7 @@ class ReportInfoService
          "installation.project.name": "project",
          "station.installation.project.name": "project",
          "station.installation.name": "installation",
-		 "surgeries.detectionSurgeries.sensor.transmitterId": tagId,
+		 "surgeries.tag.sensors.transmitterId": tagId,
 		 "tag.project.name": "project",
 		 "timestamp": "timestamp",
 		 "transmitterId": "transmitter ID"]
@@ -145,8 +145,8 @@ class ReportInfoService
 		def animalReleaseFilterParams =
 		[
 			new ListReportParameter(label: propertyToLabel["project.name"], associationName: "project", propertyName:"name", range:projectRange),
-			new AjaxMultiSelectReportParameter(label: propertyToLabel["surgeries.detectionSurgeries.sensor.transmitterId"],
-											   associationName: "surgeries.detectionSurgeries.sensor",
+			new AjaxMultiSelectReportParameter(label: propertyToLabel["surgeries.tag.sensors.transmitterId"],
+											   associationName: "surgeries.tag.sensors",
 											   propertyName:"transmitterId",
 											   lookupPath:"/sensor/lookupByTransmitterId"),
 			new AjaxMultiSelectReportParameter(label: propertyToLabel["animal.species.spcode"],
@@ -251,7 +251,8 @@ class ReportInfoService
 				propertyName: "name", 
 				range:projectRange),
              new IsNullReportParameter(
-				 label: propertyToLabel["recovery"], 
+				 label: propertyToLabel["recovery"],
+				 associationName: "recovery", 
 				 propertyName:"recovery")]
 			
 		def sensorFilterParams =

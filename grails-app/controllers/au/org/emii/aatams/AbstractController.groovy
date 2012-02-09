@@ -14,7 +14,31 @@ abstract class AbstractController
 		
 		def resultList = queryService.query(reportInfoService.getClassForName(queryName), params)
 		
+		flattenParams()
+
 		[entityList: resultList.results,
 		 total: resultList.count]
+	}
+	
+	private void flattenParams()
+	{
+		def flattenedParams = [:]
+		
+		params.each
+		{
+			k, v ->
+			
+			if (   !k.startsWith("filter") 
+				|| (k.endsWith(".eq")) 
+				|| (k.endsWith(".in")) 
+				|| (k.endsWith(".isNull")) 
+				|| (k.endsWith(".between")))
+			{
+				flattenedParams.put(k, v)
+			}
+		}
+		
+		params.clear()
+		params.putAll(flattenedParams)
 	}
 }

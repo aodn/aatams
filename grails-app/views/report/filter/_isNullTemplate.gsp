@@ -6,10 +6,11 @@
     </td>
     <td valign="top" class="value">
     
-        <g:set var="selectedValue" value="${params[qualifiedParameterName]?.getAt(1)}" />
- 
-        <g:checkBox name="${qualifiedParameterName}" 
-                    value="${value}" />
-  
+      <g:if test="${params[qualifiedParameterName] == 'on'}">
+        <g:set var="value" value="${true}" />
+      </g:if>
+
+      <g:checkBox name="${qualifiedParameterName}" 
+                  value="${value}" />
     </td>
 </tr>

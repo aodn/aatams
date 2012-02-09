@@ -29,13 +29,13 @@
                         
                             <th></th>
 
-                            <g:sortableColumn property="timestamp" title="${message(code: 'receiverEvent.timestamp.label', default: 'Timestamp')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="timestamp" title="${message(code: 'receiverEvent.timestamp.label', default: 'Timestamp')}" params="${params}"/>
                         
-                            <g:sortableColumn property="description" title="${message(code: 'receiverEvent.description.label', default: 'Description')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="description" title="${message(code: 'receiverEvent.description.label', default: 'Description')}" params="${params}"/>
                         
-                            <g:sortableColumn property="data" title="${message(code: 'receiverEvent.data.label', default: 'Data')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="data" title="${message(code: 'receiverEvent.data.label', default: 'Data')}" params="${params}"/>
                         
-                            <g:sortableColumn property="units" title="${message(code: 'receiverEvent.units.label', default: 'Units')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="units" title="${message(code: 'receiverEvent.units.label', default: 'Units')}" params="${params}"/>
                         
                             <th><g:message code="receiverEvent.receiverDeployment.label" default="Receiver Deployment" /></th>
                         
@@ -65,7 +65,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${total}" params="${executedFilter}"/>
+                <g:paginate total="${total}" params="${params}"/>
             </div>
         </div>
     </body>

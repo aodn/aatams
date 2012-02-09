@@ -141,7 +141,6 @@ class SensorController extends AbstractController
 	
 	def lookupByTransmitterId =
 	{
-println "lookup"		
 		def sensors = Sensor.findAllByTransmitterIdIlike(params.term + "%", [sort: "transmitterId"])
 		
 		// Limit so that all results fit on screen.

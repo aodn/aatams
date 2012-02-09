@@ -1,7 +1,7 @@
 <tr id="${propertyName}" class="ajaxMultiSelectReportParameter prop">
 
     <g:hiddenField name="${propertyName}_lookupPath" value="${lookupPath}" />
-    <g:hiddenField name="${propertyName}_textFieldId" value="filter.in.${propertyName}" />
+    <g:hiddenField name="${propertyName}_textFieldId" value="${qualifiedParameterName}" />
     
     <td valign="top" class="name">
         <label for="${qualifiedParameterName}">${label}</label>
@@ -11,7 +11,7 @@
     
     <td valign="top" class="value">
     
-        <g:set var="selectedValue" value="${params[qualifiedParameterName]?.getAt(1)}" />
+        <g:set var="value" value="${params[qualifiedParameterName]?.getAt(1)}" />
     
         <g:textField name="${qualifiedParameterName}" placeholder="autocomplete - start typing" value="${value}" />
     </td>

@@ -48,8 +48,8 @@ class ReportController
     
     def execute =
     {
-        log.debug("Executing report, params: " + params)
-
+		log.debug("Executing report, params: " + params)
+		
         // Test which button was clicked (which tells us the format.
         def possibleFormats = ["PDF", "CSV", "KML"]
         possibleFormats.each

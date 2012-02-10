@@ -48,13 +48,13 @@ class DetectionExtractServiceTests extends AbstractGrailsUnitTestCase
 	void testConstructQueryOneProjectOneInstallation()
 	{
 		assertEquals('''select * from detection_extract_view where trim(project) in ('Whales') and trim(installation) in ('Bondi') limit 10000 offset 0''',
-					 detectionExtractService.constructQuery([receiverDeployment:[station:[installation:[project:[in:["name", "Whales, "], name:"Bondi"]]]]], 10000, 0))
+					 detectionExtractService.constructQuery([receiverDeployment:[station:[installation:[project:[in:["name", "Whales, "]], in:["name", "Bondi"]]]]], 10000, 0))
 	}
 
 	void testConstructQueryTwoProjectsOneInstallation()
 	{
 		assertEquals('''select * from detection_extract_view where trim(project) in ('Whales', 'Sharks') and trim(installation) in ('Bondi') limit 10000 offset 0''',
-					 detectionExtractService.constructQuery([receiverDeployment:[station:[installation:[project:[in:["name", "Whales, Sharks, "], name:"Bondi"]]]]], 10000, 0))
+					 detectionExtractService.constructQuery([receiverDeployment:[station:[installation:[project:[in:["name", "Whales, Sharks, "]], in:["name", "Bondi"]]]]], 10000, 0))
 	}
 
 	void testConstructQueryOneInstallation()

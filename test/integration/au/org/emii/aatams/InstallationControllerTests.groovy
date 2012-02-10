@@ -57,7 +57,7 @@ class InstallationControllerTests extends AbstractControllerUnitTestCase
 
 	void testListWithFilter()
 	{
-		controller.params.filter = [eq:[project:[name:"Tuna"]]]
+		controller.params.filter = [project: [eq: ["name", "Tuna"]]]
 		
 		def matchingInstallations = installations.grep { it.project.name == "Tuna" }
 		assertListPagination(null, null, matchingInstallations)
@@ -65,8 +65,6 @@ class InstallationControllerTests extends AbstractControllerUnitTestCase
 		
 	void testListPaginationWithFilter()
 	{
-		controller.params.filter = [eq:[project:[name:"Tuna"]]]
-		
 		int max = 5
 		int offset = 0
 		
@@ -74,6 +72,7 @@ class InstallationControllerTests extends AbstractControllerUnitTestCase
 		
 		2.times
 		{
+			controller.params.filter = [project: [eq: ["name", "Tuna"]]]
 			assertListPagination(max, offset, matchingInstallations)
 			offset += max
 		}
@@ -86,21 +85,21 @@ class InstallationControllerTests extends AbstractControllerUnitTestCase
 
 	void testListSortWithFilter()
 	{
-		controller.params.filter = [eq:[project:[name:"Tuna"]]]
+		controller.params.filter = [project: [eq: ["name", "Tuna"]]]
 		def matchingInstallations = installations.grep { it.project.name == "Tuna" }
 		assertListSort([sort:"name", order: "asc", max: 50], matchingInstallations)
 	}
 
 	void testListSortPaginateWithFilter()
 	{
-		controller.params.filter = [eq:[project:[name:"Tuna"]]]
-		def matchingInstallations = installations.grep { it.project.name == "Tuna" }
-		
 		int max = 5
 		int offset = 0
 		
+		def matchingInstallations = installations.grep { it.project.name == "Tuna" }
+		
 		2.times
 		{
+			controller.params.filter = [project: [eq: ["name", "Tuna"]]]
 			assertListSort([sort:"name", order: "asc", max: 5], matchingInstallations)
 			offset += max
 		}

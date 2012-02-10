@@ -111,7 +111,7 @@ class QueryServiceTests extends GrailsUnitTestCase
 	void testRemoveNullValues()
 	{
 		def params = [filter: [station: [installation: [eq: ["name", null]]]], action:"list", controller:"installation", max:20]
-		def expectedParams = [action:"list", controller:"installation", max:20]
+		def expectedParams = [action:"list", controller:"installation", max:20, filter: [:]]
 		
 		assertEquals(expectedParams, queryService.transformParams(params))
 	}

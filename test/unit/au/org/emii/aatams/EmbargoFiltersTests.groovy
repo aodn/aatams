@@ -1,6 +1,7 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.*
 import au.org.emii.aatams.report.filter.ReportFilterFactoryService;
 import au.org.emii.aatams.test.AbstractFiltersUnitTestCase
@@ -50,7 +51,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     ValidDetection detectionEmbargoedNonReadableProject
     ValidDetection detectionPastEmbargoed
     
-	def reportFilterFactoryService
+	def queryService = queryService
 	def reportInfoService
 	
     protected void setUp() 
@@ -84,8 +85,8 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 
         mockConfig("grails.gorm.default.list.max = 10")
 
-		mockLogging(ReportFilterFactoryService)
-		reportFilterFactoryService = new ReportFilterFactoryService()
+		mockLogging(QueryService)
+		queryService = new QueryService()
 		mockLogging(ReportInfoService)
 		reportInfoService = new ReportInfoService()
 		
@@ -94,7 +95,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         releaseController = new AnimalReleaseController()
         releaseController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
 		releaseController.reportInfoService = reportInfoService
-		releaseController.reportFilterFactoryService = reportFilterFactoryService
+		releaseController.queryService = queryService
         
         mockController(DetectionController)
         mockLogging(DetectionController)
@@ -106,14 +107,14 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         sensorController = new SensorController()
         sensorController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
 		sensorController.reportInfoService = reportInfoService
-		sensorController.reportFilterFactoryService = reportFilterFactoryService
+		sensorController.queryService = queryService
 
         mockController(TagController)
         mockLogging(TagController)
         tagController = new TagController()
         tagController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
 		tagController.reportInfoService = reportInfoService
-		tagController.reportFilterFactoryService = reportFilterFactoryService
+		tagController.queryService = queryService
 
         mockLogging(Tag)
         mockLogging(Sensor)

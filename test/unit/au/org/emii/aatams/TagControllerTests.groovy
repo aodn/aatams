@@ -1,5 +1,6 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService
 import au.org.emii.aatams.report.filter.ReportFilterFactoryService
 import grails.test.*
@@ -16,7 +17,7 @@ class TagControllerTests extends ControllerUnitTestCase
     def project1
     def project2
     
-	def reportFilterFactoryService
+	def queryService
 	def reportInfoService
 
 	protected void setUp() 
@@ -39,12 +40,12 @@ class TagControllerTests extends ControllerUnitTestCase
             return [project1, project2]
         }
 		
-		mockLogging(ReportFilterFactoryService)
-		reportFilterFactoryService = new ReportFilterFactoryService()
+		mockLogging(QueryService)
+		queryService = new QueryService()
 		mockLogging(ReportInfoService)
 		reportInfoService = new ReportInfoService()
 		controller.reportInfoService = reportInfoService
-		controller.reportFilterFactoryService = reportFilterFactoryService
+		controller.queryService = queryService
 
         controller.candidateEntitiesService = candidateEntitiesService
         mockDomain(Tag)

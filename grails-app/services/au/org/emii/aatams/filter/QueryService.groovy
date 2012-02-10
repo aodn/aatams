@@ -1,5 +1,6 @@
 package au.org.emii.aatams.filter
 
+import au.org.emii.aatams.EmbargoService
 import au.org.emii.aatams.PermissionUtilsService
 import au.org.emii.aatams.Project
 import au.org.emii.aatams.ProjectRole
@@ -18,6 +19,7 @@ class QueryService
 {
     static transactional = false
 
+	def embargoService
 	def rootCriteria
 	Map subCriteriaMap
 	
@@ -35,7 +37,7 @@ class QueryService
 		def results
 		def count
 		
-		if (!params || params.isEmpty() || params?.filter == null)
+		if (!params || params.isEmpty() || params?.filter == null || params?.filter == [:])
 		{
 			results = clazz.list(params)
 			count = clazz.count()
@@ -53,6 +55,8 @@ class QueryService
 			count = results.totalCount
 		}
 	
+		results = embargoService.applyEmbargo(results)
+		
 		return [results: results, count: count]
     }
 	

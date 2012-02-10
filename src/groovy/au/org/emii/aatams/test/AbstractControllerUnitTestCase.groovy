@@ -6,10 +6,11 @@ import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
+import au.org.emii.aatams.EmbargoService;
+import au.org.emii.aatams.PermissionUtilsService;
 import au.org.emii.aatams.Person;
 import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService
-import au.org.emii.aatams.report.filter.ReportFilterFactoryService
 
 abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase 
 {
@@ -48,9 +49,16 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 		
 		try
 		{
-			mockLogging(ReportFilterFactoryService, true)
+			mockLogging(QueryService, true)
 			mockLogging(ReportInfoService, true)
 			controller.queryService = new QueryService()
+			
+			mockLogging(EmbargoService, true)
+			controller.queryService.embargoService = new EmbargoService()
+			
+			mockLogging(PermissionUtilsService, true)
+			controller.queryService.embargoService.permissionUtilsService = new PermissionUtilsService()
+			
 			controller.reportInfoService = new ReportInfoService()
 		}
 		catch (MissingPropertyException e)

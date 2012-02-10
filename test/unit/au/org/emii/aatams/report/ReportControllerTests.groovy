@@ -4,6 +4,7 @@ import grails.test.*
 
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.filter.*
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
@@ -19,9 +20,9 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     def embargoService
     def jasperService
 	def permissionUtilsService
-    def reportFilterFactoryService
     def reportInfoService
-    def reportQueryExecutorService
+	def queryService
+	
 	Person user
 	
     protected void setUp() 
@@ -38,23 +39,18 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         mockLogging(PermissionUtilsService)
         permissionUtilsService = new PermissionUtilsService()
 		
-		mockLogging(ReportFilterFactoryService, true)
-		reportFilterFactoryService = new ReportFilterFactoryService()
-		
+		mockLogging(QueryService, true)
+		queryService = new QueryService()
+		queryService.embargoService = embargoService
+
         mockLogging(ReportInfoService)
         reportInfoService = new ReportInfoService()
 		reportInfoService.permissionUtilsService = permissionUtilsService
         
-        mockLogging(ReportQueryExecutorService)
-        reportQueryExecutorService = new ReportQueryExecutorService()
-        reportQueryExecutorService.embargoService = embargoService
-        reportQueryExecutorService.permissionUtilsService = permissionUtilsService
-        
 		controller.jasperService = jasperService
 		controller.permissionUtilsService = permissionUtilsService
-		controller.reportFilterFactoryService = reportFilterFactoryService
+		controller.queryService = queryService
         controller.reportInfoService = reportInfoService
-        controller.reportQueryExecutorService = reportQueryExecutorService
         
 		mockDomain(Installation)
 		mockDomain(Organisation)
@@ -94,7 +90,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     {
         controller.params._name = "receiver"
         controller.params._file = "receiverList"
-        controller.params.filter = [:]
         controller.params._format = "PDF"
 		controller.params._type = "report"
 

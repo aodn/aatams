@@ -106,8 +106,37 @@ class QueryServiceTests extends GrailsUnitTestCase
 							between_second: ["timestamp", 17, 17]
 						]
 					])
+		
+		assertQuery(ValidDetection,
+			ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
+			[
+				"filter.between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(),
+				"filter.between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate(),
+				filter: 
+				[	
+					between: [aaa:"aaa"],
+					"between.0": "timestamp",
+					"between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(),
+					"between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate()
+				]
+			])
+		
+		assertQuery(ValidDetection,
+			ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
+			[
+				//  Thu Jun 18 12:38:00 EST 2009
+				"filter.between.1": "Tue May 17 12:53:00 EST 2011",
+				"filter.between.2": "Tue May 17 12:54:00 EST 2011",
+				filter:
+				[
+					between: [aaa:"aaa"],
+					"between.0": "timestamp",
+					"between.1": "Tue May 17 12:53:00 EST 2011",
+					"between.2": "Tue May 17 12:54:00 EST 2011"
+				]
+			])
 	}
-	
+
  	void testIsNullRestriction()
 	{
 		assertQuery(ReceiverDeployment,

@@ -2,6 +2,7 @@ package au.org.emii.aatams
 
 import grails.test.*
 import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService
 import au.org.emii.aatams.report.filter.ReportFilterFactoryService
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
@@ -191,7 +192,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         receiverRecoveryController = new ReceiverRecoveryController()
         receiverRecoveryController.metaClass.message = { Map map -> return "error message" }
         receiverRecoveryController.candidateEntitiesService = candEntitiesService
-		receiverRecoveryController.reportFilterFactoryService = new ReportFilterFactoryService()
+		receiverRecoveryController.queryService = new QueryService()
 		receiverRecoveryController.reportInfoService = new ReportInfoService()
         mockConfig("grails.gorm.default.list.max = 10")
         receiverRecoveryController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}

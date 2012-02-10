@@ -13,7 +13,7 @@ abstract class AbstractController
 		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
 		
 		def resultList = queryService.query(reportInfoService.getClassForName(queryName), params)
-		
+
 		flattenParams()
 
 		[entityList: resultList.results,

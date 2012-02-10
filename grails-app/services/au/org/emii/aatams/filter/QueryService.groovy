@@ -50,7 +50,6 @@ class QueryService
 			log.debug("transformed params: " + transformedParams)
 			
 			results = criteria.list(transformedParams, buildCriteriaClosure(transformedParams.filter))
-			
 			count = results.totalCount
 		}
 	
@@ -97,7 +96,6 @@ class QueryService
 				}
 				else if (nestedParams instanceof List)
 				{
-					println "method: " + method + ", args: " + nestedParams
 					invokeMethod(method, nestedParams as Object[])
 				}
 				else if (nestedParams instanceof Map)

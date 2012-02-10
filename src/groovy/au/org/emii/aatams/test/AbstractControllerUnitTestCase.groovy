@@ -7,6 +7,7 @@ import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
 import au.org.emii.aatams.Person;
+import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService
 import au.org.emii.aatams.report.filter.ReportFilterFactoryService
 
@@ -49,7 +50,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 		{
 			mockLogging(ReportFilterFactoryService, true)
 			mockLogging(ReportInfoService, true)
-			controller.reportFilterFactoryService = new ReportFilterFactoryService()
+			controller.queryService = new QueryService()
 			controller.reportInfoService = new ReportInfoService()
 		}
 		catch (MissingPropertyException e)

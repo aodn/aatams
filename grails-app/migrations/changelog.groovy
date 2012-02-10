@@ -1543,5 +1543,7 @@ databaseChangeLog = {
 	include file: 'location_migration.groovy'
 	
 	include file: 'detection_extract_view.groovy'
+
+	include file: 'locations_south.groovy'
 }
 

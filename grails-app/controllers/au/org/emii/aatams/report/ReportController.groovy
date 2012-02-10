@@ -1,7 +1,6 @@
 package au.org.emii.aatams.report
 
 import au.org.emii.aatams.*
-import au.org.emii.aatams.report.filter.ReportFilterFactoryService
 import de.micromata.opengis.kml.v_2_2_0.Data
 import de.micromata.opengis.kml.v_2_2_0.Document
 import de.micromata.opengis.kml.v_2_2_0.ExtendedData
@@ -24,9 +23,8 @@ class ReportController
     def jasperService
 	def kmlService
     def permissionUtilsService
-	def reportFilterFactoryService
     def reportInfoService
-    def reportQueryExecutorService
+    def queryService
     
     def index = { }
     
@@ -65,12 +63,12 @@ class ReportController
         
 		if (params._name == "detection"  && params._format == "CSV")
 		{
-			detectionExtractService.generateReport(getFilterParams(params), request, response)
+			detectionExtractService.generateReport(params, request, response)
 		}
 		else
 		{
 	        def resultList = generateResultList(params)
-	
+			
 	        if (!checkResultList(resultList, flash, params))
 			{
 				return
@@ -79,7 +77,6 @@ class ReportController
 			if (params._format == "KML")
 			{
 				long startTime = System.currentTimeMillis()
-				
 				InstallationStation.refreshDetectionCounts()
 				assert(!resultList.isEmpty())
 				generateKml(params, resultList)
@@ -156,10 +153,8 @@ class ReportController
 
 	private List generateResultList(Map params) 
 	{
-		def resultList = []
+		def results = []
 
-		def filterParams = getFilterParams(params)
-			
 		long startTime = System.currentTimeMillis()
 		
 		// Special handling for animal release summary.
@@ -167,43 +162,21 @@ class ReportController
 		// AnimalReleaseSummaryService.
 		if (params._name == "animalReleaseSummary")
 		{
-			resultList = animalReleaseSummaryService.countBySpecies()
+			results = animalReleaseSummaryService.countBySpecies()
 			params.putAll(animalReleaseSummaryService.summary())
 		}
 		else
 		{
 			
-			resultList = reportQueryExecutorService.executeQuery(
-					reportFilterFactoryService.newFilter(reportInfoService.getClassForName(params._name),
-					filterParams))
+			results = queryService.query(reportInfoService.getClassForName(params._name),
+										 params).results
 		}
 		
 		log.debug("Report query executed, time: " + (System.currentTimeMillis() - startTime) + "ms.")
-		
-		return resultList
+		return results
 	}
 
-	private Map getFilterParams(params) 
-	{
-		def filterParams = [:]
-		if (params.filter.between)
-		{
-			filterParams = [between:[timestamp:[params.filter.between.min.timestamp, params.filter.between.max.timestamp]]]
-		}
-
-		if (params.filter.eq)
-		{
-			filterParams.eq = params.filter.eq
-		}
-
-		if (params.filter.in)
-		{
-			filterParams.in = params.filter.in
-		}
-		return filterParams
-	}
-
-    /**
+   /**
     * Generate a html response.
     */
     def generateResponse = 

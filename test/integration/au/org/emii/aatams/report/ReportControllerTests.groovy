@@ -6,6 +6,7 @@ import groovy.sql.Sql;
 
 import au.org.emii.aatams.*
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
+import au.org.emii.aatams.filter.QueryService
 
 import org.codehaus.groovy.grails.plugins.jasper.*
 import org.codehaus.groovy.grails.web.pages.GroovyPagesTemplateEngine;
@@ -21,12 +22,13 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 class ReportControllerTests extends AbstractControllerUnitTestCase 
 {
     def reportInfoService
-    def reportQueryExecutorService
+    def queryService
     
 	def grailsApplication
 	def grailsTemplateEngineService
     def jasperService
 	def kmlService
+	def embargoService
 	
 	def dataSource
 	
@@ -63,11 +65,8 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     void testExecuteReceiverNoFilter() 
     {
         controller.params._name = "receiver"
-        controller.params."filter.organisation.name" = null
         controller.params._file = "receiverList"
-        controller.params.filter = 
-                    ["eq.organisation.name":null, 
-                     eq:[organisation:[name:null]]]
+        controller.params.filter = [:] 
                  
         controller.execute()
         
@@ -78,9 +77,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     {
         controller.params._name = "receiver"
         controller.params._file = "receiverList"
-        controller.params.filter = 
-                    [eq:[organisation:[name:"IMOS"]],
-				     "eq.organisation.name":"IMOS"]
+        controller.params.filter = [organisation: [eq:["name", "IMOS"]]]
                  
         controller.execute()
         
@@ -91,9 +88,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     {
         controller.params._name = "installationStation"
         controller.params._file = "installationStationList"
-        controller.params.filter = 
-                    [eq:[installation:[project:[name:null]]],
-					 "eq.installation.project.name":null]
+        controller.params.filter = [:]
 					
         controller.execute()
         
@@ -104,9 +99,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     {
         controller.params._name = "installationStation"
         controller.params._file = "installationStationList"
-        controller.params.filter = 
-                    [eq:[installation:[project:[name:"Seal Count"]]],
-					"eq.installation.project.name":"Seal Count"]
+        controller.params.filter = [installation: [project: [eq: ["name", "Seal Count"]]]]
 					
         controller.execute()
         
@@ -117,9 +110,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     {
         controller.params._name = "receiverDeployment"
         controller.params._file = "receiverDeploymentList"
-        controller.params.filter = 
-            [eq:[station:[installation:[project:[name:null], name:null]]],
-			 "eq.station.installation.project.name":null]
+        controller.params.filter = [:]
                  
         controller.execute()
         
@@ -130,9 +121,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     {
         controller.params._name = "receiverDeployment"
         controller.params._file = "receiverDeploymentList"
-        controller.params.filter = 
-            [eq:[station:[installation:[project:[name:"Seal Count"], name:null]]],
-			"eq.station.installation.project.name":"Seal Count"]
+        controller.params.filter = [station:[installation:[project:[eq:["name", "Seal Count"]]]]]
                  
         controller.execute()
         
@@ -143,9 +132,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     {
         controller.params._name = "receiverDeployment"
         controller.params._file = "receiverDeploymentList"
-        controller.params.filter = 
-            [eq:[station:[installation:[project:[name:null], name:"Ningaloo Array"]]],
-			 "eq.station.installation.project.name":null]
+        controller.params.filter = [station:[installation:[project:[eq:["name", "Ningaloo Array"]]]]]
                  
         controller.execute()
         
@@ -157,9 +144,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         controller.params._name = "receiverDeployment"
         controller.params._file = "receiverDeploymentList"
         controller.params.filter = 
-            [eq:[station:[installation:[project:[name:"Seal Count"], name:"Heron Island"]]],
-			 "eq.station.installation.project.name":"Seal Count",
-			 "eq.station.installation.name":"Heron Island"]
+			[station:[installation:[project:[eq:["name", "Seal Count"]], eq:["name", "Heron Island"]]]]
                  
         controller.execute()
         
@@ -219,7 +204,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 		def allNodes = div.depthFirst().collect{ it }
 		def folderNodes = allNodes.findAll { it.name() == "Folder" }
 		
-		println controller.response.contentAsString
 		["Bondi Line", "Heron Island Curtain", "Ningaloo Array", "Seal Count", "Tuna", "Whale"].each
 		{
 			folderName ->
@@ -293,17 +277,20 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 
 	private void assertContainsAllLines(actual, expected)
 	{
-println "expected:\n" + expected
-println "actual:\n" + actual
-		
-		assertTrue(expected.trim().readLines().containsAll(actual.readLines().collect { it.trim() }))
+		expected.readLines().eachWithIndex
+		{
+			expectedLine, i ->
+			
+			def actualLine = actual.readLines()[i]
+			assertEquals(expectedLine, actualLine)
+		}
 	}
 	
 	private void setupAndExecuteWhaleDetectionExtract() 
 	{
 		hasRole = false
 		
-		controller.params.filter = [in:[receiverDeployment:[station:[installation:[project:[name:"Whale"]]]]]]
+		controller.params.filter = [receiverDeployment:[station:[installation:[project:[in:["name", "Whale"]]]]]]
 		controller.params._name = "detection"
 		controller.params._file = "detectionExtract"
 		controller.params._type = "extract"

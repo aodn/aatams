@@ -407,8 +407,8 @@ class QueryServiceTests extends GrailsUnitTestCase
 	private def assertQuery(clazz, expectedResults, queryParams)
 	{
 		def actualResults = new ArrayList(queryService.query(clazz, queryParams).results)
-		println "expected: " + expectedResults
-		println "actual: " + actualResults
+//		println "expected: " + expectedResults
+//		println "actual: " + actualResults
 		
 		assertEquals(expectedResults, actualResults)
 		

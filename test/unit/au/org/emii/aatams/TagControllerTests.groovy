@@ -2,7 +2,6 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService
-import au.org.emii.aatams.report.filter.ReportFilterFactoryService
 import grails.test.*
 import grails.converters.JSON
 

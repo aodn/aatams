@@ -4,7 +4,6 @@ import grails.test.*
 import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService
-import au.org.emii.aatams.report.filter.ReportFilterFactoryService
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase 
@@ -187,7 +186,6 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
 
         mockController(ReceiverRecoveryController)
         mockLogging(ReceiverRecoveryController, true)
-		mockLogging(ReportFilterFactoryService, true)
 		mockLogging(ReportInfoService, true)
         receiverRecoveryController = new ReceiverRecoveryController()
         receiverRecoveryController.metaClass.message = { Map map -> return "error message" }

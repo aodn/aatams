@@ -1,7 +1,7 @@
-<tr id="${propertyName}" class="ajaxMultiSelectReportParameter prop">
+<tr id="${qualifiedParameterName + '.' + propertyName}" class="ajaxMultiSelectReportParameter prop">
 
-    <g:hiddenField name="${propertyName}_lookupPath" value="${lookupPath}" />
-    <g:hiddenField name="${propertyName}_textFieldId" value="${qualifiedParameterName}" />
+    <g:hiddenField name="${qualifiedParameterName + '.' + propertyName}_lookupPath" value="${lookupPath}" />
+    <g:hiddenField name="${qualifiedParameterName + '.' + propertyName}_textFieldId" value="${qualifiedParameterName}" />
     
     <td valign="top" class="name">
         <label for="${qualifiedParameterName}">${label}</label>

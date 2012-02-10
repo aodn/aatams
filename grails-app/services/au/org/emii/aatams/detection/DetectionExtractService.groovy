@@ -60,28 +60,28 @@ class DetectionExtractService
 		String query = '''select * from detection_extract_view '''
 		List<String> whereClauses = []
 		
-		["project": filterParams?.in?.receiverDeployment?.station?.installation?.project?.name,
-		 "installation": filterParams?.in?.receiverDeployment?.station?.installation?.name,
-		 "station": filterParams?.in?.receiverDeployment?.station?.name,
-		 "sensor_id": filterParams?.in?.detectionSurgeries?.tag?.codeName,
-		 "spcode": filterParams?.in?.detectionSurgeries?.surgery?.release?.animal?.species?.spcode
+		["project": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in[1],
+		 "installation": filterParams?.filter?.receiverDeployment?.station?.installation?.in[1],
+		 "station": filterParams?.filter?.receiverDeployment?.station?.in[1],
+		 "sensor_id": filterParams?.filter?.detectionSurgeries?.tag?.in[1],
+		 "spcode": filterParams?.filter?.detectionSurgeries?.surgery?.release?.animal?.species?.in[1]
 		 ].each
 	 	{
 		    k, v ->
-			
+
 			if (v)
 			{
 				whereClauses += ("trim(" + k + ") in (" + toSqlFormat(v) + ") ")
 			}
 		}
 		 
-		["timestamp": filterParams?.between?.timestamp].each
+		["timestamp": filterParams?.filter?.between].each
 		{
 			k, v ->
 			
 			if (v)
 			{
-				whereClauses += (k + " between '" + new java.sql.Timestamp(v[0].getTime()) + "' and '" + new java.sql.Timestamp(v[1].getTime()) + "' ")
+				whereClauses += (k + " between '" + new java.sql.Timestamp(v[1].getTime()) + "' and '" + new java.sql.Timestamp(v[2].getTime()) + "' ")
 			}
 		}
 			 
@@ -179,7 +179,7 @@ class DetectionExtractService
 					def offset = 0
 					
 					def resultList = extractPage(filterParams, sql, limit, offset)
-					
+
 					while (resultList.size() > 0)
 					{
 						resultListQueue.put(resultList)

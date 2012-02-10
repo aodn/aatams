@@ -134,7 +134,8 @@ log4j = {
 //    info    "grails.app.service.au.org.emii"
 
     debug   "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",
-	        "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService"
+	        "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService",
+			"grails.app.service.au.org.emii.aatams.filter.QueryService"
 //			"grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService",
 //			"grails.app.service.au.org.emii.aatams.detection.DetectionFactoryService",
 			

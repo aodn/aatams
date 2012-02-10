@@ -28,16 +28,16 @@
                         <tr>
                             <td/>
                             
-                            <%--<g:sortableColumn property="name" title="${message(code: 'receiver.name.label', default: 'ID')}" params="${executedFilter}"/> --%>
+                            <%--<g:sortableColumn property="name" title="${message(code: 'receiver.name.label', default: 'ID')}" params="${params}"/> --%>
                             <th><g:message code="name.label" default="ID" /></th>
                         
                             <th><g:message code="receiver.model.label" default="Model" /></th>
                         
-                            <g:sortableColumn property="serialNumber" title="${message(code: 'receiver.serialNumber.label', default: 'Serial Number')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="serialNumber" title="${message(code: 'receiver.serialNumber.label', default: 'Serial Number')}" params="${params}"/>
                         
-                            <g:sortableColumn property="organisation.name" title="${message(code: 'device.organisation.label', default: 'Organisation')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="organisation.name" title="${message(code: 'device.organisation.label', default: 'Organisation')}" params="${params}"/>
                         
-                            <g:sortableColumn property="status" title="${message(code: 'receiver.status.label', default: 'Status')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="status" title="${message(code: 'receiver.status.label', default: 'Status')}" params="${params}"/>
                         
                         </tr>
                     </thead>
@@ -63,7 +63,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${total}" params="${executedFilter}"/>
+                <g:paginate total="${total}" params="${params}"/>
             </div>
         </div>
     </body>

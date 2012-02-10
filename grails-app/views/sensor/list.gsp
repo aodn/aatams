@@ -29,21 +29,21 @@
                         
                             <td/>
                             
-                            <g:sortableColumn property="transmitterId" title="${message(code: 'transmitterId.label', default: 'ID')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="transmitterId" title="${message(code: 'transmitterId.label', default: 'ID')}" params="${params}"/>
                             
-                            <g:sortableColumn property="tag.model" title="${message(code: 'tag.model.label', default: 'Model')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="tag.model" title="${message(code: 'tag.model.label', default: 'Model')}" params="${params}"/>
                         
-                            <g:sortableColumn property="tag.serialNumber" title="${message(code: 'tag.serialNumber.label', default: 'Serial Number')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="tag.serialNumber" title="${message(code: 'tag.serialNumber.label', default: 'Serial Number')}" params="${params}"/>
                         
-                            <g:sortableColumn property="tag.project.name" title="${message(code: 'tag.project.name.label', default: 'Project')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="tag.project.name" title="${message(code: 'tag.project.name.label', default: 'Project')}" params="${params}"/>
 
-                            <g:sortableColumn property="tag.codeMap" title="${message(code: 'tag.codeMap.label', default: 'Code Map')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="tag.codeMap" title="${message(code: 'tag.codeMap.label', default: 'Code Map')}" params="${params}"/>
                         
-                            <g:sortableColumn property="pingCode" title="${message(code: 'pingCode.label', default: 'Ping ID Code')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="pingCode" title="${message(code: 'pingCode.label', default: 'Ping ID Code')}" params="${params}"/>
                         
-                            <g:sortableColumn property="transmitterType" title="${message(code: 'transmitterType.label', default: 'Transmitter Type')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="transmitterType" title="${message(code: 'transmitterType.label', default: 'Transmitter Type')}" params="${params}"/>
                         
-                            <g:sortableColumn property="tag.status" title="${message(code: 'tag.status.label', default: 'Status')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="tag.status" title="${message(code: 'tag.status.label', default: 'Status')}" params="${params}"/>
 
                         </tr>
                     </thead>
@@ -77,7 +77,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${total}" params="${executedFilter}"/>
+                <g:paginate total="${total}" params="${params}"/>
             </div>
         </div>
     </body>

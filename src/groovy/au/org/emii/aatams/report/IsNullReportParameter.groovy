@@ -6,4 +6,9 @@ class IsNullReportParameter extends ReportParameter
 	{
 		return "/report/filter/isNullTemplate"
 	}
+	
+	String getRestrictionName()
+	{
+		return "isNull"
+	}
 }

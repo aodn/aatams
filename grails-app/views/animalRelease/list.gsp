@@ -29,19 +29,19 @@
                         
                             <td/>
                             
-                            <g:sortableColumn property="id" title="${message(code: 'animalRelease.id.label', default: 'Tag(s)')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="id" title="${message(code: 'animalRelease.id.label', default: 'Tag(s)')}" params="${params}"/>
                         
-                            <g:sortableColumn property="animal.species" title="${message(code: 'animalRelease.animal.species.label', default: 'Species')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="animal.species" title="${message(code: 'animalRelease.animal.species.label', default: 'Species')}" params="${params}"/>
 
-                            <g:sortableColumn property="releaseDateTime" title="${message(code: 'animalRelease.releaseDateTime.label', default: 'Release Date Time')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="releaseDateTime" title="${message(code: 'animalRelease.releaseDateTime.label', default: 'Release Date Time')}" params="${params}"/>
                         
-                            <g:sortableColumn property="releaseLocality" title="${message(code: 'animalRelease.releaseLocality.label', default: 'Release Locality')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="releaseLocality" title="${message(code: 'animalRelease.releaseLocality.label', default: 'Release Locality')}" params="${params}"/>
                         
-                            <g:sortableColumn property="releaseLocation" title="${message(code: 'animalRelease.releaseLocation.label', default: 'Release Location')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="releaseLocation" title="${message(code: 'animalRelease.releaseLocation.label', default: 'Release Location')}" params="${params}"/>
                         
-                            <g:sortableColumn property="project.name" title="${message(code: 'animalRelease.project.label', default: 'Project')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="project.name" title="${message(code: 'animalRelease.project.label', default: 'Project')}" params="${params}"/>
 
-                            <g:sortableColumn property="embargoDate" title="${message(code: 'animalRelease.embargoDate.label', default: 'Embargo Date')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="embargoDate" title="${message(code: 'animalRelease.embargoDate.label', default: 'Embargo Date')}" params="${params}"/>
 
                         </tr>
                     </thead>
@@ -77,7 +77,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${total}" params="${executedFilter}"/>
+                <g:paginate total="${total}" params="${params}"/>
             </div>
         </div>
     </body>

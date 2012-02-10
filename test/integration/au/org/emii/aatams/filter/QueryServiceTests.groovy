@@ -84,7 +84,28 @@ class QueryServiceTests extends GrailsUnitTestCase
 	{
 		assertQuery(ValidDetection,
 					ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
-					[filter: [between: ["timestamp", new DateTime("2011-05-17T02:53:00+00:00").toDate(), new DateTime("2011-05-17T02:54:00+00:00").toDate()]]])
+					[filter: [between: [aaa:"aaa"],
+							  "between.0": "timestamp", 
+							  "between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(), 
+							  "between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate()]])
+
+		assertQuery(ValidDetection,
+					ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
+					[
+						filter: 
+						[
+							between: [aaa:"aaa"],
+							"between.0": "timestamp", 
+							"between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(), 
+							"between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate(),
+							between_year: ["timestamp", 17, 17],
+							between_month: ["timestamp", 17, 17],
+							between_day: ["timestamp", 17, 17],
+							between_hour: ["timestamp", 17, 17],
+							between_minute: ["timestamp", 17, 17],
+							between_second: ["timestamp", 17, 17]
+						]
+					])
 	}
 	
  	void testIsNullRestriction()
@@ -357,8 +378,8 @@ class QueryServiceTests extends GrailsUnitTestCase
 	private def assertQuery(clazz, expectedResults, queryParams)
 	{
 		def actualResults = new ArrayList(queryService.query(clazz, queryParams).results)
-//		println "expected: " + expectedResults
-//		println "actual: " + actualResults
+		println "expected: " + expectedResults
+		println "actual: " + actualResults
 		
 		assertEquals(expectedResults, actualResults)
 		

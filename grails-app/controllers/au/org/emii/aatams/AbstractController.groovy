@@ -32,7 +32,9 @@ abstract class AbstractController
 				|| (k.endsWith(".eq")) 
 				|| (k.endsWith(".in")) 
 				|| (k.endsWith(".isNull")) 
-				|| (k.endsWith(".between")))
+				|| (k.endsWith(".between.0"))
+				|| (k.endsWith(".between.1"))
+				|| (k.endsWith(".between.2")))
 			{
 				flattenedParams.put(k, v)
 			}

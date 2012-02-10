@@ -67,9 +67,6 @@ class QueryService
 				{
 					// Doesn't work, see: http://community.jboss.org/wiki/HibernateFAQ-AdvancedProblems#The_query_language_IS_NULL_syntax_wont_work_with_a_onetoone_association
 					// criteria.add(Restrictions.isNull(property))
-//					def alias = criteria.createAlias("recovery", "listRecovery", CriteriaSpecification.LEFT_JOIN)
-//					alias.add(Restrictions.sqlRestriction("recoverer_id IS NULL"))
-					
 					criteria.add(Restrictions.sqlRestriction("recoverer_id IS NULL"))
 				}
 				else if (method == "in")
@@ -98,6 +95,7 @@ class QueryService
 				}
 				else if (nestedParams instanceof List)
 				{
+					println "method: " + method + ", args: " + nestedParams
 					invokeMethod(method, nestedParams as Object[])
 				}
 				else if (nestedParams instanceof Map)
@@ -168,9 +166,26 @@ class QueryService
 				v = v.toList()
 			}
 			
+			if (k == "filter")
+			{
+				if (v?.between)
+				{
+					v.between = []
+					[0, 1, 2].each
+					{
+						assert(v["between." + it]): "Invalid \"between\" filter."
+						v.between.add(v["between." + it])
+					}
+				}
+			}
+			
 			if (k.contains("."))
 			{
 				
+			}
+			else if (k.endsWith("_year") || k.endsWith("_month") || k.endsWith("_day") || k.endsWith("_hour") || k.endsWith("_minute") || k.endsWith("_second"))
+			{
+				// Ignore - a proper date struct will be in the map elsewhere.
 			}
 			else if (v instanceof Map)
 			{

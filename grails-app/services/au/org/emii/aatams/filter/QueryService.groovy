@@ -6,6 +6,8 @@ import au.org.emii.aatams.ProjectRole
 
 import au.org.emii.aatams.report.ReportInfoService
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import org.hibernate.Criteria
 import org.hibernate.criterion.CriteriaSpecification
 import org.hibernate.criterion.Order
@@ -152,8 +154,26 @@ class QueryService
 		return transformedParams
 	}
 	
+	private void cleanDateParams(params)
+	{
+		[1, 2].each
+		{
+			if (params["filter.between." + it] && params["filter.between." + it].class == String)
+			{
+				// Thu Jun 18 12:38:00 EST 2009
+				DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy")
+				def dateAsString = params["filter.between." + it]
+				
+				params["filter.between." + it] = dateFormat.parse(dateAsString)
+				params?.filter["between." + it] = dateFormat.parse(dateAsString)
+			}
+		}
+	}
+	
 	private Map cleanParams(params)
 	{
+		cleanDateParams(params)
+		
 		def cleanedParams = [:]
 		
 		params.each

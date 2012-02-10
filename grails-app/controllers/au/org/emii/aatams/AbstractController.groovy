@@ -20,7 +20,7 @@ abstract class AbstractController
 		 total: resultList.count]
 	}
 	
-	private void flattenParams()
+	protected void flattenParams()
 	{
 		def flattenedParams = [:]
 		

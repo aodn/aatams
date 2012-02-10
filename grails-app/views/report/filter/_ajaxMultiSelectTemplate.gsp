@@ -1,19 +1,18 @@
-<tr id="${propertyName}" class="ajaxMultiSelectReportParameter prop">
-    <g:hiddenField name="${propertyName}_lookupPath" value="${lookupPath}" />
-    <g:hiddenField name="${propertyName}_textFieldId" value="filter.in.${propertyName}" />
+<tr id="${qualifiedParameterName + '.' + propertyName}" class="ajaxMultiSelectReportParameter prop">
+
+    <g:hiddenField name="${qualifiedParameterName + '.' + propertyName}_lookupPath" value="${lookupPath}" />
+    <g:hiddenField name="${qualifiedParameterName + '.' + propertyName}_textFieldId" value="${qualifiedParameterName}" />
     
     <td valign="top" class="name">
-        <label for="filter.in.${propertyName}">${label}</label>
+        <label for="${qualifiedParameterName}">${label}</label>
     </td>
+    
+    <g:hiddenField name="${qualifiedParameterName}" value="${propertyName}" />
+    
     <td valign="top" class="value">
     
-        <g:if test="${filter}">
-            <g:set var="value" value="${filter['in.' + propertyName]}" />
-        </g:if>
-        <g:else>
-            <g:set var="value" value="" />
-        </g:else>
+        <g:set var="value" value="${params[qualifiedParameterName]?.getAt(1)}" />
     
-        <g:textField name="filter.in.${propertyName}" placeholder="autocomplete - start typing" value="${value}" />
+        <g:textField name="${qualifiedParameterName}" placeholder="autocomplete - start typing" value="${value}" />
     </td>
 </tr>

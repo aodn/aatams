@@ -11,6 +11,12 @@ class AjaxMultiSelectReportParameter extends ReportParameter
 	{
         return "/report/filter/ajaxMultiSelectTemplate"
 	}
+	
+	String getRestrictionName()
+	{
+		return "in"
+	}
+
 	@Override
 	public Map getModel() 
 	{

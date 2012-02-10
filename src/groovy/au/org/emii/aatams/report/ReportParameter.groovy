@@ -20,6 +20,11 @@ abstract class ReportParameter
      */
     String label
     
+	/**
+	 * Association, may be null.
+	 */
+	String associationName
+	
     /**
      * The domain object's property that this parameter pertains to.
      */
@@ -30,13 +35,36 @@ abstract class ReportParameter
      */
     abstract String getTemplate()
     
+	/**
+	 * Corresponds to grails hibernate criteria builder method name, e.g. "eq" or "between".
+	 */
+	abstract String getRestrictionName()
+	
+	/**
+	 * e.g. "installation.eq.name
+	 */
+	String getQualifiedParameterName()
+	{
+		String retString = "filter."
+		
+		if (associationName)
+		{ 
+			retString += associationName + "."
+		}
+		
+		retString += restrictionName
+		
+		return retString
+	}
+	
     /**
      * Returns the model which can be passed to GSP/render.
      */
     Map getModel()
     {
-        return [label:label,
-                propertyName:propertyName]
+        return [label: label,
+				propertyName: propertyName,
+				qualifiedParameterName: qualifiedParameterName]
     }
     
     String toString()

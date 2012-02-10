@@ -29,17 +29,17 @@
                         
                             <td/>
                             
-                            <g:sortableColumn property="station.installation.name" title="${message(code: 'receiverDeployment.installation.label', default: 'Installation')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="station.installation.name" title="${message(code: 'receiverDeployment.installation.label', default: 'Installation')}" params="${params}"/>
                         
-                            <g:sortableColumn property="station.name" title="${message(code: 'receiverDeployment.station.label', default: 'Station')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="station.name" title="${message(code: 'receiverDeployment.station.label', default: 'Station')}" params="${params}"/>
                         
-                            <g:sortableColumn property="receiver.codeName" title="${message(code: 'receiverDeployment.receiver.label', default: 'Receiver')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="receiver" title="${message(code: 'receiver.label', default: 'Receiver')}" params="${params}"/>
                         
-                            <g:sortableColumn property="station.installation.project.name" title="${message(code: 'receiverDeployment.project.label', default: 'Project')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="station.installation.project.name" title="${message(code: 'receiverDeployment.project.label', default: 'Project')}" params="${params}"/>
                         
-                            <g:sortableColumn property="deploymentDateTime" title="${message(code: 'receiverDeployment.deploymentDateTime.label', default: 'Deployment Date')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="deploymentDateTime" title="${message(code: 'receiverDeployment.deploymentDateTime.label', default: 'Deployment Date')}" params="${params}"/>
                         
-                            <g:sortableColumn property="recoveryDate" title="${message(code: 'receiverDeployment.recoveryDate.label', default: 'Recovery Date')}" params="${executedFilter}"/>
+                            <g:sortableColumn property="recoveryDate" title="${message(code: 'receiverDeployment.recoveryDate.label', default: 'Recovery Date')}" params="${params}"/>
                         
                         </tr>
                     </thead>
@@ -67,7 +67,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${total}" params="${executedFilter}"/>
+                <g:paginate total="${total}" params="${params}"/>
             </div>
         </div>
     </body>

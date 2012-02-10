@@ -11,6 +11,11 @@ class DateRangeReportParameter extends ReportParameter
     {
         return "/report/filter/dateRangeTemplate"
     }
+	
+	String getRestrictionName()
+	{
+		return "between"
+	}
     
     /**
      * Returns the model which can be passed to GSP/render.

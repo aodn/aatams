@@ -13,6 +13,9 @@ grails.war.resources =
       delete(file:"${stagingDir}/WEB-INF/lib/postgis-jdbc-1.3.3.jar")
       delete(file:"${stagingDir}/WEB-INF/lib/postgresql-9.0-801.jdbc4.jar")
 
+	  delete(file:"${stagingDir}/WEB-INF/lib/postgis-jdbc-1.3.0.jar")
+	  delete(file:"${stagingDir}/WEB-INF/lib/postgis-stubs-1.3.0.jar")
+
       // The jars are being inserted by the hudson/tomcat build process, and
       // are causing errors on startup for the app on tomcat6.
       delete(file:"${stagingDir}/WEB-INF/lib/commons-collections-3.1.jar")

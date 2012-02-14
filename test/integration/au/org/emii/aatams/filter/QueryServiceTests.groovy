@@ -5,14 +5,17 @@ import org.joda.time.DateTime
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.report.ReportInfoService
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
-class QueryServiceTests extends GrailsUnitTestCase 
+class QueryServiceTests extends AbstractGrailsUnitTestCase 
 {
 	def queryService
 	
     protected void setUp() 
 	{
         super.setUp()
+		
+		permitted = true
     }
 
     protected void tearDown()
@@ -84,19 +87,19 @@ class QueryServiceTests extends GrailsUnitTestCase
 	{
 		assertQuery(ValidDetection,
 					ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
-					[filter: [between: [aaa:"aaa"],
-							  "between.0": "timestamp", 
-							  "between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(), 
-							  "between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate()]])
+					[filter: [between: [aaa:"aaa", "0": "timestamp", "1": new DateTime("2011-05-17T02:53:00+00:00").toDate(), "2": new DateTime("2011-05-17T02:54:00+00:00").toDate()],
+						      "between.0": "timestamp",
+						      "between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(),
+						      "between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate()]])
 
 		assertQuery(ValidDetection,
 					ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
 					[
 						filter: 
 						[
-							between: [aaa:"aaa"],
-							"between.0": "timestamp", 
-							"between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(), 
+							between: [aaa:"aaa", "0": "timestamp", "1": new DateTime("2011-05-17T02:53:00+00:00").toDate(), "2": new DateTime("2011-05-17T02:54:00+00:00").toDate()],
+							"between.0": "timestamp",
+							"between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(),
 							"between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate(),
 							between_year: ["timestamp", 17, 17],
 							between_month: ["timestamp", 17, 17],
@@ -114,7 +117,7 @@ class QueryServiceTests extends GrailsUnitTestCase
 				"filter.between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate(),
 				filter: 
 				[	
-					between: [aaa:"aaa"],
+					between: [aaa:"aaa", "0": "timestamp", "1": new DateTime("2011-05-17T02:53:00+00:00").toDate(), "2": new DateTime("2011-05-17T02:54:00+00:00").toDate()],
 					"between.0": "timestamp",
 					"between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(),
 					"between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate()
@@ -129,7 +132,7 @@ class QueryServiceTests extends GrailsUnitTestCase
 				"filter.between.2": "Tue May 17 12:54:00 EST 2011",
 				filter:
 				[
-					between: [aaa:"aaa"],
+					between: [aaa:"aaa", "0": "timestamp", "1": "Tue May 17 12:53:00 EST 2011", "2": "Tue May 17 12:54:00 EST 2011"],
 					"between.0": "timestamp",
 					"between.1": "Tue May 17 12:53:00 EST 2011",
 					"between.2": "Tue May 17 12:54:00 EST 2011"
@@ -407,8 +410,8 @@ class QueryServiceTests extends GrailsUnitTestCase
 	private def assertQuery(clazz, expectedResults, queryParams)
 	{
 		def actualResults = new ArrayList(queryService.query(clazz, queryParams).results)
-//		println "expected: " + expectedResults
-//		println "actual: " + actualResults
+		println "expected: " + expectedResults
+		println "actual: " + actualResults
 		
 		assertEquals(expectedResults, actualResults)
 		

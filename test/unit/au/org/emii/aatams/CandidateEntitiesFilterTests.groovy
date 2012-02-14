@@ -191,6 +191,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         receiverRecoveryController.metaClass.message = { Map map -> return "error message" }
         receiverRecoveryController.candidateEntitiesService = candEntitiesService
 		receiverRecoveryController.queryService = new QueryService()
+		receiverRecoveryController.queryService.embargoService = new EmbargoService()
 		receiverRecoveryController.reportInfoService = new ReportInfoService()
         mockConfig("grails.gorm.default.list.max = 10")
         receiverRecoveryController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}

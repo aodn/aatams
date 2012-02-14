@@ -25,6 +25,21 @@ class BootStrap
     { 
         servletContext ->
 
+		Map.metaClass.flatten = 
+		{ 
+			String prefix='' ->
+			
+			delegate.inject( [:] ) 
+			{
+				map, v ->
+				def kstr = "$prefix${ prefix ? '.' : ''  }$v.key"
+				
+				if( v.value instanceof Map ) map += v.value.flatten( kstr )
+				else                         map[ kstr ] = v.value
+				map
+		    }
+		}
+		
         JSON.registerObjectMarshaller(Animal.class)
         {
             def returnArray = [:]

@@ -358,67 +358,40 @@ class ReportInfoService
      */
     Map<String, Object> filterParamsToReportFormat(params)
     {
+		log.debug("Converting params to report format, params: " + params)
+		
         if (!params)
         {
             return [:]
         }
         
-        // Only include entries with non-map, non-blank, non-null values.
-        Map filteredVals = params.findAll
-        {
-            key, val ->
-            
-            log.debug("Filtering key: " + key + ", value: " + val)    
-            
-            if (!val)
-            {
-                log.debug("Filtered out key: " + key + ", value: " + val)    
-                return false
-            }
-
-            if (val == "")
-            {
-                log.debug("Filtered out key: " + key + ", value: " + val)    
-                return false
-            }
-            
-            if (val instanceof Map)
-            {
-                log.debug("Filtered out key: " + key + ", value: " + val)    
-                return false
-            }
-            
-            log.debug("Keeping key: " + key + ", value: " + val)
-            return true
-        }
-        
-        // Replace key with equivalent label.
-        def retVals = [:]
-        filteredVals.each
-        {
-            key, val ->
-            
-			key = removeParamTypePrefix(key)
+		def filterParamsInReportFormat = [:]
+		
+		def flattenedParams = params.flatten()
+		
+		flattenedParams.each
+		{
+			k, v ->
 			
-            retVals[propertyToLabel.get(key, key)] = val
-        }
-        
-        return retVals
-    }
-
-	private String removeParamTypePrefix(String key) {
-		if (key.startsWith("eq."))
-		{
-			key = key.substring("eq.".length())
+			if (k.endsWith(".eq"))
+			{
+				assert (v.size() == 2): "Invalid filter parameter: k: " + k + ", v: " + v
+				
+				def reportKey = k[0..k.size() - 4]
+				reportKey += "." + v[0]
+				
+				def reportValue = v[1]  
+				if (reportValue != null && reportValue != "")
+				{
+					filterParamsInReportFormat[propertyToLabel[reportKey]] = reportValue
+				}
+			}
+			else
+			{
+				filterParamsInReportFormat[k] = v
+			}
 		}
-		if (key.startsWith("in."))
-		{
-			key = key.substring("in".length())
-		}
-		if (key.startsWith("between."))
-		{
-			key = key.substring("between.".length())
-		}
-		return key
+		
+		return filterParamsInReportFormat
 	}
 }

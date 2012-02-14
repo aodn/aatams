@@ -20,6 +20,21 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
     {
         super.setUp()
         
+		Map.metaClass.flatten =
+		{
+			String prefix='' ->
+			
+			delegate.inject( [:] )
+			{
+				map, v ->
+				def kstr = "$prefix${ prefix ? '.' : ''  }$v.key"
+				
+				if( v.value instanceof Map ) map += v.value.flatten( kstr )
+				else                         map[ kstr ] = v.value
+				map
+			}
+		}
+		
         mockLogging(ReportInfoService, true)
         reportInfoService = new ReportInfoService()
 		reportInfoService.metaClass.getDetectionTimestampMin = { return new DateTime("2011-03-01T12:34:56").toDate() }
@@ -175,24 +190,29 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
     void testFilterParamsToReportFormat()
     {
         def filter = [user:"Jon Burgess", 
-                      "organisation.name":"CSIRO", 
-                      organisation:[name:"CSIRO"]]
+                      organisation:[eq:["name", "CSIRO"]]]
     
         def result = reportInfoService.filterParamsToReportFormat(filter)
         assertEquals([user:"Jon Burgess", organisation:"CSIRO"], result)
+    }
+	
+	void testFilterParamsToReportFormatNullValue()
+	{
+		def filter = [user:"Jon Burgess",
+				  "organisation":null,
+				  organisation:[eq:["name", null]]]
+	
+		def result = reportInfoService.filterParamsToReportFormat(filter)
+		assertEquals([user:"Jon Burgess"], result)
+	}
 
-        filter = [user:"Jon Burgess", 
-                  "organisation":null, 
-                  organisation:[name:null]]
-    
-        result = reportInfoService.filterParamsToReportFormat(filter)
-        assertEquals([user:"Jon Burgess"], result)
-        
-        filter = [user:"Jon Burgess", 
+    void testFilterParamsToReportFormatBlankValue()
+    {
+        def filter = [user:"Jon Burgess", 
                   "organisation":"", 
-                  organisation:[name:""]]
+                  organisation:[eq:["name", ""]]]
     
-        result = reportInfoService.filterParamsToReportFormat(filter)
+        def result = reportInfoService.filterParamsToReportFormat(filter)
         assertEquals([user:"Jon Burgess"], result)
     }
 }

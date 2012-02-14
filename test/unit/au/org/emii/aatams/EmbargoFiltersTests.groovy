@@ -95,7 +95,9 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         releaseController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
 		releaseController.reportInfoService = reportInfoService
 		releaseController.queryService = queryService
-        
+		releaseController.queryService.embargoService = new EmbargoService()
+		releaseController.queryService.embargoService.permissionUtilsService = permissionUtilsService
+		
         mockController(DetectionController)
         mockLogging(DetectionController)
         detectionController = new DetectionController()
@@ -107,14 +109,18 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         sensorController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
 		sensorController.reportInfoService = reportInfoService
 		sensorController.queryService = queryService
-
+		sensorController.queryService.embargoService = new EmbargoService()
+		sensorController.queryService.embargoService.permissionUtilsService = permissionUtilsService
+		
         mockController(TagController)
         mockLogging(TagController)
         tagController = new TagController()
         tagController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
 		tagController.reportInfoService = reportInfoService
 		tagController.queryService = queryService
-
+		tagController.queryService.embargoService = new EmbargoService()
+		tagController.queryService.embargoService.permissionUtilsService = permissionUtilsService
+		
         mockLogging(Tag)
         mockLogging(Sensor)
         mockLogging(AnimalRelease)
@@ -352,13 +358,12 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     {
 		controller.params._name = "entityName"
 		
-		int expectedNum = (entityName == 'sensor') ? 8 : 4
+		int expectedNum = (entityName == 'sensor') ? 6 : 3
+		int expectedTotal = (entityName == 'sensor') ? 8 : 4
         def model = controller.list()
 		
-println ("model: " + model)
-		
         assertEquals(expectedNum, model.entityList.size())
-        assertEquals(expectedNum, model.total)
+        assertEquals(expectedTotal, model.total)
 
         // Embargoed releases should not appear at all after filter.
         FilterConfig filter = getFilter(entityName + 'List')
@@ -368,8 +373,9 @@ println ("model: " + model)
         assertNotNull(model)
         
 		int expectedNumAfterEmbargo = (entityName == 'sensor') ? 6 : 3
+		int expectedTotalAfterEmbargo = (entityName == 'sensor') ? 8 : 4
         assertEquals(expectedNumAfterEmbargo, model.entityList.size())
-        assertEquals(expectedNum, model.total)
+        assertEquals(expectedTotalAfterEmbargo, model.total)
     }
     
     private void checkEmbargoed(def controller, def entity, boolean isEmbargoed, String entityName)

@@ -60,11 +60,11 @@ class DetectionExtractService
 		String query = '''select * from detection_extract_view '''
 		List<String> whereClauses = []
 		
-		["project": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in[1],
-		 "installation": filterParams?.filter?.receiverDeployment?.station?.installation?.in[1],
-		 "station": filterParams?.filter?.receiverDeployment?.station?.in[1],
-		 "sensor_id": filterParams?.filter?.detectionSurgeries?.tag?.in[1],
-		 "spcode": filterParams?.filter?.detectionSurgeries?.surgery?.release?.animal?.species?.in[1]
+		["project": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
+		 "installation": filterParams?.filter?.receiverDeployment?.station?.installation?.in?.getAt(1),
+		 "station": filterParams?.filter?.receiverDeployment?.station?.in?.getAt(1),
+		 "sensor_id": filterParams?.filter?.detectionSurgeries?.tag?.in?.getAt(1),
+		 "spcode": filterParams?.filter?.detectionSurgeries?.surgery?.release?.animal?.species?.in?.getAt(1)
 		 ].each
 	 	{
 		    k, v ->
@@ -75,13 +75,17 @@ class DetectionExtractService
 			}
 		}
 		 
+println filterParams?.filter?.between
 		["timestamp": filterParams?.filter?.between].each
 		{
 			k, v ->
-			
+
 			if (v)
 			{
-				whereClauses += (k + " between '" + new java.sql.Timestamp(v[1].getTime()) + "' and '" + new java.sql.Timestamp(v[2].getTime()) + "' ")
+				assert(v?."1") : "Start date/time must be specified"
+				assert(v?."2") : "End date/time must be specified"
+				
+				whereClauses += (k + " between '" + new java.sql.Timestamp(v?."1"?.getTime()) + "' and '" + new java.sql.Timestamp(v?."2"?.getTime()) + "' ")
 			}
 		}
 			 

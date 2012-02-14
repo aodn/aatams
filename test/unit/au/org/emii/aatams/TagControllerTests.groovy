@@ -2,10 +2,11 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.test.*
 import grails.converters.JSON
 
-class TagControllerTests extends ControllerUnitTestCase 
+class TagControllerTests extends AbstractControllerUnitTestCase 
 {
     DeviceStatus newStatus
     DeviceStatus deployedStatus
@@ -45,7 +46,8 @@ class TagControllerTests extends ControllerUnitTestCase
 		reportInfoService = new ReportInfoService()
 		controller.reportInfoService = reportInfoService
 		controller.queryService = queryService
-
+		controller.queryService.embargoService = new EmbargoService()
+		controller.queryService.embargoService.permissionUtilsService = new PermissionUtilsService()
         controller.candidateEntitiesService = candidateEntitiesService
         mockDomain(Tag)
         

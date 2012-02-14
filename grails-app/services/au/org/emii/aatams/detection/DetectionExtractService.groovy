@@ -75,7 +75,6 @@ class DetectionExtractService
 			}
 		}
 		 
-println filterParams?.filter?.between
 		["timestamp": filterParams?.filter?.between].each
 		{
 			k, v ->
@@ -163,45 +162,37 @@ println filterParams?.filter?.between
 		}
 	}
 
-	ExecutorService executor = Executors.newCachedThreadPool()
-	 
-	private void writeCsvData(filterParams, OutputStream out) 
+	private boolean shouldReadAsync()
 	{
-		def sql = new Sql(dataSource)
-		def limit = ConfigurationHolder.config.rawDetection.extract.limit
+		return true
+	}
+	
+	ExecutorService executor = Executors.newCachedThreadPool()
+	def resultListQueue
+	volatile finishedQuery
+	
+	private void writeCsvData(final filterParams, OutputStream out) 
+	{
+		resultListQueue = new LinkedBlockingQueue<List>(ConfigurationHolder.config.rawDetection.extract.queryQueueSize)
+		finishedQuery = false
 		
-		def resultListQueue = new LinkedBlockingQueue<List>(ConfigurationHolder.config.rawDetection.extract.queryQueueSize)
-		volatile finishedQuery = false
+		final def sql = new Sql(dataSource)
+		final def limit = ConfigurationHolder.config.rawDetection.extract.limit
 		
-		// Start reading thread.
-		executor.execute(new Runnable() 
+		if (shouldReadAsync())
 		{
-			public void run()
+			executor.execute(new Runnable() 
 			{
-				try
+				public void run()
 				{
-					def offset = 0
-					
-					def resultList = extractPage(filterParams, sql, limit, offset)
-
-					while (resultList.size() > 0)
-					{
-						resultListQueue.put(resultList)
-						
-						offset += resultList.size()
-						resultList = extractPage(filterParams, sql, limit, offset)
-					}
+					readData(filterParams, sql, limit)
 				}
-				catch (InterruptedException e)
-				{
-//					System.out.println("Database query interrupted", e)
-				}
-				finally
-				{
-					finishedQuery = true
-				}
-			}
-		})
+			})
+		}
+		else
+		{
+			readData(filterParams, sql, limit)
+		}
 		
 		// Write data...
 		try
@@ -226,6 +217,32 @@ println filterParams?.filter?.between
 		finally
 		{
 			sql.close()
+		}
+	}
+
+	private void readData(filterParams, sql, limit) 
+	{
+		try
+		{
+			def offset = 0
+
+			def resultList = extractPage(filterParams, sql, limit, offset)
+
+			while (resultList.size() > 0)
+			{
+				resultListQueue.put(resultList)
+
+				offset += resultList.size()
+				resultList = extractPage(filterParams, sql, limit, offset)
+			}
+		}
+		catch (InterruptedException e)
+		{
+			//					System.out.println("Database query interrupted", e)
+		}
+		finally
+		{
+			finishedQuery = true
 		}
 	}
 

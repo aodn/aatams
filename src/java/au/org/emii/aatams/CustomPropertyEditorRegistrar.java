@@ -2,6 +2,7 @@ package au.org.emii.aatams;
 
 import org.springframework.beans.PropertyEditorRegistrar;
 import org.springframework.beans.PropertyEditorRegistry;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 
 public class CustomPropertyEditorRegistrar implements PropertyEditorRegistrar 
 {
@@ -10,7 +11,6 @@ public class CustomPropertyEditorRegistrar implements PropertyEditorRegistrar
         registry.registerCustomEditor(com.vividsolutions.jts.geom.Point.class, 
                                       new PointEditor());
         
-//        registry.registerCustomEditor(org.joda.time.DateTime.class,
-//                                      new DateTimeEditor());
+        registry.registerCustomEditor(String.class, new StringTrimmerEditor(false));
     }
 }

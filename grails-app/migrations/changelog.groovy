@@ -1519,31 +1519,19 @@ databaseChangeLog = {
    	}
 
 	include file: 'deployment_has_one_recovery.groovy'
-
 	include file: 'requester_refactor.groovy'
-
 	include file: '3_4_1_changes.groovy'
-
 	include file: 'caab_attributes_to_lowercase.groovy'
-
 	include file: 'introduce_code_map_table.groovy'
-	
 	include file: 'new_reference_data_3.5.0.groovy'
-
 	include file: 'jdbc_template_detection_upload.groovy'
-
 	include file: 'deployment_init_datetime.groovy'
-
 	include file: 'sensor_params_as_float.groovy'
-
 	include file: 'tag_sensor_refactor.groovy'
-
 	include file: 'transmitter_id_index.groovy'
-
 	include file: 'location_migration.groovy'
-	
 	include file: 'detection_extract_view.groovy'
-
 	include file: 'locations_south.groovy'
+	include file: 'remove_duplicate_receivers.groovy'
 }
 

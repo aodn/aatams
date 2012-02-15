@@ -135,6 +135,7 @@ class BootStrap
             returnArray['serialNumber'] = it.serialNumber
             returnArray['model'] = it.model
 			returnArray['codeMap'] = it.codeMap
+			returnArray['deviceID'] = it.deviceID
 			returnArray['project'] = it.project
 			returnArray['expectedLifeTimeDays'] = it.expectedLifeTimeDays
 			returnArray['status'] = it.status

@@ -8,6 +8,7 @@ class SurgeryController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
+	def detectionFactoryService
     def jdbcTemplateDetectionFactoryService
     def tagFactoryService
     

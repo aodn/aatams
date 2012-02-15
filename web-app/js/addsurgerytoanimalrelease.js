@@ -18,6 +18,7 @@ $(function()
                 var timestamp_day = $("#surgeryTimestamp_day").val();
                 var timestamp_hour = $("#surgeryTimestamp_hour").val();
                 var timestamp_minute = $("#surgeryTimestamp_minute").val();
+                var timestamp_second = $("#surgeryTimestamp_second").val();
                 var timestamp_zone = $("#surgeryTimestamp_zone").val();
                 var typeId = $("#surgeryTypeId option:selected").val();
                 var treatmentTypeId = $("#treatmentTypeId option:selected").val();
@@ -51,7 +52,8 @@ $(function()
                                    timestamp_month + "/" + 
                                    timestamp_year + " " + 
                                    timestamp_hour + ":" + 
-                                   timestamp_minute + " " + 
+                                   timestamp_minute + ":" + 
+                                   timestamp_second + " " + 
                                    timestamp_zone;
                     var tag = {codeMap:{id:tagCodeMapId, serialNumber:tagSerialNumber, pingCode:tagPingCode}};
                     var type = {type:$("#surgeryTypeId option:selected").text()};
@@ -75,6 +77,7 @@ $(function()
                     mainForm.append(hiddenField(idPrefix + "timestamp_year", timestamp_year));
                     mainForm.append(hiddenField(idPrefix + "timestamp_hour", timestamp_hour));
                     mainForm.append(hiddenField(idPrefix + "timestamp_minute", timestamp_minute));
+                    mainForm.append(hiddenField(idPrefix + "timestamp_second", timestamp_second));
                     mainForm.append(hiddenField(idPrefix + "timestamp_zone", timestamp_zone));
                     mainForm.append(hiddenField(idPrefix + "type.id", typeId));
                     mainForm.append(hiddenField(idPrefix + "treatmentType.id", treatmentTypeId));
@@ -96,6 +99,7 @@ $(function()
                        'timestamp_day':timestamp_day,
                        'timestamp_hour':timestamp_hour,
                        'timestamp_minute':timestamp_minute,
+                       'timestamp_second':timestamp_second,
                        'timestamp_zone':timestamp_zone,
                        'tag.codeMap.id':tagCodeMapId,
                        'tag.pingCode':tagPingCode,
@@ -145,6 +149,7 @@ $(function()
 				$("#surgeryTimestamp_day").val($("#captureDateTime_day").val());
 				$("#surgeryTimestamp_hour").val($("#captureDateTime_hour").val());
 				$("#surgeryTimestamp_minute").val($("#captureDateTime_minute").val());
+				$("#surgeryTimestamp_second").val($("#captureDateTime_second").val());
 				$("#surgeryTimestamp_zone").val($("#captureDateTime_zone").val());
             }
             

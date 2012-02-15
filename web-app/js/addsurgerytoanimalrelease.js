@@ -230,12 +230,12 @@ function updateSurgeryTable(data, projectId, idPrefix)
     if (data.instance.tag.id != null)
     {
         var tagLink = $("<a>").attr("href", '../tag/show/' + data.instance.tag.id)
-        tagLink.html(data.instance.tag.codeName);    
+        tagLink.html(data.instance.tag.deviceID);    
         tagColumn.append(tagLink);
     }
     else
     {
-        tagColumn.html(data.instance.tag.codeName);    
+        tagColumn.html(data.instance.tag.deviceID);    
     }
     
     tableRow.append(tagColumn);

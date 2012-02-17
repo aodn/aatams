@@ -55,10 +55,6 @@ class ReceiverRecoveryController extends AbstractController
         def receiverRecoveryInstance = new ReceiverRecovery(params)
         receiverRecoveryInstance.deployment = deployment
 
-        // Set the receiver's status to that of the recovery's.
-        deployment?.receiver?.status = receiverRecoveryInstance.status
-        deployment?.receiver?.save(flush: true)
-        
         deployment?.recovery = receiverRecoveryInstance
         
         if (deployment?.save(flush: true)) 
@@ -66,7 +62,8 @@ class ReceiverRecoveryController extends AbstractController
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.toString()])}"
             redirect(action: "show", id: receiverRecoveryInstance.id)
         }
-        else {
+        else 
+		{
             render(view: "create", model: [receiverRecoveryInstance: receiverRecoveryInstance])
         }
     }

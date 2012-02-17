@@ -145,12 +145,12 @@ class ReceiverDeployment
         
         return true
     }
-    
+	
     String toString()
     {
         return String.valueOf(receiver) + " - " + String.valueOf(deploymentDateTime)
     }
-
+	
     /**
      * Non-authenticated users can only see scrambled locations.
      */
@@ -159,17 +159,25 @@ class ReceiverDeployment
         return GeometryUtils.scrambleLocation(location)
     }
     
+	private DateTime now()
+	{
+		return new DateTime()
+	}
+	
     boolean isActive()
     {
+		isActive(now())
+    }
+	
+	boolean isActive(dateTime)
+	{
         if (!recovery)
-        {
-            return true
+		{
+			return !deploymentDateTime.isAfter(dateTime)
         }
         
-        def now = new DateTime()
-        
-        return deploymentDateTime.isBefore(now) && now.isBefore(recovery?.recoveryDateTime)
-    }
+        return (!deploymentDateTime.isAfter(dateTime)) && dateTime.isBefore(recovery?.recoveryDateTime)
+	}
 	
 	ReceiverDeployment toKmlClone(List<ValidDetection> detections)
 	{

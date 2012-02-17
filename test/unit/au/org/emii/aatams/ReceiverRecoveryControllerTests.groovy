@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import org.joda.time.DateTime;
+
 import grails.test.*
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
@@ -76,7 +78,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
 		statusList.each { it.save() }
 		
 		ReceiverDeviceModel model = new ReceiverDeviceModel(modelName: "VR2W")
-		receiver = new Receiver(status:deployed, model: model, serialNumber: "1234")
+		receiver = new Receiver(model: model, serialNumber: "1234")
 		mockDomain(Receiver, [receiver])
 		receiver.save()
     }
@@ -96,6 +98,25 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         assertEquals(3, model.entityList.size())
         assertEquals(3, model.total)
     }
+	
+	void testSave()
+	{
+		def deployment = createDeployment(createStation(), new GeometryFactory().createPoint(new Coordinate(34f, 34f)))
+		deployment.mooringType = new MooringType()
+		deployment.save(failOnError:true)
+		
+		controller.params.deploymentId = deployment.id
+		controller.params.recoverer = new ProjectRole()
+		controller.params.recoveryDateTime = new DateTime()
+		controller.params.location = new GeometryFactory().createPoint(new Coordinate(34f, 34f))
+		controller.params.status = new DeviceStatus()
+		
+		controller.save()
+		
+		assertEquals("show", controller.redirectArgs.action)
+		def recovery = ReceiverRecovery.get(controller.redirectArgs.id)
+		assertNotNull(deployment)
+	}
     
 	void testCreateUseDeploymentsLocation()
 	{
@@ -146,21 +167,5 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
 		assertNotNull(model.receiverRecoveryInstance)
 		assertEquals(deployment, model.receiverRecoveryInstance.deployment)
 		assertEquals(deploymentLocation, model.receiverRecoveryInstance.location)
-	}
-	
-	void testSaveReceiverStatusMatchesRecoveryStatus()
-	{
-		Point deploymentLocation = new GeometryFactory().createPoint(new Coordinate(34f, 34f))
-		deploymentLocation.setSRID(4326)
-		InstallationStation station = createStation()
-		ReceiverDeployment deployment = createDeployment(station, deploymentLocation)
-
-		assertEquals(DeviceStatus.findByStatus('DEPLOYED'), receiver.status)
-			
-		controller.params.status = DeviceStatus.findByStatus('RECOVERED')
-		controller.params.receiver = receiver
-		controller.save()
-		
-		assertEquals(DeviceStatus.findByStatus('RECOVERED'), receiver.status)
 	}
 }

@@ -37,7 +37,7 @@
                         
                             <g:sortableColumn property="organisation.name" title="${message(code: 'device.organisation.label', default: 'Organisation')}" params="${params}"/>
                         
-                            <g:sortableColumn property="status" title="${message(code: 'receiver.status.label', default: 'Status')}" params="${params}"/>
+                            <th><g:message code="receiver.status.label" default="Status" /></th>
                         
                         </tr>
                     </thead>

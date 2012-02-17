@@ -6,8 +6,6 @@ class ReceiverControllerTests extends ControllerUnitTestCase
 {
 
     DeviceStatus newStatus
-    DeviceStatus deployedStatus
-    DeviceStatus recoveredStatus
 
     def imos
     
@@ -18,10 +16,8 @@ class ReceiverControllerTests extends ControllerUnitTestCase
         super.setUp()
         
         newStatus = new DeviceStatus(status:"NEW")
-        deployedStatus = new DeviceStatus(status:"DEPLOYED")
-        recoveredStatus = new DeviceStatus(status:"RECOVERED")
         
-        def statusList = [newStatus, deployedStatus, recoveredStatus]
+        def statusList = [newStatus]
         mockDomain(DeviceStatus, statusList)
         statusList.each { it.save() }
         

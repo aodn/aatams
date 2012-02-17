@@ -1533,5 +1533,7 @@ databaseChangeLog = {
 	include file: 'detection_extract_view.groovy'
 	include file: 'locations_south.groovy'
 	include file: 'remove_duplicate_receivers.groovy'
+
+	include file: 'remove_explicit_receiver_status.groovy'
 }
 

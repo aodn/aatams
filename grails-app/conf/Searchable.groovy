@@ -124,17 +124,15 @@ searchable {
      * which means do a non-forking, otherwise "fork" is recommended
      */
     bulkIndexOnStartup = "fork"
-//	bulkIndexOnStartup = false
 	
     /**
      * Should index locks be removed (if present) at startup?
      */
     releaseLocksOnStartup = true
 	
-    compassConnection = "ram://test-index"
-//    compassConnection = new File(
-//        "/var/lib/tomcat/instance_8083_aatams3/searchable-index/${grailsEnv}"
-//    ).absolutePath
+    compassConnection = new File(
+        "/var/lib/tomcat/instance_8083_aatams3/searchable-index/${grailsEnv}"
+    ).absolutePath
 }
 
 // per-environment settings

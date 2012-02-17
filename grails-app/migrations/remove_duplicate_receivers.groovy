@@ -1,3 +1,5 @@
+import org.apache.log4j.Logger;
+
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
 
@@ -26,6 +28,9 @@ order by trim(serial_number), id
 				def rxrToKeepId
 				def rxrToKeepSerialNumber
 		
+				
+				def duplicateSerialNumbers = []
+				
 				sql.eachRow(findDuplicatesStatement)
 				{
 					row ->
@@ -47,10 +52,14 @@ order by trim(serial_number), id
 						sql.execute('update installation_station_receiver set receiver_id = ' + rxrToKeepId + ' where receiver_id = ' + row.id)
 						
 						sql.execute('delete from device where id = ' + row.id)
+						
+						duplicateSerialNumbers.add(row.serial_number.trim())
 					}
 					
 					rowCount++
 				}
+				
+				println("Duplicate serial numbers:" + duplicateSerialNumbers)
 			}
 		}
 	}

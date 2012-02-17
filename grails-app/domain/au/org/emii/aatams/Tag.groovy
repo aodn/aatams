@@ -10,6 +10,8 @@ import au.org.emii.aatams.util.StringUtils
  */
 class Tag extends Device implements Embargoable
 {
+	DeviceStatus status
+
     List<Surgery> surgeries = new ArrayList<Surgery>()
 	Set<Sensor> sensors = new HashSet<Sensor>()
 	

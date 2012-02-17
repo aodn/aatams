@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import org.joda.time.DateTime;
+
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import grails.test.*
 
@@ -81,12 +83,12 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
         mockDomain(DeviceStatus, statusList)
         statusList.each { it.save() }
         
-        newReceiver = new Receiver(serialNumber:"111", status:newStatus, organisation:imos)
-        deployedReceiver = new Receiver(serialNumber:"222", status:deployedStatus, organisation:imos)
-        recoveredReceiver = new Receiver(serialNumber:"333", status:recoveredStatus, organisation:imos)
-        csiroReceiver = new Receiver(serialNumber:"444", status:recoveredStatus, organisation:csiro)
+        newReceiver = new Receiver(serialNumber:"111", organisation:imos)
+        deployedReceiver = new Receiver(serialNumber:"222", organisation:imos)
+        recoveredReceiver = new Receiver(serialNumber:"333", organisation:imos)
+        csiroReceiver = new Receiver(serialNumber:"444", organisation:csiro)
 
-        def receiverList = [recoveredReceiver, newReceiver, deployedReceiver]
+        def receiverList = [recoveredReceiver, newReceiver, deployedReceiver, csiroReceiver]
         mockDomain(Receiver, receiverList)
         receiverList.each 
         {
@@ -95,6 +97,25 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
         }
         
         imos.save()
+		
+		def deploymentDateTime = new DateTime()
+		ReceiverDeployment deploymentForDeployedReceiver = new ReceiverDeployment(receiver: deployedReceiver, deploymentDateTime: deploymentDateTime)
+		deployedReceiver.addToDeployments(deploymentForDeployedReceiver)
+		ReceiverDeployment deploymentForRecoveredReceiver = new ReceiverDeployment(receiver: recoveredReceiver, deploymentDateTime: deploymentDateTime)
+		recoveredReceiver.addToDeployments(deploymentForRecoveredReceiver)
+		ReceiverDeployment deploymentForCsiroReceiver = new ReceiverDeployment(receiver: csiroReceiver, deploymentDateTime: deploymentDateTime)
+		csiroReceiver.addToDeployments(deploymentForCsiroReceiver)
+		def deploymentList = [deploymentForDeployedReceiver, deploymentForRecoveredReceiver, csiroReceiver]
+		mockDomain(ReceiverDeployment, deploymentList)
+		deploymentList.each { it.save() }
+		
+		ReceiverRecovery recoveryForRecoveredReceiver = new ReceiverRecovery(deployment: deploymentForDeployedReceiver, recoveryDateTime: deploymentDateTime.plusDays(10))
+		deploymentForDeployedReceiver.recovery = recoveryForRecoveredReceiver
+		ReceiverRecovery recoveryForCsiroReceiver = new ReceiverRecovery(deployment: deploymentForCsiroReceiver, recoveryDateTime: deploymentDateTime.plusDays(10))
+		deploymentForCsiroReceiver.recovery = recoveryForCsiroReceiver
+		def recoveryList = [recoveryForRecoveredReceiver, recoveryForCsiroReceiver]
+		mockDomain(ReceiverRecovery, recoveryList)
+		recoveryList.each { it.save() }
 		
 		stationAAA = new InstallationStation(name:'AAA', installation:permittedInstallation1)
 		stationBBB = new InstallationStation(name:'BBB', installation:permittedInstallation1)
@@ -133,12 +154,12 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
     {
         def receivers = candidateEntitiesService.receivers()
         
-        assertEquals(2, receivers.size())
+        assertEquals(4, receivers.size())
         
         assertEquals(newReceiver.serialNumber, receivers[0].serialNumber)
-        assertEquals(recoveredReceiver.serialNumber, receivers[1].serialNumber)
-        assertFalse(receivers.contains(deployedReceiver))
-        assertFalse(receivers.contains(csiroReceiver))
+        assertEquals(deployedReceiver.serialNumber, receivers[1].serialNumber)
+        assertEquals(recoveredReceiver.serialNumber, receivers[2].serialNumber)
+        assertEquals(csiroReceiver.serialNumber, receivers[3].serialNumber)
     }
     
     void testInstallations()

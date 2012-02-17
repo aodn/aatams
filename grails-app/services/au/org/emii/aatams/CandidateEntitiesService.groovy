@@ -58,11 +58,8 @@ class CandidateEntitiesService
         def candOrganisations = organisations()
         
         // receivers.organisation in candOrganisations
-        // and receiver.status != DEPLOYED
 		def receivers = 
-        	Receiver.findAllByOrganisationInListAndStatusNotEqual(
-                                candOrganisations, 
-                                DeviceStatus.findByStatus("DEPLOYED"))
+        	Receiver.findAllByOrganisationInList(candOrganisations)
 			
 		receivers = receivers.sort
 		{

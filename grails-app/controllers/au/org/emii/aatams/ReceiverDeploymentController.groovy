@@ -28,20 +28,18 @@ class ReceiverDeploymentController extends AbstractController
     def save = 
     {
         def receiverDeploymentInstance = new ReceiverDeployment(params)
-
+	
 		if (receiverDeploymentInstance.receiver)
 		{
-	        if (!receiverDeploymentInstance.receiver?.canDeploy())
-	        {
-	            flash.message = "${message(code: 'default.invalidState.receiver', \
-	                                       args: [receiverDeploymentInstance?.receiver?.toString(), \
-	                                              receiverDeploymentInstance?.receiver?.status?.toString()])}"
-	            receiverDeploymentInstance.receiver = null
-	            renderCreateWithDefaultModel(receiverDeploymentInstance)
-	            return
-	        }
-	        
-			incNumDeployments(receiverDeploymentInstance)
+			if (isValidDeployment(receiverDeploymentInstance))
+			{
+				incNumDeployments(receiverDeploymentInstance)
+			}
+			else
+			{
+				renderCreateWithDefaultModel(receiverDeploymentInstance)
+				return
+			}
 		}
 		
         if (receiverDeploymentInstance.save(flush: true)) {
@@ -53,6 +51,24 @@ class ReceiverDeploymentController extends AbstractController
             renderCreateWithDefaultModel(receiverDeploymentInstance)
         }
     }
+
+	private boolean isValidDeployment(ReceiverDeployment receiverDeploymentInstance) 
+	{
+		if (!receiverDeploymentInstance.receiver?.canDeploy(receiverDeploymentInstance))
+		{
+			def args = [receiverDeploymentInstance?.receiver?.toString(),
+				receiverDeploymentInstance?.receiver?.getStatus(receiverDeploymentInstance)?.toString(),
+				receiverDeploymentInstance.deploymentDateTime]
+			receiverDeploymentInstance.errors.rejectValue("receiver",
+					"receiverDeployment.receiver.invalidStateAtDateTime",
+					args as Object[],
+					null)
+
+			return false
+		}
+		
+		return true
+	}
 
 	private void incNumDeployments(ReceiverDeployment deployment) 
 	{
@@ -72,15 +88,11 @@ class ReceiverDeploymentController extends AbstractController
 	private addReceiverToStation(ReceiverDeployment deployment) 
 	{
 		deployment.station.addToReceivers(deployment.receiver)
-		
-		// Need to update that status of the receiver to DEPLOYED.
-		deployment.receiver?.status = DeviceStatus.findByStatus('DEPLOYED')
 	}
 
 	private removeReceiverFromStation(ReceiverDeployment deployment) 
 	{
 		deployment.station.removeFromReceivers(deployment.receiver)
-		deployment.receiver.status = DeviceStatus.findByStatus("NEW")
 		deployment.receiver.save()
 	}
 
@@ -93,11 +105,15 @@ class ReceiverDeploymentController extends AbstractController
 
 	private Map renderDefaultModel(ReceiverDeployment receiverDeploymentInstance) 
 	{
+		def errors = receiverDeploymentInstance.errors
+		
 		def model =
 				[receiverDeploymentInstance: receiverDeploymentInstance] +
 				[candidateStations:getCandidateStations(receiverDeploymentInstance),
 				 candidateReceivers:getCandidateReceivers(receiverDeploymentInstance)]
-
+		
+		receiverDeploymentInstance.errors = errors		
+						
 		return model
 	}
 	
@@ -160,16 +176,18 @@ class ReceiverDeploymentController extends AbstractController
                 }
             }
 			
+//			boolean isValidDeployment = isValidDeployment(receiverDeploymentInstance)
 			removeReceiverFromStation(receiverDeploymentInstance)
             receiverDeploymentInstance.properties = params
 			addReceiverToStation(receiverDeploymentInstance)
 			
-            if (!receiverDeploymentInstance.hasErrors() && receiverDeploymentInstance.save(flush: true)) {
+            if (!receiverDeploymentInstance.hasErrors() && isValidDeployment(receiverDeploymentInstance) && receiverDeploymentInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
                 redirect(action: "show", id: receiverDeploymentInstance.id)
             }
-            else {
-                render(view: "edit", model: [receiverDeploymentInstance: receiverDeploymentInstance])
+            else 
+			{
+                render(view: "edit", model: renderDefaultModel(receiverDeploymentInstance))
             }
         }
         else {

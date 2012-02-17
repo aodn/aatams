@@ -30,7 +30,6 @@ class ReceiverController extends AbstractController
 
     def save = {
         def receiverInstance = new Receiver(params)
-        receiverInstance.status = DeviceStatus.findByStatus("NEW")
         
         if (receiverInstance.save(flush: true)) 
         {

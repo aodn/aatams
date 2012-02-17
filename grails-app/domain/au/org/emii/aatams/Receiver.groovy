@@ -1,6 +1,7 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.RawDetection
+import org.joda.time.DateTime
 
 /**
  * A receiver is a device deployed in the ocean that is able to receive 'ping'
@@ -14,7 +15,7 @@ class Receiver extends Device
     Set<RawDetection> detections = new HashSet<RawDetection>()
     static hasMany = [detections: RawDetection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
-    static transients = ['name', 'deviceID']
+    static transients = ['name', 'deviceID', 'status', 'currentRecovery']
 	
     static mapping = 
     {
@@ -40,12 +41,111 @@ class Receiver extends Device
 		return getName()
 	}
 	
-    boolean canDeploy()
+	private boolean hasActiveDeployment(dateTime)
+	{
+		def activeDeployments = deployments.findAll { it.isActive(dateTime) }
+		return !activeDeployments.isEmpty() 
+	}
+	
+	private ReceiverRecovery getCurrentRecovery(dateTime)
+	{
+		if (hasActiveDeployment(dateTime))
+		{
+			return null
+		}
+		
+		def recoveries = deployments*.recovery
+		recoveries?.removeAll
+		{
+			(it == null) || it.recoveryDateTime.isAfter(dateTime)
+		}
+
+		recoveries = recoveries?.sort
+		{
+			a, b ->
+			
+			a.recoveryDateTime <=> b.recoveryDateTime
+		}
+		
+		if (recoveries && !recoveries.isEmpty())
+		{
+			return recoveries.last()
+		}
+		
+		return null
+	}
+
+	DeviceStatus getStatus(DateTime dateTime)
+	{
+		if (hasActiveDeployment(dateTime))
+		{
+			return DeviceStatus.findByStatus(DeviceStatus.DEPLOYED)
+		}
+		else
+		{
+			def currentRecovery = getCurrentRecovery(dateTime)
+			if (currentRecovery)
+			{
+				return currentRecovery.status
+			}
+		}
+		
+		return DeviceStatus.findByStatus(DeviceStatus.NEW, [cache:true])
+	}
+	
+	DeviceStatus getStatus()
+	{
+		return getStatus(now())
+	}
+	
+	private DateTime now()
+	{
+		return new DateTime()
+	}
+
+	DeviceStatus getStatus(ReceiverDeployment deployment)
+	{
+		if (deployments*.id?.contains(deployment.id))
+		{
+			try
+			{
+				removeFromDeployments(deployment)
+				return getStatus(deployment.deploymentDateTime)
+			}
+			finally
+			{
+				addToDeployments(deployment)
+			}
+		}
+		
+		return getStatus(deployment.deploymentDateTime)
+	}
+
+	boolean canDeploy(deployment)
+	{
+		if (deployments*.id?.contains(deployment.id))
+		{
+			try
+			{
+				removeFromDeployments(deployment)
+				return canDeployAtTime(deployment.deploymentDateTime)
+			}
+			finally
+			{
+				addToDeployments(deployment)
+			}
+		}
+		
+		return canDeployAtTime(deployment.deploymentDateTime)
+	}
+	
+    boolean canDeployAtTime(dateTime)
     {
         DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
         DeviceStatus retiredStatus = DeviceStatus.findByStatus('RETIRED')
         
-        if ([deployedStatus, retiredStatus].contains(status))
+		log.debug("Status: " + getStatus(dateTime) + ", at time: " + dateTime)
+        if ([deployedStatus, retiredStatus].contains(getStatus(dateTime)))
         {
             return false
         }

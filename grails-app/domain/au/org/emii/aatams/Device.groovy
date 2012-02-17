@@ -10,21 +10,17 @@ class Device
     DeviceModel model       
     String serialNumber
     
-    DeviceStatus status
-    
     String comment
     
     static constraints =
     {
         serialNumber(blank:false, unique:true)
-        status()
         comment(nullable:true, blank:true)
     }
     
     static mapping =
     {
         cache true
-        status index:'device_status_index'
     }
     
     static transients = ['deviceID']

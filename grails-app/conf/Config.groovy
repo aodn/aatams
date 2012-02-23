@@ -1,3 +1,5 @@
+import org.apache.log4j.net.SMTPAppender
+
 // 
 // // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
@@ -73,97 +75,93 @@ grails.mail.props = ["mail.smtp.auth":"false"]
 grails.plugin.databasemigration.updateOnStart = true
 grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
 
+
 // set per-environment serverURL stem for creating absolute links
-environments 
+environments
 {
-    production 
+	production
 	{
-        grails.serverURL = "http://aatams.emii.org.au/${appName}"
-        grails.serverHost = "http://aatams.emii.org.au"
+		grails.serverURL = "http://aatams.emii.org.au/${appName}"
+		grails.serverHost = "http://aatams.emii.org.au"
 		fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod"
 		
 		grails.mail.host = "localhost"
-    }
-    development 
+	}
+	development
 	{
-        grails.serverURL = "http://localhost:8080/${appName}"
-        grails.serverHost = "http://localhost:8080"
-        fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
+		grails.serverURL = "http://localhost:8080/${appName}"
+		grails.serverHost = "http://localhost:8080"
+		fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
 		
 		grails.mail.adminEmailAddress = "jkburges@utas.edu.au"
 		grails.mail.host = "postoffice.utas.edu.au"
-    }
-    test 
+	}
+	test
 	{
-        grails.serverURL = "http://localhost:8090/${appName}/"
-        grails.serverHost = "http://localhost:8090"
+		grails.serverURL = "http://localhost:8090/${appName}/"
+		grails.serverHost = "http://localhost:8090"
 		grails.plugin.databasemigration.updateOnStart = false
-    }
+	}
 }
 
+// Logging.
+mail.error.server = grails.mail.host
+mail.error.username = grails.mail.username
+//mail.error.password = 'yourpassword'
+mail.error.to = grails.mail.adminEmailAddress
+mail.error.from = grails.mail.systemEmailAddress
+mail.error.subject = 'AATAMS Error'
+mail.error.debug = false
 
-// log4j configuration
-log4j = {
-    // Example of changing the log pattern for the default console
-    // appender:
-    //
-    appenders {
-//        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-        console name:'stdout', layout:pattern(conversionPattern: '%d [%t] %-5p %c - %m%n')
-        'null' name: "stacktrace"
-    }
-
-    error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
-           'org.codehaus.groovy.grails.web.pages', //  GSP
-           'org.codehaus.groovy.grails.web.sitemesh', //  layouts
-           'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-           'org.codehaus.groovy.grails.web.mapping', // URL mapping
-           'org.codehaus.groovy.grails.commons', // core / classloading
-           'org.codehaus.groovy.grails.plugins', // plugins
-           'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
-           'org.springframework',
-//           'org.hibernate',
-           'net.sf.ehcache.hibernate'
-
-    warn   'org.mortbay.log'
-    
-//    debug  'org.hibernate',
-//           'org.codehaus.groovy.grails.orm.hibernate',
-//		   'org.postgres'
-
-//    info    "grails.app.service.au.org.emii"
-
-    debug   "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",
-	        "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService",
-			"grails.app.domain.au.org.emii.aatams.Receiver",
-//	        "grails.app.service.au.org.emii.aatams.report.ReportInfoService",
-//            "grails.app.controller.au.org.emii.report.ReportController",
-			"grails.app.service.au.org.emii.aatams.filter.QueryService"
-//			"grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService",
-//			"grails.app.service.au.org.emii.aatams.detection.DetectionFactoryService",
-			
-//            "grails.app.service.au.org.emii",
-//			"grails.app.service.au.org.emii.aatams.detection.DetectionValidatorService",
-//	        "grails.app.domain.au.org.emii",
-//            "grails.app.tagLib.au.org.emii",
-//            "grails.app.task",
-//           'org.hibernate'
-//            "grails.buildtestdata",
-//            "net.sf.jasperreports",
-//            "org.codehaus.groovy.grails.plugins.jasper",
-//            "grails.app.filter"//,
-            //"grails.app.tagLib.com.energizedwork.grails.plugins.jodatime"
-            
-    debug   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
-	        "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService"
-//			"grails.app.service.au.org.emii.aatams.detection.DetectionExtractService"
-    info    "grails.app.service.au.org.emii.aatams.VueEventFileProcessorService"
-//			'org.hibernate'
+log4j =
+{
+	System.setProperty 'mail.smtp.auth', "false"
 	
-//	trace	"liquibase"
+	appenders
+	{
+		console name:'stdout', layout: pattern(conversionPattern: '%d [%t] [%X{username}] %-5p %c{1} - %m%n')
+		'null' name: "stacktrace"
+		appender new SMTPAppender(
+			name: 'smtp', to: mail.error.to, from: mail.error.from,
+			subject: mail.error.subject, threshold: Level.ERROR,
+			SMTPHost: mail.error.server, SMTPUsername: mail.error.username,
+			SMTPDebug: mail.error.debug.toString(), /*SMTPPassword: mail.error.password, */
+			layout: pattern(conversionPattern: '%d [%t] [%X{username}] %-5p %c{1} - %m%n'))
+	}
+
+	error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
+		   'org.codehaus.groovy.grails.web.pages', //  GSP
+		   'org.codehaus.groovy.grails.web.sitemesh', //  layouts
+		   'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
+		   'org.codehaus.groovy.grails.web.mapping', // URL mapping
+		   'org.codehaus.groovy.grails.commons', // core / classloading
+		   'org.codehaus.groovy.grails.plugins', // plugins
+		   'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
+		   'org.springframework',
+		   'net.sf.ehcache.hibernate'
+
+	warn   'org.mortbay.log'
 	
+	info   "grails.app"
+	
+	environments
+	{
+		development
+		{
+			debug  "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",
+				   "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService",
+				   "grails.app.domain.au.org.emii.aatams.Receiver",
+				   "grails.app.service.au.org.emii.aatams.filter.QueryService",
+				   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
+				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService"
+		}
+	}
+	
+	root
+	{
+		info 'stdout', 'null', 'smtp'
+	}
 }
-
 
 // Date formats.
 //jodatime.format.org.joda.time.DateTime = "yyyy-MM-dd'T'HH:mm:ssZ"

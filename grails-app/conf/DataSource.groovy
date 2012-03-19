@@ -21,7 +21,7 @@ environments {
             driverClassName = "org.postgresql.Driver"
             url = "jdbc:postgresql://localhost:5432/aatams"
             username = "aatams"
-            password = "fishybusiness"
+            password = "aatams"
             
             properties 
             {
@@ -36,7 +36,7 @@ environments {
             driverClassName = "org.postgresql.Driver"
             url = "jdbc:postgresql://localhost:5432/aatams_diff"
             username = "aatams"
-            password = "fishybusiness"
+            password = "aatams"
             
             properties 
             {
@@ -51,7 +51,7 @@ environments {
             driverClassName = "org.postgresql.Driver"
             url = "jdbc:postgresql://dbtest.emii.org.au:5432/aatams_test?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
             username = "aatams"
-            password = "fishybusiness"
+            password = "aatams"
 
             properties 
             {

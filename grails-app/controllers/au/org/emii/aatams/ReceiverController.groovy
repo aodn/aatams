@@ -29,7 +29,8 @@ class ReceiverController extends AbstractController
     }
 
     def save = {
-        def receiverInstance = new Receiver(params)
+		
+		def receiverInstance = new Receiver(params)
         
         if (receiverInstance.save(flush: true)) 
         {

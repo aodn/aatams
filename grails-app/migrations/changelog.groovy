@@ -1535,5 +1535,6 @@ databaseChangeLog = {
 	include file: 'remove_duplicate_receivers.groovy'
 
 	include file: 'remove_explicit_receiver_status.groovy'
+	include file: 'gis_detections_view.groovy'
 }
 

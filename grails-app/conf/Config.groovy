@@ -218,6 +218,7 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			project.name as project,
 			installation.name as installation,
 			COALESCE(species.spcode, '') as spcode,
+			animal_release.id as animal_release_id,
 			animal_release.embargo_date as embargo_date,
 			project.id as project_id			
 

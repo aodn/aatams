@@ -121,12 +121,6 @@ log4j =
 	{
 		console name:'stdout', layout: pattern(conversionPattern: '%d [%t] [%X{username}] %-5p %c{1} - %m%n')
 		'null' name: "stacktrace"
-		appender new SMTPAppender(
-			name: 'smtp', to: mail.error.to, from: mail.error.from,
-			subject: mail.error.subject, threshold: Level.ERROR,
-			SMTPHost: mail.error.server, SMTPUsername: mail.error.username,
-			SMTPDebug: mail.error.debug.toString(), /*SMTPPassword: mail.error.password, */
-			layout: pattern(conversionPattern: '%d [%t] [%X{username}] %-5p %c{1} - %m%n'))
 	}
 
 	error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
@@ -146,6 +140,19 @@ log4j =
 	
 	environments
 	{
+		production
+		{
+			appenders
+			{
+				appender new SMTPAppender(
+					name: 'smtp', to: mail.error.to, from: mail.error.from,
+					subject: mail.error.subject, threshold: Level.ERROR,
+					SMTPHost: mail.error.server, SMTPUsername: mail.error.username,
+					SMTPDebug: mail.error.debug.toString(), /*SMTPPassword: mail.error.password, */
+					layout: pattern(conversionPattern: '%d [%t] [%X{username}] %-5p %c{1} - %m%n'))
+			}
+		}
+		
 		development
 		{
 			debug  "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",

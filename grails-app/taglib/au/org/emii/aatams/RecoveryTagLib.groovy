@@ -16,7 +16,7 @@ class RecoveryTagLib
 		
 		if (attrs.sortable)
 		{
-			out << "<g:sortableColumn property='${attrs.property}' title='${attrs.title}' params='${attrs.params}'/>"
+			out << g.sortableColumn(property: attrs.property, title: attrs.title, params: attrs.params)
 		}
 		else
 		{

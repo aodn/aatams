@@ -305,6 +305,7 @@ table.nested td, table.nested th {
 /*    line-height: 16px;*/
     line-height: 32px;
     padding: 0px;
+    padding-left: 5px;
     text-align: left;
     vertical-align: top;
 /*    width:0%;*/

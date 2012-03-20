@@ -209,6 +209,39 @@ class ReceiverTests extends GrailsUnitTestCase
 		assertStatus("DEPLOYED", receiver, secondDeploymentDate.plusDays(1))
 	}
 	
+	void testStatusWithOneUnrecoveredBeforeOneRecoveredDeployment()
+	{
+		Receiver receiver = new Receiver()
+		receiver.save()
+		
+		def firstDeploymentDate = new DateTime().minusDays(5)
+		ReceiverDeployment firstDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: firstDeploymentDate)
+		firstDeployment.save()
+		receiver.addToDeployments(firstDeployment)
+		
+		def secondDeploymentDate = new DateTime().minusDays(3)
+		ReceiverDeployment secondDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDate)
+		secondDeployment.save()
+		receiver.addToDeployments(secondDeployment)
+
+		def recoveryDate = new DateTime().minusDays(1)
+		ReceiverRecovery recovery = new ReceiverRecovery(deployment: secondDeployment, recoveryDateTime: recoveryDate, status: DeviceStatus.findByStatus('RECOVERED'))
+		recovery.save()
+		secondDeployment.recovery = recovery
+		secondDeployment.save()
+
+		receiver.save()
+		
+		assertStatus("NEW", receiver, firstDeploymentDate.minusDays(1))
+		assertStatus("DEPLOYED", receiver, firstDeploymentDate)
+		assertStatus("DEPLOYED", receiver, firstDeploymentDate.plusDays(1))
+		assertStatus("DEPLOYED", receiver, secondDeploymentDate.minusDays(1))
+		assertStatus("DEPLOYED", receiver, secondDeploymentDate)
+		assertStatus("DEPLOYED", receiver, secondDeploymentDate.plusDays(1))
+		assertStatus("RECOVERED", receiver, recoveryDate)
+		assertStatus("RECOVERED", receiver, recoveryDate.plusDays(1))
+	}
+	
 	void testCanDeploy()
 	{
 		Receiver receiver = new Receiver()

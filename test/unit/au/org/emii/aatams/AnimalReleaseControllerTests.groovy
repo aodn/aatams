@@ -346,10 +346,12 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
         AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
         assertNotNull(release)
-        assertEquals(1, release.surgeries.size())
+		
+		def surgeries = Surgery.findAllByRelease(release)
+        assertEquals(1, surgeries.size())
         
         // tag should now be deployed
-        release.surgeries.each(
+        surgeries.each(
         {
             assertEquals(new DeviceStatus(status:'DEPLOYED').status, it.tag.status.status)
         })
@@ -416,10 +418,12 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
         AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
         assertNotNull(release)
-        assertEquals(1, release.surgeries.size())
+		
+		def surgeries = Surgery.findAllByRelease(release)
+		assertEquals(1, surgeries.size())
         
         // tag should now be deployed
-        release.surgeries.each(
+        surgeries.each(
         {
             assertEquals(new DeviceStatus(status:'DEPLOYED').status, it.tag.status.status)
         })
@@ -487,10 +491,12 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
         AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
         assertNotNull(release)
-        assertEquals(numSurgeries, release.surgeries.size())
+		
+		def surgeries = Surgery.findAllByRelease(release)
+        assertEquals(numSurgeries, surgeries.size())
         
         // tag should now be deployed
-        release.surgeries.each(
+        surgeries.each(
         {
             assertEquals(new DeviceStatus(status:'DEPLOYED').status, it.tag.status.status)
         })
@@ -543,10 +549,11 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
         AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
         assertNotNull(release)
-        assertEquals(1, release.surgeries.size())
+		def surgeries = Surgery.findAllByRelease(release)
+		assertEquals(1, surgeries.size())
         
         // tag should be created
-        release.surgeries.each(
+        surgeries.each(
         {
             Tag tag = it.tag
             assertNotNull(tag)

@@ -155,7 +155,7 @@ class TagTests extends GrailsUnitTestCase
 					serialNumber:"1111",
 					status:new DeviceStatus())
 
-		assertEquals(0, newTag.sensors.size())
+		assertNull(newTag.sensors)
 		newTag.setPingCode(1234)
 		
 		assertEquals(1, newTag.sensors.size())

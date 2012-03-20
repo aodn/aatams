@@ -15,7 +15,7 @@ class Receiver extends Device
     Set<RawDetection> detections = new HashSet<RawDetection>()
     static hasMany = [detections: RawDetection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
-    static transients = ['name', 'deviceID', 'status', 'currentRecovery']
+    static transients = ['name', 'deviceID', 'status', 'currentRecovery', 'mostRecentDeployment']
 	
     static mapping = 
     {
@@ -41,10 +41,35 @@ class Receiver extends Device
 		return getName()
 	}
 	
+	private ReceiverDeployment getMostRecentDeployment(dateTime)
+	{
+		if (!deployments || deployments.isEmpty())
+		{
+			return null
+		}
+		
+		def chronoDeployments = deployments.sort { a, b -> a.deploymentDateTime <=> b.deploymentDateTime }
+		chronoDeployments = chronoDeployments.grep
+		{
+			!it.deploymentDateTime.isAfter(dateTime)
+		}
+		
+		if (chronoDeployments.isEmpty())
+		{
+			return null
+		}
+		
+		return chronoDeployments.last()
+	}
+	
 	private boolean hasActiveDeployment(dateTime)
 	{
-		def activeDeployments = deployments.findAll { it.isActive(dateTime) }
-		return !activeDeployments.isEmpty() 
+		// A receiver is only considered to have an active deployment if the *last* deployment is active.
+		return getMostRecentDeployment(dateTime)?.isActive(dateTime) 
+		
+		
+//		def activeDeployments = deployments.findAll { it.isActive(dateTime) }
+//		return !activeDeployments.isEmpty() 
 	}
 	
 	private ReceiverRecovery getCurrentRecovery(dateTime)

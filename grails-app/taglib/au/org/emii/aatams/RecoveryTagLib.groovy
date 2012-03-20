@@ -9,4 +9,18 @@ class RecoveryTagLib
 		out << render(template: "/receiverRecovery/recoveryList",
 					  model: attrs)
 	}
+	
+	def column =
+	{
+		attrs, body ->
+		
+		if (attrs.sortable)
+		{
+			out << "<g:sortableColumn property='${attrs.property}' title='${attrs.title}' params='${attrs.params}'/>"
+		}
+		else
+		{
+			out << "<td>" << attrs.title << "</td>"
+		}
+	}
 }

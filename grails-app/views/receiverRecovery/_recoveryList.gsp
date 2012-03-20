@@ -1,6 +1,6 @@
 <div class="recoveryTable">                
 	<div class="list">
-	    <table>
+	    <table class="${clazz}">
 	        <thead>
 	          <tr>
 	              <th colspan="7">Deployment Details</th>
@@ -11,9 +11,12 @@
 	            <tr>
 	            
 	                <td/>
-	                
+<%--	                
 	                <g:sortableColumn property="deploymentDateTime" title="${message(code: 'receiverDeployment.deploymentDateTime.label', default: 'Deployment Date')}"
 	                                  params="${params}"/>
+ --%>	                                  
+                    <g:column property="deploymentDateTime" title="${message(code: 'receiverDeployment.deploymentDateTime.label', default: 'Deployment Date')}"
+                              params="${params}" sortable="${sortable}" />
 	
 	                <g:sortableColumn property="station.installation" title="${message(code: 'receiverDeployment.installation.label', default: 'Installation')}"
 	                                  params="${params}"/>
@@ -22,9 +25,11 @@
 	                <g:sortableColumn property="station" title="${message(code: 'receiverDeployment.station.label', default: 'Station')}"
 	                                  params="${params}"/>
 	            
-	                <th><g:message code="receiverDeployment.station.location.label" default="Location" /></th>
+                    <g:if test="${!hideColumns?.contains('deploymentLocation')}">
+    	                <th><g:message code="receiverDeployment.station.location.label" default="Location" /></th>
+                    </g:if>
 	            
-	                <g:if test="${!hideReceiverColumn}">
+	                <g:if test="${!hideColumns?.contains('receiver')}">
 		                <g:sortableColumn property="receiver" title="${message(code: 'receiverDeployment.receiver.label', default: 'Receiver')}"
 		                                  params="${params}"/>
 	                </g:if>
@@ -38,7 +43,9 @@
 	                <g:sortableColumn property="recovery.recoverer.person.name" title="${message(code: 'receiverRecovery.recoverer.label', default: 'Recovered By')}"
 	                                  params="${params}"/>
 	
-	                <th><g:message code="receiverRecovery.location" default="Location" /></th>
+                    <g:if test="${!hideColumns?.contains('recoveryLocation')}">
+                        <th><g:message code="receiverRecovery.location" default="Location" /></th>
+                    </g:if>
 	            
 	                <g:sortableColumn property="recovery.recoveryDateTime" title="${message(code: 'receiverRecovery.recoveryDateTime.label', default: 'Recovery Date')}"
 	                                  params="${params}"/>
@@ -60,12 +67,14 @@
 	
 	                <td><g:link controller="installationStation" action="show" id="${receiverDeployment?.station?.id}">${receiverDeployment?.station}</g:link></td>
 	            
-	                <td>
-	                  <g:point name="scrambledLocation"
-	                           value="${receiverDeployment?.station?.scrambledLocation}" />
-	                </td>
+                    <g:if test="${!hideColumns?.contains('deploymentLocation')}">
+	                    <td>
+	                      <g:point name="scrambledLocation"
+	                               value="${receiverDeployment?.station?.scrambledLocation}" />
+	                    </td>
+                    </g:if>
 	                
-                    <g:if test="${!hideReceiverColumn}">
+                    <g:if test="${!hideColumns?.contains('receiver')}">
                         <td><g:link action="receiver" controller="receiver" action="show" id="${receiverDeployment?.receiver?.id}">${receiverDeployment?.receiver}</g:link></td>
                     </g:if>
 	
@@ -79,16 +88,18 @@
 	                    </shiro:hasPermission>  
 	                  </g:if>
 	                  <g:else>
-	                    <g:link class="show" action="show" id="${receiverDeployment?.recovery?.id}"></g:link>
+	                    <g:link class="show" controller="receiverRecovery" action="show" id="${receiverDeployment?.recovery?.id}"></g:link>
 	                  </g:else>
 	                </td>
 	                
 	                <td>${fieldValue(bean: receiverDeployment?.recovery?.recoverer, field: "person")}</td>
 	
-	                <td>
-	                  <g:point name="scrambledLocation"
-	                           value="${receiverDeployment?.recovery?.scrambledLocation}" />
-	                </td>
+                    <g:if test="${!hideColumns?.contains('recoveryLocation')}">
+	                    <td>
+	                      <g:point name="scrambledLocation"
+	                               value="${receiverDeployment?.recovery?.scrambledLocation}" />
+	                    </td>
+                    </g:if>
 	
 	                <td><joda:format value="${receiverDeployment?.recovery?.recoveryDateTime}" /></td>
 	

@@ -19,8 +19,8 @@
             </g:if>
             
             <g:listFilter name="receiverRecovery" />
-            
-            <g:recoveryList entityList="${entityList}" params="${params}" />
+
+            <g:recoveryList entityList="${entityList}" params="${params}" sortable="${true}"/>
             
             <div class="paginateButtons">
                 <g:paginate total="${total}" params="${params}" />

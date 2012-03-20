@@ -60,10 +60,14 @@
                         </tr>
                     
                         <tr class="prop">
-                            <td valign="top" class="name"><g:message code="receiver.comment.label" default="Comment" /></td>
+                            <td valign="top" class="name">Deployments/Recoveries</td>
                             
-                            <td valign="top" class="value">${receiverInstance?.comment?.encodeAsHTML()}</td>
-                            
+                            <td valign="top" style="text-align: left;" class="value">
+                                <g:recoveryList entityList="${receiverInstance?.deployments?.sort({a, b -> a.deploymentDateTime <=> b.deploymentDateTime})}" 
+                                                hideColumns="${['receiver', 'deploymentLocation', 'recoveryLocation']}" 
+                                                clazz="nested"
+                                                sortable="${false}" />
+                            </td>
                         </tr>
                         
                     </tbody>

@@ -20,7 +20,7 @@ class RecoveryTagLib
 		}
 		else
 		{
-			out << "<td>" << attrs.title << "</td>"
+			out << "<th>" << attrs.title << "</th>"
 		}
 	}
 }

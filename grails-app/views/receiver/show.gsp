@@ -62,7 +62,7 @@
                         <tr class="prop">
                             <td valign="top" class="name">Deployments/Recoveries</td>
                             
-                            <td valign="top" style="text-align: left;" class="value">
+                            <td valign="top" class="value">
                                 <g:recoveryList entityList="${receiverInstance?.deployments?.sort({a, b -> a.deploymentDateTime <=> b.deploymentDateTime})}" 
                                                 hideColumns="${['receiver', 'deploymentLocation', 'recoveryLocation']}" 
                                                 clazz="nested"

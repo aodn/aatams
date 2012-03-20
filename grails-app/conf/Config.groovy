@@ -157,6 +157,7 @@ log4j =
 		{
 			debug  "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",
 				   "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService",
+				   "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
 				   "grails.app.domain.au.org.emii.aatams.Receiver",
 				   "grails.app.service.au.org.emii.aatams.filter.QueryService",
 				   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",

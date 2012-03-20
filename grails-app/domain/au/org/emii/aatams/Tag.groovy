@@ -12,9 +12,6 @@ class Tag extends Device implements Embargoable
 {
 	DeviceStatus status
 
-    List<Surgery> surgeries = new ArrayList<Surgery>()
-	Set<Sensor> sensors = new HashSet<Sensor>()
-	
     static hasMany = [sensors:Sensor, 
                       surgeries:Surgery]
 

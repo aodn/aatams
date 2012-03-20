@@ -167,10 +167,13 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 		params.surgery += ['1':surgeryNew]
 
 		assertNoExceptionAfterSave()
-		assertEquals(2, animalReleaseInstance.surgeries.size())
+		def surgeries = Surgery.findAllByRelease(animalReleaseInstance)
+		assertEquals(2, surgeries.size())
 		assertNotNull(tag)
-		assertTrue(tag.surgeries*.tag.id.contains(tag.id))
-		assertEquals(1, tag.surgeries.size())
+		
+		surgeries = Surgery.findAllByTag(tag)
+		assertTrue(surgeries*.tag.id.contains(tag.id))
+		assertEquals(1, surgeries.size())
 		assertEquals(DeviceStatus.findByStatus('DEPLOYED'), tag.status)
 		assertEquals(animalReleaseInstance.project.id, tag.project.id)
 		assertEquals(3, Tag.count())
@@ -292,9 +295,11 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 			assertNotNull(animalReleaseInstance.animal.species)
 			
 			assertNotNull(AnimalRelease.get(animalReleaseInstance.id))
-			assertFalse(AnimalRelease.get(animalReleaseInstance.id).surgeries.isEmpty())
 			
-			AnimalRelease.get(animalReleaseInstance.id).surgeries.each
+			def surgeries = Surgery.findAllByRelease(animalReleaseInstance)
+			assertFalse(surgeries.isEmpty())
+			
+			surgeries.each
 			{
 				assertFalse(it.hasErrors())
 			}
@@ -455,14 +460,18 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 		}
 
 		assertNoExceptionAfterSave()
-		assertEquals(numSurgeries, animalReleaseInstance.surgeries.size())
+		
+		def surgeries = Surgery.findAllByRelease(animalReleaseInstance)
+		assertEquals(numSurgeries, surgeries.size())
 
 		numSurgeries.times
 		{
 			Tag tag = Tag.get(it + 1)
 			assertNotNull(tag)
-			assertTrue(tag.surgeries*.tag.id.contains(tag.id))
-			assertEquals(1, tag.surgeries.size())
+			
+			surgeries = Surgery.findAllByTag(tag)
+			assertTrue(surgeries*.tag.id.contains(tag.id))
+			assertEquals(1, surgeries.size())
 			assertEquals(DeviceStatus.findByStatus('DEPLOYED'), tag.status)
 			assertEquals(animalReleaseInstance.project.id, tag.project.id)
 		}
@@ -524,7 +533,8 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 		}
 
 		assertNoExceptionAfterSave()
-		assertEquals(numNewTags, animalReleaseInstance.surgeries.size())
+		def surgeries = Surgery.findAllByRelease(animalReleaseInstance)
+		assertEquals(numNewTags, surgeries.size())
 		assertEquals(2 + numNewTags, Tag.count())
 	}
 }

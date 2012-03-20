@@ -16,6 +16,7 @@ class AnimalReleaseService
 		updateAnimal(params, animalReleaseInstance)
 
 		validateRelease(animalReleaseInstance, params)
+		saveAnimalRelease(animalReleaseInstance)
 		
 		addSurgeries(animalReleaseInstance, params)
 		addMeasurements(animalReleaseInstance, params)
@@ -80,13 +81,16 @@ class AnimalReleaseService
 				def tag = tagFactoryService.lookupOrCreate(surgeryParams.tag)
 				assert(tag)
 				surgeryParams.tag = tag
+				surgeryParams.release = animalReleaseInstance
 				
 				surgeryParams.type = SurgeryType.get(surgeryParams.type.id)
 				surgeryParams.treatmentType = SurgeryTreatmentType.get(surgeryParams.treatmentType.id)
 				
 				Surgery surgery = new Surgery(surgeryParams)
-				animalReleaseInstance.addToSurgeries(surgery)
-				tag.addToSurgeries(surgery)
+				surgery.save()
+				
+//				animalReleaseInstance.addToSurgeries(surgery)
+//				tag.addToSurgeries(surgery)
 				
 				tag.status = DeviceStatus.findByStatus('DEPLOYED')
 				
@@ -175,7 +179,8 @@ class AnimalReleaseService
 	
 	void delete(AnimalRelease animalReleaseInstance)
 	{
-		animalReleaseInstance.surgeries.each
+		def surgeries = Surgery.findAllByRelease(animalReleaseInstance)
+		surgeries.each
 		{
 			it.tag.status = DeviceStatus.findByStatus('NEW', [cache:true])
 			it.tag.save()

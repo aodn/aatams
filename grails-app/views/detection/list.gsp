@@ -43,7 +43,7 @@
                         
                             <g:sortableColumn property="stationName" title="${message(code: 'detection.stationName.label', default: 'Station Name')}" params="${params}"/>
                         
-                            <g:sortableColumn property="receiverDownload?.requestingUser" title="${message(code: 'receiverDownloadFile.requestingUser.label', default: 'Uploader')}" params="${params}"/>
+                            <g:sortableColumn property="receiverDownload.requestingUser" title="${message(code: 'receiverDownloadFile.requestingUser.label', default: 'Uploader')}" params="${params}"/>
 
                         </tr>
                     </thead>

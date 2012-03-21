@@ -80,17 +80,25 @@ class AnimalReleaseService
 				
 				def tag = tagFactoryService.lookupOrCreate(surgeryParams.tag)
 				assert(tag)
-				surgeryParams.tag = tag
-				surgeryParams.release = animalReleaseInstance
 				
-				surgeryParams.type = SurgeryType.get(surgeryParams.type.id)
-				surgeryParams.treatmentType = SurgeryTreatmentType.get(surgeryParams.treatmentType.id)
-				
-				Surgery surgery = new Surgery(surgeryParams)
-				surgery.save()
-				
-//				animalReleaseInstance.addToSurgeries(surgery)
-//				tag.addToSurgeries(surgery)
+				// Need to make a "clean" map, due to bug #1257.
+				// Note: unable to reproduce the bug in an integration test.
+				def cleanSurgeryParams = 
+					[timestamp_zone:surgeryParams.timestamp_zone, 
+					 timestamp_year:surgeryParams.timestamp_year, 
+					 timestamp_month:surgeryParams.timestamp_month,
+					 timestamp_day:surgeryParams.timestamp_day, 
+					 timestamp_hour:surgeryParams.timestamp_hour, 
+					 timestamp_minute:surgeryParams.timestamp_minute, 
+					 timestamp_second:surgeryParams.timestamp_second, 
+					 comments: surgeryParams.comments,
+					 type: SurgeryType.get(surgeryParams.type.id),
+					 treatmentType: SurgeryTreatmentType.get(surgeryParams.treatmentType.id),
+					 tag: tag,
+					 release: animalReleaseInstance]
+				 
+				Surgery surgery = new Surgery(cleanSurgeryParams)
+				surgery.save(failOnError:true)
 				
 				tag.status = DeviceStatus.findByStatus('DEPLOYED')
 				
@@ -98,6 +106,8 @@ class AnimalReleaseService
 				{
 					tag.project = animalReleaseInstance.project
 				}
+				
+				tag.save()
 			}
 		}
 	}

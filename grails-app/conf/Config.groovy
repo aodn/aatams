@@ -163,6 +163,11 @@ log4j =
 				   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
 				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService"
 		}
+		
+		test
+		{
+			debug  "grails.app.service.au.org.emii.aatams.AnimalReleaseService"
+		}
 	}
 	
 	root

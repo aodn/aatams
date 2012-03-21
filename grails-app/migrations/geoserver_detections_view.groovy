@@ -69,4 +69,19 @@ databaseChangeLog =
 			}
 		}
 	}
+	
+	// Preconditions: 1332309793000-1 1332309793000-2 1332309793000-3 1332309793000-4
+	changeSet(author: "jburgess", id: "1332312087000-1", runOnChange: true)
+	{
+		preConditions 
+		{
+			changeSetExecuted(id: "1332309793000-1", author: "jburgess", changeLogFile: "materialized_views.groovy")
+			changeSetExecuted(id: "1332309793000-2", author: "jburgess", changeLogFile: "materialized_views.groovy")
+			changeSetExecuted(id: "1332309793000-3", author: "jburgess", changeLogFile: "materialized_views.groovy")
+			changeSetExecuted(id: "1332309793000-4", author: "jburgess", changeLogFile: "materialized_views.groovy")
+		}
+
+		sql('''SELECT create_matview('detection_count_per_station_mv', 'detection_count_per_station');''')
+		sql('''SELECT refresh_matview('detection_count_per_station_mv');''')
+	}
 }

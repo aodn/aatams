@@ -10,8 +10,13 @@ class TagFactoryService {
 		
         if (tag == null)
         {
+			log.info("Tag with serial number " + params.serialNumber + " not found, creating new, params: " + params)
             tag = createNewTag(params)
         }
+		else
+		{
+			log.debug("Tag with serial number " + params.serialNumber + " found.")
+		}
         
         if (!tag.project)
         {
@@ -24,7 +29,7 @@ class TagFactoryService {
         
         if (tag.save(flush:true))
         {
-            log.info("Created tag: " + String.valueOf(tag))
+            log.info("Saved tag: " + String.valueOf(tag))
         }
         else
         {

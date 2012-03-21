@@ -58,18 +58,6 @@ environments {
                 maxActive = 20
             }
         }
-//        dataSource {
-//            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-//            driverClassName = "org.postgresql.Driver"
-//            url = "jdbc:postgresql://localhost:5432/aatams_diff"
-//            username = "aatams"
-//            password = "fishybusiness"
-//            
-//            properties 
-//            {
-//                maxActive = 20
-//            }
-//        }
     }
     
     production 

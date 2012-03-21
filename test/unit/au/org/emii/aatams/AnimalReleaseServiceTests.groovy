@@ -419,7 +419,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 		def surgeryParams = [timestamp:new DateTime(),
 							 type:surgeryType,
 							 treatmentType:surgeryTreatmentType,
-							 tag:tag1]
+							 tag:[serialNumber: tag1.serialNumber]]
 
 		Map params = 
 			[project:project,

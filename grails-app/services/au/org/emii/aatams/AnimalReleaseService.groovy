@@ -78,7 +78,10 @@ class AnimalReleaseService
 				log.debug("params: " + params)
 				log.debug("surgeryParams: " + surgeryParams)
 				
-				def tag = tagFactoryService.lookupOrCreate(surgeryParams.tag)
+				def tagParams = surgeryParams.tag
+				tagParams += [project: animalReleaseInstance.project]
+				
+				def tag = tagFactoryService.lookupOrCreate(tagParams)
 				assert(tag)
 				
 				// Need to make a "clean" map, due to bug #1257.

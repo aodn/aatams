@@ -7,6 +7,9 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
     def tagService
     def params
 	CodeMap codeMap
+	TransmitterType pinger
+	Project sealProject
+	Project tunaProject
 	
     protected void setUp() 
     {
@@ -26,6 +29,16 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
         model.save()
 
 		mockDomain(TransmitterType)
+		
+		pinger = new TransmitterType(transmitterTypeName: 'PINGER')
+		mockDomain(TransmitterType, [pinger])
+		pinger.save()
+
+		sealProject = new Project(name: "Seal Project")
+		tunaProject = new Project(name: "Tuna Project")
+		def projectList = [sealProject, tunaProject]
+		mockDomain(Project, projectList)
+		projectList.each { it.save() }
 		
 		params = 
 		    [codeMap:codeMap,
@@ -58,32 +71,50 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
 
 	void testValidParamsExisting()
 	{
-		TransmitterType pinger = new TransmitterType(transmitterTypeName: 'PINGER')
-		mockDomain(TransmitterType, [pinger])
-		pinger.save()
-		
-		Tag existingTag = new Tag(codeMap:codeMap, 
-								  serialNumber:"1111",
-								  model:new DeviceModel(),
-								  status:new DeviceStatus())
-		
-		Sensor existingSensor = new Sensor(tag: existingTag,
-								  		   transmitterType:pinger,
-										   pingCode:1234)
-		mockDomain(Sensor, [existingSensor])
-		existingTag.addToSensors(existingSensor)
-		
-		mockDomain(Tag, [existingTag])
-		codeMap.addToTags(existingTag)
-		codeMap.save()
-		
-		existingTag.save()
+		def existingTag = createExistingTag()
 		
 		assertEquals(1, Tag.count())
 		def retTag = lookupOrCreate()
 		assertEquals(1, Tag.count())
 		assertEquals(1, Sensor.count())
+		
+		def existingSensor = Sensor.findByTag(existingTag)
 		assertEquals(existingSensor, retTag.pinger)
+	}
+	
+	void testTagProjectSetToReleasesProject()
+	{
+		def existingTag = createExistingTag()
+		assertEquals(sealProject, existingTag.project)
+		
+		params += [project: tunaProject]
+		def foundTag = lookupOrCreate()
+		
+		assertEquals(sealProject, foundTag.project)
+	}
+	
+	private Tag createExistingTag()
+	{
+		Tag existingTag = 
+			new Tag(codeMap:codeMap,
+					serialNumber:"1111",
+					model:new DeviceModel(),
+					status:new DeviceStatus(),
+					project: sealProject)
+
+		Sensor existingSensor = new Sensor(tag: existingTag,
+		transmitterType:pinger,
+		pingCode:1234)
+		mockDomain(Sensor, [existingSensor])
+		existingTag.addToSensors(existingSensor)
+
+		mockDomain(Tag, [existingTag])
+		codeMap.addToTags(existingTag)
+		codeMap.save()
+
+		existingTag.save()
+		
+		return existingTag
 	}
 	
 	private Tag lookupOrCreate()

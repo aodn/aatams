@@ -31,7 +31,7 @@ databaseChangeLog =
 	
 	changeSet(author: "jburgess", id: "1332135917000-3", runOnChange: true)
 	{
-		dropView(viewName: "public_detection_view")
+		sql("DROP VIEW IF EXISTS public_detection_view")
 		createView('''select *,
 						round(latitude::NUMERIC, 2) as public_latitude,
 						round(longitude::NUMERIC, 2) as public_longitude,
@@ -49,9 +49,24 @@ databaseChangeLog =
 						''', viewName: "public_detection_view")
 	}
 
-	/**
-select station, installation, public_location, count(*)
-from public_detection_view
-group by station, installation, public_location;
-	*/
+	changeSet(author: "jburgess", id: "1332135917000-4", runOnChange: true)
+	{
+		grailsChange
+		{
+			change
+			{
+				sql.execute("DROP VIEW IF EXISTS detection_count_per_station")
+				sql.execute("create or replace view detection_count_per_station as select \
+								station, \
+								installation, \
+								project, \
+								public_location, \
+								'" + application.config.grails.serverURL + "/installationStation/show/' || station_id as installation_station_url, \
+								'" + application.config.grails.serverURL + "/report/extract?name=detection&formats=CSV&filter.receiverDeployment.station.in=name&filter.receiverDeployment.station.in=' || station as detection_download_url, \
+								count(*) \
+								from public_detection_view \
+								group by station, installation, project, public_location, station_id;")
+			}
+		}
+	}
 }

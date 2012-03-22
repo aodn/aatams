@@ -31,11 +31,27 @@ databaseChangeLog =
 	
 	changeSet(author: "jburgess", id: "1332135917000-3", runOnChange: true)
 	{
+		createProcedure('''CREATE OR REPLACE FUNCTION scramblepoint(point geometry) RETURNS geometry AS
+			$$
+			DECLARE
+				scrambled_point geometry;
+				scrambled_lat numeric;
+				scrambled_lon numeric;
+			BEGIN
+				scrambled_lon = round(st_x(point)::NUMERIC, 2);
+				scrambled_lat = round(st_y(point)::NUMERIC, 2);
+
+				return st_point(scrambled_lon, scrambled_lat);
+			END;
+			$$ LANGUAGE plpgsql STRICT;''')
+	}
+	
+
+	changeSet(author: "jburgess", id: "1332135917000-4", runOnChange: true)
+	{
 		sql("DROP VIEW IF EXISTS public_detection_view")
 		createView('''select *,
-						round(latitude::NUMERIC, 2) as public_latitude,
-						round(longitude::NUMERIC, 2) as public_longitude,
-						st_point(longitude, latitude) as public_location,
+						scramblepoint(location) as public_location,
 						case when isreleaseembargoed(animal_release_id) then 'embargoed'
 						     else species_name
 						end
@@ -49,23 +65,40 @@ databaseChangeLog =
 						''', viewName: "public_detection_view")
 	}
 
-	changeSet(author: "jburgess", id: "1332135917000-4", runOnChange: true)
+	changeSet(author: "jburgess", id: "1332135917000-5", runOnChange: true)
 	{
 		grailsChange
 		{
 			change
 			{
 				sql.execute("DROP VIEW IF EXISTS detection_count_per_station")
-				sql.execute("create or replace view detection_count_per_station as select \
-								station, \
-								installation, \
-								project, \
-								public_location, \
-								'" + application.config.grails.serverURL + "/installationStation/show/' || station_id as installation_station_url, \
-								'" + application.config.grails.serverURL + "/report/extract?name=detection&formats=CSV&filter.receiverDeployment.station.in=name&filter.receiverDeployment.station.in=' || station as detection_download_url, \
-								count(*) \
-								from public_detection_view \
-								group by station, installation, project, public_location, station_id;")
+				sql.execute('''create or replace view detection_count_per_station as \
+
+							select
+								station,
+								installation,
+								project,
+								public_location,
+								''' + "'" + application.config.grails.serverURL + '''/installationStation/show/' || station_id as installation_station_url,
+								''' + "'" + application.config.grails.serverURL + '''/report/extract?name=detection&formats=CSV&filter.receiverDeployment.station.in=name&filter.receiverDeployment.station.in=' || station as detection_download_url,
+								count(*)
+							from public_detection_view
+							group by station, installation, project, public_location, station_id
+														
+							union all
+							select
+								installation_station.name as station,
+								installation.name as installation,
+								project.name as project,
+								scramblepoint(installation_station.location),
+								''' + "'" + application.config.grails.serverURL + '''/installationStation/show/' || installation_station.id as installation_station_url,
+								'' as detection_download_url,
+								0 as detection_count
+							from installation_station
+							left join installation on installation_station.installation_id = installation.id
+							left join project on installation.project_id = project.id
+							left join public_detection_view on installation_station.id = public_detection_view.station_id
+							where public_detection_view.station_id is null;''')
 			}
 		}
 	}
@@ -79,8 +112,9 @@ databaseChangeLog =
 			changeSetExecuted(id: "1332309793000-2", author: "jburgess", changeLogFile: "materialized_views.groovy")
 			changeSetExecuted(id: "1332309793000-3", author: "jburgess", changeLogFile: "materialized_views.groovy")
 			changeSetExecuted(id: "1332309793000-4", author: "jburgess", changeLogFile: "materialized_views.groovy")
+			changeSetExecuted(id: "1332135917000-5", author: "jburgess", changeLogFile: "geoserver_detections_view.groovy")
 		}
-
+		
 		sql('''SELECT create_matview('detection_count_per_station_mv', 'detection_count_per_station');''')
 		sql('''SELECT refresh_matview('detection_count_per_station_mv');''')
 	}

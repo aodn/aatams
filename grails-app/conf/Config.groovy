@@ -89,8 +89,8 @@ environments
 	}
 	development
 	{
-		grails.serverURL = "http://localhost:8080/${appName}"
-		grails.serverHost = "http://localhost:8080"
+		grails.serverURL = "http://localhost:8090/${appName}"
+		grails.serverHost = "http://localhost:8090"
 		fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
 		
 		grails.mail.adminEmailAddress = "jkburges@utas.edu.au"
@@ -121,12 +121,6 @@ log4j =
 	{
 		console name:'stdout', layout: pattern(conversionPattern: '%d [%t] [%X{username}] %-5p %c{1} - %m%n')
 		'null' name: "stacktrace"
-		appender new SMTPAppender(
-			name: 'smtp', to: mail.error.to, from: mail.error.from,
-			subject: mail.error.subject, threshold: Level.ERROR,
-			SMTPHost: mail.error.server, SMTPUsername: mail.error.username,
-			SMTPDebug: mail.error.debug.toString(), /*SMTPPassword: mail.error.password, */
-			layout: pattern(conversionPattern: '%d [%t] [%X{username}] %-5p %c{1} - %m%n'))
 	}
 
 	error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
@@ -146,6 +140,19 @@ log4j =
 	
 	environments
 	{
+		production
+		{
+			appenders
+			{
+				appender new SMTPAppender(
+					name: 'smtp', to: mail.error.to, from: mail.error.from,
+					subject: mail.error.subject, threshold: Level.ERROR,
+					SMTPHost: mail.error.server, SMTPUsername: mail.error.username,
+					SMTPDebug: mail.error.debug.toString(), /*SMTPPassword: mail.error.password, */
+					layout: pattern(conversionPattern: '%d [%t] [%X{username}] %-5p %c{1} - %m%n'))
+			}
+		}
+		
 		development
 		{
 			debug  "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",
@@ -207,6 +214,7 @@ rawDetection.extract.view.name = 'detection_extract_view'
 rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp, 
 			installation_station.name as station,
 			installation_station.id as station_id, 
+			installation_station.location as location,
 			st_y(installation_station.location) as latitude, st_x(installation_station.location) as longitude,
 			(device_model.model_name || '-' || device.serial_number) as receiver_name,
 			COALESCE(sensor.transmitter_id, '') as sensor_id,

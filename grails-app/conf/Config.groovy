@@ -89,8 +89,8 @@ environments
 	}
 	development
 	{
-		grails.serverURL = "http://localhost:8090/${appName}"
-		grails.serverHost = "http://localhost:8090"
+		grails.serverURL = "http://localhost:8080/${appName}"
+		grails.serverHost = "http://localhost:8080"
 		fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
 		
 		grails.mail.adminEmailAddress = "jkburges@utas.edu.au"

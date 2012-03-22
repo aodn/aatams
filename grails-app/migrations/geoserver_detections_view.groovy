@@ -79,9 +79,11 @@ databaseChangeLog =
 								installation,
 								project,
 								public_location,
+								st_x(public_location) as public_lon,
+								st_y(public_location) as public_lat,
 								''' + "'" + application.config.grails.serverURL + '''/installationStation/show/' || station_id as installation_station_url,
 								''' + "'" + application.config.grails.serverURL + '''/report/extract?name=detection&formats=CSV&filter.receiverDeployment.station.in=name&filter.receiverDeployment.station.in=' || station as detection_download_url,
-								count(*)
+								count(*) as detection_count
 							from public_detection_view
 							group by station, installation, project, public_location, station_id
 														
@@ -91,6 +93,8 @@ databaseChangeLog =
 								installation.name as installation,
 								project.name as project,
 								scramblepoint(installation_station.location),
+								st_x(scramblepoint(installation_station.location)) as public_lon,
+								st_y(scramblepoint(installation_station.location)) as public_lat,
 								''' + "'" + application.config.grails.serverURL + '''/installationStation/show/' || installation_station.id as installation_station_url,
 								'' as detection_download_url,
 								0 as detection_count

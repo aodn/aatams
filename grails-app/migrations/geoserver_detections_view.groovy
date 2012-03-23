@@ -83,7 +83,13 @@ databaseChangeLog =
 								st_y(public_location) as public_lat,
 								''' + "'" + application.config.grails.serverURL + '''/installationStation/show/' || station_id as installation_station_url,
 								''' + "'" + application.config.grails.serverURL + '''/report/extract?name=detection&formats=CSV&filter.receiverDeployment.station.in=name&filter.receiverDeployment.station.in=' || station as detection_download_url,
-								count(*) as detection_count
+								count(*) as detection_count,
+								log(greatest(count(*), 1)) / log((select max(detection_count) from
+																 (
+																	 select station, count(station) as detection_count
+																	 from public_detection_view
+																	 group by station
+																 ) t)) * 10 as relative_detection_count
 							from public_detection_view
 							group by station, installation, project, public_location, station_id
 														
@@ -97,7 +103,8 @@ databaseChangeLog =
 								st_y(scramblepoint(installation_station.location)) as public_lat,
 								''' + "'" + application.config.grails.serverURL + '''/installationStation/show/' || installation_station.id as installation_station_url,
 								'' as detection_download_url,
-								0 as detection_count
+								0 as detection_count,
+								0 as releative_detection_count
 							from installation_station
 							left join installation on installation_station.installation_id = installation.id
 							left join project on installation.project_id = project.id

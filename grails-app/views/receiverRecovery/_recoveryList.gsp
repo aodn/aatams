@@ -33,8 +33,7 @@
 	                <th><g:message code="receiverDeployment.station.depth.label" default="Depth" /></th>
 	            
 	                <!-- New/edit column -->
-	                <g:column property="recovery" title="${message(code: 'receiverRecovery.label', default: 'Recovery')}"
-	                                  params="${params}" sortable="${sortable}" />
+                    <th><g:message code="receiverRecovery.label" default="Recovery" /></th>
 	                
 	                <g:column property="recovery.recoverer.person.name" title="${message(code: 'receiverRecovery.recoverer.label', default: 'Recovered By')}"
 	                                  params="${params}" sortable="${sortable}" />

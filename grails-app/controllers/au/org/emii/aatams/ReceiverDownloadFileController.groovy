@@ -1,11 +1,13 @@
 package au.org.emii.aatams
 
 import org.codehaus.groovy.grails.commons.*
+import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.web.multipart.MultipartFile
 import org.apache.shiro.SecurityUtils
 
 class ReceiverDownloadFileController 
 {
+	def dataSource
     def fileProcessorService
     
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -81,6 +83,11 @@ class ReceiverDownloadFileController
                     fileProcessorService.process(downloadFileId, 
                                                  file,
                                                  showLink)
+					
+					runAsync
+					{
+						refreshDetectionCountPerStationView()
+					}
                 }
                 catch (FileProcessingException e)
                 {
@@ -104,6 +111,21 @@ class ReceiverDownloadFileController
         }
     }
 
+	private void refreshDetectionCountPerStationView()
+	{
+		long startTime = System.currentTimeMillis()
+		log.info("Refreshing 'detection counts' materialized view...")
+		JdbcTemplate refreshStatement = getRefreshStatement()
+		refreshStatement.execute('''SELECT refresh_matview('detection_count_per_station_mv');''')
+		long endTime = System.currentTimeMillis()
+		log.info("'detection counts' materialized view refreshed, time taken (ms): " + (endTime - startTime))
+	}
+	
+	private JdbcTemplate getRefreshStatement()
+	{
+		return new JdbcTemplate(dataSource)
+	}
+	
     def show = {
         def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
         if (!receiverDownloadFileInstance) {
@@ -202,7 +224,6 @@ class ReceiverDownloadFileController
     String getPath(ReceiverDownloadFile downloadFile)
     {
         // Save the file to disk.
-//        def path = config.path
         def path = grailsApplication.config.fileimport.path
         log.debug("File import config: " + grailsApplication.config.fileimport)
         if (!path.endsWith(File.separator))

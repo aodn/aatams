@@ -99,8 +99,7 @@ class EmbargoFilters
                 model ->
                 
                 def detectionInstance = model?.detectionInstance
-                
-                model.detectionInstance = embargoService.applyEmbargo(detectionInstance)
+                model?.detectionInstance = embargoService.applyEmbargo(detectionInstance)
             }
         }
     }

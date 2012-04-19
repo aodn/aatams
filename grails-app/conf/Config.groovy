@@ -108,7 +108,7 @@ environments
 mail.error.server = grails.mail.host
 mail.error.username = grails.mail.username
 //mail.error.password = 'yourpassword'
-mail.error.to = 'developers@emii.org.au'
+mail.error.to = grails.mail.adminEmailAddress
 mail.error.from = grails.mail.systemEmailAddress
 mail.error.subject = 'AATAMS Error'
 mail.error.debug = false
@@ -220,6 +220,7 @@ rawDetection.extract.view.name = 'detection_extract_view'
 rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp, 
 			installation_station.name as station,
 			installation_station.id as station_id, 
+			installation_station.location as location,
 			st_y(installation_station.location) as latitude, st_x(installation_station.location) as longitude,
 			(device_model.model_name || '-' || device.serial_number) as receiver_name,
 			COALESCE(sensor.transmitter_id, '') as sensor_id,
@@ -231,6 +232,7 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			project.name as project,
 			installation.name as installation,
 			COALESCE(species.spcode, '') as spcode,
+			animal_release.id as animal_release_id,
 			animal_release.embargo_date as embargo_date,
 			project.id as project_id			
 

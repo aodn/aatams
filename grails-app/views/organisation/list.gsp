@@ -42,9 +42,11 @@
                             <shiro:hasRole name="SysAdmin">
                               <g:sortableColumn property="status" title="${message(code: 'organisation.status.label', default: 'Status')}" />
                               
-                              <g:sortableColumn property="requester" title="${message(code: 'organisation.requester.label', default: 'Requester')}" />
+                              <g:sortableColumn property="request.requester" title="${message(code: 'organisation.requester.label', default: 'Requester')}" />
                             </shiro:hasRole>
-                            <g:sortableColumn property="projects" title="${message(code: 'organisation.projects.label', default: 'Projects')}" />
+                            
+                            <th>Projects</th>
+
 							<th>People</th>
 
                             </tr>

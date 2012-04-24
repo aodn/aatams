@@ -1538,5 +1538,7 @@ databaseChangeLog = {
 
 	include file: 'materialized_views.groovy'
 	include file: 'geoserver_detections_view.groovy'
+	
+	include file: 'trim_whitespace.groovy'
 }
 

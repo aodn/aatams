@@ -7,7 +7,8 @@ class UrlMappings
         {
             constraints 
             {
-                // apply constraints here
+                // id must be numeric.
+				id(matches:/\d*/)
             }
         }
         

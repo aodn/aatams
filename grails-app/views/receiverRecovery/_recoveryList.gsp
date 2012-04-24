@@ -18,7 +18,7 @@
 	                                  params="${params}" sortable="${sortable}" />
 	                                  
 	            
-	                <g:column property="station" title="${message(code: 'receiverDeployment.station.label', default: 'Station')}"
+	                <g:column property="station.name" title="${message(code: 'receiverDeployment.station.label', default: 'Station')}"
 	                                  params="${params}" sortable="${sortable}" />
 	            
                     <g:if test="${!hideColumns?.contains('deploymentLocation')}">

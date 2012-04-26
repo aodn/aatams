@@ -32,7 +32,7 @@ function updateLocation()
                     // Save the point as a "coded" string.  This is then parsed on 
                     // by the PointEditor.
                     var parentName = $(this).attr("id");
-                    var pointInput = $(this).find('#' + parentName);
+                    var pointInput = $(this).find('#location');
                     var pointCodedString = genCodedPointStringX(lon, lat, srid);
                     
                     pointInput.val(pointCodedString);

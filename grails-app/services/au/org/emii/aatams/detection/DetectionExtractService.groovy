@@ -63,7 +63,7 @@ class DetectionExtractService
 		["project": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
 		 "installation": filterParams?.filter?.receiverDeployment?.station?.installation?.in?.getAt(1),
 		 "station": filterParams?.filter?.receiverDeployment?.station?.in?.getAt(1),
-		 "sensor_id": filterParams?.filter?.detectionSurgeries?.sensor?.in?.getAt(1),
+		 "transmitter_id": filterParams?.filter?.in?.getAt(1),
 		 "spcode": filterParams?.filter?.detectionSurgeries?.surgery?.release?.animal?.species?.in?.getAt(1)
 		 ].each
 	 	{

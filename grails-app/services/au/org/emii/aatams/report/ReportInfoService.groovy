@@ -73,7 +73,7 @@ class ReportInfoService
 		 "surgeries.tag.sensors.transmitterId": tagId,
 		 "tag.project.name": "project",
 		 "timestamp": "timestamp",
-		 "transmitterId": "transmitter ID"]
+		 "transmitterId": tagId]
     
     static def reportNameToClass =
         ["animalReleaseSummary": AnimalReleaseSummaryService.class,
@@ -168,8 +168,8 @@ class ReportInfoService
 												associationName: "receiverDeployment.station", 
 									 			propertyName:"name", 
 												lookupPath:"/installationStation/lookupByName"),
-			 new AjaxMultiSelectReportParameter(label: propertyToLabel["detectionSurgeries.sensor.transmitterId"], 
-												associationName: "detectionSurgeries.sensor", 
+			 new AjaxMultiSelectReportParameter(label: propertyToLabel["transmitterId"], 
+												associationName: "", 
 									 			propertyName:"transmitterId", 
 												lookupPath:"/sensor/lookupByTransmitterId"),
 			 new AjaxMultiSelectReportParameter(label: propertyToLabel["detectionSurgeries.surgery.release.animal.species.spcode"], 

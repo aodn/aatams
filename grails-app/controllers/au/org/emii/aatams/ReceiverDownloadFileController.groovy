@@ -115,15 +115,15 @@ class ReceiverDownloadFileController
 	{
 		long startTime = System.currentTimeMillis()
 		log.info("Refreshing 'detection counts' materialized view...")
-		JdbcTemplate refreshStatement = getRefreshStatement()
-		refreshStatement.execute('''SELECT refresh_matview('detection_count_per_station_mv');''')
+		doRefreshDetectionCountView()
 		long endTime = System.currentTimeMillis()
 		log.info("'detection counts' materialized view refreshed, time taken (ms): " + (endTime - startTime))
 	}
 	
-	private JdbcTemplate getRefreshStatement()
+	private void doRefreshDetectionCountView()
 	{
-		return new JdbcTemplate(dataSource)
+		JdbcTemplate refreshStatement = new JdbcTemplate(dataSource)
+		refreshStatement.execute('''SELECT refresh_matview('detection_count_per_station_mv');''')
 	}
 	
     def show = {

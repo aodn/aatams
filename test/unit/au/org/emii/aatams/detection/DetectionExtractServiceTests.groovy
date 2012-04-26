@@ -71,8 +71,8 @@ class DetectionExtractServiceTests extends AbstractGrailsUnitTestCase
 	
     void testConstructQueryOneTagID() 
 	{
-		assertEquals('''select * from detection_extract_view where trim(sensor_id) in ('A69-1303-12345') limit 10000 offset 0''', 
-					 detectionExtractService.constructQuery([filter: [detectionSurgeries:[tag:[in:["codeName", "A69-1303-12345, "]]]]], 10000, 0))
+		assertEquals('''select * from detection_extract_view where trim(transmitter_id) in ('A69-1303-12345') limit 10000 offset 0''', 
+					 detectionExtractService.constructQuery([filter: [in:["transmitterId", "A69-1303-12345, "]]], 10000, 0))
     }
 	
     void testConstructQueryOneSpecies() 

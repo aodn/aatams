@@ -128,6 +128,18 @@
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name">
+                                  <label class="compulsory" for="initialisationDateTime"><g:message code="receiverDeployment.initialisationDateTime.label" default="Initialisation Date" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'initialisationDateTime', 'errors')}">
+                                    <joda:dateTimePicker name="deployment.initialisationDateTime"
+                                                         value="${receiverDeploymentInstance?.initialisationDateTime}"
+                                                         useZone="true"/>
+                                </td>
+                            </tr>
+                        
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name">
                                     <label class="compulsory" for="recoveryDateTime"><g:message code="receiverRecovery.recoveryDate.label" default="Recovery Date" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: receiverRecoveryInstance, field: 'recoveryDateTime', 'errors')}">

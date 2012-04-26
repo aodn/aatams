@@ -105,6 +105,15 @@
                                 </td>
                             </tr>
                         
+	                        <tr class="prop">
+	                            <td/>
+	                            <td valign="top" class="name"><g:message code="receiverDeployment.initialisationDateTime.label" default="Initialisation Date" /></td>
+	                            
+	                            <td valign="top" class="value">
+	                              <joda:format value="${receiverDeploymentInstance?.initialisationDateTime}" />
+	                            </td>
+	                        </tr>
+                        
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name"><g:message code="receiverRecovery.recoveryDateTime.label" default="Recovery Date" /></td>

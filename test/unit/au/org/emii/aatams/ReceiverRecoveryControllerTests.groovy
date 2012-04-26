@@ -16,6 +16,8 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
 	
 	def receiver
 
+	DeviceStatus recovered
+	
     protected void setUp() 
     {
         super.setUp()
@@ -72,7 +74,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         mockDomain(ReceiverRecovery)
 		
 		DeviceStatus deployed = new DeviceStatus(status: 'DEPLOYED')
-		DeviceStatus recovered = new DeviceStatus(status: 'RECOVERED')
+		recovered = new DeviceStatus(status: 'RECOVERED')
 		def statusList = [deployed, recovered]
 		mockDomain(DeviceStatus, statusList)
 		statusList.each { it.save() }
@@ -105,6 +107,8 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
 		deployment.mooringType = new MooringType()
 		deployment.save(failOnError:true)
 		
+		DateTime initDate = new DateTime("2012-01-01T12:34:56")
+		controller.params.deployment = [initialisationDateTime: initDate]
 		controller.params.deploymentId = deployment.id
 		controller.params.recoverer = new ProjectRole()
 		controller.params.recoveryDateTime = new DateTime()
@@ -114,6 +118,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
 		controller.save()
 		
 		assertEquals("show", controller.redirectArgs.action)
+		assertEquals(initDate, deployment.initialisationDateTime)
 		def recovery = ReceiverRecovery.get(controller.redirectArgs.id)
 		assertNotNull(deployment)
 	}
@@ -141,7 +146,29 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
 		
 		assertRecoveryDefaults(model, deployment, station.location)
 	}
+	
+	void testUpdate()
+	{
+		def deployment = createDeployment(createStation(), new GeometryFactory().createPoint(new Coordinate(34f, 34f)))
+		deployment.mooringType = new MooringType()
+		deployment.save(failOnError:true)
 
+		def recovery = new ReceiverRecovery(
+			deployment: deployment, 
+			recoverer: new ProjectRole(), 
+			location: new GeometryFactory().createPoint(new Coordinate(34f, 34f)), 
+			status: recovered)
+		recovery.save(failOnError:true)
+		
+		DateTime initDate = new DateTime("2012-01-01T12:34:56")
+		controller.params.deployment = [initialisationDateTime: initDate]
+		controller.params.id = recovery.id
+		
+		controller.update()
+		
+		assertEquals(initDate, deployment.initialisationDateTime)
+	}
+	
 	private InstallationStation createStation() {
 		InstallationStation station = new InstallationStation(location:new GeometryFactory().createPoint(new Coordinate(12f, 34f)))
 		station.location.setSRID(4326)

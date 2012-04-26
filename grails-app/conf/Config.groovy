@@ -108,7 +108,7 @@ environments
 mail.error.server = grails.mail.host
 mail.error.username = grails.mail.username
 //mail.error.password = 'yourpassword'
-mail.error.to = grails.mail.adminEmailAddress
+mail.error.to = 'developers@emii.org.au'
 mail.error.from = grails.mail.systemEmailAddress
 mail.error.subject = 'AATAMS Error'
 mail.error.debug = false

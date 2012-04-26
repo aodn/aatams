@@ -93,8 +93,6 @@
                                 <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "depthBelowSurfaceM")}</td>
                             </tr>
 
-                          
-                          
                             <!-- Recovery -->
                             <tr><td/></tr>
                             
@@ -126,6 +124,19 @@
                                 </td>
                             </tr>
                         
+                            <tr class="prop">
+                                <td/>
+                                <td valign="top" class="name">
+                                  <label class="compulsory" for="initialisationDateTime"><g:message code="receiverDeployment.initialisationDateTime.label" default="Initialisation Date" /></label>
+                                </td>
+                                <td valign="top" class="value ${hasErrors(bean: receiverDeploymentInstance, field: 'initialisationDateTime', 'errors')}">
+                                    <joda:dateTimePicker name="deployment.initialisationDateTime" 
+                                                         class="remember"
+                                                         value="${receiverDeploymentInstance?.initialisationDateTime}"
+                                                         useZone="true"/>
+                                </td>
+                            </tr>
+                          
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="name">

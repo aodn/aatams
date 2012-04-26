@@ -50,8 +50,10 @@ class ReceiverRecoveryController extends AbstractController
     def save = 
     {
         ReceiverDeployment deployment = ReceiverDeployment.get(params.deploymentId)
+		deployment.properties = params.deployment
+		
         log.debug("deployment: " + deployment)
-        
+		
         def receiverRecoveryInstance = new ReceiverRecovery(params)
         receiverRecoveryInstance.deployment = deployment
 
@@ -102,9 +104,13 @@ class ReceiverRecoveryController extends AbstractController
                     return
                 }
             }
-            receiverRecoveryInstance.properties = params
 			
-            if (!receiverRecoveryInstance.hasErrors() && receiverRecoveryInstance.save(flush: true)) {
+            receiverRecoveryInstance.properties = params
+			receiverRecoveryInstance.deployment.properties = params.deployment
+			
+            if (   !receiverRecoveryInstance.deployment.hasErrors() 
+				&& !receiverRecoveryInstance.hasErrors() 
+				&& receiverRecoveryInstance.deployment.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.toString()])}"
                 redirect(action: "show", id: receiverRecoveryInstance.id)
             }

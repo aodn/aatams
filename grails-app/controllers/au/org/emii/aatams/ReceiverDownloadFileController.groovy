@@ -7,7 +7,6 @@ import org.apache.shiro.SecurityUtils
 
 class ReceiverDownloadFileController 
 {
-	def dataSource
     def fileProcessorService
     
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -83,11 +82,6 @@ class ReceiverDownloadFileController
                     fileProcessorService.process(downloadFileId, 
                                                  file,
                                                  showLink)
-					
-					runAsync
-					{
-						refreshDetectionCountPerStationView()
-					}
                 }
                 catch (FileProcessingException e)
                 {
@@ -111,21 +105,6 @@ class ReceiverDownloadFileController
         }
     }
 
-	private void refreshDetectionCountPerStationView()
-	{
-		long startTime = System.currentTimeMillis()
-		log.info("Refreshing 'detection counts' materialized view...")
-		doRefreshDetectionCountView()
-		long endTime = System.currentTimeMillis()
-		log.info("'detection counts' materialized view refreshed, time taken (ms): " + (endTime - startTime))
-	}
-	
-	private void doRefreshDetectionCountView()
-	{
-		JdbcTemplate refreshStatement = new JdbcTemplate(dataSource)
-		refreshStatement.execute('''SELECT refresh_matview('detection_count_per_station_mv');''')
-	}
-	
     def show = {
         def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
         if (!receiverDownloadFileInstance) {

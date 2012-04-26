@@ -33,6 +33,8 @@
                               <g:sortableColumn property="path" title="${message(code: 'receiverDownloadFile.path.label', default: 'Path')}" />
                             </shiro:hasRole>
                             
+                            <g:sortableColumn property="status" title="${message(code: 'receiverDownloadFile.status.label', default: 'Status')}" />
+                            
                             <g:sortableColumn property="errMsg" title="${message(code: 'receiverDownloadFile.errMsg.label', default: 'Err Msg')}" />
                         
                             <g:sortableColumn property="importDate" title="${message(code: 'receiverDownloadFile.importDate.label', default: 'Import Date')}" />
@@ -54,6 +56,8 @@
                             <shiro:hasRole name="SysAdmin">
                               <td>${fieldValue(bean: receiverDownloadFileInstance, field: "path")}</td>
                             </shiro:hasRole>
+                        
+                            <td>${receiverDownloadFileInstance?.status?.encodeAsHTML()}</td>
                         
                             <td>${fieldValue(bean: receiverDownloadFileInstance, field: "errMsg")}</td>
                         

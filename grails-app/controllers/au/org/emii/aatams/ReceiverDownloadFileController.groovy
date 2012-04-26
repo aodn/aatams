@@ -7,7 +7,7 @@ import org.apache.shiro.SecurityUtils
 
 class ReceiverDownloadFileController 
 {
-    def fileProcessorService
+//    def fileProcessorService
     
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -73,7 +73,10 @@ class ReceiverDownloadFileController
             // Define this in web thread, as it fails if done async.
             def downloadFileId = receiverDownloadFileInstance.id
             def showLink = createLink(action:'show', id:downloadFileId, absolute:true)
-            
+
+			FileProcessorJob.triggerNow([downloadFileId: downloadFileId, file: file, showLink: showLink])
+			
+/**			            
             runAsync
             {
                 try
@@ -100,7 +103,7 @@ class ReceiverDownloadFileController
                     receiverDownloadFileInstance.save()
                 }
             }
-        
+*/        
             redirect(action: "show", id: downloadFileId)
         }
     }

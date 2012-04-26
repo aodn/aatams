@@ -35,8 +35,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="installation.configuration.label" default="Configuration" /></td>
                             
-                            <td valign="top" class="value"><g:link controller="installationConfiguration" action="show" id="${installationInstance?.configuration?.id}">${installationInstance?.configuration?.encodeAsHTML()}</g:link></td>
-                            
+                            <td valign="top" class="value">${fieldValue(bean: installationInstance, field: "configuration")}</td>
                         </tr>
                     
                         <tr class="prop">

@@ -15,6 +15,8 @@ class AuthControllerTests extends ControllerUnitTestCase
 		WebUtils.metaClass.static.getSavedRequest = { javax.servlet.ServletRequest request -> null }
 		controller.metaClass.checkForPendingUser = { Map params -> }
 		controller.metaClass.doLogin = { UsernamePasswordToken token -> }
+		
+		controller.embargoService = new EmbargoService()
     }
 
     protected void tearDown() 

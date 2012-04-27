@@ -11,6 +11,11 @@ class EmbargoService
    
 	private Map<Integer, Boolean> projectPermissionCache = [:]
 	 
+	public void clearCache()
+	{
+		projectPermissionCache.clear()
+	}
+	
     List applyEmbargo(Class domain, List embargoees)
     {
         if (!Arrays.asList(domain.getInterfaces()).contains(Embargoable.class))
@@ -27,7 +32,7 @@ class EmbargoService
      */
     List applyEmbargo(List embargoees) 
     {
-		projectPermissionCache.clear()
+		clearCache()
 		
         def retList = embargoees.collect
         {
@@ -62,7 +67,7 @@ class EmbargoService
         {
             return embargoee
         }
-        
+
         if (hasReadPermission(embargoee))
         {
             return embargoee

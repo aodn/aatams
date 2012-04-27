@@ -6,12 +6,15 @@ import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.web.util.SavedRequest
 import org.apache.shiro.web.util.WebUtils
 
+import au.org.emii.aatams.EmbargoService
 import au.org.emii.aatams.EntityStatus
 import au.org.emii.aatams.Person
 
 class AuthController {
     def shiroSecurityManager
 
+	def embargoService
+	
     def index = { redirect(action: "login", params: params) }
 
     def login = {
@@ -47,6 +50,8 @@ class AuthController {
             // password is incorrect.
             doLogin(authToken)
 
+			embargoService.clearCache()
+			
             log.info "Redirecting to '${targetUri}'."
             redirect(uri: targetUri)
         }
@@ -88,6 +93,8 @@ class AuthController {
         // Log the user out of the application.
         SecurityUtils.subject?.logout()
 
+		embargoService.clearCache()
+		
         // For now, redirect back to the home page.
         redirect(uri: "/")
     }

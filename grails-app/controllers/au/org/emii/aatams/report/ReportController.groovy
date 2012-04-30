@@ -31,11 +31,6 @@ class ReportController extends AbstractController
         renderDefaultModel(params)
     }
 
-    def extract =
-    {
-        renderDefaultModel(params)
-    }
-    
 	private renderDefaultModel(Map params) 
 	{
 		def model = 
@@ -194,51 +189,5 @@ class ReportController extends AbstractController
     def animalReleaseSummaryCreate =
     {
         redirect(action:"create", params:[name:"animalReleaseSummary", formats:["PDF"]])
-    }
-    
-    def installationStationCreate =
-    {
-        redirect(action:"create", params:[name:"installationStation", formats:["PDF"]])
-    }
-    
-    def receiverCreate =
-    {
-        redirect(action:"create", params:[name:"receiver", formats:["PDF"]])
-    }
-    
-    def receiverDeploymentCreate =
-    {
-        redirect(action:"create", params:[name:"receiverDeployment", formats:["PDF"]])
-    }
-
-    def detectionExtract =
-    {
-//        redirect(action:"extract", params:[name:"detection", formats:["CSV", "KML"]])
-        redirect(action:"extract", params:[name:"detection", formats:["CSV"]])
-    }
-    
-    def installationExtract =
-    {
-        redirect(action:"extract", params:[name:"installation", formats:["CSV"]])
-    }
-    
-    def installationStationExtract =
-    {
-        redirect(action:"extract", params:[name:"installationStation", formats:["CSV", "KML"]])
-    }
-    
-    def receiverExtract =
-    {
-        redirect(action:"extract", params:[name:"receiver", formats:["CSV"]])
-    }
-
-    def receiverEventExtract =
-    {
-        redirect(action:"extract", params:[name:"receiverEvent", formats:["CSV"]])
-    }
-
-    def tagExtract =
-    {
-        redirect(action:"extract", params:[name:"sensor", formats:["CSV"]])
     }
 }

@@ -16,15 +16,13 @@ import org.codehaus.groovy.grails.plugins.jasper.*
 
 import org.joda.time.*
 
-class ReportController 
+class ReportController extends AbstractController
 {
     def animalReleaseSummaryService
 	def detectionExtractService
     def jasperService
 	def kmlService
     def permissionUtilsService
-    def reportInfoService
-    def queryService
     
     def index = { }
     
@@ -124,7 +122,7 @@ class ReportController
 
 		// Delegate to report controller, including our wrapped data.
 		JasperReportDef report = jasperService.buildReportDefinition(params, request.getLocale(), [data:resultList])
-			generateResponse(report)
+		generateResponse(report)
 	}
 
 	private boolean checkResultList(resultList, Map flash, Map params)

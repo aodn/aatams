@@ -1,9 +1,10 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.report.ReportController
 import org.joda.time.*
 import org.joda.time.contrib.hibernate.*
 
-class ReceiverDeploymentController extends AbstractController
+class ReceiverDeploymentController extends ReportController
 {
     def candidateEntitiesService
 

@@ -491,6 +491,11 @@ th.desc a {
     background: transparent url(../images/skin/KML.gif) 5px 50% no-repeat;
     padding-left: 28px;
 }
+.buttons input.portal {
+    background: transparent url(../images/skin/imos_portal.png) 5px 50% no-repeat;
+    padding-left: 28px;
+}
+
 
 
 /* extras for jQuery_ui */
@@ -602,6 +607,10 @@ label.compulsory:after
 td {border: 0;}*/
 div.filter td {
     border: 0;
+}
+
+div.exportPane {
+	padding-bottom: 5px
 }
 
 .mainTitle {

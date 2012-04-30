@@ -3,7 +3,7 @@ package au.org.emii.aatams
 import java.util.List;
 import java.util.Map;
 
-abstract class AbstractController 
+class AbstractController 
 {
 	def queryService
 	def reportInfoService

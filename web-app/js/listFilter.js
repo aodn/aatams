@@ -18,13 +18,13 @@ $(function()
             terms.push( "" );
             this.value = terms.join( ", " );
             
-            $("#listFilterForm").submit();
+            $("#listControlForm").submit();
             
             return false;
         },
 	    change: function(event, ui) 
 	    {
-			$("#listFilterForm").submit();
+			$("#listControlForm").submit();
 	    	
 	        return false;
 	    }
@@ -32,6 +32,6 @@ $(function()
 	
 	$(".reportFilter").find(":input").not(".ui-autocomplete-input").change(function()
 	{
-		$("#listFilterForm").submit();
+		$("#listControlForm").submit();
 	});
 });

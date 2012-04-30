@@ -19,10 +19,10 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
-            
-            <g:listFilter name="receiverDeployment" />
-            
-            <div class="list">
+        
+            <g:listControlForm name="receiverDeployment" formats="${['PDF']}" type="report" />       
+
+            <div class="list ">
                 <table>
                     <thead>
                         <tr>

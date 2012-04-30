@@ -1,6 +1,8 @@
 package au.org.emii.aatams
 
-class ReceiverEventController extends AbstractController
+import au.org.emii.aatams.report.ReportController
+
+class ReceiverEventController extends ReportController
 {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 

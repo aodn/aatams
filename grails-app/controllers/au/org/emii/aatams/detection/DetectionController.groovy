@@ -1,8 +1,8 @@
 package au.org.emii.aatams.detection
 
-import au.org.emii.aatams.AbstractController;
+import au.org.emii.aatams.report.ReportController
 
-class DetectionController extends AbstractController
+class DetectionController extends ReportController
 {
     def candidateEntitiesService
 

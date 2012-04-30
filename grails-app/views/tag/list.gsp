@@ -20,7 +20,7 @@
             <div class="message">${flash.message}</div>
             </g:if>
             
-            <g:listFilter name="tag" />
+            <g:listControlForm name="tag" formats="${['CSV']}" />       
             
             <div class="list">
                 <table>

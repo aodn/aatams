@@ -1,8 +1,9 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.report.ReportController
 import grails.converters.JSON
 
-class InstallationController extends AbstractController
+class InstallationController extends ReportController
 {
     def candidateEntitiesService
 	def grailsApplication

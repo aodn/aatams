@@ -100,16 +100,6 @@
         </g:each>
       </ul>
       
-      <h3>${message(code: 'navigationMenu.section.dataExtract.label', default: 'Data Extract')} </h3>
-      <ul>
-        <g:each var="c" in="${dataExtractActions}">
-          
-          <li class="dataExtractActions">
-            <g:link controller="report" action="${c.key}">${c.value}</g:link>
-          </li>
-        </g:each>
-      </ul>
-      
       <h3>${message(code: 'navigationMenu.section.fieldSheets.label', default: 'Field Sheets')} </h3>
       <ul>
         <li>

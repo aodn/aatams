@@ -1,5 +1,5 @@
 <div class="report">
-  <g:form action="execute">
+  <g:form >
     <g:if test="${showFilter}">
       <div class="dialog">
         <g:reportFilter name="${name}"/>
@@ -15,9 +15,10 @@
       <span class="button">
         <g:each in="${params.list('formats')}" var="format">
           
-          <g:submitButton name="${format}" 
+          <g:actionSubmit name="${format}" 
                           class="${format}" 
-                          value="${format}"/>
+                          value="${format}"
+                          action="execute" />
         </g:each>
       </span>
     </div>

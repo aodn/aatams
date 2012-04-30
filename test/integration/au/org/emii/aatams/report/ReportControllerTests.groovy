@@ -23,6 +23,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 {
     def reportInfoService
     def queryService
+	def permissionUtilsService
     
 	def grailsApplication
 	def grailsTemplateEngineService
@@ -44,8 +45,8 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
             [ getRealPath: {System.getProperty("user.dir") + "/web-app" + it }] as ServletContext
 
         controller.params.pdf = "PDF"
-        controller.params._format = "CSV"
-		controller.params._type = "report"
+        controller.params._action_execute = "PDF"
+		controller.params._format = "CSV"	// render as CSV, for ease of testing.
 		
 		permitted = true
 		
@@ -68,7 +69,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     void testExecuteReceiverNoFilter() 
     {
         controller.params._name = "receiver"
-        controller.params._file = "receiverList"
         controller.params.filter = [:] 
                  
         controller.execute()
@@ -79,7 +79,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     void testExecuteReceiverFilterByOrg() 
     {
         controller.params._name = "receiver"
-        controller.params._file = "receiverList"
         controller.params.filter = [organisation: [eq:["name", "IMOS"]]]
                  
         controller.execute()
@@ -90,7 +89,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     void testExecuteInstallationStationNoFilter() 
     {
         controller.params._name = "installationStation"
-        controller.params._file = "installationStationList"
         controller.params.filter = [:]
 					
         controller.execute()
@@ -101,7 +99,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     void testExecuteInstallationStationByProject() 
     {
         controller.params._name = "installationStation"
-        controller.params._file = "installationStationList"
         controller.params.filter = [installation: [project: [eq: ["name", "Seal Count"]]]]
 					
         controller.execute()
@@ -112,7 +109,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     void testExecuteReceiverDeploymentNoFilter() 
     {
         controller.params._name = "receiverDeployment"
-        controller.params._file = "receiverDeploymentList"
         controller.params.filter = [:]
                  
         controller.execute()
@@ -123,7 +119,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     void testExecuteReceiverDeploymentByProject() 
     {
         controller.params._name = "receiverDeployment"
-        controller.params._file = "receiverDeploymentList"
         controller.params.filter = [station:[installation:[project:[eq:["name", "Seal Count"]]]]]
                  
         controller.execute()
@@ -134,7 +129,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     void testExecuteReceiverDeploymentByInstallation() 
     {
         controller.params._name = "receiverDeployment"
-        controller.params._file = "receiverDeploymentList"
         controller.params.filter = [station:[installation:[eq:["name", "Ningaloo Array"]]]]
                  
         controller.execute()
@@ -145,7 +139,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     void testExecuteReceiverDeploymentByProjectAndInstallation() 
     {
         controller.params._name = "receiverDeployment"
-        controller.params._file = "receiverDeploymentList"
         controller.params.filter = 
 			[station:[installation:[project:[eq:["name", "Seal Count"]], eq:["name", "Heron Island Curtain"]]]]
                  
@@ -157,7 +150,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     void testExecuteAnimalReleaseSummary()
     {
         controller.params._name = "animalReleaseSummary"
-        controller.params._file = "animalReleaseSummary"
         controller.params.filter = [:]
                  
         controller.execute()
@@ -169,9 +161,8 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     void testExecuteSensor()
     {
         controller.params._name = "sensor"
-        controller.params._file = "sensorExtract"
+        controller.params._action_execute = "CSV"
         controller.params.filter = [:]
-		controller.params._type = "extract"
 		
         controller.execute()
         
@@ -181,9 +172,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 	void testExecuteDetectionExtract()
 	{
 		controller.params._name = "detection"
-		controller.params._file = "detectionExtract"
 		controller.params.filter = [:]
-		controller.params._type = "extract"
 		
 		controller.execute()
 		
@@ -196,8 +185,8 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 		
 		controller.params._name = "installationStation"
 		controller.params.filter = [:]
-		controller.params._type = "extract"
-		controller.params._format = "KML"
+		controller.params._format = null
+        controller.params._action_execute = "KML"
 		
 		controller.execute()
 
@@ -280,16 +269,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 
 	private void assertContainsAllLines(actual, expected)
 	{
-/**		
-		expected.readLines().eachWithIndex
-		{
-			expectedLine, i ->
-			
-			def actualLine = actual.readLines()[i]
-			assertEquals(expectedLine, actualLine)
-		}
-		*/
-		
 		assertTrue(expected.readLines().containsAll(actual.readLines()))
 		assertTrue(actual.readLines().containsAll(expected.readLines()))
 	}
@@ -300,8 +279,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 		
 		controller.params.filter = [receiverDeployment:[station:[installation:[project:[in:["name", "Whale"]]]]]]
 		controller.params._name = "detection"
-		controller.params._file = "detectionExtract"
-		controller.params._type = "extract"
+        controller.params._action_execute = "CSV"
 
 		controller.execute()
 	}

@@ -109,8 +109,8 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         
         assertNotNull(receiverReportInfo)
         assertEquals("Receivers", receiverReportInfo.getDisplayName())
-        assertEquals("receiverList", receiverReportInfo.getJrxmlFilename()["report"])
-        assertEquals("receiverExtract", receiverReportInfo.getJrxmlFilename()["extract"])
+        assertEquals("receiverList", receiverReportInfo.getJrxmlFilename()["PDF"])
+        assertEquals("receiverExtract", receiverReportInfo.getJrxmlFilename()["CSV"])
     }
     
     void testGetReportInfoInstallationStation()
@@ -160,7 +160,7 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         
         assertNotNull(detectionReportInfo)
         assertEquals("Detections", detectionReportInfo.getDisplayName())
-        assertEquals("detectionExtract", detectionReportInfo.getJrxmlFilename()["extract"])
+        assertEquals("detectionExtract", detectionReportInfo.getJrxmlFilename()["CSV"])
 		
 		def filterParams = detectionReportInfo.filterParams
 		assertNotNull(filterParams)

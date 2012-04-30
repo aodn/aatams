@@ -48,16 +48,11 @@ class ReportController extends AbstractController
     {
 		log.debug("Executing report, params: " + params)
 		
-        // Test which button was clicked (which tells us the format.
-        def possibleFormats = ["PDF", "CSV", "KML"]
-        possibleFormats.each
-        {
-            format ->
-            if (params[format])
-            {
-                params._format = format
-            }
-        }
+		// The only time this will be set is in integration tests (to "CSV").
+		if (!params._format)
+		{
+			params._format = params._action_execute
+		}
         
 		if (params._name == "detection"  && params._format == "CSV")
 		{
@@ -86,6 +81,8 @@ class ReportController extends AbstractController
 				long startTime = System.currentTimeMillis()
 				
 				params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/"
+				params._file = reportInfoService.getReportInfo(params._name).jrxmlFilename[params._action_execute]
+		
 				generateReport(params, log, request, resultList)
 	
 				log.debug("Report generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")

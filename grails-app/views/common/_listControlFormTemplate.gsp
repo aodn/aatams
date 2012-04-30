@@ -4,7 +4,7 @@
     
         <g:listFilter name="${name}" />
         
-        <g:exportPane name="${name}" formats="${formats}" jrxmlFilename="${jrxmlFilename}" type="${type}" />
+        <g:exportPane name="${name}" formats="${formats}" />
     
     </g:form>
 

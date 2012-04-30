@@ -1,9 +1,9 @@
 package au.org.emii.aatams
 
-class ReceiverController extends AbstractController
+import au.org.emii.aatams.report.ReportController
+
+class ReceiverController extends ReportController
 {
-    def permissionUtilsService
-    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {

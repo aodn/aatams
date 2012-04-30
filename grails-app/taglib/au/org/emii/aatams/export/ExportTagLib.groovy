@@ -11,6 +11,6 @@ class ExportTagLib
 		attrs, body ->
 		
 		out << render(template:"/export/exportPaneTemplate",
-				 	  model: attrs + [body:body, jrxmlFilename:reportInfoService.getReportInfo(attrs.name).jrxmlFilename[attrs.type]])
+				 	  model: attrs + [body:body])
 	}
 }

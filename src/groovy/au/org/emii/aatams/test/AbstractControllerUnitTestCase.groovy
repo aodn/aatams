@@ -60,6 +60,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 			controller.queryService.embargoService.permissionUtilsService = new PermissionUtilsService()
 			
 			controller.reportInfoService = new ReportInfoService()
+			controller.reportInfoService.permissionUtilsService = new PermissionUtilsService()
 		}
 		catch (MissingPropertyException e)
 		{

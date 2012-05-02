@@ -1,15 +1,29 @@
 package au.org.emii.aatams
 
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.export.JRCsvExporter
+
+import au.org.emii.aatams.export.ExportService;
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.test.*
 
 class ReceiverControllerTests extends AbstractControllerUnitTestCase 
 {
-    protected void setUp() {
+    protected void setUp() 
+	{
         super.setUp()
+		controller.params.format = "PDF"
+		
+		ExportService.metaClass.getExporter =
+		{
+			params ->
+			
+			return new JRCsvExporter()
+		}
     }
 
-    protected void tearDown() {
+    protected void tearDown() 
+	{
         super.tearDown()
     }
 
@@ -25,4 +39,9 @@ class ReceiverControllerTests extends AbstractControllerUnitTestCase
 		
 		receiver.delete(failOnError:true)
     }
+	
+	void testExportNoFilter()
+	{
+		assertExport([:], "testExecuteReceiverNoFilter")
+	}
 }

@@ -1,8 +1,11 @@
 package au.org.emii.aatams.export
 
+import java.util.List;
+
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import au.org.emii.aatams.filter.QueryService;
+import au.org.emii.aatams.report.ReportInfoService;
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import au.org.emii.aatams.*
 
@@ -12,8 +15,10 @@ import grails.test.*
 class ExportServiceTests extends AbstractGrailsUnitTestCase 
 {
 	def exportService
+	def permissionUtilsService
 	def queryService
 	def receiverList
+	def reportInfoService
 	
     protected void setUp() 
 	{
@@ -24,10 +29,26 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
 		
 		mockLogging(QueryService, true)
 		queryService = new QueryService()
+		
+		mockLogging(PermissionUtilsService, true)
+		permissionUtilsService = new PermissionUtilsService()
+		permissionUtilsService.metaClass.principal = 
+		{
+			return [name: "Joe Bloggs"]
+		}
+		
+		mockLogging(ReportInfoService, true)
+		reportInfoService = new ReportInfoService()
+		
+		exportService.reportInfoService = reportInfoService
 		exportService.queryService = queryService
+		exportService.permissionUtilsService = permissionUtilsService
+		
 		
 		exportService.metaClass.getReportStream =
 		{
+			clazz, params ->
+			
 			return new FileInputStream(new File("web-app/reports/receiverList.jrxml"))
 		}
 		
@@ -99,17 +120,17 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
 		assertEquals(JRPdfExporter.class, exportService.getExporter([format: "PDF"]).class)
 	}
 	
-//    void testExportReceiversOneRecord() 
-//	{
-//		def expectedOutput = ''',,AATAMS Receivers,,,,,,,,,,,
-//,Parameters,,,,,,,,,,,,
-//,user:,,,,Joe Bloggs,,,,,,,,
-//,,,code name,,,status,,manufacturer,,model,serial number,,
-//,organisation:,,,IMOS,,,total receivers:,,0,,,,
-//,,,vr2w-1,,,null,,Vemco,,vr2w,1,,
-//'''
-//		assertExport(expectedOutput, [receiverList[0]])
-//    }
+    void testExportReceiversOneRecord() 
+	{
+		def expectedOutput = ''',,AATAMS Receivers,,,,,,,,,,,
+,Parameters,,,,,,,,,,,,
+,user:,,,,Joe Bloggs,,,,,,,,
+,,,code name,,,status,,manufacturer,,model,serial number,,
+,organisation:,,,IMOS,,,total receivers:,,0,,,,
+,,,vr2w-1,,,null,,Vemco,,vr2w,1,,
+'''
+		assertExport(expectedOutput, [receiverList[0]])
+    }
 	
 	void testExportReceiversTwoRecords()
 	{
@@ -127,14 +148,35 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
 
 	private assertExport(expectedOutput, results)
 	{
-		PagedBeanDataSource.metaClass.getResults =
+		exportService.metaClass.getDataSource =
 		{
-			return results
+			queryService, clazz, params ->
+			
+			PagedBeanDataSource ds = new PagedBeanDataSource(queryService, clazz, params)
+			ds.metaClass.query =
+			{
+				theclazz, filterParams ->
+				
+				List queryResults
+		
+				if (filterParams.offset >= results.size())
+				{
+					queryResults = []
+				}
+				else
+				{
+					queryResults = results[filterParams.offset..Math.min(filterParams.offset + filterParams.max, results.size - 1)]
+				}
+		
+				return queryResults
+			}
+			
+			return ds
 		}
-
+	
 		ByteArrayOutputStream out = new ByteArrayOutputStream()
 		
-		def params = [format: "CSV", filter: [user: "Joe Bloggs"]]
+		def params = [format: "CSV", filter: [:]]
 		
 		exportService.export(Receiver.class, params, out)
 		

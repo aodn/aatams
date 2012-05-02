@@ -100,4 +100,61 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 	{
 		return permitted
 	}
+
+	protected void assertExport(filter, name) {
+		controller.params.filter = filter
+		
+		controller.export()
+		
+		File actualReport = File.createTempFile(name + ".", ".csv")
+		OutputStream out = new FileOutputStream(actualReport)
+		out.write(controller.response.contentAsByteArray)
+		out.close()
+		
+		println("Test output for test '" + name + "' written to: " + actualReport.getAbsolutePath())
+		
+		File expectedReport = new File(constructFilePath(name))
+		
+		assertContainsAllLines(removePageFooter(controller.response.contentAsString.trim()), removePageFooter(expectedReport.getText()))
+	}
+
+	protected String constructFilePath(expectedFileName) 
+	{
+		String expectedFilePath = \
+			System.getProperty("user.dir") + \
+			"/test/integration/au/org/emii/aatams/report/resources/" + \
+			expectedFileName + ".expected.csv"
+		return expectedFilePath
+	}
+
+	protected void assertContainsAllLines(actual, expected) 
+	{
+		assertTrue(expected.readLines().containsAll(actual.readLines()))
+		assertTrue(actual.readLines().containsAll(expected.readLines()))
+	}
+
+	protected String removePageFooter(String s) 
+	{
+		def lineCount = 0
+		s.eachLine { lineCount ++}
+		
+		def retString = ""
+		int index = 0
+		
+		s.eachLine
+		{
+			if (it.contains("Page"))
+			{
+				// remove page footer
+			}
+			else
+			{
+				retString += it + '\n'
+			}
+			
+			index++
+		}
+		
+		return retString
+	}
 }

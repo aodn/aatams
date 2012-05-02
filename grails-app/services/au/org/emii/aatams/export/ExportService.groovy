@@ -1,5 +1,6 @@
 package au.org.emii.aatams.export
 
+import au.org.emii.aatams.Person
 import au.org.emii.aatams.Receiver
 import au.org.emii.aatams.report.ReportInfoService
 
@@ -26,21 +27,24 @@ import org.springframework.context.ApplicationContextAware
 class ExportService implements ApplicationContextAware
 {
 	ApplicationContext applicationContext
+	def permissionUtilsService
 	def reportInfoService
 	def queryService
 	
     void export(Class clazz, Map params, OutputStream out) 
 	{
-		params.putAll([REPORT_USER: "jbloggs", FILTER_PARAMS: params.filter?.entrySet(), SUBREPORT_DIR: "web-app/reports/"])
+		params.putAll([REPORT_USER: permissionUtilsService.principal()?.username, FILTER_PARAMS: getFilterParamsInReportFormat(params).entrySet(), SUBREPORT_DIR: "web-app/reports/"])
 		
-		InputStream reportStream = getReportStream()
+		InputStream reportStream = getReportStream(clazz, params)
 		assert(reportStream)
 		JasperDesign jasperDesign = JRXmlLoader.load(reportStream)
 		JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign)
 		assert(jasperReport)
 		
-		JRDataSource ds = new PagedBeanDataSource(queryService, clazz, params)
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, ds)
+		JRDataSource ds = getDataSource(queryService, clazz, params)
+		// Copy the map, otherwise we get a self reference for one of the entries (which causes
+		// stackoverflow when traversing the map).
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(params), ds)
 		
 		JRExporter exporter = getExporter(params)
 		
@@ -49,6 +53,27 @@ class ExportService implements ApplicationContextAware
 		
 		exporter.exportReport()
     }
+	
+	private JRDataSource getDataSource(queryService, clazz, params)
+	{
+		return new PagedBeanDataSource(queryService, clazz, params)
+	}
+	
+	private Map getFilterParamsInReportFormat(params)
+	{
+		// Insert the user in to filter params passed to Jasper.
+		def filterParams = [:]
+
+		Person person = permissionUtilsService.principal()
+		if (person)
+		{
+			filterParams.user = person.name
+		}
+
+		filterParams = filterParams + reportInfoService.filterParamsToReportFormat(params.filter)
+
+		return filterParams
+	}
 	
 	private JRExporter getExporter(params)
 	{
@@ -70,8 +95,8 @@ class ExportService implements ApplicationContextAware
 		}
 	}
 	
-	private InputStream getReportStream()
+	private InputStream getReportStream(clazz, params)
 	{
-		return new FileInputStream(applicationContext.getResource("/WEB-INF/reports/receiverList.jrxml")?.getFile())
+		return new FileInputStream(applicationContext.getResource("/reports/" + reportInfoService.getReportInfo(clazz).jrxmlFilename[params.format] + ".jrxml")?.getFile())
 	}
 }

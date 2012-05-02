@@ -65,7 +65,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     {
         super.tearDown()
     }
-
+/**
     void testExecuteReceiverNoFilter() 
     {
         controller.params._name = "receiver"
@@ -85,7 +85,8 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         
         checkResponse("testExecuteReceiverFilterByOrg")
     }
-
+*/
+/**	
     void testExecuteInstallationStationNoFilter() 
     {
         controller.params._name = "installationStation"
@@ -105,7 +106,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         
         checkResponse("testExecuteInstallationStationByProject")
     }
-
+*/
     void testExecuteReceiverDeploymentNoFilter() 
     {
         controller.params._name = "receiverDeployment"
@@ -267,12 +268,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 2011-05-17 02:54:02,Whale Station,-20.12,76.01,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS''')
 	}
 
-//	private void assertContainsAllLines(actual, expected)
-//	{
-//		assertTrue(expected.readLines().containsAll(actual.readLines()))
-//		assertTrue(actual.readLines().containsAll(expected.readLines()))
-//	}
-//	
 	private void setupAndExecuteWhaleDetectionExtract() 
 	{
 		hasRole = false
@@ -300,37 +295,4 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         // won't match).
 		assertContainsAllLines(removePageFooter(controller.response.contentAsString.trim()), removePageFooter(expectedFile.getText()))
     }
-
-//	private String constructFilePath(expectedFileName) {
-//		String expectedFilePath = \
-//            System.getProperty("user.dir") + \
-//            "/test/integration/au/org/emii/aatams/report/resources/" + \
-//            expectedFileName + ".expected.csv"
-//		return expectedFilePath
-//	}
-//    
-//    String removePageFooter(String s)
-//    {
-//        def lineCount = 0
-//        s.eachLine { lineCount ++}
-//        
-//        def retString = ""
-//        int index = 0
-//        
-//        s.eachLine
-//        {
-//            if (it.contains("Page"))
-//			{
-//				// remove page footer
-//			}
-//            else
-//            {
-//                retString += it + '\n'
-//            }
-//            
-//            index++
-//        }
-//        
-//        return retString 
-//    }
 }

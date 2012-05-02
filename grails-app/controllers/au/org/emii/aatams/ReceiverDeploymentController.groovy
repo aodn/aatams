@@ -19,6 +19,11 @@ class ReceiverDeploymentController extends ReportController
 		doList("receiverDeployment")
 	}
 	
+	def export =
+	{
+		doExport("receiverDeployment")
+	}
+
     def create = {
         def receiverDeploymentInstance = new ReceiverDeployment()
         receiverDeploymentInstance.properties = params

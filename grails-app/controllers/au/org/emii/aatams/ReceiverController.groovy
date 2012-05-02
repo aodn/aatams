@@ -14,6 +14,11 @@ class ReceiverController extends ReportController
 	{
 		doList("receiver")
 	}
+	
+	def export =
+	{
+		doExport("receiver")
+	}
 
     def create = {
         def receiverInstance = new Receiver()

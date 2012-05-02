@@ -67,26 +67,7 @@ class PagedBeanDataSource extends JRAbstractBeanDataSource
 		filterParams.offset = firstResult
 		filterParams.max = maxResults
 		
-//		List queryResults = queryService.query(clazz, filterParams).results
-	
-//		List queryResults = getQueryProvider()
-//				.getObjects(getCriteriaSet(),
-//				firstResult,
-//				maxResults);
-		
-		def results = getResults()
-		List queryResults
-
-		if (firstResult >= results.size())
-		{
-			queryResults = []
-		}
-		else
-		{
-			queryResults = results[firstResult..Math.min(firstResult + maxResults, results.size - 1)]
-		}
-		
-		
+		List queryResults = query(clazz, filterParams)
 		
 		if (resultPage == null) 
 		{
@@ -103,6 +84,11 @@ class PagedBeanDataSource extends JRAbstractBeanDataSource
 		return resultPage;
 	}
 
+	private List query(clazz, filterParams)
+	{
+		return queryService.query(clazz, filterParams).results
+	}
+	
 	public final Object getObject(int index) 
 	{
 		if (   (resultPage == null)

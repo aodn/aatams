@@ -1,10 +1,8 @@
 package au.org.emii.aatams
 
-import java.util.List;
-import java.util.Map;
-
 class AbstractController 
 {
+	def exportService
 	def queryService
 	def reportInfoService
 
@@ -18,6 +16,11 @@ class AbstractController
 
 		[entityList: resultList.results,
 		 total: resultList.count]
+	}
+	
+	protected def doExport(queryName)
+	{
+		exportService.export(reportInfoService.getClassForName(queryName), params, response.getOutputStream())
 	}
 	
 	protected void flattenParams()

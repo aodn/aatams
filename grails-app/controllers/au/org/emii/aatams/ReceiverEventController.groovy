@@ -15,6 +15,11 @@ class ReceiverEventController extends ReportController
 		doList("receiverEvent")
 	}
 	
+	def export =
+	{
+		doExport("receiverEvent")
+	}
+
     def create = {
         redirect(controller:"receiverDownloadFile", 
                  action:"createEvents") 

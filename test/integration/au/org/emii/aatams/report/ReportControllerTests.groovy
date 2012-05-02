@@ -65,89 +65,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     {
         super.tearDown()
     }
-/**
-    void testExecuteReceiverNoFilter() 
-    {
-        controller.params._name = "receiver"
-        controller.params.filter = [:] 
-                 
-        controller.execute()
-        
-        checkResponse("testExecuteReceiverNoFilter")
-    }
-    
-    void testExecuteReceiverFilterByOrg() 
-    {
-        controller.params._name = "receiver"
-        controller.params.filter = [organisation: [eq:["name", "IMOS"]]]
-                 
-        controller.execute()
-        
-        checkResponse("testExecuteReceiverFilterByOrg")
-    }
-*/
-/**	
-    void testExecuteInstallationStationNoFilter() 
-    {
-        controller.params._name = "installationStation"
-        controller.params.filter = [:]
-					
-        controller.execute()
-        
-        checkResponse("testExecuteInstallationStationNoFilter")
-    }
-    
-    void testExecuteInstallationStationByProject() 
-    {
-        controller.params._name = "installationStation"
-        controller.params.filter = [installation: [project: [eq: ["name", "Seal Count"]]]]
-					
-        controller.execute()
-        
-        checkResponse("testExecuteInstallationStationByProject")
-    }
-*/
-    void testExecuteReceiverDeploymentNoFilter() 
-    {
-        controller.params._name = "receiverDeployment"
-        controller.params.filter = [:]
-                 
-        controller.execute()
-        
-        checkResponse("testExecuteReceiverDeploymentNoFilter")
-    }
-    
-    void testExecuteReceiverDeploymentByProject() 
-    {
-        controller.params._name = "receiverDeployment"
-        controller.params.filter = [station:[installation:[project:[eq:["name", "Seal Count"]]]]]
-                 
-        controller.execute()
-        
-        checkResponse("testExecuteReceiverDeploymentByProject")
-    }
-    
-    void testExecuteReceiverDeploymentByInstallation() 
-    {
-        controller.params._name = "receiverDeployment"
-        controller.params.filter = [station:[installation:[eq:["name", "Ningaloo Array"]]]]
-                 
-        controller.execute()
-        
-        checkResponse("testExecuteReceiverDeploymentByInstallation")
-    }
-
-    void testExecuteReceiverDeploymentByProjectAndInstallation() 
-    {
-        controller.params._name = "receiverDeployment"
-        controller.params.filter = 
-			[station:[installation:[project:[eq:["name", "Seal Count"]], eq:["name", "Heron Island Curtain"]]]]
-                 
-        controller.execute()
-        
-        checkResponse("testExecuteReceiverDeploymentByProjectAndInstallation")
-    }
-    
+	
     void testExecuteAnimalReleaseSummary()
     {
         controller.params._name = "animalReleaseSummary"
@@ -158,27 +76,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 		// Broken on certain dates - need to fix.
 //        checkResponse("testExecuteAnimalReleaseSummary")
     }
-    
-    void testExecuteSensor()
-    {
-        controller.params._name = "sensor"
-        controller.params._action_execute = "CSV"
-        controller.params.filter = [:]
-		
-        controller.execute()
-        
-        checkResponse("testExecuteSensor")
-    }
-	
-	void testExecuteDetectionExtract()
-	{
-		controller.params._name = "detection"
-		controller.params.filter = [:]
-		
-		controller.execute()
-		
-		checkResponse("testExecuteDetection")
-	}
 
 	void testExecuteStationKmlExtract()
 	{
@@ -208,77 +105,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 			assertTrue(folderNodes*.name*.text().contains(folderName))
 		}
 	}
-
-	void testDetectionExtractWithReadPermission()
-	{
-		permitted = true
-		authenticated = true
-		
-		setupAndExecuteWhaleDetectionExtract()
-		
-		assertContainsAllLines(controller.response.contentAsString,
-			'''timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
-2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
-2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
-2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-7777,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-7777,IMOS
-2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
-2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
-2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS''')
-	}
-
-	void testDetectionExtractWithoutReadPermission()
-	{
-		permitted = false
-		authenticated = true
-		
-		setupAndExecuteWhaleDetectionExtract()
-		def expected = '''timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
-2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-7777,IMOS
-2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
-2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-7777,IMOS
-2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
-2011-05-17 02:54:01,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-7777,IMOS
-2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
-2011-05-17 02:54:02,Whale Station,-20.1234,76.02,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS'''
-		
-		assertContainsAllLines(controller.response.contentAsString, expected)
-	}
-
-	void testDetectionExtractWithoutAuthentication()
-	{
-		permitted = false
-		authenticated = false
-		
-		setupAndExecuteWhaleDetectionExtract()
-		
-		assertContainsAllLines(controller.response.contentAsString, '''timestamp,station name,latitude,longitude,receiver ID,tag ID,species,uploader,transmitter ID,organisation
-2011-05-17 02:54:00,Whale Station,-20.12,76.01,VR2W-103377,,,Joe Bloggs,A69-1303-7777,IMOS
-2011-05-17 02:54:00,Whale Station,-20.12,76.01,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
-2011-05-17 02:54:00,Whale Station,-20.12,76.01,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-2011-05-17 02:54:01,Whale Station,-20.12,76.01,VR2W-103377,,,Joe Bloggs,A69-1303-7777,IMOS
-2011-05-17 02:54:01,Whale Station,-20.12,76.01,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
-2011-05-17 02:54:01,Whale Station,-20.12,76.01,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS
-2011-05-17 02:54:02,Whale Station,-20.12,76.01,VR2W-103377,,,Joe Bloggs,A69-1303-7777,IMOS
-2011-05-17 02:54:02,Whale Station,-20.12,76.01,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS
-2011-05-17 02:54:02,Whale Station,-20.12,76.01,VR2W-103377,A69-1303-6666,41110001 - Eubalaena australis (southern right whale),Joe Bloggs,A69-1303-6666,IMOS''')
-	}
-
-	private void setupAndExecuteWhaleDetectionExtract() 
-	{
-		hasRole = false
-		
-		controller.params.filter = [receiverDeployment:[station:[installation:[project:[in:["name", "Whale"]]]]]]
-		controller.params._name = "detection"
-        controller.params._action_execute = "CSV"
-
-		controller.execute()
-	}
-
+	
     private void checkResponse(def expectedFileName)
     {
         // Compare the response content with expected.

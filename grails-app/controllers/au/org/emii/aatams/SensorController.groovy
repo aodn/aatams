@@ -19,6 +19,11 @@ class SensorController extends ReportController
 		doList("sensor")
 	}
 
+	def export =
+	{
+		doExport("sensor")
+	}
+
     def create = {
         def sensorInstance = new Sensor()
         sensorInstance.properties = params

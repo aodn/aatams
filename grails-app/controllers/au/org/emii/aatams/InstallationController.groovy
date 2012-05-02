@@ -19,6 +19,11 @@ class InstallationController extends ReportController
 		doList("installation")
 	}
 	
+	def export =
+	{
+		doExport("installation")
+	}
+
     def create = {
         def installationInstance = new Installation()
         installationInstance.properties = params

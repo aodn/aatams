@@ -23,7 +23,7 @@ class PagedBeanDataSource extends JRAbstractBeanDataSource
 	private List resultPage;
 	private int pageStart = Integer.MAX_VALUE;
 	private int pageEnd = Integer.MIN_VALUE;
-	private static final int PAGE_SIZE = 50;
+	private static final int PAGE_SIZE = 500
 	
 	public PagedBeanDataSource(QueryService queryService, Class clazz, Map filterParams)
 	{

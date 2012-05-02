@@ -20,7 +20,25 @@ class AbstractController
 	
 	protected def doExport(queryName)
 	{
-		exportService.export(reportInfoService.getClassForName(queryName), params, response.getOutputStream())
+		if (!params.format)
+		{
+			params.format = params._action_export
+		}
+println "export params: " + params
+		
+		response.setHeader("Content-disposition", "attachment; filename=" + queryName + "." + params.format.toLowerCase());
+		response.contentType = getMimeType(params)
+		response.characterEncoding = "UTF-8"
+//		response.outputStream << reportDef.contentStream.toByteArray()
+
+		exportService.export(reportInfoService.getClassForName(queryName), params, response.outputStream)
+	}
+	
+	private String getMimeType(params)
+	{
+		def mimeTypes = [PDF: "application/pdf", CSV: "text/csv", KML: "application/vnd.google-earth.kml+xml"]
+		
+		return mimeTypes[params.format]
 	}
 	
 	protected void flattenParams()

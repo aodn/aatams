@@ -42,6 +42,7 @@ class ExportService implements ApplicationContextAware
 		assert(jasperReport)
 		
 		JRDataSource ds = getDataSource(queryService, clazz, params)
+		
 		// Copy the map, otherwise we get a self reference for one of the entries (which causes
 		// stackoverflow when traversing the map).
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(params), ds)
@@ -52,6 +53,10 @@ class ExportService implements ApplicationContextAware
 		exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out)
 		
 		exporter.exportReport()
+		
+		// Copy the map, otherwise we get a self reference for one of the entries (which causes
+		// stackoverflow when traversing the map).
+//		JasperFillManager.fillReportToStream(jasperReport, out, new HashMap(params), ds)
     }
 	
 	private JRDataSource getDataSource(queryService, clazz, params)

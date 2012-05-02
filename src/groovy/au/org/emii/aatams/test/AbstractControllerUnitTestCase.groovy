@@ -2,13 +2,15 @@ package au.org.emii.aatams.test
 
 import grails.test.ControllerUnitTestCase
 
+import net.sf.jasperreports.engine.export.JRCsvExporter
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
-import au.org.emii.aatams.EmbargoService;
+import au.org.emii.aatams.EmbargoService
 import au.org.emii.aatams.PermissionUtilsService;
 import au.org.emii.aatams.Person;
+import au.org.emii.aatams.export.ExportService
 import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService
 
@@ -65,6 +67,15 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 		catch (MissingPropertyException e)
 		{
 			// Some controllers don't have these properties, just ignore.
+		}
+		
+		controller.params.format = "PDF"
+		
+		ExportService.metaClass.getExporter =
+		{
+			params ->
+			
+			return new JRCsvExporter()
 		}
 	}
 

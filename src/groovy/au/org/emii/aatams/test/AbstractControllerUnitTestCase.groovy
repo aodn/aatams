@@ -77,6 +77,13 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 			
 			return new JRCsvExporter()
 		}
+		
+		controller.metaClass.getMimeType =
+		{
+			params ->
+
+			return "text/csv"
+		}
 	}
 
 	protected void tearDown()

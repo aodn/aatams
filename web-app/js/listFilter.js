@@ -1,5 +1,13 @@
 $(function()
 {
+	function submit()
+	{
+		$(".body").block({ message: '<h2><img src="../images/spinner.gif" /></h2>'});
+
+//		$(".reportFilter").block({ message: '<h2><img src="../images/spinner.gif" /></h2>'});
+		$("#listControlForm").submit();
+	}
+	
     function split( val ) {
         return val.split( /,\s*/ );
     }
@@ -18,13 +26,13 @@ $(function()
             terms.push( "" );
             this.value = terms.join( ", " );
             
-            $("#listControlForm").submit();
+            submit();
             
             return false;
         },
 	    change: function(event, ui) 
 	    {
-			$("#listControlForm").submit();
+			submit();
 	    	
 	        return false;
 	    }
@@ -32,6 +40,6 @@ $(function()
 	
 	$(".reportFilter").find(":input").not(".ui-autocomplete-input").change(function()
 	{
-		$("#listControlForm").submit();
+		submit();
 	});
 });

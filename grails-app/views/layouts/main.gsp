@@ -16,6 +16,7 @@
 
     <g:javascript src="asAbove.js"/>
     
+    <g:javascript src="jquery.blockUI.js"/>
     <g:javascript src="jquery.qtip-1.0.0-rc3.min.js"/>
     <g:javascript src="jquery.cookie.js"/>
     <g:javascript src="notification.js"/>

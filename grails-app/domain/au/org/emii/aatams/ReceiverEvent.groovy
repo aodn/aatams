@@ -1,5 +1,8 @@
 package au.org.emii.aatams
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat
+
 import au.org.emii.aatams.util.SqlUtils
 
 /**
@@ -40,6 +43,8 @@ class ReceiverEvent
         cache true
     }
 	
+	static transients = ['formattedTimestamp']
+	
 	static String toSqlInsert(Map event)
 	{
 		StringBuilder eventBuff = new StringBuilder(
@@ -55,5 +60,23 @@ class ReceiverEvent
 		SqlUtils.removeTrailingCommaAndAddBracket(eventBuff)
 		
 		return eventBuff.toString()
+	}
+	
+	static DateFormat formatter
+	
+	String getFormattedTimestamp()
+	{
+		if (timestamp)
+		{
+			if (!formatter)
+			{
+				formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+				formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+			}
+			
+			return formatter.format(timestamp)
+		}
+		
+		return null
 	}
 }

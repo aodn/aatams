@@ -1,5 +1,6 @@
 package au.org.emii.aatams.detection
 
+import au.org.emii.aatams.export.AbstractStreamingExporterService;
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.test.*
 import groovy.sql.Sql
@@ -21,10 +22,6 @@ class DetectionControllerTests extends AbstractControllerUnitTestCase
 		def viewName = ConfigurationHolder.config.rawDetection.extract.view.name
 		def viewSelect = ConfigurationHolder.config.rawDetection.extract.view.select
 		sql.execute ('create view ' + viewName + ' as ' + viewSelect)
-		
-		// For some reason, reading asynchronously is not returning results when run within context
-		// of integration test.
-		controller.detectionExtractService.metaClass.shouldReadAsync = { return false }
 	}
 	
 	void testExecuteDetectionExtract()

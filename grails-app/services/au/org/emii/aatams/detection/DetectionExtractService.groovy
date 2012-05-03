@@ -1,41 +1,35 @@
 package au.org.emii.aatams.detection
 
-import groovy.sql.Sql
-
-import java.util.Map
-import java.util.concurrent.Callable
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.FutureTask
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.TimeUnit
-import java.util.zip.GZIPOutputStream
-import java.util.zip.ZipEntry
-import java.util.zip.ZipOutputStream
+import java.io.OutputStream;
 
 import org.apache.shiro.SecurityUtils
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
+import au.org.emii.aatams.export.AbstractStreamingExporterService
 import au.org.emii.aatams.util.GeometryUtils
+import groovy.sql.Sql
 
-class DetectionExtractService 
+class DetectionExtractService extends AbstractStreamingExporterService
 {
     static transactional = false
 	
 	def dataSource
 	def permissionUtilsService
-	private Map<Integer, Boolean> projectPermissionCache = [:]
- 
-	def extractPage(filterParams, sql, limit, offset)
+	
+	def extractPage(filterParams)
 	{
-		log.debug("Querying database, offset: " + offset)
-		def results = sql.rows(constructQuery(filterParams, limit, offset))
+		log.debug("Querying database, offset: " + filterParams.offset)
+		def results = filterParams.sql.rows(constructQuery(filterParams, filterParams.max, filterParams.offset))
 		log.debug("Query finished, num results: " + results.size())
 		
 		return results
 	}
 
-	private applyEmbargo(results) 
+	protected String getReportName()
+	{
+		return "detection"
+	}
+	
+	protected void applyEmbargo(results, params) 
 	{
 		def now = new Date()
 		
@@ -45,7 +39,7 @@ class DetectionExtractService
 
 			if (row.embargo_date && row.embargo_date.after(now))
 			{
-				if (!hasReadPermission(row.project_id))
+				if (!hasReadPermission(row.project_id, params))
 				{
 					row.species_name = ""
 					row.spcode = ""
@@ -55,6 +49,14 @@ class DetectionExtractService
 		}
 	}
 	
+	protected void writeCsvData(final filterParams, OutputStream out)
+	{
+		filterParams.sql = new Sql(dataSource)
+		filterParams.projectPermissionCache = [:]
+		
+		super.writeCsvData(filterParams, out)
+	}
+
 	private String constructQuery(filterParams, limit, offset)
 	{
 		String query = '''select * from detection_extract_view '''
@@ -114,139 +116,15 @@ class DetectionExtractService
 	
 	def generateReport(filterParams, req, res)
 	{
-		long startTime = System.currentTimeMillis()
-		
-		projectPermissionCache = [:]
-		
-		OutputStream out = null
-		
-		// Select the appropriate content encoding based on the
-		// client's Accept-Encoding header. Choose GZIP if the header
-		// includes "gzip". Choose ZIP if the header includes "compress".
-		// Choose no compression otherwise.
-		String encodings = req.getHeader("Accept-Encoding");
-		if (encodings != null && encodings.indexOf("gzip") != -1) 
-		{
-			// Go with GZIP
-			res.setHeader("Content-Encoding", "gzip");
-			out = new GZIPOutputStream(res.getOutputStream());
-		}
-		else if (encodings != null && encodings.indexOf("compress") != -1) 
-		{
-			// Go with ZIP
-			res.setHeader("Content-Encoding", "x-compress");
-			out = new ZipOutputStream(res.getOutputStream());
-			((ZipOutputStream)out).putNextEntry(new ZipEntry("dummy name"));
-		}
-		else 
-		{
-			// No compression
-			out = res.getOutputStream();
-		}
-
-		res.setHeader("Vary", "Accept-Encoding");
-		res.setHeader("Content-disposition", "attachment; filename=" + "detectionExtract.csv")
-		res.contentType = "text/csv"
-		res.characterEncoding = "UTF-8"
-
-		try
-		{
-			writeCsvHeader(out)
-			writeCsvData(filterParams, out)
-		}
-		finally
-		{
-			// Write the compression trailer and close the output stream
-			out.close()
-			log.info("Elapsed time (ms): " + (System.currentTimeMillis() - startTime))
-		}
+		super.generateReport(filterParams, req, res)
 	}
 
-	private boolean shouldReadAsync()
+	protected List readData(filterParams)
 	{
-		return true
+		return extractPage(filterParams)
 	}
 	
-	ExecutorService executor = Executors.newCachedThreadPool()
-	def resultListQueue
-	volatile finishedQuery
-	
-	private void writeCsvData(final filterParams, OutputStream out) 
-	{
-		resultListQueue = new LinkedBlockingQueue<List>(ConfigurationHolder.config.rawDetection.extract.queryQueueSize)
-		finishedQuery = false
-		
-		final def sql = new Sql(dataSource)
-		final def limit = ConfigurationHolder.config.rawDetection.extract.limit
-		
-		if (shouldReadAsync())
-		{
-			executor.execute(new Runnable() 
-			{
-				public void run()
-				{
-					readData(filterParams, sql, limit)
-				}
-			})
-		}
-		else
-		{
-			readData(filterParams, sql, limit)
-		}
-		
-		// Write data...
-		try
-		{
-			while (!resultListQueue.isEmpty() || !finishedQuery)
-			{
-				def resultList = resultListQueue.poll(2, TimeUnit.SECONDS)
-				
-				if (resultList)
-				{
-					applyEmbargo(resultList)
-					writeCsvChunk(resultList, out)
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			log.warn("Data extract exception, cancelling database query...", e)
-			executor.shutdownNow()
-			executor = Executors.newCachedThreadPool()
-		}
-		finally
-		{
-			sql.close()
-		}
-	}
-
-	private void readData(filterParams, sql, limit) 
-	{
-		try
-		{
-			def offset = 0
-
-			def resultList = extractPage(filterParams, sql, limit, offset)
-
-			while (resultList.size() > 0)
-			{
-				resultListQueue.put(resultList)
-
-				offset += resultList.size()
-				resultList = extractPage(filterParams, sql, limit, offset)
-			}
-		}
-		catch (InterruptedException e)
-		{
-			//					System.out.println("Database query interrupted", e)
-		}
-		finally
-		{
-			finishedQuery = true
-		}
-	}
-
-	private def writeCsvChunk(resultList, OutputStream out) 
+	protected def writeCsvChunk(resultList, OutputStream out) 
 	{
 		resultList.each
 		{
@@ -269,7 +147,7 @@ class DetectionExtractService
 		return resultList.size()
 	}
 
-	private void writeCsvHeader(OutputStream out) 
+	protected void writeCsvHeader(OutputStream out) 
 	{
 		out << "timestamp,"
 		out << "station name,"
@@ -300,15 +178,15 @@ class DetectionExtractService
 		return sqlFormat[0..sqlFormat.length() - 3]
 	}
 	
-	private boolean hasReadPermission(projectId)
+	private boolean hasReadPermission(projectId, params)
 	{
-		if (!projectPermissionCache.containsKey(projectId))
+		if (!params.projectPermissionCache.containsKey(projectId))
 		{
 	        String permissionString = permissionUtilsService.buildProjectReadPermission(projectId)
-	        projectPermissionCache.put(projectId, SecurityUtils.subject.isPermitted(permissionString))
+	        params.projectPermissionCache.put(projectId, SecurityUtils.subject.isPermitted(permissionString))
 		}
 		
-		assert(projectPermissionCache.containsKey(projectId))
-		return projectPermissionCache[projectId]
+		assert(params.projectPermissionCache.containsKey(projectId))
+		return params.projectPermissionCache[projectId]
 	}
 }

@@ -858,19 +858,34 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                      status:FileProcessingStatus.PROCESSED,
                                      errMsg:"",
                                      requestingUser:jonBurgess).save(failOnError:true)
-                                 
+        
+		DateTime eventDate = new DateTime("2013-05-17T12:54:56")							 
         10.times
         {
             ValidReceiverEvent event =
-                new ValidReceiverEvent(timestamp:new Date(),
+                new ValidReceiverEvent(timestamp:eventDate.plusMinutes(it).toDate(),
                                   receiverDeployment:rx2Bondi,
 								  receiverName:"VR2W-101337",
                                   description:"desc",
                                   data:"123",
-                                  unit:"m")
+                                  units:"m")
                               
             export2.addToEvents(event)
         }
+		
+		5.times
+		{
+			ValidReceiverEvent event =
+				new ValidReceiverEvent(timestamp:eventDate.plusMinutes(it).toDate(),
+								  receiverDeployment:rx3Ningaloo,
+								  receiverName:"VR2W-101338",
+								  description:"other desc",
+								  data:"23.4",
+								  units:"C")
+							  
+			export2.addToEvents(event)
+		}
+
         export2.save(failOnError:true)
     }
 

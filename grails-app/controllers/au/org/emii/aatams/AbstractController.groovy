@@ -24,12 +24,10 @@ class AbstractController
 		{
 			params.format = params._action_export
 		}
-println "export params: " + params
 		
 		response.setHeader("Content-disposition", "attachment; filename=" + queryName + "." + params.format.toLowerCase());
 		response.contentType = getMimeType(params)
 		response.characterEncoding = "UTF-8"
-//		response.outputStream << reportDef.contentStream.toByteArray()
 
 		exportService.export(reportInfoService.getClassForName(queryName), params, response.outputStream)
 	}

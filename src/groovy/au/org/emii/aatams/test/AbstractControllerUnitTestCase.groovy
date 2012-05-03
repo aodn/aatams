@@ -149,6 +149,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 	{
 		assertTrue(expected.readLines().containsAll(actual.readLines()))
 		assertTrue(actual.readLines().containsAll(expected.readLines()))
+		assertEquals(expected.readLines().size(), actual.readLines().size())
 	}
 
 	protected String removePageFooter(String s) 

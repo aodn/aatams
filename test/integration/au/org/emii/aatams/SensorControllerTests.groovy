@@ -9,12 +9,18 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
 	{
 		super.setUp()
 
-		permitted = true
 		controller.params.format = "CSV"
 	}
 	
-	void testExecuteSensor()
+	void testExecuteSensorPermitted()
 	{
-		assertExport([:], "testExecuteSensor")
+		permitted = true
+		assertExport([:], "testExecuteSensorPermitted")
+	}
+
+	void testExecuteSensorNotPermitted()
+	{
+		permitted = false
+		assertExport([:], "testExecuteSensorNotPermitted")
 	}
 }

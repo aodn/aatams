@@ -57,7 +57,14 @@ class ExportService implements ApplicationContextAware
 	
 	private JRDataSource getDataSource(queryService, clazz, params)
 	{
-		return new PagedBeanDataSource(queryService, clazz, params)
+		// Don't use this for now, as filtering out of embargoed entities
+		// is not being handled properly (it's causing duplicates to appear in 
+		// the report).
+		//
+		// Both of the big reports (detection and event) are not handled
+		// by this class in any case.
+//		return new PagedBeanDataSource(queryService, clazz, params)
+		return new JRBeanCollectionDataSource(queryService.query(clazz, params).results)
 	}
 	
 	private Map getFilterParamsInReportFormat(params)

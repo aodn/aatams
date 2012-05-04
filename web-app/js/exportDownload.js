@@ -1,0 +1,38 @@
+$(document).ready(function () 
+{
+	$('#listControlForm').find(":submit").click(function(event) 
+	{
+		// Don't block for filter updates, only export downloads.
+		if (this.name === "_action_export")
+		{
+			blockUIForDownload();
+		}	
+    });
+});
+
+var fileDownloadCheckTimer;
+
+function blockUIForDownload() 
+{
+    var token = new Date().getTime(); //use the current timestamp as the token value
+    $('#downloadTokenValue').val(token);
+    
+	$.blockUI({ message: '<h2><img src="../images/spinner.gif" /></h2>'});
+	
+    fileDownloadCheckTimer = window.setInterval(function () 
+    {
+    	var cookieValue = $.cookie('fileDownloadToken');
+    	if (cookieValue == token)
+    	{
+    		finishDownload();
+    	}
+    }, 1000);
+}
+
+function finishDownload() 
+{
+	window.clearInterval(fileDownloadCheckTimer);
+	$.cookie('fileDownloadToken', null); //clears this cookie value
+	$.unblockUI();
+}
+  

@@ -2,9 +2,7 @@ $(function()
 {
 	function submit()
 	{
-		$(".body").block({ message: '<h2><img src="../images/spinner.gif" /></h2>'});
-
-//		$(".reportFilter").block({ message: '<h2><img src="../images/spinner.gif" /></h2>'});
+		$(".body").block({ message: blockUIConfig.defaultMessage });
 		$("#listControlForm").submit();
 	}
 	

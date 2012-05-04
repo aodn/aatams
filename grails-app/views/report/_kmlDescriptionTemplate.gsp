@@ -1,6 +1,6 @@
 <%@ page import="au.org.emii.aatams.InstallationStation" %>
 <div>
-	<link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css', file:'main.css', absolute:true) }" />
+	<link rel="stylesheet" type="text/css" href="${resource(dir:'css', file:'main.css', absolute:true) }" />
 	<div class="description">
 	
 	    <!--  "Header" data. -->

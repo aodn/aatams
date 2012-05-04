@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
+    <Document>
+        <Folder>
+            <name>Seal Count</name>
+            <Folder>
+                <name>Bondi Line</name>
+                <Placemark>
+                    <name>Bondi SW1</name>
+                    <open>1</open>
+                    <description>some description</description>
+                    <Point>
+                        <coordinates>30.1234,30.1234</coordinates>
+                    </Point>
+                </Placemark>
+                <Placemark>
+                    <name>Bondi SW2</name>
+                    <open>1</open>
+                    <description>some description</description>
+                    <Point>
+                        <coordinates>-10.1234,-10.1234</coordinates>
+                    </Point>
+                </Placemark>
+                <Placemark>
+                    <name>Bondi SW3</name>
+                    <open>1</open>
+                    <description>some description</description>
+                    <Point>
+                        <coordinates>10.1234,10.1234</coordinates>
+                    </Point>
+                </Placemark>
+            </Folder>
+            <Folder>
+                <name>Heron Island Curtain</name>
+                <Placemark>
+                    <name>Heron S1</name>
+                    <open>1</open>
+                    <description>some description</description>
+                    <Point>
+                        <coordinates>12.34,-42.3</coordinates>
+                    </Point>
+                </Placemark>
+                <Placemark>
+                    <name>Heron S2</name>
+                    <open>1</open>
+                    <description>some description</description>
+                    <Point>
+                        <coordinates>76.02,-20.1234</coordinates>
+                    </Point>
+                </Placemark>
+            </Folder>
+        </Folder>
+        <Folder>
+            <name>Tuna</name>
+            <Folder>
+                <name>Ningaloo Array</name>
+                <Placemark>
+                    <name>Ningaloo S1</name>
+                    <open>1</open>
+                    <description>some description</description>
+                    <Point>
+                        <coordinates>10.1234,10.1234</coordinates>
+                    </Point>
+                </Placemark>
+                <Placemark>
+                    <name>Ningaloo S2</name>
+                    <open>1</open>
+                    <description>some description</description>
+                    <Point>
+                        <coordinates>20.1234,20.1234</coordinates>
+                    </Point>
+                </Placemark>
+            </Folder>
+        </Folder>
+        <Folder>
+            <name>Whale</name>
+            <Folder>
+                <name>Whale Curtain</name>
+                <Placemark>
+                    <name>Whale Station</name>
+                    <open>1</open>
+                    <description>some description</description>
+                    <Point>
+                        <coordinates>76.02,-20.1234</coordinates>
+                    </Point>
+                </Placemark>
+            </Folder>
+        </Folder>
+    </Document>
+</kml>

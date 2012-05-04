@@ -22,6 +22,8 @@
     <g:javascript src="notification.js"/>
     <g:javascript src="rememberFormFields.js"/>
     
+    <g:javascript src="blockUIConfig.js"/>
+    
     <link ref="stylesheet" type="text/css" href="${resource(dir:'js/bubbletip', file:'bubbletip.css')}" />
     
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>
@@ -114,6 +116,10 @@
     
     <div id="spinner" class="spinner" style="display:none;">
       <img src="${resource(dir:'images',file:'spinner.gif')}" alt="${message(code:'spinner.alt',default:'Loading...')}" />
+    </div>
+
+    <div id="spinner-big" class="spinner-big" style="display:none;">
+      <img src="${resource(dir:'images',file:'spinner-big.gif')}" alt="${message(code:'roller.alt',default:'Loading...')}" />
     </div>
 
     <div id="notifications" style="display:none;">

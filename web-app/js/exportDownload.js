@@ -17,7 +17,9 @@ function blockUIForDownload()
     var token = new Date().getTime(); //use the current timestamp as the token value
     $('#downloadTokenValue').val(token);
     
-	$.blockUI({ message: '<h2><img src="../images/spinner.gif" /></h2>'});
+	$.blockUI({ 
+		message: blockUIConfig.defaultMessage
+	});
 	
     fileDownloadCheckTimer = window.setInterval(function () 
     {

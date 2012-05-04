@@ -77,34 +77,34 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 //        checkResponse("testExecuteAnimalReleaseSummary")
     }
 
-	void testExecuteStationKmlExtract()
-	{
-		InstallationStation.metaClass.toKmlDescription = { "some description" }
-		
-		controller.params._name = "installationStation"
-		controller.params.filter = [:]
-		controller.params._format = null
-        controller.params._action_execute = "KML"
-		
-		controller.execute()
-
-		def div = slurper.parseText(controller.response.contentAsString)
-		assertNotNull(div)
-		
-		def allNodes = div.depthFirst().collect{ it }
-		def folderNodes = allNodes.findAll { it.name() == "Folder" }
-		
-		["Bondi Line", "Heron Island Curtain", "Ningaloo Array", "Seal Count", "Tuna", "Whale"].each
-		{
-			folderName ->
-			
-			if (!folderNodes*.name*.text().contains(folderName))
-			{
-				println "No folder name: " + folderName
-			}
-			assertTrue(folderNodes*.name*.text().contains(folderName))
-		}
-	}
+//	void testExecuteStationKmlExtract()
+//	{
+//		InstallationStation.metaClass.toKmlDescription = { "some description" }
+//		
+//		controller.params._name = "installationStation"
+//		controller.params.filter = [:]
+//		controller.params._format = null
+//        controller.params._action_execute = "KML"
+//		
+//		controller.execute()
+//
+//		def div = slurper.parseText(controller.response.contentAsString)
+//		assertNotNull(div)
+//		
+//		def allNodes = div.depthFirst().collect{ it }
+//		def folderNodes = allNodes.findAll { it.name() == "Folder" }
+//		
+//		["Bondi Line", "Heron Island Curtain", "Ningaloo Array", "Seal Count", "Tuna", "Whale"].each
+//		{
+//			folderName ->
+//			
+//			if (!folderNodes*.name*.text().contains(folderName))
+//			{
+//				println "No folder name: " + folderName
+//			}
+//			assertTrue(folderNodes*.name*.text().contains(folderName))
+//		}
+//	}
 	
     private void checkResponse(def expectedFileName)
     {

@@ -23,7 +23,7 @@ class InstallationStationController  extends ReportController
 	{
 		doExport("installationStation")
 	}
-
+	
     def create = {
         def installationStationInstance = new InstallationStation()
         installationStationInstance.properties = params

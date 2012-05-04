@@ -1,8 +1,11 @@
 package au.org.emii.aatams.export
 
+import au.org.emii.aatams.InstallationStation
 import au.org.emii.aatams.Person
 import au.org.emii.aatams.Receiver
+import au.org.emii.aatams.report.KmlService
 import au.org.emii.aatams.report.ReportInfoService
+import de.micromata.opengis.kml.v_2_2_0.Kml
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRExporter
@@ -27,32 +30,41 @@ import org.springframework.context.ApplicationContextAware
 class ExportService implements ApplicationContextAware
 {
 	ApplicationContext applicationContext
+	
+	def kmlService
 	def permissionUtilsService
 	def reportInfoService
 	def queryService
 	
     void export(Class clazz, Map params, OutputStream out) 
 	{
-		params.putAll([REPORT_USER: permissionUtilsService.principal()?.username, FILTER_PARAMS: getFilterParamsInReportFormat(params).entrySet(), SUBREPORT_DIR: "web-app/reports/"])
-		
-		InputStream reportStream = getReportStream(clazz, params)
-		assert(reportStream)
-		JasperDesign jasperDesign = JRXmlLoader.load(reportStream)
-		JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign)
-		assert(jasperReport)
-		
-		JRDataSource ds = getDataSource(queryService, clazz, params)
-		
-		// Copy the map, otherwise we get a self reference for one of the entries (which causes
-		// stackoverflow when traversing the map).
-		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(params), ds)
-		
-		JRExporter exporter = getExporter(params)
-		
-		exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint)
-		exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out)
-		
-		exporter.exportReport()
+		if (params.format == "KML")
+		{
+			generateKml(clazz, params, out)
+		}
+		else
+		{
+			params.putAll([REPORT_USER: permissionUtilsService.principal()?.username, FILTER_PARAMS: getFilterParamsInReportFormat(params).entrySet(), SUBREPORT_DIR: "web-app/reports/"])
+			
+			InputStream reportStream = getReportStream(clazz, params)
+			assert(reportStream)
+			JasperDesign jasperDesign = JRXmlLoader.load(reportStream)
+			JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign)
+			assert(jasperReport)
+			
+			JRDataSource ds = getDataSource(queryService, clazz, params)
+			
+			// Copy the map, otherwise we get a self reference for one of the entries (which causes
+			// stackoverflow when traversing the map).
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap(params), ds)
+			
+			JRExporter exporter = getExporter(params)
+			
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint)
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out)
+			
+			exporter.exportReport()
+		}
     }
 	
 	private JRDataSource getDataSource(queryService, clazz, params)
@@ -106,5 +118,16 @@ class ExportService implements ApplicationContextAware
 	private InputStream getReportStream(clazz, params)
 	{
 		return new FileInputStream(applicationContext.getResource("/reports/" + reportInfoService.getReportInfo(clazz).jrxmlFilename[params.format] + ".jrxml")?.getFile())
+	}
+	
+	private generateKml(clazz, params, out)
+	{
+		long startTime = System.currentTimeMillis()
+		InstallationStation.refreshDetectionCounts()
+		
+		def result = queryService.query(clazz, params).results
+
+		final Kml kml = kmlService.toKml(result)
+		kml.marshal(out)
 	}
 }

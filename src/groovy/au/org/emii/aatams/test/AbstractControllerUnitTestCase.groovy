@@ -147,6 +147,11 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 
 	protected void assertContainsAllLines(actual, expected) 
 	{
+		if (!expected.readLines().containsAll(actual.readLines()) || !actual.readLines().containsAll(expected.readLines()) || !(expected.readLines().size() == actual.readLines().size()))
+		{
+			println "expected:\n" + expected
+			println "\n\nactual:\n" + actual
+		}
 		assertTrue(expected.readLines().containsAll(actual.readLines()))
 		assertTrue(actual.readLines().containsAll(expected.readLines()))
 		assertEquals(expected.readLines().size(), actual.readLines().size())

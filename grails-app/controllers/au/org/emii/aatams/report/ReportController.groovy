@@ -43,6 +43,8 @@ class ReportController extends AbstractController
     {
 		log.debug("Executing report, params: " + params)
 		
+		indicateExportStart()
+		
 		// The only time this will be set is in integration tests (to "CSV").
 		if (!params._format)
 		{
@@ -83,6 +85,8 @@ class ReportController extends AbstractController
 				log.debug("Report generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
 			}
 		}
+		
+		response.flushBuffer()
 	}
 
 	private generateKml(params, resultList)

@@ -18,8 +18,8 @@
             <div class="message">${flash.message}</div>
             </g:if>
             
-            <g:listFilter name="receiverRecovery" />
-
+            <g:listControlForm name="receiverRecovery" formats="${[]}" />       
+            
             <g:recoveryList entityList="${entityList}" params="${params}" sortable="${true}"/>
             
             <div class="paginateButtons">

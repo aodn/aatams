@@ -1,10 +1,10 @@
 package au.org.emii.aatams
 
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.Cookie
 
-abstract class AbstractController 
+class AbstractController 
 {
+	def exportService
 	def queryService
 	def reportInfoService
 
@@ -18,6 +18,39 @@ abstract class AbstractController
 
 		[entityList: resultList.results,
 		 total: resultList.count]
+	}
+	
+	protected def doExport(queryName)
+	{
+		if (!params.format)
+		{
+			params.format = params._action_export
+		}
+		
+		indicateExportStart()
+		
+		response.setHeader("Content-disposition", "attachment; filename=" + queryName + "." + params.format.toLowerCase());
+		response.contentType = getMimeType(params)
+		response.characterEncoding = "UTF-8"
+		
+		exportService.export(reportInfoService.getClassForName(queryName), params, response.outputStream)
+		response.flushBuffer()
+	}
+	
+	protected void indicateExportStart()
+	{
+		response.reset()
+
+		// Indicate to the client that we have received the export request.
+		// See: http://geekswithblogs.net/GruffCode/archive/2010/10/28/detecting-the-file-download-dialog-in-the-browser.aspx
+		response.addCookie(new Cookie("fileDownloadToken", params.downloadTokenValue))
+	}
+	
+	private String getMimeType(params)
+	{
+		def mimeTypes = [PDF: "application/pdf", CSV: "text/csv", KML: "application/vnd.google-earth.kml+xml"]
+		
+		return mimeTypes[params.format]
 	}
 	
 	protected void flattenParams()

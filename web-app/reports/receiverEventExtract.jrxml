@@ -4,14 +4,12 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="REPORT_USER" class="java.lang.String"/>
-
 	<field name="receiverDeployment.station.name" class="java.lang.String"/>
 	<field name="receiverDeployment.receiver.deviceID" class="java.lang.String"/>
 	<field name="timestamp" class="java.util.Date"/>
 	<field name="description" class="java.lang.String"/>
 	<field name="data" class="java.lang.String"/>
 	<field name="units" class="java.lang.String"/>
-
 	<sortField name="receiverDeployment.station.name"/>
 	<sortField name="receiverDeployment.receiver.deviceID"/>
 	<sortField name="timestamp"/>
@@ -29,27 +27,27 @@
 				<text><![CDATA[station name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="132" y="1" width="80" height="20"/>
+				<reportElement mode="Transparent" x="132" y="1" width="96" height="20"/>
 				<textElement/>
 				<text><![CDATA[receiver ID]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="212" y="1" width="80" height="20"/>
+				<reportElement mode="Transparent" x="228" y="1" width="127" height="20"/>
 				<textElement/>
 				<text><![CDATA[timestamp]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="292" y="1" width="80" height="20"/>
+				<reportElement mode="Transparent" x="355" y="1" width="112" height="20"/>
 				<textElement/>
 				<text><![CDATA[description]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="372" y="1" width="80" height="20"/>
+				<reportElement mode="Transparent" x="467" y="1" width="80" height="20"/>
 				<textElement/>
 				<text><![CDATA[data]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="452" y="1" width="80" height="20"/>
+				<reportElement mode="Transparent" x="547" y="1" width="80" height="20"/>
 				<textElement/>
 				<text><![CDATA[units]]></text>
 			</staticText>
@@ -63,27 +61,27 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{receiverDeployment.station.name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="132" y="0" width="80" height="20"/>
+				<reportElement x="132" y="0" width="96" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{receiverDeployment.receiver.deviceID}]]></textFieldExpression>
 			</textField>
 			<textField pattern="yyyy-MM-dd HH:mm:ss z">
-				<reportElement x="212" y="0" width="80" height="20"/>
+				<reportElement x="228" y="0" width="127" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{timestamp}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="292" y="0" width="80" height="20"/>
+				<reportElement x="355" y="0" width="112" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{description}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="372" y="0" width="80" height="20"/>
+				<reportElement x="467" y="0" width="80" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{data}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="452" y="0" width="80" height="20"/>
+				<reportElement x="547" y="0" width="80" height="20"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{units}]]></textFieldExpression>
 			</textField>

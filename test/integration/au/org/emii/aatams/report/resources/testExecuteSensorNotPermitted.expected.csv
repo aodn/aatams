@@ -1,0 +1,6 @@
+tag ID,serial number,type,manufacturer,model,status,life (days),comment
+A69-1303-11111,1111,PINGER,Vemco,V8,NEW,,
+A69-1303-3333,3333,PINGER,Vemco,V8,NEW,100,
+A69-1303-4444,4444,PINGER,Vemco,V8,NEW,,
+A69-1303-5555,5555,PINGER,Vemco,V8,NEW,,
+A69-1303-6666,6666,PINGER,Vemco,V8,DEPLOYED,,

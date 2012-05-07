@@ -1,11 +1,12 @@
 package au.org.emii.aatams.detection
 
-import au.org.emii.aatams.AbstractController;
+import au.org.emii.aatams.report.ReportController
 
-class DetectionController extends AbstractController
+class DetectionController extends ReportController
 {
     def candidateEntitiesService
-
+	def detectionExtractService
+	
     static allowedMethods = [update: "POST", delete: "POST"]
 
     def index = {
@@ -17,6 +18,11 @@ class DetectionController extends AbstractController
 		doList("detection")
 	}
 
+	def export =
+	{
+		detectionExtractService.generateReport(params, request, response)
+	}
+	
     def create = 
     {
         redirect(controller:"receiverDownloadFile", 

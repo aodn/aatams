@@ -1,5 +1,11 @@
 $(function()
 {
+	function submit()
+	{
+		$(".body").block({ message: blockUIConfig.defaultMessage });
+		$("#listControlForm").submit();
+	}
+	
     function split( val ) {
         return val.split( /,\s*/ );
     }
@@ -18,13 +24,13 @@ $(function()
             terms.push( "" );
             this.value = terms.join( ", " );
             
-            $("#listFilterForm").submit();
+            submit();
             
             return false;
         },
 	    change: function(event, ui) 
 	    {
-			$("#listFilterForm").submit();
+			submit();
 	    	
 	        return false;
 	    }
@@ -32,6 +38,6 @@ $(function()
 	
 	$(".reportFilter").find(":input").not(".ui-autocomplete-input").change(function()
 	{
-		$("#listFilterForm").submit();
+		submit();
 	});
 });

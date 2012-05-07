@@ -1,8 +1,9 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.report.ReportController;
 import grails.converters.JSON
 
-class SensorController extends AbstractController 
+class SensorController extends ReportController
 {
 	def candidateEntitiesService
     def tagFactoryService
@@ -16,6 +17,11 @@ class SensorController extends AbstractController
     def list = 
 	{
 		doList("sensor")
+	}
+
+	def export =
+	{
+		doExport("sensor")
 	}
 
     def create = {

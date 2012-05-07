@@ -20,7 +20,7 @@
             <div class="message">${flash.message}</div>
             </g:if>
             
-            <g:listFilter name="animalRelease" />
+            <g:listControlForm name="animalRelease" formats="${[]}" />       
             
             <div class="list">
                 <table>

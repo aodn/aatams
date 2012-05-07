@@ -16,10 +16,13 @@
 
     <g:javascript src="asAbove.js"/>
     
+    <g:javascript src="jquery.blockUI.js"/>
     <g:javascript src="jquery.qtip-1.0.0-rc3.min.js"/>
     <g:javascript src="jquery.cookie.js"/>
     <g:javascript src="notification.js"/>
     <g:javascript src="rememberFormFields.js"/>
+    
+    <g:javascript src="blockUIConfig.js"/>
     
     <link ref="stylesheet" type="text/css" href="${resource(dir:'js/bubbletip', file:'bubbletip.css')}" />
     
@@ -113,6 +116,10 @@
     
     <div id="spinner" class="spinner" style="display:none;">
       <img src="${resource(dir:'images',file:'spinner.gif')}" alt="${message(code:'spinner.alt',default:'Loading...')}" />
+    </div>
+
+    <div id="spinner-big" class="spinner-big" style="display:none;">
+      <img src="${resource(dir:'images',file:'spinner-big.gif')}" alt="${message(code:'roller.alt',default:'Loading...')}" />
     </div>
 
     <div id="notifications" style="display:none;">

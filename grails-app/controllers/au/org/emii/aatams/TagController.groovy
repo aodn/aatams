@@ -1,8 +1,9 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.report.ReportController
 import grails.converters.JSON
 
-class TagController extends AbstractController 
+class TagController extends ReportController 
 {
     def candidateEntitiesService
 

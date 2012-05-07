@@ -54,22 +54,9 @@ class NavigationMenuController
      */
     def reportActions = 
     [
-        'installationStationCreate':"Installation Stations",
-        'receiverCreate':"Receivers",
-        'receiverDeploymentCreate':"Receiver Deployments",
         'animalReleaseSummaryCreate':"Tag Summary"
     ]
 
-    def dataExtractActions = 
-    [
-        'detectionExtract':"Detections",
-        'installationExtract':"Installations",
-        'installationStationExtract':"Installation Stations",
-        'receiverExtract':"Receivers",
-        'receiverEventExtract':"Receiver Events",
-        'tagExtract':"Tags"
-    ]
-    
     def helpControllers =
     [
         'gettingStarted':"Getting Started",
@@ -116,7 +103,6 @@ class NavigationMenuController
          installationDataControllers: installationDataControllers,
          fieldDataControllers: fieldDataControllers(),
          reportActions: reportActions,
-         dataExtractActions: dataExtractActions,
          helpControllers: helpControllers,
          adminControllers: adminControllers,
          blacklistControllers: blacklistControllers

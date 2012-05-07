@@ -1,8 +1,9 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.report.ReportController
 import grails.converters.JSON
 
-class InstallationStationController  extends AbstractController
+class InstallationStationController  extends ReportController
 {
 
     def candidateEntitiesService
@@ -18,6 +19,11 @@ class InstallationStationController  extends AbstractController
 		doList("installationStation")
 	}
 
+	def export =
+	{
+		doExport("installationStation")
+	}
+	
     def create = {
         def installationStationInstance = new InstallationStation()
         installationStationInstance.properties = params

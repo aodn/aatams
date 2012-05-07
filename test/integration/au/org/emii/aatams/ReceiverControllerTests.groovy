@@ -5,14 +5,6 @@ import grails.test.*
 
 class ReceiverControllerTests extends AbstractControllerUnitTestCase 
 {
-    protected void setUp() {
-        super.setUp()
-    }
-
-    protected void tearDown() {
-        super.tearDown()
-    }
-
     void testSaveWithWithspaceAroundSerialNumber() 
 	{
 		controller.params.serialNumber = " 234 "
@@ -25,4 +17,14 @@ class ReceiverControllerTests extends AbstractControllerUnitTestCase
 		
 		receiver.delete(failOnError:true)
     }
+	
+	void testExportNoFilter()
+	{
+		assertExport([:], "testExecuteReceiverNoFilter")
+	}
+	
+	void testExecuteReceiverFilterByOrg()
+	{
+		assertExport([organisation: [eq:["name", "IMOS"]]], "testExecuteReceiverFilterByOrg")
+	}
 }

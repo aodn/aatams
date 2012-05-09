@@ -16,6 +16,8 @@ class AbstractController
 
 		flattenParams()
 
+		flash.message = "${resultList.count} matching records (${reportInfoService.getClassForName(queryName).count()} total)."
+		
 		[entityList: resultList.results,
 		 total: resultList.count]
 	}

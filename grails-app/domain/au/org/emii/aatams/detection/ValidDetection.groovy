@@ -1,12 +1,20 @@
 package au.org.emii.aatams.detection
 
-import de.micromata.opengis.kml.v_2_2_0.Placemark;
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormatter
+import org.joda.time.format.ISODateTimeFormat
+
 import au.org.emii.aatams.*
-import au.org.emii.aatams.util.StringUtils;
+import au.org.emii.aatams.util.StringUtils
 
-import java.util.Date;
+import com.vividsolutions.jts.geom.Point
 
-import com.vividsolutions.jts.geom.Point;
+import de.micromata.opengis.kml.v_2_2_0.Document
+import de.micromata.opengis.kml.v_2_2_0.Feature
+import de.micromata.opengis.kml.v_2_2_0.Folder
+import de.micromata.opengis.kml.v_2_2_0.Kml
+import de.micromata.opengis.kml.v_2_2_0.Placemark
+import de.micromata.opengis.kml.v_2_2_0.TimeStamp
 
 
 class ValidDetection extends RawDetection implements Embargoable
@@ -152,4 +160,44 @@ class ValidDetection extends RawDetection implements Embargoable
 
 		return detectionProperties
     }
+	
+	static Kml toKml(List<ValidDetection> detections)
+	{
+		def deployments = new HashMap<ReceiverDeployment, TreeSet<Feature>>()
+		detections.each
+		{
+			det ->
+			
+			def detSiblings = deployments[det.receiverDeployment]
+			
+			if (!detSiblings)
+			{
+				detSiblings = new TreeSet<Feature>([compare: {a, b -> a.timestamp <=> b.timestamp} ] as Comparator)
+				deployments[det.receiverDeployment] = detSiblings
+			}
+			
+			Placemark detAsPlacemark = det.toPlacemark()
+			detSiblings.add(detAsPlacemark)
+		}
+		
+		return ReceiverDeployment.toKml(deployments)
+	}
+	
+	private Placemark toPlacemark()
+	{
+		Placemark detPlacemark = new Placemark()
+		detPlacemark.setName(String.valueOf(this))
+		detPlacemark.setOpen(Boolean.TRUE)	// TODO: what effect does this have?
+		detPlacemark.createAndSetPoint().addToCoordinates(receiverDeployment.longitude, receiverDeployment.latitude)
+		detPlacemark.metaClass.timestamp = this.timestamp	// Sort key.
+		
+		DateTime dt = new DateTime(timestamp)
+		DateTimeFormatter fmt = ISODateTimeFormat.dateTime()
+		String str = fmt.print(dt)
+		TimeStamp timeStamp = new TimeStamp()
+		timeStamp.setWhen(str)
+		detPlacemark.setTimePrimitive(timeStamp)
+		
+		return detPlacemark
+	}
 }

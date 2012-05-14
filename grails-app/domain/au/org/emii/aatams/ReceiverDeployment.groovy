@@ -7,6 +7,11 @@ import au.org.emii.aatams.detection.ValidDetection
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
+import de.micromata.opengis.kml.v_2_2_0.Document
+import de.micromata.opengis.kml.v_2_2_0.Feature
+import de.micromata.opengis.kml.v_2_2_0.Folder
+import de.micromata.opengis.kml.v_2_2_0.Kml
+import de.micromata.opengis.kml.v_2_2_0.Placemark
 import org.joda.time.*
 import org.joda.time.contrib.hibernate.*
 
@@ -21,7 +26,7 @@ import org.joda.time.contrib.hibernate.*
 class ReceiverDeployment 
 {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
-    static transients = ['scrambledLocation', 'active']
+    static transients = ['scrambledLocation', 'active', 'latitude', 'longitude']
 	
     Set<ValidDetection> detections = new HashSet<ValidDetection>()
     static hasMany = [detections: ValidDetection, events: ValidReceiverEvent]
@@ -159,6 +164,16 @@ class ReceiverDeployment
         return GeometryUtils.scrambleLocation(location)
     }
     
+    double getLatitude()
+    {
+        return getScrambledLocation().coordinate.y
+    }
+    
+    double getLongitude()
+    {
+        return getScrambledLocation().coordinate.x
+    }
+    
 	private DateTime now()
 	{
 		return new DateTime()
@@ -186,5 +201,33 @@ class ReceiverDeployment
 		kmlClone.detections.addAll(detections.grep { it.receiverDeployment.id == this.id })
 		
 		return kmlClone
+	}
+	
+	static Kml toKml(Map<ReceiverDeployment, Collection<Feature>> deploymentsWithKmlChildren)
+	{
+		def stations = new HashMap<InstallationStation, TreeSet<Feature>>()
+		deploymentsWithKmlChildren.each
+		{
+			deployment, kmlChildren ->
+			
+			def deploymentSiblings = stations[deployment.station]
+			
+			if (!deploymentSiblings)
+			{
+				deploymentSiblings = new TreeSet<Feature>([compare: {a, b -> a.name <=> b.name} ] as Comparator)
+				stations[deployment.station] = deploymentSiblings
+			}
+			
+			Folder deploymentFolder = new Folder().withName(String.valueOf(deployment))
+
+			kmlChildren.each
+			{
+				deploymentFolder.getFeature().add(it)
+			}
+
+			deploymentSiblings.add(deploymentFolder)
+		}
+		
+		return InstallationStation.toKml(stations)
 	}
 }

@@ -2,8 +2,11 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.ValidDetection
 import au.org.emii.aatams.util.ListUtils
+import de.micromata.opengis.kml.v_2_2_0.Document
 import de.micromata.opengis.kml.v_2_2_0.Folder
 import de.micromata.opengis.kml.v_2_2_0.Placemark
+import de.micromata.opengis.kml.v_2_2_0.Feature;
+import de.micromata.opengis.kml.v_2_2_0.Kml;
 
 class Project 
 {
@@ -105,5 +108,29 @@ class Project
 		}
 		
 		return projectFolder
+	}
+	
+	static Kml toKml(Map<Project, List<Feature>> projectsWithKmlChildren)
+	{
+		Kml kml = new Kml()
+		Document doc = kml.createAndSetDocument()
+
+		projectsWithKmlChildren.keySet().sort{ a, b -> a.name <=> b.name }.each
+		{
+			project ->
+			
+			def kmlChildren = projectsWithKmlChildren[project]
+
+			Folder projectFolder = new Folder().withName(project.name)
+
+			kmlChildren.each
+			{
+				projectFolder.getFeature().add(it)
+			}
+
+			doc.getFeature().add(projectFolder)
+		}
+
+		return kml
 	}
 }

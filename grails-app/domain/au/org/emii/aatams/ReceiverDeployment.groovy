@@ -161,17 +161,17 @@ class ReceiverDeployment
      */
     Point getScrambledLocation()
     {
-        return GeometryUtils.scrambleLocation(location)
+        return GeometryUtils.scrambleLocation(location ?: station?.location)
     }
     
     double getLatitude()
     {
-        return getScrambledLocation().coordinate.y
+        return getScrambledLocation()?.coordinate?.y
     }
     
     double getLongitude()
     {
-        return getScrambledLocation().coordinate.x
+        return getScrambledLocation()?.coordinate?.x
     }
     
 	private DateTime now()

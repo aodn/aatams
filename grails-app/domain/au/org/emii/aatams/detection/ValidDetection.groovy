@@ -9,9 +9,7 @@ import au.org.emii.aatams.util.StringUtils
 
 import com.vividsolutions.jts.geom.Point
 
-import de.micromata.opengis.kml.v_2_2_0.Document
 import de.micromata.opengis.kml.v_2_2_0.Feature
-import de.micromata.opengis.kml.v_2_2_0.Folder
 import de.micromata.opengis.kml.v_2_2_0.Kml
 import de.micromata.opengis.kml.v_2_2_0.Placemark
 import de.micromata.opengis.kml.v_2_2_0.TimeStamp
@@ -20,7 +18,7 @@ import de.micromata.opengis.kml.v_2_2_0.TimeStamp
 class ValidDetection extends RawDetection implements Embargoable
 {
     static belongsTo = [receiverDeployment: ReceiverDeployment]
-    static transients = ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames']
+    static transients = ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames', 'placemark']
     
     /**
      * This is modelled as a many-to-many relationship, due to the fact that tags
@@ -157,11 +155,12 @@ class ValidDetection extends RawDetection implements Embargoable
 		
 		detectionProperties["sensorIds"] = getSensorIds(detectionProperties["detectionSurgeries"])
 		detectionProperties["speciesNames"] = getSpeciesNames(detectionProperties["detectionSurgeries"])
-
+		detectionProperties["placemark"] = this.getPlacemark()
+		
 		return detectionProperties
     }
 	
-	static Kml toKml(List<ValidDetection> detections)
+	static Kml toKmlByProject(List<ValidDetection> detections)
 	{
 		def deployments = new HashMap<ReceiverDeployment, TreeSet<Feature>>()
 		detections.each
@@ -176,14 +175,14 @@ class ValidDetection extends RawDetection implements Embargoable
 				deployments[det.receiverDeployment] = detSiblings
 			}
 			
-			Placemark detAsPlacemark = det.toPlacemark()
+			Placemark detAsPlacemark = det.placemark
 			detSiblings.add(detAsPlacemark)
 		}
 		
 		return ReceiverDeployment.toKml(deployments)
 	}
 	
-	private Placemark toPlacemark()
+	private Placemark getPlacemark()
 	{
 		Placemark detPlacemark = new Placemark()
 		detPlacemark.setName(String.valueOf(this))

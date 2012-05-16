@@ -13,6 +13,7 @@ import de.micromata.opengis.kml.v_2_2_0.Folder;
 import de.micromata.opengis.kml.v_2_2_0.Kml
 import de.micromata.opengis.kml.v_2_2_0.Placemark;
 import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
+import de.micromata.opengis.kml.v_2_2_0.gx.Track;
 
 class ValidDetectionTests extends GrailsUnitTestCase 
 {
@@ -146,14 +147,14 @@ class ValidDetectionTests extends GrailsUnitTestCase
 	{
 		Kml expectedKml = new Kml()
 		Document doc = expectedKml.createAndSetDocument()
-		Kml kml = ValidDetection.toKml(Collections.emptyList())
+		Kml kml = ValidDetection.toKmlByProject(Collections.emptyList())
 		
 		assertEquals(expectedKml, kml)
 	}
 	
 	void testToKmlOneDetection()
 	{
-		Kml kml = ValidDetection.toKml([det1Der1])
+		Kml kml = ValidDetection.toKmlByProject([det1Der1])
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
@@ -188,7 +189,7 @@ class ValidDetectionTests extends GrailsUnitTestCase
 
 	void testToKmlTwoDets()
 	{
-		Kml kml = ValidDetection.toKml([det1Der1, det2Der1])
+		Kml kml = ValidDetection.toKmlByProject([det1Der1, det2Der1])
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
@@ -233,7 +234,7 @@ class ValidDetectionTests extends GrailsUnitTestCase
 
 	void testToKmlTwoDetsDifferentDeployment()
 	{
-		Kml kml = ValidDetection.toKml([det1Der1, det3Der1])
+		Kml kml = ValidDetection.toKmlByProject([det1Der1, det3Der1])
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
@@ -281,7 +282,7 @@ class ValidDetectionTests extends GrailsUnitTestCase
 
 	void testToKmlTwoDetsDifferentStation()
 	{
-		Kml kml = ValidDetection.toKml([det1Der1, det1Der2])
+		Kml kml = ValidDetection.toKmlByProject([det1Der1, det1Der2])
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
@@ -332,7 +333,7 @@ class ValidDetectionTests extends GrailsUnitTestCase
 	
 	void testToKmlTwoDetsDifferentInstallation()
 	{
-		Kml kml = ValidDetection.toKml([det1Der1, det1Bondi1])
+		Kml kml = ValidDetection.toKmlByProject([det1Der1, det1Bondi1])
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
@@ -387,7 +388,7 @@ class ValidDetectionTests extends GrailsUnitTestCase
 	void testToKmlTwoDetsDifferentProject()
 	{
 		det1Der1.receiverDeployment.station.installation.project = crab
-		Kml kml = ValidDetection.toKml([det1Der1, det1Bondi1])
+		Kml kml = ValidDetection.toKmlByProject([det1Der1, det1Bondi1])
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
@@ -442,6 +443,41 @@ class ValidDetectionTests extends GrailsUnitTestCase
 		assertKmlEquals(expectedKml, kml)
 	}
 
+	void testToKmlOneDetectionEmbargoApplied()
+	{
+		Kml kml = ValidDetection.toKmlByProject([det1Der1.applyEmbargo()])
+		
+		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
+    <Document>
+        <Folder>
+            <name>fish</name>
+            <Folder>
+                <name>derwent</name>
+                <Folder>
+                    <name>der1</name>
+                    <Folder>
+                        <name>VR2W-1111 - 2012-05-03T01:02:03.000+10:00</name>
+                        <Placemark>
+                            <name>Wed May 09 12:34:56 EST 2012 VR2W-1111</name>
+                            <open>1</open>
+                            <TimeStamp>
+                                <when>2012-05-09T12:34:56.000+10:00</when>
+                            </TimeStamp>
+                            <Point>
+                                <coordinates>145.0,-42.0</coordinates>
+                            </Point>
+                        </Placemark>
+                    </Folder>
+                </Folder>
+            </Folder>
+        </Folder>
+    </Document>
+</kml>
+'''
+		assertKmlEquals(expectedKml, kml)
+	}
+	
 	private void assertKmlEquals(String expectedKmlAsString, actualKml)
 	{
 		StringWriter writer = new StringWriter()

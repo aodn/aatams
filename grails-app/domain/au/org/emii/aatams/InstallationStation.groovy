@@ -1,21 +1,15 @@
 package au.org.emii.aatams
 
+import groovy.sql.Sql
+
+import org.codehaus.groovy.grails.commons.ApplicationHolder as AH
 import org.hibernatespatial.GeometryUserType
 
-import au.org.emii.aatams.detection.ValidDetection
-import au.org.emii.aatams.report.InstallationStationReportWrapper
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
 
-import de.micromata.opengis.kml.v_2_2_0.Document
-import de.micromata.opengis.kml.v_2_2_0.Feature
-import de.micromata.opengis.kml.v_2_2_0.Folder
-import de.micromata.opengis.kml.v_2_2_0.Kml
 import de.micromata.opengis.kml.v_2_2_0.Placemark
-import groovy.sql.Sql
-
-import org.codehaus.groovy.grails.commons.ApplicationHolder as AH
 
 /**
  * An Installation Station is a location within an Installation where a 
@@ -160,33 +154,5 @@ class InstallationStation
 			
 			detectionCounts[row.station_id] = row.count
 		}
-	}
-	
-	static Kml toKml(Map<InstallationStation, List<Feature>> stationsWithKmlChildren)
-	{
-		def installations = new HashMap<Installation, TreeSet<Feature>>()
-		stationsWithKmlChildren.each
-		{
-			station, kmlChildren ->
-			
-			def stationSiblings = installations[station.installation]
-			
-			if (!stationSiblings)
-			{
-				stationSiblings = new TreeSet<Feature>([compare: {a, b -> a.name <=> b.name} ] as Comparator)
-				installations[station.installation] = stationSiblings
-			}
-			
-			Folder stationFolder = new Folder().withName(String.valueOf(station))
-
-			kmlChildren.each
-			{
-				stationFolder.getFeature().add(it)
-			}
-
-			stationSiblings.add(stationFolder)
-		}
-		
-		return Installation.toKml(installations)
 	}
 }

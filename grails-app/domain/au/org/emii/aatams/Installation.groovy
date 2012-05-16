@@ -1,12 +1,6 @@
 package au.org.emii.aatams
 
-import java.util.List;
-import java.util.Map;
-
-import au.org.emii.aatams.detection.ValidDetection
-import de.micromata.opengis.kml.v_2_2_0.Feature;
 import de.micromata.opengis.kml.v_2_2_0.Folder
-import de.micromata.opengis.kml.v_2_2_0.Kml;
 import de.micromata.opengis.kml.v_2_2_0.Placemark
 
 /**
@@ -61,33 +55,5 @@ class Installation
 		}
 		
 		return installationFolder
-	}
-	
-	static Kml toKml(Map<Installation, List<Feature>> installationsWithKmlChildren)
-	{
-		def projects = new HashMap<Project, TreeSet<Feature>>()
-		installationsWithKmlChildren.each
-		{
-			installation, kmlChildren ->
-			
-			def installationSiblings = projects[installation.project]
-			
-			if (!installationSiblings)
-			{
-				installationSiblings = new TreeSet<Feature>([compare: {a, b -> a.name <=> b.name} ] as Comparator)
-				projects[installation.project] = installationSiblings
-			}
-			
-			Folder installationFolder = new Folder().withName(String.valueOf(installation))
-
-			kmlChildren.each
-			{
-				installationFolder.getFeature().add(it)
-			}
-
-			installationSiblings.add(installationFolder)
-		}
-		
-		return Project.toKml(projects)
 	}
 }

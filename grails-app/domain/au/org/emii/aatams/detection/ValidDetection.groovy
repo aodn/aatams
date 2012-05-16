@@ -155,48 +155,12 @@ class ValidDetection extends RawDetection implements Embargoable
 		
 		detectionProperties["sensorIds"] = getSensorIds(detectionProperties["detectionSurgeries"])
 		detectionProperties["speciesNames"] = getSpeciesNames(detectionProperties["detectionSurgeries"])
-		detectionProperties["placemark"] = this.getPlacemark()
 		
 		return detectionProperties
     }
 	
-	static Kml toKmlByProject(List<ValidDetection> detections)
+	static Kml toKml(List<ValidDetection> detections)
 	{
-		def deployments = new HashMap<ReceiverDeployment, TreeSet<Feature>>()
-		detections.each
-		{
-			det ->
-			
-			def detSiblings = deployments[det.receiverDeployment]
-			
-			if (!detSiblings)
-			{
-				detSiblings = new TreeSet<Feature>([compare: {a, b -> a.timestamp <=> b.timestamp} ] as Comparator)
-				deployments[det.receiverDeployment] = detSiblings
-			}
-			
-			Placemark detAsPlacemark = det.placemark
-			detSiblings.add(detAsPlacemark)
-		}
-		
-		return ReceiverDeployment.toKml(deployments)
-	}
-	
-	private Placemark getPlacemark()
-	{
-		Placemark detPlacemark = new Placemark()
-		detPlacemark.setName(String.valueOf(this))
-		detPlacemark.setOpen(Boolean.TRUE)	// TODO: what effect does this have?
-		detPlacemark.createAndSetPoint().addToCoordinates(receiverDeployment.longitude, receiverDeployment.latitude)
-		detPlacemark.metaClass.timestamp = this.timestamp	// Sort key.
-		
-		DateTime dt = new DateTime(timestamp)
-		DateTimeFormatter fmt = ISODateTimeFormat.dateTime()
-		String str = fmt.print(dt)
-		TimeStamp timeStamp = new TimeStamp()
-		timeStamp.setWhen(str)
-		detPlacemark.setTimePrimitive(timeStamp)
-		
-		return detPlacemark
+		return new SensorTrackKml(detections)
 	}
 }

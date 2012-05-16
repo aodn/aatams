@@ -20,7 +20,14 @@ class DetectionController extends ReportController
 
 	def export =
 	{
-		detectionExtractService.generateReport(params, request, response)
+		if (params._action_export == "KML")
+		{
+			doExport("detection")
+		}
+		else
+		{
+			detectionExtractService.generateReport(params, request, response)
+		}
 	}
 	
     def create = 

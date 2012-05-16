@@ -38,6 +38,8 @@ class ExportService implements ApplicationContextAware
 	
     void export(Class clazz, Map params, OutputStream out) 
 	{
+		long startTimestamp = System.currentTimeMillis()
+		
 		if (params.format == "KML")
 		{
 			generateKml(clazz, params, out)
@@ -65,6 +67,8 @@ class ExportService implements ApplicationContextAware
 			
 			exporter.exportReport()
 		}
+		
+		log.info("Export completed in (ms): " + (System.currentTimeMillis() - startTimestamp))
     }
 	
 	private JRDataSource getDataSource(queryService, clazz, params)
@@ -122,12 +126,18 @@ class ExportService implements ApplicationContextAware
 	
 	private generateKml(clazz, params, out)
 	{
-		long startTime = System.currentTimeMillis()
-		InstallationStation.refreshDetectionCounts()
-		
+		def kml
 		def result = queryService.query(clazz, params).results
-
-		final Kml kml = kmlService.toKml(result)
+		if (clazz == InstallationStation)
+		{
+			InstallationStation.refreshDetectionCounts()
+			kml = kmlService.toKml(result)
+		}
+		else
+		{
+			kml = clazz.toKml(result)	
+		}
+		
 		kml.marshal(out)
 	}
 }

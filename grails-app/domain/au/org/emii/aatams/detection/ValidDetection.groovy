@@ -17,7 +17,7 @@ import de.micromata.opengis.kml.v_2_2_0.TimeStamp
 
 class ValidDetection extends RawDetection implements Embargoable
 {
-    static belongsTo = [receiverDeployment: ReceiverDeployment]
+	static belongsTo = [receiverDeployment: ReceiverDeployment]
     static transients = ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames', 'placemark']
     
     /**
@@ -159,8 +159,8 @@ class ValidDetection extends RawDetection implements Embargoable
 		return detectionProperties
     }
 	
-	static Kml toKml(List<ValidDetection> detections)
+	static Kml toKml(List<ValidDetection> detections, serverURL)
 	{
-		return new SensorTrackKml(detections)
+		return new SensorTrackKml(detections, serverURL)
 	}
 }

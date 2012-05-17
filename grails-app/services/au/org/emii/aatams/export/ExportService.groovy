@@ -1,11 +1,18 @@
 package au.org.emii.aatams.export
 
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 import au.org.emii.aatams.InstallationStation
 import au.org.emii.aatams.Person
 import au.org.emii.aatams.Receiver
 import au.org.emii.aatams.report.KmlService
 import au.org.emii.aatams.report.ReportInfoService
+import de.micromata.opengis.kml.v_2_2_0.Icon;
 import de.micromata.opengis.kml.v_2_2_0.Kml
+import de.micromata.opengis.kml.v_2_2_0.ScreenOverlay;
+import de.micromata.opengis.kml.v_2_2_0.Units;
+import de.micromata.opengis.kml.v_2_2_0.Vec2
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRExporter
@@ -24,6 +31,7 @@ import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.xml.JRXmlLoader
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 
@@ -44,6 +52,10 @@ class ExportService implements ApplicationContextAware
 		if (params.format == "KML")
 		{
 			generateKml(clazz, params, out)
+		}
+		else if (params.format == "KMZ")
+		{
+			generateKmz(clazz, params, out)
 		}
 		else
 		{
@@ -140,5 +152,47 @@ class ExportService implements ApplicationContextAware
 		}
 		
 		kml.marshal(out)
+	}
+	
+	private generateKmz(clazz, params, out)
+	{
+		ZipOutputStream kmzStream = new ZipOutputStream(out)
+		
+		// Write KML file itself.
+		ZipEntry kmlEntry = new ZipEntry("doc.kml")
+		kmzStream.putNextEntry(kmlEntry)
+		def result = queryService.query(clazz, params).results
+		def kml = clazz.toKml(result, grailsApplication.config.grails.serverURL)
+		
+		Icon imosIcon = new Icon().withHref("files/IMOS-logo.png")
+		ScreenOverlay imosOverlay = 
+			kml.getFeature().createAndAddScreenOverlay()
+		imosOverlay.setIcon(imosIcon)	
+		imosOverlay.setOverlayXY(new Vec2().withX(0).withY(0).withXunits(Units.FRACTION).withYunits(Units.FRACTION))
+		imosOverlay.setScreenXY(new Vec2().withX(0.025).withY(0.05).withXunits(Units.FRACTION).withYunits(Units.FRACTION))
+		
+		kml.marshal(kmzStream)
+		kmzStream.closeEntry()
+		
+		// "files" directory.
+		ZipEntry filesEntry = new ZipEntry("files/")
+		kmzStream.putNextEntry(filesEntry)
+		kmzStream.closeEntry()
+		
+		// Style sheet.
+		ZipEntry mainCssEntry = new ZipEntry("files/main.css")
+		kmzStream.putNextEntry(mainCssEntry)
+		def mainCssInputStream = applicationContext.getResource("/css/main.css").getInputStream()
+		IOUtils.copy(mainCssInputStream, kmzStream)
+		kmzStream.closeEntry()
+		
+		// IMOS logo.
+		ZipEntry imosLogoEntry = new ZipEntry("files/IMOS-logo.png")
+		kmzStream.putNextEntry(imosLogoEntry)
+		def imosLogoInputStream = applicationContext.getResource("/images/IMOS-logo.png").getInputStream()
+		IOUtils.copy(imosLogoInputStream, kmzStream)
+		kmzStream.closeEntry()
+		
+		kmzStream.close()
 	}
 }

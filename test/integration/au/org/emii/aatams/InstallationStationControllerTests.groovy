@@ -20,6 +20,8 @@ class InstallationStationControllerTests extends AbstractControllerUnitTestCase
 		assertExport([installation: [project: [eq: ["name", "Seal Count"]]]], "testExecuteInstallationStationByProject")
 	}
 	
+	// TODO: move this to ExportServiceTests
+	// Need to refactor the KML stuff out of ExportService and in to KmlService.
 	void testExecuteStationKmlExtract()
 	{
 		def sql = new Sql(dataSource)

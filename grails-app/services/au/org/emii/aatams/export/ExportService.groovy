@@ -49,11 +49,7 @@ class ExportService implements ApplicationContextAware
 	{
 		long startTimestamp = System.currentTimeMillis()
 		
-		if (params.format == "KML")
-		{
-			generateKml(clazz, params, out)
-		}
-		else if (params.format == "KMZ")
+		if (params.format == "KMZ")
 		{
 			generateKmz(clazz, params, out)
 		}
@@ -137,7 +133,7 @@ class ExportService implements ApplicationContextAware
 		return new FileInputStream(applicationContext.getResource("/reports/" + reportInfoService.getReportInfo(clazz).jrxmlFilename[params.format] + ".jrxml")?.getFile())
 	}
 	
-	private generateKml(clazz, params, out)
+	private Kml generateKml(clazz, params, out)
 	{
 		def kml
 		def result = queryService.query(clazz, params).results
@@ -151,7 +147,7 @@ class ExportService implements ApplicationContextAware
 			kml = clazz.toKml(result, grailsApplication.config.grails.serverURL)	
 		}
 		
-		kml.marshal(out)
+		return kml
 	}
 	
 	private generateKmz(clazz, params, out)
@@ -162,7 +158,7 @@ class ExportService implements ApplicationContextAware
 		ZipEntry kmlEntry = new ZipEntry("doc.kml")
 		kmzStream.putNextEntry(kmlEntry)
 		def result = queryService.query(clazz, params).results
-		def kml = clazz.toKml(result, grailsApplication.config.grails.serverURL)
+		def kml = generateKml(clazz, params, out)
 		
 		Icon imosIcon = new Icon().withHref("files/IMOS-logo.png")
 		ScreenOverlay imosOverlay = 

@@ -50,7 +50,7 @@ class AbstractController
 	
 	private String getMimeType(params)
 	{
-		def mimeTypes = [PDF: "application/pdf", CSV: "text/csv", KML: "application/vnd.google-earth.kml+xml"]
+		def mimeTypes = [PDF: "application/pdf", CSV: "text/csv", KML: "application/vnd.google-earth.kml+xml", KMZ: " application/vnd.google-earth.kmz"]
 		
 		return mimeTypes[params.format]
 	}

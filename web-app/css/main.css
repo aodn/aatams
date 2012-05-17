@@ -487,7 +487,7 @@ th.desc a {
     background: transparent url(../images/skin/CSV.gif) 5px 50% no-repeat;
     padding-left: 28px;
 }
-.buttons input.KML {
+.buttons input.KML, .buttons input.KMZ {
     background: transparent url(../images/skin/KML.gif) 5px 50% no-repeat;
     padding-left: 28px;
 }

@@ -20,7 +20,7 @@ class DetectionController extends ReportController
 
 	def export =
 	{
-		if (params._action_export == "KML")
+		if  ((params._action_export == "KML") || (params._action_export == "KMZ"))
 		{
 			doExport("detection")
 		}

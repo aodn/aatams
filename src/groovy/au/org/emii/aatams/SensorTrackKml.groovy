@@ -65,7 +65,6 @@ class SensorTrackKml extends Kml
 			
 			Placemark placemark = new Placemark()
 			placemark.setName(transmitterId)
-//			placemark.setDescription("<![CDATA[${getDescription()}]]>")
 			placemark.setDescription(getDescription())
 			
 			Track track = new Track()
@@ -100,11 +99,6 @@ class SensorTrackKml extends Kml
                             <table>
                                 <tbody>
                                 
-                                    <tr class="prop">
-                                        <td valign="top" class="name">Transmitter ID</td>
-                                        <td valign="top" class="value">$[name]</td>
-                                    </tr>
-                        
                                     <tr class="prop">
                                         <td valign="top" class="name">Link to the Data</td>
                                         <td valign="top" class="value"><a href="''' + serverURL + '''/detection/list?filter.in=transmitterId&filter.in=$[name]">Detections for $[name]</a></td>

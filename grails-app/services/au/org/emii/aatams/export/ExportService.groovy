@@ -31,6 +31,7 @@ class ExportService implements ApplicationContextAware
 {
 	ApplicationContext applicationContext
 	
+	def grailsApplication
 	def kmlService
 	def permissionUtilsService
 	def reportInfoService
@@ -135,7 +136,7 @@ class ExportService implements ApplicationContextAware
 		}
 		else
 		{
-			kml = clazz.toKml(result)	
+			kml = clazz.toKml(result, grailsApplication.config.grails.serverURL)	
 		}
 		
 		kml.marshal(out)

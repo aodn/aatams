@@ -6,14 +6,22 @@ import de.micromata.opengis.kml.v_2_2_0.Kml
 import grails.test.*
 import org.joda.time.DateTime
 
-class SensorTrackKmlTests extends GrailsUnitTestCase {
-    protected void setUp() {
+class SensorTrackKmlTests extends GrailsUnitTestCase 
+{
+    protected void setUp() 
+	{
         super.setUp()
+		
+		mockConfig('''grails
+					{
+						serverURL = "http://localhost:8090/aatams"
+					}''')
+		SensorTrackKml.metaClass.grailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
     }
 
 	void testTrackNoDetections()
 	{
-		Kml kml = new SensorTrackKml([])
+		Kml kml = new SensorTrackKml([], "http://localhost:8090/aatams")
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
@@ -29,13 +37,38 @@ class SensorTrackKmlTests extends GrailsUnitTestCase {
 			
 		Kml kml = new SensorTrackKml([[transmitterId: 'A69-1303-5566', 
 									   timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
-									   receiverDeployment: deployment]])
+									   receiverDeployment: deployment]], "http://localhost:8090/aatams")
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
     <Document>
         <Placemark>
             <name>A69-1303-5566</name>
+            <description>&lt;div&gt;
+                    &lt;link rel="stylesheet" type="text/css" href="files/main.css" /&gt;
+                    &lt;div class="description"&gt;
+                    
+                        &lt;!--  "Header" data. --&gt;
+                        &lt;div class="dialog"&gt;
+                            &lt;table&gt;
+                                &lt;tbody&gt;
+                                
+                                    &lt;tr class="prop"&gt;
+                                        &lt;td valign="top" class="name"&gt;Transmitter ID&lt;/td&gt;
+                                        &lt;td valign="top" class="value"&gt;$[name]&lt;/td&gt;
+                                    &lt;/tr&gt;
+                        
+                                    &lt;tr class="prop"&gt;
+                                        &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
+                                        &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.in=transmitterId&amp;filter.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;
+                                    &lt;/tr&gt;
+                                    
+                                &lt;/tbody&gt;
+                            &lt;/table&gt;
+                        &lt;/div&gt;
+                       
+                    &lt;/div&gt;
+                &lt;/div&gt;</description>
             <gx:Track>
                 <gx:altitudeMode>clampToGround</gx:altitudeMode>
                 <when>2010-05-28T02:02:09.000+10:00</when>
@@ -58,13 +91,38 @@ class SensorTrackKmlTests extends GrailsUnitTestCase {
 									   receiverDeployment: deployment1],
 									  [transmitterId: 'A69-1303-5566', 
 									   timestamp: new DateTime("2010-05-28T02:05:13+10:00").toDate(),
-									   receiverDeployment: deployment2]])
+									   receiverDeployment: deployment2]], "http://localhost:8090/aatams")
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
     <Document>
         <Placemark>
             <name>A69-1303-5566</name>
+            <description>&lt;div&gt;
+                    &lt;link rel="stylesheet" type="text/css" href="files/main.css" /&gt;
+                    &lt;div class="description"&gt;
+                    
+                        &lt;!--  "Header" data. --&gt;
+                        &lt;div class="dialog"&gt;
+                            &lt;table&gt;
+                                &lt;tbody&gt;
+                                
+                                    &lt;tr class="prop"&gt;
+                                        &lt;td valign="top" class="name"&gt;Transmitter ID&lt;/td&gt;
+                                        &lt;td valign="top" class="value"&gt;$[name]&lt;/td&gt;
+                                    &lt;/tr&gt;
+                        
+                                    &lt;tr class="prop"&gt;
+                                        &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
+                                        &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.in=transmitterId&amp;filter.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;
+                                    &lt;/tr&gt;
+                                    
+                                &lt;/tbody&gt;
+                            &lt;/table&gt;
+                        &lt;/div&gt;
+                       
+                    &lt;/div&gt;
+                &lt;/div&gt;</description>
             <gx:Track>
                 <gx:altitudeMode>clampToGround</gx:altitudeMode>
                 <when>2010-05-28T02:02:09.000+10:00</when>
@@ -89,13 +147,38 @@ class SensorTrackKmlTests extends GrailsUnitTestCase {
 									   receiverDeployment: deployment2],
 									  [transmitterId: 'A69-1303-5566',
 									   timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
-									   receiverDeployment: deployment1]])
+									   receiverDeployment: deployment1]], "http://localhost:8090/aatams")
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
     <Document>
         <Placemark>
             <name>A69-1303-5566</name>
+            <description>&lt;div&gt;
+                    &lt;link rel="stylesheet" type="text/css" href="files/main.css" /&gt;
+                    &lt;div class="description"&gt;
+                    
+                        &lt;!--  "Header" data. --&gt;
+                        &lt;div class="dialog"&gt;
+                            &lt;table&gt;
+                                &lt;tbody&gt;
+                                
+                                    &lt;tr class="prop"&gt;
+                                        &lt;td valign="top" class="name"&gt;Transmitter ID&lt;/td&gt;
+                                        &lt;td valign="top" class="value"&gt;$[name]&lt;/td&gt;
+                                    &lt;/tr&gt;
+                        
+                                    &lt;tr class="prop"&gt;
+                                        &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
+                                        &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.in=transmitterId&amp;filter.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;
+                                    &lt;/tr&gt;
+                                    
+                                &lt;/tbody&gt;
+                            &lt;/table&gt;
+                        &lt;/div&gt;
+                       
+                    &lt;/div&gt;
+                &lt;/div&gt;</description>
             <gx:Track>
                 <gx:altitudeMode>clampToGround</gx:altitudeMode>
                 <when>2010-05-28T02:02:09.000+10:00</when>
@@ -123,13 +206,38 @@ class SensorTrackKmlTests extends GrailsUnitTestCase {
 									   receiverDeployment: deployment1],
 								      [transmitterId: 'A69-1303-5566', 
 									   timestamp: new DateTime("2010-05-28T02:05:13+10:00").toDate(),
-									   receiverDeployment: deployment2]])
+									   receiverDeployment: deployment2]], "http://localhost:8090/aatams")
 
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
     <Document>
         <Placemark>
             <name>A69-1303-5566</name>
+            <description>&lt;div&gt;
+                    &lt;link rel="stylesheet" type="text/css" href="files/main.css" /&gt;
+                    &lt;div class="description"&gt;
+                    
+                        &lt;!--  "Header" data. --&gt;
+                        &lt;div class="dialog"&gt;
+                            &lt;table&gt;
+                                &lt;tbody&gt;
+                                
+                                    &lt;tr class="prop"&gt;
+                                        &lt;td valign="top" class="name"&gt;Transmitter ID&lt;/td&gt;
+                                        &lt;td valign="top" class="value"&gt;$[name]&lt;/td&gt;
+                                    &lt;/tr&gt;
+                        
+                                    &lt;tr class="prop"&gt;
+                                        &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
+                                        &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.in=transmitterId&amp;filter.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;
+                                    &lt;/tr&gt;
+                                    
+                                &lt;/tbody&gt;
+                            &lt;/table&gt;
+                        &lt;/div&gt;
+                       
+                    &lt;/div&gt;
+                &lt;/div&gt;</description>
             <gx:Track>
                 <gx:altitudeMode>clampToGround</gx:altitudeMode>
                 <when>2010-05-28T02:02:09.000+10:00</when>
@@ -140,6 +248,31 @@ class SensorTrackKmlTests extends GrailsUnitTestCase {
         </Placemark>
         <Placemark>
             <name>A69-1303-7788</name>
+            <description>&lt;div&gt;
+                    &lt;link rel="stylesheet" type="text/css" href="files/main.css" /&gt;
+                    &lt;div class="description"&gt;
+                    
+                        &lt;!--  "Header" data. --&gt;
+                        &lt;div class="dialog"&gt;
+                            &lt;table&gt;
+                                &lt;tbody&gt;
+                                
+                                    &lt;tr class="prop"&gt;
+                                        &lt;td valign="top" class="name"&gt;Transmitter ID&lt;/td&gt;
+                                        &lt;td valign="top" class="value"&gt;$[name]&lt;/td&gt;
+                                    &lt;/tr&gt;
+                        
+                                    &lt;tr class="prop"&gt;
+                                        &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
+                                        &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.in=transmitterId&amp;filter.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;
+                                    &lt;/tr&gt;
+                                    
+                                &lt;/tbody&gt;
+                            &lt;/table&gt;
+                        &lt;/div&gt;
+                       
+                    &lt;/div&gt;
+                &lt;/div&gt;</description>
             <gx:Track>
                 <gx:altitudeMode>clampToGround</gx:altitudeMode>
                 <when>2010-05-28T02:08:13.000+10:00</when>

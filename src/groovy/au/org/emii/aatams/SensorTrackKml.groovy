@@ -6,7 +6,9 @@ import org.joda.time.format.ISODateTimeFormat
 
 import au.org.emii.aatams.detection.ValidDetection
 import de.micromata.opengis.kml.v_2_2_0.AltitudeMode;
+import de.micromata.opengis.kml.v_2_2_0.Data
 import de.micromata.opengis.kml.v_2_2_0.Document
+import de.micromata.opengis.kml.v_2_2_0.ExtendedData;
 import de.micromata.opengis.kml.v_2_2_0.Kml
 import de.micromata.opengis.kml.v_2_2_0.Placemark
 import de.micromata.opengis.kml.v_2_2_0.gx.Track
@@ -18,9 +20,11 @@ import de.micromata.opengis.kml.v_2_2_0.gx.Track
 class SensorTrackKml extends Kml
 {
 	private final TreeMap<String, TreeSet<ValidDetection>> detsBySensor
+	private final String serverURL
 	
-	public SensorTrackKml(detections)
+	public SensorTrackKml(detections, serverURL)
 	{
+		this.serverURL = serverURL
 		this.detsBySensor = new TreeMap<String, TreeSet<ValidDetection>>()
 		loadDetections(detections)
 		refresh()
@@ -61,7 +65,9 @@ class SensorTrackKml extends Kml
 			
 			Placemark placemark = new Placemark()
 			placemark.setName(transmitterId)
-	
+//			placemark.setDescription("<![CDATA[${getDescription()}]]>")
+			placemark.setDescription(getDescription())
+			
 			Track track = new Track()
 			track.setAltitudeMode(AltitudeMode.CLAMP_TO_GROUND)
 	
@@ -80,5 +86,35 @@ class SensorTrackKml extends Kml
 			placemark.setGeometry(track)
 			doc.getFeature().add(placemark)
 		}
+	}
+	
+	// TODO: refactor to GSP template.
+	private String getDescription()
+	{
+		return '''<div>
+                    <link rel="stylesheet" type="text/css" href="files/main.css" />
+                    <div class="description">
+                    
+                        <!--  "Header" data. -->
+                        <div class="dialog">
+                            <table>
+                                <tbody>
+                                
+                                    <tr class="prop">
+                                        <td valign="top" class="name">Transmitter ID</td>
+                                        <td valign="top" class="value">$[name]</td>
+                                    </tr>
+                        
+                                    <tr class="prop">
+                                        <td valign="top" class="name">Link to the Data</td>
+                                        <td valign="top" class="value"><a href="''' + serverURL + '''/detection/list?filter.in=transmitterId&filter.in=$[name]">Detections for $[name]</a></td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                       
+                    </div>
+                </div>'''
 	}
 }

@@ -54,11 +54,6 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
                                 &lt;tbody&gt;
                                 
                                     &lt;tr class="prop"&gt;
-                                        &lt;td valign="top" class="name"&gt;Transmitter ID&lt;/td&gt;
-                                        &lt;td valign="top" class="value"&gt;$[name]&lt;/td&gt;
-                                    &lt;/tr&gt;
-                        
-                                    &lt;tr class="prop"&gt;
                                         &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
                                         &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.in=transmitterId&amp;filter.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;
                                     &lt;/tr&gt;
@@ -107,11 +102,6 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
                             &lt;table&gt;
                                 &lt;tbody&gt;
                                 
-                                    &lt;tr class="prop"&gt;
-                                        &lt;td valign="top" class="name"&gt;Transmitter ID&lt;/td&gt;
-                                        &lt;td valign="top" class="value"&gt;$[name]&lt;/td&gt;
-                                    &lt;/tr&gt;
-                        
                                     &lt;tr class="prop"&gt;
                                         &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
                                         &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.in=transmitterId&amp;filter.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;
@@ -163,11 +153,6 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
                             &lt;table&gt;
                                 &lt;tbody&gt;
                                 
-                                    &lt;tr class="prop"&gt;
-                                        &lt;td valign="top" class="name"&gt;Transmitter ID&lt;/td&gt;
-                                        &lt;td valign="top" class="value"&gt;$[name]&lt;/td&gt;
-                                    &lt;/tr&gt;
-                        
                                     &lt;tr class="prop"&gt;
                                         &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
                                         &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.in=transmitterId&amp;filter.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;
@@ -223,11 +208,6 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
                                 &lt;tbody&gt;
                                 
                                     &lt;tr class="prop"&gt;
-                                        &lt;td valign="top" class="name"&gt;Transmitter ID&lt;/td&gt;
-                                        &lt;td valign="top" class="value"&gt;$[name]&lt;/td&gt;
-                                    &lt;/tr&gt;
-                        
-                                    &lt;tr class="prop"&gt;
                                         &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
                                         &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.in=transmitterId&amp;filter.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;
                                     &lt;/tr&gt;
@@ -257,11 +237,6 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
                             &lt;table&gt;
                                 &lt;tbody&gt;
                                 
-                                    &lt;tr class="prop"&gt;
-                                        &lt;td valign="top" class="name"&gt;Transmitter ID&lt;/td&gt;
-                                        &lt;td valign="top" class="value"&gt;$[name]&lt;/td&gt;
-                                    &lt;/tr&gt;
-                        
                                     &lt;tr class="prop"&gt;
                                         &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
                                         &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.in=transmitterId&amp;filter.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;

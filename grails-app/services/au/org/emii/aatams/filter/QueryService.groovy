@@ -23,14 +23,26 @@ class QueryService
 	def rootCriteria
 	Map subCriteriaMap
 	
+	Map<Long, Collection> query(clazz, params)
+	{
+		return query(clazz, params, false)
+	}
+	
 	/**
 	 * Return map:
 	 * 
 	 * count, rows
 	 * 
+	 * Important note: skpEmbargoChecking should only be set to true
+	 * when you are certain that the returned data will not expose
+	 * any possible embargoed information (e.g. the sensor track
+	 * KML export).
+	 * 
+	 * It is provided purely for performance reasons.
+	 * 
 	 * @return
 	 */
-    Map<Long, Collection> query(clazz, params) 
+    Map<Long, Collection> query(clazz, params, skipEmbargoChecking) 
 	{
 		subCriteriaMap = [:]
 		
@@ -55,7 +67,10 @@ class QueryService
 			count = results.totalCount
 		}
 	
-		results = embargoService.applyEmbargo(results)
+		if (!skipEmbargoChecking)
+		{
+			results = embargoService.applyEmbargo(results)
+		}
 		
 		return [results: results, count: count]
     }

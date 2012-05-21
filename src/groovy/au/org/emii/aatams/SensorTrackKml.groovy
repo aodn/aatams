@@ -9,8 +9,12 @@ import de.micromata.opengis.kml.v_2_2_0.AltitudeMode;
 import de.micromata.opengis.kml.v_2_2_0.Data
 import de.micromata.opengis.kml.v_2_2_0.Document
 import de.micromata.opengis.kml.v_2_2_0.ExtendedData;
+import de.micromata.opengis.kml.v_2_2_0.Icon
+import de.micromata.opengis.kml.v_2_2_0.IconStyle;
 import de.micromata.opengis.kml.v_2_2_0.Kml
+import de.micromata.opengis.kml.v_2_2_0.LineStyle;
 import de.micromata.opengis.kml.v_2_2_0.Placemark
+import de.micromata.opengis.kml.v_2_2_0.Style
 import de.micromata.opengis.kml.v_2_2_0.gx.Track
 
 /**
@@ -57,6 +61,8 @@ class SensorTrackKml extends Kml
 			return
 		}
 		
+		insertDefaultDetectionStyle(doc)
+		
 		DateTimeFormatter fmt = ISODateTimeFormat.dateTime()
 			
 		detsBySensor.each 
@@ -66,6 +72,7 @@ class SensorTrackKml extends Kml
 			Placemark placemark = new Placemark()
 			placemark.setName(transmitterId)
 			placemark.setDescription(getDescription())
+			placemark.setStyleUrl("#defaultDetectionStyle")
 			
 			Track track = new Track()
 			track.setAltitudeMode(AltitudeMode.CLAMP_TO_GROUND)
@@ -85,6 +92,14 @@ class SensorTrackKml extends Kml
 			placemark.setGeometry(track)
 			doc.getFeature().add(placemark)
 		}
+	}
+	
+	private void insertDefaultDetectionStyle(Document doc)
+	{
+		doc.createAndAddStyle()
+			.withId("defaultDetectionStyle")
+			.withIconStyle(new IconStyle().withScale(1.0).withHeading(0.0).withIcon(new Icon().withHref("files/fish.png")))
+			.withLineStyle(new LineStyle().withColor("ffface87").withWidth(4))
 	}
 	
 	// TODO: refactor to GSP template.

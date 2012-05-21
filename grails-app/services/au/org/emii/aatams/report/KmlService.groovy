@@ -107,23 +107,30 @@ class KmlService implements ApplicationContextAware
 		kmzStream.closeEntry()
 		
 		// "files" directory.
-		ZipEntry filesEntry = new ZipEntry("files/")
-		kmzStream.putNextEntry(filesEntry)
-		kmzStream.closeEntry()
+		addZipEntry(kmzStream, "files/", null)
 		
 		// Style sheet.
-		ZipEntry mainCssEntry = new ZipEntry("files/main.css")
-		kmzStream.putNextEntry(mainCssEntry)
-		IOUtils.copy(getMainCssStream(), kmzStream)
-		kmzStream.closeEntry()
+		addZipEntry(kmzStream, "files/main.css", getMainCssStream())
 		
 		// IMOS logo.
-		ZipEntry imosLogoEntry = new ZipEntry("files/IMOS-logo.png")
-		kmzStream.putNextEntry(imosLogoEntry)
-		IOUtils.copy(getImosLogoStream(), kmzStream)
-		kmzStream.closeEntry()
+		addZipEntry(kmzStream, "files/IMOS-logo.png", getImosLogoStream())
+		
+		// IMOS logo.
+		addZipEntry(kmzStream, "files/fish.png", getFishIconStream())
 		
 		kmzStream.close()
+	}
+	
+	private addZipEntry(kmzStream, entryName, entryStream)
+	{
+		ZipEntry entry = new ZipEntry(entryName)
+		kmzStream.putNextEntry(entry)
+		
+		if (entryStream)
+		{
+			IOUtils.copy(entryStream, kmzStream)
+			kmzStream.closeEntry()
+		}
 	}
 	
 	private InputStream getMainCssStream()
@@ -134,5 +141,10 @@ class KmlService implements ApplicationContextAware
 	private InputStream getImosLogoStream()
 	{
 		return applicationContext.getResource("/images/IMOS-logo.png").getInputStream()
+	}
+	
+	private InputStream getFishIconStream()
+	{
+		return applicationContext.getResource("/images/fish.png").getInputStream()
 	}
 }

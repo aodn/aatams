@@ -102,6 +102,11 @@ class KmlServiceTests extends GrailsUnitTestCase
 		{
 			return new FileInputStream(new File("web-app/images/IMOS-logo.png"))
 		}
+		
+		service.metaClass.getFishIconStream =
+		{
+			return new FileInputStream(new File("web-app/images/fish.png"))
+		}
     }
 
     protected void tearDown() 
@@ -187,7 +192,7 @@ class KmlServiceTests extends GrailsUnitTestCase
 		
 		ZipFile kmzFile = new ZipFile(tmpKmz)
 		
-		assertEquals(["doc.kml", "files/", "files/main.css", "files/IMOS-logo.png"], kmzFile.entries().toList()*.name)
+		assertEquals(["doc.kml", "files/", "files/main.css", "files/IMOS-logo.png", "files/fish.png"], kmzFile.entries().toList()*.name)
 	}
 	
 	void testIsSupportedFormat()

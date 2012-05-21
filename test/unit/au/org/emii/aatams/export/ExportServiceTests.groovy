@@ -1,10 +1,20 @@
 package au.org.emii.aatams.export
 
 import java.util.List;
+import java.util.zip.ZipEntry
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+
+import org.apache.commons.io.IOUtils;
+
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+
+import de.micromata.opengis.kml.v_2_2_0.Kml;
 
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import au.org.emii.aatams.filter.QueryService;
+import au.org.emii.aatams.report.KmlService;
 import au.org.emii.aatams.report.ReportInfoService;
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import au.org.emii.aatams.*
@@ -43,7 +53,7 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
 		exportService.reportInfoService = reportInfoService
 		exportService.queryService = queryService
 		exportService.permissionUtilsService = permissionUtilsService
-		
+		exportService.kmlService = new KmlService()
 		
 		exportService.metaClass.getReportStream =
 		{

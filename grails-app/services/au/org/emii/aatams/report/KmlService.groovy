@@ -74,7 +74,7 @@ class KmlService implements ApplicationContextAware
 	public Kml generateKml(clazz, params)
 	{
 		def kml
-		def result = queryService.query(clazz, params).results
+		def result = queryService.query(clazz, params, true).results
 		if (clazz == InstallationStation)
 		{
 			InstallationStation.refreshDetectionCounts()

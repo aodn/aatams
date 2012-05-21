@@ -42,6 +42,22 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
     <Document>
+        <Style id="defaultDetectionStyle">
+            <IconStyle>
+                <scale>1.0</scale>
+                <heading>0.0</heading>
+                <Icon>
+                    <href>files/fish.png</href>
+                    <refreshInterval>0.0</refreshInterval>
+                    <viewRefreshTime>0.0</viewRefreshTime>
+                    <viewBoundScale>0.0</viewBoundScale>
+                </Icon>
+            </IconStyle>
+            <LineStyle>
+                <color>ffface87</color>
+                <width>4.0</width>
+            </LineStyle>
+        </Style>
         <Placemark>
             <name>A69-1303-5566</name>
             <description>&lt;div&gt;
@@ -64,6 +80,7 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
                        
                     &lt;/div&gt;
                 &lt;/div&gt;</description>
+            <styleUrl>#defaultDetectionStyle</styleUrl>
             <gx:Track>
                 <gx:altitudeMode>clampToGround</gx:altitudeMode>
                 <when>2010-05-28T02:02:09.000+10:00</when>
@@ -91,6 +108,22 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
     <Document>
+        <Style id="defaultDetectionStyle">
+            <IconStyle>
+                <scale>1.0</scale>
+                <heading>0.0</heading>
+                <Icon>
+                    <href>files/fish.png</href>
+                    <refreshInterval>0.0</refreshInterval>
+                    <viewRefreshTime>0.0</viewRefreshTime>
+                    <viewBoundScale>0.0</viewBoundScale>
+                </Icon>
+            </IconStyle>
+            <LineStyle>
+                <color>ffface87</color>
+                <width>4.0</width>
+            </LineStyle>
+        </Style>
         <Placemark>
             <name>A69-1303-5566</name>
             <description>&lt;div&gt;
@@ -113,6 +146,7 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
                        
                     &lt;/div&gt;
                 &lt;/div&gt;</description>
+            <styleUrl>#defaultDetectionStyle</styleUrl>
             <gx:Track>
                 <gx:altitudeMode>clampToGround</gx:altitudeMode>
                 <when>2010-05-28T02:02:09.000+10:00</when>
@@ -142,6 +176,22 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
     <Document>
+        <Style id="defaultDetectionStyle">
+            <IconStyle>
+                <scale>1.0</scale>
+                <heading>0.0</heading>
+                <Icon>
+                    <href>files/fish.png</href>
+                    <refreshInterval>0.0</refreshInterval>
+                    <viewRefreshTime>0.0</viewRefreshTime>
+                    <viewBoundScale>0.0</viewBoundScale>
+                </Icon>
+            </IconStyle>
+            <LineStyle>
+                <color>ffface87</color>
+                <width>4.0</width>
+            </LineStyle>
+        </Style>
         <Placemark>
             <name>A69-1303-5566</name>
             <description>&lt;div&gt;
@@ -164,6 +214,7 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
                        
                     &lt;/div&gt;
                 &lt;/div&gt;</description>
+            <styleUrl>#defaultDetectionStyle</styleUrl>
             <gx:Track>
                 <gx:altitudeMode>clampToGround</gx:altitudeMode>
                 <when>2010-05-28T02:02:09.000+10:00</when>
@@ -196,6 +247,22 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
     <Document>
+        <Style id="defaultDetectionStyle">
+            <IconStyle>
+                <scale>1.0</scale>
+                <heading>0.0</heading>
+                <Icon>
+                    <href>files/fish.png</href>
+                    <refreshInterval>0.0</refreshInterval>
+                    <viewRefreshTime>0.0</viewRefreshTime>
+                    <viewBoundScale>0.0</viewBoundScale>
+                </Icon>
+            </IconStyle>
+            <LineStyle>
+                <color>ffface87</color>
+                <width>4.0</width>
+            </LineStyle>
+        </Style>
         <Placemark>
             <name>A69-1303-5566</name>
             <description>&lt;div&gt;
@@ -218,6 +285,7 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
                        
                     &lt;/div&gt;
                 &lt;/div&gt;</description>
+            <styleUrl>#defaultDetectionStyle</styleUrl>
             <gx:Track>
                 <gx:altitudeMode>clampToGround</gx:altitudeMode>
                 <when>2010-05-28T02:02:09.000+10:00</when>
@@ -248,6 +316,7 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
                        
                     &lt;/div&gt;
                 &lt;/div&gt;</description>
+            <styleUrl>#defaultDetectionStyle</styleUrl>
             <gx:Track>
                 <gx:altitudeMode>clampToGround</gx:altitudeMode>
                 <when>2010-05-28T02:08:13.000+10:00</when>

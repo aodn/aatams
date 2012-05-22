@@ -5,7 +5,9 @@ import au.org.emii.aatams.detection.ValidDetection
 import de.micromata.opengis.kml.v_2_2_0.Document
 import de.micromata.opengis.kml.v_2_2_0.Folder
 import de.micromata.opengis.kml.v_2_2_0.Icon
+import de.micromata.opengis.kml.v_2_2_0.IconStyle
 import de.micromata.opengis.kml.v_2_2_0.Kml
+import de.micromata.opengis.kml.v_2_2_0.LabelStyle;
 import de.micromata.opengis.kml.v_2_2_0.Placemark
 import de.micromata.opengis.kml.v_2_2_0.ScreenOverlay
 import de.micromata.opengis.kml.v_2_2_0.Units
@@ -47,6 +49,11 @@ class KmlService implements ApplicationContextAware
 	{
 		final Kml kml = new Kml()
 		Document doc = kml.createAndSetDocument()
+
+		doc.createAndAddStyle()
+			.withId("defaultStationStyle")
+			.withIconStyle(new IconStyle().withScale(1.0).withHeading(0.0).withIcon(new Icon().withHref("files/station.png")))
+			.withLabelStyle(new LabelStyle().withScale(0.0))
 
 		def projects = stations*.installation*.project.unique().sort()
 		{
@@ -118,6 +125,8 @@ class KmlService implements ApplicationContextAware
 		// IMOS logo.
 		addZipEntry(kmzStream, "files/fish.png", getFishIconStream())
 		
+		addZipEntry(kmzStream, "files/station.png", getStationIconStream())
+		
 		kmzStream.close()
 	}
 	
@@ -147,4 +156,10 @@ class KmlService implements ApplicationContextAware
 	{
 		return applicationContext.getResource("/images/fish.png").getInputStream()
 	}
+	
+	private InputStream getStationIconStream()
+	{
+		return applicationContext.getResource("/images/station.png").getInputStream()
+	}
+
 }

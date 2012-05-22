@@ -123,6 +123,7 @@ class InstallationStation
 		placemark.setOpen(Boolean.TRUE)
 		placemark.createAndSetPoint().addToCoordinates(getLongitude(), getLatitude())
 		placemark.setDescription(toKmlDescription())
+		placemark.setStyleUrl("#defaultStationStyle")
 		
 		return placemark
 	}

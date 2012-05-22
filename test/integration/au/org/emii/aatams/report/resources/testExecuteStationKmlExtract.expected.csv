@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
     <Document>
+        <Style id="defaultStationStyle">
+            <IconStyle>
+                <scale>1.0</scale>
+                <heading>0.0</heading>
+                <Icon>
+                    <href>files/station.png</href>
+                    <refreshInterval>0.0</refreshInterval>
+                    <viewRefreshTime>0.0</viewRefreshTime>
+                    <viewBoundScale>0.0</viewBoundScale>
+                </Icon>
+            </IconStyle>
+            <LabelStyle>
+                <scale>0.0</scale>
+            </LabelStyle>
+        </Style>
         <Folder>
             <name>Seal Count</name>
             <Folder>
@@ -9,6 +24,7 @@
                     <name>Bondi SW1</name>
                     <open>1</open>
                     <description>some description</description>
+                    <styleUrl>#defaultStationStyle</styleUrl>
                     <Point>
                         <coordinates>30.1234,30.1234</coordinates>
                     </Point>
@@ -17,6 +33,7 @@
                     <name>Bondi SW2</name>
                     <open>1</open>
                     <description>some description</description>
+                    <styleUrl>#defaultStationStyle</styleUrl>
                     <Point>
                         <coordinates>-10.1234,-10.1234</coordinates>
                     </Point>
@@ -25,6 +42,7 @@
                     <name>Bondi SW3</name>
                     <open>1</open>
                     <description>some description</description>
+                    <styleUrl>#defaultStationStyle</styleUrl>
                     <Point>
                         <coordinates>10.1234,10.1234</coordinates>
                     </Point>
@@ -36,6 +54,7 @@
                     <name>Heron S1</name>
                     <open>1</open>
                     <description>some description</description>
+                    <styleUrl>#defaultStationStyle</styleUrl>
                     <Point>
                         <coordinates>12.34,-42.3</coordinates>
                     </Point>
@@ -44,6 +63,7 @@
                     <name>Heron S2</name>
                     <open>1</open>
                     <description>some description</description>
+                    <styleUrl>#defaultStationStyle</styleUrl>
                     <Point>
                         <coordinates>76.02,-20.1234</coordinates>
                     </Point>
@@ -58,6 +78,7 @@
                     <name>Ningaloo S1</name>
                     <open>1</open>
                     <description>some description</description>
+                    <styleUrl>#defaultStationStyle</styleUrl>
                     <Point>
                         <coordinates>10.1234,10.1234</coordinates>
                     </Point>
@@ -66,6 +87,7 @@
                     <name>Ningaloo S2</name>
                     <open>1</open>
                     <description>some description</description>
+                    <styleUrl>#defaultStationStyle</styleUrl>
                     <Point>
                         <coordinates>20.1234,20.1234</coordinates>
                     </Point>
@@ -80,6 +102,7 @@
                     <name>Whale Station</name>
                     <open>1</open>
                     <description>some description</description>
+                    <styleUrl>#defaultStationStyle</styleUrl>
                     <Point>
                         <coordinates>76.02,-20.1234</coordinates>
                     </Point>

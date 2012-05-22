@@ -6,16 +6,12 @@ import de.micromata.opengis.kml.v_2_2_0.Kml
 import grails.test.*
 import org.joda.time.DateTime
 
-class SensorTrackKmlTests extends GrailsUnitTestCase 
+class SensorTrackKmlTests extends AbstractKmlTest
 {
     protected void setUp() 
 	{
         super.setUp()
 		
-		mockConfig('''grails
-					{
-						serverURL = "http://localhost:8090/aatams"
-					}''')
 		SensorTrackKml.metaClass.grailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
     }
 
@@ -327,20 +323,5 @@ class SensorTrackKmlTests extends GrailsUnitTestCase
 </kml>
 '''
 		assertKmlEquals(expectedKml, kml)
-	}
-	
-	private void assertKmlEquals(String expectedKmlAsString, actualKml)
-	{
-		StringWriter writer = new StringWriter()
-		actualKml.marshal(writer)
-		String actualKmlAsString = writer.toString()
-		
-		if (expectedKmlAsString != actualKmlAsString)
-		{
-			println "expected:\n" + expectedKmlAsString + "end"
-			println "\n\nactual:\n" + actualKmlAsString + "end"
-		}
-		
-		assertEquals(expectedKmlAsString, actualKmlAsString)
 	}
 }

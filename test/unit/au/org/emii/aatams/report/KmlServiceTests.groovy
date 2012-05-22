@@ -180,7 +180,7 @@ class KmlServiceTests extends GrailsUnitTestCase
 		assertEquals("12.0,12.0", tasmanSW2Node.Point.coordinates.text())
 	}
 
-	void testGenerateKml()
+	void testGenerateKmz()
 	{
 		ByteArrayOutputStream out = new ByteArrayOutputStream()
 		def kml = new Kml()

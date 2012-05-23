@@ -1,4 +1,4 @@
-package au.org.emii.aatams
+package au.org.emii.aatams.test
 
 import grails.test.GrailsUnitTestCase
 

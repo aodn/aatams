@@ -20,7 +20,8 @@
             <div class="message">${flash.message}</div>
             </g:if>
             
-            <g:listControlForm name="detection" formats="${['CSV', 'KMZ']}" />       
+            <g:listControlForm name="detection" 
+                               formats="${['CSV', 'KMZ (tag tracks)', 'KMZ (bubble plot)']}" />       
             
             <div class="list">
                 <table>

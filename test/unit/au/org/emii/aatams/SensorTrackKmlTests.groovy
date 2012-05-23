@@ -1,6 +1,7 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.test.AbstractKmlTest;
 
 import de.micromata.opengis.kml.v_2_2_0.Kml
 import grails.test.*

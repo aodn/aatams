@@ -4,7 +4,7 @@
     
         <g:listFilter name="${name}" />
         
-        <g:exportPane name="${name}" formats="${formats}" />
+        <g:exportPane name="${name}" formats="${formats}" subFormats="${subFormats}" />
     
     </g:form>
 

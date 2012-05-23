@@ -20,7 +20,14 @@ class DetectionController extends ReportController
 
 	def export =
 	{
-		detectionExtractService.generateReport(params, request, response)
+		if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export))
+		{
+			doExport("detection")
+		}
+		else
+		{
+			detectionExtractService.generateReport(params, request, response)
+		}
 	}
 	
     def create = 

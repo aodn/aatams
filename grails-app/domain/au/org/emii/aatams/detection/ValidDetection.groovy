@@ -1,18 +1,24 @@
 package au.org.emii.aatams.detection
 
-import de.micromata.opengis.kml.v_2_2_0.Placemark;
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormatter
+import org.joda.time.format.ISODateTimeFormat
+
 import au.org.emii.aatams.*
-import au.org.emii.aatams.util.StringUtils;
+import au.org.emii.aatams.util.StringUtils
 
-import java.util.Date;
+import com.vividsolutions.jts.geom.Point
 
-import com.vividsolutions.jts.geom.Point;
+import de.micromata.opengis.kml.v_2_2_0.Feature
+import de.micromata.opengis.kml.v_2_2_0.Kml
+import de.micromata.opengis.kml.v_2_2_0.Placemark
+import de.micromata.opengis.kml.v_2_2_0.TimeStamp
 
 
 class ValidDetection extends RawDetection implements Embargoable
 {
-    static belongsTo = [receiverDeployment: ReceiverDeployment]
-    static transients = ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames']
+	static belongsTo = [receiverDeployment: ReceiverDeployment]
+    static transients = ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames', 'placemark']
     
     /**
      * This is modelled as a many-to-many relationship, due to the fact that tags
@@ -149,7 +155,12 @@ class ValidDetection extends RawDetection implements Embargoable
 		
 		detectionProperties["sensorIds"] = getSensorIds(detectionProperties["detectionSurgeries"])
 		detectionProperties["speciesNames"] = getSpeciesNames(detectionProperties["detectionSurgeries"])
-
+		
 		return detectionProperties
     }
+	
+	static Kml toKml(List<ValidDetection> detections, serverURL)
+	{
+		return new SensorTrackKml(detections, serverURL)
+	}
 }

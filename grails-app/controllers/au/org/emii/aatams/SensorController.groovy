@@ -147,7 +147,7 @@ class SensorController extends ReportController
 	
 	def lookupByTransmitterId =
 	{
-		def sensors = Sensor.findAllByTransmitterIdIlike(params.term + "%", [sort: "transmitterId"])
+		def sensors = Sensor.findAllByTransmitterIdIlike("%" + params.term + "%", [sort: "transmitterId"])
 		
 		// Limit so that all results fit on screen.
 		if (sensors?.size() > 20)

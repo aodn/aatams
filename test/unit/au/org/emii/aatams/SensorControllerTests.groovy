@@ -125,6 +125,9 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
 		assertLookupWithTerm(0, "A7")
 		assertLookupWithTerm(1, "A69")
 		assertLookupWithTerm(1, "A69-1303-123")
+		assertLookupWithTerm(1, "123")
+		assertLookupWithTerm(1, "23")
+		assertLookupWithTerm(0, "21")
 	}
 	
 	private void assertLookupWithTerm(expectedNumResults, term)

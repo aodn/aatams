@@ -207,6 +207,8 @@ class KmlServiceTests extends GrailsUnitTestCase
 		assertFalse(service.isSupportedFormat("CSV"))
 		assertTrue(service.isSupportedFormat("KML"))
 		assertTrue(service.isSupportedFormat("KMZ"))
+		assertTrue(service.isSupportedFormat("KMZ (tag tracks)"))
+		assertTrue(service.isSupportedFormat("KMZ (bubble plot)"))
 	}
 	
 	private def convertToParsedKml(List stations) 

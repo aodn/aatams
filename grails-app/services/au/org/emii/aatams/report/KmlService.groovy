@@ -34,7 +34,7 @@ class KmlService implements ApplicationContextAware
 	{
 		assert(isSupportedFormat(params.format))
 
-		if (params.format == "KMZ")
+		if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params.format))
 		{
 			generateKmz(generateKml(clazz, params), out)
 		}
@@ -75,7 +75,7 @@ class KmlService implements ApplicationContextAware
 	
 	public boolean isSupportedFormat(String format)
 	{
-		return ((format == "KML") || (format == "KMZ"))
+		return ["KML", "KMZ", "KMZ (tag tracks)", "KMZ (bubble plot)"].contains(format)
 	}
 	
 	public Kml generateKml(clazz, params)
@@ -87,9 +87,13 @@ class KmlService implements ApplicationContextAware
 			InstallationStation.refreshDetectionCounts()
 			kml = toKml(result)
 		}
-		else
+		else if (params.format == "KMZ (tag tracks)")
 		{
-			kml = clazz.toKml(result, grailsApplication.config.grails.serverURL)
+			kml = new SensorTrackKml(result, grailsApplication.config.grails.serverURL)
+		}
+		else if (params.format == "KMZ (bubble plot)")
+		{
+			kml = new DetectionBubblePlotKml(result, grailsApplication.config.grails.serverURL)
 		}
 		
 		return kml

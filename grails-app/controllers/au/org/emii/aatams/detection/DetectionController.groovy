@@ -20,7 +20,7 @@ class DetectionController extends ReportController
 
 	def export =
 	{
-		if  ((params._action_export == "KML") || (params._action_export == "KMZ"))
+		if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export))
 		{
 			doExport("detection")
 		}

@@ -4,6 +4,8 @@ import de.micromata.opengis.kml.v_2_2_0.Kml
 import grails.test.*
 import org.joda.time.DateTime
 
+import au.org.emii.aatams.test.AbstractKmlTest;
+
 class DetectionBubblePlotKmlTests extends AbstractKmlTest 
 {
     protected void setUp() 

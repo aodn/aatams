@@ -31,7 +31,7 @@ class AbstractController
 		
 		indicateExportStart()
 		
-		response.setHeader("Content-disposition", "attachment; filename=" + queryName + "." + params.format.toLowerCase());
+		response.setHeader("Content-disposition", "attachment; filename=" + queryName + "." + getExtension(params.format))
 		response.contentType = getMimeType(params)
 		response.characterEncoding = "UTF-8"
 		
@@ -48,9 +48,20 @@ class AbstractController
 		response.addCookie(new Cookie("fileDownloadToken", params.downloadTokenValue))
 	}
 	
+	private String getExtension(format)
+	{
+		return [PDF: "pdf", CSV: "csv", KML: "kml", KMZ: "kmz", 'KMZ (tag tracks)': "kmz", 'KMZ (bubble plot)': "kmz"][format]
+	}
+	
 	private String getMimeType(params)
 	{
-		def mimeTypes = [PDF: "application/pdf", CSV: "text/csv", KML: "application/vnd.google-earth.kml+xml", KMZ: " application/vnd.google-earth.kmz"]
+		def mimeTypes = 
+			[PDF: "application/pdf", 
+			 CSV: "text/csv", 
+			 KML: "application/vnd.google-earth.kml+xml", 
+			 KMZ: "application/vnd.google-earth.kmz", 
+			 'KMZ (tag tracks)': "application/vnd.google-earth.kmz", 
+			 'KMZ (bubble plot)': "application/vnd.google-earth.kmz"]
 		
 		return mimeTypes[params.format]
 	}

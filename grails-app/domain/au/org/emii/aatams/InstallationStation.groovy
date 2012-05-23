@@ -1,17 +1,15 @@
 package au.org.emii.aatams
 
+import groovy.sql.Sql
+
+import org.codehaus.groovy.grails.commons.ApplicationHolder as AH
 import org.hibernatespatial.GeometryUserType
 
-import au.org.emii.aatams.detection.ValidDetection
-import au.org.emii.aatams.report.InstallationStationReportWrapper
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
 
 import de.micromata.opengis.kml.v_2_2_0.Placemark
-import groovy.sql.Sql
-
-import org.codehaus.groovy.grails.commons.ApplicationHolder as AH
 
 /**
  * An Installation Station is a location within an Installation where a 
@@ -125,6 +123,7 @@ class InstallationStation
 		placemark.setOpen(Boolean.TRUE)
 		placemark.createAndSetPoint().addToCoordinates(getLongitude(), getLatitude())
 		placemark.setDescription(toKmlDescription())
+		placemark.setStyleUrl("#defaultStationStyle")
 		
 		return placemark
 	}

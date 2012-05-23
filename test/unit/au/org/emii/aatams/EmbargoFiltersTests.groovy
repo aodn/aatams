@@ -4,6 +4,8 @@ import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.*
 import au.org.emii.aatams.test.AbstractFiltersUnitTestCase
+import com.vividsolutions.jts.geom.Coordinate
+import com.vividsolutions.jts.geom.GeometryFactory
 
 import grails.test.*
 
@@ -161,6 +163,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 		
         detectionNonEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
         detectionEmbargoedReadableProject = new ValidDetection(receiverDownload:receiverDownload)
+		
         detectionEmbargoedNonReadableProject = new ValidDetection(receiverDownload:receiverDownload)
         detectionPastEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
 
@@ -177,6 +180,9 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         def surgeryList = [surgeryNonEmbargoed, surgeryEmbargoedReadableProject, surgeryEmbargoedNonReadableProject, surgeryPastEmbargoed]
         def detectionList =
                           [detectionNonEmbargoed, detectionEmbargoedReadableProject, detectionEmbargoedNonReadableProject, detectionPastEmbargoed]
+		detectionList.each {
+			it.receiverDeployment = new ReceiverDeployment(location: new GeometryFactory().createPoint(new Coordinate(145f, -42f)))
+		}
         def detectionSurgeryList =
                           [detectionSurgeryNonEmbargoed, detectionSurgeryEmbargoedReadableProject, detectionSurgeryEmbargoedNonReadableProject, detectionSurgeryPastEmbargoed]
         

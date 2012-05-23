@@ -1,14 +1,13 @@
 package au.org.emii.aatams
 
 import org.hibernatespatial.GeometryUserType
+import org.joda.time.*
+import org.joda.time.contrib.hibernate.*
 
 import au.org.emii.aatams.detection.ValidDetection
-
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
-import org.joda.time.*
-import org.joda.time.contrib.hibernate.*
 
 
 /**
@@ -21,7 +20,7 @@ import org.joda.time.contrib.hibernate.*
 class ReceiverDeployment 
 {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
-    static transients = ['scrambledLocation', 'active']
+    static transients = ['scrambledLocation', 'active', 'latitude', 'longitude']
 	
     Set<ValidDetection> detections = new HashSet<ValidDetection>()
     static hasMany = [detections: ValidDetection, events: ValidReceiverEvent]
@@ -156,7 +155,17 @@ class ReceiverDeployment
      */
     Point getScrambledLocation()
     {
-        return GeometryUtils.scrambleLocation(location)
+        return GeometryUtils.scrambleLocation(location ?: station?.location)
+    }
+    
+    double getLatitude()
+    {
+        return getScrambledLocation()?.coordinate?.y
+    }
+    
+    double getLongitude()
+    {
+        return getScrambledLocation()?.coordinate?.x
     }
     
 	private DateTime now()

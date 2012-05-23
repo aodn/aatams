@@ -55,7 +55,7 @@ grails.project.dependency.resolution = {
         runtime 'postgresql:postgresql:9.0-801.jdbc4'
 		
 		// KML
-		compile 'de.micromata.jak:JavaAPIforKml:2.2.0-SNAPSHOT'
+//		compile 'de.micromata.jak:JavaAPIforKml:2.2.0-SNAPSHOT'
 		
 		test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion")
 		{

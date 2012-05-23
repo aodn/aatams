@@ -7,7 +7,9 @@ import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.ValidDetection;
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
+import de.micromata.opengis.kml.v_2_2_0.Kml
 import grails.test.*
+import java.util.zip.ZipFile
 
 class KmlServiceTests extends GrailsUnitTestCase
 {
@@ -90,6 +92,26 @@ class KmlServiceTests extends GrailsUnitTestCase
 		mockDomain(ReceiverDeployment, [deploymentTasmanSW1, deploymentTasmanSW2, deploymentNingalooW, deploymentNingalooE])
 		
 		[sealProject, whaleProject].each { it.save() }
+		
+		service.metaClass.getMainCssStream =
+		{
+			return new FileInputStream(new File("web-app/css/main.css"))
+		}
+		
+		service.metaClass.getImosLogoStream =
+		{
+			return new FileInputStream(new File("web-app/images/IMOS-logo.png"))
+		}
+		
+		service.metaClass.getFishIconStream =
+		{
+			return new FileInputStream(new File("web-app/images/fish.png"))
+		}
+
+		service.metaClass.getStationIconStream =
+		{
+			return new FileInputStream(new File("web-app/images/station.png"))
+		}
     }
 
     protected void tearDown() 
@@ -158,6 +180,37 @@ class KmlServiceTests extends GrailsUnitTestCase
 		assertEquals("12.0,12.0", tasmanSW2Node.Point.coordinates.text())
 	}
 
+	void testGenerateKmz()
+	{
+		ByteArrayOutputStream out = new ByteArrayOutputStream()
+		def kml = new Kml()
+		kml.createAndSetDocument()
+		
+		service.generateKmz(kml, out)
+		
+		assertFalse(out.size() == 0)
+		
+		File tmpKmz = File.createTempFile("kmz", ".zip")
+		FileOutputStream kmzOut = new FileOutputStream(tmpKmz)
+		kmzOut.write(out.toByteArray())
+		kmzOut.close()
+		
+		ZipFile kmzFile = new ZipFile(tmpKmz)
+		
+		assertEquals(["doc.kml", "files/", "files/main.css", "files/IMOS-logo.png", "files/fish.png", "files/station.png"], kmzFile.entries().toList()*.name)
+	}
+	
+	void testIsSupportedFormat()
+	{
+		assertFalse(service.isSupportedFormat())	
+		assertFalse(service.isSupportedFormat("PDF"))
+		assertFalse(service.isSupportedFormat("CSV"))
+		assertTrue(service.isSupportedFormat("KML"))
+		assertTrue(service.isSupportedFormat("KMZ"))
+		assertTrue(service.isSupportedFormat("KMZ (tag tracks)"))
+		assertTrue(service.isSupportedFormat("KMZ (bubble plot)"))
+	}
+	
 	private def convertToParsedKml(List stations) 
 	{
 		def kml = service.toKml(stations)

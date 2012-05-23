@@ -1,36 +1,28 @@
 package au.org.emii.aatams.export
 
-import au.org.emii.aatams.InstallationStation
-import au.org.emii.aatams.Person
-import au.org.emii.aatams.Receiver
-import au.org.emii.aatams.report.KmlService
-import au.org.emii.aatams.report.ReportInfoService
-import de.micromata.opengis.kml.v_2_2_0.Kml
-
-import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRDataSource
 import net.sf.jasperreports.engine.JRExporter
+import net.sf.jasperreports.engine.JRExporterParameter
 import net.sf.jasperreports.engine.JasperCompileManager
-import net.sf.jasperreports.engine.JasperFillManager 
+import net.sf.jasperreports.engine.JasperFillManager
 import net.sf.jasperreports.engine.JasperPrint
 import net.sf.jasperreports.engine.JasperReport
-import net.sf.jasperreports.engine.JRExporterParameter
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource
 import net.sf.jasperreports.engine.design.JasperDesign
 import net.sf.jasperreports.engine.export.JRCsvExporter
-import net.sf.jasperreports.engine.export.JRCsvExporterParameter;
-import net.sf.jasperreports.engine.export.JRCsvMetadataExporter;
-import net.sf.jasperreports.engine.export.JRCsvMetadataExporterParameter;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.export.JRXmlExporter;
+import net.sf.jasperreports.engine.export.JRPdfExporter
 import net.sf.jasperreports.engine.xml.JRXmlLoader
 
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 
+import au.org.emii.aatams.Person
+
 class ExportService implements ApplicationContextAware
 {
 	ApplicationContext applicationContext
 	
+	def grailsApplication
 	def kmlService
 	def permissionUtilsService
 	def reportInfoService
@@ -38,9 +30,11 @@ class ExportService implements ApplicationContextAware
 	
     void export(Class clazz, Map params, OutputStream out) 
 	{
-		if (params.format == "KML")
+		long startTimestamp = System.currentTimeMillis()
+		
+		if (kmlService.isSupportedFormat(params.format))
 		{
-			generateKml(clazz, params, out)
+			kmlService.export(clazz, params, out)	
 		}
 		else
 		{
@@ -65,6 +59,8 @@ class ExportService implements ApplicationContextAware
 			
 			exporter.exportReport()
 		}
+		
+		log.info("Export completed in (ms): " + (System.currentTimeMillis() - startTimestamp))
     }
 	
 	private JRDataSource getDataSource(queryService, clazz, params)
@@ -118,16 +114,5 @@ class ExportService implements ApplicationContextAware
 	private InputStream getReportStream(clazz, params)
 	{
 		return new FileInputStream(applicationContext.getResource("/reports/" + reportInfoService.getReportInfo(clazz).jrxmlFilename[params.format] + ".jrxml")?.getFile())
-	}
-	
-	private generateKml(clazz, params, out)
-	{
-		long startTime = System.currentTimeMillis()
-		InstallationStation.refreshDetectionCounts()
-		
-		def result = queryService.query(clazz, params).results
-
-		final Kml kml = kmlService.toKml(result)
-		kml.marshal(out)
 	}
 }

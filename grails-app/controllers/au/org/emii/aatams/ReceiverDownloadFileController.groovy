@@ -76,34 +76,6 @@ class ReceiverDownloadFileController
 
 			FileProcessorJob.triggerNow([downloadFileId: downloadFileId, file: file, showLink: showLink])
 			
-/**			            
-            runAsync
-            {
-                try
-                {
-                    receiverDownloadFileInstance = ReceiverDownloadFile.get(downloadFileId)
-                    fileProcessorService.process(downloadFileId, 
-                                                 file,
-                                                 showLink)
-                }
-                catch (FileProcessingException e)
-                {
-                    log.error(e)
-                    
-                    receiverDownloadFileInstance.status = FileProcessingStatus.ERROR
-                    receiverDownloadFileInstance.errMsg = e.getMessage()
-                    receiverDownloadFileInstance.save()
-                }
-                catch (Throwable t)
-                {
-                    log.error(t)
-                    
-                    receiverDownloadFileInstance.status = FileProcessingStatus.ERROR
-                    receiverDownloadFileInstance.errMsg = "System Error - Contact eMII" //t.getMessage()
-                    receiverDownloadFileInstance.save()
-                }
-            }
-*/        
             redirect(action: "show", id: downloadFileId)
         }
     }

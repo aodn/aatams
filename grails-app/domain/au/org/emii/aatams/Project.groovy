@@ -54,13 +54,10 @@ class Project
         return ListUtils.fold(projectRoles, "person")
     }
     
-    String getPrincipalInvestigators()
+    List<Person> getPrincipalInvestigators()
     {
         ProjectRoleType piRoleType = ProjectRoleType.findByDisplayName('Principal Investigator');
-        def principalInvestigators = projectRoles.findAll { it.roleType == piRoleType}
-
-        return ListUtils.fold(principalInvestigators,
-                              "person")
+        return projectRoles.findAll { it.roleType == piRoleType}*.person
     }
     
     /**

@@ -9,7 +9,7 @@ class Sensor implements Embargoable
     static belongsTo = [tag:Tag]
 	
 	static hasMany = [detectionSurgeries:DetectionSurgery]
-	static transients = ['project', 'codeName', 'codeMap', 'status']
+	static transients = ['project', 'codeName', 'codeMap', 'status', 'owningPIs']
 	
 	Integer pingCode
 	TransmitterType transmitterType
@@ -106,5 +106,38 @@ class Sensor implements Embargoable
 		}
 		
 		return null
+	}
+	
+	List<Person> getOwningPIs()
+	{
+		return tag.getOwningPIs()
+	}
+	
+	static Map<Person, SortedSet<Sensor>> groupByOwningPI(List<Sensor> sensors)
+	{
+		def groupedSensors = new HashMap<Person, SortedSet<Sensor>>()
+		
+		sensors.each
+		{
+			sensor ->
+			
+			def pis = sensor.getOwningPIs()
+			
+			pis.each
+			{
+				pi ->
+				
+				def sensorsForPI = groupedSensors[pi]
+				if (!sensorsForPI)
+				{
+					sensorsForPI = new TreeSet<Sensor>([compare: {a, b -> a.transmitterId <=> b.transmitterId} ] as Comparator)	
+					groupedSensors[pi] = sensorsForPI
+				}
+				
+				sensorsForPI.add(sensor)
+			}
+		}
+		
+		return groupedSensors
 	}
 }

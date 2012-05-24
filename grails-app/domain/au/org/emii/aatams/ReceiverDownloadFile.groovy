@@ -38,6 +38,8 @@ class ReceiverDownloadFile
         path()
     }
     
+	static transients = ['knownSensors']
+	
     static mapping =
     {
         errMsg type: 'text'
@@ -120,5 +122,12 @@ class ReceiverDownloadFile
 		}
 		
 		return count
+	}
+	
+	List<Long> getKnownSensors()
+	{
+		def validDetections = ValidDetection.findAllByReceiverDownload(this)
+		def uniqueTransmitterIds = validDetections*.transmitterId.unique()
+		return Sensor.findAllByTransmitterIdInList(uniqueTransmitterIds)
 	}
 }

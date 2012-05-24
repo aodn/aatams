@@ -33,7 +33,7 @@ class Tag extends Device implements Embargoable
         expectedLifeTimeDays(nullable:true)
     }
     
-    static transients = ['expectedLifeTimeDaysAsString', 'deviceID', 'pinger', 'pingCode', 'pingCodes', 'transmitterTypeNames', 'nonPingerSensors']
+    static transients = ['expectedLifeTimeDaysAsString', 'deviceID', 'pinger', 'pingCode', 'pingCodes', 'transmitterTypeNames', 'nonPingerSensors', 'owningPIs']
     
     static searchable = [only: ['serialNumber']]
     
@@ -142,4 +142,14 @@ class Tag extends Device implements Embargoable
         log.debug("Tag is embargoed, id: " + id)
         return null
     }
+	
+	List<Person> getOwningPIs()
+	{
+		if (project)
+		{
+			return project.getPrincipalInvestigators()
+		}
+		
+		return []
+	}
 }

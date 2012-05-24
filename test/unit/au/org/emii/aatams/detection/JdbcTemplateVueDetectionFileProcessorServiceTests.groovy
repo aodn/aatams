@@ -25,6 +25,12 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 
 		vueDetectionFileProcessorService = new JdbcTemplateVueDetectionFileProcessorService()
 		vueDetectionFileProcessorService.jdbcTemplateDetectionFactoryService = jdbcTemplateDetectionFactoryService
+		vueDetectionFileProcessorService.detectionNotificationService = new DetectionNotificationService()
+		vueDetectionFileProcessorService.detectionNotificationService.metaClass.sendDetectionNotificationEmails =
+		{
+			donwloadFile ->
+		}
+		
 		vueDetectionFileProcessorService.searchableService = searchableService
 		vueDetectionFileProcessorService.metaClass.getReader = { getReader(it) }
 		vueDetectionFileProcessorService.metaClass.markDuplicates = { }

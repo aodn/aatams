@@ -8,11 +8,13 @@ import com.vividsolutions.jts.geom.*
 
 import org.joda.time.*
 import org.joda.time.format.DateTimeFormat
+import org.springframework.context.support.DelegatingMessageSource;
 
 class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProcessorServiceTests 
 {
-
-    protected void setUp() 
+	def detectionNotificationService
+	
+	protected void setUp() 
     {
         super.setUp()
         
@@ -25,6 +27,9 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
 		
 		vueDetectionFileProcessorService = new VueDetectionFileProcessorService()
 		vueDetectionFileProcessorService.detectionFactoryService = detectionFactoryService
+		
+		detectionNotificationService = new DetectionNotificationService()
+		vueDetectionFileProcessorService.detectionNotificationService = detectionNotificationService
 		vueDetectionFileProcessorService.searchableService = searchableService
 		vueDetectionFileProcessorService.metaClass.getReader = { getReader(it) }
     }
@@ -40,8 +45,17 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
         mockDomain(ReceiverDownloadFile, [download])
         download.save()
 
+		boolean notificationEmailsSent = false
+		detectionNotificationService.metaClass.sendDetectionNotificationEmails = 
+		{
+			downloadFile -> 
+			
+			notificationEmailsSent = true 
+		}
+		
         vueDetectionFileProcessorService.process(download)
-        
+		assertTrue(notificationEmailsSent)
+
         assertEquals(vueDetectionFileProcessorService.getRecords(download).size(), ValidDetection.count() + InvalidDetection.count())
         
 		assertEquals(2, ValidDetection.count())

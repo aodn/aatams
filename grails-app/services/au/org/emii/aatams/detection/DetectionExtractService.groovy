@@ -15,7 +15,7 @@ class DetectionExtractService extends AbstractStreamingExporterService
 	def dataSource
 	def permissionUtilsService
 	
-	def extractPage(filterParams)
+	public List extractPage(filterParams)
 	{
 		log.debug("Querying database, offset: " + filterParams.offset)
 		def results = filterParams.sql.rows(constructQuery(filterParams, filterParams.max, filterParams.offset))
@@ -107,7 +107,15 @@ class DetectionExtractService extends AbstractStreamingExporterService
 			}
 		}
 		
-		query += "limit " + limit + " offset " + offset
+		if (limit != null)
+		{
+			query += "limit " + limit
+		}
+		
+		if (offset != null)
+		{
+			query += " offset " + offset
+		}
 		
 		log.debug("Query: " + query)
 		

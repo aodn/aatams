@@ -12,6 +12,7 @@ import de.micromata.opengis.kml.v_2_2_0.Placemark
 import de.micromata.opengis.kml.v_2_2_0.ScreenOverlay
 import de.micromata.opengis.kml.v_2_2_0.Units
 import de.micromata.opengis.kml.v_2_2_0.Vec2
+import groovy.sql.Sql
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -27,6 +28,8 @@ class KmlService implements ApplicationContextAware
     static transactional = false
 
 	ApplicationContext applicationContext
+	def dataSource
+	def detectionExtractService
 	def grailsApplication
 	def queryService
 	
@@ -81,7 +84,19 @@ class KmlService implements ApplicationContextAware
 	public Kml generateKml(clazz, params)
 	{
 		def kml
-		def result = queryService.query(clazz, params, true).results
+		def result
+		
+		if (clazz == ValidDetection)
+		{
+			params.sql = new Sql(dataSource)
+			params.projectPermissionCache = [:]
+			result = detectionExtractService.extractPage(params)
+		}
+		else
+		{
+			result = queryService.query(clazz, params, true).results
+		}
+		
 		if (clazz == InstallationStation)
 		{
 			InstallationStation.refreshDetectionCounts()

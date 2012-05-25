@@ -53,7 +53,17 @@ class AuthController {
 			embargoService.clearCache()
 			
             log.info "Redirecting to '${targetUri}'."
-            redirect(uri: targetUri)
+			
+			// Sometimes we are provided with a full URL, which needs a slightly
+			// different call to redirect (url instead of uri).
+			if (targetUri.startsWith("http://"))
+			{
+				redirect(url: targetUri)
+			}
+			else
+			{
+				redirect(uri: targetUri)
+			}
         }
         catch (AuthenticationException ex){
             // Authentication failed, so display the appropriate message

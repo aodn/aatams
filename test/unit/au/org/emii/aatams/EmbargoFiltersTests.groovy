@@ -280,6 +280,9 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 
     void testAnimalReleaseNotList() 
     {
+		controllerName = "animalRelease"
+		actionName = "show"
+
         checkEmbargoed(releaseController, releaseNonEmbargoed, false, 'animalRelease')
         checkEmbargoed(releaseController, releaseEmbargoedReadableProject, false, 'animalRelease')
         checkEmbargoed(releaseController, releaseEmbargoedNonReadableProject, true, 'animalRelease')
@@ -294,11 +297,13 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     
     void testTagNotList()
     {
+		controllerName = "tag"
+		actionName = "show"
+
         checkEmbargoed(tagController, tagNonEmbargoed, false, 'tag')
         checkEmbargoed(tagController, tagEmbargoedReadableProject, false, 'tag')
         checkEmbargoed(tagController, tagEmbargoedNonReadableProject, true, 'tag')
         checkEmbargoed(tagController, tagPastEmbargoed, false, 'tag')
-        
     }
     
     void testSensorList()
@@ -308,6 +313,9 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     
     void testSensorNotList()
     {
+		controllerName = "sensor"
+		actionName = "show"
+
         checkEmbargoed(sensorController, sensorNonEmbargoed, false, 'sensor')
         checkEmbargoed(sensorController, sensorEmbargoedReadableProject, false, 'sensor')
         checkEmbargoed(sensorController, sensorEmbargoedNonReadableProject, true, 'sensor')
@@ -326,6 +334,22 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         checkDetection(detectionEmbargoedNonReadableProject, true)
         checkDetection(detectionPastEmbargoed, false)
     }
+	
+	void testRedirectToLoginWhenNotAuthenticated()
+	{
+		controllerName = "sensor"
+		actionName = "show"	
+		authenticated = false
+		checkEmbargoed(sensorController, sensorEmbargoedNonReadableProject, true, 'sensor', "login", "/sensor/show/" + sensorEmbargoedNonReadableProject.id)
+	}
+    
+	void testRedirectToUnauthorizedWhenAuthenticated()
+	{
+		controllerName = "sensor"
+		actionName = "show"	
+		authenticated = true
+		checkEmbargoed(sensorController, sensorEmbargoedNonReadableProject, true, 'sensor', "unauthorized", null)
+	}
     
     private void checkDetection(def detection, boolean isEmbargoed)
     {
@@ -386,6 +410,11 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     
     private void checkEmbargoed(def controller, def entity, boolean isEmbargoed, String entityName)
     {
+		checkEmbargoed(controller, entity, isEmbargoed, entityName, "unauthorized", null)
+    }
+
+    private void checkEmbargoed(def controller, def entity, boolean isEmbargoed, String entityName, expectedRedirectAction, expectedTargetUri)
+    {
         controller.params.id = entity.id
         assert(controller.params)
         
@@ -396,17 +425,24 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         FilterConfig filter = getFilter(entityName + "NotList")
         assertNotNull(filter)
         
-        Map redirectParams = [:] 
-        filter.metaClass.redirect = 
-        { Map m -> redirectParams.putAll m }
-
+		EmbargoFilters.metaClass.getTargetUri = 
+		{
+			params ->
+			
+			return expectedTargetUri
+		}
+		
         boolean result = filter.after(model)
         
         if (isEmbargoed)
         {
             // redirect auth/unauthorized
-            assertEquals("auth", redirectParams.controller)
-            assertEquals("unauthorized", redirectParams.action)
+            assertEquals("auth", redirectArgs.controller)
+            assertEquals(expectedRedirectAction, redirectArgs.action)
+			if (expectedTargetUri)
+			{
+				assertEquals(expectedTargetUri, redirectArgs.params.targetUri)
+			}
         }
         else
         {

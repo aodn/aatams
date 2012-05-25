@@ -1,6 +1,7 @@
 package au.org.emii.aatams
 
 import org.apache.shiro.SecurityUtils
+import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
 
 /**
  * Filters tag/receiver/species if it is embargoed and principal doesn't have
@@ -10,9 +11,11 @@ import org.apache.shiro.SecurityUtils
  */
 class EmbargoFilters
 {
+	def grailsApplication
     def embargoService
 
     def notListActions = 'show|edit|update|delete'
+	
     def filters = 
     {
         animalReleaseList(controller:'animalRelease', action:'list')
@@ -36,7 +39,7 @@ class EmbargoFilters
                 if (embargoService.isEmbargoed(model?.animalReleaseInstance))
                 {
                     // Redirect.
-                    redirect(controller:"auth", action:"unauthorized")
+					redirect(getRedirectParams(id: model?.animalReleaseInstance.id, controllerName: controllerName, actionName: actionName))
                 }
             }
         }
@@ -62,7 +65,7 @@ class EmbargoFilters
 				if (embargoService.isEmbargoed(model?.tagInstance))
                 {
 					// Redirect.
-                    redirect(controller:"auth", action:"unauthorized")
+					redirect(getRedirectParams(id: model?.tagInstance.id, controllerName: controllerName, actionName: actionName))
                 }
             }
         }
@@ -86,8 +89,7 @@ class EmbargoFilters
 
                 if (embargoService.isEmbargoed(model?.sensorInstance))
                 {
-                    // Redirect.
-                    redirect(controller:"auth", action:"unauthorized")
+					redirect(getRedirectParams(id: model?.sensorInstance.id, controllerName: controllerName, actionName: actionName))
                 }
             }
         }
@@ -103,5 +105,22 @@ class EmbargoFilters
             }
         }
     }
+	
+	def getRedirectParams(params)
+	{
+		if (SecurityUtils.subject.isAuthenticated())
+		{
+			return [controller:"auth", action:"unauthorized"]
+		}
+		else
+		{
+			return [controller: "auth", action: "login", params: [targetUri: getTargetUri(params)]]
+		}
+	}
+
+	def getTargetUri(params) 
+	{
+		return new ApplicationTagLib().createLink(absolute: true, controller: params.controllerName, action: params.actionName, id: params.id)
+	}
 }
 

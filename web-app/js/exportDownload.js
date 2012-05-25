@@ -2,6 +2,12 @@ $(document).ready(function ()
 {
 	$('#listControlForm').find(":submit").click(function(event) 
 	{
+		if (   ($('#totalMatches').val() > 300000) 
+			&& !confirm('This request is likely to take a while.  Do you want to continue?'))
+		{
+			return;	// bail
+		}
+		
 		// Don't block for filter updates, only export downloads.
 		if (this.name === "_action_export")
 		{
@@ -37,4 +43,5 @@ function finishDownload()
 	$.cookie('fileDownloadToken', null); //clears this cookie value
 	$.unblockUI();
 }
+
   

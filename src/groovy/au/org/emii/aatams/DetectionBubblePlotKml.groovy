@@ -27,15 +27,16 @@ class DetectionBubblePlotKml extends Kml
 		{
 			det ->
 			
-			def detCountForStation = detCountByStation[det.receiverDeployment.station]
+			InstallationStation station = InstallationStation.get(det.station_id)
+			def detCountForStation = detCountByStation[station]
 			
 			if (!detCountForStation)
 			{
 				detCountForStation = Long.valueOf(0)
-				detCountByStation[det.receiverDeployment.station] = detCountForStation
+				detCountByStation[station] = detCountForStation
 			}
 			
-			detCountByStation[det.receiverDeployment.station] = detCountByStation[det.receiverDeployment.station] + 1
+			detCountByStation[station] = detCountByStation[station] + 1
 		}
 	}
 	

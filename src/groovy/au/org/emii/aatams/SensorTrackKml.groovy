@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.util.GeometryUtils
+
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormatter
 import org.joda.time.format.ISODateTimeFormat
@@ -40,12 +42,12 @@ class SensorTrackKml extends Kml
 		{
 			det ->
 			
-			def detsForSingleSensor = detsBySensor[det.transmitterId]
+			def detsForSingleSensor = detsBySensor[det.transmitter_id]
 			
 			if (!detsForSingleSensor)
 			{
 				detsForSingleSensor = new TreeSet<ValidDetection>([compare: {a, b -> a.timestamp <=> b.timestamp} ] as Comparator)
-				detsBySensor[det.transmitterId] = detsForSingleSensor
+				detsBySensor[det.transmitter_id] = detsForSingleSensor
 			}
 			
 			detsForSingleSensor.add(det)
@@ -85,8 +87,7 @@ class SensorTrackKml extends Kml
 
 			track.setCoord(detsForSingleSensor.collect {
 				
-				def station = it.receiverDeployment.station
-				return String.valueOf(station.longitude) + " " + String.valueOf(station.latitude)
+				return GeometryUtils.scrambleCoordinate(it.longitude) + " " + GeometryUtils.scrambleCoordinate(it.latitude)
 			})
 
 			placemark.setGeometry(track)

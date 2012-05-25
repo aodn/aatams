@@ -1,9 +1,8 @@
 package au.org.emii.aatams.test
 
-import grails.test.GrailsUnitTestCase
-
-class AbstractKmlTest extends GrailsUnitTestCase
+class AbstractKmlTest extends AbstractGrailsUnitTestCase
 {
+	protected void setUp()
 	{
 		super.setUp()
 		
@@ -13,6 +12,11 @@ class AbstractKmlTest extends GrailsUnitTestCase
 					}''')
 	}
 
+	protected void tearDown()
+	{
+		super.tearDown()
+	}
+	
 	protected void assertKmlEquals(String expectedKmlAsString, actualKml)
 	{
 		StringWriter writer = new StringWriter()

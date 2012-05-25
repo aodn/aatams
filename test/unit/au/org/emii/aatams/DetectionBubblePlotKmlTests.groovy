@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import com.vividsolutions.jts.geom.Coordinate
+import com.vividsolutions.jts.geom.GeometryFactory
 import de.micromata.opengis.kml.v_2_2_0.Kml
 import grails.test.*
 import org.joda.time.DateTime
@@ -8,11 +10,24 @@ import au.org.emii.aatams.test.AbstractKmlTest;
 
 class DetectionBubblePlotKmlTests extends AbstractKmlTest 
 {
+	InstallationStation bl1, bl2
+	
     protected void setUp() 
 	{
         super.setUp()
+
+		bl1 = new InstallationStation(name: "BL1", location: new GeometryFactory().createPoint(new Coordinate(-122f, 37f)))
+		bl2 = new InstallationStation(name: "BL2", location: new GeometryFactory().createPoint(new Coordinate(12f, 34f)))
+		
+		mockDomain(InstallationStation, [bl1, bl2])
+		[bl1, bl2].each { it.save() }
     }
 
+	protected void tearDown()
+	{
+		super.tearDown()
+	}
+	
     void testNoDetections() 
 	{
 		Kml kml = new DetectionBubblePlotKml([], "http://localhost:8090/aatams")
@@ -27,11 +42,14 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
 	
 	void testOneDetection()
 	{
-		def deployment = [station: [name: "BL1", longitude: -122f, latitude: 37f]]
-			
-		Kml kml = new DetectionBubblePlotKml([[transmitterId: 'A69-1303-5566', 
-									   timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
-									   receiverDeployment: deployment]], "http://localhost:8090/aatams")
+		Kml kml = 
+			new DetectionBubblePlotKml(
+				[
+					[transmitter_id: 'A69-1303-5566', 
+					 timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
+					 station_id: bl1.id]
+				],
+				"http://localhost:8090/aatams")
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
@@ -75,17 +93,17 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
 	
 	void testTwoDetectionsSameStation()
 	{
-		def deployment = [station: [name: "BL1", longitude: -122f, latitude: 37f]]
-			
 		Kml kml = 
-			new DetectionBubblePlotKml([[transmitterId: 'A69-1303-5566', 
-									     timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
-									     receiverDeployment: deployment],
-									 	[transmitterId: 'A69-1303-5566', 
-									     timestamp: new DateTime("2010-05-28T06:02:09+10:00").toDate(),
-									     receiverDeployment: deployment]], 
-									 
-									 "http://localhost:8090/aatams")
+			new DetectionBubblePlotKml(
+				[
+					[transmitter_id: 'A69-1303-5566', 
+					 timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
+					 station_id: bl1.id],
+					[transmitter_id: 'A69-1303-5566', 
+					 timestamp: new DateTime("2010-05-28T06:02:09+10:00").toDate(),
+					 station_id: bl1.id]
+				],
+				"http://localhost:8090/aatams")
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
@@ -129,21 +147,20 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
 
 	void testThreeDetectionsDifferentStations()
 	{
-		def deployment1 = [station: [name: "BL1", longitude: -122f, latitude: 37f]]
-		def deployment2 = [station: [name: "BL2", longitude: 12f, latitude: 34f]]
-		
 		Kml kml = 
-			new DetectionBubblePlotKml([[transmitterId: 'A69-1303-5566', 
-									     timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
-									     receiverDeployment: deployment1],
-									 	[transmitterId: 'A69-1303-5566', 
-									     timestamp: new DateTime("2010-05-28T06:02:09+10:00").toDate(),
-									     receiverDeployment: deployment2], 
-									 	[transmitterId: 'A69-1303-5566',
-										 timestamp: new DateTime("2010-05-28T06:02:09+10:00").toDate(),
-										 receiverDeployment: deployment1]],
-
-									 "http://localhost:8090/aatams")
+			new DetectionBubblePlotKml(
+				[
+					[transmitter_id: 'A69-1303-5566', 
+					 timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
+					 station_id: bl1.id],
+					[transmitter_id: 'A69-1303-5566', 
+					 timestamp: new DateTime("2010-05-28T06:02:09+10:00").toDate(),
+					 station_id: bl2.id],
+					[transmitter_id: 'A69-1303-5566', 
+					 timestamp: new DateTime("2010-05-28T06:02:09+10:00").toDate(),
+					 station_id: bl1.id]
+				],
+				"http://localhost:8090/aatams")
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">

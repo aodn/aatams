@@ -16,6 +16,11 @@ class SensorTrackKmlTests extends AbstractKmlTest
 		SensorTrackKml.metaClass.grailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
     }
 
+	protected void tearDown()
+	{
+		super.tearDown()
+	}
+	
 	void testTrackNoDetections()
 	{
 		Kml kml = new SensorTrackKml([], "http://localhost:8090/aatams")
@@ -30,11 +35,15 @@ class SensorTrackKmlTests extends AbstractKmlTest
 	
 	void testTrackOneDetection()
 	{
-		def deployment = [station: [longitude: -122f, latitude: 37f]]
-			
-		Kml kml = new SensorTrackKml([[transmitterId: 'A69-1303-5566', 
-									   timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
-									   receiverDeployment: deployment]], "http://localhost:8090/aatams")
+		Kml kml = 
+			new SensorTrackKml(
+				[
+					[transmitter_id: 'A69-1303-5566', 
+					 timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
+					 latitude: 37f,
+					 longitude: -122f]
+				],
+				"http://localhost:8090/aatams")
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
@@ -92,16 +101,20 @@ class SensorTrackKmlTests extends AbstractKmlTest
 	
 	void testTrackTwoDetections()
 	{
-		def deployment1 = [station: [longitude: -122f, latitude: 37f]]
-		def deployment2 = [station: [longitude: -145f, latitude: -42f]]
-		
-		Kml kml = new SensorTrackKml([[transmitterId: 'A69-1303-5566', 
-									   timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
-									   receiverDeployment: deployment1],
-									  [transmitterId: 'A69-1303-5566', 
-									   timestamp: new DateTime("2010-05-28T02:05:13+10:00").toDate(),
-									   receiverDeployment: deployment2]], "http://localhost:8090/aatams")
-		
+		Kml kml =
+			new SensorTrackKml(
+				[
+					[transmitter_id: 'A69-1303-5566',
+					 timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
+					 latitude: 37f,
+					 longitude: -122f],
+					[transmitter_id: 'A69-1303-5566',
+					 timestamp: new DateTime("2010-05-28T02:05:13+10:00").toDate(),
+					 latitude: -42f,
+					 longitude: -145f]
+				],
+				"http://localhost:8090/aatams")
+
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
     <Document>
@@ -160,15 +173,19 @@ class SensorTrackKmlTests extends AbstractKmlTest
 	
 	void testTrackTwoDetectionsReverseOrder()
 	{
-		def deployment1 = [station: [longitude: -122f, latitude: 37f]]
-		def deployment2 = [station: [longitude: -145f, latitude: -42f]]
-		
-		Kml kml = new SensorTrackKml([[transmitterId: 'A69-1303-5566',
-									   timestamp: new DateTime("2010-05-28T02:05:13+10:00").toDate(),
-									   receiverDeployment: deployment2],
-									  [transmitterId: 'A69-1303-5566',
-									   timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
-									   receiverDeployment: deployment1]], "http://localhost:8090/aatams")
+		Kml kml =
+			new SensorTrackKml(
+				[
+					[transmitter_id: 'A69-1303-5566',
+					 timestamp: new DateTime("2010-05-28T02:05:13+10:00").toDate(),
+					 latitude: -42f,
+					 longitude: -145f],
+					[transmitter_id: 'A69-1303-5566',
+					 timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
+					 latitude: 37f,
+					 longitude: -122f]
+				],
+				"http://localhost:8090/aatams")
 		
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
@@ -228,18 +245,23 @@ class SensorTrackKmlTests extends AbstractKmlTest
 
 	void testTrackThreeDetectionsTwoSensors()
 	{
-		def deployment1 = [station: [longitude: -122f, latitude: 37f]]
-		def deployment2 = [station: [longitude: -145f, latitude: -42f]]
-		
-		Kml kml = new SensorTrackKml([[transmitterId: 'A69-1303-5566', 
-									   timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
-									   receiverDeployment: deployment1],
-									  [transmitterId: 'A69-1303-7788',
-									   timestamp: new DateTime("2010-05-28T02:08:13+10:00").toDate(),
-									   receiverDeployment: deployment1],
-								      [transmitterId: 'A69-1303-5566', 
-									   timestamp: new DateTime("2010-05-28T02:05:13+10:00").toDate(),
-									   receiverDeployment: deployment2]], "http://localhost:8090/aatams")
+		Kml kml =
+			new SensorTrackKml(
+				[
+					[transmitter_id: 'A69-1303-5566',
+					 timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
+					 latitude: 37f,
+					 longitude: -122f],
+					[transmitter_id: 'A69-1303-7788',
+					 timestamp: new DateTime("2010-05-28T02:08:13+10:00").toDate(),
+					 latitude: 37f,
+					 longitude: -122f],
+					[transmitter_id: 'A69-1303-5566',
+					 timestamp: new DateTime("2010-05-28T02:05:13+10:00").toDate(),
+					 latitude: -42f,
+					 longitude: -145f]
+				],
+				"http://localhost:8090/aatams")
 
 		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">

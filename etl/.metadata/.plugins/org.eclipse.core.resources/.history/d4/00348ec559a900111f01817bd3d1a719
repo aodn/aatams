@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:TalendProperties="http://www.talend.org/properties">
+  <TalendProperties:Property xmi:id="_wtVUYKk_EeGgVIw3cefMlw" id="_wtSREKk_EeGgVIw3cefMlw" label="LoadReceivers" creationDate="2012-05-29T14:38:31.461+1000" modificationDate="2012-05-29T16:43:49.726+1000" version="0.1" statusCode="" item="_wtVUYqk_EeGgVIw3cefMlw" maxInformationLevel="ERROR" displayName="LoadReceivers">
+    <author href="../talend.project#_DhSYEKk_EeGgVIw3cefMlw"/>
+    <informations xmi:id="_JbXrsKlREeGgVIw3cefMlw" level="ERROR" text="The method setLong(int, long) in the type PreparedStatement is not applicable for the arguments (int, Object)"/>
+    <informations xmi:id="_JbXrsalREeGgVIw3cefMlw" level="ERROR" text="The operator == is undefined for the argument type(s) long, null"/>
+  </TalendProperties:Property>
+  <TalendProperties:ItemState xmi:id="_wtVUYak_EeGgVIw3cefMlw" path="" locked="true" lockDate="2012-05-29T15:35:45.627+1000">
+    <locker href="../talend.project#_DhSYEKk_EeGgVIw3cefMlw"/>
+  </TalendProperties:ItemState>
+  <TalendProperties:ProcessItem xmi:id="_wtVUYqk_EeGgVIw3cefMlw" property="_wtVUYKk_EeGgVIw3cefMlw" state="_wtVUYak_EeGgVIw3cefMlw">
+    <process href="LoadReceivers_0.1.item#/"/>
+  </TalendProperties:ProcessItem>
+</xmi:XMI>

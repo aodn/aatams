@@ -1540,5 +1540,7 @@ databaseChangeLog = {
 	include file: 'geoserver_detections_view.groovy'
 	
 	include file: 'trim_whitespace.groovy'
+
+	include file: 'bulk_import.groovy'
 }
 

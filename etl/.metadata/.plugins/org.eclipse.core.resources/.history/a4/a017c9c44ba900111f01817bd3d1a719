@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:TalendProperties="http://www.talend.org/properties">
+  <TalendProperties:Property xmi:id="_1t-446lBEeGgVIw3cefMlw" id="_1tz5wKlBEeGgVIw3cefMlw" label="CsiroReceiver" creationDate="2012-05-29T14:53:24.065+1000" modificationDate="2012-05-29T14:53:24.065+1000" version="0.1" statusCode="" item="_1t-45alBEeGgVIw3cefMlw" displayName="CsiroReceiver">
+    <author href="../../talend.project#_DhSYEKk_EeGgVIw3cefMlw"/>
+  </TalendProperties:Property>
+  <TalendProperties:ItemState xmi:id="_1t-45KlBEeGgVIw3cefMlw" path="" locked="true" lockDate="2012-05-29T15:04:25.610+1000">
+    <locker href="../../talend.project#_DhSYEKk_EeGgVIw3cefMlw"/>
+  </TalendProperties:ItemState>
+  <TalendProperties:GenericSchemaConnectionItem xmi:id="_1t-45alBEeGgVIw3cefMlw" property="_1t-446lBEeGgVIw3cefMlw" state="_1t-45KlBEeGgVIw3cefMlw">
+    <connection href="CsiroReceiver_0.1.item#_1t-R0KlBEeGgVIw3cefMlw"/>
+  </TalendProperties:GenericSchemaConnectionItem>
+</xmi:XMI>

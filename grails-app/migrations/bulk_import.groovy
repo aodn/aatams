@@ -10,9 +10,7 @@ databaseChangeLog = {
 				constraints(nullable: "false")
 			}
 
-			column(name: "import_finish_date", type: "TIMESTAMP WITH TIME ZONE") {
-				constraints(nullable: "false")
-			}
+			column(name: "import_finish_date", type: "TIMESTAMP WITH TIME ZONE")
 
 			column(name: "import_start_date", type: "TIMESTAMP WITH TIME ZONE") {
 				constraints(nullable: "false")

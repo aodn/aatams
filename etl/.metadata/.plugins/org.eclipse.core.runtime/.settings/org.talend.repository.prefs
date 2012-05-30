@@ -1,0 +1,4 @@
+#Wed May 30 17:07:13 EST 2012
+eclipse.preferences.version=1
+tos_count_job_exports=1
+TOS_Jobs_Records={"CSIRO_TO_AATAMS"\:{"tos.count.businessModels"\:0,"tos.count.components"\:13,"tos.count.contextVariables"\:0,"tos.count.generatedJobDocs"\:0,"tos.count.jobs"\:2,"tos.count.metadatas"\:3,"tos.job.frequentComponents"\:{"tFileInputDelimited"\:2,"tJoin"\:2,"tLogRow"\:3,"tMap"\:1,"tPostgresqlInput"\:4,"tPostgresqlOutput"\:1}}}

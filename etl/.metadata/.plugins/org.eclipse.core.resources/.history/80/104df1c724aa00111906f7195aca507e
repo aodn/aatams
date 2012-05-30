@@ -1,0 +1,1105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<talendfile:ProcessType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.talend.org/mapper" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd" defaultContext="Default">
+  <context confirmationNeeded="false" name="Default"/>
+  <parameters>
+    <elementParameter field="TEXT" name="JOB_RUN_VM_ARGUMENTS" value=" -Xms256M -Xmx1024M"/>
+    <elementParameter field="CHECK" name="JOB_RUN_VM_ARGUMENTS_OPTION" value="false"/>
+    <elementParameter field="TEXT" name="SCREEN_OFFSET_X" value="0"/>
+    <elementParameter field="TEXT" name="SCREEN_OFFSET_Y" value="0"/>
+    <elementParameter field="TEXT" name="SCHEMA_OPTIONS" value="none"/>
+    <elementParameter field="TEXT" name="OEM_CUSTOM_ATTRIBUTE" value=""/>
+    <elementParameter field="TEXT" name="HADOOP_APP_PATH" value=""/>
+    <elementParameter field="TEXT" name="JOBID_FOR_OOZIE" value=""/>
+    <elementParameter field="CHECK" name="IMPLICITCONTEXT_USE_PROJECT_SETTINGS" value="true"/>
+    <elementParameter field="CHECK" name="STATANDLOG_USE_PROJECT_SETTINGS" value="true"/>
+    <elementParameter field="FILE" name="IMPLICIT_TCONTEXTLOAD_FILE" value="&quot;&quot;"/>
+    <elementParameter field="TEXT" name="FIELDSEPARATOR" value="&quot;&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="DB_VERSION_IMPLICIT_CONTEXT" value=""/>
+    <elementParameter field="CHECK" name="DISABLE_WARNINGS" value="false"/>
+    <elementParameter field="CHECK" name="DISABLE_INFO" value="false"/>
+    <elementParameter field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
+    <elementParameter field="CLOSED_LIST" name="DB_VERSION" value="ojdbc14-10g.jar"/>
+    <routinesParameter id="_JW_AIKk_EeGgVIw3cefMlw" name="DataOperation"/>
+    <routinesParameter id="_JXSiIKk_EeGgVIw3cefMlw" name="Mathematical"/>
+    <routinesParameter id="_JXUXUKk_EeGgVIw3cefMlw" name="Numeric"/>
+    <routinesParameter id="_JXYBsKk_EeGgVIw3cefMlw" name="Relational"/>
+    <routinesParameter id="_JXad8Kk_EeGgVIw3cefMlw" name="StringHandling"/>
+    <routinesParameter id="_JXcTIKk_EeGgVIw3cefMlw" name="TalendDataGenerator"/>
+    <routinesParameter id="_JXeIUKk_EeGgVIw3cefMlw" name="TalendDate"/>
+    <routinesParameter id="_JXfWcKk_EeGgVIw3cefMlw" name="TalendString"/>
+  </parameters>
+  <node componentName="tFileInputDelimited" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="160" posY="320">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tFileInputDelimited_2"/>
+    <elementParameter field="LABEL" name="FILENAMETEXT" value="&quot;When the input source is a stream or a zip file,footer and random shouldn't be bigger than 0.&quot;"/>
+    <elementParameter field="FILE" name="FILENAME" value="&quot;/Users/jburgess/Documents/talend_aatams_workspace/test_data/RECEIVERS_22MAY12.csv&quot;"/>
+    <elementParameter field="TEXT" name="ROWSEPARATOR" value="&quot;\n&quot;"/>
+    <elementParameter field="OPENED_LIST" name="CSVROWSEPARATOR" value="&quot;\n&quot;"/>
+    <elementParameter field="TEXT" name="FIELDSEPARATOR" value="&quot;,&quot;"/>
+    <elementParameter field="CHECK" name="CSV_OPTION" value="true"/>
+    <elementParameter field="TEXT" name="ESCAPE_CHAR" value="&quot;&quot;&quot;"/>
+    <elementParameter field="TEXT" name="TEXT_ENCLOSURE" value="&quot;\&quot;&quot;"/>
+    <elementParameter field="TEXT" name="HEADER" value="1"/>
+    <elementParameter field="TEXT" name="FOOTER" value="0"/>
+    <elementParameter field="TEXT" name="LIMIT" value=""/>
+    <elementParameter field="CHECK" name="REMOVE_EMPTY_ROW" value="true"/>
+    <elementParameter field="CHECK" name="UNCOMPRESS" value="false"/>
+    <elementParameter field="CHECK" name="DIE_ON_ERROR" value="false"/>
+    <elementParameter field="TECHNICAL" name="SCHEMA:SCHEMA_TYPE" value="REPOSITORY"/>
+    <elementParameter field="TECHNICAL" name="SCHEMA:REPOSITORY_SCHEMA_TYPE" value="_ERVYIKlDEeGgVIw3cefMlw - CsiroReceiverSchema"/>
+    <elementParameter field="DIRECTORY" name="TEMP_DIR" value="&quot;/Users/jburgess/Documents/talend_aatams_workspace&quot;"/>
+    <elementParameter field="CHECK" name="ADVANCED_SEPARATOR" value="false"/>
+    <elementParameter field="TEXT" name="THOUSANDS_SEPARATOR" value="&quot;,&quot;"/>
+    <elementParameter field="TEXT" name="DECIMAL_SEPARATOR" value="&quot;.&quot;"/>
+    <elementParameter field="CHECK" name="RANDOM" value="false"/>
+    <elementParameter field="TEXT" name="NB_RANDOM" value="10"/>
+    <elementParameter field="CHECK" name="TRIMALL" value="true"/>
+    <elementParameter field="TABLE" name="TRIMSELECT">
+      <elementValue elementRef="SCHEMA_COLUMN" value="RCV_ID"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="RCV_SERIAL_NO"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="RCV_MODEL_CODE"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="RCV_OWNER"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="RCV_COMMENTS"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="ENTRY_DATETIME"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="ENTRY_BY"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="MODIFIED_DATETIME"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="MODIFIED_BY"/>
+      <elementValue elementRef="TRIM" value="false"/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="CHECK_FIELDS_NUM" value="false"/>
+    <elementParameter field="CHECK" name="CHECK_DATE" value="false"/>
+    <elementParameter field="ENCODING_TYPE" name="ENCODING" value="&quot;ISO-8859-15&quot;"/>
+    <elementParameter field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
+    <elementParameter field="CHECK" name="SPLITRECORD" value="false"/>
+    <elementParameter field="TEXT" name="DESTINATION" value=""/>
+    <elementParameter field="TEXT" name="LABEL" value="RECEIVERS.csv"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" label="CsiroReceiverSchema" name="tFileInputDelimited_2">
+      <column comment="" key="false" length="2" name="RCV_ID" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_Integer"/>
+      <column comment="" key="false" length="4" name="RCV_SERIAL_NO" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="3" name="RCV_MODEL_CODE" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="0" name="RCV_OWNER" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="0" name="RCV_COMMENTS" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="18" name="ENTRY_DATETIME" nullable="false" pattern="&quot;dd/MM/yyyy' 'HH:mm:ss&quot;" precision="0" type="id_Date"/>
+      <column comment="" key="false" length="3" name="ENTRY_BY" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="18" name="MODIFIED_DATETIME" nullable="true" pattern="&quot;dd/MM/yyyy' 'HH:mm:ss&quot;" precision="0" type="id_Date"/>
+      <column comment="" key="false" length="3" name="MODIFIED_BY" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+    </metadata>
+    <metadata connector="REJECT" label="CsiroReceiverSchema" name="REJECT">
+      <column comment="" key="false" length="2" name="RCV_ID" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_Integer"/>
+      <column comment="" key="false" length="4" name="RCV_SERIAL_NO" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="3" name="RCV_MODEL_CODE" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="0" name="RCV_OWNER" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="0" name="RCV_COMMENTS" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="18" name="ENTRY_DATETIME" nullable="false" pattern="&quot;dd/MM/yyyy' 'HH:mm:ss&quot;" precision="0" type="id_Date"/>
+      <column comment="" key="false" length="3" name="ENTRY_BY" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="18" name="MODIFIED_DATETIME" nullable="true" pattern="&quot;dd/MM/yyyy' 'HH:mm:ss&quot;" precision="0" type="id_Date"/>
+      <column comment="" key="false" length="3" name="MODIFIED_BY" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column defaultValue="" key="false" length="255" name="errorCode" nullable="true" precision="0" sourceType="" type="id_String"/>
+      <column defaultValue="" key="false" length="255" name="errorMessage" nullable="true" precision="0" sourceType="" type="id_String"/>
+    </metadata>
+  </node>
+  <node componentName="tJoin" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="384" posY="384">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tJoin_1"/>
+    <elementParameter field="CHECK" name="USE_LOOKUP_COLS" value="false"/>
+    <elementParameter field="TABLE" name="LOOKUP_COLS"/>
+    <elementParameter field="TABLE" name="JOIN_KEY">
+      <elementValue elementRef="INPUT_COLUMN" value="RCV_SERIAL_NO"/>
+      <elementValue elementRef="LOOKUP_COLUMN" value="serial_number"/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="USE_INNER_JOIN" value="true"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" label="CsiroReceiverSchema" name="tJoin_1">
+      <column comment="" key="false" length="2" name="RCV_ID" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_Integer"/>
+      <column comment="" key="false" length="4" name="RCV_SERIAL_NO" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="3" name="RCV_MODEL_CODE" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="0" name="RCV_OWNER" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="0" name="RCV_COMMENTS" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="18" name="ENTRY_DATETIME" nullable="false" pattern="&quot;dd/MM/yyyy' 'HH:mm:ss&quot;" precision="0" type="id_Date"/>
+      <column comment="" key="false" length="3" name="ENTRY_BY" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="18" name="MODIFIED_DATETIME" nullable="true" pattern="&quot;dd/MM/yyyy' 'HH:mm:ss&quot;" precision="0" type="id_Date"/>
+      <column comment="" key="false" length="3" name="MODIFIED_BY" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+    </metadata>
+    <metadata connector="REJECT" label="CsiroReceiverSchema" name="REJECT">
+      <column comment="" key="false" length="2" name="RCV_ID" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_Integer"/>
+      <column comment="" key="false" length="4" name="RCV_SERIAL_NO" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="3" name="RCV_MODEL_CODE" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="0" name="RCV_OWNER" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="0" name="RCV_COMMENTS" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="18" name="ENTRY_DATETIME" nullable="false" pattern="&quot;dd/MM/yyyy' 'HH:mm:ss&quot;" precision="0" type="id_Date"/>
+      <column comment="" key="false" length="3" name="ENTRY_BY" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="18" name="MODIFIED_DATETIME" nullable="true" pattern="&quot;dd/MM/yyyy' 'HH:mm:ss&quot;" precision="0" type="id_Date"/>
+      <column comment="" key="false" length="3" name="MODIFIED_BY" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+    </metadata>
+  </node>
+  <node componentName="tPostgresqlInput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="352" posY="480">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tPostgresqlInput_2"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY:PROPERTY_TYPE" value="REPOSITORY"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY:REPOSITORY_PROPERTY_TYPE" value="_qowUEKlFEeGgVIw3cefMlw"/>
+    <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="false"/>
+    <elementParameter field="COMPONENT_LIST" name="CONNECTION" value=""/>
+    <elementParameter field="TEXT" name="HOST" value="&quot;localhost&quot;"/>
+    <elementParameter field="TEXT" name="TYPE" value="POSTGRESQL"/>
+    <elementParameter field="TEXT" name="PORT" value="&quot;5432&quot;"/>
+    <elementParameter field="TEXT" name="DBNAME" value="&quot;aatams&quot;"/>
+    <elementParameter field="TEXT" name="SCHEMA_DB" value="&quot;public&quot;"/>
+    <elementParameter field="TEXT" name="USER" value="&quot;postgres&quot;"/>
+    <elementParameter field="TEXT" name="PASS" value="&quot;postgres&quot;"/>
+    <elementParameter field="TECHNICAL" name="SCHEMA:SCHEMA_TYPE" value="REPOSITORY"/>
+    <elementParameter field="TECHNICAL" name="SCHEMA:REPOSITORY_SCHEMA_TYPE" value="_qowUEKlFEeGgVIw3cefMlw - device"/>
+    <elementParameter field="DBTABLE" name="TABLE" value="&quot;device&quot;"/>
+    <elementParameter field="QUERYSTORE_TYPE" name="QUERYSTORE" value="&quot;&quot;"/>
+    <elementParameter field="TECHNICAL" name="QUERYSTORE:REPOSITORY_QUERYSTORE_TYPE" value=""/>
+    <elementParameter field="TECHNICAL" name="QUERYSTORE:QUERYSTORE_TYPE" value="BUILT_IN"/>
+    <elementParameter field="GUESS_SCHEMA" name="GUESS_SCHEMA" value="&quot;&quot;"/>
+    <elementParameter field="MEMO_SQL" name="QUERY" value="&quot;SELECT &#xA;  \&quot;aatams\&quot;.\&quot;public\&quot;.\&quot;device\&quot;.\&quot;id\&quot;, &#xA;  \&quot;aatams\&quot;.\&quot;public\&quot;.\&quot;device\&quot;.\&quot;version\&quot;, &#xA;  \&quot;aatams\&quot;.\&quot;public\&quot;.\&quot;device\&quot;.\&quot;comment\&quot;, &#xA;  \&quot;aatams\&quot;.\&quot;public\&quot;.\&quot;device\&quot;.\&quot;model_id\&quot;, &#xA;  \&quot;aatams\&quot;.\&quot;public\&quot;.\&quot;device\&quot;.\&quot;serial_number\&quot;, &#xA;  \&quot;aatams\&quot;.\&quot;public\&quot;.\&quot;device\&quot;.\&quot;status_id\&quot;, &#xA;  \&quot;aatams\&quot;.\&quot;public\&quot;.\&quot;device\&quot;.\&quot;class\&quot;, &#xA;  \&quot;aatams\&quot;.\&quot;public\&quot;.\&quot;device\&quot;.\&quot;organisation_id\&quot;, &#xA;  \&quot;aatams\&quot;.\&quot;public\&quot;.\&quot;device\&quot;.\&quot;expected_life_time_days\&quot;, &#xA;  \&quot;aatams\&quot;.\&quot;public\&quot;.\&quot;device\&quot;.\&quot;project_id\&quot;, &#xA;  \&quot;aatams\&quot;.\&quot;public\&quot;.\&quot;device\&quot;.\&quot;code_map_id\&quot;&#xA;FROM \&quot;aatams\&quot;.\&quot;public\&quot;.\&quot;device\&quot;&quot;"/>
+    <elementParameter field="MAPPING_TYPE" name="MAPPING" value="postgres_id"/>
+    <elementParameter field="ENCODING_TYPE" name="ENCODING" value="&quot;ISO-8859-15&quot;"/>
+    <elementParameter field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
+    <elementParameter field="CHECK" name="USE_CURSOR" value="false"/>
+    <elementParameter field="TEXT" name="CURSOR_SIZE" value="1000"/>
+    <elementParameter field="CHECK" name="TRIM_ALL_COLUMN" value="true"/>
+    <elementParameter field="TABLE" name="TRIM_COLUMN">
+      <elementValue elementRef="SCHEMA_COLUMN" value="id"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="version"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="comment"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="model_id"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="serial_number"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="status_id"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="_class"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="organisation_id"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="expected_life_time_days"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="project_id"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="code_map_id"/>
+      <elementValue elementRef="TRIM" value="false"/>
+    </elementParameter>
+    <elementParameter field="TEXT" name="LABEL" value="__TABLE__"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" label="device" name="tPostgresqlInput_2">
+      <column comment="" key="true" length="19" name="id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="19" name="version" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="comment" nullable="true" pattern="" precision="0" sourceType="varchar" type="id_String"/>
+      <column comment="" key="true" length="19" name="model_id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="serial_number" nullable="false" pattern="" precision="0" sourceType="varchar" type="id_String"/>
+      <column comment="" key="true" length="19" name="status_id" nullable="true" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="_class" nullable="false" originalDbColumnName="class" pattern="" precision="0" sourceType="varchar" type="id_String"/>
+      <column comment="" key="true" length="19" name="organisation_id" nullable="true" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="10" name="expected_life_time_days" nullable="true" pattern="" precision="0" sourceType="int4" type="id_Integer"/>
+      <column comment="" key="true" length="19" name="project_id" nullable="true" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="true" length="19" name="code_map_id" nullable="true" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+    </metadata>
+  </node>
+  <node componentName="tMap" componentVersion="2.1" offsetLabelX="0" offsetLabelY="0" posX="864" posY="288">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tMap_1"/>
+    <elementParameter field="EXTERNAL" name="MAP" value=""/>
+    <elementParameter field="CLOSED_LIST" name="LINK_STYLE" value="AUTO"/>
+    <elementParameter field="DIRECTORY" name="TEMPORARY_DATA_DIRECTORY" value=""/>
+    <elementParameter field="IMAGE" name="PREVIEW" value="_wtSREKk_EeGgVIw3cefMlw-tMap_1-PREVIEW.bmp"/>
+    <elementParameter field="CHECK" name="DIE_ON_ERROR" value="true"/>
+    <elementParameter field="CHECK" name="LKUP_PARALLELIZE" value="false"/>
+    <elementParameter field="TEXT" name="ROWS_BUFFER_SIZE" value="2000000"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" label="device" name="out1">
+      <column comment="" key="false" length="19" name="version" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="comment" nullable="true" pattern="" precision="0" sourceType="varchar" type="id_String"/>
+      <column comment="" key="true" length="19" name="model_id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="serial_number" nullable="false" pattern="" precision="0" sourceType="varchar" type="id_String"/>
+      <column comment="" key="true" length="19" name="status_id" nullable="true" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="_class" nullable="false" originalDbColumnName="class" pattern="" precision="0" sourceType="varchar" type="id_String"/>
+      <column comment="" key="true" length="19" name="organisation_id" nullable="true" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="10" name="expected_life_time_days" nullable="true" pattern="" precision="0" sourceType="int4" type="id_Integer"/>
+      <column comment="" key="true" length="19" name="project_id" nullable="true" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="true" length="19" name="code_map_id" nullable="true" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" defaultValue="" key="true" length="19" name="id" nullable="false" pattern="" precision="0" sourceType="" type="id_Long"/>
+    </metadata>
+    <nodeData xsi:type="MapperData">
+      <uiProperties/>
+      <varTables sizeState="INTERMEDIATE" name="Var"/>
+      <outputTables sizeState="INTERMEDIATE" name="out1">
+        <mapperTableEntries name="version" expression="0" type="id_Long"/>
+        <mapperTableEntries name="comment" expression="row4.RCV_COMMENTS + &quot; CSIRO&quot;" type="id_String" nullable="true"/>
+        <mapperTableEntries name="model_id" expression="row2.id " type="id_Long"/>
+        <mapperTableEntries name="serial_number" expression="String.valueOf(row4.RCV_SERIAL_NO) " type="id_String"/>
+        <mapperTableEntries name="status_id" expression="null" type="id_Long" nullable="true"/>
+        <mapperTableEntries name="_class" expression="&quot;au.org.emii.aatams.Receiver&quot;" type="id_String"/>
+        <mapperTableEntries name="organisation_id" expression="629985l" type="id_Long" nullable="true"/>
+        <mapperTableEntries name="expected_life_time_days" expression="null" type="id_Integer" nullable="true"/>
+        <mapperTableEntries name="project_id" expression="null" type="id_Long" nullable="true"/>
+        <mapperTableEntries name="code_map_id" expression="null" type="id_Long" nullable="true"/>
+        <mapperTableEntries name="id" expression="Numeric.sequence(&quot;s1&quot;, (int)row6.nextval, 1)  " type="id_Long"/>
+      </outputTables>
+      <inputTables sizeState="INTERMEDIATE" name="row4" matchingMode="UNIQUE_MATCH" lookupMode="LOAD_ONCE">
+        <mapperTableEntries name="RCV_ID" type="id_Integer"/>
+        <mapperTableEntries name="RCV_SERIAL_NO" type="id_String"/>
+        <mapperTableEntries name="RCV_MODEL_CODE" type="id_String"/>
+        <mapperTableEntries name="RCV_OWNER" type="id_String" nullable="true"/>
+        <mapperTableEntries name="RCV_COMMENTS" type="id_String" nullable="true"/>
+        <mapperTableEntries name="ENTRY_DATETIME" type="id_Date"/>
+        <mapperTableEntries name="ENTRY_BY" type="id_String" nullable="true"/>
+        <mapperTableEntries name="MODIFIED_DATETIME" type="id_Date" nullable="true"/>
+        <mapperTableEntries name="MODIFIED_BY" type="id_String" nullable="true"/>
+      </inputTables>
+      <inputTables sizeState="INTERMEDIATE" name="row2" activateCondensedTool="true" matchingMode="UNIQUE_MATCH" lookupMode="LOAD_ONCE">
+        <mapperTableEntries name="id" type="id_Long"/>
+        <mapperTableEntries name="version" expression="" type="id_Long"/>
+        <mapperTableEntries name="manufacturer_id" type="id_Long"/>
+        <mapperTableEntries name="model_name" expression="row4.RCV_MODEL_CODE " type="id_String" operator="="/>
+        <mapperTableEntries name="_class" type="id_String"/>
+      </inputTables>
+      <inputTables sizeState="INTERMEDIATE" name="row6" matchingMode="ALL_ROWS" lookupMode="LOAD_ONCE">
+        <mapperTableEntries name="nextval" expression="" type="id_Long"/>
+      </inputTables>
+    </nodeData>
+  </node>
+  <node componentName="tPostgresqlInput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="864" posY="448">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tPostgresqlInput_1"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY:PROPERTY_TYPE" value="REPOSITORY"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY:REPOSITORY_PROPERTY_TYPE" value="_qowUEKlFEeGgVIw3cefMlw"/>
+    <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="false"/>
+    <elementParameter field="COMPONENT_LIST" name="CONNECTION" value=""/>
+    <elementParameter field="TEXT" name="HOST" value="&quot;localhost&quot;"/>
+    <elementParameter field="TEXT" name="TYPE" value="POSTGRESQL"/>
+    <elementParameter field="TEXT" name="PORT" value="&quot;5432&quot;"/>
+    <elementParameter field="TEXT" name="DBNAME" value="&quot;aatams&quot;"/>
+    <elementParameter field="TEXT" name="SCHEMA_DB" value="&quot;public&quot;"/>
+    <elementParameter field="TEXT" name="USER" value="&quot;postgres&quot;"/>
+    <elementParameter field="TEXT" name="PASS" value="&quot;postgres&quot;"/>
+    <elementParameter field="TECHNICAL" name="SCHEMA:SCHEMA_TYPE" value="REPOSITORY"/>
+    <elementParameter field="TECHNICAL" name="SCHEMA:REPOSITORY_SCHEMA_TYPE" value="_qowUEKlFEeGgVIw3cefMlw - device_model"/>
+    <elementParameter field="DBTABLE" name="TABLE" value="&quot;device_model&quot;"/>
+    <elementParameter field="QUERYSTORE_TYPE" name="QUERYSTORE" value="&quot;&quot;"/>
+    <elementParameter field="TECHNICAL" name="QUERYSTORE:REPOSITORY_QUERYSTORE_TYPE" value=""/>
+    <elementParameter field="TECHNICAL" name="QUERYSTORE:QUERYSTORE_TYPE" value="BUILT_IN"/>
+    <elementParameter field="GUESS_SCHEMA" name="GUESS_SCHEMA" value="&quot;&quot;"/>
+    <elementParameter field="MEMO_SQL" name="QUERY" value="&quot;SELECT * FROM device_model;&quot;"/>
+    <elementParameter field="MAPPING_TYPE" name="MAPPING" value="postgres_id"/>
+    <elementParameter field="ENCODING_TYPE" name="ENCODING" value="&quot;ISO-8859-15&quot;"/>
+    <elementParameter field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
+    <elementParameter field="CHECK" name="USE_CURSOR" value="false"/>
+    <elementParameter field="TEXT" name="CURSOR_SIZE" value="1000"/>
+    <elementParameter field="CHECK" name="TRIM_ALL_COLUMN" value="true"/>
+    <elementParameter field="TABLE" name="TRIM_COLUMN">
+      <elementValue elementRef="SCHEMA_COLUMN" value="id"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="version"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="manufacturer_id"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="model_name"/>
+      <elementValue elementRef="TRIM" value="false"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="_class"/>
+      <elementValue elementRef="TRIM" value="false"/>
+    </elementParameter>
+    <elementParameter field="TEXT" name="LABEL" value="aatamsLocalhost"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" label="device_model" name="tPostgresqlInput_1">
+      <column comment="" key="true" length="19" name="id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="19" name="version" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="true" length="19" name="manufacturer_id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="model_name" nullable="false" pattern="" precision="0" sourceType="varchar" type="id_String"/>
+      <column comment="" key="false" length="255" name="_class" nullable="false" originalDbColumnName="class" pattern="" precision="0" sourceType="varchar" type="id_String"/>
+    </metadata>
+  </node>
+  <node componentName="tPostgresqlOutput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="992" posY="256">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tPostgresqlOutput_2"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY:PROPERTY_TYPE" value="REPOSITORY"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY:REPOSITORY_PROPERTY_TYPE" value="_qowUEKlFEeGgVIw3cefMlw"/>
+    <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="false"/>
+    <elementParameter field="COMPONENT_LIST" name="CONNECTION" value=""/>
+    <elementParameter field="TEXT" name="HOST" value="&quot;localhost&quot;"/>
+    <elementParameter field="TEXT" name="PORT" value="&quot;5432&quot;"/>
+    <elementParameter field="TEXT" name="DBNAME" value="&quot;aatams&quot;"/>
+    <elementParameter field="TEXT" name="TYPE" value="POSTGRESQL"/>
+    <elementParameter field="TEXT" name="SCHEMA_DB" value="&quot;public&quot;"/>
+    <elementParameter field="TEXT" name="USER" value="&quot;postgres&quot;"/>
+    <elementParameter field="TEXT" name="PASS" value="&quot;postgres&quot;"/>
+    <elementParameter field="DBTABLE" name="TABLE" value="&quot;device&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="TABLE_ACTION" value="NONE"/>
+    <elementParameter field="CLOSED_LIST" name="DATA_ACTION" value="INSERT"/>
+    <elementParameter field="CHECK" name="USE_SPATIAL_OPTIONS" value="false"/>
+    <elementParameter field="CHECK" name="SPATIAL_INDEX" value="false"/>
+    <elementParameter field="CHECK" name="GEOMETRY_COLUMNS" value="false"/>
+    <elementParameter field="CHECK" name="DIE_ON_ERROR" value="false"/>
+    <elementParameter field="MAPPING_TYPE" name="MAPPING" value="postgres_id"/>
+    <elementParameter field="ENCODING_TYPE" name="ENCODING" value="&quot;ISO-8859-15&quot;"/>
+    <elementParameter field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
+    <elementParameter field="TEXT" name="COMMIT_EVERY" value="10000"/>
+    <elementParameter field="TABLE" name="ADD_COLS"/>
+    <elementParameter field="CHECK" name="USE_FIELD_OPTIONS" value="false"/>
+    <elementParameter field="TABLE" name="FIELD_OPTIONS">
+      <elementValue elementRef="SCHEMA_COLUMN" value="version"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="comment"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="model_id"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="serial_number"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="status_id"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="_class"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="organisation_id"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="expected_life_time_days"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="project_id"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="code_map_id"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="id"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="ENABLE_DEBUG_MODE" value="false"/>
+    <elementParameter field="CHECK" name="SUPPORT_NULL_WHERE" value="false"/>
+    <elementParameter field="CHECK" name="USE_BATCH_SIZE" value="true"/>
+    <elementParameter field="TEXT" name="BATCH_SIZE" value="10000"/>
+    <elementParameter field="TEXT" name="LABEL" value="__TABLE__"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" label="device" name="tPostgresqlOutput_2">
+      <column comment="" key="false" length="19" name="version" nullable="false" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="comment" nullable="true" pattern="" precision="0" sourceType="VARCHAR" type="id_String"/>
+      <column comment="" key="true" length="19" name="model_id" nullable="false" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="serial_number" nullable="false" pattern="" precision="0" sourceType="VARCHAR" type="id_String"/>
+      <column comment="" key="true" length="19" name="status_id" nullable="true" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="_class" nullable="false" originalDbColumnName="class" pattern="" precision="0" sourceType="VARCHAR" type="id_String"/>
+      <column comment="" key="true" length="19" name="organisation_id" nullable="true" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="10" name="expected_life_time_days" nullable="true" pattern="" precision="0" sourceType="INT4" type="id_Integer"/>
+      <column comment="" key="true" length="19" name="project_id" nullable="true" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="true" length="19" name="code_map_id" nullable="true" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" defaultValue="" key="true" length="19" name="id" nullable="false" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+    </metadata>
+    <metadata connector="REJECT" label="device" name="REJECT">
+      <column comment="" key="false" length="19" name="version" nullable="false" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="comment" nullable="true" pattern="" precision="0" sourceType="VARCHAR" type="id_String"/>
+      <column comment="" key="true" length="19" name="model_id" nullable="false" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="serial_number" nullable="false" pattern="" precision="0" sourceType="VARCHAR" type="id_String"/>
+      <column comment="" key="true" length="19" name="status_id" nullable="true" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="_class" nullable="false" originalDbColumnName="class" pattern="" precision="0" sourceType="VARCHAR" type="id_String"/>
+      <column comment="" key="true" length="19" name="organisation_id" nullable="true" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="10" name="expected_life_time_days" nullable="true" pattern="" precision="0" sourceType="INT4" type="id_Integer"/>
+      <column comment="" key="true" length="19" name="project_id" nullable="true" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="true" length="19" name="code_map_id" nullable="true" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" defaultValue="" key="true" length="19" name="id" nullable="false" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column defaultValue="" key="false" length="255" name="errorCode" nullable="true" precision="0" sourceType="" type="id_String"/>
+      <column defaultValue="" key="false" length="255" name="errorMessage" nullable="true" precision="0" sourceType="" type="id_String"/>
+    </metadata>
+  </node>
+  <node componentName="tLogRow" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="576" posY="192">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tLogRow_2"/>
+    <elementParameter field="RADIO" name="BASIC_MODE" value="false"/>
+    <elementParameter field="RADIO" name="TABLE_PRINT" value="true"/>
+    <elementParameter field="RADIO" name="VERTICAL" value="false"/>
+    <elementParameter field="RADIO" name="PRINT_UNIQUE" value="true"/>
+    <elementParameter field="RADIO" name="PRINT_LABEL" value="false"/>
+    <elementParameter field="RADIO" name="PRINT_UNIQUE_LABEL" value="false"/>
+    <elementParameter field="TEXT" name="FIELDSEPARATOR" value="&quot;|&quot;"/>
+    <elementParameter field="CHECK" name="PRINT_HEADER" value="false"/>
+    <elementParameter field="CHECK" name="PRINT_UNIQUE_NAME" value="false"/>
+    <elementParameter field="CHECK" name="PRINT_COLNAMES" value="false"/>
+    <elementParameter field="CHECK" name="USE_FIXED_LENGTH" value="false"/>
+    <elementParameter field="TABLE" name="LENGTHS">
+      <elementValue elementRef="SCHEMA_COLUMN" value="RCV_ID"/>
+      <elementValue elementRef="LENGTH" value="10"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="RCV_SERIAL_NO"/>
+      <elementValue elementRef="LENGTH" value="10"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="RCV_MODEL_CODE"/>
+      <elementValue elementRef="LENGTH" value="10"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="RCV_OWNER"/>
+      <elementValue elementRef="LENGTH" value="10"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="RCV_COMMENTS"/>
+      <elementValue elementRef="LENGTH" value="10"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="ENTRY_DATETIME"/>
+      <elementValue elementRef="LENGTH" value="10"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="ENTRY_BY"/>
+      <elementValue elementRef="LENGTH" value="10"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="MODIFIED_DATETIME"/>
+      <elementValue elementRef="LENGTH" value="10"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="MODIFIED_BY"/>
+      <elementValue elementRef="LENGTH" value="10"/>
+    </elementParameter>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" label="CsiroReceiverSchema" name="tLogRow_2">
+      <column comment="" key="false" length="2" name="RCV_ID" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_Integer"/>
+      <column comment="" key="false" length="4" name="RCV_SERIAL_NO" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="3" name="RCV_MODEL_CODE" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="0" name="RCV_OWNER" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="0" name="RCV_COMMENTS" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="18" name="ENTRY_DATETIME" nullable="false" pattern="&quot;dd/MM/yyyy' 'HH:mm:ss&quot;" precision="0" type="id_Date"/>
+      <column comment="" key="false" length="3" name="ENTRY_BY" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+      <column comment="" key="false" length="18" name="MODIFIED_DATETIME" nullable="true" pattern="&quot;dd/MM/yyyy' 'HH:mm:ss&quot;" precision="0" type="id_Date"/>
+      <column comment="" key="false" length="3" name="MODIFIED_BY" nullable="true" pattern="&quot;dd-MM-yyyy&quot;" precision="0" type="id_String"/>
+    </metadata>
+  </node>
+  <node componentName="tPostgresqlInput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="576" posY="480">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tPostgresqlInput_3"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY:PROPERTY_TYPE" value="REPOSITORY"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY:REPOSITORY_PROPERTY_TYPE" value="_qowUEKlFEeGgVIw3cefMlw"/>
+    <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="false"/>
+    <elementParameter field="COMPONENT_LIST" name="CONNECTION" value=""/>
+    <elementParameter field="TEXT" name="HOST" value="&quot;localhost&quot;"/>
+    <elementParameter field="TEXT" name="TYPE" value="POSTGRESQL"/>
+    <elementParameter field="TEXT" name="PORT" value="&quot;5432&quot;"/>
+    <elementParameter field="TEXT" name="DBNAME" value="&quot;aatams&quot;"/>
+    <elementParameter field="TEXT" name="SCHEMA_DB" value="&quot;public&quot;"/>
+    <elementParameter field="TEXT" name="USER" value="&quot;postgres&quot;"/>
+    <elementParameter field="TEXT" name="PASS" value="&quot;postgres&quot;"/>
+    <elementParameter field="DBTABLE" name="TABLE" value="&quot;&quot;"/>
+    <elementParameter field="QUERYSTORE_TYPE" name="QUERYSTORE" value="&quot;&quot;"/>
+    <elementParameter field="TECHNICAL" name="QUERYSTORE:REPOSITORY_QUERYSTORE_TYPE" value=""/>
+    <elementParameter field="TECHNICAL" name="QUERYSTORE:QUERYSTORE_TYPE" value="BUILT_IN"/>
+    <elementParameter field="GUESS_SCHEMA" name="GUESS_SCHEMA" value="&quot;&quot;"/>
+    <elementParameter field="MEMO_SQL" name="QUERY" value="&quot;select nextval('hibernate_sequence')&quot;"/>
+    <elementParameter field="MAPPING_TYPE" name="MAPPING" value="postgres_id"/>
+    <elementParameter field="ENCODING_TYPE" name="ENCODING" value="&quot;ISO-8859-15&quot;"/>
+    <elementParameter field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
+    <elementParameter field="CHECK" name="USE_CURSOR" value="false"/>
+    <elementParameter field="TEXT" name="CURSOR_SIZE" value="1000"/>
+    <elementParameter field="CHECK" name="TRIM_ALL_COLUMN" value="false"/>
+    <elementParameter field="TABLE" name="TRIM_COLUMN">
+      <elementValue elementRef="SCHEMA_COLUMN" value="nextval"/>
+      <elementValue elementRef="TRIM" value="false"/>
+    </elementParameter>
+    <elementParameter field="TEXT" name="LABEL" value="hibernateSeq"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" name="tPostgresqlInput_3">
+      <column comment="" defaultValue="" key="false" length="19" name="nextval" nullable="false" pattern="" precision="0" sourceType="" type="id_Long"/>
+    </metadata>
+  </node>
+  <node componentName="tJavaFlex" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="160" posY="64">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tJavaFlex_2"/>
+    <elementParameter field="CHECK" name="START" value="true"/>
+    <elementParameter field="TECHNICAL" name="SCHEMA:SCHEMA_TYPE" value="REPOSITORY"/>
+    <elementParameter field="TECHNICAL" name="SCHEMA:REPOSITORY_SCHEMA_TYPE" value="_qowUEKlFEeGgVIw3cefMlw - bulk_import"/>
+    <elementParameter field="CHECK" name="DATA_AUTO_PROPAGATE" value="true"/>
+    <elementParameter field="MEMO_JAVA" name="CODE_START" value="// start part of your Java code&#xA;long pk = 1;"/>
+    <elementParameter field="MEMO_JAVA" name="CODE_MAIN" value="row7.id = pk;&#xA;row7.version = 0;&#xA;row7.import_start_date = new Date();&#xA;row7.import_finish_date = null;&#xA;row7.organisation_id = 629985l;&#xA;row7.status = &quot;IN_PROGRESS&quot;;&#xA;"/>
+    <elementParameter field="MEMO_JAVA" name="CODE_END" value="// end of the component, outside/closing the loop&#xA;globalMap.put(&quot;bulkImportPk&quot;, Long.valueOf(pk));      "/>
+    <elementParameter field="CHECK" name="Version_V2_0" value="false"/>
+    <elementParameter field="CHECK" name="Version_V3_2" value="false"/>
+    <elementParameter field="CHECK" name="Version_V4.0" value="true"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="//import java.util.List;"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" label="bulk_import" name="tJavaFlex_2">
+      <column comment="" key="true" length="19" name="id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="19" name="version" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="35" name="import_finish_date" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" sourceType="timestamptz" type="id_Date"/>
+      <column comment="" key="false" length="35" name="import_start_date" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" sourceType="timestamptz" type="id_Date"/>
+      <column comment="" key="true" length="19" name="organisation_id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="status" nullable="false" pattern="" precision="0" sourceType="varchar" type="id_String"/>
+    </metadata>
+  </node>
+  <node componentName="tPostgresqlOutput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="416" posY="64">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tPostgresqlOutput_3"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY:PROPERTY_TYPE" value="REPOSITORY"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY:REPOSITORY_PROPERTY_TYPE" value="_qowUEKlFEeGgVIw3cefMlw"/>
+    <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="false"/>
+    <elementParameter field="COMPONENT_LIST" name="CONNECTION" value=""/>
+    <elementParameter field="TEXT" name="HOST" value="&quot;localhost&quot;"/>
+    <elementParameter field="TEXT" name="PORT" value="&quot;5432&quot;"/>
+    <elementParameter field="TEXT" name="DBNAME" value="&quot;aatams&quot;"/>
+    <elementParameter field="TEXT" name="TYPE" value="POSTGRESQL"/>
+    <elementParameter field="TEXT" name="SCHEMA_DB" value="&quot;public&quot;"/>
+    <elementParameter field="TEXT" name="USER" value="&quot;postgres&quot;"/>
+    <elementParameter field="TEXT" name="PASS" value="&quot;postgres&quot;"/>
+    <elementParameter field="DBTABLE" name="TABLE" value="&quot;bulk_import&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="TABLE_ACTION" value="NONE"/>
+    <elementParameter field="CLOSED_LIST" name="DATA_ACTION" value="INSERT"/>
+    <elementParameter field="TECHNICAL" name="SCHEMA_FLOW:SCHEMA_TYPE" value="REPOSITORY"/>
+    <elementParameter field="TECHNICAL" name="SCHEMA_FLOW:REPOSITORY_SCHEMA_TYPE" value="_qowUEKlFEeGgVIw3cefMlw - bulk_import"/>
+    <elementParameter field="CHECK" name="USE_SPATIAL_OPTIONS" value="false"/>
+    <elementParameter field="CHECK" name="SPATIAL_INDEX" value="false"/>
+    <elementParameter field="CHECK" name="GEOMETRY_COLUMNS" value="false"/>
+    <elementParameter field="CHECK" name="DIE_ON_ERROR" value="false"/>
+    <elementParameter field="MAPPING_TYPE" name="MAPPING" value="postgres_id"/>
+    <elementParameter field="ENCODING_TYPE" name="ENCODING" value="&quot;ISO-8859-15&quot;"/>
+    <elementParameter field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
+    <elementParameter field="TEXT" name="COMMIT_EVERY" value="10000"/>
+    <elementParameter field="TABLE" name="ADD_COLS"/>
+    <elementParameter field="CHECK" name="USE_FIELD_OPTIONS" value="false"/>
+    <elementParameter field="TABLE" name="FIELD_OPTIONS">
+      <elementValue elementRef="SCHEMA_COLUMN" value="id"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="version"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="import_finish_date"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="import_start_date"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="organisation_id"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="status"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="ENABLE_DEBUG_MODE" value="true"/>
+    <elementParameter field="CHECK" name="SUPPORT_NULL_WHERE" value="false"/>
+    <elementParameter field="CHECK" name="USE_BATCH_SIZE" value="false"/>
+    <elementParameter field="TEXT" name="BATCH_SIZE" value="10000"/>
+    <elementParameter field="TEXT" name="LABEL" value="__TABLE__"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" label="bulk_import" name="tPostgresqlOutput_3">
+      <column comment="" key="true" length="19" name="id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="19" name="version" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="35" name="import_finish_date" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" sourceType="timestamptz" type="id_Date"/>
+      <column comment="" key="false" length="35" name="import_start_date" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" sourceType="timestamptz" type="id_Date"/>
+      <column comment="" key="true" length="19" name="organisation_id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="status" nullable="false" pattern="" precision="0" sourceType="varchar" type="id_String"/>
+    </metadata>
+    <metadata connector="REJECT" label="bulk_import" name="REJECT">
+      <column comment="" key="true" length="19" name="id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="19" name="version" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="35" name="import_finish_date" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" sourceType="timestamptz" type="id_Date"/>
+      <column comment="" key="false" length="35" name="import_start_date" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" sourceType="timestamptz" type="id_Date"/>
+      <column comment="" key="true" length="19" name="organisation_id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="status" nullable="false" pattern="" precision="0" sourceType="varchar" type="id_String"/>
+      <column defaultValue="" key="false" length="255" name="errorCode" nullable="true" precision="0" sourceType="" type="id_String"/>
+      <column defaultValue="" key="false" length="255" name="errorMessage" nullable="true" precision="0" sourceType="" type="id_String"/>
+    </metadata>
+  </node>
+  <node componentName="tJavaFlex" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="160" posY="608">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tJavaFlex_1"/>
+    <elementParameter field="TECHNICAL" name="SCHEMA:SCHEMA_TYPE" value="REPOSITORY"/>
+    <elementParameter field="TECHNICAL" name="SCHEMA:REPOSITORY_SCHEMA_TYPE" value="_qowUEKlFEeGgVIw3cefMlw - bulk_import"/>
+    <elementParameter field="CHECK" name="DATA_AUTO_PROPAGATE" value="true"/>
+    <elementParameter field="MEMO_JAVA" name="CODE_START" value="// start part of your Java code&#xA;System.out.println(&quot;Running bulk import update, PK: &quot; + globalMap.get(&quot;bulkImportPk&quot;));      "/>
+    <elementParameter field="MEMO_JAVA" name="CODE_MAIN" value="row8.id = ((Long)globalMap.get(&quot;bulkImportPk&quot;)).longValue();&#xA;row8.import_finish_date = new Date();&#xA;row8.status = &quot;SUCCESS&quot;;&#xA;"/>
+    <elementParameter field="MEMO_JAVA" name="CODE_END" value="// end of the component, outside/closing the loop&#xA;globalMap.put(&quot;bulkImportPk&quot;, 1);      "/>
+    <elementParameter field="CHECK" name="Version_V2_0" value="false"/>
+    <elementParameter field="CHECK" name="Version_V3_2" value="false"/>
+    <elementParameter field="CHECK" name="Version_V4.0" value="true"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="//import java.util.List;"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" label="bulk_import" name="tJavaFlex_1">
+      <column comment="" key="true" length="19" name="id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="19" name="version" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="35" name="import_finish_date" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" sourceType="timestamptz" type="id_Date"/>
+      <column comment="" key="false" length="35" name="import_start_date" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" sourceType="timestamptz" type="id_Date"/>
+      <column comment="" key="true" length="19" name="organisation_id" nullable="false" pattern="" precision="0" sourceType="int8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="status" nullable="false" pattern="" precision="0" sourceType="varchar" type="id_String"/>
+    </metadata>
+  </node>
+  <node componentName="tPostgresqlOutput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="416" posY="608">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tPostgresqlOutput_4"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY:PROPERTY_TYPE" value="REPOSITORY"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY:REPOSITORY_PROPERTY_TYPE" value="_qowUEKlFEeGgVIw3cefMlw"/>
+    <elementParameter field="CHECK" name="USE_EXISTING_CONNECTION" value="false"/>
+    <elementParameter field="COMPONENT_LIST" name="CONNECTION" value=""/>
+    <elementParameter field="TEXT" name="HOST" value="&quot;localhost&quot;"/>
+    <elementParameter field="TEXT" name="PORT" value="&quot;5432&quot;"/>
+    <elementParameter field="TEXT" name="DBNAME" value="&quot;aatams&quot;"/>
+    <elementParameter field="TEXT" name="TYPE" value="POSTGRESQL"/>
+    <elementParameter field="TEXT" name="SCHEMA_DB" value="&quot;public&quot;"/>
+    <elementParameter field="TEXT" name="USER" value="&quot;postgres&quot;"/>
+    <elementParameter field="TEXT" name="PASS" value="&quot;postgres&quot;"/>
+    <elementParameter field="DBTABLE" name="TABLE" value="&quot;bulk_import&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="TABLE_ACTION" value="NONE"/>
+    <elementParameter field="CLOSED_LIST" name="DATA_ACTION" value="UPDATE"/>
+    <elementParameter field="CHECK" name="USE_SPATIAL_OPTIONS" value="false"/>
+    <elementParameter field="CHECK" name="SPATIAL_INDEX" value="false"/>
+    <elementParameter field="CHECK" name="GEOMETRY_COLUMNS" value="false"/>
+    <elementParameter field="CHECK" name="DIE_ON_ERROR" value="false"/>
+    <elementParameter field="MAPPING_TYPE" name="MAPPING" value="postgres_id"/>
+    <elementParameter field="ENCODING_TYPE" name="ENCODING" value="&quot;ISO-8859-15&quot;"/>
+    <elementParameter field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
+    <elementParameter field="TEXT" name="COMMIT_EVERY" value="10000"/>
+    <elementParameter field="TABLE" name="ADD_COLS"/>
+    <elementParameter field="CHECK" name="USE_FIELD_OPTIONS" value="false"/>
+    <elementParameter field="TABLE" name="FIELD_OPTIONS">
+      <elementValue elementRef="SCHEMA_COLUMN" value="id"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="version"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="import_finish_date"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="import_start_date"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="organisation_id"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+      <elementValue elementRef="SCHEMA_COLUMN" value="status"/>
+      <elementValue elementRef="UPDATE_KEY" value="false"/>
+      <elementValue elementRef="DELETE_KEY" value="false"/>
+      <elementValue elementRef="UPDATABLE" value="true"/>
+      <elementValue elementRef="INSERTABLE" value="true"/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="ENABLE_DEBUG_MODE" value="true"/>
+    <elementParameter field="CHECK" name="SUPPORT_NULL_WHERE" value="false"/>
+    <elementParameter field="CHECK" name="USE_BATCH_SIZE" value="false"/>
+    <elementParameter field="TEXT" name="BATCH_SIZE" value="10000"/>
+    <elementParameter field="TEXT" name="LABEL" value="__TABLE__"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" label="bulk_import" name="tPostgresqlOutput_4">
+      <column comment="" key="true" length="19" name="id" nullable="false" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="19" name="version" nullable="false" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="35" name="import_finish_date" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" sourceType="TIMESTAMP" type="id_Date"/>
+      <column comment="" key="false" length="35" name="import_start_date" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" sourceType="TIMESTAMP" type="id_Date"/>
+      <column comment="" key="true" length="19" name="organisation_id" nullable="false" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="status" nullable="false" pattern="" precision="0" sourceType="VARCHAR" type="id_String"/>
+    </metadata>
+    <metadata connector="REJECT" label="bulk_import" name="REJECT">
+      <column comment="" key="true" length="19" name="id" nullable="false" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="19" name="version" nullable="false" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="35" name="import_finish_date" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" sourceType="TIMESTAMP" type="id_Date"/>
+      <column comment="" key="false" length="35" name="import_start_date" nullable="false" pattern="&quot;dd-MM-yyyy&quot;" precision="0" sourceType="TIMESTAMP" type="id_Date"/>
+      <column comment="" key="true" length="19" name="organisation_id" nullable="false" pattern="" precision="0" sourceType="INT8" type="id_Long"/>
+      <column comment="" key="false" length="255" name="status" nullable="false" pattern="" precision="0" sourceType="VARCHAR" type="id_String"/>
+      <column defaultValue="" key="false" length="255" name="errorCode" nullable="true" precision="0" sourceType="" type="id_String"/>
+      <column defaultValue="" key="false" length="255" name="errorMessage" nullable="true" precision="0" sourceType="" type="id_String"/>
+    </metadata>
+  </node>
+  <connection connectorName="FLOW" label="row1" lineStyle="0" metaname="tFileInputDelimited_2" offsetLabelX="0" offsetLabelY="0" source="tFileInputDelimited_2" target="tJoin_1">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_ID"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_SERIAL_NO"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_MODEL_CODE"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_OWNER"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_COMMENTS"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="ENTRY_DATETIME"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="ENTRY_BY"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="MODIFIED_DATETIME"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="MODIFIED_BY"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row1"/>
+  </connection>
+  <connection connectorName="SUBJOB_OK" label="OnSubjobOk" lineStyle="1" metaname="tFileInputDelimited_2" offsetLabelX="0" offsetLabelY="0" source="tFileInputDelimited_2" target="tJavaFlex_1">
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk2"/>
+  </connection>
+  <connection connectorName="FLOW" label="row5" lineStyle="0" metaname="tJoin_1" offsetLabelX="0" offsetLabelY="0" outputId="1" source="tJoin_1" target="tLogRow_2">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_ID"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_SERIAL_NO"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_MODEL_CODE"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_OWNER"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_COMMENTS"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="ENTRY_DATETIME"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="ENTRY_BY"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="MODIFIED_DATETIME"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="MODIFIED_BY"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row5"/>
+  </connection>
+  <connection connectorName="REJECT" label="row4" lineStyle="0" metaname="REJECT" offsetLabelX="0" offsetLabelY="0" outputId="2" source="tJoin_1" target="tMap_1">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_ID"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_SERIAL_NO"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_MODEL_CODE"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_OWNER"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="RCV_COMMENTS"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="ENTRY_DATETIME"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="ENTRY_BY"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="MODIFIED_DATETIME"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="MODIFIED_BY"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row4"/>
+  </connection>
+  <connection connectorName="FLOW" label="row3" lineStyle="8" metaname="tPostgresqlInput_2" offsetLabelX="0" offsetLabelY="0" source="tPostgresqlInput_2" target="tJoin_1">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="version"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="comment"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="model_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="serial_number"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="status_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="_class"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="organisation_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="expected_life_time_days"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="project_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="code_map_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row3"/>
+  </connection>
+  <connection connectorName="FLOW" label="out1" lineStyle="0" metaname="out1" offsetLabelX="0" offsetLabelY="0" source="tMap_1" target="tPostgresqlOutput_2">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="version"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="comment"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="model_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="serial_number"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="status_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="_class"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="organisation_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="expected_life_time_days"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="project_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="code_map_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="out1"/>
+  </connection>
+  <connection connectorName="FLOW" label="row2" lineStyle="8" metaname="tPostgresqlInput_1" offsetLabelX="0" offsetLabelY="0" source="tPostgresqlInput_1" target="tMap_1">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="version"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="manufacturer_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="model_name"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="_class"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row2"/>
+  </connection>
+  <connection connectorName="FLOW" label="row6" lineStyle="8" metaname="tPostgresqlInput_3" offsetLabelX="0" offsetLabelY="0" source="tPostgresqlInput_3" target="tMap_1">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER"/>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row6"/>
+  </connection>
+  <connection connectorName="FLOW" label="row7" lineStyle="0" metaname="tJavaFlex_2" offsetLabelX="0" offsetLabelY="0" source="tJavaFlex_2" target="tPostgresqlOutput_3">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="version"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="import_finish_date"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="import_start_date"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="organisation_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="status"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row7"/>
+  </connection>
+  <connection connectorName="SUBJOB_OK" label="OnSubjobOk" lineStyle="1" metaname="tJavaFlex_2" offsetLabelX="0" offsetLabelY="0" source="tJavaFlex_2" target="tFileInputDelimited_2">
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnSubjobOk1"/>
+  </connection>
+  <connection connectorName="FLOW" label="row8" lineStyle="0" metaname="tJavaFlex_1" offsetLabelX="0" offsetLabelY="0" source="tJavaFlex_1" target="tPostgresqlOutput_4">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="version"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="import_finish_date"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="import_start_date"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="organisation_id"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+      <elementValue elementRef="TRACE_COLUMN" value="status"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
+    </elementParameter>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row8"/>
+  </connection>
+  <subjob>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tFileInputDelimited_2"/>
+    <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
+    <elementParameter field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
+  </subjob>
+  <subjob>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tJavaFlex_2"/>
+    <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
+    <elementParameter field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
+  </subjob>
+  <subjob>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tJavaFlex_1"/>
+    <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
+    <elementParameter field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
+  </subjob>
+</talendfile:ProcessType>

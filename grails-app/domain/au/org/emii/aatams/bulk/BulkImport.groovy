@@ -13,5 +13,6 @@ class BulkImport
 	
     static constraints = 
 	{
+		importFinishDate(nullable:true)
     }
 }

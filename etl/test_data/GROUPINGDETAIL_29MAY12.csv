@@ -1,0 +1,30 @@
+"GRP_ID","GRP_NAME","GRP_DESCRIPTION"
+1,"60 nm closure","The fishery closure area off Port Lincoln SA. Closed the upper-slope fisheries to protect gulper shark population. Study area for gulper tagging and tracking experiment"
+2,"GAB","Great Australian Bight"
+3,"East","Eastern end of array"
+4,"Central","Central part of array"
+5,"West","Western end of array"
+6,"Range","Range testing"
+7,"Inner","Shallowest of upper-slope curtain"
+8,"Mid","Mid depth position of upper-slope curtain"
+9,"Outer","Deepest moorings of array"
+10,"Hard","Hard (high backscatter) habitat"
+11,"Soft","Soft (low backscatter) habitat"
+12,"Gulper","a group name to easily identify all station data for the gulper project and associated deployments"
+13,"Far west","to identify the western curtain for the array as deployed 2008 and 2009"
+14,"Far east","to identify the eastern most curtain as deployed in 2008 and 2009 as part of the array"
+15,"Long range curtain E","Long range curtain E (8 km) as deployed during the pilot"
+16,"Survivorship mooring","moorings in the vicinity fo the fish release point"
+17,"Long range curtain W","Long range curtain W (8 km) as deployed during the pilot"
+18,"Short range curtainE","Short range curtain E (4 km) as deployed during the pilot"
+19,"Short range curtainW","Short range curtain W (4 km) as deployed during the pilot"
+20,"HardGroundHabE","Habitat mooring to the east on hard ground as deployed during the pilot"
+21,"HardGroundHabW","Habitat mooring to the West on hard ground as deployed during the pilot"
+22,"SoftGroundHabW","soft ground habitat mooring to the west as deployed during the pilot"
+23,"Habitat","Mooring on isolated and or distinct habitat e.g. hard, soft, knoll"
+24,"Curtain 1",
+25,"Curtain 2",
+26,"Curtain 3",
+27,"Curtain 4",
+28,"Curtain 5",
+29,"Ningaloo Reef",

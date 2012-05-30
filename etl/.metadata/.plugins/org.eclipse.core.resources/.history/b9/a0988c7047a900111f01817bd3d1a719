@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:TalendProperties="http://www.talend.org/properties">
+  <TalendProperties:Project xmi:id="_DgJvoak_EeGgVIw3cefMlw" label="csiro_to_aatams" description="Bulk transfer of data from CSIRO's acoustic tagging database to AATAMS database.&#xA;" language="java" technicalLabel="CSIRO_TO_AATAMS" local="true" author="_DhSYEKk_EeGgVIw3cefMlw"/>
+  <TalendProperties:User xmi:id="_DhSYEKk_EeGgVIw3cefMlw" login="test@talend.com" password="D41D8CD98F00B204E9800998ECF8427E"/>
+  <TalendProperties:ExchangeUser xmi:id="_DhS_IKk_EeGgVIw3cefMlw" username="" login="" password=""/>
+</xmi:XMI>

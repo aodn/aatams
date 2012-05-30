@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_WEBSERVICE_5">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.webservice"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ALFRESCOOUTPUT">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.alfrescooutput"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_WEBSERVICE_6">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.webservice"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ESB_COMPONENTS_WS_CONSUMER">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.esb.components.ws.consumer"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_WEBSERVICE">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.webservice"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ROWGENERATOR">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.rowgenerator"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_DBMAP">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.dbmap"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_FILEOUTPUTXML">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.fileoutputxml"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_WEBSERVICE_3">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.webservice"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_WEBSERVICE_4">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.webservice"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="CORE_LIBRARIES">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.core"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="COMMON_LIBRARIES">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.commons.runtime"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="CORERUNTIME_LIBRARIES">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.core.runtime"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_SCD">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.scd"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EMF_COMMON">
+		<attributes>
+			<attribute name="plugin_id" value="org.eclipse.emf.common"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="COMMON_LIBRARIES_2">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.commons.runtime"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ESB_COMPONENTS_WS_CONSUMER_4">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.esb.components.ws.consumer"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_WEBSERVICE_1">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.webservice"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_FILEMULTISCHEMAS">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.filemultischemas"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="COMMON_LIBRARIES_1">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.commons.runtime"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ESB_COMPONENTS_WS_CONSUMER_3">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.esb.components.ws.consumer"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_WEBSERVICE_2">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.webservice"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ESB_COMPONENTS_WS_CONSUMER_2">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.esb.components.ws.consumer"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_SPSS">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.spss"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ESB_COMPONENTS_WS_CONSUMER_1">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.esb.components.ws.consumer"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="CODEGEN_LIBRARIES">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.codegen"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_HL7">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.hl7"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EMF_ECORE">
+		<attributes>
+			<attribute name="plugin_id" value="org.eclipse.emf.ecore"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ESB_COMPONENTS_WS_CONSUMER_8">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.esb.components.ws.consumer"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_SPSS_1">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.spss"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="CORERUNTIME_LIBRARIES_1">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.core.runtime"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="MANAGEMENT_LIBRARIES">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.metadata.managment"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ESB_COMPONENTS_WS_CONSUMER_7">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.esb.components.ws.consumer"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ESB_COMPONENTS_WS_CONSUMER_6">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.esb.components.ws.consumer"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ESB_COMPONENTS_WS_CONSUMER_5">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.esb.components.ws.consumer"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ESB_COMPONENTS_WS_CONSUMER_10">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.esb.components.ws.consumer"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="MANAGEMENT_LIBRARIES_3">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.metadata.managment"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="ORG_TALEND_DESIGNER_ABSTRACTMAP_LIBRARIES">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.abstractmap"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ESB_COMPONENTS_WS_CONSUMER_11">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.esb.components.ws.consumer"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_MAPPER">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.mapper"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_WEBSERVICE_9">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.webservice"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_XMLMAP">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.xmlmap"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="MANAGEMENT_LIBRARIES_4">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.metadata.managment"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_WEBSERVICE_8">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.webservice"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="MANAGEMENT_LIBRARIES_1">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.metadata.managment"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_ESB_COMPONENTS_WS_CONSUMER_9">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.esb.components.ws.consumer"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="EXTERNAL_COMPONENT_ORG_TALEND_DESIGNER_WEBSERVICE_7">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.designer.webservice"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="MANAGEMENT_LIBRARIES_2">
+		<attributes>
+			<attribute name="plugin_id" value="org.talend.metadata.managment"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="runtime"/>
+</classpath>

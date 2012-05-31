@@ -83,7 +83,7 @@ environments
 		grails.serverURL = "http://preview.emii.org.au/${appName}"
 		grails.serverHost = "http://preview.emii.org.au"
 		fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod"
-		
+		bulkimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod/bulkimports"
 		grails.mail.host = "localhost"
 	}
 	development
@@ -91,6 +91,7 @@ environments
 		grails.serverURL = "http://localhost:8080/${appName}"
 		grails.serverHost = "http://localhost:8080"
 		fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
+		bulkimport.path = "/Users/jburgess/Documents/aatams/test_uploads/bulkimports"
 		
 		grails.mail.adminEmailAddress = "jkburges@utas.edu.au"
 		grails.mail.host = "postoffice.utas.edu.au"

@@ -4,5 +4,6 @@ enum BulkImportStatus
 {
 	SUCCESS,
 	FAIL,
-	IN_PROGRESS
+	IN_PROGRESS,
+	ERROR
 }

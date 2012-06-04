@@ -70,6 +70,22 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 			 "serialNumber": "1661"]])
 	}
 	
+	void testDuplicateSerialNumber()
+	{
+		Receiver receiver = new Receiver(serialNumber: "1661", model: new ReceiverDeviceModel(), organisation: new Organisation())
+		receiver.save()
+		
+		def receiversText = HEADER + '''1,1661,"VR2",,,15/5/2008 16:01:55,"TAG",15/5/2008 16:01:55,"TAG"'''
+		
+		assertSuccess(
+			receiversText, 
+			[["type": BulkImportRecordType.DUPLICATE, 
+			  "srcPk": 1, 
+			  "srcTable": "RECEIVERS", 
+			  "srcModifiedDate": ReceiverLoader.DATE_TIME_FORMATTER.parseDateTime("15/5/2008 16:01:55"),
+			  "dstClass": "receiver"]])
+	}
+	
 	void testNewTwo()
 	{
 		def receiversText = HEADER + '''1,1661,"VR2",,,15/5/2008 16:01:55,"TAG",15/5/2008 16:01:55,"TAG"

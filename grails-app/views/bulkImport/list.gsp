@@ -40,9 +40,9 @@
                         
                             <td><g:link action="show" id="${bulkImportInstance.id}">${fieldValue(bean: bulkImportInstance, field: "id")}</g:link></td>
                         
-                            <td><g:formatDate date="${bulkImportInstance.importFinishDate}" /></td>
+                            <td><joda:format value="${bulkImportInstance.importFinishDate}" /></td>
                         
-                            <td><g:formatDate date="${bulkImportInstance.importStartDate}" /></td>
+                            <td><joda:format value="${bulkImportInstance.importStartDate}" /></td>
                         
                             <td>${fieldValue(bean: bulkImportInstance, field: "organisation")}</td>
                         

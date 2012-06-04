@@ -59,6 +59,8 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 		}
 		catch (BulkImportException e)
 		{
+			assertEquals(BulkImportStatus.ERROR, bulkImport.status)
+			assertNotNull(bulkImport.importFinishDate)
 			assertEquals("Invalid zip file", e.message)
 			assertEquals(ZipException.class, e.cause.class)
 		}
@@ -71,6 +73,8 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 		try
 		{
 			FileInputStream bulkIn = new FileInputStream(bulkImport.path)
+			assertEquals(BulkImportStatus.SUCCESS, bulkImport.status)
+			assertNotNull(bulkImport.importFinishDate)
 		}
 		catch (Exception e)
 		{
@@ -106,6 +110,8 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 		
 		assertTrue(loadCalled)
 		
+		assertEquals(BulkImportStatus.SUCCESS, bulkImport.status)
+		assertNotNull(bulkImport.importFinishDate)
 	}
 	
 	private InputStream createZipStream(Map entries)

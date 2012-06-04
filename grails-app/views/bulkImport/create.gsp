@@ -23,44 +23,16 @@
                 <g:renderErrors bean="${bulkImportInstance}" as="list" />
             </div>
             </g:hasErrors>
-            <g:form action="save" >
+            <g:uploadForm action="save" >
                 <div class="dialog">
                     <table>
                         <tbody>
-                        
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="importFinishDate"><g:message code="bulkImport.importFinishDate.label" default="Import Finish Date" /></label>
+                                    <label class="compulsory" for="path"><g:message code="bulkImportInstance.path.label" default="Bulk Import ZIP file" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: bulkImportInstance, field: 'importFinishDate', 'errors')}">
-                                    <g:datePicker name="importFinishDate" value="${bulkImportInstance?.importFinishDate}" noSelection="['':'']"></g:datePicker>
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="importStartDate"><g:message code="bulkImport.importStartDate.label" default="Import Start Date" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: bulkImportInstance, field: 'importStartDate', 'errors')}">
-                                    <g:datePicker name="importStartDate" value="${bulkImportInstance?.importStartDate}" ></g:datePicker>
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="organisation"><g:message code="bulkImport.organisation.label" default="Organisation" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: bulkImportInstance, field: 'organisation', 'errors')}">
-                                    <g:select optionKey="id" from="${au.org.emii.aatams.Organisation.list()}" name="organisation.id" value="${bulkImportInstance?.organisation?.id}" ></g:select>
-                                </td>
-                            </tr>
-                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                    <label for="status"><g:message code="bulkImport.status.label" default="Status" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: bulkImportInstance, field: 'status', 'errors')}">
-                                    <g:select  from="${au.org.emii.aatams.bulk.BulkImportStatus?.values()}" value="${bulkImportInstance?.status}" name="status" ></g:select>
+                                <td valign="top" class="value ${hasErrors(bean: bulkImportInstance, field: 'path', 'errors')}">
+                                    <input type="file" name="path" accept="*" />
                                 </td>
                             </tr>
                         
@@ -70,7 +42,7 @@
                 <div class="buttons">
                     <span class="button"><g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                 </div>
-            </g:form>
+            </g:uploadForm>            
         </div>
     </body>
 </html>

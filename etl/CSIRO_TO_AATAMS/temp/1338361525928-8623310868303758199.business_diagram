@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:business="business" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation">
-  <business:BusinessProcess xmi:id="_czcZ8KodEeGWj7AoXL2Qxg"/>
-  <notation:Diagram xmi:id="_c0AaoKodEeGWj7AoXL2Qxg" type="Business" element="_czcZ8KodEeGWj7AoXL2Qxg" name="1338361525928-8623310868303758199.business_diagram" measurementUnit="Pixel">
-    <styles xmi:type="notation:PageStyle" xmi:id="_c0AaoaodEeGWj7AoXL2Qxg"/>
-    <styles xmi:type="notation:GuideStyle" xmi:id="_c0AaoqodEeGWj7AoXL2Qxg"/>
-    <styles xmi:type="notation:DescriptionStyle" xmi:id="_c0Aao6odEeGWj7AoXL2Qxg"/>
-  </notation:Diagram>
-</xmi:XMI>

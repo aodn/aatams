@@ -1,6 +1,7 @@
 package au.org.emii.aatams.bulk
 
 import java.util.zip.ZipEntry
+import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
 import au.org.emii.aatams.Organisation
@@ -46,9 +47,23 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 		}
     }
 	
+	void testInvalidZipFile()
+	{
+		try
+		{
+			bulkImportService.process(bulkImport.id, new MockMultipartFile("testBulkImportSaveFile.zip", "testBulkImportSaveFile.zip", null, new ByteArrayInputStream("foo".bytes)))
+			fail()
+		}
+		catch (BulkImportException e)
+		{
+			assertEquals("Invalid zip file", e.message)
+			assertEquals(ZipException.class, e.cause.class)
+		}
+	}
+	
 	void testBulkImportWriteFileToDisk()
 	{
-		bulkImportService.process(bulkImport.id, new MockMultipartFile("testBulkImportSaveFile.zip", "testBulkImportSaveFile.zip", null, new ByteArrayInputStream("foo".bytes)))
+		bulkImportService.process(bulkImport.id, new MockMultipartFile("testBulkImportSaveFile.zip", "testBulkImportSaveFile.zip", null, createZipStream(["foo":"foo"])))
 		
 		try
 		{
@@ -58,10 +73,9 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 		{
 			fail()
 		}
-		
 	}
 	
-	void testBulkImportReceivers()
+	void testBulkImportReceiversCalled()
 	{
 		boolean processReceiversCalled = false
 		
@@ -77,16 +91,34 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 			processReceiversCalled = true
 		}
 		
+		bulkImportService.process(
+			bulkImport.id, 
+			new MockMultipartFile(
+				"testBulkImportReceivers.zip", 
+				"testBulkImportReceivers.zip", 
+				null, 
+				createZipStream(["RECEIVERS.csv":receiversText])))
+		
+		assertTrue(processReceiversCalled)
+	}
+	
+	private InputStream createZipStream(Map entries)
+	{
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream()
 		ZipOutputStream zipOut = new ZipOutputStream(byteOut)
 		
-		ZipEntry receiversEntry = new ZipEntry("RECEIVERS.csv")
-		zipOut.putNextEntry(receiversEntry)
-		zipOut.write(receiversText.bytes)
-		zipOut.closeEntry()
+		entries.each 
+		{
+			k, v ->
+			
+			ZipEntry receiversEntry = new ZipEntry(k)
+			zipOut.putNextEntry(receiversEntry)
+			zipOut.write(v.bytes)
+			zipOut.closeEntry()
+		}
+		
 		zipOut.close()
 		
-		bulkImportService.process(bulkImport.id, new MockMultipartFile("testBulkImportReceivers.zip", "testBulkImportReceivers.zip", null, new ByteArrayInputStream(byteOut.toByteArray())))
-		assertTrue(processReceiversCalled)
+		return new ByteArrayInputStream(byteOut.toByteArray())
 	}
 }

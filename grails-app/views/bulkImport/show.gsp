@@ -25,21 +25,21 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="bulkImport.id.label" default="Id" /></td>
                             
-                            <td valign="top" class="value">${fieldValue(bean: bulkImportInstance, field: "id")}</td>
+                            <td valign="top" class="value">${bulkImportInstance.id}</td>
                             
                         </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="bulkImport.importFinishDate.label" default="Import Finish Date" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${bulkImportInstance?.importFinishDate}" /></td>
+                            <td valign="top" class="value"><joda:format value="${bulkImportInstance?.importFinishDate}" /></td>
                             
                         </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="bulkImport.importStartDate.label" default="Import Start Date" /></td>
                             
-                            <td valign="top" class="value"><g:formatDate date="${bulkImportInstance?.importStartDate}" /></td>
+                            <td valign="top" class="value"><joda:format value="${bulkImportInstance?.importStartDate}" /></td>
                             
                         </tr>
                     
@@ -47,19 +47,6 @@
                             <td valign="top" class="name"><g:message code="bulkImport.organisation.label" default="Organisation" /></td>
                             
                             <td valign="top" class="value"><g:link controller="organisation" action="show" id="${bulkImportInstance?.organisation?.id}">${bulkImportInstance?.organisation?.encodeAsHTML()}</g:link></td>
-                            
-                        </tr>
-                    
-                        <tr class="prop">
-                            <td valign="top" class="name"><g:message code="bulkImport.records.label" default="Records" /></td>
-                            
-                            <td valign="top" style="text-align: left;" class="value">
-                                <ul>
-                                <g:each in="${bulkImportInstance.records}" var="r">
-                                    <li><g:link controller="bulkImportRecord" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></li>
-                                </g:each>
-                                </ul>
-                            </td>
                             
                         </tr>
                     

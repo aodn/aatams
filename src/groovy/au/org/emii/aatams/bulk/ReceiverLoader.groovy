@@ -90,15 +90,25 @@ class ReceiverLoader
 
 		if (existingImportRecords.isEmpty())
 		{
-			Receiver receiver =
-				new Receiver(
-					organisation: context.organisation,
-					model: record.receiverModel,
-					serialNumber: record[RCV_SERIAL_NO_COL],
-					comment: record[RCV_COMMENTS_COL])
-			receiver.save()
-			record.id = receiver.id
-			record.status = BulkImportRecordType.NEW
+			if (Receiver.findBySerialNumber(record[RCV_SERIAL_NO_COL]))
+			{
+				// duplicate - this receiver has already be entered (manually) in to the
+				// database.
+				record.id = null
+				record.status = BulkImportRecordType.DUPLICATE
+			}
+			else
+			{
+				Receiver receiver =
+					new Receiver(
+						organisation: context.organisation,
+						model: record.receiverModel,
+						serialNumber: record[RCV_SERIAL_NO_COL],
+						comment: record[RCV_COMMENTS_COL])
+				receiver.save(failOnError:true)
+				record.id = receiver.id
+				record.status = BulkImportRecordType.NEW
+			}
 		}
 		else
 		{
@@ -112,7 +122,7 @@ class ReceiverLoader
 				existingReceiver.model = record.receiverModel
 				existingReceiver.serialNumber = record[RCV_SERIAL_NO_COL]
 				existingReceiver.comment = record[RCV_COMMENTS_COL]
-				existingReceiver.save()
+				existingReceiver.save(failOnError:true)
 
 				// update
 				record.id = existingReceiver.id

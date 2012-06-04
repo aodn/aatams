@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:TalendProperties="http://www.talend.org/properties" xmlns:business="business">
-  <business:BusinessProcess/>
-  <TalendProperties:NotationHolder notationString="&lt;?xml version=&quot;1.0&quot; encoding=&quot;ASCII&quot;?>&#xA;&lt;notation:Diagram xmi:version=&quot;2.0&quot; xmlns:xmi=&quot;http://www.omg.org/XMI&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:notation=&quot;http://www.eclipse.org/gmf/runtime/1.0.2/notation&quot; type=&quot;Business&quot; name=&quot;1338361525928-8623310868303758199.business_diagram&quot; measurementUnit=&quot;Pixel&quot;>&#xA;  &lt;styles xsi:type=&quot;notation:PageStyle&quot;/>&#xA;  &lt;styles xsi:type=&quot;notation:GuideStyle&quot;/>&#xA;  &lt;styles xsi:type=&quot;notation:DescriptionStyle&quot;/>&#xA;  &lt;element href=&quot;#/0&quot;/>&#xA;&lt;/notation:Diagram>&#xA;"/>
-</xmi:XMI>

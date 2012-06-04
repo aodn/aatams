@@ -15,6 +15,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader
 
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
+import org.codehaus.groovy.grails.web.context.ServletContextHolder as SCH
 
 import au.org.emii.aatams.Person
 
@@ -38,7 +39,9 @@ class ExportService implements ApplicationContextAware
 		}
 		else
 		{
-			params.putAll([REPORT_USER: permissionUtilsService.principal()?.username, FILTER_PARAMS: getFilterParamsInReportFormat(params).entrySet(), SUBREPORT_DIR: "web-app/reports/"])
+			params.putAll([REPORT_USER: permissionUtilsService.principal()?.username, 
+				           FILTER_PARAMS: getFilterParamsInReportFormat(params).entrySet(), 
+						   SUBREPORT_DIR: getSubreportDir()])
 			
 			InputStream reportStream = getReportStream(clazz, params)
 			assert(reportStream)
@@ -62,6 +65,12 @@ class ExportService implements ApplicationContextAware
 		
 		log.info("Export completed in (ms): " + (System.currentTimeMillis() - startTimestamp))
     }
+	
+	private String getSubreportDir()
+	{
+		def servletContext = SCH.servletContext
+		return servletContext.getRealPath('/reports') + "/"
+	}
 	
 	private JRDataSource getDataSource(queryService, clazz, params)
 	{

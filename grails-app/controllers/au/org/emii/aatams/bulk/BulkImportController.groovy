@@ -2,6 +2,7 @@ package au.org.emii.aatams.bulk
 
 import au.org.emii.aatams.Organisation
 import org.springframework.web.multipart.MultipartFile
+import org.joda.time.DateTime
 
 class BulkImportController {
 
@@ -40,7 +41,7 @@ class BulkImportController {
 		{
 			def multipartFile = (fileMap.values() as List)[0]
 			bulkImportInstance.organisation = Organisation.findByNameAndDepartment('CSIRO', 'CMAR Hobart')
-			bulkImportInstance.importStartDate = new Date()
+			bulkImportInstance.importStartDate = new DateTime()
 			bulkImportInstance.status = BulkImportStatus.IN_PROGRESS
 			bulkImportInstance.filename = multipartFile.getOriginalFilename()
 			bulkImportInstance.save(flush: true, failOnError: true)

@@ -4,5 +4,6 @@ enum BulkImportRecordType
 {
 	NEW,
 	UPDATED,
-	IGNORED
+	IGNORED,
+	INVALID
 }

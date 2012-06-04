@@ -1,12 +1,16 @@
 databaseChangeLog = {
 
-	changeSet(author: "jburgess (generated)", id: "1338352662081-1") {
+	changeSet(author: "jburgess (generated)", id: "1338773805818-1") {
 		createTable(tableName: "bulk_import") {
 			column(name: "id", type: "int8") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "bulk_import_pkey")
 			}
 
 			column(name: "version", type: "int8") {
+				constraints(nullable: "false")
+			}
+
+			column(name: "filename", type: "VARCHAR(255)") {
 				constraints(nullable: "false")
 			}
 
@@ -26,7 +30,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "jburgess (generated)", id: "1338352662081-2") {
+	changeSet(author: "jburgess (generated)", id: "1338773805818-2") {
 		createTable(tableName: "bulk_import_record") {
 			column(name: "id", type: "int8") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "bulk_import_record_pkey")
@@ -62,11 +66,11 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "jburgess (generated)", id: "1338352662081-4") {
+	changeSet(author: "jburgess (generated)", id: "1338773805818-4") {
 		addForeignKeyConstraint(baseColumnNames: "organisation_id", baseTableName: "bulk_import", baseTableSchemaName: "public", constraintName: "fkf7eb277299b5ecd3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "organisation", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "jburgess (generated)", id: "1338352662081-5") {
+	changeSet(author: "jburgess (generated)", id: "1338773805818-5") {
 		addForeignKeyConstraint(baseColumnNames: "bulk_import_id", baseTableName: "bulk_import_record", baseTableSchemaName: "public", constraintName: "fk53875dbec6323f02", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "bulk_import", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
 	}
 }

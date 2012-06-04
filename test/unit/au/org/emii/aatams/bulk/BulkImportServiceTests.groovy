@@ -1,6 +1,7 @@
 package au.org.emii.aatams.bulk
 
 import java.util.zip.ZipEntry
+
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
@@ -9,6 +10,7 @@ import grails.test.*
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.mock.web.MockMultipartFile
+import org.joda.time.DateTime
 
 class BulkImportServiceTests extends GrailsUnitTestCase 
 {
@@ -22,11 +24,12 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 		mockLogging(BulkImportService, true)
 		bulkImportService = new BulkImportService()
 
-		bulkImport = new BulkImport(organisation: new Organisation(), importStartDate: new Date(), status: BulkImportStatus.IN_PROGRESS)
+		bulkImport = new BulkImport(organisation: new Organisation(), importStartDate: new DateTime(), status: BulkImportStatus.IN_PROGRESS)
 		mockDomain(BulkImport, [bulkImport])
 		bulkImport.save()
 		
 		mockConfig("bulkimport.path = \"" + FileUtils.getTempDirectory().getPath() + "\"")
+		registerMetaClass ReceiverLoader
     }
 
     protected void tearDown() 
@@ -77,18 +80,20 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 	
 	void testBulkImportReceiversCalled()
 	{
-		boolean processReceiversCalled = false
+		boolean loadCalled = false
 		
 		def receiversText = '''"RCV_ID","RCV_SERIAL_NO","RCV_MODEL_CODE","RCV_OWNER","RCV_COMMENTS","ENTRY_DATETIME","ENTRY_BY","MODIFIED_DATETIME","MODIFIED_BY"
 		1,1661,"VR2",,,15/5/2008 16:01:55,"TAG",15/5/2008 16:01:55,"TAG"
 		2,1663,"VR2",,,15/5/2008 16:01:56,"TAG",15/5/2008 16:01:56,"TAG"
 '''
 		
-		bulkImportService.metaClass.processReceivers =
+		ReceiverLoader.metaClass.load =
 		{
+			Map context,
 			InputStream receiverStream ->
 			
-			processReceiversCalled = true
+			assertNotNull(context.bulkImport)
+			loadCalled = true
 		}
 		
 		bulkImportService.process(
@@ -99,7 +104,8 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 				null, 
 				createZipStream(["RECEIVERS.csv":receiversText])))
 		
-		assertTrue(processReceiversCalled)
+		assertTrue(loadCalled)
+		
 	}
 	
 	private InputStream createZipStream(Map entries)

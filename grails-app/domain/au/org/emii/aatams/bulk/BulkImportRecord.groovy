@@ -1,13 +1,16 @@
 package au.org.emii.aatams.bulk
 
+import org.joda.time.DateTime
+
 class BulkImportRecord 
 {
 	String srcTable
 	Long srcPk
-	Date srcModifiedDate
+	DateTime srcModifiedDate
 	
 	String dstClass
 	Long dstPk
+	
 	BulkImportRecordType type
 	
 	static belongsTo = [bulkImport: BulkImport]

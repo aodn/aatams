@@ -1,5 +1,8 @@
 package au.org.emii.aatams.bulk
 
+import java.util.zip.ZipEntry
+import java.util.zip.ZipException
+import java.util.zip.ZipFile
 import java.util.zip.ZipInputStream;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -19,40 +22,46 @@ class BulkImportService {
 			throw new BulkImportException("Invalid bulk import id: " + bulkImportId)
 		}
 		
-		writeFileToDisk(bulkImport, multipartFile)
-
-		ZipArchiveInputStream zipStream
+		File bulkImportFile
+		ZipFile bulkImportZipFile
+		
 		try
 		{		
-			InputStream multipartStream = multipartFile.getInputStream()
-			zipStream = new ZipArchiveInputStream(multipartStream)
+			bulkImportFile = writeFileToDisk(bulkImport, multipartFile)
+			bulkImportZipFile = new ZipFile(bulkImportFile)
 			
-			ZipArchiveEntry zipEntry = zipStream.getNextZipEntry()
-			while (zipEntry != null)
+			ZipEntry receiversEntry = bulkImportZipFile.getEntry("RECEIVERS.csv")
+			if (receiversEntry)
 			{
-				if (zipEntry.getName() == "RECEIVERS.csv")
-				{
-					processReceivers(null)
-				}
-				
-				zipEntry = zipStream.getNextZipEntry()
+				processReceivers([bulkImport: bulkImport], bulkImportZipFile.getInputStream(receiversEntry))
 			}
+		}
+		catch (ZipException e)
+		{
+			throw new BulkImportException("Invalid zip file", e)
 		}
 		finally
 		{
-			zipStream.close()
+			bulkImportZipFile?.close()
 		}
     }
 
-	private void writeFileToDisk(BulkImport bulkImport, MultipartFile multipartFile) 
+	private File writeFileToDisk(BulkImport bulkImport, MultipartFile multipartFile) 
 	{
 		File outFile = new File(bulkImport.path)
 		outFile.getParentFile().mkdirs()
 		multipartFile.transferTo(outFile)
+		
+		return outFile
 	}
 	
-	private void processReceivers(InputStream receiverStream)
+	private void processReceivers(Map context, InputStream receiverStream) throws BulkImportException
 	{
+		if (receiverStream == null)
+		{
+			throw new BulkImportException("Invalid receivers data.")
+		}
 		
+		new ReceiverLoader().load(context, receiverStream)
 	}
 }

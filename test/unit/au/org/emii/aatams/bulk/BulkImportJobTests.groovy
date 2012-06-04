@@ -4,6 +4,7 @@ import au.org.emii.aatams.Organisation
 import grails.test.*
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile;
+import org.joda.time.DateTime
 
 class BulkImportJobTests extends GrailsUnitTestCase 
 {
@@ -31,7 +32,7 @@ class BulkImportJobTests extends GrailsUnitTestCase
 		bulkImportJob = new BulkImportJob()
 		bulkImportJob.bulkImportService = bulkImportService
 		
-		bulkImport = new BulkImport(organisation: new Organisation(), importStartDate: new Date(), status: BulkImportStatus.IN_PROGRESS)
+		bulkImport = new BulkImport(organisation: new Organisation(), importStartDate: new DateTime(), status: BulkImportStatus.IN_PROGRESS)
 		mockDomain(BulkImport, [bulkImport])
 		bulkImport.save()
 		

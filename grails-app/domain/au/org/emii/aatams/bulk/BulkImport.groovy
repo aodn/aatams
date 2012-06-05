@@ -14,6 +14,7 @@ class BulkImport
 	String filename
 	
 	static hasMany = [records: BulkImportRecord]
+	
 	static transients = ['path']
 	
     static constraints = 

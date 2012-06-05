@@ -66,7 +66,7 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 			 "srcPk": 1, 
 			 "srcTable": "RECEIVERS", 
 			 "srcModifiedDate": ReceiverLoader.DATE_TIME_FORMATTER.parseDateTime("15/5/2008 16:01:55"),
-			 "dstClass": "receiver",
+			 "dstClass": "au.org.emii.aatams.Receiver",
 			 "serialNumber": "1661"]])
 	}
 	
@@ -83,7 +83,7 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 			  "srcPk": 1, 
 			  "srcTable": "RECEIVERS", 
 			  "srcModifiedDate": ReceiverLoader.DATE_TIME_FORMATTER.parseDateTime("15/5/2008 16:01:55"),
-			  "dstClass": "receiver"]])
+			  "dstClass": "au.org.emii.aatams.Receiver"]])
 	}
 	
 	void testNewTwo()
@@ -97,13 +97,13 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 			 "srcPk": 1, 
 			 "srcTable": "RECEIVERS", 
 			 "srcModifiedDate": ReceiverLoader.DATE_TIME_FORMATTER.parseDateTime("15/5/2008 16:01:55"),
-			 "dstClass": "receiver",
+			 "dstClass": "au.org.emii.aatams.Receiver",
 			 "serialNumber": "1661"],
 			 ["type": BulkImportRecordType.NEW, 
 			 "srcPk": 2, 
 			 "srcTable": "RECEIVERS", 
 			 "srcModifiedDate": ReceiverLoader.DATE_TIME_FORMATTER.parseDateTime("15/5/2008 16:01:55"),
-			 "dstClass": "receiver",
+			 "dstClass": "au.org.emii.aatams.Receiver",
 			 "serialNumber": "1662"]])
 	}
 	
@@ -121,7 +121,7 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 				srcTable: "RECEIVERS", 
 				srcPk: 1,
 				srcModifiedDate: ReceiverLoader.DATE_TIME_FORMATTER.parseDateTime("15/5/2007 16:01:55"),
-				dstClass: "receiver",
+				dstClass: "au.org.emii.aatams.Receiver",
 				dstPk: receiver.id,
 				type: BulkImportRecordType.NEW)
 		importRecord.save(failOnError:true)
@@ -138,7 +138,7 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 			 "srcPk": 1, 
 			 "srcTable": "RECEIVERS", 
 			 "srcModifiedDate": ReceiverLoader.DATE_TIME_FORMATTER.parseDateTime("15/5/2008 16:01:55"),
-			 "dstClass": "receiver",
+			 "dstClass": "au.org.emii.aatams.Receiver",
 			 "serialNumber": "1662"]])
 
 		assertEquals(1, Receiver.count())
@@ -161,7 +161,7 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 				srcTable: "RECEIVERS", 
 				srcPk: 1,
 				srcModifiedDate: ReceiverLoader.DATE_TIME_FORMATTER.parseDateTime("15/5/2009 16:01:55"),
-				dstClass: "receiver",
+				dstClass: "au.org.emii.aatams.Receiver",
 				dstPk: receiver.id,
 				type: BulkImportRecordType.NEW)
 		importRecord.save(failOnError:true)
@@ -178,7 +178,7 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 			 "srcPk": 1, 
 			 "srcTable": "RECEIVERS", 
 			 "srcModifiedDate": ReceiverLoader.DATE_TIME_FORMATTER.parseDateTime("15/5/2008 16:01:55"),
-			 "dstClass": "receiver",
+			 "dstClass": "au.org.emii.aatams.Receiver",
 			 "serialNumber": "1661"]])
 
 		assertEquals(1, Receiver.count())

@@ -4,6 +4,8 @@ import org.joda.time.DateTime
 
 class BulkImportRecord 
 {
+	def grailsApplication
+	
 	String srcTable
 	Long srcPk
 	DateTime srcModifiedDate
@@ -20,4 +22,18 @@ class BulkImportRecord
 		dstClass(nullable:true)
 		dstPk(nullable:true)
     }
+
+	def afterDelete()
+	{
+		if (this.type == BulkImportRecordType.NEW)
+		{
+			Class dstClazz = grailsApplication.getClassForName(dstClass)
+			log.debug "Deleting for class: " + dstClazz + ", pk: " + dstPk
+			
+			def dstObject = dstClazz.get(dstPk)
+				
+			assert(dstObject)
+			dstObject.delete(failOnError:true)
+		}
+	}
 }

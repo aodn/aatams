@@ -1,0 +1,127 @@
+package au.org.emii.aatams.bulk
+
+import au.org.emii.aatams.*
+import grails.test.*
+import org.joda.time.DateTime
+
+class BulkImportRecordTests extends GrailsUnitTestCase 
+{
+	Receiver receiver
+	BulkImport bulkImport
+	
+    protected void setUp() 
+	{
+        super.setUp()
+		
+		receiver = 
+			new Receiver(
+				organisation: Organisation.findByName('CSIRO'), 
+				model: ReceiverDeviceModel.findByModelName('VR2W'),
+				serialNumber: '112233')
+		receiver.save(failOnError: true, flush: true)
+		
+		bulkImport =
+			new BulkImport(
+				organisation: Organisation.findByName('CSIRO'),
+				importStartDate: new DateTime(),
+				status: BulkImportStatus.SUCCESS,
+				filename: "some/path")
+		bulkImport.save(flush: true)	
+    }
+
+    protected void tearDown() 
+	{
+		receiver.delete()
+		
+        super.tearDown()
+    }
+
+    void testDeleteNewExistingReceiver() 
+	{
+		BulkImportRecord newRecord = 
+			new BulkImportRecord(
+				srcTable: "RECEIVERS", 
+				srcPk: 123, 
+				srcModifiedDate: new DateTime(),
+				dstClass: "au.org.emii.aatams.Receiver", 
+				dstPk: receiver.id, 
+				type: BulkImportRecordType.NEW, 
+				bulkImport: bulkImport)
+			
+		newRecord.save(flush: true, failOnError: true)
+		assertNotNull(Receiver.get(receiver.id))
+
+		bulkImport.refresh()
+		bulkImport.delete(flush: true, failOnError: true)
+		assertNull(Receiver.get(receiver.id))
+    }
+	
+    void testDeleteNewNonexistentReceiver()
+	{
+		try
+		{
+			BulkImportRecord newRecord = 
+				new BulkImportRecord(
+					srcTable: "RECEIVERS", 
+					srcPk: 123, 
+					srcModifiedDate: new DateTime(),
+					dstClass: "au.org.emii.aatams.Receiver", 
+					dstPk: 123, 
+					type: BulkImportRecordType.NEW, 
+					bulkImport: bulkImport)
+				
+			newRecord.save(flush: true, failOnError: true)
+			assertNotNull(Receiver.get(receiver.id))
+			
+			bulkImport.refresh()
+			bulkImport.delete(flush: true)
+			assertNull(Receiver.get(receiver.id))
+			
+			fail()
+		}
+		catch (Throwable e)
+		{
+			
+		}
+    }
+	
+	void testDeleteUpdated()
+	{
+		BulkImportRecord newRecord = 
+			new BulkImportRecord(
+				srcTable: "RECEIVERS", 
+				srcPk: 123, 
+				srcModifiedDate: new DateTime(),
+				dstClass: "au.org.emii.aatams.Receiver", 
+				dstPk: receiver.id, 
+				type: BulkImportRecordType.UPDATED, 
+				bulkImport: bulkImport)
+			
+		newRecord.save(flush: true, failOnError: true)
+		assertNotNull(Receiver.get(receiver.id))
+		
+		bulkImport.refresh()
+		bulkImport.delete(flush: true)
+		assertNotNull(Receiver.get(receiver.id))
+    }
+	
+	void testDeleteIgnored()
+	{
+		BulkImportRecord newRecord =
+			new BulkImportRecord(
+				srcTable: "RECEIVERS",
+				srcPk: 123,
+				srcModifiedDate: new DateTime(),
+				dstClass: "au.org.emii.aatams.Receiver",
+				dstPk: receiver.id,
+				type: BulkImportRecordType.IGNORED,
+				bulkImport: bulkImport)
+			
+		newRecord.save(flush: true, failOnError: true)
+		assertNotNull(Receiver.get(receiver.id))
+		
+		bulkImport.refresh()
+		bulkImport.delete(flush: true)
+		assertNotNull(Receiver.get(receiver.id))
+	}
+}

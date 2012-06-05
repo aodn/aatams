@@ -145,7 +145,7 @@ class ReceiverLoader
 				srcTable: "RECEIVERS", 
 				srcPk: record[RCV_ID_COL],
 				srcModifiedDate: record.modifiedDate,
-				dstClass: "receiver",
+				dstClass: "au.org.emii.aatams.Receiver",
 				dstPk: record.id,
 				type: record.status)
 			

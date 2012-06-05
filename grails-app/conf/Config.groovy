@@ -159,6 +159,7 @@ log4j =
 				   "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService",
 				   "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
 				   "grails.app.domain.au.org.emii.aatams.Receiver",
+				   "grails.app.domain.au.org.emii.aatams.bulk",
 				   "grails.app.service.au.org.emii.aatams.filter.QueryService",
 				   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
 				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService"
@@ -166,7 +167,8 @@ log4j =
 		
 		test
 		{
-			debug  "grails.app.service.au.org.emii.aatams.AnimalReleaseService"
+			debug  "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
+				   "grails.app.domain.au.org.emii.aatams.bulk"
 		}
 	}
 	

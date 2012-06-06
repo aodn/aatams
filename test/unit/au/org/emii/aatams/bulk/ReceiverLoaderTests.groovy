@@ -3,20 +3,16 @@ package au.org.emii.aatams.bulk
 import au.org.emii.aatams.*
 import grails.test.*
 import org.joda.time.DateTime
-import org.joda.time.DateTimeUtils
 
-class ReceiverLoaderTests extends GrailsUnitTestCase 
+class ReceiverLoaderTests extends AbstractLoaderTests
 {
-	ReceiverLoader processor
 	private static String HEADER = '''"RCV_ID","RCV_SERIAL_NO","RCV_MODEL_CODE","RCV_OWNER","RCV_COMMENTS","ENTRY_DATETIME","ENTRY_BY","MODIFIED_DATETIME","MODIFIED_BY"''' + '\n'
-	
-	def currentDateTime = new DateTime("2012-01-01T12:00:00")
 	
     protected void setUp() 
 	{
         super.setUp()
 		
-		processor = new ReceiverLoader()
+		loader = new ReceiverLoader()
 		
 		mockDomain(BulkImport)
 		mockDomain(BulkImportRecord)
@@ -24,8 +20,6 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 		def vr2 = new ReceiverDeviceModel(modelName: "VR2")
 		mockDomain(ReceiverDeviceModel, [vr2])
 		vr2.save()
-		
-		DateTimeUtils.setCurrentMillisFixed(currentDateTime.toInstant().getMillis())
 		
 		mockDomain(Receiver)
     }
@@ -61,7 +55,7 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 		def receiversText = HEADER + '''1,1661,"VR2",,,15/5/2008 16:01:55,"TAG",15/5/2008 16:01:55,"TAG"'''
 		
 		assertSuccess(
-			receiversText, 
+			[receiversText], 
 			[["type": BulkImportRecordType.NEW, 
 			 "srcPk": 1, 
 			 "srcTable": "RECEIVERS", 
@@ -78,7 +72,7 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 		def receiversText = HEADER + '''1,1661,"VR2",,,15/5/2008 16:01:55,"TAG",15/5/2008 16:01:55,"TAG"'''
 		
 		assertSuccess(
-			receiversText, 
+			[receiversText], 
 			[["type": BulkImportRecordType.DUPLICATE, 
 			  "srcPk": 1, 
 			  "srcTable": "RECEIVERS", 
@@ -92,7 +86,7 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 2,1662,"VR2",,,15/5/2008 16:01:55,"TAG",15/5/2008 16:01:55,"TAG"'''
 		
 		assertSuccess(
-			receiversText, 
+			[receiversText], 
 			[["type": BulkImportRecordType.NEW, 
 			 "srcPk": 1, 
 			 "srcTable": "RECEIVERS", 
@@ -133,7 +127,7 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 		def receiversText = HEADER + '''1,1662,"VR2",,,15/5/2008 16:01:55,"TAG",15/5/2008 16:01:55,"TAG"'''
 		
 		assertSuccess(
-			receiversText, 
+			[receiversText], 
 			[["type": BulkImportRecordType.UPDATED, 
 			 "srcPk": 1, 
 			 "srcTable": "RECEIVERS", 
@@ -173,7 +167,7 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 		def receiversText = HEADER + '''1,1662,"VR2",,,15/5/2008 16:01:55,"TAG",15/5/2008 16:01:55,"TAG"'''
 		
 		assertSuccess(
-			receiversText, 
+			[receiversText], 
 			[["type": BulkImportRecordType.IGNORED, 
 			 "srcPk": 1, 
 			 "srcTable": "RECEIVERS", 
@@ -198,7 +192,7 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 		BulkImport bulkImport = new BulkImport()
 		try
 		{
-			processor.load([bulkImport: bulkImport], receiversText ? new ByteArrayInputStream(receiversText.bytes) : null)
+			loader.load([bulkImport: bulkImport], receiversText ? [new ByteArrayInputStream(receiversText.bytes)] : [null])
 			fail()
 		}
 		catch (BulkImportException e)
@@ -207,38 +201,14 @@ class ReceiverLoaderTests extends GrailsUnitTestCase
 			assertEquals(BulkImportStatus.ERROR, bulkImport.status)
 		}	
 	}
-
-	private def assertSuccess(receiversText, expectedImportRecords)
+	
+	protected void assertSuccessDetail(it, importRecord)
 	{
-		Organisation csiro = new Organisation()
-		BulkImport bulkImport = new BulkImport(organisation: csiro, importStartDate: new DateTime(), status: BulkImportStatus.IN_PROGRESS, filename: "some/path")
-		
-		processor.load([bulkImport: bulkImport, organisation: csiro], new ByteArrayInputStream(receiversText.bytes))
-		
-		bulkImport.save(failOnError: true)
-		def importRecords = BulkImportRecord.findAllByBulkImport(bulkImport)
-		assertEquals(expectedImportRecords.size(), importRecords.size())
-		
-		expectedImportRecords.eachWithIndex
+		if (importRecord.dstPk)
 		{
-			it, i ->
-			
-			def importRecord = importRecords[i]
-			assertNotNull(importRecord)
-			assertEquals(bulkImport, importRecord.bulkImport)
-			
-			assertEquals(it.type, importRecord.type)
-			assertEquals(it.srcPk, importRecord.srcPk)
-			assertEquals(it.srcTable, importRecord.srcTable)
-			assertEquals(it.srcModifiedDate, importRecord.srcModifiedDate)
-			assertEquals(it.dstClass, importRecord.dstClass)
-			
-			if (importRecord.dstPk)
-			{
-				def receiver = Receiver.get(importRecord.dstPk)
-				assertNotNull(receiver)
-				assertEquals(it.serialNumber, receiver.serialNumber)
-			}
+			def receiver = Receiver.get(importRecord.dstPk)
+			assertNotNull(receiver)
+			assertEquals(it.serialNumber, receiver.serialNumber)
 		}
 	}
 }

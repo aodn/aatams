@@ -94,7 +94,7 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 		ReceiverLoader.metaClass.load =
 		{
 			Map context,
-			InputStream receiverStream ->
+			List<InputStream> streams ->
 			
 			assertNotNull(context.bulkImport)
 			loadCalled = true
@@ -114,6 +114,51 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 		assertNotNull(bulkImport.importFinishDate)
 	}
 	
+	void testBulkImportInstallationsCalled()
+	{
+		boolean loadCalled = false
+		
+		def groupingDetailText = '''"GRP_ID","GRP_NAME","GRP_DESCRIPTION"
+1,"60 nm closure","The fishery closure area off Port Lincoln SA. Closed the upper-slope fisheries to protect gulper shark population. Study area for gulper tagging and tracking experiment"
+2,"GAB","Great Australian Bight"
+'''
+		
+		def groupingsText = '''"GRP_ID","STA_ID"
+1,69
+1,70
+1,71
+'''
+		def stationsText = '''"STA_ID","STA_SITE_NAME","STA_CONTACT_NAME","STA_DESCRIPTION","ENTRY_DATETIME","ENTRY_BY","MODIFIED_DATETIME","MODIFIED_BY"
+1,"MB11C","Richard Pillans","Old Name: MB11B",1/10/2010 15:05:31,"TAG",1/10/2010 15:05:31,"TAG"
+2,"MB12A","Richard Pillans",,1/10/2010 15:11:07,"TAG",1/10/2010 15:11:26,"TAG"
+'''
+		
+		InstallationLoader.metaClass.load =
+		{
+			Map context,
+			List<InputStream> streams ->
+			
+			assertNotNull(context.bulkImport)
+			loadCalled = true
+		}
+		
+		bulkImportService.process(
+			bulkImport.id,
+			new MockMultipartFile(
+				"testBulkImportInstallations.zip",
+				"testBulkImportInstallations.zip",
+				null,
+				createZipStream(["GROUPINGDETAIL.csv": groupingDetailText,
+								 "GROUPINGS.csv": groupingsText,
+								 "STATIONS.csv": stationsText])))
+		
+		assertTrue(loadCalled)
+		
+		assertEquals(BulkImportStatus.SUCCESS, bulkImport.status)
+		assertNotNull(bulkImport.importFinishDate)
+	}
+	
+
 	private InputStream createZipStream(Map entries)
 	{
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream()

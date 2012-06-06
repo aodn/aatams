@@ -28,19 +28,13 @@ class BulkImportService {
 		
 		long startTime = System.currentTimeMillis()
 		log.info("Bulk import started: " + bulkImport.path)
-		
+		 
 		try
 		{		
 			bulkImportFile = writeFileToDisk(bulkImport, multipartFile)
 			bulkImportZipFile = new ZipFile(bulkImportFile)
 			
-			ZipEntry receiversEntry = bulkImportZipFile.getEntry("RECEIVERS.csv")
-			if (receiversEntry)
-			{
-				processReceivers([organisation: bulkImport.organisation, bulkImport: bulkImport], bulkImportZipFile.getInputStream(receiversEntry))
-			}
-			
-			bulkImport.status = BulkImportStatus.SUCCESS
+			load(bulkImportZipFile, bulkImport)
 		}
 		catch (ZipException e)
 		{
@@ -63,6 +57,27 @@ class BulkImportService {
 		}
     }
 
+	private void load(ZipFile bulkImportZipFile, BulkImport bulkImport) 
+	{
+		[(new ReceiverLoader()): ["RECEIVERS.csv"], (new InstallationLoader()): ["GROUPINGS.csv", "GROUPINGDETAIL.csv", "STATIONS.csv"]].each
+		{
+			loader, entryNames ->
+
+			def entries = entryNames.collect { bulkImportZipFile.getEntry(it) }
+
+			def allNonNull = true
+			entries.each { allNonNull &= (it != null) }
+
+			if (allNonNull)
+			{
+				log.info "loading ${entryNames}..."
+				loader.load([bulkImport: bulkImport], entries.collect { bulkImportZipFile.getInputStream(it) } )
+			}
+		}
+
+		bulkImport.status = BulkImportStatus.SUCCESS
+	}
+
 	private File writeFileToDisk(BulkImport bulkImport, MultipartFile multipartFile) 
 	{
 		File outFile = new File(bulkImport.path)
@@ -70,15 +85,5 @@ class BulkImportService {
 		multipartFile.transferTo(outFile)
 		
 		return outFile
-	}
-	
-	private void processReceivers(Map context, InputStream receiverStream) throws BulkImportException
-	{
-		if (receiverStream == null)
-		{
-			throw new BulkImportException("Invalid receivers data.")
-		}
-		
-		new ReceiverLoader().load(context, receiverStream)
 	}
 }

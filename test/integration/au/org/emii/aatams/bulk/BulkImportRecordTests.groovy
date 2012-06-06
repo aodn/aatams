@@ -2,16 +2,22 @@ package au.org.emii.aatams.bulk
 
 import au.org.emii.aatams.*
 import grails.test.*
+
+import org.hibernate.SessionFactory;
 import org.joda.time.DateTime
 
 class BulkImportRecordTests extends GrailsUnitTestCase 
 {
 	Receiver receiver
 	BulkImport bulkImport
+	SessionFactory sessionFactory
 	
     protected void setUp() 
 	{
         super.setUp()
+		
+		sessionFactory.getCurrentSession().flush()
+		sessionFactory.getCurrentSession().clear()
 		
 		receiver = 
 			new Receiver(
@@ -31,7 +37,7 @@ class BulkImportRecordTests extends GrailsUnitTestCase
 
     protected void tearDown() 
 	{
-		receiver.delete()
+		receiver?.delete()
 		
         super.tearDown()
     }
@@ -53,7 +59,10 @@ class BulkImportRecordTests extends GrailsUnitTestCase
 
 		bulkImport.refresh()
 		bulkImport.delete(flush: true, failOnError: true)
-		assertNull(Receiver.get(receiver.id))
+		
+		sessionFactory.getCurrentSession().clear()
+		receiver = Receiver.get(receiver.id)
+		assertNull(receiver)
     }
 	
     void testDeleteNewNonexistentReceiver()
@@ -102,7 +111,10 @@ class BulkImportRecordTests extends GrailsUnitTestCase
 		
 		bulkImport.refresh()
 		bulkImport.delete(flush: true)
-		assertNotNull(Receiver.get(receiver.id))
+		
+		sessionFactory.getCurrentSession().clear()
+		receiver = Receiver.get(receiver.id)
+		assertNotNull(receiver)
     }
 	
 	void testDeleteIgnored()
@@ -122,6 +134,9 @@ class BulkImportRecordTests extends GrailsUnitTestCase
 		
 		bulkImport.refresh()
 		bulkImport.delete(flush: true)
-		assertNotNull(Receiver.get(receiver.id))
+		
+		sessionFactory.getCurrentSession().clear()
+		receiver = Receiver.get(receiver.id)
+		assertNotNull(receiver)
 	}
 }

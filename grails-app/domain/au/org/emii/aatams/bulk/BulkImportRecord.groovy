@@ -23,17 +23,21 @@ class BulkImportRecord
 		dstPk(nullable:true)
     }
 
-	def afterDelete()
+	def beforeDelete()
 	{
 		if (this.type == BulkImportRecordType.NEW)
 		{
 			Class dstClazz = grailsApplication.getClassForName(dstClass)
-			log.debug "Deleting for class: " + dstClazz + ", pk: " + dstPk
-			
-			def dstObject = dstClazz.get(dstPk)
+
+			dstClazz.withNewSession
+			{			
+				def dstObject = dstClazz.get(dstPk)
+				assert(dstObject)
 				
-			assert(dstObject)
-			dstObject.delete(failOnError:true)
+				log.debug("Deleting: " + String.valueOf(dstObject))
+				
+				dstObject.delete(failOnError:true, flush: true)
+			}
 		}
 	}
 }

@@ -30,8 +30,9 @@ class ReceiverLoader
 		
 	static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("d/m/YYYY HH:mm:ss")
 	
-	void load(Map context, InputStream receiverStream) throws BulkImportException
+	void load(Map context, List<InputStream> streams) throws BulkImportException
 	{
+		def receiverStream = streams[0]
 		if (receiverStream == null)
 		{
 			context.bulkImport.status = BulkImportStatus.ERROR
@@ -101,7 +102,7 @@ class ReceiverLoader
 			{
 				Receiver receiver =
 					new Receiver(
-						organisation: context.organisation,
+						organisation: context.bulkImport.organisation,
 						model: record.receiverModel,
 						serialNumber: record[RCV_SERIAL_NO_COL],
 						comment: record[RCV_COMMENTS_COL])
@@ -118,7 +119,7 @@ class ReceiverLoader
 			if (record.modifiedDate > lastModifiedDate)
 			{
 				Receiver existingReceiver = Receiver.get(lastImport.dstPk)
-				existingReceiver.organisation = context.organisation
+				existingReceiver.organisation = context.bulkImport.organisation
 				existingReceiver.model = record.receiverModel
 				existingReceiver.serialNumber = record[RCV_SERIAL_NO_COL]
 				existingReceiver.comment = record[RCV_COMMENTS_COL]

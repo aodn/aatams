@@ -40,4 +40,9 @@ class BulkImportRecord
 			}
 		}
 	}
+	
+	String toString()
+	{
+		return "[srcTable: ${srcTable}, srcPk: ${srcPk}, dstPk: ${dstPk}, type: ${type}]"
+	}
 }

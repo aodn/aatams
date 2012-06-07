@@ -31,6 +31,7 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 		mockConfig("bulkimport.path = \"" + FileUtils.getTempDirectory().getPath() + "\"")
 		registerMetaClass InstallationLoader
 		registerMetaClass ReceiverLoader
+		registerMetaClass ReceiverDeploymentLoader
     }
 
     protected void tearDown() 
@@ -159,6 +160,39 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 		assertNotNull(bulkImport.importFinishDate)
 	}
 	
+	void testBulkImportReceiverDeploymentsCalled()
+	{
+		boolean loadCalled = false
+		
+		def receiverDeploymentsText = '''"RCD_ID","RCV_ID","STA_ID","RCD_LATITUDE","RCD_LONGITUDE","RCD_MOORING_DEPTH","RCD_DATETIME_IN","RCD_DATETIME_OUT","RCD_FIRMWARE_VER","RCD_PC_DATETIME_AT_UPLOAD","RCD_PC_TIMEZONE_AT_UPLOAD","RCD_PC_TIMEZONE_AT_INIT","RCD_INIT_DATETIME","RCD_LOG_START_DATETIME","RCD_LOG_END_DATETIME","RCD_UPLO
+AD_DATETIME","RCD_CODE_MAP_CODE","RCD_BLANKING_INT","RCD_BATTERY_UPTIME","RCD_FILENAME","RCD_PERF_ST
+ATS","RCD_GAIN_MODE_CODE","RCD_GAIN","RCD_STRUCTURE_FAIL_YN","RCD_BATTERY_FAIL_YN","RCD_SOFTWARE_FAIL_YN","RCD_LOST_YN","RCD_OTHER_FAILURE","ENTRY_DATETIME","ENTRY_BY","MODIFIED_DATETIME","MODIFIED_BY"
+256,108,,,,,,,,,,,1/1/1990 0:00:00,,,,,,,,,,,-1,,,,,31/3/2009 15:05:22,"TAG",27/9/2010 10:29:27,"TAG"
+257,109,,,,,,,,,,,1/1/1990 0:00:00,,,,,,,,,,,,,,,,31/3/2009 15:17:10,"TAG",27/9/2010 10:29:26,"TAG"
+'''
+		
+		ReceiverDeploymentLoader.metaClass.load =
+		{
+			Map context,
+			List<InputStream> streams ->
+			
+			assertNotNull(context.bulkImport)
+			loadCalled = true
+		}
+		
+		bulkImportService.process(
+			bulkImport.id,
+			new MockMultipartFile(
+				"testBulkImportReceiverDeployments.zip",
+				"testBulkImportReceiverDeployments.zip",
+				null,
+				createZipStream(["RECEIVERDEPLOYMENTS.csv":receiverDeploymentsText])))
+		
+		assertTrue(loadCalled)
+		
+		assertEquals(BulkImportStatus.SUCCESS, bulkImport.status)
+		assertNotNull(bulkImport.importFinishDate)
+	}
 
 	private InputStream createZipStream(Map entries)
 	{

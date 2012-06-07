@@ -9,7 +9,7 @@ import org.joda.time.format.DateTimeFormatter
 import au.org.emii.aatams.Receiver
 import au.org.emii.aatams.ReceiverDeviceModel
 
-class ReceiverLoader 
+class ReceiverLoader extends AbstractLoader
 {
 	private static final Logger log = Logger.getLogger(ReceiverLoader)
 	
@@ -28,8 +28,6 @@ class ReceiverLoader
 		 RCV_OWNER_COL, RCV_COMMENTS_COL, ENTRY_DATETIME_COL, 
 		 ENTRY_BY_COL, MODIFIED_DATETIME_COL, MODIFIED_BY_COL]
 		
-	static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("d/m/YYYY HH:mm:ss")
-	
 	void load(Map context, List<InputStream> streams) throws BulkImportException
 	{
 		def receiverStream = streams[0]

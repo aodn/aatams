@@ -29,6 +29,7 @@ class BulkImportServiceTests extends GrailsUnitTestCase
 		bulkImport.save()
 		
 		mockConfig("bulkimport.path = \"" + FileUtils.getTempDirectory().getPath() + "\"")
+		registerMetaClass InstallationLoader
 		registerMetaClass ReceiverLoader
     }
 

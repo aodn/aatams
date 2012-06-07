@@ -20,8 +20,6 @@ class ReceiverLoader extends AbstractLoader
 	static final String RCV_COMMENTS_COL = "RCV_COMMENTS"
 	static final String ENTRY_DATETIME_COL = "ENTRY_DATETIME"
 	static final String ENTRY_BY_COL = "ENTRY_BY"
-	static final String MODIFIED_DATETIME_COL = "MODIFIED_DATETIME"
-	static final String MODIFIED_BY_COL = "MODIFIED_BY"
 	
 	static final List<String> HEADERS = 
 		[RCV_ID_COL, RCV_SERIAL_NO_COL, RCV_MODEL_CODE_COL, 
@@ -45,11 +43,6 @@ class ReceiverLoader extends AbstractLoader
 		{
 			processSingleRecord(context, it)
 		}
-	}
-	
-	private List<Map<String, String>> getRecords(InputStream receiverStream)
-	{
-		return new CSVMapReader(new InputStreamReader(receiverStream)).toList()
 	}
 	
 	private void processSingleRecord(Map context, Map record) throws BulkImportException
@@ -89,11 +82,12 @@ class ReceiverLoader extends AbstractLoader
 
 		if (existingImportRecords.isEmpty())
 		{
-			if (Receiver.findBySerialNumber(record[RCV_SERIAL_NO_COL]))
+			def existingReceiver = Receiver.findBySerialNumber(record[RCV_SERIAL_NO_COL])
+			if (existingReceiver)
 			{
 				// duplicate - this receiver has already be entered (manually) in to the
 				// database.
-				record.id = null
+				record.id = existingReceiver.id
 				record.status = BulkImportRecordType.DUPLICATE
 			}
 			else

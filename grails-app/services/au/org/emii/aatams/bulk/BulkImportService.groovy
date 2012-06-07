@@ -59,7 +59,9 @@ class BulkImportService {
 
 	private void load(ZipFile bulkImportZipFile, BulkImport bulkImport) 
 	{
-		[(new ReceiverLoader()): ["RECEIVERS.csv"], (new InstallationLoader()): ["GROUPINGS.csv", "GROUPINGDETAIL.csv", "STATIONS.csv"]].each
+		[(new ReceiverLoader()): ["RECEIVERS.csv"], 
+		 (new InstallationLoader()): ["GROUPINGS.csv", "GROUPINGDETAIL.csv", "STATIONS.csv"],
+		 (new ReceiverDeploymentLoader()): ["RECEIVERDEPLOYMENTS.csv"]].each
 		{
 			loader, entryNames ->
 

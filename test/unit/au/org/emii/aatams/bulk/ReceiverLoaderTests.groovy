@@ -74,7 +74,9 @@ class ReceiverLoaderTests extends AbstractLoaderTests
 			  "srcPk": 1, 
 			  "srcTable": "RECEIVERS", 
 			  "srcModifiedDate": ReceiverLoader.DATE_TIME_FORMATTER.parseDateTime("15/5/2008 16:01:55"),
-			  "dstClass": "au.org.emii.aatams.Receiver"]])
+			  "dstClass": "au.org.emii.aatams.Receiver",
+			  "dstPk": receiver.id,
+			  "serialNumber": "1661"]])
 	}
 	
 	void testNewTwo()

@@ -162,8 +162,7 @@ log4j =
 				   "grails.app.domain.au.org.emii.aatams.bulk",
 				   "grails.app.service.au.org.emii.aatams.filter.QueryService",
 				   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
-				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService",
-				   "au.org.emii.aatams.bulk"
+				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService"
 		}
 		
 		test

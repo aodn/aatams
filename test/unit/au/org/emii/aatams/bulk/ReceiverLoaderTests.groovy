@@ -14,9 +14,6 @@ class ReceiverLoaderTests extends AbstractLoaderTests
 		
 		loader = new ReceiverLoader()
 		
-		mockDomain(BulkImport)
-		mockDomain(BulkImportRecord)
-		
 		def vr2 = new ReceiverDeviceModel(modelName: "VR2")
 		mockDomain(ReceiverDeviceModel, [vr2])
 		vr2.save()

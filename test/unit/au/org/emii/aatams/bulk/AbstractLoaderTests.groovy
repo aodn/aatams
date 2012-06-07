@@ -8,19 +8,20 @@ import org.joda.time.DateTimeUtils
 abstract class AbstractLoaderTests extends GrailsUnitTestCase 
 {
 	protected def currentDateTime = new DateTime("2012-01-01T12:00:00")
-	protected def loader
+	protected AbstractLoader loader
 	Organisation csiro
 	
 	protected void setUp()
 	{
 		super.setUp()
 		
+		mockDomain(BulkImport)
+		mockDomain(BulkImportRecord)
+		
 		DateTimeUtils.setCurrentMillisFixed(currentDateTime.toInstant().getMillis())
 		mockDomain(Organisation)
 		csiro = new Organisation(name: 'CSIRO', department: 'CMAR')
 		csiro.save()
-		
-		loader = null
 	}
 
 	protected void tearDown()
@@ -32,7 +33,7 @@ abstract class AbstractLoaderTests extends GrailsUnitTestCase
 	{
 		BulkImport bulkImport = new BulkImport(organisation: csiro, importStartDate: new DateTime(), status: BulkImportStatus.IN_PROGRESS, filename: "some/path")
 		bulkImport.save(failOnError: true)
-		
+	
 		loader.load([bulkImport: bulkImport, organisation: csiro], texts.collect { new ByteArrayInputStream(it.bytes) })
 
 		def importRecords = BulkImportRecord.findAllByBulkImport(bulkImport)

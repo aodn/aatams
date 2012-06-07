@@ -20,8 +20,9 @@ import au.org.emii.aatams.ProjectRoleType
 
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
+import com.vividsolutions.jts.geom.Point;
 
-class InstallationLoader 
+class InstallationLoader extends AbstractLoader
 {
 	private static final Logger log = Logger.getLogger(InstallationLoader)
 	
@@ -35,55 +36,69 @@ class InstallationLoader
 	static final String MODIFIED_DATETIME_COL = "MODIFIED_DATETIME"
 	static final String MODIFIED_BY_COL = "MODIFIED_BY"
 
-	static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("d/m/YYYY HH:mm:ss")
-	
 	void load(Map context, List<InputStream> streams) throws BulkImportException
 	{
 		Map groupings = loadGroupings(streams[0])
 		Map groupingDetail = loadGroupingDetail(streams[1])
 		Map stations = loadStations(streams[2])
 		
+		// This will be set properly later on when the deployments are loaded.
+		Point defaultLocation = new GeometryFactory().createPoint(new Coordinate(0f, 0f))
+		defaultLocation.setSRID(4326)
+
 		groupingDetail.each
 		{
 			grpId, grpDetail ->
 			
+			log.debug("Loading grouping detail: " + grpDetail)
+			
 			// Take contact name from first station in the group.
 			def stationsIdForGrp = groupings[grpId]
-			def firstStationInGrp = stations[stationsIdForGrp[0]]
-			def contactName = firstStationInGrp[STA_CONTACT_NAME_COL]
 			
-			Installation installation = 
-				createInstallation(organisation: context.bulkImport.organisation,
-								   installationName: grpDetail[GRP_NAME_COL],
-								   contactName: contactName)
-				
-			stationsIdForGrp.each
+			if ((stationsIdForGrp == null) || stationsIdForGrp.isEmpty())
 			{
-				stationId ->
-			
-				def stationRecord = stations[stationId]
+				// This grouping has no stations.
+			}
+			else
+			{
+				def firstStationInGrp = stations[stationsIdForGrp[0]]
+				def contactName = firstStationInGrp[STA_CONTACT_NAME_COL]
 				
-				InstallationStation station = 
-					new InstallationStation(
-						installation: installation,
-						name: stationRecord[STA_SITE_NAME_COL],
-						curtainPosition: 0,
-						numDeployments: 0,
-						location: new GeometryFactory().createPoint(new Coordinate(0f, 0f)))	// This will be set properly later on when the deployments are loaded.
+				Installation installation = 
+					createInstallation(organisation: context.bulkImport.organisation,
+									   installationName: grpDetail[GRP_NAME_COL],
+									   contactName: contactName)
 					
-				station.save(failOnError: true)	
+				stationsIdForGrp.each
+				{
+					stationId ->
+				
+					def stationRecord = stations[stationId]
 					
-				BulkImportRecord importRecord =
-					new BulkImportRecord(
-						bulkImport: context.bulkImport,
-						srcTable: "STATIONS",
-						srcPk: stationId,
-						srcModifiedDate: DATE_TIME_FORMATTER.parseDateTime(stationRecord[MODIFIED_DATETIME_COL]),
-						dstClass: "au.org.emii.aatams.InstallationStation",
-						dstPk: station.id,
-						type: BulkImportRecordType.NEW)
+					log.debug("Loading station record: " + stationRecord)
 					
-				importRecord.save(failOnError: true)
+					InstallationStation station = 
+						new InstallationStation(
+							installation: installation,
+							name: stationRecord[STA_SITE_NAME_COL],
+							curtainPosition: 0,
+							numDeployments: 0,
+							location: defaultLocation)
+						
+					station.save(failOnError: true)	
+						
+					BulkImportRecord importRecord =
+						new BulkImportRecord(
+							bulkImport: context.bulkImport,
+							srcTable: "STATIONS",
+							srcPk: stationId,
+							srcModifiedDate: DATE_TIME_FORMATTER.parseDateTime(stationRecord[MODIFIED_DATETIME_COL]),
+							dstClass: "au.org.emii.aatams.InstallationStation",
+							dstPk: station.id,
+							type: BulkImportRecordType.NEW)
+						
+					importRecord.save(failOnError: true)
+				}
 			}	
 		}
 	}

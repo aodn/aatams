@@ -17,9 +17,6 @@ class InstallationLoaderTests extends AbstractLoaderTests
 		
 		loader = new InstallationLoader()
 		
-		mockDomain(BulkImport)
-		mockDomain(BulkImportRecord)
-		
 		mockDomain(Installation)
 		mockDomain(InstallationStation)
 		
@@ -171,9 +168,33 @@ class InstallationLoaderTests extends AbstractLoaderTests
 			[["type": BulkImportRecordType.NEW, 
 			 "srcPk": 1, 
 			 "srcTable": "STATIONS", 
-			 "srcModifiedDate": ReceiverLoader.DATE_TIME_FORMATTER.parseDateTime("1/10/2010 15:05:31"),
+			 "srcModifiedDate": InstallationLoader.DATE_TIME_FORMATTER.parseDateTime("1/10/2010 15:05:31"),
 			 "dstClass": "au.org.emii.aatams.InstallationStation",
 			 "name": "MB11C"]])
+	}
+	
+	void testGroupDetailWithNoStations()
+	{
+		def groupingsText = '''"GRP_ID","STA_ID"
+'''
+		
+		def groupingDetailText = '''"GRP_ID","GRP_NAME","GRP_DESCRIPTION"
+1,"Neptunes","neptune description"
+'''
+		
+		def stationsText = '''"STA_ID","STA_SITE_NAME","STA_CONTACT_NAME","STA_DESCRIPTION","ENTRY_DATETIME","ENTRY_BY","MODIFIED_DATETIME","MODIFIED_BY"
+'''
+		
+		try
+		{
+			assertSuccess(
+				[groupingsText, groupingDetailText, stationsText],
+				[])
+		}
+		catch (Throwable t)
+		{
+			fail(t.message)
+		}
 	}
 	
 	void testUpdated()

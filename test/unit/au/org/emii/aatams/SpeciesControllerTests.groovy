@@ -17,7 +17,6 @@ class SpeciesControllerTests extends ControllerUnitTestCase
         CaabSpecies blueFinTuna = new CaabSpecies(scientificName:"Thunnus maccoyii", commonName:"Southern Bluefin Tuna", spcode:"37441004")
         CaabSpecies blueEyeTrevalla = new CaabSpecies(scientificName:"Hyperoglyphe antarctica", commonName:"Blue-eye Trevalla", spcode:"37445001")
 		def speciesList = [whiteShark, blueFinTuna, blueEyeTrevalla]
-		mockDomain(Species, speciesList)
 		mockDomain(CaabSpecies, speciesList)
 		speciesList.each { it.save() }
     }

@@ -49,6 +49,8 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
 		def transmitterTypeList = [pinger, temp, pressure]
 		mockDomain(TransmitterType, transmitterTypeList)
 		transmitterTypeList.each { it.save() }
+		
+		controller.candidateEntitiesService = new CandidateEntitiesService()
     }
 
     protected void tearDown() 
@@ -66,6 +68,32 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
 		createTag("12345")
 		
 		assertSaveTag(2222, pressure)		
+	}
+
+	void testSaveSensorExistingSerialNumberSameSensorType()
+	{
+		// #1728
+		// Property [transmitterType] of class [class au.org.emii.aatams.Sensor] with value [PINGER] must be unique
+		def serialNumber = "12345"
+		createTag(serialNumber)
+		
+		def saveParams = [tag: [serialNumber:serialNumber,
+					project:project,
+					model:model,
+					codeMap:a69_1303,
+					expectedLifeTimeDays:100,
+					status:new DeviceStatus()],
+			  transmitterType:pinger,
+			  pingCode:2222]
+		
+		controller.params.putAll(saveParams)
+		controller.save()
+		controller.save()
+		
+		def renderModel = controller.renderArgs.model
+		
+		assertNotNull(renderModel.sensorInstance)
+		assertEquals("unique", renderModel.sensorInstance.errors.getFieldError('transmitterType').getCode())
 	}
 
 	private void createTag(serialNumber) 

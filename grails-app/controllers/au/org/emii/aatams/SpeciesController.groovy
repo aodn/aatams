@@ -111,7 +111,7 @@ class SpeciesController {
         
         // Delegate to the species service (limit to the first 25 items
         // since any more than that will barely fit on the screen).
-        def species = speciesService.lookup(params.term) + Species.findAllByNameIlike("%" + params.term + "%")
+        def species = speciesService.lookup(params.term) + CaabSpecies.findAllByNameIlike("%" + params.term + "%")
 		
 		// Fix for #1729 - remove duplicates (matched in both speciesService.lookup() and findAllByNameIlike() above).
 		species = species.unique()

@@ -136,7 +136,7 @@ class ReportInfoService
             projectRange.add(0, MEMBER_PROJECTS)
         }
         
-        def organisationRange = Organisation.list()*.name
+        def organisationRange = Organisation.findAllByStatus(EntityStatus.ACTIVE)*.name
         def installationRange = Installation.list()*.name
 		
 		def timestampMin = getDetectionTimestampMin()

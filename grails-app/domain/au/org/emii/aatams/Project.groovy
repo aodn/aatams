@@ -46,7 +46,7 @@ class Project
     
     String getOrganisations()
     {
-        return ListUtils.fold(organisationProjects, "organisation")
+        return ListUtils.fold(organisationProjects.grep { it.organisation.status == EntityStatus.ACTIVE }, "organisation")
     }
     
     String getPeople()

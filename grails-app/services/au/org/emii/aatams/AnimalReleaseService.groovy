@@ -6,15 +6,15 @@ class AnimalReleaseService
 
 	def animalFactoryService
 	def jdbcTemplateDetectionFactoryService
-    def tagFactoryService
-
+	def tagFactoryService
+	
 	void save(AnimalRelease animalReleaseInstance, Map params) throws IllegalArgumentException 
 	{
 		updateAnimalRelease(animalReleaseInstance, params)
 		validateParams(animalReleaseInstance, params)
-
+		
 		updateAnimal(params, animalReleaseInstance)
-
+		
 		validateRelease(animalReleaseInstance, params)
 		saveAnimalRelease(animalReleaseInstance)
 		
@@ -83,6 +83,10 @@ class AnimalReleaseService
 				
 				def tag = tagFactoryService.lookupOrCreate(tagParams)
 				assert(tag)
+				
+				// Workaround for #1731.
+				// See https://forum.hibernate.org/viewtopic.php?p=2221154&sid=ca3afa263ffe05d3bcba7826b4be3ea0#p2221154
+				tag.setSensors(new HashSet(tag.getSensors()))
 				
 				// Need to make a "clean" map, due to bug #1257.
 				// Note: unable to reproduce the bug in an integration test.

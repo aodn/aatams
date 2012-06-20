@@ -4,8 +4,6 @@ import org.apache.log4j.Logger
 
 class EventValidator extends VueExportValidator 
 {
-	private static final Logger log = Logger.getLogger(VueExportValidator.class)
-	
 	protected boolean isEventBeforeDeploymentDateTime(theDeployment)
 	{
 		assert(theDeployment)

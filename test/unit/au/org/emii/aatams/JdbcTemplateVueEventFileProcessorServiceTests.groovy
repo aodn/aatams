@@ -15,8 +15,7 @@ class JdbcTemplateVueEventFileProcessorServiceTests extends AbstractVueEventFile
 		vueEventFileProcessorService = new JdbcTemplateVueEventFileProcessorService()
 		vueEventFileProcessorService.jdbcTemplateEventFactoryService = eventFactoryService
 		
-		mockLogging(EventValidatorService, true)
-		vueEventFileProcessorService.jdbcTemplateEventFactoryService.eventValidatorService = new EventValidatorService()
+		mockLogging(EventValidator, true)
 
 		vueEventFileProcessorService.searchableService = searchableService
 		vueEventFileProcessorService.metaClass.getReader = { getReader(it) }

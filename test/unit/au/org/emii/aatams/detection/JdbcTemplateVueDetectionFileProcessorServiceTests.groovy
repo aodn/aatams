@@ -18,8 +18,7 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 
 		mockLogging(JdbcTemplateDetectionFactoryService, true)
 		def jdbcTemplateDetectionFactoryService = new JdbcTemplateDetectionFactoryService()
-		mockLogging(DetectionValidatorService, true)
-		jdbcTemplateDetectionFactoryService.detectionValidatorService = new DetectionValidatorService()
+		mockLogging(DetectionValidator, true)
 
 		mockLogging(VueDetectionFileProcessorService, true)
 

@@ -38,8 +38,6 @@ class DetectionFactoryService
     static final String TRANSMITTER_ID_DELIM = "-"
     static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
     
-	def detectionValidatorService
-	
 	private Map<String, List<Sensor>> sensorCache = new WeakHashMap<String, List<Sensor>>()
 	
     /**
@@ -131,21 +129,22 @@ class DetectionFactoryService
 	
     private def initDetection(downloadFile, nativeParams)
     {
-        assert(detectionValidatorService)
+		def detectionValidator = new DetectionValidator()
+        assert(detectionValidator)
 		
-		if (detectionValidatorService.validate(downloadFile, nativeParams))
+		if (detectionValidator.validate(downloadFile, nativeParams))
 		{
 			return createValidDetection(nativeParams + 
 					   	                [receiverDownload:downloadFile, 
-										 receiverDeployment:detectionValidatorService.deployment,
-										 receiver:detectionValidatorService.receiver])
+										 receiverDeployment:detectionValidator.deployment,
+										 receiver:detectionValidator.receiver])
 		}
 		else
 		{
 			return createInvalidDetection(nativeParams + 
                                           [receiverDownload:downloadFile, 
-                                           reason:detectionValidatorService.invalidReason, 
-                                           message:detectionValidatorService.invalidMessage])
+                                           reason:detectionValidator.invalidReason, 
+                                           message:detectionValidator.invalidMessage])
 		}
     }
     

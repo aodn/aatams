@@ -15,8 +15,7 @@ class JdbcTemplateDetectionFactoryServiceTests extends AbstractDetectionFactoryS
 		detectionFactoryService = new JdbcTemplateDetectionFactoryService()
 		detectionFactoryService.metaClass.batchUpdate = { String[] statements -> batchUpdate(statements) }
 		
-		mockLogging(DetectionValidatorService, true)
-		detectionFactoryService.detectionValidatorService = new DetectionValidatorService()
+		mockLogging(DetectionValidator, true)
     }
 
     protected void tearDown() 

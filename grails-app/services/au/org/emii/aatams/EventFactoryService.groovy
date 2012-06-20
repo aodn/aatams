@@ -15,8 +15,6 @@ class EventFactoryService
 
     static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
     
-	def eventValidatorService
-	
     /**
      * Creates a receiver event given a map of parameters (which originate from a line
      * in a CSV upload file).
@@ -30,20 +28,21 @@ class EventFactoryService
 	
 	private def initEvent(downloadFile, nativeParams)
 	{
-		assert(eventValidatorService)
+		def eventValidator = new EventValidator()
+		assert(eventValidator)
 		
-		if (eventValidatorService.validate(downloadFile, nativeParams))
+		if (eventValidator.validate(downloadFile, nativeParams))
 		{
 			return createValidEvent(nativeParams +
 									[receiverDownload: downloadFile,
-									 receiverDeployment: eventValidatorService.deployment])
+									 receiverDeployment: eventValidator.deployment])
 		}
 		else
 		{
 			return createInvalidEvent(nativeParams +
 									  [receiverDownload:downloadFile, 
-                                       reason:eventValidatorService.invalidReason, 
-                                       message:eventValidatorService.invalidMessage])
+                                       reason:eventValidator.invalidReason, 
+                                       message:eventValidator.invalidMessage])
 		}
 	}
 	

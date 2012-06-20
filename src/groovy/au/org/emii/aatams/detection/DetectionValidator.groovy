@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
  * 
  * @author jburgess
  */
-class DetectionValidatorService extends VueExportValidatorService
+class DetectionValidator extends VueExportValidator
 {
 	protected boolean isEventBeforeDeploymentDateTime(theDeployment)
 	{

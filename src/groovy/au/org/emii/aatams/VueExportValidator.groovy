@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat
 
 import au.org.emii.aatams.detection.*
 
-abstract class VueExportValidatorService 
+abstract class VueExportValidator 
 {
 	def params
 	

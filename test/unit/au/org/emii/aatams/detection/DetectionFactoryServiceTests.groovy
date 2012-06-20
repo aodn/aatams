@@ -17,8 +17,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		mockLogging(DetectionFactoryService, true)
 		detectionFactoryService = new DetectionFactoryService()
 		
-		mockLogging(DetectionValidatorService, true)
-		detectionFactoryService.detectionValidatorService = new DetectionValidatorService()
+		mockLogging(DetectionValidator, true)
     }
 
     protected void tearDown() 

@@ -21,12 +21,12 @@ abstract class AbstractBatchProcessor
 		return 30
 	}
 	
-	protected void startBatch()
+	protected void startBatch(context)
 	{
 		
 	}
 	
-    protected void endBatch() 
+    protected void endBatch(context) 
     {
         def session = sessionFactory?.currentSession
         session?.flush()
@@ -53,7 +53,8 @@ abstract class AbstractBatchProcessor
 			
 			long startTime = System.currentTimeMillis()
 			
-			startBatch()
+			def context = [:]
+			startBatch(context)
 			
             records.eachWithIndex
             {
@@ -61,11 +62,11 @@ abstract class AbstractBatchProcessor
 
 				if ((i != 0) && ((i % batchSize) == 0))
                 {
-                    endBatch()
-					startBatch()
+                    endBatch(context)
+					startBatch(context)
                 }
 				
-                processSingleRecord(downloadFile, map)
+                processSingleRecord(downloadFile, map, context)
 
 				float progress = (float)i/numRecords * 100
 				if ((int)progress > percentProgress)
@@ -88,7 +89,7 @@ abstract class AbstractBatchProcessor
 				}
             }
 
-			endBatch()
+			endBatch(context)
 			
             long elapsedTime = System.currentTimeMillis() - startTimestamp
             log.info("Batch details, size: " + batchSize + ", time per record (ms) : " + (float)elapsedTime / numRecords)    
@@ -123,6 +124,6 @@ abstract class AbstractBatchProcessor
 		return new CSVMapReader(getReader(downloadFile))
 	}
 	
-    abstract void processSingleRecord(downloadFile, map)
+    abstract void processSingleRecord(downloadFile, map, context)
 }
 

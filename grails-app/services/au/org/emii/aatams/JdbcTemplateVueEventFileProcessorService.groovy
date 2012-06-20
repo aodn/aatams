@@ -9,30 +9,30 @@ class JdbcTemplateVueEventFileProcessorService extends VueEventFileProcessorServ
 	def dataSource
 	def jdbcTemplateEventFactoryService
 	
-	List<Map> eventBatch
+//	List<Map> eventBatch
 	
 	protected int getBatchSize()
 	{
 		return 10000
 	}
 	
-	protected void startBatch()
+	protected void startBatch(context)
 	{
 		log.debug("Start batch")
 		
 		// Create lists
-		eventBatch = new ArrayList<Map>()
+		context.eventBatch = new ArrayList<Map>()
 	}
 	
-	protected void endBatch()
+	protected void endBatch(context)
 	{
 		log.debug("End batch, inserting events...")
-		insertEvents()
+		insertEvents(context)
 	}
 	
-	private void insertEvents()
+	private void insertEvents(context)
 	{
-		def insertStatementList = eventBatch.collect
+		def insertStatementList = context.eventBatch.collect
 		{
 			ReceiverEvent.toSqlInsert(it)
 		}
@@ -48,9 +48,9 @@ class JdbcTemplateVueEventFileProcessorService extends VueEventFileProcessorServ
 		log.debug("Batch successfully inserted")
 	}
 	
-    void processSingleRecord(downloadFile, map)
+    void processSingleRecord(downloadFile, map, context)
     {
 		def event = jdbcTemplateEventFactoryService.newEvent(downloadFile, map)
-        eventBatch.addAll(event)
+        context.eventBatch.addAll(event)
     }
 }

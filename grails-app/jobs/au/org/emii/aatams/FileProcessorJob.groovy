@@ -2,9 +2,6 @@ package au.org.emii.aatams
 
 class FileProcessorJob 
 {
-	// Avoid concurrent modification exceptions (#1466).
-	def concurrent = false
-	
 	def fileProcessorService
 	
 	// This job is triggered dynamically from the receiver download file controller.

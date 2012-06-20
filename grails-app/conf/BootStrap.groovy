@@ -18,6 +18,7 @@ import shiro.*
 
 class BootStrap 
 {
+	def grailsApplication
     def permissionUtilsService
     def searchableService
 
@@ -25,6 +26,16 @@ class BootStrap
     { 
         servletContext ->
 
+		// Eager initialize GORM Domain Mixin Methods.
+		// See: http://grails.1312388.n4.nabble.com/GORM-dynamic-save-method-intermittently-not-found-td3859120.html
+		// Without this, can get a groovy.lang.MissingMethodException when load testing concurrent detection uploads.
+		grailsApplication.domainClasses.each 
+		{
+			dc ->
+			
+			dc.clazz.count()
+		}
+	
 		Map.metaClass.flatten = 
 		{ 
 			String prefix='' ->

@@ -94,12 +94,14 @@ environments
 		
 		grails.mail.adminEmailAddress = "jkburges@utas.edu.au"
 		grails.mail.host = "postoffice.utas.edu.au"
+		grails.mail.disabled = true
 	}
 	test
 	{
 		grails.serverURL = "http://localhost:8090/${appName}/"
 		grails.serverHost = "http://localhost:8090"
 		grails.plugin.databasemigration.updateOnStart = false
+		grails.mail.disabled = true
 	}
 }
 
@@ -159,7 +161,8 @@ log4j =
 				   "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
 				   "grails.app.domain.au.org.emii.aatams.Receiver",
 				   "grails.app.service.au.org.emii.aatams.filter.QueryService",
-				   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService"
+				   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
+				   "grails.app.service.au.org.emii.aatams.detection.DetectionNotificationService"
 		}
 		
 		test

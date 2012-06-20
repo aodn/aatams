@@ -487,10 +487,23 @@ th.desc a {
     background: transparent url(../images/skin/CSV.gif) 5px 50% no-repeat;
     padding-left: 28px;
 }
+
 .buttons input.KML, .buttons input.KMZ, .buttons input.KMZ_SENSOR_TRACKS, .buttons input.KMZ_BUBBLE_PLOT {
     background: transparent url(../images/skin/KML.gif) 5px 50% no-repeat;
     padding-left: 28px;
 }
+
+input.KMZ[disabled], input.KML[disabled] {
+/*     border: 1px solid #999;
+    background-color: #ddd;
+ */    
+    cursor: default;
+	filter:alpha(opacity=60); /* IE */
+	opacity: 0.6; /* Safari, Opera */
+	-moz-opacity:0.60; /* FireFox */
+}
+
+
 .buttons input.portal {
     background: transparent url(../images/skin/imos_portal.png) 5px 50% no-repeat;
     padding-left: 28px;

@@ -13,15 +13,15 @@ $(function()
             var tooltip = 'leftMiddle'
             var tip = 'leftMiddle'
             
+            // If the user has previously acknowledged the
+            // notification, there will be a cookie.
+            if ($.cookie($(this).attr("key")))
+            {
+                return
+            }
+            
             if (anchorSelector == "#userlogin > [href$='/person/create']")
             {
-                // If the (unauthenticated) user has previously acknowledged the
-                // register notification, there will be a register cookie.
-                if ($.cookie('REGISTER'))
-                {
-                    return
-                }
-                    
                 // Special case for register, as this tip must be displayed below the link.
                 target = 'bottomLeft'
                 tooltip = 'topRight'
@@ -82,20 +82,12 @@ $(function()
 
 function acknowledge(key)
 {
-    // Special case for register - store this in a cookie if user has acknowledged
-    // this one.
-    if (key == "REGISTER")
-    {
-        $.cookie('REGISTER', "acknowledged", { expires: 7, path: '/'});    
-    }
-    else
-    {
-        $.post(contextPath + '/notification/acknowledge',
-               {'key':key},
-               function(data)
-               {
-                   // Nothing to do.
-               },
-               'json');
-    }
+    $.cookie(key, "acknowledged", { expires: 7, path: '/'});    
+    $.post(contextPath + '/notification/acknowledge',
+           {'key':key},
+           function(data)
+           {
+               // Nothing to do.
+           },
+           'json');
 }

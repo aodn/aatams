@@ -167,7 +167,8 @@ log4j =
 		
 		test
 		{
-			debug  "grails.app.service.au.org.emii.aatams.AnimalReleaseService"
+			debug  "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
+			       "grails.app.service.au.org.emii.aatams.detection"
 		}
 	}
 	

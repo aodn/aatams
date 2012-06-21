@@ -27,6 +27,8 @@ class ReceiverDownloadFile
     
     Person requestingUser
     
+	Integer percentComplete
+	
     Set<RawDetection> detections = new HashSet<RawDetection>()
     Set<ReceiverEvent> events = new HashSet<ReceiverEvent>()
     
@@ -36,6 +38,7 @@ class ReceiverDownloadFile
     {
         type()
         path()
+		percentComplete(nullable: true, min: 0, max: 100)
     }
     
 	static transients = ['knownSensors', 'uniqueTransmitterIds']

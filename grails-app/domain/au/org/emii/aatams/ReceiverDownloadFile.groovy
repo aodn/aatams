@@ -38,7 +38,7 @@ class ReceiverDownloadFile
         path()
     }
     
-	static transients = ['knownSensors']
+	static transients = ['knownSensors', 'uniqueTransmitterIds']
 	
     static mapping =
     {
@@ -124,10 +124,17 @@ class ReceiverDownloadFile
 		return count
 	}
 	
+	List<String> getUniqueTransmitterIds()
+	{
+		def uniqueTransmitterIds = 
+			ValidDetection.executeQuery("select distinct det.transmitterId from ValidDetection det where receiverDownload = ? order by det.transmitterId", this)
+		log.debug("Unique transmitter IDs: " + uniqueTransmitterIds)
+		
+		return uniqueTransmitterIds
+	}
+	
 	List<Long> getKnownSensors()
 	{
-		def validDetections = ValidDetection.findAllByReceiverDownload(this)
-		def uniqueTransmitterIds = validDetections*.transmitterId.unique()
-		return Sensor.findAllByTransmitterIdInList(uniqueTransmitterIds)
+		return Sensor.findAllByTransmitterIdInList(getUniqueTransmitterIds())
 	}
 }

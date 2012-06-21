@@ -9,7 +9,7 @@ import org.grails.plugins.csv.CSVMapReader
  */
 abstract class AbstractBatchProcessor 
 {
-    def sessionFactory
+	def sessionFactory
     def propertyInstanceMap = org.codehaus.groovy.grails.plugins.DomainClassGrailsPlugin.PROPERTY_INSTANCE_MAP
     
     def searchableService
@@ -41,15 +41,12 @@ abstract class AbstractBatchProcessor
         {
             searchableService.stopMirroring()
         
-            downloadFile.status = FileProcessingStatus.PROCESSING
-            downloadFile.save()
-
             def startTimestamp = System.currentTimeMillis()
 
             def records = getRecords(downloadFile)
             def numRecords = records.size()
 
-			int percentProgress = 0
+			int percentProgress = -1
 			
 			long startTime = System.currentTimeMillis()
 			
@@ -81,6 +78,9 @@ abstract class AbstractBatchProcessor
 					if ((percentProgress % 10) == 0)
 					{
 						log.info(progressMsg)
+						
+						updateProgress(downloadFile, percentProgress)
+						downloadFile.refresh()
 					}
 					else
 					{
@@ -98,7 +98,8 @@ abstract class AbstractBatchProcessor
             // Required to avoid hibernate exception, since session is flushed and cleared above.
             downloadFile = ReceiverDownloadFile.get(downloadFile.id)
             downloadFile.status = FileProcessingStatus.PROCESSED
-            downloadFile.errMsg = ""
+            downloadFile.percentComplete = 100
+			downloadFile.errMsg = ""
             downloadFile.save(flush:true)
         }
         finally
@@ -106,6 +107,21 @@ abstract class AbstractBatchProcessor
             searchableService.startMirroring()
         }
     }
+
+	private void updateProgress(downloadFile, percentProgress) 
+	{
+println "before new transaction"		
+		ReceiverDownloadFile.withNewTransaction
+		{
+println "Updating percent complete: " + percentProgress
+			downloadFile.refresh()
+println "after get"
+			downloadFile.percentComplete = percentProgress
+			downloadFile.save(flush: true)
+println "after save"
+		}
+println "after new transaction"
+	}
     
 	Reader getReader(downloadFile)
 	{

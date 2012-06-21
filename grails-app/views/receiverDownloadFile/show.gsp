@@ -80,6 +80,13 @@
                             
                         </tr>
                     
+                        <tr class="prop">
+                            <td valign="top" class="name"><g:message code="receiverDownloadFile.percentComplete.label" default="Percent Complete" /></td>
+                            
+                            <td valign="top" class="value">${receiverDownloadFileInstance?.percentComplete?.encodeAsHTML()}</td>
+                            
+                        </tr>
+                    
                         <g:if test="${   (receiverDownloadFileInstance.status != FileProcessingStatus.PROCESSING) 
                                       && (receiverDownloadFileInstance.type == ReceiverDownloadFileType.DETECTIONS_CSV)}">
                                       

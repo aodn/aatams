@@ -40,8 +40,8 @@ class ReceiverDownloadFileController
 
     def save = 
     {
-        log.debug("Processing receiver export, params: " + params)
-        def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
+		log.debug("Processing receiver export, params: " + params)
+        def receiverDownloadFileInstance = new ReceiverDownloadFile(type: params.type)
 
         // Save the file to disk.
         def fileMap = request.getFileMap()
@@ -60,8 +60,8 @@ class ReceiverDownloadFileController
             
             MultipartFile file = (fileMap.values() as List)[0]
             receiverDownloadFileInstance.name = file.getOriginalFilename()
-            receiverDownloadFileInstance.path = String.valueOf(System.currentTimeMillis())
-            receiverDownloadFileInstance.save()
+            receiverDownloadFileInstance.path = "temp path" // so that the save works, and hence ID is assigned
+            receiverDownloadFileInstance.save(flush:true, failOnError:true)
 
             def path = getPath(receiverDownloadFileInstance)
             String fullPath = path + File.separator + file.getOriginalFilename()
@@ -185,6 +185,7 @@ class ReceiverDownloadFileController
             path = path + File.separator
         }
         
-        path += downloadFile.id
+		assert(downloadFile.id): "Download file ID cannot be null"
+		path += downloadFile.id
     }
 }

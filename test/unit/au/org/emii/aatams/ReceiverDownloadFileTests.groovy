@@ -52,6 +52,7 @@ class ReceiverDownloadFileTests extends GrailsUnitTestCase
 		
 		mockDomain(ValidDetection)
 		mockDomain(InvalidDetection)
+		mockDomain(ReceiverDownloadFile)
     }
 
     void testGetKnownSensorIDsOneValid() 
@@ -76,6 +77,11 @@ class ReceiverDownloadFileTests extends GrailsUnitTestCase
 	
 	private void assertGetKnownSensors(transmitterIds, expectedSensors)
 	{
+		ReceiverDownloadFile.metaClass.getUniqueTransmitterIds =
+		{
+			transmitterIds.unique().sort()
+		}
+		
 		ReceiverDownloadFile download = new ReceiverDownloadFile()
 		
 		transmitterIds.each

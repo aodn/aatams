@@ -32,11 +32,7 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
 	{
 		Kml kml = new DetectionBubblePlotKml([], "http://localhost:8090/aatams")
 		
-		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
-    <Document/>
-</kml>
-'''
+		def expectedKml = wrapInKml("<Document/>")
 		assertKmlEquals(expectedKml, kml)
 	}
 	
@@ -51,43 +47,16 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
 				],
 				"http://localhost:8090/aatams")
 		
-		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
+		def expectedKml = wrapInKml('''
     <Document>
         <Placemark>
-            <name>BL1</name>
-            <description>&lt;div&gt;
-                    &lt;link rel="stylesheet" type="text/css" href="files/main.css" /&gt;
-                    &lt;div class="description"&gt;
-
-                        &lt;!--  "Header" data. --&gt;
-                        &lt;div class="dialog"&gt;
-                            &lt;table&gt;
-                                &lt;tbody&gt;
-
-                                    &lt;tr class="prop"&gt;
-                                        &lt;td valign="top" class="name"&gt;Number of detections&lt;/td&gt;
-                                        &lt;td valign="top" class="value"&gt;1&lt;/td&gt;
-                                    &lt;/tr&gt;
-
-                                    &lt;tr class="prop"&gt;
-                                        &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
-                                        &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.receiverDeployment.station.in=name&amp;filter.receiverDeployment.station.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;
-                                    &lt;/tr&gt;
-
-                                &lt;/tbody&gt;
-                            &lt;/table&gt;
-                        &lt;/div&gt;
-
-                    &lt;/div&gt;
-                &lt;/div&gt;</description>
-            <Point>
+            <name>BL1</name>''' + getDescription(1) + '''
+			<Point>
                 <coordinates>-122.0,37.0</coordinates>
             </Point>
         </Placemark>
-    </Document>
-</kml>
-'''
+    </Document>''')
+
 		assertKmlEquals(expectedKml, kml)
 	}
 	
@@ -105,43 +74,15 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
 				],
 				"http://localhost:8090/aatams")
 		
-		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
-    <Document>
+		def expectedKml = wrapInKml('''<Document>
         <Placemark>
-            <name>BL1</name>
-            <description>&lt;div&gt;
-                    &lt;link rel="stylesheet" type="text/css" href="files/main.css" /&gt;
-                    &lt;div class="description"&gt;
-
-                        &lt;!--  "Header" data. --&gt;
-                        &lt;div class="dialog"&gt;
-                            &lt;table&gt;
-                                &lt;tbody&gt;
-
-                                    &lt;tr class="prop"&gt;
-                                        &lt;td valign="top" class="name"&gt;Number of detections&lt;/td&gt;
-                                        &lt;td valign="top" class="value"&gt;2&lt;/td&gt;
-                                    &lt;/tr&gt;
-
-                                    &lt;tr class="prop"&gt;
-                                        &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
-                                        &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.receiverDeployment.station.in=name&amp;filter.receiverDeployment.station.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;
-                                    &lt;/tr&gt;
-
-                                &lt;/tbody&gt;
-                            &lt;/table&gt;
-                        &lt;/div&gt;
-
-                    &lt;/div&gt;
-                &lt;/div&gt;</description>
-            <Point>
+            <name>BL1</name>''' + getDescription(2) + '''
+             <Point>
                 <coordinates>-122.0,37.0</coordinates>
             </Point>
         </Placemark>
-    </Document>
-</kml>
-'''
+    </Document>''')
+
 		assertKmlEquals(expectedKml, kml)
 	}
 
@@ -162,43 +103,27 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
 				],
 				"http://localhost:8090/aatams")
 		
-		def expectedKml = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
-    <Document>
+		def expectedKml = wrapInKml('''<Document>
         <Placemark>
-            <name>BL1</name>
-            <description>&lt;div&gt;
-                    &lt;link rel="stylesheet" type="text/css" href="files/main.css" /&gt;
-                    &lt;div class="description"&gt;
-
-                        &lt;!--  "Header" data. --&gt;
-                        &lt;div class="dialog"&gt;
-                            &lt;table&gt;
-                                &lt;tbody&gt;
-
-                                    &lt;tr class="prop"&gt;
-                                        &lt;td valign="top" class="name"&gt;Number of detections&lt;/td&gt;
-                                        &lt;td valign="top" class="value"&gt;2&lt;/td&gt;
-                                    &lt;/tr&gt;
-
-                                    &lt;tr class="prop"&gt;
-                                        &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;
-                                        &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/detection/list?filter.receiverDeployment.station.in=name&amp;filter.receiverDeployment.station.in=$[name]"&gt;Detections for $[name]&lt;/a&gt;&lt;/td&gt;
-                                    &lt;/tr&gt;
-
-                                &lt;/tbody&gt;
-                            &lt;/table&gt;
-                        &lt;/div&gt;
-
-                    &lt;/div&gt;
-                &lt;/div&gt;</description>
+            <name>BL1</name>''' + getDescription(2) + '''
             <Point>
                 <coordinates>-122.0,37.0</coordinates>
             </Point>
         </Placemark>
         <Placemark>
-            <name>BL2</name>
-            <description>&lt;div&gt;
+            <name>BL2</name>''' + getDescription(1) + '''
+            <Point>
+                <coordinates>12.0,34.0</coordinates>
+            </Point>
+        </Placemark>
+    </Document>''')
+
+		assertKmlEquals(expectedKml, kml)
+	}
+	
+	private String getDescription(numDetections)
+	{
+		return '''<description>&lt;div&gt;
                     &lt;link rel="stylesheet" type="text/css" href="files/main.css" /&gt;
                     &lt;div class="description"&gt;
 
@@ -209,7 +134,7 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
 
                                     &lt;tr class="prop"&gt;
                                         &lt;td valign="top" class="name"&gt;Number of detections&lt;/td&gt;
-                                        &lt;td valign="top" class="value"&gt;1&lt;/td&gt;
+                                        &lt;td valign="top" class="value"&gt;''' + numDetections + '''&lt;/td&gt;
                                     &lt;/tr&gt;
 
                                     &lt;tr class="prop"&gt;
@@ -222,14 +147,15 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
                         &lt;/div&gt;
 
                     &lt;/div&gt;
-                &lt;/div&gt;</description>
-            <Point>
-                <coordinates>12.0,34.0</coordinates>
-            </Point>
-        </Placemark>
-    </Document>
+                &lt;/div&gt;</description>'''
+	}
+	
+	private String wrapInKml(String doc)
+	{
+		return '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">
+''' + doc + '''
 </kml>
 '''
-		assertKmlEquals(expectedKml, kml)
 	}
 }

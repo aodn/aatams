@@ -1,10 +1,14 @@
 package au.org.emii.aatams.test
 
+import org.custommonkey.xmlunit.*
+
 class AbstractKmlTest extends AbstractGrailsUnitTestCase
 {
 	protected void setUp()
 	{
 		super.setUp()
+		
+		XMLUnit.setIgnoreWhitespace(true)
 		
 		mockConfig('''grails
 					{
@@ -23,12 +27,14 @@ class AbstractKmlTest extends AbstractGrailsUnitTestCase
 		actualKml.marshal(writer)
 		String actualKmlAsString = writer.toString()
 		
-		if (expectedKmlAsString != actualKmlAsString)
+		def xmlDiff = new Diff(expectedKmlAsString, actualKmlAsString)
+		
+		if (!xmlDiff.similar())
 		{
 			println "expected:\n" + expectedKmlAsString + "end"
 			println "\n\nactual:\n" + actualKmlAsString + "end"
 		}
 		
-		assertEquals(expectedKmlAsString, actualKmlAsString)
+		assert xmlDiff.similar()
 	}
 }

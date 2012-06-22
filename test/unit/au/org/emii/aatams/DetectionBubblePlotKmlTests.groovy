@@ -32,7 +32,7 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
 	{
 		Kml kml = new DetectionBubblePlotKml([], "http://localhost:8090/aatams")
 		
-		def expectedKml = wrapInKml("<Document/>")
+		def expectedKml = wrapInKmlElement("<Document/>")
 		assertKmlEquals(expectedKml, kml)
 	}
 	
@@ -47,14 +47,29 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
 				],
 				"http://localhost:8090/aatams")
 		
-		def expectedKml = wrapInKml('''
+		def expectedKml = wrapInKmlElement('''
     <Document>
-        <Placemark>
-            <name>BL1</name>''' + getDescription(1) + '''
-			<Point>
-                <coordinates>-122.0,37.0</coordinates>
-            </Point>
-        </Placemark>
+        ''' + getStyleElements() + '''
+
+		<Folder>
+			<name>station markers</name>
+	        <Placemark>
+                <styleUrl>#station</styleUrl>
+	            <name>BL1</name>''' + getDescriptionElement(1) + '''
+				<Point>
+	                <coordinates>-122.0,37.0</coordinates>
+	            </Point>
+	        </Placemark>
+		</Folder>
+		<Folder>
+			<name>bubbles</name>
+	        <Placemark>
+                <styleUrl>#bubble9</styleUrl>
+				<Point>
+	                <coordinates>-122.0,37.0</coordinates>
+	            </Point>
+	        </Placemark>
+		</Folder>
     </Document>''')
 
 		assertKmlEquals(expectedKml, kml)
@@ -74,13 +89,27 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
 				],
 				"http://localhost:8090/aatams")
 		
-		def expectedKml = wrapInKml('''<Document>
-        <Placemark>
-            <name>BL1</name>''' + getDescription(2) + '''
-             <Point>
-                <coordinates>-122.0,37.0</coordinates>
-            </Point>
-        </Placemark>
+		def expectedKml = wrapInKmlElement('''<Document>
+        ''' + getStyleElements() + '''
+		<Folder>
+			<name>station markers</name>
+	        <Placemark>
+                <styleUrl>#station</styleUrl>
+	            <name>BL1</name>''' + getDescriptionElement(2) + '''
+	             <Point>
+	                <coordinates>-122.0,37.0</coordinates>
+	            </Point>
+	        </Placemark>
+		</Folder>
+		<Folder>
+			<name>bubbles</name>
+	        <Placemark>
+                <styleUrl>#bubble9</styleUrl>
+				<Point>
+	                <coordinates>-122.0,37.0</coordinates>
+	            </Point>
+	        </Placemark>
+		</Folder>
     </Document>''')
 
 		assertKmlEquals(expectedKml, kml)
@@ -103,25 +132,61 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
 				],
 				"http://localhost:8090/aatams")
 		
-		def expectedKml = wrapInKml('''<Document>
-        <Placemark>
-            <name>BL1</name>''' + getDescription(2) + '''
-            <Point>
-                <coordinates>-122.0,37.0</coordinates>
-            </Point>
-        </Placemark>
-        <Placemark>
-            <name>BL2</name>''' + getDescription(1) + '''
-            <Point>
-                <coordinates>12.0,34.0</coordinates>
-            </Point>
-        </Placemark>
+		def expectedKml = wrapInKmlElement('''<Document>
+        ''' + getStyleElements() + '''
+		<Folder>
+			<name>station markers</name>
+	        <Placemark>
+                <styleUrl>#station</styleUrl>
+	            <name>BL1</name>''' + getDescriptionElement(2) + '''
+	            <Point>
+	                <coordinates>-122.0,37.0</coordinates>
+	            </Point>
+	        </Placemark>
+	        <Placemark>
+                <styleUrl>#station</styleUrl>
+	            <name>BL2</name>''' + getDescriptionElement(1) + '''
+	            <Point>
+	                <coordinates>12.0,34.0</coordinates>
+	            </Point>
+	        </Placemark>
+		</Folder>
+		<Folder>
+			<name>bubbles</name>
+	        <Placemark>
+                <styleUrl>#bubble9</styleUrl>
+				<Point>
+	                <coordinates>-122.0,37.0</coordinates>
+	            </Point>
+	        </Placemark>
+	        <Placemark>
+                <styleUrl>#bubble0</styleUrl>
+				<Point>
+	                <coordinates>12.0,34.0</coordinates>
+	            </Point>
+	        </Placemark>
+		</Folder>
     </Document>''')
 
 		assertKmlEquals(expectedKml, kml)
 	}
 	
-	private String getDescription(numDetections)
+	void testCalcRelativeSize()
+	{
+		assertEquals(9, DetectionBubblePlotKml.calculateRelativeSize(1, [1]))
+		assertEquals(9, DetectionBubblePlotKml.calculateRelativeSize(3, [3]))
+		
+		assertEquals(9, DetectionBubblePlotKml.calculateRelativeSize(2, [2, 1]))
+		assertEquals(0, DetectionBubblePlotKml.calculateRelativeSize(1, [2, 1]))
+		
+		assertEquals(0, DetectionBubblePlotKml.calculateRelativeSize(1, [1, 10, 100]))
+		assertEquals(5, DetectionBubblePlotKml.calculateRelativeSize(10, [1, 10, 100]))
+		assertEquals(9, DetectionBubblePlotKml.calculateRelativeSize(100, [1, 10, 100]))
+	}
+	
+	// testFor0detections
+	
+	private String getDescriptionElement(numDetections)
 	{
 		return '''<description>&lt;div&gt;
                     &lt;link rel="stylesheet" type="text/css" href="files/main.css" /&gt;
@@ -150,7 +215,46 @@ class DetectionBubblePlotKmlTests extends AbstractKmlTest
                 &lt;/div&gt;</description>'''
 	}
 	
-	private String wrapInKml(String doc)
+	private String getStyleElements()
+	{
+		StringBuilder buff = new StringBuilder()
+	
+		def scaleLookup = [0: 0.5, 1: 1.0, 2: 1.5, 3: 2.0, 4: 2.5, 5: 3.0, 6: 3.5, 7: 4.0, 8: 4.5, 9: 5.0]
+		
+		10.times
+		{
+			buff.append('''<Style id="bubble''' + it + '''">
+            <IconStyle>
+                <scale>''' + scaleLookup[it] + '''</scale>
+                <heading>0.0</heading>
+				<Icon>
+                    <href>files/circle.png</href>
+                    <refreshInterval>0.0</refreshInterval>
+                    <viewRefreshTime>0.0</viewRefreshTime>
+                    <viewBoundScale>0.0</viewBoundScale>
+                </Icon>
+            </IconStyle>
+        </Style>''')
+			buff.append('\n')
+		}
+		
+        buff.append('''<Style id="station">
+            <IconStyle>
+                <scale>1.0</scale>
+                <heading>0.0</heading>
+                <Icon>
+                    <href>files/station.png</href>
+                    <refreshInterval>0.0</refreshInterval>
+                    <viewRefreshTime>0.0</viewRefreshTime>
+                    <viewBoundScale>0.0</viewBoundScale>
+                </Icon>
+            </IconStyle>
+        </Style>''')
+		
+		return buff.toString()
+	}
+	
+	private String wrapInKmlElement(String doc)
 	{
 		return '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0">

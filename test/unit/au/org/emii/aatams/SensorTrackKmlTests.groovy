@@ -249,6 +249,13 @@ class SensorTrackKmlTests extends AbstractKmlTest
     &lt;td valign="top" class="value"&gt;&lt;a href="http://localhost:8090/aatams/tag/show/$[tagId]"&gt;$[name]&lt;/a&gt;&lt;/td&gt;
 &lt;/tr&gt;''')
 		}
+		else
+		{
+			desc.append('''&lt;tr class="prop"&gt;
+    &lt;td valign="top" class="name"&gt;Tag&lt;/td&gt;
+    &lt;td valign="top" class="value"&gt;unknown tag&lt;/td&gt;
+&lt;/tr&gt;''')
+		}
 		desc.append('''                                
                                     &lt;tr class="prop"&gt;
                                         &lt;td valign="top" class="name"&gt;Link to the Data&lt;/td&gt;

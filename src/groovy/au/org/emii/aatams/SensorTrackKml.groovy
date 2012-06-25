@@ -131,7 +131,14 @@ class SensorTrackKml extends Kml
     <td valign="top" class="value"><a href="''' + serverURL + '''/tag/show/$[tagId]">$[name]</a></td>
 </tr>''')
 		}	
-			
+		else
+		{
+			desc.append('''<tr class="prop">
+    <td valign="top" class="name">Tag</td>
+    <td valign="top" class="value">unknown tag</td>
+</tr>''')
+		}
+
 		desc.append('''                                
                                     <tr class="prop">
                                         <td valign="top" class="name">Link to the Data</td>

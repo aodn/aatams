@@ -16,7 +16,6 @@ import de.micromata.opengis.kml.v_2_2_0.IconStyle;
 import de.micromata.opengis.kml.v_2_2_0.Kml
 import de.micromata.opengis.kml.v_2_2_0.LineStyle;
 import de.micromata.opengis.kml.v_2_2_0.Placemark
-import de.micromata.opengis.kml.v_2_2_0.Style
 import de.micromata.opengis.kml.v_2_2_0.gx.Track
 
 /**
@@ -73,7 +72,16 @@ class SensorTrackKml extends Kml
 			
 			Placemark placemark = new Placemark()
 			placemark.setName(transmitterId)
-			placemark.setDescription(getDescription())
+			
+			Sensor sensor = Sensor.findByTransmitterId(transmitterId, [cache: true])
+			if (sensor)
+			{
+				ExtendedData extData = new ExtendedData()
+				extData.addToData(new Data(String.valueOf(sensor.tag.id)).withName("tagId"))
+				placemark.setExtendedData(extData)
+			}
+			
+			placemark.setDescription(getDescription(sensor?.tag))
 			placemark.setStyleUrl("#defaultDetectionStyle")
 			
 			Track track = new Track()
@@ -104,9 +112,9 @@ class SensorTrackKml extends Kml
 	}
 	
 	// TODO: refactor to GSP template.
-	private String getDescription()
+	private String getDescription(tag)
 	{
-		return '''<div>
+		StringBuilder desc = new StringBuilder('''<div>
                     <link rel="stylesheet" type="text/css" href="files/main.css" />
                     <div class="description">
                     
@@ -114,7 +122,17 @@ class SensorTrackKml extends Kml
                         <div class="dialog">
                             <table>
                                 <tbody>
-                                
+''')
+
+		if (tag)
+		{
+			desc.append('''<tr class="prop">
+    <td valign="top" class="name">Tag</td>
+    <td valign="top" class="value"><a href="''' + serverURL + '''/tag/show/$[tagId]">$[name]</a></td>
+</tr>''')
+		}	
+			
+		desc.append('''                                
                                     <tr class="prop">
                                         <td valign="top" class="name">Link to the Data</td>
                                         <td valign="top" class="value"><a href="''' + serverURL + '''/detection/list?filter.in=transmitterId&filter.in=$[name]">Detections for $[name]</a></td>
@@ -125,6 +143,8 @@ class SensorTrackKml extends Kml
                         </div>
                        
                     </div>
-                </div>'''
+                </div>''')
+
+		return desc.toString()
 	}
 }

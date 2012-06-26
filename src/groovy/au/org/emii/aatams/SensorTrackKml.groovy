@@ -73,15 +73,12 @@ class SensorTrackKml extends Kml
 			Placemark placemark = new Placemark()
 			placemark.setName(transmitterId)
 			
-			Sensor sensor = Sensor.findByTransmitterId(transmitterId, [cache: true])
-			if (sensor)
-			{
-				ExtendedData extData = new ExtendedData()
-				extData.addToData(new Data(String.valueOf(sensor.tag.id)).withName("tagId"))
-				placemark.setExtendedData(extData)
-			}
+			assert(!detsForSingleSensor.isEmpty()): "No detections for sensor"
 			
-			placemark.setDescription(getDescription(sensor?.tag))
+			AnimalRelease release = addReleaseData(detsForSingleSensor.iterator().next().detection_id, placemark)
+			Sensor sensor = addSensorData(transmitterId, placemark)
+			
+			placemark.setDescription(getDescription(sensor?.tag, release))
 			placemark.setStyleUrl("#defaultDetectionStyle")
 			
 			Track track = new Track()
@@ -102,6 +99,33 @@ class SensorTrackKml extends Kml
 			doc.getFeature().add(placemark)
 		}
 	}
+
+	private AnimalRelease addReleaseData(def detectionId, Placemark placemark)
+	{
+		AnimalRelease release = DetectionSurgery.findByDetection(ValidDetection.get(detectionId))?.surgery?.release
+		
+		if (release)
+		{
+			ExtendedData extData = placemark.getExtendedData()?: new ExtendedData()
+			extData.addToData(new Data(String.valueOf(release.id)).withName("releaseId"))
+			extData.addToData(new Data(String.valueOf(release?.animal?.species?.name)).withName("releaseSpecies"))
+			placemark.setExtendedData(extData)
+		}
+		
+		return release
+	}
+	
+	private Sensor addSensorData(def transmitterId, Placemark placemark) 
+	{
+		Sensor sensor = Sensor.findByTransmitterId(transmitterId, [cache: true])
+		if (sensor)
+		{
+			ExtendedData extData = placemark.getExtendedData()?: new ExtendedData()
+			extData.addToData(new Data(String.valueOf(sensor.tag.id)).withName("tagId"))
+			placemark.setExtendedData(extData)
+		}
+		return sensor
+	}
 	
 	private void insertDefaultDetectionStyle(Document doc)
 	{
@@ -112,7 +136,7 @@ class SensorTrackKml extends Kml
 	}
 	
 	// TODO: refactor to GSP template.
-	private String getDescription(tag)
+	private String getDescription(tag, release)
 	{
 		StringBuilder desc = new StringBuilder('''<div>
                     <link rel="stylesheet" type="text/css" href="files/main.css" />
@@ -123,6 +147,21 @@ class SensorTrackKml extends Kml
                             <table>
                                 <tbody>
 ''')
+
+		if (release)
+		{
+			desc.append('''<tr class="prop">
+    <td valign="top" class="name">Release</td>
+    <td valign="top" class="value"><a href="''' + serverURL + '''/animalRelease/show/$[releaseId]">$[releaseSpecies]</a></td>
+</tr>''')
+		}	
+		else
+		{
+			desc.append('''<tr class="prop">
+    <td valign="top" class="name">Release</td>
+    <td valign="top" class="value">unknown release</td>
+</tr>''')
+		}
 
 		if (tag)
 		{

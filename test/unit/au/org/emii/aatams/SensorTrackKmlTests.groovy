@@ -51,16 +51,22 @@ class SensorTrackKmlTests extends AbstractKmlTest
 		
 		def expectedKml = wrapInKmlElement('''<Document>
         ''' + getStyleElements() + '''
-        <Placemark>
-            <name>A69-1303-5566</name>
-			''' + getDescriptionElement() + ''' 
-			<styleUrl>#defaultDetectionStyle</styleUrl>
-            <gx:Track>
-                <gx:altitudeMode>clampToGround</gx:altitudeMode>
-                <when>2010-05-28T02:02:09.000+10:00</when>
-                <gx:coord>-122.0 37.0</gx:coord>
-            </gx:Track>
-        </Placemark>
+		<Folder>
+			<name>Releases</name>
+		</Folder>
+		<Folder>
+			<name>Detections</name>
+	        <Placemark>
+	            <name>A69-1303-5566</name>
+				''' + getDescriptionElement() + ''' 
+				<styleUrl>#defaultDetectionStyle</styleUrl>
+	            <gx:Track>
+	                <gx:altitudeMode>clampToGround</gx:altitudeMode>
+	                <when>2010-05-28T02:02:09.000+10:00</when>
+	                <gx:coord>-122.0 37.0</gx:coord>
+	            </gx:Track>
+	        </Placemark>
+		</Folder>
     </Document>''')
 		assertKmlEquals(expectedKml, kml)
 	}
@@ -87,21 +93,27 @@ class SensorTrackKmlTests extends AbstractKmlTest
 		
 		def expectedKml = wrapInKmlElement('''<Document>
         ''' + getStyleElements() + '''
-        <Placemark>
-            <name>A69-1303-5566</name>
-			''' + getDescriptionElement(tag.id) + ''' 
-			<styleUrl>#defaultDetectionStyle</styleUrl>
-			<ExtendedData>
-                <Data name="tagId">
-                    <value>''' + tag.id + '''</value>
-		        </Data>
-		    </ExtendedData>
-            <gx:Track>
-                <gx:altitudeMode>clampToGround</gx:altitudeMode>
-                <when>2010-05-28T02:02:09.000+10:00</when>
-                <gx:coord>-122.0 37.0</gx:coord>
-            </gx:Track>
-        </Placemark>
+		<Folder>
+			<name>Releases</name>
+		</Folder>
+		<Folder>
+			<name>Detections</name>
+	        <Placemark>
+	            <name>A69-1303-5566</name>
+				''' + getDescriptionElement(tag.id) + ''' 
+				<styleUrl>#defaultDetectionStyle</styleUrl>
+				<ExtendedData>
+	                <Data name="tagId">
+	                    <value>''' + tag.id + '''</value>
+			        </Data>
+			    </ExtendedData>
+	            <gx:Track>
+	                <gx:altitudeMode>clampToGround</gx:altitudeMode>
+	                <when>2010-05-28T02:02:09.000+10:00</when>
+	                <gx:coord>-122.0 37.0</gx:coord>
+	            </gx:Track>
+	        </Placemark>
+		</Folder>
     </Document>''')
 		assertKmlEquals(expectedKml, kml)
 	}
@@ -165,31 +177,70 @@ class SensorTrackKmlTests extends AbstractKmlTest
 					 longitude: -122f]
 				],
 				"http://localhost:8090/aatams")
-		
+
 		def expectedKml = wrapInKmlElement('''<Document>
         ''' + getStyleElements() + '''
-        <Placemark>
-            <name>A69-1303-5566</name>
-			''' + getDescriptionElement(tag.id, release.id) + ''' 
-			<styleUrl>#defaultDetectionStyle</styleUrl>
-			<ExtendedData>
-                <Data name="releaseId">
-                    <value>''' + release.id + '''</value>
-		        </Data>
-                <Data name="releaseSpecies">
-                    <value>flathead</value>
-		        </Data>
-                <Data name="tagId">
-                    <value>''' + tag.id + '''</value>
-		        </Data>
-		    </ExtendedData>
-            <gx:Track>
-                <gx:altitudeMode>clampToGround</gx:altitudeMode>
-                <when>2010-05-28T02:02:09.000+10:00</when>
-                <gx:coord>-122.0 37.0</gx:coord>
-            </gx:Track>
-        </Placemark>
+		<Folder>
+			<name>Releases</name>
+	        <Placemark>
+	            <name>A69-1303-5566</name>
+				''' + getDescriptionElement(tag.id, release.id) + ''' 
+				<styleUrl>#defaultReleaseStyle</styleUrl>
+				<ExtendedData>
+	                <Data name="releaseId">
+	                    <value>''' + release.id + '''</value>
+			        </Data>
+	                <Data name="releaseSpecies">
+	                    <value>flathead</value>
+			        </Data>
+	                <Data name="tagId">
+	                    <value>''' + tag.id + '''</value>
+			        </Data>
+			    </ExtendedData>
+	            <MultiGeometry>
+	            
+	                <Point>
+	                    <altitudeMode>clampToGround</altitudeMode>
+	                    <coordinates>
+	                        12.0,34.0 
+	                    </coordinates>
+	                </Point>
+	                
+		            <LineString>
+		                <altitudeMode>clampToGround</altitudeMode>
+		                <coordinates>
+		                    12.0,34.0 -122.0,37.0 
+		                </coordinates>
+		            </LineString>
+		        </MultiGeometry>
+	        </Placemark>
+		</Folder>
+		<Folder>
+			<name>Detections</name>
+	        <Placemark>
+	            <name>A69-1303-5566</name>
+				''' + getDescriptionElement(tag.id, release.id) + ''' 
+				<styleUrl>#defaultDetectionStyle</styleUrl>
+				<ExtendedData>
+	                <Data name="releaseId">
+	                    <value>''' + release.id + '''</value>
+			        </Data>
+	                <Data name="releaseSpecies">
+	                    <value>flathead</value>
+			        </Data>
+	                <Data name="tagId">
+	                    <value>''' + tag.id + '''</value>
+			        </Data>
+			    </ExtendedData>
+	            <gx:Track>
+	                <gx:altitudeMode>clampToGround</gx:altitudeMode>
+	                <when>2010-05-28T02:02:09.000+10:00</when>
+	                <gx:coord>-122.0 37.0</gx:coord>
+	            </gx:Track>
+	        </Placemark>
+		</Folder>
     </Document>''')
+
 		assertKmlEquals(expectedKml, kml)
 	}
 	
@@ -211,18 +262,24 @@ class SensorTrackKmlTests extends AbstractKmlTest
 
 		def expectedKml = wrapInKmlElement('''<Document>
         ''' + getStyleElements() + '''
-        <Placemark>
-            <name>A69-1303-5566</name>
-			''' + getDescriptionElement() + ''' 
-            <styleUrl>#defaultDetectionStyle</styleUrl>
-            <gx:Track>
-                <gx:altitudeMode>clampToGround</gx:altitudeMode>
-                <when>2010-05-28T02:02:09.000+10:00</when>
-                <when>2010-05-28T02:05:13.000+10:00</when>
-                <gx:coord>-122.0 37.0</gx:coord>
-                <gx:coord>-145.0 -42.0</gx:coord>
-            </gx:Track>
-        </Placemark>
+		<Folder>
+			<name>Releases</name>
+		</Folder>
+		<Folder>
+			<name>Detections</name>
+	        <Placemark>
+	            <name>A69-1303-5566</name>
+				''' + getDescriptionElement() + ''' 
+	            <styleUrl>#defaultDetectionStyle</styleUrl>
+	            <gx:Track>
+	                <gx:altitudeMode>clampToGround</gx:altitudeMode>
+	                <when>2010-05-28T02:02:09.000+10:00</when>
+	                <when>2010-05-28T02:05:13.000+10:00</when>
+	                <gx:coord>-122.0 37.0</gx:coord>
+	                <gx:coord>-145.0 -42.0</gx:coord>
+	            </gx:Track>
+	        </Placemark>
+		</Folder>
     </Document>''')
 		
 		assertKmlEquals(expectedKml, kml)
@@ -246,18 +303,24 @@ class SensorTrackKmlTests extends AbstractKmlTest
 		
 		def expectedKml = wrapInKmlElement('''<Document>
         ''' + getStyleElements() + '''
-        <Placemark>
-            <name>A69-1303-5566</name>
-			''' + getDescriptionElement() + ''' 
-            <styleUrl>#defaultDetectionStyle</styleUrl>
-            <gx:Track>
-                <gx:altitudeMode>clampToGround</gx:altitudeMode>
-                <when>2010-05-28T02:02:09.000+10:00</when>
-                <when>2010-05-28T02:05:13.000+10:00</when>
-                <gx:coord>-122.0 37.0</gx:coord>
-                <gx:coord>-145.0 -42.0</gx:coord>
-            </gx:Track>
-        </Placemark>
+		<Folder>
+			<name>Releases</name>
+		</Folder>
+		<Folder>
+			<name>Detections</name>
+	        <Placemark>
+	            <name>A69-1303-5566</name>
+				''' + getDescriptionElement() + ''' 
+	            <styleUrl>#defaultDetectionStyle</styleUrl>
+	            <gx:Track>
+	                <gx:altitudeMode>clampToGround</gx:altitudeMode>
+	                <when>2010-05-28T02:02:09.000+10:00</when>
+	                <when>2010-05-28T02:05:13.000+10:00</when>
+	                <gx:coord>-122.0 37.0</gx:coord>
+	                <gx:coord>-145.0 -42.0</gx:coord>
+	            </gx:Track>
+	        </Placemark>
+		</Folder>
     </Document>''')
 
 		assertKmlEquals(expectedKml, kml)
@@ -285,28 +348,34 @@ class SensorTrackKmlTests extends AbstractKmlTest
 
 		def expectedKml = wrapInKmlElement('''<Document>
         ''' + getStyleElements() + '''
-        <Placemark>
-            <name>A69-1303-5566</name>
-			''' + getDescriptionElement() + ''' 
-            <styleUrl>#defaultDetectionStyle</styleUrl>
-            <gx:Track>
-                <gx:altitudeMode>clampToGround</gx:altitudeMode>
-                <when>2010-05-28T02:02:09.000+10:00</when>
-                <when>2010-05-28T02:05:13.000+10:00</when>
-                <gx:coord>-122.0 37.0</gx:coord>
-                <gx:coord>-145.0 -42.0</gx:coord>
-            </gx:Track>
-        </Placemark>
-        <Placemark>
-            <name>A69-1303-7788</name>
-			''' + getDescriptionElement() + ''' 
-            <styleUrl>#defaultDetectionStyle</styleUrl>
-            <gx:Track>
-                <gx:altitudeMode>clampToGround</gx:altitudeMode>
-                <when>2010-05-28T02:08:13.000+10:00</when>
-                <gx:coord>-122.0 37.0</gx:coord>
-            </gx:Track>
-        </Placemark>
+		<Folder>
+			<name>Releases</name>
+		</Folder>
+		<Folder>
+			<name>Detections</name>
+	        <Placemark>
+	            <name>A69-1303-5566</name>
+				''' + getDescriptionElement() + ''' 
+	            <styleUrl>#defaultDetectionStyle</styleUrl>
+	            <gx:Track>
+	                <gx:altitudeMode>clampToGround</gx:altitudeMode>
+	                <when>2010-05-28T02:02:09.000+10:00</when>
+	                <when>2010-05-28T02:05:13.000+10:00</when>
+	                <gx:coord>-122.0 37.0</gx:coord>
+	                <gx:coord>-145.0 -42.0</gx:coord>
+	            </gx:Track>
+	        </Placemark>
+	        <Placemark>
+	            <name>A69-1303-7788</name>
+				''' + getDescriptionElement() + ''' 
+	            <styleUrl>#defaultDetectionStyle</styleUrl>
+	            <gx:Track>
+	                <gx:altitudeMode>clampToGround</gx:altitudeMode>
+	                <when>2010-05-28T02:08:13.000+10:00</when>
+	                <gx:coord>-122.0 37.0</gx:coord>
+	            </gx:Track>
+	        </Placemark>
+		</Folder>
     </Document>''')
 
 		assertKmlEquals(expectedKml, kml)
@@ -395,7 +464,23 @@ class SensorTrackKmlTests extends AbstractKmlTest
             </IconStyle>
             <LineStyle>
                 <color>ffface87</color>
-                <width>4.0</width>
+                <width>2.0</width>
+            </LineStyle>
+        </Style>
+        <Style id="defaultReleaseStyle">
+            <IconStyle>
+                <scale>1.0</scale>
+                <heading>0.0</heading>
+                <Icon>
+                    <href>files/red_fish.png</href>
+                    <refreshInterval>0.0</refreshInterval>
+                    <viewRefreshTime>0.0</viewRefreshTime>
+                    <viewBoundScale>0.0</viewBoundScale>
+                </Icon>
+            </IconStyle>
+            <LineStyle>
+                <color>aa0000ff</color>
+                <width>2.0</width>
             </LineStyle>
         </Style>
 '''

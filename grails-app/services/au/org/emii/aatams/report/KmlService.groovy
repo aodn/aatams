@@ -137,6 +137,7 @@ class KmlService implements ApplicationContextAware
 			"files/main.css": getMainCssStream(), 
 			"files/IMOS-logo.png": getImosLogoStream(), 
 			"files/fish.png": getFishIconStream(), 
+			"files/red_fish.png": getRedFishIconStream(), 
 			"files/station.png": getStationIconStream(), 
 			"files/circle.png": getCircleIconStream()
 		].each
@@ -174,6 +175,11 @@ class KmlService implements ApplicationContextAware
 	private InputStream getFishIconStream()
 	{
 		return applicationContext.getResource("/images/fish.png").getInputStream()
+	}
+	
+	private InputStream getRedFishIconStream()
+	{
+		return applicationContext.getResource("/images/red_fish.png").getInputStream()
 	}
 	
 	private InputStream getStationIconStream()

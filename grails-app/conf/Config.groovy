@@ -80,8 +80,8 @@ environments
 {
 	production
 	{
-		grails.serverURL = "http://preview.emii.org.au/${appName}"
-		grails.serverHost = "http://preview.emii.org.au"
+		grails.serverURL = "http://aatams.emii.org.au/${appName}"
+		grails.serverHost = "http://aatams.emii.org.au"
 		fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod"
 		
 		grails.mail.host = "localhost"

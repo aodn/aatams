@@ -29,6 +29,7 @@ abstract class AbstractBatchProcessor
     protected void endBatch(context) 
     {
         def session = sessionFactory?.currentSession
+		
         session?.flush()
         session?.clear()
 		
@@ -50,7 +51,11 @@ abstract class AbstractBatchProcessor
 			
 			long startTime = System.currentTimeMillis()
 			
-			def context = [:]
+			downloadFile.discard()
+			downloadFile?.progress?.discard()
+			
+			def context = [downloadFile: downloadFile]
+			
 			startBatch(context)
 			
             records.eachWithIndex
@@ -84,7 +89,10 @@ abstract class AbstractBatchProcessor
 						log.debug(progressMsg)
 					}
 					
-					updateProgress(downloadFile, percentProgress)
+					if ((percentProgress % 1) == 0)
+					{
+						updateProgress(downloadFile, percentProgress)
+					}
 				}
             }
 
@@ -96,6 +104,7 @@ abstract class AbstractBatchProcessor
 
             // Required to avoid hibernate exception, since session is flushed and cleared above.
             downloadFile = ReceiverDownloadFile.get(downloadFile.id)
+			downloadFile.progress?.refresh()
             downloadFile.status = FileProcessingStatus.PROCESSED
             downloadFile.percentComplete = 100
 			downloadFile.errMsg = ""
@@ -111,11 +120,12 @@ abstract class AbstractBatchProcessor
 	{
 		ReceiverDownloadFileProgress.withNewTransaction
 		{
-			ReceiverDownloadFile refreshedDownloadFile = ReceiverDownloadFile.get(downloadFile.id)
-			ReceiverDownloadFileProgress progress = refreshedDownloadFile.progress ?: new ReceiverDownloadFileProgress(receiverDownloadFile: refreshedDownloadFile)
-			progress.percentComplete = percentProgress
+			ReceiverDownloadFile refreshedDownloadFile = ReceiverDownloadFile.read(downloadFile.id)
+			ReceiverDownloadFileProgress progress = refreshedDownloadFile.progress
 			
-			progress.save(failOnError: true)
+			log.debug("Updating progress, percentComplete: ${percentProgress}")
+			progress?.percentComplete = percentProgress
+			progress?.save(failOnError: true)
 		}
 	}
     

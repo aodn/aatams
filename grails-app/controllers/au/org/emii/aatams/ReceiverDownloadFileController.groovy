@@ -60,6 +60,7 @@ class ReceiverDownloadFileController
             MultipartFile file = (fileMap.values() as List)[0]
             receiverDownloadFileInstance.name = file.getOriginalFilename()
             receiverDownloadFileInstance.path = "temp path" // so that the save works, and hence ID is assigned
+			receiverDownloadFileInstance.progress = new ReceiverDownloadFileProgress(percentComplete: 0, receiverDownloadFile: receiverDownloadFileInstance)
             receiverDownloadFileInstance.save(flush:true, failOnError:true)
 
             def path = getPath(receiverDownloadFileInstance)

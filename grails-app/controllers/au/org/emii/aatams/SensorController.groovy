@@ -137,7 +137,7 @@ class SensorController extends ReportController
             }
             
             def tagId = sensorInstance?.tag?.id
-            redirect(controller: "tag", action: "edit", id: tagId, params: [projectId:sensorInstance?.project?.id])
+            redirect(controller: "tag", action: "show", id: tagId)
         }
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'sensor.label', default: 'Sensor'), params.id])}"

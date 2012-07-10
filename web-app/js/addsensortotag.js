@@ -32,11 +32,21 @@ $(function() {
                         'responseType': 'json'},
                        function(data) 
                        {
+                        	updateHeader(data);
+                        	
 							$('form').each(function () 
 							{
 								$(this).data('initialForm', $(this).serialize());
 							});
-							window.location = contextPath + '/tag/edit/' + data.tag.id + "?projectId=" + projectId;
+							
+							if (data.errors)
+							{
+								
+							}
+							else
+							{	
+								window.location = contextPath + '/tag/show/' + data.tag.id;
+							}
                        }, 
                        'json');
                        
@@ -46,7 +56,6 @@ $(function() {
             Cancel: function() {
                 $(this).dialog('close');
             }
-
         }        
     });
     

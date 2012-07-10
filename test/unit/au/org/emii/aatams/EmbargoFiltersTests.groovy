@@ -289,12 +289,6 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         checkEmbargoed(releaseController, releasePastEmbargoed, false, 'animalRelease')
     }
 
-    void testTagList()
-    {
-		tagController.metaClass.insertNoSensorRestriction = {}
-        checkList(tagController, "tag")
-    }
-    
     void testTagNotList()
     {
 		controllerName = "tag"

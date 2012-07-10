@@ -78,16 +78,13 @@ abstract class AbstractBatchProcessor
 					if ((percentProgress % 10) == 0)
 					{
 						log.info(progressMsg)
-						
-						updateProgress(downloadFile, percentProgress)
-//log.info("Before refresh")						
-//						downloadFile.refresh()
-//log.info("After refresh")						
 					}
 					else
 					{
 						log.debug(progressMsg)
 					}
+					
+					updateProgress(downloadFile, percentProgress)
 				}
             }
 
@@ -112,19 +109,14 @@ abstract class AbstractBatchProcessor
 
 	private void updateProgress(downloadFile, percentProgress) 
 	{
-println "before new transaction"		
 		ReceiverDownloadFileProgress.withNewTransaction
 		{
-println "Updating percent complete: " + percentProgress
 			ReceiverDownloadFile refreshedDownloadFile = ReceiverDownloadFile.get(downloadFile.id)
-println "after get"
 			ReceiverDownloadFileProgress progress = refreshedDownloadFile.progress ?: new ReceiverDownloadFileProgress(receiverDownloadFile: refreshedDownloadFile)
 			progress.percentComplete = percentProgress
 			
 			progress.save(failOnError: true)
-println "after save"
 		}
-println "after new transaction"
 	}
     
 	Reader getReader(downloadFile)

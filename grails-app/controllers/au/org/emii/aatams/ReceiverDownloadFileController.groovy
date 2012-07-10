@@ -4,11 +4,10 @@ import org.codehaus.groovy.grails.commons.*
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.web.multipart.MultipartFile
 import org.apache.shiro.SecurityUtils
+import grails.converters.JSON
 
 class ReceiverDownloadFileController 
 {
-//    def fileProcessorService
-    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -188,4 +187,20 @@ class ReceiverDownloadFileController
 		assert(downloadFile.id): "Download file ID cannot be null"
 		path += downloadFile.id
     }
+	
+	def status = 
+	{
+		ReceiverDownloadFile download = ReceiverDownloadFile.get(params.id)
+		
+		def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
+		if (!receiverDownloadFileInstance)
+		{
+			response.status = 404
+			render([error: [message: "Unknown receiverDownloadFile id: ${params.id}"]] as JSON)
+		}
+		else
+		{
+			render([status: download.status, percentComplete: download.percentComplete] as JSON)
+		}
+	}
 }

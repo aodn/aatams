@@ -27,21 +27,20 @@ class ReceiverDownloadFile
     
     Person requestingUser
     
-	Integer percentComplete
-	
     Set<RawDetection> detections = new HashSet<RawDetection>()
     Set<ReceiverEvent> events = new HashSet<ReceiverEvent>()
     
     static hasMany = [detections:RawDetection, events:ReceiverEvent]
-    
+	static hasOne = [progress: ReceiverDownloadFileProgress]
+	
     static constraints =
     {
         type()
         path()
-		percentComplete(nullable: true, min: 0, max: 100)
+		progress(nullable: true)
     }
     
-	static transients = ['knownSensors', 'uniqueTransmitterIds']
+	static transients = ['knownSensors', 'uniqueTransmitterIds', 'percentComplete']
 	
     static mapping =
     {
@@ -52,6 +51,21 @@ class ReceiverDownloadFile
     {
         return String.valueOf(path)
     }
+	
+	Integer getPercentComplete()
+	{
+		return progress?.percentComplete
+	}
+	
+	void setPercentComplete(percentComplete)
+	{
+		if (!progress)
+		{
+			progress = new ReceiverDownloadFileProgress(receiverDownloadFile: this)
+		}
+		
+		progress.percentComplete = percentComplete
+	}
     
 	def totalDetectionCount()
 	{

@@ -10,6 +10,7 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile')}" />
         <title><g:message code="default.show.label" args="[entityName]" /></title>
+        <script type="text/javascript" src="${resource(dir:'js', file:'receiverDownloadProgress.js')}"></script>
     </head>
     <body>
         <div class="nav">
@@ -31,55 +32,51 @@
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.type.label" default="Type" /></td>
-                            
                             <td valign="top" class="value">${receiverDownloadFileInstance?.type?.encodeAsHTML()}</td>
-                            
                         </tr>
                     
                         <shiro:hasRole name="SysAdmin">
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.path.label" default="Path" /></td>
-
                               <td valign="top" class="value">${fieldValue(bean: receiverDownloadFileInstance, field: "path")}</td>
-
                           </tr>
                         </shiro:hasRole>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.errMsg.label" default="Err Msg" /></td>
-                            
                             <td valign="top" class="value">${fieldValue(bean: receiverDownloadFileInstance, field: "errMsg")}</td>
-                            
                         </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.importDate.label" default="Import Date" /></td>
-                            
                             <td valign="top" class="value"><g:formatDate format="dd/MM/yyyy HH:mm:ss" date="${receiverDownloadFileInstance?.importDate}" /></td>
-                            
                         </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.name.label" default="Name" /></td>
-                            
                             <td valign="top" class="value">${fieldValue(bean: receiverDownloadFileInstance, field: "name")}</td>
-                            
                         </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.requestingUser.label" default="Uploader" /></td>
-                            
                             <td valign="top" class="value"><g:link controller="person" action="show" id="${receiverDownloadFileInstance?.requestingUser?.id}">${receiverDownloadFileInstance?.requestingUser?.encodeAsHTML()}</g:link></td>
-                            
                         </tr>
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.status.label" default="Status" /></td>
-                            
                             <td valign="top" class="value">${receiverDownloadFileInstance?.status?.encodeAsHTML()}</td>
-                            
                         </tr>
                     
+                        <g:hiddenField name="status" value="${receiverDownloadFileInstance?.status}"/>
+                        <g:hiddenField name="receiverDownloadId" value="${receiverDownloadFileInstance?.id}"/>
+                        
+                        <g:if test="${ (receiverDownloadFileInstance.status == FileProcessingStatus.PROCESSING) }">
+	                        <tr class="prop">
+	                            <td valign="top" class="name"><g:message code="receiverDownloadFile.percentComplete.label" default="Progress" /></td>
+	                            <td valign="top" class="value"><div id="progressbar"></div></td>
+	                        </tr>
+                        </g:if>
+                        
                         <g:if test="${   (receiverDownloadFileInstance.status != FileProcessingStatus.PROCESSING) 
                                       && (receiverDownloadFileInstance.type == ReceiverDownloadFileType.DETECTIONS_CSV)}">
                                       

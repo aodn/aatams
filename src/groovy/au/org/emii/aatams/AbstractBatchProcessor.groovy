@@ -9,7 +9,7 @@ import org.grails.plugins.csv.CSVMapReader
  */
 abstract class AbstractBatchProcessor 
 {
-    def sessionFactory
+	def sessionFactory
     def propertyInstanceMap = org.codehaus.groovy.grails.plugins.DomainClassGrailsPlugin.PROPERTY_INSTANCE_MAP
     
     def searchableService
@@ -29,6 +29,7 @@ abstract class AbstractBatchProcessor
     protected void endBatch(context) 
     {
         def session = sessionFactory?.currentSession
+		
         session?.flush()
         session?.clear()
 		
@@ -41,19 +42,20 @@ abstract class AbstractBatchProcessor
         {
             searchableService.stopMirroring()
         
-            downloadFile.status = FileProcessingStatus.PROCESSING
-            downloadFile.save()
-
             def startTimestamp = System.currentTimeMillis()
 
             def records = getRecords(downloadFile)
             def numRecords = records.size()
 
-			int percentProgress = 0
+			int percentProgress = -1
 			
 			long startTime = System.currentTimeMillis()
 			
-			def context = [:]
+			downloadFile.discard()
+			downloadFile?.progress?.discard()
+			
+			def context = [downloadFile: downloadFile]
+			
 			startBatch(context)
 			
             records.eachWithIndex
@@ -86,6 +88,11 @@ abstract class AbstractBatchProcessor
 					{
 						log.debug(progressMsg)
 					}
+					
+					if ((percentProgress % 1) == 0)
+					{
+						updateProgress(downloadFile, percentProgress)
+					}
 				}
             }
 
@@ -97,8 +104,10 @@ abstract class AbstractBatchProcessor
 
             // Required to avoid hibernate exception, since session is flushed and cleared above.
             downloadFile = ReceiverDownloadFile.get(downloadFile.id)
+			downloadFile.progress?.refresh()
             downloadFile.status = FileProcessingStatus.PROCESSED
-            downloadFile.errMsg = ""
+            downloadFile.percentComplete = 100
+			downloadFile.errMsg = ""
             downloadFile.save(flush:true)
         }
         finally
@@ -106,6 +115,19 @@ abstract class AbstractBatchProcessor
             searchableService.startMirroring()
         }
     }
+
+	private void updateProgress(downloadFile, percentProgress) 
+	{
+		ReceiverDownloadFileProgress.withNewTransaction
+		{
+			ReceiverDownloadFile refreshedDownloadFile = ReceiverDownloadFile.read(downloadFile.id)
+			ReceiverDownloadFileProgress progress = refreshedDownloadFile.progress
+			
+			log.debug("Updating progress, percentComplete: ${percentProgress}")
+			progress?.percentComplete = percentProgress
+			progress?.save(failOnError: true)
+		}
+	}
     
 	Reader getReader(downloadFile)
 	{

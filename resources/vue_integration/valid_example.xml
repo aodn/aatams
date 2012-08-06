@@ -1,49 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="./convertToSql.xsl"?>
     
 <v:vueOffload xmlns:v="http://vemco.com/vue"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://vemco.com/vue vue.xsd">
             
-    <deviceModelList>
-        <deviceModel model="514" class="1" name="VR2W" description="VR2W Acoustic receiver" />
-    </deviceModelList> 
+    <deviceModel model="514" class="1" name="VR2W" description="VR2W Acoustic receiver" />
+
+    <recorder id="1" model="514" serial="12345" />
+    <!-- Invalid (model,serial) not unique  <recorder id="2" model="514" serial="12345" /> -->
     
-    <recorderList>
-        <recorder id="1" model="514" serial="12345" />
-        <!-- Invalid (model,serial) not unique  <recorder id="2" model="514" serial="12345" /> -->
-        <recorder id="3" model="514" serial="12346" />
-    </recorderList>
+    <recordingContext id="1" rxr="1" rxrFwVer="123"/>
+
+    <offloadContext id="1" dateTime="2012-06-12T12:34:56.000" uuid="550e8400e29b41d4a716446655440000" 
+                    offloaderAppName="VUE" offloaderAppVersion="123" offloaderModuleName="VR2W" offloaderModuleVersion="456" />
+
+    <eventContext id="1" recordingContext="1" offloadContext="1"/>
     
-    <transmitterList>
-        <transmitter id="1" tagId="123" codeSpace="1303" frequency="69000"/>
-        <transmitter id="2" tagId="456" codeSpace="1303" frequency="69000"/>
-        <transmitter id="3" tagId="789" codeSpace="1303" frequency="69000"/>
-    </transmitterList> 
+    <transmitter id="1" tagId="123" codeSpace="1303" frequency="69000"/>
+    <transmitter id="2" tagId="456" codeSpace="1303" frequency="69000"/>
     
-    <recordingContextList>
-        <recordingContext id="1" rxr="1" rxrFwVer="123"/>
-    </recordingContextList>     
+    <detection dateTime="2012-06-13T12:33:56.000" txr="1" rxr="1" eventContext="1" />
+    <detection dateTime="2012-06-13T12:34:56.000" txr="1" rxr="1" eventContext="1" />
+    <detection dateTime="2012-06-13T12:35:56.000" txr="2" rxr="1" eventContext="1" />
     
-    <offloadContextList>
-        <offloadContext id="1" dateTime="2012-06-12T12:34:56.000" uuid="550e8400e29b41d4a716446655440000" 
-                        offloaderAppName="VUE" offloaderAppVersion="123" offloaderModuleName="VR2W" offloaderModuleVersion="456" />
-    </offloadContextList>
-    
-    <eventContextList>
-        <eventContext id="1" recordingContext="1" offloadContext="1"/>
-    </eventContextList>
-    
-    <detectionList>
-    
-        <detection dateTime="2012-06-13T12:33:56.000" txr="1" rxr="1" eventContext="1" />
-        <detection dateTime="2012-06-13T12:34:56.000" txr="1" rxr="1" eventContext="1" />
-        <detection dateTime="2012-06-13T12:35:56.000" txr="2" rxr="1" eventContext="1" />
-        
-        <detection dateTime="2012-06-13T12:36:56.000" txr="3" rxr="1" eventContext="1" />
-        <detection dateTime="2012-06-13T12:37:56.000" txr="1" rxr="1" eventContext="1" />
-        <detection dateTime="2012-06-13T12:38:56.000" txr="2" rxr="1" eventContext="1" />
-        
-    </detectionList>
+    <transmitter id="3" tagId="789" codeSpace="1303" frequency="69000"/>
+
+    <detection dateTime="2012-06-13T12:36:56.000" txr="3" rxr="1" eventContext="1" />
+    <detection dateTime="2012-06-13T12:37:56.000" txr="1" rxr="1" eventContext="1" />
+    <detection dateTime="2012-06-13T12:38:56.000" txr="2" rxr="1" eventContext="1" />
      
 </v:vueOffload>

@@ -6,133 +6,136 @@
     <xs:element name="vueOffload">
     
 	    <xs:complexType>
-	        <xs:sequence>
+	        <xs:choice maxOccurs="unbounded">
 
-	            <xs:element name="deviceModelList" type="v:deviceModelList" maxOccurs="1" minOccurs="0">
-			        <xs:key name="deviceModelId">
-			            <xs:selector xpath="./deviceModel"/>
-			            <xs:field xpath="@model"/>
-			        </xs:key>
-	            </xs:element>
+	            <xs:element name="deviceModel" type="v:deviceModel" />
 	            
-	            <xs:element name="recorderList" type="v:recorderList" maxOccurs="1" minOccurs="0">
-                    <xs:key name="recorderId">
-                        <xs:selector xpath="./recorder"/>
-                        <xs:field xpath="@id"/>
-                    </xs:key>
+	            <xs:element name="recorder" type="v:recorder" />
+	            
+	            <xs:element name="transmitter" type="v:transmitter" />
+	            
+	            <xs:element name="recordingContext" type="v:recordingContext" />
+	            
+	            <xs:element name="offloadContext" type="v:offloadContext" />
                     
-                    <xs:key name="modelSerialUnique">
-                        <xs:selector xpath="./recorder"/>
-                        <xs:field xpath="@model"/>
-                        <xs:field xpath="@serial"/>
-                    </xs:key>
-	            </xs:element>
+	            <xs:element name="offloadContextEx" type="v:offloadContextEx" />
 	            
-	            <xs:element name="transmitterList" type="v:transmitterList" maxOccurs="1" minOccurs="0">
-                    <xs:key name="transmitterId">
-                        <xs:selector xpath="./transmitter"/>
-                        <xs:field xpath="@id"/>
-                    </xs:key>
-	            </xs:element>
+	            <xs:element name="eventContext" type="v:eventContext" />
 	            
-	            <xs:element name="recordingContextList" type="v:recordingContextList" maxOccurs="1" minOccurs="0">
-					<xs:key name="recordingContextId">
-						<xs:selector xpath="./recordingContext" />
-						<xs:field xpath="@id" />
-					</xs:key>
-                    <xs:unique name="rxrRxrFwVerUnique">
-                        <xs:selector xpath="./recordingContext"/>
-                        <xs:field xpath="@rxr"/>
-                        <xs:field xpath="@rxrFwVer"/>
-                    </xs:unique>
-	            </xs:element>
+	            <xs:element name="detection" type="v:detection" />
 	            
-	            <xs:element name="offloadContextList" type="v:offloadContextList" maxOccurs="1" minOccurs="0">
-                    <xs:key name="offloadContextId">
-                        <xs:selector xpath="./offloadContext" />
-                        <xs:field xpath="@id" />
-                    </xs:key>
-                    <xs:key name="uuid">
-                        <xs:selector xpath="./offloadContext" />
-                        <xs:field xpath="@uuid" />
-                    </xs:key>
-                    
-	            </xs:element>
-	            
-	            <xs:element name="offloadContextExList" type="v:offloadContextExList" maxOccurs="1" minOccurs="0">
-                    <xs:key name="offloadContextExId">
-                        <xs:selector xpath="./offloadContextEx" />
-                        <xs:field xpath="@id" />
-                    </xs:key>
-	            </xs:element>
-	            
-	            <xs:element name="eventContextList" type="v:eventContextList" maxOccurs="1" minOccurs="0">
-                    <xs:key name="eventContextId">
-                        <xs:selector xpath="./eventContext"/>
-                        <xs:field xpath="@id"/>
-                    </xs:key>
-                    <xs:key name="contextUnique">
-                        <xs:selector xpath="./eventContext"/>
-                        <xs:field xpath="@recordingContext"/>
-                        <xs:field xpath="@offloadContext"/>
-                    </xs:key>
-	            </xs:element>
-	            
-	            <xs:element name="detectionList" type="v:detectionList" maxOccurs="1" minOccurs="0">
-                    <xs:key name="detectionKey">
-                        <xs:selector xpath="./detection"/>
-                        <xs:field xpath="@dateTime"/>
-                        <xs:field xpath="@txr"/>
-                        <xs:field xpath="@rxr"/>
-                    </xs:key>
-	            </xs:element>
-	            
-	        </xs:sequence>
+	        </xs:choice>
 	    </xs:complexType>
-	    
+
+        <!--  Referential and uniqueness constraints. -->
+        <xs:key name="deviceModelId">
+            <xs:selector xpath="./deviceModel"/>
+            <xs:field xpath="@model"/>
+        </xs:key>
+     
         <xs:keyref name="referDeviceModelId" refer="v:deviceModelId">
-            <xs:selector xpath="./recorderList/recorder"/>
+            <xs:selector xpath="./recorder"/>
             <xs:field xpath="@model"/>
         </xs:keyref>
+        
+        <xs:key name="recordModelSerialUnique">
+            <xs:selector xpath="./recorder"/>
+            <xs:field xpath="@model"/>
+            <xs:field xpath="@serial"/>
+        </xs:key>
+                    
+		<xs:key name="recorderId">
+			<xs:selector xpath="./recorder" />
+			<xs:field xpath="@id" />
+		</xs:key>
 
         <xs:keyref name="referRecorderId" refer="v:recorderId">
-            <xs:selector xpath="./recordingContextList/recordingContext"/>
+            <xs:selector xpath="./recordingContext"/>
             <xs:field xpath="@id"/>
         </xs:keyref>
+	    
+        <xs:keyref name="referRecoderIdFromDetection" refer="v:recorderId">
+            <xs:selector xpath="./detection"/>
+            <xs:field xpath="@rxr"/>
+        </xs:keyref>
+        
+        <xs:unique name="recordingContextRxrRxrFwVerUnique">
+            <xs:selector xpath="./recordingContext"/>
+            <xs:field xpath="@rxr"/>
+            <xs:field xpath="@rxrFwVer"/>
+        </xs:unique>
+        
+        <xs:key name="recordingContextId">
+            <xs:selector xpath="./recordingContext" />
+            <xs:field xpath="@id" />
+        </xs:key>
         
         <xs:keyref name="referRecordingContextId" refer="v:recordingContextId">
-            <xs:selector xpath="./eventContextList/eventContext"/>
+            <xs:selector xpath="./eventContext"/>
             <xs:field xpath="@recordingContext"/>
         </xs:keyref>
         
+        <xs:key name="offloadContextUuidUnique">
+            <xs:selector xpath="./offloadContext" />
+            <xs:field xpath="@uuid" />
+        </xs:key>
+                    
+        <xs:key name="offloadContextId">
+            <xs:selector xpath="./offloadContext" />
+            <xs:field xpath="@id" />
+        </xs:key>
+        
         <xs:keyref name="referOffloadContextId" refer="v:offloadContextId">
-            <xs:selector xpath="./offloadContextExList/offloadContextEx"/>
+            <xs:selector xpath="./offloadContextEx"/>
             <xs:field xpath="@id"/>
         </xs:keyref>
         
         <xs:keyref name="referOffloadContextFromEventId" refer="v:offloadContextId">
-            <xs:selector xpath="./eventContextList/eventContext"/>
+            <xs:selector xpath="./eventContext"/>
             <xs:field xpath="@offloadContext"/>
         </xs:keyref>
         
+        <xs:key name="transmitterId">
+            <xs:selector xpath="./transmitter"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+        
         <xs:keyref name="referTransmitterId" refer="v:transmitterId">
-            <xs:selector xpath="./detectionList/detection"/>
+            <xs:selector xpath="./detection"/>
             <xs:field xpath="@txr"/>
         </xs:keyref>
         
-        <xs:keyref name="referRecoderIdFromDetection" refer="v:recorderId">
-            <xs:selector xpath="./detectionList/detection"/>
-            <xs:field xpath="@rxr"/>
-        </xs:keyref>
+        <xs:key name="eventContextUnique">
+            <xs:selector xpath="./eventContext"/>
+            <xs:field xpath="@recordingContext"/>
+            <xs:field xpath="@offloadContext"/>
+        </xs:key>
+                    
+        <xs:key name="eventContextId">
+            <xs:selector xpath="./eventContext"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
         
         <xs:keyref name="referEventContextId" refer="v:eventContextId">
-            <xs:selector xpath="./detectionList/detection"/>
+            <xs:selector xpath="./detection"/>
             <xs:field xpath="@eventContext"/>
         </xs:keyref>
         
+        <xs:key name="offloadContextExId">
+            <xs:selector xpath="./offloadContextEx" />
+            <xs:field xpath="@id" />
+        </xs:key>
+     
+        <xs:key name="detectionKey">
+            <xs:selector xpath="./detection"/>
+            <xs:field xpath="@dateTime"/>
+            <xs:field xpath="@txr"/>
+            <xs:field xpath="@rxr"/>
+        </xs:key>
+        
     </xs:element>
     
-    
+    <!--  Type definitions. -->
     <xs:complexType name="deviceModel">
         <xs:attribute name="model" type="xs:int"></xs:attribute>
         <xs:attribute name="class" type="xs:int"></xs:attribute>
@@ -140,22 +143,10 @@
         <xs:attribute name="description" type="xs:string"></xs:attribute>
     </xs:complexType>
 
-    <xs:complexType name="deviceModelList">
-        <xs:sequence>
-            <xs:element name="deviceModel" type="v:deviceModel" maxOccurs="unbounded" minOccurs="0"></xs:element>
-        </xs:sequence>
-    </xs:complexType>
-
     <xs:complexType name="recorder">
         <xs:attribute name="id" type="xs:int"></xs:attribute>
         <xs:attribute name="model" type="xs:int"></xs:attribute>
         <xs:attribute name="serial" type="xs:int"></xs:attribute>
-    </xs:complexType>
-    
-    <xs:complexType name="recorderList">
-        <xs:sequence>
-            <xs:element name="recorder" type="v:recorder" maxOccurs="unbounded" minOccurs="0"></xs:element>
-        </xs:sequence>
     </xs:complexType>
     
     <xs:complexType name="transmitter">
@@ -167,22 +158,10 @@
         <xs:attribute name="name" type="xs:string" use="optional"></xs:attribute>
     </xs:complexType>
     
-    <xs:complexType name="transmitterList">
-        <xs:sequence>
-            <xs:element name="transmitter" type="v:transmitter" maxOccurs="unbounded" minOccurs="0"></xs:element>
-        </xs:sequence>
-    </xs:complexType>
-    
     <xs:complexType name="recordingContext">
         <xs:attribute name="id" type="xs:int"></xs:attribute>
         <xs:attribute name="rxr" type="xs:int"></xs:attribute>
         <xs:attribute name="rxrFwVer" type="xs:int" use="optional"></xs:attribute>
-    </xs:complexType>
-    
-    <xs:complexType name="recordingContextList">
-        <xs:sequence>
-            <xs:element name="recordingContext" type="v:recordingContext" maxOccurs="unbounded" minOccurs="0"></xs:element>
-        </xs:sequence>
     </xs:complexType>
     
     <xs:complexType name="offloadContext">
@@ -195,21 +174,9 @@
         <xs:attribute name="offloaderModuleVersion" type="xs:int" use="optional"></xs:attribute>
     </xs:complexType>
     
-    <xs:complexType name="offloadContextList">
-        <xs:sequence>
-            <xs:element name="offloadContext" type="v:offloadContext" maxOccurs="unbounded" minOccurs="0"></xs:element>
-        </xs:sequence>
-    </xs:complexType>
-    
     <xs:complexType name="offloadContextEx">
         <xs:attribute name="id" type="xs:int"></xs:attribute>
         <xs:attribute name="phaseOfTheMoon" type="xs:string" use="optional"></xs:attribute>
-    </xs:complexType>
-    
-    <xs:complexType name="offloadContextExList">
-        <xs:sequence>
-            <xs:element name="offloadContextEx" type="v:offloadContextEx" maxOccurs="unbounded" minOccurs="0"></xs:element>
-        </xs:sequence>
     </xs:complexType>
     
     <xs:complexType name="eventContext">
@@ -218,23 +185,11 @@
         <xs:attribute name="offloadContext" type="xs:int"></xs:attribute>
     </xs:complexType>
     
-    <xs:complexType name="eventContextList">
-        <xs:sequence>
-            <xs:element name="eventContext" type="v:eventContext" maxOccurs="unbounded" minOccurs="0"></xs:element>
-        </xs:sequence>
-    </xs:complexType>
-    
     <xs:complexType name="detection">
         <xs:attribute name="dateTime" type="xs:dateTime"></xs:attribute>
         <xs:attribute name="txr" type="xs:int"></xs:attribute>
         <xs:attribute name="rxr" type="xs:int"></xs:attribute>
         <xs:attribute name="eventContext" type="xs:int"></xs:attribute>
-    </xs:complexType>
-    
-    <xs:complexType name="detectionList">
-        <xs:sequence>
-            <xs:element name="detection" type="v:detection" maxOccurs="unbounded" minOccurs="0"></xs:element>
-        </xs:sequence>
     </xs:complexType>
     
 </xs:schema>

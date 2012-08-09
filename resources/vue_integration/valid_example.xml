@@ -86,11 +86,16 @@
         
         <detection time="2012-06-13T12:37:56.000Z" txr="1" rxr="1" ctx="1" correctedTime="2012-06-13T12:37:56.000-04:00" />
         <detection time="2012-06-13T12:38:56.000Z" txr="3" rxr="1" ctx="1" cooked="true">
-            <sample sensor="1" txr="2" val="1.7"/>
+            <sample sensor="1" txr="3" val="1.7"/>
         </detection>
         <detection time="2012-06-13T12:38:57.000Z" txr="4" rxr="1" ctx="1">
              <sample sensor="1" txr="4" adc="1.1"/>
              <sample sensor="2" txr="4" adc="1.2"/>
+             
+             <!--  Invalid - duplicate sensor. -->
+             <!-- 
+             <sample sensor="2" txr="4" adc="1.2"/>
+             -->
         </detection>
     </records>
 

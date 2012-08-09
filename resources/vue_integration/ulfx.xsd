@@ -33,7 +33,23 @@
                 <xs:element name="records">
                     <xs:complexType>
                         <xs:choice maxOccurs="unbounded">
-                            <xs:element name="detection" type="v:detection" />                            
+                            <xs:element name="detection" type="v:detection" >
+						        <xs:key name="detectionTransmitterKey">
+						            <xs:selector xpath="."/>
+						            <xs:field xpath="@txr"/>
+						        </xs:key>
+						        
+						        <xs:keyref name="sampleDetectionTransmitterForeignKey" refer="v:detectionTransmitterKey">
+						            <xs:selector xpath="./sample"/>
+						            <xs:field xpath="@txr"/>
+						        </xs:keyref>
+						        
+						        <xs:key name="sampleKey">
+                                    <xs:selector xpath="./sample"/>
+                                    <xs:field xpath="@sensor"/>
+						        </xs:key>
+						        
+                            </xs:element>
                         </xs:choice>
                     </xs:complexType>
                 </xs:element>
@@ -148,7 +164,7 @@
             <xs:field xpath="@sensor"/>
             <xs:field xpath="@txr"/>
         </xs:keyref>
-
+        
         <xs:keyref name="detectionRecorderForeignKey" refer="v:recorderKey">
             <xs:selector xpath="./records/detection"/>
             <xs:field xpath="@rxr"/>

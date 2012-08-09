@@ -49,25 +49,28 @@
 
         <transmitter id="1" codeSpace="1" tagId="456" />
 
-        <transmitter id="2" codeSpace="2" tagId="123" />
-        <sensor id="1" txr="2" unit="5" slope="5.6" intercept="7.8" />
+        <transmitter id="2" codeSpace="2" tagId="123" >
+            <sensor id="1" txr="2" unit="5" slope="5.6" intercept="7.8" />
         
-        <!--  Invalid - id not unique for txr. -->
-        <!--
-        <sensor id="1" txr="2" unit="5" slope="5.6" intercept="7.8" />
-        -->
-        
-        <!--  Invalid - unknown txr. -->
-        <!-- 
-        <sensor id="1" txr="99" unit="5" slope="5.6" intercept="7.8" />
-        -->
-        
-        <transmitter id="3" codeSpace="2" tagId="123"/>
-        <sensor id="1" txr="3" unit="2" />
+	        <!--  Invalid - id not unique for txr. -->
+	        <!--
+	        <sensor id="1" txr="2" unit="5" slope="5.6" intercept="7.8" />
+	        -->
+	        
+	        <!--  Invalid - txr not equal to parent id. -->
+	        <!--
+	        <sensor id="2" txr="1" unit="5" slope="5.6" intercept="7.8" />
+	         -->
+        </transmitter>
+                
+        <transmitter id="3" codeSpace="2" tagId="123" >
+            <sensor id="1" txr="3" unit="2" />
+        </transmitter>    
 
-        <transmitter id="4" codeSpace="3"/>
-        <sensor id="1" txr="4" slope="1.1" intercept="2.2" unit="1" />
-        <sensor id="2" txr="4" slope="3.3" intercept="4.4" unit="2" />
+        <transmitter id="4" codeSpace="3" >
+	        <sensor id="1" txr="4" slope="1.1" intercept="2.2" unit="1" />
+	        <sensor id="2" txr="4" slope="3.3" intercept="4.4" unit="2" />
+        </transmitter>
         
     </definitions>
 
@@ -82,6 +85,10 @@
             <sample sensor="2" txr="2" adc="123"/>
             -->
             
+            <!-- Invalid - txr doesn't match parent. -->
+            <!-- 
+            <sample sensor="3" txr="1" adc="123"/>
+            -->
         </detection>
         
         <detection time="2012-06-13T12:37:56.000Z" txr="1" rxr="1" ctx="1" correctedTime="2012-06-13T12:37:56.000-04:00" />

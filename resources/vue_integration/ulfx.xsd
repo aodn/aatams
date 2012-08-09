@@ -14,8 +14,25 @@
                             <xs:element name="codeSpace" type="v:codeSpace" />
                             <xs:element name="recorder" type="v:recorder" />
                             <xs:element name="measurementUnit" type="v:measurementUnit" />
-                            <xs:element name="transmitter" type="v:transmitter"/>
-                            <xs:element name="sensor" type="v:sensor"/>
+                            <xs:element name="transmitter" type="v:transmitter" >
+                            
+                                <!--  Ensure that sensor txr attribute is same as parent transmitter ID. -->
+                                <xs:key name="sensorTransmitterKey">
+                                    <xs:selector xpath="."/>
+                                    <xs:field xpath="@id"/>
+                                </xs:key>
+                                <xs:keyref name="sensorTransmitterForeignKey" refer="v:sensorTransmitterKey">
+                                    <xs:selector xpath="./sensor"/>
+                                    <xs:field xpath="@txr"/>
+                                </xs:keyref>
+                            
+                                <!--  Ensure that sensor ID is unique within a transmitter. -->
+                                <xs:unique name="sensorIdUnique">
+                                    <xs:selector xpath="./sensor"/>
+                                    <xs:field xpath="@id"/>
+                                </xs:unique>
+                              
+                            </xs:element>
                         </xs:choice>
                     </xs:complexType>
                 </xs:element>
@@ -34,6 +51,8 @@
                     <xs:complexType>
                         <xs:choice maxOccurs="unbounded">
                             <xs:element name="detection" type="v:detection" >
+                            
+                                <!--  Ensure that sample txr attribute is same as parent (detection) txr FK. -->
 						        <xs:key name="detectionTransmitterKey">
 						            <xs:selector xpath="."/>
 						            <xs:field xpath="@txr"/>
@@ -44,6 +63,7 @@
 						            <xs:field xpath="@txr"/>
 						        </xs:keyref>
 						        
+						        <!--  Ensure that sensor ID is unique within a detection. -->
 						        <xs:key name="sampleKey">
                                     <xs:selector xpath="./sample"/>
                                     <xs:field xpath="@sensor"/>
@@ -86,7 +106,7 @@
         </xs:key>
 
          <xs:key name="sensorKey">
-            <xs:selector xpath="./definitions/sensor"/>
+            <xs:selector xpath="./definitions/transmitter/sensor"/>
             <xs:field xpath="@id"/>
             <xs:field xpath="@txr"/>
         </xs:key>
@@ -139,11 +159,6 @@
             <xs:field xpath="@model"/>
         </xs:keyref>
 
-        <xs:keyref name="sensorTransmitterForeignKey" refer="v:transmitterKey">
-            <xs:selector xpath="./definitions/sensor"/>
-            <xs:field xpath="@txr"/>
-        </xs:keyref>
-
         <xs:keyref name="contextSetRecordingContextForeignKey" refer="v:recorderFWKey">
             <xs:selector xpath="./context/contextSet"/>
             <xs:field xpath="@recorderFW"/>
@@ -158,7 +173,7 @@
             <xs:selector xpath="./records/detection"/>
             <xs:field xpath="@txr"/>
         </xs:keyref>
-
+        
         <xs:keyref name="detectionSensorForeignKey" refer="v:sensorKey">
             <xs:selector xpath="./records/detection/sample"/>
             <xs:field xpath="@sensor"/>
@@ -245,6 +260,9 @@
     </xs:complexType>
 
     <xs:complexType name="transmitter">
+        <xs:sequence>
+            <xs:element name="sensor" type="v:sensor" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
         <xs:attribute name="id" type="xs:int"/>
         <xs:attribute name="tagId" type="xs:int"/>
         <xs:attribute name="codeSpace" type="xs:int"/>

@@ -1,32 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    
-<v:vueOffload xmlns:v="http://vemco.com/vue"
+
+
+<v:ulfx xmlns:v="http://vemco.com/vue"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://vemco.com/vue vue.xsd">
+            xsi:schemaLocation="http://vemco.com/vue ulfx.xsd">
+
+
+    <!-- Global Definitions (hardcoded in VUE) -->
+
+    <definitions>
+        <deviceModel id="1" model="0202" class="1" name="VR2W" description="VR2W Acoustic receiver (69 kHz)" />
+        <deviceModel id="2" model="0203" class="1" name="VR2W81" description="VR2W Acoustic receiver (81 kHz)" />
+        <deviceModel id="3" model="0204" class="1" name="VR2W180" description="VR2W Acoustic receiver (180 kHz)" />
+
+        <measurementUnit id="1" dimension="101" displayUnit="m" displayName="metres" displayDimension="distance" />
+        <measurementUnit id="2" dimension="102" displayUnit="Pa" displayName="pascals" displayDimension="pressure" />
+        <measurementUnit id="5" dimension="0" displayUnit="ADC" displayName="ADC sample" displayDimension="" />
+    </definitions>
+
+
+    <!-- Data Collection Context (from VRL header(s)) -->
+
+    <definitions>
+        <recorder id="1" model="1" serial="12345" />
+    </definitions>
+
+    <context>
+        <recorderFW id="1" version="1.2.3" displayVersion="1.2.3 Alpha Test Build" />
+        <offload
+            id="1"
+            time="2012-06-12T12:34:56.000"
+            uuid="550e8400e29b41d4a716446655440000"
+            appName="VUE"
+            appVersion="1.2.3"
+            pluginName="VR2W"
+            pluginVersion="4.5.6"
+        />
+        <contextSet id="1" recorderFW="1" offload="1"/>
+    </context>
+
+
+    <!-- Log Data (from ULF blocks) -->
+
+    <definitions>
+        <codeSpace id="1" codingId="1303" mcc="A" freq="69000" displayName="A69-1303" displayType="Coded Pinger"/>
+        <codeSpace id="2" codingId="1105" mcc="A" freq="69000" displayName="A69-1105" displayType="Coded Sensor" sensorBits="8"/>
+        <codeSpace id="3" codingId="201" mcc="A" freq="69000" displayName="A69-201" displayType="Continuous Dual Sensor"/>
+
+        <transmitter id="1" codeSpace="1" tagId="456" />
+
+        <transmitter id="2" codeSpace="2" tagId="123">
+            <sensor id="1" unit="5" slope="5.6" intercept="7.8"/>
             
-    <deviceModel model="514" class="1" name="VR2W" description="VR2W Acoustic receiver" />
+            <!--  Invalid - id not unique. -->
+            <sensor id="1" unit="5" slope="5.6" intercept="7.8"/>
+        </transmitter>
 
-    <recorder id="1" model="514" serial="12345" />
-    <!-- Invalid (model,serial) not unique  <recorder id="2" model="514" serial="12345" /> -->
-    
-    <recordingContext id="1" rxr="1" rxrFwVer="123"/>
+        <transmitter id="3" codeSpace="2" tagId="123">
+            <sensor id="1" unit="2" />
+        </transmitter>
 
-    <offloadContext id="1" dateTime="2012-06-12T12:34:56.000" uuid="550e8400e29b41d4a716446655440000" 
-                    offloaderAppName="VUE" offloaderAppVersion="123" offloaderModuleName="VR2W" offloaderModuleVersion="456" />
+        <transmitter id="4" codeSpace="3">
+            <sensor id="1" slope="1.1" intercept="2.2" unit="1" />
+            <sensor id="2" slope="3.3" intercept="4.4" unit="2" />
+        </transmitter>
+    </definitions>
 
-    <eventContext id="1" recordingContext="1" offloadContext="1"/>
-    
-    <transmitter id="1" tagId="123" codeSpace="1303" frequency="69000"/>
-    <transmitter id="2" tagId="456" codeSpace="1303" frequency="69000"/>
-    
-    <detection dateTime="2012-06-13T12:33:56.000" txr="1" rxr="1" eventContext="1" />
-    <detection dateTime="2012-06-13T12:34:56.000" txr="1" rxr="1" eventContext="1" />
-    <detection dateTime="2012-06-13T12:35:56.000" txr="2" rxr="1" eventContext="1" />
-    
-    <transmitter id="3" tagId="789" codeSpace="1303" frequency="69000"/>
+    <records>
+        <detection time="2012-06-13T12:33:56.000-04:00" txr="1" rxr="1" ctx="1" />
+        <detection time="2012-06-13T12:34:56.000" txr="1" rxr="1" ctx="1" />
+        <detection time="2012-06-13T12:35:56.000" txr="2" rxr="1" ctx="1">
+            <sample sensor="1" adc="123"/>
+            
+            <!-- Invalid - sensor 2 doesn't exist for this txr 2. -->
+            <sample sensor="2" adc="123"/>
+            
+        </detection>
+        <detection time="2012-06-13T12:37:56.000Z" txr="1" rxr="1" ctx="1" correctedTime="2012-06-13T12:37:56.000-04:00" />
+        <detection time="2012-06-13T12:38:56.000Z" txr="3" rxr="1" ctx="1" cooked="true">
+            <sample sensor="1" val="1.7"/>
+        </detection>
+        <detection time="2012-06-13T12:38:57.000Z" txr="4" rxr="1" ctx="1">
+            <sample sensor="1" adc="1.1"/>
+            <sample sensor="2" adc="1.2"/>
+        </detection>
+    </records>
 
-    <detection dateTime="2012-06-13T12:36:56.000" txr="3" rxr="1" eventContext="1" />
-    <detection dateTime="2012-06-13T12:37:56.000" txr="1" rxr="1" eventContext="1" />
-    <detection dateTime="2012-06-13T12:38:56.000" txr="2" rxr="1" eventContext="1" />
-     
-</v:vueOffload>
+    <definitions>
+        <transmitter id="5" tagId="789" codeSpace="2"/>
+    </definitions>
+
+    <context>
+        <recorderFW id="2" version="4.5.6"/>
+        <contextSet id="2" recorderFW="2" offload="1"/>
+    </context>
+
+    <records>
+        <detection time="2012-06-13T12:36:56.000Z" txr="5" rxr="1" ctx="2" />
+        <detection time="2012-06-13T12:36:57.000Z" txr="2" rxr="1" ctx="2">
+            <sample sensor="1" adc="123"/>
+        </detection>
+    </records>
+
+</v:ulfx>

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://vemco.com/vue"
+           xmlns:v="http://vemco.com/vue">
+
+    <xs:element name="ulfx">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+
+                <xs:element name="definitions">
+                    <xs:complexType>
+                        <xs:choice maxOccurs="unbounded">
+                            <xs:element name="deviceModel" type="v:deviceModel" />
+                            <xs:element name="codeSpace" type="v:codeSpace" />
+                            <xs:element name="recorder" type="v:recorder" />
+                            <xs:element name="measurementUnit" type="v:measurementUnit" />
+                            <xs:element name="transmitter" type="v:transmitter"/>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="context">
+                    <xs:complexType>
+                        <xs:choice maxOccurs="unbounded">
+                            <xs:element name="recorderFW" type="v:recorderFW" />
+                            <xs:element name="offload" type="v:offload" />
+                            <xs:element name="contextSet" type="v:contextSet" />
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="records">
+                    <xs:complexType>
+                        <xs:choice maxOccurs="unbounded">
+                            <xs:element name="detection" type="v:detection">
+<!--                             
+						        <xs:keyref name="sensorIdForeignKey" refer="v:deviceModelKey">
+						            <xs:selector xpath="./definitions/recorder"/>
+						            <xs:field xpath="@model"/>
+						        </xs:keyref>
+-->						        
+                            </xs:element>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+
+            </xs:choice>
+        </xs:complexType>
+
+
+        <!-- Key Definitions -->
+
+        <xs:key name="deviceModelKey">
+            <xs:selector xpath="./definitions/deviceModel"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+
+        <xs:key name="measurementUnitKey">
+            <xs:selector xpath="./definitions/measurementUnit"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+
+        <xs:key name="codeSpaceKey">
+            <xs:selector xpath="./definitions/codeSpace"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+
+        <xs:key name="recorderKey">
+            <xs:selector xpath="./definitions/recorder" />
+            <xs:field xpath="@id" />
+        </xs:key>
+
+        <xs:key name="transmitterKey">
+            <xs:selector xpath="./definitions/transmitter"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+
+        <xs:key name="recorderFWKey">
+            <xs:selector xpath="./context/recorderFW"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+
+        <xs:key name="offloadContextKey">
+            <xs:selector xpath="./context/offload"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+
+        <xs:key name="offloadSetKey">
+            <xs:selector xpath="./context/contextSet"/>
+            <xs:field xpath="@id"/>
+        </xs:key>
+
+
+        <!-- Uniqueness Constraints -->
+
+        <xs:unique name="recorderModelUnique">
+            <xs:selector xpath="./definitions/recorder"/>
+            <xs:field xpath="@model"/>
+            <xs:field xpath="@serial"/>
+        </xs:unique>
+
+        <xs:unique name="offloadContextUnique">
+            <xs:selector xpath="./context/offload" />
+            <xs:field xpath="@uuid" />
+        </xs:unique>
+
+        <xs:unique name="detectionRecordUnique">
+            <xs:selector xpath="./records/detection"/>
+            <xs:field xpath="@time"/>
+            <xs:field xpath="@txr"/>
+            <xs:field xpath="@rxr"/>
+        </xs:unique>
+
+
+        <!-- Foreign Key Definitions -->
+
+        <xs:keyref name="transmitterCodeSpaceForeignKey" refer="v:codeSpaceKey">
+            <xs:selector xpath="./definitions/transmitter"/>
+            <xs:field xpath="@codeSpace"/>
+        </xs:keyref>
+
+        <xs:keyref name="recorderModelForeignKey" refer="v:deviceModelKey">
+            <xs:selector xpath="./definitions/recorder"/>
+            <xs:field xpath="@model"/>
+        </xs:keyref>
+
+        <xs:keyref name="contextSetRecordingContextForeignKey" refer="v:recorderFWKey">
+            <xs:selector xpath="./context/contextSet"/>
+            <xs:field xpath="@recorderFW"/>
+        </xs:keyref>
+
+        <xs:keyref name="contextSetOffloadContextForeignKey" refer="v:offloadContextKey">
+            <xs:selector xpath="./context/contextSet"/>
+            <xs:field xpath="@offload"/>
+        </xs:keyref>
+
+        <xs:keyref name="detectionTransmitterForeignKey" refer="v:transmitterKey">
+            <xs:selector xpath="./records/detection"/>
+            <xs:field xpath="@txr"/>
+        </xs:keyref>
+
+        <xs:keyref name="detectionRecorderForeignKey" refer="v:recorderKey">
+            <xs:selector xpath="./records/detection"/>
+            <xs:field xpath="@rxr"/>
+        </xs:keyref>
+
+        <xs:keyref name="detectionContextForeignKey" refer="v:offloadSetKey">
+            <xs:selector xpath="./records/detection"/>
+            <xs:field xpath="@ctx"/>
+        </xs:keyref>
+    </xs:element>
+
+
+    <!--  Type Definitions. -->
+
+    <xs:simpleType name="uuid">
+        <xs:restriction base="xs:hexBinary">
+            <xs:length value="16"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="modelCode">
+        <xs:restriction base="xs:hexBinary">
+            <xs:length value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="mcc">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="A"/>
+            <xs:enumeration value="E"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="version">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d{1,2}[.]\d{1,2}[.]\d{1,6}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="measurementUnit">
+        <xs:attribute name="id" type="xs:int"/>
+        <xs:attribute name="dimension" type="xs:int"/>
+        <xs:attribute name="displayUnit" type="xs:string"/>
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="displayDimension" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="deviceModel">
+        <xs:attribute name="id" type="xs:int"/>
+        <xs:attribute name="model" type="v:modelCode"/>
+        <xs:attribute name="class" type="xs:int"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="description" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="recorder">
+        <xs:attribute name="id" type="xs:int"/>
+        <xs:attribute name="model" type="xs:int"/>
+        <xs:attribute name="serial" type="xs:int"/>
+    </xs:complexType>
+
+    <xs:complexType name="codeSpace">
+        <xs:attribute name="id" type="xs:int"/>
+        <xs:attribute name="codingId" type="xs:int"/>
+        <xs:attribute name="mcc" type="v:mcc" use="required"/>
+        <xs:attribute name="freq" type="xs:int" use="required"/>
+        <xs:attribute name="displayName" type="xs:string"/>
+        <xs:attribute name="displayType" type="xs:string"/>
+        <xs:attribute name="sensorBits" type="xs:int" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="sensor">
+        <xs:attribute name="id" type="xs:int"/>
+        <xs:attribute name="slope" type="xs:decimal" use="optional"/>
+        <xs:attribute name="intercept" type="xs:decimal" use="optional"/>
+        <xs:attribute name="unit" type="xs:int" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="transmitter">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="sensor" type="v:sensor"/>
+        </xs:choice>
+        <xs:attribute name="id" type="xs:int"/>
+        <xs:attribute name="tagId" type="xs:int"/>
+        <xs:attribute name="codeSpace" type="xs:int"/>
+        <xs:attribute name="model" type="v:modelCode" use="optional"/>
+        <xs:attribute name="name" type="xs:string" use="optional"/>
+        <xs:attribute name="serial" type="xs:int" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="recorderFW">
+        <xs:attribute name="id" type="xs:int"/>
+        <xs:attribute name="version" type="v:version"/>
+        <xs:attribute name="displayVersion" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="offload">
+        <xs:attribute name="id" type="xs:int"/>
+        <xs:attribute name="time" type="xs:dateTime"/>
+        <xs:attribute name="uuid" type="v:uuid"/>
+        <xs:attribute name="appName" type="xs:string" use="optional"/>
+        <xs:attribute name="appVersion" type="v:version" use="optional"/>
+        <xs:attribute name="pluginName" type="xs:string" use="optional"/>
+        <xs:attribute name="pluginVersion" type="v:version" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="contextSet">
+        <xs:attribute name="id" type="xs:int"/>
+        <xs:attribute name="recorderFW" type="xs:int"/>
+        <xs:attribute name="offload" type="xs:int"/>
+    </xs:complexType>
+
+    <xs:complexType name="detection">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="sample" type="v:sample" />
+        </xs:choice>
+        <xs:attribute name="time" type="xs:dateTime"/>
+        <xs:attribute name="txr" type="xs:int"/>
+        <xs:attribute name="rxr" type="xs:int"/>
+        <xs:attribute name="ctx" type="xs:int"/>
+        <xs:attribute name="cooked" type="xs:boolean" use="optional"/>
+        <xs:attribute name="correctedTime" type="xs:dateTime" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="sample">
+        <xs:attribute name="sensor" type="xs:int" />
+        <xs:attribute name="adc" type="xs:decimal" use="optional"/>
+        <xs:attribute name="val" type="xs:decimal" use="optional"/>
+    </xs:complexType>
+</xs:schema>

@@ -49,40 +49,48 @@
 
         <transmitter id="1" codeSpace="1" tagId="456" />
 
-        <transmitter id="2" codeSpace="2" tagId="123">
-            <sensor id="1" unit="5" slope="5.6" intercept="7.8"/>
-            
-            <!--  Invalid - id not unique. -->
-            <sensor id="1" unit="5" slope="5.6" intercept="7.8"/>
-        </transmitter>
+        <transmitter id="2" codeSpace="2" tagId="123" />
+        <sensor id="1" txr="2" unit="5" slope="5.6" intercept="7.8" />
+        
+        <!--  Invalid - id not unique for txr. -->
+        <!--
+        <sensor id="1" txr="2" unit="5" slope="5.6" intercept="7.8" />
+        -->
+        
+        <!--  Invalid - unknown txr. -->
+        <!-- 
+        <sensor id="1" txr="99" unit="5" slope="5.6" intercept="7.8" />
+        -->
+        
+        <transmitter id="3" codeSpace="2" tagId="123"/>
+        <sensor id="1" txr="3" unit="2" />
 
-        <transmitter id="3" codeSpace="2" tagId="123">
-            <sensor id="1" unit="2" />
-        </transmitter>
-
-        <transmitter id="4" codeSpace="3">
-            <sensor id="1" slope="1.1" intercept="2.2" unit="1" />
-            <sensor id="2" slope="3.3" intercept="4.4" unit="2" />
-        </transmitter>
+        <transmitter id="4" codeSpace="3"/>
+        <sensor id="1" txr="4" slope="1.1" intercept="2.2" unit="1" />
+        <sensor id="2" txr="4" slope="3.3" intercept="4.4" unit="2" />
+        
     </definitions>
 
     <records>
         <detection time="2012-06-13T12:33:56.000-04:00" txr="1" rxr="1" ctx="1" />
         <detection time="2012-06-13T12:34:56.000" txr="1" rxr="1" ctx="1" />
         <detection time="2012-06-13T12:35:56.000" txr="2" rxr="1" ctx="1">
-            <sample sensor="1" adc="123"/>
+            <sample sensor="1" txr="2" adc="123"/>
             
             <!-- Invalid - sensor 2 doesn't exist for this txr 2. -->
-            <sample sensor="2" adc="123"/>
+            <!-- 
+            <sample sensor="2" txr="2" adc="123"/>
+            -->
             
         </detection>
+        
         <detection time="2012-06-13T12:37:56.000Z" txr="1" rxr="1" ctx="1" correctedTime="2012-06-13T12:37:56.000-04:00" />
         <detection time="2012-06-13T12:38:56.000Z" txr="3" rxr="1" ctx="1" cooked="true">
-            <sample sensor="1" val="1.7"/>
+            <sample sensor="1" txr="2" val="1.7"/>
         </detection>
         <detection time="2012-06-13T12:38:57.000Z" txr="4" rxr="1" ctx="1">
-            <sample sensor="1" adc="1.1"/>
-            <sample sensor="2" adc="1.2"/>
+             <sample sensor="1" txr="4" adc="1.1"/>
+             <sample sensor="2" txr="4" adc="1.2"/>
         </detection>
     </records>
 
@@ -98,7 +106,7 @@
     <records>
         <detection time="2012-06-13T12:36:56.000Z" txr="5" rxr="1" ctx="2" />
         <detection time="2012-06-13T12:36:57.000Z" txr="2" rxr="1" ctx="2">
-            <sample sensor="1" adc="123"/>
+            <sample sensor="1" txr="2" adc="123"/>
         </detection>
     </records>
 

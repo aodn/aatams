@@ -32,6 +32,7 @@ class ReceiverDownloadFile
     
     static hasMany = [detections:RawDetection, events:ReceiverEvent]
 	static hasOne = [progress: ReceiverDownloadFileProgress]
+	static auditable = true
 	
     static constraints =
     {

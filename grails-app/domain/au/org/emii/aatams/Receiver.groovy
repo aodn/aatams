@@ -16,6 +16,7 @@ class Receiver extends Device
     static hasMany = [detections: RawDetection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
     static transients = ['name', 'deviceID', 'status', 'currentRecovery', 'mostRecentDeployment']
+	static auditable = true
 	
     static mapping = 
     {

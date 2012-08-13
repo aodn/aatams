@@ -32,6 +32,7 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase
         "animalMeasurement",
         "animalMeasurementType",
         "animalRelease",
+		"auditLogEvent",
         "detection",
         "detectionSurgery",
         "device",

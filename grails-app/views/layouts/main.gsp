@@ -143,7 +143,7 @@
           <!-- Shown if logged in. -->
           <shiro:user>
             <div id="userlogout">
-              Logged in as <shiro:principal/> (<g:link controller="auth" action="signOut">logout</g:link>)
+              Logged in as <shiro:principal/> (<g:link controller="auditLogEvent" action="list">activity</g:link>|<g:link controller="auth" action="signOut">logout</g:link>)
             </div>
           </shiro:user>
         </div>

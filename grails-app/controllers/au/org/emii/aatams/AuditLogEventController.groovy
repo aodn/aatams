@@ -10,9 +10,13 @@ class AuditLogEventController extends org.codehaus.groovy.grails.plugins.orm.aud
 	def list = {
 		
 		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-		params.sort = 'dateCreated'
-		params.order = 'desc'
 		
+		if (!params.sort && ! params.order)
+		{
+			params.sort = 'dateCreated'
+			params.order = 'desc'
+		}
+				
 		if (SecurityUtils.subject.hasRole("SysAdmin"))
 		{
 			[auditLogEventInstanceList: AuditLogEvent.list(params), auditLogEventInstanceTotal: AuditLogEvent.count()]

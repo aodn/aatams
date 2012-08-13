@@ -25,7 +25,8 @@ class InstallationStation
     static belongsTo = [installation:Installation]
     static hasMany = [receivers:Receiver, deployments:ReceiverDeployment]
     static transients = ['curtainPositionAsString', 'scrambledLocation', 'latitude', 'longitude', 'active', 'detectionCount']
-    
+	static auditable = true
+	
     static mapping =
     {
         // Speed up candidateEntitiesService.

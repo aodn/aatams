@@ -21,6 +21,7 @@ class ReceiverDeployment
 {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
     static transients = ['scrambledLocation', 'active', 'latitude', 'longitude']
+	static auditable = true
 	
     Set<ValidDetection> detections = new HashSet<ValidDetection>()
     static hasMany = [detections: ValidDetection, events: ValidReceiverEvent]

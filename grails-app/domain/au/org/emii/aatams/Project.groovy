@@ -12,7 +12,8 @@ class Project
                       releases:AnimalRelease]
                   
     static transients = ['organisations', 'people', 'principalInvestigators']
-    
+	static auditable = true
+	
     String name
     String description
     

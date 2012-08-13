@@ -75,6 +75,12 @@ grails.mail.props = ["mail.smtp.auth":"false"]
 grails.plugin.databasemigration.updateOnStart = true
 grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
 
+auditLog {
+	actorClosure = { request, session ->
+		org.apache.shiro.SecurityUtils.getSubject()?.getPrincipal()
+	}
+}
+
 // set per-environment serverURL stem for creating absolute links
 environments
 {

@@ -17,6 +17,7 @@ class Tag extends Device implements Embargoable
 
     Project project
 	static belongsTo = [codeMap: CodeMap]
+	static auditable = true
 	
     /**
      * The expected lifetime (in days) of a tag once is it deployed.  This

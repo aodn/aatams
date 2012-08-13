@@ -1544,7 +1544,5 @@ databaseChangeLog = {
 	include file: 'unique_transmitter_types_for_tag.groovy'
 
 	include file: 'upload_progress.groovy'
-
-	include file: 'audit_log.groovy'
 }
 

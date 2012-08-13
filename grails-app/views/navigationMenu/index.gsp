@@ -98,13 +98,6 @@
             <g:link controller="report" action="${c.key}">${c.value}</g:link>
           </li>
         </g:each>
-        
-        <shiro:user>
-          <li class="reportActions">
-            <g:link controller="auditLog">Activity</g:link>
-          </li>
-        </shiro:user>
-        
       </ul>
       
       <h3>${message(code: 'navigationMenu.section.fieldSheets.label', default: 'Field Sheets')} </h3>

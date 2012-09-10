@@ -184,7 +184,6 @@ class TagTests extends GrailsUnitTestCase
 		Tag.registerObjectMarshaller()
 		
 		def tagAsJson = (tag as JSON)
-		println tagAsJson
 		assertEquals("1111, 2222, 3333", JSON.parse(tagAsJson.toString()).pingCode)
 	}
 }

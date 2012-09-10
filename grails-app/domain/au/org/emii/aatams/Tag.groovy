@@ -1,6 +1,7 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.util.StringUtils
+import grails.converters.JSON
 
 /**
  * Represents a physical tag (which may be attached at any one time to an animal via a surgery).
@@ -105,7 +106,7 @@ class Tag extends Device implements Embargoable
 	
 	String getPingCodes()
 	{
-		return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.pingCode))
+		return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.pingCode.sort()))
 	}
 	
 	String getTransmitterTypeNames()
@@ -152,5 +153,25 @@ class Tag extends Device implements Embargoable
 		}
 		
 		return []
+	}
+	
+	static void registerObjectMarshaller()
+	{
+		JSON.registerObjectMarshaller(Tag.class)
+		{
+			def returnArray = [:]
+			returnArray['id'] = it.id
+			returnArray['label'] = it.serialNumber
+			returnArray['serialNumber'] = it.serialNumber
+			returnArray['model'] = it.model
+			returnArray['codeMap'] = it.codeMap
+			returnArray['deviceID'] = it.deviceID
+			returnArray['project'] = it.project
+			returnArray['expectedLifeTimeDays'] = it.expectedLifeTimeDays
+			returnArray['status'] = it.status
+			returnArray['pingCode'] = it.pingCodes
+			
+			return returnArray
+		}
 	}
 }

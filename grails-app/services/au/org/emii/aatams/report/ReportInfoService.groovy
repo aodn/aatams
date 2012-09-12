@@ -250,6 +250,10 @@ class ReportInfoService
 				associationName: "station.installation.project",
 				propertyName: "name", 
 				range:projectRange),
+			 new AjaxMultiSelectReportParameter(label: propertyToLabel["station.installation.name"],
+												associationName: "station.installation", 
+												propertyName:"name",
+												lookupPath:"/installation/lookupByName"),
              new IsNullReportParameter(
 				 label: propertyToLabel["recovery"],
 				 associationName: "recovery", 

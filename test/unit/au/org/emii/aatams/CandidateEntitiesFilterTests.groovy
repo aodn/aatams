@@ -93,8 +93,9 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
                             roleType:roleType,
                             access:ProjectAccess.READ_ONLY)
         def roles = [activeProjRole, pendingProjRole, nonWriteProjRole]
+        mockDomain(ProjectRole, roles)
         roles.each { permService.setPermissions(it) }
-        
+		
         mockDomain(AnimalRelease)
         mockDomain(RawDetection)
         

@@ -13,7 +13,7 @@
             input = $( "<input>" )
                 .appendTo( wrapper )
                 .val( value )
-                .addClass( "ui-state-default ui-combobox-input" )
+                .addClass( "ui-combobox-input" )
                 .autocomplete({
                     delay: 0,
                     minLength: 0,
@@ -60,7 +60,6 @@
                         }
                     }
                 })
-                .addClass( "ui-widget ui-widget-content ui-corner-left" );
 
             input.data( "autocomplete" )._renderItem = function( ul, item ) {
                 return $( "<li></li>" )
@@ -80,6 +79,7 @@
                     text: false
                 })
                 .removeClass( "ui-corner-all" )
+                .removeClass("ui-button")
                 .addClass( "ui-corner-right ui-combobox-toggle" )
                 .click(function() {
                     // close if already visible

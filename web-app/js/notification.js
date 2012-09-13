@@ -32,7 +32,7 @@ $(function()
             {
                 anchor.qtip(
                 {
-                   content: $(this).attr("htmlFragment"),
+                   content: $(this).attr("htmlFragment") + "<a href='#'> (close)</a>",
                    position: {
                       corner: {
                          target: target,

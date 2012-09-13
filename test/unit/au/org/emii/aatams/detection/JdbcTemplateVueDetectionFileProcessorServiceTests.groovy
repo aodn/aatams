@@ -33,6 +33,7 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 		vueDetectionFileProcessorService.searchableService = searchableService
 		vueDetectionFileProcessorService.metaClass.getReader = { getReader(it) }
 		vueDetectionFileProcessorService.metaClass.markDuplicates = { }
+		vueDetectionFileProcessorService.metaClass.getNumRecords = { 14 }
 		
 		DeviceStatus status = new DeviceStatus(status: "DEPLOYED")
 		mockDomain(DeviceStatus, [status])

@@ -36,7 +36,7 @@ abstract class AbstractBatchProcessor
         propertyInstanceMap?.get().clear()
     }
     
-	private long getNumRecords(downloadFile)
+	long getNumRecords(downloadFile)
 	{
 		log.debug("Counting number of records in file...")
 		long lineCount = 0
@@ -58,7 +58,6 @@ abstract class AbstractBatchProcessor
         
             def startTimestamp = System.currentTimeMillis()
 
-//            def records = getRecords(downloadFile)
 			recordCsvMapReader = getMapReader(downloadFile)
             def numRecords = getNumRecords(downloadFile)
 			

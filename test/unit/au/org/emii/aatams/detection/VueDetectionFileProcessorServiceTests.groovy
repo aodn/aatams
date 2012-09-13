@@ -31,6 +31,8 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
 		vueDetectionFileProcessorService.detectionNotificationService = detectionNotificationService
 		vueDetectionFileProcessorService.searchableService = searchableService
 		vueDetectionFileProcessorService.metaClass.getReader = { getReader(it) }
+		vueDetectionFileProcessorService.metaClass.getNumRecords = { 7 }
+		
     }
 
     protected void tearDown() 

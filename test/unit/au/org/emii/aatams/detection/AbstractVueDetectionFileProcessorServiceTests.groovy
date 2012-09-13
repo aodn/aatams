@@ -66,6 +66,7 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
         deployment.save()
 		
 		AbstractBatchProcessor.metaClass.getReader = { getReader(it) }
+		AbstractBatchProcessor.metaClass.getNumRecords = { 7 }
 		mockDomain(ReceiverDownloadFileProgress)
 		ReceiverDownloadFileProgress.metaClass.static.withNewTransaction = { it() }
     }

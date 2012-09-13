@@ -36,17 +36,32 @@ abstract class AbstractBatchProcessor
         propertyInstanceMap?.get().clear()
     }
     
+	private long getNumRecords(downloadFile)
+	{
+		log.debug("Counting number of records in file...")
+		long lineCount = 0
+		
+		new File(downloadFile.path).eachLine {
+			lineCount++
+		}
+		
+		log.debug("Records count: " + lineCount)
+		return lineCount	
+	}
+	
     void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
     {
+		def recordCsvMapReader
         try
         {
             searchableService.stopMirroring()
         
             def startTimestamp = System.currentTimeMillis()
 
-            def records = getRecords(downloadFile)
-            def numRecords = records.size()
-
+//            def records = getRecords(downloadFile)
+			recordCsvMapReader = getMapReader(downloadFile)
+            def numRecords = getNumRecords(downloadFile)
+			
 			int percentProgress = -1
 			
 			long startTime = System.currentTimeMillis()
@@ -58,7 +73,7 @@ abstract class AbstractBatchProcessor
 			
 			startBatch(context)
 			
-            records.eachWithIndex
+            recordCsvMapReader.eachWithIndex
             {
                 map, i ->
 
@@ -113,6 +128,7 @@ abstract class AbstractBatchProcessor
         finally
         {
             searchableService.startMirroring()
+			recordCsvMapReader?.close()
         }
     }
 
@@ -131,19 +147,29 @@ abstract class AbstractBatchProcessor
     
 	Reader getReader(downloadFile)
 	{
+		log.debug("Instantiating stream reader...")
 		// Wrap in BOMInputStream, to handle the byte-order marker present in VUE exports
 		// (see http://stackoverflow.com/questions/1835430/byte-order-mark-screws-up-file-reading-in-java/7390288#7390288)
-		return new InputStreamReader(new BOMInputStream(new FileInputStream(new File(downloadFile.path))))
+		def reader = new InputStreamReader(new BOMInputStream(new FileInputStream(new File(downloadFile.path))))
+		log.debug("Stream reader instantiated")
+		
+		return reader
 	}
 	
     List<Map<String, String>> getRecords(downloadFile)
     {
-		return getMapReader(downloadFile).toList()
+		log.debug("Instantiating list of records...")
+		def mapReader = getMapReader(downloadFile).toList()
+		log.debug("List of records instantiated")
+		return mapReader
     }
     
 	protected CSVMapReader getMapReader(downloadFile)
 	{
-		return new CSVMapReader(getReader(downloadFile))
+		log.debug("Instantiating CSV map reader...")
+		def mapReader = new CSVMapReader(getReader(downloadFile))
+		log.debug(" CSV map reader instantiated")
+		return mapReader
 	}
 	
     abstract void processSingleRecord(downloadFile, map, context)

@@ -74,24 +74,59 @@ class RawDetection
         receiverName index:'receiverName_index'
         cache true
 		location type: GeometryUserType
+		
+		// Partition valid/invalid detections for performance improvement.
+		tablePerHierarchy false
     }
     
-	static String toSqlInsert(Map detection)
+	static List<String> toSqlInsert(Map detection)
 	{
+		def retList = []
+		
 		StringBuilder detectionBuff = new StringBuilder(
-				"INSERT INTO RAW_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_DEPLOYMENT_ID, " + /* LOCATION, */ "RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, " +
-				"STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, CLASS, MESSAGE, REASON) " +
+				"INSERT INTO RAW_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, " + /* LOCATION, */ "RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, " +
+				"STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER) " +
 				" VALUES(")
 
 		detectionBuff.append("nextval('hibernate_sequence'),")
 		detectionBuff.append("0,")
 		detectionBuff.append("'" + new java.sql.Timestamp(detection["timestamp"].getTime()) + "',")
-		SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDownloadId", "receiverDeploymentId"])
+		SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDownloadId"])
 		SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
-			"transmitterSerialNumber", "clazz", "message", "reason"])
+			"transmitterSerialNumber"])
 		SqlUtils.removeTrailingCommaAndAddBracket(detectionBuff)
 		
-		return detectionBuff.toString()
+		retList.add(detectionBuff.toString())
+
+		if (detection["clazz"] == "au.org.emii.aatams.detection.ValidDetection")
+		{
+			detectionBuff = new StringBuilder(
+					"INSERT INTO VALID_DETECTION (ID, RECEIVER_DEPLOYMENT_ID) " +
+					" VALUES(")
+	
+			detectionBuff.append("currval('hibernate_sequence'),")
+			SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDeploymentId"])
+			SqlUtils.removeTrailingCommaAndAddBracket(detectionBuff)
+		}
+		else if (detection["clazz"] == "au.org.emii.aatams.detection.InvalidDetection")
+		{
+			detectionBuff = new StringBuilder(
+					"INSERT INTO INVALID_DETECTION (ID, MESSAGE, REASON) " +
+					" VALUES(")
+	
+			detectionBuff.append("currval('hibernate_sequence'),")
+			SqlUtils.appendStringParams(detectionBuff, detection, ["message", "reason"])
+			SqlUtils.removeTrailingCommaAndAddBracket(detectionBuff)
+		}
+		else
+		{
+			assert(false): "Unknown detection class: " + detection["clazz"]
+		}
+
+		
+		retList.add(detectionBuff.toString())
+
+		return retList
 	}
 
     boolean isValid()

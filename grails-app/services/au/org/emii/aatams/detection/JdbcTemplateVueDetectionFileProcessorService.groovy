@@ -87,7 +87,7 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 		
 		context.detectionBatch.each
 		{
-			insertStatementList.add(RawDetection.toSqlInsert(it))
+			insertStatementList += RawDetection.toSqlInsert(it)
 			
 			it.detectionSurgeries.each
 			{

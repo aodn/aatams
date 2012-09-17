@@ -245,8 +245,10 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			project.id as project_id,			
 			raw_detection.id as detection_id
 
-			from raw_detection
+			from valid_detection
 			
+			inner join raw_detection on valid_detection.id = raw_detection.id
+
 			left join receiver_deployment on receiver_deployment_id = receiver_deployment.id
 			left join installation_station on receiver_deployment.station_id = installation_station.id
 			left join installation on installation_station.installation_id = installation.id
@@ -262,7 +264,4 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			left join surgery on detection_surgery.surgery_id = surgery.id
 			left join animal_release on surgery.release_id = animal_release.id
 			left join animal on animal_release.animal_id = animal.id
-			left join species on animal.species_id = species.id
-			
-			where raw_detection.class = 'au.org.emii.aatams.detection.ValidDetection' '''
-//			order by timestamp ''' //, installation_station.name, receiver_name, sensor_id'''
+			left join species on animal.species_id = species.id'''

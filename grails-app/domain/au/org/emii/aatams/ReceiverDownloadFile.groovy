@@ -27,10 +27,11 @@ class ReceiverDownloadFile
     
     Person requestingUser
     
-    Set<RawDetection> detections = new HashSet<RawDetection>()
+    Set<ValidDetection> validDetections = new HashSet<ValidDetection>()
+    Set<InvalidDetection> invalidDetections = new HashSet<InvalidDetection>()
     Set<ReceiverEvent> events = new HashSet<ReceiverEvent>()
     
-    static hasMany = [detections:RawDetection, events:ReceiverEvent]
+    static hasMany = [validDetections:ValidDetection, invalidDetections:InvalidDetection, events:ReceiverEvent]
 	static hasOne = [progress: ReceiverDownloadFileProgress]
 	static auditable = true
 	
@@ -48,6 +49,21 @@ class ReceiverDownloadFile
         errMsg type: 'text'
     }
     
+	void addToDetections(detection)
+	{
+		if (detection instanceof ValidDetection)
+		{
+			validDetections += detection
+		}
+		else if (detection instanceof InvalidDetection)
+		{
+			invalidDetections += detection
+		}
+		else
+		{
+			assert(false): "Unknown detection class: " + detection.class
+		}
+	}
     String toString()
     {
         return String.valueOf(path)
@@ -70,7 +86,7 @@ class ReceiverDownloadFile
     
 	def totalDetectionCount()
 	{
-		return executeCountCriteria(RawDetection)
+		return validDetectionCount() + invalidDetectionCount()
 	}
 	
     def validDetectionCount()

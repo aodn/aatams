@@ -21,7 +21,6 @@ class InvalidDetectionTests extends GrailsUnitTestCase
 
     void testInvalidDetection() 
     {
-        mockDomain(RawDetection)
         mockDomain(InvalidDetection)
 
         Point location = new GeometryFactory().createPoint(new Coordinate(45.1234f, -40.1234f))
@@ -42,11 +41,13 @@ class InvalidDetectionTests extends GrailsUnitTestCase
         assertTrue(invalidDetection.hasErrors())
         assertFalse(invalidDetection.validate())
 
+        invalidDetection.message = "Duplicate"
         invalidDetection.reason = InvalidDetectionReason.DUPLICATE
 
-        invalidDetection.save()
+        invalidDetection.save(failOnError: true)
         assertFalse(invalidDetection.hasErrors())
         assertTrue(invalidDetection.validate())
         assertEquals(InvalidDetectionReason.DUPLICATE, invalidDetection.reason)
+        assertEquals("Duplicate", invalidDetection.message)
     }
 }

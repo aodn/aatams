@@ -235,7 +235,7 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			COALESCE((species.spcode || ' - ' || species.scientific_name || ' (' || species.common_name || ')'), '') as species_name,
 			
 			sec_user.name as uploader,
-			raw_detection.transmitter_id as "transmitter_id",
+			valid_detection.transmitter_id as "transmitter_id",
 			organisation.name as organisation,
 			project.name as project,
 			installation.name as installation,
@@ -243,12 +243,10 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			animal_release.id as animal_release_id,
 			animal_release.embargo_date as embargo_date,
 			project.id as project_id,			
-			raw_detection.id as detection_id
+			valid_detection.id as detection_id
 
 			from valid_detection
 			
-			inner join raw_detection on valid_detection.id = raw_detection.id
-
 			left join receiver_deployment on receiver_deployment_id = receiver_deployment.id
 			left join installation_station on receiver_deployment.station_id = installation_station.id
 			left join installation on installation_station.installation_id = installation.id
@@ -258,7 +256,7 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			left join receiver_download_file on receiver_download_id = receiver_download_file.id
 			left join sec_user on receiver_download_file.requesting_user_id = sec_user.id
 			left join organisation on device.organisation_id = organisation.id
-			left join detection_surgery on raw_detection.id = detection_surgery.detection_id
+			left join detection_surgery on valid_detection.id = detection_surgery.detection_id
 			left join sensor on detection_surgery.sensor_id = sensor.id
 			
 			left join surgery on detection_surgery.surgery_id = surgery.id

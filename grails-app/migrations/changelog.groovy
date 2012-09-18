@@ -1547,6 +1547,8 @@ databaseChangeLog = {
 
 	include file: 'audit_log.groovy'
 
-	include file: 'detection_partition.groovy'
+//	include file: 'detection_partition.groovy'
+
+	include file: 'abstract_raw_detection.groovy'
 }
 

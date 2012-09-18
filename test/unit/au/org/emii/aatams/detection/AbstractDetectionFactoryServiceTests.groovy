@@ -21,7 +21,6 @@ abstract class AbstractDetectionFactoryServiceTests extends GrailsUnitTestCase
 		
 		mockLogging(Surgery)
 		
-		mockDomain(RawDetection)
 		mockDomain(InvalidDetection)
 		mockDomain(ValidDetection)
 		

@@ -1,11 +1,14 @@
 package au.org.emii.aatams.detection
 
+import java.util.Map;
+
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormatter
 import org.joda.time.format.ISODateTimeFormat
 
 import au.org.emii.aatams.*
 import au.org.emii.aatams.util.StringUtils
+import au.org.emii.aatams.util.SqlUtils
 
 import com.vividsolutions.jts.geom.Point
 
@@ -14,11 +17,10 @@ import de.micromata.opengis.kml.v_2_2_0.Kml
 import de.micromata.opengis.kml.v_2_2_0.Placemark
 import de.micromata.opengis.kml.v_2_2_0.TimeStamp
 
-
 class ValidDetection extends RawDetection implements Embargoable
 {
-	static belongsTo = [receiverDeployment: ReceiverDeployment]
-    static transients = ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames', 'placemark']
+	static belongsTo = [receiverDownload:ReceiverDownloadFile, receiverDeployment: ReceiverDeployment]
+    static transients = RawDetection.transients + ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames', 'placemark']
     
     /**
      * This is modelled as a many-to-many relationship, due to the fact that tags
@@ -32,13 +34,17 @@ class ValidDetection extends RawDetection implements Embargoable
     // Note: initialise with empty set so that detectionSurgeries.isEmpty()
     // returns true (I thought that the initialisation should happen when save()
     // is called but apparently not.
-//    List<DetectionSurgery> detectionSurgeries = new ArrayList<DetectionSurgery>()
     Set<DetectionSurgery> detectionSurgeries = new HashSet<DetectionSurgery>()
     static hasMany = [detectionSurgeries:DetectionSurgery]
-    
+   
+	static constraints = RawDetection.constraints
+
 	static mapping =
 	{
-		cache true
+		timestamp index:'valid_timestamp_index'
+		transmitterId index:'valid_transmitterId_index'
+		receiverName index:'valid_receiverName_index'
+		
 		detectionSurgeries cache:true
 	}
 	
@@ -137,6 +143,25 @@ class ValidDetection extends RawDetection implements Embargoable
 	private String getSpeciesNames(theDetectionSurgeries)
 	{
 		return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.surgery.release.animal.species.name)
+	}
+	
+	static String toSqlInsert(detection)
+	{
+		StringBuilder detectionBuff = new StringBuilder(
+				"INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, " +
+				"STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID) " +
+				" VALUES(")
+
+		detectionBuff.append("nextval('hibernate_sequence'),")
+		detectionBuff.append("0,")
+		detectionBuff.append("'" + new java.sql.Timestamp(detection["timestamp"].getTime()) + "',")
+		SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDownloadId"])
+		SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
+			"transmitterSerialNumber"])
+		SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDeploymentId"])
+		SqlUtils.removeTrailingCommaAndAddBracket(detectionBuff)
+		
+		return detectionBuff.toString()
 	}
    
     def applyEmbargo()

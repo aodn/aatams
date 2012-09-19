@@ -56,7 +56,7 @@ databaseChangeLog = {
 //
 	changeSet(author: "jburgess (generated)", id: "1347934661760-3") {
 		createTable(tableName: "receiver_valid_detection") {
-			column(name: "receiver_valid_detections_id", type: "int8")
+			column(name: "receiver_detections_id", type: "int8")
 
 			column(name: "valid_detection_id", type: "int8")
 		}

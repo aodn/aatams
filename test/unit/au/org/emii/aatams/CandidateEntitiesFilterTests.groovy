@@ -97,7 +97,6 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         roles.each { permService.setPermissions(it) }
 		
         mockDomain(AnimalRelease)
-        mockDomain(RawDetection)
         
         activeInstallation = 
             new Installation(project:activeProj,
@@ -287,8 +286,8 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
     
     void testDetectionEdit()
     {
-        RawDetection detection = new RawDetection()
-        mockDomain(RawDetection, [detection])
+        ValidDetection detection = new ValidDetection()
+        mockDomain(ValidDetection, [detection])
         detection.save()
         
         // candidateDeployments

@@ -87,8 +87,19 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 		
 		context.detectionBatch.each
 		{
-			insertStatementList.add(RawDetection.toSqlInsert(it))
-			
+			if (it.clazz == "au.org.emii.aatams.detection.ValidDetection")
+			{
+				insertStatementList += ValidDetection.toSqlInsert(it)
+			}
+			else if (it.clazz == "au.org.emii.aatams.detection.InvalidDetection")
+			{
+				insertStatementList += InvalidDetection.toSqlInsert(it)
+			}
+			else
+			{
+				assert(false): "Unknown detection class: " + it.clazz
+			}
+
 			it.detectionSurgeries.each
 			{
 				detSurgery ->

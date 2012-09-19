@@ -31,7 +31,6 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
         
         mockLogging(Surgery)
         
-        mockDomain(RawDetection)
         mockDomain(InvalidDetection)
         mockDomain(ValidDetection)
         

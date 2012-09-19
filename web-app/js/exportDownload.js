@@ -1,13 +1,12 @@
 $(document).ready(function () 
 {
+	if ($('#totalMatches').val() > 300000) 
+	{
+		$('input.KMZ, input.KML').prop('disabled', true);
+	}
+	
 	$('#listControlForm').find(":submit").click(function(event) 
 	{
-		if (   ($('#totalMatches').val() > 300000) 
-			&& !confirm('This request is likely to take a while.  Do you want to continue?'))
-		{
-			return;	// bail
-		}
-		
 		// Don't block for filter updates, only export downloads.
 		if (this.name === "_action_export")
 		{

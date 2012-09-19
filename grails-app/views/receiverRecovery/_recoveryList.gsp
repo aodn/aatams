@@ -25,8 +25,10 @@
     	                <th><g:message code="receiverDeployment.station.location.label" default="Location" /></th>
                     </g:if>
 	            
+	                <!--  Bit of a hack to sort by serial number, but it seems that for all intents and purposes, this will give the
+	                      same result as sorting by name (cannot sort by name, because it is a transient property. -->
 	                <g:if test="${!hideColumns?.contains('receiver')}">
-		                <g:column property="receiver" title="${message(code: 'receiverDeployment.receiver.label', default: 'Receiver')}"
+		                <g:column property="receiver.serialNumber" title="${message(code: 'receiverDeployment.receiver.label', default: 'Receiver')}"
 		                                  params="${params}" sortable="${sortable}" />
 	                </g:if>
 	            

@@ -82,7 +82,7 @@ databaseChangeLog =
 								st_x(public_location) as public_lon,
 								st_y(public_location) as public_lat,
 								''' + "'" + application.config.grails.serverURL + '''/installationStation/show/' || station_id as installation_station_url,
-								''' + "'" + application.config.grails.serverURL + '''/report/extract?name=detection&formats=CSV&filter.receiverDeployment.station.in=name&filter.receiverDeployment.station.in=' || station as detection_download_url,
+								''' + "'" + application.config.grails.serverURL + '''/detection/list?filter.receiverDeployment.station.in=name&filter.receiverDeployment.station.in=' || station as detection_download_url,
 								count(*) as detection_count,
 								log(greatest(count(*), 1)) / log((select max(detection_count) from
 																 (
@@ -117,7 +117,7 @@ databaseChangeLog =
 	// Preconditions: 1332309793000-1 1332309793000-2 1332309793000-3 1332309793000-4
 	changeSet(author: "jburgess", id: "1332312087000-1", runOnChange: true)
 	{
-		preConditions 
+		preConditions
 		{
 			changeSetExecuted(id: "1332309793000-1", author: "jburgess", changeLogFile: "materialized_views.groovy")
 			changeSetExecuted(id: "1332309793000-2", author: "jburgess", changeLogFile: "materialized_views.groovy")
@@ -126,7 +126,17 @@ databaseChangeLog =
 			changeSetExecuted(id: "1332135917000-5", author: "jburgess", changeLogFile: "geoserver_detections_view.groovy")
 		}
 		
+		sql('''SELECT drop_matview('detection_count_per_station_mv');''')
 		sql('''SELECT create_matview('detection_count_per_station_mv', 'detection_count_per_station');''')
+	}
+
+	changeSet(author: "jburgess", id: "1332312087000-2", runOnChange: true)
+	{
+		preConditions 
+		{
+			changeSetExecuted(id: "1332312087000-1", author: "jburgess", changeLogFile: "geoserver_detections_view.groovy")
+		}
+		
 		sql('''SELECT refresh_matview('detection_count_per_station_mv');''')
 	}
 }

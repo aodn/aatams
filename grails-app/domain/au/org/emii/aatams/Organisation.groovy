@@ -9,7 +9,8 @@ class Organisation
                       people:Person]
                   
     static transients = ['projects', 'totalReceivers']
-    
+	static auditable = true
+	
     String name
     String department
     String phoneNumber

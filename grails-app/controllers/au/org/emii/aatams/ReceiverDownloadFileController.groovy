@@ -4,11 +4,10 @@ import org.codehaus.groovy.grails.commons.*
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.web.multipart.MultipartFile
 import org.apache.shiro.SecurityUtils
+import grails.converters.JSON
 
 class ReceiverDownloadFileController 
 {
-//    def fileProcessorService
-    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -40,8 +39,8 @@ class ReceiverDownloadFileController
 
     def save = 
     {
-        log.debug("Processing receiver export, params: " + params)
-        def receiverDownloadFileInstance = new ReceiverDownloadFile(params)
+		log.debug("Processing receiver export, params: " + params)
+        def receiverDownloadFileInstance = new ReceiverDownloadFile(type: params.type)
 
         // Save the file to disk.
         def fileMap = request.getFileMap()
@@ -60,8 +59,9 @@ class ReceiverDownloadFileController
             
             MultipartFile file = (fileMap.values() as List)[0]
             receiverDownloadFileInstance.name = file.getOriginalFilename()
-            receiverDownloadFileInstance.path = String.valueOf(System.currentTimeMillis())
-            receiverDownloadFileInstance.save()
+            receiverDownloadFileInstance.path = "temp path" // so that the save works, and hence ID is assigned
+			receiverDownloadFileInstance.progress = new ReceiverDownloadFileProgress(percentComplete: 0, receiverDownloadFile: receiverDownloadFileInstance)
+            receiverDownloadFileInstance.save(flush:true, failOnError:true)
 
             def path = getPath(receiverDownloadFileInstance)
             String fullPath = path + File.separator + file.getOriginalFilename()
@@ -185,6 +185,23 @@ class ReceiverDownloadFileController
             path = path + File.separator
         }
         
-        path += downloadFile.id
+		assert(downloadFile.id): "Download file ID cannot be null"
+		path += downloadFile.id
     }
+	
+	def status = 
+	{
+		ReceiverDownloadFile download = ReceiverDownloadFile.get(params.id)
+		
+		def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
+		if (!receiverDownloadFileInstance)
+		{
+			response.status = 404
+			render([error: [message: "Unknown receiverDownloadFile id: ${params.id}"]] as JSON)
+		}
+		else
+		{
+			render([status: download.status, percentComplete: download.percentComplete] as JSON)
+		}
+	}
 }

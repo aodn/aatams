@@ -102,6 +102,11 @@ class AnimalController {
    
     def lookup =
     {
+		if ((params.project.id == "") || (params.species.id == ""))
+		{
+			return [] as JSON
+		}
+		
         def criteria = Animal.createCriteria()
         
         def animals = criteria

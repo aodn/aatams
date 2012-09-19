@@ -75,13 +75,19 @@ grails.mail.props = ["mail.smtp.auth":"false"]
 grails.plugin.databasemigration.updateOnStart = true
 grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
 
+auditLog {
+	actorClosure = { request, session ->
+		org.apache.shiro.SecurityUtils.getSubject()?.getPrincipal()
+	}
+}
+
 // set per-environment serverURL stem for creating absolute links
 environments
 {
 	production
 	{
-		grails.serverURL = "http://preview.emii.org.au/${appName}"
-		grails.serverHost = "http://preview.emii.org.au"
+		grails.serverURL = "http://aatams.emii.org.au/${appName}"
+		grails.serverHost = "http://aatams.emii.org.au"
 		fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod"
 		bulkimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod/bulkimports"
 		grails.mail.host = "localhost"
@@ -95,12 +101,14 @@ environments
 		
 		grails.mail.adminEmailAddress = "jkburges@utas.edu.au"
 		grails.mail.host = "postoffice.utas.edu.au"
+		grails.mail.disabled = true
 	}
 	test
 	{
 		grails.serverURL = "http://localhost:8090/${appName}/"
 		grails.serverHost = "http://localhost:8090"
 		grails.plugin.databasemigration.updateOnStart = false
+		grails.mail.disabled = true
 	}
 }
 
@@ -160,15 +168,18 @@ log4j =
 				   "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
 				   "grails.app.domain.au.org.emii.aatams.Receiver",
 				   "grails.app.domain.au.org.emii.aatams.bulk",
+				   "grails.app.domain.au.org.emii.aatams.ReceiverDownloadFile",
 				   "grails.app.service.au.org.emii.aatams.filter.QueryService",
+//				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService",
 				   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
-				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService"
+				   "grails.app.service.au.org.emii.aatams.detection.DetectionNotificationService"
 		}
 		
 		test
 		{
 			debug  "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
 				   "grails.app.domain.au.org.emii.aatams.bulk"
+			       "grails.app.service.au.org.emii.aatams.detection"
 		}
 	}
 	
@@ -227,16 +238,17 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			COALESCE((species.spcode || ' - ' || species.scientific_name || ' (' || species.common_name || ')'), '') as species_name,
 			
 			sec_user.name as uploader,
-			raw_detection.transmitter_id as "transmitter_id",
+			valid_detection.transmitter_id as "transmitter_id",
 			organisation.name as organisation,
 			project.name as project,
 			installation.name as installation,
 			COALESCE(species.spcode, '') as spcode,
 			animal_release.id as animal_release_id,
 			animal_release.embargo_date as embargo_date,
-			project.id as project_id			
+			project.id as project_id,			
+			valid_detection.id as detection_id
 
-			from raw_detection
+			from valid_detection
 			
 			left join receiver_deployment on receiver_deployment_id = receiver_deployment.id
 			left join installation_station on receiver_deployment.station_id = installation_station.id
@@ -247,13 +259,10 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			left join receiver_download_file on receiver_download_id = receiver_download_file.id
 			left join sec_user on receiver_download_file.requesting_user_id = sec_user.id
 			left join organisation on device.organisation_id = organisation.id
-			left join detection_surgery on raw_detection.id = detection_surgery.detection_id
+			left join detection_surgery on valid_detection.id = detection_surgery.detection_id
 			left join sensor on detection_surgery.sensor_id = sensor.id
 			
 			left join surgery on detection_surgery.surgery_id = surgery.id
 			left join animal_release on surgery.release_id = animal_release.id
 			left join animal on animal_release.animal_id = animal.id
-			left join species on animal.species_id = species.id
-			
-			where raw_detection.class = 'au.org.emii.aatams.detection.ValidDetection' '''
-//			order by timestamp ''' //, installation_station.name, receiver_name, sensor_id'''
+			left join species on animal.species_id = species.id'''

@@ -41,7 +41,6 @@ class PermissionUtilsService
         
         // Cleanup existing permissions.
         Person user = removePermissions(projectRole)
-//        Person user = Person.get(projectRole.person.id)
 
         if (!user)
         {
@@ -102,9 +101,14 @@ class PermissionUtilsService
         if (   projectRole.roleType 
             == getPIRoleType())
         {
-            user.removeFromPermissions(buildReceiverCreatePermission())
-            user.removeFromPermissions(buildPersonWriteAnyPermission())
             user.removeFromPermissions(buildPrincipalInvestigatorPermission(projectRole.project.id))
+			
+			// Only remove these if the user is not a PI on any projects.
+			if (!piOnAnyProject(user, projectRole))
+			{
+	            user.removeFromPermissions(buildReceiverCreatePermission())
+	            user.removeFromPermissions(buildPersonWriteAnyPermission())
+			}
         }
         
         // Read access for project (this just allows embargoes data to be 
@@ -113,19 +117,42 @@ class PermissionUtilsService
             || projectRole.access == ProjectAccess.READ_WRITE)
         {
             user.removeFromPermissions(buildProjectReadPermission(projectRole.project.id))
-            user.removeFromPermissions(buildProjectReadAnyPermission())
+			
+			if (!readAnyProject(user, projectRole) && !writeAnyProject(user, projectRole))
+			{
+				user.removeFromPermissions(buildProjectReadAnyPermission())
+			}
         }
         
         if (projectRole.access == ProjectAccess.READ_WRITE)
         {
             user.removeFromPermissions(buildProjectWritePermission(projectRole.project.id))
-            user.removeFromPermissions(buildProjectWriteAnyPermission())
+			
+			if (!writeAnyProject(user, projectRole))
+			{
+				user.removeFromPermissions(buildProjectWriteAnyPermission())
+			}
         }
         
         user.save()
         
         return user
     }
+	
+	private boolean piOnAnyProject(Person user, ProjectRole exceptRole)
+	{
+		return !(ProjectRole.findAllByPersonAndRoleType(user, getPIRoleType()) - exceptRole).isEmpty()
+	}
+    
+	private boolean readAnyProject(Person user, ProjectRole exceptRole)
+	{
+		return !(ProjectRole.findAllByPersonAndAccess(user, ProjectAccess.READ_ONLY) - exceptRole).isEmpty()
+	}
+    
+	private boolean writeAnyProject(Person user, ProjectRole exceptRole)
+	{
+		return !(ProjectRole.findAllByPersonAndAccess(user, ProjectAccess.READ_WRITE) - exceptRole).isEmpty()
+	}
     
     private String buildPermission(def id, Map cache, String permFormat)
     {
@@ -221,7 +248,6 @@ class PermissionUtilsService
     {
         String permissionString = buildReceiverUpdatePermission(receiverInstance?.id)
         
-//        log.debug("Adding permission \'" + permissionString + "\' to user:" + String.valueOf(principal()))
         principal().addToPermissions(permissionString)
         principal().save()
     }

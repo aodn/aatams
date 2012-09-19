@@ -1,6 +1,8 @@
 package au.org.emii.aatams
 
-class EventValidatorService extends VueExportValidatorService 
+import org.apache.log4j.Logger
+
+class EventValidator extends VueExportValidator 
 {
 	protected boolean isEventBeforeDeploymentDateTime(theDeployment)
 	{

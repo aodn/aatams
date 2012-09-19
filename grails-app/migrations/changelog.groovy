@@ -1542,5 +1542,13 @@ databaseChangeLog = {
 	include file: 'trim_whitespace.groovy'
 
 	include file: 'bulk_import.groovy'
+
+	include file: 'unique_transmitter_types_for_tag.groovy'
+
+	include file: 'upload_progress.groovy'
+
+	include file: 'audit_log.groovy'
+
+	include file: 'abstract_raw_detection.groovy'
 }
 

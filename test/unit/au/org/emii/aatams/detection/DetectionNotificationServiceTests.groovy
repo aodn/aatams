@@ -23,16 +23,21 @@ class DetectionNotificationServiceTests extends AbstractVueDetectionFileProcesso
 
 	void testNotificationEmailSent()
 	{
+		mockDomain(ReceiverDownloadFile)
+		ReceiverDownloadFile.metaClass.getUniqueTransmitterIds =
+		{
+			
+		}
+		
+		ReceiverDownloadFile download = new ReceiverDownloadFile()
+		download.save()
+
 		Sensor.metaClass.static.groupByOwningPI = {
 			List<Sensor> sensors ->
 
 			return [[name: 'adam', emailAddress: 'adam@aatams']: [[id: 1, transmitterId: 'a69_1303_1111'], [id:2, transmitterId: 'a69_1303_2222']],
 					[name: 'bruce', emailAddress: 'bruce@aatams']: [[id:3, transmitterId: 'a69_1303_1111']]]
 		}
-
-		ReceiverDownloadFile download = new ReceiverDownloadFile()
-		mockDomain(ReceiverDownloadFile, [download])
-		download.save()
 
 		int sendEmailToPersonCallCount = 0
 		

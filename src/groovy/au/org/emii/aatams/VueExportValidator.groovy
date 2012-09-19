@@ -4,9 +4,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat
 
 import au.org.emii.aatams.detection.*
+import org.apache.log4j.Logger
 
-abstract class VueExportValidatorService 
+abstract class VueExportValidator 
 {
+    protected static final Logger log = Logger.getLogger(VueExportValidator.class)
+
 	def params
 	
 	ReceiverDownloadFile receiverDownload

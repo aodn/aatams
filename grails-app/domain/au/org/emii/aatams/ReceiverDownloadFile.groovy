@@ -27,32 +27,66 @@ class ReceiverDownloadFile
     
     Person requestingUser
     
-    Set<RawDetection> detections = new HashSet<RawDetection>()
+    Set<ValidDetection> validDetections = new HashSet<ValidDetection>()
+    Set<InvalidDetection> invalidDetections = new HashSet<InvalidDetection>()
     Set<ReceiverEvent> events = new HashSet<ReceiverEvent>()
     
-    static hasMany = [detections:RawDetection, events:ReceiverEvent]
-    
+    static hasMany = [validDetections:ValidDetection, invalidDetections:InvalidDetection, events:ReceiverEvent]
+	static hasOne = [progress: ReceiverDownloadFileProgress]
+	static auditable = true
+	
     static constraints =
     {
         type()
         path()
+		progress(nullable: true)
     }
     
-	static transients = ['knownSensors']
+	static transients = ['knownSensors', 'uniqueTransmitterIds', 'percentComplete']
 	
     static mapping =
     {
         errMsg type: 'text'
     }
     
+	void addToDetections(detection)
+	{
+		if (detection instanceof ValidDetection)
+		{
+			validDetections += detection
+		}
+		else if (detection instanceof InvalidDetection)
+		{
+			invalidDetections += detection
+		}
+		else
+		{
+			assert(false): "Unknown detection class: " + detection.class
+		}
+	}
     String toString()
     {
         return String.valueOf(path)
     }
+	
+	Integer getPercentComplete()
+	{
+		return progress?.percentComplete
+	}
+	
+	void setPercentComplete(percentComplete)
+	{
+		if (!progress)
+		{
+			progress = new ReceiverDownloadFileProgress(receiverDownloadFile: this)
+		}
+		
+		progress.percentComplete = percentComplete
+	}
     
 	def totalDetectionCount()
 	{
-		return executeCountCriteria(RawDetection)
+		return validDetectionCount() + invalidDetectionCount()
 	}
 	
     def validDetectionCount()
@@ -124,10 +158,17 @@ class ReceiverDownloadFile
 		return count
 	}
 	
+	List<String> getUniqueTransmitterIds()
+	{
+		def uniqueTransmitterIds = 
+			ValidDetection.executeQuery("select distinct det.transmitterId from ValidDetection det where receiverDownload = ? order by det.transmitterId", this)
+		log.debug("Unique transmitter IDs: " + uniqueTransmitterIds)
+		
+		return uniqueTransmitterIds
+	}
+	
 	List<Long> getKnownSensors()
 	{
-		def validDetections = ValidDetection.findAllByReceiverDownload(this)
-		def uniqueTransmitterIds = validDetections*.transmitterId.unique()
-		return Sensor.findAllByTransmitterIdInList(uniqueTransmitterIds)
+		return Sensor.findAllByTransmitterIdInList(getUniqueTransmitterIds())
 	}
 }

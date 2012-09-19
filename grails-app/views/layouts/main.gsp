@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="au.org.emii.aatams.PermissionUtilsService" %>
 <!DOCTYPE html>
 <html >
   <head>
@@ -9,6 +10,7 @@
 
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery-1.7.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery-ui-1.8.10.custom.min.js')}"></script>
+    <script type="text/javascript" src="${resource(dir:'js',file:'jquery-ui-combobox.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.layout.min.js')}"></script>
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.highlight.js')}"></script>
 
@@ -21,14 +23,15 @@
     <g:javascript src="jquery.cookie.js"/>
     <g:javascript src="notification.js"/>
     <g:javascript src="rememberFormFields.js"/>
+    <g:javascript src="autocompleteForLargeSelects.js"/>
+    
     
     <g:javascript src="blockUIConfig.js"/>
     
-    <link ref="stylesheet" type="text/css" href="${resource(dir:'js/bubbletip', file:'bubbletip.css')}" />
-    
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'custom-theme/jquery-ui-1.8.13.custom.css')}"/>
-    <link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui-combobox.css')}"/>
+    <link rel="stylesheet" type="text/css"href="${resource(dir:'css',file:'main.css')}" />
 
     <!-- Shiro tags, used for security -->
     <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
@@ -142,8 +145,10 @@
 
           <!-- Shown if logged in. -->
           <shiro:user>
+            <g:set var="principal" value="${PermissionUtilsService.principal()}" />
+          
             <div id="userlogout">
-              Logged in as <shiro:principal/> (<g:link controller="auth" action="signOut">logout</g:link>)
+              Logged in as <g:link controller="person" action="show" id="${principal.id}">${principal.name}</g:link> (<g:link controller="auditLogEvent" action="list">activity</g:link> | <g:link controller="auth" action="signOut">logout</g:link>)
             </div>
           </shiro:user>
         </div>

@@ -31,7 +31,6 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
         
         mockLogging(Surgery)
         
-        mockDomain(RawDetection)
         mockDomain(InvalidDetection)
         mockDomain(ValidDetection)
         
@@ -66,6 +65,9 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
         deployment.save()
 		
 		AbstractBatchProcessor.metaClass.getReader = { getReader(it) }
+		AbstractBatchProcessor.metaClass.getNumRecords = { 7 }
+		mockDomain(ReceiverDownloadFileProgress)
+		ReceiverDownloadFileProgress.metaClass.static.withNewTransaction = { it() }
     }
 
     protected void tearDown() 

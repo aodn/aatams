@@ -25,6 +25,9 @@ abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestC
 		assert(searchableService)
 
 		AbstractBatchProcessor.metaClass.getReader = { getReader(it) }
+		AbstractBatchProcessor.metaClass.getNumRecords = { 16 }
+		mockDomain(ReceiverDownloadFileProgress)
+		ReceiverDownloadFileProgress.metaClass.static.withNewTransaction = { it() }
 		
 		ReceiverDeviceModel model = new ReceiverDeviceModel(modelName:"VR2W")
 		mockDomain(ReceiverDeviceModel, [model])

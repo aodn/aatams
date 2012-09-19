@@ -12,7 +12,7 @@ class SecSecurityFilters
     def permissionUtilsService
     
     def accessibleControllersRegexp = 
-        "animal|animalMeasurement|notification|" + \
+        "animal|animalMeasurement|auditLogEvent|notification|" + \
         "organisation|organisationProject|project|projectRole|person|" + \
         "installation|installationStation|receiver|species|tag|sensor|" + \
         "animalRelease|detection|receiverDeployment|receiverRecovery|" + \
@@ -102,6 +102,24 @@ class SecSecurityFilters
             }
         }
         
+		//
+		// Only authenticated users can list audit log events.
+		//
+		auditLogEvent(controller: 'auditLogEvent', action: 'list|index')
+		{
+			before =
+			{
+                if (SecurityUtils.subject.isAuthenticated())
+                {
+                    return true
+                }
+
+                redirect(controller:'auth', action:'unauthorized')
+                return false
+			}
+		}
+
+
         //
         // Authenticated users can create Organisations (although
         // they will have status of PENDING and will not be useable).

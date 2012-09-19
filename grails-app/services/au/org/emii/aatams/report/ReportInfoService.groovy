@@ -136,7 +136,7 @@ class ReportInfoService
             projectRange.add(0, MEMBER_PROJECTS)
         }
         
-        def organisationRange = Organisation.list()*.name
+        def organisationRange = Organisation.findAllByStatus(EntityStatus.ACTIVE)*.name
         def installationRange = Installation.list()*.name
 		
 		def timestampMin = getDetectionTimestampMin()
@@ -250,6 +250,10 @@ class ReportInfoService
 				associationName: "station.installation.project",
 				propertyName: "name", 
 				range:projectRange),
+			 new AjaxMultiSelectReportParameter(label: propertyToLabel["station.installation.name"],
+												associationName: "station.installation", 
+												propertyName:"name",
+												lookupPath:"/installation/lookupByName"),
              new IsNullReportParameter(
 				 label: propertyToLabel["recovery"],
 				 associationName: "recovery", 

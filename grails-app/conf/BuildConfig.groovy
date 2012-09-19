@@ -70,6 +70,8 @@ grails.project.dependency.resolution = {
 		// You usually only need one of these, but this project uses both
 //		test "org.codehaus.geb:geb-spock:$gebVersion"
 		test "org.codehaus.geb:geb-junit4:$gebVersion"
+		
+		test "xmlunit:xmlunit:1.3"
     }
 	plugins {
 //		test ":tomcat:$grailsVersion"

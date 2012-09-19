@@ -132,19 +132,20 @@ class KmlService implements ApplicationContextAware
 		kml.marshal(kmzStream)
 		kmzStream.closeEntry()
 		
-		// "files" directory.
-		addZipEntry(kmzStream, "files/", null)
-		
-		// Style sheet.
-		addZipEntry(kmzStream, "files/main.css", getMainCssStream())
-		
-		// IMOS logo.
-		addZipEntry(kmzStream, "files/IMOS-logo.png", getImosLogoStream())
-		
-		// IMOS logo.
-		addZipEntry(kmzStream, "files/fish.png", getFishIconStream())
-		
-		addZipEntry(kmzStream, "files/station.png", getStationIconStream())
+		[
+			"files/": null, 
+			"files/main.css": getMainCssStream(), 
+			"files/IMOS-logo.png": getImosLogoStream(), 
+			"files/fish.png": getFishIconStream(), 
+			"files/red_fish.png": getRedFishIconStream(), 
+			"files/station.png": getStationIconStream(), 
+			"files/circle.png": getCircleIconStream()
+		].each
+	 	{
+		    k, v ->
+			
+			addZipEntry(kmzStream, k, v)
+		}
 		
 		kmzStream.close()
 	}
@@ -176,9 +177,18 @@ class KmlService implements ApplicationContextAware
 		return applicationContext.getResource("/images/fish.png").getInputStream()
 	}
 	
+	private InputStream getRedFishIconStream()
+	{
+		return applicationContext.getResource("/images/red_fish.png").getInputStream()
+	}
+	
 	private InputStream getStationIconStream()
 	{
 		return applicationContext.getResource("/images/station.png").getInputStream()
 	}
 
+	private InputStream getCircleIconStream()
+	{
+		return applicationContext.getResource("/images/circle.png").getInputStream()
+	}
 }

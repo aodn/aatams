@@ -9,7 +9,7 @@ import org.grails.plugins.csv.CSVMapReader
  */
 abstract class AbstractBatchProcessor 
 {
-    def sessionFactory
+	def sessionFactory
     def propertyInstanceMap = org.codehaus.groovy.grails.plugins.DomainClassGrailsPlugin.PROPERTY_INSTANCE_MAP
     
     def searchableService
@@ -21,51 +21,68 @@ abstract class AbstractBatchProcessor
 		return 30
 	}
 	
-	protected void startBatch()
+	protected void startBatch(context)
 	{
 		
 	}
 	
-    protected void endBatch() 
+    protected void endBatch(context) 
     {
         def session = sessionFactory?.currentSession
+		
         session?.flush()
         session?.clear()
 		
         propertyInstanceMap?.get().clear()
     }
     
+	long getNumRecords(downloadFile)
+	{
+		log.debug("Counting number of records in file...")
+		long lineCount = 0
+		
+		new File(downloadFile.path).eachLine {
+			lineCount++
+		}
+		
+		log.debug("Records count: " + lineCount)
+		return lineCount	
+	}
+	
     void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
     {
+		def recordCsvMapReader
         try
         {
             searchableService.stopMirroring()
         
-            downloadFile.status = FileProcessingStatus.PROCESSING
-            downloadFile.save()
-
             def startTimestamp = System.currentTimeMillis()
 
-            def records = getRecords(downloadFile)
-            def numRecords = records.size()
-
-			int percentProgress = 0
+			recordCsvMapReader = getMapReader(downloadFile)
+            def numRecords = getNumRecords(downloadFile)
+			
+			int percentProgress = -1
 			
 			long startTime = System.currentTimeMillis()
 			
-			startBatch()
+			downloadFile.discard()
+			downloadFile?.progress?.discard()
 			
-            records.eachWithIndex
+			def context = [downloadFile: downloadFile]
+			
+			startBatch(context)
+			
+            recordCsvMapReader.eachWithIndex
             {
                 map, i ->
 
 				if ((i != 0) && ((i % batchSize) == 0))
                 {
-                    endBatch()
-					startBatch()
+                    endBatch(context)
+					startBatch(context)
                 }
 				
-                processSingleRecord(downloadFile, map)
+                processSingleRecord(downloadFile, map, context)
 
 				float progress = (float)i/numRecords * 100
 				if ((int)progress > percentProgress)
@@ -85,10 +102,15 @@ abstract class AbstractBatchProcessor
 					{
 						log.debug(progressMsg)
 					}
+					
+					if ((percentProgress % 1) == 0)
+					{
+						updateProgress(downloadFile, percentProgress)
+					}
 				}
             }
 
-			endBatch()
+			endBatch(context)
 			
             long elapsedTime = System.currentTimeMillis() - startTimestamp
             log.info("Batch details, size: " + batchSize + ", time per record (ms) : " + (float)elapsedTime / numRecords)    
@@ -96,33 +118,59 @@ abstract class AbstractBatchProcessor
 
             // Required to avoid hibernate exception, since session is flushed and cleared above.
             downloadFile = ReceiverDownloadFile.get(downloadFile.id)
+			downloadFile.progress?.refresh()
             downloadFile.status = FileProcessingStatus.PROCESSED
-            downloadFile.errMsg = ""
+            downloadFile.percentComplete = 100
+			downloadFile.errMsg = ""
             downloadFile.save(flush:true)
         }
         finally
         {
             searchableService.startMirroring()
+			recordCsvMapReader?.close()
         }
     }
+
+	private void updateProgress(downloadFile, percentProgress) 
+	{
+		ReceiverDownloadFileProgress.withNewTransaction
+		{
+			ReceiverDownloadFile refreshedDownloadFile = ReceiverDownloadFile.read(downloadFile.id)
+			ReceiverDownloadFileProgress progress = refreshedDownloadFile.progress
+			
+			log.debug("Updating progress, percentComplete: ${percentProgress}")
+			progress?.percentComplete = percentProgress
+			progress?.save(failOnError: true)
+		}
+	}
     
 	Reader getReader(downloadFile)
 	{
+		log.debug("Instantiating stream reader...")
 		// Wrap in BOMInputStream, to handle the byte-order marker present in VUE exports
 		// (see http://stackoverflow.com/questions/1835430/byte-order-mark-screws-up-file-reading-in-java/7390288#7390288)
-		return new InputStreamReader(new BOMInputStream(new FileInputStream(new File(downloadFile.path))))
+		def reader = new InputStreamReader(new BOMInputStream(new FileInputStream(new File(downloadFile.path))))
+		log.debug("Stream reader instantiated")
+		
+		return reader
 	}
 	
     List<Map<String, String>> getRecords(downloadFile)
     {
-		return getMapReader(downloadFile).toList()
+		log.debug("Instantiating list of records...")
+		def mapReader = getMapReader(downloadFile).toList()
+		log.debug("List of records instantiated")
+		return mapReader
     }
     
 	protected CSVMapReader getMapReader(downloadFile)
 	{
-		return new CSVMapReader(getReader(downloadFile))
+		log.debug("Instantiating CSV map reader...")
+		def mapReader = new CSVMapReader(getReader(downloadFile))
+		log.debug(" CSV map reader instantiated")
+		return mapReader
 	}
 	
-    abstract void processSingleRecord(downloadFile, map)
+    abstract void processSingleRecord(downloadFile, map, context)
 }
 

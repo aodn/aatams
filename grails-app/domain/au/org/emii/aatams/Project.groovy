@@ -12,7 +12,8 @@ class Project
                       releases:AnimalRelease]
                   
     static transients = ['organisations', 'people', 'principalInvestigators']
-    
+	static auditable = true
+	
     String name
     String description
     
@@ -46,7 +47,7 @@ class Project
     
     String getOrganisations()
     {
-        return ListUtils.fold(organisationProjects, "organisation")
+        return ListUtils.fold(organisationProjects.grep { it.organisation.status == EntityStatus.ACTIVE }, "organisation")
     }
     
     String getPeople()

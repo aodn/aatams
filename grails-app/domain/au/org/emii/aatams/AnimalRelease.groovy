@@ -22,7 +22,8 @@ class AnimalRelease implements Embargoable
     static belongsTo = [project: Project, animal: Animal]
     static hasMany = [surgeries: Surgery, measurements: AnimalMeasurement]
     static transients = ['scrambledReleaseLocation', 'current', 'embargoed']
-
+	static auditable = true
+	
     static mapping =
     {
         captureDateTime type: PersistentDateTimeTZ,

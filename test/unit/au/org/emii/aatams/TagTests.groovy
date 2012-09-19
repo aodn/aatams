@@ -1,6 +1,7 @@
 package au.org.emii.aatams
 
 import grails.test.*
+import grails.converters.JSON
 
 class TagTests extends GrailsUnitTestCase 
 {
@@ -175,5 +176,14 @@ class TagTests extends GrailsUnitTestCase
 		{
 			assertTrue(it.transmitterId.startsWith("A69-9002"))
 		}
+	}
+	
+	// Test for #1863.
+	void testTagAsJson()
+	{
+		Tag.registerObjectMarshaller()
+		
+		def tagAsJson = (tag as JSON)
+		assertEquals("1111, 2222, 3333", JSON.parse(tagAsJson.toString()).pingCode)
 	}
 }

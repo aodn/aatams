@@ -17,13 +17,13 @@ import java.util.Map
 /**
  * A 1:1 mapping of a single CSV record from receiver export.
  */
-class RawDetection 
+abstract class RawDetection 
 {
     /**
      * UTC timestamp.
      */
     Date timestamp
-    
+	
     String receiverName
     
     String stationName
@@ -49,8 +49,8 @@ class RawDetection
     String sensorUnit
     
     static transients = ['scrambledLocation', 'valid', 'formattedTimestamp']
-    
-    static constraints = 
+
+	static constraints = 
     {
         transmitterName(nullable:true, blank:true)
         transmitterSerialNumber(nullable:true, blank:true)
@@ -65,35 +65,17 @@ class RawDetection
 		formattedTimestamp(nullable:true)
     }
 
-    static belongsTo = [receiverDownload:ReceiverDownloadFile]
+//    static belongsTo = [receiverDownload:ReceiverDownloadFile]
     
     static mapping =
     {
-        timestamp index:'timestamp_index'
-        transmitterId index:'transmitterId_index'
-        receiverName index:'receiverName_index'
+//        timestamp index:'timestamp_index'
+//        transmitterId index:'transmitterId_index'
+//        receiverName index:'receiverName_index'
         cache true
 		location type: GeometryUserType
     }
     
-	static String toSqlInsert(Map detection)
-	{
-		StringBuilder detectionBuff = new StringBuilder(
-				"INSERT INTO RAW_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_DEPLOYMENT_ID, " + /* LOCATION, */ "RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, " +
-				"STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, CLASS, MESSAGE, REASON) " +
-				" VALUES(")
-
-		detectionBuff.append("nextval('hibernate_sequence'),")
-		detectionBuff.append("0,")
-		detectionBuff.append("'" + new java.sql.Timestamp(detection["timestamp"].getTime()) + "',")
-		SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDownloadId", "receiverDeploymentId"])
-		SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
-			"transmitterSerialNumber", "clazz", "message", "reason"])
-		SqlUtils.removeTrailingCommaAndAddBracket(detectionBuff)
-		
-		return detectionBuff.toString()
-	}
-
     boolean isValid()
     {
         return true

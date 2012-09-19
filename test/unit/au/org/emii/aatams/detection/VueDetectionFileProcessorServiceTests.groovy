@@ -20,8 +20,7 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
         
 		mockLogging(DetectionFactoryService, true)
 		detectionFactoryService = new DetectionFactoryService()
-		mockLogging(DetectionValidatorService, true)
-		detectionFactoryService.detectionValidatorService = new DetectionValidatorService()
+		mockLogging(DetectionValidator, true)
 		
 		mockLogging(VueDetectionFileProcessorService, true)
 		
@@ -32,6 +31,8 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
 		vueDetectionFileProcessorService.detectionNotificationService = detectionNotificationService
 		vueDetectionFileProcessorService.searchableService = searchableService
 		vueDetectionFileProcessorService.metaClass.getReader = { getReader(it) }
+		vueDetectionFileProcessorService.metaClass.getNumRecords = { 7 }
+		
     }
 
     protected void tearDown() 

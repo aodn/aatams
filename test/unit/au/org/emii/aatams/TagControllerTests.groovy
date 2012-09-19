@@ -91,33 +91,6 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         assertEquals(recoveredStatus.status, jsonResult[1].status.status)
     }
     
-    void testNoSensorsInList()
-    {
-		CodeMap a69_9002 = new CodeMap(codeMap: "A69-9002")
-        Tag tag1 = new Tag(codeMap:a69_9002, status:newStatus)
-        Tag tag2 = new Tag(codeMap:a69_9002, status:newStatus)
-        def tagList = [tag1, tag2]
-		mockDomain(Tag, tagList)
-		tagList.each { it.save() }
-
-        Sensor sensor1 = new Sensor(tag:tag1)
-        Sensor sensor2 = new Sensor(tag:tag1)
-        def sensorList = [sensor1, sensor2]
-		mockDomain(Sensor, sensorList)
-        sensorList.each { it.save() }
-        
-        tag1.addToSensors(sensor1)
-        tag1.addToSensors(sensor2)
-        
-		controller.metaClass.insertNoSensorRestriction = {}
-        def model = controller.list()
-
-        assertEquals(2, model.entityList.size())
-        assertEquals(2, model.total)
-        assertTrue(model.entityList.contains(tag1))
-        assertTrue(model.entityList.contains(tag2))
-    }
-    
     void testCreate() 
     {
         def model = controller.create()

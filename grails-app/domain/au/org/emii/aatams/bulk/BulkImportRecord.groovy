@@ -32,11 +32,18 @@ class BulkImportRecord
 			dstClazz.withNewSession
 			{			
 				def dstObject = dstClazz.get(dstPk)
-				assert(dstObject)
 				
-				log.debug("Deleting: " + String.valueOf(dstObject))
-				
-				dstObject.delete(failOnError:true, flush: true)
+				if (!dstObject)
+				{
+					// This is ok, the destination object has already been deleted as part of a cascade
+					// delete of parent entity.
+					log.debug("No destination object, dstClass: ${dstClass}, pk: ${dstPk}")
+				}
+				else
+				{
+					log.debug("Deleting: " + String.valueOf(dstObject))
+					dstObject.delete(failOnError:true, flush: true)
+				}
 			}
 		}
 	}

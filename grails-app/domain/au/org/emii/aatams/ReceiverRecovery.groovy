@@ -33,7 +33,8 @@ class ReceiverRecovery
         comments type: 'text'
 		location type: GeometryUserType
 	}
-    
+	static auditable = true
+	
     DateTime recoveryDateTime = new DateTime(Person.defaultTimeZone())
     Point location
     DeviceStatus status

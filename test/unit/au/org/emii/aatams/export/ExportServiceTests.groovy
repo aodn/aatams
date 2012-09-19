@@ -62,6 +62,11 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
 			return new FileInputStream(new File("web-app/reports/receiverList.jrxml"))
 		}
 		
+		exportService.metaClass.getSubreportDir =
+		{
+			return "web-app/reports/"
+		}
+		
 		def deployed = new DeviceStatus(status: "DEPLOYED")
 		mockDomain(DeviceStatus, [deployed])
 		deployed.save()

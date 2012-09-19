@@ -25,8 +25,7 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 		mockLogging(EventFactoryService, true)
 		eventFactoryService = new EventFactoryService()
 		
-		mockLogging(EventValidatorService, true)
-		eventFactoryService.eventValidatorService = new EventValidatorService()
+		mockLogging(EventValidator, true)
 		
 		standardParams =
 				[(EventFactoryService.DATE_AND_TIME_COLUMN):"2008-12-08 12:44:24",

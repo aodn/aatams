@@ -44,18 +44,6 @@ class EmbargoFilters
             }
         }
 
-        tagList(controller:'tag', action:'list')
-        {
-            after =
-            {
-                model ->
-
-                // Filter out tag which have associated embargoed releases.
-                model.entityList = 
-                    embargoService.applyEmbargo(model.entityList)
-            }
-        }
-
         tagNotList(controller:'tag', action:notListActions)
         {
             after =

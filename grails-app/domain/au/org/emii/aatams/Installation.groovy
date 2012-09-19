@@ -12,7 +12,8 @@ class Installation
 {
     static hasMany = [stations:InstallationStation]
     static belongsTo = [project:Project]
-    
+	static auditable = true
+	
     String name
     InstallationConfiguration configuration
     

@@ -101,6 +101,11 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
 	
     void testGetReportInfoReceiver() 
     {
+		Organisation active = new Organisation(name: "active org", status: EntityStatus.ACTIVE)
+		Organisation deactivated = new Organisation(name: "deactivated org", status: EntityStatus.DEACTIVATED)
+		mockDomain(Organisation, [active, deactivated])
+		[active, deactivated].each { it.save(validate: false) }
+		
         def reportInfos = reportInfoService.getReportInfo()
         
         assertEquals(12, reportInfos.size())
@@ -111,6 +116,9 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         assertEquals("Receivers", receiverReportInfo.getDisplayName())
         assertEquals("receiverList", receiverReportInfo.getJrxmlFilename()["PDF"])
         assertEquals("receiverExtract", receiverReportInfo.getJrxmlFilename()["CSV"])
+		
+		assertTrue(receiverReportInfo.filterParams[0].range.contains(active.name))
+		assertFalse(receiverReportInfo.filterParams[0].range.contains(deactivated.name))
     }
     
     void testGetReportInfoInstallationStation()

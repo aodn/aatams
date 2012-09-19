@@ -13,7 +13,8 @@ class Person extends SecUser
     static belongsTo = [organisation:Organisation]
     
     static transients = ['projects']
-    
+	static auditable = true
+	
     String name;
     String emailAddress;
     String phoneNumber;

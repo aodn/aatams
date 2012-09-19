@@ -38,7 +38,7 @@ class Sensor implements Embargoable
     {
         tag()
         pingCode()
-		transmitterType()
+		transmitterType(unique: 'tag')
         unit(nullable:true)
         slope(nullable:true)
         intercept(nullable:true)

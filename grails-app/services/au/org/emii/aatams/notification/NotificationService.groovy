@@ -43,7 +43,10 @@ class NotificationService
             throw new IllegalArgumentException("Null notification")
         }
         
-        notification.addToAcknowledgers(permissionUtilsService.principal())
-        notification.save()
+		if (permissionUtilsService.principal())
+		{
+	        notification.addToAcknowledgers(permissionUtilsService.principal())
+	        notification.save()
+		}
     }
 }

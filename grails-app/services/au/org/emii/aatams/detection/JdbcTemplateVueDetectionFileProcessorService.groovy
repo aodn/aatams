@@ -23,37 +23,36 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 	def dataSource
 	def jdbcTemplateDetectionFactoryService
 	
-	List<Map> detectionBatch
+//	List<Map> detectionBatch
 	
 	protected int getBatchSize()
 	{
 		return 500
 	}
 	
-	protected void startBatch()
+	protected void startBatch(context)
 	{
 		log.debug("Start batch")
 		
 		// Create lists
-		detectionBatch = new ArrayList<Map>()
+		context.detectionBatch = new ArrayList<Map>()
 	}
 	
-	protected void endBatch()
+	protected void endBatch(context)
 	{
 		log.debug("Start mark duplicates...")
-		markDuplicates()
+		markDuplicates(context)
 		log.debug("End mark duplicates.")
 		
 		log.debug("End batch, inserting detections...")
-		insertDetections()
+		insertDetections(context)
 		
-		
-		super.endBatch()
+		super.endBatch(context)
 	}
 	
-	private void markDuplicates()
+	private void markDuplicates(context)
 	{
-		detectionBatch.each 
+		context.detectionBatch.each 
 		{
 			newDetection ->
 			
@@ -82,14 +81,25 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 		}
 	}
 	
-	private void insertDetections()
+	private void insertDetections(context)
 	{
 		def insertStatementList = []
 		
-		detectionBatch.each
+		context.detectionBatch.each
 		{
-			insertStatementList.add(RawDetection.toSqlInsert(it))
-			
+			if (it.clazz == "au.org.emii.aatams.detection.ValidDetection")
+			{
+				insertStatementList += ValidDetection.toSqlInsert(it)
+			}
+			else if (it.clazz == "au.org.emii.aatams.detection.InvalidDetection")
+			{
+				insertStatementList += InvalidDetection.toSqlInsert(it)
+			}
+			else
+			{
+				assert(false): "Unknown detection class: " + it.clazz
+			}
+
 			it.detectionSurgeries.each
 			{
 				detSurgery ->
@@ -109,9 +119,9 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 		log.debug("Batch successfully inserted")	
 	}
 	
-    void processSingleRecord(downloadFile, map)
+    void processSingleRecord(downloadFile, map, context)
     {
 		def detection = jdbcTemplateDetectionFactoryService.newDetection(downloadFile, map)
-        detectionBatch.addAll(detection)
+        context.detectionBatch.addAll(detection)
     }
 }

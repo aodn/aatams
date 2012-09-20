@@ -61,7 +61,8 @@ class BulkImportService {
 	{
 		[(new ReceiverLoader()): ["RECEIVERS.csv"], 
 		 (new InstallationLoader()): ["GROUPINGS.csv", "GROUPINGDETAIL.csv", "STATIONS.csv"],
-		 (new ReceiverDeploymentLoader()): ["RECEIVERDEPLOYMENTS.csv"]].each
+		 (new ReceiverDeploymentLoader()): ["RECEIVERDEPLOYMENTS.csv"],
+		 (new AnimalReleaseLoader()): ["RELEASES.csv"]].each
 		{
 			loader, entryNames ->
 

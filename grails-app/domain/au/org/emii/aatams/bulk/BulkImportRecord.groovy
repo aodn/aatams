@@ -19,8 +19,9 @@ class BulkImportRecord
 	
     static constraints = 
 	{
-		dstClass(nullable:true)
-		dstPk(nullable:true)
+		dstClass(nullable: true)
+		dstPk(nullable: true)
+		srcModifiedDate(nullable: true)
     }
 
 	def beforeDelete()

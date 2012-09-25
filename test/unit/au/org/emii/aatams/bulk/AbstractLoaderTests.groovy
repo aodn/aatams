@@ -31,13 +31,27 @@ abstract class AbstractLoaderTests extends GrailsUnitTestCase
 
 	protected def assertSuccess(texts, expectedImportRecords)
 	{
+		assertSuccess(texts, expectedImportRecords, true)
+	}
+	
+	protected BulkImport load(texts)
+	{
 		BulkImport bulkImport = new BulkImport(organisation: csiro, importStartDate: new DateTime(), status: BulkImportStatus.IN_PROGRESS, filename: "some/path")
 		bulkImport.save(failOnError: true)
 	
 		loader.load([bulkImport: bulkImport, organisation: csiro], texts.collect { new ByteArrayInputStream(it.bytes) })
-
+	}
+	
+	protected def assertSuccess(texts, expectedImportRecords, checkAllExpected)
+	{
+		def bulkImport = load(texts)
+		
 		def importRecords = BulkImportRecord.findAllByBulkImport(bulkImport)
-		assertEquals(expectedImportRecords.size(), importRecords.size())
+		
+		if (checkAllExpected)
+		{
+			assertEquals(expectedImportRecords.size(), importRecords.size())
+		}
 		
 		expectedImportRecords.eachWithIndex
 		{

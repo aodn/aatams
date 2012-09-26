@@ -45,6 +45,8 @@ abstract class AbstractLoaderTests extends GrailsUnitTestCase
 		bulkImport.save(failOnError: true)
 	
 		loader.load([bulkImport: bulkImport, organisation: csiro], streams)
+		
+		return bulkImport
 	}
 
 	protected def assertSuccess(texts, expectedImportRecords, checkAllExpected)
@@ -52,7 +54,7 @@ abstract class AbstractLoaderTests extends GrailsUnitTestCase
 		def bulkImport = load(texts)
 		
 		def importRecords = BulkImportRecord.findAllByBulkImport(bulkImport)
-		
+
 		if (checkAllExpected)
 		{
 			assertEquals(expectedImportRecords.size(), importRecords.size())

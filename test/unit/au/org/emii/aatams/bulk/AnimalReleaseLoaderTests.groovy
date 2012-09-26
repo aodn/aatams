@@ -166,7 +166,7 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		assertEquals(1, Sensor.findAllByTag(tag).size())
 		
 		def project = tag.project
-		assertEquals("Bruce", project.name)
+		assertEquals("CSIRO bulk import", project.name)
 		
 		assertEquals(1, Tag.count())
 		assertEquals(1, Project.count())
@@ -322,13 +322,8 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		assertEquals(1, AnimalMeasurement.count())
 	}
 	
-	void testIgnore()
-	{
-		loadStreams([new FileInputStream("/tmp/RELEASES.csv")])
-
-//		load()
-//		// Load actual file.
-//		loader.load([:], [new FileInputStream("/tmp/RELEASES.csv")])
-		
-	}
+//	void testIgnore()
+//	{
+//		loadStreams([new FileInputStream("/tmp/RELEASES.csv")])
+//	}
 }

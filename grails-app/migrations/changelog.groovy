@@ -1550,5 +1550,9 @@ databaseChangeLog = {
 	include file: 'audit_log.groovy'
 
 	include file: 'abstract_raw_detection.groovy'
+
+	include file: 'nullable_src_date.groovy'
+
+	include file: 'non_unique_device_serial_numbers.groovy'
 }
 

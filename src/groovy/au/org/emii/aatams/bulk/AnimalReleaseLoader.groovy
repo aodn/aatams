@@ -53,12 +53,36 @@ class AnimalReleaseLoader extends AbstractLoader
 	private void processSingleRecord(Map context, Map record) throws BulkImportException
 	{
 		log.debug("Processing record: " + record)
+		println("Processing record: " + record)
+		
+		if (shouldIgnore(record))
+		{
+			
+		}
+		else
+		{
+			def tag = loadTag(context, record)
+			def animal = loadAnimal(context, record)
+			def release = loadRelease(context, record, tag.project, animal)
+			def surgery = loadSurgery(context, record, tag, release)
+			def measurement = loadMeasurement(context, record, release)
+		}
+	}
+	
+	// TODO probably shouldn't be ignoring any records.
+	private boolean shouldIgnore(record)
+	{
+		boolean shouldIgnore = false
+		
+		[record[ACO_MANUFACTURER_COL], record[ACO_SERIAL_NUMBER_COL], record["ACO_OWNER"], record["REL_LONGITUDE"], record["REL_LATITUDE"]].each {
+			
+			if (it.isEmpty())
+			{ 
+				shouldIgnore = true
+			}
+		}
 
-		def tag = loadTag(context, record)
-		def animal = loadAnimal(context, record)
-		def release = loadRelease(context, record, tag.project, animal)
-		def surgery = loadSurgery(context, record, tag, release)
-		def measurement = loadMeasurement(context, record, release)
+		return shouldIgnore
 	}
 	
 	private Tag loadTag(Map context, Map record) throws BulkImportException
@@ -103,6 +127,9 @@ class AnimalReleaseLoader extends AbstractLoader
 	
 	private Project findOrCreateProject(name)
 	{
+		// TODO: project mapping (by owner)
+		name = "CSIRO bulk import"
+		
 		Project project = Project.findByName(name, [cache: true])
 		
 		if (!project)
@@ -123,18 +150,33 @@ class AnimalReleaseLoader extends AbstractLoader
 		{
 			return TagDeviceModel.findByModelName("V16")
 		}
-		
+		else if (modelAsString == "Vemco 13mm")
+		{
+			return TagDeviceModel.findByModelName("V13")
+		}
+		else if (modelAsString == "Vemco 9mm")
+		{
+			return TagDeviceModel.findByModelName("V9")
+		}
+		else if (modelAsString == "Vemco 8mm")
+		{
+			return TagDeviceModel.findByModelName("V8")
+		}
+
 		assert(false): "Unkown model: " + modelAsString
 	}
 	
 	private CodeMap getCodeMap(codeMapAsString)
 	{
-		if (codeMapAsString == "R64K (Sync=320,Bin=20)")
-		{
-			return CodeMap.findByCodeMap("A69-1303")
-		}
+		return CodeMap.findByCodeMap("A69-1303")
 		
-		assert(false): "Unkown code map: " + codeMapAsString
+//		TODO
+//		if (codeMapAsString == "R64K (Sync=320,Bin=20)")
+//		{
+//			return CodeMap.findByCodeMap("A69-1303")
+//		}
+//		
+//		assert(false): "Unknown code map: " + codeMapAsString
 	}
 	
 	private Animal loadAnimal(Map context, Map record) throws BulkImportException
@@ -146,12 +188,18 @@ class AnimalReleaseLoader extends AbstractLoader
 			throw new BulkImportException("Unknown CAAB code: ${record['SPC_CAAB_CODE']}")
 		}
 		
-		def sexMapping = ["male": Sex.findBySex("MALE"), "female": Sex.findBySex("FEMALE"), "": Sex.findBySex("UNKNOWN"), "indeterminate": Sex.findBySex("UNKNOWN")]
+		println "REL_SEX = '${record['REL_SEX']}'"
+		def sexMapping = [
+			"male": Sex.findBySex("MALE"), 
+			"female": Sex.findBySex("FEMALE"), 
+			null: Sex.findBySex("UNKNOWN"), 
+			'': Sex.findBySex("UNKNOWN"), 
+			"indeterminate": Sex.findBySex("UNKNOWN")]
 		def sex = sexMapping[record["REL_SEX"]]
 		
 		if (!sex)
 		{
-			throw new BulkImportException("Unknown sex: ${record['REL_SEX']}")
+			throw new BulkImportException("Unknown sex: '${record['REL_SEX']}'")
 		}
 		
 		Animal animal = new Animal(sex: sex, species: species)
@@ -177,18 +225,20 @@ class AnimalReleaseLoader extends AbstractLoader
 		assert(project)
 		assert(animal)	
 	
+		Point location =  new GeometryFactory().createPoint(new Coordinate(Double.valueOf(record['REL_LONGITUDE']), Double.valueOf(record['REL_LATITUDE'])))
+		location.setSRID(4326)
 		AnimalRelease release = new AnimalRelease(
 			project: project,
 			animal: animal,
 			captureLocality: "not recorded",
-			captureLocation: new GeometryFactory().createPoint(new Coordinate(Double.valueOf(record['REL_LONGITUDE']), Double.valueOf(record['REL_LATITUDE']))),
+			captureLocation: location,
 			captureDateTime: constructDateTime(record['REL_DATE'], record['TIME']),
 			captureMethod: CaptureMethod.findByName("LINE"),	// TODO
 			releaseLocality: "not recorded",
-			releaseLocation: new GeometryFactory().createPoint(new Coordinate(Double.valueOf(record['REL_LONGITUDE']), Double.valueOf(record['REL_LATITUDE']))),
+			releaseLocation: location,
 			releaseDateTime: constructDateTime(record['REL_DATE'], record['TIME']),
 			comments: record['NOTES'],
-			embargoDate: new DateTime().plusYears(3),
+			embargoDate: new DateTime().plusYears(3).toDate(),
 			status: AnimalReleaseStatus.CURRENT)
 	
 		release.save(failOnError: true)
@@ -247,15 +297,22 @@ class AnimalReleaseLoader extends AbstractLoader
 	{
 		assert(release)
 		
-		AnimalMeasurement measurement = new AnimalMeasurement(
-			release: release,
-			type: getMeasurementType(record['REL_LENGTH_TYPE']),
-			value: Float.valueOf(record['REL_LENGTH']),
-			unit: MeasurementUnit.findByUnit("cm", [cache: true]),
-			estimate: isEstimatedMeasurement(record['REL_LENGTH_QUALITY']))
+		def type = getMeasurementType(record['REL_LENGTH_TYPE'])
+		def valueAsString = record['REL_LENGTH']
+		if (type && !valueAsString.isEmpty())
+		{
+			AnimalMeasurement measurement = new AnimalMeasurement(
+				release: release,
+				type: type,
+				value: Float.valueOf(valueAsString),
+				unit: MeasurementUnit.findByUnit("cm", [cache: true]),
+				estimate: isEstimatedMeasurement(record['REL_LENGTH_QUALITY']))
+			
+			measurement.save(failOnError: true)
+			return measurement
+		}
 		
-		measurement.save(failOnError: true)
-		return measurement
+		return null
 	}
 	
 	private AnimalMeasurementType getMeasurementType(typeAsString)
@@ -268,7 +325,6 @@ class AnimalReleaseLoader extends AbstractLoader
 		
 		assert(mapping.containsKey(typeAsString))
 		return mapping[typeAsString]
-
 	}
 	
 	private boolean isEstimatedMeasurement(lengthQuality)

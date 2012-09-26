@@ -34,14 +34,19 @@ abstract class AbstractLoaderTests extends GrailsUnitTestCase
 		assertSuccess(texts, expectedImportRecords, true)
 	}
 	
-	protected BulkImport load(texts)
+	protected BulkImport load(List<String> texts)
+	{
+		return loadStreams(texts.collect { new ByteArrayInputStream(it.bytes) })
+	}
+
+	protected BulkImport loadStreams(List<InputStream> streams)
 	{
 		BulkImport bulkImport = new BulkImport(organisation: csiro, importStartDate: new DateTime(), status: BulkImportStatus.IN_PROGRESS, filename: "some/path")
 		bulkImport.save(failOnError: true)
 	
-		loader.load([bulkImport: bulkImport, organisation: csiro], texts.collect { new ByteArrayInputStream(it.bytes) })
+		loader.load([bulkImport: bulkImport, organisation: csiro], streams)
 	}
-	
+
 	protected def assertSuccess(texts, expectedImportRecords, checkAllExpected)
 	{
 		def bulkImport = load(texts)

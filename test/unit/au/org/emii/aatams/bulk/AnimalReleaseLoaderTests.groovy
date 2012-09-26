@@ -8,12 +8,13 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 {
 	def a69_1303
 	def newStatus
-	def v16
+	def v16, v13, v9, v8
 	def pingerType
 	def pressureType
 	
 	def male
 	def female
+	def unknown
 	
 	def whiteShark
 	
@@ -35,8 +36,12 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		mockDomain(Tag)
 
 		v16 = new TagDeviceModel(modelName: "V16", manufacturer: new DeviceManufacturer())
-		mockDomain(TagDeviceModel, [v16])
-		[v16].each {
+		v13 = new TagDeviceModel(modelName: "V13", manufacturer: new DeviceManufacturer())
+		v9 = new TagDeviceModel(modelName: "V9", manufacturer: new DeviceManufacturer())
+		v8 = new TagDeviceModel(modelName: "V8", manufacturer: new DeviceManufacturer())
+		mockDomain(TagDeviceModel, [v16, v13, v9, v8])
+		
+		[v16, v13, v9, v8].each {
 			it.save()
 		}
 		
@@ -49,14 +54,13 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		
 		male = new Sex(sex: "MALE")
 		female = new Sex(sex: "FEMALE")
-		mockDomain(Sex, [male, female])
-		[male, female].each {
+		unknown = new Sex(sex: "UNKNOWN")
+		mockDomain(Sex, [male, female, unknown])
+		[male, female, unknown].each {
 			it.save()
 		}
 		
-		whiteShark = new CaabSpecies(spcode: '37010003')
-		mockDomain(CaabSpecies, [whiteShark])
-		whiteShark.save()
+		loadCaabCodes()
 		
 		def lineCapture = new CaptureMethod(name: 'LINE')
 		mockDomain(CaptureMethod, [lineCapture])
@@ -72,8 +76,9 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		[internal, external].each { it.save(failOnError: true) }
 		
 		def totalLength = new AnimalMeasurementType(type: "TOTAL LENGTH")
-		mockDomain(AnimalMeasurementType, [totalLength])
-		totalLength.save()
+		def forkLength = new AnimalMeasurementType(type: "FORK LENGTH")
+		mockDomain(AnimalMeasurementType, [totalLength, forkLength])
+		[totalLength, forkLength].each { it.save() }
 		
 		def cm = new MeasurementUnit(unit: "cm")
 		mockDomain(MeasurementUnit, [cm])
@@ -86,6 +91,54 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		mockDomain(Surgery)
     }
 
+	private void loadCaabCodes()
+	{
+		def codesAsString = 
+			'''37010003
+			37311010
+			37351008
+			37337037
+			37346027
+			37018036
+			37018033
+			37311057
+			37361001
+			37311166
+			37351013
+			37386027
+			37437031
+			37386030
+			37384090
+			37018030
+			37014001
+			37311022
+			37311078
+			37311012
+			37386008
+			37386001
+			37018029
+			37018034
+			37035011
+			37027010
+			37018022
+			37035027
+			37335001
+			37018038
+			37018039
+			37441004'''.split('\n').collect { it.trim() }
+		
+		
+		
+		def speciesList = codesAsString.collect {
+			new CaabSpecies(spcode: it)
+		}
+		whiteShark = speciesList[0]
+		
+		mockDomain(CaabSpecies, speciesList)
+		speciesList.each { it.save() }
+		
+
+	}
     protected void tearDown() 
 	{
         super.tearDown()
@@ -209,7 +262,7 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		}
 		catch (BulkImportException e)
 		{
-			assertEquals("Unknown sex: aaa", e.message)
+			assertEquals("Unknown sex: 'aaa'", e.message)
 		}
 	}
 	
@@ -267,5 +320,15 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		
 		
 		assertEquals(1, AnimalMeasurement.count())
+	}
+	
+	void testIgnore()
+	{
+		loadStreams([new FileInputStream("/tmp/RELEASES.csv")])
+
+//		load()
+//		// Load actual file.
+//		loader.load([:], [new FileInputStream("/tmp/RELEASES.csv")])
+		
 	}
 }

@@ -139,6 +139,7 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		
 
 	}
+	
     protected void tearDown() 
 	{
         super.tearDown()

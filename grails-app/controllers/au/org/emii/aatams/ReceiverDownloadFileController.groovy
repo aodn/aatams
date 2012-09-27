@@ -52,22 +52,9 @@ class ReceiverDownloadFileController
         }
         else
         {
-            receiverDownloadFileInstance.errMsg = ""
-            receiverDownloadFileInstance.importDate = new Date()
-            receiverDownloadFileInstance.status = FileProcessingStatus.PROCESSING
-            receiverDownloadFileInstance.requestingUser = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
-            
-            MultipartFile file = (fileMap.values() as List)[0]
-            receiverDownloadFileInstance.name = file.getOriginalFilename()
-            receiverDownloadFileInstance.path = "temp path" // so that the save works, and hence ID is assigned
-			receiverDownloadFileInstance.progress = new ReceiverDownloadFileProgress(percentComplete: 0, receiverDownloadFile: receiverDownloadFileInstance)
-            receiverDownloadFileInstance.save(flush:true, failOnError:true)
-
-            def path = getPath(receiverDownloadFileInstance)
-            String fullPath = path + File.separator + file.getOriginalFilename()
-            receiverDownloadFileInstance.path = fullPath
-            receiverDownloadFileInstance.save(flush:true, failOnError:true)
-
+			MultipartFile file = (fileMap.values() as List)[0]
+			receiverDownloadFileInstance.initialiseForProcessing(file.getOriginalFilename())
+			
             flash.message = "${message(code: 'default.processing.receiverUpload.message')}"
             
             // Define this in web thread, as it fails if done async.
@@ -168,25 +155,6 @@ class ReceiverDownloadFileController
             response.outputStream << file.newInputStream() // Performing a binary stream copy
             [receiverDownloadFileInstance: receiverDownloadFileInstance]
         }
-    }
-    
-    /**
-     *  Files are stored at: 
-     *  
-     *      <basepath>/<downloadFile.id>.
-     */
-    String getPath(ReceiverDownloadFile downloadFile)
-    {
-        // Save the file to disk.
-        def path = grailsApplication.config.fileimport.path
-        log.debug("File import config: " + grailsApplication.config.fileimport)
-        if (!path.endsWith(File.separator))
-        {
-            path = path + File.separator
-        }
-        
-		assert(downloadFile.id): "Download file ID cannot be null"
-		path += downloadFile.id
     }
 	
 	def status = 

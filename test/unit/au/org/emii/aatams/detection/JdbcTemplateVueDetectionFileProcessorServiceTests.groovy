@@ -61,7 +61,7 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 		tag.addToSurgeries(surgery)
 		tag.save()
 
-		download = new ReceiverDownloadFile()
+		download = new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV)
 		mockDomain(ReceiverDownloadFile, [download])
 		download.save()
 	}

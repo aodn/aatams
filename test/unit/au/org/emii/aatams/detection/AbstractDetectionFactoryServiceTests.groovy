@@ -31,14 +31,14 @@ abstract class AbstractDetectionFactoryServiceTests extends GrailsUnitTestCase
 		mockDomain(Tag)
 		
 		standardParams =
-				[(DetectionFactoryService.DATE_AND_TIME_COLUMN):"2009-12-08 06:44:24",
-				 (DetectionFactoryService.RECEIVER_COLUMN):"VR3UWM-354",
-				 (DetectionFactoryService.TRANSMITTER_COLUMN):"A69-1303-62347",
-				 (DetectionFactoryService.TRANSMITTER_NAME_COLUMN):"shark tag",
-				 (DetectionFactoryService.TRANSMITTER_SERIAL_NUMBER_COLUMN):"1234",
-				 (DetectionFactoryService.STATION_NAME_COLUMN):"Neptune SW 1",
-				 (DetectionFactoryService.LATITUDE_COLUMN):-40.1234f,
-				 (DetectionFactoryService.LONGITUDE_COLUMN):45.1234f]
+				[(VueDetectionFormat.DATE_AND_TIME_COLUMN):"2009-12-08 06:44:24",
+				 (VueDetectionFormat.RECEIVER_COLUMN):"VR3UWM-354",
+				 (VueDetectionFormat.TRANSMITTER_COLUMN):"A69-1303-62347",
+				 (VueDetectionFormat.TRANSMITTER_NAME_COLUMN):"shark tag",
+				 (VueDetectionFormat.TRANSMITTER_SERIAL_NUMBER_COLUMN):"1234",
+				 (VueDetectionFormat.STATION_NAME_COLUMN):"Neptune SW 1",
+				 (VueDetectionFormat.LATITUDE_COLUMN):-40.1234f,
+				 (VueDetectionFormat.LONGITUDE_COLUMN):45.1234f]
 		
 		ReceiverDeviceModel rxrModel = new ReceiverDeviceModel(modelName:"VR3UWM")
 		mockDomain(ReceiverDeviceModel, [rxrModel])

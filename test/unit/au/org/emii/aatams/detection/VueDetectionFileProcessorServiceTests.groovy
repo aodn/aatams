@@ -42,7 +42,7 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
 
 	void testProcess()
     {
-        ReceiverDownloadFile download = new ReceiverDownloadFile()
+        ReceiverDownloadFile download = new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV)
         mockDomain(ReceiverDownloadFile, [download])
         download.save()
 

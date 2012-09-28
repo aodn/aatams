@@ -20,7 +20,6 @@ class ReceiverDownloadFileTests extends GroovyTestCase
 	{
         ReceiverDownloadFile export = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
-                                     path:"/tmp/export.csv",
                                      name:"export.csv",
                                      importDate:new DateTime("2013-05-17T12:54:56").toDate(),
                                      status:FileProcessingStatus.PROCESSED,

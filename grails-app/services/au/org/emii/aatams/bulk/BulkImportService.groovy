@@ -14,7 +14,7 @@ class BulkImportService {
 
     static transactional = true
 
-	def fileProcessorService
+	def jdbcTemplateVueDetectionFileProcessorService
 	
     void process(Long bulkImportId, MultipartFile multipartFile) throws BulkImportException
 	{
@@ -65,7 +65,7 @@ class BulkImportService {
 		 (new InstallationLoader()): ["GROUPINGS.csv", "GROUPINGDETAIL.csv", "STATIONS.csv"],
 		 (new ReceiverDeploymentLoader()): ["RECEIVERDEPLOYMENTS.csv"],
 		 (new AnimalReleaseLoader()): ["RELEASES.csv"],
-		 (new DetectionLoader(fileProcessorService: fileProcessorService)): ["DETECTIONS.csv"]].each
+		 (new DetectionLoader(jdbcTemplateVueDetectionFileProcessorService: jdbcTemplateVueDetectionFileProcessorService)): ["DETECTIONS.csv"]].each
 		{
 			loader, entryNames ->
 

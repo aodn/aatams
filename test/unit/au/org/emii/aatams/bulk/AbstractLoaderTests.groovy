@@ -1,11 +1,12 @@
 package au.org.emii.aatams.bulk
 
 import au.org.emii.aatams.*
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase;
 import grails.test.GrailsUnitTestCase;
 import org.joda.time.DateTime
 import org.joda.time.DateTimeUtils
 
-abstract class AbstractLoaderTests extends GrailsUnitTestCase 
+abstract class AbstractLoaderTests extends AbstractGrailsUnitTestCase 
 {
 	protected def currentDateTime = new DateTime("2012-01-01T12:00:00")
 	protected AbstractLoader loader

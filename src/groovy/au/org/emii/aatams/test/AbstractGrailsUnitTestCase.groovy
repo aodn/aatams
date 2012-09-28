@@ -12,7 +12,7 @@ import au.org.emii.aatams.Person;
 abstract class AbstractGrailsUnitTestCase extends GrailsUnitTestCase 
 {
 	protected hasRole = true
-	protected user
+	protected def user
 	protected authenticated = true
 	protected permitted = false
 	
@@ -23,7 +23,7 @@ abstract class AbstractGrailsUnitTestCase extends GrailsUnitTestCase
 		super.setUp()
 
 		hasRole = true
-		authenticated = true
+		authenticated = false
 		permitted = false
 
 		def subject = [ getPrincipal: { getPrincipal() },
@@ -39,6 +39,12 @@ abstract class AbstractGrailsUnitTestCase extends GrailsUnitTestCase
 		registry.removeMetaClass(SecurityUtils)
 
 		SecurityUtils.metaClass.static.getSubject = { subject }
+		
+		user = new Person(username:"jkburges")
+		mockDomain(Person, [user])
+		user.save()
+		
+		authenticated = true
 	}
 
 	protected void tearDown()
@@ -49,14 +55,9 @@ abstract class AbstractGrailsUnitTestCase extends GrailsUnitTestCase
 		super.tearDown()
 	}
 	
-	protected Person getUser()
-	{
-		return new Person(username:"jkburges")
-	}
-	
 	protected def getPrincipal()
 	{
-		return getUser()?.username
+		return user?.username
 	}
 	
 	protected boolean isAuthenticated()

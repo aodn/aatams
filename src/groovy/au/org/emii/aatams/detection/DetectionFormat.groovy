@@ -18,7 +18,11 @@ abstract class DetectionFormat
 		{
 			return new VueDetectionFormat()
 		}
-		
-		assert(false): "Unknown detection format: " + type
+		else if (type == ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV)
+		{
+			return new CsiroDetectionFormat()
+		}
+
+		throw new IllegalArgumentException("Unknown detection format: " + type)
 	}
 }

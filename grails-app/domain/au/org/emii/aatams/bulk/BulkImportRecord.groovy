@@ -21,6 +21,7 @@ class BulkImportRecord
 	{
 		dstClass(nullable: true)
 		dstPk(nullable: true)
+		srcPk(nullable: true)
 		srcModifiedDate(nullable: true)
     }
 

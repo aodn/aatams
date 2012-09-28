@@ -52,8 +52,7 @@ class ReceiverDownloadFile
         errMsg = ""
         importDate = new Date()
         status = FileProcessingStatus.PROCESSING
-        requestingUser = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
-        
+		requestingUser = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
         name = filename
         progress = new ReceiverDownloadFileProgress(percentComplete: 0, receiverDownloadFile: this)
         save(flush:true, failOnError:true)

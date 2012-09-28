@@ -14,6 +14,8 @@ class BulkImportService {
 
     static transactional = true
 
+	def fileProcessorService
+	
     void process(Long bulkImportId, MultipartFile multipartFile) throws BulkImportException
 	{
 		BulkImport bulkImport = BulkImport.get(bulkImportId)
@@ -62,7 +64,8 @@ class BulkImportService {
 		[(new ReceiverLoader()): ["RECEIVERS.csv"], 
 		 (new InstallationLoader()): ["GROUPINGS.csv", "GROUPINGDETAIL.csv", "STATIONS.csv"],
 		 (new ReceiverDeploymentLoader()): ["RECEIVERDEPLOYMENTS.csv"],
-		 (new AnimalReleaseLoader()): ["RELEASES.csv"]].each
+		 (new AnimalReleaseLoader()): ["RELEASES.csv"],
+		 (new DetectionLoader(fileProcessorService: fileProcessorService)): ["DETECTIONS.csv"]].each
 		{
 			loader, entryNames ->
 

@@ -37,6 +37,7 @@ class ReceiverDownloadFile
     static constraints =
     {
         type()
+		requestingUser(nullable: true)	// Null for bulk import
 		progress(nullable: true)
     }
     
@@ -52,17 +53,15 @@ class ReceiverDownloadFile
         errMsg = ""
         importDate = new Date()
         status = FileProcessingStatus.PROCESSING
-		requestingUser = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
         name = filename
-        progress = new ReceiverDownloadFileProgress(percentComplete: 0, receiverDownloadFile: this)
-        save(flush:true, failOnError:true)
+		progress = new ReceiverDownloadFileProgress(percentComplete: 0, receiverDownloadFile: this)
 	}
 	
     String getPath()
     {
         // Save the file to disk.
         def path = grailsApplication.config.fileimport.path
-        log.debug("File import config: " + grailsApplication.config.fileimport)
+		
         if (!path.endsWith(File.separator))
         {
             path = path + File.separator

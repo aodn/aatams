@@ -14,6 +14,7 @@ class DetectionLoaderTests extends AbstractLoaderTests
 		
 		mockConfig("fileimport.path = '/tmp/fileProcessorServiceTests'")
 		ReceiverDownloadFile.metaClass.getPath = { '/tmp/detectionLoaderTests' }
+		ReceiverDownloadFile.metaClass.static.withNewTransaction = { it.call() }
 	}
 	
 	protected void tearDown()

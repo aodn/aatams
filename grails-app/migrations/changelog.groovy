@@ -1556,5 +1556,7 @@ databaseChangeLog = {
 	include file: 'non_unique_device_serial_numbers.groovy'
 
 	include file: 'transient_download_path.groovy'
+
+	include file: 'null_requester_and_srk_pk.groovy'
 }
 

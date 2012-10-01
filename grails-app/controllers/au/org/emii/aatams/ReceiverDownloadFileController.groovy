@@ -54,6 +54,7 @@ class ReceiverDownloadFileController
         {
 			MultipartFile file = (fileMap.values() as List)[0]
 			receiverDownloadFileInstance.initialiseForProcessing(file.getOriginalFilename())
+			receiverDownloadFileInstance.save(flush: true, failOnError: true)
 			
             flash.message = "${message(code: 'default.processing.receiverUpload.message')}"
             

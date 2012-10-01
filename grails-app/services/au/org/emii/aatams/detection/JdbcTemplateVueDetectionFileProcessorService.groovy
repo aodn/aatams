@@ -40,12 +40,19 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 	
 	protected void endBatch(context)
 	{
-		log.debug("Start mark duplicates...")
-		markDuplicates(context)
-		log.debug("End mark duplicates.")
-		
-		log.debug("End batch, inserting detections...")
-		insertDetections(context)
+		if (context.detectionBatch.isEmpty())
+		{
+			log.warn("Detection batch empty.")
+		}
+		else
+		{
+			log.debug("Start mark duplicates...")
+			markDuplicates(context)
+			log.debug("End mark duplicates.")
+			
+			log.debug("End batch, inserting detections...")
+			insertDetections(context)
+		}
 		
 		super.endBatch(context)
 	}

@@ -52,6 +52,6 @@ class BulkImportRecord
 	
 	String toString()
 	{
-		return "[srcTable: ${srcTable}, srcPk: ${srcPk}, dstPk: ${dstPk}, type: ${type}]"
+		return "[srcTable: ${srcTable}, srcPk: ${srcPk}, dstPk: ${dstPk}, dstClass: ${dstClass}, type: ${type}]"
 	}
 }

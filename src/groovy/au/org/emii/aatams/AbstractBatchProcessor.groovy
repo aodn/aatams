@@ -1,5 +1,6 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.bulk.BulkImportException
 import org.apache.commons.io.input.BOMInputStream;
 import org.grails.plugins.csv.CSVMapReader
 
@@ -82,30 +83,41 @@ abstract class AbstractBatchProcessor
 					startBatch(context)
                 }
 				
-                processSingleRecord(downloadFile, map, context)
-
-				float progress = (float)i/numRecords * 100
-				if ((int)progress > percentProgress)
+				// TODO: should be getting exceptions - but it depends on reading in
+				// all CSIRO imports (rather than ignoring some records).
+				try
 				{
-					percentProgress = (int)progress
-					
-					String progressMsg = 
-						"Download file processing, id: " + downloadFile.id +
-						", progress: " + percentProgress +
-						"%, average time per record: " + (float)(System.currentTimeMillis() - startTime) / (i + 1) + "ms"
+	                processSingleRecord(downloadFile, map, context)
+				}
+				catch (Throwable e)	// should only have to catch BulkImportException, but that is being wrapped for some reason.
+				{
+//					log.warn("Exception reading record: ${map}")
+				}
+				finally
+				{
+					float progress = (float)i/numRecords * 100
+					if ((int)progress > percentProgress)
+					{
+						percentProgress = (int)progress
 						
-					if ((percentProgress % 10) == 0)
-					{
-						log.info(progressMsg)
-					}
-					else
-					{
-						log.debug(progressMsg)
-					}
-					
-					if ((percentProgress % 1) == 0)
-					{
-						updateProgress(downloadFile, percentProgress)
+						String progressMsg = 
+							"Download file processing, id: " + downloadFile.id +
+							", progress: " + percentProgress +
+							"%, average time per record: " + (float)(System.currentTimeMillis() - startTime) / (i + 1) + "ms"
+							
+						if ((percentProgress % 10) == 0)
+						{
+							log.info(progressMsg)
+						}
+						else
+						{
+							log.debug(progressMsg)
+						}
+						
+						if ((percentProgress % 1) == 0)
+						{
+							updateProgress(downloadFile, percentProgress)
+						}
 					}
 				}
             }

@@ -1,6 +1,7 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.ReceiverDownloadFileType
+import au.org.emii.aatams.bulk.BulkImportException;
 
 /**
  * Format subclasses know how to parse particular detection file formats, e.g. Vue, CSIRO.
@@ -10,7 +11,7 @@ import au.org.emii.aatams.ReceiverDownloadFileType
  */
 abstract class DetectionFormat 
 {
-	abstract Map parseRow(row)
+	abstract Map parseRow(row) throws BulkImportException
 	
 	static DetectionFormat newFormat(type)
 	{

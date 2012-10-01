@@ -12,9 +12,17 @@ class DetectionLoader extends AbstractLoader
 	void load(Map context, List<InputStream> streams) throws BulkImportException
 	{
 		// Create a ReceiverDownloadFile...
-		ReceiverDownloadFile download = new ReceiverDownloadFile(type: ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV)
-		download.initialiseForProcessing("CSIRO bulk upload")
+		ReceiverDownloadFile download
 		
+		ReceiverDownloadFile.withNewTransaction
+		{
+			download = new ReceiverDownloadFile(type: ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV)
+			download.initialiseForProcessing("CSIRO_bulk_upload")
+			download.save(flush: true, failOnError: true)
+		}
+
+		download = ReceiverDownloadFile.read(download.id)
+				
 		BulkImportRecord importRecord = 
 			new BulkImportRecord(
 				bulkImport: context.bulkImport,
@@ -27,6 +35,9 @@ class DetectionLoader extends AbstractLoader
 			
 		// Save stream to file...
 		File outfile = new File(download.path)
+		outfile.getParentFile().mkdirs()
+		outfile.createNewFile()
+		
 		IOUtils.copy(streams[0], new BufferedOutputStream(new FileOutputStream(outfile)))
 		
 		// Delegate to fileProcessorService

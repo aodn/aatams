@@ -238,7 +238,7 @@ class AnimalReleaseLoader extends AbstractLoader
 			releaseLocation: location,
 			releaseDateTime: constructDateTime(record['REL_DATE'], record['TIME']),
 			comments: record['NOTES'],
-			embargoDate: new DateTime().plusYears(3).toDate(),
+			embargoDate: new DateTime().plusYears(1).toDate(),
 			status: AnimalReleaseStatus.CURRENT)
 	
 		release.save(failOnError: true)

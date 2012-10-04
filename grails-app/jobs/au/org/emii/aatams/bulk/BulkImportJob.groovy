@@ -21,7 +21,7 @@ class BulkImportJob
 		{
 			log.error(e)
 			
-			def bulkImport = BulkImportException.getAt(context.mergedJobDataMap.get('bulkImportId'))
+			def bulkImport = BulkImport.get(context.mergedJobDataMap.get('bulkImportId'))
 			bulkImport?.status = BulkImportStatus.ERROR
 			bulkImport?.save()
 		}

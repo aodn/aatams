@@ -43,5 +43,4 @@ class DetectionLoaderTests extends AbstractLoaderTests
 		load([detectionsText])
 		assertTrue(processCalled)
 	}
-
 }

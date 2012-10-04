@@ -23,6 +23,8 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 	def bluefinTunaProject
 	def daleyProject
 	
+	def expectedCaptureMapping 
+	
     protected void setUp() 
 	{
         super.setUp()
@@ -67,10 +69,6 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		
 		loadCaabCodes()
 		
-		def lineCapture = new CaptureMethod(name: 'LINE')
-		mockDomain(CaptureMethod, [lineCapture])
-		lineCapture.save()
-		
 		def noAnesthetic = new SurgeryTreatmentType( type: 'NO ANESTHETIC')
 		mockDomain(SurgeryTreatmentType, [noAnesthetic])
 		noAnesthetic.save()
@@ -98,6 +96,21 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		mockDomain(Project, projectList)
 		projectList.each { it.save() }
 		
+		mockDomain(CaptureMethod)
+		expectedCaptureMapping = [
+			"Shark Cage Dive": "FREE-SWIMMING",
+			"": "OTHER",
+			"Other/unknown": "OTHER",
+			"Handlining": "HAND CAPTURE",
+			"Trolling": "TRAWL",
+			"Pole and line": "POLE AND LINE"]
+		
+		// Create capture methods...
+		expectedCaptureMapping.values().each {
+			def captureMethod = new CaptureMethod(name: it)
+			captureMethod.save()
+		}
+
 		mockDomain(Animal)
 		mockDomain(AnimalMeasurement)
 		mockDomain(AnimalRelease)
@@ -372,6 +385,16 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		["Bruce"].each
 		{
 			assertFalse(loader.shouldIgnore(defaultVals + ["ACO_OWNER": it]))
+		}
+	}
+	
+	void testCaptureMethod()
+	{
+		expectedCaptureMapping.each
+		{
+			k, v ->
+			
+			assertEquals(CaptureMethod.findByName(v), loader.getCaptureMethod(k))
 		}
 	}
 }

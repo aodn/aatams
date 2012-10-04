@@ -293,7 +293,7 @@ class AnimalReleaseLoader extends AbstractLoader
 			captureLocality: "not recorded",
 			captureLocation: location,
 			captureDateTime: constructDateTime(record['REL_DATE'], record['TIME']),
-			captureMethod: CaptureMethod.findByName("LINE"),	// TODO
+			captureMethod: getCaptureMethod(record['REL_CAPTURE']),
 			releaseLocality: "not recorded",
 			releaseLocation: location,
 			releaseDateTime: constructDateTime(record['REL_DATE'], record['TIME']),
@@ -304,6 +304,26 @@ class AnimalReleaseLoader extends AbstractLoader
 		release.save(failOnError: true)
 		
 		return release
+	}
+	
+	private CaptureMethod getCaptureMethod(captureMethodName)
+	{
+		def mapping = [
+			"Shark Cage Dive": "FREE-SWIMMING",
+			"": "OTHER",
+			"Other/unknown": "OTHER",
+			"Handlining": "HAND CAPTURE",
+			"Trolling": "TRAWL",
+			"Pole and line": "POLE AND LINE"]
+		
+		def captureMethod = CaptureMethod.findByName(mapping[captureMethodName])
+		
+		if (!captureMethod)
+		{
+			throw new BulkImportException("Unknown capture method: ${captureMethodName}")
+		}
+		
+		return captureMethod
 	}
 	
 	private static DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("d/M/yyyy' 0:00:00'")

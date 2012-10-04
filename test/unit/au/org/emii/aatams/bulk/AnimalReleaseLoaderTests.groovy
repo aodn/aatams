@@ -18,6 +18,11 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 	
 	def whiteShark
 	
+	def bruceProject
+	def nretaProject
+	def bluefinTunaProject
+	def daleyProject
+	
     protected void setUp() 
 	{
         super.setUp()
@@ -84,10 +89,18 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		mockDomain(MeasurementUnit, [cm])
 		cm.save()
 					
+		bruceProject = new Project(name: "CSIRO: Shark Monitoring Network")
+		nretaProject = new Project(name: "Ningaloo Reef Ecosystem Tracking Array (NRETA)")
+		bluefinTunaProject = new Project(name: "Bluefin tuna WA")
+		daleyProject = new Project(name: "CSIRO: Ross Daley")
+		
+		def projectList = [bruceProject, nretaProject, bluefinTunaProject, daleyProject]
+		mockDomain(Project, projectList)
+		projectList.each { it.save() }
+		
 		mockDomain(Animal)
 		mockDomain(AnimalMeasurement)
 		mockDomain(AnimalRelease)
-		mockDomain(Project)
 		mockDomain(Surgery)
     }
 
@@ -148,7 +161,6 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
     void testCreateTag() 
 	{
 		assertEquals(0, Tag.count())
-		assertEquals(0, Project.count())
 		
 		def releasesText = '''"ACO_ID","ACO_SERIAL_NUMBER","ACO_PINGER_CODE_ID","ACO_PINGER_TYPE","ACO_CODE_SPACE","ACO_MANUFACTURER","ACO_ATTACHMENT","ACO_OWNER","ACO_FREQUENCY","ACO_TEMP_SENSOR_YN","ACO_TEMP_CODE_SPACE","ACO_TEMP_PINGER_ID","ACO_TEMP_SLOPE","ACO_TEMP_INTERCEPT","ACO_PRES_SENSOR_YN","ACO_PRES_CODE_SPACE","ACO_PRES_PINGER_ID","ACO_PRES_SLOPE","ACO_PRES_INTERCEPT","ACO_TRANSMIT_INT_MIN","ACO_TRANSMIT_INT_MAX","REL_ID","REL_DATE","TIME","REL_TYPE","SPC_CAAB_CODE","SPC_COMMON_NAME","REL_LENGTH","REL_LENGTH_QUAL","REL_LENGTH_TYPE","REL_SEX","REL_COHORT_AGE","REL_LATITUDE","REL_LONGITUDE","TAG_ID","TAG_FIRST_NAME","TAG_FAMILY_NAME","VSL_ID","VSL_NAME","REL_CAPTURE","REL_FISH_COND","REL_INJ","REL_INJ_SEVERITY","REL_TIME_OOW","REL_STRONT_DOSE","REL_ABIOT_USED","REL_ABIOT_DOSE","REL_ASEPT_USED","REL_SCHOOL_NUM","REL_COUNT","REL_OBS_PROG_YN","NOTES"
 904,1078955,62347,"Coded Pinger","R64K (Sync=320,Bin=20)","Vemco 16mm","External","Bruce",69,0,,,,,0,,,,,50,130,149291,10/12/2009 0:00:00,"22:15","into the wild",37010003,"White Shark",420,"guessed","Total Length","male",,-35.23,136.07,414,"Barry","Bruce",15365,"CALYPSO STAR","Shark Cage Dive","good condition","other","slight injury",0,,,,,,,,"Date and time are in UTC"
@@ -167,45 +179,11 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		assertEquals(1, Sensor.findAllByTag(tag).size())
 		
 		def project = tag.project
-		assertEquals("CSIRO bulk import", project.name)
+		assertEquals("CSIRO: Shark Monitoring Network", project.name)
 		
 		assertEquals(1, Tag.count())
-		assertEquals(1, Project.count())
     }
 	
-	void testExistingTagProject()
-	{
-		Project project = new Project(name: "Bruce")
-		project.save(failOnError: true)
-		
-		Tag tag = new Tag(
-			project: project,
-			model: v16,
-			serialNumber: "1078955",
-			status: newStatus,
-			codeMap: a69_1303)
-		tag.save(failOnError: true)
-		
-		Sensor pinger = new Sensor(
-			tag: tag,
-			pingCode: 62347,
-			transmitterType: pingerType)
-		pinger.save(failOnError: true)
-		
-		tag.addToSensors(pinger)
-		
-		
-		assertEquals(1, Tag.count())
-		
-		def releasesText = '''"ACO_ID","ACO_SERIAL_NUMBER","ACO_PINGER_CODE_ID","ACO_PINGER_TYPE","ACO_CODE_SPACE","ACO_MANUFACTURER","ACO_ATTACHMENT","ACO_OWNER","ACO_FREQUENCY","ACO_TEMP_SENSOR_YN","ACO_TEMP_CODE_SPACE","ACO_TEMP_PINGER_ID","ACO_TEMP_SLOPE","ACO_TEMP_INTERCEPT","ACO_PRES_SENSOR_YN","ACO_PRES_CODE_SPACE","ACO_PRES_PINGER_ID","ACO_PRES_SLOPE","ACO_PRES_INTERCEPT","ACO_TRANSMIT_INT_MIN","ACO_TRANSMIT_INT_MAX","REL_ID","REL_DATE","TIME","REL_TYPE","SPC_CAAB_CODE","SPC_COMMON_NAME","REL_LENGTH","REL_LENGTH_QUAL","REL_LENGTH_TYPE","REL_SEX","REL_COHORT_AGE","REL_LATITUDE","REL_LONGITUDE","TAG_ID","TAG_FIRST_NAME","TAG_FAMILY_NAME","VSL_ID","VSL_NAME","REL_CAPTURE","REL_FISH_COND","REL_INJ","REL_INJ_SEVERITY","REL_TIME_OOW","REL_STRONT_DOSE","REL_ABIOT_USED","REL_ABIOT_DOSE","REL_ASEPT_USED","REL_SCHOOL_NUM","REL_COUNT","REL_OBS_PROG_YN","NOTES"
-904,1078955,62347,"Coded Pinger","R64K (Sync=320,Bin=20)","Vemco 16mm","External","Bruce",69,0,,,,,0,,,,,50,130,149291,10/12/2009 0:00:00,"22:15","into the wild",37010003,"White Shark",420,"guessed","Total Length","male",,-35.23,136.07,414,"Barry","Bruce",15365,"CALYPSO STAR","Shark Cage Dive","good condition","other","slight injury",0,,,,,,,,"Date and time are in UTC"
-'''
-		load([releasesText])
-		
-		assertEquals(1, Tag.count())
-		assertEquals(1, Project.count())
-	}
-
 //    void testCreateTagWithPressure() 
 //	{
 //		assertEquals(0, Tag.count())
@@ -238,7 +216,7 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 	void testCreateAnimalUnknownCaabCode()
 	{
 		def releasesText = '''"ACO_ID","ACO_SERIAL_NUMBER","ACO_PINGER_CODE_ID","ACO_PINGER_TYPE","ACO_CODE_SPACE","ACO_MANUFACTURER","ACO_ATTACHMENT","ACO_OWNER","ACO_FREQUENCY","ACO_TEMP_SENSOR_YN","ACO_TEMP_CODE_SPACE","ACO_TEMP_PINGER_ID","ACO_TEMP_SLOPE","ACO_TEMP_INTERCEPT","ACO_PRES_SENSOR_YN","ACO_PRES_CODE_SPACE","ACO_PRES_PINGER_ID","ACO_PRES_SLOPE","ACO_PRES_INTERCEPT","ACO_TRANSMIT_INT_MIN","ACO_TRANSMIT_INT_MAX","REL_ID","REL_DATE","TIME","REL_TYPE","SPC_CAAB_CODE","SPC_COMMON_NAME","REL_LENGTH","REL_LENGTH_QUAL","REL_LENGTH_TYPE","REL_SEX","REL_COHORT_AGE","REL_LATITUDE","REL_LONGITUDE","TAG_ID","TAG_FIRST_NAME","TAG_FAMILY_NAME","VSL_ID","VSL_NAME","REL_CAPTURE","REL_FISH_COND","REL_INJ","REL_INJ_SEVERITY","REL_TIME_OOW","REL_STRONT_DOSE","REL_ABIOT_USED","REL_ABIOT_DOSE","REL_ASEPT_USED","REL_SCHOOL_NUM","REL_COUNT","REL_OBS_PROG_YN","NOTES"
-904,1078955,62347,"Coded Pinger","R64K (Sync=320,Bin=20)","Vemco 16mm","External","Bruce\\R-00656-02-015",69,0,,,,,0,,,,,50,130,149291,10/12/2009 0:00:00,"22:15","into the wild",123,"White Shark",420,"guessed","Total Length","male",,-35.23,136.07,414,"Barry","Bruce",15365,"CALYPSO STAR","Shark Cage Dive","good condition","other","slight injury",0,,,,,,,,"Date and time are in UTC"
+904,1078955,62347,"Coded Pinger","R64K (Sync=320,Bin=20)","Vemco 16mm","External","Bruce",69,0,,,,,0,,,,,50,130,149291,10/12/2009 0:00:00,"22:15","into the wild",123,"White Shark",420,"guessed","Total Length","male",,-35.23,136.07,414,"Barry","Bruce",15365,"CALYPSO STAR","Shark Cage Dive","good condition","other","slight injury",0,,,,,,,,"Date and time are in UTC"
 '''
 		try
 		{
@@ -254,7 +232,7 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 	void testCreateAnimalUnknownSex()
 	{
 		def releasesText = '''"ACO_ID","ACO_SERIAL_NUMBER","ACO_PINGER_CODE_ID","ACO_PINGER_TYPE","ACO_CODE_SPACE","ACO_MANUFACTURER","ACO_ATTACHMENT","ACO_OWNER","ACO_FREQUENCY","ACO_TEMP_SENSOR_YN","ACO_TEMP_CODE_SPACE","ACO_TEMP_PINGER_ID","ACO_TEMP_SLOPE","ACO_TEMP_INTERCEPT","ACO_PRES_SENSOR_YN","ACO_PRES_CODE_SPACE","ACO_PRES_PINGER_ID","ACO_PRES_SLOPE","ACO_PRES_INTERCEPT","ACO_TRANSMIT_INT_MIN","ACO_TRANSMIT_INT_MAX","REL_ID","REL_DATE","TIME","REL_TYPE","SPC_CAAB_CODE","SPC_COMMON_NAME","REL_LENGTH","REL_LENGTH_QUAL","REL_LENGTH_TYPE","REL_SEX","REL_COHORT_AGE","REL_LATITUDE","REL_LONGITUDE","TAG_ID","TAG_FIRST_NAME","TAG_FAMILY_NAME","VSL_ID","VSL_NAME","REL_CAPTURE","REL_FISH_COND","REL_INJ","REL_INJ_SEVERITY","REL_TIME_OOW","REL_STRONT_DOSE","REL_ABIOT_USED","REL_ABIOT_DOSE","REL_ASEPT_USED","REL_SCHOOL_NUM","REL_COUNT","REL_OBS_PROG_YN","NOTES"
-904,1078955,62347,"Coded Pinger","R64K (Sync=320,Bin=20)","Vemco 16mm","External","Bruce\\R-00656-02-015",69,0,,,,,0,,,,,50,130,149291,10/12/2009 0:00:00,"22:15","into the wild",37010003,"White Shark",420,"guessed","Total Length","aaa",,-35.23,136.07,414,"Barry","Bruce",15365,"CALYPSO STAR","Shark Cage Dive","good condition","other","slight injury",0,,,,,,,,"Date and time are in UTC"
+904,1078955,62347,"Coded Pinger","R64K (Sync=320,Bin=20)","Vemco 16mm","External","Bruce",69,0,,,,,0,,,,,50,130,149291,10/12/2009 0:00:00,"22:15","into the wild",37010003,"White Shark",420,"guessed","Total Length","aaa",,-35.23,136.07,414,"Barry","Bruce",15365,"CALYPSO STAR","Shark Cage Dive","good condition","other","slight injury",0,,,,,,,,"Date and time are in UTC"
 '''
 		try
 		{
@@ -272,7 +250,7 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		assertEquals(0, Animal.count())
 		
 		def releasesText = '''"ACO_ID","ACO_SERIAL_NUMBER","ACO_PINGER_CODE_ID","ACO_PINGER_TYPE","ACO_CODE_SPACE","ACO_MANUFACTURER","ACO_ATTACHMENT","ACO_OWNER","ACO_FREQUENCY","ACO_TEMP_SENSOR_YN","ACO_TEMP_CODE_SPACE","ACO_TEMP_PINGER_ID","ACO_TEMP_SLOPE","ACO_TEMP_INTERCEPT","ACO_PRES_SENSOR_YN","ACO_PRES_CODE_SPACE","ACO_PRES_PINGER_ID","ACO_PRES_SLOPE","ACO_PRES_INTERCEPT","ACO_TRANSMIT_INT_MIN","ACO_TRANSMIT_INT_MAX","REL_ID","REL_DATE","TIME","REL_TYPE","SPC_CAAB_CODE","SPC_COMMON_NAME","REL_LENGTH","REL_LENGTH_QUAL","REL_LENGTH_TYPE","REL_SEX","REL_COHORT_AGE","REL_LATITUDE","REL_LONGITUDE","TAG_ID","TAG_FIRST_NAME","TAG_FAMILY_NAME","VSL_ID","VSL_NAME","REL_CAPTURE","REL_FISH_COND","REL_INJ","REL_INJ_SEVERITY","REL_TIME_OOW","REL_STRONT_DOSE","REL_ABIOT_USED","REL_ABIOT_DOSE","REL_ASEPT_USED","REL_SCHOOL_NUM","REL_COUNT","REL_OBS_PROG_YN","NOTES"
-904,1078955,62347,"Coded Pinger","R64K (Sync=320,Bin=20)","Vemco 16mm","External","Bruce\\R-00656-02-015",69,0,,,,,0,,,,,50,130,149291,10/12/2009 0:00:00,"22:15","into the wild",37010003,"White Shark",420,"guessed","Total Length","male",,-35.23,136.07,414,"Barry","Bruce",15365,"CALYPSO STAR","Shark Cage Dive","good condition","other","slight injury",0,,,,,,,,"Date and time are in UTC"
+904,1078955,62347,"Coded Pinger","R64K (Sync=320,Bin=20)","Vemco 16mm","External","Bruce",69,0,,,,,0,,,,,50,130,149291,10/12/2009 0:00:00,"22:15","into the wild",37010003,"White Shark",420,"guessed","Total Length","male",,-35.23,136.07,414,"Barry","Bruce",15365,"CALYPSO STAR","Shark Cage Dive","good condition","other","slight injury",0,,,,,,,,"Date and time are in UTC"
 '''
 		load([releasesText])
 		
@@ -287,7 +265,7 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		assertEquals(0, AnimalRelease.count())
 		
 		def releasesText = '''"ACO_ID","ACO_SERIAL_NUMBER","ACO_PINGER_CODE_ID","ACO_PINGER_TYPE","ACO_CODE_SPACE","ACO_MANUFACTURER","ACO_ATTACHMENT","ACO_OWNER","ACO_FREQUENCY","ACO_TEMP_SENSOR_YN","ACO_TEMP_CODE_SPACE","ACO_TEMP_PINGER_ID","ACO_TEMP_SLOPE","ACO_TEMP_INTERCEPT","ACO_PRES_SENSOR_YN","ACO_PRES_CODE_SPACE","ACO_PRES_PINGER_ID","ACO_PRES_SLOPE","ACO_PRES_INTERCEPT","ACO_TRANSMIT_INT_MIN","ACO_TRANSMIT_INT_MAX","REL_ID","REL_DATE","TIME","REL_TYPE","SPC_CAAB_CODE","SPC_COMMON_NAME","REL_LENGTH","REL_LENGTH_QUAL","REL_LENGTH_TYPE","REL_SEX","REL_COHORT_AGE","REL_LATITUDE","REL_LONGITUDE","TAG_ID","TAG_FIRST_NAME","TAG_FAMILY_NAME","VSL_ID","VSL_NAME","REL_CAPTURE","REL_FISH_COND","REL_INJ","REL_INJ_SEVERITY","REL_TIME_OOW","REL_STRONT_DOSE","REL_ABIOT_USED","REL_ABIOT_DOSE","REL_ASEPT_USED","REL_SCHOOL_NUM","REL_COUNT","REL_OBS_PROG_YN","NOTES"
-904,1078955,62347,"Coded Pinger","R64K (Sync=320,Bin=20)","Vemco 16mm","External","Bruce\\R-00656-02-015",69,0,,,,,0,,,,,50,130,149291,10/12/2009 0:00:00,"22:15","into the wild",37010003,"White Shark",420,"guessed","Total Length","male",,-35.23,136.07,414,"Barry","Bruce",15365,"CALYPSO STAR","Shark Cage Dive","good condition","other","slight injury",0,,,,,,,,"Date and time are in UTC"
+904,1078955,62347,"Coded Pinger","R64K (Sync=320,Bin=20)","Vemco 16mm","External","Bruce",69,0,,,,,0,,,,,50,130,149291,10/12/2009 0:00:00,"22:15","into the wild",37010003,"White Shark",420,"guessed","Total Length","male",,-35.23,136.07,414,"Barry","Bruce",15365,"CALYPSO STAR","Shark Cage Dive","good condition","other","slight injury",0,,,,,,,,"Date and time are in UTC"
 '''
 		load([releasesText])
 		
@@ -322,6 +300,65 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		
 		assertEquals(1, AnimalMeasurement.count())
 	}
+	
+	void testFindProjectUnknownName()
+	{
+		["asdf", "", "Auto Entry"].each
+		{
+			try
+			{
+				loader.findProject(it)
+				fail()
+			}
+			catch (BulkImportException e)
+			{
+				assertEquals("No mapping to project for owner: ${it}", e.message)
+			}
+		}
+	}
+	
+	void testFindProjectBruce()
+	{
+		[
+			"BRU007 / White shark collaboration",
+			"Bruce\\R-00656-02-015",
+			"Bruce",
+			"Bruce \\ KU30A",
+			"Bruce \\ SMN",
+			"Bruce\\KU30A",
+			"Bruce / KU30A",
+			"KU30A / Bruce",
+			"Bruce / KU30",
+			"Bruce\\Effects of berley",
+			"BRU-00656-02-015",
+			"BRU080\\R-00656-02-015",
+			"Bruce \\ Effects of berley",
+			"Bruce \\ Juv white sharks",
+			"Bruce \\ white sharks",
+			"Bruce \\ white shark",
+			"Fox A\\none",
+			"Fox A/ none",
+			"Fox A / none"
+		].each
+		{
+			assertEquals(bruceProject, loader.findProject(it))
+		}
+	}
+	
+	void testFindProject()
+	{
+		[			
+			"Babcock/Pillans": nretaProject,
+			"Al Hobday" : bluefinTunaProject,
+			"Daley \\ R656-02-014": daleyProject
+		].each
+		{
+			k, v ->
+			
+			assertEquals(v, loader.findProject(k))
+		}
+	}
+	
 	
 //	void testIgnore()
 //	{

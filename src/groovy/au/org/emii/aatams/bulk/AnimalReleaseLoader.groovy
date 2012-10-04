@@ -200,14 +200,6 @@ class AnimalReleaseLoader extends AbstractLoader
 	private CodeMap getCodeMap(codeMapAsString)
 	{
 		return CodeMap.findByCodeMap("A69-1303")
-		
-//		TODO
-//		if (codeMapAsString == "R64K (Sync=320,Bin=20)")
-//		{
-//			return CodeMap.findByCodeMap("A69-1303")
-//		}
-//		
-//		assert(false): "Unknown code map: " + codeMapAsString
 	}
 	
 	private Animal loadAnimal(Map context, Map record) throws BulkImportException
@@ -219,7 +211,6 @@ class AnimalReleaseLoader extends AbstractLoader
 			throw new BulkImportException("Unknown CAAB code: ${record['SPC_CAAB_CODE']}")
 		}
 		
-		println "REL_SEX = '${record['REL_SEX']}'"
 		def sexMapping = [
 			"male": Sex.findBySex("MALE"), 
 			"female": Sex.findBySex("FEMALE"), 

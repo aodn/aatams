@@ -53,7 +53,6 @@ class AnimalReleaseLoader extends AbstractLoader
 	private void processSingleRecord(Map context, Map record) throws BulkImportException
 	{
 		log.debug("Processing record: " + record)
-		println("Processing record: " + record)
 		
 		if (shouldIgnore(record))
 		{
@@ -101,7 +100,7 @@ class AnimalReleaseLoader extends AbstractLoader
 			serialNumber: serialNumber,
 			
 			status: DeviceStatus.findByStatus(DeviceStatus.NEW, [cache: true]),
-			project: findOrCreateProject(record["ACO_OWNER"]),
+			project: findProject(record["ACO_OWNER"]),
 			codeMap: getCodeMap(record[ACO_CODE_SPACE_COL]))
 		tag.save(failOnError: true)
 		
@@ -125,20 +124,52 @@ class AnimalReleaseLoader extends AbstractLoader
 		return tag
 	}
 	
-	private Project findOrCreateProject(name)
+	private Project findProject(owner)
 	{
-		// TODO: project mapping (by owner)
-		name = "CSIRO bulk import"
+		def ownerToProjectNameMapping = [:]
+		
+		[
+			"BRU007 / White shark collaboration",
+			"Bruce\\R-00656-02-015",
+			"Bruce",
+			"Bruce \\ KU30A",
+			"Bruce \\ SMN",
+			"Bruce\\KU30A",
+			"Bruce / KU30A",
+			"KU30A / Bruce",
+			"Bruce / KU30",
+			"Bruce\\Effects of berley",
+			"BRU-00656-02-015",
+			"BRU080\\R-00656-02-015",
+			"Bruce \\ Effects of berley",
+			"Bruce \\ Juv white sharks",
+			"Bruce \\ white sharks",
+			"Bruce \\ white shark",
+			"Fox A\\none",
+			"Fox A/ none",
+			"Fox A / none"
+		].each {
+		
+			ownerToProjectNameMapping[it] = "CSIRO: Shark Monitoring Network"
+		}
+		
+		ownerToProjectNameMapping["Babcock/Pillans"] = "Ningaloo Reef Ecosystem Tracking Array (NRETA)"
+		ownerToProjectNameMapping["Al Hobday"] = "Bluefin tuna WA"
+		ownerToProjectNameMapping["Daley \\ R656-02-014"] = "CSIRO: Ross Daley"
+			
+		def name = ownerToProjectNameMapping[owner]
+		
+		if (!name)
+		{
+			throw new BulkImportException("No mapping to project for owner: ${owner}")
+		}
 		
 		Project project = Project.findByName(name, [cache: true])
 		
-		if (!project)
+		if (!project && owner == "Daley \\ R656-02-014")
 		{
-			project = new Project(
-				name: name, organisation: 
-				Organisation.findByName('CSIRO', [cache: true]),
-				status: EntityStatus.ACTIVE)
-			project.save(failOnError: true)
+			project = new Project(name: owner)
+			project.save()
 		}
 		
 		return project

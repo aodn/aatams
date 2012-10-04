@@ -184,35 +184,6 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		assertEquals(1, Tag.count())
     }
 	
-//    void testCreateTagWithPressure() 
-//	{
-//		assertEquals(0, Tag.count())
-//		
-//		def releasesText = '''"ACO_ID","ACO_SERIAL_NUMBER","ACO_PINGER_CODE_ID","ACO_PINGER_TYPE","ACO_CODE_SPACE","ACO_MANUFACTURER","ACO_ATTACHMENT","ACO_OWNER","ACO_FREQUENCY","ACO_TEMP_SENSOR_YN","ACO_TEMP_CODE_SPACE","ACO_TEMP_PINGER_ID","ACO_TEMP_SLOPE","ACO_TEMP_INTERCEPT","ACO_PRES_SENSOR_YN","ACO_PRES_CODE_SPACE","ACO_PRES_PINGER_ID","ACO_PRES_SLOPE","ACO_PRES_INTERCEPT","ACO_TRANSMIT_INT_MIN","ACO_TRANSMIT_INT_MAX","REL_ID","REL_DATE","TIME","REL_TYPE","SPC_CAAB_CODE","SPC_COMMON_NAME","REL_LENGTH","REL_LENGTH_QUAL","REL_LENGTH_TYPE","REL_SEX","REL_COHORT_AGE","REL_LATITUDE","REL_LONGITUDE","TAG_ID","TAG_FIRST_NAME","TAG_FAMILY_NAME","VSL_ID","VSL_NAME","REL_CAPTURE","REL_FISH_COND","REL_INJ","REL_INJ_SEVERITY","REL_TIME_OOW","REL_STRONT_DOSE","REL_ABIOT_USED","REL_ABIOT_DOSE","REL_ASEPT_USED","REL_SCHOOL_NUM","REL_COUNT","REL_OBS_PROG_YN","NOTES"
-//497,5791,242,"Coded Pinger","S256 (Sync=360,Bin=20)","Vemco 16mm","Internal","Al Hobday",69,0,,,,,-1,,,0.69,-8.38,20,69,146417,4/12/2006 0:00:00,"","into the wild",37441004,"Southern Bluefin Tuna",58,"correctly measured","Length to Caudal Fork",,0,-34.57,118.09,99,"Alistair","Hobday",14337,"QUADRANT","Pole and line","good condition",,"slight injury",,,,,,,,,
-//'''
-//		assertSuccess(
-//			[releasesText], 
-//			[["type": BulkImportRecordType.NEW, 
-//			 "srcPk": 497, 
-//			 "srcTable": "RELEASES", 
-//			 "srcModifiedDate": null,
-//			 "dstClass": "au.org.emii.aatams.Tag"]])
-//		
-//		def pressureSensor = Sensor.findByPingCode(242)
-//		assertNotNull(pressureSensor)
-//		assertEquals(pressureType, pressureSensor.transmitterType)
-//		
-//		def tag = pressureSensor.tag
-//		assertNotNull(tag)
-//		assertEquals(a69_1303, tag.codeMap)
-//		assertEquals(newStatus, tag.status)
-//		assertEquals(v16, tag.model)
-//		assertEquals(1, Sensor.findAllByTag(tag).size())
-//		
-//		assertEquals(1, Tag.count())
-//	}
-	
 	void testCreateAnimalUnknownCaabCode()
 	{
 		def releasesText = '''"ACO_ID","ACO_SERIAL_NUMBER","ACO_PINGER_CODE_ID","ACO_PINGER_TYPE","ACO_CODE_SPACE","ACO_MANUFACTURER","ACO_ATTACHMENT","ACO_OWNER","ACO_FREQUENCY","ACO_TEMP_SENSOR_YN","ACO_TEMP_CODE_SPACE","ACO_TEMP_PINGER_ID","ACO_TEMP_SLOPE","ACO_TEMP_INTERCEPT","ACO_PRES_SENSOR_YN","ACO_PRES_CODE_SPACE","ACO_PRES_PINGER_ID","ACO_PRES_SLOPE","ACO_PRES_INTERCEPT","ACO_TRANSMIT_INT_MIN","ACO_TRANSMIT_INT_MAX","REL_ID","REL_DATE","TIME","REL_TYPE","SPC_CAAB_CODE","SPC_COMMON_NAME","REL_LENGTH","REL_LENGTH_QUAL","REL_LENGTH_TYPE","REL_SEX","REL_COHORT_AGE","REL_LATITUDE","REL_LONGITUDE","TAG_ID","TAG_FIRST_NAME","TAG_FAMILY_NAME","VSL_ID","VSL_NAME","REL_CAPTURE","REL_FISH_COND","REL_INJ","REL_INJ_SEVERITY","REL_TIME_OOW","REL_STRONT_DOSE","REL_ABIOT_USED","REL_ABIOT_DOSE","REL_ASEPT_USED","REL_SCHOOL_NUM","REL_COUNT","REL_OBS_PROG_YN","NOTES"
@@ -359,9 +330,48 @@ class AnimalReleaseLoaderTests extends AbstractLoaderTests
 		}
 	}
 	
+	void testIgnoreBySerialNumber()
+	{
+		def defaultVals = ["SPC_CAAB_CODE": "310", "ACO_OWNER": "Bruce", "ACO_MANUFACTURER": "Vemco 16mm"]
+		
+		["", "0", "1", "2"].each
+		{
+			assertTrue(loader.shouldIgnore(defaultVals + ["ACO_SERIAL_NUMBER": it]))
+		}
+		
+		["3", "12"].each
+		{
+			assertFalse(loader.shouldIgnore(defaultVals + ["ACO_SERIAL_NUMBER": it]))
+		}
+	}
 	
-//	void testIgnore()
-//	{
-//		loadStreams([new FileInputStream("/tmp/RELEASES.csv")])
-//	}
+	void testIgnoreBySpecies()
+	{
+		def defaultVals = ["ACO_OWNER": "Bruce", "ACO_MANUFACTURER": "Vemco 16mm", "ACO_SERIAL_NUMBER": "12"]
+		
+		["", "0"].each
+		{
+			assertTrue(loader.shouldIgnore(defaultVals + ["SPC_CAAB_CODE": it]))
+		}
+		
+		["312"].each
+		{
+			assertFalse(loader.shouldIgnore(defaultVals + ["SPC_CAAB_CODE": it]))
+		}
+	}
+	
+	void testIgnoreByOwner()
+	{
+		def defaultVals = ["SPC_CAAB_CODE": "310", "ACO_MANUFACTURER": "Vemco 16mm", "ACO_SERIAL_NUMBER": "12"]
+		
+		["", "Auto Entry", "Auto Entry "].each
+		{
+			assertTrue(loader.shouldIgnore(defaultVals + ["ACO_OWNER": it]))
+		}
+		
+		["Bruce"].each
+		{
+			assertFalse(loader.shouldIgnore(defaultVals + ["ACO_OWNER": it]))
+		}
+	}
 }

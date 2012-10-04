@@ -22,9 +22,6 @@ class AnimalReleaseLoader extends AbstractLoader
 	static final String RCV_ID_COL = "RCV_ID"
 	static final String STA_ID_COL = "STA_ID"
 
-	//"","ACO_PINGER_TYPE",
-	//"","","ACO_ATTACHMENT","ACO_OWNER","ACO_FREQUENCY","ACO_TEMP_SENSOR_YN","ACO_TEMP_CODE_SPACE","ACO_TEMP_PINGER_ID","ACO_TEMP_SLOPE","ACO_TEMP_INTERCEPT","ACO_PRES_SENSOR_YN","ACO_PRES_CODE_SPACE","ACO_PRES_PINGER_ID","ACO_PRES_SLOPE","ACO_PRES_INTERCEPT","ACO_TRANSMIT_INT_MIN","ACO_TRANSMIT_INT_MAX"
-	
 	static final String ACO_ID_COL = "ACO_ID"
 	static final String ACO_SERIAL_NUMBER_COL = "ACO_SERIAL_NUMBER"
 	static final String ACO_PINGER_CODE_ID_COL = "ACO_PINGER_CODE_ID"
@@ -61,23 +58,53 @@ class AnimalReleaseLoader extends AbstractLoader
 		else
 		{
 			def tag = loadTag(context, record)
-			def animal = loadAnimal(context, record)
-			def release = loadRelease(context, record, tag.project, animal)
-			def surgery = loadSurgery(context, record, tag, release)
-			def measurement = loadMeasurement(context, record, release)
+			
+			if (!record["REL_LATITUDE"].isEmpty() && !record["REL_LONGITUDE"].isEmpty())
+			{
+				def animal = loadAnimal(context, record)
+				def release = loadRelease(context, record, tag.project, animal)
+				def surgery = loadSurgery(context, record, tag, release)
+				def measurement = loadMeasurement(context, record, release)
+			}
 		}
 	}
 	
-	// TODO probably shouldn't be ignoring any records.
 	private boolean shouldIgnore(record)
 	{
 		boolean shouldIgnore = false
 		
-		[record[ACO_MANUFACTURER_COL], record[ACO_SERIAL_NUMBER_COL], record["ACO_OWNER"], record["REL_LONGITUDE"], record["REL_LATITUDE"]].each {
+		[record[ACO_MANUFACTURER_COL], record[ACO_SERIAL_NUMBER_COL], record["ACO_OWNER"]].each {
 			
-			if (it.isEmpty())
+			if (!it || it.isEmpty())
 			{ 
 				shouldIgnore = true
+			}
+		}
+		
+		["0", "1", "2"].each
+		{
+			if (record[ACO_SERIAL_NUMBER_COL] == it)
+			{
+				log.warn("Ignoring tag with serial number '${record[ACO_SERIAL_NUMBER_COL]}'")
+				shouldIgnore =  true
+			}
+		}
+
+		["", "0"].each
+		{
+			if (record["SPC_CAAB_CODE"] == it)
+			{
+				log.warn("Ignoring tag with species code \'${record['SPC_CAAB_CODE']}\'")
+				shouldIgnore =  true
+			}
+		}
+		
+		["", "Auto Entry"].each
+		{
+			if (record["ACO_OWNER"].trim() == it)
+			{
+				log.warn("Ignoring tag with owner code \'${record['ACO_OWNER']}\'")
+				shouldIgnore =  true
 			}
 		}
 

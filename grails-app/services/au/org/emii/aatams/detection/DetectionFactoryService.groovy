@@ -32,7 +32,8 @@ class DetectionFactoryService
      */
 	def newDetection(downloadFile, params) throws FileProcessingException
     {
-		def nativeParams = DetectionFormat.newFormat(downloadFile.type).parseRow(params)
+		def format = DetectionFormat.newFormat(downloadFile.type)		
+		def nativeParams = format.parseRow(params)
         def detection = initDetection(downloadFile, nativeParams)
         assert(detection)
 		

@@ -2,8 +2,11 @@ package au.org.emii.aatams.bulk
 
 import au.org.emii.aatams.CodeMap;
 import au.org.emii.aatams.DeviceStatus;
+import au.org.emii.aatams.InstallationStation
+import au.org.emii.aatams.MooringType
 import au.org.emii.aatams.Organisation
 import au.org.emii.aatams.Receiver
+import au.org.emii.aatams.ReceiverDeployment;
 import au.org.emii.aatams.ReceiverDeviceModel
 import au.org.emii.aatams.Sensor
 import au.org.emii.aatams.Tag
@@ -29,6 +32,7 @@ class CsiroDetectionFormatTests extends GrailsUnitTestCase
 		
 		mockDomain(BulkImportRecord)
 		mockDomain(Receiver)
+		mockDomain(ReceiverDeployment)
 		mockDomain(Sensor)
 		mockDomain(Tag)
     }
@@ -100,13 +104,13 @@ class CsiroDetectionFormatTests extends GrailsUnitTestCase
 				bulkImport: new BulkImport(),
 				srcTable: "RELEASES",
 				srcPk: 1063,
-				dstClass: String.valueOf(Tag.class),
+				dstClass: "au.org.emii.aatams.Tag",
 				dstPk: tagId,
 				type: BulkImportRecordType.NEW)
 		tagRecord.save(failOnError: true)
 	}
 	
-	private Receiver createReceiver()
+	private ReceiverDeployment createReceiverDeployment()
 	{
 		def receiver = new Receiver(
 			model: new ReceiverDeviceModel(modelName: "VR2W"),
@@ -115,18 +119,26 @@ class CsiroDetectionFormatTests extends GrailsUnitTestCase
 		
 		receiver.save(failOnError: true)
 		
-		return receiver
+		def receiverDeployment = new ReceiverDeployment(
+			receiver: receiver,
+			station: new InstallationStation(),
+			deploymentDateTime: new DateTime(),
+			mooringType: new MooringType())
+		
+		receiverDeployment.save(failOnError: true)
+			
+		return receiverDeployment
 	}
 	
-	private BulkImportRecord createReceiverImportRecord(receiverId)
+	private BulkImportRecord createReceiverImportRecord(receiverDeploymentId)
 	{
 		BulkImportRecord receiverRecord =
 			new BulkImportRecord(
 				bulkImport: new BulkImport(),
 				srcTable: "RECEIVERS",
 				srcPk: 344,
-				dstClass: String.valueOf(Receiver.class),
-				dstPk: receiverId,
+				dstClass: "au.org.emii.aatams.ReceiverDeployment",
+				dstPk: receiverDeploymentId,
 				type: BulkImportRecordType.NEW)
 		receiverRecord.save(failOnError: true)
 	}
@@ -159,7 +171,7 @@ class CsiroDetectionFormatTests extends GrailsUnitTestCase
 	void testPinger()
 	{
 		createTagImportRecord(createTag().id)
-		createReceiverImportRecord(createReceiver().id)
+		createReceiverImportRecord(createReceiverDeployment().id)
 		
 		assertSuccess([
 			[timestamp: new DateTime("2008-06-03T08:01:53Z").toDate(),
@@ -171,7 +183,7 @@ class CsiroDetectionFormatTests extends GrailsUnitTestCase
 	void testSensor()
 	{
 		createTagImportRecord(createTag().id)
-		createReceiverImportRecord(createReceiver().id)
+		createReceiverImportRecord(createReceiverDeployment().id)
 		
 		assertSuccess([
 			[timestamp: new DateTime("2008-06-03T08:01:53Z").toDate(),

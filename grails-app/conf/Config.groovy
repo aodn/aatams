@@ -109,6 +109,7 @@ environments
 		grails.serverHost = "http://localhost:8090"
 		grails.plugin.databasemigration.updateOnStart = false
 		grails.mail.disabled = true
+		fileimport.path = "/tmp"
 	}
 }
 

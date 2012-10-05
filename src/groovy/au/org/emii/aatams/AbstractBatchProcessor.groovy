@@ -46,8 +46,8 @@ abstract class AbstractBatchProcessor
 			lineCount++
 		}
 		
-		log.debug("Records count: " + lineCount)
-		return lineCount	
+		log.debug("Records count: " + (lineCount - 1))
+		return (lineCount - 1)	// -1 -> don't count the header.	
 	}
 	
     void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
@@ -61,6 +61,7 @@ abstract class AbstractBatchProcessor
 
 			recordCsvMapReader = getMapReader(downloadFile)
             def numRecords = getNumRecords(downloadFile)
+println "${numRecords} records in file"			
 			
 			int percentProgress = -1
 			
@@ -96,6 +97,7 @@ abstract class AbstractBatchProcessor
 				finally
 				{
 					float progress = (float)i/numRecords * 100
+println "progress as float: ${progress}, ${i}, ${numRecords}"					
 					if ((int)progress > percentProgress)
 					{
 						percentProgress = (int)progress

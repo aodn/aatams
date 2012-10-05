@@ -96,7 +96,6 @@ abstract class AbstractBatchProcessor
 				finally
 				{
 					float progress = (float)i/numRecords * 100
-println "progress as float: ${progress}, ${i}, ${numRecords}"					
 					if ((int)progress > percentProgress)
 					{
 						percentProgress = (int)progress

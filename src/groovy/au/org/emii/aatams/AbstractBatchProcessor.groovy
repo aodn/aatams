@@ -61,7 +61,6 @@ abstract class AbstractBatchProcessor
 
 			recordCsvMapReader = getMapReader(downloadFile)
             def numRecords = getNumRecords(downloadFile)
-println "${numRecords} records in file"			
 			
 			int percentProgress = -1
 			

@@ -40,19 +40,25 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
         super.tearDown()
     }
 
-	void testProcess()
-    {
-        ReceiverDownloadFile download = new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV)
+	ReceiverDownloadFile initDownloadAndNotificationService(type, mockedNotificationMethod)
+	{
+        ReceiverDownloadFile download = new ReceiverDownloadFile(type: type)
         mockDomain(ReceiverDownloadFile, [download])
         download.save()
 
+		detectionNotificationService.metaClass.sendDetectionNotificationEmails = mockedNotificationMethod
+		
+		return download
+	}
+	
+	void testProcess()
+    {
 		boolean notificationEmailsSent = false
-		detectionNotificationService.metaClass.sendDetectionNotificationEmails = 
-		{
+		ReceiverDownloadFile download = initDownloadAndNotificationService(ReceiverDownloadFileType.DETECTIONS_CSV, {
 			downloadFile -> 
 			
 			notificationEmailsSent = true 
-		}
+		})
 		
         vueDetectionFileProcessorService.process(download)
 		assertTrue(notificationEmailsSent)
@@ -72,4 +78,17 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
 		assertEquals(1 ,InvalidDetection.findAllByReason(InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME).size())
 		assertEquals(1 ,InvalidDetection.findAllByReason(InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME).size())
     }
+	
+	void testNotificationForCsiroBulkUpload()
+	{
+		boolean notificationEmailsSent = false
+		ReceiverDownloadFile download = initDownloadAndNotificationService(ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV, {
+			downloadFile -> 
+			
+			notificationEmailsSent = true 
+		})
+		
+        vueDetectionFileProcessorService.process(download)
+		assertFalse(notificationEmailsSent)
+	}
 }

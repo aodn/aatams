@@ -28,6 +28,9 @@ class VueDetectionFileProcessorService extends AbstractBatchProcessor
 	{
 		super.process(downloadFile)
 		
-		detectionNotificationService.sendDetectionNotificationEmails(downloadFile)
+		if (downloadFile.type != ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV)
+		{
+			detectionNotificationService.sendDetectionNotificationEmails(downloadFile)
+		}
 	}
 }

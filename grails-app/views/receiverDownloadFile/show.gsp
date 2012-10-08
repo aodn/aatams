@@ -78,7 +78,8 @@
                         </g:if>
                         
                         <g:if test="${   (receiverDownloadFileInstance.status != FileProcessingStatus.PROCESSING) 
-                                      && (receiverDownloadFileInstance.type == ReceiverDownloadFileType.DETECTIONS_CSV)}">
+                                      && (   (receiverDownloadFileInstance.type == ReceiverDownloadFileType.DETECTIONS_CSV)
+                                          || (receiverDownloadFileInstance.type == ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV))}">
                                       
                           <!-- Total -->
                           <tr class="prop">

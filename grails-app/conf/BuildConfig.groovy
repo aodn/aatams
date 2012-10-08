@@ -57,6 +57,8 @@ grails.project.dependency.resolution = {
 		// KML
 //		compile 'de.micromata.jak:JavaAPIforKml:2.2.0-SNAPSHOT'
 		
+		compile 'org.apache.commons:commons-compress:1.4'
+		
 		test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion")
 		{
 			exclude "xml-apis"

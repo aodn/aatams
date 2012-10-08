@@ -5,6 +5,8 @@ import java.util.Map;
 import au.org.emii.aatams.DetectionSurgery
 import au.org.emii.aatams.util.SqlUtils
 
+import au.org.emii.aatams.bulk.BulkImportException
+
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate
 import org.springframework.jdbc.core.namedparam.SqlParameterSource
@@ -40,12 +42,19 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 	
 	protected void endBatch(context)
 	{
-		log.debug("Start mark duplicates...")
-		markDuplicates(context)
-		log.debug("End mark duplicates.")
-		
-		log.debug("End batch, inserting detections...")
-		insertDetections(context)
+		if (context.detectionBatch.isEmpty())
+		{
+			log.warn("Detection batch empty.")
+		}
+		else
+		{
+			log.debug("Start mark duplicates...")
+			markDuplicates(context)
+			log.debug("End mark duplicates.")
+			
+			log.debug("End batch, inserting detections...")
+			insertDetections(context)
+		}
 		
 		super.endBatch(context)
 	}
@@ -90,6 +99,13 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 			if (it.clazz == "au.org.emii.aatams.detection.ValidDetection")
 			{
 				insertStatementList += ValidDetection.toSqlInsert(it)
+
+				it.detectionSurgeries.each
+				{
+					detSurgery ->
+	
+					insertStatementList.add(DetectionSurgery.toSqlInsert(detSurgery, true))
+				}
 			}
 			else if (it.clazz == "au.org.emii.aatams.detection.InvalidDetection")
 			{
@@ -98,13 +114,6 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 			else
 			{
 				assert(false): "Unknown detection class: " + it.clazz
-			}
-
-			it.detectionSurgeries.each
-			{
-				detSurgery ->
-
-				insertStatementList.add(DetectionSurgery.toSqlInsert(detSurgery, true))
 			}
 		}
 		
@@ -121,7 +130,14 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 	
     void processSingleRecord(downloadFile, map, context)
     {
-		def detection = jdbcTemplateDetectionFactoryService.newDetection(downloadFile, map)
-        context.detectionBatch.addAll(detection)
+		try
+		{
+			def detection = jdbcTemplateDetectionFactoryService.newDetection(downloadFile, map)
+	        context.detectionBatch.addAll(detection)
+		}
+		catch (BulkImportException e)
+		{
+			
+		}
     }
 }

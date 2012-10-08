@@ -5,18 +5,17 @@ import au.org.emii.aatams.detection.InvalidDetectionReason
 import au.org.emii.aatams.detection.RawDetection
 import au.org.emii.aatams.detection.ValidDetection
 
+import org.apache.shiro.SecurityUtils
+
 /**
  * Index (and meta-data) to a file which has been downloaded from a receiver as
  * part of the recovery process.
  */
 class ReceiverDownloadFile 
 {
+	def grailsApplication
+	
     ReceiverDownloadFileType type
-    
-    /**
-     * Path (including filename) to file.
-     */
-    String path
     
     String name
     Date importDate
@@ -38,17 +37,40 @@ class ReceiverDownloadFile
     static constraints =
     {
         type()
-        path()
+		requestingUser(nullable: true)	// Null for bulk import
 		progress(nullable: true)
     }
     
-	static transients = ['knownSensors', 'uniqueTransmitterIds', 'percentComplete']
+	static transients = ['knownSensors', 'uniqueTransmitterIds', 'percentComplete', 'path']
 	
     static mapping =
     {
         errMsg type: 'text'
     }
     
+	void initialiseForProcessing(filename)
+	{
+        errMsg = ""
+        importDate = new Date()
+        status = FileProcessingStatus.PROCESSING
+        name = filename
+		progress = new ReceiverDownloadFileProgress(percentComplete: 0, receiverDownloadFile: this)
+	}
+	
+    String getPath()
+    {
+        // Save the file to disk.
+        def path = grailsApplication.config.fileimport.path
+		
+        if (!path.endsWith(File.separator))
+        {
+            path = path + File.separator
+        }
+        
+		assert(id): "Download file ID cannot be null"
+		path += (id + File.separator + name)
+    }
+	
 	void addToDetections(detection)
 	{
 		if (detection instanceof ValidDetection)
@@ -64,6 +86,7 @@ class ReceiverDownloadFile
 			assert(false): "Unknown detection class: " + detection.class
 		}
 	}
+	
     String toString()
     {
         return String.valueOf(path)

@@ -24,20 +24,6 @@ class DetectionFactoryService
 {
     static transactional = true
 
-    static final String DATE_AND_TIME_COLUMN = "Date and Time (UTC)"
-    static final String RECEIVER_COLUMN = "Receiver"
-    static final String TRANSMITTER_COLUMN = "Transmitter"
-    static final String TRANSMITTER_NAME_COLUMN = "Transmitter Name"
-    static final String TRANSMITTER_SERIAL_NUMBER_COLUMN = "Transmitter Serial"
-    static final String SENSOR_VALUE_COLUMN = "Sensor Value"
-    static final String SENSOR_UNIT_COLUMN = "Sensor Unit"
-    static final String STATION_NAME_COLUMN = "Station Name"
-    static final String LATITUDE_COLUMN = "Latitude"
-    static final String LONGITUDE_COLUMN = "Longitude"
-    
-    static final String TRANSMITTER_ID_DELIM = "-"
-    static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
-    
 	private Map<String, List<Sensor>> sensorCache = new WeakHashMap<String, List<Sensor>>()
 	
     /**
@@ -46,8 +32,8 @@ class DetectionFactoryService
      */
 	def newDetection(downloadFile, params) throws FileProcessingException
     {
-		def nativeParams = toNativeParams(params)
-
+		def format = DetectionFormat.newFormat(downloadFile.type)		
+		def nativeParams = format.parseRow(params)
         def detection = initDetection(downloadFile, nativeParams)
         assert(detection)
 		
@@ -146,51 +132,6 @@ class DetectionFactoryService
                                            reason:detectionValidator.invalidReason, 
                                            message:detectionValidator.invalidMessage])
 		}
-    }
-    
-	private static def getFloat(stringVal)
-	{
-		try
-		{
-			return Float.valueOf(stringVal)
-		}
-		catch (NullPointerException e)
-		{
-			return null
-		}
-		catch (NumberFormatException e)
-		{
-			return null
-		}
-	}
-	
-    private static Map toNativeParams(params)
-    {
-        def timestamp = new Date().parse(DATE_FORMAT, params[DATE_AND_TIME_COLUMN] + " " + "UTC")
-        
-        def retMap =
-               [timestamp:timestamp,
-                receiverName:params[RECEIVER_COLUMN],
-                transmitterId:params[TRANSMITTER_COLUMN],
-                transmitterName:params[TRANSMITTER_NAME_COLUMN],
-                transmitterSerialNumber:params[TRANSMITTER_SERIAL_NUMBER_COLUMN],
-                sensorValue:getFloat(params[SENSOR_VALUE_COLUMN]),
-                sensorUnit:params[SENSOR_UNIT_COLUMN],
-                stationName:params[STATION_NAME_COLUMN]] 
-
-        // Latitude and longitude are optional.
-        if ((params[LATITUDE_COLUMN] != null) && (params[LONGITUDE_COLUMN] != null))
-        {
-            Point location = new GeometryFactory().createPoint(new Coordinate(getFloat(params[LONGITUDE_COLUMN]), getFloat(params[LATITUDE_COLUMN])))
-            location.setSRID(4326)
-            retMap.location = location
-        }
-		else
-		{
-			retMap.location = null
-		}
-        
-        return retMap
     }
     
     private void matchToTags(detection)

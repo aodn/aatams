@@ -27,7 +27,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
     
     void testValid()
     {
-        def validDetection = newDetection(new ReceiverDownloadFile(), standardParams)
+        def validDetection = newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
          
 		assertEquals("2009-12-08 06:44:24", validDetection.formattedTimestamp)
 		 
@@ -41,8 +41,8 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 
     void testValidSensor()
     {
-        def validDetection = newDetection(new ReceiverDownloadFile(), 
-                standardParams + [(DetectionFactoryService.SENSOR_VALUE_COLUMN):123, (DetectionFactoryService.SENSOR_UNIT_COLUMN):"ADC"])
+        def validDetection = newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), 
+                standardParams + [(VueDetectionFormat.SENSOR_VALUE_COLUMN):123, (VueDetectionFormat.SENSOR_UNIT_COLUMN):"ADC"])
          
         assertNotNull(validDetection)
         assertTrue(validDetection instanceof ValidDetection)
@@ -77,9 +77,9 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
     
     void testUnknownReceiver()
     {
-        standardParams[(DetectionFactoryService.RECEIVER_COLUMN)] = "VR2W-1234"
+        standardParams[(VueDetectionFormat.RECEIVER_COLUMN)] = "VR2W-1234"
         def unknownReceiverDetection = 
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
             
         assertNotNull(unknownReceiverDetection)
         assertTrue(unknownReceiverDetection instanceof InvalidDetection)
@@ -98,7 +98,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         deployment.save()
         
         def noDeploymentAtTimeDetection = 
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
             
         assertNotNull(noDeploymentAtTimeDetection)
         assertTrue(noDeploymentAtTimeDetection instanceof InvalidDetection)
@@ -117,7 +117,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         recovery.save()
 
         def noRecoveryAtDateTimeDetection =
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
         
         assertNotNull(noRecoveryAtDateTimeDetection)
         assertTrue(noRecoveryAtDateTimeDetection instanceof InvalidDetection)
@@ -133,7 +133,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
     void testNoMatchingSurgeries() 
     {
         def detection = 
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -147,7 +147,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         setupData()
         
         def detection = 
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -162,10 +162,10 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
     void testOneMatchingSensorSurgery() 
     {
         setupData()
-        standardParams[(DetectionFactoryService.TRANSMITTER_COLUMN)] = "A69-1303-12345"
+        standardParams[(VueDetectionFormat.TRANSMITTER_COLUMN)] = "A69-1303-12345"
         
         def detection = 
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -180,10 +180,10 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
     void testMultipleMatchingSurgeries() 
     {
         setupData()
-        standardParams[(DetectionFactoryService.TRANSMITTER_COLUMN)] = "A69-1303-1111"
+        standardParams[(VueDetectionFormat.TRANSMITTER_COLUMN)] = "A69-1303-1111"
         
         def detection = 
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -207,7 +207,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         release.status = AnimalReleaseStatus.FINISHED
         
         def detection = 
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -219,7 +219,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
     void testTagRetired()
     {
         setupData()
-        standardParams[(DetectionFactoryService.TRANSMITTER_COLUMN)] = "A69-1303-1111"
+        standardParams[(VueDetectionFormat.TRANSMITTER_COLUMN)] = "A69-1303-1111"
         
         DeviceStatus retiredStatus = new DeviceStatus(status:DeviceStatus.RETIRED)
         mockDomain(DeviceStatus, [retiredStatus])
@@ -228,7 +228,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         tag1.save()
         
         def detection = 
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -243,13 +243,13 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
     void testBeforeTagWindow()
     {
         setupData()
-        standardParams[(DetectionFactoryService.TRANSMITTER_COLUMN)] = "A69-1303-1111"
+        standardParams[(VueDetectionFormat.TRANSMITTER_COLUMN)] = "A69-1303-1111"
         
         release1.releaseDateTime = new DateTime("2009-12-09T06:44:24")
         release1.save()
         
         def detection = 
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -264,7 +264,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
     void testAfterTagWindow()
     {
         setupData()
-        standardParams[(DetectionFactoryService.TRANSMITTER_COLUMN)] = "A69-1303-1111"
+        standardParams[(VueDetectionFormat.TRANSMITTER_COLUMN)] = "A69-1303-1111"
         
         surgery1.grailsApplication = [config:[tag:[expectedLifeTime:[gracePeriodDays:10]]]]
 		surgery2.grailsApplication = [config:[tag:[expectedLifeTime:[gracePeriodDays:10]]]]
@@ -278,7 +278,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		assertEquals(0, DetectionSurgery.count())
 		
         def detection = 
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)
@@ -301,7 +301,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		
         // "2009-12-08 06:44:24"
         detection = 
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
            
 		assertEquals(3, DetectionSurgery.count())
 		def detectionSurgery1 = DetectionSurgery.list()[1]
@@ -315,7 +315,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
     void testRescan()
     {
         def detection = 
-            newDetection(new ReceiverDownloadFile(), standardParams)
+            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
          
         assertNotNull(detection)
         assertTrue(detection instanceof ValidDetection)

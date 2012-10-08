@@ -89,7 +89,7 @@ environments
 		grails.serverURL = "http://aatams.emii.org.au/${appName}"
 		grails.serverHost = "http://aatams.emii.org.au"
 		fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod"
-		
+		bulkimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod/bulkimports"
 		grails.mail.host = "localhost"
 	}
 	development
@@ -97,6 +97,7 @@ environments
 		grails.serverURL = "http://localhost:8080/${appName}"
 		grails.serverHost = "http://localhost:8080"
 		fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
+		bulkimport.path = "/Users/jburgess/Documents/aatams/test_uploads/bulkimports"
 		
 		grails.mail.adminEmailAddress = "jkburges@utas.edu.au"
 		grails.mail.host = "postoffice.utas.edu.au"
@@ -108,6 +109,7 @@ environments
 		grails.serverHost = "http://localhost:8090"
 		grails.plugin.databasemigration.updateOnStart = false
 		grails.mail.disabled = true
+		fileimport.path = "/tmp"
 	}
 }
 
@@ -166,9 +168,10 @@ log4j =
 				   "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService",
 				   "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
 				   "grails.app.domain.au.org.emii.aatams.Receiver",
+				   "grails.app.domain.au.org.emii.aatams.bulk",
 				   "grails.app.domain.au.org.emii.aatams.ReceiverDownloadFile",
 				   "grails.app.service.au.org.emii.aatams.filter.QueryService",
-//				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService",
+				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService",
 				   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
 				   "grails.app.service.au.org.emii.aatams.detection.DetectionNotificationService"
 		}
@@ -176,6 +179,7 @@ log4j =
 		test
 		{
 			debug  "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
+				   "grails.app.domain.au.org.emii.aatams.bulk"
 			       "grails.app.service.au.org.emii.aatams.detection"
 		}
 	}

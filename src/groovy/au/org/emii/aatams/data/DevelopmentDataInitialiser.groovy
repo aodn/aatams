@@ -852,7 +852,6 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 		
         ReceiverDownloadFile export2 = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
-                                     path:"/tmp/export2.csv",
                                      name:"export2.csv",
                                      importDate:new DateTime("2013-05-17T12:54:56").toDate(),
                                      status:FileProcessingStatus.PROCESSED,
@@ -893,7 +892,6 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 	{
         ReceiverDownloadFile export = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
-                                     path:"/tmp/export.csv",
                                      name:exportName,
                                      importDate:new DateTime("2013-05-17T12:54:56").toDate(),
                                      status:FileProcessingStatus.PROCESSED,

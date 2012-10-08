@@ -1,6 +1,7 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.ReceiverDownloadFile
+import au.org.emii.aatams.ReceiverDownloadFileProgress;
 import au.org.emii.aatams.Sensor
 import grails.test.*
 import org.springframework.context.support.DelegatingMessageSource
@@ -23,6 +24,7 @@ class DetectionNotificationServiceTests extends AbstractVueDetectionFileProcesso
 
 	void testNotificationEmailSent()
 	{
+		mockLogging(ReceiverDownloadFile)
 		mockDomain(ReceiverDownloadFile)
 		ReceiverDownloadFile.metaClass.getUniqueTransmitterIds =
 		{
@@ -31,6 +33,9 @@ class DetectionNotificationServiceTests extends AbstractVueDetectionFileProcesso
 		
 		ReceiverDownloadFile download = new ReceiverDownloadFile()
 		download.save()
+		download.id = 123
+		
+		download.grailsApplication = [config: [fileimport: [path: "some path"]]]
 
 		Sensor.metaClass.static.groupByOwningPI = {
 			List<Sensor> sensors ->

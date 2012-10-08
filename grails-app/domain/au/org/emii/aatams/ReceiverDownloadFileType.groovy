@@ -5,7 +5,9 @@ enum ReceiverDownloadFileType
     DETECTIONS_CSV('detections (CSV)'),
     EVENTS_CSV('events (CSV)'),
     VRL('VRL'),
-    RLD('RLD')
+    RLD('RLD'),
+	CSIRO_DETECTIONS_CSV('CSIRO detections (CSV)')	// Don't want this showing up in the front-end.
+	
     
     String type
     

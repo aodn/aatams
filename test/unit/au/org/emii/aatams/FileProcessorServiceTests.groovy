@@ -125,9 +125,10 @@ class FileProcessorServiceTests extends GrailsUnitTestCase
 	private ReceiverDownloadFile createExport(filename, downloadType) 
 	{
 		ReceiverDownloadFile export =
-				new ReceiverDownloadFile(path:System.getProperty("java.io.tmpdir") + "fileProcessorServiceTests",
-										 name:filename,
+				new ReceiverDownloadFile(name:filename,
 										 type:downloadType)
+				
+		export.grailsApplication = [config: [fileimport: [path: System.getProperty("java.io.tmpdir") + "fileProcessorServiceTests"]]]		
 				
 		mockDomain(ReceiverDownloadFile, [export])
 		export.save()

@@ -192,7 +192,9 @@ class AnimalReleaseLoader extends AbstractLoader
 		}
 		
 		ownerToProjectNameMapping["Babcock/Pillans"] = "Ningaloo Reef Ecosystem Tracking Array (NRETA)"
+		ownerToProjectNameMapping["Richard Pillans/TERN"] = "Ningaloo Reef Ecosystem Tracking Array (NRETA)"
 		ownerToProjectNameMapping["Al Hobday"] = "Bluefin tuna WA"
+		ownerToProjectNameMapping["Hobday"] = "Bluefin tuna WA"
 		ownerToProjectNameMapping["Daley \\ R656-02-014"] = "CSIRO: Ross Daley"
 			
 		def name = ownerToProjectNameMapping[owner]
@@ -314,7 +316,9 @@ class AnimalReleaseLoader extends AbstractLoader
 			"Other/unknown": "OTHER",
 			"Handlining": "HAND CAPTURE",
 			"Trolling": "TRAWL",
-			"Pole and line": "POLE AND LINE"]
+			"Pole and line": "POLE AND LINE",
+			"Cast Net": "OTHER",
+			"Rod and reel": "POLE AND LINE"]
 		
 		def captureMethod = CaptureMethod.findByName(mapping[captureMethodName])
 		
@@ -326,7 +330,7 @@ class AnimalReleaseLoader extends AbstractLoader
 		return captureMethod
 	}
 	
-	private static DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("d/M/yyyy' 0:00:00'")
+	private static DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("d/M/yyyy")
 	
 	private DateTime constructDateTime(dateAsString, timeAsString)
 	{

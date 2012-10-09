@@ -132,28 +132,45 @@ databaseChangeLog = {
 		{
 			change
 			{
-				sql.eachRow('select * from raw_detection')
+				boolean hasRows = true
+				def limit = 100000
+				
+				while (hasRows)
 				{
-					row ->
+					hasRows = false
 					
-					if (row.class == 'au.org.emii.aatams.detection.ValidDetection')
+					// It appears that without "limit", the whole table will be loaded in to memory
+					// at once (which causes out of memory error).
+					sql.eachRow("select * from raw_detection limit ${limit}")
 					{
-						String insertStatement = '''insert into valid_detection (id, version, location, receiver_deployment_id, receiver_download_id, receiver_name, sensor_unit, ''' +
-							'''sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
-						sql.executeInsert(insertStatement, [row.id, row.version, row.location, row.receiver_deployment_id, row.receiver_download_id, row.receiver_name, row.sensor_unit,
-							row.sensor_value, row.station_name, row.timestamp, row.transmitter_id, row.transmitter_name, row.transmitter_serial_number])
+						row ->
+						
+						hasRows = true
+						
+						if (row.class == 'au.org.emii.aatams.detection.ValidDetection')
+						{
+							String insertStatement = '''insert into valid_detection (id, version, location, receiver_deployment_id, receiver_download_id, receiver_name, sensor_unit, ''' +
+								'''sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
+							sql.executeInsert(insertStatement, [row.id, row.version, row.location, row.receiver_deployment_id, row.receiver_download_id, row.receiver_name, row.sensor_unit,
+								row.sensor_value, row.station_name, row.timestamp, row.transmitter_id, row.transmitter_name, row.transmitter_serial_number])
+						}
+						else if (row.class == 'au.org.emii.aatams.detection.InvalidDetection')
+						{
+							String insertStatement = '''insert into invalid_detection (id, version, location, message, reason, receiver_download_id, receiver_name, sensor_unit, ''' +
+								'''sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
+							sql.executeInsert(insertStatement, [row.id, row.version, row.location, row.message, row.reason, row.receiver_download_id, row.receiver_name, row.sensor_unit, 
+								row.sensor_value, row.station_name, row.timestamp, row.transmitter_id, row.transmitter_name, row.transmitter_serial_number])
+						}
+						else
+						{
+							assert(false): "Unknown detection class."
+						}
+						
+						// delete
+						sql.execute("delete from raw_detection where id = ${row.id}")
 					}
-					else if (row.class == 'au.org.emii.aatams.detection.InvalidDetection')
-					{
-						String insertStatement = '''insert into invalid_detection (id, version, location, message, reason, receiver_download_id, receiver_name, sensor_unit, ''' +
-							'''sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'''
-						sql.executeInsert(insertStatement, [row.id, row.version, row.location, row.message, row.reason, row.receiver_download_id, row.receiver_name, row.sensor_unit, 
-							row.sensor_value, row.station_name, row.timestamp, row.transmitter_id, row.transmitter_name, row.transmitter_serial_number])
-					}
-					else
-					{
-						assert(false): "Unknown detection class."
-					}
+					
+					println "Detection batch processed"
 				}
 			}
 		}

@@ -37,5 +37,10 @@ function isExcludedInput(element) {
         }
     })
     
+    // ... and specific selects...
+    if ($(element).hasClass('noAutocompleteCombo')) {
+        isExcluded = true;
+    }
+    
     return isExcluded;
 }

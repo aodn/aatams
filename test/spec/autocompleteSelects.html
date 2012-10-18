@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Jasmine Test Runner</title>
+		<link rel="stylesheet" type="text/css" href="../../src/resources/jasmine-1.0.2/jasmine.css">
+		<script type="text/javascript" src="../../src/resources/jasmine-1.0.2/jasmine.js"></script>
+		<script type="text/javascript" src="../../src/resources/jasmine-1.0.2/jasmine-html.js"></script>
+		<script type="text/javascript" src="../../src/resources/jasmine-reporters/jasmine.console_reporter.js"></script>
+		<script type="text/javascript" src="../../src/resources/jasmine-reporters/jasmine.junit_reporter.js"></script>
+		
+		<!-- supporting source files here... -->
+        <link rel="stylesheet" type="text/css" href="../../web-app/css/jquery-ui-combobox.css">
+        <link rel="stylesheet" type="text/css" href="../../web-app/css/custom-theme/jquery-ui-1.8.13.custom.css">
+
+		<script type="text/javascript" src="../../web-app/js/jquery-1.7.min.js"></script>
+		<script type="text/javascript" src="../../web-app/js/jquery-ui-1.8.10.custom.min.js"></script>
+		<script type="text/javascript" src="../../web-app/js/jquery-ui-combobox.js"></script>
+
+        <!--  file(s) under test -->
+		<script type="text/javascript" src="../../web-app/js/autocompleteForLargeSelects.js"></script>
+		
+		<!-- include spec files here... -->
+		<script type="text/javascript" src="autocompleteSelectsSpec.js"></script>
+	</head>
+	
+	<body>
+	
+		<script type="text/javascript">
+		  jasmine.getEnv().addReporter(new jasmine.ConsoleReporter());
+		  jasmine.getEnv().addReporter(new jasmine.JUnitXmlReporter());
+		  jasmine.getEnv().execute();
+		</script>
+	
+	    <div>
+			<select name="sex.id" id="sex.id">
+				<option value="">Not specified</option>
+				<option value="52">MALE</option>
+				<option value="53">FEMALE</option>
+				<option value="54">UNKNOWN</option>
+			</select>
+		</div>
+		
+		<div>	
+	        <select name="embargoPeriod" id="embargoPeriod">
+				<option value="">No embargo</option>
+				<option value="6">6 months</option>
+				<option value="12" selected="selected">12 months</option>
+				<option value="36">3 years</option>
+	        </select>
+        </div>   
+             
+	</body>
+</html>

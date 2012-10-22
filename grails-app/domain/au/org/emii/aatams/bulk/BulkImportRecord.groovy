@@ -1,5 +1,7 @@
 package au.org.emii.aatams.bulk
 
+import grails.util.GrailsNameUtils;
+
 import org.joda.time.DateTime
 
 class BulkImportRecord 
@@ -24,17 +26,15 @@ class BulkImportRecord
 		srcPk(nullable: true)
 		srcModifiedDate(nullable: true)
     }
+	
+	static transients = ['dstClazz', 'dstController', 'dstObject']
 
 	def beforeDelete()
 	{
 		if (this.type == BulkImportRecordType.NEW)
 		{
-			Class dstClazz = grailsApplication.getClassForName(dstClass)
-
 			dstClazz.withNewSession
 			{			
-				def dstObject = dstClazz.get(dstPk)
-				
 				if (!dstObject)
 				{
 					// This is ok, the destination object has already been deleted as part of a cascade
@@ -50,6 +50,30 @@ class BulkImportRecord
 		}
 	}
 	
+	Class getDstClazz()
+	{
+		return grailsApplication.getClassForName(dstClass)
+	}
+	
+	Object getDstObject()
+	{
+		return dstClazz.get(dstPk)
+	}
+	
+	/**
+	 * Trick to make 'g' resolve to the ApplicationTagLib.
+	 */
+    private getG() 
+    {
+		grailsApplication.mainContext.getBean(
+			'org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+	}
+	
+	String getDstController()
+	{
+		return GrailsNameUtils.getPropertyNameRepresentation(dstClazz)
+	}
+ 
 	String toString()
 	{
 		return "[srcTable: ${srcTable}, srcPk: ${srcPk}, dstPk: ${dstPk}, dstClass: ${dstClass}, type: ${type}]"

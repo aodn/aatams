@@ -139,4 +139,35 @@ class BulkImportRecordTests extends GrailsUnitTestCase
 		receiver = Receiver.get(receiver.id)
 		assertNotNull(receiver)
 	}
+	
+	void testGetDstClazz()
+	{
+		assertEquals(Receiver.class, getRecord().getDstClazz())
+	}
+	
+	void testGetDstController()
+	{
+		assertEquals("receiver", getRecord().getDstController())
+	}
+	
+	void testGetDstObject()
+	{
+		assertEquals(receiver, getRecord().getDstObject())
+	}
+
+	private BulkImportRecord getRecord()
+	{
+		BulkImportRecord newRecord =
+			new BulkImportRecord(
+				srcTable: "RECEIVERS",
+				srcPk: 123,
+				srcModifiedDate: new DateTime(),
+				dstClass: "au.org.emii.aatams.Receiver",
+				dstPk: receiver.id,
+				type: BulkImportRecordType.NEW,
+				bulkImport: bulkImport)
+		newRecord.save(flush: true, failOnError: true)
+		
+		return newRecord
+	}
 }

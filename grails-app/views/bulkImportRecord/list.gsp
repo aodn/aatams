@@ -22,8 +22,10 @@
                     <thead>
                         <tr>
                         
-                            <g:sortableColumn property="id" title="${message(code: 'bulkImportRecord.id.label', default: 'Id')}" />
-                        
+                            <td/>
+                            
+                            <g:sortableColumn property="dstObject?.toString()" title="Dst Object" />
+                            
                             <g:sortableColumn property="dstClass" title="${message(code: 'bulkImportRecord.dstClass.label', default: 'Dst Class')}" />
                         
                             <g:sortableColumn property="dstPk" title="${message(code: 'bulkImportRecord.dstPk.label', default: 'Dst Pk')}" />
@@ -40,17 +42,22 @@
                     <g:each in="${bulkImportRecordInstanceList}" status="i" var="bulkImportRecordInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${bulkImportRecordInstance.id}">${fieldValue(bean: bulkImportRecordInstance, field: "id")}</g:link></td>
+                            <td class="rowButton"><g:link class="show" action="show" id="${bulkImportRecordInstance.id}">.</g:link></td>
                         
+                            <td><g:link class="show" 
+                                        controller="${bulkImportRecordInstance?.dstController}"
+                                        action="show" 
+                                        id="${bulkImportRecordInstance?.dstObject?.id}">${bulkImportRecordInstance?.dstObject?.toString()}</g:link></td>
+                            
                             <td>${fieldValue(bean: bulkImportRecordInstance, field: "dstClass")}</td>
                         
-                            <td>${fieldValue(bean: bulkImportRecordInstance, field: "dstPk")}</td>
+                            <td>${bulkImportRecordInstance?.dstPk}</td>
                         
                             <td>${fieldValue(bean: bulkImportRecordInstance, field: "bulkImport")}</td>
                         
                             <td>${fieldValue(bean: bulkImportRecordInstance, field: "srcModifiedDate")}</td>
                         
-                            <td>${fieldValue(bean: bulkImportRecordInstance, field: "srcPk")}</td>
+                            <td>${bulkImportRecordInstance?.srcPk}</td>
                         
                         </tr>
                     </g:each>

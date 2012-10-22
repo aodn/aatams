@@ -39,6 +39,7 @@
                         self._trigger( "selected", event, {
                             item: ui.item.option
                         });
+                        select.change();   // #1991 - trigger this manually so that the "rememberFormFields.js" works as expected.
                     },
                     change: function( event, ui ) {
                         if ( !ui.item ) {

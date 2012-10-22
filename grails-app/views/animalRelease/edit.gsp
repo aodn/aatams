@@ -316,6 +316,7 @@
 	                                
                                     <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'embargoDate', 'errors')}">
                                         <g:select from="${embargoPeriods}"
+                                                  class="noAutocompleteCombo"
                                                   name="embargoPeriod" 
                                                   optionKey="key"
                                                   optionValue="value"

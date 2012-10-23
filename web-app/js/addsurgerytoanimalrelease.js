@@ -33,6 +33,7 @@ $(function()
                 // create a new tag.
                 //
                 var tagCodeMapId = $("#tagCodeMapId").val();
+                var tagCodeMapValue = $("#tagCodeMapId option:selected").text();
                 var tagSerialNumber = $("#serialNumber").val();
                 var tagPingCode = $("#pingCode").val();
                 var tagModelId = $("#modelId option:selected").val();
@@ -55,7 +56,7 @@ $(function()
                                    timestamp_minute + ":" + 
                                    timestamp_second + " " + 
                                    timestamp_zone;
-                    var tag = {codeMap:{id:tagCodeMapId, serialNumber:tagSerialNumber, pingCode:tagPingCode}};
+                    var tag = {codeMap:{id:tagCodeMapId, value:tagCodeMapValue}, serialNumber:tagSerialNumber, pingCode:tagPingCode};
                     var type = {type:$("#surgeryTypeId option:selected").text()};
                     var treatmentType = {type:$("#treatmentTypeId option:selected").text()};
                     var instance = {timestamp:dateTime, 
@@ -235,7 +236,7 @@ function updateSurgeryTable(data, projectId, idPrefix)
     }
     else
     {
-        tagColumn.html(data.instance.tag.deviceID);    
+        tagColumn.html(data.instance.tag.codeMap.value + "-" + data.instance.tag.pingCode);    
     }
     
     tableRow.append(tagColumn);

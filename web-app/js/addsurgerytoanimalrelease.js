@@ -215,7 +215,7 @@ function updateSurgeryTable(data, projectId, idPrefix)
                 tableRow.remove();
                 
                 // Remove hidden fields.
-                $("[id*=" + idPrefix + "]").remove();
+                $("[id*='" + idPrefix + "']").remove();
             }
                 
         });

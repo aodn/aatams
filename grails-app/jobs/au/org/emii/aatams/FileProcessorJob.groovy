@@ -20,7 +20,7 @@ class FileProcessorJob
         }
         catch (FileProcessingException e)
         {
-            log.error(e)
+            log.error("", e)
             
             receiverDownloadFileInstance?.status = FileProcessingStatus.ERROR
             receiverDownloadFileInstance?.errMsg = e.getMessage()
@@ -28,7 +28,7 @@ class FileProcessorJob
         }
         catch (Throwable t)
         {
-            log.error(t)
+            log.error("", t)
             
             receiverDownloadFileInstance?.status = FileProcessingStatus.ERROR
             receiverDownloadFileInstance?.errMsg = "System Error - Contact eMII" //t.getMessage()

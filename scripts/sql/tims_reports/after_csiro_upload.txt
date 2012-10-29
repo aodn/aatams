@@ -1,0 +1,268 @@
+Executing file: project_list.sql ...
+                    project name                    | number of stations 
+----------------------------------------------------+--------------------
+ AATAMS Bondi line                                  |                 30
+ AATAMS Cabbage Tree Bay Aquatic Reserve (CTBAR)    |                 15
+ AATAMS Coffs Harbour line                          |                 15
+ AATAMS Glenelg line                                |                 10
+ AATAMS Heron Island                                |                 31
+ AATAMS Narooma line                                |                  9
+ AATAMS / Ocean Tracking Network Perth Line         |                 53
+ AATAMS One Tree Island                             |                 21
+ AATAMS Orpheus Island                              |                 20
+ AATAMS / OTN Maria & Flinders Island Lines         |                 72
+ AATAMS Port Stephens                               |                  5
+ AATAMS Rowley shoals                               |                 27
+ AATAMS Scott reef                                  |                 15
+ AATAMS Sydney Gate                                 |                  4
+ AIMS Scientific Zone                               |                 14
+ Bruce Barker's project                             |                 72
+ Coral Sea  Nautilus tracking project               |                  5
+ CSIRO: Juvenile White Sharks                       |                 35
+ CSIRO: Shark Monitoring Network                    |                 11
+ Gulf St Vincent monitoring                         |                 54
+ JCU Cleveland Bay                                  |                 63
+ JCU Townsville Reefs                               |                 23
+ MQ Bronte-Coogee Aquatic reserve (BCAR)            |                 11
+ New Zealand white shark tracking                   |                 25
+ Ningaloo Reef Ecosystem Tracking Array (NRETA)     |                120
+ NSW DPI (Artificial Reef Network)                  |                  1
+ NSW DPI Coastal and Estuarine Fish Tracking (CEFT) |                 48
+ NSW DPI Jervis Bay                                 |                 21
+ Port Stephens Marine Park tracking project         |                 20
+ Richard Pillans's project                          |                 59
+ Rowley Shoals reef shark tracking 2007             |                 15
+ Seven Gill tracking in Coastal Tasmania            |                 71
+ The Yongala's Halo of Holes - Who is Digging It    |                 10
+ UQ Project Manta east Australia                    |                  1
+ VIC Fisheries Snapper - Port Phillip Bay           |                 47
+ Wenlock River Array, Gulf of Carpentaria           |                 65
+(36 rows)
+
+
+Executing file: releases_by_species.sql ...
+ count | CAAB code |         common_name         |        scientific_name        
+-------+-----------+-----------------------------+-------------------------------
+   757 | 37441004  | Southern Bluefin Tuna       | Thunnus maccoyii
+   109 | 37351008  | Spangled Emperor            | Lethrinus nebulosus
+   106 | 37010003  | White Shark                 | Carcharodon carcharias
+    86 | 37018030  | Grey Reef Shark             | Carcharhinus amblyrhynchos
+    64 | 37351013  | Yellowtail Emperor          | Lethrinus atkinsoni
+    59 | 37018021  | Bull Shark                  | Carcharhinus leucas
+    45 | 37005002  | Broadnose Shark             | Notorynchus cepedianus
+    45 | 37361007  | Luderick                    | Girella tricuspidata
+    39 | 37338001  | Mahi Mahi                   | Coryphaena hippurus
+    37 | 37041005  | [a devilray]                | Manta alfredi
+    34 | 37337006  | Yellowtail Kingfish         | Seriola lalandi
+    29 | 37384043  | Eastern Blue Groper         | Achoerodus viridis
+    29 | 37353001  | Snapper                     | Pagrus auratus
+    28 | 37018001  | Bronze Whaler               | Carcharhinus brachyurus
+    27 | 37013003  | Spotted Wobbegong           | Orectolobus maculatus
+    25 | 37361001  | Silver Drummer              | Kyphosus sydneyanus
+    24 | 37337037  | Turrum                      | Carangoides fulvoguttatus
+    23 | 37384090  | Redblotched Wrasse          | Coris aygula
+    23 | 37361006  | Rock Blackfish              | Girella elevata
+    23 | 37386030  | Greenfin Parrotfish         | Chlorurus sordidus
+    19 | 37018036  | Blacktip Reef Shark         | Carcharhinus melanopterus
+    18 | 37017001  | Gummy Shark                 | Mustelus antarcticus
+    15 | 37310006  | Barramundi                  | Lates calcarifer
+    13 | 37381002  | Sea Mullet                  | Mugil cephalus
+    12 | 37346015  | Mangrove Jack               | Lutjanus argentimaculatus
+    11 | 37018034  | Nervous Shark               | Carcharhinus cautus
+    11 | 37311010  | Rankin Cod                  | Epinephelus multinotatus
+    11 | 37018027  | Silvertip Shark             | Carcharhinus albimarginatus
+    10 | 37018038  | Whitetip Reef Shark         | Triaenodon obesus
+    10 | 37027010  | Giant Shovelnose Ray        | Glaucostegus typus
+    10 | 37311057  | Greasy Rockcod              | Epinephelus tauvina
+    10 | 37311166  | Yellowedge Coronation Trout | Variola louti
+     9 | 37020008  | Whitespotted Dogfish        | Squalus acanthias
+     8 | 37017008  | School Shark                | Galeorhinus galeus
+     8 | 37018003  | Dusky Whaler                | Carcharhinus obscurus
+     8 | 37311022  | Chinaman Rockcod            | Epinephelus rivulatus
+     8 | 37018026  | Pigeye Shark                | Carcharhinus amboinensis
+     8 | 37035011  | Cowtail Stingray            | Pastinachus atrus
+     8 | 37018029  | Lemon Shark                 | Negaprion acutidens
+     5 | 37353004  | Yellowfin Bream             | Acanthopagrus australis
+     5 | 37386027  | Surf Parrotfish             | Scarus rivulatus
+     5 | 37039001  | Southern Eagle Ray          | Myliobatis australis
+     5 | 37018022  | Tiger Shark                 | Galeocerdo cuvier
+     4 | 37346027  | Green Jobfish               | Aprion virescens
+     4 | 37035027  | Porcupine Ray               | Urogymnus asperrimus
+     4 | 37188005  | Blue Catfish                | Neoarius graeffei
+     4 | 37437031  | Bluespine Unicornfish       | Naso unicornis
+     3 | 37043001  | Elephantfish                | Callorhinchus milii
+     2 | 37346030  | Golden Snapper              | Lutjanus johnii
+     2 | 37019002  | Great Hammerhead            | Sphyrna mokarran
+     1 | 37014001  | Whale Shark                 | Rhincodon typus
+     1 | 37311012  | Barcheek Coral Trout        | Plectropomus maculatus
+     1 | 37386008  | Longnose Parrotfish         | Hipposcarus longiceps
+     1 | 37018033  | Graceful Shark              | Carcharhinus amblyrhynchoides
+     1 | 39020002  | green turtle                | Chelonia mydas
+     1 | 37335001  | Cobia                       | Rachycentron canadum
+     1 | 37386001  | Bluebarred Parrotfish       | Scarus ghobban
+     1 | 37018039  | Common Blacktip Shark       | Carcharhinus limbatus
+     1 | 37311078  | Common Coral Trout          | Plectropomus leopardus
+     1 | 37013020  | [a wobbegong ]              | Orectolobus halei
+     0 |           |                             | 
+(61 rows)
+
+
+Executing file: overall_stats.sql ...
+
+Executing file: detections_by_project.sql ...
+  count  |                       name                       
+---------+--------------------------------------------------
+ 2167721 | Richard Pillans's project
+ 2095156 | AIMS Scientific Zone
+ 1592878 | Ningaloo Reef Ecosystem Tracking Array (NRETA)
+  966348 | AATAMS Heron Island
+  855754 | AATAMS Cabbage Tree Bay Aquatic Reserve (CTBAR) 
+  291751 | CSIRO: Shark Monitoring Network
+  223703 | Coral Sea  Nautilus tracking project
+  117173 | AATAMS One Tree Island
+   90422 | AATAMS Orpheus Island
+   46647 | AATAMS Bondi line
+   43185 | CSIRO: Juvenile White Sharks
+   34597 | Rowley Shoals reef shark tracking 2007
+   11360 | AATAMS Sydney Gate
+    9491 | AATAMS Port Stephens
+    7668 | Bruce Barker's project
+     499 | AATAMS Glenelg line
+     425 | Gulf St Vincent monitoring
+     390 | AATAMS Coffs Harbour line
+(18 rows)
+
+
+Executing file: detections_by_species.sql ...
+  count  |         common_name         |        scientific_name        |  spcode  
+---------+-----------------------------+-------------------------------+----------
+ 1286913 | Spangled Emperor            | Lethrinus nebulosus           | 37351008
+  424463 | Spotted Wobbegong           | Orectolobus maculatus         | 37013003
+  232114 | Redblotched Wrasse          | Coris aygula                  | 37384090
+  152391 | Blacktip Reef Shark         | Carcharhinus melanopterus     | 37018036
+  109163 | Grey Reef Shark             | Carcharhinus amblyrhynchos    | 37018030
+  101780 | Silver Drummer              | Kyphosus sydneyanus           | 37361001
+   51454 | Nervous Shark               | Carcharhinus cautus           | 37018034
+   51224 | Turrum                      | Carangoides fulvoguttatus     | 37337037
+   37599 | Porcupine Ray               | Urogymnus asperrimus          | 37035027
+   28924 | Yellowtail Emperor          | Lethrinus atkinsoni           | 37351013
+   28408 | Rankin Cod                  | Epinephelus multinotatus      | 37311010
+   23634 | Lemon Shark                 | Negaprion acutidens           | 37018029
+   22831 | Southern Bluefin Tuna       | Thunnus maccoyii              | 37441004
+   21109 | Cowtail Stingray            | Pastinachus atrus             | 37035011
+   18317 | Graceful Shark              | Carcharhinus amblyrhynchoides | 37018033
+    9959 | Giant Shovelnose Ray        | Glaucostegus typus            | 37027010
+    8655 | Common Coral Trout          | Plectropomus leopardus        | 37311078
+    8426 | [a devilray]                | Manta alfredi                 | 37041005
+    6312 | Green Jobfish               | Aprion virescens              | 37346027
+    5860 | Tiger Shark                 | Galeocerdo cuvier             | 37018022
+    2947 | Greenfin Parrotfish         | Chlorurus sordidus            | 37386030
+    2060 | Yellowedge Coronation Trout | Variola louti                 | 37311166
+     791 | [a wobbegong ]              | Orectolobus halei             | 37013020
+     566 | Greasy Rockcod              | Epinephelus tauvina           | 37311057
+     557 | Bronze Whaler               | Carcharhinus brachyurus       | 37018001
+     399 | Bull Shark                  | Carcharhinus leucas           | 37018021
+     374 | Bluespine Unicornfish       | Naso unicornis                | 37437031
+     296 | Pigeye Shark                | Carcharhinus amboinensis      | 37018026
+     291 | Cobia                       | Rachycentron canadum          | 37335001
+      99 | Dusky Whaler                | Carcharhinus obscurus         | 37018003
+      79 | Bluebarred Parrotfish       | Scarus ghobban                | 37386001
+      79 | Yellowtail Kingfish         | Seriola lalandi               | 37337006
+      34 | Chinaman Rockcod            | Epinephelus rivulatus         | 37311022
+       7 | green turtle                | Chelonia mydas                | 39020002
+       2 | Silvertip Shark             | Carcharhinus albimarginatus   | 37018027
+       1 | Barcheek Coral Trout        | Plectropomus maculatus        | 37311012
+       1 | Broadnose Shark             | Notorynchus cepedianus        | 37005002
+       1 | Surf Parrotfish             | Scarus rivulatus              | 37386027
+(38 rows)
+
+
+Executing file: installation_list.sql ...
+            installation name            
+-----------------------------------------
+ 60 nm closure
+ AATAMS Port Stephens
+ AIMS Scientific Zone Townsville
+ Anchorage
+ Aqua1
+ Aqua2
+ Ardrossan - SA
+ BCAR
+ Birubi Point
+ Black Point - SA
+ Black Pole
+ Bondi Line
+ Boondelbah Island
+ Brewer Reef
+ Cabbage Tree Island
+ Centipede Reef
+ Central Line
+ Cleveland Bay
+ Coffs Harbour line
+ Coral Bay
+ Corner Inlet, Victoria
+ CT 01
+ CTBAR
+ Davies Reef
+ Deep1
+ Deep2
+ Deep3
+ Edward Wakool
+ Estuarine (Lake Macquarie)
+ Flinders Island/ Cape Barron
+ Glenelg Line SA
+ Grange
+ Halifax
+ Hawks Nest, NSW
+ Helix Reef
+ Heron Island
+ JB1
+ JB5
+ JB6
+ JB7
+ Lady Elliot Island SEQ
+ Little Broadhurst Reef
+ Little Island
+ Lodestone Reef
+ Long Reef - the wall
+ Longspit - SA
+ Mangrove Bay
+ Mangrove Bay
+ Maria Island Line
+ Narooma Line
+ Neptune Islands, SA
+ Ningaloo Reef
+ North Line
+ NSW DPI Jervis Bay array
+ NSW DPI Jervis Bay array
+ NSW DPI North Sydney Drummer Array
+ NSW DPI offshore FAD array
+ NSW DPI Wollongong Drummer Array
+ NSW Jervis Bay Array
+ Oakland
+ OAR (Sydney)
+ Offshore Artificial Reef
+ One Tree Island
+ Orpheus Island
+ Osprey Reef
+ OTN Perth Line
+ Port Stephens
+ Rowley shoals 
+ Rowley Shoals
+ Scott reef
+ SEACAMS
+ Semaphore Reef
+ Seven Gill tracking in Coastal Tasmania
+ South Line
+ Stewart Island NZ
+ Sydney Gate
+ Tomaree Head
+ Torrens River Mouth
+ VIC DPI Port Phillip Bay
+ Wenlock River
+ Wheeler Reef
+ Yacaaba Head
+ Yongala Tracking array 
+(83 rows)
+
+

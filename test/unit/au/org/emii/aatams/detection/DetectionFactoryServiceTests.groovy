@@ -10,6 +10,8 @@ import org.joda.time.format.DateTimeFormat
 
 class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests 
 {
+	def download
+	
     protected void setUp() 
     {
         super.setUp()
@@ -18,6 +20,8 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		detectionFactoryService = new DetectionFactoryService()
 		
 		mockLogging(DetectionValidator, true)
+		
+		download = new ReceiverDownloadFile()
     }
 
     protected void tearDown() 
@@ -312,7 +316,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		assertEquals(surgery2, detectionSurgery2.surgery)
     }
     
-    void testRescan()
+    void testRescanForSurgery()
     {
         def detection = 
             newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
@@ -333,4 +337,69 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		assertEquals(sensor0, detectionSurgery.sensor)
 		assertEquals(surgery, detectionSurgery.surgery)
     }
+	
+	private def createInvalidDetection(params)
+	{
+		def timestamp = params.timestamp ?: new DateTime("2012-01-01T00:00:00").toDate()
+		def receiverName = params.receiverName ?: "VR2W-1234"
+		
+		def det = new InvalidDetection(timestamp: timestamp, receiverName: receiverName, reason: params.reason, message: "some message", transmitterId: "A69-1303-1111", receiverDownload: download)
+		det.save(failOnError: true)
+		
+		return det
+	}
+	
+	// Test for #1751
+	void testRescanForDeployment()
+	{
+		mockDomain(InvalidDetection)
+		mockDomain(ValidDetection)
+
+		// 1) invaliddetection - inside time range - no deployment
+		InvalidDetection insideTimeRangeUnknownReceiver = createInvalidDetection(reason: InvalidDetectionReason.UNKNOWN_RECEIVER)
+		InvalidDetection insideTimeRangeNoDeployment = createInvalidDetection(reason: InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME)
+		InvalidDetection insideTimeRangeNoRecovery = createInvalidDetection(reason: InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME)
+		
+		// 2) invaliddetection - outside time range
+		InvalidDetection beforeTimeRange = createInvalidDetection(timestamp: new DateTime("2011-01-01T00:00:00").toDate(), reason: InvalidDetectionReason.UNKNOWN_RECEIVER)
+		InvalidDetection afterTimeRange = createInvalidDetection(timestamp: new DateTime("2013-01-01T00:00:00").toDate(), reason: InvalidDetectionReason.UNKNOWN_RECEIVER)
+		
+		// 3) invaliddetection - other reason
+		InvalidDetection insideTimeRangeDuplicate = createInvalidDetection(reason: InvalidDetectionReason.DUPLICATE)
+		InvalidDetection insideTimeRangeDifferentReceiver = createInvalidDetection(receiverName: "VR2W-5678", reason: InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME)
+
+		assertEquals(0, ValidDetection.count())
+		assertEquals(7, InvalidDetection.count())
+		
+		// create recovery
+		ReceiverDeviceModel vr2w = new ReceiverDeviceModel(modelName: "VR2W", manufacturer: new DeviceManufacturer())
+		Receiver rxr = new Receiver(model: vr2w, serialNumber: "1234")
+		ReceiverDeployment deployment =
+			new ReceiverDeployment(station: new InstallationStation(),
+								   receiver: rxr,
+								   deploymentDateTime: new DateTime("2011-06-01T00:00:00"))
+		mockDomain(ReceiverDeployment, [deployment])
+		deployment.metaClass.validate = { true }
+		deployment.save(failOnError: true)
+		
+		ReceiverRecovery recovery = 
+			new ReceiverRecovery(deployment: deployment,
+								 recoverer: new ProjectRole(),
+								 recoveryDateTime: new DateTime("2012-06-01T00:00:00"),
+								 location: new GeometryFactory().createPoint(new Coordinate(34f, 34f)),
+								 status: new DeviceStatus())
+		mockDomain(ReceiverRecovery, [recovery])
+		recovery.save(failOnError: true)
+		deployment.recovery = recovery
+		
+		detectionFactoryService.rescanForDeployment(deployment)
+
+		assertEquals(3, ValidDetection.count())
+		assertEquals(4, InvalidDetection.count())
+		
+		// These should all still be invalid.
+		[beforeTimeRange, afterTimeRange, insideTimeRangeDuplicate, insideTimeRangeDifferentReceiver].each {
+			assertNotNull(InvalidDetection.get(it.id))
+		}
+	}
 }

@@ -54,7 +54,9 @@ class ReceiverDownloadFile
         importDate = new Date()
         status = FileProcessingStatus.PROCESSING
         name = filename
+		requestingUser = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
 		progress = new ReceiverDownloadFileProgress(percentComplete: 0, receiverDownloadFile: this)
+		// requestingUser = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
 	}
 	
     String getPath()

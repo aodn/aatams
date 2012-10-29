@@ -1,10 +1,13 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.test.*
 import grails.converters.JSON
 
-class ReceiverDownloadFileControllerTests extends ControllerUnitTestCase 
+class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase 
 {
+	def user
+	
     protected void setUp() 
 	{
         super.setUp()
@@ -13,6 +16,11 @@ class ReceiverDownloadFileControllerTests extends ControllerUnitTestCase
 		ReceiverDownloadFile.metaClass.validate = { true }
 		
 		mockDomain(ReceiverDownloadFileProgress)
+		
+		mockDomain(Person)
+		user = new Person(username: "username")
+		mockDomain(Person, [user])
+		user.save()
     }
 
     protected void tearDown() 
@@ -20,6 +28,11 @@ class ReceiverDownloadFileControllerTests extends ControllerUnitTestCase
         super.tearDown()
     }
 
+	protected def getPrincipal()
+	{
+		return user?.username
+	}
+	
 	void testProgressInvalidDownload()
 	{
 		controller.params.id = 123l
@@ -55,4 +68,14 @@ class ReceiverDownloadFileControllerTests extends ControllerUnitTestCase
 		assertEquals('PROCESSING', jsonResult.status.name)
 		assertEquals(73, jsonResult.percentComplete)
     }
+	
+	void testInitialiseForProcessing()
+	{
+		ReceiverDownloadFile download = new ReceiverDownloadFile(status: FileProcessingStatus.PROCESSING)
+		download.initialiseForProcessing("the_filename")
+		
+		assertEquals("", download.errMsg)
+		assertEquals("the_filename", download.name)
+		assertEquals("username", download.requestingUser.username)
+	}
 }

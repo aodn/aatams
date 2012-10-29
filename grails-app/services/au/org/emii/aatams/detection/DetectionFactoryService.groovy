@@ -9,6 +9,8 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
 import org.joda.time.*
+
+import java.util.Date;
 import java.util.TimeZone
 
 /**
@@ -87,6 +89,52 @@ class DetectionFactoryService
 		log.debug("Num new detection surgeries: " + newDetectionSurgeries.size())
         return newDetectionSurgeries
     }
+	
+	void rescanForDeployment(ReceiverDeployment deployment)
+	{
+		assert(deployment.recovery) : "Deployment must have associated recovery"
+		def matchingInvalidDets = 
+			InvalidDetection.findAllByReceiverNameAndTimestampBetween(
+				deployment.receiver.name, 
+				deployment.deploymentDateTime.toDate(), 
+				deployment.recovery.recoveryDateTime.toDate()).grep {
+				
+			it.reason != InvalidDetectionReason.DUPLICATE
+		}
+			
+		long matchingInvalidDetsCount = matchingInvalidDets.size()	
+		log.info("${matchingInvalidDetsCount} matching invalid detections found, promoting to valid...")
+		
+		int percentComplete = 0
+		
+		matchingInvalidDets.eachWithIndex {
+			
+			invalidDet, i ->
+			
+			ValidDetection validDet = 
+				new ValidDetection(timestamp: invalidDet.timestamp,
+								   receiverName: invalidDet.receiverName,
+								   stationName: invalidDet.stationName,
+								   transmitterId: invalidDet.transmitterId,
+								   transmitterName: invalidDet.transmitterName,
+								   transmitterSerialNumber: invalidDet.transmitterSerialNumber,
+								   location: invalidDet.location,
+								   sensorValue: invalidDet.sensorValue,
+								   sensorUnit: invalidDet.sensorUnit,
+								   receiverDownload: invalidDet.receiverDownload,
+								   receiverDeployment: deployment)
+			log.debug("Saving valid detection: ${validDet}, deleting invalid detection: ${invalidDet}")
+			validDet.save()
+			invalidDet.delete()
+			
+			def oldPercentComplete = percentComplete
+			percentComplete = i / matchingInvalidDetsCount
+			if (oldPercentComplete != percentComplete)
+			{
+				log.info("${percentComplete}% detections promoted")
+			}
+		}
+	}
     
 	private int logProgress(i, numRecords, percentProgress, surgery, startTime)
 	{

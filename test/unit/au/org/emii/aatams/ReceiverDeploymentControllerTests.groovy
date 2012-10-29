@@ -341,6 +341,5 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
 		assertTrue(model.candidateReceivers.contains(receiver))
 		assertEquals(3, model.candidateStations.size())
 		assertTrue(model.candidateStations.contains(newStation))
-		
 	}
 }

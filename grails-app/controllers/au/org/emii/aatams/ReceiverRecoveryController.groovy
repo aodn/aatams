@@ -11,7 +11,7 @@ class ReceiverRecoveryController extends AbstractController
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def candidateEntitiesService
-	def jdbcTemplateDetectionFactoryService
+	def detectionFactoryService
     def sessionFactory
 	
     def index = {
@@ -78,7 +78,7 @@ class ReceiverRecoveryController extends AbstractController
 		runAsync
 		{
 			deployment.refresh()
-			jdbcTemplateDetectionFactoryService.rescanForDeployment(deployment)
+			detectionFactoryService.rescanForDeployment(deployment)
 		}
 	}
 	

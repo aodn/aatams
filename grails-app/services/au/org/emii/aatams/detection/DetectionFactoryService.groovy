@@ -9,6 +9,8 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 
 import org.joda.time.*
+import org.joda.time.format.ISODateTimeFormat;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Date;
 import java.util.TimeZone
@@ -25,6 +27,9 @@ import java.util.TimeZone
 class DetectionFactoryService 
 {
     static transactional = true
+	
+	def dataSource
+	def sessionFactory
 
 	private Map<String, List<Sensor>> sensorCache = new WeakHashMap<String, List<Sensor>>()
 	
@@ -90,50 +95,35 @@ class DetectionFactoryService
         return newDetectionSurgeries
     }
 	
+	
+	private String buildRescanDeploymentSql(deployment)
+	{
+		def dateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis()
+		def condition = "reason <> 'DUPLICATE' and receiver_name = '${deployment.receiver.name}' and timestamp between '${dateTimeFormatter.print(deployment.deploymentDateTime)}' AND '${dateTimeFormatter.print(deployment.recovery.recoveryDateTime)}'"
+		def validDetectionColumnNames = "id, version, location, receiver_deployment_id, receiver_download_id, receiver_name, sensor_unit, sensor_value, station_name, \
+					 timestamp, transmitter_id, transmitter_name, transmitter_serial_number"
+		def invalidDetectionSelectFields = "id, version, location, ${deployment.id}, receiver_download_id, receiver_name, sensor_unit, sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number"
+		def invalidDetectionGroupByClause = "receiver_name, transmitter_id, timestamp, id, version, location, message, reason, receiver_download_id, sensor_unit, sensor_value, station_name, transmitter_name, transmitter_serial_number"
+		 
+		return "insert into valid_detection \
+					(${validDetectionColumnNames}) \
+						( \
+							select ${invalidDetectionSelectFields} from invalid_detection \
+								where ${condition} \
+								group by ${invalidDetectionGroupByClause} \
+						); \
+					delete from invalid_detection \
+					where ${condition};"
+	}
+	
 	void rescanForDeployment(ReceiverDeployment deployment)
 	{
 		assert(deployment.recovery) : "Deployment must have associated recovery"
-		def matchingInvalidDets = 
-			InvalidDetection.findAllByReceiverNameAndTimestampBetween(
-				deployment.receiver.name, 
-				deployment.deploymentDateTime.toDate(), 
-				deployment.recovery.recoveryDateTime.toDate()).grep {
-				
-			it.reason != InvalidDetectionReason.DUPLICATE
-		}
-			
-		long matchingInvalidDetsCount = matchingInvalidDets.size()	
-		log.info("${matchingInvalidDetsCount} matching invalid detections found, promoting to valid...")
 		
-		int percentComplete = 0
-		
-		matchingInvalidDets.eachWithIndex {
-			
-			invalidDet, i ->
-			
-			ValidDetection validDet = 
-				new ValidDetection(timestamp: invalidDet.timestamp,
-								   receiverName: invalidDet.receiverName,
-								   stationName: invalidDet.stationName,
-								   transmitterId: invalidDet.transmitterId,
-								   transmitterName: invalidDet.transmitterName,
-								   transmitterSerialNumber: invalidDet.transmitterSerialNumber,
-								   location: invalidDet.location,
-								   sensorValue: invalidDet.sensorValue,
-								   sensorUnit: invalidDet.sensorUnit,
-								   receiverDownload: invalidDet.receiverDownload,
-								   receiverDeployment: deployment)
-			log.debug("Saving valid detection: ${validDet}, deleting invalid detection: ${invalidDet}")
-			validDet.save()
-			invalidDet.delete()
-			
-			def oldPercentComplete = percentComplete
-			percentComplete = i / matchingInvalidDetsCount
-			if (oldPercentComplete != percentComplete)
-			{
-				log.info("${percentComplete}% detections promoted")
-			}
-		}
+		log.info("Rescanning invalid detections, deployment: ${deployment}...")
+		JdbcTemplate rescanInvalid = new JdbcTemplate(dataSource)
+		rescanInvalid.execute(buildRescanDeploymentSql(deployment))
+		log.info("Rescan complete, deployment: ${deployment}")
 	}
     
 	private int logProgress(i, numRecords, percentProgress, surgery, startTime)

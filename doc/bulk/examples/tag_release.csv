@@ -1,3 +1,3 @@
 capture date/time,project name,animal id,animal CAAB code,animal sex,capture locality,capture method,release date/time,release locality,capture latitude,capture longitude,comments,embargo period (months),release latitude,release longitude
-2008-01-26T01:23:45+00:00,"Seven Gill tracking in Coastal Tasmania",1,37005002,"MALE","Derwent","LINE",2008-01-26T:01:25:00+00:00,"Derwent",-42.86,147.34,,6,-42.86,147.34
+2008-01-26T01:23:45+00:00,"Seven Gill tracking in Coastal Tasmania",1,37005002,"MALE","Derwent","LINE",2008-01-26T:01:25:00+00:00,"Derwent",-42.86345,147.34345,,6,-42.86345,147.34345
 

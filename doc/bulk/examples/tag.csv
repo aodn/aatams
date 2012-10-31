@@ -1,0 +1,4 @@
+code map,ping code,transmitter type,model name,project name,serial number,intercept,slope,unit,expected life time (days)
+"A69-1303",1234,"PINGER","V16","AATAMS Bondi line","1111",,,,,
+"A69-1303",5678,"PRESSURE","V16","AATAMS Bondi line","1111",2.3,4.5,m,,
+

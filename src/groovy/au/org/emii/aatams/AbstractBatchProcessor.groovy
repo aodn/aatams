@@ -73,8 +73,6 @@ abstract class AbstractBatchProcessor
 			
 			startBatch(context)
 			
-			File bulkDebugLog = new File("/tmp/bulkUpload.log")
-			
             recordCsvMapReader.eachWithIndex
             {
                 map, i ->
@@ -93,8 +91,7 @@ abstract class AbstractBatchProcessor
 				}
 				catch (Throwable e)	// should only have to catch BulkImportException, but that is being wrapped for some reason.
 				{
-//					log.warn("Exception reading record: ${map}")
-					bulkDebugLog << "Exception reading record: ${map}\n${e.cause.message}\n"
+					log.warn("Exception reading record: ${map}", e)
 				}
 				finally
 				{

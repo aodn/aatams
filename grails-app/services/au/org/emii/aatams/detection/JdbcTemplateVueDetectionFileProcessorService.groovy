@@ -122,10 +122,10 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 	
 	void batchUpdate(String[] statements)
 	{
-		log.info("Inserting " + statements.size() + " records...")
+		log.debug("Inserting " + statements.size() + " records...")
 		JdbcTemplate insert = new JdbcTemplate(dataSource)
 		insert.batchUpdate(statements)
-		log.info("Batch successfully inserted")	
+		log.debug("Batch successfully inserted")	
 	}
 	
     void processSingleRecord(downloadFile, map, context)

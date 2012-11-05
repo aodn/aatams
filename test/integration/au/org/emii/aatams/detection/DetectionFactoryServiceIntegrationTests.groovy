@@ -23,6 +23,14 @@ class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
 	{
 		def initValidCount = 31
 		def initInvalidCount = 0
+		def initDetSurgeryCount = 6
+		
+		Tag releasedTag = Tag.findBySerialNumber('46601')
+		assertNotNull(releasedTag)
+		Sensor pinger46601 = Sensor.findByTagAndPingCode(releasedTag, 46601)
+		assertNotNull(pinger46601)
+
+		assertEquals(6, DetectionSurgery.findAllBySensor(pinger46601).size())
 		
 		assertEquals(initValidCount, ValidDetection.count())
 		assertEquals(initInvalidCount, InvalidDetection.count())
@@ -45,11 +53,14 @@ class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
 		
 		ReceiverDeployment deploymentBondi1 =
 			ReceiverDeployment.findByStation(InstallationStation.findByName("Bondi SW1"))
-		
+
 		detectionFactoryService.rescanForDeployment(deploymentBondi1)
 
 		assertEquals(initValidCount + 3, ValidDetection.count())
 		assertEquals(initInvalidCount + 4, InvalidDetection.count())
+		
+		// assert that DetectionSurgeries have been created.
+		assertEquals(initDetSurgeryCount + 3, DetectionSurgery.findAllBySensor(pinger46601).size())
 		
 		// These should all still be invalid.
 		[beforeTimeRange, afterTimeRange, insideTimeRangeDuplicate, insideTimeRangeDifferentReceiver].each {
@@ -71,7 +82,7 @@ class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
 				receiverName: receiverName, 
 				reason: params.reason, 
 				message: "some message", 
-				transmitterId: "A69-1303-1111", 
+				transmitterId: "A69-1303-46601", 
 				receiverDownload: ReceiverDownloadFile.list()[0])
 			
 		det.save(failOnError: true)

@@ -247,7 +247,7 @@
                                     <g:select from="${embargoPeriods}"
                                               class="noAutocompleteCombo"
                                               name="embargoPeriod" 
-                                              value="12"
+                                              value=""
                                               optionKey="key"
                                               optionValue="value"
                                               noSelection="['':'No embargo']"/>

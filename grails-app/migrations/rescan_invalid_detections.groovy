@@ -11,6 +11,7 @@ databaseChangeLog =
 		{
 			change
 			{
+				println "Num detections before rescan: " + sql.firstRow("select count(*) as num_rows from valid_detection").num_rows
 				def detectionFactoryService = new DetectionFactoryService()
 				
 				def countRows = sql.firstRow("select count(*) as num_rows from receiver_recovery").num_rows
@@ -38,6 +39,8 @@ databaseChangeLog =
 					
 					println("${(int)(rowsProcessed / countRows * 100)}% complete")
 				}
+				
+				println "Num detections after rescan: " + sql.firstRow("select count(*) as num_rows from valid_detection").num_rows
 			}
 		}
 	}
@@ -87,7 +90,9 @@ databaseChangeLog =
 		REFERENCES valid_detection (id) MATCH SIMPLE
 		ON UPDATE NO ACTION ON DELETE NO ACTION;
 ''')
-  
+				
+				println "Num detections after deleting duplicates: " + sql.firstRow("select count(*) as num_rows from valid_detection").num_rows
+				
 			}
 		}
 	}

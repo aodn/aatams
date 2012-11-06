@@ -1558,5 +1558,7 @@ databaseChangeLog = {
 	include file: 'transient_download_path.groovy'
 
 	include file: 'null_requester_and_srk_pk.groovy'
+	
+	include file: 'rescan_invalid_detections.groovy'
 }
 

@@ -11,6 +11,7 @@ class ReceiverRecoveryController extends AbstractController
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def candidateEntitiesService
+	def detectionFactoryService
     def sessionFactory
 	
     def index = {
@@ -61,6 +62,8 @@ class ReceiverRecoveryController extends AbstractController
         
         if (deployment?.save(flush: true)) 
         {
+			rescanDetections(deployment)
+			
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.toString()])}"
             redirect(action: "show", id: receiverRecoveryInstance.id)
         }
@@ -69,7 +72,16 @@ class ReceiverRecoveryController extends AbstractController
             render(view: "create", model: [receiverRecoveryInstance: receiverRecoveryInstance])
         }
     }
-
+	
+	def rescanDetections(deployment)
+	{
+		runAsync
+		{
+			deployment.refresh()
+			detectionFactoryService.rescanForDeployment(deployment)
+		}
+	}
+	
     def show = {
         def receiverRecoveryInstance = ReceiverRecovery.get(params.id)
         if (!receiverRecoveryInstance) {

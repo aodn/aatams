@@ -12,6 +12,12 @@ databaseChangeLog =
 			change
 			{
 				println "Num detections before rescan: " + sql.firstRow("select count(*) as num_rows from valid_detection").num_rows
+				println "Num duplicates: " + sql.firstRow('''select count(*) as num_rows from (
+																select receiver_name, transmitter_id, timestamp
+																from valid_detection
+																group by receiver_name, transmitter_id, timestamp
+																having count(*) > 1) dups;''').num_rows
+				
 				def detectionFactoryService = new DetectionFactoryService()
 				
 				def countRows = sql.firstRow("select count(*) as num_rows from receiver_recovery").num_rows
@@ -41,6 +47,11 @@ databaseChangeLog =
 				}
 				
 				println "Num detections after rescan: " + sql.firstRow("select count(*) as num_rows from valid_detection").num_rows
+				println "Num duplicates: " + sql.firstRow('''select count(*) as num_rows from (
+																select receiver_name, transmitter_id, timestamp
+																from valid_detection
+																group by receiver_name, transmitter_id, timestamp
+																having count(*) > 1) dups;''').num_rows
 			}
 		}
 	}
@@ -92,7 +103,11 @@ databaseChangeLog =
 ''')
 				
 				println "Num detections after deleting duplicates: " + sql.firstRow("select count(*) as num_rows from valid_detection").num_rows
-				
+				println "Num duplicates: " + sql.firstRow('''select count(*) as num_rows from (
+																select receiver_name, transmitter_id, timestamp
+																from valid_detection
+																group by receiver_name, transmitter_id, timestamp
+																having count(*) > 1) dups;''').num_rows
 			}
 		}
 	}

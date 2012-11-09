@@ -29,24 +29,20 @@ class DetectionExtractService extends AbstractStreamingExporterService
 		return "detection"
 	}
 	
-	protected void applyEmbargo(results, params) 
+	protected def applyEmbargo(results, params) 
 	{
 		def now = new Date()
 		
-		results.each
-		{
+		results = results.grep {
+			
 			row ->
-
-			if (row.embargo_date && row.embargo_date.after(now))
-			{
-				if (!hasReadPermission(row.project_id, params))
-				{
-					row.species_name = ""
-					row.spcode = ""
-					row.sensor_id = ""
-				}
-			}
+			
+			boolean isEmbargoed = (row.embargo_date && row.embargo_date.after(now) && !hasReadPermission(row.project_id, params))
+			
+			return !isEmbargoed
 		}
+		
+		return results
 	}
 	
 	protected void writeCsvData(final filterParams, OutputStream out)

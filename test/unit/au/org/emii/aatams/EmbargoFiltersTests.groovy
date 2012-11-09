@@ -104,7 +104,11 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         mockLogging(DetectionController)
         detectionController = new DetectionController()
         detectionController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
-        
+		detectionController.reportInfoService = reportInfoService
+		detectionController.queryService = queryService
+		detectionController.queryService.embargoService = new EmbargoService()
+		detectionController.queryService.embargoService.permissionUtilsService = permissionUtilsService
+
         mockController(SensorController)
         mockLogging(SensorController)
         sensorController = new SensorController()
@@ -232,6 +236,8 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         surgeryList.each { it.save() }
         detectionList.each { it.save() }
         detectionSurgeryList.each { it.save() }
+		
+		ReceiverDownloadFile.metaClass.getPath = { "/some/path" }
     }        
 
     protected void tearDown() 
@@ -321,6 +327,21 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 		checkEmbargoed(sensorController, sensorPingerPastEmbargoed, false, 'sensor')
     }
     
+	void testDetectionList()
+	{
+		def model = detectionController.list()
+		assertNotNull(model)
+		
+		FilterConfig filter = getFilter("detectionList")
+		assertNotNull(filter)
+
+		filter.after(model)
+		assertNotNull(model)
+		
+		assertTrue(model.entityList.containsAll(detectionNonEmbargoed, detectionPastEmbargoed, detectionEmbargoedReadableProject))
+		assertFalse(model.entityList.contains(detectionEmbargoedNonReadableProject))
+	}
+	
     void testDetectionNotList()
     {
         checkDetection(detectionNonEmbargoed, false)
@@ -361,20 +382,14 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         filter.after(model)
         assertNotNull(model)
         assertEquals(1, model.size())
-        assertNotNull(model.detectionInstance)
-        assertNotNull(model.detectionInstance.receiverDownload)
-        assertNotNull(model.detectionInstance.receiverDownload.requestingUser)
-        assertEquals('jbloggs', model.detectionInstance.receiverDownload.requestingUser.username)
-		assertEquals(detection.timestamp, model.detectionInstance.timestamp)
 		
         if (isEmbargoed)
         {
-            // ... but not the associated detectionSurgeries (which links detection back to tag/release)
-            assertTrue(model.detectionInstance.detectionSurgeries.isEmpty())
+			assertNull(model.detectionInstance)
         }
         else
         {
-            assertEquals(1, model.detectionInstance.detectionSurgeries.size())
+			assertNotNull(model.detectionInstance)
         }
     }
     

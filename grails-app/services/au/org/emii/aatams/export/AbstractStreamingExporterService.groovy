@@ -19,7 +19,7 @@ abstract class AbstractStreamingExporterService
 {
 	protected abstract void writeCsvHeader(OutputStream out)
 	protected abstract def writeCsvChunk(resultList, OutputStream out)
-	protected void applyEmbargo(results, params) {}
+	protected def applyEmbargo(results, params) { return results }
 	protected abstract List readData(filterParams)
 	protected abstract String getReportName()
 	
@@ -92,7 +92,7 @@ abstract class AbstractStreamingExporterService
 
 		while (results.size() > 0)
 		{
-			applyEmbargo(results, params)
+			results = applyEmbargo(results, params)
 			writeCsvChunk(results, out)
 			
 			results = readData(params)

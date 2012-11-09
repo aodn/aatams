@@ -82,6 +82,17 @@ class EmbargoFilters
             }
         }
 
+        detectionList(controller:'detection', action:'list')
+        {
+            after =
+            {
+                model ->
+
+                model.entityList = 
+                    embargoService.applyEmbargo(model.entityList)
+            }
+        }
+
         detectionNotList(controller:'detection', action:notListActions)
         {
             after =

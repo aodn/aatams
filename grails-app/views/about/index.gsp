@@ -28,7 +28,12 @@
               and other physical changes that affect animals within the marine environment.<br/><br/>
               Currently a large range of fish, sharks and mammals are collecting a wide range of data.
               This includes behavioural and physical data such as the depth, temperature, salinity
-              and movement effort of individual marine animals.</p>
+              and movement effort of individual marine animals.</p><br/>
+              
+            <p>IMOS data is made freely available under the 
+                <a href="http://imos.org.au/fileadmin/user_upload/shared/IMOS%20General/documents/internal/IMOS_Policy_documents/Policy-Acknowledgement_of_use_of_IMOS_data_11Jun09.pdf">Conditions of Use</a>.
+            </p>
+            
           </div>
         </div>
         
@@ -92,10 +97,15 @@
           <br/><br/>
           <div id="footerLogo">
             <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS-logo.png')}" alt="IMOS Logo"  /></a>
-            <a href="http://www.innovation.gov.au/"><img src="${resource(dir:'images',file:'aus.jpg')}" width="121" height="78" alt="" /></a>
+            <a href="http://www.innovation.gov.au/"><img src="${resource(dir:'images',file:'aus_gov.png')}" width="121" height="78" alt="" /></a>
             <a href="http://www.utas.edu.au/"><img src="${resource(dir:'images',file:'utas.jpg')}" width="61" height="76" alt="" /></a>       
             <p>IMOS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy and the Super Science Initiative.
             It is led by the University of Tasmania on behalf of the Australian marine &amp; climate science community.</p>
+            
+            <p>You accept all risks and responsibility for losses, damages, costs and other consequences resulting directly or 
+            indirectly from using this site and any information or material available from it. If you have any concerns about 
+            the veracity of the data, please make enquiries via <a href="mailto:info@imos.org.au">info@imos.org.au </a> to be directed to the data custodian.</p>
+            
           </div>
           <br/><br/>
         </div>

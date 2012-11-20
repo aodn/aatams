@@ -64,14 +64,10 @@
     {
       myLayout = $('body').layout(
       {
-        north__resizable:  false,
-        north__closable: false,
+        north: {size: 130, resizable: false, closable: false},
         spacing_closed:			10,
         // enable showOverflow on west-pane so popups will overlap north pane
-        west__showOverflowOnHover: false,
-        west__resizable:  false,
-        west__closable: false,
-        west__size: 230
+        west: {showOverflowOnHover: false, resizable:  false, closable: false, size: 230}
       });
     });
 
@@ -133,9 +129,8 @@
     
     <div class="ui-layout-north">
       <div id="logo">
-        <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS-logo.png')}" alt="IMOS Logo"  /></a>
-        <div class="mainTitle">${message(code: 'default.application.detailedTitle', default: 'AATAMS data entry')}</div>
-
+        <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS_Facility_8.jpg')}" alt="IMOS Logo"  /></a>
+        
         <div id="userlogin">
           <!-- Shown if not logged in. -->
           <shiro:guest>

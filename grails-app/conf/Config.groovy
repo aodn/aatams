@@ -250,7 +250,8 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			project.id as project_id,			
 			valid_detection.id as detection_id,
 
-			animal_release.project_id as release_project_id
+			animal_release.project_id as release_project_id,
+			valid_detection.sensor_value, valid_detection.sensor_unit
 
 			from valid_detection
 			

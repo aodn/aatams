@@ -143,8 +143,10 @@ class DetectionExtractService extends AbstractStreamingExporterService
 			out << row.species_name << ","
 			out << row.uploader << ","
 			out << row.transmitter_id << ","
-			out << row.organisation
-
+			out << row.organisation << ","
+			out << ((row.sensor_value == null) ? "" : row.sensor_value) << ","
+			out << ((row.sensor_unit == null) ? "" : row.sensor_unit)
+			
 			out << "\n"
 		}
 		
@@ -162,8 +164,10 @@ class DetectionExtractService extends AbstractStreamingExporterService
 		out << "species,"
 		out << "uploader,"
 		out << "transmitter ID,"
-		out << "organisation"
-
+		out << "organisation,"
+		out << "sensor value,"
+		out << "sensor unit"
+		
 		out << "\n"
 	}
 	

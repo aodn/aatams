@@ -93,7 +93,7 @@ class ValidDetection extends RawDetection implements Embargoable
     // Convenience method.
     Project getProject()
     {
-        return receiverDeployment?.station?.installation?.project
+		return firstDetectionSurgery?.surgery?.release?.project
     }
 
     /**

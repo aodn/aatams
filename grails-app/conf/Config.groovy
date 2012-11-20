@@ -248,7 +248,9 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			animal_release.id as animal_release_id,
 			animal_release.embargo_date as embargo_date,
 			project.id as project_id,			
-			valid_detection.id as detection_id
+			valid_detection.id as detection_id,
+
+			animal_release.project_id as release_project_id
 
 			from valid_detection
 			

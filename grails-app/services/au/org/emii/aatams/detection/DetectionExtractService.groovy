@@ -37,7 +37,7 @@ class DetectionExtractService extends AbstractStreamingExporterService
 			
 			row ->
 			
-			boolean isEmbargoed = (row.embargo_date && row.embargo_date.after(now) && !hasReadPermission(row.project_id, params))
+			boolean isEmbargoed = (row.embargo_date && row.embargo_date.after(now) && !hasReadPermission(row.release_project_id, params))
 			
 			return !isEmbargoed
 		}
@@ -184,6 +184,11 @@ class DetectionExtractService extends AbstractStreamingExporterService
 	
 	private boolean hasReadPermission(projectId, params)
 	{
+		if (projectId == null)
+		{
+			return true
+		}
+		
 		if (!params.projectPermissionCache.containsKey(projectId))
 		{
 	        String permissionString = permissionUtilsService.buildProjectReadPermission(projectId)

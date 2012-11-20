@@ -39,5 +39,19 @@ databaseChangeLog =
 			}
 		}
 	}
+	
+	changeSet(author: "jburgess", id: "1353377490000-1")
+	{
+		grailsChange
+		{
+			change
+			{
+				def viewName = application.config.rawDetection.extract.view.name
+				def viewSelect = application.config.rawDetection.extract.view.select
+				sql.execute ('create or replace view ' + viewName + ' as ' + viewSelect)
+			}
+		}
+	}
+
 }
 

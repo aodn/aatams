@@ -639,6 +639,11 @@ div.exportPane {
     vertical-align:middle;
 }
 
+/* This is needed for chrome to render menu items properly. */
+.menuList li {
+	height: 14px;
+}
+
 #footerLogo
 {
     text-align:center;margin:0 auto;

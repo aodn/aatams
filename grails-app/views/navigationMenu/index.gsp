@@ -3,7 +3,7 @@
      from elsewhere.
 -->
 
-    <div id="controllerList" >
+    <div id="controllerList" class="menuList" >
 
       <h3>${message(code: 'navigationMenu.section.search.label', default: 'Search')} </h3>
       <ul>
@@ -17,6 +17,8 @@
       <h3>${message(code: 'navigationMenu.section.background.label', default: 'Background Data')} </h3>
       <ul>
           <li class="backgroundDataControllers">
+          
+          <%--
             <g:link controller="organisation">Organisations</g:link>
             
             <shiro:user>
@@ -24,7 +26,11 @@
                 <g:link controller="organisation" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
               </span>
             </shiro:user>
-            
+             --%>
+             
+            <g:link controller="organisation">Organisations</g:link>
+            <g:link controller="organisation" action="create" class="modal ui-icon ui-icon-newwin" >create</g:link>
+             
           </li>
           
           <li class="backgroundDataControllers">
@@ -121,8 +127,6 @@
          doesn't cause a warning to be issued even when the user hasn't actually
          changed the form. -->
     <g:javascript src="formChangedWarning.js"/>
-  </body>
-  
 
     </div>
 

@@ -27,6 +27,7 @@ abstract class AbstractLoaderTests extends AbstractGrailsUnitTestCase
 
 	protected void tearDown()
 	{
+		DateTimeUtils.setCurrentMillisSystem()
 		super.tearDown()
 	}
 

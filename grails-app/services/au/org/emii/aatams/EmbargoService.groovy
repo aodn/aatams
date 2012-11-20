@@ -38,19 +38,25 @@ class EmbargoService
         {
             applyEmbargo(it)
         }
-
+		
         retList.removeAll
         {
             it == null
         }
         
-        return retList
+       return retList
     }
 
 	private boolean hasReadPermission(embargoee)
 	{
 		def projectId = embargoee.project?.id
 
+		// Some detections have no related project, as far as embargoes go.
+		if (projectId == null)
+		{
+			return true
+		}
+		
 		if (!projectPermissionCache.containsKey(projectId))
 		{
 	        String permissionString = permissionUtilsService.buildProjectReadPermission(projectId)
@@ -74,7 +80,6 @@ class EmbargoService
         }
         else
         {
-            def embargoedVal = embargoee.applyEmbargo()
             return embargoee.applyEmbargo()
         }
     }

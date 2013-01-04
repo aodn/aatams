@@ -141,7 +141,7 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
 ,Parameters,,,,,,,,,,,,
 ,user:,,,,Joe Bloggs,,,,,,,,
 ,,,code name,,,status,,manufacturer,,model,serial number,,
-,organisation:,,,IMOS,,,total receivers:,,0,,,,
+,organisation:,,,IMOS,,,total,,0,,,,
 ,,,vr2w-1,,,null,,Vemco,,vr2w,1,,
 '''
 		assertExport(expectedOutput, [receiverList[0]])

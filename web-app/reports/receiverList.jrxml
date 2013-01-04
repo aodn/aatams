@@ -37,7 +37,7 @@
 				<staticText>
 					<reportElement style="fieldNameText" x="191" y="7" width="83" height="20"/>
 					<textElement/>
-					<text><![CDATA[total]]></text>
+					<text><![CDATA[total receivers:]]></text>
 				</staticText>
 				<textField>
 					<reportElement style="fieldValue" x="274" y="7" width="100" height="20"/>

@@ -1,10 +1,12 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.report.ReportController
+import groovy.sql.Sql
 
 class DetectionController extends ReportController
 {
     def candidateEntitiesService
+    def dataSource
 	def detectionExtractService
 	
     static allowedMethods = [update: "POST", delete: "POST"]
@@ -16,6 +18,37 @@ class DetectionController extends ReportController
     def list = 
 	{
 		doList("detection")
+    }
+
+    protected def getResultList(queryName)
+    {
+        params.sql = new Sql(dataSource)
+        params.projectPermissionCache = [:]
+        //		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
+
+        def detections = detectionExtractService.applyEmbargo(detectionExtractService.extractPage(params), params)
+        detections = detections.collect {
+            ValidDetection.get(it.detection_id)
+        }
+
+        def count
+
+        if (!params || params.isEmpty() || params?.filter == null || params?.filter == [:])
+		{
+			count = ValidDetection.count()
+		}
+        else
+        {
+            count = detectionExtractService.getCount(params)
+        }
+        
+        //        flattenParams()
+        //		flash.message = "${count} matching records (${ValidDetection.count()} total)."
+        
+        // [entityList: results,
+        // total: results.size]
+
+        [results: detections, count: count]
 	}
 
 	def export =

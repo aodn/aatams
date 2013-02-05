@@ -22,6 +22,8 @@ class DetectionControllerTests extends AbstractControllerUnitTestCase
 		def viewName = ConfigurationHolder.config.rawDetection.extract.view.name
 		def viewSelect = ConfigurationHolder.config.rawDetection.extract.view.select
 		sql.execute ('create view ' + viewName + ' as ' + viewSelect)
+
+        DetectionExtractService.metaClass.getDetectionExtractViewName = { viewName }
 	}
 	
 	void testExecuteDetectionExtract()

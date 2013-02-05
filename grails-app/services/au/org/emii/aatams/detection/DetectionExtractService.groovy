@@ -53,9 +53,17 @@ class DetectionExtractService extends AbstractStreamingExporterService
 		super.writeCsvData(filterParams, out)
 	}
 
+    /**
+     * Allow mocking in tests (where "create_matview" function is not available).
+     */
+    private String getDetectionExtractViewName()
+    {
+        return "detection_extract_view_mv"
+    }
+    
 	private String constructQuery(filterParams, limit, offset)
 	{
-		String query = '''select * from detection_extract_view '''
+		String query = "select * from ${getDetectionExtractViewName()} "
 		List<String> whereClauses = []
 		
 		["project": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
@@ -69,7 +77,7 @@ class DetectionExtractService extends AbstractStreamingExporterService
 
 			if (v)
 			{
-				whereClauses += ("trim(" + k + ") in (" + toSqlFormat(v) + ") ")
+				whereClauses += (k + " in (" + toSqlFormat(v) + ") ")
 			}
 		}
 		 

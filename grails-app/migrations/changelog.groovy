@@ -1533,32 +1533,20 @@ databaseChangeLog = {
 	include file: 'detection_extract_view.groovy'
 	include file: 'locations_south.groovy'
 	include file: 'remove_duplicate_receivers.groovy'
-
 	include file: 'remove_explicit_receiver_status.groovy'
-
 	include file: 'materialized_views.groovy'
 	include file: 'geoserver_detections_view.groovy'
-	
 	include file: 'trim_whitespace.groovy'
-
 	include file: 'bulk_import.groovy'
-
 	include file: 'unique_transmitter_types_for_tag.groovy'
-
 	include file: 'upload_progress.groovy'
-
 	include file: 'audit_log.groovy'
-
 	include file: 'abstract_raw_detection.groovy'
-
 	include file: 'nullable_src_date.groovy'
-
 	include file: 'non_unique_device_serial_numbers.groovy'
-
 	include file: 'transient_download_path.groovy'
-
 	include file: 'null_requester_and_srk_pk.groovy'
-	
 	include file: 'rescan_invalid_detections.groovy'
+	include file: 'detection_extract_materialized_view.groovy'
 }
 

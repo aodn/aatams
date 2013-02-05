@@ -24,6 +24,15 @@ class DetectionExtractService extends AbstractStreamingExporterService
 		return results
 	}
 
+    public Long getCount(filterParams)
+    {
+		log.debug("Querying database, offset: " + filterParams.offset)
+		def results = filterParams.sql.rows(constructQuery(filterParams, filterParams.max, filterParams.offset, true))
+		log.debug("results: " + results)
+		
+		return results.count[0]
+    }
+    
 	protected String getReportName()
 	{
 		return "detection"
@@ -60,10 +69,25 @@ class DetectionExtractService extends AbstractStreamingExporterService
     {
         return "detection_extract_view_mv"
     }
-    
+
 	private String constructQuery(filterParams, limit, offset)
+    {
+        return constructQuery(filterParams, limit, offset, false)
+    }
+    
+	private String constructQuery(filterParams, limit, offset, count)
 	{
-		String query = "select * from ${getDetectionExtractViewName()} "
+        String query
+
+        if (count)
+        {
+            query = "select count(*) from ${getDetectionExtractViewName()} "
+        }
+        else
+        {
+            query = "select * from ${getDetectionExtractViewName()} "
+        }
+        
 		List<String> whereClauses = []
 		
 		["project": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
@@ -111,7 +135,7 @@ class DetectionExtractService extends AbstractStreamingExporterService
 			}
 		}
 		
-		if (limit != null)
+		if ((limit != null) && !count)
 		{
 			query += "limit " + limit
 		}

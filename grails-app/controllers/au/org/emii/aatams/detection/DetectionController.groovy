@@ -17,6 +17,11 @@ class DetectionController extends ReportController
 
     def list = 
 	{
+        // ValidDetection.metaClass.static.count = {
+        //     println("*** controller overridden count")
+        //     return au.org.emii.aatams.Statistics.getStatistic('numValidDetections')
+        // }
+        
 		doList("detection")
     }
 
@@ -24,7 +29,6 @@ class DetectionController extends ReportController
     {
         params.sql = new Sql(dataSource)
         params.projectPermissionCache = [:]
-        //		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
 
         def detections = detectionExtractService.applyEmbargo(detectionExtractService.extractPage(params), params)
         detections = detections.collect {
@@ -34,7 +38,7 @@ class DetectionController extends ReportController
         def count
 
         if (!params || params.isEmpty() || params?.filter == null || params?.filter == [:])
-		{
+        {
 			count = ValidDetection.count()
 		}
         else
@@ -45,9 +49,9 @@ class DetectionController extends ReportController
         //        flattenParams()
         //		flash.message = "${count} matching records (${ValidDetection.count()} total)."
         
-        // [entityList: results,
-        // total: results.size]
-
+        params.remove("sql")
+        params.remove("projectPermissionCache")
+        
         [results: detections, count: count]
 	}
 

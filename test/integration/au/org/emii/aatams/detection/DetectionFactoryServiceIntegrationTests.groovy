@@ -2,11 +2,14 @@ package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
 import grails.test.*
+import groovy.sql.Sql
 import org.joda.time.DateTime
 
 class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
-	
+
+    def dataSource
 	def detectionFactoryService
+    
     protected void setUp() 
 	{
         super.setUp()
@@ -24,7 +27,13 @@ class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
 		def initValidCount = 31
 		def initInvalidCount = 0
 		def initDetSurgeryCount = 6
-		
+
+        def sql = new Sql(dataSource)
+        ValidDetection.metaClass.static.count = {
+
+            return sql.firstRow('select count(*) from valid_detection').count
+        }
+        
 		Tag releasedTag = Tag.findBySerialNumber('46601')
 		assertNotNull(releasedTag)
 		Sensor pinger46601 = Sensor.findByTagAndPingCode(releasedTag, 46601)
@@ -32,7 +41,7 @@ class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
 
 		assertEquals(6, DetectionSurgery.findAllBySensor(pinger46601).size())
 		
-		assertEquals(initValidCount, ValidDetection.count())
+        assertEquals(initValidCount, ValidDetection.count())
 		assertEquals(initInvalidCount, InvalidDetection.count())
 		
 		// 1) invaliddetection - inside time range - no deployment

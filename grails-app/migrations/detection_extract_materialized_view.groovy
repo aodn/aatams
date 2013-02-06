@@ -28,4 +28,33 @@ databaseChangeLog =
         }
     }
 
+	changeSet(author: "jburgess", id: "1360028054000-4")
+    {
+		createTable(tableName: "statistics")
+        {
+			column(name: "id", type: "int8")
+            {
+				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "statistics_pkey")
+			}
+
+			column(name: "version", type: "int8")
+            {
+				constraints(nullable: "false")
+			}
+
+			column(name: "key", type: "VARCHAR(255)")
+            {
+				constraints(nullable: "false")
+			}
+            1
+			column(name: "value", type: "int8")
+            {
+				constraints(nullable: "false")
+			}
+		}
+
+		addUniqueConstraint(columnNames: "key", constraintName: "statistics_key_key", deferrable: "false", disabled: "false", initiallyDeferred: "false", tableName: "statistics")
+	
+        sql("INSERT INTO statistics (id, version, key, value) VALUES (1, 0, 'numValidDetections', (SELECT COUNT(*) FROM detection_extract_view_mv))")
+	}
 }

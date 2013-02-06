@@ -144,7 +144,7 @@ class ValidDetection extends RawDetection implements Embargoable
 	{
 		return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.surgery.release.animal.species.name)
 	}
-	
+
 	static String toSqlInsert(detection)
 	{
 		StringBuilder detectionBuff = new StringBuilder(

@@ -26,8 +26,13 @@ class DetectionExtractService extends AbstractStreamingExporterService
 
     public Long getCount(filterParams)
     {
+        if (!filterParams || filterParams.isEmpty() || filterParams?.filter == null || filterParams?.filter == [:])
+        {
+			return ValidDetection.count()
+		}
+
 		log.debug("Querying database, offset: " + filterParams.offset)
-		def results = filterParams.sql.rows(constructQuery(filterParams, filterParams.max, filterParams.offset, true))
+		def results = filterParams.sql.rows(constructQuery(filterParams, null, null, true))
 		log.debug("results: " + results)
 		
 		return results.count[0]
@@ -104,7 +109,7 @@ class DetectionExtractService extends AbstractStreamingExporterService
 				whereClauses += (k + " in (" + toSqlFormat(v) + ") ")
 			}
 		}
-		 
+                		 
 		["timestamp": filterParams?.filter?.between].each
 		{
 			k, v ->
@@ -134,17 +139,20 @@ class DetectionExtractService extends AbstractStreamingExporterService
 				query += clause
 			}
 		}
-		
-		if ((limit != null) && !count)
-		{
-			query += "limit " + limit
-		}
-		
-		if (offset != null)
-		{
-			query += " offset " + offset
-		}
-		
+
+        if (!count)
+        {
+            if ((limit != null) && !count)
+            {
+                query += "limit " + limit
+            }
+
+            if (offset != null)
+            {
+                query += " offset " + offset
+            }
+        }
+        
 		log.debug("Query: " + query)
 		
 		return query

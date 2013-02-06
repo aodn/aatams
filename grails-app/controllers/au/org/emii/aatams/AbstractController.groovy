@@ -1,6 +1,10 @@
 package au.org.emii.aatams
 
 import javax.servlet.http.Cookie
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+import au.org.emii.aatams.detection.*
 
 class AbstractController 
 {
@@ -19,10 +23,10 @@ class AbstractController
 		
 		def resultList = getResultList(queryName)
 
-		flattenParams()
+        flattenParams()
 
         flash.message = "${resultList.count} matching records (${reportInfoService.getClassForName(queryName).count()} total)."
-		
+
 		[entityList: resultList.results,
 		 total: resultList.count]
 	}
@@ -90,8 +94,8 @@ class AbstractController
 				flattenedParams.put(k, v)
 			}
 		}
-		
-		params.clear()
-		params.putAll(flattenedParams)
+
+        params.clear()
+        params.putAll(flattenedParams)
 	}
 }

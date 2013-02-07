@@ -24,6 +24,20 @@ class DetectionExtractService extends AbstractStreamingExporterService
 		return results
 	}
 
+    public Long getCount(filterParams)
+    {
+        if (!filterParams || filterParams.isEmpty() || filterParams?.filter == null || filterParams?.filter == [:])
+        {
+			return ValidDetection.count()
+		}
+
+		log.debug("Querying database, offset: " + filterParams.offset)
+		def results = filterParams.sql.rows(constructQuery(filterParams, null, null, true))
+		log.debug("results: " + results)
+		
+		return results.count[0]
+    }
+    
 	protected String getReportName()
 	{
 		return "detection"
@@ -53,9 +67,32 @@ class DetectionExtractService extends AbstractStreamingExporterService
 		super.writeCsvData(filterParams, out)
 	}
 
+    /**
+     * Allow mocking in tests (where "create_matview" function is not available).
+     */
+    private String getDetectionExtractViewName()
+    {
+        return "detection_extract_view_mv"
+    }
+
 	private String constructQuery(filterParams, limit, offset)
+    {
+        return constructQuery(filterParams, limit, offset, false)
+    }
+    
+	private String constructQuery(filterParams, limit, offset, count)
 	{
-		String query = '''select * from detection_extract_view '''
+        String query
+
+        if (count)
+        {
+            query = "select count(*) from ${getDetectionExtractViewName()} "
+        }
+        else
+        {
+            query = "select * from ${getDetectionExtractViewName()} "
+        }
+        
 		List<String> whereClauses = []
 		
 		["project": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
@@ -69,10 +106,10 @@ class DetectionExtractService extends AbstractStreamingExporterService
 
 			if (v)
 			{
-				whereClauses += ("trim(" + k + ") in (" + toSqlFormat(v) + ") ")
+				whereClauses += (k + " in (" + toSqlFormat(v) + ") ")
 			}
 		}
-		 
+                		 
 		["timestamp": filterParams?.filter?.between].each
 		{
 			k, v ->
@@ -102,17 +139,20 @@ class DetectionExtractService extends AbstractStreamingExporterService
 				query += clause
 			}
 		}
-		
-		if (limit != null)
-		{
-			query += "limit " + limit
-		}
-		
-		if (offset != null)
-		{
-			query += " offset " + offset
-		}
-		
+
+        if (!count)
+        {
+            if ((limit != null) && !count)
+            {
+                query += "limit " + limit
+            }
+
+            if (offset != null)
+            {
+                query += " offset " + offset
+            }
+        }
+        
 		log.debug("Query: " + query)
 		
 		return query

@@ -1,10 +1,14 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.report.ReportController
+import groovy.sql.Sql
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 
 class DetectionController extends ReportController
 {
     def candidateEntitiesService
+    def dataSource
 	def detectionExtractService
 	
     static allowedMethods = [update: "POST", delete: "POST"]
@@ -16,8 +20,48 @@ class DetectionController extends ReportController
     def list = 
 	{
 		doList("detection")
-	}
+    }
+    
+	protected void cleanDateParams()
+	{
+		[1, 2].each
+		{
+			if (params["filter.between." + it] && params["filter.between." + it].class == String)
+            {
+				// Thu Jun 18 12:38:00 EST 2009
+				DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy")
+				def dateAsString = params["filter.between." + it]
+                Date parsedDate = dateFormat.parse(dateAsString)
 
+				params["filter.between." + it] = parsedDate
+				params.filter["between." + it] = parsedDate
+				params.filter.between."${it}" = parsedDate
+			}
+		}
+	}
+    
+    protected def getResultList(queryName)
+    {
+        params.sql = new Sql(dataSource)
+        params.projectPermissionCache = [:]
+
+        // The data params get turned in to strings on the way back to front-end - need to change
+        // them back to java.util.Dates again.
+        cleanDateParams()
+        
+        def detections = detectionExtractService.applyEmbargo(detectionExtractService.extractPage(params), params)
+        detections = detections.collect {
+            ValidDetection.get(it.detection_id)
+        }
+
+        def count = detectionExtractService.getCount(params)
+
+        params.remove("sql")
+        params.remove("projectPermissionCache")
+        
+        [results: detections, count: count]
+	}
+    
 	def export =
 	{
 		if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export))

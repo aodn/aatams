@@ -329,7 +329,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     
 	void testDetectionList()
 	{
-		def model = detectionController.list()
+        def model = [entityList: ValidDetection.list(), total: ValidDetection.count()]
 		assertNotNull(model)
 		
 		FilterConfig filter = getFilter("detectionList")

@@ -1,12 +1,13 @@
 package au.org.emii.aatams.bulk
 
 import au.org.emii.aatams.*
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import grails.test.*
 
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime
 
-class BulkImportRecordTests extends GrailsUnitTestCase 
+class BulkImportRecordTests extends AbstractGrailsUnitTestCase 
 {
 	Receiver receiver
 	BulkImport bulkImport

@@ -1,6 +1,10 @@
 package au.org.emii.aatams
 
 import javax.servlet.http.Cookie
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+import au.org.emii.aatams.detection.*
 
 class AbstractController 
 {
@@ -8,16 +12,21 @@ class AbstractController
 	def queryService
 	def reportInfoService
 
+    protected def getResultList(queryName)
+    {
+		return queryService.query(reportInfoService.getClassForName(queryName), params)
+    }
+    
 	protected def doList(queryName)
 	{
 		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
 		
-		def resultList = queryService.query(reportInfoService.getClassForName(queryName), params)
+		def resultList = getResultList(queryName)
 
-		flattenParams()
+        flattenParams()
 
-		flash.message = "${resultList.count} matching records (${reportInfoService.getClassForName(queryName).count()} total)."
-		
+        flash.message = "${resultList.count} matching records (${reportInfoService.getClassForName(queryName).count()} total)."
+
 		[entityList: resultList.results,
 		 total: resultList.count]
 	}
@@ -85,8 +94,8 @@ class AbstractController
 				flattenedParams.put(k, v)
 			}
 		}
-		
-		params.clear()
-		params.putAll(flattenedParams)
+
+        params.clear()
+        params.putAll(flattenedParams)
 	}
 }

@@ -18,6 +18,7 @@ import shiro.*
 
 class BootStrap 
 {
+    def dataSource
 	def grailsApplication
     def permissionUtilsService
     def searchableService
@@ -26,15 +27,15 @@ class BootStrap
     { 
         servletContext ->
 
-		// Eager initialize GORM Domain Mixin Methods.
-		// See: http://grails.1312388.n4.nabble.com/GORM-dynamic-save-method-intermittently-not-found-td3859120.html
-		// Without this, can get a groovy.lang.MissingMethodException when load testing concurrent detection uploads.
-		grailsApplication.domainClasses.each 
-		{
-			dc ->
+		// // Eager initialize GORM Domain Mixin Methods.
+		// // See: http://grails.1312388.n4.nabble.com/GORM-dynamic-save-method-intermittently-not-found-td3859120.html
+		// // Without this, can get a groovy.lang.MissingMethodException when load testing concurrent detection uploads.
+		// grailsApplication.domainClasses.each 
+		// {
+		// 	dc ->
 			
-			dc.clazz.count()
-		}
+		// 	dc.clazz.count()
+		// }
 	
 		Map.metaClass.flatten = 
 		{ 
@@ -199,7 +200,17 @@ class BootStrap
 			
 			return returnArray
 		}
-		
+
+        // Required for following metaclass override to "stick".
+        ValidDetection.count()
+        
+        // Performance optimisation (select count(*) is slow on large tables).
+        ValidDetection.metaClass.static.count =
+        {
+            
+            return Statistics.getStatistic('numValidDetections')
+        }
+
         assert(permissionUtilsService): "permissionUtilsService cannot be null"
         DataInitialiser initialiser  //= new DevelopmentDataInitialiser(permissionUtilsService)
             

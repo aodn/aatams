@@ -113,19 +113,8 @@ environments
 	}
 }
 
-// Logging.
-mail.error.server = grails.mail.host
-mail.error.username = grails.mail.username
-//mail.error.password = 'yourpassword'
-mail.error.to = 'jkburges@utas.edu.au'
-mail.error.from = grails.mail.systemEmailAddress
-mail.error.subject = 'AATAMS Error'
-mail.error.debug = false
-
 log4j =
 {
-	System.setProperty 'mail.smtp.auth', "false"
-	
 	appenders
 	{
 		console name:'stdout', layout: pattern(conversionPattern: '%d [%t] [%X{username}] %-5p %c{1} - %m%n')
@@ -151,15 +140,17 @@ log4j =
 	{
 		production
 		{
-			appenders
-			{
-				appender new SMTPAppender(
-					name: 'smtp', to: mail.error.to, from: mail.error.from,
-					subject: mail.error.subject, threshold: Level.ERROR,
-					SMTPHost: mail.error.server, SMTPUsername: mail.error.username,
-					SMTPDebug: mail.error.debug.toString(), /*SMTPPassword: mail.error.password, */
-					layout: pattern(conversionPattern: '%d [%t] [%X{username}] %-5p %c{1} - %m%n'))
-			}
+            appenders
+            {
+                appender new de.viaboxx.nagios.NagiosAppender(
+                name: 'nagiosAppender',
+                threshold: Level.ERROR,
+                nagiosHost: 'status.emii.org.au',
+                nagiosPort: 5667,
+                nagiosEncryption: "TRIPLE_DES",
+                nagiosPassword: "broken cat batteries",
+                monitoredServiceName: "AATAMS-Log4J-Appender")
+            }
 		}
 		
 		development
@@ -187,7 +178,7 @@ log4j =
 	
 	root
 	{
-		info 'stdout', 'null', 'smtp'
+		info 'stdout', 'null', 'nagiosAppender'
 	}
 }
 

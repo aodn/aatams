@@ -35,7 +35,7 @@ class JdbcTemplateVueDetectionFileProcessorServicePerformanceTests extends Abstr
 
             def elapsedTimeMs = stopWatch.getElapsedTime()
             println "Elapsed time (ms): ${elapsedTimeMs}"
-            assertTrue(elapsedTimeMs < 60000)
+            assertTrue(elapsedTimeMs < 100000)
         }
         finally
         {

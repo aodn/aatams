@@ -38,7 +38,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		 
         assertNotNull(validDetection)
         assertTrue(validDetection instanceof ValidDetection)
-        // assertTrue(validDetection.isProvisional())
+        assertTrue(validDetection.isProvisional())
         assertNotNull(ValidDetection.findByTimestamp(validDetection.timestamp))
         
 		assertEquals(deployment.id, validDetection.receiverDeployment.id)
@@ -319,8 +319,8 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 	
 	void testBuildRescanDeploymentSql()
 	{
-		def sql = '''insert into valid_detection (id, version, location, receiver_deployment_id, receiver_download_id, receiver_name, sensor_unit, sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number)
-(select id, version, location, 123, receiver_download_id, receiver_name, sensor_unit, sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number from invalid_detection 
+		def sql = '''insert into valid_detection (id, version, location, receiver_deployment_id, receiver_download_id, receiver_name, sensor_unit, sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number, provisional)
+(select id, version, location, 123, receiver_download_id, receiver_name, sensor_unit, sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number, true as provisional from invalid_detection 
 where reason <> 'DUPLICATE' and receiver_name = 'VR2W-102026' and timestamp between '2009-05-19T10:18:00+10:00' AND '2011-05-19T10:18:00+10:00'
 group by receiver_name, transmitter_id, timestamp, id, version, location, message, reason, receiver_download_id, sensor_unit, sensor_value, station_name, transmitter_name, transmitter_serial_number
 );

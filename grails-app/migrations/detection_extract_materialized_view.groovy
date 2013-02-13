@@ -57,4 +57,12 @@ databaseChangeLog =
 	
         sql("INSERT INTO statistics (id, version, key, value) VALUES (1, 0, 'numValidDetections', (SELECT COUNT(*) FROM detection_extract_view_mv))")
 	}
+
+	changeSet(author: "jburgess", id: "1360028054000-5") {
+		addColumn(tableName: "valid_detection") {
+			column(name: "provisional", type: "bool", defaultValueBoolean: false) {
+				constraints(nullable: "false")
+			}
+		}
+    }
 }

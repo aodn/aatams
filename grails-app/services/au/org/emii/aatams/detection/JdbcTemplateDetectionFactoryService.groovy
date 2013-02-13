@@ -19,6 +19,7 @@ class JdbcTemplateDetectionFactoryService extends DetectionFactoryService
 				   "receiverDeploymentId": params.receiverDeployment.id,
 				   "message": "",
 				   "reason": "",
+                   "provisional": true,
 				   "detectionSurgeries": new ArrayList()])
 	}
 	

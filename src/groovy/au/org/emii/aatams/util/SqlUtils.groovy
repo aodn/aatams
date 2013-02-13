@@ -11,6 +11,11 @@ class SqlUtils
 		}
 	}
 	
+	public static void appendBooleanParams(buff, params, paramNames)
+	{
+		appendIntegerParams(buff, params, paramNames)
+	}
+	
 	public static  void appendStringParams(buff, params, paramNames)
 	{
 		paramNames.each

@@ -21,6 +21,14 @@ class ValidDetection extends RawDetection implements Embargoable
 {
 	static belongsTo = [receiverDownload:ReceiverDownloadFile, receiverDeployment: ReceiverDeployment]
     static transients = RawDetection.transients + ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames', 'placemark']
+
+    /**
+     * This is a part of an optimisation for #2239.  All new detections are marked provisional.  Subsequently,
+     * the set of provisional detections are used to update the 'detection_extract_view_mv' materialized view,
+     * the 'detection_count_per_station_mv' materialized view and also the Statistics table.  After this, they
+     * are no longer considered provisional.
+     */
+    boolean provisional = true
     
     /**
      * This is modelled as a many-to-many relationship, due to the fact that tags
@@ -149,7 +157,7 @@ class ValidDetection extends RawDetection implements Embargoable
 	{
 		StringBuilder detectionBuff = new StringBuilder(
 				"INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, " +
-				"STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID) " +
+				"STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) " +
 				" VALUES(")
 
 		detectionBuff.append("nextval('hibernate_sequence'),")
@@ -159,8 +167,9 @@ class ValidDetection extends RawDetection implements Embargoable
 		SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
 			"transmitterSerialNumber"])
 		SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDeploymentId"])
+		SqlUtils.appendBooleanParams(detectionBuff, detection, ["provisional"])
 		SqlUtils.removeTrailingCommaAndAddBracket(detectionBuff)
-		
+
 		return detectionBuff.toString()
 	}
 

@@ -24,8 +24,10 @@ abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestC
 		searchableService.metaClass.stopMirroring = {}
 		assert(searchableService)
 
+        registerMetaClass AbstractBatchProcessor
 		AbstractBatchProcessor.metaClass.getReader = { getReader(it) }
 		AbstractBatchProcessor.metaClass.getNumRecords = { 16 }
+        
 		mockDomain(ReceiverDownloadFileProgress)
 		ReceiverDownloadFileProgress.metaClass.static.withNewTransaction = { it() }
 		

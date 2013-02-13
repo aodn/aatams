@@ -63,7 +63,11 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
         
         deployment.recovery = recovery
         deployment.save()
-		
+
+        registerMetaClass AbstractBatchProcessor
+        registerMetaClass VueDetectionFileProcessorService
+        registerMetaClass JdbcTemplateVueDetectionFileProcessorService
+        
 		AbstractBatchProcessor.metaClass.getReader = { getReader(it) }
 		AbstractBatchProcessor.metaClass.getNumRecords = { 7 }
 		mockDomain(ReceiverDownloadFileProgress)

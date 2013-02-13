@@ -52,14 +52,4 @@ class AuditLogEventControllerTests extends AbstractControllerUnitTestCase
 		assertFalse(eventList.auditLogEventInstanceList.contains(eventSomeone))
 		assertTrue(eventList.auditLogEventInstanceList.contains(eventJkburges))
 	}
-	
-	void testSortDateDesc()
-	{
-		hasRole = true
-		controller.params.max = 10
-		def eventList = controller.list()
-		
-		assertEquals(eventJkburges, eventList.auditLogEventInstanceList[0])
-		assertEquals(eventSomeone, eventList.auditLogEventInstanceList[1])
-	}
 }

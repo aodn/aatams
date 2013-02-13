@@ -38,7 +38,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		 
         assertNotNull(validDetection)
         assertTrue(validDetection instanceof ValidDetection)
-        //        assertTrue(validDetection.isProvisional())
+        // assertTrue(validDetection.isProvisional())
         assertNotNull(ValidDetection.findByTimestamp(validDetection.timestamp))
         
 		assertEquals(deployment.id, validDetection.receiverDeployment.id)

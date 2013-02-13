@@ -414,8 +414,15 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
 		println "expected: " + expectedResults
 		println "actual: " + actualResults
 		
-		assertEquals(expectedResults, actualResults)
+		assertContainsAll(expectedResults, actualResults)
 		
 		return actualResults
 	}
+
+    private assertContainsAll(listA, listB)
+    {
+        assertEquals(listA.size(), listB.size())
+        assertTrue(listA.containsAll(listB))
+        assertTrue(listB.containsAll(listA))
+    }
 }

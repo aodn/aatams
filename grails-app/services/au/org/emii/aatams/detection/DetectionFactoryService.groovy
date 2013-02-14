@@ -215,7 +215,7 @@ class DetectionFactoryService
     {
 		def detectionValidator = new DetectionValidator()
         assert(detectionValidator)
-		
+
 		if (detectionValidator.validate(downloadFile, nativeParams))
 		{
 			return createValidDetection(nativeParams + 

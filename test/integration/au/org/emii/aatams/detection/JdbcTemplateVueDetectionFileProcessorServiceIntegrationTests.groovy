@@ -1,23 +1,17 @@
 package au.org.emii.aatams.detection
 
-import au.org.emii.aatams.DetectionSurgery;
-import au.org.emii.aatams.FileProcessingStatus
-import au.org.emii.aatams.Person
-import au.org.emii.aatams.ReceiverDownloadFile
-import au.org.emii.aatams.ReceiverDownloadFileType
-
+import au.org.emii.aatams.*
 import au.org.emii.aatams.test.*
 
 import grails.test.*
+import groovy.sql.*
+import groovy.lang.MetaClass
 
-class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends AbstractGrailsUnitTestCase 
+class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests 
 {
-    static transactional = false
-    
-	def jdbcTemplateVueDetectionFileProcessorService
     ReceiverDownloadFile export
 	def exportFile
-    
+
     protected void setUp() 
 	{
         super.setUp()
@@ -66,21 +60,34 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
         assertEquals(detSurgeryCount, DetectionSurgery.count())
     }
 
-    void testNewDetectionsAreProvisional()
+    void testPromoteProvisional()
     {
-		exportFile << '''2011-05-17 03:54:05,VR2W-101336,A69-1303-62339
-2011-05-17 04:54:05,VR2W-101336,A69-1303-62339
-2011-05-17 05:54:05,VR2W-101336,A69-1303-62339
-'''
+        def origMatViewCount = sql.firstRow('select count(*) from detection_extract_view_mv;').count
+        def origValidDetCount = sql.firstRow('select count(*) from valid_detection;').count
+        def origInvalidDetCount = InvalidDetection.count()
+        assertEquals(origMatViewCount, origValidDetCount)
+
+        def origStatisticsNumValidDetCount = Statistics.findByKey('numValidDetections')?.value
+            
+        def detRows = ['2011-05-17 03:54:05,VR2W-101336,A69-1303-12345','2011-05-17 04:54:05,VR2W-101336,A69-1303-12345', '2011-05-17 05:54:05,VR2W-101336,A69-1303-12345']
+        def numNewDets = detRows.size()
+            
+        exportFile << detRows.join('\n')
 
         jdbcTemplateVueDetectionFileProcessorService.process(export)
+            
+        def finalMatViewCount = sql.firstRow('select count(*) from detection_extract_view_mv;').count
+        def finalValidDetCount = sql.firstRow('select count(*) from valid_detection;').count
+        def finalProvDetCount = ValidDetection.findAllByProvisional(true).size()
+        def finalStatisticsNumValidDetCount = Statistics.getStatistic('numValidDetections')
 
-        assertEquals(3, getRefreshedExport(export)?.validDetections.size())
-        getRefreshedExport(export)?.validDetections.each {
-            assertTrue(it.isProvisional())
-        }
+        assertEquals(origInvalidDetCount, InvalidDetection.count())
+        assertEquals(0, finalProvDetCount)
+        assertEquals(origMatViewCount + numNewDets, finalMatViewCount)
+        assertEquals(origValidDetCount + numNewDets, finalValidDetCount)
+        assertEquals(origStatisticsNumValidDetCount + numNewDets, finalStatisticsNumValidDetCount)
     }
-
+    
     private def getRefreshedExport(export)
     {
         return ReceiverDownloadFile.read(export?.id)

@@ -65,4 +65,22 @@ databaseChangeLog =
 			}
 		}
     }
+    
+	changeSet(author: "jburgess", id: "1360028054000-6") {
+        createIndex(
+            indexName: "valid_provisional_index",
+            tableName: "valid_detection",
+            unique: "false") {
+                column(name: 'provisional')
+        }
+    }
+    
+	changeSet(author: "jburgess", id: "1360028054000-7") {
+        createIndex(
+            indexName: "detection_extract_view_mv_provisional_index",
+            tableName: "detection_extract_view_mv",
+            unique: "false") {
+                column(name: 'provisional')
+        }
+    }
 }

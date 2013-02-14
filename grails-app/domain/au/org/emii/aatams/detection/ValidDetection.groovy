@@ -52,7 +52,8 @@ class ValidDetection extends RawDetection implements Embargoable
 		timestamp index:'valid_timestamp_index'
 		transmitterId index:'valid_transmitterId_index'
 		receiverName index:'valid_receiverName_index'
-		
+		provisional index: 'valie_provisional_index'
+        
 		detectionSurgeries cache:true
 	}
 	

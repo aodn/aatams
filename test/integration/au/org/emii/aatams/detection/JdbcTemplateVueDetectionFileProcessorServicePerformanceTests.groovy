@@ -5,14 +5,8 @@ import au.org.emii.aatams.test.*
 
 import org.perf4j.StopWatch
 
-class JdbcTemplateVueDetectionFileProcessorServicePerformanceTests extends AbstractGrailsUnitTestCase
+class JdbcTemplateVueDetectionFileProcessorServicePerformanceTests extends AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests
 {
-    // If running in transaction, entities are not visible to inner transactions (e.g. the
-    // download file progess).
-    static transactional = false
-    
-    def jdbcTemplateVueDetectionFileProcessorService
-    
     void testProcess()
     {
         ReceiverDownloadFile download

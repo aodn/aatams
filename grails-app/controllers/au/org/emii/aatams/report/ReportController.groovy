@@ -67,7 +67,6 @@ class ReportController extends AbstractController
 			if (params._format == "KML")
 			{
 				long startTime = System.currentTimeMillis()
-				InstallationStation.refreshDetectionCounts()
 				assert(!resultList.isEmpty())
 				generateKml(params, resultList)
 	

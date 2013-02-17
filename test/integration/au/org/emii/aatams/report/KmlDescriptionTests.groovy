@@ -37,7 +37,8 @@ class KmlDescriptionTests extends GroovyPagesTestCase
 	void testHeaderData()
 	{
 		InstallationStation stationInstance = setupStation()
-		
+        stationInstance.metaClass.getDetectionCount = { -> 0 }
+        
 		def div = executeTemplate([installationStationInstance:stationInstance])
 		
 		def allNodes = div.depthFirst().collect{ it }

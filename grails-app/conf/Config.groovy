@@ -171,10 +171,10 @@ log4j =
 				   "grails.app.domain.au.org.emii.aatams.bulk",
 				   "grails.app.domain.au.org.emii.aatams.ReceiverDownloadFile",
 				   "grails.app.service.au.org.emii.aatams.filter.QueryService",
-//				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService",
 				   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
 				   "grails.app.service.au.org.emii.aatams.detection.DetectionNotificationService",
-				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService"
+				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService",
+				   "grails.app.service.au.org.emii.aatams.report.KmlService"
 		}
 		
 		test

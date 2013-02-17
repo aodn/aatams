@@ -38,6 +38,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		 
         assertNotNull(validDetection)
         assertTrue(validDetection instanceof ValidDetection)
+        assertTrue(validDetection.isProvisional())
         assertNotNull(ValidDetection.findByTimestamp(validDetection.timestamp))
         
 		assertEquals(deployment.id, validDetection.receiverDeployment.id)
@@ -57,29 +58,6 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 		assertEquals(receiver.id, validDetection.receiverDeployment.receiver.id)
     }
 
-	/**
-	 * Testing for duplicates is now done immediately before a batch of new detections is committed
-	 * (rather than in the validator/detection factory).
-	 */
-//    void testDuplicate()
-//    {
-//        def validDetection = newDetection(new ReceiverDownloadFile(), standardParams)
-//        assertNotNull(validDetection)
-//        
-//        def duplicateDetection = newDetection(new ReceiverDownloadFile(), standardParams)
-//        assertNotNull(duplicateDetection)
-//        assertTrue(duplicateDetection instanceof InvalidDetection)
-//        assertEquals(InvalidDetectionReason.DUPLICATE, duplicateDetection.reason)
-//        
-//		assertEquals(deployment.id, validDetection.receiverDeployment.id)
-//		assertEquals(receiver.id, validDetection.receiverDeployment.receiver.id)
-//
-//        standardParams[(DetectionFactoryService.DATE_AND_TIME_COLUMN)] = "2009-12-08 06:45:24"
-//        def validDetection2 = newDetection(new ReceiverDownloadFile(), standardParams)
-//        assertNotNull(validDetection2)
-//        assertEquals(2, ValidDetection.count())
-//    }
-    
     void testUnknownReceiver()
     {
         standardParams[(VueDetectionFormat.RECEIVER_COLUMN)] = "VR2W-1234"
@@ -341,8 +319,8 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
 	
 	void testBuildRescanDeploymentSql()
 	{
-		def sql = '''insert into valid_detection (id, version, location, receiver_deployment_id, receiver_download_id, receiver_name, sensor_unit, sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number)
-(select id, version, location, 123, receiver_download_id, receiver_name, sensor_unit, sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number from invalid_detection 
+		def sql = '''insert into valid_detection (id, version, location, receiver_deployment_id, receiver_download_id, receiver_name, sensor_unit, sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number, provisional)
+(select id, version, location, 123, receiver_download_id, receiver_name, sensor_unit, sensor_value, station_name, timestamp, transmitter_id, transmitter_name, transmitter_serial_number, true as provisional from invalid_detection 
 where reason <> 'DUPLICATE' and receiver_name = 'VR2W-102026' and timestamp between '2009-05-19T10:18:00+10:00' AND '2011-05-19T10:18:00+10:00'
 group by receiver_name, transmitter_id, timestamp, id, version, location, message, reason, receiver_download_id, sensor_unit, sensor_value, station_name, transmitter_name, transmitter_serial_number
 );

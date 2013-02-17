@@ -162,10 +162,10 @@ log4j =
 				   "grails.app.domain.au.org.emii.aatams.bulk",
 				   "grails.app.domain.au.org.emii.aatams.ReceiverDownloadFile",
 				   "grails.app.service.au.org.emii.aatams.filter.QueryService",
-//				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateVueDetectionFileProcessorService",
 				   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
 				   "grails.app.service.au.org.emii.aatams.detection.DetectionNotificationService",
-				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService"
+				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService",
+				   "grails.app.service.au.org.emii.aatams.report.KmlService"
 		}
 		
 		test
@@ -221,7 +221,7 @@ grails.gorm.default.mapping = {
 
 rawDetection.extract.limit = 50000
 rawDetection.extract.view.name = 'detection_extract_view'
-rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp, 
+rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp,
 			installation_station.name as station,
 			installation_station.id as station_id, 
 			installation_station.location as location,
@@ -242,7 +242,8 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 			valid_detection.id as detection_id,
 
 			animal_release.project_id as release_project_id,
-			valid_detection.sensor_value, valid_detection.sensor_unit
+			valid_detection.sensor_value, valid_detection.sensor_unit,
+            valid_detection.provisional
 
 			from valid_detection
 			

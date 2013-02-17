@@ -41,11 +41,11 @@ abstract class VueExportValidator
 	private boolean hasNoDeploymentsAtDateTime()
 	{
 		assert(receiver)
-		
+
 		deploymentsByDateTime = receiver.deployments?.grep
 		{
 			theDeployment ->
-			
+
 			if (!theDeployment)
 			{
 				return false
@@ -112,7 +112,7 @@ abstract class VueExportValidator
 			
 			return false
 		}
-		
+
 		if (hasNoDeploymentsAtDateTime())
 		{
 			log.debug("Invalid detection: no deployment at time " + simpleDateFormat.format(params.timestamp) + " for receiver " + params.receiverName)

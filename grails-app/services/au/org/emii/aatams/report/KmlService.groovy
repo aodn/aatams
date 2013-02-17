@@ -99,7 +99,6 @@ class KmlService implements ApplicationContextAware
 		
 		if (clazz == InstallationStation)
 		{
-			InstallationStation.refreshDetectionCounts()
 			kml = toKml(result)
 		}
 		else if (params.format == "KMZ (tag tracks)")

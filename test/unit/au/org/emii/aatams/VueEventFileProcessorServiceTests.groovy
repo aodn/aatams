@@ -19,7 +19,6 @@ class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorSer
 		mockLogging(VueEventFileProcessorService, true)
 		vueEventFileProcessorService = new VueEventFileProcessorService()
 		vueEventFileProcessorService.eventFactoryService = eventFactoryService
-		
 		vueEventFileProcessorService.searchableService = searchableService
 		vueEventFileProcessorService.metaClass.getReader = { getReader(it) }
 	}

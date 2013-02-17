@@ -17,7 +17,7 @@ class DetectionValidator extends VueExportValidator
 	protected boolean isEventBeforeDeploymentDateTime(theDeployment)
 	{
 		assert(theDeployment)
-		
+
 		return theDeployment.deploymentDateTime.toDate().after(params.timestamp)
 	}
 	

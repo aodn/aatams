@@ -3,6 +3,9 @@ package au.org.emii.aatams.detection
 import java.util.Map;
 
 import au.org.emii.aatams.DetectionSurgery
+import au.org.emii.aatams.FileProcessingException
+import au.org.emii.aatams.Statistics
+import au.org.emii.aatams.ReceiverDownloadFile
 import au.org.emii.aatams.util.SqlUtils
 
 import au.org.emii.aatams.bulk.BulkImportException
@@ -11,6 +14,8 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate
 import org.springframework.jdbc.core.namedparam.SqlParameterSource
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils
+
+import groovy.sql.Sql
 
 /**
  *  Uses JDBC template (rather than GORM) to persist detection records.
@@ -23,6 +28,7 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
     static transactional = true
 	
 	def dataSource
+    def grailsApplication
 	def jdbcTemplateDetectionFactoryService
 	
 //	List<Map> detectionBatch
@@ -32,6 +38,13 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 		return 500
 	}
 	
+	void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
+	{
+		super.process(downloadFile)
+
+        promoteProvisional()
+	}
+    
 	protected void startBatch(context)
 	{
 		log.debug("Start batch")
@@ -139,5 +152,23 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 		{
 			
 		}
+    }
+
+    private void promoteProvisional()
+    {
+        println "* promoteProvisional *"
+        def sql = Sql.newInstance(dataSource)
+        
+        // Insert provisional dets in to materialized view.
+        def provDetsCount = sql.firstRow('select count(*) from detection_extract_view where provisional = true;').count
+        sql.execute("insert into detection_extract_view_mv (select * from detection_extract_view where provisional = true)")
+
+        // Update statistics.
+        def numValidDets = Statistics.findByKey("numValidDetections")
+        numValidDets.value += provDetsCount
+
+        // Clear 'provisional' flag on detections.
+        sql.execute("update valid_detection set provisional = false where provisional = true")
+        sql.execute("update detection_extract_view_mv set provisional = false where provisional = true")
     }
 }

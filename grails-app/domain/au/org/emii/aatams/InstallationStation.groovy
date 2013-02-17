@@ -37,8 +37,6 @@ class InstallationStation
     
     static searchable = [only: ['name']]
     
-	static Map<Long, Long> detectionCounts = [:]
-	
     String name
     
     /**
@@ -119,13 +117,14 @@ class InstallationStation
 
 	Placemark toPlacemark()
 	{
-		final Placemark placemark = new Placemark()
-		placemark.setName(name)
-		placemark.setOpen(Boolean.TRUE)
-		placemark.createAndSetPoint().addToCoordinates(getLongitude(), getLatitude())
-		placemark.setDescription(toKmlDescription())
-		placemark.setStyleUrl("#defaultStationStyle")
-		
+        final Placemark placemark = new Placemark()
+        
+        placemark.setName(name)
+        placemark.setOpen(Boolean.TRUE)
+        placemark.createAndSetPoint().addToCoordinates(getLongitude(), getLatitude())
+        placemark.setDescription(toKmlDescription())
+        placemark.setStyleUrl("#defaultStationStyle")
+
 		return placemark
 	}
 	
@@ -141,20 +140,7 @@ class InstallationStation
 	
 	long getDetectionCount()
 	{
-		return detectionCounts.get(id) ?: 0
-	}
-	
-	static void refreshDetectionCounts()
-	{
-		detectionCounts = [:]
-		
-		def sql = new Sql(AH.application.mainContext.dataSource)
-		
-		sql.eachRow('''select station_id, count(*) from detection_extract_view group by station_id''')
-		{
-			row ->
-			
-			detectionCounts[row.station_id] = row.count
-		}
+        def sql = new Sql(AH.application.mainContext.dataSource)
+        return sql.firstRow("select detection_count from detection_count_per_station_mv where station_id = ${id}").detection_count ?: 0
 	}
 }

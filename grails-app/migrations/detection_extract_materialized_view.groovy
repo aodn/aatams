@@ -57,4 +57,30 @@ databaseChangeLog =
 	
         sql("INSERT INTO statistics (id, version, key, value) VALUES (1, 0, 'numValidDetections', (SELECT COUNT(*) FROM detection_extract_view_mv))")
 	}
+
+	changeSet(author: "jburgess", id: "1360028054000-5") {
+		addColumn(tableName: "valid_detection") {
+			column(name: "provisional", type: "bool", defaultValueBoolean: false) {
+				constraints(nullable: "false")
+			}
+		}
+    }
+    
+	changeSet(author: "jburgess", id: "1360028054000-6") {
+        createIndex(
+            indexName: "valid_provisional_index",
+            tableName: "valid_detection",
+            unique: "false") {
+                column(name: 'provisional')
+        }
+    }
+    
+	changeSet(author: "jburgess", id: "1360028054000-7") {
+        createIndex(
+            indexName: "detection_extract_view_mv_provisional_index",
+            tableName: "detection_extract_view_mv",
+            unique: "false") {
+                column(name: 'provisional')
+        }
+    }
 }

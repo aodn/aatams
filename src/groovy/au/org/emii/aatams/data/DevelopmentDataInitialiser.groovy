@@ -541,7 +541,9 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                    receiverOrientation:ReceiverOrientation.UP,
                                    batteryLifeDays:90,
                                    location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
-
+        rx1.addToDeployments(rx1Bondi)
+        rx1.save()
+        
         ReceiverDeployment rx2Bondi =
             new ReceiverDeployment(station:bondiSW2,
                                    receiver:rx2,
@@ -908,10 +910,11 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 		{
 			ValidDetection detection =
 					new ValidDetection(receiverDeployment:rx1Bondi,
-					timestamp:new DateTime("2011-05-17T02:54:00+00:00").plusSeconds(it).toDate(),
-					receiverName:rx1.name,
-					transmitterId:tag.pinger.transmitterId,
-					receiverDownload:export1)
+					timestamp: new DateTime("2011-05-17T02:54:00+00:00").plusSeconds(it).toDate(),
+					receiverName: rx1.name,
+					transmitterId: tag.pinger.transmitterId,
+					receiverDownload: export1,
+                    provisional: false)
 
 			if (surgery1)
 			{	

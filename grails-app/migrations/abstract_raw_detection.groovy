@@ -324,6 +324,19 @@ databaseChangeLog = {
 	// Update views "detection_extract_view"...
 	changeSet(author: "jburgess", id: "1347934661760-37-1")
 	{
+		addColumn(tableName: "valid_detection") {
+			column(name: "provisional", type: "bool", defaultValueBoolean: false) {
+				constraints(nullable: "false")
+			}
+		}
+
+        createIndex(
+            indexName: "valid_provisional_index",
+            tableName: "valid_detection",
+            unique: "false") {
+                column(name: 'provisional')
+        }
+        
 		grailsChange
 		{
 			change

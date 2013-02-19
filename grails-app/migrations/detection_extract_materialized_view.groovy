@@ -64,6 +64,19 @@ databaseChangeLog =
 				constraints(nullable: "false")
 			}
 		}
+
+        grailsChange
+		{
+			change
+			{
+				def viewName = application.config.rawDetection.extract.view.name
+				def viewSelect = application.config.rawDetection.extract.view.select
+                
+                sql.execute('create or replace view ' + viewName + ' as ' + viewSelect)
+				sql.execute("select drop_matview('detection_extract_view_mv');")
+				sql.execute("select create_matview('detection_extract_view_mv', 'detection_extract_view');")
+			}
+		}        
     }
     
 	changeSet(author: "jburgess", id: "1360028054000-6") {
@@ -81,6 +94,20 @@ databaseChangeLog =
             tableName: "detection_extract_view_mv",
             unique: "false") {
                 column(name: 'provisional')
+        }
+    }
+    
+	changeSet(author: "jburgess", id: "1360028054000-8") {
+        
+        // Add indexes.
+        ['project', 'installation', 'station', 'transmitter_id', 'spcode', 'timestamp'].each
+        {
+            columnName ->
+                
+                createIndex(indexName: "detection_extract_mv_${columnName}_index", tableName: "detection_extract_view_mv", unique: "false")
+                {
+                    column(name: columnName)
+                }
         }
     }
 }

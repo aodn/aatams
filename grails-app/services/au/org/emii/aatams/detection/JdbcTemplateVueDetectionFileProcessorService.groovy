@@ -31,8 +31,6 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
     def grailsApplication
 	def jdbcTemplateDetectionFactoryService
 	
-//	List<Map> detectionBatch
-	
 	protected int getBatchSize()
 	{
 		return 500
@@ -156,7 +154,6 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 
     private void promoteProvisional()
     {
-        println "* promoteProvisional *"
         def sql = Sql.newInstance(dataSource)
         
         // Insert provisional dets in to materialized view.

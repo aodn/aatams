@@ -322,7 +322,7 @@ databaseChangeLog = {
 	
 	
 	// Update views "detection_extract_view"...
-	changeSet(author: "jburgess", id: "1347934661760-37-1")
+	changeSet(author: "jburgess", id: "1347934661760-37-1", runOnChange: true)
 	{
 		addColumn(tableName: "valid_detection") {
 			column(name: "provisional", type: "bool", defaultValueBoolean: false) {

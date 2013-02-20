@@ -11,8 +11,9 @@ databaseChangeLog =
         }
     }
 
-	changeSet(author: "jburgess", id: "1360028054000-2") {
+	changeSet(author: "jburgess", id: "1360028054000-2", runOnChange: true) {
 
+        sql('''SELECT drop_matview('detection_extract_view_mv');''')
         sql('''SELECT create_matview('detection_extract_view_mv', 'detection_extract_view');''')
         
         // Add indexes.
@@ -27,8 +28,9 @@ databaseChangeLog =
         }
     }
     
-	changeSet(author: "jburgess", id: "1360028054000-3")
+	changeSet(author: "jburgess", id: "1360028054000-3", runOnChange: true)
     {
+        dropTable(tableName: "statistics")
 		createTable(tableName: "statistics")
         {
 			column(name: "id", type: "int8")
@@ -57,7 +59,7 @@ databaseChangeLog =
         sql("INSERT INTO statistics (id, version, key, value) VALUES (1, 0, 'numValidDetections', (SELECT COUNT(*) FROM detection_extract_view_mv))")
 	}
 
-	changeSet(author: "jburgess", id: "1360028054000-4")
+	changeSet(author: "jburgess", id: "1360028054000-4", runOnChange: true)
 	{
 		grailsChange
 		{

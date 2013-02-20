@@ -1548,5 +1548,6 @@ databaseChangeLog = {
 	include file: 'null_requester_and_srk_pk.groovy'
 	include file: 'rescan_invalid_detections.groovy'
 	include file: 'detection_extract_materialized_view.groovy'
+    include file: 'receiver_download_file_optimisations.groovy'
 }
 

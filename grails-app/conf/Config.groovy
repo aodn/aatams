@@ -149,7 +149,9 @@ log4j =
                 nagiosPort: 5667,
                 nagiosEncryption: "TRIPLE_DES",
                 nagiosPassword: "broken cat batteries",
-                monitoredServiceName: "AATAMS-Log4J-Appender")
+                monitoredServiceName: "AATAMS-Log4J-Appender",
+                monitoredHostName: "vm-115-41.ersa.edu.au"
+                )
             }
 		}
 		

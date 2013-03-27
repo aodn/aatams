@@ -7,7 +7,7 @@ import org.joda.time.contrib.hibernate.*
  * Surgery is the process of attaching/implanting a tag to/in an animal (given
  * by the owning AnimalRelease).
  */
-class Surgery 
+class Surgery implements Embargoable
 {
 	def grailsApplication
     def sessionFactory
@@ -27,7 +27,7 @@ class Surgery
         cache true
     }
     
-    static transients = ['inWindow']
+    static transients = ['inWindow', 'project', 'embargoed']
     
     DateTime timestamp = new DateTime(Person.defaultTimeZone())
     SurgeryType type
@@ -87,5 +87,22 @@ class Surgery
         }
         
         return true
+    }
+
+    def isEmbargoed() {
+        return release.embargoed
+    }
+    
+    def applyEmbargo()
+	{
+        if (isEmbargoed()) {
+            return null
+        }
+		return this
+	}
+
+    def getProject()
+    {
+        return release.project
     }
 }

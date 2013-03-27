@@ -29,6 +29,7 @@ class ReportInfoService
         ["animalReleaseSummary": "au.org.emii.aatams.report.AnimalReleaseSummaryService",
 		 "animalRelease": "au.org.emii.aatams.AnimalRelease",
          "detection": "au.org.emii.aatams.detection.ValidDetection",
+         "detectionSurgery": "au.org.emii.aatams.DetectionSurgery",
          "installation": "au.org.emii.aatams.Installation",
          "installationStation": "au.org.emii.aatams.InstallationStation",
 		 "person": "au.org.emii.aatams.Person",
@@ -39,6 +40,7 @@ class ReportInfoService
          "receiverRecovery": "au.org.emii.aatams.ReceiverRecovery",
          "receiverEvent": "au.org.emii.aatams.ValidReceiverEvent",
          "sensor": "au.org.emii.aatams.Sensor",
+         "surgery": "au.org.emii.aatams.Surgery",
          "tag": "au.org.emii.aatams.Tag"
          ]
 
@@ -79,6 +81,7 @@ class ReportInfoService
         ["animalReleaseSummary": AnimalReleaseSummaryService.class,
 		 "animalRelease": AnimalRelease.class,
          "detection": ValidDetection.class,
+         "detectionSurgery": DetectionSurgery.class,
          "installation": Installation.class,
          "installationStation": InstallationStation.class,
 		 "organisation": Organisation.class,
@@ -89,6 +92,7 @@ class ReportInfoService
          "receiverRecovery": ReceiverDeployment.class,	// This is deliberate - the "recovery" list view is actually a list of deployments and associated recovery (if there is one)
          "receiverEvent": ValidReceiverEvent.class,
          "sensor": Sensor.class,
+         "surgery": Surgery.class,
          "tag": Tag.class
          ]
      

@@ -15,12 +15,13 @@ class EmbargoFilters
     def embargoService
 
     def notListActions = 'show|edit|update|delete'
-	
+    def embargoControllers = 'animalRelease|detection|detectionSurgery|sensor|surgery|tag'
+    
     def filters = 
     {
-        animalReleaseList(controller:'animalRelease', action:'list')
+        genericList(controller: embargoControllers, action:'list')
         {
-            after =
+            after = 
             {
                 model ->
 
@@ -29,78 +30,25 @@ class EmbargoFilters
                     embargoService.applyEmbargo(model.entityList)
             }
         }
-
-        animalReleaseNotList(controller:'animalRelease', action:notListActions)
+        
+        genericNotList(controller: embargoControllers, action:notListActions)
         {
             after =
             {
                 model ->
 
-                if (embargoService.isEmbargoed(model?.animalReleaseInstance))
-                {
-                    // Redirect.
-					redirect(getRedirectParams(id: model?.animalReleaseInstance.id, controllerName: controllerName, actionName: actionName))
-                }
-            }
-        }
-
-        tagNotList(controller:'tag', action:notListActions)
-        {
-            after =
-            {
-                model ->
-                
-				if (embargoService.isEmbargoed(model?.tagInstance))
-                {
-					// Redirect.
-					redirect(getRedirectParams(id: model?.tagInstance.id, controllerName: controllerName, actionName: actionName))
-                }
-            }
-        }
-
-        sensorList(controller:'sensor', action:'list')
-        {
-            after =
-            {
-                model ->
-
-                model.entityList = 
-                    embargoService.applyEmbargo(model.entityList)
-            }
-        }
-
-        sensorNotList(controller:'sensor', action:notListActions)
-        {
-            after =
-            {
-                model ->
-
-                if (embargoService.isEmbargoed(model?.sensorInstance))
-                {
-					redirect(getRedirectParams(id: model?.sensorInstance.id, controllerName: controllerName, actionName: actionName))
-                }
-            }
-        }
-
-        detectionList(controller:'detection', action:'list')
-        {
-            after =
-            {
-                model ->
-
-                model.entityList = 
-                    embargoService.applyEmbargo(model.entityList)
-            }
-        }
-
-        detectionNotList(controller:'detection', action:notListActions)
-        {
-            after =
-            {
-                model ->
-                
-                def detectionInstance = model?.detectionInstance
-                model?.detectionInstance = embargoService.applyEmbargo(detectionInstance)
+                    if (controllerName == "detection") {
+                        def detectionInstance = model?.detectionInstance
+                        model?.detectionInstance = embargoService.applyEmbargo(detectionInstance)
+                    }
+                    else {
+                        
+                        def instanceName = "${controllerName}Instance"
+                        if (embargoService.isEmbargoed(model[instanceName]))
+                        {
+                            redirect(getRedirectParams(id: model[instanceName].id, controllerName: controllerName, actionName: actionName))
+                        }
+                    }
             }
         }
     }

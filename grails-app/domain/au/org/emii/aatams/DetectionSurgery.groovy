@@ -27,7 +27,7 @@ import au.org.emii.aatams.util.SqlUtils
  * pings sent out from tags with multiple sensors on the one physical tag (and
  * hence only one surgery).
  */
-class DetectionSurgery 
+class DetectionSurgery implements Embargoable
 {
     static belongsTo = [surgery:Surgery, detection:ValidDetection, sensor:Sensor]
     
@@ -35,13 +35,9 @@ class DetectionSurgery
 	{
 		id generator:'sequence', params:[sequence:'detection_surgery_sequence']
 	}
-
-//    static searchable =
-//    {
-//        root(false)
-//        sensor(component:true)
-//    }
     
+    static transients = ['project']
+
     static DetectionSurgery newSavedInstance(surgery, detection, sensor)
     {
         DetectionSurgery detectionSurgery =
@@ -88,5 +84,19 @@ class DetectionSurgery
     String toString()
     {
         return String.valueOf(sensor) + "-" + String.valueOf(surgery) + "-" + String.valueOf(detection)
+    }
+
+    def applyEmbargo()
+	{
+        if (surgery.isEmbargoed()) {
+            return null
+        }
+
+        return this
+	}
+    
+    def getProject()
+    {
+        return surgery.project
     }
 }

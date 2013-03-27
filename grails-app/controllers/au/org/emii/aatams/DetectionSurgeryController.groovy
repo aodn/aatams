@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-class DetectionSurgeryController {
+class DetectionSurgeryController extends AbstractController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -9,8 +9,7 @@ class DetectionSurgeryController {
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [detectionSurgeryInstanceList: DetectionSurgery.list(params), detectionSurgeryInstanceTotal: DetectionSurgery.count()]
+        doList("detectionSurgery")
     }
 
     def create = {

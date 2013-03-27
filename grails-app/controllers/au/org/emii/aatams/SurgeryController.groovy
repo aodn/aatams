@@ -4,7 +4,7 @@ import grails.converters.JSON
 
 import org.joda.time.format.DateTimeFormat
 
-class SurgeryController {
+class SurgeryController extends AbstractController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
@@ -17,8 +17,7 @@ class SurgeryController {
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [surgeryInstanceList: Surgery.list(params), surgeryInstanceTotal: Surgery.count()]
+        doList("surgery")
     }
 
     def create = {

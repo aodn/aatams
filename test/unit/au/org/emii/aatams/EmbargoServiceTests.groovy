@@ -14,8 +14,12 @@ class EmbargoServiceTests extends AbstractGrailsUnitTestCase
 	
 	Project installationProject
 	Project releaseProject
-	ValidDetection det
-	
+
+    ValidDetection det
+    AnimalRelease release
+    Surgery surgery
+    DetectionSurgery detSurgery
+    
     protected void setUp() 
 	{
         super.setUp()
@@ -38,10 +42,12 @@ class EmbargoServiceTests extends AbstractGrailsUnitTestCase
 		[installationProject, releaseProject].each {
 			it.save()
 		}
-		AnimalRelease release = new AnimalRelease(project: releaseProject, embargoDate: new DateTime().plusDays(1).toDate())
-		Surgery surgery = new Surgery(release: release)
+
+        mockLogging(AnimalRelease)
+		release = new AnimalRelease(project: releaseProject, embargoDate: new DateTime().plusDays(1).toDate())
+		surgery = new Surgery(release: release)
 		det = new ValidDetection(receiverDeployment: deployment)
-		DetectionSurgery detSurgery = new DetectionSurgery(surgery: surgery, detection: det)
+		detSurgery = new DetectionSurgery(surgery: surgery, detection: det)
 		
 		mockDomain(ValidDetection, [det])
 		
@@ -62,13 +68,18 @@ class EmbargoServiceTests extends AbstractGrailsUnitTestCase
     void testDetectionEmbargoMemberOfDeploymentProject() 
 	{
 		acceptedPermissionString = "project:${installationProject.id}:read"
-		assertNull(embargoService.applyEmbargo(det))
+
+        [det, detSurgery, surgery, release].each {
+            assertNull(embargoService.applyEmbargo(it))
+        }
     }
 	
     void testDetectionEmbargoMemberOfReleaseProject() 
 	{
 		acceptedPermissionString = "project:${releaseProject.id}:read"
-		assertNotNull(embargoService.applyEmbargo(det))
+        [det, detSurgery, surgery, release].each {
+            assertNotNull(embargoService.applyEmbargo(it))
+        }
     }
 	
 	protected boolean isPermitted(permission)

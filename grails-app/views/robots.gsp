@@ -1,6 +1,4 @@
-<%@ page contentType="text/plain;charset=UTF-8" %>
-
-User-agent: *
+<%@ page contentType="text/plain;charset=UTF-8" %>User-agent: *
 Disallow: /aatams/animal/*
 
 User-agent: *

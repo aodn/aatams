@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-class Animal 
+class Animal implements Embargoable
 {
     static hasMany = [releases: AnimalRelease]
     Species species
@@ -10,6 +10,8 @@ class Animal
     {
         sex(nullable:true)
     }
+
+    static transients = ['embargoed', 'project']
     
     String toString()
     {
@@ -24,5 +26,24 @@ class Animal
         buf.append(")")
         
         return buf.toString()
+    }
+    
+    boolean isEmbargoed()
+    {
+        def embargoed = false
+
+        releases.each {
+            embargoed |= it.embargoed
+        }
+        
+        return embargoed
+    }
+
+    def applyEmbargo() {
+        return embargoed ? null : this
+    }
+
+    def getProject() {
+        return (releases as List).first()?.project
     }
 }

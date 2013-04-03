@@ -26,7 +26,9 @@ class ReportInfoService
      * hierarchy etc).
      */
     static def reportMapping =
-        ["animalReleaseSummary": "au.org.emii.aatams.report.AnimalReleaseSummaryService",
+        ["animal": "au.org.emii.aatams.Animal",
+         "animalMeasurement": "au.org.emii.aatams.AnimalMeasurement",
+         "animalReleaseSummary": "au.org.emii.aatams.report.AnimalReleaseSummaryService",
 		 "animalRelease": "au.org.emii.aatams.AnimalRelease",
          "detection": "au.org.emii.aatams.detection.ValidDetection",
          "detectionSurgery": "au.org.emii.aatams.DetectionSurgery",
@@ -78,7 +80,9 @@ class ReportInfoService
 		 "transmitterId": tagId]
     
     static def reportNameToClass =
-        ["animalReleaseSummary": AnimalReleaseSummaryService.class,
+        ["animal": Animal.class,
+         "animalMeasurement": AnimalMeasurement.class,
+         "animalReleaseSummary": AnimalReleaseSummaryService.class,
 		 "animalRelease": AnimalRelease.class,
          "detection": ValidDetection.class,
          "detectionSurgery": DetectionSurgery.class,

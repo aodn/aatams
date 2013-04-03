@@ -20,7 +20,9 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     
     Project project1
     Project project2
-    
+
+    AnimalController animalController
+    AnimalMeasurementController animalMeasurementController
     AnimalReleaseController releaseController
     DetectionController detectionController
     DetectionSurgeryController detectionSurgeryController
@@ -29,6 +31,16 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     TagController tagController
 
     def releaseList
+
+    Animal animalNonEmbargoed
+    Animal animalEmbargoedReadableProject
+    Animal animalEmbargoedNonReadableProject
+    Animal animalPastEmbargoed
+    
+    AnimalMeasurement animalMeasurementNonEmbargoed
+    AnimalMeasurement animalMeasurementEmbargoedReadableProject
+    AnimalMeasurement animalMeasurementEmbargoedNonReadableProject
+    AnimalMeasurement animalMeasurementPastEmbargoed
     
     AnimalRelease releaseNonEmbargoed
     AnimalRelease releaseEmbargoedReadableProject
@@ -129,6 +141,16 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         sensorPingerEmbargoedNonReadableProject = new Sensor(tag:tagEmbargoedNonReadableProject, pingCode:7777)
         sensorPingerPastEmbargoed = new Sensor(tag:tagPastEmbargoed, pingCode:8888)
 
+        animalNonEmbargoed = new Animal()
+        animalEmbargoedReadableProject = new Animal()
+        animalEmbargoedNonReadableProject = new Animal()
+        animalPastEmbargoed = new Animal()
+        
+        animalMeasurementNonEmbargoed = new AnimalMeasurement()
+        animalMeasurementEmbargoedReadableProject = new AnimalMeasurement()
+        animalMeasurementEmbargoedNonReadableProject = new AnimalMeasurement()
+        animalMeasurementPastEmbargoed = new AnimalMeasurement()
+    
         releaseNonEmbargoed = new AnimalRelease(project:project1)
         releaseEmbargoedReadableProject = new AnimalRelease(project:project1, embargoDate:nextYear())
         releaseEmbargoedNonReadableProject = new AnimalRelease(project:project2, embargoDate:nextYear())
@@ -154,7 +176,8 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         detectionSurgeryEmbargoedNonReadableProject = new DetectionSurgery(surgery:surgeryEmbargoedNonReadableProject, detection:detectionEmbargoedNonReadableProject, sensor:sensorPingerEmbargoedNonReadableProject)
         detectionSurgeryPastEmbargoed = new DetectionSurgery(surgery:surgeryPastEmbargoed, detection:detectionPastEmbargoed, sensor:sensorPingerPastEmbargoed)
 
-        
+        def animalList = [animalNonEmbargoed,  animalEmbargoedReadableProject,  animalEmbargoedNonReadableProject, animalPastEmbargoed]
+        def animalMeasurementList = [animalMeasurementNonEmbargoed,  animalMeasurementEmbargoedReadableProject,  animalMeasurementEmbargoedNonReadableProject, animalMeasurementPastEmbargoed]
         def tagList =     [tagNonEmbargoed,     tagEmbargoedReadableProject,     tagEmbargoedNonReadableProject,     tagPastEmbargoed]
         def sensorList =  [sensorNonEmbargoed,  sensorEmbargoedReadableProject,  sensorEmbargoedNonReadableProject,  sensorPastEmbargoed]
         sensorList +=  [sensorPingerNonEmbargoed,  sensorPingerEmbargoedReadableProject,  sensorPingerEmbargoedNonReadableProject,  sensorPingerPastEmbargoed]
@@ -170,6 +193,8 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         
         mockDomain(Tag, tagList)
         mockDomain(Sensor, sensorList)
+        mockDomain(Animal, animalList)
+        mockDomain(AnimalMeasurement, animalMeasurementList)
         mockDomain(AnimalRelease, releaseList)
         mockDomain(Surgery, surgeryList)
         mockDomain(ValidDetection, detectionList)
@@ -181,13 +206,17 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         tagNonEmbargoed.addToSensors(sensorPingerNonEmbargoed)
         sensorNonEmbargoed.addToDetectionSurgeries(detectionSurgeryNonEmbargoed)
         detectionNonEmbargoed.addToDetectionSurgeries(detectionSurgeryNonEmbargoed)
-        
+        animalNonEmbargoed.addToReleases(releaseNonEmbargoed)
+        animalMeasurementNonEmbargoed.release = releaseNonEmbargoed
+       
         releaseEmbargoedReadableProject.addToSurgeries(surgeryEmbargoedReadableProject)
         tagEmbargoedReadableProject.addToSurgeries(surgeryEmbargoedReadableProject)
         tagEmbargoedReadableProject.addToSensors(sensorEmbargoedReadableProject)
         tagEmbargoedReadableProject.addToSensors(sensorPingerEmbargoedReadableProject)
         sensorEmbargoedReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedReadableProject)
         detectionEmbargoedReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedReadableProject)
+        animalEmbargoedReadableProject.addToReleases(releaseEmbargoedReadableProject)
+        animalMeasurementEmbargoedReadableProject.release = releaseEmbargoedReadableProject
         
         releaseEmbargoedNonReadableProject.addToSurgeries(surgeryEmbargoedNonReadableProject)
         tagEmbargoedNonReadableProject.addToSurgeries(surgeryEmbargoedNonReadableProject)
@@ -195,6 +224,8 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         tagEmbargoedNonReadableProject.addToSensors(sensorPingerEmbargoedNonReadableProject)
         sensorEmbargoedNonReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedNonReadableProject)
         detectionEmbargoedNonReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedNonReadableProject)
+        animalEmbargoedNonReadableProject.addToReleases(releaseEmbargoedNonReadableProject)
+        animalMeasurementEmbargoedNonReadableProject.release = releaseEmbargoedNonReadableProject
         
         releasePastEmbargoed.addToSurgeries(surgeryPastEmbargoed)
         tagPastEmbargoed.addToSurgeries(surgeryPastEmbargoed)
@@ -202,12 +233,16 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         tagPastEmbargoed.addToSensors(sensorPingerPastEmbargoed)
         sensorPastEmbargoed.addToDetectionSurgeries(detectionSurgeryPastEmbargoed)
         detectionPastEmbargoed.addToDetectionSurgeries(detectionSurgeryPastEmbargoed)
+        animalPastEmbargoed.addToReleases(releasePastEmbargoed)
+        animalMeasurementPastEmbargoed.release = releasePastEmbargoed
         
         detectionNonEmbargoed.metaClass.getProject = { project1 }
         detectionEmbargoedReadableProject.metaClass.getProject = { project1 }
         detectionEmbargoedNonReadableProject.metaClass.getProject = { project2 }
         detectionPastEmbargoed.metaClass.getProject = { project2 }
-        
+
+        animalList.each {  it.save() }
+        animalMeasurementList.each {  it.save() }
         tagList.each { it.save() }
         sensorList.each { it.save() }
         releaseList.each { it.save() }
@@ -220,7 +255,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 
     private void setupControllers() {
 
-        [AnimalReleaseController, DetectionController, DetectionSurgeryController, SensorController, SurgeryController, TagController
+        [AnimalController, AnimalMeasurementController, AnimalReleaseController, DetectionController, DetectionSurgeryController, SensorController, SurgeryController, TagController
         ].each {
             clazz ->
 
@@ -228,6 +263,8 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
                 mockLogging(clazz)
         }
 
+        animalController = new AnimalController()
+        animalMeasurementController = new AnimalMeasurementController()
         releaseController = new AnimalReleaseController()
         detectionController = new DetectionController()
         detectionSurgeryController = new DetectionSurgeryController()
@@ -235,7 +272,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         surgeryController = new SurgeryController()
         tagController = new TagController()
         
-        [releaseController, detectionController, detectionSurgeryController, sensorController, surgeryController, tagController].each {
+        [animalController, animalMeasurementController, releaseController, detectionController, detectionSurgeryController, sensorController, surgeryController, tagController].each {
             controller ->
 
                 controller.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
@@ -283,6 +320,38 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         Calendar cal = Calendar.getInstance()
         cal.add(Calendar.YEAR, -1)
         return cal.getTime()
+    }
+
+    void testAnimalList() 
+    {
+        checkList(animalController, "animal")
+    }
+
+    void testAnimalNotList() 
+    {
+		controllerName = "animal"
+		actionName = "show"
+
+        checkEmbargoed(animalController, animalNonEmbargoed, false, 'animal')
+        checkEmbargoed(animalController, animalEmbargoedReadableProject, false, 'animal')
+        checkEmbargoed(animalController, animalEmbargoedNonReadableProject, true, 'animal')
+        checkEmbargoed(animalController, animalPastEmbargoed, false, 'animal')
+    }
+    
+    void testAnimalMeasurementList() 
+    {
+        checkList(animalMeasurementController, "animalMeasurement")
+    }
+
+    void testAnimalMeasurementNotList() 
+    {
+		controllerName = "animalMeasurement"
+		actionName = "show"
+
+        checkEmbargoed(animalMeasurementController, animalMeasurementNonEmbargoed, false, 'animalMeasurement')
+        checkEmbargoed(animalMeasurementController, animalMeasurementEmbargoedReadableProject, false, 'animalMeasurement')
+        checkEmbargoed(animalMeasurementController, animalMeasurementEmbargoedNonReadableProject, true, 'animalMeasurement')
+        checkEmbargoed(animalMeasurementController, animalMeasurementPastEmbargoed, false, 'animalMeasurement')
     }
 
     void testAnimalReleaseList() 

@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-class AnimalMeasurement 
+class AnimalMeasurement implements Embargoable
 {
     static belongsTo = [release: AnimalRelease]
     
@@ -23,6 +23,8 @@ class AnimalMeasurement
         estimate()
         comments(nullable:true)
     }
+
+    static transients = ['project', 'embargoed']
     
     static mapping =
     {
@@ -32,5 +34,18 @@ class AnimalMeasurement
     String toString()
     {
         return String.valueOf(type) + ":" + value + " (" + unit + ")"
+    }
+    
+    boolean isEmbargoed()
+    {
+        return release.embargoed
+    }
+
+    def applyEmbargo() {
+        return embargoed ? null : this
+    }
+
+    def getProject() {
+        return release.project
     }
 }

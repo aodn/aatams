@@ -31,7 +31,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${animalInstanceList}" status="i" var="animalInstance">
+                    <g:each in="${entityList}" status="i" var="animalInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
                             <td><g:link action="show" id="${animalInstance.id}">${fieldValue(bean: animalInstance, field: "id")}</g:link></td>
@@ -46,7 +46,7 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${animalInstanceTotal}" />
+                <g:paginate total="${total}" params="${params}"/>
             </div>
         </div>
     </body>

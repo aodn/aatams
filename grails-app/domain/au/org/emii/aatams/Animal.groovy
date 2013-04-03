@@ -44,6 +44,12 @@ class Animal implements Embargoable
     }
 
     def getProject() {
+
+        // There should be at least one release, but check anyway.
+        if (releases.isEmpty()) {
+            return null
+        }
+        
         return (releases as List).first()?.project
     }
 }

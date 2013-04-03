@@ -15,7 +15,7 @@ class EmbargoFilters
     def embargoService
 
     def notListActions = 'show|edit|update|delete'
-    def embargoControllers = 'animalRelease|detection|detectionSurgery|sensor|surgery|tag'
+    def embargoControllers = 'animal|animalRelease|detection|detectionSurgery|sensor|surgery|tag'
     
     def filters = 
     {

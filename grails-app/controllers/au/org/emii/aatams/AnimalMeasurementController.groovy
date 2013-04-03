@@ -2,7 +2,7 @@ package au.org.emii.aatams
 
 import grails.converters.JSON
 
-class AnimalMeasurementController {
+class AnimalMeasurementController extends AbstractController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
@@ -11,8 +11,7 @@ class AnimalMeasurementController {
     }
 
     def list = {
-        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        [animalMeasurementInstanceList: AnimalMeasurement.list(params), animalMeasurementInstanceTotal: AnimalMeasurement.count()]
+        doList("animalMeasurement")
     }
 
     def create = {

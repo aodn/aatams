@@ -31,6 +31,13 @@ class SecSecurityFilters
     
     def filters = 
     {
+        robots(uri: "/robots.txt") {
+
+            before = {
+                 true
+            }
+        }
+        
         delete(controller:'[^(' + deleteControllersRegexp + ')]' , action:'delete')
         {
             before = 
@@ -74,13 +81,15 @@ class SecSecurityFilters
         {
             before = 
             {
+                // Ignore direct views (e.g. the default main page, robots.txt).
+                if (!controllerName) return true
                 accessControl
                 {
                     role("SysAdmin")
                 }
             }
         }
-        
+
         //
         // Anyone (including unauthenticated users) can list/index/show the 
         // accessible controllers.

@@ -8,6 +8,9 @@ User-agent: *
 Disallow: /aatams/animalRelease/*
 
 User-agent: *
+Disallow: /aatams/detection/*
+
+User-agent: *
 Disallow: /aatams/detectionSurgery/*
 
 User-agent: *

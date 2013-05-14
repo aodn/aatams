@@ -1,0 +1,6 @@
+# A sample Guardfile
+# More info at https://github.com/guard/guard#readme
+    
+guard :shell do
+  watch('.*\.sql') { `psql -h db.emii.org.au aatams3 < calibrated_values.sql` }
+end

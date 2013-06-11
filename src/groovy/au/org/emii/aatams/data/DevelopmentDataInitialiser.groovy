@@ -806,8 +806,20 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         embargoedWhaleRelease.addToSurgeries(embargoedWhaleSurgery).save(failOnError:true)
 		
         // Receiver Recovery.
+        Calendar cal = Calendar.getInstance()
+        cal.set(Calendar.HOUR_OF_DAY, 12)
+        cal.set(Calendar.MINUTE, 34)
+        cal.set(Calendar.SECOND, 56)
+        cal.set(Calendar.MILLISECOND, 0)
+        cal.add(Calendar.DATE, 2)
+
+        DateTime recoveryDateTimeRx1 = new DateTime(cal.getTime().getTime())
+
+        cal.set(Calendar.MINUTE, 54)
+        DateTime recoveryDateTimeRx2 = new DateTime(cal.getTime().getTime())
+
         ReceiverRecovery recovery1 =
-            new ReceiverRecovery(recoveryDateTime: new DateTime("2013-07-25T12:34:56"),
+            new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx1,
                                  location:(Point)reader.read("POINT(10.1234 10.1234)"),
                                  status:recoveredStatus,
                                  recoverer:sealProjectInvestigator,
@@ -816,7 +828,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  batteryVoltage:3.7f).save(failOnError:true)
 
         ReceiverRecovery recovery2 =
-            new ReceiverRecovery(recoveryDateTime: new DateTime("2013-05-17T12:54:56"),
+            new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
                                  location:(Point)reader.read("POINT(20.1234 20.1234)"),
                                  status:recoveredStatus,
                                  recoverer:sealProjectInvestigator,
@@ -825,7 +837,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  batteryVoltage:3.7f).save(failOnError:true)
                              
         ReceiverRecovery recovery3 =
-            new ReceiverRecovery(recoveryDateTime: new DateTime("2023-05-17T12:54:56"),
+            new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
                                  location:(Point)reader.read("POINT(20.1234 20.1234)"),
                                  status:recoveredStatus,
                                  recoverer:sealProjectInvestigator,
@@ -834,7 +846,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  batteryVoltage:3.7f).save(failOnError:true)
                              
         ReceiverRecovery recoveryWhale =
-            new ReceiverRecovery(recoveryDateTime: new DateTime("2023-05-17T12:54:56"),
+            new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
                                  location:(Point)reader.read("POINT(20.1234 20.1234)"),
                                  status:recoveredStatus,
                                  recoverer:sealProjectInvestigator,

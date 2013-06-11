@@ -5,6 +5,8 @@ import au.org.emii.aatams.*
 import org.joda.time.*
 import grails.test.*
 
+import java.text.SimpleDateFormat
+
 class SearchableTests extends GrailsUnitTestCase 
 {
     protected void setUp() 
@@ -68,11 +70,20 @@ class SearchableTests extends GrailsUnitTestCase
     {
         def rx1 = Receiver.findBySerialNumber('101336')
 
-        def rx1BondiRecovery = ReceiverRecovery.findByRecoveryDateTime(new DateTime("2013-07-25T12:34:56"))
-        def rx2BondiRecovery = ReceiverRecovery.findByRecoveryDateTime(new DateTime("2013-05-17T12:54:56"))
-        
+        Calendar cal = Calendar.getInstance()
+        cal.set(Calendar.HOUR_OF_DAY, 12)
+        cal.set(Calendar.MINUTE, 34)
+        cal.set(Calendar.SECOND, 56)
+        cal.set(Calendar.MILLISECOND, 0)
+        cal.add(Calendar.DATE, 2)
+
+        def rx1BondiRecovery = ReceiverRecovery.findByRecoveryDateTime(new DateTime(cal.getTime().getTime()))
+
+        cal.set(Calendar.MINUTE, 54)
+        def rx2BondiRecovery = ReceiverRecovery.findByRecoveryDateTime(new DateTime(cal.getTime().getTime()))
+
         def searchResult = ReceiverRecovery.search(rx1.name)
-        
+
         assertTrue(searchResult.results*.id.contains(rx1BondiRecovery.id))
         assertFalse(searchResult.results*.id.contains(rx2BondiRecovery.id))
     }

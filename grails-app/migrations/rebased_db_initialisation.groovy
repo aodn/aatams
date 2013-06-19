@@ -1,6 +1,70 @@
 databaseChangeLog = {
 
-	changeSet(author: "jburgess (generated)", id: "1371620272075-1") {
+	changeSet(author: "jburgess (generated)", id: "1371625156687-1") {
+		createTable(tableName: "aatams_acoustictag_all_deployments_mv") {
+			column(name: "funding_type", type: "TEXT")
+
+			column(name: "project_name", type: "VARCHAR(255)")
+
+			column(name: "installation_name", type: "VARCHAR(255)")
+
+			column(name: "station_name", type: "VARCHAR(255)")
+
+			column(name: "no_deployments", type: "int4")
+
+			column(name: "no_detections", type: "int8")
+
+			column(name: "station_lat_lon", type: "TEXT")
+
+			column(name: "deployment_depth", type: "DECIMAL")
+
+			column(name: "start_date", type: "DATE")
+
+			column(name: "end_date", type: "DATE")
+
+			column(name: "coverage_duration", type: "DECIMAL")
+
+			column(name: "station_lat", type: "DECIMAL")
+
+			column(name: "station_lon", type: "DECIMAL")
+		}
+	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-2") {
+		createTable(tableName: "aatams_acoustictag_all_detections_view_mv") {
+			column(name: "phylum", type: "VARCHAR(255)")
+
+			column(name: "order_name", type: "VARCHAR(255)")
+
+			column(name: "spcode", type: "VARCHAR(255)")
+
+			column(name: "common_name", type: "VARCHAR(255)")
+
+			column(name: "scientific_name", type: "VARCHAR(255)")
+
+			column(name: "no_releases", type: "int8")
+
+			column(name: "no_detections", type: "int8")
+
+			column(name: "first_detection", type: "DATE")
+
+			column(name: "last_detection", type: "DATE")
+
+			column(name: "coverage_duration", type: "FLOAT8(17)")
+
+			column(name: "missing_info", type: "TEXT")
+		}
+	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-3") {
+		createTable(tableName: "aatams_acoustictag_totals_species_view_mv") {
+			column(name: "statistics", type: "DECIMAL")
+
+			column(name: "statistics_type", type: "TEXT")
+		}
+	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-4") {
 		createTable(tableName: "address") {
 			column(name: "id", type: "int8") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "address_pkey")
@@ -2017,6 +2081,46 @@ databaseChangeLog = {
 						END;
 						$$''')
 	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-167") {
+		createView("SELECT aatams_acoustictag_all_deployments_mv.funding_type, aatams_acoustictag_all_deployments_mv.project_name, aatams_acoustictag_all_deployments_mv.installation_name, aatams_acoustictag_all_deployments_mv.station_name, CASE WHEN (aatams_acoustictag_all_deployments_mv.no_deployments IS NULL) THEN 0 ELSE aatams_acoustictag_all_deployments_mv.no_deployments END AS no_deployments, CASE WHEN ((aatams_acoustictag_all_deployments_mv.no_deployments IS NULL) OR (aatams_acoustictag_all_deployments_mv.no_deployments = 0)) THEN (0)::bigint ELSE aatams_acoustictag_all_deployments_mv.no_detections END AS no_detections, aatams_acoustictag_all_deployments_mv.station_lat_lon, aatams_acoustictag_all_deployments_mv.deployment_depth, aatams_acoustictag_all_deployments_mv.start_date, aatams_acoustictag_all_deployments_mv.end_date, aatams_acoustictag_all_deployments_mv.coverage_duration, aatams_acoustictag_all_deployments_mv.station_lat, aatams_acoustictag_all_deployments_mv.station_lon FROM aatams_acoustictag_all_deployments_mv;", schemaName: "public", viewName: "aatams_acoustictag_all_deployments_view")
+	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-168") {
+		createView("SELECT aatams_acoustictag_all_deployments_view.funding_type, aatams_acoustictag_all_deployments_view.project_name, (count(DISTINCT aatams_acoustictag_all_deployments_view.installation_name))::numeric AS no_installations, (count(DISTINCT aatams_acoustictag_all_deployments_view.station_name))::numeric AS no_stations, (sum(aatams_acoustictag_all_deployments_view.no_deployments))::numeric AS no_deployments, sum(aatams_acoustictag_all_deployments_view.no_detections) AS no_detections, COALESCE(((min(aatams_acoustictag_all_deployments_view.station_lat) || '/'::text) || max(aatams_acoustictag_all_deployments_view.station_lat))) AS lat_range, COALESCE(((min(aatams_acoustictag_all_deployments_view.station_lon) || '/'::text) || max(aatams_acoustictag_all_deployments_view.station_lon))) AS lon_range, COALESCE(((min(aatams_acoustictag_all_deployments_view.deployment_depth) || '-'::text) || max(aatams_acoustictag_all_deployments_view.deployment_depth))) AS deployment_depth_range, min(aatams_acoustictag_all_deployments_view.start_date) AS start_date, max(aatams_acoustictag_all_deployments_view.end_date) AS end_date, ((max(aatams_acoustictag_all_deployments_view.end_date) - min(aatams_acoustictag_all_deployments_view.start_date)))::numeric AS coverage_duration, min(aatams_acoustictag_all_deployments_view.station_lat) AS min_lat, max(aatams_acoustictag_all_deployments_view.station_lat) AS max_lat, min(aatams_acoustictag_all_deployments_view.station_lon) AS min_lon, max(aatams_acoustictag_all_deployments_view.station_lon) AS max_lon, min(aatams_acoustictag_all_deployments_view.deployment_depth) AS min_depth, max(aatams_acoustictag_all_deployments_view.deployment_depth) AS max_depth FROM aatams_acoustictag_all_deployments_view GROUP BY aatams_acoustictag_all_deployments_view.funding_type, aatams_acoustictag_all_deployments_view.project_name ORDER BY aatams_acoustictag_all_deployments_view.funding_type DESC, aatams_acoustictag_all_deployments_view.project_name;", schemaName: "public", viewName: "aatams_acoustictag_data_summary_project_view")
+	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-169") {
+		createView("SELECT aatams_acoustictag_all_detections_view_mv.phylum, aatams_acoustictag_all_detections_view_mv.order_name, aatams_acoustictag_all_detections_view_mv.spcode, aatams_acoustictag_all_detections_view_mv.common_name, aatams_acoustictag_all_detections_view_mv.scientific_name, aatams_acoustictag_all_detections_view_mv.no_releases, aatams_acoustictag_all_detections_view_mv.no_detections, aatams_acoustictag_all_detections_view_mv.first_detection, aatams_acoustictag_all_detections_view_mv.last_detection, aatams_acoustictag_all_detections_view_mv.coverage_duration, aatams_acoustictag_all_detections_view_mv.missing_info FROM aatams_acoustictag_all_detections_view_mv;", schemaName: "public", viewName: "aatams_acoustictag_data_summary_species_view")
+	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-170") {
+		createView("SELECT aatams_acoustictag_data_summary_project_view.funding_type, count(DISTINCT aatams_acoustictag_data_summary_project_view.project_name) AS no_projects, sum(aatams_acoustictag_data_summary_project_view.no_installations) AS no_installations, sum(aatams_acoustictag_data_summary_project_view.no_stations) AS no_stations, sum(aatams_acoustictag_data_summary_project_view.no_deployments) AS no_deployments, sum(aatams_acoustictag_data_summary_project_view.no_detections) AS no_detections FROM aatams_acoustictag_data_summary_project_view GROUP BY aatams_acoustictag_data_summary_project_view.funding_type UNION ALL SELECT 'TOTAL' AS funding_type, count(DISTINCT aatams_acoustictag_data_summary_project_view.project_name) AS no_projects, sum(aatams_acoustictag_data_summary_project_view.no_installations) AS no_installations, sum(aatams_acoustictag_data_summary_project_view.no_stations) AS no_stations, sum(aatams_acoustictag_data_summary_project_view.no_deployments) AS no_deployments, sum(aatams_acoustictag_data_summary_project_view.no_detections) AS no_detections FROM aatams_acoustictag_data_summary_project_view ORDER BY 1;", schemaName: "public", viewName: "aatams_acoustictag_totals_project_view")
+	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-171") {
+		createView("SELECT aatams_acoustictag_totals_species_view_mv.statistics, aatams_acoustictag_totals_species_view_mv.statistics_type FROM aatams_acoustictag_totals_species_view_mv;", schemaName: "public", viewName: "aatams_acoustictag_totals_species_view")
+	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-174") {
+		createView("SELECT count(project.name) AS count, project.name FROM ((((valid_detection JOIN receiver_deployment ON ((valid_detection.receiver_deployment_id = receiver_deployment.id))) JOIN installation_station ON ((receiver_deployment.station_id = installation_station.id))) JOIN installation ON ((installation_station.installation_id = installation.id))) JOIN project ON ((installation.project_id = project.id))) GROUP BY project.name ORDER BY count(project.name) DESC;", schemaName: "public", viewName: "detections_by_project")
+	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-175") {
+		createView("SELECT count(*) AS count, species.common_name, species.scientific_name, species.spcode FROM (((((valid_detection JOIN detection_surgery ON ((valid_detection.id = detection_surgery.detection_id))) JOIN surgery ON ((detection_surgery.surgery_id = surgery.id))) JOIN animal_release ON ((surgery.release_id = animal_release.id))) JOIN animal ON ((animal_release.animal_id = animal.id))) JOIN species ON ((animal.species_id = species.id))) GROUP BY species.spcode, species.scientific_name, species.common_name ORDER BY count(*) DESC;", schemaName: "public", viewName: "detections_by_species")
+	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-177") {
+		createView('''SELECT installation.name AS "installation name" FROM installation ORDER BY installation.name;''', schemaName: "public", viewName: "installation_list")
+	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-178") {
+		createView('''SELECT project.name AS "project name", count(project.name) AS "number of stations" FROM ((installation_station JOIN installation ON ((installation_station.installation_id = installation.id))) JOIN project ON ((installation.project_id = project.id))) GROUP BY project.name ORDER BY project.name;''', schemaName: "public", viewName: "project_list")
+	}
+
+	changeSet(author: "jburgess (generated)", id: "1371625156687-180") {
+		createView('''SELECT count(species.spcode) AS count, species.spcode AS "CAAB code", species.common_name, species.scientific_name FROM ((animal_release JOIN animal ON ((animal_release.animal_id = animal.id))) JOIN species ON ((animal.species_id = species.id))) GROUP BY species.spcode, species.common_name, species.scientific_name ORDER BY count(species.spcode) DESC;''', schemaName: "public", viewName: "releases_by_species")
+    }
     
 	changeSet(author: "jburgess (generated)", id: "1371620272075-164") {
 		createView('''SELECT valid_detection."timestamp", to_char(timezone('00:00'::text, valid_detection."timestamp"), 'YYYY-MM-DD HH24:MI:SS'::text) AS formatted_timestamp, installation_station.name AS station, installation_station.id AS station_id, installation_station.location, st_y(installation_station.location) AS latitude, st_x(installation_station.location) AS longitude, (((device_model.model_name)::text || '-'::text) || (device.serial_number)::text) AS receiver_name, COALESCE(sensor.transmitter_id, ''::character varying) AS sensor_id, COALESCE(((((((species.spcode)::text || ' - '::text) || (species.scientific_name)::text) || ' ('::text) || (species.common_name)::text) || ')'::text), ''::text) AS species_name, sec_user.name AS uploader, valid_detection.transmitter_id, organisation.name AS organisation, project.name AS project, installation.name AS installation, COALESCE(species.spcode, ''::character varying) AS spcode, animal_release.id AS animal_release_id, animal_release.embargo_date, project.id AS project_id, valid_detection.id AS detection_id, animal_release.project_id AS release_project_id, valid_detection.sensor_value, valid_detection.sensor_unit, valid_detection.provisional FROM (((((((((((((((valid_detection LEFT JOIN receiver_deployment ON ((valid_detection.receiver_deployment_id = receiver_deployment.id))) LEFT JOIN installation_station ON ((receiver_deployment.station_id = installation_station.id))) LEFT JOIN installation ON ((installation_station.installation_id = installation.id))) LEFT JOIN project ON ((installation.project_id = project.id))) LEFT JOIN device ON ((receiver_deployment.receiver_id = device.id))) LEFT JOIN device_model ON ((device.model_id = device_model.id))) LEFT JOIN receiver_download_file ON ((valid_detection.receiver_download_id = receiver_download_file.id))) LEFT JOIN sec_user ON ((receiver_download_file.requesting_user_id = sec_user.id))) LEFT JOIN organisation ON ((device.organisation_id = organisation.id))) LEFT JOIN detection_surgery ON ((valid_detection.id = detection_surgery.detection_id))) LEFT JOIN sensor ON ((detection_surgery.sensor_id = sensor.id))) LEFT JOIN surgery ON ((detection_surgery.surgery_id = surgery.id))) LEFT JOIN animal_release ON ((surgery.release_id = animal_release.id))) LEFT JOIN animal ON ((animal_release.animal_id = animal.id))) LEFT JOIN species ON ((animal.species_id = species.id)));''', schemaName: "public", viewName: "detection_extract_view")

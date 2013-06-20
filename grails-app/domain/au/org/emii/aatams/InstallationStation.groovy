@@ -141,6 +141,6 @@ class InstallationStation
 	long getDetectionCount()
 	{
         def sql = new Sql(AH.application.mainContext.dataSource)
-        return sql.firstRow("select detection_count from detection_count_per_station_mv where station_id = ${id}").detection_count ?: 0
+        return sql.firstRow("select coalesce((select detection_count from detection_count_per_station_mv where station_id = ${id}), 0) as detection_count").detection_count
 	}
 }

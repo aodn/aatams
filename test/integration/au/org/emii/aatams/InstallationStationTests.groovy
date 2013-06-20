@@ -40,6 +40,7 @@ WITH (
         super.tearDown()
     }
 
+    // Tests a null station that doesn't exist in view
     void testStationJustAddedNotInMaterializedView() {
         // A station that doesn't exist in the materialized view
         // should return 0
@@ -47,7 +48,7 @@ WITH (
         assertEquals(0, installationStation.getDetectionCount())
     }
 
-    //@Test Tests a station with detections
+    // Tests a station with detections
     void testStationHasDetections() {
         def sql = new Sql(dataSource)
         // Inject a new station to the view and query its detection count

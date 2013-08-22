@@ -119,11 +119,6 @@ abstract class AbstractBatchProcessor
 							updateProgress(downloadFile, percentProgress)
 						}
 					}
-					
-					if ((percentProgress % 1) == 0)
-					{
-						updateProgress(downloadFile, percentProgress)
-					}
 				}
             }
 

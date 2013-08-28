@@ -27,7 +27,7 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 		vueDetectionFileProcessorService.detectionNotificationService = new DetectionNotificationService()
 		vueDetectionFileProcessorService.detectionNotificationService.metaClass.sendDetectionNotificationEmails =
 		{
-			donwloadFile ->
+			downloadFile ->
 		}
 		
 		vueDetectionFileProcessorService.searchableService = searchableService
@@ -98,7 +98,6 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 
 	private void batchUpdateFirst(String[] statementList) {
 		if (count == 0) {
-			
 			assertEach(
 			[
 				"INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 17:44:24.0',1,'VR3UWM-354','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234',1,true)",
@@ -110,7 +109,6 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 			], statementList)
 		}
 		else if (count == 1) {
-			
 			assertEach([
 				"INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 17:47:24.0',1,'BBB-111','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234','Unknown receiver code name BBB-111','UNKNOWN_RECEIVER')",
 				"INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON)  VALUES(nextval('hibernate_sequence'),0,'2007-12-08 17:44:24.0',1,'VR3UWM-354','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234','No deployment at time 2007-12-08 06:44:24 for receiver VR3UWM-354','NO_DEPLOYMENT_AT_DATE_TIME')",

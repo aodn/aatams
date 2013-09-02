@@ -27,6 +27,7 @@ abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestC
         registerMetaClass AbstractBatchProcessor
 		AbstractBatchProcessor.metaClass.getReader = { getReader(it) }
 		AbstractBatchProcessor.metaClass.getNumRecords = { 16 }
+        AbstractBatchProcessor.metaClass.flushSession = {  }
         
 		mockDomain(ReceiverDownloadFileProgress)
 		ReceiverDownloadFileProgress.metaClass.static.withNewTransaction = { it() }
@@ -61,6 +62,10 @@ abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestC
 		
 		download = new ReceiverDownloadFile()
 		mockDomain(ReceiverDownloadFile, [download])
+        download.importDate = new Date()
+        download.name = "My Download File"
+        download.type = ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV
+        download.metaClass.toString = { super.toString() }
 		download.save()
 	}
 

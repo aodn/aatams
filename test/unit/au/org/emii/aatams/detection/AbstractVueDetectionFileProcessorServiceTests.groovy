@@ -70,6 +70,7 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
         
 		AbstractBatchProcessor.metaClass.getReader = { getReader(it) }
 		AbstractBatchProcessor.metaClass.getNumRecords = { 7 }
+        AbstractBatchProcessor.metaClass.flushSession = {  }
 		mockDomain(ReceiverDownloadFileProgress)
 		ReceiverDownloadFileProgress.metaClass.static.withNewTransaction = { it() }
     }
@@ -95,4 +96,16 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
 2007-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2010-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234'''
 	}
+
+    protected String getBadDateFormatData()
+    {
+        return '''Date and Time (UTC),Receiver,Transmitter,Transmitter Name,Transmitter Serial,Sensor Value,Sensor Unit,Station Name,Latitude,Longitude,
+06/09/12 2:12,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+06/09/12 2:12,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+06/09/12 2:12,AAA-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+06/09/12 2:12,BBB-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+06/09/12 2:15,BBB-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+06/09/12 2:12,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+06/09/12 2:12,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234'''
+    }
 }

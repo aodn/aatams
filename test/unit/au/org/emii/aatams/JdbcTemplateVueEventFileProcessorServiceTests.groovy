@@ -19,6 +19,8 @@ class JdbcTemplateVueEventFileProcessorServiceTests extends AbstractVueEventFile
 
 		vueEventFileProcessorService.searchableService = searchableService
 		vueEventFileProcessorService.metaClass.getReader = { getReader(it) }
+
+        download.type = ReceiverDownloadFileType.EVENTS_CSV
     }
 
     protected void tearDown() 

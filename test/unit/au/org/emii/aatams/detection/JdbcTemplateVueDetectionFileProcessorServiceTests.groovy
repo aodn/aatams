@@ -22,6 +22,9 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 
 		mockLogging(VueDetectionFileProcessorService, true)
 
+        registerMetaClass AbstractBatchProcessor
+        AbstractBatchProcessor.metaClass.flushSession = {  }
+
 		vueDetectionFileProcessorService = new JdbcTemplateVueDetectionFileProcessorService()
 		vueDetectionFileProcessorService.jdbcTemplateDetectionFactoryService = jdbcTemplateDetectionFactoryService
 		vueDetectionFileProcessorService.detectionNotificationService = new DetectionNotificationService()
@@ -31,11 +34,11 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 		}
 		
 		vueDetectionFileProcessorService.searchableService = searchableService
-		vueDetectionFileProcessorService.metaClass.getReader = { getReader(it) }
 		vueDetectionFileProcessorService.metaClass.markDuplicates = { }
 		vueDetectionFileProcessorService.metaClass.getNumRecords = { 14 }
         vueDetectionFileProcessorService.metaClass.promoteProvisional = { }
-		DeviceStatus status = new DeviceStatus(status: "DEPLOYED")
+
+        DeviceStatus status = new DeviceStatus(status: "DEPLOYED")
 		mockDomain(DeviceStatus, [status])
 		status.save()
 
@@ -61,14 +64,25 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 		tag.addToSurgeries(surgery)
 		tag.save()
 
-		download = new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV)
+		download = new ReceiverDownloadFile(
+            type: ReceiverDownloadFileType.DETECTIONS_CSV,
+            importDate: new Date(),
+            name: "My Detections File",
+            status: FileProcessingStatus.PENDING,
+            errMsg: ""
+        )
+
 		mockDomain(ReceiverDownloadFile, [download])
 		download.save()
 	}
 
 	protected void tearDown() {
-		super.tearDown()
-	}
+        super.tearDown()
+        AbstractBatchProcessor.metaClass.getReader = null
+        VueDetectionFileProcessorService.metaClass.getReader = null
+        JdbcTemplateVueDetectionFileProcessorService.metaClass.getReader = null
+        vueDetectionFileProcessorService.metaClass.getReader = null
+    }
 
 	void testProcessSingleBatch() {
 		vueDetectionFileProcessorService.metaClass.batchUpdate = { String[] statements -> batchUpdate(statements) }
@@ -82,6 +96,38 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 		vueDetectionFileProcessorService.process(download)
 	}
 
+    /*
+     * This does not call into the correct getReader method, i.e. getBadDateFormatReader never gets called
+     * so the dates pass
+     */
+//    void testInvalidDateFormat()
+//    {
+//        AbstractBatchProcessor.metaClass.getReader = { getBadDateFormatReader(it) }
+//        VueDetectionFileProcessorService.metaClass.getReader = { getBadDateFormatReader(it) }
+//        JdbcTemplateVueDetectionFileProcessorService.metaClass.getReader = { getBadDateFormatReader(it) }
+//        vueDetectionFileProcessorService.metaClass.getReader = { getBadDateFormatReader(it) }
+//
+//        registerMetaClass AbstractBatchProcessor
+//        registerMetaClass VueDetectionFileProcessorService
+//        registerMetaClass JdbcTemplateVueDetectionFileProcessorService
+//        try
+//        {
+//            vueDetectionFileProcessorService.metaClass.batchUpdate = { String[] statements -> batchUpdate(statements) }
+//            vueDetectionFileProcessorService.metaClass.getBatchSize = { 10000 }
+//            vueDetectionFileProcessorService.process(download)
+//
+//            fail("Date format should have thrown a FileProcessingException")
+//        }
+//        catch (FileProcessingException fpe)
+//        {
+//            assert true
+//        }
+//        catch (Throwable t)
+//        {
+//            fail("Expected FileProcessingException but caught ${t.toString()}")
+//        }
+//    }
+
 	protected String getData() {
 		return super.getData() + '''
 2009-12-08 06:50:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
@@ -93,6 +139,19 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 2010-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 '''
 	}
+
+    protected String getBadDateFormatData() {
+        println "getBadDateFormatData"
+        return super.getBadDateFormatData() + '''
+06/09/12 2:18,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+06/09/12 2:12,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+06/09/12 2:12,AAA-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+06/09/12 2:12,BBB-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+06/09/12 2:15,BBB-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+06/09/12 2:12,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+06/09/12 2:12,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
+'''
+    }
 
 	static int count = 0
 
@@ -151,4 +210,9 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
 			assertEquals(val, actual[i])
 		}
 	}
+
+    public Reader getBadDateFormatReader(downloadFile)
+    {
+        return new StringReader(getBadDateFormatData())
+    }
 }

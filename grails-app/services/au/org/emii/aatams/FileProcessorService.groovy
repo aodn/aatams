@@ -32,7 +32,7 @@ class FileProcessorService
 		saveToDiskAndProcess(receiverDownloadFile, file,showLink)
     }
 
-	private void saveToDiskAndProcess(ReceiverDownloadFile receiverDownloadFile, MultipartFile file, showLink) 
+	private void saveToDiskAndProcess(ReceiverDownloadFile receiverDownloadFile, MultipartFile file, showLink) throws FileProcessingException
 	{
 		log.debug("Creating file at path: " + receiverDownloadFile.path)
 		File outFile = new File(receiverDownloadFile.path)

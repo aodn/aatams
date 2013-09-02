@@ -16,6 +16,9 @@ import grails.test.*
 import org.grails.plugins.csv.CSVMapReader
 import org.joda.time.DateTime
 
+import java.text.ParseException
+import java.text.SimpleDateFormat
+
 class CsiroDetectionFormatTests extends GrailsUnitTestCase 
 {
 	CsiroDetectionFormat format
@@ -45,10 +48,14 @@ class CsiroDetectionFormatTests extends GrailsUnitTestCase
 	//		def detectionsText = '''"DET_ID","ACO_ID","RCD_ID","DET_DATETIME","DET_QUALITY_CODE","DET_TEMP","DET_DEPTH","DET_RAW","DET_RECORD_ID","DET_CORR_STATUS_CODE"
 	//		98472,1063,344,3/6/2008 8:01:53,,0,0,0,,
 	//		'''
-	
+
+    def detectionReader() {
+        return new CSVMapReader(new StringReader(detectionsText))
+    }
+
 	private void assertException(List<String> expectedMessages)
 	{
-		new CSVMapReader(new StringReader(detectionsText)).eachWithIndex
+        detectionReader().eachWithIndex
 		{
 			it, i ->
 			
@@ -63,10 +70,10 @@ class CsiroDetectionFormatTests extends GrailsUnitTestCase
 			}
 		}
 	}
-	
-	private void assertSuccess(List<Map> expectedValues)
+
+    private void assertSuccess(List<Map> expectedValues)
 	{
-		new CSVMapReader(new StringReader(detectionsText)).eachWithIndex
+		detectionReader().eachWithIndex
 		{
 			it, i ->
 			
@@ -142,16 +149,71 @@ class CsiroDetectionFormatTests extends GrailsUnitTestCase
 				type: BulkImportRecordType.NEW)
 		receiverRecord.save(failOnError: true)
 	}
-	
-    void testUnknownTagBulkImport()
-	{
-		assertException(["No bulk import record for tag with ACO_ID = 1063"])	
+
+    void testUnknownTagRecord()
+    {
+        try
+        {
+            format.tagRecord(['ACO_ID': '1063'])
+            fail()
+        }
+        catch (BulkImportException e)
+        {
+            assertEquals("No bulk import record for tag with ACO_ID = 1063", e.message)
+        }
     }
 
     void testUnknownTag()
+    {
+        createTagImportRecord(1)
+        try
+        {
+            format.tag(['ACO_ID': '1063'])
+            fail()
+        }
+        catch (BulkImportException e)
+        {
+            assertEquals("No tag corresponding to bulk import record with ACO_ID = 1063", e.message)
+        }
+    }
+
+    void testUnknownReceiverDeployment()
+    {
+        try
+        {
+            format.receiverDeployment(['RCD_ID': '344'])
+        }
+        catch (BulkImportException e)
+        {
+            assertEquals("No bulk import record for receiver with RCD_ID = 344", e.message)
+        }
+    }
+
+    void testUnknownReceiver()
+    {
+        createReceiverImportRecord(null)
+
+        try
+        {
+            format.receiver(['RCD_ID': "344"])
+        }
+        catch (BulkImportException e)
+        {
+            assertEquals("No receiver corresponding to bulk import record with RCD_ID = 344", e.message)
+        }
+    }
+
+    void testUnknownTagBulkImport()
 	{
-		createTagImportRecord()
-		assertException(["No tag corresponding to bulk import record with ACO_ID = 1063"])	
+        createReceiverImportRecord(createReceiverDeployment().id)
+        assertException(["No bulk import record for tag with ACO_ID = 1063"])
+    }
+
+    void testUnknownTagThroughParse()
+	{
+        createTagImportRecord(1)
+        createReceiverImportRecord(createReceiverDeployment().id)
+		assertException(["No tag corresponding to bulk import record with ACO_ID = 1063"])
     }
 
     void testUnknownReceiverBulkImport()
@@ -160,7 +222,7 @@ class CsiroDetectionFormatTests extends GrailsUnitTestCase
 		assertException(["No bulk import record for receiver with RCD_ID = 344"])
     }
 	
-    void testUnknownReceiver()
+    void testUnknownReceiverThroughParse()
 	{
 		createTagImportRecord(createTag().id)
 		createReceiverImportRecord(null)
@@ -192,4 +254,55 @@ class CsiroDetectionFormatTests extends GrailsUnitTestCase
 //			 sensorValue: TODO
 		])
 	}
+
+    void testNullDateTime()
+    {
+        try
+        {
+            format.timestamp([:])
+            fail("Timestamp parsed when expecting an Exception")
+        }
+        catch (NullPointerException e)
+        {
+            // Null should be caught and rethrown as a FileFormatException
+            fail("Caught NullPointerException expected FileFormatException")
+        }
+        catch (FileFormatException e)
+        {
+            // Not fussed about the content of the exception just that it handles the right cases
+            assert true
+        }
+    }
+
+    void testIncorrectFormatForDateTime()
+    {
+        try
+        {
+            format.timestamp(['DET_DATETIME': '31-01-2013 12:59:59'])
+            fail("Timestamp parsed when expecting an Exception")
+        }
+        catch (ParseException e)
+        {
+            // Null should be caught and rethrown as a FileFormatException
+            fail("Caught ParseException, expected FileFormatException")
+        }
+        catch (FileFormatException e)
+        {
+            // Not fussed about the content of the exception just that it handles the right cases
+            assert true
+        }
+    }
+
+    void testValidFormatForDateTime()
+    {
+        try
+        {
+            format.timestamp(['DET_DATETIME': '31/01/2013 12:59:59'])
+            assert true
+        }
+        catch (FileFormatException e)
+        {
+            fail("Timestamp threw an Exception when expected to parse")
+        }
+    }
 }

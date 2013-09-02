@@ -42,7 +42,7 @@ class VueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProc
 
 	ReceiverDownloadFile initDownloadAndNotificationService(type, mockedNotificationMethod)
 	{
-        ReceiverDownloadFile download = new ReceiverDownloadFile(type: type)
+        ReceiverDownloadFile download = new ReceiverDownloadFile(type: type, importDate: new Date(), name: "VueDetectionFileProcessorServiceTests File")
         mockDomain(ReceiverDownloadFile, [download])
         download.save()
 

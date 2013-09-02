@@ -47,15 +47,11 @@ class DetectionFactoryService
         def detection = initDetection(downloadFile, nativeParams)
         assert(detection)
 		
-        if (!detection.valid)
+        if (detection.valid)
         {
-			;
+            matchToTags(detection)
         }
-		else
-		{
-			matchToTags(detection)
-		}
-		
+
         return detection
     }
     

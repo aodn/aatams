@@ -1,6 +1,8 @@
 package au.org.emii.aatams.bulk
 
-class BulkImportException extends Exception
+import au.org.emii.aatams.FileProcessingException
+
+class BulkImportException extends FileProcessingException
 {
     public BulkImportException()
     {

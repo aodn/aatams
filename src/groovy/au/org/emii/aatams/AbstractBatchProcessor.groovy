@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.bulk.BulkImportException
+import au.org.emii.aatams.bulk.ReceiverDownloadFileProgressUpdater
 import org.apache.commons.io.input.BOMInputStream;
 import org.grails.plugins.csv.CSVMapReader
 
@@ -29,12 +29,15 @@ abstract class AbstractBatchProcessor
 	
     protected void endBatch(context) 
     {
-        def session = sessionFactory?.currentSession
-		
-        session?.flush()
-        session?.clear()
-		
+        flushSession()
         propertyInstanceMap?.get().clear()
+    }
+
+    void flushSession()
+    {
+        def session = sessionFactory.currentSession
+        session.flush()
+        session.clear()
     }
     
 	long getNumRecords(downloadFile)
@@ -56,107 +59,25 @@ abstract class AbstractBatchProcessor
         try
         {
             searchableService.stopMirroring()
-        
-            def startTimestamp = System.currentTimeMillis()
-
 			recordCsvMapReader = getMapReader(downloadFile)
-            def numRecords = getNumRecords(downloadFile)
-			
-			int percentProgress = -1
-			
-			long startTime = System.currentTimeMillis()
-			
-			downloadFile.discard()
-			downloadFile?.progress?.discard()
-			
-			def context = [downloadFile: downloadFile]
-			
-			startBatch(context)
-			
-            recordCsvMapReader.eachWithIndex
-            {
-                map, i ->
-
-				if ((i != 0) && ((i % batchSize) == 0))
-                {
-                    endBatch(context)
-					startBatch(context)
-                }
-				
-				// TODO: should be getting exceptions - but it depends on reading in
-				// all CSIRO imports (rather than ignoring some records).
-				try
-				{
-	                processSingleRecord(downloadFile, map, context)
-				}
-				catch (Throwable e)	// should only have to catch BulkImportException, but that is being wrapped for some reason.
-				{
-					log.warn("Exception reading record: ${map}", e)
-				}
-				finally
-				{
-					float progress = (float)i/numRecords * 100
-					if ((int)progress > percentProgress)
-					{
-						percentProgress = (int)progress
-						
-						String progressMsg = 
-							"Download file processing, id: " + downloadFile.id +
-							", progress: " + percentProgress +
-							"%, average time per record: " + (float)(System.currentTimeMillis() - startTime) / (i + 1) + "ms"
-							
-						if ((percentProgress % 10) == 0)
-						{
-							log.info(progressMsg)
-						}
-						else
-						{
-							log.debug(progressMsg)
-						}
-						
-						if ((percentProgress % 1) == 0)
-						{
-							updateProgress(downloadFile, percentProgress)
-						}
-					}
-				}
-            }
-
-			endBatch(context)
-			
-            long elapsedTime = System.currentTimeMillis() - startTimestamp
-            log.info("Batch details, size: " + batchSize + ", time per record (ms) : " + (float)elapsedTime / numRecords)    
-            log.info("Records processed: (" + numRecords + ") in (ms): " +  elapsedTime)
-
-            // Required to avoid hibernate exception, since session is flushed and cleared above.
-            downloadFile = ReceiverDownloadFile.get(downloadFile.id)
-			downloadFile.progress?.refresh()
-            downloadFile.status = FileProcessingStatus.PROCESSED
-            downloadFile.percentComplete = 100
-			downloadFile.errMsg = ""
-            downloadFile.save(flush:true)
+            batchProcess(downloadFile, recordCsvMapReader)
+            downloadFileProcessed(downloadFile)
+        }
+        catch (Throwable t)
+        {
+            downloadFileError(downloadFile, t)
+            throw t
         }
         finally
         {
+            downloadFile.save(flush: true, failOnError: true)
+            flushSession()
             searchableService.startMirroring()
 			recordCsvMapReader?.close()
         }
     }
 
-	private void updateProgress(downloadFile, percentProgress) 
-	{
-		ReceiverDownloadFileProgress.withNewTransaction
-		{
-			ReceiverDownloadFile refreshedDownloadFile = ReceiverDownloadFile.read(downloadFile.id)
-			ReceiverDownloadFileProgress progress = refreshedDownloadFile.progress
-			
-			log.debug("Updating progress, percentComplete: ${percentProgress}")
-			progress?.percentComplete = percentProgress
-			progress?.save(failOnError: true)
-		}
-	}
-    
-	Reader getReader(downloadFile)
+    Reader getReader(downloadFile)
 	{
 		log.debug("Instantiating stream reader...")
 		// Wrap in BOMInputStream, to handle the byte-order marker present in VUE exports
@@ -182,7 +103,90 @@ abstract class AbstractBatchProcessor
 		log.debug(" CSV map reader instantiated")
 		return mapReader
 	}
+
+    private boolean isEndOfBatch(itemNumber)
+    {
+        return itemNumber != 0 && itemNumber % batchSize == 0
+    }
+
+    private void batchProcess(downloadFile, recordCsvMapReader) throws FileProcessingException
+    {
+        def progress = new ReceiverDownloadFileProgressUpdater(downloadFile, getNumRecords(downloadFile))
+        progress.start()
+
+        def context = [downloadFile: downloadFile]
+        try
+        {
+            startBatch(context)
+            recordCsvMapReader.eachWithIndex
+            {   map, i ->
+
+                if (isEndOfBatch(i))
+                {
+                    endBatch(context)
+                    startBatch(context)
+                }
+
+                // TODO: should be getting exceptions - but it depends on reading in
+                // all CSIRO imports (rather than ignoring some records).
+                try
+                {
+                    processSingleRecord(downloadFile, map, context)
+                }
+                catch (Throwable e)	// should only have to catch BulkImportException, but that is being wrapped for some reason.
+                {
+                    log.error("Exception reading record: ${map}", e)
+                    throw e
+                }
+                finally
+                {
+                    progress.updateProgress(i + 1)
+                }
+            }
+        }
+        finally
+        {
+            endBatch(context)
+        }
+        // Only log statistics if the upload is successful
+        progress.logStatistics(batchSize)
+    }
+
+    private void finishDownloadFile(downloadFile, errMsg, status)
+    {
+        downloadFile.errMsg = errMsg
+        downloadFile.status = status
+    }
+
+    private void downloadFileProcessed(downloadFile)
+    {
+        finishDownloadFile(downloadFile, "", FileProcessingStatus.PROCESSED)
+    }
+
+    private void downloadFileError(downloadFile, throwable)
+    {
+        finishDownloadFile(downloadFile, downloadFileErrorMessage(throwable), FileProcessingStatus.ERROR)
+    }
+
+    private def downloadFileErrorMessage(throwable)
+    {
+        def message = throwable.toString()
+        if (throwable.message)
+        {
+            message = throwable.message
+        }
+        else if (throwable.cause)
+        {
+            message = throwable.cause.message
+        }
+        else if (throwable.undeclaredThrowable)
+        {
+            message = throwable.undeclaredThrowable.message
+        }
+
+        return message
+    }
 	
-    abstract void processSingleRecord(downloadFile, map, context)
+    abstract void processSingleRecord(downloadFile, map, context) throws FileProcessingException
 }
 

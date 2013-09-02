@@ -12,7 +12,7 @@ class VueEventFileProcessorService extends AbstractBatchProcessor
     
     static transactional = true
     
-    void processSingleRecord(downloadFile, map, context)
+    void processSingleRecord(downloadFile, map, context) throws FileProcessingException
     {
         eventFactoryService.newEvent(downloadFile, map)
     }

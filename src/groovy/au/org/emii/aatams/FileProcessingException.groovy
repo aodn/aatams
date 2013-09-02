@@ -6,22 +6,22 @@ package au.org.emii.aatams
  */
 class FileProcessingException extends Exception
 {
-    FileProcessingException()
+    public FileProcessingException()
     {
         super()
     }
 
-    FileProcessingException(String message)
+    public FileProcessingException(String message)
     {
         super(message)
     }
 
-    FileProcessingException(String message, Throwable cause)
+    public FileProcessingException(String message, Throwable cause)
     {
         super(message, cause)
     }
-    
-    FileProcessingException(Throwable cause)
+
+    public FileProcessingException(Throwable cause)
     {
         super(cause)
     }

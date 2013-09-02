@@ -139,23 +139,16 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 		log.debug("Batch successfully inserted")	
 	}
 	
-    void processSingleRecord(downloadFile, map, context)
+    void processSingleRecord(downloadFile, map, context) throws FileProcessingException
     {
-		try
-		{
-			def detection = jdbcTemplateDetectionFactoryService.newDetection(downloadFile, map)
-	        context.detectionBatch.addAll(detection)
-		}
-		catch (BulkImportException e)
-		{
-			
-		}
+        def detection = jdbcTemplateDetectionFactoryService.newDetection(downloadFile, map)
+        context.detectionBatch.addAll(detection)
     }
 
     private void promoteProvisional()
     {
         def sql = Sql.newInstance(dataSource)
-        
+
         // Insert provisional dets in to materialized view.
         def provDetsCount = sql.firstRow('select count(*) from detection_extract_view where provisional = true;').count
         sql.execute("insert into detection_extract_view_mv (select * from detection_extract_view where provisional = true)")

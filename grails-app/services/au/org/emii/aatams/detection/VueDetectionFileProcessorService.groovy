@@ -19,7 +19,7 @@ class VueDetectionFileProcessorService extends AbstractBatchProcessor
 	
     static transactional = true
 	
-    void processSingleRecord(downloadFile, map, context)
+    void processSingleRecord(downloadFile, map, context) throws FileProcessingException
     {
         detectionFactoryService.newDetection(downloadFile, map)
     }

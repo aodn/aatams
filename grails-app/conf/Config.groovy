@@ -86,10 +86,10 @@ environments
 {
 	production
 	{
-		grails.serverURL = "http://aatams.emii.org.au/${appName}"
-		grails.serverHost = "http://aatams.emii.org.au"
-		fileimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod"
-		bulkimport.path = "/var/lib/tomcat/instance_8083_aatams3/uploads/prod/bulkimports"
+		grails.serverURL = "http://imos-13.emii.org.au/${appName}"
+		grails.serverHost = "http://imos-13.emii.org.au"
+		fileimport.path = "/tmp/fileimports"
+		bulkimport.path = "/tmp/fileimports/bulkimports"
 		grails.mail.host = "localhost"
 	}
 	development

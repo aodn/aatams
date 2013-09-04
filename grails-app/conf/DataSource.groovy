@@ -17,9 +17,9 @@ environments {
     development {
         dataSource {
             driverClassName = "org.postgresql.Driver"
-            url = "jdbc:postgresql://localhost:5432/aatams"
+			url = "jdbc:postgresql://dbprod.emii.org.au:5432/aatams3?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
             username = "aatams"
-            password = "aatams"
+            password = "fishybusiness"
             
             properties 
             {
@@ -47,9 +47,9 @@ environments {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'
             driverClassName = "org.postgresql.Driver"
-			url = "jdbc:postgresql://localhost:5432/aatams_test"
+			url = "jdbc:postgresql://localhost:55432/aatams3"
             username = "aatams"
-            password = "aatams"
+            password = "fishybusiness"
 
             properties 
             {

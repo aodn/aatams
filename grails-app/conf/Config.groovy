@@ -113,6 +113,43 @@ environments
 	}
 }
 
+/**
+ * Instance specific customisation, clearly stolen from:
+ * http://phatness.com/2010/03/how-to-externalize-your-grails-configuration/
+ *
+ * To use set for a specific instance, either set the environment variable "INSTANCE_NAME", or add this in the grails
+ * commandline like so:
+ *
+ * grails -DINSTANCE_NAME=WA run-app
+ *
+ * Instance specific config files are located in $project_home/instances/
+ *
+ * Any configuration found in these instance specific file will OVERRIDE values set in Config.groovy and
+ * application.properties.
+ *
+ * NOTE: app.name and version is ignored in external application.properties
+ */
+if(!grails.config.locations || !(grails.config.locations instanceof List)) {
+    grails.config.locations = []
+}
+
+try {
+	configurationPath = new InitialContext().lookup('java:comp/env/aodn.configuration')
+	grails.config.locations << "file:${configurationPath}"
+
+	println "Loading external config from '$configurationPath'..."
+
+	def startupConfig = new ConfigSlurper(grailsSettings.grailsEnv).parse(new File(configurationPath).toURI().toURL())
+	System.setProperty("INSTANCE_NAME", startupConfig.portal.instance.name ?: defaultInstanceName)
+}
+catch (e) {
+
+	println "Not loading external config"
+
+	portal.instance.name = defaultInstanceName
+	System.setProperty "INSTANCE_NAME", portal.instance.name
+}
+
 log4j =
 {
 	appenders

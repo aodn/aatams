@@ -1,4 +1,5 @@
 import org.apache.log4j.net.SMTPAppender
+import javax.naming.InitialContext
 
 // 
 // // locations to search for config files that get merged into the main config
@@ -138,16 +139,9 @@ try {
 	grails.config.locations << "file:${configurationPath}"
 
 	println "Loading external config from '$configurationPath'..."
-
-	def startupConfig = new ConfigSlurper(grailsSettings.grailsEnv).parse(new File(configurationPath).toURI().toURL())
-	System.setProperty("INSTANCE_NAME", startupConfig.portal.instance.name ?: defaultInstanceName)
 }
 catch (e) {
-
 	println "Not loading external config"
-
-	portal.instance.name = defaultInstanceName
-	System.setProperty "INSTANCE_NAME", portal.instance.name
 }
 
 log4j =

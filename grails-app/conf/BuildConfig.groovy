@@ -10,10 +10,10 @@ grails.war.resources =
     
       // The jars are being inserted by the hudson/tomcat build process, and
       // are causing errors on startup for the app on tomcat6.
-      delete(file:"${stagingDir}/WEB-INF/lib/commons-collections-3.1.jar")
-      delete(file:"${stagingDir}/WEB-INF/lib/slf4j-api-1.5.2.jar")
+//      delete(file:"${stagingDir}/WEB-INF/lib/commons-collections-3.1.jar")
+//      delete(file:"${stagingDir}/WEB-INF/lib/slf4j-api-1.5.2.jar")
 
-      delete(file:"${stagingDir}/WEB-INF/lib/servlet-api-2.3.jar")
+ //     delete(file:"${stagingDir}/WEB-INF/lib/servlet-api-2.3.jar")
 }
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -44,7 +44,9 @@ grails.project.dependency.resolution = {
     dependencies {
 
         runtime 'postgresql:postgresql:9.0-801.jdbc4'
-		
+        build 'commons-io:commons-io:2.1'
+        runtime 'commons-io:commons-io:2.1'
+	
 		compile 'org.apache.commons:commons-compress:1.4'
         
 		test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion")

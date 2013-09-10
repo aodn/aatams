@@ -5,7 +5,7 @@ class DetectionCountPerStationRefreshMaterializedViewJob extends RefreshMaterial
     static triggers =
     {
         // Execute daily at 8pm.
-        cron name: 'refreshDetectionCountPerStationMaterializedDailyTrigger', cronExpression: "0 20 0 * * ?"
+        cron name: 'refreshDetectionCountPerStationMaterializedDailyTrigger', cronExpression: "0 0 20 * * ?"
     }
 
     String getViewName()

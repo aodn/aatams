@@ -6,18 +6,7 @@ abstract class RefreshMaterializedViewJob
 {
     def dataSource
 
-    static triggers =
-    {
-        // Execute daily at 8pm.
-        cron name: 'refreshMaterializedDailyTrigger', cronExpression: "0 20 0 * * ?"
-    }
-
     def execute()
-    {
-        refreshDetectionCountPerStationView()
-    }
-
-    private void refreshDetectionCountPerStationView()
     {
         long startTime = System.currentTimeMillis()
         log.info("'${getViewName()}': refreshing materialized view...")

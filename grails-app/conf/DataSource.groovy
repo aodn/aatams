@@ -17,7 +17,7 @@ environments {
     development {
         dataSource {
             driverClassName = "org.postgresql.Driver"
-			url = "jdbc:postgresql://dbprod.emii.org.au:5432/aatams3?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory"
+            url = "jdbc:postgresql://localhost:5432/aatams"
             username = "aatams"
             password = "fishybusiness"
             

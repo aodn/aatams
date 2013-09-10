@@ -3,18 +3,6 @@ grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
-// The excluded jars are provided by the container (tomcat).
-grails.war.resources = 
-{ 
-    stagingDir ->
-    
-      // The jars are being inserted by the hudson/tomcat build process, and
-      // are causing errors on startup for the app on tomcat6.
-//      delete(file:"${stagingDir}/WEB-INF/lib/commons-collections-3.1.jar")
-//      delete(file:"${stagingDir}/WEB-INF/lib/slf4j-api-1.5.2.jar")
-
- //     delete(file:"${stagingDir}/WEB-INF/lib/servlet-api-2.3.jar")
-}
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {

@@ -5,7 +5,8 @@ class DetectionExtractRefreshMaterializedViewJob extends RefreshMaterializedView
     static triggers =
     {
         // Execute daily at 8pm.
-        cron name: 'refreshDetectionExtractMaterializedDailyTrigger', cronExpression: "0 20 0 * * ?"
+        // Note: first field is seconds (non-standard for cron).
+        cron name: 'refreshDetectionExtractMaterializedDailyTrigger', cronExpression: "0 0 20 * * *"
     }
 
     String getViewName()

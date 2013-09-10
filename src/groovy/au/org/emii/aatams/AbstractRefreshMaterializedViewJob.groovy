@@ -2,7 +2,7 @@ package au.org.emii.aatams
 
 import org.springframework.jdbc.core.JdbcTemplate
 
-class RefreshMaterializedViewJob
+abstract class RefreshMaterializedViewJob
 {
 	def dataSource
 

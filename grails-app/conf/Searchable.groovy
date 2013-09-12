@@ -131,7 +131,7 @@ searchable {
     releaseLocksOnStartup = true
 	
     compassConnection = new File(
-        "/var/lib/tomcat/instance_8083_aatams3/searchable-index/${grailsEnv}"
+        "/tmp/search/${grailsEnv}"
     ).absolutePath
 }
 

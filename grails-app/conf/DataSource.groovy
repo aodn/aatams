@@ -48,8 +48,8 @@ environments {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'
             driverClassName = "org.postgresql.Driver"
 			url = "jdbc:postgresql://localhost:5432/aatams_test"
-            username = "aatams"
-            password = "aatams"
+            username = "aatams_test"
+            password = "aatams_test"
 
             properties 
             {

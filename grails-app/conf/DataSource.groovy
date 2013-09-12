@@ -19,7 +19,7 @@ environments {
             driverClassName = "org.postgresql.Driver"
             url = "jdbc:postgresql://localhost:5432/aatams"
             username = "aatams"
-            password = "fishybusiness"
+            password = "aatams"
             
             properties 
             {

@@ -103,24 +103,30 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 	
 	private void insertDetections(context)
 	{
-		def insertStatementList = []
+		// TODO TODO JdbcTemplate(dataSource)
+		def validDetectionInsertStatements   = ValidDetection.prepareInsertStatement(new JdbcTemplate(dataSource))
+		def invalidDetectionInsertStatements = InvalidDetection.prepareInsertStatement(new JdbcTemplate(dataSource))
+		def detectionSurgeryInsertStatements = DetectionSurgery.prepareInsertStatement(new JdbcTemplate(dataSource))
 		
 		context.detectionBatch.each
 		{
 			if (it.clazz == "au.org.emii.aatams.detection.ValidDetection")
 			{
-				insertStatementList += ValidDetection.toSqlInsert(it)
+				ValidDetection.addToPreparedStatement(validDetectionInsertStatements, it);
 
 				it.detectionSurgeries.each
 				{
 					detSurgery ->
 	
-					insertStatementList.add(DetectionSurgery.toSqlInsert(detSurgery, true))
+					DetectionSurgery.addToPreparedStatement(
+						detectionSurgeryInsertStatements,
+						detSurgery,
+						true)
 				}
 			}
 			else if (it.clazz == "au.org.emii.aatams.detection.InvalidDetection")
 			{
-				insertStatementList += InvalidDetection.toSqlInsert(it)
+				InvalidDetection.addToPreparedStatement(invalidDetectionInsertStatements, it)
 			}
 			else
 			{
@@ -128,17 +134,12 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 			}
 		}
 		
-		batchUpdate(insertStatementList.toArray(new String[0]))
+		int [] validDetectionUpdateCounts   = validDetectionInsertStatements.executeBatch()
+		int [] invalidDetectionUpdateCounts = invalidDetectionInsertStatements.executeBatch()
+		int [] detectionSurgeryUpdateCounts = detectionSurgeryInsertStatements.executeBatch()
+		// TODO process update counts
 	}
-	
-	void batchUpdate(String[] statements)
-	{
-		log.debug("Inserting " + statements.size() + " records...")
-		JdbcTemplate insert = new JdbcTemplate(dataSource)
-		insert.batchUpdate(statements)
-		log.debug("Batch successfully inserted")	
-	}
-	
+
     void processSingleRecord(downloadFile, map, context) throws FileProcessingException
     {
         def detection = jdbcTemplateDetectionFactoryService.newDetection(downloadFile, map)

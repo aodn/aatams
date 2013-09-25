@@ -10,40 +10,40 @@ class CaabSpecies extends Species
     /**
      * Naming conventions have been kept same as CAAB export file for ease of
      * import in to database.
-     * 
+     *
      * (except for the first three, because uppercase attributes are causing
      * grails dynamic finder problems).
      */
     String spcode
-    String commonName 
-    String scientificName 
-    String AUTHORITY 
-    String FAMILY 
-    String FAMILY_SEQUENCE 
-    String ASSIGNED_FAMILY_CODE 
-    String ASSIGNED_FAMILY_SEQUENCE 
-    String RECENT_SYNONYMS 
-    String COMMON_NAMES_LIST 
-    String GENUS 
-    String SPECIES 
-    String SCINAME_INFORMAL 
-    String DATE_LAST_MODIFIED 
-    String SUBSPECIES 
-    String VARIETY 
-    String UNDESCRIBED_SP_FLAG 
-    String HABITAT_CODE 
-    String OBIS_CLASSIFICATION_CODE 
-    String SUBGENUS 
-    String KINGDOM 
-    String PHYLUM 
-    String SUBPHYLUM 
+    String commonName
+    String scientificName
+    String AUTHORITY
+    String FAMILY
+    String FAMILY_SEQUENCE
+    String ASSIGNED_FAMILY_CODE
+    String ASSIGNED_FAMILY_SEQUENCE
+    String RECENT_SYNONYMS
+    String COMMON_NAMES_LIST
+    String GENUS
+    String SPECIES
+    String SCINAME_INFORMAL
+    String DATE_LAST_MODIFIED
+    String SUBSPECIES
+    String VARIETY
+    String UNDESCRIBED_SP_FLAG
+    String HABITAT_CODE
+    String OBIS_CLASSIFICATION_CODE
+    String SUBGENUS
+    String KINGDOM
+    String PHYLUM
+    String SUBPHYLUM
     String SPCLASS      // This is known as "CLASS" in the CAAB export, but that causes a naming conflict.
-    String SUBCLASS 
-    String ORDER_NAME 
-    String SUBORDER 
+    String SUBCLASS
+    String ORDER_NAME
+    String SUBORDER
     String INFRAORDER
-    
-    static constraints = 
+
+    static constraints =
     {
         spcode(unique:true)
         commonName(nullable:true)
@@ -74,22 +74,19 @@ class CaabSpecies extends Species
         SUBORDER(nullable:true)
         INFRAORDER(nullable:true)
     }
-    
+
     static mapping =
     {
         cache true
-        spcode index:"spcode_index"
-        common_name index:"common_name_index"
-        scientific_name index:"scientific_name_index"
     }
-    
+
     String toString()
     {
         return name
     }
-	
+
 	String getName()
 	{
 		return spcode + " - " + scientificName + " (" + commonName + ")"
-	}	
+	}
 }

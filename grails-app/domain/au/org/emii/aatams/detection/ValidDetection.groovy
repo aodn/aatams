@@ -29,13 +29,13 @@ class ValidDetection extends RawDetection implements Embargoable
      * are no longer considered provisional.
      */
     boolean provisional = true
-    
+
     /**
      * This is modelled as a many-to-many relationship, due to the fact that tags
      * transmit only code map and ping ID which is not guaranteed to be unique
      * between manufacturers, although in reality the relationship will *usually*
      * be one-to-one.
-     * 
+     *
      * Additionally, the relationship is modelled via surgery, due to the fact
      * that a tag could potentially be reused on several animals.
      */
@@ -44,19 +44,14 @@ class ValidDetection extends RawDetection implements Embargoable
     // is called but apparently not.
     Set<DetectionSurgery> detectionSurgeries = new HashSet<DetectionSurgery>()
     static hasMany = [detectionSurgeries:DetectionSurgery]
-   
+
 	static constraints = RawDetection.constraints
 
 	static mapping =
 	{
-		timestamp index:'valid_timestamp_index'
-		transmitterId index:'valid_transmitterId_index'
-		receiverName index:'valid_receiverName_index'
-		provisional index: 'valie_provisional_index'
-        
 		detectionSurgeries cache:true
 	}
-	
+
     static boolean isDuplicate(other)
     {
         boolean duplicate = false
@@ -69,10 +64,10 @@ class ValidDetection extends RawDetection implements Embargoable
             }
 			return false
         }
-        
+
         return duplicate
     }
-    
+
 	private boolean duplicateProperty(property, other)
 	{
 		// null property is considered equal to empty string.
@@ -80,7 +75,7 @@ class ValidDetection extends RawDetection implements Embargoable
 		((this[property] == null) && (other[property] == "")) ||
 		((this[property] == "") && (other[property] == null))
 	}
-	
+
     private boolean duplicate(other)
     {
 		 return (
@@ -93,12 +88,12 @@ class ValidDetection extends RawDetection implements Embargoable
 		  && this.location == other.location
 		  && this.sensorValue == other.sensorValue)
     }
-    
+
     String toString()
     {
         return timestamp.toString() + " " + String.valueOf(receiverDeployment?.receiver)
     }
-    
+
     // Convenience method.
     Project getProject()
     {
@@ -133,22 +128,22 @@ class ValidDetection extends RawDetection implements Embargoable
 
         return new ArrayList(detectionSurgeries)[0]
     }
-	
+
 	String getSensorIds()
 	{
 		return getSensorIds(detectionSurgeries)
 	}
-	
+
 	private String getSensorIds(theDetectionSurgeries)
 	{
 		return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.sensor.transmitterId)
 	}
-	
+
 	String getSpeciesNames()
 	{
 		return getSpeciesNames(detectionSurgeries)
 	}
-   
+
 	private String getSpeciesNames(theDetectionSurgeries)
 	{
 		return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.surgery.release.animal.species.name)
@@ -177,18 +172,18 @@ class ValidDetection extends RawDetection implements Embargoable
 	def applyEmbargo()
 	{
 		boolean isEmbargoed = false
-		
-		detectionSurgeries.each 
+
+		detectionSurgeries.each
 		{
 			if (it.surgery.release.isEmbargoed())
 			{
 				isEmbargoed = true
 			}
 		}
-		
+
 		return isEmbargoed ? null : this
 	}
-	
+
 	static Kml toKml(List<ValidDetection> detections, serverURL)
 	{
 		return new SensorTrackKml(detections, serverURL)

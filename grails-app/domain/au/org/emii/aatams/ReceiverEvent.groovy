@@ -6,29 +6,29 @@ import java.text.SimpleDateFormat
 import au.org.emii.aatams.util.SqlUtils
 
 /**
- * Receivers (or more correctly deployments) have a number of (usually daily) 
+ * Receivers (or more correctly deployments) have a number of (usually daily)
  * events associated with them.
  *
  * e.g. initialisation time (once off), daily battery level, daily pings etc.
  */
-class ReceiverEvent 
+class ReceiverEvent
 {
     /**
      * UTC timestamp.
      */
     Date timestamp
-    
+
 	String receiverName
-	
+
     static belongsTo = [receiverDownload:ReceiverDownloadFile]
-    
+
     String description
-    
+
     String data
-    
+
     String units
-    
-    static constraints = 
+
+    static constraints =
     {
         timestamp()
         description()
@@ -36,15 +36,14 @@ class ReceiverEvent
         data(nullable:true, blank:true)
         units(nullable:true, blank:true)
     }
-    
+
     static mapping =
     {
-        timestamp index:'event_timestamp_index'
         cache true
     }
-	
+
 	static transients = ['formattedTimestamp']
-	
+
 	static String toSqlInsert(Map event)
 	{
 		StringBuilder eventBuff = new StringBuilder(
@@ -54,16 +53,16 @@ class ReceiverEvent
 		eventBuff.append("nextval('hibernate_sequence'),")
 		eventBuff.append("0,")
 		eventBuff.append("'" + new java.sql.Timestamp(event["timestamp"].getTime()) + "',")
-		
+
 		SqlUtils.appendIntegerParams(eventBuff, event, ["receiverDeploymentId", "receiverDownloadId"])
 		SqlUtils.appendStringParams(eventBuff, event, ["data", "description", "receiverName", "units", "clazz", "message", "reason"])
 		SqlUtils.removeTrailingCommaAndAddBracket(eventBuff)
-		
+
 		return eventBuff.toString()
 	}
-	
+
 	static DateFormat formatter
-	
+
 	String getFormattedTimestamp()
 	{
 		if (timestamp)
@@ -73,10 +72,10 @@ class ReceiverEvent
 				formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 				formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 			}
-			
+
 			return formatter.format(timestamp)
 		}
-		
+
 		return null
 	}
 }

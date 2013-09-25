@@ -7,17 +7,10 @@ class InvalidDetection extends RawDetection
 {
     InvalidDetectionReason reason
     String message
-    
+
 	static belongsTo = [receiverDownload:ReceiverDownloadFile]
 	static transients = RawDetection.transients
-	
-	static mapping =
-	{
-		timestamp index:'invalid_timestamp_index'
-		transmitterId index:'invalid_transmitterId_index'
-		receiverName index:'invalid_receiverName_index'
-	}
-     
+
     boolean isValid()
     {
         return false
@@ -37,7 +30,7 @@ class InvalidDetection extends RawDetection
 		SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
 			"transmitterSerialNumber", "message", "reason"])
 		SqlUtils.removeTrailingCommaAndAddBracket(detectionBuff)
-		
+
 		return detectionBuff.toString()
 	}
 
@@ -49,7 +42,7 @@ class InvalidDetection extends RawDetection
             buf.append(": ")
             buf.append(message)
         }
-        
+
         return buf.toString()
     }
 }

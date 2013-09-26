@@ -87,7 +87,7 @@ environments
 {
 	production
 	{
-		grails.serverURL = "http://aatams.emii.org.au/${appName}"
+		grails.serverURL = "http://aatams.emii.org.au/${grails.util.Metadata.current.getApplicationName()}"
 		grails.serverHost = "http://aatams.emii.org.au"
 		fileimport.path = "/tmp/fileimports"
 		bulkimport.path = "/tmp/fileimports/bulkimports"
@@ -95,7 +95,7 @@ environments
 	}
 	development
 	{
-		grails.serverURL = "http://localhost:8080/${appName}"
+		grails.serverURL = "http://localhost:8080/${grails.util.Metadata.current.getApplicationName()}"
 		grails.serverHost = "http://localhost:8080"
 		fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
 		bulkimport.path = "/Users/jburgess/Documents/aatams/test_uploads/bulkimports"
@@ -106,7 +106,7 @@ environments
 	}
 	test
 	{
-		grails.serverURL = "http://localhost:8090/${appName}"
+		grails.serverURL = "http://localhost:8090/${grails.util.Metadata.current.getApplicationName()}"
 		grails.serverHost = "http://localhost:8090"
 		grails.plugin.databasemigration.updateOnStart = false
 		grails.mail.disabled = true

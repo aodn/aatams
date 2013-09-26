@@ -103,11 +103,13 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 	
 	private void insertDetections(context)
 	{
+		def useHibernameSeqIdForDetectionSurgery = true
+
 		def connection = dataSource.getConnection()
 
 		def validDetectionInsertStatements   = ValidDetection.prepareInsertStatement(connection)
 		def invalidDetectionInsertStatements = InvalidDetection.prepareInsertStatement(connection)
-		def detectionSurgeryInsertStatements = DetectionSurgery.prepareInsertStatement(connection)
+		def detectionSurgeryInsertStatements = DetectionSurgery.prepareInsertStatement(connection, useHibernameSeqIdForDetectionSurgery)
 		
 		context.detectionBatch.each
 		{
@@ -122,7 +124,7 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 					DetectionSurgery.addToPreparedStatement(
 						detectionSurgeryInsertStatements,
 						detSurgery,
-						true)
+						useHibernameSeqIdForDetectionSurgery)
 				}
 			}
 			else if (it.clazz == "au.org.emii.aatams.detection.InvalidDetection")

@@ -58,9 +58,19 @@ class DetectionSurgery implements Embargoable
         return detectionSurgery
     }
     
-	static PreparedStatement prepareInsertStatement(connection)
+	static PreparedStatement prepareInsertStatement(connection, boolean useHibernateSeqForDetectionId)
 	{
-		String sql = "INSERT INTO DETECTION_SURGERY (ID, VERSION, DETECTION_ID, SURGERY_ID, SENSOR_ID) VALUE (nextval('hibernate_sequence'), ?, ?, ?, ?)"
+		String sql = "INSERT INTO DETECTION_SURGERY (ID, VERSION, SURGERY_ID, SENSOR_ID, DETECTION_ID)"
+
+		if (useHibernateSeqForDetectionId)
+		{
+			sql += "VALUE (nextval('hibernate_sequence'), ?, ?, ?, currval('hibernate_sequence'))"
+		}
+		else
+		{
+			sql += "VALUE (nextval('hibernate_sequence'), ?, ?, ?, ?)"
+		}
+
 		return connection.prepareStatement(sql);
 	}
 
@@ -69,21 +79,19 @@ class DetectionSurgery implements Embargoable
 		Map detSurgery,
 		boolean useHibernateSeqForDetectionId)
 	{
-		preparedStatement.setInt     (1, 0)
+		assert(detSurgery.detectionId)
+		preparedStatement.setInt (1, 0)
+		preparedStatement.setInt (2, detSurgery.detectionId)
+		preparedStatement.setInt (3, detSurgery.surgeryId)
 
 		if (useHibernateSeqForDetectionId)
 		{
-			// TODO this will not parse well!!
-			preparedStatement.setInt (2, "currval('hibernate_sequence'),")
+			preparedStatement.setInt (4, detSurgery.sensorId)
 		}
 		else
 		{
-			assert(detSurgery.detectionId)
-			preparedStatement.setInt (2, detSurgery.detectionId)
+			// Handled by query, will take only 3 parameters :)
 		}
-
-		preparedStatement.setInt     (3, detSurgery.surgeryId)
-		preparedStatement.setInt     (4, detSurgery.sensorId)
 
 		preparedStatement.addBatch()
 	}

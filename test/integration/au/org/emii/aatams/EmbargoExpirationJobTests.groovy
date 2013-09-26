@@ -2,20 +2,29 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class EmbargoExpirationJobTests extends GroovyTestCase 
+class EmbargoExpirationJobTests extends GroovyTestCase
 {
-    protected void setUp() 
-    {
-        super.setUp()
-    }
-
-    protected void tearDown() 
-    {
-        super.tearDown()
-    }
+    def grailsApplication
 
     void testFindEmbargoedReleasesToday()
     {
         EmbargoExpirationJob.triggerNow()
+    }
+
+    void testCreateLink()
+    {
+        def embargoExpirationJob = new EmbargoExpirationJob()
+        embargoExpirationJob.grailsApplication = grailsApplication
+
+        assertEquals(
+            "http://localhost:8090/aatams/animalRelease/show/123",
+            embargoExpirationJob.createLink(
+                [
+                    controller: 'animalRelease',
+                    action: 'show',
+                    id: 123
+                ]
+            )
+        )
     }
 }

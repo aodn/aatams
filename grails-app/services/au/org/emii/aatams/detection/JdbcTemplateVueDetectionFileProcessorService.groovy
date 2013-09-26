@@ -136,12 +136,20 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 				assert(false): "Unknown detection class: " + it.clazz
 			}
 		}
-		
-		// TODO process update counts
+
 		try {
-			int [] validDetectionUpdateCounts   = validDetectionInsertStatements.executeBatch()
+			log.debug("Inserting ValidDetections records...")
+			int [] validDetectionUpdateCounts = validDetectionInsertStatements.executeBatch()
+			log.debug("Batch successfully inserted, " + validDetectionUpdateCounts.length + " records")
+
+			log.debug("Inserting InvalidDetections records...")
 			int [] invalidDetectionUpdateCounts = invalidDetectionInsertStatements.executeBatch()
+			log.debug("Batch successfully inserted, " + invalidDetectionUpdateCounts.length + " records")
+
+			log.debug("Inserting DetectionSurgeries records...")
 			int [] detectionSurgeryUpdateCounts = detectionSurgeryInsertStatements.executeBatch()
+			log.debug("Batch successfully inserted, " + detectionSurgeryUpdateCounts.length + " records")
+
 		} catch (java.sql.SQLException t) {
 			log.info(t.getNextException().getMessage())
 			throw t

@@ -54,6 +54,9 @@ class JdbcTemplateDetectionFactoryService extends DetectionFactoryService
 	Collection rescanForSurgery(Surgery surgery)
 	{
 		def newDetectionSurgeries = super.rescanForSurgery(surgery)
+
+		def useHibernameSeqIdForDetectionSurgery = false
+		def detectionSurgeryInsertStatements = DetectionSurgery.prepareInsertStatement(connection, useHibernameSeqIdForDetectionSurgery)
 		
 		if (newDetectionSurgeries.isEmpty())
 		{
@@ -63,10 +66,20 @@ class JdbcTemplateDetectionFactoryService extends DetectionFactoryService
 		{
 			def insertStatementList = newDetectionSurgeries.collect
 			{
-				DetectionSurgery.toSqlInsert(it, false)
+				DetectionSurgery.addToPreparedStatement(
+					detectionSurgeryInsertStatements,
+					detSurgery,
+					useHibernameSeqIdForDetectionSurgery)
 			}
 			
-			batchUpdate(insertStatementList.toArray(new String[0]))
+			try {
+				log.debug("Inserting records...")
+				int [] detectionSurgeryUpdateCounts = detectionSurgeryInsertStatements.executeBatch()
+				log.debug("Batch successfully inserted, " + detectionSurgeryUpdateCounts.length + " records")
+			} catch (java.sql.SQLException t) {
+				log.info(t.getNextException().getMessage())
+				throw t
+			}
 		}
 	}
 	

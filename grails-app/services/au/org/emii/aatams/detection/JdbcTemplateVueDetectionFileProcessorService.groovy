@@ -103,10 +103,11 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 	
 	private void insertDetections(context)
 	{
-		// TODO TODO JdbcTemplate(dataSource)
-		def validDetectionInsertStatements   = ValidDetection.prepareInsertStatement(new JdbcTemplate(dataSource))
-		def invalidDetectionInsertStatements = InvalidDetection.prepareInsertStatement(new JdbcTemplate(dataSource))
-		def detectionSurgeryInsertStatements = DetectionSurgery.prepareInsertStatement(new JdbcTemplate(dataSource))
+		def connection = dataSource.getConnection()
+
+		def validDetectionInsertStatements   = ValidDetection.prepareInsertStatement(connection)
+		def invalidDetectionInsertStatements = InvalidDetection.prepareInsertStatement(connection)
+		def detectionSurgeryInsertStatements = DetectionSurgery.prepareInsertStatement(connection)
 		
 		context.detectionBatch.each
 		{
@@ -134,10 +135,15 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 			}
 		}
 		
-		int [] validDetectionUpdateCounts   = validDetectionInsertStatements.executeBatch()
-		int [] invalidDetectionUpdateCounts = invalidDetectionInsertStatements.executeBatch()
-		int [] detectionSurgeryUpdateCounts = detectionSurgeryInsertStatements.executeBatch()
 		// TODO process update counts
+		try {
+			int [] validDetectionUpdateCounts   = validDetectionInsertStatements.executeBatch()
+			int [] invalidDetectionUpdateCounts = invalidDetectionInsertStatements.executeBatch()
+			int [] detectionSurgeryUpdateCounts = detectionSurgeryInsertStatements.executeBatch()
+		} catch (java.sql.SQLException t) {
+			log.info(t.getNextException().getMessage())
+			throw t
+		}
 	}
 
     void processSingleRecord(downloadFile, map, context) throws FileProcessingException

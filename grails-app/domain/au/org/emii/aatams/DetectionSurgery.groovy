@@ -4,6 +4,7 @@ import java.util.Map;
 
 import au.org.emii.aatams.detection.ValidDetection
 import au.org.emii.aatams.util.SqlUtils
+import java.sql.PreparedStatement
 
 
 /**
@@ -72,7 +73,7 @@ class DetectionSurgery implements Embargoable
 
 		if (useHibernateSeqForDetectionId)
 		{
-			# TODO this will not parse well!!
+			// TODO this will not parse well!!
 			preparedStatement.setInt (2, "currval('hibernate_sequence'),")
 		}
 		else

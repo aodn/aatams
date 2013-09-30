@@ -4,6 +4,7 @@ import java.util.Map;
 
 import au.org.emii.aatams.detection.ValidDetection
 import au.org.emii.aatams.util.SqlUtils
+import java.sql.PreparedStatement
 
 
 /**
@@ -57,28 +58,42 @@ class DetectionSurgery implements Embargoable
         return detectionSurgery
     }
     
-	static String toSqlInsert(Map detSurgery, boolean useHibernateSeqForDetectionId)
+	static PreparedStatement prepareInsertStatement(connection, boolean useHibernateSeqForDetectionId)
 	{
-		StringBuilder detSurgeryBuff = new StringBuilder(
-				"INSERT INTO DETECTION_SURGERY (ID, VERSION, DETECTION_ID, SURGERY_ID, SENSOR_ID) " +
-				" VALUES(")
+		String sql = "INSERT INTO DETECTION_SURGERY (ID, VERSION, SURGERY_ID, SENSOR_ID, DETECTION_ID)"
 
-		detSurgeryBuff.append("nextval('detection_surgery_sequence'),")
-		detSurgeryBuff.append("0,")
-		
 		if (useHibernateSeqForDetectionId)
 		{
-			detSurgeryBuff.append("currval('hibernate_sequence'),")
-			SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["surgeryId", "sensorId"])
+			sql += "VALUE (nextval('hibernate_sequence'), ?, ?, ?, currval('hibernate_sequence'))"
 		}
 		else
 		{
-			assert(detSurgery.detectionId)
-			SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["detectionId", "surgeryId", "sensorId"])
+			sql += "VALUE (nextval('hibernate_sequence'), ?, ?, ?, ?)"
 		}
-		SqlUtils.removeTrailingCommaAndAddBracket(detSurgeryBuff)
-		
-		return detSurgeryBuff.toString()
+
+		return connection.prepareStatement(sql);
+	}
+
+	static void addToPreparedStatement(
+		preparedStatement,
+		Map detSurgery,
+		boolean useHibernateSeqForDetectionId)
+	{
+		assert(detSurgery.detectionId)
+		preparedStatement.setInt (1, 0)
+		preparedStatement.setInt (2, detSurgery.detectionId)
+		preparedStatement.setInt (3, detSurgery.surgeryId)
+
+		if (useHibernateSeqForDetectionId)
+		{
+			preparedStatement.setInt (4, detSurgery.sensorId)
+		}
+		else
+		{
+			// Handled by query, will take only 3 parameters :)
+		}
+
+		preparedStatement.addBatch()
 	}
 
     String toString()

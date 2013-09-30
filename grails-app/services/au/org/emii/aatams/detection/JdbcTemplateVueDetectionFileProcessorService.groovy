@@ -103,42 +103,59 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 	
 	private void insertDetections(context)
 	{
-		def insertStatementList = []
+		def useHibernameSeqIdForDetectionSurgery = true
+
+		def connection = dataSource.getConnection()
+
+		def validDetectionInsertStatements   = ValidDetection.prepareInsertStatement(connection)
+		def invalidDetectionInsertStatements = InvalidDetection.prepareInsertStatement(connection)
+		def detectionSurgeryInsertStatements = DetectionSurgery.prepareInsertStatement(connection, useHibernameSeqIdForDetectionSurgery)
 		
 		context.detectionBatch.each
 		{
 			if (it.clazz == "au.org.emii.aatams.detection.ValidDetection")
 			{
-				insertStatementList += ValidDetection.toSqlInsert(it)
+				ValidDetection.addToPreparedStatement(validDetectionInsertStatements, it);
 
 				it.detectionSurgeries.each
 				{
 					detSurgery ->
 	
-					insertStatementList.add(DetectionSurgery.toSqlInsert(detSurgery, true))
+					DetectionSurgery.addToPreparedStatement(
+						detectionSurgeryInsertStatements,
+						detSurgery,
+						useHibernameSeqIdForDetectionSurgery)
 				}
 			}
 			else if (it.clazz == "au.org.emii.aatams.detection.InvalidDetection")
 			{
-				insertStatementList += InvalidDetection.toSqlInsert(it)
+				InvalidDetection.addToPreparedStatement(invalidDetectionInsertStatements, it)
 			}
 			else
 			{
 				assert(false): "Unknown detection class: " + it.clazz
 			}
 		}
-		
-		batchUpdate(insertStatementList.toArray(new String[0]))
+
+		try {
+			log.debug("Inserting ValidDetections records...")
+			int [] validDetectionUpdateCounts = validDetectionInsertStatements.executeBatch()
+			log.debug("Batch successfully inserted, " + validDetectionUpdateCounts.length + " records")
+
+			log.debug("Inserting InvalidDetections records...")
+			int [] invalidDetectionUpdateCounts = invalidDetectionInsertStatements.executeBatch()
+			log.debug("Batch successfully inserted, " + invalidDetectionUpdateCounts.length + " records")
+
+			log.debug("Inserting DetectionSurgeries records...")
+			int [] detectionSurgeryUpdateCounts = detectionSurgeryInsertStatements.executeBatch()
+			log.debug("Batch successfully inserted, " + detectionSurgeryUpdateCounts.length + " records")
+
+		} catch (java.sql.SQLException t) {
+			log.info(t.getNextException().getMessage())
+			throw t
+		}
 	}
-	
-	void batchUpdate(String[] statements)
-	{
-		log.debug("Inserting " + statements.size() + " records...")
-		JdbcTemplate insert = new JdbcTemplate(dataSource)
-		insert.batchUpdate(statements)
-		log.debug("Batch successfully inserted")	
-	}
-	
+
     void processSingleRecord(downloadFile, map, context) throws FileProcessingException
     {
         def detection = jdbcTemplateDetectionFactoryService.newDetection(downloadFile, map)

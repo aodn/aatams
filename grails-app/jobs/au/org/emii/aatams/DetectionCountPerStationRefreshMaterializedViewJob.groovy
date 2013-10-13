@@ -6,7 +6,7 @@ class DetectionCountPerStationRefreshMaterializedViewJob extends RefreshMaterial
     {
         // Execute on Sundays at 7am.
         // Note: first field is seconds (non-standard for cron).
-        cron name: 'refreshDetectionCountPerStationMaterializedDailyTrigger', cronExpression: "0 0 7 * 1 ?"
+        cron name: 'refreshDetectionCountPerStationMaterializedDailyTrigger', cronExpression: "0 0 7 * * 1"
     }
 
     String getViewName()

@@ -15,7 +15,7 @@ class ExportVisibilityFilters {
                     if (!SecurityUtils.subject.isAuthenticated())
                     {
                         redirect([controller: "auth", action: "login",
-                            params: [targetUri: getTargetUri(controllerName: controllerName, actionName: actionName)]] )
+                            params: [targetUri: getTargetUri(controllerName: controllerName, actionName: actionName)]])
                     }
                     else if(SecurityUtils.subject.hasRole("SysAdmin")
                         || Person.findByUsername(SecurityUtils.subject.principal, [cache:true]).id
@@ -50,7 +50,7 @@ class ExportVisibilityFilters {
         }
     }
 
-    def applyVisibility( currentUser, currentUserIsSysAdmin, model )
+    def applyVisibility(currentUser, currentUserIsSysAdmin, model)
     {
         model.receiverDownloadFileInstanceList =
             model.receiverDownloadFileInstanceList.findAll({

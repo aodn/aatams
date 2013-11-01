@@ -58,7 +58,7 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
         receiverDownloadFileController.params.max = "100"
         def model = receiverDownloadFileController.list()
         assertNotNull(model)
-        assertEquals( 2, model.receiverDownloadFileInstanceList.size())
+        assertEquals(2, model.receiverDownloadFileInstanceList.size())
 
         controllerName = 'receiverDownloadFile'
         actionName = 'list'
@@ -100,7 +100,7 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
         receiverDownloadFileController.params.max = "100"
         def model = receiverDownloadFileController.list()
         assertNotNull(model)
-        assertEquals( 2, model.receiverDownloadFileInstanceList.size() )
+        assertEquals(2, model.receiverDownloadFileInstanceList.size())
 
         controllerName = 'receiverDownloadFile'
         actionName = 'list'
@@ -108,8 +108,8 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
         assertNotNull(filter)
 
         filter.after(model)
-        assertEquals( 1, model.receiverDownloadFileInstanceList.size() )
-        assertEquals( alice.id, model.receiverDownloadFileInstanceList[0].requestingUser.id)
+        assertEquals(1, model.receiverDownloadFileInstanceList.size())
+        assertEquals(alice.id, model.receiverDownloadFileInstanceList[0].requestingUser.id)
     }
 
     void test3() {
@@ -142,7 +142,7 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
         assertNotNull(filter)
 
         filter.after(model)
-        assertEquals( 1, model.receiverDownloadFileInstanceList.size() )
+        assertEquals(1, model.receiverDownloadFileInstanceList.size())
     }
 
     void test4() {

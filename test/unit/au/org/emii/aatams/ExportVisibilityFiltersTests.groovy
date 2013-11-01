@@ -129,8 +129,8 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
         Person user = new Person(username: 'bob', id : 123)
         mockDomain(Person, [user])
 
-        ReceiverDownloadFile file1 = new ReceiverDownloadFile(requestingUser:user)
-        mockDomain(ReceiverDownloadFile, [file1])
+        ReceiverDownloadFile file = new ReceiverDownloadFile(requestingUser:user)
+        mockDomain(ReceiverDownloadFile, [file])
 
         receiverDownloadFileController.params.max = "100"
         def model = receiverDownloadFileController.list()
@@ -163,10 +163,10 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
         Person user = new Person(username: 'alice', id : 123)
         mockDomain(Person, [user])
 
-        ReceiverDownloadFile file1 = new ReceiverDownloadFile(requestingUser:user)
-        mockDomain(ReceiverDownloadFile, [file1])
+        ReceiverDownloadFile file = new ReceiverDownloadFile(requestingUser:user)
+        mockDomain(ReceiverDownloadFile, [file])
 
-        receiverDownloadFileController.params.id = file1.id
+        receiverDownloadFileController.params.id = file.id
         def model = receiverDownloadFileController.show()
         assertNotNull(model)
 
@@ -178,7 +178,7 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
         filter.after(model)
         assertNotNull(model)
         assertNotNull(model.receiverDownloadFileInstance)
-        assertEquals(file1.id, model.receiverDownloadFileInstance.id)
+        assertEquals(file.id, model.receiverDownloadFileInstance.id)
     }
 
     void test5() {
@@ -199,10 +199,10 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
         Person user = new Person(username: 'bob', id : 123)
         mockDomain(Person, [user])
 
-        ReceiverDownloadFile file1 = new ReceiverDownloadFile(requestingUser:user)
-        mockDomain(ReceiverDownloadFile, [file1])
+        ReceiverDownloadFile file = new ReceiverDownloadFile(requestingUser:user)
+        mockDomain(ReceiverDownloadFile, [file])
 
-        receiverDownloadFileController.params.id = file1.id
+        receiverDownloadFileController.params.id = file.id
         def model = receiverDownloadFileController.show()
         assertNotNull(model)
 
@@ -214,7 +214,7 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
         filter.after(model)
         assertNotNull(model)
         assertNotNull(model.receiverDownloadFileInstance)
-        assertEquals(file1.id, model.receiverDownloadFileInstance.id)
+        assertEquals(file.id, model.receiverDownloadFileInstance.id)
     }
 
     void test6() {
@@ -236,10 +236,10 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
         Person user = new Person(username: 'alice', id : 123)
         mockDomain(Person, [user])
 
-        ReceiverDownloadFile file1 = new ReceiverDownloadFile(requestingUser:user)
-        mockDomain(ReceiverDownloadFile, [file1])
+        ReceiverDownloadFile file = new ReceiverDownloadFile(requestingUser:user)
+        mockDomain(ReceiverDownloadFile, [file])
 
-        receiverDownloadFileController.params.id = file1.id
+        receiverDownloadFileController.params.id = file.id
         def model = receiverDownloadFileController.show()
         assertNotNull(model)
 
@@ -284,10 +284,10 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
                 return null
         }
 
-        ReceiverDownloadFile bobsFile = new ReceiverDownloadFile(requestingUser:bob)
-        mockDomain(ReceiverDownloadFile, [bobsFile])
+        ReceiverDownloadFile file = new ReceiverDownloadFile(requestingUser:bob)
+        mockDomain(ReceiverDownloadFile, [file])
 
-        receiverDownloadFileController.params.id = bobsFile.id
+        receiverDownloadFileController.params.id = file.id
         def model = receiverDownloadFileController.show()
         assertNotNull(model)
 
@@ -320,10 +320,10 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
         Person bob = new Person(username: 'bob', id : 124)
         mockDomain(Person, [alice, bob])
 
-        ReceiverDownloadFile bobsFile = new ReceiverDownloadFile(requestingUser:bob)
-        mockDomain(ReceiverDownloadFile, [bobsFile])
+        ReceiverDownloadFile file = new ReceiverDownloadFile(requestingUser:bob)
+        mockDomain(ReceiverDownloadFile, [file])
 
-        receiverDownloadFileController.params.id = bobsFile.id
+        receiverDownloadFileController.params.id = file.id
         def model = receiverDownloadFileController.show()
         assertNotNull(model)
 
@@ -336,6 +336,6 @@ class ExportVisibilityFiltersTests extends FiltersUnitTestCase {
 
         assertNotNull(model)
         assertNotNull(model.receiverDownloadFileInstance)
-        assertEquals(bobsFile.id, model.receiverDownloadFileInstance.id)
+        assertEquals(file.id, model.receiverDownloadFileInstance.id)
     }
 }

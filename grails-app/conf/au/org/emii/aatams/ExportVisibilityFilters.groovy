@@ -37,7 +37,7 @@ class ExportVisibilityFilters {
                 model ->
                     if (!SecurityUtils.subject.isAuthenticated())
                     {
-                         redirect([controller: "auth", action: "login",
+                        redirect([controller: "auth", action: "login",
                              params: [targetUri: getTargetUri(controllerName: controllerName, actionName: actionName)]])
                     }
                     else {

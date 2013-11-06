@@ -13,7 +13,7 @@ import au.org.emii.aatams.Person
 class AuthController {
     def shiroSecurityManager
 
-	def embargoService
+    def embargoService
 
     def index = { redirect(action: "login", params: params) }
 
@@ -50,7 +50,7 @@ class AuthController {
             // password is incorrect.
             doLogin(authToken)
 
-			embargoService.clearCache()
+            embargoService.clearCache()
 
             redirectToTargetUrl(targetUri)
         }
@@ -93,22 +93,22 @@ class AuthController {
         }
     }
 
-	private doLogin(UsernamePasswordToken authToken) {
-		SecurityUtils.subject.login(authToken)
-	}
+    private doLogin(UsernamePasswordToken authToken) {
+        SecurityUtils.subject.login(authToken)
+    }
 
-	private checkForPendingUser(Map params) {
-		if (Person.findByUsername(params.username)?.status == EntityStatus.PENDING)
-		{
-			throw new AuthenticationException("Attempted login by PENDING user: " + params.username)
-		}
-	}
+    private checkForPendingUser(Map params) {
+        if (Person.findByUsername(params.username)?.status == EntityStatus.PENDING)
+        {
+            throw new AuthenticationException("Attempted login by PENDING user: " + params.username)
+        }
+    }
 
     def signOut = {
         // Log the user out of the application.
         SecurityUtils.subject?.logout()
 
-		embargoService.clearCache()
+        embargoService.clearCache()
 
         // For now, redirect back to the home page.
         redirect(uri: "/")

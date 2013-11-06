@@ -9,48 +9,48 @@ import org.apache.shiro.web.util.WebUtils
 class AuthControllerTests extends ControllerUnitTestCase
 {
     protected void setUp()
-	{
+    {
         super.setUp()
 
-		WebUtils.metaClass.static.getSavedRequest = { javax.servlet.ServletRequest request -> null }
-		controller.metaClass.checkForPendingUser = { Map params -> }
-		controller.metaClass.doLogin = { UsernamePasswordToken token -> }
+        WebUtils.metaClass.static.getSavedRequest = { javax.servlet.ServletRequest request -> null }
+        controller.metaClass.checkForPendingUser = { Map params -> }
+        controller.metaClass.doLogin = { UsernamePasswordToken token -> }
 
-		controller.embargoService = new EmbargoService()
+        controller.embargoService = new EmbargoService()
     }
 
     protected void tearDown()
-	{
+    {
         super.tearDown()
     }
 
     void testLoginFromReportExtract()
-	{
-		String targetUri = "/report/extract?name=detection&formats=CSV&formats=KML"
-		controller.params.username = "jbloggs"
-		controller.params.password = "password"
-		controller.params.targetUri = targetUri
+    {
+        String targetUri = "/report/extract?name=detection&formats=CSV&formats=KML"
+        controller.params.username = "jbloggs"
+        controller.params.password = "password"
+        controller.params.targetUri = targetUri
 
-		controller.signIn()
+        controller.signIn()
 
-		assertEquals(targetUri, controller.redirectArgs.uri)
+        assertEquals(targetUri, controller.redirectArgs.uri)
     }
 
-	void testLoginWithUpperCaseName()
-	{
-		controller.params.username = "FredSmith"
-		controller.params.password = "paSSwoRD"
+    void testLoginWithUpperCaseName()
+    {
+        controller.params.username = "FredSmith"
+        controller.params.password = "paSSwoRD"
 
-		controller.metaClass.doLogin =
-		{
-			UsernamePasswordToken token ->
+        controller.metaClass.doLogin =
+        {
+            UsernamePasswordToken token ->
 
-			assertEquals("fredsmith", token.username)
-			assertEquals("paSSwoRD".toCharArray(), token.password)
-		}
+            assertEquals("fredsmith", token.username)
+            assertEquals("paSSwoRD".toCharArray(), token.password)
+        }
 
-		controller.signIn()
-	}
+        controller.signIn()
+    }
 
     void testRedirectToTargetUrlSlash()
     {

@@ -70,13 +70,22 @@ First start the AATAMS application, the migrations will run and create the datab
 
 Then create a TOC from the database dump file
 
-`$ pg_restore -l db.aatams3.20130808.dump > db.aatams3.20130808.dump.list`
+`$ pg_restore -l db.aatams3.20130808.dump > db.aatams3.list`
 
-Edit the TOC file and comment out each line by starting it with a `;` as you will end up excluding more items than you will include. You will want to set the hibernate schema, in the TOC find `SEQUENCE SET public hibernate_sequence aatams` and uncomment that line.
+Edit the TOC file and comment out each line by starting it with a `;` as you will end up excluding more items than you will include. You will want to set the hibernate schema, in the TOC find `SEQUENCE SET public hibernate_sequence aatams` and uncomment that line, alternatively you can run:
+```
+$ grep -e "hibernate_sequence" db.aatams3.list >> db.aatams3.toc
+```
 
-Next you want to restore table data belonging to the aatams user search for entries like `TABLE DATA public animal_measurement aatams` where `animal_measurement` is the table name in this example, uncomment those entries, these are what will be restored.
+Next you want to restore table data belonging to the aatams user search for entries like `TABLE DATA public animal_measurement aatams` where `animal_measurement` is the table name in this example, uncomment those entries, or run the command below:
+```
+$ grep -e "TABLE DATA .* aatams$" db.aatams3.list >> db.aatams3.toc
+```
 
-When you are happy with the TOC to be restored execute a command like `pg_restore -O -j 4 -a -L db.aatams3.20130808.dump.list --disable-triggers -S postgres -d aatams db.aatams3.20130808.dump`
+When you are happy with the TOC to be restored execute a command like:
+```
+$ pg_restore -O -j 4 -a -L db.aatams3.toc --disable-triggers -S postgres -d aatams db.aatams3.20130808.dump
+```
 
 Where;
 `-j` is the number of jobs there are few factors to consider here, please consult the `man` page, I used 4 because I have 4 cores.

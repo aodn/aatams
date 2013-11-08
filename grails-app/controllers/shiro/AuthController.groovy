@@ -83,7 +83,7 @@ class AuthController {
 
         // Sometimes we are provided with a full URL (starting with "http(s)://"), which needs a slightly
         // different call to redirect (url instead of uri).
-        if (targetUri =~ /^https*:\/\//)
+        if (targetUri =~ /^https?:\/\//)
         {
             redirect(url: targetUri)
         }

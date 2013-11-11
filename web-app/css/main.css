@@ -647,13 +647,14 @@ div.exportPane {
 #footerLogo
 {
     text-align:center;margin:0 auto;
-    width:75%;
+    width:700px;
+    font-size: 0.9em;
 }
 
 #footerLogo img
 {
     padding-top:0px;
     padding-bottom:10px;
-    padding-right:30px;
-    padding-left:30px;
+    padding-right:15px;
+    padding-left:15px;
 }

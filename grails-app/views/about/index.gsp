@@ -93,18 +93,21 @@
         </div>
  
         <h1></h1>
-        <div class="dialog">
+        <div>
           <br/><br/>
           <div id="footerLogo">
             <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS-logo.png')}" alt="IMOS Logo"  /></a>
-            <a href="http://www.innovation.gov.au/"><img src="${resource(dir:'images',file:'aus_gov.png')}" width="121" height="78" alt="" /></a>
-            <a href="http://www.utas.edu.au/"><img src="${resource(dir:'images',file:'utas.jpg')}" width="61" height="76" alt="" /></a>       
-            <p>IMOS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy and the Super Science Initiative.
-            It is led by the University of Tasmania on behalf of the Australian marine &amp; climate science community.</p>
+            <img src="http://static.emii.org.au/images/logo/NCRIS_Initiative_inline200.png"  alt="Australian Government logo" />
+            <a href="http://www.utas.edu.au/"><img src="${resource(dir:'images',file:'Utas_vert.png')}" alt="UTAS Logo"  height="50"/></a>
+            <p><a title="Integrated Marine Observing System" href="http://www.imos.org.au">IMOS</a>
+                is a national collaborative research infrastructure, supported by the Australian Government. It is led by the
+                <a href="http://www.utas.edu.au/">University of Tasmania</a>
+                in partnership with the Australian marine & climate science community.
+            </p>
             
             <p>You accept all risks and responsibility for losses, damages, costs and other consequences resulting directly or 
             indirectly from using this site and any information or material available from it. If you have any concerns about 
-            the veracity of the data, please make enquiries via <a href="mailto:info@imos.org.au">info@imos.org.au </a> to be directed to the data custodian.</p>
+            the veracity of the data, please make enquiries via <a href="mailto:info@emii.org.au">info@emii.org.au </a> to be directed to the data custodian.</p>
             
           </div>
           <br/><br/>

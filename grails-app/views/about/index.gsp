@@ -1,13 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="layout" content="main"/>
-    <title>About AATAMS</title>
-</head>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="layout" content="main"/>
+        <title>About AATAMS</title>
+    </head>
 
-<body>
+    <body>
     <div class="nav">
         <span class="menuButton"><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a>
         </span>

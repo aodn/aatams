@@ -644,16 +644,18 @@ div.exportPane {
 	height: 14px;
 }
 
-#footerLogo
+#footer
 {
-    text-align:center;margin:0 auto;
-    width:75%;
+    padding: 20px;
+    text-align:center;margin:30px auto;
+    width:700px;
+    font-size: 0.9em;
 }
 
-#footerLogo img
+#footer img
 {
     padding-top:0px;
     padding-bottom:10px;
-    padding-right:30px;
-    padding-left:30px;
+    padding-right:15px;
+    padding-left:15px;
 }

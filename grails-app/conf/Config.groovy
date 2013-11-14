@@ -66,7 +66,7 @@ grails.exceptionresolver.params.exclude = ['password']
 grails.converters.json.circular.reference.behaviour = "INSERT_NULL"
 
 // Mail plugin config
-grails.mail.adminEmailAddress = "info@emii.org.au"
+grails.mail.adminEmailAddress = "aatams_admin@emii.org.au"
 grails.mail.systemEmailAddress = "aatams_system@emii.org.au"
 grails.mail.port = 25
 grails.mail.username = "aatams_system@utas.edu.au"

@@ -90,16 +90,16 @@ environments
 	{
 		grails.serverURL = "http://aatams.emii.org.au/${grails.util.Metadata.current.getApplicationName()}"
 		grails.serverHost = "http://aatams.emii.org.au"
-		fileimport.path = "/tmp/fileimports"
-		bulkimport.path = "/tmp/fileimports/bulkimports"
+		fileimport.path = "/tmp/aatams/fileimports"
+		bulkimport.path = "/tmp/aatams/fileimports/bulkimports"
 		grails.mail.host = "localhost"
 	}
 	development
 	{
 		grails.serverURL = "http://localhost:8080/${grails.util.Metadata.current.getApplicationName()}"
 		grails.serverHost = "http://localhost:8080"
-		fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
-		bulkimport.path = "/Users/jburgess/Documents/aatams/test_uploads/bulkimports"
+		fileimport.path = "/tmp/aatams/test_uploads"
+		bulkimport.path = "/tmp/aatams/test_uploads/bulkimports"
 
 		grails.mail.adminEmailAddress = "jkburges@utas.edu.au"
 		grails.mail.host = "postoffice.utas.edu.au"

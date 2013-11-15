@@ -113,7 +113,7 @@
 
             <p>You accept all risks and responsibility for losses, damages, costs and other consequences resulting directly or
             indirectly from using this site and any information or material available from it. If you have any concerns about
-            the veracity of the data, please make enquiries via <a href="mailto:${grailsApplication.config.grails.mail.supportEmailAddress}>${grailsApplication.config.grails.mail.supportEmailAddress}"</a> to be directed to the data custodian.
+            the veracity of the data, please make enquiries via <a href="mailto:${grailsApplication.config.grails.mail.supportEmailAddress}">${grailsApplication.config.grails.mail.supportEmailAddress}</a> to be directed to the data custodian.
             </p>
 
         </div>

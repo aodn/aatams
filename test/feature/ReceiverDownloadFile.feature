@@ -2,10 +2,9 @@ Feature: export visibility
     As a shark I would like the receiver export list to be viewed only by the uploader so that I don't get shot.
 
 
-Scenario: receiver export list view as unathenticated user
+Scenario: receiver export list view as unauthenticated user
     Given I am not logged in
-    And someone else has uploaded a receiver export
-    Then I should not be able to see any receiver exports
+    Then I should be redirected to the login page
 
 Scenario: receiver export list view as normal user
     Given I am logged in as a normal user

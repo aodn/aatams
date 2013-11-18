@@ -13,10 +13,10 @@ import au.org.emii.aatams.Person
 abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase
 {
 	protected hasRole = true
-	protected user
+	protected Person user
 	protected authenticated = true
 	protected permitted = false
-	
+    
 	private MetaClass originalSecurityUtilsMetaClass
 	
 	protected void setUp()
@@ -26,7 +26,8 @@ abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase
 		hasRole = true
 		authenticated = true
 		permitted = false
-
+		user = null
+        
 		def subject = [ getPrincipal: { getPrincipal() },
 						isAuthenticated: { isAuthenticated() },
 						hasRole: { hasRole() },
@@ -50,14 +51,9 @@ abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase
 		super.tearDown()
 	}
 	
-	protected Person getUser()
-	{
-		return new Person(username:"jkburges")
-	}
-	
 	protected def getPrincipal()
 	{
-		return getUser()?.username
+		return user?.username
 	}
 	
 	protected boolean isAuthenticated()

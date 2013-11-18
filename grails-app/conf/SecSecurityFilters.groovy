@@ -11,7 +11,7 @@ class SecSecurityFilters
 {
     def permissionUtilsService
     
-    def accessibleControllersRegexp = 
+    def accessibleByAllControllersRegexp = 
         "animal|animalMeasurement|auditLogEvent|bulkImport|bulkImportRecord|notification|" + \
         "organisation|organisationProject|project|projectRole|person|" + \
         "installation|installationStation|receiver|species|tag|sensor|" + \
@@ -21,6 +21,9 @@ class SecSecurityFilters
         "surgery|detectionSurgery|" + \
         "gettingStarted|about|report|jasper"
 
+    def authenticatedOnlyControllersRegexp =
+        "receiverDownloadFile"
+         
     //
     // Only Sys Admins can delete (except for the following child/association 
     // entities, which users with project write access can delete).
@@ -77,7 +80,7 @@ class SecSecurityFilters
         // Some controllers are only accessible to Sys Admin (generally those
         // that aren't linked on the navigation menu.
         //
-        nonAccessible(controller:accessibleControllersRegexp, action:'*', invert:true)
+        nonAccessible(controller:"$accessibleByAllControllersRegexp|$authenticatedOnlyControllersRegexp", action:'*', invert:true)
         {
             before = 
             {
@@ -92,9 +95,9 @@ class SecSecurityFilters
 
         //
         // Anyone (including unauthenticated users) can list/index/show the 
-        // accessible controllers.
+        // accessible by all controllers.
         //
-        listIndexShow(controller:accessibleControllersRegexp, action:'list|index|show|acknowledge')
+        listIndexShow(controller:accessibleByAllControllersRegexp, action:'list|index|show|acknowledge')
         {
             before = 
             {
@@ -103,7 +106,7 @@ class SecSecurityFilters
         }
         
         // As above.
-        nullAction(controller:accessibleControllersRegexp, action:null)
+        nullAction(controller:accessibleByAllControllersRegexp, action:null)
         {
             before = 
             {
@@ -111,13 +114,51 @@ class SecSecurityFilters
             }
         }
         
-		//
-		// Only authenticated users can list audit log events.
-		//
-		auditLogEvent(controller: 'auditLogEvent', action: 'list|index')
-		{
-			before =
-			{
+        //
+        // Only authenticated users can list|index|show the authenticated only controllers
+        // Redirect to login page if not authenticated before allowing access
+        //
+        authenticatedOnly(controller: authenticatedOnlyControllersRegexp, action: 'list|index|show')
+        {
+            before =
+            {
+                accessControl
+                {
+                    return true
+                }
+            }
+        }
+
+        //
+        // Only sys admin or the requesting user can show a receiver download file.
+        //
+        receiverDownloadFileShow(controller: 'receiverDownloadFile', action:'show')
+        {
+            before =
+            {
+                def receiverDownloadFile = ReceiverDownloadFile.get(params.id)
+                def currentUser = Person.findByUsername(SecurityUtils.subject.principal, [cache:true])
+                
+                if (SecurityUtils.subject.hasRole("SysAdmin")
+                    || currentUser.id == receiverDownloadFile?.requestingUser?.id)
+                {
+                    return true
+                }
+                else
+                {
+                    redirect([controller:"auth", action:"unauthorized"])
+                    return false
+                }
+            }
+        }
+
+        //
+        // Only authenticated users can list audit log events.
+        //
+        auditLogEvent(controller: 'auditLogEvent', action: 'list|index')
+        {
+            before =
+            {
                 if (SecurityUtils.subject.isAuthenticated())
                 {
                     return true
@@ -125,8 +166,8 @@ class SecSecurityFilters
 
                 redirect(controller:'auth', action:'unauthorized')
                 return false
-			}
-		}
+            }
+        }
 
 
         //

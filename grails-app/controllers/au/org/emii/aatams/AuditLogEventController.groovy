@@ -22,11 +22,12 @@ class AuditLogEventController extends org.codehaus.groovy.grails.plugins.orm.aud
 			[auditLogEventInstanceList: AuditLogEvent.list(params), auditLogEventInstanceTotal: AuditLogEvent.count()]
 		}
 		else
-		{
-			assert(SecurityUtils.subject.principal)
+        {
+            Person user = Person.get(SecurityUtils.subject.principal)
+			assert(user)
 
-			[auditLogEventInstanceList: AuditLogEvent.findAllByActor(SecurityUtils.subject.principal, params),
-			 auditLogEventInstanceTotal: AuditLogEvent.findAllByActor(SecurityUtils.subject.principal).size()]
+			[auditLogEventInstanceList: AuditLogEvent.findAllByActor(user.username, params),
+			 auditLogEventInstanceTotal: AuditLogEvent.findAllByActor(user.username).size()]
 		}
 	}
 }

@@ -9,15 +9,15 @@ import org.apache.shiro.SecurityUtils
 
 import au.org.emii.aatams.Person;
 
-abstract class AbstractGrailsUnitTestCase extends GrailsUnitTestCase 
+abstract class AbstractGrailsUnitTestCase extends GrailsUnitTestCase
 {
 	protected hasRole = true
 	protected def user
 	protected authenticated = true
 	protected permitted = false
-	
+
 	private MetaClass originalSecurityUtilsMetaClass
-	
+
 	protected void setUp()
 	{
 		super.setUp()
@@ -39,11 +39,11 @@ abstract class AbstractGrailsUnitTestCase extends GrailsUnitTestCase
 		registry.removeMetaClass(SecurityUtils)
 
 		SecurityUtils.metaClass.static.getSubject = { subject }
-		
+
 		user = new Person(username:"jkburges")
 		mockDomain(Person, [user])
 		user.save()
-		
+
 		authenticated = true
 	}
 
@@ -51,25 +51,25 @@ abstract class AbstractGrailsUnitTestCase extends GrailsUnitTestCase
 	{
 		// Restore the old meta class on SecurityUtils.
 		GroovySystem.metaClassRegistry.setMetaClass(SecurityUtils, this.originalSecurityUtilsMetaClass)
-		
+
 		super.tearDown()
 	}
-	
+
 	protected def getPrincipal()
 	{
-		return user?.username
+		return user?.id
 	}
-	
+
 	protected boolean isAuthenticated()
 	{
 		return authenticated
 	}
-	
+
 	protected boolean hasRole()
 	{
 		return hasRole
 	}
-	
+
 	protected boolean isPermitted(permission)
 	{
 		return permitted

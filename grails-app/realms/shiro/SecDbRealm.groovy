@@ -33,7 +33,7 @@ class SecDbRealm {
 
         // Now check the user's password against the hashed value stored
         // in the database.
-        def account = new SimpleAccount(username, user.passwordHash, "SecDbRealm")
+        def account = new SimpleAccount(user.id, user.passwordHash, "SecDbRealm")
         if (!credentialMatcher.doCredentialsMatch(authToken, account)) {
             log.info "Invalid password (DB realm)"
             throw new IncorrectCredentialsException("Invalid password for user '${username}'")
@@ -47,7 +47,7 @@ class SecDbRealm {
             roles {
                 eq("name", roleName)
             }
-            eq("username", principal)
+            eq("id", principal)
         }
 
         return roles.size() > 0
@@ -58,7 +58,7 @@ class SecDbRealm {
             roles {
                 'in'("name", roles)
             }
-            eq("username", principal)
+            eq("id", principal)
         }
 
         return r.size() == roles.size()
@@ -71,7 +71,7 @@ class SecDbRealm {
         //
         // First find all the permissions that the user has that match
         // the required permission's type and project code.
-        def user = SecUser.findByUsername(principal, [cache:true])
+        def user = SecUser.get(principal)
         def permissions = user.permissions
 
         // Try each of the permissions found and see whether any of
@@ -100,7 +100,7 @@ class SecDbRealm {
         // If not, does he gain it through a role?
         //
         // Get the permissions from the roles that the user does have.
-        def results = SecUser.executeQuery("select distinct p from SecUser as user join user.roles as role join role.permissions as p where user.username = '$principal'", [cache:true])
+        def results = SecUser.executeQuery("select distinct p from SecUser as user join user.roles as role join role.permissions as p where user.id = '$principal'", [cache:true])
 
         // There may be some duplicate entries in the results, but
         // at this stage it is not worth trying to remove them. Now,

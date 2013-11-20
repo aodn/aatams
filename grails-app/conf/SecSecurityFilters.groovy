@@ -224,7 +224,7 @@ class SecSecurityFilters
                 SecUser operandUser = SecUser.get(params?.id)
 
                 // The logged in user.
-                SecUser principal = SecUser.findByUsername(SecurityUtils?.subject?.principal)
+                SecUser principal = SecUser.get(SecurityUtils?.subject?.principal)
 
                 // User can update own record.
                 if (operandUser == principal)

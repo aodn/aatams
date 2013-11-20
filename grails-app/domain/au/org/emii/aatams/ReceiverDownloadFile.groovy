@@ -11,68 +11,67 @@ import org.apache.shiro.SecurityUtils
  * Index (and meta-data) to a file which has been downloaded from a receiver as
  * part of the recovery process.
  */
-class ReceiverDownloadFile 
+class ReceiverDownloadFile
 {
 	def grailsApplication
-	
+
     ReceiverDownloadFileType type
-    
+
     String name
     Date importDate
-    
+
     FileProcessingStatus status
-    
+
     String errMsg
-    
+
     Person requestingUser
-    
+
     Set<ValidDetection> validDetections = new HashSet<ValidDetection>()
     Set<InvalidDetection> invalidDetections = new HashSet<InvalidDetection>()
     Set<ReceiverEvent> events = new HashSet<ReceiverEvent>()
-    
+
     static hasMany = [validDetections:ValidDetection, invalidDetections:InvalidDetection, events:ReceiverEvent]
 	static hasOne = [progress: ReceiverDownloadFileProgress]
 	static auditable = true
-	
+
     static constraints =
     {
         type()
 		requestingUser(nullable: true)	// Null for bulk import
 		progress(nullable: true)
     }
-    
+
 	static transients = ['knownSensors', 'uniqueTransmitterIds', 'percentComplete', 'path']
-	
+
     static mapping =
     {
         errMsg type: 'text'
     }
-    
+
 	void initialiseForProcessing(filename)
 	{
         errMsg = ""
         importDate = new Date()
         status = FileProcessingStatus.PROCESSING
         name = filename
-		requestingUser = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
+		requestingUser = Person.get(SecurityUtils.getSubject().getPrincipal())
 		progress = new ReceiverDownloadFileProgress(percentComplete: 0, receiverDownloadFile: this)
-		// requestingUser = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
 	}
-	
+
     String getPath()
     {
         // Save the file to disk.
         def path = grailsApplication.config.fileimport.path
-		
+
         if (!path.endsWith(File.separator))
         {
             path = path + File.separator
         }
-        
+
 		assert(id): "Download file ID cannot be null"
 		path += (id + File.separator + name)
     }
-	
+
 	void addToDetections(detection)
 	{
 		if (detection instanceof ValidDetection)
@@ -88,37 +87,37 @@ class ReceiverDownloadFile
 			assert(false): "Unknown detection class: " + detection.class
 		}
 	}
-	
+
     String toString()
     {
         return String.valueOf(path)
     }
-	
+
 	Integer getPercentComplete()
 	{
 		return progress?.percentComplete
 	}
-	
+
 	void setPercentComplete(percentComplete)
 	{
 		if (!progress)
 		{
 			progress = new ReceiverDownloadFileProgress(receiverDownloadFile: this)
 		}
-		
+
 		progress.percentComplete = percentComplete
 	}
-    
+
 	def totalDetectionCount()
 	{
 		return validDetectionCount() + invalidDetectionCount()
 	}
-	
+
     def validDetectionCount()
     {
 		return executeCountCriteria(ValidDetection)
     }
-    
+
     def invalidDetectionCount()
     {
 		return executeCountCriteria(InvalidDetection)
@@ -126,12 +125,12 @@ class ReceiverDownloadFile
 
     def invalidDetectionCount(reason)
     {
-		return executeCountCriteria(InvalidDetection, 
+		return executeCountCriteria(InvalidDetection,
 		{
 			eq("reason", reason)
 		})
     }
-	
+
 	def unknownReceivers()
 	{
 		def c = InvalidDetection.createCriteria()
@@ -143,21 +142,21 @@ class ReceiverDownloadFile
 			}
 
 			eq("reason", InvalidDetectionReason.UNKNOWN_RECEIVER)
-			
+
 			projections
 			{
 				distinct("receiverName")
 			}
 		}
-		
+
 		return results
 	}
-	
+
 	private def executeCountCriteria(clazz)
 	{
 		executeCountCriteria(clazz, null)
 	}
-	
+
 	private def executeCountCriteria(clazz, customRestriction)
 	{
 		def c = clazz.createCriteria()
@@ -172,26 +171,26 @@ class ReceiverDownloadFile
 			{
 				eq("id", Long.valueOf(id))
 			}
-			
+
 			if (customRestriction)
 			{
 				customRestriction.delegate = delegate
 				customRestriction.call()
 			}
 		}
-		
+
 		return count
 	}
-	
+
 	List<String> getUniqueTransmitterIds()
 	{
-		def uniqueTransmitterIds = 
+		def uniqueTransmitterIds =
 			ValidDetection.executeQuery("select distinct det.transmitterId from ValidDetection det where receiverDownload = ? order by det.transmitterId", this)
 		log.debug("Unique transmitter IDs: " + uniqueTransmitterIds)
-		
+
 		return uniqueTransmitterIds
 	}
-	
+
 	List<Long> getKnownSensors()
 	{
 		return Sensor.findAllByTransmitterIdInList(getUniqueTransmitterIds())

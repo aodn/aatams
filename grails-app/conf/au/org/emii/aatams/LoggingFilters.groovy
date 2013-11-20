@@ -12,7 +12,7 @@ class LoggingFilters
 		{
             before =
 			{
-				def username = SecurityUtils?.subject?.principal
+				def username = Person.get(SecurityUtils?.subject?.principal)?.username
 				if (username)
 				{
 					MDC.put('username', username)

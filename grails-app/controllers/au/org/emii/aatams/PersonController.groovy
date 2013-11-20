@@ -171,7 +171,7 @@ class PersonController {
                 canEdit = true
             }
             // A person can edit their own record
-            else if (personInstance.id == Person.findByUsername(SecurityUtils.subject.principal).id)
+            else if (personInstance.id == SecurityUtils.subject.principal)
             {
                 canEdit = true
             }

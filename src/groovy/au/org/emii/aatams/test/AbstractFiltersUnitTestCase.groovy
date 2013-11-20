@@ -16,9 +16,9 @@ abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase
 	protected user
 	protected authenticated = true
 	protected permitted = false
-	
+
 	private MetaClass originalSecurityUtilsMetaClass
-	
+
 	protected void setUp()
 	{
 		super.setUp()
@@ -46,30 +46,30 @@ abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase
 	{
 		// Restore the old meta class on SecurityUtils.
 		GroovySystem.metaClassRegistry.setMetaClass(SecurityUtils, this.originalSecurityUtilsMetaClass)
-		
+
 		super.tearDown()
 	}
-	
+
 	protected Person getUser()
 	{
 		return new Person(username:"jkburges")
 	}
-	
+
 	protected def getPrincipal()
 	{
-		return getUser()?.username
+		return getUser()?.id
 	}
-	
+
 	protected boolean isAuthenticated()
 	{
 		return authenticated
 	}
-	
+
 	protected boolean hasRole()
 	{
 		return hasRole
 	}
-	
+
 	protected boolean isPermitted(permission)
 	{
 		return permitted

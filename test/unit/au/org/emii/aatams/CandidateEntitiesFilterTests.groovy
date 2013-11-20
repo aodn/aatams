@@ -211,7 +211,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
 
 	protected def getPrincipal()
 	{
-		return person.username
+		return person.id
 	}
 	
 	protected boolean isPermitted(String permString)

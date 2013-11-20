@@ -7,55 +7,55 @@ import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import org.joda.time.*
 
-class NotificationServiceTests extends AbstractGrailsUnitTestCase 
+class NotificationServiceTests extends AbstractGrailsUnitTestCase
 {
     def notificationService
     def person
     def otherPerson
-    
-    Notification gettingStarted 
+
+    Notification gettingStarted
     Notification receiverRecoveryCreate
     Notification register
-    
+
     def permissionUtilsService
 
 	def authorisedPerson
-	
-    protected void setUp() 
+
+    protected void setUp()
     {
         super.setUp()
-        
+
         mockDomain(Notification)
         mockLogging(Notification, true)
-        
+
         mockLogging(NotificationService, true)
         notificationService = new NotificationService()
-        
+
         mockLogging(PermissionUtilsService, true)
         permissionUtilsService = new PermissionUtilsService()
         notificationService.permissionUtilsService = permissionUtilsService
-        
+
         person = new Person(name:"Joe Bloggs",
                             username:"person",
                             organisation:new Organisation(),
                             defaultTimeZone:DateTimeZone.forID("Australia/Darwin"))
-                               
+
         otherPerson = new Person(name:"Other Person",
                              username:"otherPerson",
                              organisation:new Organisation())
-        
+
         def personList = [person, otherPerson]
         mockDomain(Person, personList)
         personList.each { it.save() }
-        
+
 		permitted = true
 		authorisedPerson = person
-		
-        gettingStarted = 
+
+        gettingStarted =
             new Notification(key:"GETTING_STARTED",
                              htmlFragment:"Click here to get started",
                              anchorSelector:"[href='/aatams/gettingStarted/index']")
-    
+
         receiverRecoveryCreate =
             new Notification(key:"RECEIVER_RECOVERY_CREATE",
                              htmlFragment:"Click here to create a receiver recovery",
@@ -72,47 +72,47 @@ class NotificationServiceTests extends AbstractGrailsUnitTestCase
         notificationList.each { it.save() }
     }
 
-    protected void tearDown() 
+    protected void tearDown()
     {
         super.tearDown()
     }
 
 	protected def getPrincipal()
 	{
-		return authorisedPerson?.username
+		return authorisedPerson?.id
 	}
-	
+
     void testActiveNotifications()
     {
         def notificationList = notificationService.listActive()
-        
+
         assertTrue(notificationList.contains(gettingStarted))
         assertTrue(notificationList.contains(receiverRecoveryCreate))
         assertFalse(notificationList.contains(register))
-        
+
 		authenticated = false
 		hasRole = false
 		authorisedPerson = null
 		permitted = false
-		
+
         notificationList = notificationService.listActive()
-        
+
         assertFalse(notificationList.contains(gettingStarted))
         assertFalse(notificationList.contains(receiverRecoveryCreate))
         assertTrue(notificationList.contains(register))
     }
-    
+
     void testAcknowledgeNotifications()
     {
         def notificationList = notificationService.listActive()
         assertTrue(notificationList.contains(gettingStarted))
         assertTrue(notificationList.contains(receiverRecoveryCreate))
-        
+
         notificationService.acknowledge(gettingStarted)
         notificationList = notificationService.listActive()
         assertFalse(notificationList.contains(gettingStarted))
         assertTrue(notificationList.contains(receiverRecoveryCreate))
-       
+
 		authorisedPerson = otherPerson
 		authenticated = true
 		hasRole = true
@@ -123,18 +123,18 @@ class NotificationServiceTests extends AbstractGrailsUnitTestCase
         assertTrue(notificationList.contains(receiverRecoveryCreate))
 
     }
-    
+
     void testAcknowledgeNotificationsByKey()
     {
         def notificationList = notificationService.listActive()
         assertTrue(notificationList.contains(gettingStarted))
         assertTrue(notificationList.contains(receiverRecoveryCreate))
-        
+
         notificationService.acknowledge("GETTING_STARTED")
         notificationList = notificationService.listActive()
         assertFalse(notificationList.contains(gettingStarted))
         assertTrue(notificationList.contains(receiverRecoveryCreate))
-        
+
 		authorisedPerson = otherPerson
 		authenticated = true
 		hasRole = true

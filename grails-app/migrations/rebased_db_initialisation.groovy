@@ -1711,251 +1711,251 @@ databaseChangeLog = {
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-102") {
-		addForeignKeyConstraint(baseColumnNames: "sex_id", baseTableName: "animal", baseTableSchemaName: "public", constraintName: "fkabc58dfccd365681", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sex", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "sex_id", baseTableName: "animal", constraintName: "fkabc58dfccd365681", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sex", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-103") {
-		addForeignKeyConstraint(baseColumnNames: "species_id", baseTableName: "animal", baseTableSchemaName: "public", constraintName: "fkabc58dfc94348341", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "species", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "species_id", baseTableName: "animal", constraintName: "fkabc58dfc94348341", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "species", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-104") {
-		addForeignKeyConstraint(baseColumnNames: "release_id", baseTableName: "animal_measurement", baseTableSchemaName: "public", constraintName: "fk8eb3adf9b5c10085", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "animal_release", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "release_id", baseTableName: "animal_measurement", constraintName: "fk8eb3adf9b5c10085", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "animal_release", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-105") {
-		addForeignKeyConstraint(baseColumnNames: "type_id", baseTableName: "animal_measurement", baseTableSchemaName: "public", constraintName: "fk8eb3adf914018681", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "animal_measurement_type", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "type_id", baseTableName: "animal_measurement", constraintName: "fk8eb3adf914018681", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "animal_measurement_type", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-106") {
-		addForeignKeyConstraint(baseColumnNames: "unit_id", baseTableName: "animal_measurement", baseTableSchemaName: "public", constraintName: "fk8eb3adf9e6ea591d", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "measurement_unit", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "unit_id", baseTableName: "animal_measurement", constraintName: "fk8eb3adf9e6ea591d", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "measurement_unit", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-107") {
-		addForeignKeyConstraint(baseColumnNames: "animal_id", baseTableName: "animal_release", baseTableSchemaName: "public", constraintName: "fk88d6a0c4e0347853", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "animal", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "animal_id", baseTableName: "animal_release", constraintName: "fk88d6a0c4e0347853", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "animal", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-108") {
-		addForeignKeyConstraint(baseColumnNames: "capture_method_id", baseTableName: "animal_release", baseTableSchemaName: "public", constraintName: "fk88d6a0c45d50d0e", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "capture_method", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "capture_method_id", baseTableName: "animal_release", constraintName: "fk88d6a0c45d50d0e", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "capture_method", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-109") {
-		addForeignKeyConstraint(baseColumnNames: "project_id", baseTableName: "animal_release", baseTableSchemaName: "public", constraintName: "fk88d6a0c4bf505a21", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "project_id", baseTableName: "animal_release", constraintName: "fk88d6a0c4bf505a21", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-110") {
-		addForeignKeyConstraint(baseColumnNames: "organisation_id", baseTableName: "bulk_import", baseTableSchemaName: "public", constraintName: "fkf7eb277299b5ecd3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "organisation", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "organisation_id", baseTableName: "bulk_import", constraintName: "fkf7eb277299b5ecd3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "organisation", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-111") {
-		addForeignKeyConstraint(baseColumnNames: "bulk_import_id", baseTableName: "bulk_import_record", baseTableSchemaName: "public", constraintName: "fk53875dbec6323f02", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "bulk_import", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "bulk_import_id", baseTableName: "bulk_import_record", constraintName: "fk53875dbec6323f02", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "bulk_import", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-112") {
-		addForeignKeyConstraint(baseColumnNames: "detection_id", baseTableName: "detection_surgery", baseTableSchemaName: "public", constraintName: "fkdf258e3b55219160", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "valid_detection", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "detection_id", baseTableName: "detection_surgery", constraintName: "fkdf258e3b55219160", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "valid_detection", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-113") {
-		addForeignKeyConstraint(baseColumnNames: "sensor_id", baseTableName: "detection_surgery", baseTableSchemaName: "public", constraintName: "fkdf258e3bd7d8b793", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sensor", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "sensor_id", baseTableName: "detection_surgery", constraintName: "fkdf258e3bd7d8b793", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sensor", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-114") {
-		addForeignKeyConstraint(baseColumnNames: "surgery_id", baseTableName: "detection_surgery", baseTableSchemaName: "public", constraintName: "fkdf258e3b96ba9ca1", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "surgery", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "surgery_id", baseTableName: "detection_surgery", constraintName: "fkdf258e3b96ba9ca1", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "surgery", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-115") {
-		addForeignKeyConstraint(baseColumnNames: "code_map_id", baseTableName: "device", baseTableSchemaName: "public", constraintName: "fkb06b1e56472540a6", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "code_map", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "code_map_id", baseTableName: "device", constraintName: "fkb06b1e56472540a6", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "code_map", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-116") {
-		addForeignKeyConstraint(baseColumnNames: "model_id", baseTableName: "device", baseTableSchemaName: "public", constraintName: "fkb06b1e561c043beb", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device_model", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "model_id", baseTableName: "device", constraintName: "fkb06b1e561c043beb", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device_model", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-117") {
-		addForeignKeyConstraint(baseColumnNames: "organisation_id", baseTableName: "device", baseTableSchemaName: "public", constraintName: "fkb06b1e5699b5ecd3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "organisation", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "organisation_id", baseTableName: "device", constraintName: "fkb06b1e5699b5ecd3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "organisation", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-118") {
-		addForeignKeyConstraint(baseColumnNames: "project_id", baseTableName: "device", baseTableSchemaName: "public", constraintName: "fkb06b1e56bf505a21", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "project_id", baseTableName: "device", constraintName: "fkb06b1e56bf505a21", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-119") {
-		addForeignKeyConstraint(baseColumnNames: "status_id", baseTableName: "device", baseTableSchemaName: "public", constraintName: "fkb06b1e566b73e7c9", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device_status", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "status_id", baseTableName: "device", constraintName: "fkb06b1e566b73e7c9", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device_status", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-120") {
-		addForeignKeyConstraint(baseColumnNames: "manufacturer_id", baseTableName: "device_model", baseTableSchemaName: "public", constraintName: "fkdcc4e40025f67029", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device_manufacturer", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "manufacturer_id", baseTableName: "device_model", constraintName: "fkdcc4e40025f67029", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device_manufacturer", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-121") {
-		addForeignKeyConstraint(baseColumnNames: "configuration_id", baseTableName: "installation", baseTableSchemaName: "public", constraintName: "fk796d5e3a18d65d27", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "installation_configuration", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "configuration_id", baseTableName: "installation", constraintName: "fk796d5e3a18d65d27", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "installation_configuration", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-122") {
-		addForeignKeyConstraint(baseColumnNames: "project_id", baseTableName: "installation", baseTableSchemaName: "public", constraintName: "fk796d5e3abf505a21", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "project_id", baseTableName: "installation", constraintName: "fk796d5e3abf505a21", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-123") {
-		addForeignKeyConstraint(baseColumnNames: "installation_id", baseTableName: "installation_station", baseTableSchemaName: "public", constraintName: "fk902c2c2f35e870d3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "installation", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "installation_id", baseTableName: "installation_station", constraintName: "fk902c2c2f35e870d3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "installation", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-124") {
-		addForeignKeyConstraint(baseColumnNames: "installation_station_receivers_id", baseTableName: "installation_station_receiver", baseTableSchemaName: "public", constraintName: "fk2f7233ffd6ed9307", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "installation_station", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "installation_station_receivers_id", baseTableName: "installation_station_receiver", constraintName: "fk2f7233ffd6ed9307", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "installation_station", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-125") {
-		addForeignKeyConstraint(baseColumnNames: "receiver_id", baseTableName: "installation_station_receiver", baseTableSchemaName: "public", constraintName: "fk2f7233fff0bb6d33", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "receiver_id", baseTableName: "installation_station_receiver", constraintName: "fk2f7233fff0bb6d33", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-126") {
-		addForeignKeyConstraint(baseColumnNames: "receiver_download_id", baseTableName: "invalid_detection", baseTableSchemaName: "public", constraintName: "fk2b27ee3d7eb9cbee", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_download_file", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "receiver_download_id", baseTableName: "invalid_detection", constraintName: "fk2b27ee3d7eb9cbee", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_download_file", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-127") {
-		addForeignKeyConstraint(baseColumnNames: "notification_acknowledgers_id", baseTableName: "notification_person", baseTableSchemaName: "public", constraintName: "fk41244129fafc8826", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "notification", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "notification_acknowledgers_id", baseTableName: "notification_person", constraintName: "fk41244129fafc8826", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "notification", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-128") {
-		addForeignKeyConstraint(baseColumnNames: "person_id", baseTableName: "notification_person", baseTableSchemaName: "public", constraintName: "fk41244129e985cdb3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "person_id", baseTableName: "notification_person", constraintName: "fk41244129e985cdb3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-129") {
-		addForeignKeyConstraint(baseColumnNames: "postal_address_id", baseTableName: "organisation", baseTableSchemaName: "public", constraintName: "fk3a5300dac7e435", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "address", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "postal_address_id", baseTableName: "organisation", constraintName: "fk3a5300dac7e435", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "address", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-130") {
-		addForeignKeyConstraint(baseColumnNames: "street_address_id", baseTableName: "organisation", baseTableSchemaName: "public", constraintName: "fk3a5300dabc5dddfd", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "address", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "street_address_id", baseTableName: "organisation", constraintName: "fk3a5300dabc5dddfd", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "address", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-131") {
-		addForeignKeyConstraint(baseColumnNames: "organisation_id", baseTableName: "organisation_project", baseTableSchemaName: "public", constraintName: "fkf3b978b499b5ecd3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "organisation", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "organisation_id", baseTableName: "organisation_project", constraintName: "fkf3b978b499b5ecd3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "organisation", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-132") {
-		addForeignKeyConstraint(baseColumnNames: "project_id", baseTableName: "organisation_project", baseTableSchemaName: "public", constraintName: "fkf3b978b4bf505a21", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "project_id", baseTableName: "organisation_project", constraintName: "fkf3b978b4bf505a21", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-133") {
-		addForeignKeyConstraint(baseColumnNames: "requesting_user_id", baseTableName: "project", baseTableSchemaName: "public", constraintName: "fked904b19a7db8c31", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "requesting_user_id", baseTableName: "project", constraintName: "fked904b19a7db8c31", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-134") {
-		addForeignKeyConstraint(baseColumnNames: "person_id", baseTableName: "project_role", baseTableSchemaName: "public", constraintName: "fk37fff5dce985cdb3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "person_id", baseTableName: "project_role", constraintName: "fk37fff5dce985cdb3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-135") {
-		addForeignKeyConstraint(baseColumnNames: "project_id", baseTableName: "project_role", baseTableSchemaName: "public", constraintName: "fk37fff5dcbf505a21", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "project_id", baseTableName: "project_role", constraintName: "fk37fff5dcbf505a21", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-136") {
-		addForeignKeyConstraint(baseColumnNames: "role_type_id", baseTableName: "project_role", baseTableSchemaName: "public", constraintName: "fk37fff5dc51218487", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project_role_type", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "role_type_id", baseTableName: "project_role", constraintName: "fk37fff5dc51218487", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project_role_type", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-137") {
-		addForeignKeyConstraint(baseColumnNames: "mooring_type_id", baseTableName: "receiver_deployment", baseTableSchemaName: "public", constraintName: "fk862aeb1531eebdc", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "mooring_type", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "mooring_type_id", baseTableName: "receiver_deployment", constraintName: "fk862aeb1531eebdc", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "mooring_type", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-138") {
-		addForeignKeyConstraint(baseColumnNames: "receiver_id", baseTableName: "receiver_deployment", baseTableSchemaName: "public", constraintName: "fk862aeb15f0bb6d33", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "receiver_id", baseTableName: "receiver_deployment", constraintName: "fk862aeb15f0bb6d33", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-139") {
-		addForeignKeyConstraint(baseColumnNames: "station_id", baseTableName: "receiver_deployment", baseTableSchemaName: "public", constraintName: "fk862aeb15cdaf3227", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "installation_station", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "station_id", baseTableName: "receiver_deployment", constraintName: "fk862aeb15cdaf3227", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "installation_station", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-140") {
-		addForeignKeyConstraint(baseColumnNames: "requesting_user_id", baseTableName: "receiver_download_file", baseTableSchemaName: "public", constraintName: "fk3b462883a7db8c31", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "requesting_user_id", baseTableName: "receiver_download_file", constraintName: "fk3b462883a7db8c31", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-141") {
-		addForeignKeyConstraint(baseColumnNames: "receiver_download_file_id", baseTableName: "receiver_download_file_progress", baseTableSchemaName: "public", constraintName: "fk5875ae6950da4c63", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_download_file", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "receiver_download_file_id", baseTableName: "receiver_download_file_progress", constraintName: "fk5875ae6950da4c63", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_download_file", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-142") {
-		addForeignKeyConstraint(baseColumnNames: "receiver_deployment_id", baseTableName: "receiver_event", baseTableSchemaName: "public", constraintName: "fk224d504ab30f8f32", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_deployment", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "receiver_deployment_id", baseTableName: "receiver_event", constraintName: "fk224d504ab30f8f32", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_deployment", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-143") {
-		addForeignKeyConstraint(baseColumnNames: "receiver_download_id", baseTableName: "receiver_event", baseTableSchemaName: "public", constraintName: "fk224d504a7eb9cbee", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_download_file", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "receiver_download_id", baseTableName: "receiver_event", constraintName: "fk224d504a7eb9cbee", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_download_file", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-144") {
-		addForeignKeyConstraint(baseColumnNames: "deployment_id", baseTableName: "receiver_recovery", baseTableSchemaName: "public", constraintName: "fk82de83e579a96182", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_deployment", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "deployment_id", baseTableName: "receiver_recovery", constraintName: "fk82de83e579a96182", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_deployment", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-145") {
-		addForeignKeyConstraint(baseColumnNames: "recoverer_id", baseTableName: "receiver_recovery", baseTableSchemaName: "public", constraintName: "fk82de83e5dc30b5bf", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project_role", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "recoverer_id", baseTableName: "receiver_recovery", constraintName: "fk82de83e5dc30b5bf", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "project_role", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-146") {
-		addForeignKeyConstraint(baseColumnNames: "status_id", baseTableName: "receiver_recovery", baseTableSchemaName: "public", constraintName: "fk82de83e56b73e7c9", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device_status", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "status_id", baseTableName: "receiver_recovery", constraintName: "fk82de83e56b73e7c9", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device_status", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-147") {
-		addForeignKeyConstraint(baseColumnNames: "organisation_id", baseTableName: "request", baseTableSchemaName: "public", constraintName: "fk414ef28f99b5ecd3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "organisation", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "organisation_id", baseTableName: "request", constraintName: "fk414ef28f99b5ecd3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "organisation", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-148") {
-		addForeignKeyConstraint(baseColumnNames: "requester_id", baseTableName: "request", baseTableSchemaName: "public", constraintName: "fk414ef28f4ad0c2c", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "requester_id", baseTableName: "request", constraintName: "fk414ef28f4ad0c2c", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-149") {
-		addForeignKeyConstraint(baseColumnNames: "sec_role_id", baseTableName: "sec_role_permissions", baseTableSchemaName: "public", constraintName: "fk103984696511cce0", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_role", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "sec_role_id", baseTableName: "sec_role_permissions", constraintName: "fk103984696511cce0", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_role", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-150") {
-		addForeignKeyConstraint(baseColumnNames: "organisation_id", baseTableName: "sec_user", baseTableSchemaName: "public", constraintName: "fk375df2f999b5ecd3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "organisation", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "organisation_id", baseTableName: "sec_user", constraintName: "fk375df2f999b5ecd3", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "organisation", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-151") {
-		addForeignKeyConstraint(baseColumnNames: "sec_user_id", baseTableName: "sec_user_permissions", baseTableSchemaName: "public", constraintName: "fkbf3983ea3c90c0", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "sec_user_id", baseTableName: "sec_user_permissions", constraintName: "fkbf3983ea3c90c0", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-152") {
-		addForeignKeyConstraint(baseColumnNames: "sec_role_id", baseTableName: "sec_user_roles", baseTableSchemaName: "public", constraintName: "fk3e2705f76511cce0", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_role", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "sec_role_id", baseTableName: "sec_user_roles", constraintName: "fk3e2705f76511cce0", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_role", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-153") {
-		addForeignKeyConstraint(baseColumnNames: "sec_user_id", baseTableName: "sec_user_roles", baseTableSchemaName: "public", constraintName: "fk3e2705f7a3c90c0", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "sec_user_id", baseTableName: "sec_user_roles", constraintName: "fk3e2705f7a3c90c0", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "sec_user", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-154") {
-		addForeignKeyConstraint(baseColumnNames: "tag_id", baseTableName: "sensor", baseTableSchemaName: "public", constraintName: "fkca0053baceab1a01", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "tag_id", baseTableName: "sensor", constraintName: "fkca0053baceab1a01", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-155") {
-		addForeignKeyConstraint(baseColumnNames: "transmitter_type_id", baseTableName: "sensor", baseTableSchemaName: "public", constraintName: "fkca0053ba4b0c3bc4", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "transmitter_type", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "transmitter_type_id", baseTableName: "sensor", constraintName: "fkca0053ba4b0c3bc4", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "transmitter_type", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-156") {
-		addForeignKeyConstraint(baseColumnNames: "release_id", baseTableName: "surgery", baseTableSchemaName: "public", constraintName: "fk918a71f5b5c10085", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "animal_release", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "release_id", baseTableName: "surgery", constraintName: "fk918a71f5b5c10085", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "animal_release", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-157") {
-		addForeignKeyConstraint(baseColumnNames: "tag_id", baseTableName: "surgery", baseTableSchemaName: "public", constraintName: "fk918a71f5ceab1a01", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "tag_id", baseTableName: "surgery", constraintName: "fk918a71f5ceab1a01", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "device", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-158") {
-		addForeignKeyConstraint(baseColumnNames: "treatment_type_id", baseTableName: "surgery", baseTableSchemaName: "public", constraintName: "fk918a71f54f2dd3af", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "surgery_treatment_type", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "treatment_type_id", baseTableName: "surgery", constraintName: "fk918a71f54f2dd3af", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "surgery_treatment_type", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-159") {
-		addForeignKeyConstraint(baseColumnNames: "type_id", baseTableName: "surgery", baseTableSchemaName: "public", constraintName: "fk918a71f56d95e296", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "surgery_type", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "type_id", baseTableName: "surgery", constraintName: "fk918a71f56d95e296", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "surgery_type", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-160") {
-		addForeignKeyConstraint(baseColumnNames: "receiver_deployment_id", baseTableName: "valid_detection", baseTableSchemaName: "public", constraintName: "fk28ce8a02b30f8f32", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_deployment", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "receiver_deployment_id", baseTableName: "valid_detection", constraintName: "fk28ce8a02b30f8f32", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_deployment", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-161") {
-		addForeignKeyConstraint(baseColumnNames: "receiver_download_id", baseTableName: "valid_detection", baseTableSchemaName: "public", constraintName: "fk28ce8a027eb9cbee", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_download_file", referencedTableSchemaName: "public", referencesUniqueColumn: "false")
+		addForeignKeyConstraint(baseColumnNames: "receiver_download_id", baseTableName: "valid_detection", constraintName: "fk28ce8a027eb9cbee", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_download_file", referencesUniqueColumn: "false")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-162") {
-		createSequence(schemaName: "public", sequenceName: "detection_surgery_sequence")
+		createSequence(sequenceName: "detection_surgery_sequence")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-163") {
-		createSequence(schemaName: "public", sequenceName: "hibernate_sequence")
+		createSequence( sequenceName: "hibernate_sequence")
 	}
 
 	changeSet(author: "jburgess", id: "1371620272000-1", runOnChange: true)
@@ -2083,54 +2083,54 @@ databaseChangeLog = {
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371625156687-167") {
-		createView("SELECT aatams_acoustictag_all_deployments_mv.funding_type, aatams_acoustictag_all_deployments_mv.project_name, aatams_acoustictag_all_deployments_mv.installation_name, aatams_acoustictag_all_deployments_mv.station_name, CASE WHEN (aatams_acoustictag_all_deployments_mv.no_deployments IS NULL) THEN 0 ELSE aatams_acoustictag_all_deployments_mv.no_deployments END AS no_deployments, CASE WHEN ((aatams_acoustictag_all_deployments_mv.no_deployments IS NULL) OR (aatams_acoustictag_all_deployments_mv.no_deployments = 0)) THEN (0)::bigint ELSE aatams_acoustictag_all_deployments_mv.no_detections END AS no_detections, aatams_acoustictag_all_deployments_mv.station_lat_lon, aatams_acoustictag_all_deployments_mv.deployment_depth, aatams_acoustictag_all_deployments_mv.start_date, aatams_acoustictag_all_deployments_mv.end_date, aatams_acoustictag_all_deployments_mv.coverage_duration, aatams_acoustictag_all_deployments_mv.station_lat, aatams_acoustictag_all_deployments_mv.station_lon FROM aatams_acoustictag_all_deployments_mv;", schemaName: "public", viewName: "aatams_acoustictag_all_deployments_view")
+		createView("SELECT aatams_acoustictag_all_deployments_mv.funding_type, aatams_acoustictag_all_deployments_mv.project_name, aatams_acoustictag_all_deployments_mv.installation_name, aatams_acoustictag_all_deployments_mv.station_name, CASE WHEN (aatams_acoustictag_all_deployments_mv.no_deployments IS NULL) THEN 0 ELSE aatams_acoustictag_all_deployments_mv.no_deployments END AS no_deployments, CASE WHEN ((aatams_acoustictag_all_deployments_mv.no_deployments IS NULL) OR (aatams_acoustictag_all_deployments_mv.no_deployments = 0)) THEN (0)::bigint ELSE aatams_acoustictag_all_deployments_mv.no_detections END AS no_detections, aatams_acoustictag_all_deployments_mv.station_lat_lon, aatams_acoustictag_all_deployments_mv.deployment_depth, aatams_acoustictag_all_deployments_mv.start_date, aatams_acoustictag_all_deployments_mv.end_date, aatams_acoustictag_all_deployments_mv.coverage_duration, aatams_acoustictag_all_deployments_mv.station_lat, aatams_acoustictag_all_deployments_mv.station_lon FROM aatams_acoustictag_all_deployments_mv;",  viewName: "aatams_acoustictag_all_deployments_view")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371625156687-168") {
-		createView("SELECT aatams_acoustictag_all_deployments_view.funding_type, aatams_acoustictag_all_deployments_view.project_name, (count(DISTINCT aatams_acoustictag_all_deployments_view.installation_name))::numeric AS no_installations, (count(DISTINCT aatams_acoustictag_all_deployments_view.station_name))::numeric AS no_stations, (sum(aatams_acoustictag_all_deployments_view.no_deployments))::numeric AS no_deployments, sum(aatams_acoustictag_all_deployments_view.no_detections) AS no_detections, COALESCE(((min(aatams_acoustictag_all_deployments_view.station_lat) || '/'::text) || max(aatams_acoustictag_all_deployments_view.station_lat))) AS lat_range, COALESCE(((min(aatams_acoustictag_all_deployments_view.station_lon) || '/'::text) || max(aatams_acoustictag_all_deployments_view.station_lon))) AS lon_range, COALESCE(((min(aatams_acoustictag_all_deployments_view.deployment_depth) || '-'::text) || max(aatams_acoustictag_all_deployments_view.deployment_depth))) AS deployment_depth_range, min(aatams_acoustictag_all_deployments_view.start_date) AS start_date, max(aatams_acoustictag_all_deployments_view.end_date) AS end_date, ((max(aatams_acoustictag_all_deployments_view.end_date) - min(aatams_acoustictag_all_deployments_view.start_date)))::numeric AS coverage_duration, min(aatams_acoustictag_all_deployments_view.station_lat) AS min_lat, max(aatams_acoustictag_all_deployments_view.station_lat) AS max_lat, min(aatams_acoustictag_all_deployments_view.station_lon) AS min_lon, max(aatams_acoustictag_all_deployments_view.station_lon) AS max_lon, min(aatams_acoustictag_all_deployments_view.deployment_depth) AS min_depth, max(aatams_acoustictag_all_deployments_view.deployment_depth) AS max_depth FROM aatams_acoustictag_all_deployments_view GROUP BY aatams_acoustictag_all_deployments_view.funding_type, aatams_acoustictag_all_deployments_view.project_name ORDER BY aatams_acoustictag_all_deployments_view.funding_type DESC, aatams_acoustictag_all_deployments_view.project_name;", schemaName: "public", viewName: "aatams_acoustictag_data_summary_project_view")
+		createView("SELECT aatams_acoustictag_all_deployments_view.funding_type, aatams_acoustictag_all_deployments_view.project_name, (count(DISTINCT aatams_acoustictag_all_deployments_view.installation_name))::numeric AS no_installations, (count(DISTINCT aatams_acoustictag_all_deployments_view.station_name))::numeric AS no_stations, (sum(aatams_acoustictag_all_deployments_view.no_deployments))::numeric AS no_deployments, sum(aatams_acoustictag_all_deployments_view.no_detections) AS no_detections, COALESCE(((min(aatams_acoustictag_all_deployments_view.station_lat) || '/'::text) || max(aatams_acoustictag_all_deployments_view.station_lat))) AS lat_range, COALESCE(((min(aatams_acoustictag_all_deployments_view.station_lon) || '/'::text) || max(aatams_acoustictag_all_deployments_view.station_lon))) AS lon_range, COALESCE(((min(aatams_acoustictag_all_deployments_view.deployment_depth) || '-'::text) || max(aatams_acoustictag_all_deployments_view.deployment_depth))) AS deployment_depth_range, min(aatams_acoustictag_all_deployments_view.start_date) AS start_date, max(aatams_acoustictag_all_deployments_view.end_date) AS end_date, ((max(aatams_acoustictag_all_deployments_view.end_date) - min(aatams_acoustictag_all_deployments_view.start_date)))::numeric AS coverage_duration, min(aatams_acoustictag_all_deployments_view.station_lat) AS min_lat, max(aatams_acoustictag_all_deployments_view.station_lat) AS max_lat, min(aatams_acoustictag_all_deployments_view.station_lon) AS min_lon, max(aatams_acoustictag_all_deployments_view.station_lon) AS max_lon, min(aatams_acoustictag_all_deployments_view.deployment_depth) AS min_depth, max(aatams_acoustictag_all_deployments_view.deployment_depth) AS max_depth FROM aatams_acoustictag_all_deployments_view GROUP BY aatams_acoustictag_all_deployments_view.funding_type, aatams_acoustictag_all_deployments_view.project_name ORDER BY aatams_acoustictag_all_deployments_view.funding_type DESC, aatams_acoustictag_all_deployments_view.project_name;", viewName: "aatams_acoustictag_data_summary_project_view")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371625156687-169") {
-		createView("SELECT aatams_acoustictag_all_detections_view_mv.phylum, aatams_acoustictag_all_detections_view_mv.order_name, aatams_acoustictag_all_detections_view_mv.spcode, aatams_acoustictag_all_detections_view_mv.common_name, aatams_acoustictag_all_detections_view_mv.scientific_name, aatams_acoustictag_all_detections_view_mv.no_releases, aatams_acoustictag_all_detections_view_mv.no_detections, aatams_acoustictag_all_detections_view_mv.first_detection, aatams_acoustictag_all_detections_view_mv.last_detection, aatams_acoustictag_all_detections_view_mv.coverage_duration, aatams_acoustictag_all_detections_view_mv.missing_info FROM aatams_acoustictag_all_detections_view_mv;", schemaName: "public", viewName: "aatams_acoustictag_data_summary_species_view")
+		createView("SELECT aatams_acoustictag_all_detections_view_mv.phylum, aatams_acoustictag_all_detections_view_mv.order_name, aatams_acoustictag_all_detections_view_mv.spcode, aatams_acoustictag_all_detections_view_mv.common_name, aatams_acoustictag_all_detections_view_mv.scientific_name, aatams_acoustictag_all_detections_view_mv.no_releases, aatams_acoustictag_all_detections_view_mv.no_detections, aatams_acoustictag_all_detections_view_mv.first_detection, aatams_acoustictag_all_detections_view_mv.last_detection, aatams_acoustictag_all_detections_view_mv.coverage_duration, aatams_acoustictag_all_detections_view_mv.missing_info FROM aatams_acoustictag_all_detections_view_mv;", viewName: "aatams_acoustictag_data_summary_species_view")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371625156687-170") {
-		createView("SELECT aatams_acoustictag_data_summary_project_view.funding_type, count(DISTINCT aatams_acoustictag_data_summary_project_view.project_name) AS no_projects, sum(aatams_acoustictag_data_summary_project_view.no_installations) AS no_installations, sum(aatams_acoustictag_data_summary_project_view.no_stations) AS no_stations, sum(aatams_acoustictag_data_summary_project_view.no_deployments) AS no_deployments, sum(aatams_acoustictag_data_summary_project_view.no_detections) AS no_detections FROM aatams_acoustictag_data_summary_project_view GROUP BY aatams_acoustictag_data_summary_project_view.funding_type UNION ALL SELECT 'TOTAL' AS funding_type, count(DISTINCT aatams_acoustictag_data_summary_project_view.project_name) AS no_projects, sum(aatams_acoustictag_data_summary_project_view.no_installations) AS no_installations, sum(aatams_acoustictag_data_summary_project_view.no_stations) AS no_stations, sum(aatams_acoustictag_data_summary_project_view.no_deployments) AS no_deployments, sum(aatams_acoustictag_data_summary_project_view.no_detections) AS no_detections FROM aatams_acoustictag_data_summary_project_view ORDER BY 1;", schemaName: "public", viewName: "aatams_acoustictag_totals_project_view")
+		createView("SELECT aatams_acoustictag_data_summary_project_view.funding_type, count(DISTINCT aatams_acoustictag_data_summary_project_view.project_name) AS no_projects, sum(aatams_acoustictag_data_summary_project_view.no_installations) AS no_installations, sum(aatams_acoustictag_data_summary_project_view.no_stations) AS no_stations, sum(aatams_acoustictag_data_summary_project_view.no_deployments) AS no_deployments, sum(aatams_acoustictag_data_summary_project_view.no_detections) AS no_detections FROM aatams_acoustictag_data_summary_project_view GROUP BY aatams_acoustictag_data_summary_project_view.funding_type UNION ALL SELECT 'TOTAL' AS funding_type, count(DISTINCT aatams_acoustictag_data_summary_project_view.project_name) AS no_projects, sum(aatams_acoustictag_data_summary_project_view.no_installations) AS no_installations, sum(aatams_acoustictag_data_summary_project_view.no_stations) AS no_stations, sum(aatams_acoustictag_data_summary_project_view.no_deployments) AS no_deployments, sum(aatams_acoustictag_data_summary_project_view.no_detections) AS no_detections FROM aatams_acoustictag_data_summary_project_view ORDER BY 1;", viewName: "aatams_acoustictag_totals_project_view")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371625156687-171") {
-		createView("SELECT aatams_acoustictag_totals_species_view_mv.statistics, aatams_acoustictag_totals_species_view_mv.statistics_type FROM aatams_acoustictag_totals_species_view_mv;", schemaName: "public", viewName: "aatams_acoustictag_totals_species_view")
+		createView("SELECT aatams_acoustictag_totals_species_view_mv.statistics, aatams_acoustictag_totals_species_view_mv.statistics_type FROM aatams_acoustictag_totals_species_view_mv;", viewName: "aatams_acoustictag_totals_species_view")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371625156687-174") {
-		createView("SELECT count(project.name) AS count, project.name FROM ((((valid_detection JOIN receiver_deployment ON ((valid_detection.receiver_deployment_id = receiver_deployment.id))) JOIN installation_station ON ((receiver_deployment.station_id = installation_station.id))) JOIN installation ON ((installation_station.installation_id = installation.id))) JOIN project ON ((installation.project_id = project.id))) GROUP BY project.name ORDER BY count(project.name) DESC;", schemaName: "public", viewName: "detections_by_project")
+		createView("SELECT count(project.name) AS count, project.name FROM ((((valid_detection JOIN receiver_deployment ON ((valid_detection.receiver_deployment_id = receiver_deployment.id))) JOIN installation_station ON ((receiver_deployment.station_id = installation_station.id))) JOIN installation ON ((installation_station.installation_id = installation.id))) JOIN project ON ((installation.project_id = project.id))) GROUP BY project.name ORDER BY count(project.name) DESC;", viewName: "detections_by_project")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371625156687-175") {
-		createView("SELECT count(*) AS count, species.common_name, species.scientific_name, species.spcode FROM (((((valid_detection JOIN detection_surgery ON ((valid_detection.id = detection_surgery.detection_id))) JOIN surgery ON ((detection_surgery.surgery_id = surgery.id))) JOIN animal_release ON ((surgery.release_id = animal_release.id))) JOIN animal ON ((animal_release.animal_id = animal.id))) JOIN species ON ((animal.species_id = species.id))) GROUP BY species.spcode, species.scientific_name, species.common_name ORDER BY count(*) DESC;", schemaName: "public", viewName: "detections_by_species")
+		createView("SELECT count(*) AS count, species.common_name, species.scientific_name, species.spcode FROM (((((valid_detection JOIN detection_surgery ON ((valid_detection.id = detection_surgery.detection_id))) JOIN surgery ON ((detection_surgery.surgery_id = surgery.id))) JOIN animal_release ON ((surgery.release_id = animal_release.id))) JOIN animal ON ((animal_release.animal_id = animal.id))) JOIN species ON ((animal.species_id = species.id))) GROUP BY species.spcode, species.scientific_name, species.common_name ORDER BY count(*) DESC;", viewName: "detections_by_species")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371625156687-177") {
-		createView('''SELECT installation.name AS "installation name" FROM installation ORDER BY installation.name;''', schemaName: "public", viewName: "installation_list")
+		createView('''SELECT installation.name AS "installation name" FROM installation ORDER BY installation.name;''', viewName: "installation_list")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371625156687-178") {
-		createView('''SELECT project.name AS "project name", count(project.name) AS "number of stations" FROM ((installation_station JOIN installation ON ((installation_station.installation_id = installation.id))) JOIN project ON ((installation.project_id = project.id))) GROUP BY project.name ORDER BY project.name;''', schemaName: "public", viewName: "project_list")
+		createView('''SELECT project.name AS "project name", count(project.name) AS "number of stations" FROM ((installation_station JOIN installation ON ((installation_station.installation_id = installation.id))) JOIN project ON ((installation.project_id = project.id))) GROUP BY project.name ORDER BY project.name;''', viewName: "project_list")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371625156687-180") {
-		createView('''SELECT count(species.spcode) AS count, species.spcode AS "CAAB code", species.common_name, species.scientific_name FROM ((animal_release JOIN animal ON ((animal_release.animal_id = animal.id))) JOIN species ON ((animal.species_id = species.id))) GROUP BY species.spcode, species.common_name, species.scientific_name ORDER BY count(species.spcode) DESC;''', schemaName: "public", viewName: "releases_by_species")
+		createView('''SELECT count(species.spcode) AS count, species.spcode AS "CAAB code", species.common_name, species.scientific_name FROM ((animal_release JOIN animal ON ((animal_release.animal_id = animal.id))) JOIN species ON ((animal.species_id = species.id))) GROUP BY species.spcode, species.common_name, species.scientific_name ORDER BY count(species.spcode) DESC;''', viewName: "releases_by_species")
     }
     
 	changeSet(author: "jburgess (generated)", id: "1371620272075-164") {
-		createView('''SELECT valid_detection."timestamp", to_char(timezone('00:00'::text, valid_detection."timestamp"), 'YYYY-MM-DD HH24:MI:SS'::text) AS formatted_timestamp, installation_station.name AS station, installation_station.id AS station_id, installation_station.location, st_y(installation_station.location) AS latitude, st_x(installation_station.location) AS longitude, (((device_model.model_name)::text || '-'::text) || (device.serial_number)::text) AS receiver_name, COALESCE(sensor.transmitter_id, ''::character varying) AS sensor_id, COALESCE(((((((species.spcode)::text || ' - '::text) || (species.scientific_name)::text) || ' ('::text) || (species.common_name)::text) || ')'::text), ''::text) AS species_name, sec_user.name AS uploader, valid_detection.transmitter_id, organisation.name AS organisation, project.name AS project, installation.name AS installation, COALESCE(species.spcode, ''::character varying) AS spcode, animal_release.id AS animal_release_id, animal_release.embargo_date, project.id AS project_id, valid_detection.id AS detection_id, animal_release.project_id AS release_project_id, valid_detection.sensor_value, valid_detection.sensor_unit, valid_detection.provisional FROM (((((((((((((((valid_detection LEFT JOIN receiver_deployment ON ((valid_detection.receiver_deployment_id = receiver_deployment.id))) LEFT JOIN installation_station ON ((receiver_deployment.station_id = installation_station.id))) LEFT JOIN installation ON ((installation_station.installation_id = installation.id))) LEFT JOIN project ON ((installation.project_id = project.id))) LEFT JOIN device ON ((receiver_deployment.receiver_id = device.id))) LEFT JOIN device_model ON ((device.model_id = device_model.id))) LEFT JOIN receiver_download_file ON ((valid_detection.receiver_download_id = receiver_download_file.id))) LEFT JOIN sec_user ON ((receiver_download_file.requesting_user_id = sec_user.id))) LEFT JOIN organisation ON ((device.organisation_id = organisation.id))) LEFT JOIN detection_surgery ON ((valid_detection.id = detection_surgery.detection_id))) LEFT JOIN sensor ON ((detection_surgery.sensor_id = sensor.id))) LEFT JOIN surgery ON ((detection_surgery.surgery_id = surgery.id))) LEFT JOIN animal_release ON ((surgery.release_id = animal_release.id))) LEFT JOIN animal ON ((animal_release.animal_id = animal.id))) LEFT JOIN species ON ((animal.species_id = species.id)));''', schemaName: "public", viewName: "detection_extract_view")
+		createView('''SELECT valid_detection."timestamp", to_char(timezone('00:00'::text, valid_detection."timestamp"), 'YYYY-MM-DD HH24:MI:SS'::text) AS formatted_timestamp, installation_station.name AS station, installation_station.id AS station_id, installation_station.location, st_y(installation_station.location) AS latitude, st_x(installation_station.location) AS longitude, (((device_model.model_name)::text || '-'::text) || (device.serial_number)::text) AS receiver_name, COALESCE(sensor.transmitter_id, ''::character varying) AS sensor_id, COALESCE(((((((species.spcode)::text || ' - '::text) || (species.scientific_name)::text) || ' ('::text) || (species.common_name)::text) || ')'::text), ''::text) AS species_name, sec_user.name AS uploader, valid_detection.transmitter_id, organisation.name AS organisation, project.name AS project, installation.name AS installation, COALESCE(species.spcode, ''::character varying) AS spcode, animal_release.id AS animal_release_id, animal_release.embargo_date, project.id AS project_id, valid_detection.id AS detection_id, animal_release.project_id AS release_project_id, valid_detection.sensor_value, valid_detection.sensor_unit, valid_detection.provisional FROM (((((((((((((((valid_detection LEFT JOIN receiver_deployment ON ((valid_detection.receiver_deployment_id = receiver_deployment.id))) LEFT JOIN installation_station ON ((receiver_deployment.station_id = installation_station.id))) LEFT JOIN installation ON ((installation_station.installation_id = installation.id))) LEFT JOIN project ON ((installation.project_id = project.id))) LEFT JOIN device ON ((receiver_deployment.receiver_id = device.id))) LEFT JOIN device_model ON ((device.model_id = device_model.id))) LEFT JOIN receiver_download_file ON ((valid_detection.receiver_download_id = receiver_download_file.id))) LEFT JOIN sec_user ON ((receiver_download_file.requesting_user_id = sec_user.id))) LEFT JOIN organisation ON ((device.organisation_id = organisation.id))) LEFT JOIN detection_surgery ON ((valid_detection.id = detection_surgery.detection_id))) LEFT JOIN sensor ON ((detection_surgery.sensor_id = sensor.id))) LEFT JOIN surgery ON ((detection_surgery.surgery_id = surgery.id))) LEFT JOIN animal_release ON ((surgery.release_id = animal_release.id))) LEFT JOIN animal ON ((animal_release.animal_id = animal.id))) LEFT JOIN species ON ((animal.species_id = species.id)));''', viewName: "detection_extract_view")
 	}
 
 	changeSet(author: "jburgess (generated)", id: "1371620272075-165") {
-		createView('''SELECT detection_extract_view."timestamp", detection_extract_view.formatted_timestamp, detection_extract_view.station, detection_extract_view.station_id, detection_extract_view.location, detection_extract_view.latitude, detection_extract_view.longitude, detection_extract_view.receiver_name, detection_extract_view.sensor_id, detection_extract_view.species_name, detection_extract_view.uploader, detection_extract_view.transmitter_id, detection_extract_view.organisation, detection_extract_view.project, detection_extract_view.installation, detection_extract_view.spcode, detection_extract_view.animal_release_id, detection_extract_view.embargo_date, detection_extract_view.project_id, detection_extract_view.detection_id, scramblepoint(detection_extract_view.location) AS public_location, CASE WHEN isreleaseembargoed(detection_extract_view.animal_release_id) THEN 'embargoed'::text ELSE detection_extract_view.species_name END AS public_species_name, CASE WHEN isreleaseembargoed(detection_extract_view.animal_release_id) THEN 'embargoed'::character varying ELSE detection_extract_view.spcode END AS public_spcode FROM detection_extract_view;''', schemaName: "public", viewName: "public_detection_view")
+		createView('''SELECT detection_extract_view."timestamp", detection_extract_view.formatted_timestamp, detection_extract_view.station, detection_extract_view.station_id, detection_extract_view.location, detection_extract_view.latitude, detection_extract_view.longitude, detection_extract_view.receiver_name, detection_extract_view.sensor_id, detection_extract_view.species_name, detection_extract_view.uploader, detection_extract_view.transmitter_id, detection_extract_view.organisation, detection_extract_view.project, detection_extract_view.installation, detection_extract_view.spcode, detection_extract_view.animal_release_id, detection_extract_view.embargo_date, detection_extract_view.project_id, detection_extract_view.detection_id, scramblepoint(detection_extract_view.location) AS public_location, CASE WHEN isreleaseembargoed(detection_extract_view.animal_release_id) THEN 'embargoed'::text ELSE detection_extract_view.species_name END AS public_species_name, CASE WHEN isreleaseembargoed(detection_extract_view.animal_release_id) THEN 'embargoed'::character varying ELSE detection_extract_view.spcode END AS public_spcode FROM detection_extract_view;''', viewName: "public_detection_view")
 	}
     
 	changeSet(author: "jburgess (generated)", id: "1371620272075-166") {
-		createView("SELECT public_detection_view.station, public_detection_view.installation, public_detection_view.project, public_detection_view.public_location, st_x(public_detection_view.public_location) AS public_lon, st_y(public_detection_view.public_location) AS public_lat, ('http://localhost:8080/aatams/installationStation/show/'::text || public_detection_view.station_id) AS installation_station_url, ('http://localhost:8080/aatams/detection/list?filter.receiverDeployment.station.in=name&filter.receiverDeployment.station.in='::text || (public_detection_view.station)::text) AS detection_download_url, count(*) AS detection_count, ((log((GREATEST(count(*), (1)::bigint))::double precision) / log(((SELECT max(t.detection_count) AS max FROM (SELECT public_detection_view.station, count(public_detection_view.station) AS detection_count FROM public_detection_view GROUP BY public_detection_view.station) t))::double precision)) * (10)::double precision) AS relative_detection_count, public_detection_view.station_id FROM public_detection_view GROUP BY public_detection_view.station, public_detection_view.installation, public_detection_view.project, public_detection_view.public_location, public_detection_view.station_id UNION ALL SELECT installation_station.name AS station, installation.name AS installation, project.name AS project, scramblepoint(installation_station.location) AS public_location, st_x(scramblepoint(installation_station.location)) AS public_lon, st_y(scramblepoint(installation_station.location)) AS public_lat, ('http://localhost:8080/aatams/installationStation/show/'::text || installation_station.id) AS installation_station_url, '' AS detection_download_url, 0 AS detection_count, 0 AS relative_detection_count, installation_station.id AS station_id FROM (((installation_station LEFT JOIN installation ON ((installation_station.installation_id = installation.id))) LEFT JOIN project ON ((installation.project_id = project.id))) LEFT JOIN public_detection_view ON ((installation_station.id = public_detection_view.station_id))) WHERE (public_detection_view.station_id IS NULL);", schemaName: "public", viewName: "detection_count_per_station")
+		createView("SELECT public_detection_view.station, public_detection_view.installation, public_detection_view.project, public_detection_view.public_location, st_x(public_detection_view.public_location) AS public_lon, st_y(public_detection_view.public_location) AS public_lat, ('http://localhost:8080/aatams/installationStation/show/'::text || public_detection_view.station_id) AS installation_station_url, ('http://localhost:8080/aatams/detection/list?filter.receiverDeployment.station.in=name&filter.receiverDeployment.station.in='::text || (public_detection_view.station)::text) AS detection_download_url, count(*) AS detection_count, ((log((GREATEST(count(*), (1)::bigint))::double precision) / log(((SELECT max(t.detection_count) AS max FROM (SELECT public_detection_view.station, count(public_detection_view.station) AS detection_count FROM public_detection_view GROUP BY public_detection_view.station) t))::double precision)) * (10)::double precision) AS relative_detection_count, public_detection_view.station_id FROM public_detection_view GROUP BY public_detection_view.station, public_detection_view.installation, public_detection_view.project, public_detection_view.public_location, public_detection_view.station_id UNION ALL SELECT installation_station.name AS station, installation.name AS installation, project.name AS project, scramblepoint(installation_station.location) AS public_location, st_x(scramblepoint(installation_station.location)) AS public_lon, st_y(scramblepoint(installation_station.location)) AS public_lat, ('http://localhost:8080/aatams/installationStation/show/'::text || installation_station.id) AS installation_station_url, '' AS detection_download_url, 0 AS detection_count, 0 AS relative_detection_count, installation_station.id AS station_id FROM (((installation_station LEFT JOIN installation ON ((installation_station.installation_id = installation.id))) LEFT JOIN project ON ((installation.project_id = project.id))) LEFT JOIN public_detection_view ON ((installation_station.id = public_detection_view.station_id))) WHERE (public_detection_view.station_id IS NULL);", viewName: "detection_count_per_station")
 	}
 }

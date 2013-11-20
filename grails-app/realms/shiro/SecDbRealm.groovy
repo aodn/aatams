@@ -65,7 +65,7 @@ class SecDbRealm {
     }
 
     def isPermitted(principal, requiredPermission) {
-        
+
         // Does the user have the given permission directly associated
         // with himself?
         //
@@ -73,7 +73,7 @@ class SecDbRealm {
         // the required permission's type and project code.
         def user = SecUser.findByUsername(principal, [cache:true])
         def permissions = user.permissions
-        
+
         // Try each of the permissions found and see whether any of
         // them confer the required permission.
         def retval = permissions?.find { permString ->

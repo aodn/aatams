@@ -8,7 +8,7 @@ import org.joda.time.DateTimeZone
 class PersonController {
 
     def permissionUtilsService
-    
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", updatePassword: "POST"]
 
     def index = {
@@ -17,10 +17,10 @@ class PersonController {
 
     def list = {
         params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        
+
         def personTotal = Person.count()
         def personList = Person.list(params)
-        
+
         if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
         {
             // Filter out non-ACTIVE people (only sys admin should see these).
@@ -28,7 +28,7 @@ class PersonController {
             {
                 return (it.status == EntityStatus.ACTIVE)
             }
-            
+
             // Only count ACTIVE people..
             // TODO: why doesn't count({}) work?
             personTotal = 0
@@ -40,7 +40,7 @@ class PersonController {
                 }
             }
         }
-        
+
         [personInstanceList: personList, personInstanceTotal: personTotal]
     }
 
@@ -50,21 +50,21 @@ class PersonController {
         return [personInstance: personInstance]
     }
 
-    def save = 
-    {   
+    def save =
+    {
         PersonCreateCommand createPersonCmd ->
-        
+
         if (createPersonCmd.validate())
         {
             def personInstance = createPersonCmd.createPerson()
-            
+
             // If a PI then set Person's status to ACTIVE, otherwise,
             // set to PENDING.
             // (Use "personWriteAny" permission for now, as my understanding
             // of shiro permission wildcards was back-to-front, so the commented
             // out way of doing things doesn't work.
             if (   !SecurityUtils.getSubject().isAuthenticated()
-                || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission())) 
+                || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission()))
             {
                 personInstance.status = EntityStatus.PENDING
             }
@@ -72,7 +72,7 @@ class PersonController {
             {
                 personInstance.status = EntityStatus.ACTIVE
             }
-            
+
             if (createPersonCmd.unlistedOrganisationName)
             {
                 personInstance.organisation = createUnlistedOrganisation(createPersonCmd, personInstance)
@@ -80,28 +80,28 @@ class PersonController {
 
             assert(personInstance.organisation)
             personInstance.organisation.addToPeople(personInstance)
-            
-            if (personInstance.organisation.save(flush: true)) 
+
+            if (personInstance.organisation.save(flush: true))
             {
                 if (createPersonCmd.unlistedOrganisationName)
                 {
-                    sendMail 
-                    {  
+                    sendMail
+                    {
                         to grailsApplication.config.grails.mail.adminEmailAddress
                         from grailsApplication.config.grails.mail.systemEmailAddress
-                        subject "${message(code: 'mail.unlisted.organisation.create.subject', args: [personInstance.organisation.name])}"     
-                        body "${message(code: 'mail.unlisted.organisation.create.body', args: [personInstance.organisation.name, createLink(controller:'organisation', action:'show', id:personInstance.organisation.id, absolute:true)])}" 
+                        subject "${message(code: 'mail.unlisted.organisation.create.subject', args: [personInstance.organisation.name])}"
+                        body "${message(code: 'mail.unlisted.organisation.create.body', args: [personInstance.organisation.name, createLink(controller:'organisation', action:'show', id:personInstance.organisation.id, absolute:true)])}"
                     }
                 }
-                
+
                 if (   !SecurityUtils.getSubject().isAuthenticated()
-                    || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission())) 
+                    || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission()))
                 {
                     if (personInstance.status == EntityStatus.PENDING)
                     {
                         sendCreationNotificationEmails(personInstance)
                     }
-                    
+
                     flash.message = "${message(code: 'default.requested.message', args: [message(code: 'person.label', default: 'Person'), personInstance.toString()])}"
                 }
                 else
@@ -110,7 +110,7 @@ class PersonController {
                 }
                 redirect(action: "show", id: personInstance.id)
             }
-            else 
+            else
             {
                 render(view: "create", model: [createPersonCmd:createPersonCmd, organisation: personInstance.organisation])
             }
@@ -125,8 +125,8 @@ class PersonController {
     {
         String name = createPersonCommand.unlistedOrganisationName
         log.debug("Creating unlisted organisation, name: " + name)
-        
-        def addressParams = 
+
+        def addressParams =
             [streetAddress:name,
              suburbTown:name,
              state:name,
@@ -134,7 +134,7 @@ class PersonController {
              country:name]
         Address unlistedPostalAddress = new Address(addressParams).save()
         Address unlistedStreetAddress = new Address(addressParams).save()
-          
+
         Request request = new Request(requester:requester)
         requester.addToRequests(request)
         return new Organisation(name:createPersonCommand.unlistedOrganisationName,
@@ -146,20 +146,20 @@ class PersonController {
                              request:request,
                              status:EntityStatus.PENDING)
     }
-    
+
     def show = {
         def personInstance = Person.get(params.id)
-        if (!personInstance) 
+        if (!personInstance)
         {
             log.debug("Person not found, id: " + params.id)
-            
+
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
             redirect(action: "list")
         }
-        else 
+        else
         {
             log.debug("Person found, id: " + params.id)
-            
+
             def canEdit = false
 
             if (!SecurityUtils.subject.isAuthenticated())
@@ -189,7 +189,7 @@ class PersonController {
                     }
                 }
             }
-            
+
             [personInstance: personInstance, canEdit:canEdit]
         }
     }
@@ -208,29 +208,29 @@ class PersonController {
     def update = {
         def personInstance = Person.get(params.id)
         boolean prevPending = (personInstance.status == EntityStatus.PENDING)
-        
+
         if (personInstance) {
             if (params.version) {
                 def version = params.version.toLong()
                 if (personInstance.version > version) {
-                    
+
                     personInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'person.label', default: 'Person')] as Object[], "Another user has updated this Person while you were editing")
                     render(view: "edit", model: [personInstance: personInstance])
                     return
                 }
             }
-            
+
             params.username = params.username.toLowerCase()
-            
+
             personInstance.properties = params
-            if (!personInstance.hasErrors() && personInstance.save(flush: true)) 
+            if (!personInstance.hasErrors() && personInstance.save(flush: true))
             {
                 // Notify organisation activated.
                 if (prevPending && (personInstance.status == EntityStatus.ACTIVE))
                 {
                     sendActivatedNotificationEmails(personInstance)
                 }
-                
+
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'person.label', default: 'Person'), personInstance.toString()])}"
                 redirect(action: "show", id: personInstance.id)
             }
@@ -244,10 +244,10 @@ class PersonController {
         }
     }
 
-    def updatePassword = 
+    def updatePassword =
     {
         PersonUpdatePasswordCommand updatePwdCmd ->
-        
+
         if (   updatePwdCmd.validate()
             && updatePwdCmd.updatePassword())
         {
@@ -257,17 +257,17 @@ class PersonController {
         else
         {
             def personInstance = Person.get(updatePwdCmd.id)
-            if (!personInstance) 
+            if (!personInstance)
             {
                 flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
                 redirect(action: "list")
             }
-            else 
+            else
             {
                 return [personInstance: personInstance]
             }
         }
-        
+
     }
     def delete = {
         def personInstance = Person.get(params.id)
@@ -297,25 +297,25 @@ class PersonController {
      */
     def sendCreationNotificationEmails(person)
     {
-        sendMail 
-        {  
+        sendMail
+        {
             to person?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
-            subject "${message(code: 'mail.request.person.create.subject', args: [person.name])}"     
-            body "${message(code: 'mail.request.person.create.body', args: [person.name, createLink(action:'show', id:person.id, absolute:true)])}" 
+            subject "${message(code: 'mail.request.person.create.subject', args: [person.name])}"
+            body "${message(code: 'mail.request.person.create.body', args: [person.name, createLink(action:'show', id:person.id, absolute:true)])}"
         }
     }
-    
+
     def sendActivatedNotificationEmails(person)
     {
-        sendMail 
-        {     
+        sendMail
+        {
             to person?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
-            subject "${message(code: 'mail.request.person.activate.subject', args: [person.name])}"     
-            body "${message(code: 'mail.request.person.activate.body', args: [person.name, createLink(controller:'auth', action:'login', absolute:true), createLink(controller:'gettingStarted', action:'index', absolute:true), grailsApplication.config.grails.mail.adminEmailAddress])}" 
+            subject "${message(code: 'mail.request.person.activate.subject', args: [person.name])}"
+            body "${message(code: 'mail.request.person.activate.body', args: [person.name, createLink(controller:'auth', action:'login', absolute:true), createLink(controller:'gettingStarted', action:'index', absolute:true), grailsApplication.config.grails.mail.adminEmailAddress])}"
         }
     }
 }
@@ -336,7 +336,7 @@ class PersonCreateCommand
     String phoneNumber
     String emailAddress
     DateTimeZone defaultTimeZone
-    
+
     static constraints =
     {
         name(blank:false)
@@ -347,26 +347,26 @@ class PersonCreateCommand
                 return "person.password.mismatch"
             }
         })
-    
+
         passwordConfirm(blank:false)
         organisation(validator:
-        {   
+        {
             val, obj ->
-            
+
             return !(val && obj.unlistedOrganisationName)
         })
         unlistedOrganisationName(validator:
-        {   
+        {
             val, obj ->
-            
+
             return !(val && obj.organisation)
         })
-        
+
         phoneNumber(blank:false)
         emailAddress(email:true)
         defaultTimeZone(nullable:false)
     }
-    
+
     Person createPerson()
     {
         def person = new Person(username:username.toLowerCase(),
@@ -376,7 +376,7 @@ class PersonCreateCommand
                                 phoneNumber:phoneNumber,
                                 emailAddress:emailAddress,
                                 defaultTimeZone:defaultTimeZone)
-                            
+
         return person
     }
 }
@@ -386,7 +386,7 @@ class PersonUpdatePasswordCommand
     Integer id
     String password
     String passwordConfirm
-    
+
     static constraints =
     {
         id(validator:{val ->
@@ -413,7 +413,7 @@ class PersonUpdatePasswordCommand
         {
             return null
         }
-        
+
         return person
     }
 }

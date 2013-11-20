@@ -76,6 +76,7 @@ grails.mail.props = ["mail.smtp.auth":"false"]
 // Database migration.
 grails.plugin.databasemigration.updateOnStart = true
 grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+grails.plugin.databasemigration.updateOnStartDefaultSchema = "aatams"
 
 auditLog {
     actorClosure = { request, session ->

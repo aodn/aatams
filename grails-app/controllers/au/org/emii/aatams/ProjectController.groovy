@@ -10,14 +10,14 @@ class ProjectController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def permissionUtilsService
-    
+
     def index = {
         redirect(action: "list", params: params)
     }
 
     def list = {
         params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        
+
         def projectTotal = Project.count()
         def projectList = Project.list(params)
 
@@ -28,7 +28,7 @@ class ProjectController {
             {
                 return (it.status == EntityStatus.ACTIVE)
             }
-            
+
             // Only count ACTIVE projects.
             // TODO: why doesn't count({}) work?
             projectTotal = 0
@@ -40,31 +40,26 @@ class ProjectController {
                 }
             }
         }
-        
+
         [projectInstanceList: projectList, projectInstanceTotal: projectTotal]
     }
 
     def create = {
-        
+
         def createProjectCmd = new ProjectCreateCommand()
-//        createProjectCmd.properties = params
-        createProjectCmd.person = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
+        createProjectCmd.person = Person.get(SecurityUtils.getSubject().getPrincipal())
         createProjectCmd.organisation = createProjectCmd.person.organisation
         return [createProjectCmd:createProjectCmd]
-        
-//        def projectInstance = new Project()
-//        projectInstance.properties = params
-//        return [projectInstance: projectInstance]
     }
 
     def save = {
-        
+
         ProjectCreateCommand createProjectCmd ->
-        
+
         if (createProjectCmd.validate())
         {
             def projectInstance =  createProjectCmd.createProject()
-        
+
             // If SysAdmin, then set Organisation's status to ACTIVE, otherwise,
             // set to PENDING and record the requesting user.
             if (SecurityUtils.getSubject().hasRole("SysAdmin"))
@@ -74,25 +69,25 @@ class ProjectController {
             else
             {
                 projectInstance.status = EntityStatus.PENDING
-                Person user = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
+                Person user = Person.get(SecurityUtils.getSubject().getPrincipal())
                 projectInstance.requestingUser = user
             }
 
-            if (projectInstance.save(flush: true)) 
+            if (projectInstance.save(flush: true))
             {
                 // Doing this here rather than in the createProject() method
                 // of the command, as that was causing StackOVerflowError
                 ProjectRoleType pi = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
-                ProjectRole projectRole = 
-                    new ProjectRole(person:createProjectCmd.person, 
-                                    project:projectInstance, 
+                ProjectRole projectRole =
+                    new ProjectRole(person:createProjectCmd.person,
+                                    project:projectInstance,
                                     roleType:pi,
                                     access:ProjectAccess.READ_WRITE)
                 if (projectRole.save(flush:true))
                 {
                     permissionUtilsService.setPermissions(projectRole)
                 }
-                
+
                 if (SecurityUtils.getSubject().hasRole("SysAdmin"))
                 {
                     flash.message = "${message(code: 'default.created.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.toString()])}"
@@ -104,7 +99,7 @@ class ProjectController {
                 }
                 redirect(action: "show", id: projectInstance.id)
             }
-            else 
+            else
             {
                 log.error("Error saving projectInstance: " + projectInstance.errors)
 //                    render(view: "create", model: [projectInstance: projectInstance])
@@ -118,14 +113,14 @@ class ProjectController {
         }
     }
 
-    
+
     def show = {
         def projectInstance = Project.get(params.id)
         if (!projectInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), params.id])}"
             redirect(action: "list")
         }
-        else 
+        else
         {
             [projectInstance: projectInstance, unrelatedOrganisations: projectInstance.unrelatedOrganisations()]
         }
@@ -138,7 +133,7 @@ class ProjectController {
             redirect(action: "list")
         }
         else {
-            return [projectInstance: projectInstance, 
+            return [projectInstance: projectInstance,
                     unrelatedOrganisations: projectInstance.unrelatedOrganisations()]
         }
     }
@@ -152,14 +147,14 @@ class ProjectController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (projectInstance.version > version) {
-                    
+
                     projectInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'project.label', default: 'Project')] as Object[], "Another user has updated this Project while you were editing")
                     render(view: "edit", model: [projectInstance: projectInstance])
                     return
                 }
             }
             projectInstance.properties = params
-            if (!projectInstance.hasErrors() && projectInstance.save(flush: true)) 
+            if (!projectInstance.hasErrors() && projectInstance.save(flush: true))
             {
                 // Notify project activated.
                 if (prevPending && (projectInstance.status == EntityStatus.ACTIVE))
@@ -207,33 +202,33 @@ class ProjectController {
      */
     def sendCreationNotificationEmails(project)
     {
-        sendMail 
-        {  
+        sendMail
+        {
             to project?.requestingUser?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
-            subject "${message(code: 'mail.request.project.create.subject', args: [project.name])}"     
-            body "${message(code: 'mail.request.project.create.body', args: [project.name, createLink(action:'show', id:project.id, absolute:true), permissionUtilsService.principal().name])}" 
+            subject "${message(code: 'mail.request.project.create.subject', args: [project.name])}"
+            body "${message(code: 'mail.request.project.create.body', args: [project.name, createLink(action:'show', id:project.id, absolute:true), permissionUtilsService.principal().name])}"
         }
     }
-    
+
     def sendActivatedNotificationEmails(project)
     {
-        sendMail 
-        {     
+        sendMail
+        {
             to project?.requestingUser?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
-            subject "${message(code: 'mail.request.project.activate.subject', args: [project.name])}"     
-            body "${message(code: 'mail.request.project.activate.body', args: [project.name, createLink(action:'show', id:project.id, absolute:true), project?.requestingUser?.name])}" 
+            subject "${message(code: 'mail.request.project.activate.subject', args: [project.name])}"
+            body "${message(code: 'mail.request.project.activate.body', args: [project.name, createLink(action:'show', id:project.id, absolute:true), project?.requestingUser?.name])}"
         }
     }
-	
+
 	def lookupByName =
 	{
 		log.debug("Looking up projects matching: " + params.term)
 		def projectsMatchingName = Project.findAllByNameIlike('%' + params.term + '%')
 		log.debug("Matching projects: " + projectsMatchingName)
-		render(projectsMatchingName as JSON) 
+		render(projectsMatchingName as JSON)
 	}
 }

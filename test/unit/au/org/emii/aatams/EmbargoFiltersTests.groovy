@@ -13,11 +13,11 @@ import org.codehaus.groovy.grails.plugins.web.filters.FilterConfig
 
 import org.apache.shiro.SecurityUtils
 
-class EmbargoFiltersTests extends AbstractFiltersUnitTestCase 
+class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 {
     def embargoService
     def permissionUtilsService
-    
+
     Project project1
     Project project2
 
@@ -36,22 +36,22 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     Animal animalEmbargoedReadableProject
     Animal animalEmbargoedNonReadableProject
     Animal animalPastEmbargoed
-    
+
     AnimalMeasurement animalMeasurementNonEmbargoed
     AnimalMeasurement animalMeasurementEmbargoedReadableProject
     AnimalMeasurement animalMeasurementEmbargoedNonReadableProject
     AnimalMeasurement animalMeasurementPastEmbargoed
-    
+
     AnimalRelease releaseNonEmbargoed
     AnimalRelease releaseEmbargoedReadableProject
     AnimalRelease releaseEmbargoedNonReadableProject
     AnimalRelease releasePastEmbargoed
-    
+
     DetectionSurgery detectionSurgeryNonEmbargoed
     DetectionSurgery detectionSurgeryEmbargoedReadableProject
     DetectionSurgery detectionSurgeryEmbargoedNonReadableProject
     DetectionSurgery detectionSurgeryPastEmbargoed
-    
+
     Tag tagNonEmbargoed
     Tag tagEmbargoedReadableProject
     Tag tagEmbargoedNonReadableProject
@@ -70,40 +70,42 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     Surgery surgeryEmbargoedReadableProject
     Surgery surgeryEmbargoedNonReadableProject
     Surgery surgeryPastEmbargoed
-    
+
     ValidDetection detectionNonEmbargoed
     ValidDetection detectionEmbargoedReadableProject
     ValidDetection detectionEmbargoedNonReadableProject
     ValidDetection detectionPastEmbargoed
-    
+
 	def queryService = queryService
 	def reportInfoService
-	
-    protected void setUp() 
+
+    Person user
+
+    protected void setUp()
     {
         super.setUp()
 
         mockLogging(EmbargoService, true)
         embargoService = new EmbargoService()
-        
+
         mockLogging(PermissionUtilsService, true)
         permissionUtilsService = new PermissionUtilsService()
 
         filters.embargoService = embargoService
         embargoService.permissionUtilsService = permissionUtilsService
-        
+
         project1 = new Project(name: "project 1")
         project2 = new Project(name: "project 2")
         def projectList = [project1, project2]
         mockDomain(Project, projectList)
         projectList.each{ it.save()}
-        
-        Person user = new Person(username: 'jbloggs')
-        
+
+        user = new Person(username: 'jbloggs')
+
         // Need this for "findByUsername()" etc.
         mockDomain(Person, [user])
         user.save()
-        
+
         // Check permissions are behaving correctly.
         assertTrue(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(project1.id)))
         assertFalse(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(project2.id)))
@@ -116,14 +118,14 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 		reportInfoService = new ReportInfoService()
 
         setupControllers()
-		
+
         mockLogging(Tag)
         mockLogging(Sensor)
         mockLogging(AnimalRelease)
         mockLogging(Surgery)
         mockLogging(ValidDetection)
         mockLogging(DetectionSurgery)
-        
+
         // Set up some data.
 		CodeMap codeMap = new CodeMap(codeMap:"A69-1303")
         tagNonEmbargoed = new Tag(project:project1, codeMap:codeMap)
@@ -145,12 +147,12 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         animalEmbargoedReadableProject = new Animal()
         animalEmbargoedNonReadableProject = new Animal()
         animalPastEmbargoed = new Animal()
-        
+
         animalMeasurementNonEmbargoed = new AnimalMeasurement()
         animalMeasurementEmbargoedReadableProject = new AnimalMeasurement()
         animalMeasurementEmbargoedNonReadableProject = new AnimalMeasurement()
         animalMeasurementPastEmbargoed = new AnimalMeasurement()
-    
+
         releaseNonEmbargoed = new AnimalRelease(project:project1)
         releaseEmbargoedReadableProject = new AnimalRelease(project:project1, embargoDate:nextYear())
         releaseEmbargoedNonReadableProject = new AnimalRelease(project:project2, embargoDate:nextYear())
@@ -164,10 +166,10 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 		ReceiverDownloadFile receiverDownload = new ReceiverDownloadFile(requestingUser:user)
 		mockDomain(ReceiverDownloadFile, [receiverDownload])
 		receiverDownload.save()
-		
+
         detectionNonEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
         detectionEmbargoedReadableProject = new ValidDetection(receiverDownload:receiverDownload)
-		
+
         detectionEmbargoedNonReadableProject = new ValidDetection(receiverDownload:receiverDownload)
         detectionPastEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
 
@@ -190,7 +192,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 		}
         def detectionSurgeryList =
                           [detectionSurgeryNonEmbargoed, detectionSurgeryEmbargoedReadableProject, detectionSurgeryEmbargoedNonReadableProject, detectionSurgeryPastEmbargoed]
-        
+
         mockDomain(Tag, tagList)
         mockDomain(Sensor, sensorList)
         mockDomain(Animal, animalList)
@@ -199,7 +201,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         mockDomain(Surgery, surgeryList)
         mockDomain(ValidDetection, detectionList)
         mockDomain(DetectionSurgery, detectionSurgeryList)
-        
+
         releaseNonEmbargoed.addToSurgeries(surgeryNonEmbargoed)
         tagNonEmbargoed.addToSurgeries(surgeryNonEmbargoed)
         tagNonEmbargoed.addToSensors(sensorNonEmbargoed)
@@ -208,7 +210,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         detectionNonEmbargoed.addToDetectionSurgeries(detectionSurgeryNonEmbargoed)
         animalNonEmbargoed.addToReleases(releaseNonEmbargoed)
         animalMeasurementNonEmbargoed.release = releaseNonEmbargoed
-       
+
         releaseEmbargoedReadableProject.addToSurgeries(surgeryEmbargoedReadableProject)
         tagEmbargoedReadableProject.addToSurgeries(surgeryEmbargoedReadableProject)
         tagEmbargoedReadableProject.addToSensors(sensorEmbargoedReadableProject)
@@ -217,7 +219,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         detectionEmbargoedReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedReadableProject)
         animalEmbargoedReadableProject.addToReleases(releaseEmbargoedReadableProject)
         animalMeasurementEmbargoedReadableProject.release = releaseEmbargoedReadableProject
-        
+
         releaseEmbargoedNonReadableProject.addToSurgeries(surgeryEmbargoedNonReadableProject)
         tagEmbargoedNonReadableProject.addToSurgeries(surgeryEmbargoedNonReadableProject)
         tagEmbargoedNonReadableProject.addToSensors(sensorEmbargoedNonReadableProject)
@@ -226,7 +228,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         detectionEmbargoedNonReadableProject.addToDetectionSurgeries(detectionSurgeryEmbargoedNonReadableProject)
         animalEmbargoedNonReadableProject.addToReleases(releaseEmbargoedNonReadableProject)
         animalMeasurementEmbargoedNonReadableProject.release = releaseEmbargoedNonReadableProject
-        
+
         releasePastEmbargoed.addToSurgeries(surgeryPastEmbargoed)
         tagPastEmbargoed.addToSurgeries(surgeryPastEmbargoed)
         tagPastEmbargoed.addToSensors(sensorPastEmbargoed)
@@ -235,7 +237,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         detectionPastEmbargoed.addToDetectionSurgeries(detectionSurgeryPastEmbargoed)
         animalPastEmbargoed.addToReleases(releasePastEmbargoed)
         animalMeasurementPastEmbargoed.release = releasePastEmbargoed
-        
+
         detectionNonEmbargoed.metaClass.getProject = { project1 }
         detectionEmbargoedReadableProject.metaClass.getProject = { project1 }
         detectionEmbargoedNonReadableProject.metaClass.getProject = { project2 }
@@ -249,9 +251,9 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         surgeryList.each { it.save() }
         detectionList.each { it.save() }
         detectionSurgeryList.each { it.save() }
-		
+
 		ReceiverDownloadFile.metaClass.getPath = { "/some/path" }
-    }        
+    }
 
     private void setupControllers() {
 
@@ -271,7 +273,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         sensorController = new SensorController()
         surgeryController = new SurgeryController()
         tagController = new TagController()
-        
+
         [animalController, animalMeasurementController, releaseController, detectionController, detectionSurgeryController, sensorController, surgeryController, tagController].each {
             controller ->
 
@@ -282,32 +284,32 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
                 controller.queryService.embargoService.permissionUtilsService = permissionUtilsService
         }
     }
-        
-    protected void tearDown() 
+
+    protected void tearDown()
     {
         super.tearDown()
     }
-   
+
 	protected def getPrincipal()
 	{
-		return 'jbloggs'
+		return user.id
 	}
-	
+
 	protected boolean isPermitted(String permString)
 	{
 		if (permString == "project:" + project1.id + ":read")
 		{
 			return true
 		}
-		
+
 		return false
 	}
-	
+
     private Date now()
     {
         return new Date()
     }
-    
+
     private Date nextYear()
     {
         Calendar cal = Calendar.getInstance()
@@ -322,12 +324,12 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         return cal.getTime()
     }
 
-    void testAnimalList() 
+    void testAnimalList()
     {
         checkList(animalController, "animal")
     }
 
-    void testAnimalNotList() 
+    void testAnimalNotList()
     {
 		controllerName = "animal"
 		actionName = "show"
@@ -337,13 +339,13 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         checkEmbargoed(animalController, animalEmbargoedNonReadableProject, true, 'animal')
         checkEmbargoed(animalController, animalPastEmbargoed, false, 'animal')
     }
-    
-    void testAnimalMeasurementList() 
+
+    void testAnimalMeasurementList()
     {
         checkList(animalMeasurementController, "animalMeasurement")
     }
 
-    void testAnimalMeasurementNotList() 
+    void testAnimalMeasurementNotList()
     {
 		controllerName = "animalMeasurement"
 		actionName = "show"
@@ -354,12 +356,12 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         checkEmbargoed(animalMeasurementController, animalMeasurementPastEmbargoed, false, 'animalMeasurement')
     }
 
-    void testAnimalReleaseList() 
+    void testAnimalReleaseList()
     {
         checkList(releaseController, "animalRelease")
     }
 
-    void testAnimalReleaseNotList() 
+    void testAnimalReleaseNotList()
     {
 		controllerName = "animalRelease"
 		actionName = "show"
@@ -380,12 +382,12 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         checkEmbargoed(tagController, tagEmbargoedNonReadableProject, true, 'tag')
         checkEmbargoed(tagController, tagPastEmbargoed, false, 'tag')
     }
-    
+
     void testSensorList()
     {
         checkList(sensorController, "sensor")
     }
-    
+
     void testSensorNotList()
     {
 		controllerName = "sensor"
@@ -401,24 +403,24 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 		checkEmbargoed(sensorController, sensorPingerEmbargoedNonReadableProject, true, 'sensor')
 		checkEmbargoed(sensorController, sensorPingerPastEmbargoed, false, 'sensor')
     }
-    
+
 	void testDetectionList()
 	{
 		controllerName = "detection"
 
         def model = [entityList: ValidDetection.list(), total: ValidDetection.count()]
 		assertNotNull(model)
-		
+
 		FilterConfig filter = getFilter("genericList")
 		assertNotNull(filter)
 
 		filter.after(model)
 		assertNotNull(model)
-		
+
 		assertTrue(model.entityList.containsAll(detectionNonEmbargoed, detectionPastEmbargoed, detectionEmbargoedReadableProject))
 		assertFalse(model.entityList.contains(detectionEmbargoedNonReadableProject))
 	}
-	
+
     void testDetectionNotList()
     {
 		controllerName = "detection"
@@ -457,32 +459,32 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         checkEmbargoed(detectionSurgeryController, detectionSurgeryEmbargoedNonReadableProject, true, 'detectionSurgery')
         checkEmbargoed(detectionSurgeryController, detectionSurgeryPastEmbargoed, false, 'detectionSurgery')
     }
-    
+
 	void testRedirectToLoginWhenNotAuthenticated()
 	{
 		controllerName = "sensor"
-		actionName = "show"	
+		actionName = "show"
 		authenticated = false
 		checkEmbargoed(sensorController, sensorEmbargoedNonReadableProject, true, 'sensor', "login", "/sensor/show/" + sensorEmbargoedNonReadableProject.id)
 	}
-    
+
 	void testRedirectToUnauthorizedWhenAuthenticated()
 	{
 		controllerName = "sensor"
-		actionName = "show"	
+		actionName = "show"
 		authenticated = true
 		checkEmbargoed(sensorController, sensorEmbargoedNonReadableProject, true, 'sensor', "unauthorized", null)
 	}
-    
+
     private void checkDetection(def detection, boolean isEmbargoed)
     {
         assert(detection)
-        
+
         detectionController.params.id = detection.id
         def model = detectionController.show()
         assertNotNull(model)
         assertEquals(1, model.size())
-        
+
         FilterConfig filter = getFilter("genericNotList")
         assertNotNull(filter)
 
@@ -490,7 +492,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         filter.after(model)
         assertNotNull(model)
         assertEquals(1, model.size())
-		
+
         if (isEmbargoed)
         {
 			assertNull(model.detectionInstance)
@@ -500,31 +502,31 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 			assertNotNull(model.detectionInstance)
         }
     }
-    
+
     private void checkList(def controller, def entityName)
     {
 		controller.params._name = "entityName"
-		
+
 		int expectedNum = (entityName == 'sensor') ? 6 : 3
 		int expectedTotal = (entityName == 'sensor') ? 8 : 4
         def model = controller.list()
-		
+
         assertEquals(expectedNum, model.entityList.size())
         assertEquals(expectedTotal, model.total)
 
         // Embargoed releases should not appear at all after filter.
         FilterConfig filter = getFilter('genericList')
         assertNotNull(filter)
-        
+
         filter.after(model)
         assertNotNull(model)
-        
+
 		int expectedNumAfterEmbargo = (entityName == 'sensor') ? 6 : 3
 		int expectedTotalAfterEmbargo = (entityName == 'sensor') ? 8 : 4
         assertEquals(expectedNumAfterEmbargo, model.entityList.size())
         assertEquals(expectedTotalAfterEmbargo, model.total)
     }
-    
+
     private void checkEmbargoed(def controller, def entity, boolean isEmbargoed, String entityName)
     {
 		checkEmbargoed(controller, entity, isEmbargoed, entityName, "unauthorized", null)
@@ -534,23 +536,23 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     {
         controller.params.id = entity.id
         assert(controller.params)
-        
+
         def model = controller.show()
         assertNotNull(model)
         assertEquals(1, model.size())
-        
+
         FilterConfig filter = getFilter("genericNotList")
         assertNotNull(filter)
-        
-		EmbargoFilters.metaClass.getTargetUri = 
+
+		EmbargoFilters.metaClass.getTargetUri =
 		{
 			params ->
-			
+
 			return expectedTargetUri
 		}
-		
+
         boolean result = filter.after(model)
-        
+
         if (isEmbargoed)
         {
             // redirect auth/unauthorized

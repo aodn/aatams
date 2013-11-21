@@ -11,21 +11,21 @@ class Person extends SecUser
 {
     static hasMany = [projectRoles:ProjectRole, requests:Request]
     static belongsTo = [organisation:Organisation]
-    
+
     static transients = ['projects']
 	static auditable = true
-	
+
     String name;
     String emailAddress;
     String phoneNumber;
-    
+
     // Allows for PENDING users when self-registering.
     EntityStatus status
     String registrationComment
-    
+
     DateTimeZone defaultTimeZone
-    
-    static constraints = 
+
+    static constraints =
     {
         name(blank:false)
         organisation()
@@ -36,21 +36,21 @@ class Person extends SecUser
         defaultTimeZone()
     }
 
-    static mapping = 
+    static mapping =
     {
         // Speed up candidate entities service/permission utils service.
         cache true
-		
+
 		sort name:"asc"
     }
-    
+
     static searchable = [only: ['name', 'description'], except: ['passwordHash', 'permissions', 'roles']]
 
     String toString()
     {
         return name
     }
-    
+
     String getProjects()
     {
         return ListUtils.fold(projectRoles, "project")
@@ -65,7 +65,7 @@ class Person extends SecUser
                 return DateTimeZone.getDefault()
             }
 
-            Person principal = Person.findByUsername(SecurityUtils.subject?.principal, [cache:true])
+            Person principal = Person.get(SecurityUtils.subject?.principal)
             return principal?.defaultTimeZone
         }
         // This is being thrown for findByUsername in cobertura coverage tests.

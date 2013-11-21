@@ -79,7 +79,7 @@ class NotificationFiltersTests extends AbstractFiltersUnitTestCase
 
 	protected def getPrincipal()
 	{
-		return person.username
+		return person.id
 	}
 	
     void testInsertNotifications()

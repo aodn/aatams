@@ -4,15 +4,15 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.web.context.request.RequestContextHolder
 import org.slf4j.MDC
 
-class LoggingFilters 
+class LoggingFilters
 {
-    def filters = 
+    def filters =
 	{
-        all(controller:'*', action:'*') 
+        all(controller:'*', action:'*')
 		{
-            before = 
+            before =
 			{
-				def username = SecurityUtils?.subject?.principal
+				def username = Person.get(SecurityUtils?.subject?.principal)?.username
 				if (username)
 				{
 					MDC.put('username', username)
@@ -22,8 +22,8 @@ class LoggingFilters
 					MDC.put('username', 'unathenticated')
 				}
             }
-			
-            afterView = 
+
+            afterView =
 			{
 				MDC.remove('username')
             }

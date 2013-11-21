@@ -31,7 +31,7 @@ class NavigationMenuControllerTests extends AbstractControllerUnitTestCase
 
 	protected def getPrincipal()
 	{
-		return person.username
+		return person.id
 	}
 
 	protected boolean isPermitted(String permission)

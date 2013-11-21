@@ -1,8 +1,11 @@
 import grails.test.*
+import groovy.lang.MetaClass;
 
 import au.org.emii.aatams.*
 import au.org.emii.aatams.test.AbstractFiltersUnitTestCase
 
+import org.apache.shiro.SecurityUtils
+import org.apache.shiro.subject.Subject
 import org.codehaus.groovy.grails.plugins.web.filters.FilterConfig
 
 class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase 
@@ -71,12 +74,12 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase
         "secUser"
     ]
     
-    def accessibleControllers = 
+    def accessibleByAllControllers = 
     [
         "animal", "animalMeasurement", "organisation", "organisationProject", "project", "projectRole", "person",
         "installation", "installationStation", "receiver", "species", "tag", "sensor",
         "animalRelease", "detection", "receiverDeployment", "receiverRecovery",
-        "receiverEvent", "navigationMenu", "receiverDownloadFile",
+        "receiverEvent", "navigationMenu",
         "surgery", "detectionSurgery",
         "gettingStarted", "about"
     ]
@@ -127,5 +130,84 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase
                 }
             }
         }
+    }
+
+    void testAuthenticatedOnly() {
+        FilterConfig filter = initFilter("authenticatedOnly")
+
+        def accessClosure  
+        
+        filter.metaClass.accessControl = { 
+            it ->
+            
+            accessClosure = it
+        }
+
+        filter.before()
+        
+        assertTrue accessClosure() 
+    }
+
+    void testReceiverDownloadFileShowNotAuthorised() {
+        FilterConfig filter = initFilter("receiverDownloadFileShow")
+
+        Person bob = new Person(username: 'bob')
+        Person sally = new Person(username: 'sally')
+        
+        mockDomain(Person, [bob, sally])
+        
+        ReceiverDownloadFile file = new ReceiverDownloadFile(requestingUser:bob)
+        mockDomain(ReceiverDownloadFile, [file])
+
+        user = sally
+        hasRole = false
+        mockParams.id = file.id
+
+        def result = filter.before()
+        
+        assertEquals "auth", redirectArgs.controller
+        assertEquals "unauthorized", redirectArgs.action
+        assertFalse result
+    }
+
+    void testReceiverDownloadFileShowAuthorised() {
+        FilterConfig filter = initFilter("receiverDownloadFileShow")
+
+        Person sally = new Person(username: 'sally')
+        
+        mockDomain(Person, [sally])
+
+        ReceiverDownloadFile file = new ReceiverDownloadFile(requestingUser:sally)
+        mockDomain(ReceiverDownloadFile, [file])
+
+        user = sally
+        hasRole = false
+        mockParams.id = file.id
+
+        def result = filter.before()
+        
+        assertEquals 0, redirectArgs.size()
+        assertTrue result
+    }
+
+    void testReceiverDownloadFileShowSysAdmin() {
+        FilterConfig filter = initFilter("receiverDownloadFileShow")
+
+        Person bob = new Person(username: 'bob')
+        Person sally = new Person(username: 'sally')
+        
+        mockDomain(Person, [bob, sally])
+        
+        ReceiverDownloadFile file = new ReceiverDownloadFile(requestingUser:sally)
+        mockDomain(ReceiverDownloadFile, [file])
+
+        user = sally
+        hasRole = true
+        mockParams.id = file.id
+
+        def result = filter.before()
+        
+        assertEquals 0, redirectArgs.size()
+        assertTrue result
     }
 }

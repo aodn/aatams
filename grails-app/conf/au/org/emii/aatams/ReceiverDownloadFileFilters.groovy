@@ -12,7 +12,7 @@ class ReceiverDownloadFileFilters {
             after =
             {
                 model ->
-                    applyVisibility(Person.findByUsername(SecurityUtils.subject?.principal, [cache:true])
+                    applyVisibility(Person.get(SecurityUtils.subject?.principal)
                         , SecurityUtils.subject.hasRole("SysAdmin"), model)
                     model
             }

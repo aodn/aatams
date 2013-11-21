@@ -13,8 +13,8 @@ import au.org.emii.aatams.Person
 class AuthController {
     def shiroSecurityManager
 
-	def embargoService
-	
+    def embargoService
+
     def index = { redirect(action: "login", params: params) }
 
     def login = {
@@ -28,42 +28,31 @@ class AuthController {
         if (params.rememberMe) {
             authToken.rememberMe = true
         }
-        
+
         // If a controller redirected to this page, redirect back
         // to it. Otherwise redirect to the root URI.
         def targetUri = params.targetUri ?: "/"
-        
+
         // Handle requests saved by Shiro filters.
         def savedRequest = WebUtils.getSavedRequest(request)
         if (savedRequest) {
             targetUri = savedRequest.requestURI - request.contextPath
             if (savedRequest.queryString) targetUri = targetUri + '?' + savedRequest.queryString
         }
-        
+
         try
         {
             // Don't let PENDING users log in.
             checkForPendingUser(params)
-            
+
             // Perform the actual login. An AuthenticationException
             // will be thrown if the username is unrecognised or the
             // password is incorrect.
             doLogin(authToken)
 
-			embargoService.clearCache()
-			
-            log.info "Redirecting to '${targetUri}'."
-			
-			// Sometimes we are provided with a full URL, which needs a slightly
-			// different call to redirect (url instead of uri).
-			if (targetUri.startsWith("http://"))
-			{
-				redirect(url: targetUri)
-			}
-			else
-			{
-				redirect(uri: targetUri)
-			}
+            embargoService.clearCache()
+
+            redirectToTargetUrl(targetUri)
         }
         catch (AuthenticationException ex){
             // Authentication failed, so display the appropriate message
@@ -88,23 +77,39 @@ class AuthController {
         }
     }
 
-	private doLogin(UsernamePasswordToken authToken) {
-		SecurityUtils.subject.login(authToken)
-	}
+    private redirectToTargetUrl(targetUri)
+    {
+        log.info "Redirecting to '${targetUri}'."
 
-	private checkForPendingUser(Map params) {
-		if (Person.findByUsername(params.username)?.status == EntityStatus.PENDING)
-		{
-			throw new AuthenticationException("Attempted login by PENDING user: " + params.username)
-		}
-	}
+        // Sometimes we are provided with a full URL (starting with "http(s)://"), which needs a slightly
+        // different call to redirect (url instead of uri).
+        if (targetUri =~ /^https?:\/\//)
+        {
+            redirect(url: targetUri)
+        }
+        else
+        {
+            redirect(uri: targetUri)
+        }
+    }
+
+    private doLogin(UsernamePasswordToken authToken) {
+        SecurityUtils.subject.login(authToken)
+    }
+
+    private checkForPendingUser(Map params) {
+        if (Person.findByUsername(params.username)?.status == EntityStatus.PENDING)
+        {
+            throw new AuthenticationException("Attempted login by PENDING user: " + params.username)
+        }
+    }
 
     def signOut = {
         // Log the user out of the application.
         SecurityUtils.subject?.logout()
 
-		embargoService.clearCache()
-		
+        embargoService.clearCache()
+
         // For now, redirect back to the home page.
         redirect(uri: "/")
     }

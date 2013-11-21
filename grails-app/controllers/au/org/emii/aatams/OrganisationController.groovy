@@ -7,20 +7,20 @@ import grails.util.GrailsUtil
 class OrganisationController
 {
 	def permissionUtilsService
-	
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
     }
 
-    def list = 
+    def list =
     {
         params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-        
+
         def organisationTotal = Organisation.count()
         def organisationList = Organisation.list(params)
-        
+
         if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
         {
             // Filter out non-ACTIVE organisations (only sys admin should see these).
@@ -28,7 +28,7 @@ class OrganisationController
             {
                 return (it.status == EntityStatus.ACTIVE)
             }
-            
+
             // Only count ACTIVE organisations.
             // TODO: why doesn't .count({}) work here?
             organisationTotal = 0
@@ -39,13 +39,13 @@ class OrganisationController
                     organisationTotal++
                 }
             }
-//            organisationTotal = 
+//            organisationTotal =
 //                Organisation.list().count
 //                {
 //                    it.status == EntityStatus.ACTIVE
 //                }
         }
-        
+
         [organisationInstanceList: organisationList, organisationInstanceTotal: organisationTotal]
     }
 
@@ -55,21 +55,21 @@ class OrganisationController
         return [organisationInstance: organisationInstance]
     }
 
-    def save = 
+    def save =
     {
         def streetAddress = new Address(params['streetAddress']).save()
         def postalAddress = new Address(params['postalAddress']).save()
 
-        def organisationInstance = 
+        def organisationInstance =
             new Organisation(params['organisation'])
         organisationInstance.streetAddress = streetAddress
         organisationInstance.postalAddress = postalAddress
-        
+
         // If SysAdmin, then set Organisation's status to ACTIVE, otherwise,
         // set to PENDING.
-        Person user = Person.findByUsername(SecurityUtils.getSubject().getPrincipal())
+        Person user = Person.get(SecurityUtils.getSubject().getPrincipal())
         organisationInstance.request = new Request(requester:user, organisation: organisationInstance)
-        
+
         if (SecurityUtils.getSubject().hasRole("SysAdmin"))
         {
             organisationInstance.status = EntityStatus.ACTIVE
@@ -78,8 +78,8 @@ class OrganisationController
         {
             organisationInstance.status = EntityStatus.PENDING
         }
-        
-        if (organisationInstance.save(flush: true)) 
+
+        if (organisationInstance.save(flush: true))
         {
             if (SecurityUtils.getSubject().hasRole("SysAdmin"))
             {
@@ -121,14 +121,14 @@ class OrganisationController
 
     def update = {
         def organisationInstance = Organisation.get(params.id)
-        
+
         boolean prevPending = (organisationInstance.status == EntityStatus.PENDING)
-        
+
         if (organisationInstance) {
             if (params.version) {
                 def version = params.version.toLong()
                 if (organisationInstance.version > version) {
-                    
+
                     organisationInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'organisation.label', default: 'Organisation')] as Object[], "Another user has updated this Organisation while you were editing")
                     render(view: "edit", model: [organisationInstance: organisationInstance])
                     return
@@ -141,7 +141,7 @@ class OrganisationController
                 {
                     sendActivatedNotificationEmails(organisationInstance)
                 }
-                
+
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.toString()])}"
                 redirect(action: "show", id: organisationInstance.id)
             }
@@ -173,7 +173,7 @@ class OrganisationController
             redirect(action: "list")
         }
     }
-    
+
     /**
      * Notification emails are sent when an organisation is created (by a non-
      * sys admin) to:
@@ -183,25 +183,25 @@ class OrganisationController
      */
     def sendCreationNotificationEmails(organisation)
     {
-        sendMail 
-        {  
+        sendMail
+        {
             to organisation?.request?.requester?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
-            subject "${message(code: 'mail.request.organisation.create.subject', args: [organisation.name])}"     
-            body "${message(code: 'mail.request.organisation.create.body', args: [organisation.name, permissionUtilsService.principal().name])}" 
+            subject "${message(code: 'mail.request.organisation.create.subject', args: [organisation.name])}"
+            body "${message(code: 'mail.request.organisation.create.body', args: [organisation.name, permissionUtilsService.principal().name])}"
         }
     }
-    
+
     def sendActivatedNotificationEmails(organisation)
     {
-        sendMail 
-        {     
+        sendMail
+        {
             to organisation?.request?.requester?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
-            subject "${message(code: 'mail.request.organisation.activate.subject', args: [organisation.name])}"     
-            body "${message(code: 'mail.request.organisation.activate.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true), organisation?.request?.requester?.name])}" 
+            subject "${message(code: 'mail.request.organisation.activate.subject', args: [organisation.name])}"
+            body "${message(code: 'mail.request.organisation.activate.body', args: [organisation.name, createLink(action:'show', id:organisation.id, absolute:true), organisation?.request?.requester?.name])}"
         }
     }
 }

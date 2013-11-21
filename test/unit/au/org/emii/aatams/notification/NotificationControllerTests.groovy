@@ -78,7 +78,7 @@ class NotificationControllerTests extends AbstractControllerUnitTestCase
 
 	protected def getPrincipal()
 	{
-		return person.username
+		return person.id
 	}
 	
     void testAcknowledgeNoKey() 

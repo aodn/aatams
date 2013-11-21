@@ -68,6 +68,7 @@ grails.converters.json.circular.reference.behaviour = "INSERT_NULL"
 // Mail plugin config
 grails.mail.adminEmailAddress = "aatams_admin@emii.org.au"
 grails.mail.systemEmailAddress = "aatams_system@emii.org.au"
+grails.mail.supportEmailAddress = "info@emii.org.au"
 grails.mail.port = 25
 grails.mail.username = "aatams_system@utas.edu.au"
 grails.mail.props = ["mail.smtp.auth":"false"]
@@ -77,41 +78,41 @@ grails.plugin.databasemigration.updateOnStart = true
 grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
 
 auditLog {
-	actorClosure = { request, session ->
-		org.apache.shiro.SecurityUtils.getSubject()?.getPrincipal()
-	}
+    actorClosure = { request, session ->
+        org.apache.shiro.SecurityUtils.getSubject()?.getPrincipal()
+    }
 }
 
 // set per-environment serverURL stem for creating absolute links
 environments
 {
-	production
-	{
-		grails.serverURL = "http://aatams.emii.org.au/${grails.util.Metadata.current.getApplicationName()}"
-		grails.serverHost = "http://aatams.emii.org.au"
-		fileimport.path = "/tmp/fileimports"
-		bulkimport.path = "/tmp/fileimports/bulkimports"
-		grails.mail.host = "localhost"
-	}
-	development
-	{
-		grails.serverURL = "http://localhost:8080/${grails.util.Metadata.current.getApplicationName()}"
-		grails.serverHost = "http://localhost:8080"
-		fileimport.path = "/Users/jburgess/Documents/aatams/test_uploads"
-		bulkimport.path = "/Users/jburgess/Documents/aatams/test_uploads/bulkimports"
+    production
+    {
+        grails.serverURL = "http://aatams.emii.org.au/${grails.util.Metadata.current.getApplicationName()}"
+        grails.serverHost = "http://aatams.emii.org.au"
+        fileimport.path = new File(System.getProperty('java.io.tmpdir'), "aatams/test_uploads").toString()
+        bulkimport.path = new File(fileimport.path, "bulkimports").toString()
+        grails.mail.host = "localhost"
+    }
+    development
+    {
+        grails.serverURL = "http://localhost:8080/${grails.util.Metadata.current.getApplicationName()}"
+        grails.serverHost = "http://localhost:8080"
+        fileimport.path = new File(System.getProperty('java.io.tmpdir'), "aatams/test_uploads").toString()
+        bulkimport.path = new File(fileimport.path, "bulkimports").toString()
 
-		grails.mail.adminEmailAddress = "jkburges@utas.edu.au"
-		grails.mail.host = "postoffice.utas.edu.au"
-		grails.mail.disabled = true
-	}
-	test
-	{
-		grails.serverURL = "http://localhost:8090/${grails.util.Metadata.current.getApplicationName()}"
-		grails.serverHost = "http://localhost:8090"
-		grails.plugin.databasemigration.updateOnStart = false
-		grails.mail.disabled = true
-		fileimport.path = "/tmp"
-	}
+        grails.mail.adminEmailAddress = "jkburges@utas.edu.au"
+        grails.mail.host = "postoffice.utas.edu.au"
+        grails.mail.disabled = true
+    }
+    test
+    {
+        grails.serverURL = "http://localhost:8090/${grails.util.Metadata.current.getApplicationName()}"
+        grails.serverHost = "http://localhost:8090"
+        grails.plugin.databasemigration.updateOnStart = false
+        grails.mail.disabled = true
+        fileimport.path = "/tmp"
+    }
 }
 
 /**
@@ -135,20 +136,22 @@ if(!grails.config.locations || !(grails.config.locations instanceof List)) {
 }
 
 try {
-	configurationPath = new InitialContext().lookup('java:comp/env/aodn.configuration')
-	grails.config.locations << "file:${configurationPath}"
+    configurationPath = new InitialContext().lookup('java:comp/env/aodn.configuration')
+    grails.config.locations << "file:${configurationPath}"
 
-	println "Loading external config from '$configurationPath'..."
+    println "Loading external config from '$configurationPath'..."
 }
 catch (e) {
-	println "Not loading external config"
+    println "Not loading external config"
 }
+
+def log4jConversionPattern = '%d [%t] [%X{username}] %-5p %c{1} - %m%n'
 
 log4j =
 {
 	appenders
 	{
-		console name:'stdout', layout: pattern(conversionPattern: '%d [%t] [%X{username}] %-5p %c{1} - %m%n')
+		console name: 'stdout', layout: pattern(conversionPattern: log4jConversionPattern)
 		'null' name: "stacktrace"
 	}
 
@@ -174,20 +177,25 @@ log4j =
             appenders
             {
                 appender new de.viaboxx.nagios.NagiosAppender(
-                name: 'nagiosAppender',
-                threshold: Level.ERROR,
-                nagiosHost: 'status.emii.org.au',
-                nagiosPort: 5667,
-                nagiosEncryption: "TRIPLE_DES",
-                nagiosPassword: "broken cat batteries",
-                monitoredServiceName: "AATAMS-Log4J-Appender",
-                monitoredHostName: "vm-115-41.ersa.edu.au"
+                    name: 'nagiosAppender',
+                    threshold: Level.ERROR,
+                    nagiosHost: 'status.emii.org.au',
+                    nagiosPort: 5667,
+                    nagiosEncryption: "TRIPLE_DES",
+                    nagiosPassword: "broken cat batteries",
+                    monitoredServiceName: "AATAMS-Log4J-Appender",
+                    monitoredHostName: "vm-115-41.ersa.edu.au"
                 )
             }
 		}
 
 		development
 		{
+            appenders
+            {
+                file name: 'file', file: 'aatams.log', layout: pattern(conversionPattern: log4jConversionPattern)
+            }
+
 			debug  "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",
 				   "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService",
 				   "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
@@ -211,7 +219,8 @@ log4j =
 
 	root
 	{
-		info 'stdout', 'null', 'nagiosAppender'
+        info 'stdout', 'null', 'nagiosAppender', 'file'
+		info 'null', 'nagiosAppender', 'file'
 	}
 }
 
@@ -242,57 +251,57 @@ grails.gorm.default.mapping = {
    'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.Puntal)
    'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.Lineal)
    'user-type'(type:org.hibernatespatial.GeometryUserType, class:com.vividsolutions.jts.geom.Polygonal)
-	"user-type" type: org.joda.time.contrib.hibernate.PersistentDateTime, class: org.joda.time.DateTime
-	"user-type" type: org.joda.time.contrib.hibernate.PersistentDuration, class: org.joda.time.Duration
-	"user-type" type: org.joda.time.contrib.hibernate.PersistentInstant, class: org.joda.time.Instant
-	"user-type" type: org.joda.time.contrib.hibernate.PersistentInterval, class: org.joda.time.Interval
-	"user-type" type: org.joda.time.contrib.hibernate.PersistentLocalDate, class: org.joda.time.LocalDate
-	"user-type" type: org.joda.time.contrib.hibernate.PersistentLocalTimeAsString, class: org.joda.time.LocalTime
-	"user-type" type: org.joda.time.contrib.hibernate.PersistentLocalDateTime, class: org.joda.time.LocalDateTime
-	"user-type" type: org.joda.time.contrib.hibernate.PersistentPeriod, class: org.joda.time.Period
+    "user-type" type: org.joda.time.contrib.hibernate.PersistentDateTime, class: org.joda.time.DateTime
+    "user-type" type: org.joda.time.contrib.hibernate.PersistentDuration, class: org.joda.time.Duration
+    "user-type" type: org.joda.time.contrib.hibernate.PersistentInstant, class: org.joda.time.Instant
+    "user-type" type: org.joda.time.contrib.hibernate.PersistentInterval, class: org.joda.time.Interval
+    "user-type" type: org.joda.time.contrib.hibernate.PersistentLocalDate, class: org.joda.time.LocalDate
+    "user-type" type: org.joda.time.contrib.hibernate.PersistentLocalTimeAsString, class: org.joda.time.LocalTime
+    "user-type" type: org.joda.time.contrib.hibernate.PersistentLocalDateTime, class: org.joda.time.LocalDateTime
+    "user-type" type: org.joda.time.contrib.hibernate.PersistentPeriod, class: org.joda.time.Period
 }
 
 rawDetection.extract.limit = 50000
 rawDetection.extract.view.name = 'detection_extract_view'
 rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp,
-			installation_station.name as station,
-			installation_station.id as station_id,
-			installation_station.location as location,
-			st_y(installation_station.location) as latitude, st_x(installation_station.location) as longitude,
-			(device_model.model_name || '-' || device.serial_number) as receiver_name,
-			COALESCE(sensor.transmitter_id, '') as sensor_id,
-			COALESCE((species.spcode || ' - ' || species.scientific_name || ' (' || species.common_name || ')'), '') as species_name,
+            installation_station.name as station,
+            installation_station.id as station_id,
+            installation_station.location as location,
+            st_y(installation_station.location) as latitude, st_x(installation_station.location) as longitude,
+            (device_model.model_name || '-' || device.serial_number) as receiver_name,
+            COALESCE(sensor.transmitter_id, '') as sensor_id,
+            COALESCE((species.spcode || ' - ' || species.scientific_name || ' (' || species.common_name || ')'), '') as species_name,
 
-			sec_user.name as uploader,
-			valid_detection.transmitter_id as "transmitter_id",
-			organisation.name as organisation,
-			project.name as project,
-			installation.name as installation,
-			COALESCE(species.spcode, '') as spcode,
-			animal_release.id as animal_release_id,
-			animal_release.embargo_date as embargo_date,
-			project.id as project_id,
-			valid_detection.id as detection_id,
+            sec_user.name as uploader,
+            valid_detection.transmitter_id as "transmitter_id",
+            organisation.name as organisation,
+            project.name as project,
+            installation.name as installation,
+            COALESCE(species.spcode, '') as spcode,
+            animal_release.id as animal_release_id,
+            animal_release.embargo_date as embargo_date,
+            project.id as project_id,
+            valid_detection.id as detection_id,
 
-			animal_release.project_id as release_project_id,
-			valid_detection.sensor_value, valid_detection.sensor_unit,
+            animal_release.project_id as release_project_id,
+            valid_detection.sensor_value, valid_detection.sensor_unit,
             valid_detection.provisional
 
-			from valid_detection
+            from valid_detection
 
-			left join receiver_deployment on receiver_deployment_id = receiver_deployment.id
-			left join installation_station on receiver_deployment.station_id = installation_station.id
-			left join installation on installation_station.installation_id = installation.id
-			left join project on installation.project_id = project.id
-			left join device on receiver_deployment.receiver_id = device.id
-			left join device_model on device.model_id = device_model.id
-			left join receiver_download_file on receiver_download_id = receiver_download_file.id
-			left join sec_user on receiver_download_file.requesting_user_id = sec_user.id
-			left join organisation on device.organisation_id = organisation.id
-			left join detection_surgery on valid_detection.id = detection_surgery.detection_id
-			left join sensor on detection_surgery.sensor_id = sensor.id
+            left join receiver_deployment on receiver_deployment_id = receiver_deployment.id
+            left join installation_station on receiver_deployment.station_id = installation_station.id
+            left join installation on installation_station.installation_id = installation.id
+            left join project on installation.project_id = project.id
+            left join device on receiver_deployment.receiver_id = device.id
+            left join device_model on device.model_id = device_model.id
+            left join receiver_download_file on receiver_download_id = receiver_download_file.id
+            left join sec_user on receiver_download_file.requesting_user_id = sec_user.id
+            left join organisation on device.organisation_id = organisation.id
+            left join detection_surgery on valid_detection.id = detection_surgery.detection_id
+            left join sensor on detection_surgery.sensor_id = sensor.id
 
-			left join surgery on detection_surgery.surgery_id = surgery.id
-			left join animal_release on surgery.release_id = animal_release.id
-			left join animal on animal_release.animal_id = animal.id
-			left join species on animal.species_id = species.id'''
+            left join surgery on detection_surgery.surgery_id = surgery.id
+            left join animal_release on surgery.release_id = animal_release.id
+            left join animal on animal_release.animal_id = animal.id
+            left join species on animal.species_id = species.id'''

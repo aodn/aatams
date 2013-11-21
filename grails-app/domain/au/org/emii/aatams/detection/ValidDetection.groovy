@@ -1,8 +1,6 @@
 package au.org.emii.aatams.detection
 
-import java.util.Map
-import java.sql.PreparedStatement
-import java.sql.Timestamp
+import java.util.Map;
 
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormatter
@@ -151,28 +149,24 @@ class ValidDetection extends RawDetection implements Embargoable
 		return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.surgery.release.animal.species.name)
 	}
 
-	static PreparedStatement prepareInsertStatement(connection)
+	static String toSqlInsert(detection)
 	{
-		String sql = "INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) VALUES (nextval('hibernate_sequence'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-		return connection.prepareStatement(sql);
-	}
+		StringBuilder detectionBuff = new StringBuilder(
+				"INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, " +
+				"STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) " +
+				" VALUES(")
 
-	static void addToPreparedStatement(preparedStatement, detection)
-	{
-		preparedStatement.setLong     (1,  0)
-		preparedStatement.setTimestamp(2,  new Timestamp(detection.timestamp.getTime()))
-		preparedStatement.setLong     (3,  detection.receiverDownloadId)
-		preparedStatement.setString   (4,  detection.receiverName)
-		preparedStatement.setString   (5,  detection.sensorUnit)
-		// sensorValue can be null
-		preparedStatement.setFloat    (6,  detection.sensorValue ? Float.valueOf(detection.sensorValue) : 0f)
-		preparedStatement.setString   (7,  detection.stationName)
-		preparedStatement.setString   (8,  detection.transmitterId)
-		preparedStatement.setString   (9,  detection.transmitterName)
-		preparedStatement.setString   (10, detection.transmitterSerialNumber)
-		preparedStatement.setLong     (11, detection.receiverDeploymentId)
-		preparedStatement.setBoolean  (12, detection.provisional)
-		preparedStatement.addBatch()
+		detectionBuff.append("nextval('hibernate_sequence'),")
+		detectionBuff.append("0,")
+		detectionBuff.append("'" + new java.sql.Timestamp(detection["timestamp"].getTime()) + "',")
+		SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDownloadId"])
+		SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
+			"transmitterSerialNumber"])
+		SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDeploymentId"])
+		SqlUtils.appendBooleanParams(detectionBuff, detection, ["provisional"])
+		SqlUtils.removeTrailingCommaAndAddBracket(detectionBuff)
+
+		return detectionBuff.toString()
 	}
 
 	def applyEmbargo()

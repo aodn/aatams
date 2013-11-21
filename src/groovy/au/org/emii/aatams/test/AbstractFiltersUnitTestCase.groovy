@@ -27,7 +27,7 @@ abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase
 		authenticated = true
 		permitted = false
 
-        user =  new Person(username:"jkburges")
+		user =  new Person(username:"jkburges")
         
 		def subject = [ getPrincipal: { getPrincipal() },
 						isAuthenticated: { isAuthenticated() },

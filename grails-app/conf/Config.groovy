@@ -220,8 +220,7 @@ log4j =
 	root
 	{
         info 'stdout', 'null', 'nagiosAppender', 'file'
-		info 'null', 'nagiosAppender', 'file'
-	}
+    }
 }
 
 // Date formats.

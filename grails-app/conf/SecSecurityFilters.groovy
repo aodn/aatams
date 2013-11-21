@@ -97,6 +97,9 @@ class SecSecurityFilters
         // Anyone (including unauthenticated users) can list/index/show the 
         // accessible by all controllers.
         //
+        // Note that for some entities (e.g. surgery, detection surgery) the results are still subject 
+        // to "embargo" filtering
+        //
         listIndexShow(controller:accessibleByAllControllersRegexp, action:'list|index|show|acknowledge')
         {
             before =

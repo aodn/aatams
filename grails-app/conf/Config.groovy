@@ -84,6 +84,10 @@ auditLog {
     }
 }
 
+compassConnection = new File(
+    "/tmp/search/${grailsEnv}"
+).absolutePath
+
 // set per-environment serverURL stem for creating absolute links
 environments
 {
@@ -116,6 +120,7 @@ environments
     }
 }
 
+
 /**
  * Instance specific customisation, clearly stolen from:
  * http://phatness.com/2010/03/how-to-externalize-your-grails-configuration/
@@ -145,6 +150,7 @@ try {
 catch (e) {
     println "Not loading external config"
 }
+
 
 def log4jConversionPattern = '%d [%t] [%X{username}] %-5p %c{1} - %m%n'
 

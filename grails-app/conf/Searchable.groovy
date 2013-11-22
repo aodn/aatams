@@ -124,28 +124,24 @@ searchable {
      * which means do a non-forking, otherwise "fork" is recommended
      */
     bulkIndexOnStartup = "fork"
-	
+
     /**
      * Should index locks be removed (if present) at startup?
      */
     releaseLocksOnStartup = true
-	
-    compassConnection = new File(
-        "/tmp/search/${grailsEnv}"
-    ).absolutePath
 }
 
 // per-environment settings
 environments {
 
-    test 
+    test
     {
-        searchable 
+        searchable
         {
             // Make sure things are in the index before tests are run (by doing
             // on main thread).
             bulkIndexOnStartup = true
-            
+
             // use faster in-memory index
             compassConnection = "ram://test-index"
         }

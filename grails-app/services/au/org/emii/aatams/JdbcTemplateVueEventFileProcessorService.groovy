@@ -26,8 +26,15 @@ class JdbcTemplateVueEventFileProcessorService extends VueEventFileProcessorServ
 	
 	protected void endBatch(context)
 	{
-		log.debug("End batch, inserting events...")
-		insertEvents(context)
+		if (context.eventBatch.isEmpty())
+		{
+			log.warn("Event batch empty.")
+		}
+		else
+		{
+			log.debug("End batch, inserting events...")
+			insertEvents(context)
+	    }
 	}
 	
 	private void insertEvents(context)

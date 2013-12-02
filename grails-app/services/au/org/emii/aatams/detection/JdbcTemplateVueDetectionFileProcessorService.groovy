@@ -1,21 +1,13 @@
 package au.org.emii.aatams.detection
 
-import java.util.Map;
+import groovy.sql.Sql
+
+import org.springframework.jdbc.core.JdbcTemplate
 
 import au.org.emii.aatams.DetectionSurgery
 import au.org.emii.aatams.FileProcessingException
-import au.org.emii.aatams.Statistics
 import au.org.emii.aatams.ReceiverDownloadFile
-import au.org.emii.aatams.util.SqlUtils
-
-import au.org.emii.aatams.bulk.BulkImportException
-
-import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate
-import org.springframework.jdbc.core.namedparam.SqlParameterSource
-import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils
-
-import groovy.sql.Sql
+import au.org.emii.aatams.Statistics
 
 /**
  *  Uses JDBC template (rather than GORM) to persist detection records.

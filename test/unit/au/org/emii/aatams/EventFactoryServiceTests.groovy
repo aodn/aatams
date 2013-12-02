@@ -1,6 +1,7 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.*
+import au.org.emii.aatams.event.EventFormat;
 import grails.test.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
@@ -28,11 +29,11 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 		mockLogging(EventValidator, true)
 		
 		standardParams =
-				[(EventFactoryService.DATE_AND_TIME_COLUMN):"2008-12-08 12:44:24",
-				 (EventFactoryService.RECEIVER_COLUMN):"VR3UWM-354",
-				 (EventFactoryService.DESCRIPTION_COLUMN):"Initialization",
-				 (EventFactoryService.DATA_COLUMN):"",
-				 (EventFactoryService.UNITS_COLUMN):""]
+				[(EventFormat.DATE_AND_TIME_COLUMN):"2008-12-08 12:44:24",
+				 (EventFormat.RECEIVER_COLUMN):"VR3UWM-354",
+				 (EventFormat.DESCRIPTION_COLUMN):"Initialization",
+				 (EventFormat.DATA_COLUMN):"",
+				 (EventFormat.UNITS_COLUMN):""]
 			 
 		ReceiverDeviceModel model = new ReceiverDeviceModel(modelName:"VR3UWM")
 		mockDomain(ReceiverDeviceModel, [model])
@@ -60,7 +61,7 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 		mockDomain(ReceiverEvent)
 		mockDomain(ValidReceiverEvent)
 		
-		downloadFile = new ReceiverDownloadFile()
+		downloadFile = new ReceiverDownloadFile(type: ReceiverDownloadFileType.EVENTS_CSV)
 		mockDomain(ReceiverDownloadFile, [downloadFile])
 		downloadFile.save()
     }
@@ -72,10 +73,10 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 
     void testDuplicateEvent() 
 	{
-		def validEvent = newEvent(new ReceiverDownloadFile(), standardParams)
+		def validEvent = newEvent(new ReceiverDownloadFile(type: ReceiverDownloadFileType.EVENTS_CSV), standardParams)
 		assertNotNull(validEvent)
 		
-		def duplicateEvent = newEvent(new ReceiverDownloadFile(), standardParams)
+		def duplicateEvent = newEvent(new ReceiverDownloadFile(type: ReceiverDownloadFileType.EVENTS_CSV), standardParams)
 		assertNotNull(duplicateEvent)
 		assertTrue(duplicateEvent instanceof InvalidReceiverEvent)
 		assertEquals(InvalidDetectionReason.DUPLICATE, duplicateEvent.reason)
@@ -84,8 +85,8 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 	
 	void testUnknownReceiver()
 	{
-		standardParams[EventFactoryService.RECEIVER_COLUMN] = "VR3UWM-123"
-		def invalidEvent = newEvent(new ReceiverDownloadFile(), standardParams)
+		standardParams[EventFormat.RECEIVER_COLUMN] = "VR3UWM-123"
+		def invalidEvent = newEvent(new ReceiverDownloadFile(type: ReceiverDownloadFileType.EVENTS_CSV), standardParams)
 		assertNotNull(invalidEvent)
 		assertTrue(invalidEvent instanceof InvalidReceiverEvent)
 		assertEquals(InvalidDetectionReason.UNKNOWN_RECEIVER, invalidEvent.reason)
@@ -97,7 +98,7 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 		deployment.initialisationDateTime = null
 		
 		// test deployment.initializationDateTime
-		def notInitialisedEvent = newEvent(new ReceiverDownloadFile(), standardParams)
+		def notInitialisedEvent = newEvent(new ReceiverDownloadFile(type: ReceiverDownloadFileType.EVENTS_CSV), standardParams)
 //		initialisationDateTime:new DateTime("2008-12-08T02:00:00"),
 //		deploymentDateTime:new DateTime("2008-12-09T06:44:24"))
 
@@ -112,7 +113,7 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 		deployment.initialisationDateTime = new DateTime("2009-12-08T07:44:24Z")
 		
 		// test deployment.initializationDateTime
-		def notInitialisedEvent = newEvent(new ReceiverDownloadFile(), standardParams)
+		def notInitialisedEvent = newEvent(new ReceiverDownloadFile(type: ReceiverDownloadFileType.EVENTS_CSV), standardParams)
 		
 		assertNotNull(notInitialisedEvent)
 		assertTrue(notInitialisedEvent instanceof InvalidReceiverEvent)
@@ -126,7 +127,7 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 		recovery.save()
 
 		def noRecoveryAtDateTimeEvent =
-			newEvent(new ReceiverDownloadFile(), standardParams)
+			newEvent(new ReceiverDownloadFile(type: ReceiverDownloadFileType.EVENTS_CSV), standardParams)
 		
 		assertNotNull(noRecoveryAtDateTimeEvent)
 		assertTrue(noRecoveryAtDateTimeEvent instanceof InvalidReceiverEvent)
@@ -136,9 +137,9 @@ class EventFactoryServiceTests extends GrailsUnitTestCase
 	
 	void testValidEvent()
 	{
-		standardParams[EventFactoryService.DESCRIPTION_COLUMN] = "Blanking"
-		standardParams[EventFactoryService.DATA_COLUMN] = "260"
-		standardParams[EventFactoryService.UNITS_COLUMN] = "ms"
+		standardParams[EventFormat.DESCRIPTION_COLUMN] = "Blanking"
+		standardParams[EventFormat.DATA_COLUMN] = "260"
+		standardParams[EventFormat.UNITS_COLUMN] = "ms"
 		
 		def validEvent = newEvent(downloadFile, standardParams)
 		

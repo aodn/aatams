@@ -1,18 +1,18 @@
 package au.org.emii.aatams.detection
 
+import au.org.emii.aatams.FileFormat;
 import au.org.emii.aatams.bulk.BulkImportException
 import au.org.emii.aatams.bulk.FileFormatException
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
 import com.vividsolutions.jts.geom.Point
 
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.Map;
 
-class VueDetectionFormat extends DetectionFormat 
+class VueDetectionFormat extends FileFormat 
 {
 	static final String DATE_AND_TIME_COLUMN = "Date and Time (UTC)"
+	static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
 	static final String RECEIVER_COLUMN = "Receiver"
 	static final String TRANSMITTER_COLUMN = "Transmitter"
 	static final String TRANSMITTER_NAME_COLUMN = "Transmitter Name"
@@ -24,12 +24,11 @@ class VueDetectionFormat extends DetectionFormat
 	static final String LONGITUDE_COLUMN = "Longitude"
 	
 	static final String TRANSMITTER_ID_DELIM = "-"
-	static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
 
-	Map parseRow(row) throws BulkImportException
+	Map parseRow(row) throws FileFormatException
 	{
 
-        def timestamp = timestamp(row)
+        def timestamp = getUtcDate(row, DATE_AND_TIME_COLUMN, DATE_FORMAT)
 		
 		def retMap =
 			   [timestamp:timestamp,
@@ -71,18 +70,4 @@ class VueDetectionFormat extends DetectionFormat
 			return null
 		}
 	}
-
-    private def timestamp(row)
-    {
-        try
-        {
-            return new SimpleDateFormat(DATE_FORMAT).parse(row[DATE_AND_TIME_COLUMN] + " " + "UTC")
-        }
-        catch (NullPointerException npe) {
-            throw new FileFormatException("Missing $DATE_AND_TIME_COLUMN value", npe)
-        }
-        catch (ParseException pe) {
-            throw new FileFormatException("Incorrect format for $DATE_AND_TIME_COLUMN expected ${DATE_FORMAT}", pe)
-        }
-    }
 }

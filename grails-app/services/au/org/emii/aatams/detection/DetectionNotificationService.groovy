@@ -1,12 +1,10 @@
 package au.org.emii.aatams.detection
 
-import java.util.SortedSet;
-
-import au.org.emii.aatams.FileProcessingException;
-import au.org.emii.aatams.Person;
-import au.org.emii.aatams.ReceiverDownloadFile;
-import au.org.emii.aatams.Sensor;
 import org.springframework.context.i18n.LocaleContextHolder as LCH
+
+import au.org.emii.aatams.Person
+import au.org.emii.aatams.ReceiverDownloadFile
+import au.org.emii.aatams.Sensor
 
 class DetectionNotificationService 
 {

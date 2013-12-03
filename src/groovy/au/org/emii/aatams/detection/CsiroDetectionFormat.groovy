@@ -6,19 +6,21 @@ import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat;
 
+import au.org.emii.aatams.FileFormat;
 import au.org.emii.aatams.Receiver
 import au.org.emii.aatams.ReceiverDeployment
 import au.org.emii.aatams.Tag
 import au.org.emii.aatams.bulk.BulkImportException
 import au.org.emii.aatams.bulk.BulkImportRecord;
 
-class CsiroDetectionFormat extends DetectionFormat 
+class CsiroDetectionFormat extends FileFormat 
 {
-	static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss Z")
-	
-	Map parseRow(row) throws BulkImportException
+	static final String DATE_AND_TIME_COLUMN = "DET_DATETIME"
+	static final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ss Z"
+    
+	Map parseRow(row) throws FileFormatException
 	{
-        return [timestamp: timestamp(row),
+        return [timestamp: getUtcDate(row, DATE_AND_TIME_COLUMN, DATE_FORMAT),
 			    receiverName: receiver(row).name,
 				transmitterId: tag(row).sensors.toList()[0].transmitterId]
 	}
@@ -64,18 +66,4 @@ class CsiroDetectionFormat extends DetectionFormat
 
         return receiver
     }
-
-    def timestamp(row) throws FileFormatException {
-        def dateTimeColumnName = 'DET_DATETIME'
-        try {
-            return DATE_FORMAT.parse(row[dateTimeColumnName] + " UTC")
-        }
-        catch (NullPointerException npe) {
-            throw new FileFormatException("Missing $dateTimeColumnName value", npe)
-        }
-        catch (ParseException pe) {
-            throw new FileFormatException("Incorrect format for $dateTimeColumnName expected ${DATE_FORMAT.toPattern()}", pe)
-        }
-    }
-
 }

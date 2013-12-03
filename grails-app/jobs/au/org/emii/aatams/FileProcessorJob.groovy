@@ -9,30 +9,30 @@ class FileProcessorJob
 	
 	def execute(context)
 	{
-		def receiverDownloadFileInstance
-		
         try
         {
-            receiverDownloadFileInstance = ReceiverDownloadFile.get(context.mergedJobDataMap.get('downloadFileId'))
             fileProcessorService.process(context.mergedJobDataMap.get('downloadFileId'), 
                                          context.mergedJobDataMap.get('file'),
                                          context.mergedJobDataMap.get('showLink'))
         }
         catch (FileProcessingException e)
         {
-            log.error("", e)
-            
-            receiverDownloadFileInstance?.status = FileProcessingStatus.ERROR
-            receiverDownloadFileInstance?.errMsg = e.getMessage()
-            receiverDownloadFileInstance?.save()
+            _logException(context, e, e.getMessage())
         }
         catch (Throwable t)
         {
-            log.error("", t)
-            
-            receiverDownloadFileInstance?.status = FileProcessingStatus.ERROR
-            receiverDownloadFileInstance?.errMsg = "System Error - Contact eMII" //t.getMessage()
-            receiverDownloadFileInstance?.save()
+            _logException(context, t, "System Error - Contact eMII")
         }
-	}
+    }
+    
+    def _logException(context, e, message)
+    {
+        log.error("", e)
+        
+        def receiverDownloadFileInstance = ReceiverDownloadFile.get(context.mergedJobDataMap.get('downloadFileId'))
+        
+        receiverDownloadFileInstance?.status = FileProcessingStatus.ERROR
+        receiverDownloadFileInstance?.errMsg = message
+        receiverDownloadFileInstance?.save()
+    }
 }

@@ -864,6 +864,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 		createExportWithDetections("embargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, embargoedTag, embargoedWhaleSurgery, 3)
 		createExportWithDetections("unknownTagWhale.csv", joeBloggs, whaleDeployment, rxWhale, [pinger:[transmitterId:"A69-1303-8888"]], null, 3)
 		
+		new Statistics(key: "numValidDetections", value: 31).save(failOnError: true)
+		
         ReceiverDownloadFile export2 = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
                                      name:"export2.csv",

@@ -1,10 +1,8 @@
 package au.org.emii.aatams
 
 
-import org.joda.time.DateTime;
-
-import grails.plugin.searchable.SearchableService
 import grails.test.*
+import au.org.emii.aatams.event.EventFormat
 
 
 class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorServiceTests 
@@ -40,9 +38,9 @@ class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorSer
 		{
 			record, i ->
 			
-			assertEquals(record[EventFactoryService.RECEIVER_COLUMN], ValidReceiverEvent.list()[i].receiverDeployment.receiver.name)
-			assertEquals(record[EventFactoryService.DESCRIPTION_COLUMN], ValidReceiverEvent.list()[i].description)
-			assertEquals(record[EventFactoryService.DATA_COLUMN], ValidReceiverEvent.list()[i].data ?: "")
+			assertEquals(record[EventFormat.RECEIVER_COLUMN], ValidReceiverEvent.list()[i].receiverDeployment.receiver.name)
+			assertEquals(record[EventFormat.DESCRIPTION_COLUMN], ValidReceiverEvent.list()[i].description)
+			assertEquals(record[EventFormat.DATA_COLUMN], ValidReceiverEvent.list()[i].data ?: "")
 			
 			// Special case for #1016
 			if (ValidReceiverEvent.list()[i].units?.startsWith("Shad Bay"))
@@ -51,7 +49,7 @@ class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorSer
 			}
 			else
 			{
-				assertEquals(record[EventFactoryService.UNITS_COLUMN], ValidReceiverEvent.list()[i].units ?: "")
+				assertEquals(record[EventFormat.UNITS_COLUMN], ValidReceiverEvent.list()[i].units ?: "")
 			}
 		}
     }

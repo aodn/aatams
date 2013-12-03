@@ -127,13 +127,11 @@ abstract class AbstractBatchProcessor
                     startBatch(context)
                 }
 
-                // TODO: should be getting exceptions - but it depends on reading in
-                // all CSIRO imports (rather than ignoring some records).
                 try
                 {
                     processSingleRecord(downloadFile, map, context)
                 }
-                catch (Throwable e)	// should only have to catch BulkImportException, but that is being wrapped for some reason.
+                catch (FileProcessingException e)	
                 {
                     log.error("Exception reading record: ${map}", e)
                     throw e

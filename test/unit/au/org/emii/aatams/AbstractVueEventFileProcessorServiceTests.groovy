@@ -64,7 +64,7 @@ abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestC
 		mockDomain(ReceiverDownloadFile, [download])
         download.importDate = new Date()
         download.name = "My Download File"
-        download.type = ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV
+        download.type = ReceiverDownloadFileType.EVENTS_CSV
         download.metaClass.toString = { super.toString() }
 		download.save()
 	}

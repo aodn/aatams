@@ -4,4 +4,5 @@ databaseChangeLog = {
     include file: 'foreign_key_indices.groovy'
     include file: 'correct_url_in_detection_count_per_station.groovy'
     include file: 'truncate_instead_of_delete_on_refresh_matview.groovy'
+    include file: 'vr4_uwm_receiver_model.groovy'
 }

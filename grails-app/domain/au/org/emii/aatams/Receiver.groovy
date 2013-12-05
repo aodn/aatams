@@ -14,75 +14,71 @@ class Receiver extends Device
      * Detections recorded at the receiver.
      */
     Set<ValidDetection> detections = new HashSet<ValidDetection>()
-	
+
     static hasMany = [detections: ValidDetection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
     static transients = ['name', 'deviceID', 'status', 'currentRecovery', 'mostRecentDeployment']
 	static auditable = true
-	
-    static mapping = 
+
+    static mapping =
     {
         organisation sort:'name'
 		cache true
 		validDetections cache:true
 		invalidDetections cache:true
     }
-    
+
     static searchable = [only: ['name']]
-    
+
 	String getName()
 	{
 		return String.valueOf(model) + "-" + serialNumber
 	}
-	
+
 	String getDeviceID()
 	{
 		return getName()
 	}
-	
+
 	String toString()
 	{
 		return getName()
 	}
-	
+
 	private ReceiverDeployment getMostRecentDeployment(dateTime)
 	{
 		if (!deployments || deployments.isEmpty())
 		{
 			return null
 		}
-		
+
 		def chronoDeployments = deployments.sort { a, b -> a.deploymentDateTime <=> b.deploymentDateTime }
 		chronoDeployments = chronoDeployments.grep
 		{
 			!it.deploymentDateTime.isAfter(dateTime)
 		}
-		
+
 		if (chronoDeployments.isEmpty())
 		{
 			return null
 		}
-		
+
 		return chronoDeployments.last()
 	}
-	
+
 	private boolean hasActiveDeployment(dateTime)
 	{
 		// A receiver is only considered to have an active deployment if the *last* deployment is active.
-		return getMostRecentDeployment(dateTime)?.isActive(dateTime) 
-		
-		
-//		def activeDeployments = deployments.findAll { it.isActive(dateTime) }
-//		return !activeDeployments.isEmpty() 
+		return getMostRecentDeployment(dateTime)?.isActive(dateTime)
 	}
-	
+
 	private ReceiverRecovery getCurrentRecovery(dateTime)
 	{
 		if (hasActiveDeployment(dateTime))
 		{
 			return null
 		}
-		
+
 		def recoveries = deployments*.recovery
 		recoveries?.removeAll
 		{
@@ -92,15 +88,15 @@ class Receiver extends Device
 		recoveries = recoveries?.sort
 		{
 			a, b ->
-			
+
 			a.recoveryDateTime <=> b.recoveryDateTime
 		}
-		
+
 		if (recoveries && !recoveries.isEmpty())
 		{
 			return recoveries.last()
 		}
-		
+
 		return null
 	}
 
@@ -118,15 +114,15 @@ class Receiver extends Device
 				return currentRecovery.status
 			}
 		}
-		
+
 		return DeviceStatus.findByStatus(DeviceStatus.NEW, [cache:true])
 	}
-	
+
 	DeviceStatus getStatus()
 	{
 		return getStatus(now())
 	}
-	
+
 	private DateTime now()
 	{
 		return new DateTime()
@@ -146,7 +142,7 @@ class Receiver extends Device
 				addToDeployments(deployment)
 			}
 		}
-		
+
 		return getStatus(deployment.deploymentDateTime)
 	}
 
@@ -164,33 +160,36 @@ class Receiver extends Device
 				addToDeployments(deployment)
 			}
 		}
-		
+
 		return canDeployAtTime(deployment.deploymentDateTime)
 	}
-	
+
     boolean canDeployAtTime(dateTime)
     {
         DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
         DeviceStatus retiredStatus = DeviceStatus.findByStatus('RETIRED')
-        
+
 		log.debug("Status: " + getStatus(dateTime) + ", at time: " + dateTime)
         if ([deployedStatus, retiredStatus].contains(getStatus(dateTime)))
         {
             return false
         }
-        
+
         return true
     }
-	
+
 	/**
 	 * Backward compatibility.
 	 */
 	static Receiver findByName(name, params=[:])
 	{
 		def tokens = name.tokenize("-")
-		assert(tokens.size() == 2): "Invalid receiver name: " + name
-		
-		return Receiver.findByModelAndSerialNumber(ReceiverDeviceModel.findByModelName(tokens[0], params), 
-												   tokens[1], params)
+		assert(tokens.size() >= 2): "Invalid receiver name: " + name
+
+        def modelName = tokens[0..-2].join('-')
+        def serialNumber = tokens.last()
+
+		return Receiver.findByModelAndSerialNumber(ReceiverDeviceModel.findByModelName(modelName, params),
+												   serialNumber, params)
 	}
 }

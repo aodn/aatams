@@ -16,42 +16,42 @@ import com.vividsolutions.jts.geom.Point
 
 import shiro.*
 
-class BootStrap 
+class BootStrap
 {
     def dataSource
 	def grailsApplication
     def permissionUtilsService
     def searchableService
 
-    def init = 
-    { 
+    def init =
+    {
         servletContext ->
 
 		// // Eager initialize GORM Domain Mixin Methods.
 		// // See: http://grails.1312388.n4.nabble.com/GORM-dynamic-save-method-intermittently-not-found-td3859120.html
 		// // Without this, can get a groovy.lang.MissingMethodException when load testing concurrent detection uploads.
-		// grailsApplication.domainClasses.each 
+		// grailsApplication.domainClasses.each
 		// {
 		// 	dc ->
-			
+
 		// 	dc.clazz.count()
 		// }
-	
-		Map.metaClass.flatten = 
-		{ 
+
+		Map.metaClass.flatten =
+		{
 			String prefix='' ->
-			
-			delegate.inject( [:] ) 
+
+			delegate.inject( [:] )
 			{
 				map, v ->
 				def kstr = "$prefix${ prefix ? '.' : ''  }$v.key"
-				
+
 				if( v.value instanceof Map ) map += v.value.flatten( kstr )
 				else                         map[ kstr ] = v.value
 				map
 		    }
 		}
-		
+
 		JSON.registerObjectMarshaller(Animal.class)
 		{
 			def returnArray = [:]
@@ -60,7 +60,7 @@ class BootStrap
 
 			return returnArray
 		}
-		
+
 		// Add "label" property for the jquery autocomplete plugin.
 		JSON.registerObjectMarshaller(Species.class)
 		{
@@ -81,7 +81,7 @@ class BootStrap
 
 			return returnArray
 		}
-		
+
 		JSON.registerObjectMarshaller(Installation.class)
 		{
 			def returnArray = [:]
@@ -138,16 +138,16 @@ class BootStrap
 
 			return returnArray
 		}
-		
+
 		Tag.registerObjectMarshaller()
-		
+
 		JSON.registerObjectMarshaller(Point.class)
 		{
 			return [x:it.coordinate.x,
 					y:it.coordinate.y,
 					srid:it.SRID]
 		}
-		   
+
 		JSON.registerObjectMarshaller(AnimalMeasurement.class)
 		{
 			def returnArray = [:]
@@ -157,10 +157,10 @@ class BootStrap
 			returnArray['unit'] = it.unit
 			returnArray['estimate'] = it.estimate
 			returnArray['comments'] = it.comments
-			
+
 			return returnArray
 		}
-		
+
 		JSON.registerObjectMarshaller(ProjectRole.class)
 		{
 			def returnArray = [:]
@@ -168,20 +168,20 @@ class BootStrap
 			returnArray['person'] = it.person
 			returnArray['roleType'] = it.roleType
 			returnArray['access'] = it.access
-			
+
 			return returnArray
 		}
-		
+
 		JSON.registerObjectMarshaller(OrganisationProject.class)
 		{
 			def returnArray = [:]
-			
+
 			returnArray['id'] = it.id
 			returnArray['organisation'] = it.organisation
-			
+
 			return returnArray
 		}
-		
+
 		JSON.registerObjectMarshaller(Sensor.class)
 		{
 			def returnArray = [:]
@@ -197,23 +197,23 @@ class BootStrap
 			returnArray['label'] = it.transmitterId
 			returnArray['serialNumber'] = it.tag.serialNumber
 			returnArray['model'] = it.tag.model
-			
+
 			return returnArray
 		}
 
         // Required for following metaclass override to "stick".
         ValidDetection.count()
-        
+
         // Performance optimisation (select count(*) is slow on large tables).
         ValidDetection.metaClass.static.count =
         {
-            
+
             return Statistics.getStatistic('numValidDetections')
         }
 
         assert(permissionUtilsService): "permissionUtilsService cannot be null"
         DataInitialiser initialiser  //= new DevelopmentDataInitialiser(permissionUtilsService)
-            
+
         environments
         {
             test
@@ -222,22 +222,22 @@ class BootStrap
                 assert(initialiser): "Initialiser cannot be null"
                 initialiser.execute()
             }
-            
+
             development
             {
-//                initialiser = new DevelopmentDataInitialiser(permissionUtilsService)
-//
-//                assert(initialiser): "Initialiser cannot be null"
-//                initialiser.execute()
+               // initialiser = new DevelopmentDataInitialiser(permissionUtilsService)
+
+               // assert(initialiser): "Initialiser cannot be null"
+               // initialiser.execute()
             }
-            
+
             production
             {
 //                initialiser = new ReferenceDataInitialiser(permissionUtilsService)
 //                assert(initialiser): "Initialiser cannot be null"
 //                initialiser.execute()
             }
-            
+
             performance
             {
                 initialiser = new PerformanceDataInitialiser(permissionUtilsService)
@@ -246,8 +246,8 @@ class BootStrap
             }
         }
     }
-    
-    def destroy = 
+
+    def destroy =
     {
     }
 }

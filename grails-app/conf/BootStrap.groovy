@@ -225,17 +225,13 @@ class BootStrap
 
             development
             {
-               // initialiser = new DevelopmentDataInitialiser(permissionUtilsService)
+                if (Booelan.getBoolean('initialiseWithData'))
+                {
+                    initialiser = new DevelopmentDataInitialiser(permissionUtilsService)
 
-               // assert(initialiser): "Initialiser cannot be null"
-               // initialiser.execute()
-            }
-
-            production
-            {
-//                initialiser = new ReferenceDataInitialiser(permissionUtilsService)
-//                assert(initialiser): "Initialiser cannot be null"
-//                initialiser.execute()
+                    assert(initialiser): "Initialiser cannot be null"
+                    initialiser.execute()
+                }
             }
 
             performance

@@ -96,206 +96,206 @@ class ReceiverTests extends GrailsUnitTestCase
 		Receiver newReceiver = new Receiver()
 		newReceiver.save()
 
-		assertStatus("NEW", newReceiver)
-	}
+        assertStatus("NEW", newReceiver)
+    }
 
-	void testStatusWithDeployment()
-	{
-		Receiver receiver = new Receiver()
-		receiver.save()
-		assertStatus("NEW", receiver)
+    void testStatusWithDeployment()
+    {
+        Receiver receiver = new Receiver()
+        receiver.save()
+        assertStatus("NEW", receiver)
 
-		ReceiverDeployment deployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: new DateTime().minusDays(1))
-		deployment.save()
-		receiver.addToDeployments(deployment)
-		receiver.save()
+        ReceiverDeployment deployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: new DateTime().minusDays(1))
+        deployment.save()
+        receiver.addToDeployments(deployment)
+        receiver.save()
 
-		assertStatus("DEPLOYED", receiver)
-	}
+        assertStatus("DEPLOYED", receiver)
+    }
 
-	void testStatusWithDeploymentAndRecovery()
-	{
-		Receiver receiver = new Receiver()
-		receiver.save()
-		assertStatus("NEW", receiver)
+    void testStatusWithDeploymentAndRecovery()
+    {
+        Receiver receiver = new Receiver()
+        receiver.save()
+        assertStatus("NEW", receiver)
 
-		ReceiverDeployment deployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: new DateTime().minusDays(2))
-		deployment.save()
-		receiver.addToDeployments(deployment)
-		receiver.save()
-		assertStatus("DEPLOYED", receiver)
+        ReceiverDeployment deployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: new DateTime().minusDays(2))
+        deployment.save()
+        receiver.addToDeployments(deployment)
+        receiver.save()
+        assertStatus("DEPLOYED", receiver)
 
-		ReceiverRecovery recovery = new ReceiverRecovery(deployment: deployment, recoveryDateTime: new DateTime().minusDays(1), status: DeviceStatus.findByStatus('RECOVERED'))
-		recovery.save()
-		deployment.recovery = recovery
-		deployment.save()
+        ReceiverRecovery recovery = new ReceiverRecovery(deployment: deployment, recoveryDateTime: new DateTime().minusDays(1), status: DeviceStatus.findByStatus('RECOVERED'))
+        recovery.save()
+        deployment.recovery = recovery
+        deployment.save()
 
-		assertStatus("RECOVERED", receiver)
-	}
+        assertStatus("RECOVERED", receiver)
+    }
 
-	void testStatusWithDeploymentAndRecoveryAtTime()
-	{
-		Receiver receiver = new Receiver()
-		receiver.save()
+    void testStatusWithDeploymentAndRecoveryAtTime()
+    {
+        Receiver receiver = new Receiver()
+        receiver.save()
 
-		assertStatus("NEW", receiver)
-		assertStatus("NEW", receiver, new DateTime().minusDays(1))
-		assertStatus("NEW", receiver, new DateTime().plusDays(1))
+        assertStatus("NEW", receiver)
+        assertStatus("NEW", receiver, new DateTime().minusDays(1))
+        assertStatus("NEW", receiver, new DateTime().plusDays(1))
 
-		def deploymentDate = new DateTime().minusDays(5)
-		ReceiverDeployment deployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: deploymentDate)
-		deployment.save()
-		receiver.addToDeployments(deployment)
-		receiver.save()
+        def deploymentDate = new DateTime().minusDays(5)
+        ReceiverDeployment deployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: deploymentDate)
+        deployment.save()
+        receiver.addToDeployments(deployment)
+        receiver.save()
 
-		assertStatus("DEPLOYED", receiver)
-		assertStatus("NEW", receiver, deploymentDate.minusDays(1))
-		assertStatus("DEPLOYED", receiver, deploymentDate)
-		assertStatus("DEPLOYED", receiver, deploymentDate.plusDays(1))
+        assertStatus("DEPLOYED", receiver)
+        assertStatus("NEW", receiver, deploymentDate.minusDays(1))
+        assertStatus("DEPLOYED", receiver, deploymentDate)
+        assertStatus("DEPLOYED", receiver, deploymentDate.plusDays(1))
 
-		def recoveryDate = new DateTime().minusDays(2)
-		ReceiverRecovery recovery = new ReceiverRecovery(deployment: deployment, recoveryDateTime: recoveryDate, status: DeviceStatus.findByStatus('RECOVERED'))
-		recovery.save()
-		deployment.recovery = recovery
-		deployment.save()
+        def recoveryDate = new DateTime().minusDays(2)
+        ReceiverRecovery recovery = new ReceiverRecovery(deployment: deployment, recoveryDateTime: recoveryDate, status: DeviceStatus.findByStatus('RECOVERED'))
+        recovery.save()
+        deployment.recovery = recovery
+        deployment.save()
 
-		assertStatus("RECOVERED", receiver)
-		assertStatus("NEW", receiver, deploymentDate.minusDays(1))
-		assertStatus("DEPLOYED", receiver, deploymentDate)
-		assertStatus("DEPLOYED", receiver, deploymentDate.plusDays(1))
+        assertStatus("RECOVERED", receiver)
+        assertStatus("NEW", receiver, deploymentDate.minusDays(1))
+        assertStatus("DEPLOYED", receiver, deploymentDate)
+        assertStatus("DEPLOYED", receiver, deploymentDate.plusDays(1))
 
-		assertStatus("DEPLOYED", receiver, recoveryDate.minusDays(1))
-		assertStatus("RECOVERED", receiver, recoveryDate)
-		assertStatus("RECOVERED", receiver, recoveryDate.plusDays(1))
+        assertStatus("DEPLOYED", receiver, recoveryDate.minusDays(1))
+        assertStatus("RECOVERED", receiver, recoveryDate)
+        assertStatus("RECOVERED", receiver, recoveryDate.plusDays(1))
 
-		// add second deployment and recovery
-		def secondDeploymentDate = new DateTime().plusDays(2)
-		ReceiverDeployment secondDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDate)
-		secondDeployment.save()
-		receiver.addToDeployments(secondDeployment)
-		receiver.save()
+        // add second deployment and recovery
+        def secondDeploymentDate = new DateTime().plusDays(2)
+        ReceiverDeployment secondDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDate)
+        secondDeployment.save()
+        receiver.addToDeployments(secondDeployment)
+        receiver.save()
 
-		assertStatus("RECOVERED", receiver)
-		assertStatus("RECOVERED", receiver, secondDeploymentDate.minusDays(1))
-		assertStatus("DEPLOYED", receiver, secondDeploymentDate)
-		assertStatus("DEPLOYED", receiver, secondDeploymentDate.plusDays(1))
+        assertStatus("RECOVERED", receiver)
+        assertStatus("RECOVERED", receiver, secondDeploymentDate.minusDays(1))
+        assertStatus("DEPLOYED", receiver, secondDeploymentDate)
+        assertStatus("DEPLOYED", receiver, secondDeploymentDate.plusDays(1))
 
-		def secondRecoveryDate = new DateTime().plusDays(5)
-		ReceiverRecovery secondRecovery = new ReceiverRecovery(deployment: secondDeployment, recoveryDateTime: secondRecoveryDate, status: DeviceStatus.findByStatus('RECOVERED'))
-		secondRecovery.save()
-		secondDeployment.recovery = secondRecovery
-		secondDeployment.save()
+        def secondRecoveryDate = new DateTime().plusDays(5)
+        ReceiverRecovery secondRecovery = new ReceiverRecovery(deployment: secondDeployment, recoveryDateTime: secondRecoveryDate, status: DeviceStatus.findByStatus('RECOVERED'))
+        secondRecovery.save()
+        secondDeployment.recovery = secondRecovery
+        secondDeployment.save()
 
-		assertStatus("RECOVERED", receiver)
-		assertStatus("RECOVERED", receiver, secondDeploymentDate.minusDays(1))
-		assertStatus("DEPLOYED", receiver, secondDeploymentDate)
-		assertStatus("DEPLOYED", receiver, secondDeploymentDate.plusDays(1))
+        assertStatus("RECOVERED", receiver)
+        assertStatus("RECOVERED", receiver, secondDeploymentDate.minusDays(1))
+        assertStatus("DEPLOYED", receiver, secondDeploymentDate)
+        assertStatus("DEPLOYED", receiver, secondDeploymentDate.plusDays(1))
 
-		assertStatus("DEPLOYED", receiver, secondRecoveryDate.minusDays(1))
-		assertStatus("RECOVERED", receiver, secondRecoveryDate)
-		assertStatus("RECOVERED", receiver, secondRecoveryDate.plusDays(1))
-	}
+        assertStatus("DEPLOYED", receiver, secondRecoveryDate.minusDays(1))
+        assertStatus("RECOVERED", receiver, secondRecoveryDate)
+        assertStatus("RECOVERED", receiver, secondRecoveryDate.plusDays(1))
+    }
 
-	void testStatusWithTwoUnrecoveredDeployments()
-	{
-		Receiver receiver = new Receiver()
-		receiver.save()
+    void testStatusWithTwoUnrecoveredDeployments()
+    {
+        Receiver receiver = new Receiver()
+        receiver.save()
 
-		def firstDeploymentDate = new DateTime().minusDays(5)
-		ReceiverDeployment firstDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: firstDeploymentDate)
-		firstDeployment.save()
-		receiver.addToDeployments(firstDeployment)
+        def firstDeploymentDate = new DateTime().minusDays(5)
+        ReceiverDeployment firstDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: firstDeploymentDate)
+        firstDeployment.save()
+        receiver.addToDeployments(firstDeployment)
 
-		def secondDeploymentDate = new DateTime().minusDays(3)
-		ReceiverDeployment secondDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDate)
-		secondDeployment.save()
-		receiver.addToDeployments(secondDeployment)
+        def secondDeploymentDate = new DateTime().minusDays(3)
+        ReceiverDeployment secondDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDate)
+        secondDeployment.save()
+        receiver.addToDeployments(secondDeployment)
 
-		receiver.save()
+        receiver.save()
 
-		assertStatus("NEW", receiver, firstDeploymentDate.minusDays(1))
-		assertStatus("DEPLOYED", receiver, firstDeploymentDate)
-		assertStatus("DEPLOYED", receiver, firstDeploymentDate.plusDays(1))
-		assertStatus("DEPLOYED", receiver, secondDeploymentDate.minusDays(1))
-		assertStatus("DEPLOYED", receiver, secondDeploymentDate)
-		assertStatus("DEPLOYED", receiver, secondDeploymentDate.plusDays(1))
-	}
+        assertStatus("NEW", receiver, firstDeploymentDate.minusDays(1))
+        assertStatus("DEPLOYED", receiver, firstDeploymentDate)
+        assertStatus("DEPLOYED", receiver, firstDeploymentDate.plusDays(1))
+        assertStatus("DEPLOYED", receiver, secondDeploymentDate.minusDays(1))
+        assertStatus("DEPLOYED", receiver, secondDeploymentDate)
+        assertStatus("DEPLOYED", receiver, secondDeploymentDate.plusDays(1))
+    }
 
-	void testStatusWithOneUnrecoveredBeforeOneRecoveredDeployment()
-	{
-		Receiver receiver = new Receiver()
-		receiver.save()
+    void testStatusWithOneUnrecoveredBeforeOneRecoveredDeployment()
+    {
+        Receiver receiver = new Receiver()
+        receiver.save()
 
-		def firstDeploymentDate = new DateTime().minusDays(5)
-		ReceiverDeployment firstDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: firstDeploymentDate)
-		firstDeployment.save()
-		receiver.addToDeployments(firstDeployment)
+        def firstDeploymentDate = new DateTime().minusDays(5)
+        ReceiverDeployment firstDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: firstDeploymentDate)
+        firstDeployment.save()
+        receiver.addToDeployments(firstDeployment)
 
-		def secondDeploymentDate = new DateTime().minusDays(3)
-		ReceiverDeployment secondDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDate)
-		secondDeployment.save()
-		receiver.addToDeployments(secondDeployment)
+        def secondDeploymentDate = new DateTime().minusDays(3)
+        ReceiverDeployment secondDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDate)
+        secondDeployment.save()
+        receiver.addToDeployments(secondDeployment)
 
-		def recoveryDate = new DateTime().minusDays(1)
-		ReceiverRecovery recovery = new ReceiverRecovery(deployment: secondDeployment, recoveryDateTime: recoveryDate, status: DeviceStatus.findByStatus('RECOVERED'))
-		recovery.save()
-		secondDeployment.recovery = recovery
-		secondDeployment.save()
+        def recoveryDate = new DateTime().minusDays(1)
+        ReceiverRecovery recovery = new ReceiverRecovery(deployment: secondDeployment, recoveryDateTime: recoveryDate, status: DeviceStatus.findByStatus('RECOVERED'))
+        recovery.save()
+        secondDeployment.recovery = recovery
+        secondDeployment.save()
 
-		receiver.save()
+        receiver.save()
 
-		assertStatus("NEW", receiver, firstDeploymentDate.minusDays(1))
-		assertStatus("DEPLOYED", receiver, firstDeploymentDate)
-		assertStatus("DEPLOYED", receiver, firstDeploymentDate.plusDays(1))
-		assertStatus("DEPLOYED", receiver, secondDeploymentDate.minusDays(1))
-		assertStatus("DEPLOYED", receiver, secondDeploymentDate)
-		assertStatus("DEPLOYED", receiver, secondDeploymentDate.plusDays(1))
-		assertStatus("RECOVERED", receiver, recoveryDate)
-		assertStatus("RECOVERED", receiver, recoveryDate.plusDays(1))
-	}
+        assertStatus("NEW", receiver, firstDeploymentDate.minusDays(1))
+        assertStatus("DEPLOYED", receiver, firstDeploymentDate)
+        assertStatus("DEPLOYED", receiver, firstDeploymentDate.plusDays(1))
+        assertStatus("DEPLOYED", receiver, secondDeploymentDate.minusDays(1))
+        assertStatus("DEPLOYED", receiver, secondDeploymentDate)
+        assertStatus("DEPLOYED", receiver, secondDeploymentDate.plusDays(1))
+        assertStatus("RECOVERED", receiver, recoveryDate)
+        assertStatus("RECOVERED", receiver, recoveryDate.plusDays(1))
+    }
 
-	void testCanDeploy()
-	{
-		Receiver receiver = new Receiver()
-		receiver.save()
+    void testCanDeploy()
+    {
+        Receiver receiver = new Receiver()
+        receiver.save()
 
-		def deploymentDateTime = new DateTime()
-		ReceiverDeployment existingDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: deploymentDateTime)
-		existingDeployment.save()
-		receiver.addToDeployments(existingDeployment)
+        def deploymentDateTime = new DateTime()
+        ReceiverDeployment existingDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: deploymentDateTime)
+        existingDeployment.save()
+        receiver.addToDeployments(existingDeployment)
 
-		ReceiverRecovery existingRecovery = new ReceiverRecovery(deployment: existingDeployment,
-																 recoveryDateTime: deploymentDateTime.plusDays(1),
-																 status: DeviceStatus.findByStatus('RETIRED'))
-		existingRecovery.save()
-		existingDeployment.recovery = existingRecovery
+        ReceiverRecovery existingRecovery = new ReceiverRecovery(deployment: existingDeployment,
+                                                                 recoveryDateTime: deploymentDateTime.plusDays(1),
+                                                                 status: DeviceStatus.findByStatus('RETIRED'))
+        existingRecovery.save()
+        existingDeployment.recovery = existingRecovery
 
-		// Create second deployment before existing.
-		def secondDeploymentDateTime = deploymentDateTime.minusDays(5)
-		ReceiverDeployment secondDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDateTime)
-		receiver.addToDeployments(secondDeployment)
-		assertTrue(receiver.canDeploy(secondDeployment))
-		secondDeployment.save()
+        // Create second deployment before existing.
+        def secondDeploymentDateTime = deploymentDateTime.minusDays(5)
+        ReceiverDeployment secondDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDateTime)
+        receiver.addToDeployments(secondDeployment)
+        assertTrue(receiver.canDeploy(secondDeployment))
+        secondDeployment.save()
 
-		// Update date/time to be future
-		secondDeploymentDateTime = deploymentDateTime.plusDays(2)
-		secondDeployment.deploymentDateTime = secondDeploymentDateTime
-		assertFalse(receiver.canDeploy(secondDeployment))
-	}
+        // Update date/time to be future
+        secondDeploymentDateTime = deploymentDateTime.plusDays(2)
+        secondDeployment.deploymentDateTime = secondDeploymentDateTime
+        assertFalse(receiver.canDeploy(secondDeployment))
+    }
 
-	private void assertStatus(expectedStatus, receiver)
-	{
-		assertNotNull(receiver.status)
-		assertEquals(DeviceStatus.findByStatus(expectedStatus), receiver.status)
-	}
+    private void assertStatus(expectedStatus, receiver)
+    {
+        assertNotNull(receiver.status)
+        assertEquals(DeviceStatus.findByStatus(expectedStatus), receiver.status)
+    }
 
-	private void assertStatus(expectedStatusAsString, receiver, dateTime)
-	{
-		assert(receiver)
-		assert(dateTime)
+    private void assertStatus(expectedStatusAsString, receiver, dateTime)
+    {
+        assert(receiver)
+        assert(dateTime)
 
-		def expectedStatus = DeviceStatus.findByStatus(expectedStatusAsString)
-		assertNotNull(receiver.getStatus(dateTime))
-		assertEquals(expectedStatus, receiver.getStatus(dateTime))
-	}
+        def expectedStatus = DeviceStatus.findByStatus(expectedStatusAsString)
+        assertNotNull(receiver.getStatus(dateTime))
+        assertEquals(expectedStatus, receiver.getStatus(dateTime))
+    }
 }

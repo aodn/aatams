@@ -169,7 +169,7 @@ class Receiver extends Device
         DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
         DeviceStatus retiredStatus = DeviceStatus.findByStatus('RETIRED')
 
-        log.debug("Status: " + getStatus(dateTime) + ", at time: " + dateTime)
+        log.debug("Status: ${getStatus(dateTime)}, at time: ${dateTime}")
         if ([deployedStatus, retiredStatus].contains(getStatus(dateTime)))
         {
             return false
@@ -184,7 +184,7 @@ class Receiver extends Device
     static Receiver findByName(name, params=[:])
     {
         def tokens = name.tokenize("-")
-        assert(tokens.size() >= 2): "Invalid receiver name: " + name
+        assert(tokens.size() >= 2): "Invalid receiver name: ${name}"
 
         def modelName = tokens[0..-2].join('-')
         def serialNumber = tokens.last()

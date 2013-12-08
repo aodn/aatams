@@ -17,7 +17,14 @@ class Receiver extends Device
 
     static hasMany = [detections: ValidDetection, deployments: ReceiverDeployment]
     static belongsTo = [organisation: Organisation]
-    static transients = ['name', 'deviceID', 'status', 'currentRecovery', 'mostRecentDeployment']
+    static transients = ['name',
+                         'deviceID',
+                         'status',
+                         'mostRecentRecovery',
+                         'mostRecentDeployment',
+                         'recoveriesBeforeOrEqualToDateTime',
+                         'sortedByDateTime']
+
     static auditable = true
 
     static mapping =
@@ -72,25 +79,15 @@ class Receiver extends Device
         return getMostRecentDeployment(dateTime)?.isActive(dateTime)
     }
 
-    private ReceiverRecovery getCurrentRecovery(dateTime)
+    private ReceiverRecovery getMostRecentRecovery(dateTime)
     {
         if (hasActiveDeployment(dateTime))
         {
             return null
         }
 
-        def recoveries = deployments*.recovery
-        recoveries?.removeAll
-        {
-            (it == null) || it.recoveryDateTime.isAfter(dateTime)
-        }
-
-        recoveries = recoveries?.sort
-        {
-            a, b ->
-
-            a.recoveryDateTime <=> b.recoveryDateTime
-        }
+        def recoveries =
+            getSortedByRecoveryDateTime(getRecoveriesBeforeOrEqualToDateTime(dateTime))
 
         if (recoveries && !recoveries.isEmpty())
         {
@@ -98,6 +95,24 @@ class Receiver extends Device
         }
 
         return null
+    }
+
+    private List getRecoveriesBeforeOrEqualToDateTime(dateTime)
+    {
+        return (deployments*.recovery.grep
+        {
+            it && !it.recoveryDateTime.isAfter(dateTime)
+        })
+    }
+
+    private List getSortedByRecoveryDateTime(sortees)
+    {
+        return (sortees?.sort
+        {
+            a, b ->
+
+            a.recoveryDateTime <=> b.recoveryDateTime
+        })
     }
 
     DeviceStatus getStatus(DateTime dateTime)
@@ -108,10 +123,10 @@ class Receiver extends Device
         }
         else
         {
-            def currentRecovery = getCurrentRecovery(dateTime)
-            if (currentRecovery)
+            def mostRecentRecovery = getMostRecentRecovery(dateTime)
+            if (mostRecentRecovery)
             {
-                return currentRecovery.status
+                return mostRecentRecovery.status
             }
         }
 

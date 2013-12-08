@@ -20,6 +20,7 @@ class Receiver extends Device
     static transients = ['name',
                          'deviceID',
                          'status',
+                         'statusNotIncludingDeployment',
                          'mostRecentRecovery',
                          'mostRecentDeployment',
                          'recoveriesBeforeOrEqualToDateTime',
@@ -143,40 +144,48 @@ class Receiver extends Device
         return new DateTime()
     }
 
-    DeviceStatus getStatus(ReceiverDeployment deployment)
+    DeviceStatus getStatusNotIncludingDeployment(ReceiverDeployment deployment)
     {
-        if (deployments*.id?.contains(deployment.id))
-        {
-            try
+        return withoutDeployment(
+            deployment,
             {
-                removeFromDeployments(deployment)
                 return getStatus(deployment.deploymentDateTime)
             }
-            finally
-            {
-                addToDeployments(deployment)
-            }
-        }
-
-        return getStatus(deployment.deploymentDateTime)
+        )
     }
 
     boolean canDeploy(deployment)
     {
-        if (deployments*.id?.contains(deployment.id))
-        {
-            try
+        return withoutDeployment(
+            deployment,
             {
-                removeFromDeployments(deployment)
                 return canDeployAtTime(deployment.deploymentDateTime)
             }
-            finally
-            {
-                addToDeployments(deployment)
-            }
+        )
+    }
+
+    private withoutDeployment(deployment, testClosure)
+    {
+        boolean hasDeployment = hasDeployment(deployment)
+
+        if (hasDeployment)
+        {
+            removeFromDeployments(deployment)
         }
 
-        return canDeployAtTime(deployment.deploymentDateTime)
+        def retVal = testClosure.call()
+
+        if (hasDeployment)
+        {
+            addToDeployments(deployment)
+        }
+
+        return retVal
+    }
+
+    private boolean hasDeployment(deployment)
+    {
+        return deployments*.id?.contains(deployment.id)
     }
 
     boolean canDeployAtTime(dateTime)

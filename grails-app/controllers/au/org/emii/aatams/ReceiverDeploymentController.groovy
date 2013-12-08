@@ -14,11 +14,11 @@ class ReceiverDeploymentController extends ReportController
         redirect(action: "list", params: params)
     }
 
-    def list = 
+    def list =
 	{
 		doList("receiverDeployment")
 	}
-	
+
 	def export =
 	{
 		doExport("receiverDeployment")
@@ -27,14 +27,14 @@ class ReceiverDeploymentController extends ReportController
     def create = {
         def receiverDeploymentInstance = new ReceiverDeployment()
         receiverDeploymentInstance.properties = params
-        
+
         renderCreateWithDefaultModel(receiverDeploymentInstance)
     }
 
-    def save = 
+    def save =
     {
         def receiverDeploymentInstance = new ReceiverDeployment(params)
-	
+
 		if (receiverDeploymentInstance.receiver)
 		{
 			if (isValidDeployment(receiverDeploymentInstance))
@@ -47,23 +47,23 @@ class ReceiverDeploymentController extends ReportController
 				return
 			}
 		}
-		
+
         if (receiverDeploymentInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
             redirect(action: "show", id: receiverDeploymentInstance.id)
         }
-        else 
+        else
         {
             renderCreateWithDefaultModel(receiverDeploymentInstance)
         }
     }
 
-	private boolean isValidDeployment(ReceiverDeployment receiverDeploymentInstance) 
+	private boolean isValidDeployment(ReceiverDeployment receiverDeploymentInstance)
 	{
 		if (!receiverDeploymentInstance.receiver?.canDeploy(receiverDeploymentInstance))
 		{
 			def args = [receiverDeploymentInstance?.receiver?.toString(),
-				receiverDeploymentInstance?.receiver?.getStatus(receiverDeploymentInstance)?.toString(),
+				receiverDeploymentInstance?.receiver?.getStatusNotIncludingDeployment(receiverDeploymentInstance)?.toString(),
 				receiverDeploymentInstance.deploymentDateTime]
 			receiverDeploymentInstance.errors.rejectValue("receiver",
 					"receiverDeployment.receiver.invalidStateAtDateTime",
@@ -72,11 +72,11 @@ class ReceiverDeploymentController extends ReportController
 
 			return false
 		}
-		
+
 		return true
 	}
 
-	private void incNumDeployments(ReceiverDeployment deployment) 
+	private void incNumDeployments(ReceiverDeployment deployment)
 	{
 		if (deployment?.station?.numDeployments != null)
 		{
@@ -87,42 +87,42 @@ class ReceiverDeploymentController extends ReportController
 
 		// And record the deployment number against the actual deployment.
 		deployment?.deploymentNumber = deployment?.station?.numDeployments
-		
+
 		addReceiverToStation(deployment)
 	}
 
-	private addReceiverToStation(ReceiverDeployment deployment) 
+	private addReceiverToStation(ReceiverDeployment deployment)
 	{
 		deployment.station.addToReceivers(deployment.receiver)
 	}
 
-	private removeReceiverFromStation(ReceiverDeployment deployment) 
+	private removeReceiverFromStation(ReceiverDeployment deployment)
 	{
 		deployment.station.removeFromReceivers(deployment.receiver)
 		deployment.receiver.save()
 	}
 
-	private renderCreateWithDefaultModel(ReceiverDeployment receiverDeploymentInstance) 
+	private renderCreateWithDefaultModel(ReceiverDeployment receiverDeploymentInstance)
 	{
 		def model = renderDefaultModel(receiverDeploymentInstance)
 
 		render(view: "create", model: model)
 	}
 
-	private Map renderDefaultModel(ReceiverDeployment receiverDeploymentInstance) 
+	private Map renderDefaultModel(ReceiverDeployment receiverDeploymentInstance)
 	{
 		def errors = receiverDeploymentInstance.errors
-		
+
 		def model =
 				[receiverDeploymentInstance: receiverDeploymentInstance] +
 				[candidateStations:getCandidateStations(receiverDeploymentInstance),
 				 candidateReceivers:getCandidateReceivers(receiverDeploymentInstance)]
-		
-		receiverDeploymentInstance.errors = errors		
-						
+
+		receiverDeploymentInstance.errors = errors
+
 		return model
 	}
-	
+
 	private Collection<Receiver> getCandidateReceivers(deployment)
 	{
 		def retList = candidateEntitiesService.receivers()
@@ -130,7 +130,7 @@ class ReceiverDeploymentController extends ReportController
 		{
 			retList += deployment.receiver
 		}
-		
+
 		return retList.unique({ a, b -> a.id <=> b.id })
 	}
 
@@ -141,7 +141,7 @@ class ReceiverDeploymentController extends ReportController
 		{
 			retList.add(0, deployment.station)
 		}
-		
+
 		return retList.unique({ a, b -> a.id <=> b.id })
 	}
 
@@ -169,29 +169,29 @@ class ReceiverDeploymentController extends ReportController
     }
 
     def update = {
-        
+
         def receiverDeploymentInstance = ReceiverDeployment.get(params.id)
         if (receiverDeploymentInstance) {
             if (params.version) {
                 def version = params.version.toLong()
                 if (receiverDeploymentInstance.version > version) {
-                    
+
                     receiverDeploymentInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment')] as Object[], "Another user has updated this ReceiverDeployment while you were editing")
                     render(view: "edit", model: [receiverDeploymentInstance: receiverDeploymentInstance])
                     return
                 }
             }
-			
+
 //			boolean isValidDeployment = isValidDeployment(receiverDeploymentInstance)
 			removeReceiverFromStation(receiverDeploymentInstance)
             receiverDeploymentInstance.properties = params
 			addReceiverToStation(receiverDeploymentInstance)
-			
+
             if (!receiverDeploymentInstance.hasErrors() && isValidDeployment(receiverDeploymentInstance) && receiverDeploymentInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
                 redirect(action: "show", id: receiverDeploymentInstance.id)
             }
-            else 
+            else
 			{
                 render(view: "edit", model: renderDefaultModel(receiverDeploymentInstance))
             }

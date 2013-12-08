@@ -225,7 +225,7 @@ class BootStrap
 
             development
             {
-                if (Booelan.getBoolean('initialiseWithData'))
+                if (Boolean.getBoolean('initialiseWithData'))
                 {
                     initialiser = new DevelopmentDataInitialiser(permissionUtilsService)
 

@@ -1,0 +1,6 @@
+# A sample Guardfile
+# More info at https://github.com/guard/guard#readme
+
+guard :shell do
+  watch(/.*\.sql/) { `psql -h localhost -d aatams_prod_copy < receiver_deployment.sql | head` }
+end

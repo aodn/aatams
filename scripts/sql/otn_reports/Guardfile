@@ -2,5 +2,6 @@
 # More info at https://github.com/guard/guard#readme
 
 guard :shell do
-  watch(/.*\.sql/) { `psql -h localhost -d aatams_prod_copy < receiver_deployment.sql | head` }
+  watch('receiver_deployment.sql') { `psql -h localhost -d aatams_prod_copy < receiver_deployment.sql | head` }
+  watch('receiver_recovery.sql') { `psql -h localhost -d aatams_prod_copy < receiver_recovery.sql | head` }
 end

@@ -5,30 +5,29 @@ COPY (
       model_name as "receiver model name",
       trim(serial_number) as "receiver serial number",
       installation_station.name as "station name",
-      type as "mooring type",
-      acoustic_releaseid as "acoustic release id",
-      battery_life_days as "battery life (days)",
-      bottom_depthm as "bottom depth (m)",
-      comments,
-      depth_below_surfacem as "depth below surface (m)",
+      to_char(initialisationdatetime_timestamp AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SSZ') as "initialisation date/time",
       st_y(installation_station.location) as "latitude",
       st_x(installation_station.location) as "longitude",
-      mooring_descriptor as "mooring descriptor",
-      receiver_orientation as "receiver orientation",
-      to_char(recovery_date AT TIME ZONE 'UTC', 'YYYY-MM-DD') as "scheduled recovery date",
-      installation.name as "installation name"
-
+      sec_user.name as "recoverer name",
+      to_char(recoverydatetime_timestamp AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SSZ') as "recovery date/time",
+      device_status.status,
+      receiver_recovery.comments
 
     from receiver_deployment
+    inner join receiver_recovery on receiver_recovery.deployment_id = receiver_deployment.id
     inner join device on device.id = receiver_deployment.receiver_id
     inner join device_model on device_model.id = device.model_id
     inner join installation_station on installation_station.id = receiver_deployment.station_id
     inner join installation on installation.id = installation_station.installation_id
     inner join mooring_type on mooring_type.id = receiver_deployment.mooring_type_id
+    inner join project_role on receiver_recovery.recoverer_id = project_role.id
+    inner join sec_user on sec_user.id = project_role.person_id
+    inner join device_status on device_status.id = receiver_recovery.status_id
 
     where installation.name in ('Maria Island Line', 'OTN Perth Line')
 
     order by deploymentdatetime_timestamp
+
 ) TO STDOUT
 
     WITH CSV HEADER QUOTE '"'

@@ -14,15 +14,15 @@ COPY (
       receiver_recovery.comments
 
     from receiver_deployment
-    inner join receiver_recovery on receiver_recovery.deployment_id = receiver_deployment.id
-    inner join device on device.id = receiver_deployment.receiver_id
-    inner join device_model on device_model.id = device.model_id
-    inner join installation_station on installation_station.id = receiver_deployment.station_id
-    inner join installation on installation.id = installation_station.installation_id
-    inner join mooring_type on mooring_type.id = receiver_deployment.mooring_type_id
-    inner join project_role on receiver_recovery.recoverer_id = project_role.id
-    inner join sec_user on sec_user.id = project_role.person_id
-    inner join device_status on device_status.id = receiver_recovery.status_id
+    join receiver_recovery on receiver_recovery.deployment_id = receiver_deployment.id
+    join device on device.id = receiver_deployment.receiver_id
+    join device_model on device_model.id = device.model_id
+    join installation_station on installation_station.id = receiver_deployment.station_id
+    join installation on installation.id = installation_station.installation_id
+    join mooring_type on mooring_type.id = receiver_deployment.mooring_type_id
+    join project_role on receiver_recovery.recoverer_id = project_role.id
+    join sec_user on sec_user.id = project_role.person_id
+    join device_status on device_status.id = receiver_recovery.status_id
 
     where installation.name in ('Maria Island Line', 'OTN Perth Line')
 

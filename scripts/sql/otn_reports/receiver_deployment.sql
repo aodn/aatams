@@ -20,11 +20,11 @@ COPY (
 
 
     from receiver_deployment
-    inner join device on device.id = receiver_deployment.receiver_id
-    inner join device_model on device_model.id = device.model_id
-    inner join installation_station on installation_station.id = receiver_deployment.station_id
-    inner join installation on installation.id = installation_station.installation_id
-    inner join mooring_type on mooring_type.id = receiver_deployment.mooring_type_id
+    join device on device.id = receiver_deployment.receiver_id
+    join device_model on device_model.id = device.model_id
+    join installation_station on installation_station.id = receiver_deployment.station_id
+    join installation on installation.id = installation_station.installation_id
+    join mooring_type on mooring_type.id = receiver_deployment.mooring_type_id
 
     where installation.name in ('Maria Island Line', 'OTN Perth Line')
 

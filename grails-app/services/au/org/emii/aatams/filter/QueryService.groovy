@@ -1,21 +1,17 @@
 package au.org.emii.aatams.filter
 
-import au.org.emii.aatams.EmbargoService
 import au.org.emii.aatams.PermissionUtilsService
 import au.org.emii.aatams.Project
 import au.org.emii.aatams.ProjectRole
-
 import au.org.emii.aatams.report.ReportInfoService
+import org.hibernate.criterion.CriteriaSpecification
+import org.hibernate.criterion.Restrictions
+import org.hibernate.impl.CriteriaImpl
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import org.hibernate.Criteria
-import org.hibernate.criterion.CriteriaSpecification
-import org.hibernate.criterion.Order
-import org.hibernate.criterion.Projections
-import org.hibernate.criterion.Restrictions
 
-class QueryService 
+class QueryService
 {
     static transactional = false
 
@@ -74,12 +70,61 @@ class QueryService
         
         return [results: results, count: count]
     }
+
+    Map<Long, Collection> queryWithoutCount(clazz, params)
+    {
+        subCriteriaMap = [:]
+
+        def results = []
+
+        if (hasFilter(params))
+        {
+            def criteria = clazz.createCriteria()
+            criteria.getInstance()?.setCacheable(true)
+
+            def transformedParams = transformParams(params)
+
+            log.debug("transformed params: " + transformedParams)
+
+            results = criteria.list(transformedParams, buildCriteriaClosure(transformedParams.filter))
+        }
+        else
+        {
+            results = clazz.list(params)
+        }
+
+        return [results: results]
+    }
+
+    Number queryCountOnly(clazz, params)
+    {
+        subCriteriaMap = [:]
+
+        def criteria = clazz.createCriteria()
+        criteria.getInstance()?.setCacheable(true)
+
+        if (hasFilter(params))
+        {
+            def transformedParams = transformParams(params)
+
+            log.debug("transformed params: " + transformedParams)
+
+            return criteria.count(buildCriteriaClosure(transformedParams.filter))
+        }
+
+        return clazz.list(params).count()
+    }
+
+    def hasFilter(params)
+    {
+        return !(!params || params.isEmpty() || params?.filter == null || params?.filter == [:])
+    }
     
     private Closure buildCriteriaClosure(Map params)
     {
         return (
         {
-            params?.each  
+            params?.each
             {
                 method, nestedParams ->
                 
@@ -94,8 +139,7 @@ class QueryService
                     assert(nestedParams.size() == 2): "Invalid nested params: " + nestedParams
                     def parsedParams = []
                     parsedParams.add(nestedParams[0])
-                    parsedParams.add(nestedParams[1].tokenize(",").collect { it.trim() })
-                    
+                    parsedParams.add(nestedParams[1].tokenize(",").grep { !it.trim().isEmpty() }.collect { it.trim() })
                     invokeMethod(method, parsedParams as Object[])
                 }
                 else if ((method == "eq") && (nestedParams as List).contains(ReportInfoService.MEMBER_PROJECTS))

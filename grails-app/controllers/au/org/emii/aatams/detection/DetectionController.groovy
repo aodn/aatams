@@ -19,7 +19,30 @@ class DetectionController extends ReportController
 
     def list = 
 	{
-		doList("detection")
+        if (queryService.hasFilter(params)) {
+            def countParams = params.clone()
+            def clazz = reportInfoService.getClassForName("detection")
+
+            params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
+
+            def resultList = queryService.queryWithoutCount(clazz, params)
+
+            countParams.max = grailsApplication.config.detection.filter.count.max
+            def count = queryService.queryCountOnly(clazz, countParams)
+
+            flattenParams()
+
+            if (count < countParams.max) {
+                flash.message = "${count} matching records (${clazz.count()} total)."
+            }
+            else {
+                flash.message = "&gt; ${countParams.max - 1} matching records (${clazz.count()} total)."
+            }
+            return [entityList: resultList.results, total: count]
+        }
+        else {
+            return doList("detection")
+        }
     }
     
 	protected void cleanDateParams()

@@ -9,8 +9,8 @@ class DetectionController extends ReportController
 {
     def candidateEntitiesService
     def dataSource
-	def detectionExtractService
-	
+    def detectionExtractService
+    
     static allowedMethods = [update: "POST", delete: "POST"]
 
     def index = {
@@ -18,7 +18,7 @@ class DetectionController extends ReportController
     }
 
     def list = 
-	{
+    {
         if (queryService.hasFilter(params)) {
             def countParams = params.clone()
             def clazz = reportInfoService.getClassForName("detection")
@@ -45,23 +45,23 @@ class DetectionController extends ReportController
         }
     }
     
-	protected void cleanDateParams()
-	{
-		[1, 2].each
-		{
-			if (params["filter.between." + it] && params["filter.between." + it].class == String)
+    protected void cleanDateParams()
+    {
+        [1, 2].each
+        {
+            if (params["filter.between." + it] && params["filter.between." + it].class == String)
             {
-				// Thu Jun 18 12:38:00 EST 2009
-				DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy")
-				def dateAsString = params["filter.between." + it]
+                // Thu Jun 18 12:38:00 EST 2009
+                DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy")
+                def dateAsString = params["filter.between." + it]
                 Date parsedDate = dateFormat.parse(dateAsString)
 
-				params["filter.between." + it] = parsedDate
-				params.filter["between." + it] = parsedDate
-				params.filter.between."${it}" = parsedDate
-			}
-		}
-	}
+                params["filter.between." + it] = parsedDate
+                params.filter["between." + it] = parsedDate
+                params.filter.between."${it}" = parsedDate
+            }
+        }
+    }
     
     protected def getResultList(queryName)
     {
@@ -83,20 +83,20 @@ class DetectionController extends ReportController
         params.remove("projectPermissionCache")
         
         [results: detections, count: count]
-	}
+    }
     
-	def export =
-	{
-		if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export))
-		{
-			doExport("detection")
-		}
-		else
-		{
-			detectionExtractService.generateReport(params, request, response)
-		}
-	}
-	
+    def export =
+    {
+        if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export))
+        {
+            doExport("detection")
+        }
+        else
+        {
+            detectionExtractService.generateReport(params, request, response)
+        }
+    }
+    
     def create = 
     {
         redirect(controller:"receiverDownloadFile", 

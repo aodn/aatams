@@ -214,6 +214,7 @@ log4j =
 				   "grails.app.service.au.org.emii.aatams.detection.DetectionNotificationService",
 				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService",
 				   "grails.app.service.au.org.emii.aatams.report.KmlService"
+
 		}
 
 		test
@@ -238,6 +239,9 @@ tag.expectedLifeTime.gracePeriodDays = 182 // 6 months
 
 // Warning period for release embargo expiration.
 animalRelease.embargoExpiration.warningPeriodMonths = 1
+
+// The count figure to cut off at to prevent long running tag detection queries
+detection.filter.count.max = 300000
 
 
 grails.gorm.default.list.max = 20

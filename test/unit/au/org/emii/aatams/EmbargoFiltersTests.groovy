@@ -503,7 +503,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         }
     }
 
-    private void checkList(def controller, def entityName)
+    private void checkList(controller, entityName)
     {
 		controller.params._name = "entityName"
 

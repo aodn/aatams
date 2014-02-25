@@ -9,8 +9,8 @@ class DetectionController extends ReportController
 {
     def candidateEntitiesService
     def dataSource
-	def detectionExtractService
-	
+    def detectionExtractService
+    
     static allowedMethods = [update: "POST", delete: "POST"]
 
     def index = {
@@ -18,27 +18,51 @@ class DetectionController extends ReportController
     }
 
     def list = 
-	{
-		doList("detection")
+    {
+        if (queryService.hasFilter(params)) {
+            def countParams = params.clone()
+            def clazz = reportInfoService.getClassForName("detection")
+
+            params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
+
+            def resultList = queryService.queryWithoutCount(clazz, params, false)
+
+            countParams.max = grailsApplication.config.detection.filter.count.max + 1
+            def count = queryService.queryCountOnly(clazz, countParams)
+
+            flattenParams()
+
+            if (count < countParams.max) {
+                flash.message = "${count} matching records (${clazz.count()} total)."
+            }
+            else {
+                flash.message = "&gt; ${grailsApplication.config.detection.filter.count.max} matching records (${clazz.count()} total)."
+                count = count - 1
+            }
+            return [entityList: resultList.results, total: count]
+        }
+        else {
+            return doList("detection")
+        }
     }
     
-	protected void cleanDateParams()
-	{
-		[1, 2].each
-		{
-			if (params["filter.between." + it] && params["filter.between." + it].class == String)
+    protected void cleanDateParams()
+    {
+        [1, 2].each
+        {
+            if (params["filter.between." + it] && params["filter.between." + it].class == String)
             {
-				// Thu Jun 18 12:38:00 EST 2009
-				DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy")
-				def dateAsString = params["filter.between." + it]
+                // Thu Jun 18 12:38:00 EST 2009
+                DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy")
+                def dateAsString = params["filter.between." + it]
                 Date parsedDate = dateFormat.parse(dateAsString)
 
-				params["filter.between." + it] = parsedDate
-				params.filter["between." + it] = parsedDate
-				params.filter.between."${it}" = parsedDate
-			}
-		}
-	}
+                params["filter.between." + it] = parsedDate
+                params.filter["between." + it] = parsedDate
+                params.filter.between."${it}" = parsedDate
+            }
+        }
+    }
     
     protected def getResultList(queryName)
     {
@@ -60,20 +84,20 @@ class DetectionController extends ReportController
         params.remove("projectPermissionCache")
         
         [results: detections, count: count]
-	}
+    }
     
-	def export =
-	{
-		if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export))
-		{
-			doExport("detection")
-		}
-		else
-		{
-			detectionExtractService.generateReport(params, request, response)
-		}
-	}
-	
+    def export =
+    {
+        if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export))
+        {
+            doExport("detection")
+        }
+        else
+        {
+            detectionExtractService.generateReport(params, request, response)
+        }
+    }
+    
     def create = 
     {
         redirect(controller:"receiverDownloadFile", 

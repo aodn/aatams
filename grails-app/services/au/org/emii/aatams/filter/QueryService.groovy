@@ -4,9 +4,7 @@ import au.org.emii.aatams.PermissionUtilsService
 import au.org.emii.aatams.Project
 import au.org.emii.aatams.ProjectRole
 import au.org.emii.aatams.report.ReportInfoService
-import org.hibernate.criterion.CriteriaSpecification
 import org.hibernate.criterion.Restrictions
-import org.hibernate.impl.CriteriaImpl
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -16,9 +14,7 @@ class QueryService
     static transactional = false
 
     def embargoService
-    def rootCriteria
-    Map subCriteriaMap
-    
+
     Map<Long, Collection> query(clazz, params)
     {
         return query(clazz, params, false)
@@ -38,43 +34,13 @@ class QueryService
      * 
      * @return
      */
-    Map<Long, Collection> query(clazz, params, skipEmbargoChecking) 
+    Map<Long, Collection> query(clazz, params, skipEmbargoChecking)
     {
-        subCriteriaMap = [:]
-        
-        def results
-        def count
-        
-        if (!params || params.isEmpty() || params?.filter == null || params?.filter == [:])
-        {
-            results = clazz.list(params)
-            count = clazz.count()
-        }
-        else
-        {
-            def criteria = clazz.createCriteria()
-            criteria.getInstance()?.setCacheable(true)
-        
-            def transformedParams = transformParams(params)
-            
-            log.debug("transformed params: " + transformedParams)
-            
-            results = criteria.list(transformedParams, buildCriteriaClosure(transformedParams.filter))
-            count = results.totalCount
-        }
-    
-        if (!skipEmbargoChecking)
-        {
-            results = embargoService.applyEmbargo(results)
-        }
-        
-        return [results: results, count: count]
+        return [results: queryWithoutCount(clazz, params, skipEmbargoChecking)['results'], count: queryCountOnly(clazz, params)]
     }
 
-    Map<Long, Collection> queryWithoutCount(clazz, params)
+    Map<Long, Collection> queryWithoutCount(clazz, params, skipEmbargoChecking)
     {
-        subCriteriaMap = [:]
-
         def results = []
 
         if (hasFilter(params))
@@ -93,26 +59,29 @@ class QueryService
             results = clazz.list(params)
         }
 
+        if (!skipEmbargoChecking)
+        {
+            results = embargoService.applyEmbargo(results)
+        }
+
         return [results: results]
     }
 
     Number queryCountOnly(clazz, params)
     {
-        subCriteriaMap = [:]
-
-        def criteria = clazz.createCriteria()
-        criteria.getInstance()?.setCacheable(true)
-
         if (hasFilter(params))
         {
-            def transformedParams = transformParams(params)
+            def criteria = clazz.createCriteria()
+            criteria.getInstance()?.setCacheable(true)
+
+            def transformedParams = transformParams(removeSortOrderParams(params))
 
             log.debug("transformed params: " + transformedParams)
 
             return criteria.count(buildCriteriaClosure(transformedParams.filter))
         }
 
-        return clazz.list(params).count()
+        return clazz.count()
     }
 
     def hasFilter(params)
@@ -306,5 +275,14 @@ class QueryService
     {
         def roles = ProjectRole.findAllByPerson(PermissionUtilsService.principal())
         return roles*.project
+    }
+
+    private removeSortOrderParams(params)
+    {
+        def paramsCopy = params.clone()
+        paramsCopy.remove("sort")
+        paramsCopy.remove("order")
+
+        return paramsCopy
     }
 }

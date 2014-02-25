@@ -25,9 +25,9 @@ class DetectionController extends ReportController
 
             params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
 
-            def resultList = queryService.queryWithoutCount(clazz, params)
+            def resultList = queryService.queryWithoutCount(clazz, params, false)
 
-            countParams.max = grailsApplication.config.detection.filter.count.max
+            countParams.max = grailsApplication.config.detection.filter.count.max + 1
             def count = queryService.queryCountOnly(clazz, countParams)
 
             flattenParams()
@@ -36,7 +36,8 @@ class DetectionController extends ReportController
                 flash.message = "${count} matching records (${clazz.count()} total)."
             }
             else {
-                flash.message = "&gt; ${countParams.max - 1} matching records (${clazz.count()} total)."
+                flash.message = "&gt; ${grailsApplication.config.detection.filter.count.max} matching records (${clazz.count()} total)."
+                count = count - 1
             }
             return [entityList: resultList.results, total: count]
         }

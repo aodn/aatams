@@ -160,16 +160,7 @@ class DetectionFactoryService
             }
             else
             {
-                def sensor = Sensor.findByTransmitterId(detection.transmitter_id, [cache: true])
-                Surgery.findAllByTag(sensor.tag).each
-                {
-                    surgery ->
-
-                    if (surgery.isInWindow(detection.timestamp))
-                    {
-                        createDetectionSurgery(surgery, sensor, ValidDetection.get(detection.id))
-                    }
-                }
+                createDetectionSurgeryForDetection(detection)
             }
 
             progress = ((float) index / rows.size()) * 100
@@ -177,6 +168,23 @@ class DetectionFactoryService
             {
                 prevProgress = progress
                 log.info("${progress}% of surgeries rescanned")
+            }
+        }
+    }
+
+    private def createDetectionSurgeryForDetection(detection)
+    {
+        def sensor = Sensor.findByTransmitterId(detection.transmitter_id, [cache: true])
+        if (sensor)
+        {
+            Surgery.findAllByTag(sensor.tag).each
+            {
+                surgery ->
+
+                if (surgery.isInWindow(detection.timestamp))
+                {
+                    createDetectionSurgery(surgery, sensor, ValidDetection.get(detection.id))
+                }
             }
         }
     }

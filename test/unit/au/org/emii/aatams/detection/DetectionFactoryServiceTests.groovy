@@ -25,11 +25,6 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         download = new ReceiverDownloadFile()
     }
 
-    protected void tearDown()
-    {
-        super.tearDown()
-    }
-
     void testValid()
     {
         def validDetection = newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
@@ -317,9 +312,25 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         assertEquals(surgery, detectionSurgery.surgery)
     }
 
-    void testRescanForDeploymentBug69()
+    void testCreateDetectionSurgeryForDetectionBug69()
     {
+        registerMetaClass Sensor
 
+        Sensor.metaClass.static.findByTransmitterId =
+        {
+            id, params ->
+
+            null
+        }
+
+        try
+        {
+            detectionFactoryService.createDetectionSurgeryForDetection([ transmitter_id: '1234' ])
+        }
+        catch (NullPointerException e)
+        {
+            fail(e.message)
+        }
     }
 
     void testBuildRescanDeploymentSql()

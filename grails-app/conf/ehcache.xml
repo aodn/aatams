@@ -8,8 +8,8 @@
 
     <defaultCache maxElementsInMemory="10000"
                   eternal="false"
-                  timeToIdleSeconds="120"
-                  timeToLiveSeconds="120"
+                  timeToIdleSeconds="10"
+                  timeToLiveSeconds="60"
                   overflowToDisk="true"
                   maxElementsOnDisk="10000000"
                   diskPersistent="false"
@@ -18,10 +18,10 @@
 
     <cache name="org.hibernate.cache.StandardQueryCache"
            maxElementsInMemory="100"
-           timeToIdleSeconds="300"
+           timeToIdleSeconds="10"
            eternal="false"
            overflowToDisk="false"
-           timeToLiveSeconds="600"
+           timeToLiveSeconds="60"
            diskPersistent="false" />
 
 </ehcache>

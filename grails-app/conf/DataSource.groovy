@@ -7,6 +7,7 @@ dataSource {
     properties
     {
         maxActive = 20
+        validationQuery = "SELECT 1"
     }
 }
 

@@ -1,4 +1,7 @@
 # Restoring the AATAMS database
+
+*Note from @jkburges: I think that some of the instructions below are quite out of date, especially since @julian1's work to segregate `public` and `aatams` schemas.  This has many advantages, one being that the backup and restore process can be drastically simplified.  The updated process needs to be documented.*
+
 This assumes that you have already obtained a backup of the AATAMS database.
 
 First thing you will want to do is tweak some postgres settings to help it load faster. The values listed here are used for a 4 core 8GB iMac so tweak your settings accordingly, check your `server.log` when you start postgres to see if there are any issues as YMMV. [Tuning Your PostgreSQL Server](http://wiki.postgresql.org/wiki/Tuning_Your_PostgreSQL_Server)
@@ -81,3 +84,4 @@ Where;
 and lastly the dump file to restore the data from.
 
 This approach worked for me with no errors being thrown at import.
+

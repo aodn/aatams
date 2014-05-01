@@ -52,5 +52,5 @@ def removeDuplicates(sql, referencingTables, columnName, entityClass) {
 }
 
 def replaceField(sql, table, column, oldVal, newVal) {
-    sql.execute(String.format("update %1$s set %2$s = %3$d where %2$s = %4$d", table, column, newVal, oldVal))
+    sql.execute("update " + table + " set " + column + " = ${newVal} where " + column + " = ${oldVal}")
 }

@@ -18,7 +18,7 @@ Note that there is provisional agreement between Vemco and AATAMS representative
 # Upload
 In both scenarios above, *something* would have to be uploaded to the AATAMS system by VUE.
 
-Probably the easiest way to do this would be to open up a web service in the AATAMS app to which the VUE software can [HTTP POST](http://en.wikipedia.org/wiki/POST_(HTTP\)) its payload.
+Probably the easiest way to do this would be to open up a web service in the AATAMS app to which the VUE software can [HTTP POST](http://en.wikipedia.org/wiki/POST_(HTTP)) its payload.
 
 Things to consider are:
 

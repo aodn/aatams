@@ -102,7 +102,7 @@
             <a href="http://imos.org.au/"><img src="${resource(dir: 'images', file: 'IMOS-logo.png')}" alt="IMOS Logo"/>
             </a>
             <img src="http://static.emii.org.au/images/logo/NCRIS_Initiative_inline200.png" alt="Australian Government logo"/>
-            <a href="http://www.utas.edu.au/"><img src="http://static.emii.org.au/images/logo/Utas_vert.png" alt="UTAS Logo" height="50"/>
+            <a href="http://www.utas.edu.au/"><img src="http://static.emii.org.au/images/logo/utas/UTAS_RGB-onwhite_Stacked_104w.png" alt="UTAS Logo" height="50"/>
             </a>
 
             <p><a title="Integrated Marine Observing System" href="http://www.imos.org.au">IMOS</a>

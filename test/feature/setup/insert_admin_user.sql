@@ -5,9 +5,6 @@
 -- Edit the values before running it
 --
 
--- Create a SysAdmin role
-insert into aatams.sec_role (id, version, name) values (0, 0, 'SysAdmin');
-
 -- Create an address
 insert into aatams.address
     (id, version, country, postcode, state, street_address, suburb_town)
@@ -41,7 +38,7 @@ insert into aatams.sec_user
     0, '+61-4-11111111', 'Sys Admin User', 'ACTIVE');
 
 -- Associate user with SysAdmin role
-insert into aatams.sec_user_roles (sec_role_id, sec_user_id) values (0, 0);
+insert into aatams.sec_user_roles (sec_role_id, sec_user_id) values (1, 0);
 
 -- Grant user all permissions
-insert into aatams.sec_role_permissions (sec_role_id, permissions_string) values (0, '*:*');
+insert into aatams.sec_role_permissions (sec_role_id, permissions_string) values (1, '*:*');

@@ -9,7 +9,7 @@
 insert into aatams.sec_role (id, version, name) values (0, 0, 'SysAdmin');
 
 -- Create an address
-insert into aatams.address 
+insert into aatams.address
     (id, version, country, postcode, state, street_address, suburb_town)
     values
     (0, 0, 'Australia', '7000', 'TAS', 'St. Address', 'Hobart');
@@ -23,9 +23,9 @@ insert into aatams.organisation (
     '+61-4-11111111', 0, 0, 'ACTIVE');
 
 -- Create the user
--- Password is test, obtain a password by running:
+-- Password is "password", obtain a password by running:
 -- echo -n 'password' | sha256sum
--- Given password here is for 'test'
+-- Given password here is for 'password'
 -- The long string will set the timezone to Australia/Melbourne
 insert into aatams.sec_user
     (id, version, password_hash,
@@ -34,10 +34,11 @@ insert into aatams.sec_user
     organisation_id, phone_number,
     registration_comment, status)
     values
-    (0, 0, '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08',
-    'user_name', 'au.org.emii.aatams.Person', '\xaced00057372001f6f72672e6a6f64612e74696d652e4461746554696d655a6f6e652453747562a62f019a7c321ae30300007870771500134175737472616c69612f4d656c626f75726e6578',
-    'your@email.com', 'Your Name',
-    0, '+61-4-11111111', 'Admin User', 'ACTIVE');
+    (0, 0, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',
+    'admin', 'au.org.emii.aatams.Person',
+    '\xaced00057372001f6f72672e6a6f64612e74696d652e4461746554696d655a6f6e652453747562a62f019a7c321ae30300007870771500134175737472616c69612f4d656c626f75726e6578',
+    'your@email.com', 'Sys Admin',
+    0, '+61-4-11111111', 'Sys Admin User', 'ACTIVE');
 
 -- Associate user with SysAdmin role
 insert into aatams.sec_user_roles (sec_role_id, sec_user_id) values (0, 0);

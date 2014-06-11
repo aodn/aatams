@@ -3,7 +3,8 @@
 --
 
 SET statement_timeout = 0;
-SET client_encoding = 'UTF8';
+SET client_encoding = 'UTF
+8';
 SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
@@ -12,6 +13,10 @@ SET escape_string_warning = off;
 SET SESSION AUTHORIZATION 'aatams';
 
 SET search_path = aatams, pg_catalog;
+
+INSERT INTO statistics VALUES (0, 1, 'numValidDetections', 0);
+
+INSERT INTO project_role VALUES (13, 0, 'READ_ONLY', 9, 1, 2);
 
 INSERT INTO project_role_type (id, version, display_name)
     VALUES (1, 0, 'Principal Investigator');
@@ -27,14 +32,8 @@ INSERT INTO project_role_type (id, version, display_name)
     VALUES (6, 0, 'Student');
 
 
-INSERT INTO system_role_type (id, version, display_name)
-    VALUES (1, 0, 'eMII employee');
-INSERT INTO system_role_type (id, version, display_name)
-    VALUES (2, 0, 'eMII administrator');
-INSERT INTO system_role_type (id, version, display_name)
-    VALUES (3, 0, 'system administrator');
-INSERT INTO system_role_type (id, version, display_name)
-    VALUES (4, 0, 'normal');
+INSERT INTO sec_role (id, version, name)
+VALUES (1, 0, 'SysAdmin');
 
 INSERT INTO device_status (id, version, status)
     VALUES (1, 0, 'NEW');
@@ -99,4 +98,11 @@ INSERT INTO measurement_unit (id, version, unit)
 INSERT INTO measurement_unit (id, version, unit)
     VALUES (2, 0, 'mm');
 
+INSERT INTO device_manufacturer VALUES (0, 0, 'Vemco');
+INSERT INTO device_model VALUES (0, 0, 0, 'VR2W', 'au.org.emii.aatams.ReceiverDeviceModel');
+INSERT INTO device_model VALUES (1, 0, 0, 'VR2', 'au.org.emii.aatams.ReceiverDeviceModel');
 
+INSERT INTO device_model VALUES (2, 0, 0, 'V13', 'au.org.emii.aatams.TagDeviceModel');
+INSERT INTO code_map VALUES (0, 0, 'A69-1303');
+
+INSERT INTO capture_method VALUES (0, 0, 'POLE AND LINE');

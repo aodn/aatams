@@ -1,7 +1,8 @@
 #!/bin/bash
+set -x
 
 AATAMS_URL="http://localhost:8080/aatams"
-COOKIE_FILE=/tmp/cookies.txt
+COOKIE_FILE=`mktemp`
 CURL_AUTH_CMD="curl --compressed -b ${COOKIE_FILE}"
 
 curl "${AATAMS_URL}/auth/signIn" --data "targetUri=%2F%3Fnull&username=admin&password=password"  -c ${COOKIE_FILE}
@@ -46,3 +47,5 @@ ${CURL_AUTH_CMD} "${AATAMS_URL}/sensor/save" -d "tag.serialNumber=11111111" -d "
 
 # Release
 ${CURL_AUTH_CMD} "${AATAMS_URL}/animalRelease/save" -d "project.id=5" -d "speciesId=10029746" -d "speciesName=41112004+-+Balaenoptera+musculus+%28blue+whale%29" -d "sex.id=1" -d "animal.id=" -d "captureLocality=Derwent+River" -d "captureLocation_pointInputTextField=42%C2%B0S+138%C2%B0E+%28datum%3AWGS+84%29" -d "captureLocation=POINT%28138+-42%29+%2C+4326" -d "captureLocation_lon=138" -d "captureLocation_lat=-42" -d "captureLocation_srid=4326" -d "captureDateTime=struct" -d "captureDateTime_day=6" -d "captureDateTime_month=6" -d "captureDateTime_year=2014" -d "captureDateTime_hour=16" -d "captureDateTime_minute=25" -d "captureDateTime_second=23" -d "captureDateTime_zone=Australia%2FMelbourne" -d "captureMethod.id=0" -d "releaseLocality=Derwent+River" -d "releaseLocation_pointInputTextField=42%C2%B0S+138%C2%B0E+%28datum%3AWGS+84%29" -d "releaseLocation=POINT%28138+-42%29+%2C+4326" -d "releaseLocation_lon=138" -d "releaseLocation_lat=-42" -d "releaseLocation_srid=4326" -d "releaseDateTime=struct" -d "releaseDateTime_day=6" -d "releaseDateTime_month=6" -d "releaseDateTime_year=2014" -d "releaseDateTime_hour=16" -d "releaseDateTime_minute=25" -d "releaseDateTime_second=23" -d "releaseDateTime_zone=Australia%2FMelbourne" -d "comments=" -d "embargoPeriod=36" -d "create=Create" -d "surgery.0.timestamp_day=6" -d "surgery.0.timestamp_month=6" -d "surgery.0.timestamp_year=2014" -d "surgery.0.timestamp_hour=16" -d "surgery.0.timestamp_minute=25" -d "surgery.0.timestamp_second=23" -d "surgery.0.timestamp_zone=Australia%2FMelbourne" -d "surgery.0.type.id=1" -d "surgery.0.treatmentType.id=1" -d "surgery.0.comments=" -d "surgery.0.tag.codeMap.id=0" -d "surgery.0.tag.pingCode=1111" -d "surgery.0.tag.serialNumber=11111111" -d "surgery.0.tag.model.id=2" -d "measurement.0.type.id=1" -d "measurement.0.value=26000" -d "measurement.0.unit.id=2" -d "measurement.0.estimate=false" -d "measurement.0.comments="
+
+rm ${COOKIE_FILE}

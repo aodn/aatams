@@ -7,10 +7,10 @@ class AnimalReleaseController extends AbstractController
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     
     def animalFactoryService
-	def animalReleaseService
+    def animalReleaseService
     def candidateEntitiesService
     def detectionFactoryService
-	
+    
     def tagFactoryService
     
     def index = {
@@ -18,15 +18,15 @@ class AnimalReleaseController extends AbstractController
     }
 
     def list = 
-	{
-		doList("animalRelease")
-	}
+    {
+        doList("animalRelease")
+    }
 
     def create = {
         def animalReleaseInstance = new AnimalRelease()
         animalReleaseInstance.properties = params
         
-		renderDefaultModel(animalReleaseInstance, params)
+        renderDefaultModel(animalReleaseInstance, params)
     }
     
     def addDependantEntity(params)
@@ -73,38 +73,38 @@ class AnimalReleaseController extends AbstractController
         addDependantEntity(params)
     }
 
-	def save =
-	{
-		def animalReleaseInstance = new AnimalRelease()
-		
-		try 
-		{
-			animalReleaseService.save(animalReleaseInstance, params)
-			flash.message = "${message(code: 'default.created.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.toString()])}"
-			redirect(action: "show", id: animalReleaseInstance.id)
-		}
-		catch (IllegalArgumentException e)
-		{
-			log.error("Error saving animal release", e)
-			renderDefaultModel(animalReleaseInstance, params)
-		}
-	}
+    def save =
+    {
+        def animalReleaseInstance = new AnimalRelease()
+        
+        try 
+        {
+            animalReleaseService.save(animalReleaseInstance, params)
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.toString()])}"
+            redirect(action: "show", id: animalReleaseInstance.id)
+        }
+        catch (IllegalArgumentException e)
+        {
+            log.error("Error saving animal release", e)
+            renderDefaultModel(animalReleaseInstance, params)
+        }
+    }
 
-	private renderDefaultModel(AnimalRelease animalReleaseInstance, params) 
-	{
-		def model =
-				[animalReleaseInstance: animalReleaseInstance] \
+    private renderDefaultModel(AnimalRelease animalReleaseInstance, params) 
+    {
+        def model =
+                [animalReleaseInstance: animalReleaseInstance] \
               + [candidateProjects:candidateEntitiesService.projects()] \
               + embargoPeriods()
-			  
-		if (params.speciesId && params.speciesName)	  
-		{
-			def species = [id:params.speciesId, name:params.speciesName]
-			model.species = species
-		}
+              
+        if (params.speciesId && params.speciesName)      
+        {
+            def species = [id:params.speciesId, name:params.speciesName]
+            model.species = species
+        }
 
-		render(view: "create", model: model)
-	}
+        render(view: "create", model: model)
+    }
 
     def show = {
         def animalReleaseInstance = AnimalRelease.get(params.id)
@@ -179,7 +179,7 @@ class AnimalReleaseController extends AbstractController
         def animalReleaseInstance = AnimalRelease.get(params.id)
         if (animalReleaseInstance) {
             try {
-				animalReleaseService.delete(animalReleaseInstance)
+                animalReleaseService.delete(animalReleaseInstance)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'animalRelease.label', default: 'AnimalRelease'), animalReleaseInstance.toString()])}"
                 redirect(action: "list")
             }

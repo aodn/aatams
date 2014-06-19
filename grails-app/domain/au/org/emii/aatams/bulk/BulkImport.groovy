@@ -7,28 +7,28 @@ import au.org.emii.aatams.Organisation;
 
 class BulkImport 
 {
-	Organisation organisation
-	DateTime importStartDate
-	DateTime importFinishDate
-	BulkImportStatus status
-	String filename
-	
-	static hasMany = [records: BulkImportRecord]
-	
-	static transients = ['path']
-	
+    Organisation organisation
+    DateTime importStartDate
+    DateTime importFinishDate
+    BulkImportStatus status
+    String filename
+    
+    static hasMany = [records: BulkImportRecord]
+    
+    static transients = ['path']
+    
     static constraints = 
-	{
-		importFinishDate(nullable:true)
+    {
+        importFinishDate(nullable:true)
     }
-	
-	String getPath()
-	{
-		return ConfigurationHolder.config.bulkimport.path + File.separator + id + File.separator + filename
-	}
-	
-	String toString()
-	{
-		return "Organisation: " + String.valueOf(organisation) + " on " + String.valueOf(importStartDate)
-	}
+    
+    String getPath()
+    {
+        return ConfigurationHolder.config.bulkimport.path + File.separator + id + File.separator + filename
+    }
+    
+    String toString()
+    {
+        return "Organisation: " + String.valueOf(organisation) + " on " + String.valueOf(importStartDate)
+    }
 }

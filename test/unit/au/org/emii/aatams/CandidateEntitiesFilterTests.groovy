@@ -95,7 +95,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         def roles = [activeProjRole, pendingProjRole, nonWriteProjRole]
         mockDomain(ProjectRole, roles)
         roles.each { permService.setPermissions(it) }
-		
+        
         mockDomain(AnimalRelease)
         
         activeInstallation = 
@@ -186,13 +186,13 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
 
         mockController(ReceiverRecoveryController)
         mockLogging(ReceiverRecoveryController, true)
-		mockLogging(ReportInfoService, true)
+        mockLogging(ReportInfoService, true)
         receiverRecoveryController = new ReceiverRecoveryController()
         receiverRecoveryController.metaClass.message = { Map map -> return "error message" }
         receiverRecoveryController.candidateEntitiesService = candEntitiesService
-		receiverRecoveryController.queryService = new QueryService()
-		receiverRecoveryController.queryService.embargoService = new EmbargoService()
-		receiverRecoveryController.reportInfoService = new ReportInfoService()
+        receiverRecoveryController.queryService = new QueryService()
+        receiverRecoveryController.queryService.embargoService = new EmbargoService()
+        receiverRecoveryController.reportInfoService = new ReportInfoService()
         mockConfig("grails.gorm.default.list.max = 10")
         receiverRecoveryController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
         
@@ -209,13 +209,13 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         super.tearDown()
     }
 
-	protected def getPrincipal()
-	{
-		return person.id
-	}
-	
-	protected boolean isPermitted(String permString)
-	{
+    protected def getPrincipal()
+    {
+        return person.id
+    }
+    
+    protected boolean isPermitted(String permString)
+    {
         if (permString == "project:" + activeProj.id + ":write")
         {
             return true
@@ -238,8 +238,8 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         }
         
         return false
-	}
-	
+    }
+    
     void testAnimalReleaseCreate()
     {
         def model = animalReleaseController.create()
@@ -441,6 +441,6 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
     
     private void setNonAdminUser()
     {
-		hasRole = false
+        hasRole = false
     }
 }

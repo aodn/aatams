@@ -25,22 +25,22 @@ public class PointEditor extends PropertyEditorSupport
         
         try 
         {
-        	if (text.isEmpty())
-        	{
-        		point = null;
-        	}
-        	else
-        	{
-	            String[] tokens = text.split(",");
-	            if (tokens.length != 2)
-	            {
-	                throw new ParseException("Invalid number of tokens (!= 2): " + text);
-	            }
-	            
-	            point = (Point)reader.read(tokens[0]);
-	            point.setSRID(Integer.parseInt(tokens[1].trim()));
-        	}
-        	
+            if (text.isEmpty())
+            {
+                point = null;
+            }
+            else
+            {
+                String[] tokens = text.split(",");
+                if (tokens.length != 2)
+                {
+                    throw new ParseException("Invalid number of tokens (!= 2): " + text);
+                }
+                
+                point = (Point)reader.read(tokens[0]);
+                point.setSRID(Integer.parseInt(tokens[1].trim()));
+            }
+            
             super.setValue(point);
         } 
         catch (ParseException e) 

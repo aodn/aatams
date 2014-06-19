@@ -8,8 +8,8 @@ class BulkImportController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-	def bulkImportService
-	
+    def bulkImportService
+    
     def index = {
         redirect(action: "list", params: params)
     }
@@ -26,32 +26,32 @@ class BulkImportController {
     }
 
     def save = 
-	{
+    {
         def bulkImportInstance = new BulkImport(params)
-		
-		def fileMap = request.getFileMap()
-		
-		if (fileMap.size() != 1)
+        
+        def fileMap = request.getFileMap()
+        
+        if (fileMap.size() != 1)
         {
             // Error.
             flash.error = "Number of posted files must be exactly one, you posted: " + fileMap.size()
             render(view: "create", model: [bulkImportInstance: bulkImportInstance])
         }
-		else
-		{
-			def multipartFile = (fileMap.values() as List)[0]
-			bulkImportInstance.organisation = Organisation.findByNameAndDepartment('CSIRO', 'CMAR Hobart')
-			bulkImportInstance.importStartDate = new DateTime()
-			bulkImportInstance.status = BulkImportStatus.IN_PROGRESS
-			bulkImportInstance.filename = multipartFile.getOriginalFilename()
-			bulkImportInstance.save(flush: true, failOnError: true)
-			
-			BulkImportJob.triggerNow([bulkImportId: bulkImportInstance.id, multipartFile: multipartFile])
-			
+        else
+        {
+            def multipartFile = (fileMap.values() as List)[0]
+            bulkImportInstance.organisation = Organisation.findByNameAndDepartment('CSIRO', 'CMAR Hobart')
+            bulkImportInstance.importStartDate = new DateTime()
+            bulkImportInstance.status = BulkImportStatus.IN_PROGRESS
+            bulkImportInstance.filename = multipartFile.getOriginalFilename()
+            bulkImportInstance.save(flush: true, failOnError: true)
+            
+            BulkImportJob.triggerNow([bulkImportId: bulkImportInstance.id, multipartFile: multipartFile])
+            
             redirect(action: "show", id: bulkImportInstance.id)
-		}
+        }
     }
-	
+    
     def show = {
         def bulkImportInstance = BulkImport.get(params.id)
         if (!bulkImportInstance) {

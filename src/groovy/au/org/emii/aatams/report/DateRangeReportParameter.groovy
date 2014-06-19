@@ -4,18 +4,18 @@ import java.util.Map;
 
 class DateRangeReportParameter extends ReportParameter
 {
-	Date minRange
-	Date maxRange
-	
+    Date minRange
+    Date maxRange
+    
     String getTemplate()
     {
         return "/report/filter/dateRangeTemplate"
     }
-	
-	String getRestrictionName()
-	{
-		return "between"
-	}
+    
+    String getRestrictionName()
+    {
+        return "between"
+    }
     
     /**
      * Returns the model which can be passed to GSP/render.

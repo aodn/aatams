@@ -22,21 +22,21 @@ The following tags have new detections as a result of a recent upload:<br/></p>
                         
                     </thead>
                     <tbody>
-	                    <g:each in="${sensors}" status="i" var="sensor">
-	                        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-	                        
-	                            <td><a href="${g.createLink(controller: 'tag', action: 'show', id: sensor.tag.id, absolute: true)}">${sensor.transmitterId}</a></td>
+                        <g:each in="${sensors}" status="i" var="sensor">
+                            <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+                            
+                                <td><a href="${g.createLink(controller: 'tag', action: 'show', id: sensor.tag.id, absolute: true)}">${sensor.transmitterId}</a></td>
                                 <td><a href="${g.createLink(controller: 'detection', action: 'list', absolute: true, params: ['filter.in': ['transmitterId', sensor.transmitterId]])}">data...</a></td>
-	
-	                        </tr>
-	                    </g:each>
-	                    </tbody>
+    
+                            </tr>
+                        </g:each>
+                        </tbody>
                 </table>
             </div>
             
             <p>
-	            Regards,<br/>
-	            The AATAMS team
+                Regards,<br/>
+                The AATAMS team
             </p>            
         </div>
     </body>

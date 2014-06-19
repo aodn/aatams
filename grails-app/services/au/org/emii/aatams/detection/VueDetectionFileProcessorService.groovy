@@ -15,22 +15,22 @@ import org.springframework.context.i18n.LocaleContextHolder as LCH
 class VueDetectionFileProcessorService extends AbstractBatchProcessor
 {
     def detectionFactoryService
-	def detectionNotificationService
-	
+    def detectionNotificationService
+    
     static transactional = true
-	
+    
     void processSingleRecord(downloadFile, map, context) throws FileProcessingException
     {
         detectionFactoryService.newDetection(downloadFile, map)
     }
-	
-	void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
-	{
-		super.process(downloadFile)
-		
-		if (downloadFile.type != ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV)
-		{
-			detectionNotificationService.sendDetectionNotificationEmails(downloadFile)
-		}
-	}
+    
+    void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
+    {
+        super.process(downloadFile)
+        
+        if (downloadFile.type != ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV)
+        {
+            detectionNotificationService.sendDetectionNotificationEmails(downloadFile)
+        }
+    }
 }

@@ -15,15 +15,15 @@ import au.org.emii.aatams.bulk.BulkImportRecord;
 
 class CsiroDetectionFormat extends FileFormat 
 {
-	static final String DATE_AND_TIME_COLUMN = "DET_DATETIME"
-	static final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ss Z"
+    static final String DATE_AND_TIME_COLUMN = "DET_DATETIME"
+    static final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ss Z"
     
-	Map parseRow(row) throws FileFormatException
-	{
+    Map parseRow(row) throws FileFormatException
+    {
         return [timestamp: getUtcDate(row, DATE_AND_TIME_COLUMN, DATE_FORMAT),
-			    receiverName: receiver(row).name,
-				transmitterId: tag(row).sensors.toList()[0].transmitterId]
-	}
+                receiverName: receiver(row).name,
+                transmitterId: tag(row).sensors.toList()[0].transmitterId]
+    }
 
     def tagRecord(row) throws BulkImportException {
         BulkImportRecord tagRecord = BulkImportRecord.findByDstClassAndSrcPk("au.org.emii.aatams.Tag", Long.valueOf(row['ACO_ID']))

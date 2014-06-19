@@ -22,8 +22,8 @@ class AnimalRelease implements Embargoable
     static belongsTo = [project: Project, animal: Animal]
     static hasMany = [surgeries: Surgery, measurements: AnimalMeasurement]
     static transients = ['scrambledReleaseLocation', 'current', 'embargoed']
-	static auditable = true
-	
+    static auditable = true
+    
     static mapping =
     {
         captureDateTime type: PersistentDateTimeTZ,
@@ -39,14 +39,14 @@ class AnimalRelease implements Embargoable
         }
         
         comments type: 'text'
-		captureLocation type: GeometryUserType
-		releaseLocation type: GeometryUserType
+        captureLocation type: GeometryUserType
+        releaseLocation type: GeometryUserType
     }
 
-	static searchable =
-	{
-		surgeries(component:true)
-	}
+    static searchable =
+    {
+        surgeries(component:true)
+    }
 
     String captureLocality
     Point captureLocation

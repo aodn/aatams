@@ -11,31 +11,31 @@ class ReceiverController extends ReportController
     }
 
     def list = 
-	{
-		doList("receiver")
-	}
-	
-	def export =
-	{
-		doExport("receiver")
-	}
+    {
+        doList("receiver")
+    }
+    
+    def export =
+    {
+        doExport("receiver")
+    }
 
     def create = {
         def receiverInstance = new Receiver()
         receiverInstance.properties = params
-		
-		def defaultModel = ReceiverDeviceModel.findByModelName("VR2W")
-		if (defaultModel)
-		{
-			receiverInstance.model = defaultModel
-		}
-		
+        
+        def defaultModel = ReceiverDeviceModel.findByModelName("VR2W")
+        if (defaultModel)
+        {
+            receiverInstance.model = defaultModel
+        }
+        
         return [receiverInstance: receiverInstance]
     }
 
     def save = {
-		
-		def receiverInstance = new Receiver(params)
+        
+        def receiverInstance = new Receiver(params)
         
         if (receiverInstance.save(flush: true)) 
         {

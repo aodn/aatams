@@ -19,7 +19,7 @@ abstract class AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTe
     def sql
 
     protected void setUp() 
-	{
+    {
         super.setUp()
         
         sql = Sql.newInstance(dataSource)
@@ -27,7 +27,7 @@ abstract class AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTe
     }
 
     protected void tearDown() 
-	{
+    {
         Statistics.findByKey('numValidDetections')?.delete()
         dropMatviews()
         
@@ -66,38 +66,38 @@ abstract class AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTe
 
         // create create_matview function
         sql.execute('''
-						CREATE OR REPLACE FUNCTION create_matview(NAME, NAME)
-						RETURNS VOID
-						SECURITY DEFINER
-						LANGUAGE plpgsql AS
-						$$
-						DECLARE
-							matview ALIAS FOR $1;
-							view_name ALIAS FOR $2;
-							entry matviews%ROWTYPE;
-						BEGIN
-							SELECT * INTO entry FROM matviews WHERE mv_name = matview;
-						
-							IF FOUND THEN
-								RAISE EXCEPTION 'Materialized view % already exists.', matview;
-							END IF;
-						
-							EXECUTE 'REVOKE ALL ON ' || view_name || ' FROM PUBLIC';
-						
-							EXECUTE 'GRANT SELECT ON ' || view_name || ' TO PUBLIC';
-						
-							EXECUTE 'CREATE TABLE ' || matview || ' AS SELECT * FROM ' || view_name;
-						
-							EXECUTE 'REVOKE ALL ON ' || matview || ' FROM PUBLIC';
-						
-							EXECUTE 'GRANT SELECT ON ' || matview || ' TO PUBLIC';
-						
-							INSERT INTO matviews (mv_name, v_name, last_refresh)
-							  VALUES (matview, view_name, CURRENT_TIMESTAMP);
-							
-							RETURN;
-						END;
-						$$''')
+                        CREATE OR REPLACE FUNCTION create_matview(NAME, NAME)
+                        RETURNS VOID
+                        SECURITY DEFINER
+                        LANGUAGE plpgsql AS
+                        $$
+                        DECLARE
+                            matview ALIAS FOR $1;
+                            view_name ALIAS FOR $2;
+                            entry matviews%ROWTYPE;
+                        BEGIN
+                            SELECT * INTO entry FROM matviews WHERE mv_name = matview;
+                        
+                            IF FOUND THEN
+                                RAISE EXCEPTION 'Materialized view % already exists.', matview;
+                            END IF;
+                        
+                            EXECUTE 'REVOKE ALL ON ' || view_name || ' FROM PUBLIC';
+                        
+                            EXECUTE 'GRANT SELECT ON ' || view_name || ' TO PUBLIC';
+                        
+                            EXECUTE 'CREATE TABLE ' || matview || ' AS SELECT * FROM ' || view_name;
+                        
+                            EXECUTE 'REVOKE ALL ON ' || matview || ' FROM PUBLIC';
+                        
+                            EXECUTE 'GRANT SELECT ON ' || matview || ' TO PUBLIC';
+                        
+                            INSERT INTO matviews (mv_name, v_name, last_refresh)
+                              VALUES (matview, view_name, CURRENT_TIMESTAMP);
+                            
+                            RETURN;
+                        END;
+                        $$''')
         
         sql.execute('DROP TABLE IF EXISTS detection_extract_view_mv')
         sql.execute("select create_matview('detection_extract_view_mv', 'detection_extract_view');")

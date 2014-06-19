@@ -8,47 +8,47 @@ import org.joda.time.DateTime
 
 class BulkImportJobTests extends GrailsUnitTestCase 
 {
-	BulkImportService bulkImportService
-	BulkImport bulkImport
-	BulkImportJob bulkImportJob
-	
-	boolean processCalled
-	Long expectedId
-	
+    BulkImportService bulkImportService
+    BulkImport bulkImport
+    BulkImportJob bulkImportJob
+    
+    boolean processCalled
+    Long expectedId
+    
     protected void setUp() 
-	{
+    {
         super.setUp()
-		
-		mockLogging(BulkImportService, true)
-		bulkImportService = new BulkImportService()
-		bulkImportService.metaClass.process =
-		{
-			Long bulkImportId, MultipartFile multipartFile ->
-			
-			processCalled = true
-			assertEquals(expectedId, bulkImportId)
-		}
-		
-		bulkImportJob = new BulkImportJob()
-		bulkImportJob.bulkImportService = bulkImportService
-		
-		bulkImport = new BulkImport(organisation: new Organisation(), importStartDate: new DateTime(), status: BulkImportStatus.IN_PROGRESS)
-		mockDomain(BulkImport, [bulkImport])
-		bulkImport.save()
-		
-		processCalled = false
+        
+        mockLogging(BulkImportService, true)
+        bulkImportService = new BulkImportService()
+        bulkImportService.metaClass.process =
+        {
+            Long bulkImportId, MultipartFile multipartFile ->
+            
+            processCalled = true
+            assertEquals(expectedId, bulkImportId)
+        }
+        
+        bulkImportJob = new BulkImportJob()
+        bulkImportJob.bulkImportService = bulkImportService
+        
+        bulkImport = new BulkImport(organisation: new Organisation(), importStartDate: new DateTime(), status: BulkImportStatus.IN_PROGRESS)
+        mockDomain(BulkImport, [bulkImport])
+        bulkImport.save()
+        
+        processCalled = false
     }
 
     protected void tearDown() 
-	{
+    {
         super.tearDown()
     }
 
     void testExecute() 
-	{
-		expectedId = 23
-		bulkImportJob.execute([mergedJobDataMap:[bulkImportId: 23, multipartFile: new MockMultipartFile("file1.zip", "foo".bytes)]])
-		
-		assertTrue(processCalled)
+    {
+        expectedId = 23
+        bulkImportJob.execute([mergedJobDataMap:[bulkImportId: 23, multipartFile: new MockMultipartFile("file1.zip", "foo".bytes)]])
+        
+        assertTrue(processCalled)
     }
 }

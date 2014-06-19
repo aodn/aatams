@@ -8,7 +8,7 @@ import org.joda.time.*
 class PersonTests extends AbstractGrailsUnitTestCase
 {
     def perthTZ = DateTimeZone.forID("Australia/Perth")
-	def person
+    def person
 
     protected void setUp()
     {
@@ -21,8 +21,8 @@ class PersonTests extends AbstractGrailsUnitTestCase
         mockDomain(Person, [person])
         person.save()
 
-		permitted = true
-		hasRole = true
+        permitted = true
+        hasRole = true
     }
 
     protected void tearDown()
@@ -30,10 +30,10 @@ class PersonTests extends AbstractGrailsUnitTestCase
         super.tearDown()
     }
 
-	protected def getPrincipal()
-	{
-		return person?.id
-	}
+    protected def getPrincipal()
+    {
+        return person?.id
+    }
 
     void testDefaultTimeZone()
     {

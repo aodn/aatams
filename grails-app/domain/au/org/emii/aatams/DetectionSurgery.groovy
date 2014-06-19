@@ -31,10 +31,10 @@ class DetectionSurgery implements Embargoable
 {
     static belongsTo = [surgery:Surgery, detection:ValidDetection, sensor:Sensor]
     
-	static mapping =
-	{
-		id generator:'sequence', params:[sequence:'detection_surgery_sequence']
-	}
+    static mapping =
+    {
+        id generator:'sequence', params:[sequence:'detection_surgery_sequence']
+    }
     
     static transients = ['project']
 
@@ -57,29 +57,29 @@ class DetectionSurgery implements Embargoable
         return detectionSurgery
     }
     
-	static String toSqlInsert(Map detSurgery, boolean useHibernateSeqForDetectionId)
-	{
-		StringBuilder detSurgeryBuff = new StringBuilder(
-				"INSERT INTO DETECTION_SURGERY (ID, VERSION, DETECTION_ID, SURGERY_ID, SENSOR_ID) " +
-				" VALUES(")
+    static String toSqlInsert(Map detSurgery, boolean useHibernateSeqForDetectionId)
+    {
+        StringBuilder detSurgeryBuff = new StringBuilder(
+                "INSERT INTO DETECTION_SURGERY (ID, VERSION, DETECTION_ID, SURGERY_ID, SENSOR_ID) " +
+                " VALUES(")
 
-		detSurgeryBuff.append("nextval('detection_surgery_sequence'),")
-		detSurgeryBuff.append("0,")
-		
-		if (useHibernateSeqForDetectionId)
-		{
-			detSurgeryBuff.append("currval('hibernate_sequence'),")
-			SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["surgeryId", "sensorId"])
-		}
-		else
-		{
-			assert(detSurgery.detectionId)
-			SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["detectionId", "surgeryId", "sensorId"])
-		}
-		SqlUtils.removeTrailingCommaAndAddBracket(detSurgeryBuff)
-		
-		return detSurgeryBuff.toString()
-	}
+        detSurgeryBuff.append("nextval('detection_surgery_sequence'),")
+        detSurgeryBuff.append("0,")
+        
+        if (useHibernateSeqForDetectionId)
+        {
+            detSurgeryBuff.append("currval('hibernate_sequence'),")
+            SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["surgeryId", "sensorId"])
+        }
+        else
+        {
+            assert(detSurgery.detectionId)
+            SqlUtils.appendIntegerParams(detSurgeryBuff, detSurgery, ["detectionId", "surgeryId", "sensorId"])
+        }
+        SqlUtils.removeTrailingCommaAndAddBracket(detSurgeryBuff)
+        
+        return detSurgeryBuff.toString()
+    }
 
     String toString()
     {
@@ -87,13 +87,13 @@ class DetectionSurgery implements Embargoable
     }
 
     def applyEmbargo()
-	{
+    {
         if (surgery.isEmbargoed()) {
             return null
         }
 
         return this
-	}
+    }
     
     def getProject()
     {

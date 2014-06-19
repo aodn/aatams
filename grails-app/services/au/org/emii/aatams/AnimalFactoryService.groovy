@@ -15,7 +15,7 @@ class AnimalFactoryService
         
         // Otherwise, we need to create a new Animal.
         log.debug("Creating new animal...")
-		Sex sex = Sex.get(params.sex?.id)
+        Sex sex = Sex.get(params.sex?.id)
         Species species = lookupOrCreateSpecies(params)
         
         Animal animalInstance = new Animal(sex:sex, species:species).save()

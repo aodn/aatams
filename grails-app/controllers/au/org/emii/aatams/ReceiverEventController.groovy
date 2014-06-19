@@ -4,8 +4,8 @@ import au.org.emii.aatams.report.ReportController
 
 class ReceiverEventController extends ReportController
 {
-	def receiverEventExportService
-	
+    def receiverEventExportService
+    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -13,14 +13,14 @@ class ReceiverEventController extends ReportController
     }
 
     def list = 
-	{
-		doList("receiverEvent")
-	}
-	
-	def export =
-	{
-		receiverEventExportService.generateReport(params, request, response)
-	}
+    {
+        doList("receiverEvent")
+    }
+    
+    def export =
+    {
+        receiverEventExportService.generateReport(params, request, response)
+    }
 
     def create = {
         redirect(controller:"receiverDownloadFile", 

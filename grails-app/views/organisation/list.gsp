@@ -47,7 +47,7 @@
                             
                             <th>Projects</th>
 
-							<th>People</th>
+                            <th>People</th>
 
                             </tr>
                     </thead>

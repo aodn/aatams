@@ -65,7 +65,7 @@
       myLayout = $('body').layout(
       {
         north: {size: 130, resizable: false, closable: false},
-        spacing_closed:			10,
+        spacing_closed:            10,
         // enable showOverflow on west-pane so popups will overlap north pane
         west: {showOverflowOnHover: false, resizable:  false, closable: false, size: 230}
       });
@@ -76,10 +76,10 @@
 
     <style type="text/css">
       /**
-      *	Basic Layout Theme
+      *    Basic Layout Theme
       *
-      *	This theme uses the default layout class-names for all classes
-      *	Add any 'custom class-names', from options: paneClass, resizerClass, togglerClass
+      *    This theme uses the default layout class-names for all classes
+      *    Add any 'custom class-names', from options: paneClass, resizerClass, togglerClass
       */
 
       .ui-layout-pane { /* all 'panes' */

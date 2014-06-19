@@ -74,7 +74,7 @@ class ReportTagLib
                                      formats:attrs.formats,
                                      controller:"report",
                                      action:"execute",
-									 type:type,
+                                     type:type,
                                      showFilter:showFilter])
             }
         }

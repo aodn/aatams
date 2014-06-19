@@ -15,7 +15,7 @@ class TimeZoneTests extends AbstractGrailsUnitTestCase
     {
         super.setUp()
 
-		permitted = true
+        permitted = true
 
         person = new Person(
             username:"person",
@@ -32,10 +32,10 @@ class TimeZoneTests extends AbstractGrailsUnitTestCase
         super.tearDown()
     }
 
-	protected def getPrincipal()
-	{
-		return person.id
-	}
+    protected def getPrincipal()
+    {
+        return person.id
+    }
 
     void testAnimalRelease()
     {

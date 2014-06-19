@@ -135,7 +135,7 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
 
     void testListAsSysAdmin()
     {
-		hasRole = true
+        hasRole = true
         
         def retVal = controller.list()
         assertEquals(3,
@@ -144,7 +144,7 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
     
     void testListAsNonSysAdmin()
     {
-		hasRole = false
+        hasRole = false
         
         def retVal = controller.list()
         assertEquals(1, 
@@ -154,7 +154,7 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
     
     void testSaveAsSysAdmin()
     {
-		hasRole = true
+        hasRole = true
 
         boolean mailSent = false
         
@@ -181,7 +181,7 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
     void testSaveAsNonSysAdmin()
     {
         // Status should be set to PENDING and mail sent.
-		hasRole = false
+        hasRole = false
 
         boolean mailSent = false
         
@@ -205,28 +205,28 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
         assertTrue(mailSent)
     }
 
-	void testLookupByName()
-	{
-		assertLookupWithTerm(0, 'X')
-		assertLookupWithTerm(1, 'S')
-		assertLookupWithTerm(1, 's')
-		assertLookupWithTerm(2, 'T')
-		assertLookupWithTerm(2, 't')
-		assertLookupWithTerm(3, 'A')
-		assertLookupWithTerm(3, 'a')
-	}
+    void testLookupByName()
+    {
+        assertLookupWithTerm(0, 'X')
+        assertLookupWithTerm(1, 'S')
+        assertLookupWithTerm(1, 's')
+        assertLookupWithTerm(2, 'T')
+        assertLookupWithTerm(2, 't')
+        assertLookupWithTerm(3, 'A')
+        assertLookupWithTerm(3, 'a')
+    }
 
-	private assertLookupWithTerm(expectedNumResults, term) 
-	{
-		controller.params.term = term
-		controller.lookupByName()
+    private assertLookupWithTerm(expectedNumResults, term) 
+    {
+        controller.params.term = term
+        controller.lookupByName()
 
-		def jsonResponse = JSON.parse(controller.response.contentAsString)
-		assertEquals(expectedNumResults, jsonResponse.size())
-		
-		// Need to reset the response so that this method can be called multiple times within a single test case.
-		// Also requires workaround to avoid exception, see: http://jira.grails.org/browse/GRAILS-6483
-		mockResponse?.committed = false // Current workaround
-		reset()
-	}
+        def jsonResponse = JSON.parse(controller.response.contentAsString)
+        assertEquals(expectedNumResults, jsonResponse.size())
+        
+        // Need to reset the response so that this method can be called multiple times within a single test case.
+        // Also requires workaround to avoid exception, see: http://jira.grails.org/browse/GRAILS-6483
+        mockResponse?.committed = false // Current workaround
+        reset()
+    }
 }

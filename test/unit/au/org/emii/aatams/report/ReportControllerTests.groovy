@@ -19,11 +19,11 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 {
     def embargoService
     def jasperService
-	def permissionUtilsService
+    def permissionUtilsService
     def reportInfoService
-	def queryService
+    def queryService
 
-	Person user
+    Person user
 
     protected void setUp()
     {
@@ -39,28 +39,28 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         mockLogging(PermissionUtilsService)
         permissionUtilsService = new PermissionUtilsService()
 
-		mockLogging(QueryService, true)
-		queryService = new QueryService()
-		queryService.embargoService = embargoService
+        mockLogging(QueryService, true)
+        queryService = new QueryService()
+        queryService.embargoService = embargoService
 
         mockLogging(ReportInfoService)
         reportInfoService = new ReportInfoService()
-		reportInfoService.permissionUtilsService = permissionUtilsService
+        reportInfoService.permissionUtilsService = permissionUtilsService
 
-		controller.jasperService = jasperService
-		controller.permissionUtilsService = permissionUtilsService
-		controller.queryService = queryService
+        controller.jasperService = jasperService
+        controller.permissionUtilsService = permissionUtilsService
+        controller.queryService = queryService
         controller.reportInfoService = reportInfoService
 
-		mockDomain(Installation)
-		mockDomain(Organisation)
-		mockDomain(Project)
+        mockDomain(Installation)
+        mockDomain(Organisation)
+        mockDomain(Project)
         mockDomain(Receiver)
         mockDomain(ReceiverEvent)
-		mockDomain(ValidDetection)
+        mockDomain(ValidDetection)
 
         user = new Person(username: 'user')
-		hasRole = true
+        hasRole = true
 
         // Need this for "findByUsername()" etc.
         mockDomain(Person, [user])
@@ -72,26 +72,26 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         super.tearDown()
     }
 
-	protected def getPrincipal()
-	{
-		return user?.id
-	}
+    protected def getPrincipal()
+    {
+        return user?.id
+    }
 
-	protected boolean isPermitted(permission)
-	{
-		if (permission == "project:" + project1.id + ":read")
-		{
-			return true
-		}
+    protected boolean isPermitted(permission)
+    {
+        if (permission == "project:" + project1.id + ":read")
+        {
+            return true
+        }
 
-		return false
-	}
+        return false
+    }
     void testNoResults()
     {
         controller.params._name = "receiver"
         controller.params._file = "receiverList"
         controller.params._format = "PDF"
-		controller.params._type = "report"
+        controller.params._type = "report"
 
         def model = controller.execute()
 

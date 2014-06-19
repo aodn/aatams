@@ -14,12 +14,12 @@ class CandidateEntitiesService
     
     def projects()
     {
-		def candidateProjects = 
+        def candidateProjects = 
             Project.findAllByStatus(EntityStatus.ACTIVE).grep
             {
-				SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(it.id))
+                SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(it.id))
             }
-			
+            
         return candidateProjects 
     }
     
@@ -48,7 +48,7 @@ class CandidateEntitiesService
     
     def stations()
     {
-		def candidateStations = InstallationStation.findAllByInstallationInList(installations(), [sort:"name"])
+        def candidateStations = InstallationStation.findAllByInstallationInList(installations(), [sort:"name"])
 
         return candidateStations
     }
@@ -58,17 +58,17 @@ class CandidateEntitiesService
         def candOrganisations = organisations()
         
         // receivers.organisation in candOrganisations
-		def receivers = 
-        	Receiver.findAllByOrganisationInList(candOrganisations)
-			
-		receivers = receivers.sort
-		{
-			a, b ->
-			
-			a.toString() <=> b.toString()
-		}
-	
-		return receivers
+        def receivers = 
+            Receiver.findAllByOrganisationInList(candOrganisations)
+            
+        receivers = receivers.sort
+        {
+            a, b ->
+            
+            a.toString() <=> b.toString()
+        }
+    
+        return receivers
     }
     
     def tags(Project project)
@@ -109,8 +109,8 @@ class CandidateEntitiesService
     
     def deployments()
     {
-		def projects = projects()
-		
+        def projects = projects()
+        
         def candidateDeployments =
             ReceiverDeployment.list().grep(
             {
@@ -122,8 +122,8 @@ class CandidateEntitiesService
     
     def surgeries()
     {
-		def projects = projects()
-		
+        def projects = projects()
+        
         def candidateSurgeries =
             Surgery.list().grep(
             {

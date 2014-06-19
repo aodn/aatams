@@ -5,9 +5,9 @@ import grails.converters.JSON
 
 class SensorController extends ReportController
 {
-	def candidateEntitiesService
+    def candidateEntitiesService
     def tagFactoryService
-	
+    
     static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
     def index = {
@@ -15,14 +15,14 @@ class SensorController extends ReportController
     }
 
     def list = 
-	{
-		doList("sensor")
-	}
+    {
+        doList("sensor")
+    }
 
-	def export =
-	{
-		doExport("sensor")
-	}
+    def export =
+    {
+        doExport("sensor")
+    }
 
     def create = {
         def sensorInstance = new Sensor()
@@ -32,45 +32,45 @@ class SensorController extends ReportController
     }
 
     def save = 
-	{
-		def tag = tagFactoryService.lookupOrCreate(params.tag)
-		assert(tag)
-		
-		params.tag = tag
-		
+    {
+        def tag = tagFactoryService.lookupOrCreate(params.tag)
+        assert(tag)
+        
+        params.tag = tag
+        
         def sensorInstance = new Sensor(params)
-		
-		// Workaround for http://jira.grails.org/browse/GRAILS-3783
-		tag.addToSensors(sensorInstance)
+        
+        // Workaround for http://jira.grails.org/browse/GRAILS-3783
+        tag.addToSensors(sensorInstance)
 
-		if (sensorInstance.save(flush: true)) 
+        if (sensorInstance.save(flush: true)) 
         {
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
-			
-			if (params.responseType == 'json')
-			{
-				render ([instance:sensorInstance, message:flash, tag:[id: tag.id]] as JSON)
-			}
-			else
-			{
-				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
-				redirect(controller: "tag", action: "show", id: sensorInstance.tag?.id)
-			}
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
+            
+            if (params.responseType == 'json')
+            {
+                render ([instance:sensorInstance, message:flash, tag:[id: tag.id]] as JSON)
+            }
+            else
+            {
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
+                redirect(controller: "tag", action: "show", id: sensorInstance.tag?.id)
+            }
         }
         else 
         {
             log.error(sensorInstance.errors)
-			
-			if (params.responseType == 'json')
-			{
-				render ([errors:sensorInstance.errors] as JSON)
-			}
-			else
-			{
-				def model =  [sensorInstance: sensorInstance,
-							  candidateProjects:candidateEntitiesService.projects()]
-				render(view: "create", model: model)
-			}
+            
+            if (params.responseType == 'json')
+            {
+                render ([errors:sensorInstance.errors] as JSON)
+            }
+            else
+            {
+                def model =  [sensorInstance: sensorInstance,
+                              candidateProjects:candidateEntitiesService.projects()]
+                render(view: "create", model: model)
+            }
         }
     }
 
@@ -123,7 +123,7 @@ class SensorController extends ReportController
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'sensor.label', default: 'Sensor'), params.id])}"
             redirect(action: "list")
         }
-	}
+    }
 
     def delete = {
         def sensorInstance = Sensor.get(params.id)
@@ -144,17 +144,17 @@ class SensorController extends ReportController
             redirect(action: "list")
         }
     }
-	
-	def lookupByTransmitterId =
-	{
-		def sensors = Sensor.findAllByTransmitterIdIlike("%" + params.term + "%", [sort: "transmitterId"])
-		
-		// Limit so that all results fit on screen.
-		if (sensors?.size() > 20)
-		{
-			sensors = sensors[0..19]
-		}
-		
-		render sensors as JSON
-	}
+    
+    def lookupByTransmitterId =
+    {
+        def sensors = Sensor.findAllByTransmitterIdIlike("%" + params.term + "%", [sort: "transmitterId"])
+        
+        // Limit so that all results fit on screen.
+        if (sensors?.size() > 20)
+        {
+            sensors = sensors[0..19]
+        }
+        
+        render sensors as JSON
+    }
 }

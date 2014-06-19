@@ -101,11 +101,11 @@ class AnimalController extends AbstractController {
    
     def lookup =
     {
-		if ((params.project.id == "") || (params.species.id == ""))
-		{
-			return [] as JSON
-		}
-		
+        if ((params.project.id == "") || (params.species.id == ""))
+        {
+            return [] as JSON
+        }
+        
         def criteria = Animal.createCriteria()
         
         def animals = criteria

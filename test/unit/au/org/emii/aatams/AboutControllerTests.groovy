@@ -9,7 +9,7 @@ class AboutControllerTests extends AbstractControllerUnitTestCase
     {
         super.setUp()
 
-		permitted = true
+        permitted = true
     }
 
     protected void tearDown() 

@@ -82,15 +82,15 @@ class InstallationStationReportWrapper
     {
         return Collections.EMPTY_LIST
     }
-	
-	boolean hasDetections()
-	{
-		return (detectionCount() != 0) 
-	}
-	
-	long getDetectionCount()
-	{
-		return 73
-	}
+    
+    boolean hasDetections()
+    {
+        return (detectionCount() != 0) 
+    }
+    
+    long getDetectionCount()
+    {
+        return 73
+    }
 }
 

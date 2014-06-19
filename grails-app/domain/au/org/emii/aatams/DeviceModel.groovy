@@ -11,11 +11,11 @@ class DeviceModel
         manufacturer()
     }
     
-	static mapping =
-	{
-		sort "modelName"
-	}
-	
+    static mapping =
+    {
+        sort "modelName"
+    }
+    
     String toString()
     {
         return modelName

@@ -71,10 +71,10 @@
                         <g:hiddenField name="receiverDownloadId" value="${receiverDownloadFileInstance?.id}"/>
                         
                         <g:if test="${ (receiverDownloadFileInstance.status == FileProcessingStatus.PROCESSING) }">
-	                        <tr class="prop">
-	                            <td valign="top" class="name"><g:message code="receiverDownloadFile.percentComplete.label" default="Progress" /></td>
-	                            <td valign="top" class="value"><div id="progressbar"></div></td>
-	                        </tr>
+                            <tr class="prop">
+                                <td valign="top" class="name"><g:message code="receiverDownloadFile.percentComplete.label" default="Progress" /></td>
+                                <td valign="top" class="value"><div id="progressbar"></div></td>
+                            </tr>
                         </g:if>
                         
                         <g:if test="${   (receiverDownloadFileInstance.status != FileProcessingStatus.PROCESSING) 

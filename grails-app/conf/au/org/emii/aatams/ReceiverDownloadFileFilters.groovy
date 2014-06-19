@@ -6,7 +6,7 @@ import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
 class ReceiverDownloadFileFilters {
 
     def filters = 
-	{
+    {
         receiverDownloadFileList(controller: 'receiverDownloadFile', action:'list')
         {
             after =

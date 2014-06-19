@@ -39,7 +39,7 @@ class ReceiverDownloadFileController
 
     def save = 
     {
-		log.debug("Processing receiver export, params: " + params)
+        log.debug("Processing receiver export, params: " + params)
         def receiverDownloadFileInstance = new ReceiverDownloadFile(type: params.type)
 
         // Save the file to disk.
@@ -52,18 +52,18 @@ class ReceiverDownloadFileController
         }
         else
         {
-			MultipartFile file = (fileMap.values() as List)[0]
-			receiverDownloadFileInstance.initialiseForProcessing(file.getOriginalFilename())
-			receiverDownloadFileInstance.save(flush: true, failOnError: true)
-			
+            MultipartFile file = (fileMap.values() as List)[0]
+            receiverDownloadFileInstance.initialiseForProcessing(file.getOriginalFilename())
+            receiverDownloadFileInstance.save(flush: true, failOnError: true)
+            
             flash.message = "${message(code: 'default.processing.receiverUpload.message')}"
             
             // Define this in web thread, as it fails if done async.
             def downloadFileId = receiverDownloadFileInstance.id
             def showLink = createLink(action:'show', id:downloadFileId, absolute:true)
 
-			FileProcessorJob.triggerNow([downloadFileId: downloadFileId, file: file, showLink: showLink])
-			
+            FileProcessorJob.triggerNow([downloadFileId: downloadFileId, file: file, showLink: showLink])
+            
             redirect(action: "show", id: downloadFileId)
         }
     }
@@ -157,20 +157,20 @@ class ReceiverDownloadFileController
             [receiverDownloadFileInstance: receiverDownloadFileInstance]
         }
     }
-	
-	def status = 
-	{
-		ReceiverDownloadFile download = ReceiverDownloadFile.get(params.id)
-		
-		def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
-		if (!receiverDownloadFileInstance)
-		{
-			response.status = 404
-			render([error: [message: "Unknown receiverDownloadFile id: ${params.id}"]] as JSON)
-		}
-		else
-		{
-			render([status: download.status, percentComplete: download.percentComplete] as JSON)
-		}
-	}
+    
+    def status = 
+    {
+        ReceiverDownloadFile download = ReceiverDownloadFile.get(params.id)
+        
+        def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
+        if (!receiverDownloadFileInstance)
+        {
+            response.status = 404
+            render([error: [message: "Unknown receiverDownloadFile id: ${params.id}"]] as JSON)
+        }
+        else
+        {
+            render([status: download.status, percentComplete: download.percentComplete] as JSON)
+        }
+    }
 }

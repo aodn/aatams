@@ -19,9 +19,9 @@ import org.joda.time.*
 class ReportController extends AbstractController
 {
     def animalReleaseSummaryService
-	def detectionExtractService
+    def detectionExtractService
     def jasperService
-	def kmlService
+    def kmlService
     def permissionUtilsService
     
     def index = { }
@@ -31,143 +31,143 @@ class ReportController extends AbstractController
         renderDefaultModel(params)
     }
 
-	private renderDefaultModel(Map params) 
-	{
-		def model = 
-			[name:params.name,
-			 displayName:reportInfoService.getReportInfo(params.name).displayName,
-			 formats:params.formats]
-	}
+    private renderDefaultModel(Map params) 
+    {
+        def model = 
+            [name:params.name,
+             displayName:reportInfoService.getReportInfo(params.name).displayName,
+             formats:params.formats]
+    }
     
     def execute =
     {
-		log.debug("Executing report, params: " + params)
-		
-		indicateExportStart()
-		
-		// The only time this will be set is in integration tests (to "CSV").
-		if (!params._format)
-		{
-			params._format = params._action_execute
-		}
+        log.debug("Executing report, params: " + params)
         
-		if (params._name == "detection"  && params._format == "CSV")
-		{
-			detectionExtractService.generateReport(params, request, response)
-		}
-		else
-		{
-	        def resultList = generateResultList(params)
-			
-	        if (!checkResultList(resultList, flash, params))
-			{
-				return
-			}
-	        
-			if (params._format == "KML")
-			{
-				long startTime = System.currentTimeMillis()
-				assert(!resultList.isEmpty())
-				generateKml(params, resultList)
-	
-				log.debug("KML generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
-			}
-			else
-			{
-				long startTime = System.currentTimeMillis()
-				
-				params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/"
-				params._file = reportInfoService.getReportInfo(params._name).jrxmlFilename[params._action_execute]
-		
-				generateReport(params, log, request, resultList)
-	
-				log.debug("Report generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
-			}
-		}
-		
-		response.flushBuffer()
-	}
+        indicateExportStart()
+        
+        // The only time this will be set is in integration tests (to "CSV").
+        if (!params._format)
+        {
+            params._format = params._action_execute
+        }
+        
+        if (params._name == "detection"  && params._format == "CSV")
+        {
+            detectionExtractService.generateReport(params, request, response)
+        }
+        else
+        {
+            def resultList = generateResultList(params)
+            
+            if (!checkResultList(resultList, flash, params))
+            {
+                return
+            }
+            
+            if (params._format == "KML")
+            {
+                long startTime = System.currentTimeMillis()
+                assert(!resultList.isEmpty())
+                generateKml(params, resultList)
+    
+                log.debug("KML generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
+            }
+            else
+            {
+                long startTime = System.currentTimeMillis()
+                
+                params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/"
+                params._file = reportInfoService.getReportInfo(params._name).jrxmlFilename[params._action_execute]
+        
+                generateReport(params, log, request, resultList)
+    
+                log.debug("Report generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
+            }
+        }
+        
+        response.flushBuffer()
+    }
 
-	private generateKml(params, resultList)
-	{
-		response.setHeader("Content-disposition", "attachment; filename=" + params._name + ".kml");
-		response.contentType = "application/vnd.google-earth.kml+xml"
-		response.characterEncoding = "UTF-8"
-		
-		final Kml kml = kmlService.toKml(resultList)
-		kml.marshal(response.outputStream)
-		response.outputStream.flush()
-	}
-	
-	private generateReport(Map params, org.apache.commons.logging.Log log, javax.servlet.http.HttpServletRequest request, List resultList)
-	{
-		def filterParams = [:]
+    private generateKml(params, resultList)
+    {
+        response.setHeader("Content-disposition", "attachment; filename=" + params._name + ".kml");
+        response.contentType = "application/vnd.google-earth.kml+xml"
+        response.characterEncoding = "UTF-8"
+        
+        final Kml kml = kmlService.toKml(resultList)
+        kml.marshal(response.outputStream)
+        response.outputStream.flush()
+    }
+    
+    private generateReport(Map params, org.apache.commons.logging.Log log, javax.servlet.http.HttpServletRequest request, List resultList)
+    {
+        def filterParams = [:]
 
-		Person person = permissionUtilsService.principal()
-		if (person)
-		{
-			filterParams.user = person.name
-		}
+        Person person = permissionUtilsService.principal()
+        if (person)
+        {
+            filterParams.user = person.name
+        }
 
-		filterParams = filterParams + reportInfoService.filterParamsToReportFormat(params.filter)
+        filterParams = filterParams + reportInfoService.filterParamsToReportFormat(params.filter)
 
-		log.debug("Filter params: " + filterParams)
+        log.debug("Filter params: " + filterParams)
 
-		params.FILTER_PARAMS = filterParams.entrySet()
+        params.FILTER_PARAMS = filterParams.entrySet()
 
-		// Delegate to report controller, including our wrapped data.
-		JasperReportDef report = jasperService.buildReportDefinition(params, request.getLocale(), [data:resultList])
-		generateResponse(report)
-	}
+        // Delegate to report controller, including our wrapped data.
+        JasperReportDef report = jasperService.buildReportDefinition(params, request.getLocale(), [data:resultList])
+        generateResponse(report)
+    }
 
-	private boolean checkResultList(resultList, Map flash, Map params)
-	{
-		if (!resultList || resultList.isEmpty())
-		{
-			flash.message = "No matching records."
+    private boolean checkResultList(resultList, Map flash, Map params)
+    {
+        if (!resultList || resultList.isEmpty())
+        {
+            flash.message = "No matching records."
 
-			def redirectParams = [name:params._name, formats:[params._format]]
-			def action
-			if (params._type == "report")
-			{
-				action = "create"
-			}
-			else
-			{
-				action = "extract"
-			}
+            def redirectParams = [name:params._name, formats:[params._format]]
+            def action
+            if (params._type == "report")
+            {
+                action = "create"
+            }
+            else
+            {
+                action = "extract"
+            }
 
-			redirect(action:action, params:redirectParams)
-			return false
-		}
-		
-		return true
-	}
+            redirect(action:action, params:redirectParams)
+            return false
+        }
+        
+        return true
+    }
 
-	private List generateResultList(Map params) 
-	{
-		def results = []
+    private List generateResultList(Map params) 
+    {
+        def results = []
 
-		long startTime = System.currentTimeMillis()
-		
-		// Special handling for animal release summary.
-		// TODO: refactor to remove dependency of this controller on to
-		// AnimalReleaseSummaryService.
-		if (params._name == "animalReleaseSummary")
-		{
-			results = animalReleaseSummaryService.countBySpecies()
-			params.putAll(animalReleaseSummaryService.summary())
-		}
-		else
-		{
-			
-			results = queryService.query(reportInfoService.getClassForName(params._name),
-										 params).results
-		}
-		
-		log.debug("Report query executed, time: " + (System.currentTimeMillis() - startTime) + "ms.")
-		return results
-	}
+        long startTime = System.currentTimeMillis()
+        
+        // Special handling for animal release summary.
+        // TODO: refactor to remove dependency of this controller on to
+        // AnimalReleaseSummaryService.
+        if (params._name == "animalReleaseSummary")
+        {
+            results = animalReleaseSummaryService.countBySpecies()
+            params.putAll(animalReleaseSummaryService.summary())
+        }
+        else
+        {
+            
+            results = queryService.query(reportInfoService.getClassForName(params._name),
+                                         params).results
+        }
+        
+        log.debug("Report query executed, time: " + (System.currentTimeMillis() - startTime) + "ms.")
+        return results
+    }
 
    /**
     * Generate a html response.

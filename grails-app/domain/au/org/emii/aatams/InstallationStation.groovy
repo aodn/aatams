@@ -19,20 +19,20 @@ import de.micromata.opengis.kml.v_2_2_0.Placemark
  */
 class InstallationStation 
 {
-	def dataSource
-	def grailsTemplateEngineService
-	
+    def dataSource
+    def grailsTemplateEngineService
+    
     static belongsTo = [installation:Installation]
     static hasMany = [receivers:Receiver, deployments:ReceiverDeployment]
     static transients = ['curtainPositionAsString', 'scrambledLocation', 'latitude', 'longitude', 'active', 'detectionCount']
-	static auditable = true
-	
+    static auditable = true
+    
     static mapping =
     {
         // Speed up candidateEntitiesService.
         cache: true
         installation cache:true
-		location type: GeometryUserType
+        location type: GeometryUserType
     }
     
     static searchable = [only: ['name']]
@@ -49,7 +49,7 @@ class InstallationStation
      * Number of deployments at this particular station.
      */
     Integer numDeployments = 0
-	
+    
     /**
      * Geographic position of this station.
      */
@@ -115,8 +115,8 @@ class InstallationStation
         return activeDeployments.size() >= 1
     }
 
-	Placemark toPlacemark()
-	{
+    Placemark toPlacemark()
+    {
         final Placemark placemark = new Placemark()
         
         placemark.setName(name)
@@ -125,22 +125,22 @@ class InstallationStation
         placemark.setDescription(toKmlDescription())
         placemark.setStyleUrl("#defaultStationStyle")
 
-		return placemark
-	}
-	
-	String toKmlDescription()
-	{
-		return grailsTemplateEngineService.renderView("/report/_kmlDescriptionTemplate", [installationStationInstance:this])
-	}
-	
-	boolean hasDetections()
-	{
-		return (detectionCount() != 0)
-	}
-	
-	long getDetectionCount()
-	{
+        return placemark
+    }
+    
+    String toKmlDescription()
+    {
+        return grailsTemplateEngineService.renderView("/report/_kmlDescriptionTemplate", [installationStationInstance:this])
+    }
+    
+    boolean hasDetections()
+    {
+        return (detectionCount() != 0)
+    }
+    
+    long getDetectionCount()
+    {
         def sql = new Sql(AH.application.mainContext.dataSource)
         return sql.firstRow("select coalesce((select detection_count from detection_count_per_station_mv where station_id = ${id}), 0) as detection_count").detection_count
-	}
+    }
 }

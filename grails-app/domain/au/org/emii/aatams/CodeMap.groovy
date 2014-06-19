@@ -7,21 +7,21 @@ package au.org.emii.aatams
  */
 class CodeMap 
 {
-	String codeMap
-	static hasMany = [tags:Tag]
-	
+    String codeMap
+    static hasMany = [tags:Tag]
+    
     static constraints = 
-	{
-		codeMap(nullable:false, blank:false, unique:true)
+    {
+        codeMap(nullable:false, blank:false, unique:true)
     }
-	
-	static mapping =
-	{
-		sort "codeMap"
-	}
-	
-	String toString()
-	{
-		return codeMap
-	}
+    
+    static mapping =
+    {
+        sort "codeMap"
+    }
+    
+    String toString()
+    {
+        return codeMap
+    }
 }

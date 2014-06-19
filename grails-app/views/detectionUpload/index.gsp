@@ -46,7 +46,7 @@
           <tr>
             <td></td>
             <td>
-          <fileuploader:download 	id="${f.id}"
+          <fileuploader:download     id="${f.id}"
                                   errorAction="index"
                                   errorController="detectionUpload">Click here to download</fileuploader:download></td>
           </tr>
@@ -54,7 +54,7 @@
             <td></td>
             <td>
           <g:link controller="detectionUpload" action="delete" id="${f.id}">Click here to delete</g:link></td>
-          </tr>					
+          </tr>                    
         </table>
       </g:each>
     </p>

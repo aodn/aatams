@@ -14,9 +14,9 @@ class TagController extends ReportController
     }
 
     def list = 
-	{
-		redirect(controller: "sensor", action: "list")
-	}
+    {
+        redirect(controller: "sensor", action: "list")
+    }
 
     def create = {
         def tagInstance = new Tag()
@@ -135,27 +135,27 @@ class TagController extends ReportController
         render tags as JSON
     }
 
-	def lookupBySerialNumber =
-	{
-		def tags = Tag.findAllBySerialNumberIlike(params.term + "%", [sort: "serialNumber"])
-		
-		// Limit so that all results fit on screen.
-		if (tags?.size() > 20)
-		{
-			tags = tags[0..19]
-		}
-		
-		log.debug("Returning: " + (tags as JSON))
-		render tags as JSON
-	}
+    def lookupBySerialNumber =
+    {
+        def tags = Tag.findAllBySerialNumberIlike(params.term + "%", [sort: "serialNumber"])
+        
+        // Limit so that all results fit on screen.
+        if (tags?.size() > 20)
+        {
+            tags = tags[0..19]
+        }
+        
+        log.debug("Returning: " + (tags as JSON))
+        render tags as JSON
+    }
 
-	def lookupByCodeName = 
-	{
-		def tags = Tag.findAllByCodeNameIlike("%" + params.term + "%", [max:20, sort:"codeName", order:"asc"])
-		def jsonResults = tags.collect
-		{
-			[label:it.toString(), value:it.codeName]
-		}
-		render(jsonResults as JSON)
-	}
+    def lookupByCodeName = 
+    {
+        def tags = Tag.findAllByCodeNameIlike("%" + params.term + "%", [max:20, sort:"codeName", order:"asc"])
+        def jsonResults = tags.collect
+        {
+            [label:it.toString(), value:it.codeName]
+        }
+        render(jsonResults as JSON)
+    }
 }

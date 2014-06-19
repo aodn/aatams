@@ -23,17 +23,17 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
     Project project1
     Project project2
 
-	def animalReleaseService
+    def animalReleaseService
     def candidateEntitiesService
 
-	def animalFactoryService
-	def tagFactoryService
+    def animalFactoryService
+    def tagFactoryService
 
-	TransmitterType pinger
+    TransmitterType pinger
 
-	CodeMap codeMap
+    CodeMap codeMap
 
-	def person
+    def person
 
     protected void setUp()
     {
@@ -52,19 +52,19 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         candidateEntitiesService.permissionUtilsService = permService
         controller.candidateEntitiesService = candidateEntitiesService
 
-		mockLogging(AnimalFactoryService, true)
-		animalFactoryService = new AnimalFactoryService()
+        mockLogging(AnimalFactoryService, true)
+        animalFactoryService = new AnimalFactoryService()
 
-		mockLogging(TagFactoryService, true)
-		tagFactoryService = new TagFactoryService()
+        mockLogging(TagFactoryService, true)
+        tagFactoryService = new TagFactoryService()
 
-		mockLogging(AnimalReleaseService, true)
-		animalReleaseService = new AnimalReleaseService()
-		animalReleaseService.animalFactoryService = animalFactoryService
-		animalReleaseService.tagFactoryService = tagFactoryService
-		animalReleaseService.metaClass.runAsync = { Closure c -> }
+        mockLogging(AnimalReleaseService, true)
+        animalReleaseService = new AnimalReleaseService()
+        animalReleaseService.animalFactoryService = animalFactoryService
+        animalReleaseService.tagFactoryService = tagFactoryService
+        animalReleaseService.metaClass.runAsync = { Closure c -> }
 
-		controller.animalReleaseService = animalReleaseService
+        controller.animalReleaseService = animalReleaseService
 
         mockDomain(Person)
         mockDomain(AnimalRelease)
@@ -119,15 +119,15 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         mockDomain(Project, projectList)
         projectList.each { it.save() }
 
-		mockDomain(Animal)
-		mockDomain(Sex)
-		mockDomain(Species)
+        mockDomain(Animal)
+        mockDomain(Sex)
+        mockDomain(Species)
 
-		codeMap = new CodeMap(codeMap:"A69-1303")
-		mockDomain(CodeMap, [codeMap])
-		codeMap.save()
+        codeMap = new CodeMap(codeMap:"A69-1303")
+        mockDomain(CodeMap, [codeMap])
+        codeMap.save()
 
-		permitted = true
+        permitted = true
     }
 
     protected void tearDown()
@@ -135,15 +135,15 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         super.tearDown()
     }
 
-	protected boolean isPermitted()
-	{
-		return true
-	}
+    protected boolean isPermitted()
+    {
+        return true
+    }
 
-	protected def getPrincipal()
-	{
-		return person?.id
-	}
+    protected def getPrincipal()
+    {
+        return person?.id
+    }
 
     void testAddSurgeryNoExistingRelease()
     {
@@ -172,11 +172,11 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
     void testSaveNoAnimalOrSpecies()
     {
-		addOneSurgeryToParams()
+        addOneSurgeryToParams()
         def model = controller.save()
 
         assertNull(model.animalReleaseInstance.animal)
-		assertEquals("animalRelease.noSpeciesOrAnimal", model.animalReleaseInstance.errors.getGlobalError().getCode())
+        assertEquals("animalRelease.noSpeciesOrAnimal", model.animalReleaseInstance.errors.getGlobalError().getCode())
     }
 
     void testSaveWithAnimalNoSurgery()
@@ -191,7 +191,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
         def model = controller.save()
 
-		assertEquals("animalRelease.noTaggings", model.animalReleaseInstance.errors.getGlobalError().getCode())
+        assertEquals("animalRelease.noTaggings", model.animalReleaseInstance.errors.getGlobalError().getCode())
     }
 
     void testSaveWithAnimal()
@@ -203,7 +203,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
         // animal.id
         controller.params.animal = [id:animal.id]
-		addOneSurgeryToParams()
+        addOneSurgeryToParams()
 
         def model = controller.save()
 
@@ -211,26 +211,26 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertNotNull(controller.redirectArgs.id)
     }
 
-	void testSaveWithSpeciesNoSexNoSurgery()
-	{
-		Species species = new Species(name:"white shark")
-		mockDomain(Species, [species])
-		species.save()
+    void testSaveWithSpeciesNoSexNoSurgery()
+    {
+        Species species = new Species(name:"white shark")
+        mockDomain(Species, [species])
+        species.save()
 
-		mockDomain(Animal)
-		mockDomain(AnimalRelease)
-		mockDomain(Sex)
+        mockDomain(Animal)
+        mockDomain(AnimalRelease)
+        mockDomain(Sex)
 
-		// speciesId
-		controller.params.speciesId = species.id
-		controller.params.speciesName = species.name
+        // speciesId
+        controller.params.speciesId = species.id
+        controller.params.speciesName = species.name
 
-		def model = controller.save()
+        def model = controller.save()
 
-		assertEquals("animalRelease.noTaggings", model.animalReleaseInstance.errors.getGlobalError().getCode())
-		assertEquals(species.id, model.species.id)
-		assertEquals("white shark", model.species.name)
-	}
+        assertEquals("animalRelease.noTaggings", model.animalReleaseInstance.errors.getGlobalError().getCode())
+        assertEquals(species.id, model.species.id)
+        assertEquals("white shark", model.species.name)
+    }
 
     void testSaveWithSpeciesNoSex()
     {
@@ -244,7 +244,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
         // speciesId
         controller.params.speciesId = species.id
-		addOneSurgeryToParams()
+        addOneSurgeryToParams()
 
         def model = controller.save()
         assertEquals("show", controller.redirectArgs.action)
@@ -272,7 +272,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         // speciesId
         controller.params.speciesId = species.id
         controller.params.sex = [id:sex.id]
-		addOneSurgeryToParams()
+        addOneSurgeryToParams()
 
         def model = controller.save()
         assertEquals("show", controller.redirectArgs.action)
@@ -298,17 +298,17 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         deviceModel.save()
 
 
-		tag = new Tag(codeMap:codeMap,
+        tag = new Tag(codeMap:codeMap,
                       serialNumber:"11111",
                       model:deviceModel,
                       status:new DeviceStatus(status:'NEW'))
         mockDomain(Tag, [tag])
 
-		def pinger = new Sensor(pingCode:11111,
-                          		transmitterType:pinger)
+        def pinger = new Sensor(pingCode:11111,
+                                  transmitterType:pinger)
 
-		mockDomain(Sensor, [pinger])
-		tag.addToSensors(pinger)
+        mockDomain(Sensor, [pinger])
+        tag.addToSensors(pinger)
 
         tag.save()
 
@@ -347,7 +347,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
         assertNotNull(release)
 
-		def surgeries = Surgery.findAllByRelease(release)
+        def surgeries = Surgery.findAllByRelease(release)
         assertEquals(1, surgeries.size())
 
         // tag should now be deployed
@@ -359,24 +359,24 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertEquals(project, tag.project)
     }
 
-	private addOneSurgeryToParams() {
-		initSurgeryObjects()
+    private addOneSurgeryToParams() {
+        initSurgeryObjects()
 
-		// Surgery 0.
-		def surgery0 = [
-					timestamp_day: 1,
-					timestamp_month: 6,
-					timestamp_year: 2009,
-					timestamp_hour: 12,
-					timestamp_minute: 34,
-					timestamp_zone: 45,
-					type: [id:surgeryType.id],
-					treatmentType : [id:surgeryTreatmentType.id],
-					comments: "",
-					tag:[codeMap: tag.codeMap, pingCode: tag.pinger.pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
+        // Surgery 0.
+        def surgery0 = [
+                    timestamp_day: 1,
+                    timestamp_month: 6,
+                    timestamp_year: 2009,
+                    timestamp_hour: 12,
+                    timestamp_minute: 34,
+                    timestamp_zone: 45,
+                    type: [id:surgeryType.id],
+                    treatmentType : [id:surgeryTreatmentType.id],
+                    comments: "",
+                    tag:[codeMap: tag.codeMap, pingCode: tag.pinger.pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
 
-		controller.params.surgery = ['0':surgery0]
-	}
+        controller.params.surgery = ['0':surgery0]
+    }
 
     void testSaveTagInDifferentProject()
     {
@@ -419,8 +419,8 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
         assertNotNull(release)
 
-		def surgeries = Surgery.findAllByRelease(release)
-		assertEquals(1, surgeries.size())
+        def surgeries = Surgery.findAllByRelease(release)
+        assertEquals(1, surgeries.size())
 
         // tag should now be deployed
         surgeries.each(
@@ -492,7 +492,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
         assertNotNull(release)
 
-		def surgeries = Surgery.findAllByRelease(release)
+        def surgeries = Surgery.findAllByRelease(release)
         assertEquals(numSurgeries, surgeries.size())
 
         // tag should now be deployed
@@ -549,8 +549,8 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
         AnimalRelease release = AnimalRelease.get(controller.redirectArgs.id)
         assertNotNull(release)
-		def surgeries = Surgery.findAllByRelease(release)
-		assertEquals(1, surgeries.size())
+        def surgeries = Surgery.findAllByRelease(release)
+        assertEquals(1, surgeries.size())
 
         // tag should be created
         surgeries.each(
@@ -597,7 +597,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         animal.save()
         controller.params.animal = [id:animal.id]
         controller.params.species = animal.species
-		addOneSurgeryToParams()
+        addOneSurgeryToParams()
 
         mockDomain(AnimalRelease)
 
@@ -629,7 +629,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         mockDomain(Animal, [animal])
         animal.save()
         controller.params.animal = [id:animal.id]
-		addOneSurgeryToParams()
+        addOneSurgeryToParams()
 
         def model = controller.save()
         assertEquals("show", controller.redirectArgs.action)
@@ -651,7 +651,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
         // controller.params.releaseDateTime = new DateTime("2011-05-15T14:12:00+10:00")
         controller.params.embargoPeriod = 3
-		addOneSurgeryToParams()
+        addOneSurgeryToParams()
 
         def model = controller.save()
         assertEquals("show", controller.redirectArgs.action)
@@ -679,7 +679,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         mockDomain(Animal, [animal])
         animal.save()
         controller.params.animal = [id:animal.id]
-		addOneSurgeryToParams()
+        addOneSurgeryToParams()
 
         def model = controller.save()
         assertEquals("show", controller.redirectArgs.action)
@@ -709,7 +709,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         mockDomain(Animal, [animal])
         animal.save()
         controller.params.animal = [id:animal.id]
-		addOneSurgeryToParams()
+        addOneSurgeryToParams()
 
         def model = controller.save()
         assertEquals("show", controller.redirectArgs.action)
@@ -749,7 +749,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
         // controller.params.releaseDateTime = new DateTime("2011-05-15T14:12:00+10:00")
         controller.params.embargoPeriod = 3
-		addOneSurgeryToParams()
+        addOneSurgeryToParams()
 
         def model = controller.save()
         assertEquals("show", controller.redirectArgs.action)

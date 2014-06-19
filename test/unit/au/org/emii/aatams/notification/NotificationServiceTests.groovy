@@ -19,7 +19,7 @@ class NotificationServiceTests extends AbstractGrailsUnitTestCase
 
     def permissionUtilsService
 
-	def authorisedPerson
+    def authorisedPerson
 
     protected void setUp()
     {
@@ -48,8 +48,8 @@ class NotificationServiceTests extends AbstractGrailsUnitTestCase
         mockDomain(Person, personList)
         personList.each { it.save() }
 
-		permitted = true
-		authorisedPerson = person
+        permitted = true
+        authorisedPerson = person
 
         gettingStarted =
             new Notification(key:"GETTING_STARTED",
@@ -77,10 +77,10 @@ class NotificationServiceTests extends AbstractGrailsUnitTestCase
         super.tearDown()
     }
 
-	protected def getPrincipal()
-	{
-		return authorisedPerson?.id
-	}
+    protected def getPrincipal()
+    {
+        return authorisedPerson?.id
+    }
 
     void testActiveNotifications()
     {
@@ -90,10 +90,10 @@ class NotificationServiceTests extends AbstractGrailsUnitTestCase
         assertTrue(notificationList.contains(receiverRecoveryCreate))
         assertFalse(notificationList.contains(register))
 
-		authenticated = false
-		hasRole = false
-		authorisedPerson = null
-		permitted = false
+        authenticated = false
+        hasRole = false
+        authorisedPerson = null
+        permitted = false
 
         notificationList = notificationService.listActive()
 
@@ -113,10 +113,10 @@ class NotificationServiceTests extends AbstractGrailsUnitTestCase
         assertFalse(notificationList.contains(gettingStarted))
         assertTrue(notificationList.contains(receiverRecoveryCreate))
 
-		authorisedPerson = otherPerson
-		authenticated = true
-		hasRole = true
-		permitted = true
+        authorisedPerson = otherPerson
+        authenticated = true
+        hasRole = true
+        permitted = true
 
         notificationList = notificationService.listActive()
         assertTrue(notificationList.contains(gettingStarted))
@@ -135,10 +135,10 @@ class NotificationServiceTests extends AbstractGrailsUnitTestCase
         assertFalse(notificationList.contains(gettingStarted))
         assertTrue(notificationList.contains(receiverRecoveryCreate))
 
-		authorisedPerson = otherPerson
-		authenticated = true
-		hasRole = true
-		permitted = true
+        authorisedPerson = otherPerson
+        authenticated = true
+        hasRole = true
+        permitted = true
 
         notificationList = notificationService.listActive()
         assertTrue(notificationList.contains(gettingStarted))

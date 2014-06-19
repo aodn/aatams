@@ -11,15 +11,15 @@ import grails.converters.JSON
  */
 class Tag extends Device implements Embargoable
 {
-	DeviceStatus status
+    DeviceStatus status
 
     static hasMany = [sensors:Sensor, 
                       surgeries:Surgery]
 
     Project project
-	static belongsTo = [codeMap: CodeMap]
-	static auditable = true
-	
+    static belongsTo = [codeMap: CodeMap]
+    static auditable = true
+    
     /**
      * The expected lifetime (in days) of a tag once is it deployed.  This
      * value is used to derive the "window of operation" of a Surgery when 
@@ -39,13 +39,13 @@ class Tag extends Device implements Embargoable
     
     static searchable = [only: ['serialNumber']]
     
-	static mapping =
-	{
-		cache true
-		surgeries cache:true
-		detectionSurgeries cache:true
-	}
-	
+    static mapping =
+    {
+        cache true
+        surgeries cache:true
+        detectionSurgeries cache:true
+    }
+    
     // For reports...
     String getExpectedLifeTimeDaysAsString()
     {
@@ -57,68 +57,68 @@ class Tag extends Device implements Embargoable
         return String.valueOf(expectedLifeTimeDays)
     }
     
-	String toString()
-	{
-		return getDeviceID()
-	}
-	
-	String getDeviceID()
-	{
-		return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.toString()))
-	}
-	
-	Sensor getPinger()
-	{
-		def searchPinger = sensors.find
-		{
-			it.transmitterType == TransmitterType.findByTransmitterTypeName('PINGER', [cache:true])
-		}
-		return searchPinger
-	}
-	
-	void setPingCode(Integer newPingCode)
-	{
-		if (!pinger)
-		{
-			Sensor newPinger = new Sensor(tag: this, pingCode: newPingCode, transmitterType: TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]))
-			addToSensors(newPinger)
-		}
-		else
-		{
-			assert(pinger)
-			pinger.pingCode = newPingCode
-		}	
-	}
-	
-	Integer getPingCode()
-	{
-		return pinger?.pingCode
-	}
-	
-	void setCodeMap(CodeMap codeMap)
-	{
-		this.codeMap = codeMap
-		sensors.each
-		{
-			it?.refreshTransmitterId()
-		}	
-	}
-	
-	String getPingCodes()
-	{
-		return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.pingCode?.sort()))
-	}
-	
-	String getTransmitterTypeNames()
-	{
-		return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.transmitterType?.transmitterTypeName))
-	}
+    String toString()
+    {
+        return getDeviceID()
+    }
+    
+    String getDeviceID()
+    {
+        return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.toString()))
+    }
+    
+    Sensor getPinger()
+    {
+        def searchPinger = sensors.find
+        {
+            it.transmitterType == TransmitterType.findByTransmitterTypeName('PINGER', [cache:true])
+        }
+        return searchPinger
+    }
+    
+    void setPingCode(Integer newPingCode)
+    {
+        if (!pinger)
+        {
+            Sensor newPinger = new Sensor(tag: this, pingCode: newPingCode, transmitterType: TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]))
+            addToSensors(newPinger)
+        }
+        else
+        {
+            assert(pinger)
+            pinger.pingCode = newPingCode
+        }    
+    }
+    
+    Integer getPingCode()
+    {
+        return pinger?.pingCode
+    }
+    
+    void setCodeMap(CodeMap codeMap)
+    {
+        this.codeMap = codeMap
+        sensors.each
+        {
+            it?.refreshTransmitterId()
+        }    
+    }
+    
+    String getPingCodes()
+    {
+        return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.pingCode?.sort()))
+    }
+    
+    String getTransmitterTypeNames()
+    {
+        return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.transmitterType?.transmitterTypeName))
+    }
 
-	List<Sensor> getNonPingerSensors()
-	{
-		return Sensor.findAllByTagAndTransmitterTypeNotEqual(this, TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]), [sort:"transmitterId"])
-	}
-	
+    List<Sensor> getNonPingerSensors()
+    {
+        return Sensor.findAllByTagAndTransmitterTypeNotEqual(this, TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]), [sort:"transmitterId"])
+    }
+    
     def applyEmbargo()
     {
         boolean embargoed = false
@@ -144,34 +144,34 @@ class Tag extends Device implements Embargoable
         log.debug("Tag is embargoed, id: " + id)
         return null
     }
-	
-	List<Person> getOwningPIs()
-	{
-		if (project)
-		{
-			return project.getPrincipalInvestigators()
-		}
-		
-		return []
-	}
-	
-	static void registerObjectMarshaller()
-	{
-		JSON.registerObjectMarshaller(Tag.class)
-		{
-			def returnArray = [:]
-			returnArray['id'] = it.id
-			returnArray['label'] = it.serialNumber
-			returnArray['serialNumber'] = it.serialNumber
-			returnArray['model'] = it.model
-			returnArray['codeMap'] = it.codeMap
-			returnArray['deviceID'] = it.deviceID
-			returnArray['project'] = it.project
-			returnArray['expectedLifeTimeDays'] = it.expectedLifeTimeDays
-			returnArray['status'] = it.status
-			returnArray['pingCode'] = it.pingCodes
-			
-			return returnArray
-		}
-	}
+    
+    List<Person> getOwningPIs()
+    {
+        if (project)
+        {
+            return project.getPrincipalInvestigators()
+        }
+        
+        return []
+    }
+    
+    static void registerObjectMarshaller()
+    {
+        JSON.registerObjectMarshaller(Tag.class)
+        {
+            def returnArray = [:]
+            returnArray['id'] = it.id
+            returnArray['label'] = it.serialNumber
+            returnArray['serialNumber'] = it.serialNumber
+            returnArray['model'] = it.model
+            returnArray['codeMap'] = it.codeMap
+            returnArray['deviceID'] = it.deviceID
+            returnArray['project'] = it.project
+            returnArray['expectedLifeTimeDays'] = it.expectedLifeTimeDays
+            returnArray['status'] = it.status
+            returnArray['pingCode'] = it.pingCodes
+            
+            return returnArray
+        }
+    }
 }

@@ -69,7 +69,7 @@ class GeometryTagLib
                                  latNorthOrSouth:(lat > 0 ? 'N' : 'S'),
                                  srid:srid,
                                  datums:datumService.datums,
-								 clazz:attrs.class]) 
+                                 clazz:attrs.class]) 
         }
         else
         {

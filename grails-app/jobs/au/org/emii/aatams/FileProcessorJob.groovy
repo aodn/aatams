@@ -2,13 +2,13 @@ package au.org.emii.aatams
 
 class FileProcessorJob 
 {
-	def fileProcessorService
-	
-	// This job is triggered dynamically from the receiver download file controller.
-	static triggers = {}
-	
-	def execute(context)
-	{
+    def fileProcessorService
+    
+    // This job is triggered dynamically from the receiver download file controller.
+    static triggers = {}
+    
+    def execute(context)
+    {
         try
         {
             fileProcessorService.process(context.mergedJobDataMap.get('downloadFileId'), 

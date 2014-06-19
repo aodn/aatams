@@ -2,11 +2,11 @@ package pages
 
 class PersonCreatePage extends PersonCreateEditPage
 {
-	static content =
-	{
-		passwordTextField { $("input", name: "password") }
-		passwordConfirmTextField { $("input", name: "passwordConfirm") }
+    static content =
+    {
+        passwordTextField { $("input", name: "password") }
+        passwordConfirmTextField { $("input", name: "passwordConfirm") }
 
-		createButton (to: [PersonShowPage]) { $("input", type: "submit") }
-	}
+        createButton (to: [PersonShowPage]) { $("input", type: "submit") }
+    }
 }

@@ -6,8 +6,8 @@ import grails.converters.JSON
 class InstallationController extends ReportController
 {
     def candidateEntitiesService
-	def grailsApplication
-	
+    def grailsApplication
+    
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -15,14 +15,14 @@ class InstallationController extends ReportController
     }
 
     def list = 
-	{
-		doList("installation")
-	}
-	
-	def export =
-	{
-		doExport("installation")
-	}
+    {
+        doList("installation")
+    }
+    
+    def export =
+    {
+        doExport("installation")
+    }
 
     def create = {
         def installationInstance = new Installation()
@@ -116,10 +116,10 @@ class InstallationController extends ReportController
             redirect(action: "list")
         }
     }
-	
-	def lookupByName =
-	{
-		def matches = Installation.findAllByNameIlike('%' + params.term + '%')
-		render(matches as JSON) 
-	}
+    
+    def lookupByName =
+    {
+        def matches = Installation.findAllByNameIlike('%' + params.term + '%')
+        render(matches as JSON) 
+    }
 }

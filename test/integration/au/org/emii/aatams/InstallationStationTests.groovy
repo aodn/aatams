@@ -12,8 +12,8 @@ class InstallationStationTests extends GroovyTestCase {
 
         def sql = new Sql(dataSource)
         // TODO: Ugly but no other way!
-		// Mock the detection_count_per_station_mv table
-		sql.execute ("""CREATE TABLE detection_count_per_station_mv
+        // Mock the detection_count_per_station_mv table
+        sql.execute ("""CREATE TABLE detection_count_per_station_mv
 (
   station character varying(255),
   installation character varying(255),
@@ -34,8 +34,8 @@ WITH (
 
     protected void tearDown() {
         def sql = new Sql(dataSource)
-		// Delete the materialized view we've created
-		sql.execute ('''DROP TABLE detection_count_per_station_mv;''')
+        // Delete the materialized view we've created
+        sql.execute ('''DROP TABLE detection_count_per_station_mv;''')
 
         super.tearDown()
     }

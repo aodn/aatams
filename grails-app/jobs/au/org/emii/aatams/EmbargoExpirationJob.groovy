@@ -187,13 +187,13 @@ class EmbargoExpirationJob implements ApplicationContextAware
         applicationContext = theApplicationContext
     }
     
-	def createLink(Map urlAttrs)
-	{
-		return getServerUrl() + "/" + urlAttrs.controller + "/" + urlAttrs.action + "/" + urlAttrs.id
-	}
-	
-	def getServerUrl()
-	{
-		return grailsApplication.config.grails.serverURL
-	}
+    def createLink(Map urlAttrs)
+    {
+        return getServerUrl() + "/" + urlAttrs.controller + "/" + urlAttrs.action + "/" + urlAttrs.id
+    }
+    
+    def getServerUrl()
+    {
+        return grailsApplication.config.grails.serverURL
+    }
 }

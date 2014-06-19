@@ -13,8 +13,8 @@ import com.vividsolutions.jts.geom.Point;
  */
 class GeometryUtils 
 {
-	static double scrambleCoordinate(double coord)
-	{
+    static double scrambleCoordinate(double coord)
+    {
         if (!SecurityUtils.subject.isAuthenticated())
         {
             return truncate2(coord)
@@ -24,8 +24,8 @@ class GeometryUtils
         {
             return coord
         }
-	}
-	
+    }
+    
     static Point scrambleLocation(Point origPoint)
     {
         if (origPoint == null)
@@ -69,10 +69,10 @@ class GeometryUtils
         double lon = truncate2(origPoint.getCoordinate().x)
         double lat = truncate2(origPoint.getCoordinate().y)
 
-		Point p = new GeometryFactory().createPoint(
+        Point p = new GeometryFactory().createPoint(
                     new Coordinate(lon, lat))
-		p.SRID = origPoint.SRID
-		
+        p.SRID = origPoint.SRID
+        
         return p
     }
 }

@@ -18,7 +18,7 @@ class ReceiverEvent
      */
     Date timestamp
 
-	String receiverName
+    String receiverName
 
     static belongsTo = [receiverDownload:ReceiverDownloadFile]
 
@@ -32,7 +32,7 @@ class ReceiverEvent
     {
         timestamp()
         description()
-		receiverName()
+        receiverName()
         data(nullable:true, blank:true)
         units(nullable:true, blank:true)
     }
@@ -42,40 +42,40 @@ class ReceiverEvent
         cache true
     }
 
-	static transients = ['formattedTimestamp']
+    static transients = ['formattedTimestamp']
 
-	static String toSqlInsert(Map event)
-	{
-		StringBuilder eventBuff = new StringBuilder(
-				"INSERT INTO RECEIVER_EVENT (ID, VERSION, TIMESTAMP, RECEIVER_DEPLOYMENT_ID, RECEIVER_DOWNLOAD_ID, DATA, DESCRIPTION, RECEIVER_NAME, UNITS, CLASS, MESSAGE, REASON)" +
-				" VALUES(")
+    static String toSqlInsert(Map event)
+    {
+        StringBuilder eventBuff = new StringBuilder(
+                "INSERT INTO RECEIVER_EVENT (ID, VERSION, TIMESTAMP, RECEIVER_DEPLOYMENT_ID, RECEIVER_DOWNLOAD_ID, DATA, DESCRIPTION, RECEIVER_NAME, UNITS, CLASS, MESSAGE, REASON)" +
+                " VALUES(")
 
-		eventBuff.append("nextval('hibernate_sequence'),")
-		eventBuff.append("0,")
-		eventBuff.append("'" + new java.sql.Timestamp(event["timestamp"].getTime()) + "',")
+        eventBuff.append("nextval('hibernate_sequence'),")
+        eventBuff.append("0,")
+        eventBuff.append("'" + new java.sql.Timestamp(event["timestamp"].getTime()) + "',")
 
-		SqlUtils.appendIntegerParams(eventBuff, event, ["receiverDeploymentId", "receiverDownloadId"])
-		SqlUtils.appendStringParams(eventBuff, event, ["data", "description", "receiverName", "units", "clazz", "message", "reason"])
-		SqlUtils.removeTrailingCommaAndAddBracket(eventBuff)
+        SqlUtils.appendIntegerParams(eventBuff, event, ["receiverDeploymentId", "receiverDownloadId"])
+        SqlUtils.appendStringParams(eventBuff, event, ["data", "description", "receiverName", "units", "clazz", "message", "reason"])
+        SqlUtils.removeTrailingCommaAndAddBracket(eventBuff)
 
-		return eventBuff.toString()
-	}
+        return eventBuff.toString()
+    }
 
-	static DateFormat formatter
+    static DateFormat formatter
 
-	String getFormattedTimestamp()
-	{
-		if (timestamp)
-		{
-			if (!formatter)
-			{
-				formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-				formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-			}
+    String getFormattedTimestamp()
+    {
+        if (timestamp)
+        {
+            if (!formatter)
+            {
+                formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+            }
 
-			return formatter.format(timestamp)
-		}
+            return formatter.format(timestamp)
+        }
 
-		return null
-	}
+        return null
+    }
 }

@@ -20,9 +20,9 @@
             <div class="message">${flash.message}</div>
             </g:if>
             <g:hasErrors bean="${receiverRecoveryInstance}">
-	            <div class="errors">
-	                <g:renderErrors bean="${receiverRecoveryInstance}" as="list" />
-	            </div>
+                <div class="errors">
+                    <g:renderErrors bean="${receiverRecoveryInstance}" as="list" />
+                </div>
             </g:hasErrors>
             <g:hasErrors bean="${receiverDeploymentInstance}">
                 <div class="errors">

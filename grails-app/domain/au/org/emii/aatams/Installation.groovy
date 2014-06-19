@@ -12,8 +12,8 @@ class Installation
 {
     static hasMany = [stations:InstallationStation]
     static belongsTo = [project:Project]
-	static auditable = true
-	
+    static auditable = true
+    
     String name
     InstallationConfiguration configuration
     
@@ -38,23 +38,23 @@ class Installation
         return name
     }
 
-	Folder toKmlFolder()
-	{
-		Folder installationFolder = new Folder().withName(name)
-		
-		stations.sort()
-		{
-			a, b ->
-			
-			a.name <=> b.name
-		}.each
-		{
-			station ->
+    Folder toKmlFolder()
+    {
+        Folder installationFolder = new Folder().withName(name)
+        
+        stations.sort()
+        {
+            a, b ->
+            
+            a.name <=> b.name
+        }.each
+        {
+            station ->
 
-			final Placemark stationPlacemark = station.toPlacemark()
-			installationFolder.getFeature().add(stationPlacemark)
-		}
-		
-		return installationFolder
-	}
+            final Placemark stationPlacemark = station.toPlacemark()
+            installationFolder.getFeature().add(stationPlacemark)
+        }
+        
+        return installationFolder
+    }
 }

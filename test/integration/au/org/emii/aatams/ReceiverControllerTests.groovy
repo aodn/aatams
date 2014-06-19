@@ -6,25 +6,25 @@ import grails.test.*
 class ReceiverControllerTests extends AbstractControllerUnitTestCase 
 {
     void testSaveWithWithspaceAroundSerialNumber() 
-	{
-		controller.params.serialNumber = " 234 "
-		controller.params.organisation = Organisation.findByName("IMOS")
-		controller.params.model = ReceiverDeviceModel.findByModelName("VR2W")
-		controller.save()
-		
-		def receiver = Receiver.get(controller.redirectArgs.id)
-		assertEquals("234", receiver.serialNumber)
-		
-		receiver.delete(failOnError:true)
+    {
+        controller.params.serialNumber = " 234 "
+        controller.params.organisation = Organisation.findByName("IMOS")
+        controller.params.model = ReceiverDeviceModel.findByModelName("VR2W")
+        controller.save()
+        
+        def receiver = Receiver.get(controller.redirectArgs.id)
+        assertEquals("234", receiver.serialNumber)
+        
+        receiver.delete(failOnError:true)
     }
-	
-	void testExportNoFilter()
-	{
-		assertExport([:], "testExecuteReceiverNoFilter")
-	}
-	
-	void testExecuteReceiverFilterByOrg()
-	{
-		assertExport([organisation: [eq:["name", "IMOS"]]], "testExecuteReceiverFilterByOrg")
-	}
+    
+    void testExportNoFilter()
+    {
+        assertExport([:], "testExecuteReceiverNoFilter")
+    }
+    
+    void testExecuteReceiverFilterByOrg()
+    {
+        assertExport([organisation: [eq:["name", "IMOS"]]], "testExecuteReceiverFilterByOrg")
+    }
 }

@@ -16,7 +16,7 @@ hibernate {
     cache.use_query_cache = true
     cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
 
-	show_sql = false
+    show_sql = false
 }
 
 // environment specific settings
@@ -37,7 +37,7 @@ environments {
     test {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-			url = "jdbc:postgresql://localhost:5432/aatams_test"
+            url = "jdbc:postgresql://localhost:5432/aatams_test"
             username = "aatams_test"
             password = "aatams_test"
         }

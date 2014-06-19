@@ -36,8 +36,8 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         def projectList = [projectA, projectB]
         mockDomain(Project, projectList)
         projectList.each 
-		{
-			it.save()
+        {
+            it.save()
         }
     }
 
@@ -159,9 +159,9 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
     
     ProjectRole testSetPermissionsNonPIREAD()
     {
-		return testSetPermissionsNonPIREAD(projectA)
-	}
-	
+        return testSetPermissionsNonPIREAD(projectA)
+    }
+    
     ProjectRole testSetPermissionsNonPIREAD(project)
     {
         ProjectRole nonPiRead = 
@@ -169,29 +169,29 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
                             person:person,
                             roleType:nonPiType,
                             access:ProjectAccess.READ_ONLY)
-		nonPiRead.save()	
+        nonPiRead.save()    
                         
         assertEquals(person, service.setPermissions(nonPiRead))
         
-		assertIsNotPermitted([
-			service.buildPersonWriteAnyPermission(),
-			service.buildReceiverCreatePermission(),
-			service.buildPrincipalInvestigatorPermission(project.id),
-			service.buildProjectWritePermission(project.id),
-			service.buildProjectWriteAnyPermission()])
+        assertIsNotPermitted([
+            service.buildPersonWriteAnyPermission(),
+            service.buildReceiverCreatePermission(),
+            service.buildPrincipalInvestigatorPermission(project.id),
+            service.buildProjectWritePermission(project.id),
+            service.buildProjectWriteAnyPermission()])
         
-		assertIsPermitted([
-			service.buildProjectReadPermission(project.id),
-			service.buildProjectReadAnyPermission()])
+        assertIsPermitted([
+            service.buildProjectReadPermission(project.id),
+            service.buildProjectReadAnyPermission()])
 
-		return nonPiRead
+        return nonPiRead
     }
 
     ProjectRole testSetPermissionsNonPIWRITE()
     {
-		return testSetPermissionsNonPIWRITE(projectA)
-	}
-	
+        return testSetPermissionsNonPIWRITE(projectA)
+    }
+    
     ProjectRole testSetPermissionsNonPIWRITE(project)
     {
         ProjectRole nonPiWrite = 
@@ -199,29 +199,29 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
                             person:person,
                             roleType:nonPiType,
                             access:ProjectAccess.READ_WRITE)
-		nonPiWrite.save()
+        nonPiWrite.save()
                         
         assertEquals(person, service.setPermissions(nonPiWrite))
         
-		assertIsNotPermitted([
-			service.buildPersonWriteAnyPermission(),
-			service.buildReceiverCreatePermission(),
-			service.buildPrincipalInvestigatorPermission(project.id)])
+        assertIsNotPermitted([
+            service.buildPersonWriteAnyPermission(),
+            service.buildReceiverCreatePermission(),
+            service.buildPrincipalInvestigatorPermission(project.id)])
         
-		assertIsPermitted([
-			service.buildProjectReadPermission(project.id),
-			service.buildProjectReadAnyPermission(),
-			service.buildProjectWritePermission(project.id),
-			service.buildProjectWriteAnyPermission()])
-		
-		return nonPiWrite
+        assertIsPermitted([
+            service.buildProjectReadPermission(project.id),
+            service.buildProjectReadAnyPermission(),
+            service.buildProjectWritePermission(project.id),
+            service.buildProjectWriteAnyPermission()])
+        
+        return nonPiWrite
     }
     
     ProjectRole testSetPermissionsPIREAD()
     {
-		return testSetPermissionsPIREAD(projectA)
-	}
-	
+        return testSetPermissionsPIREAD(projectA)
+    }
+    
     ProjectRole testSetPermissionsPIREAD(project)
     {
         ProjectRole piRead = 
@@ -229,66 +229,66 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
                             person:person,
                             roleType:piRoleType,
                             access:ProjectAccess.READ_ONLY)
-		piRead.save()
+        piRead.save()
                         
         assertEquals(person, service.setPermissions(piRead))
         
-		assertIsPermitted([
-			service.buildPersonWriteAnyPermission(),
-			service.buildReceiverCreatePermission(),
-			service.buildPrincipalInvestigatorPermission(project.id),
-			service.buildProjectReadPermission(project.id),
-			service.buildProjectReadAnyPermission()])
-			
-		assertIsNotPermitted([
-			service.buildProjectWritePermission(project.id),
-			service.buildProjectWriteAnyPermission()])
-		
-		return piRead
+        assertIsPermitted([
+            service.buildPersonWriteAnyPermission(),
+            service.buildReceiverCreatePermission(),
+            service.buildPrincipalInvestigatorPermission(project.id),
+            service.buildProjectReadPermission(project.id),
+            service.buildProjectReadAnyPermission()])
+            
+        assertIsNotPermitted([
+            service.buildProjectWritePermission(project.id),
+            service.buildProjectWriteAnyPermission()])
+        
+        return piRead
     }
 
     ProjectRole testSetPermissionsPIWRITE()
     {
-		return testSetPermissionsPIWRITE(projectA)
+        return testSetPermissionsPIWRITE(projectA)
     }
 
-	ProjectRole testSetPermissionsPIWRITE(project)
-	{
-		ProjectRole piWrite =
-			new ProjectRole(project:project,
-							person:person,
-							roleType:piRoleType,
-							access:ProjectAccess.READ_WRITE)
-		piWrite.save()
-						
-		assertEquals(person, service.setPermissions(piWrite))
-		
-		assertIsPermitted([
-			service.buildPersonWriteAnyPermission(),
-			service.buildReceiverCreatePermission(),
-			service.buildPrincipalInvestigatorPermission(project.id),
-			service.buildProjectReadPermission(project.id),
-			service.buildProjectReadAnyPermission(),
-			service.buildProjectWritePermission(project.id),
-			service.buildProjectWriteAnyPermission()])
-		
-		return piWrite
-	}
+    ProjectRole testSetPermissionsPIWRITE(project)
+    {
+        ProjectRole piWrite =
+            new ProjectRole(project:project,
+                            person:person,
+                            roleType:piRoleType,
+                            access:ProjectAccess.READ_WRITE)
+        piWrite.save()
+                        
+        assertEquals(person, service.setPermissions(piWrite))
+        
+        assertIsPermitted([
+            service.buildPersonWriteAnyPermission(),
+            service.buildReceiverCreatePermission(),
+            service.buildPrincipalInvestigatorPermission(project.id),
+            service.buildProjectReadPermission(project.id),
+            service.buildProjectReadAnyPermission(),
+            service.buildProjectWritePermission(project.id),
+            service.buildProjectWriteAnyPermission()])
+        
+        return piWrite
+    }
 
     void testRemovePermissionsNonPIREAD()
     {
         ProjectRole nonPiRead = testSetPermissionsNonPIREAD()
         assertEquals(person, service.removePermissions(nonPiRead))
-		
-		assertIsOnlyPermitted([])
+        
+        assertIsOnlyPermitted([])
     }
     
     void testRemovePermissionsNonPIWRITE()
     {
         ProjectRole nonPiWrite = testSetPermissionsNonPIWRITE()
         assertEquals(person, service.removePermissions(nonPiWrite))
-		
-		assertIsOnlyPermitted([])
+        
+        assertIsOnlyPermitted([])
     }
     
     void testRemovePermissionsPIREAD()
@@ -296,8 +296,8 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         ProjectRole piRead = testSetPermissionsPIREAD()
         
         assertEquals(person, service.removePermissions(piRead))
-		
-		assertIsOnlyPermitted([])
+        
+        assertIsOnlyPermitted([])
     }
 
     void testRemovePermissionsPIWRITE()
@@ -305,140 +305,140 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         ProjectRole piWrite = testSetPermissionsPIWRITE()
         
         assertEquals(person, service.removePermissions(piWrite))
-		
-		assertIsOnlyPermitted([])
+        
+        assertIsOnlyPermitted([])
     }
-	
-	void testRemovePermissionsMultiRolePIRead()
-	{
-		ProjectRole piReadA = testSetPermissionsPIREAD(projectA)
-		ProjectRole piReadB = testSetPermissionsPIREAD(projectB)
-		
-		assertEquals(person, service.removePermissions(piReadA))
-		piReadA.delete()
-		
-		assertIsOnlyPermitted([
-			service.buildPersonWriteAnyPermission(),
-			service.buildReceiverCreatePermission(),
-			service.buildProjectReadAnyPermission(),
-			service.buildPrincipalInvestigatorPermission(projectB.id),
-			service.buildProjectReadPermission(projectB.id)])
-		
+    
+    void testRemovePermissionsMultiRolePIRead()
+    {
+        ProjectRole piReadA = testSetPermissionsPIREAD(projectA)
+        ProjectRole piReadB = testSetPermissionsPIREAD(projectB)
+        
+        assertEquals(person, service.removePermissions(piReadA))
+        piReadA.delete()
+        
+        assertIsOnlyPermitted([
+            service.buildPersonWriteAnyPermission(),
+            service.buildReceiverCreatePermission(),
+            service.buildProjectReadAnyPermission(),
+            service.buildPrincipalInvestigatorPermission(projectB.id),
+            service.buildProjectReadPermission(projectB.id)])
+        
 
-		assertEquals(person, service.removePermissions(piReadB))
-		piReadB.delete()
-		
-		assertIsOnlyPermitted([])
-	}
-	
-	void testRemovePermissionsMultiRolePIWrite()
-	{
-		ProjectRole piWriteA = testSetPermissionsPIWRITE(projectA)
-		ProjectRole piWriteB = testSetPermissionsPIWRITE(projectB)
-		
-		assertEquals(person, service.removePermissions(piWriteA))
-		piWriteA.delete()
-		
-		assertIsOnlyPermitted([
-			service.buildPersonWriteAnyPermission(),
-			service.buildReceiverCreatePermission(),
-			service.buildProjectReadAnyPermission(),
-			service.buildProjectWriteAnyPermission(),
-			service.buildPrincipalInvestigatorPermission(projectB.id),
-			service.buildProjectReadPermission(projectB.id),
-			service.buildProjectWritePermission(projectB.id)])
-		
+        assertEquals(person, service.removePermissions(piReadB))
+        piReadB.delete()
+        
+        assertIsOnlyPermitted([])
+    }
+    
+    void testRemovePermissionsMultiRolePIWrite()
+    {
+        ProjectRole piWriteA = testSetPermissionsPIWRITE(projectA)
+        ProjectRole piWriteB = testSetPermissionsPIWRITE(projectB)
+        
+        assertEquals(person, service.removePermissions(piWriteA))
+        piWriteA.delete()
+        
+        assertIsOnlyPermitted([
+            service.buildPersonWriteAnyPermission(),
+            service.buildReceiverCreatePermission(),
+            service.buildProjectReadAnyPermission(),
+            service.buildProjectWriteAnyPermission(),
+            service.buildPrincipalInvestigatorPermission(projectB.id),
+            service.buildProjectReadPermission(projectB.id),
+            service.buildProjectWritePermission(projectB.id)])
+        
 
-		assertEquals(person, service.removePermissions(piWriteB))
-		piWriteB.delete()
-		
-		assertIsOnlyPermitted([])
-	}
-	
-	void testRemovePermissionsMultiRoleNonPIRead()
-	{
-		ProjectRole nonpiReadA = testSetPermissionsNonPIREAD(projectA)
-		ProjectRole nonpiReadB = testSetPermissionsNonPIREAD(projectB)
-		
-		assertEquals(person, service.removePermissions(nonpiReadA))
-		nonpiReadA.delete()
-		
-		assertIsOnlyPermitted([
-			service.buildProjectReadAnyPermission(),
-			service.buildProjectReadPermission(projectB.id)])
+        assertEquals(person, service.removePermissions(piWriteB))
+        piWriteB.delete()
+        
+        assertIsOnlyPermitted([])
+    }
+    
+    void testRemovePermissionsMultiRoleNonPIRead()
+    {
+        ProjectRole nonpiReadA = testSetPermissionsNonPIREAD(projectA)
+        ProjectRole nonpiReadB = testSetPermissionsNonPIREAD(projectB)
+        
+        assertEquals(person, service.removePermissions(nonpiReadA))
+        nonpiReadA.delete()
+        
+        assertIsOnlyPermitted([
+            service.buildProjectReadAnyPermission(),
+            service.buildProjectReadPermission(projectB.id)])
 
-		assertEquals(person, service.removePermissions(nonpiReadB))
-		nonpiReadB.delete()
-		
-		assertIsOnlyPermitted([])
-	}
-	
-	void testRemovePermissionsMultiRoleNonPIWrite()
-	{
-		ProjectRole nonpiWriteA = testSetPermissionsNonPIWRITE(projectA)
-		ProjectRole nonpiWriteB = testSetPermissionsNonPIWRITE(projectB)
-		
-		assertEquals(person, service.removePermissions(nonpiWriteA))
-		nonpiWriteA.delete()
-		
-		assertIsOnlyPermitted([
-			service.buildProjectReadAnyPermission(),
-			service.buildProjectWriteAnyPermission(),
-			service.buildProjectReadPermission(projectB.id),
-			service.buildProjectWritePermission(projectB.id)])
+        assertEquals(person, service.removePermissions(nonpiReadB))
+        nonpiReadB.delete()
+        
+        assertIsOnlyPermitted([])
+    }
+    
+    void testRemovePermissionsMultiRoleNonPIWrite()
+    {
+        ProjectRole nonpiWriteA = testSetPermissionsNonPIWRITE(projectA)
+        ProjectRole nonpiWriteB = testSetPermissionsNonPIWRITE(projectB)
+        
+        assertEquals(person, service.removePermissions(nonpiWriteA))
+        nonpiWriteA.delete()
+        
+        assertIsOnlyPermitted([
+            service.buildProjectReadAnyPermission(),
+            service.buildProjectWriteAnyPermission(),
+            service.buildProjectReadPermission(projectB.id),
+            service.buildProjectWritePermission(projectB.id)])
 
-		assertEquals(person, service.removePermissions(nonpiWriteB))
-		nonpiWriteB.delete()
-		
-		assertIsOnlyPermitted([])
-	}
-	
-	private void assertIsPermitted(permissionStrings)
-	{
-		permissionStrings.each
-		{
-			permission ->
-			
-			assertTrue(person.permissions.contains(permission))
-		}
-	}
-	
-	private void assertIsOnlyPermitted(permissionStrings)
-	{
-		if (permissionStrings.isEmpty() && person.permissions.isEmpty())
-		{
-			return
-		}
-		
-		if (permissionStrings.size() != person.permissions.size())
-		{
-			println "Expected permissions: " + permissionStrings
-			println "Actual permissions: " + person.permissions
-		}
-		
-		assertEquals(permissionStrings.size(), person.permissions.size())
-		
-		permissionStrings.each
-		{
-			permission ->
-			
-			assertTrue(person.permissions.contains(permission))
-		}
-	}
-	
+        assertEquals(person, service.removePermissions(nonpiWriteB))
+        nonpiWriteB.delete()
+        
+        assertIsOnlyPermitted([])
+    }
+    
+    private void assertIsPermitted(permissionStrings)
+    {
+        permissionStrings.each
+        {
+            permission ->
+            
+            assertTrue(person.permissions.contains(permission))
+        }
+    }
+    
+    private void assertIsOnlyPermitted(permissionStrings)
+    {
+        if (permissionStrings.isEmpty() && person.permissions.isEmpty())
+        {
+            return
+        }
+        
+        if (permissionStrings.size() != person.permissions.size())
+        {
+            println "Expected permissions: " + permissionStrings
+            println "Actual permissions: " + person.permissions
+        }
+        
+        assertEquals(permissionStrings.size(), person.permissions.size())
+        
+        permissionStrings.each
+        {
+            permission ->
+            
+            assertTrue(person.permissions.contains(permission))
+        }
+    }
+    
 
-	private void assertIsNotPermitted(permissionStrings)
-	{
-		permissionStrings.each
-		{
-			permission ->
-			
-			if (person.permissions.contains(permission))
-			{
-				println "Permission exists: " + permission
-			}
-			
-			assertFalse(person.permissions.contains(permission))
-		}
-	}
+    private void assertIsNotPermitted(permissionStrings)
+    {
+        permissionStrings.each
+        {
+            permission ->
+            
+            if (person.permissions.contains(permission))
+            {
+                println "Permission exists: " + permission
+            }
+            
+            assertFalse(person.permissions.contains(permission))
+        }
+    }
 }

@@ -8,7 +8,7 @@ class SurgeryController extends AbstractController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
 
-	def detectionFactoryService
+    def detectionFactoryService
     def jdbcTemplateDetectionFactoryService
     def tagFactoryService
     

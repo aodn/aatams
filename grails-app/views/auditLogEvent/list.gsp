@@ -25,7 +25,7 @@
                         
                             <td>
 
-                   	        <g:sortableColumn property="dateCreated" title="Date" />
+                               <g:sortableColumn property="dateCreated" title="Date" />
                         
                             <g:sortableColumn property="className" title="Type" />
 
@@ -40,31 +40,31 @@
                         </tr>
                     </thead>
                     <tbody>
-	                    <g:each in="${auditLogEventInstanceList}" status="i" var="auditLogEventInstance">
-	                        <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-	                        
-	                            <td class="rowButton">
-	                                <g:link class="show" 
-	                                        controller="${WordUtils.uncapitalize(GrailsNameUtils.getShortName(auditLogEventInstance.className))}" 
-	                                        action="show" 
-	                                        id="${auditLogEventInstance.persistedObjectId}">.
-	                                </g:link>
-	                            </td>
-	                            
-	                            <td><g:formatDate format="dd/MM/yyyy HH:mm:ss" date="${auditLogEventInstance.dateCreated}" /></td>
-	                        
-	                            <td>${GrailsNameUtils.getShortName(auditLogEventInstance.className)}</td>
-	
-	                            <td>${fieldValue(bean:auditLogEventInstance, field:'eventName')}</td>
-	                        
-	                            <td>${String.valueOf(ClassUtils.getClass(auditLogEventInstance.className).get(auditLogEventInstance.persistedObjectId))}</td>
-	                        
-	                            <shiro:hasRole name="SysAdmin">
-	                                <td>${fieldValue(bean:auditLogEventInstance, field:'actor')}</td>
-	                            </shiro:hasRole>
-	                        
-	                        </tr>
-	                    </g:each>
+                        <g:each in="${auditLogEventInstanceList}" status="i" var="auditLogEventInstance">
+                            <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
+                            
+                                <td class="rowButton">
+                                    <g:link class="show" 
+                                            controller="${WordUtils.uncapitalize(GrailsNameUtils.getShortName(auditLogEventInstance.className))}" 
+                                            action="show" 
+                                            id="${auditLogEventInstance.persistedObjectId}">.
+                                    </g:link>
+                                </td>
+                                
+                                <td><g:formatDate format="dd/MM/yyyy HH:mm:ss" date="${auditLogEventInstance.dateCreated}" /></td>
+                            
+                                <td>${GrailsNameUtils.getShortName(auditLogEventInstance.className)}</td>
+    
+                                <td>${fieldValue(bean:auditLogEventInstance, field:'eventName')}</td>
+                            
+                                <td>${String.valueOf(ClassUtils.getClass(auditLogEventInstance.className).get(auditLogEventInstance.persistedObjectId))}</td>
+                            
+                                <shiro:hasRole name="SysAdmin">
+                                    <td>${fieldValue(bean:auditLogEventInstance, field:'actor')}</td>
+                                </shiro:hasRole>
+                            
+                            </tr>
+                        </g:each>
                     </tbody>
                 </table>
             </div>

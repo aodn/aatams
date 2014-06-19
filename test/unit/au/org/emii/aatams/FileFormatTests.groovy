@@ -11,12 +11,12 @@ import au.org.emii.aatams.event.EventFormat
 
 class FileFormatTests extends GrailsUnitTestCase 
 {
-	FileFormat format
-	
+    FileFormat format
+    
     protected void setUp() 
-	{
+    {
         super.setUp()
-		
+        
         // Instantiate abstract FileFormat by mocking abstract parseRow method
         format = [ parseRow: { -> return [:] } ] as FileFormat
     }

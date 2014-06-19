@@ -9,7 +9,7 @@ import org.joda.time.contrib.hibernate.*
  */
 class Surgery implements Embargoable
 {
-	def grailsApplication
+    def grailsApplication
     def sessionFactory
     
     static belongsTo = [release: AnimalRelease, tag: Tag]
@@ -45,7 +45,7 @@ class Surgery implements Embargoable
     
     static searchable =
     {
-		root false
+        root false
         tag(component:true)
     }
     
@@ -80,7 +80,7 @@ class Surgery implements Embargoable
         }
         
         def endWindow = startWindow.plusDays(tag?.expectedLifeTimeDays).plusDays(grailsApplication.config.tag.expectedLifeTime.gracePeriodDays)
-		
+        
         if (new DateTime(timestamp).isAfter(endWindow))
         {
             return false
@@ -94,12 +94,12 @@ class Surgery implements Embargoable
     }
     
     def applyEmbargo()
-	{
+    {
         if (isEmbargoed()) {
             return null
         }
-		return this
-	}
+        return this
+    }
 
     def getProject()
     {

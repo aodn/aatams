@@ -7,17 +7,17 @@ import org.joda.time.DateTime
 class ReceiverDownloadFileTests extends GroovyTestCase 
 {
     protected void setUp() 
-	{
+    {
         super.setUp()
     }
 
     protected void tearDown() 
-	{
+    {
         super.tearDown()
     }
 
     void testGetUniqueTransmitterIds() 
-	{
+    {
         ReceiverDownloadFile export = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
                                      name:"export.csv",
@@ -25,28 +25,28 @@ class ReceiverDownloadFileTests extends GroovyTestCase
                                      status:FileProcessingStatus.PROCESSED,
                                      errMsg:"",
                                      requestingUser:Person.findByName("Joe Bloggs"))
-			
-		['A69-1303-1111', 'A69-1303-5555', 'A69-1303-1111', 'A69-1303-3333'].each
-		{
-			transmitterId ->
-			
-			int i = 0
-			
-			ValidDetection detection =
-					new ValidDetection(receiverDeployment:ReceiverDeployment.list()[0],
-					timestamp:new DateTime("2011-05-17T02:54:00+00:00").plusSeconds(i++).toDate(),
-					receiverName:Receiver.list()[0].name,
-					transmitterId:transmitterId,
-					receiverDownload:export)
-			export.addToDetections(detection)
-		}
-		
-		export.save()
-		
-		assertEquals(['A69-1303-1111', 'A69-1303-3333', 'A69-1303-5555'], export.getUniqueTransmitterIds())
-		
-		export.delete()
-		
-	}
-	
+            
+        ['A69-1303-1111', 'A69-1303-5555', 'A69-1303-1111', 'A69-1303-3333'].each
+        {
+            transmitterId ->
+            
+            int i = 0
+            
+            ValidDetection detection =
+                    new ValidDetection(receiverDeployment:ReceiverDeployment.list()[0],
+                    timestamp:new DateTime("2011-05-17T02:54:00+00:00").plusSeconds(i++).toDate(),
+                    receiverName:Receiver.list()[0].name,
+                    transmitterId:transmitterId,
+                    receiverDownload:export)
+            export.addToDetections(detection)
+        }
+        
+        export.save()
+        
+        assertEquals(['A69-1303-1111', 'A69-1303-3333', 'A69-1303-5555'], export.getUniqueTransmitterIds())
+        
+        export.delete()
+        
+    }
+    
 }

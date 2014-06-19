@@ -24,10 +24,10 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
     Installation permittedInstallation1
     Installation permittedInstallation2
 
-	InstallationStation stationAAA
-	InstallationStation stationBBB
-	InstallationStation stationCCC
-	InstallationStation stationDDD
+    InstallationStation stationAAA
+    InstallationStation stationBBB
+    InstallationStation stationCCC
+    InstallationStation stationDDD
 
     protected void setUp()
     {
@@ -98,54 +98,54 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
 
         imos.save()
 
-		def deploymentDateTime = new DateTime()
-		ReceiverDeployment deploymentForDeployedReceiver = new ReceiverDeployment(receiver: deployedReceiver, deploymentDateTime: deploymentDateTime)
-		deployedReceiver.addToDeployments(deploymentForDeployedReceiver)
-		ReceiverDeployment deploymentForRecoveredReceiver = new ReceiverDeployment(receiver: recoveredReceiver, deploymentDateTime: deploymentDateTime)
-		recoveredReceiver.addToDeployments(deploymentForRecoveredReceiver)
-		ReceiverDeployment deploymentForCsiroReceiver = new ReceiverDeployment(receiver: csiroReceiver, deploymentDateTime: deploymentDateTime)
-		csiroReceiver.addToDeployments(deploymentForCsiroReceiver)
-		def deploymentList = [deploymentForDeployedReceiver, deploymentForRecoveredReceiver, csiroReceiver]
-		mockDomain(ReceiverDeployment, deploymentList)
-		deploymentList.each { it.save() }
+        def deploymentDateTime = new DateTime()
+        ReceiverDeployment deploymentForDeployedReceiver = new ReceiverDeployment(receiver: deployedReceiver, deploymentDateTime: deploymentDateTime)
+        deployedReceiver.addToDeployments(deploymentForDeployedReceiver)
+        ReceiverDeployment deploymentForRecoveredReceiver = new ReceiverDeployment(receiver: recoveredReceiver, deploymentDateTime: deploymentDateTime)
+        recoveredReceiver.addToDeployments(deploymentForRecoveredReceiver)
+        ReceiverDeployment deploymentForCsiroReceiver = new ReceiverDeployment(receiver: csiroReceiver, deploymentDateTime: deploymentDateTime)
+        csiroReceiver.addToDeployments(deploymentForCsiroReceiver)
+        def deploymentList = [deploymentForDeployedReceiver, deploymentForRecoveredReceiver, csiroReceiver]
+        mockDomain(ReceiverDeployment, deploymentList)
+        deploymentList.each { it.save() }
 
-		ReceiverRecovery recoveryForRecoveredReceiver = new ReceiverRecovery(deployment: deploymentForDeployedReceiver, recoveryDateTime: deploymentDateTime.plusDays(10))
-		deploymentForDeployedReceiver.recovery = recoveryForRecoveredReceiver
-		ReceiverRecovery recoveryForCsiroReceiver = new ReceiverRecovery(deployment: deploymentForCsiroReceiver, recoveryDateTime: deploymentDateTime.plusDays(10))
-		deploymentForCsiroReceiver.recovery = recoveryForCsiroReceiver
-		def recoveryList = [recoveryForRecoveredReceiver, recoveryForCsiroReceiver]
-		mockDomain(ReceiverRecovery, recoveryList)
-		recoveryList.each { it.save() }
+        ReceiverRecovery recoveryForRecoveredReceiver = new ReceiverRecovery(deployment: deploymentForDeployedReceiver, recoveryDateTime: deploymentDateTime.plusDays(10))
+        deploymentForDeployedReceiver.recovery = recoveryForRecoveredReceiver
+        ReceiverRecovery recoveryForCsiroReceiver = new ReceiverRecovery(deployment: deploymentForCsiroReceiver, recoveryDateTime: deploymentDateTime.plusDays(10))
+        deploymentForCsiroReceiver.recovery = recoveryForCsiroReceiver
+        def recoveryList = [recoveryForRecoveredReceiver, recoveryForCsiroReceiver]
+        mockDomain(ReceiverRecovery, recoveryList)
+        recoveryList.each { it.save() }
 
-		stationAAA = new InstallationStation(name:'AAA', installation:permittedInstallation1)
-		stationBBB = new InstallationStation(name:'BBB', installation:permittedInstallation1)
-		stationCCC = new InstallationStation(name:'CCC', installation:permittedInstallation1)
-		stationDDD = new InstallationStation(name:'DDD', installation:permittedInstallation1)
-		// save out of order
-		def stationList = [stationBBB, stationCCC, stationAAA, stationDDD]
-		mockDomain(InstallationStation, stationList)
-		stationList.each
-		{
-			permittedInstallation1.addToStations(it)
-			it.save()
-		}
+        stationAAA = new InstallationStation(name:'AAA', installation:permittedInstallation1)
+        stationBBB = new InstallationStation(name:'BBB', installation:permittedInstallation1)
+        stationCCC = new InstallationStation(name:'CCC', installation:permittedInstallation1)
+        stationDDD = new InstallationStation(name:'DDD', installation:permittedInstallation1)
+        // save out of order
+        def stationList = [stationBBB, stationCCC, stationAAA, stationDDD]
+        mockDomain(InstallationStation, stationList)
+        stationList.each
+        {
+            permittedInstallation1.addToStations(it)
+            it.save()
+        }
     }
 
-	protected def getPrincipal()
-	{
-		return person.id
-	}
+    protected def getPrincipal()
+    {
+        return person.id
+    }
 
-	protected boolean isPermitted(String permission)
-	{
+    protected boolean isPermitted(String permission)
+    {
         if (permission == "project:" + permittedProject.id + ":write")
         {
             return true
         }
         return false
-	}
+    }
 
-	protected void tearDown()
+    protected void tearDown()
     {
         super.tearDown()
     }
@@ -180,20 +180,20 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
         assertTrue(projects.contains(permittedProject ))
     }
 
-	void testStations()
-	{
-		[stationAAA, stationBBB, stationCCC].each
-		{
-			it.metaClass.isActive = { false }
-		}
-		stationDDD.metaClass.isActive = { true }
+    void testStations()
+    {
+        [stationAAA, stationBBB, stationCCC].each
+        {
+            it.metaClass.isActive = { false }
+        }
+        stationDDD.metaClass.isActive = { true }
 
-		assertEquals(stationAAA.name, candidateEntitiesService.stations()[0].name, )
-		assertEquals(stationBBB.name, candidateEntitiesService.stations()[1].name, )
-		assertEquals(stationCCC.name, candidateEntitiesService.stations()[2].name, )
+        assertEquals(stationAAA.name, candidateEntitiesService.stations()[0].name, )
+        assertEquals(stationBBB.name, candidateEntitiesService.stations()[1].name, )
+        assertEquals(stationCCC.name, candidateEntitiesService.stations()[2].name, )
 
-		// active stations are now allowed in station list (as user may be entering historical
-		// deployment data).
-		assertEquals(stationDDD.name, candidateEntitiesService.stations()[3].name, )
-	}
+        // active stations are now allowed in station list (as user may be entering historical
+        // deployment data).
+        assertEquals(stationDDD.name, candidateEntitiesService.stations()[3].name, )
+    }
 }

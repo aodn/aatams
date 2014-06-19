@@ -49,7 +49,7 @@ class NotificationFiltersTests extends AbstractFiltersUnitTestCase
         mockDomain(Person, personList)
         personList.each { it.save() }
         
-		permitted = true
+        permitted = true
         
         gettingStarted = 
             new Notification(key:"GETTING_STARTED",
@@ -77,11 +77,11 @@ class NotificationFiltersTests extends AbstractFiltersUnitTestCase
         super.tearDown()
     }
 
-	protected def getPrincipal()
-	{
-		return person.id
-	}
-	
+    protected def getPrincipal()
+    {
+        return person.id
+    }
+    
     void testInsertNotifications()
     {
         def model = [:]
@@ -96,9 +96,9 @@ class NotificationFiltersTests extends AbstractFiltersUnitTestCase
         assertTrue(model.notifications.contains(receiverRecoveryCreate))
         assertFalse(model.notifications.contains(register))
         
-		authenticated = false
-		hasRole = false
-		permitted = false
+        authenticated = false
+        hasRole = false
+        permitted = false
 
         model = [:]
         filter.after(model)

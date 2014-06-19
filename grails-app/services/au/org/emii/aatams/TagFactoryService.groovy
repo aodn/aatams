@@ -6,17 +6,17 @@ class TagFactoryService {
 
     def lookupOrCreate(params) throws IllegalArgumentException
     {
-		def tag = Tag.findBySerialNumber(params.serialNumber)
-		
+        def tag = Tag.findBySerialNumber(params.serialNumber)
+        
         if (tag == null)
         {
-			log.info("Tag with serial number " + params.serialNumber + " not found, creating new, params: " + params)
+            log.info("Tag with serial number " + params.serialNumber + " not found, creating new, params: " + params)
             tag = createNewTag(params)
         }
-		else
-		{
-			log.debug("Tag with serial number " + params.serialNumber + " found.")
-		}
+        else
+        {
+            log.debug("Tag with serial number " + params.serialNumber + " found.")
+        }
         
         if (!tag.project)
         {
@@ -39,18 +39,18 @@ class TagFactoryService {
         return tag
     }
 
-	private Tag createNewTag(params) 
-	{
-		initDefaults(params)
-		
-		return new Tag(params)
-	}
+    private Tag createNewTag(params) 
+    {
+        initDefaults(params)
+        
+        return new Tag(params)
+    }
 
-	private initDefaults(params) 
-	{
-		if (!params.status)
-		{
-			params.status = DeviceStatus.findByStatus('NEW')
-		}
-	}
+    private initDefaults(params) 
+    {
+        if (!params.status)
+        {
+            params.status = DeviceStatus.findByStatus('NEW')
+        }
+    }
 }

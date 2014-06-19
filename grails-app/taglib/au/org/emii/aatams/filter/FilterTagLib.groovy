@@ -5,15 +5,15 @@ import au.org.emii.aatams.report.*
 
 class FilterTagLib 
 {
-	def listFilterIncludes =
-	{
-		out << g.javascript(src:"listFilter.js")	
-	}
-	
-	def listFilter =
-	{
-		attrs, body ->
+    def listFilterIncludes =
+    {
+        out << g.javascript(src:"listFilter.js")    
+    }
+    
+    def listFilter =
+    {
+        attrs, body ->
 
-		out << render(template:"/filter/listFilterTemplate", model:[name:attrs.name, body:body])		
-	}
+        out << render(template:"/filter/listFilterTemplate", model:[name:attrs.name, body:body])        
+    }
 }

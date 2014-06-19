@@ -156,31 +156,31 @@ def log4jConversionPattern = '%d [%t] [%X{username}] %-5p %c{1} - %m%n'
 
 log4j =
 {
-	appenders
-	{
-		console name: 'stdout', layout: pattern(conversionPattern: log4jConversionPattern)
-		'null' name: "stacktrace"
-	}
+    appenders
+    {
+        console name: 'stdout', layout: pattern(conversionPattern: log4jConversionPattern)
+        'null' name: "stacktrace"
+    }
 
-	error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
-		   'org.codehaus.groovy.grails.web.pages', //  GSP
-		   'org.codehaus.groovy.grails.web.sitemesh', //  layouts
-		   'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-		   'org.codehaus.groovy.grails.web.mapping', // URL mapping
-		   'org.codehaus.groovy.grails.commons', // core / classloading
-		   'org.codehaus.groovy.grails.plugins', // plugins
-		   'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
-		   'org.springframework',
-		   'net.sf.ehcache.hibernate'
+    error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
+           'org.codehaus.groovy.grails.web.pages', //  GSP
+           'org.codehaus.groovy.grails.web.sitemesh', //  layouts
+           'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
+           'org.codehaus.groovy.grails.web.mapping', // URL mapping
+           'org.codehaus.groovy.grails.commons', // core / classloading
+           'org.codehaus.groovy.grails.plugins', // plugins
+           'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
+           'org.springframework',
+           'net.sf.ehcache.hibernate'
 
-	warn   'org.mortbay.log'
+    warn   'org.mortbay.log'
 
-	info   "grails.app"
+    info   "grails.app"
 
-	environments
-	{
-		production
-		{
+    environments
+    {
+        production
+        {
             appenders
             {
                 appender new de.viaboxx.nagios.NagiosAppender(
@@ -194,39 +194,39 @@ log4j =
                     monitoredHostName: "vm-115-41.ersa.edu.au"
                 )
             }
-		}
+        }
 
-		development
-		{
+        development
+        {
             appenders
             {
                 file name: 'file', file: 'aatams.log', layout: pattern(conversionPattern: log4jConversionPattern)
             }
 
-			debug  "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",
-				   "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService",
-				   "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
-				   "grails.app.domain.au.org.emii.aatams.Receiver",
-				   "grails.app.domain.au.org.emii.aatams.bulk",
-				   "grails.app.domain.au.org.emii.aatams.ReceiverDownloadFile",
-				   "grails.app.service.au.org.emii.aatams.filter.QueryService",
-				   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
-				   "grails.app.service.au.org.emii.aatams.detection.DetectionNotificationService",
-				   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService",
-				   "grails.app.service.au.org.emii.aatams.report.KmlService"
+            debug  "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",
+                   "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService",
+                   "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
+                   "grails.app.domain.au.org.emii.aatams.Receiver",
+                   "grails.app.domain.au.org.emii.aatams.bulk",
+                   "grails.app.domain.au.org.emii.aatams.ReceiverDownloadFile",
+                   "grails.app.service.au.org.emii.aatams.filter.QueryService",
+                   "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
+                   "grails.app.service.au.org.emii.aatams.detection.DetectionNotificationService",
+                   "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService",
+                   "grails.app.service.au.org.emii.aatams.report.KmlService"
 
-		}
+        }
 
-		test
-		{
-			debug  "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
-				   "grails.app.domain.au.org.emii.aatams.bulk"
-			       "grails.app.service.au.org.emii.aatams.detection"
-		}
-	}
+        test
+        {
+            debug  "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
+                   "grails.app.domain.au.org.emii.aatams.bulk"
+                   "grails.app.service.au.org.emii.aatams.detection"
+        }
+    }
 
-	root
-	{
+    root
+    {
         info 'stdout', 'null', 'nagiosAppender', 'file'
     }
 }

@@ -14,18 +14,18 @@ import java.text.SimpleDateFormat
  */
 class DetectionValidator extends VueExportValidator
 {
-	protected boolean isEventBeforeDeploymentDateTime(theDeployment)
-	{
-		assert(theDeployment)
+    protected boolean isEventBeforeDeploymentDateTime(theDeployment)
+    {
+        assert(theDeployment)
 
-		return theDeployment.deploymentDateTime.toDate().after(params.timestamp)
-	}
-	
-	protected boolean isDuplicate()
-	{
-		return false
-		// This is now checked at the end of each batch in JdbcTemplateVueDetectionFileProcessorService.
-//		return ValidDetection.isDuplicate(params)
-	}
+        return theDeployment.deploymentDateTime.toDate().after(params.timestamp)
+    }
+    
+    protected boolean isDuplicate()
+    {
+        return false
+        // This is now checked at the end of each batch in JdbcTemplateVueDetectionFileProcessorService.
+//        return ValidDetection.isDuplicate(params)
+    }
 }
 

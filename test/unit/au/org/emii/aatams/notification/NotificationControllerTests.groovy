@@ -48,7 +48,7 @@ class NotificationControllerTests extends AbstractControllerUnitTestCase
         mockDomain(Person, personList)
         personList.each { it.save() }
         
-		permitted = true
+        permitted = true
         
         gettingStarted = 
             new Notification(key:"GETTING_STARTED",
@@ -76,11 +76,11 @@ class NotificationControllerTests extends AbstractControllerUnitTestCase
         super.tearDown()
     }
 
-	protected def getPrincipal()
-	{
-		return person.id
-	}
-	
+    protected def getPrincipal()
+    {
+        return person.id
+    }
+    
     void testAcknowledgeNoKey() 
     {
         controller.acknowledge()
@@ -115,9 +115,9 @@ class NotificationControllerTests extends AbstractControllerUnitTestCase
     
     void testAcknowledgeUnathenticated()
     {
-		authenticated = false
-		hasRole = false
-		permitted = false
+        authenticated = false
+        hasRole = false
+        permitted = false
         
         controller.params.key = "GETTING_STARTED"
         controller.acknowledge()

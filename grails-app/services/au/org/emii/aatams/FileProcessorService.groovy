@@ -8,17 +8,17 @@ class FileProcessorService
 {
     static transactional = true
 
-	def jdbcTemplateVueDetectionFileProcessorService
-	def jdbcTemplateVueEventFileProcessorService
-	
+    def jdbcTemplateVueDetectionFileProcessorService
+    def jdbcTemplateVueEventFileProcessorService
+    
     def grailsApplication
     def mailService
 
-	/**
-	 * When uploading CSV, firefox and chrome report "text/csv", IE reports "text/plain".
-	 */
-	private static final CSV_CONTENT_TYPES = ["text/csv", "text/plain"]
-	
+    /**
+     * When uploading CSV, firefox and chrome report "text/csv", IE reports "text/plain".
+     */
+    private static final CSV_CONTENT_TYPES = ["text/csv", "text/plain"]
+    
     void process(receiverDownloadFileId, MultipartFile file, showLink) throws FileProcessingException
     {
         log.debug("Processing receiver export, download file ID: " + receiverDownloadFileId + ", content type: " + file.getContentType())
@@ -26,65 +26,65 @@ class FileProcessorService
         def receiverDownloadFile = ReceiverDownloadFile.get(receiverDownloadFileId)
         assert(receiverDownloadFile != null): "receiverDownloadFile cannot be null"
         
-		validateContent(receiverDownloadFile, file)
-			
+        validateContent(receiverDownloadFile, file)
+            
         // Save the file to disk.
-		saveToDiskAndProcess(receiverDownloadFile, file,showLink)
+        saveToDiskAndProcess(receiverDownloadFile, file,showLink)
     }
 
-	private void saveToDiskAndProcess(ReceiverDownloadFile receiverDownloadFile, MultipartFile file, showLink) throws FileProcessingException
-	{
-		log.debug("Creating file at path: " + receiverDownloadFile.path)
-		File outFile = new File(receiverDownloadFile.path)
+    private void saveToDiskAndProcess(ReceiverDownloadFile receiverDownloadFile, MultipartFile file, showLink) throws FileProcessingException
+    {
+        log.debug("Creating file at path: " + receiverDownloadFile.path)
+        File outFile = new File(receiverDownloadFile.path)
 
-		// Create the directory structure first...
-		outFile.mkdirs()
+        // Create the directory structure first...
+        outFile.mkdirs()
 
-		// ... then transfer the data.
-		file.transferTo(outFile)
+        // ... then transfer the data.
+        file.transferTo(outFile)
 
-		try
-		{
-			switch (receiverDownloadFile.type)
-			{
-				case ReceiverDownloadFileType.DETECTIONS_CSV:
+        try
+        {
+            switch (receiverDownloadFile.type)
+            {
+                case ReceiverDownloadFileType.DETECTIONS_CSV:
 
-				// Delegate to VUE Detection Processor...
-					log.debug("Delegating to VUE detection file processor...")
-					jdbcTemplateVueDetectionFileProcessorService.process(receiverDownloadFile)
+                // Delegate to VUE Detection Processor...
+                    log.debug("Delegating to VUE detection file processor...")
+                    jdbcTemplateVueDetectionFileProcessorService.process(receiverDownloadFile)
 
-					break;
+                    break;
 
-				case ReceiverDownloadFileType.EVENTS_CSV:
+                case ReceiverDownloadFileType.EVENTS_CSV:
 
-				// Delegate to VUE Event Processor...
-					log.debug("Processing events...")
-					jdbcTemplateVueEventFileProcessorService.process(receiverDownloadFile)
-					break;
+                // Delegate to VUE Event Processor...
+                    log.debug("Processing events...")
+                    jdbcTemplateVueEventFileProcessorService.process(receiverDownloadFile)
+                    break;
 
-				default:
+                default:
 
-				// No processing - just update the status.
-					receiverDownloadFile.status = FileProcessingStatus.PROCESSED
-					receiverDownloadFile.save()
-			}
+                // No processing - just update the status.
+                    receiverDownloadFile.status = FileProcessingStatus.PROCESSED
+                    receiverDownloadFile.save()
+            }
 
-			log.info "Finished processing."
-		}
-		catch (Throwable e)
-		{
-			log.error("Error processing file", e)
-			receiverDownloadFile.status = FileProcessingStatus.ERROR
-			receiverDownloadFile.errMsg = String.valueOf(e)
-			receiverDownloadFile.save()
+            log.info "Finished processing."
+        }
+        catch (Throwable e)
+        {
+            log.error("Error processing file", e)
+            receiverDownloadFile.status = FileProcessingStatus.ERROR
+            receiverDownloadFile.errMsg = String.valueOf(e)
+            receiverDownloadFile.save()
 
-			throw e
-		}
-		finally
-		{
-			sendNotification(receiverDownloadFile, showLink)
-		}
-	}
+            throw e
+        }
+        finally
+        {
+            sendNotification(receiverDownloadFile, showLink)
+        }
+    }
     
     boolean isParseable(downloadFile)
     {
@@ -106,25 +106,25 @@ class FileProcessorService
                  + showLink
         }
     }
-	
-	private void validateContent(ReceiverDownloadFile receiverDownloadFile, MultipartFile file) throws FileProcessingException
-	{
-		if (file.isEmpty())
-		{
-			def errMsg = "File is empty"
-			log.error(errMsg)
-			throw new FileProcessingException(errMsg)
-		}
+    
+    private void validateContent(ReceiverDownloadFile receiverDownloadFile, MultipartFile file) throws FileProcessingException
+    {
+        if (file.isEmpty())
+        {
+            def errMsg = "File is empty"
+            log.error(errMsg)
+            throw new FileProcessingException(errMsg)
+        }
 
-		log.debug("Validating file with content type: " + file.getContentType())
+        log.debug("Validating file with content type: " + file.getContentType())
 
-		// See: http://blog.futtta.be/2009/08/24/http-upload-mime-type-hell/ as to why we're no longer validating mime-type
-			
-		if (!file.getOriginalFilename().endsWith(ReceiverDownloadFileType.getExtension(receiverDownloadFile.type)))
-		{
-			def errMsg = "Invalid " + ReceiverDownloadFileType.getCategory(receiverDownloadFile.type) + \
-						 " filename (" + file.getOriginalFilename() + ") - must have extension \"." + ReceiverDownloadFileType.getExtension(receiverDownloadFile.type) + "\"."
-			throw new FileProcessingException(errMsg)
-		}
-	}
+        // See: http://blog.futtta.be/2009/08/24/http-upload-mime-type-hell/ as to why we're no longer validating mime-type
+            
+        if (!file.getOriginalFilename().endsWith(ReceiverDownloadFileType.getExtension(receiverDownloadFile.type)))
+        {
+            def errMsg = "Invalid " + ReceiverDownloadFileType.getCategory(receiverDownloadFile.type) + \
+                         " filename (" + file.getOriginalFilename() + ") - must have extension \"." + ReceiverDownloadFileType.getExtension(receiverDownloadFile.type) + "\"."
+            throw new FileProcessingException(errMsg)
+        }
+    }
 }

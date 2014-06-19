@@ -6,15 +6,15 @@ import grails.test.*
 
 class ReceiverTests extends GrailsUnitTestCase
 {
-	Receiver rx1
-	Receiver rx2
+    Receiver rx1
+    Receiver rx2
 
     protected void setUp()
-	{
+    {
         super.setUp()
 
-		ReceiverDeviceModel model = new ReceiverDeviceModel(modelName: "VR2W")
-		mockDomain(ReceiverDeviceModel, [model])
+        ReceiverDeviceModel model = new ReceiverDeviceModel(modelName: "VR2W")
+        mockDomain(ReceiverDeviceModel, [model])
 
         rx1 = new Receiver(serialNumber:"1111",
                            model:model,
@@ -26,17 +26,17 @@ class ReceiverTests extends GrailsUnitTestCase
         mockDomain(Receiver, [rx1, rx2])
         mockForConstraintsTests(Receiver, [rx1, rx2])
 
-		DeviceStatus newStatus = new DeviceStatus(status: 'NEW')
-		DeviceStatus deployedStatus = new DeviceStatus(status: 'DEPLOYED')
-		DeviceStatus recoveredStatus = new DeviceStatus(status: 'RECOVERED')
-		DeviceStatus retiredStatus = new DeviceStatus(status: 'RETIRED')
-		def statusList = [newStatus, deployedStatus, recoveredStatus, retiredStatus]
-		mockDomain(DeviceStatus, statusList)
-		statusList.each { it.save() }
+        DeviceStatus newStatus = new DeviceStatus(status: 'NEW')
+        DeviceStatus deployedStatus = new DeviceStatus(status: 'DEPLOYED')
+        DeviceStatus recoveredStatus = new DeviceStatus(status: 'RECOVERED')
+        DeviceStatus retiredStatus = new DeviceStatus(status: 'RETIRED')
+        def statusList = [newStatus, deployedStatus, recoveredStatus, retiredStatus]
+        mockDomain(DeviceStatus, statusList)
+        statusList.each { it.save() }
 
-		mockDomain(ReceiverDeployment)
-		mockDomain(ReceiverRecovery)
-		mockLogging(Receiver)
+        mockDomain(ReceiverDeployment)
+        mockDomain(ReceiverRecovery)
+        mockLogging(Receiver)
     }
 
     protected void tearDown()
@@ -46,7 +46,7 @@ class ReceiverTests extends GrailsUnitTestCase
 
     void testNonUniqueSerialNumber()
     {
-		rx2.serialNumber = rx1.serialNumber
+        rx2.serialNumber = rx1.serialNumber
         assertFalse(rx2.validate())
     }
 
@@ -56,27 +56,27 @@ class ReceiverTests extends GrailsUnitTestCase
         mockDomain(ReceiverDeviceModel, [model])
         model.save()
 
-		def rxr = new Receiver(serialNumber: "12345", model: model)
+        def rxr = new Receiver(serialNumber: "12345", model: model)
 
-		assertEquals("VR2W-12345", rxr.name)
+        assertEquals("VR2W-12345", rxr.name)
     }
 
-	void testFindByName()
-	{
-		assertNotNull(Receiver.findByName("VR2W-1111"))
-		assertNotNull(Receiver.findByName("VR2W-1111", [cache:true]))
-		assertNull(Receiver.findByName("VR2W-3333"))
+    void testFindByName()
+    {
+        assertNotNull(Receiver.findByName("VR2W-1111"))
+        assertNotNull(Receiver.findByName("VR2W-1111", [cache:true]))
+        assertNull(Receiver.findByName("VR2W-3333"))
 
-		try
-		{
-			Receiver.findByName("VR2W111")
-			fail()
-		}
-		catch (AssertionError e)
-		{
-			assertEquals("Invalid receiver name: VR2W111. Expression: (tokens.size() >= 2)", e.getMessage())
-		}
-	}
+        try
+        {
+            Receiver.findByName("VR2W111")
+            fail()
+        }
+        catch (AssertionError e)
+        {
+            assertEquals("Invalid receiver name: VR2W111. Expression: (tokens.size() >= 2)", e.getMessage())
+        }
+    }
 
     void testFindByNameWhereModelIncludesHyphen()
     {
@@ -91,10 +91,10 @@ class ReceiverTests extends GrailsUnitTestCase
         assertEquals(vr4uwmRxr, Receiver.findByName('VR4-UWM-1234'))
     }
 
-	void testStatusNoDeployments()
-	{
-		Receiver newReceiver = new Receiver()
-		newReceiver.save()
+    void testStatusNoDeployments()
+    {
+        Receiver newReceiver = new Receiver()
+        newReceiver.save()
 
         assertStatus("NEW", newReceiver)
     }

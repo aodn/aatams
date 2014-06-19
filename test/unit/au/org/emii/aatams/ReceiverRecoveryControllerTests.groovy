@@ -13,11 +13,11 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
 
     def project1
     def project2
-	
-	def receiver
+    
+    def receiver
 
-	DeviceStatus recovered
-	
+    DeviceStatus recovered
+    
     protected void setUp() 
     {
         super.setUp()
@@ -72,17 +72,17 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         deployment3.recovery = recovery3
 
         mockDomain(ReceiverRecovery)
-		
-		DeviceStatus deployed = new DeviceStatus(status: 'DEPLOYED')
-		recovered = new DeviceStatus(status: 'RECOVERED')
-		def statusList = [deployed, recovered]
-		mockDomain(DeviceStatus, statusList)
-		statusList.each { it.save() }
-		
-		ReceiverDeviceModel model = new ReceiverDeviceModel(modelName: "VR2W")
-		receiver = new Receiver(model: model, serialNumber: "1234")
-		mockDomain(Receiver, [receiver])
-		receiver.save()
+        
+        DeviceStatus deployed = new DeviceStatus(status: 'DEPLOYED')
+        recovered = new DeviceStatus(status: 'RECOVERED')
+        def statusList = [deployed, recovered]
+        mockDomain(DeviceStatus, statusList)
+        statusList.each { it.save() }
+        
+        ReceiverDeviceModel model = new ReceiverDeviceModel(modelName: "VR2W")
+        receiver = new Receiver(model: model, serialNumber: "1234")
+        mockDomain(Receiver, [receiver])
+        receiver.save()
     }
 
     protected void tearDown() 
@@ -100,109 +100,109 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         assertEquals(3, model.entityList.size())
         assertEquals(3, model.total)
     }
-	
-	void testSave()
-	{
-		def deployment = createDeployment(createStation(), new GeometryFactory().createPoint(new Coordinate(34f, 34f)))
-		deployment.mooringType = new MooringType()
-		deployment.save(failOnError:true)
-		
-		DateTime initDate = new DateTime("2012-01-01T12:34:56")
-		controller.params.deployment = [initialisationDateTime: initDate]
-		controller.params.deploymentId = deployment.id
-		controller.params.recoverer = new ProjectRole()
-		controller.params.recoveryDateTime = new DateTime()
-		controller.params.location = new GeometryFactory().createPoint(new Coordinate(34f, 34f))
-		controller.params.status = new DeviceStatus()
-		
-		// Test for #1751
-		boolean rescanCalled = false
-		controller.metaClass.rescanDetections = 
-		{
-			theDeployment ->
-			
-			rescanCalled = true	
-		}
-
-		controller.save()
-		
-		assertEquals("show", controller.redirectArgs.action)
-		assertEquals(initDate, deployment.initialisationDateTime)
-		assertTrue(rescanCalled)
-		def recovery = ReceiverRecovery.get(controller.redirectArgs.id)
-		assertNotNull(deployment)
-	}
     
-	void testCreateUseDeploymentsLocation()
-	{
-		Point deploymentLocation = new GeometryFactory().createPoint(new Coordinate(34f, 34f))
-		deploymentLocation.setSRID(4326)
+    void testSave()
+    {
+        def deployment = createDeployment(createStation(), new GeometryFactory().createPoint(new Coordinate(34f, 34f)))
+        deployment.mooringType = new MooringType()
+        deployment.save(failOnError:true)
+        
+        DateTime initDate = new DateTime("2012-01-01T12:34:56")
+        controller.params.deployment = [initialisationDateTime: initDate]
+        controller.params.deploymentId = deployment.id
+        controller.params.recoverer = new ProjectRole()
+        controller.params.recoveryDateTime = new DateTime()
+        controller.params.location = new GeometryFactory().createPoint(new Coordinate(34f, 34f))
+        controller.params.status = new DeviceStatus()
+        
+        // Test for #1751
+        boolean rescanCalled = false
+        controller.metaClass.rescanDetections = 
+        {
+            theDeployment ->
+            
+            rescanCalled = true    
+        }
 
-		InstallationStation station = createStation()
-		
-		ReceiverDeployment deployment = createDeployment(station, deploymentLocation)
-		
-		def model = controller.create()
-		
-		assertRecoveryDefaults(model, deployment, deploymentLocation)
-	}
+        controller.save()
+        
+        assertEquals("show", controller.redirectArgs.action)
+        assertEquals(initDate, deployment.initialisationDateTime)
+        assertTrue(rescanCalled)
+        def recovery = ReceiverRecovery.get(controller.redirectArgs.id)
+        assertNotNull(deployment)
+    }
+    
+    void testCreateUseDeploymentsLocation()
+    {
+        Point deploymentLocation = new GeometryFactory().createPoint(new Coordinate(34f, 34f))
+        deploymentLocation.setSRID(4326)
 
-	void testCreateUseStationsLocation()
-	{
-		InstallationStation station = createStation()
-		ReceiverDeployment deployment = createDeployment(station, null)
-		
-		def model = controller.create()
-		
-		assertRecoveryDefaults(model, deployment, station.location)
-	}
-	
-	void testUpdate()
-	{
-		def deployment = createDeployment(createStation(), new GeometryFactory().createPoint(new Coordinate(34f, 34f)))
-		deployment.mooringType = new MooringType()
-		deployment.save(failOnError:true)
+        InstallationStation station = createStation()
+        
+        ReceiverDeployment deployment = createDeployment(station, deploymentLocation)
+        
+        def model = controller.create()
+        
+        assertRecoveryDefaults(model, deployment, deploymentLocation)
+    }
 
-		def recovery = new ReceiverRecovery(
-			deployment: deployment, 
-			recoverer: new ProjectRole(), 
-			location: new GeometryFactory().createPoint(new Coordinate(34f, 34f)), 
-			status: recovered)
-		recovery.save(failOnError:true)
-		
-		DateTime initDate = new DateTime("2012-01-01T12:34:56")
-		controller.params.deployment = [initialisationDateTime: initDate]
-		controller.params.id = recovery.id
-		
-		controller.update()
-		
-		assertEquals(initDate, deployment.initialisationDateTime)
-	}
-	
-	private InstallationStation createStation() {
-		InstallationStation station = new InstallationStation(location:new GeometryFactory().createPoint(new Coordinate(12f, 34f)))
-		station.location.setSRID(4326)
-		mockDomain(InstallationStation, [station])
-		station.save()
-		return station
-	}
+    void testCreateUseStationsLocation()
+    {
+        InstallationStation station = createStation()
+        ReceiverDeployment deployment = createDeployment(station, null)
+        
+        def model = controller.create()
+        
+        assertRecoveryDefaults(model, deployment, station.location)
+    }
+    
+    void testUpdate()
+    {
+        def deployment = createDeployment(createStation(), new GeometryFactory().createPoint(new Coordinate(34f, 34f)))
+        deployment.mooringType = new MooringType()
+        deployment.save(failOnError:true)
 
-	private ReceiverDeployment createDeployment(InstallationStation station, location) 
-	{
-		ReceiverDeployment deployment = new ReceiverDeployment(location:location, station:station, receiver:receiver)
-		mockDomain(ReceiverDeployment, [deployment])
-		deployment.save()
-		deployment.metaClass.toString = { "test deployment"}
+        def recovery = new ReceiverRecovery(
+            deployment: deployment, 
+            recoverer: new ProjectRole(), 
+            location: new GeometryFactory().createPoint(new Coordinate(34f, 34f)), 
+            status: recovered)
+        recovery.save(failOnError:true)
+        
+        DateTime initDate = new DateTime("2012-01-01T12:34:56")
+        controller.params.deployment = [initialisationDateTime: initDate]
+        controller.params.id = recovery.id
+        
+        controller.update()
+        
+        assertEquals(initDate, deployment.initialisationDateTime)
+    }
+    
+    private InstallationStation createStation() {
+        InstallationStation station = new InstallationStation(location:new GeometryFactory().createPoint(new Coordinate(12f, 34f)))
+        station.location.setSRID(4326)
+        mockDomain(InstallationStation, [station])
+        station.save()
+        return station
+    }
 
-		controller.params.deploymentId = deployment.id
-		
-		return deployment
-	}
+    private ReceiverDeployment createDeployment(InstallationStation station, location) 
+    {
+        ReceiverDeployment deployment = new ReceiverDeployment(location:location, station:station, receiver:receiver)
+        mockDomain(ReceiverDeployment, [deployment])
+        deployment.save()
+        deployment.metaClass.toString = { "test deployment"}
 
-	private void assertRecoveryDefaults(model, ReceiverDeployment deployment, Point deploymentLocation) 
-	{
-		assertNotNull(model.receiverRecoveryInstance)
-		assertEquals(deployment, model.receiverRecoveryInstance.deployment)
-		assertEquals(deploymentLocation, model.receiverRecoveryInstance.location)
-	}
+        controller.params.deploymentId = deployment.id
+        
+        return deployment
+    }
+
+    private void assertRecoveryDefaults(model, ReceiverDeployment deployment, Point deploymentLocation) 
+    {
+        assertNotNull(model.receiverRecoveryInstance)
+        assertEquals(deployment, model.receiverRecoveryInstance.deployment)
+        assertEquals(deploymentLocation, model.receiverRecoveryInstance.location)
+    }
 }

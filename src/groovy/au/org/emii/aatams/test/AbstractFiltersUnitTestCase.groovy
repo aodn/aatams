@@ -12,63 +12,63 @@ import au.org.emii.aatams.Person
 
 abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase
 {
-	protected hasRole = true
-	protected Person user
-	protected authenticated = true
-	protected permitted = false
+    protected hasRole = true
+    protected Person user
+    protected authenticated = true
+    protected permitted = false
     
-	private MetaClass originalSecurityUtilsMetaClass
+    private MetaClass originalSecurityUtilsMetaClass
 
-	protected void setUp()
-	{
-		super.setUp()
+    protected void setUp()
+    {
+        super.setUp()
 
-		hasRole = true
-		authenticated = true
-		permitted = false
+        hasRole = true
+        authenticated = true
+        permitted = false
 
-		user =  new Person(username:"jkburges")
+        user =  new Person(username:"jkburges")
         
-		def subject = [ getPrincipal: { getPrincipal() },
-						isAuthenticated: { isAuthenticated() },
-						hasRole: { hasRole() },
-						isPermitted: { isPermitted(it) },
-					  ] as Subject
+        def subject = [ getPrincipal: { getPrincipal() },
+                        isAuthenticated: { isAuthenticated() },
+                        hasRole: { hasRole() },
+                        isPermitted: { isPermitted(it) },
+                      ] as Subject
 
-		// Save SecurityUtils' current meta class and clear it from
-		// the registry.
-		def registry = GroovySystem.metaClassRegistry
-		this.originalSecurityUtilsMetaClass = registry.getMetaClass(SecurityUtils)
-		registry.removeMetaClass(SecurityUtils)
+        // Save SecurityUtils' current meta class and clear it from
+        // the registry.
+        def registry = GroovySystem.metaClassRegistry
+        this.originalSecurityUtilsMetaClass = registry.getMetaClass(SecurityUtils)
+        registry.removeMetaClass(SecurityUtils)
 
-		SecurityUtils.metaClass.static.getSubject = { subject }
-	}
+        SecurityUtils.metaClass.static.getSubject = { subject }
+    }
 
-	protected void tearDown()
-	{
-		// Restore the old meta class on SecurityUtils.
-		GroovySystem.metaClassRegistry.setMetaClass(SecurityUtils, this.originalSecurityUtilsMetaClass)
+    protected void tearDown()
+    {
+        // Restore the old meta class on SecurityUtils.
+        GroovySystem.metaClassRegistry.setMetaClass(SecurityUtils, this.originalSecurityUtilsMetaClass)
 
-		super.tearDown()
-	}
-	
-	protected def getPrincipal()
-	{
-		return user?.id
-	}
+        super.tearDown()
+    }
+    
+    protected def getPrincipal()
+    {
+        return user?.id
+    }
 
-	protected boolean isAuthenticated()
-	{
-		return authenticated
-	}
+    protected boolean isAuthenticated()
+    {
+        return authenticated
+    }
 
-	protected boolean hasRole()
-	{
-		return hasRole
-	}
+    protected boolean hasRole()
+    {
+        return hasRole
+    }
 
-	protected boolean isPermitted(permission)
-	{
-		return permitted
-	}
+    protected boolean isPermitted(permission)
+    {
+        return permitted
+    }
 }

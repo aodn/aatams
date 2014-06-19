@@ -48,9 +48,9 @@ class SearchableController
             result.get(result.id)
         }
     }
-	
-	def addImplicitWildCards(searchTerm)
-	{
-		return '*' + searchTerm + '*'
-	}
+    
+    def addImplicitWildCards(searchTerm)
+    {
+        return '*' + searchTerm + '*'
+    }
 }

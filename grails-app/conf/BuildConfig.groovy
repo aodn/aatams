@@ -13,8 +13,8 @@ grails.project.dependency.resolution = {
         grailsPlugins()
         grailsHome()
         grailsCentral()
-		mavenLocal()
-		mavenCentral()
+        mavenLocal()
+        mavenCentral()
         mavenRepo "http://download.java.net/maven/2/"
     }
 
@@ -22,10 +22,10 @@ grails.project.dependency.resolution = {
         build 'commons-io:commons-io:2.1'
         runtime 'commons-io:commons-io:2.1'
         runtime 'postgresql:postgresql:9.0-801.jdbc4'
-		compile 'org.apache.commons:commons-compress:1.4'
-		test "xmlunit:xmlunit:1.3"
+        compile 'org.apache.commons:commons-compress:1.4'
+        test "xmlunit:xmlunit:1.3"
     }
 
-	plugins {
-	}
+    plugins {
+    }
 }

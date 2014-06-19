@@ -43,10 +43,10 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
         super.tearDown()
     }
 
-	protected def getPrincipal()
-	{
-		return user?.id
-	}
+    protected def getPrincipal()
+    {
+        return user?.id
+    }
 
     static def createDataList()
     {
@@ -97,7 +97,7 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
 
     void testShow()
     {
-		hasRole = true
+        hasRole = true
 
         def address = new Address(id:1,
                                   streetAddress:'1 Smith Street',

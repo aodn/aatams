@@ -44,9 +44,9 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
         controller.metaClass.body = {}
         controller.metaClass.createLink = {}
 
-		permissionUtilsService = new PermissionUtilsService()
-		permissionUtilsService.metaClass.principal = { getUser() }
-		controller.permissionUtilsService = permissionUtilsService
+        permissionUtilsService = new PermissionUtilsService()
+        permissionUtilsService.metaClass.principal = { getUser() }
+        controller.permissionUtilsService = permissionUtilsService
     }
 
     protected void tearDown()
@@ -65,10 +65,10 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
 
         Person somePerson = new Person()
 
-		Person.metaClass.static.get =
-		{
-			new Person(username: "jbloggs", emailAddress: "jbloggs@test.com")
-		}
+        Person.metaClass.static.get =
+        {
+            new Person(username: "jbloggs", emailAddress: "jbloggs@test.com")
+        }
 
         //
         // Organisations.
@@ -125,7 +125,7 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
 
     void testListAsSysAdmin()
     {
-		hasRole = true
+        hasRole = true
 
         // There list of organisations should include non-active.
         def retVal = controller.list()
@@ -136,7 +136,7 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
 
     void testListAsNonSysAdmin()
     {
-		hasRole = false
+        hasRole = false
 
         // There list of organisations should include non-active.
         def retVal = controller.list()
@@ -147,8 +147,8 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
 
     void testListAsNoone()
     {
-		hasRole = false
-		permitted = false
+        hasRole = false
+        permitted = false
 
         // There list of organisations should include non-active.
         def retVal = controller.list()
@@ -158,7 +158,7 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
 
     void testSaveAsSysAdmin()
     {
-		hasRole = true
+        hasRole = true
 
         // Status should be set to ACTIVE.
         def address =
@@ -188,7 +188,7 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
     void testSaveAsNonSysAdmin()
     {
         // Status should be set to PENDING.
-		hasRole = false
+        hasRole = false
 
         def address =
                     [streetAddress:'12 Smith Street',

@@ -19,7 +19,7 @@ import de.micromata.opengis.kml.v_2_2_0.TimeStamp
 
 class ValidDetection extends RawDetection implements Embargoable
 {
-	static belongsTo = [receiverDownload:ReceiverDownloadFile, receiverDeployment: ReceiverDeployment]
+    static belongsTo = [receiverDownload:ReceiverDownloadFile, receiverDeployment: ReceiverDeployment]
     static transients = RawDetection.transients + ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames', 'placemark']
 
     /**
@@ -45,12 +45,12 @@ class ValidDetection extends RawDetection implements Embargoable
     Set<DetectionSurgery> detectionSurgeries = new HashSet<DetectionSurgery>()
     static hasMany = [detectionSurgeries:DetectionSurgery]
 
-	static constraints = RawDetection.constraints
+    static constraints = RawDetection.constraints
 
-	static mapping =
-	{
-		detectionSurgeries cache:true
-	}
+    static mapping =
+    {
+        detectionSurgeries cache:true
+    }
 
     static boolean isDuplicate(other)
     {
@@ -62,31 +62,31 @@ class ValidDetection extends RawDetection implements Embargoable
                 duplicate = true
                 return
             }
-			return false
+            return false
         }
 
         return duplicate
     }
 
-	private boolean duplicateProperty(property, other)
-	{
-		// null property is considered equal to empty string.
-		(this[property] == other[property]) ||
-		((this[property] == null) && (other[property] == "")) ||
-		((this[property] == "") && (other[property] == null))
-	}
+    private boolean duplicateProperty(property, other)
+    {
+        // null property is considered equal to empty string.
+        (this[property] == other[property]) ||
+        ((this[property] == null) && (other[property] == "")) ||
+        ((this[property] == "") && (other[property] == null))
+    }
 
     private boolean duplicate(other)
     {
-		 return (
-			 this.timestamp == other.timestamp
-		  && duplicateProperty("receiverName", other)
-		  && duplicateProperty("transmitterId", other)
-		  && duplicateProperty("transmitterName", other)
-		  && duplicateProperty("transmitterSerialNumber", other)
-		  && duplicateProperty("sensorUnit", other)
-		  && this.location == other.location
-		  && this.sensorValue == other.sensorValue)
+        return (
+            this.timestamp == other.timestamp
+            && duplicateProperty("receiverName", other)
+            && duplicateProperty("transmitterId", other)
+            && duplicateProperty("transmitterName", other)
+            && duplicateProperty("transmitterSerialNumber", other)
+            && duplicateProperty("sensorUnit", other)
+            && this.location == other.location
+            && this.sensorValue == other.sensorValue)
     }
 
     String toString()
@@ -97,7 +97,7 @@ class ValidDetection extends RawDetection implements Embargoable
     // Convenience method.
     Project getProject()
     {
-		return firstDetectionSurgery?.surgery?.release?.project
+        return firstDetectionSurgery?.surgery?.release?.project
     }
 
     /**
@@ -129,63 +129,63 @@ class ValidDetection extends RawDetection implements Embargoable
         return new ArrayList(detectionSurgeries)[0]
     }
 
-	String getSensorIds()
-	{
-		return getSensorIds(detectionSurgeries)
-	}
+    String getSensorIds()
+    {
+        return getSensorIds(detectionSurgeries)
+    }
 
-	private String getSensorIds(theDetectionSurgeries)
-	{
-		return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.sensor.transmitterId)
-	}
+    private String getSensorIds(theDetectionSurgeries)
+    {
+        return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.sensor.transmitterId)
+    }
 
-	String getSpeciesNames()
-	{
-		return getSpeciesNames(detectionSurgeries)
-	}
+    String getSpeciesNames()
+    {
+        return getSpeciesNames(detectionSurgeries)
+    }
 
-	private String getSpeciesNames(theDetectionSurgeries)
-	{
-		return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.surgery.release.animal.species.name)
-	}
+    private String getSpeciesNames(theDetectionSurgeries)
+    {
+        return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.surgery.release.animal.species.name)
+    }
 
-	static String toSqlInsert(detection)
-	{
-		StringBuilder detectionBuff = new StringBuilder(
-				"INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, " +
-				"STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) " +
-				" VALUES(")
+    static String toSqlInsert(detection)
+    {
+        StringBuilder detectionBuff = new StringBuilder(
+            "INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, " +
+            "STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) " +
+            " VALUES(")
 
-		detectionBuff.append("nextval('hibernate_sequence'),")
-		detectionBuff.append("0,")
-		detectionBuff.append("'" + new java.sql.Timestamp(detection["timestamp"].getTime()) + "',")
-		SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDownloadId"])
-		SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
-			"transmitterSerialNumber"])
-		SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDeploymentId"])
-		SqlUtils.appendBooleanParams(detectionBuff, detection, ["provisional"])
-		SqlUtils.removeTrailingCommaAndAddBracket(detectionBuff)
+        detectionBuff.append("nextval('hibernate_sequence'),")
+        detectionBuff.append("0,")
+        detectionBuff.append("'" + new java.sql.Timestamp(detection["timestamp"].getTime()) + "',")
+        SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDownloadId"])
+        SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
+                                                               "transmitterSerialNumber"])
+        SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDeploymentId"])
+        SqlUtils.appendBooleanParams(detectionBuff, detection, ["provisional"])
+        SqlUtils.removeTrailingCommaAndAddBracket(detectionBuff)
 
-		return detectionBuff.toString()
-	}
+        return detectionBuff.toString()
+    }
 
-	def applyEmbargo()
-	{
-		boolean isEmbargoed = false
+    def applyEmbargo()
+    {
+        boolean isEmbargoed = false
 
-		detectionSurgeries.each
-		{
-			if (it.surgery.release.isEmbargoed())
-			{
-				isEmbargoed = true
-			}
-		}
+        detectionSurgeries.each
+        {
+            if (it.surgery.release.isEmbargoed())
+            {
+                            isEmbargoed = true
+            }
+        }
 
-		return isEmbargoed ? null : this
-	}
+        return isEmbargoed ? null : this
+    }
 
-	static Kml toKml(List<ValidDetection> detections, serverURL)
-	{
-		return new SensorTrackKml(detections, serverURL)
-	}
+    static Kml toKml(List<ValidDetection> detections, serverURL)
+    {
+        return new SensorTrackKml(detections, serverURL)
+    }
 }

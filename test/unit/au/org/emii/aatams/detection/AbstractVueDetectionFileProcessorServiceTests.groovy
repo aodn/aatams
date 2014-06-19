@@ -12,17 +12,17 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
 {
     def detectionFactoryService
     def vueDetectionFileProcessorService
-	
+    
     def searchableService
     
     Receiver receiver
     ReceiverDeployment deployment
     ReceiverRecovery recovery
-	
+    
     protected void setUp() 
-	{
+    {
         super.setUp()
-		
+        
         mockLogging(SearchableService, true)
         searchableService = new SearchableService()
         searchableService.metaClass.startMirroring = {}
@@ -40,11 +40,11 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
         mockDomain(Surgery)
         mockDomain(Tag)
         
-		
-		ReceiverDeviceModel vr3uwm = new ReceiverDeviceModel(modelName: "VR3UWM")
-		mockDomain(ReceiverDeviceModel, [vr3uwm])
-		vr3uwm.save()
-		
+        
+        ReceiverDeviceModel vr3uwm = new ReceiverDeviceModel(modelName: "VR3UWM")
+        mockDomain(ReceiverDeviceModel, [vr3uwm])
+        vr3uwm.save()
+        
         receiver = new Receiver(serialNumber:"354", model: vr3uwm)
         mockDomain(Receiver, [receiver])
         
@@ -68,26 +68,26 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
         registerMetaClass VueDetectionFileProcessorService
         registerMetaClass JdbcTemplateVueDetectionFileProcessorService
         
-		AbstractBatchProcessor.metaClass.getReader = { getReader(it) }
-		AbstractBatchProcessor.metaClass.getNumRecords = { 7 }
+        AbstractBatchProcessor.metaClass.getReader = { getReader(it) }
+        AbstractBatchProcessor.metaClass.getNumRecords = { 7 }
         AbstractBatchProcessor.metaClass.flushSession = {  }
-		mockDomain(ReceiverDownloadFileProgress)
-		ReceiverDownloadFileProgress.metaClass.static.withNewTransaction = { it() }
+        mockDomain(ReceiverDownloadFileProgress)
+        ReceiverDownloadFileProgress.metaClass.static.withNewTransaction = { it() }
     }
 
     protected void tearDown() 
-	{
+    {
         super.tearDown()
     }
 
-	public Reader getReader(downloadFile)
-	{
-		return new StringReader(getData())
-	}
-	
-	protected String getData() 
-	{
-		return '''Date and Time (UTC),Receiver,Transmitter,Transmitter Name,Transmitter Serial,Sensor Value,Sensor Unit,Station Name,Latitude,Longitude,
+    public Reader getReader(downloadFile)
+    {
+        return new StringReader(getData())
+    }
+    
+    protected String getData() 
+    {
+        return '''Date and Time (UTC),Receiver,Transmitter,Transmitter Name,Transmitter Serial,Sensor Value,Sensor Unit,Station Name,Latitude,Longitude,
 2009-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2009-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2009-12-08 06:44:24,AAA-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
@@ -95,7 +95,7 @@ abstract class AbstractVueDetectionFileProcessorServiceTests extends GrailsUnitT
 2009-12-08 06:47:24,BBB-111,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2007-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
 2010-12-08 06:44:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234'''
-	}
+    }
 
     protected String getBadDateFormatData()
     {

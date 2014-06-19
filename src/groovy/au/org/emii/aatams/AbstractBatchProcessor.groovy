@@ -10,23 +10,23 @@ import org.grails.plugins.csv.CSVMapReader
  */
 abstract class AbstractBatchProcessor 
 {
-	def sessionFactory
+    def sessionFactory
     def propertyInstanceMap = org.codehaus.groovy.grails.plugins.DomainClassGrailsPlugin.PROPERTY_INSTANCE_MAP
     
     def searchableService
  
-	protected int getBatchSize()
-	{
-	    // This has been  tuned with a "suck-it-and-see" approach, with a dataset
-	    // of 3000 records.
-		return 30
-	}
-	
-	protected void startBatch(context)
-	{
-		
-	}
-	
+    protected int getBatchSize()
+    {
+        // This has been  tuned with a "suck-it-and-see" approach, with a dataset
+        // of 3000 records.
+        return 30
+    }
+    
+    protected void startBatch(context)
+    {
+        
+    }
+    
     protected void endBatch(context) 
     {
         flushSession()
@@ -40,26 +40,26 @@ abstract class AbstractBatchProcessor
         session.clear()
     }
     
-	long getNumRecords(downloadFile)
-	{
-		log.debug("Counting number of records in file...")
-		long lineCount = 0
-		
-		new File(downloadFile.path).eachLine {
-			lineCount++
-		}
-		
-		log.debug("Records count: " + (lineCount - 1))
-		return (lineCount - 1)	// -1 -> don't count the header.	
-	}
-	
+    long getNumRecords(downloadFile)
+    {
+        log.debug("Counting number of records in file...")
+        long lineCount = 0
+        
+        new File(downloadFile.path).eachLine {
+            lineCount++
+        }
+        
+        log.debug("Records count: " + (lineCount - 1))
+        return (lineCount - 1)    // -1 -> don't count the header.    
+    }
+    
     void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
     {
-		def recordCsvMapReader
+        def recordCsvMapReader
         try
         {
             searchableService.stopMirroring()
-			recordCsvMapReader = getMapReader(downloadFile)
+            recordCsvMapReader = getMapReader(downloadFile)
             batchProcess(downloadFile, recordCsvMapReader)
             downloadFileProcessed(downloadFile)
         }
@@ -73,36 +73,36 @@ abstract class AbstractBatchProcessor
             downloadFile.save(flush: true, failOnError: true)
             flushSession()
             searchableService.startMirroring()
-			recordCsvMapReader?.close()
+            recordCsvMapReader?.close()
         }
     }
 
     Reader getReader(downloadFile)
-	{
-		log.debug("Instantiating stream reader...")
-		// Wrap in BOMInputStream, to handle the byte-order marker present in VUE exports
-		// (see http://stackoverflow.com/questions/1835430/byte-order-mark-screws-up-file-reading-in-java/7390288#7390288)
-		def reader = new InputStreamReader(new BOMInputStream(new FileInputStream(new File(downloadFile.path))))
-		log.debug("Stream reader instantiated")
-		
-		return reader
-	}
-	
-    List<Map<String, String>> getRecords(downloadFile)
     {
-		log.debug("Instantiating list of records...")
-		def mapReader = getMapReader(downloadFile).toList()
-		log.debug("List of records instantiated")
-		return mapReader
+        log.debug("Instantiating stream reader...")
+        // Wrap in BOMInputStream, to handle the byte-order marker present in VUE exports
+        // (see http://stackoverflow.com/questions/1835430/byte-order-mark-screws-up-file-reading-in-java/7390288#7390288)
+        def reader = new InputStreamReader(new BOMInputStream(new FileInputStream(new File(downloadFile.path))))
+        log.debug("Stream reader instantiated")
+        
+        return reader
     }
     
-	protected CSVMapReader getMapReader(downloadFile)
-	{
-		log.debug("Instantiating CSV map reader...")
-		def mapReader = new CSVMapReader(getReader(downloadFile))
-		log.debug(" CSV map reader instantiated")
-		return mapReader
-	}
+    List<Map<String, String>> getRecords(downloadFile)
+    {
+        log.debug("Instantiating list of records...")
+        def mapReader = getMapReader(downloadFile).toList()
+        log.debug("List of records instantiated")
+        return mapReader
+    }
+    
+    protected CSVMapReader getMapReader(downloadFile)
+    {
+        log.debug("Instantiating CSV map reader...")
+        def mapReader = new CSVMapReader(getReader(downloadFile))
+        log.debug(" CSV map reader instantiated")
+        return mapReader
+    }
 
     private boolean isEndOfBatch(itemNumber)
     {
@@ -131,7 +131,7 @@ abstract class AbstractBatchProcessor
                 {
                     processSingleRecord(downloadFile, map, context)
                 }
-                catch (FileProcessingException e)	
+                catch (FileProcessingException e)    
                 {
                     log.error("Exception reading record: ${map}", e)
                     throw e
@@ -184,7 +184,7 @@ abstract class AbstractBatchProcessor
 
         return message
     }
-	
+    
     abstract void processSingleRecord(downloadFile, map, context) throws FileProcessingException
 }
 

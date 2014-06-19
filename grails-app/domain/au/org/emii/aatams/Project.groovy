@@ -12,7 +12,7 @@ class Project
                       releases:AnimalRelease]
 
     static transients = ['organisations', 'people', 'principalInvestigators']
-	static auditable = true
+    static auditable = true
 
     String name
     String description
@@ -33,8 +33,8 @@ class Project
     static mapping =
     {
         // Speed up the candidateEntitiesService (that reads user's projects).
-		cache true
-		sort "name"
+        cache true
+        sort "name"
     }
 
     static searchable = [only: ['name', 'description']]
@@ -83,22 +83,22 @@ class Project
         return organisations
     }
 
-	Folder toKmlFolder()
-	{
-		Folder projectFolder = new Folder().withName(name)
+    Folder toKmlFolder()
+    {
+        Folder projectFolder = new Folder().withName(name)
 
-		installations.sort
-		{
-			a, b ->
+        installations.sort
+        {
+            a, b ->
 
-			a.name <=> b.name
-		}.each
-		{
-			installation ->
+            a.name <=> b.name
+        }.each
+        {
+            installation ->
 
-			projectFolder.getFeature().add(installation.toKmlFolder())
-		}
+            projectFolder.getFeature().add(installation.toKmlFolder())
+        }
 
-		return projectFolder
-	}
+        return projectFolder
+    }
 }

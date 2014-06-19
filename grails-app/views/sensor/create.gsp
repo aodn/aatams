@@ -18,14 +18,14 @@
             <div class="message">${flash.message}</div>
             </g:if>
             <g:hasErrors bean="${sensorInstance}">
-	            <div class="errors">
-	                <g:renderErrors bean="${sensorInstance}" as="list" />
-	            </div>
+                <div class="errors">
+                    <g:renderErrors bean="${sensorInstance}" as="list" />
+                </div>
             </g:hasErrors>
             <g:hasErrors bean="${sensorInstance?.tag}">
-	            <div class="errors">
-	                <g:renderErrors bean="${sensorInstance?.tag}" as="list" />
-	            </div>
+                <div class="errors">
+                    <g:renderErrors bean="${sensorInstance?.tag}" as="list" />
+                </div>
             </g:hasErrors>
             <g:form action="save" >
                 <div class="dialog">

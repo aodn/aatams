@@ -2,8 +2,8 @@ package au.org.emii.aatams
 
 class ValidReceiverEvent extends ReceiverEvent 
 {
-	static belongsTo = [receiverDeployment: ReceiverDeployment]
-	
+    static belongsTo = [receiverDeployment: ReceiverDeployment]
+    
     static boolean isDuplicate(other)
     {
         boolean duplicate = false
@@ -21,7 +21,7 @@ class ValidReceiverEvent extends ReceiverEvent
     
     private boolean duplicate(other)
     {
-		return (
+        return (
             this.timestamp == other.timestamp
          && this.receiverName == other.receiverName
          && this.description == other.description

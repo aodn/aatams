@@ -20,60 +20,60 @@ import static com.energizedwork.grails.plugins.jodatime.Html5DateTimeFormat.*
 
 class Html5InputTagLib {
 
-	static final namespace = "joda"
+    static final namespace = "joda"
 
-	def dateField = {attrs ->
-		attrs.type = "date"
-		attrs.tagName = "dateField"
-		if (attrs.value) {
-			attrs.value = date().print(attrs.value)
-		}
-		g.field(attrs)
-	}
+    def dateField = {attrs ->
+        attrs.type = "date"
+        attrs.tagName = "dateField"
+        if (attrs.value) {
+            attrs.value = date().print(attrs.value)
+        }
+        g.field(attrs)
+    }
 
-	def timeField = {attrs ->
-		attrs.type = "time"
-		attrs.tagName = "timeField"
-		if (attrs.value) {
-			attrs.value = time().print(attrs.value)
-		}
-		g.field(attrs)
-	}
+    def timeField = {attrs ->
+        attrs.type = "time"
+        attrs.tagName = "timeField"
+        if (attrs.value) {
+            attrs.value = time().print(attrs.value)
+        }
+        g.field(attrs)
+    }
 
-	def datetimeField = {attrs ->
-		attrs.type = "datetime"
-		attrs.tagName = "datetimeField"
-		if (attrs.value) {
-			attrs.value = datetime().print(attrs.value)
-		}
-		g.field(attrs)
-	}
+    def datetimeField = {attrs ->
+        attrs.type = "datetime"
+        attrs.tagName = "datetimeField"
+        if (attrs.value) {
+            attrs.value = datetime().print(attrs.value)
+        }
+        g.field(attrs)
+    }
 
-	def datetimeLocalField = {attrs ->
-		attrs.type = "datetime-local"
-		attrs.tagName = "datetimeLocalField"
-		if (attrs.value) {
-			attrs.value = datetimeLocal().print(attrs.value)
-		}
-		g.field(attrs)
-	}
+    def datetimeLocalField = {attrs ->
+        attrs.type = "datetime-local"
+        attrs.tagName = "datetimeLocalField"
+        if (attrs.value) {
+            attrs.value = datetimeLocal().print(attrs.value)
+        }
+        g.field(attrs)
+    }
 
-	def monthField = {attrs ->
-		attrs.type = "month"
-		attrs.tagName = "monthField"
-		if (attrs.value) {
-			attrs.value = month().print(attrs.value)
-		}
-		g.field(attrs)
-	}
+    def monthField = {attrs ->
+        attrs.type = "month"
+        attrs.tagName = "monthField"
+        if (attrs.value) {
+            attrs.value = month().print(attrs.value)
+        }
+        g.field(attrs)
+    }
 
-	def weekField = {attrs ->
-		attrs.type = "week"
-		attrs.tagName = "weekField"
-		if (attrs.value) {
-			attrs.value = week().print(attrs.value)
-		}
-		g.field(attrs)
-	}
+    def weekField = {attrs ->
+        attrs.type = "week"
+        attrs.tagName = "weekField"
+        if (attrs.value) {
+            attrs.value = week().print(attrs.value)
+        }
+        g.field(attrs)
+    }
 
 }

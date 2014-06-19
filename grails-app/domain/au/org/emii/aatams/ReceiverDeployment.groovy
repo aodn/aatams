@@ -21,15 +21,15 @@ class ReceiverDeployment
 {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
     static transients = ['scrambledLocation', 'active', 'latitude', 'longitude']
-	static auditable = true
-	
+    static auditable = true
+    
     Set<ValidDetection> detections = new HashSet<ValidDetection>()
     static hasMany = [detections: ValidDetection, events: ValidReceiverEvent]
 
     Integer deploymentNumber
     
-	DateTime initialisationDateTime = new DateTime(Person.defaultTimeZone())
-	
+    DateTime initialisationDateTime = new DateTime(Person.defaultTimeZone())
+    
     DateTime deploymentDateTime = new DateTime(Person.defaultTimeZone())
 
     static mapping =
@@ -51,9 +51,9 @@ class ReceiverDeployment
         // Speed up candidateEntitiesService.
         cache: true
         station cache:true
-		detections cache:true
-		
-		location type: GeometryUserType
+        detections cache:true
+        
+        location type: GeometryUserType
     }
 
     static searchable =
@@ -117,7 +117,7 @@ class ReceiverDeployment
     {
         receiver()
         station()
-		initialisationDateTime(nullable:true)
+        initialisationDateTime(nullable:true)
         deploymentNumber(nullable:true, min:0)
         deploymentDateTime()
         recoveryDate(nullable:true, validator:recoveryDateValidator)
@@ -145,12 +145,12 @@ class ReceiverDeployment
         
         return true
     }
-	
+    
     String toString()
     {
         return String.valueOf(receiver) + " - " + String.valueOf(deploymentDateTime)
     }
-	
+    
     /**
      * Non-authenticated users can only see scrambled locations.
      */
@@ -169,32 +169,32 @@ class ReceiverDeployment
         return getScrambledLocation()?.coordinate?.x
     }
     
-	private DateTime now()
-	{
-		return new DateTime()
-	}
-	
+    private DateTime now()
+    {
+        return new DateTime()
+    }
+    
     boolean isActive()
     {
-		isActive(now())
+        isActive(now())
     }
-	
-	boolean isActive(dateTime)
-	{
+    
+    boolean isActive(dateTime)
+    {
         if (!recovery)
-		{
-			return !deploymentDateTime.isAfter(dateTime)
+        {
+            return !deploymentDateTime.isAfter(dateTime)
         }
         
         return (!deploymentDateTime.isAfter(dateTime)) && dateTime.isBefore(recovery?.recoveryDateTime)
-	}
-	
-	ReceiverDeployment toKmlClone(List<ValidDetection> detections)
-	{
-		ReceiverDeployment kmlClone = new ReceiverDeployment(receiver: this.receiver, deploymentDateTime: this.deploymentDateTime)
-		
-		kmlClone.detections.addAll(detections.grep { it.receiverDeployment.id == this.id })
-		
-		return kmlClone
-	}
+    }
+    
+    ReceiverDeployment toKmlClone(List<ValidDetection> detections)
+    {
+        ReceiverDeployment kmlClone = new ReceiverDeployment(receiver: this.receiver, deploymentDateTime: this.deploymentDateTime)
+        
+        kmlClone.detections.addAll(detections.grep { it.receiverDeployment.id == this.id })
+        
+        return kmlClone
+    }
 }

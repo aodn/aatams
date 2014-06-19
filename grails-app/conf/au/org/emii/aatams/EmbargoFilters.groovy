@@ -11,7 +11,7 @@ import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
  */
 class EmbargoFilters
 {
-	def grailsApplication
+    def grailsApplication
     def embargoService
 
     def notListActions = 'show|edit|update|delete'
@@ -52,22 +52,22 @@ class EmbargoFilters
             }
         }
     }
-	
-	def getRedirectParams(params)
-	{
-		if (SecurityUtils.subject.isAuthenticated())
-		{
-			return [controller:"auth", action:"unauthorized"]
-		}
-		else
-		{
-			return [controller: "auth", action: "login", params: [targetUri: getTargetUri(params)]]
-		}
-	}
+    
+    def getRedirectParams(params)
+    {
+        if (SecurityUtils.subject.isAuthenticated())
+        {
+            return [controller:"auth", action:"unauthorized"]
+        }
+        else
+        {
+            return [controller: "auth", action: "login", params: [targetUri: getTargetUri(params)]]
+        }
+    }
 
-	def getTargetUri(params) 
-	{
-		return new ApplicationTagLib().createLink(absolute: true, controller: params.controllerName, action: params.actionName, id: params.id)
-	}
+    def getTargetUri(params) 
+    {
+        return new ApplicationTagLib().createLink(absolute: true, controller: params.controllerName, action: params.actionName, id: params.id)
+    }
 }
 

@@ -20,23 +20,23 @@ abstract class FileFormat
 {
     abstract Map parseRow(row) throws FileFormatException
     
-	static FileFormat newFormat(type)
-	{
-		if (type == ReceiverDownloadFileType.DETECTIONS_CSV)
-		{
-			return new VueDetectionFormat()
-		}
-		else if (type == ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV)
-		{
-			return new CsiroDetectionFormat()
-		}
+    static FileFormat newFormat(type)
+    {
+        if (type == ReceiverDownloadFileType.DETECTIONS_CSV)
+        {
+            return new VueDetectionFormat()
+        }
+        else if (type == ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV)
+        {
+            return new CsiroDetectionFormat()
+        }
         else if (type == ReceiverDownloadFileType.EVENTS_CSV)
         {
             return new EventFormat()
         }
 
-		throw new IllegalArgumentException("Unknown detection format: " + type)
-	}
+        throw new IllegalArgumentException("Unknown detection format: " + type)
+    }
 
     protected def getUtcDate(row, timestampColumn, dateFormat)
     {

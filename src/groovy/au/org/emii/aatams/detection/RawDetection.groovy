@@ -23,7 +23,7 @@ abstract class RawDetection
      * UTC timestamp.
      */
     Date timestamp
-	
+    
     String receiverName
     
     String stationName
@@ -50,7 +50,7 @@ abstract class RawDetection
     
     static transients = ['scrambledLocation', 'valid', 'formattedTimestamp']
 
-	static constraints = 
+    static constraints = 
     {
         transmitterName(nullable:true, blank:true)
         transmitterSerialNumber(nullable:true, blank:true)
@@ -58,11 +58,11 @@ abstract class RawDetection
         sensorUnit(nullable:true, blank:true)
         stationName(nullable:true, blank:true)
         location(nullable:true)
-		
-		// Workaround for problem where jenkins build is failing - not sure why.
-		// Getting "ValidationException" when trying to save ValidDetection.
-		scrambledLocation(nullable:true)
-		formattedTimestamp(nullable:true)
+        
+        // Workaround for problem where jenkins build is failing - not sure why.
+        // Getting "ValidationException" when trying to save ValidDetection.
+        scrambledLocation(nullable:true)
+        formattedTimestamp(nullable:true)
     }
 
 //    static belongsTo = [receiverDownload:ReceiverDownloadFile]
@@ -73,7 +73,7 @@ abstract class RawDetection
 //        transmitterId index:'transmitterId_index'
 //        receiverName index:'receiverName_index'
         cache true
-		location type: GeometryUserType
+        location type: GeometryUserType
     }
     
     boolean isValid()
@@ -88,22 +88,22 @@ abstract class RawDetection
     {
         return GeometryUtils.scrambleLocation(location)
     }
-	
-	static DateFormat formatter
-	
-	String getFormattedTimestamp()
-	{
-		if (timestamp)
-		{
-			if (!formatter)
-			{
-				formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-				formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-			}
-			
-			return formatter.format(timestamp)
-		}
-		
-		return null
-	}
+    
+    static DateFormat formatter
+    
+    String getFormattedTimestamp()
+    {
+        if (timestamp)
+        {
+            if (!formatter)
+            {
+                formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+            }
+            
+            return formatter.format(timestamp)
+        }
+        
+        return null
+    }
 }

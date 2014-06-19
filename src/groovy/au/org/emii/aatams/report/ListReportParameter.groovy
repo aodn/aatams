@@ -17,11 +17,11 @@ class ListReportParameter extends ReportParameter
         return "/report/filter/listTemplate"
     }
     
-	String getRestrictionName()
-	{
-		return "eq"
-	}
-	
+    String getRestrictionName()
+    {
+        return "eq"
+    }
+    
     /**
      * Returns the model which can be passed to GSP/render.
      */

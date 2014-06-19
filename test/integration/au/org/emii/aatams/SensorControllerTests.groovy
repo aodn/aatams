@@ -5,22 +5,22 @@ import grails.test.*
 
 class SensorControllerTests extends AbstractControllerUnitTestCase
 {
-	protected void setUp()
-	{
-		super.setUp()
+    protected void setUp()
+    {
+        super.setUp()
 
-		controller.params.format = "CSV"
-	}
-	
-	void testExecuteSensorPermitted()
-	{
-		permitted = true
-		assertExport([:], "testExecuteSensorPermitted")
-	}
+        controller.params.format = "CSV"
+    }
+    
+    void testExecuteSensorPermitted()
+    {
+        permitted = true
+        assertExport([:], "testExecuteSensorPermitted")
+    }
 
-	void testExecuteSensorNotPermitted()
-	{
-		permitted = false
-		assertExport([:], "testExecuteSensorNotPermitted")
-	}
+    void testExecuteSensorNotPermitted()
+    {
+        permitted = false
+        assertExport([:], "testExecuteSensorNotPermitted")
+    }
 }

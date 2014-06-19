@@ -224,11 +224,11 @@ class ProjectController {
         }
     }
 
-	def lookupByName =
-	{
-		log.debug("Looking up projects matching: " + params.term)
-		def projectsMatchingName = Project.findAllByNameIlike('%' + params.term + '%')
-		log.debug("Matching projects: " + projectsMatchingName)
-		render(projectsMatchingName as JSON)
-	}
+    def lookupByName =
+    {
+        log.debug("Looking up projects matching: " + params.term)
+        def projectsMatchingName = Project.findAllByNameIlike('%' + params.term + '%')
+        log.debug("Matching projects: " + projectsMatchingName)
+        render(projectsMatchingName as JSON)
+    }
 }

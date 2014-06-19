@@ -5,29 +5,29 @@ import org.apache.shiro.SecurityUtils
 
 class AuditLogEventController extends org.codehaus.groovy.grails.plugins.orm.auditable.AuditLogEventController {
 
-	private static String TARGET = 'org.codehaus.groovy.grails.plugins.orm.auditable.AuditLogEventController.TARGET'
+    private static String TARGET = 'org.codehaus.groovy.grails.plugins.orm.auditable.AuditLogEventController.TARGET'
 
-	def list = {
+    def list = {
 
-		params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
+        params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
 
-		if (!params.sort && ! params.order)
-		{
-			params.sort = 'dateCreated'
-			params.order = 'desc'
-		}
+        if (!params.sort && ! params.order)
+        {
+            params.sort = 'dateCreated'
+            params.order = 'desc'
+        }
 
-		if (SecurityUtils.subject.hasRole("SysAdmin"))
-		{
-			[auditLogEventInstanceList: AuditLogEvent.list(params), auditLogEventInstanceTotal: AuditLogEvent.count()]
-		}
-		else
+        if (SecurityUtils.subject.hasRole("SysAdmin"))
+        {
+            [auditLogEventInstanceList: AuditLogEvent.list(params), auditLogEventInstanceTotal: AuditLogEvent.count()]
+        }
+        else
         {
             Person user = Person.get(SecurityUtils.subject.principal)
-			assert(user)
+            assert(user)
 
-			[auditLogEventInstanceList: AuditLogEvent.findAllByActor(user.username, params),
-			 auditLogEventInstanceTotal: AuditLogEvent.findAllByActor(user.username).size()]
-		}
-	}
+            [auditLogEventInstanceList: AuditLogEvent.findAllByActor(user.username, params),
+             auditLogEventInstanceTotal: AuditLogEvent.findAllByActor(user.username).size()]
+        }
+    }
 }

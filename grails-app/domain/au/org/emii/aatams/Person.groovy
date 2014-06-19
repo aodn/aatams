@@ -13,7 +13,7 @@ class Person extends SecUser
     static belongsTo = [organisation:Organisation]
 
     static transients = ['projects']
-	static auditable = true
+    static auditable = true
 
     String name;
     String emailAddress;
@@ -41,7 +41,7 @@ class Person extends SecUser
         // Speed up candidate entities service/permission utils service.
         cache true
 
-		sort name:"asc"
+        sort name:"asc"
     }
 
     static searchable = [only: ['name', 'description'], except: ['passwordHash', 'permissions', 'roles']]

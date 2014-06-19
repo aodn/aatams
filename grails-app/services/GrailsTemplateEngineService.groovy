@@ -22,18 +22,18 @@ class GrailsTemplateEngineService {
 
         def engine = groovyPagesTemplateEngine
         def requestAttributes = RequestContextHolder.getRequestAttributes()
-		boolean unbindRequest = false
+        boolean unbindRequest = false
 
-		// outside of an executing request, establish a mock version
-		if(!requestAttributes) {
-			def servletContext  = ServletContextHolder.getServletContext()
-			def applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext)
-			requestAttributes = grails.util.GrailsWebUtil.bindMockWebRequest(applicationContext)
-			unbindRequest = true
-		}
+        // outside of an executing request, establish a mock version
+        if(!requestAttributes) {
+            def servletContext  = ServletContextHolder.getServletContext()
+            def applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext)
+            requestAttributes = grails.util.GrailsWebUtil.bindMockWebRequest(applicationContext)
+            unbindRequest = true
+        }
 
-		def servletContext = requestAttributes.request.servletContext
-		def request = requestAttributes.request
+        def servletContext = requestAttributes.request.servletContext
+        def request = requestAttributes.request
 
         def grailsAttributes = new DefaultGrailsApplicationAttributes(servletContext);
         // See if the application has the view for it
@@ -55,8 +55,8 @@ class GrailsTemplateEngineService {
                 r = engine.getResourceForUri(uri)
             }
         }
-		def t = engine.createTemplate( r )
-		
+        def t = engine.createTemplate( r )
+        
         def out = new StringWriter();
         def originalOut = requestAttributes.getOut()
         requestAttributes.setOut(out)
@@ -64,16 +64,16 @@ class GrailsTemplateEngineService {
             if(model instanceof Map) {
                 t.make( model ).writeTo(out)
             }
-    		else {
-    			t.make().writeTo(out)
-    		}
-	    }
-	    finally {
-	        requestAttributes.setOut(originalOut)
-			if(unbindRequest) {
-				RequestContextHolder.setRequestAttributes(null)
-			}
-	    }
+            else {
+                t.make().writeTo(out)
+            }
+        }
+        finally {
+            requestAttributes.setOut(originalOut)
+            if(unbindRequest) {
+                RequestContextHolder.setRequestAttributes(null)
+            }
+        }
 
         return out.toString();
     }
@@ -85,14 +85,14 @@ class GrailsTemplateEngineService {
         if(viewName.startsWith("/")) {
            String tmp = viewName.substring(1,viewName.length());
            if(tmp.indexOf('/') > -1) {
-        	   buf.append('/');
-        	   buf.append(tmp.substring(0,tmp.lastIndexOf('/')));
-        	   buf.append("/");
-        	   buf.append(tmp.substring(tmp.lastIndexOf('/') + 1,tmp.length()));
+               buf.append('/');
+               buf.append(tmp.substring(0,tmp.lastIndexOf('/')));
+               buf.append("/");
+               buf.append(tmp.substring(tmp.lastIndexOf('/') + 1,tmp.length()));
            }
            else {
-        	   buf.append("/");
-        	   buf.append(viewName.substring(1,viewName.length()));
+               buf.append("/");
+               buf.append(viewName.substring(1,viewName.length()));
            }
         }
         else {
@@ -105,7 +105,7 @@ class GrailsTemplateEngineService {
 
         }
         return buf.append(".gsp").toString();
-	}
+    }
 
 }
 

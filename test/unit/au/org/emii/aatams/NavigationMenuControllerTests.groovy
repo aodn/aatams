@@ -29,25 +29,25 @@ class NavigationMenuControllerTests extends AbstractControllerUnitTestCase
         super.tearDown()
     }
 
-	protected def getPrincipal()
-	{
-		return person.id
-	}
+    protected def getPrincipal()
+    {
+        return person.id
+    }
 
-	protected boolean isPermitted(String permission)
-	{
-	    if (permission == "projectWriteAny")
-	    {
-	        return true
-	    }
-	    
-	    return false
-	}	
-	
+    protected boolean isPermitted(String permission)
+    {
+        if (permission == "projectWriteAny")
+        {
+            return true
+        }
+        
+        return false
+    }    
+    
     void testFieldDataControllersAsNonSysAdmin() 
     {
-		hasRole = false
-		
+        hasRole = false
+        
         def fieldDataControllers =
             controller.index().fieldDataControllers
         
@@ -61,7 +61,7 @@ class NavigationMenuControllerTests extends AbstractControllerUnitTestCase
 
     void testFieldDataControllersAsSysAdmin() 
     {
-		hasRole = true
+        hasRole = true
 
         def fieldDataControllers =
             controller.index().fieldDataControllers

@@ -34,10 +34,10 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
     
     def initData()
     {
-		TransmitterType pinger =
-			new TransmitterType(transmitterTypeName:"PINGER").save(failOnError:true)
-		assert(!pinger.hasErrors())
-		
+        TransmitterType pinger =
+            new TransmitterType(transmitterTypeName:"PINGER").save(failOnError:true)
+        assert(!pinger.hasErrors())
+        
 
         Notification receiverRecoveryCreate =
             new Notification(key:"RECEIVER_RECOVERY_CREATE",
@@ -204,15 +204,15 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                        status:EntityStatus.ACTIVE,
                        defaultTimeZone:DateTimeZone.forID("Australia/Adelaide"))
 
-		Person mrPending =
-			new Person(username:'pending',
-					   passwordHash:new Sha256Hash("pending").toHex(),
-					   name:'Pending Pending',
-					   organisation:csiroOrg,
-					   phoneNumber:'5678',
-					   emailAddress:'pending@blah.au',
-					   status:EntityStatus.PENDING,
-					   defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
+        Person mrPending =
+            new Person(username:'pending',
+                       passwordHash:new Sha256Hash("pending").toHex(),
+                       name:'Pending Pending',
+                       organisation:csiroOrg,
+                       phoneNumber:'5678',
+                       emailAddress:'pending@blah.au',
+                       status:EntityStatus.PENDING,
+                       defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
 
         csiroOrg.addToPeople(joeBloggs)
         csiroOrg.addToPeople(johnCitizen)
@@ -301,9 +301,9 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                          status:deployedStatus,
                          model:vemcoVR2,
                          organisation:csiroOrg).save(failOnError: true)
-		csiroOrg.addToReceivers(rx1)
-		csiroOrg.addToReceivers(rx2)
-		
+        csiroOrg.addToReceivers(rx1)
+        csiroOrg.addToReceivers(rx2)
+        
         Receiver rx3 =
             new Receiver(serialNumber:'101338',
                          status:newStatus,
@@ -327,108 +327,108 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                          status:newStatus,
                          model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
-						 
+                         
         Receiver rxWhale =
             new Receiver(serialNumber:'103377',
                          status:deployedStatus,
                          model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
-		imosOrg.addToReceivers(rx3)
-		imosOrg.addToReceivers(rx4)
-		imosOrg.addToReceivers(rx5)
-		imosOrg.addToReceivers(rx6)
-		imosOrg.addToReceivers(rxWhale)
-		
-		csiroOrg.save(failOnError:true)
-		imosOrg.save(failOnError:true)
-		
-		// CodeMaps.
-		createCodeMaps()
-			
-		def a69_111053 = CodeMap.findByCodeMap('A69-1105')	
-		def a69_1303 = CodeMap.findByCodeMap('A69-1303')
-		
+        imosOrg.addToReceivers(rx3)
+        imosOrg.addToReceivers(rx4)
+        imosOrg.addToReceivers(rx5)
+        imosOrg.addToReceivers(rx6)
+        imosOrg.addToReceivers(rxWhale)
+        
+        csiroOrg.save(failOnError:true)
+        imosOrg.save(failOnError:true)
+        
+        // CodeMaps.
+        createCodeMaps()
+            
+        def a69_111053 = CodeMap.findByCodeMap('A69-1105')    
+        def a69_1303 = CodeMap.findByCodeMap('A69-1303')
+        
         //
         // Tags.
         //
-		Tag tag1 = createTag(
-			[serialNumber:'62339',
-			 codeMap:a69_1303,
-			 pingCode:'62339',
+        Tag tag1 = createTag(
+            [serialNumber:'62339',
+             codeMap:a69_1303,
+             pingCode:'62339',
              model:vemcoV8,
              project:sealCountProject,
              status:deployedStatus])
-		
-		Tag tag2 = createTag(
-			[serialNumber:'46601',
-			 codeMap:a69_1303,
-			 pingCode:'46601',
-			 model:vemcoV8,
-			 project:sealCountProject,
-			 status:deployedStatus])
-					
-		Tag tag3 = createTag(
-			[serialNumber:'1111',
-			 codeMap:a69_1303,
-			 pingCode:'11111',
-			 model:vemcoV8,
-			 project:sealCountProject,
-			 status:newStatus])
-			
+        
+        Tag tag2 = createTag(
+            [serialNumber:'46601',
+             codeMap:a69_1303,
+             pingCode:'46601',
+             model:vemcoV8,
+             project:sealCountProject,
+             status:deployedStatus])
+                    
+        Tag tag3 = createTag(
+            [serialNumber:'1111',
+             codeMap:a69_1303,
+             pingCode:'11111',
+             model:vemcoV8,
+             project:sealCountProject,
+             status:newStatus])
+            
         // Bug #352 - this tag won't be selectable if animal release project
         // set to "tuna".
-		Tag tag5 = createTag(
-			[serialNumber:'3333',
-			 codeMap:a69_1303,
-			 pingCode:'3333',
-			 model:vemcoV8,
-			 project:tunaProject,
-			 status:newStatus,
-			 expectedLifeTimeDays:100])
-					
-		Tag tag6 = createTag(
-			[serialNumber:'4444',
-			 codeMap:a69_1303,
-			 pingCode:'4444',
-			 model:vemcoV8,
-			 project:tunaProject,
-			 status:newStatus])
-			
-		Tag orphanTag = createTag(
-			[serialNumber:'5555',
-			 codeMap:a69_1303,
-			 pingCode:'5555',
-			 model:vemcoV8,
-			 status:newStatus])
-		
-		Tag nonEmbargoedTag = createTag(
-			[serialNumber:'6666',
-				codeMap:a69_1303,
-				pingCode:'6666',
-				model:vemcoV8,
-				status:deployedStatus])
+        Tag tag5 = createTag(
+            [serialNumber:'3333',
+             codeMap:a69_1303,
+             pingCode:'3333',
+             model:vemcoV8,
+             project:tunaProject,
+             status:newStatus,
+             expectedLifeTimeDays:100])
+                    
+        Tag tag6 = createTag(
+            [serialNumber:'4444',
+             codeMap:a69_1303,
+             pingCode:'4444',
+             model:vemcoV8,
+             project:tunaProject,
+             status:newStatus])
+            
+        Tag orphanTag = createTag(
+            [serialNumber:'5555',
+             codeMap:a69_1303,
+             pingCode:'5555',
+             model:vemcoV8,
+             status:newStatus])
+        
+        Tag nonEmbargoedTag = createTag(
+            [serialNumber:'6666',
+                codeMap:a69_1303,
+                pingCode:'6666',
+                model:vemcoV8,
+                status:deployedStatus])
 
-		Tag embargoedTag = createTag(
-			[serialNumber:'7777',
-				codeMap:a69_1303,
-				pingCode:'7777',
-				model:vemcoV8,
-				status:deployedStatus])
+        Tag embargoedTag = createTag(
+            [serialNumber:'7777',
+                codeMap:a69_1303,
+                pingCode:'7777',
+                model:vemcoV8,
+                status:deployedStatus])
 
         TransmitterType depth =
             new TransmitterType(transmitterTypeName:"DEPTH").save(failOnError:true)
         TransmitterType temp =
             new TransmitterType(transmitterTypeName:"TEMP").save(failOnError:true)
 
-		Sensor sensor1 =
+        Sensor sensor1 =
             new Sensor(pingCode:'64000',
                     tag:tag1,
                     transmitterType:depth,
                     unit:'m',
                     slope:1,
                     intercept:0)
-		
-		
+        
+        
         Sensor sensor2 =
             new Sensor(pingCode:'65000',
                     tag:tag1,
@@ -436,12 +436,12 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     unit:'k',
                     slope:1,
                     intercept:0)
-		tag1.addToSensors(sensor1)	
-		tag1.addToSensors(sensor2)
-		tag1.save(failOnError:true)
-		
-		a69_1303.save(failOnError:true)
-		
+        tag1.addToSensors(sensor1)    
+        tag1.addToSensors(sensor2)
+        tag1.save(failOnError:true)
+        
+        a69_1303.save(failOnError:true)
+        
         //
         // Installation data.
         //
@@ -453,8 +453,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         Installation bondiLine =
             new Installation(name:'Bondi Line',
                              configuration:curtain,
-                             project:sealCountProject).save(failOnError:true)					 
-		                 
+                             project:sealCountProject).save(failOnError:true)                     
+                         
         Installation ningalooArray =
             new Installation(name:'Ningaloo Array',
                              configuration:array,
@@ -469,7 +469,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new Installation(name:'Whale Curtain',
                              configuration:curtain,
                              project:whaleProject).save(failOnError:true)
-							 
+                             
         WKTReader reader = new WKTReader();
 
         Point location = (Point)reader.read("POINT(30.1234 30.1234)")
@@ -522,7 +522,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                     name:'Whale Station',
                                     curtainPosition:1,
                                     location:(Point)reader.read("POINT(76.02 -20.1234)")).save(failOnError:true)
-									
+                                    
         //
         //  Receiver Deployments.
         //
@@ -628,16 +628,16 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                    receiverOrientation:ReceiverOrientation.UP,
                                    batteryLifeDays:90,
                                    location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
-								   
+                                   
         //
         // Animals and Animal Releases etc.
         //
         CaabSpecies whiteShark = new CaabSpecies(scientificName:"Carcharodon carcharias", commonName:"White Shark", spcode:"37010003").save(failOnError:true)
         CaabSpecies blueFinTuna = new CaabSpecies(scientificName:"Thunnus maccoyii", commonName:"Southern Bluefin Tuna", spcode:"37441004").save(failOnError:true)
         CaabSpecies blueEyeTrevalla = new CaabSpecies(scientificName:"Hyperoglyphe antarctica", commonName:"Blue-eye Trevalla", spcode:"37445001").save(failOnError:true)
-		CaabSpecies southernRightWhale = new CaabSpecies(scientificName:"Eubalaena australis", commonName:"southern right whale", spcode:"41110001").save(failOnError:true)
-		
-		
+        CaabSpecies southernRightWhale = new CaabSpecies(scientificName:"Eubalaena australis", commonName:"southern right whale", spcode:"41110001").save(failOnError:true)
+        
+        
         Sex male = new Sex(sex:'MALE').save(failOnError:true)
         Sex female = new Sex(sex:'FEMALE').save(failOnError:true)
 
@@ -647,11 +647,11 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                         sex:male).save(failOnError:true)
         Animal blueFinTuna1 = new Animal(species:blueFinTuna,
                                          sex:female).save(failOnError:true)
-										 
-		Animal nonEmbargoedWhale = new Animal(species:southernRightWhale,
-			 								  sex:female).save(failOnError:true)
-	    Animal embargoedWhale = new Animal(species:southernRightWhale,
-										   sex:female).save(failOnError:true)
+                                         
+        Animal nonEmbargoedWhale = new Animal(species:southernRightWhale,
+                                               sex:female).save(failOnError:true)
+        Animal embargoedWhale = new Animal(species:southernRightWhale,
+                                           sex:female).save(failOnError:true)
 
 
         AnimalMeasurementType length = new AnimalMeasurementType(type:'LENGTH').save(failOnError:true)
@@ -709,33 +709,33 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                               releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
                               releaseDateTime:new DateTime("2011-05-15T14:15:00")).save(failOnError:true)
     
-	    AnimalRelease nonEmbargoedWhaleRelease =
-	        new AnimalRelease(project:whaleProject,
-						surgeries:[],
-						measurements:[],
-						animal:nonEmbargoedWhale,
-						captureLocality:'Neptune Islands',
-						captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
-						captureDateTime:new DateTime("2011-05-15T14:10:00"),
-						captureMethod:net,
-						releaseLocality:'Neptune Islands',
-						releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
-						releaseDateTime:new DateTime("2011-05-15T14:15:00")).save(failOnError:true)
-				  
-	    AnimalRelease embargoedWhaleRelease =
-	        new AnimalRelease(project:whaleProject,
-						surgeries:[],
-						measurements:[],
-						animal:embargoedWhale,
-						captureLocality:'Neptune Islands',
-						captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
-						captureDateTime:new DateTime("2011-05-15T14:10:00"),
-						captureMethod:net,
-						releaseLocality:'Neptune Islands',
-						releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
-						releaseDateTime:new DateTime("2011-05-15T14:15:00"),
-						embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2020-05-15 12:34:56")).save(failOnError:true)
-						
+        AnimalRelease nonEmbargoedWhaleRelease =
+            new AnimalRelease(project:whaleProject,
+                        surgeries:[],
+                        measurements:[],
+                        animal:nonEmbargoedWhale,
+                        captureLocality:'Neptune Islands',
+                        captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
+                        captureDateTime:new DateTime("2011-05-15T14:10:00"),
+                        captureMethod:net,
+                        releaseLocality:'Neptune Islands',
+                        releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
+                        releaseDateTime:new DateTime("2011-05-15T14:15:00")).save(failOnError:true)
+                  
+        AnimalRelease embargoedWhaleRelease =
+            new AnimalRelease(project:whaleProject,
+                        surgeries:[],
+                        measurements:[],
+                        animal:embargoedWhale,
+                        captureLocality:'Neptune Islands',
+                        captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
+                        captureDateTime:new DateTime("2011-05-15T14:10:00"),
+                        captureMethod:net,
+                        releaseLocality:'Neptune Islands',
+                        releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
+                        releaseDateTime:new DateTime("2011-05-15T14:15:00"),
+                        embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2020-05-15 12:34:56")).save(failOnError:true)
+                        
         AnimalMeasurement whiteShark1Length = 
             new AnimalMeasurement(release:whiteShark1Release,
                                   type:length,
@@ -795,7 +795,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         treatmentType:antibiotic)
         nonEmbargoedTag.addToSurgeries(nonEmbargoedWhaleSurgery).save(failOnError:true)
         nonEmbargoedWhaleRelease.addToSurgeries(nonEmbargoedWhaleSurgery).save(failOnError:true)
-		
+        
         Surgery embargoedWhaleSurgery = 
             new Surgery(release:embargoedWhaleRelease,
                         tag:embargoedTag,
@@ -804,7 +804,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         treatmentType:antibiotic)
         embargoedTag.addToSurgeries(embargoedWhaleSurgery).save(failOnError:true)
         embargoedWhaleRelease.addToSurgeries(embargoedWhaleSurgery).save(failOnError:true)
-		
+        
         // Receiver Recovery.
         Calendar cal = Calendar.getInstance()
         cal.set(Calendar.HOUR_OF_DAY, 12)
@@ -853,19 +853,19 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  deployment:whaleDeployment,
                                  batteryLife:12.5f,
                                  batteryVoltage:3.7f).save(failOnError:true)
-								 
+                                 
         createExportWithDetections("export1.csv", jonBurgess, rx1Bondi, rx1, tag1, surgery1, 10)
         createExportWithDetections("export6.csv", jonBurgess, rx1Bondi, rx1, tag2, surgery4, 3)
         createExportWithDetections("export3.csv", jonBurgess, rx2Bondi, rx2, tag2, surgery4, 3)
-		createExportWithDetections("export4.csv", jonBurgess, rx3Ningaloo, rx3, tag3, surgery4, 3)
-		createExportWithDetections("export5.csv", jonBurgess, rx4Heron, rx4, tag5, null, 3)
+        createExportWithDetections("export4.csv", jonBurgess, rx3Ningaloo, rx3, tag3, surgery4, 3)
+        createExportWithDetections("export5.csv", jonBurgess, rx4Heron, rx4, tag5, null, 3)
 
-		createExportWithDetections("nonEmbargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, nonEmbargoedTag, nonEmbargoedWhaleSurgery, 3)
-		createExportWithDetections("embargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, embargoedTag, embargoedWhaleSurgery, 3)
-		createExportWithDetections("unknownTagWhale.csv", joeBloggs, whaleDeployment, rxWhale, [pinger:[transmitterId:"A69-1303-8888"]], null, 3)
-		
-		new Statistics(key: "numValidDetections", value: 31).save(failOnError: true)
-		
+        createExportWithDetections("nonEmbargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, nonEmbargoedTag, nonEmbargoedWhaleSurgery, 3)
+        createExportWithDetections("embargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, embargoedTag, embargoedWhaleSurgery, 3)
+        createExportWithDetections("unknownTagWhale.csv", joeBloggs, whaleDeployment, rxWhale, [pinger:[transmitterId:"A69-1303-8888"]], null, 3)
+        
+        new Statistics(key: "numValidDetections", value: 31).save(failOnError: true)
+        
         ReceiverDownloadFile export2 = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
                                      name:"export2.csv",
@@ -874,38 +874,38 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                      errMsg:"",
                                      requestingUser:jonBurgess).save(failOnError:true)
         
-		DateTime eventDate = new DateTime("2013-05-17T12:54:56")							 
+        DateTime eventDate = new DateTime("2013-05-17T12:54:56")                             
         10.times
         {
             ValidReceiverEvent event =
                 new ValidReceiverEvent(timestamp:eventDate.plusMinutes(it).toDate(),
                                   receiverDeployment:rx2Bondi,
-								  receiverName:"VR2W-101337",
+                                  receiverName:"VR2W-101337",
                                   description:"desc",
                                   data:"123",
                                   units:"m")
                               
             export2.addToEvents(event)
         }
-		
-		5.times
-		{
-			ValidReceiverEvent event =
-				new ValidReceiverEvent(timestamp:eventDate.plusMinutes(it).toDate(),
-								  receiverDeployment:rx3Ningaloo,
-								  receiverName:"VR2W-101338",
-								  description:"other desc",
-								  data:"23.4",
-								  units:"C")
-							  
-			export2.addToEvents(event)
-		}
+        
+        5.times
+        {
+            ValidReceiverEvent event =
+                new ValidReceiverEvent(timestamp:eventDate.plusMinutes(it).toDate(),
+                                  receiverDeployment:rx3Ningaloo,
+                                  receiverName:"VR2W-101338",
+                                  description:"other desc",
+                                  data:"23.4",
+                                  units:"C")
+                              
+            export2.addToEvents(event)
+        }
 
         export2.save(failOnError:true)
     }
 
-	private void createExportWithDetections(String exportName, Person uploader, ReceiverDeployment deployment, Receiver receiver, tag, Surgery surgery, int numDetections)
-	{
+    private void createExportWithDetections(String exportName, Person uploader, ReceiverDeployment deployment, Receiver receiver, tag, Surgery surgery, int numDetections)
+    {
         ReceiverDownloadFile export = 
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
                                      name:exportName,
@@ -916,68 +916,68 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  
         createDetections(deployment, receiver, tag, export, surgery, numDetections)
         export.save(failOnError:true)
-	}
-	
-	private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, tag, ReceiverDownloadFile export1, Surgery surgery1, int numDetections) 
-	{
-		numDetections.times
-		{
-			ValidDetection detection =
-					new ValidDetection(receiverDeployment:rx1Bondi,
-					timestamp: new DateTime("2011-05-17T02:54:00+00:00").plusSeconds(it).toDate(),
-					receiverName: rx1.name,
-					transmitterId: tag.pinger.transmitterId,
-					receiverDownload: export1,
+    }
+    
+    private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, tag, ReceiverDownloadFile export1, Surgery surgery1, int numDetections) 
+    {
+        numDetections.times
+        {
+            ValidDetection detection =
+                    new ValidDetection(receiverDeployment:rx1Bondi,
+                    timestamp: new DateTime("2011-05-17T02:54:00+00:00").plusSeconds(it).toDate(),
+                    receiverName: rx1.name,
+                    transmitterId: tag.pinger.transmitterId,
+                    receiverDownload: export1,
                     provisional: false)
 
-			if (surgery1)
-			{	
-				DetectionSurgery detSurgery =
-						new DetectionSurgery(surgery:surgery1,
-						detection:detection,
-						sensor:tag.pinger)
-				detection.addToDetectionSurgeries(detSurgery)
-			}
-			export1.addToDetections(detection)
-		}
-	}
-	
-	private void createCodeMaps()
-	{
-		["A69", "A180"].each
-		{
-			freq ->
-			
-			["1303", "1601", "9001", "9003", "1206", "1105", "9002", "9004"].each
-			{
-				codeSpace ->
-				
-				CodeMap codeMap = new CodeMap(codeMap:freq + "-" + codeSpace).save(failOnError:true, flush:true)
-			}
-		}
-	}
-	
-	private Tag createTag(params)
-	{
-		TransmitterType pinger =
-			TransmitterType.findByTransmitterTypeName("PINGER")
-		assert(pinger)
-		
-		Tag tag =
-			new Tag(serialNumber:params.serialNumber,
-					codeMap:params.codeMap,
-					model:params.model,
-					project:params.project,
-					status:params.status,
-					expectedLifeTimeDays:params.expectedLifeTimeDays)
-			
-		Sensor sensor = new Sensor(tag:tag, pingCode: params.pingCode, transmitterType: pinger)
-		tag.addToSensors(sensor)
-		
-		tag.save(failOnError:true, flush:true)
-		params.codeMap.addToTags(tag)
-		
-		return tag
-	}
+            if (surgery1)
+            {    
+                DetectionSurgery detSurgery =
+                        new DetectionSurgery(surgery:surgery1,
+                        detection:detection,
+                        sensor:tag.pinger)
+                detection.addToDetectionSurgeries(detSurgery)
+            }
+            export1.addToDetections(detection)
+        }
+    }
+    
+    private void createCodeMaps()
+    {
+        ["A69", "A180"].each
+        {
+            freq ->
+            
+            ["1303", "1601", "9001", "9003", "1206", "1105", "9002", "9004"].each
+            {
+                codeSpace ->
+                
+                CodeMap codeMap = new CodeMap(codeMap:freq + "-" + codeSpace).save(failOnError:true, flush:true)
+            }
+        }
+    }
+    
+    private Tag createTag(params)
+    {
+        TransmitterType pinger =
+            TransmitterType.findByTransmitterTypeName("PINGER")
+        assert(pinger)
+        
+        Tag tag =
+            new Tag(serialNumber:params.serialNumber,
+                    codeMap:params.codeMap,
+                    model:params.model,
+                    project:params.project,
+                    status:params.status,
+                    expectedLifeTimeDays:params.expectedLifeTimeDays)
+            
+        Sensor sensor = new Sensor(tag:tag, pingCode: params.pingCode, transmitterType: pinger)
+        tag.addToSensors(sensor)
+        
+        tag.save(failOnError:true, flush:true)
+        params.codeMap.addToTags(tag)
+        
+        return tag
+    }
 }
 

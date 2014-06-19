@@ -8,7 +8,7 @@ class UrlMappings
             constraints 
             {
                 // id must be numeric.
-				id(matches:/\d*/)
+                id(matches:/\d*/)
             }
         }
         
@@ -16,6 +16,6 @@ class UrlMappings
         
         "500"(view:'/error')
         
-		"/robots.txt" (view: "/robots")
+        "/robots.txt" (view: "/robots")
     }
 }

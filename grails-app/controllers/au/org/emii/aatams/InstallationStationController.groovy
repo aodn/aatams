@@ -15,15 +15,15 @@ class InstallationStationController  extends ReportController
     }
 
     def list = 
-	{
-		doList("installationStation")
-	}
+    {
+        doList("installationStation")
+    }
 
-	def export =
-	{
-		doExport("installationStation")
-	}
-	
+    def export =
+    {
+        doExport("installationStation")
+    }
+    
     def create = {
         def installationStationInstance = new InstallationStation()
         installationStationInstance.properties = params
@@ -129,9 +129,9 @@ class InstallationStationController  extends ReportController
         }
     }
 
-	def lookupByName =
-	{
-		def matches = InstallationStation.findAllByNameIlike('%' + params.term + '%')
-		render(matches as JSON) 
-	}
+    def lookupByName =
+    {
+        def matches = InstallationStation.findAllByNameIlike('%' + params.term + '%')
+        render(matches as JSON) 
+    }
 }

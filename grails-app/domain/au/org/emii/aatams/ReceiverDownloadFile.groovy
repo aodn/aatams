@@ -7,6 +7,8 @@ import au.org.emii.aatams.detection.ValidDetection
 
 import org.apache.shiro.SecurityUtils
 
+import grails.converters.XML
+
 /**
  * Index (and meta-data) to a file which has been downloaded from a receiver as
  * part of the recovery process.
@@ -91,6 +93,11 @@ class ReceiverDownloadFile
     String toString()
     {
         return String.valueOf(path)
+    }
+
+    def toXml() 
+    {
+        this as XML
     }
 
     Integer getPercentComplete()

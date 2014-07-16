@@ -6,8 +6,8 @@ enum ReceiverDownloadFileType
     EVENTS_CSV('events (CSV)'),
     VRL('VRL'),
     RLD('RLD'),
-    CSIRO_DETECTIONS_CSV('CSIRO detections (CSV)')    // Don't want this showing up in the front-end.
-    
+    CSIRO_DETECTIONS_CSV('CSIRO detections (CSV)'),   // Don't want this showing up in the front-end.
+    VUE_XML_ZIPPED('VUE XML zip file')
     
     String type
     
@@ -23,7 +23,7 @@ enum ReceiverDownloadFileType
 
     static list()
     {
-        [DETECTIONS_CSV, EVENTS_CSV, VRL, RLD]
+        [DETECTIONS_CSV, EVENTS_CSV, VRL, RLD, VUE_XML_ZIPPED]
     }
     
     static detectionTypes()
@@ -48,6 +48,8 @@ enum ReceiverDownloadFileType
                 return "vrl"
             case RLD:
                 return "rld"
+            case VUE_XML_ZIPPED:
+                return "zip"
             default:
                 return null
         }
@@ -62,6 +64,7 @@ enum ReceiverDownloadFileType
             case DETECTIONS_CSV:
             case VRL:
             case RLD:
+            case VUE_XML_ZIPPED:
                 return "detections"
             default:
                 return null

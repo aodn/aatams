@@ -6,6 +6,9 @@ import org.springframework.web.multipart.MultipartFile
 import org.apache.shiro.SecurityUtils
 import grails.converters.JSON
 
+import groovy.xml.MarkupBuilder
+
+
 class ReceiverDownloadFileController 
 {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -46,36 +49,62 @@ class ReceiverDownloadFileController
         def fileMap = request.getFileMap()
         if (fileMap.size() != 1)
         {
-            // Error.
-            flash.error = "Number of posted files must be exactly one, you posted: " + fileMap.size()
-            render(view: "create", model: [receiverDownloadFileInstance: receiverDownloadFileInstance])
+            withFormat {
+                html {
+                    flash.error = "Number of posted files must be exactly one, you posted: " + fileMap.size()
+                    render(view: "create", model: [receiverDownloadFileInstance: receiverDownloadFileInstance])
+                }
+                xml {
+                    def xmlContent = new StringWriter()
+                    def xmlBuilder = new MarkupBuilder(xmlContent)
+                    xmlBuilder.mkp.xmlDeclaration(version: "1.0", encoding: "utf-8")
+
+                    xmlBuilder.receiverDownloadFileSaveRequest(
+                        errMsg: 'No file uploaded'
+                    )
+                    response.status = 400
+
+                    render(contentType: 'text/xml', text: xmlContent.toString())
+                }
+            }
         }
         else
         {
-            MultipartFile file = (fileMap.values() as List)[0]
-            receiverDownloadFileInstance.initialiseForProcessing(file.getOriginalFilename())
-            receiverDownloadFileInstance.save(flush: true, failOnError: true)
-            
-            flash.message = "${message(code: 'default.processing.receiverUpload.message')}"
-            
-            // Define this in web thread, as it fails if done async.
-            def downloadFileId = receiverDownloadFileInstance.id
-            def showLink = createLink(action:'show', id:downloadFileId, absolute:true)
-
-            FileProcessorJob.triggerNow([downloadFileId: downloadFileId, file: file, showLink: showLink])
-            
-            redirect(action: "show", id: downloadFileId)
+            _processRxrDownload(receiverDownloadFileInstance)
+            redirect(action: "show", id: receiverDownloadFileInstance.id, params: params)
         }
+    }
+
+    def _processRxrDownload(receiverDownloadFileInstance) {
+        MultipartFile file = (request.fileMap.values() as List)[0]
+        receiverDownloadFileInstance.initialiseForProcessing(file.getOriginalFilename())
+        receiverDownloadFileInstance.save(flush: true, failOnError: true)
+            
+        flash.message = "${message(code: 'default.processing.receiverUpload.message')}"
+            
+        // Define this in web thread, as it fails if done async.
+        def downloadFileId = receiverDownloadFileInstance.id
+        def showLink = createLink(action:'show', id:downloadFileId, absolute:true)
+
+        FileProcessorJob.triggerNow([downloadFileId: downloadFileId, file: file, showLink: showLink])
     }
 
     def show = {
         def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
+
         if (!receiverDownloadFileInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), params.id])}"
             redirect(action: "list")
         }
         else {
-            [receiverDownloadFileInstance: receiverDownloadFileInstance]
+            withFormat {
+                html {
+                    [receiverDownloadFileInstance: receiverDownloadFileInstance]
+                }
+                xml {
+                    render receiverDownloadFileInstance.toXml()
+                }
+            }
         }
     }
 

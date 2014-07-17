@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x
 
-AATAMS_URL="http://localhost:8080/aatams"
+AATAMS_URL="http://aatams-rc.emii.org.au/aatams"
 COOKIE_FILE=`mktemp`
 CURL_AUTH_CMD="curl -b ${COOKIE_FILE} -i"
 

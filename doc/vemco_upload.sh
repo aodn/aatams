@@ -1,7 +1,6 @@
 #!/bin/bash
-set -x
 
-AATAMS_URL="http://aatams-rc.emii.org.au/aatams"
+AATAMS_URL="http://aatams-rc.aodn.org.au/aatams"
 COOKIE_FILE=`mktemp`
 CURL_AUTH_CMD="curl -b ${COOKIE_FILE} -i"
 
@@ -18,4 +17,4 @@ ${CURL_AUTH_CMD} -L "${AATAMS_URL}/receiverDownloadFile/save?format=xml" \
 #     -H "Accept: application/xml"
 
 # Cleanup.
-rm ${COOKIE_FILE}
+rm -f ${COOKIE_FILE}

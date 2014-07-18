@@ -3,6 +3,7 @@ import au.org.emii.aatams.data.*
 import au.org.emii.aatams.detection.*
 
 import grails.converters.JSON
+import grails.converters.XML
 
 import com.vividsolutions.jts.geom.Point
 import com.vividsolutions.jts.io.ParseException
@@ -11,6 +12,8 @@ import com.vividsolutions.jts.io.WKTReader
 import org.apache.shiro.crypto.hash.Sha256Hash
 import org.joda.time.*
 import org.joda.time.format.DateTimeFormat
+
+import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
 
 import com.vividsolutions.jts.geom.Point
 
@@ -199,6 +202,21 @@ class BootStrap
             returnArray['model'] = it.tag.model
 
             return returnArray
+        }
+
+        XML.registerObjectMarshaller ReceiverDownloadFile.class, {
+            rxrDownloadFile, xml ->
+
+            xml.attribute 'id', String.valueOf(rxrDownloadFile.id)
+            xml.attribute 'type', String.valueOf(rxrDownloadFile.type)
+            xml.attribute 'name', String.valueOf(rxrDownloadFile.name)
+            xml.attribute 'importDate', String.valueOf(rxrDownloadFile.importDate)
+            xml.attribute 'status', String.valueOf(rxrDownloadFile.status)
+            xml.attribute 'errMsg', String.valueOf(rxrDownloadFile.errMsg)
+            xml.attribute 'requestingUser', String.valueOf(rxrDownloadFile.requestingUser)
+            xml.attribute 'percentComplete', String.valueOf(rxrDownloadFile.progress?.percentComplete)
+            xml.attribute 'link', String.valueOf(
+                new ApplicationTagLib().createLink(action: 'show', id: rxrDownloadFile.id, absolute:true))
         }
 
         // Required for following metaclass override to "stick".

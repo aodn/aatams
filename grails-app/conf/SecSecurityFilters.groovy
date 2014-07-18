@@ -71,7 +71,7 @@ class SecSecurityFilters
                     return true
                 }
 
-                redirect(controller:'auth', action:'unauthorized')
+                redirect(controller:'auth', action:'unauthorized', params: params)
                 return false
             }
         }
@@ -167,7 +167,7 @@ class SecSecurityFilters
                     return true
                 }
 
-                redirect(controller:'auth', action:'unauthorized')
+                redirect(controller:'auth', action:'unauthorized', params: params)
                 return false
             }
         }
@@ -186,7 +186,7 @@ class SecSecurityFilters
                     return true
                 }
 
-                redirect(controller:'auth', action:'unauthorized')
+                redirect(controller:'auth', action:'unauthorized', params: params)
                 return false
             }
         }
@@ -216,7 +216,7 @@ class SecSecurityFilters
                     return true
                 }
 
-                redirect(controller:'auth', action:'unauthorized')
+                redirect(controller:'auth', action:'unauthorized', params: params)
                 return false
             }
         }
@@ -233,7 +233,7 @@ class SecSecurityFilters
                     return true
                 }
 
-                redirect(controller:'auth', action:'unauthorized')
+                redirect(controller:'auth', action:'unauthorized', params: params)
                 return false
             }
         }
@@ -261,7 +261,7 @@ class SecSecurityFilters
                 // Non-authenticated users can't update.
                 if (!SecurityUtils.subject.isAuthenticated())
                 {
-                    redirect(controller:'auth', action:'unauthorized')
+                    redirect(controller:'auth', action:'unauthorized', params: params)
                 }
 
                 // The user whose record is being updated.
@@ -298,7 +298,7 @@ class SecSecurityFilters
                 }
 
                 // Non of the update conditions were met if we got this far.
-                redirect(controller:'auth', action:'unauthorized')
+                redirect(controller:'auth', action:'unauthorized', params: params)
                 return false
             }
         }
@@ -324,7 +324,7 @@ class SecSecurityFilters
                     return true
                 }
 
-                redirect(controller:'auth', action:'unauthorized')
+                redirect(controller:'auth', action:'unauthorized', params: params)
                 return false
             }
         }
@@ -349,7 +349,7 @@ class SecSecurityFilters
                     return true
                 }
 
-                redirect(controller:'auth', action:'unauthorized')
+                redirect(controller:'auth', action:'unauthorized', params: params)
                 return false
             }
         }
@@ -369,7 +369,7 @@ class SecSecurityFilters
                     return true
                 }
 
-                redirect(controller:'auth', action:'unauthorized')
+                redirect(controller:'auth', action:'unauthorized', params: params)
                 return false
             }
         }
@@ -390,7 +390,7 @@ class SecSecurityFilters
                     return true
                 }
 
-                redirect(controller:'auth', action:'unauthorized')
+                redirect(controller:'auth', action:'unauthorized', params: params)
                 return false
             }
         }

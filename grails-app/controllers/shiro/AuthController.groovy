@@ -10,6 +10,8 @@ import au.org.emii.aatams.EmbargoService
 import au.org.emii.aatams.EntityStatus
 import au.org.emii.aatams.Person
 
+import groovy.xml.MarkupBuilder
+
 class AuthController {
     def shiroSecurityManager
 
@@ -115,6 +117,25 @@ class AuthController {
     }
 
     def unauthorized = {
-        render "You do not have permission to access this page."
+
+        def errMsg = "You do not have permission to access this page."
+
+        withFormat {
+            html {
+                render errMsg
+            }
+            xml {
+                def xmlContent = new StringWriter()
+                def xmlBuilder = new MarkupBuilder(xmlContent)
+                xmlBuilder.mkp.xmlDeclaration(version: "1.0", encoding: "utf-8")
+
+                xmlBuilder.authorizationRequest(
+                    errMsg: errMsg
+                )
+                response.status = 401
+
+                render(contentType: 'text/xml', text: xmlContent.toString())
+            }
+        }
     }
 }

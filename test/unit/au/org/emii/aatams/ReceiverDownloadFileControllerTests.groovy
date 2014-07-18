@@ -3,6 +3,7 @@ package au.org.emii.aatams
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.test.*
 import grails.converters.JSON
+import grails.converters.XML
 
 class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
 {
@@ -21,11 +22,6 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
         user = new Person(username: "username")
         mockDomain(Person, [user])
         user.save()
-    }
-
-    protected void tearDown()
-    {
-        super.tearDown()
     }
 
     protected def getPrincipal()
@@ -49,12 +45,7 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
 
     void testProgressValidDownload()
     {
-        ReceiverDownloadFile download = new ReceiverDownloadFile(status: FileProcessingStatus.PROCESSING)
-        download.save()
-
-        ReceiverDownloadFileProgress progress = new ReceiverDownloadFileProgress(percentComplete: 73, receiverDownloadFile: download)
-        progress.save()
-        download.progress = progress
+        def download = createDownload()
 
         controller.params.id = download.id
         controller.status()
@@ -77,5 +68,70 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
         assertEquals("", download.errMsg)
         assertEquals("the_filename", download.name)
         assertEquals("username", download.requestingUser.username)
+    }
+
+    void testSaveXmlSuccessRedirectToShow()
+    {
+        controller.request.format = 'xml'
+        controller.params.type = 'VUE_XML_ZIPPED'
+        controller.params.'example.zip' = '@example.zip'
+        
+        controller.request.metaClass.getFileMap = {
+            ['example.zip': []]
+        }
+        controller.metaClass._processRxrDownload = {
+        }
+
+        controller.save()
+
+        assertEquals('show', controller.redirectArgs.action)
+        assertEquals(controller.params, controller.redirectArgs.params)
+    }
+
+    void testSaveXmlBadRequest()
+    {
+        controller.request.format = 'xml'
+        controller.params.type = 'VUE_XML_ZIPPED'
+        controller.params.'example.zip' = '@example.zip'
+        
+        // No file attached.
+        controller.request.metaClass.getFileMap = {
+            [:]
+        }
+
+        controller.save()
+
+        def decodedResponse = new XmlParser().parseText(controller.response.contentAsString)
+
+        assertEquals(400, controller.response.status)
+        assertEquals('No file uploaded', decodedResponse.'@errMsg')
+    }
+
+    void testShowXml() {
+        controller.request.format = 'xml'
+
+        def download = createDownload()
+        controller.params.id = download.id
+
+        download.metaClass.toXml = {
+            "some xml"
+        }
+
+        controller.show()
+
+        assertEquals(200, controller.response.status)
+        assertEquals("some xml", controller.response.contentAsString)
+    }
+
+    def createDownload() 
+    {
+        ReceiverDownloadFile download = new ReceiverDownloadFile(status: FileProcessingStatus.PROCESSING)
+        download.save()
+
+        ReceiverDownloadFileProgress progress = new ReceiverDownloadFileProgress(percentComplete: 73, receiverDownloadFile: download)
+        progress.save()
+        download.progress = progress
+
+        return download
     }
 }

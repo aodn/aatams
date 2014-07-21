@@ -11,6 +11,8 @@ guest_command() {
     vagrant ssh $NODE_NAME -c "$@"
 }
 
+vagrant up $NODE_NAME
+
 if `guest_command "[ ! -f $DUMP_FILE ]"`; then
     echo "Backup dump file '$DUMP_FILE' not found!"
     exit 1
@@ -18,7 +20,6 @@ fi
 
 DB_TOC=`guest_command mktemp`
 
-vagrant up $NODE_NAME
 vagrant provision $NODE_NAME
 
 guest_command "sudo service tomcat7_aatams_rc start"

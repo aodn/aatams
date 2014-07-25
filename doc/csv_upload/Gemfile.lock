@@ -1,0 +1,14 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    httpclient (2.3.4.1)
+    mini_portile (0.6.0)
+    nokogiri (1.6.3.1)
+      mini_portile (= 0.6.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  httpclient
+  nokogiri

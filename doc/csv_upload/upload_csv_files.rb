@@ -7,13 +7,13 @@ require 'trollop'
 # Feed a list of filenames to this script, as such:
 #
 # # This *should* only include detections files (as opposed to events files also).
-# $ grep -Rl "Transmitter" * | ~/git/aatams/doc/csv_upload/upload_csv_files.rb
+# $ grep -Rl "Transmitter" * | ~/git/aatams/doc/csv_upload/upload_csv_files.rb --url <url> --username <username> --password <password>
 #
 
 $http = HTTPClient.new
 
-def authenticate(aatams_url)
-  $http.post "#{aatams_url}/auth/signIn", :username => 'jkburges', :password => 'password'
+def authenticate(opts)
+  response = $http.post "#{opts[:url]}/auth/signIn?format=xml", :username => opts[:username], :password => opts[:password]
 end
 
 def upload_files(aatams_url)
@@ -50,10 +50,13 @@ def main
 
   opts = Trollop::options do
     opt :url, "AATAMS URL", :default => "http://localhost:8080/aatams"
+    opt :username, "username", :required => true, :type => :string
+    opt :password, "password", :required => true, :type => :string
   end
 
-  authenticate opts[:url]
+  authenticate opts
   upload_files opts[:url]
+
 end
 
 main

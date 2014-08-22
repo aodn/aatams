@@ -6,7 +6,7 @@ Feature: protected releases
 
 Scenario Outline: project protection configuration
     Given I have navigated to the "Create/Edit Project" screen
-    Given I am <auth level>   # logged in as a sys admin
+    Given I am <auth level>
     Then a check box labelled "Protected" will be <visibility> # visible and enabled
 
     Examples:
@@ -51,7 +51,7 @@ Scenario Outline: protection notification
 
 Scenario Outline: detection and release visibility
     Given there is a protected release with associated detections
-    And I am <auth level>   # I am not logged in
+    And I am <auth level>
     And the current date is <relative date> the protected release's embargo expiry date  # before or equal to
     Then the detections, releases and associated entities shall be <visibility> # not visible or downloadable
 

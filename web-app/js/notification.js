@@ -42,13 +42,13 @@ $(function()
                    style: { 
                       width: 200,
                       padding: 5,
-                      background: '#FFFF66',
+                      background: '#99CCFF',
                       color: 'black',
                       textAlign: 'center',
                       border: {
                          width: 5,
                          radius: 7,
-                         color: '#FFFF66'
+                         color: '#99CCFF'
                       },
                       tip: tip,
                       name: 'dark' // Inherit the rest of the attributes from the preset dark style

@@ -6,4 +6,6 @@ databaseChangeLog = {
     include file: 'truncate_instead_of_delete_on_refresh_matview.groovy'
     include file: 'add_project_name_index.groovy'
     include file: 'trim_serial_numbers.groovy'
+    include file: '20140827-AS-AddUnavailabilityNotification.groovy'
+    include file: '20140827-AS-AddReceiverModel.groovy'
 }

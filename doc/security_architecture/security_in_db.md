@@ -10,7 +10,7 @@ The high-level requirements are:
 
 *Note: in the images below, the small boxes contain either the text "sec", "security" or "WFS" (since it's a little hard to read).*
 
-<img src="current.tiff" />
+<img src="current.png" />
 
 Currently, security is *mostly* handled by the AATAMS web application, with rules based around a user's membership of projects and/or organisations, in combination with certain permission levels applied to individual records (e.g. whether or not a particular release is embargoed).
 
@@ -33,7 +33,7 @@ Disadvantes:
 
 ## Security in DB
 
-<img src="sec_in_db.tiff" />
+<img src="sec_in_db.png" />
 
 Here, *all* of the security logic is pushed down in to the database.
 
@@ -53,7 +53,7 @@ Disadvantages:
 
 ## Web App implements WFS
 
-<img src="webapp_as_proxy.tiff" />
+<img src="webapp_as_proxy.png" />
 
 In this scenario, the AATAMS web-app itself would provide certain WFS end-points (e.g. for `detections`, `deployments`).
 
@@ -71,7 +71,7 @@ Disadvantages:
 
 ## Harvest public data
 
-<img src="harvest_public.tiff" />
+<img src="harvest_public.png" />
 
 Here, a scheduled job could harvest public data, which would be the source for geoserver.
 

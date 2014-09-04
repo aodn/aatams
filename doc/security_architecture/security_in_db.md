@@ -69,6 +69,27 @@ Disadvantages:
 * would have to implement WFS encoders etc in the web app (although, probably using a 3rd party library to do most of the heavy lifting)
 * possibly some performance penalties (i.e. latency)
 
+## AATAMS GeoTools Data Source
+
+<img src="geotools_data_source.png" />
+
+In this scenario, a custom GeoTools "AATAMS data source" is implemented and added to geoserver, which can the pull data from AATAMS (as opposed to a PostGIS DB or shapefile, for example).
+
+See [this custom data store example](http://docs.geotools.org/stable/tutorials/advanced/datastore.html).
+
+Advantages:
+
+* security logic in one place only
+* no need to port security logic to database
+* less coding and more flexible that WFS above
+
+Disadvantages:
+
+* XML encoders for AATAMS types
+* need to develop geotools plugin and install in geoserver
+* performance penalties
+
+
 ## Harvest public data
 
 <img src="harvest_public.png" />

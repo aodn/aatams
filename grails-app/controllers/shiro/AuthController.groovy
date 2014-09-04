@@ -56,26 +56,33 @@ class AuthController {
 
             redirectToTargetUrl(targetUri)
         }
-        catch (AuthenticationException ex){
-            // Authentication failed, so display the appropriate message
-            // on the login page.
-            log.info "Authentication failure for user '${params.username}'."
-            flash.message = message(code: "login.failed")
+        catch (AuthenticationException ex) {
+            withFormat {
+                html {
+                    // Authentication failed, so display the appropriate message
+                    // on the login page.
+                    log.info "Authentication failure for user '${params.username}'."
+                    flash.message = message(code: "login.failed")
 
-            // Keep the username and "remember me" setting so that the
-            // user doesn't have to enter them again.
-            def m = [ username: params.username ]
-            if (params.rememberMe) {
-                m["rememberMe"] = true
+                    // Keep the username and "remember me" setting so that the
+                    // user doesn't have to enter them again.
+                    def m = [ username: params.username ]
+                    if (params.rememberMe) {
+                        m["rememberMe"] = true
+                    }
+
+                    // Remember the target URI too.
+                    if (params.targetUri) {
+                        m["targetUri"] = params.targetUri
+                    }
+
+                    // Now redirect back to the login page.
+                    redirect(action: "login", params: m)
+                }
+                xml {
+                    redirect(action: "unauthorized", params: params)
+                }
             }
-
-            // Remember the target URI too.
-            if (params.targetUri) {
-                m["targetUri"] = params.targetUri
-            }
-
-            // Now redirect back to the login page.
-            redirect(action: "login", params: m)
         }
     }
 
@@ -119,6 +126,8 @@ class AuthController {
     def unauthorized = {
 
         def errMsg = "You do not have permission to access this page."
+
+        println "in unauthorized, params: ${params}"
 
         withFormat {
             html {

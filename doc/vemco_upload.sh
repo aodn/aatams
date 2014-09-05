@@ -5,7 +5,7 @@ COOKIE_FILE=`mktemp`
 CURL_AUTH_CMD="curl -b ${COOKIE_FILE} -i"
 
 # Authenticate.
-curl "${AATAMS_URL}/auth/signIn" --data "username=vemco&password=vemco"  -c ${COOKIE_FILE}
+curl -L "${AATAMS_URL}/auth/signIn?format=xml" --data "username=vemco&password=vemco"  -c ${COOKIE_FILE}
 
 # Upload data.
 ${CURL_AUTH_CMD} -L "${AATAMS_URL}/receiverDownloadFile/save?format=xml" \

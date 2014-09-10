@@ -82,12 +82,15 @@ Advantages:
 * security logic in one place only
 * no need to port security logic to database
 * less coding and more flexible that WFS above
+* XML interface useful for other applications
+* implementation of "protected species" could be done independently of this
 
 Disadvantages:
 
 * XML encoders for AATAMS types
 * need to develop geotools plugin and install in geoserver
 * performance penalties
+* limits on what layers could be constructed (c.f. free-form SQL)
 
 
 ## Harvest public data

@@ -110,6 +110,31 @@ Disadvantages:
 * an extra service/harvester to run
 * possibly duplicated security logic (although the web app could itself be the harvester)
 
+## Harvest from AATAMS Web App
+
+<img src="harvest_from_webapp.png" />
+
+One of the layers that we want to publish is something along the lines of counts of distinct species detected at each station.  As this would involve aggregating data from the entire detections table (upwards of 50M rows), it's not feasible to do this in real time.
+
+None of the suggested architectures above can meet this requirement - a harvester is needed. So, building on @pmbohm's [suggestion above](## Harvest public data), on a regular basis, a harvester could harvest data from the *web app* and store it in a data warehouse database for geoserver to access.
+
+Advantages:
+
+* meets the requirement for detection counts
+* security logic in one place only
+* no need to port security logic to database
+* XML interface useful for other applications
+* no need to develop geotools plugin
+* implementation of "protected species" could be done independently of this
+* more flexibility as the harvester could potentially pull data from several XML services available in the app
+* architecure more closely aligned with how other collections are published (except harvesting from a webservice as opposed to NetCDF etc.)
+
+Disadvantages:
+
+* XML encoders for AATAMS types
+* "public" data only, no mechanism to see privileged data
+* an extra service/harvester to run
+* if permissions are tightened for a particular set of data in the AATAMS DB, it may take some time for this to flow through to the harvested data
 
 
 # Implementation Notes

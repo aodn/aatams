@@ -129,7 +129,7 @@
     
     <div class="ui-layout-north">
       <div id="logo">
-        <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS_Facility_8.jpg')}" alt="IMOS Logo"  /></a>
+        <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS_Facility_8.png')}" alt="IMOS Logo"  /></a>
         
         <div id="userlogin">
           <!-- Shown if not logged in. -->

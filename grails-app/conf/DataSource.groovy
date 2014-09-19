@@ -1,7 +1,5 @@
 dataSource {
     pooled = true
-    username = "aatams"
-    password = "aatams"
     driverClassName = "org.postgresql.Driver"
 
     properties
@@ -19,11 +17,15 @@ hibernate {
     show_sql = false
 }
 
+def env = System.getenv()
+
 // environment specific settings
 environments {
     development {
         dataSource {
-                url = "jdbc:postgresql://localhost:5432/aatams"
+            url = env['AATAMS_DATA_SOURCE_URL'] ?: "jdbc:postgresql://localhost:5432/aatams"
+            username = env['AATAMS_DATA_SOURCE_USERNAME'] ?: "aatams"
+            password = env['AATAMS_DATA_SOURCE_PASSWORD'] ?: "aatams"
         }
     }
 

@@ -181,18 +181,18 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         assertEquals('/project/lookupByName', filterParams[0].lookupPath)
         assertEquals("/report/filter/ajaxMultiSelectTemplate", filterParams[0].template)
 
-           assertEquals("installation", filterParams[1].label)
+        assertEquals("installation", filterParams[1].label)
         assertEquals("receiverDeployment.station.installation", filterParams[1].associationName)
         assertEquals("name", filterParams[1].propertyName)
 
-           assertEquals("station", filterParams[2].label)
+        assertEquals("station", filterParams[2].label)
         assertEquals("receiverDeployment.station", filterParams[2].associationName)
         assertEquals("name", filterParams[2].propertyName)
 
-           assertEquals("timestamp", filterParams[5].label)
-        assertEquals("timestamp", filterParams[5].propertyName)
-        assertTrue(filterParams[5] instanceof DateRangeReportParameter)
-        assertEquals(new DateTime("2011-03-01T12:34:56").toDate(), filterParams[5].minRange)
+        assertEquals("timestamp", filterParams[4].label)
+        assertEquals("timestamp", filterParams[4].propertyName)
+        assertTrue(filterParams[4] instanceof DateRangeReportParameter)
+        assertEquals(new DateTime("2011-03-01T12:34:56").toDate(), filterParams[4].minRange)
     }
 
     void testFilterParamsToReportFormat()

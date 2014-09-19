@@ -20,7 +20,8 @@ import de.micromata.opengis.kml.v_2_2_0.TimeStamp
 class ValidDetection extends RawDetection implements Embargoable
 {
     static belongsTo = [receiverDownload:ReceiverDownloadFile, receiverDeployment: ReceiverDeployment]
-    static transients = RawDetection.transients + ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames', 'placemark']
+    static transients = RawDetection.transients +
+        ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames', 'surgeries', 'placemark']
 
     /**
      * This is a part of an optimisation for #2239.  All new detections are marked provisional.  Subsequently,
@@ -98,6 +99,12 @@ class ValidDetection extends RawDetection implements Embargoable
     Project getProject()
     {
         return firstDetectionSurgery?.surgery?.release?.project
+    }
+
+    def getSurgeries()
+    {
+        // TODO: implement this!
+        return Collections.emptyList()
     }
 
     /**

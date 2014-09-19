@@ -6,20 +6,20 @@ import au.org.emii.aatams.detection.ValidDetection
 /**
  * This service allows clients to  retrieve a list of available reports, along
  * with applicable filter parameters
- *   
+ *
  *   TODO: may move modelling of ReportInfo and associated parameters to domain classes.
  */
-class ReportInfoService 
+class ReportInfoService
 {
     static transactional = false
 
     def permissionUtilsService
-    
+
     def detectionTimestampMin
     def eventTimestampMin
-    
+
     static final String MEMBER_PROJECTS = "My Projects"
-    
+
     /**
      * Mapping between report name and relevant domain class.
      * Saves clients from having to know anything about internal package
@@ -31,7 +31,6 @@ class ReportInfoService
          "animalReleaseSummary": "au.org.emii.aatams.report.AnimalReleaseSummaryService",
          "animalRelease": "au.org.emii.aatams.AnimalRelease",
          "detection": "au.org.emii.aatams.detection.ValidDetection",
-         "detectionSurgery": "au.org.emii.aatams.DetectionSurgery",
          "installation": "au.org.emii.aatams.Installation",
          "installationStation": "au.org.emii.aatams.InstallationStation",
          "person": "au.org.emii.aatams.Person",
@@ -50,16 +49,12 @@ class ReportInfoService
     static def speciesCommonName = "species common name"
     static def speciesScientificName = "species scientific name"
     static def tagId = "tag ID"
-    
+
     static def propertyToLabel =
         ["animal.species.spcode": speciesCaabLabel,
          "animal.species.commonName": speciesCommonName,
          "animal.species.scientificName": speciesScientificName,
          "codeName": tagId,
-         "detectionSurgeries.surgery.release.animal.species.spcode": speciesCaabLabel,
-         "detectionSurgeries.surgery.release.animal.species.commonName": speciesCommonName,
-         "detectionSurgeries.surgery.release.animal.species.scientificName": speciesScientificName,
-         "detectionSurgeries.sensor.transmitterId": tagId,
          "releaseDateTime": "release date/time",
          "receiverDeployment.station.installation.project.name": "project",
          "receiverDeployment.station.installation.name": "installation",
@@ -74,11 +69,12 @@ class ReportInfoService
          "installation.project.name": "project",
          "station.installation.project.name": "project",
          "station.installation.name": "installation",
+         "surgeries.release.animal.species.spcode": speciesCaabLabel,
          "surgeries.tag.sensors.transmitterId": tagId,
          "tag.project.name": "project",
          "timestamp": "timestamp",
          "transmitterId": tagId]
-    
+
     static def reportNameToClass =
         ["animal": Animal.class,
          "animalMeasurement": AnimalMeasurement.class,
@@ -99,7 +95,7 @@ class ReportInfoService
          "surgery": Surgery.class,
          "tag": Tag.class
          ]
-     
+
     private def getDetectionTimestampMin()
     {
         if (!detectionTimestampMin)
@@ -112,9 +108,9 @@ class ReportInfoService
                 }
             }
         }
-        
+
         return detectionTimestampMin
-    }       
+    }
 
     private def getEventTimestampMin()
     {
@@ -128,28 +124,28 @@ class ReportInfoService
                 }
             }
         }
-        
+
         return detectionTimestampMin
     }
 
     /**
      * Return info for all available reports (keyed by the domain class).
      */
-    Map<Class, ReportInfo> getReportInfo() 
+    Map<Class, ReportInfo> getReportInfo()
     {
         def projectRange = Project.list()*.name
-        
+
         if (permissionUtilsService.isAuthenticated())
         {
             projectRange.add(0, MEMBER_PROJECTS)
         }
-        
+
         def organisationRange = Organisation.findAllByStatus(EntityStatus.ACTIVE)*.name
         def installationRange = Installation.list()*.name
-        
+
         def timestampMin = getDetectionTimestampMin()
         def timestampMax = new Date()
-        
+
         def animalReleaseFilterParams =
         [
             new ListReportParameter(label: propertyToLabel["project.name"], associationName: "project", propertyName:"name", range:projectRange),
@@ -162,44 +158,40 @@ class ReportInfoService
                                                propertyName:"spcode",
                                                lookupPath:"/species/lookupByNameAndReturnSpcode")
         ]
-        
-        def detectionFilterParams = 
+
+        def detectionFilterParams =
             [new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"],
-                                                associationName: "receiverDeployment.station.installation.project", 
-                                                 propertyName:"name", 
+                                                associationName: "receiverDeployment.station.installation.project",
+                                                 propertyName:"name",
                                                 lookupPath:"/project/lookupByName"),
-             new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.name"], 
-                                                associationName: "receiverDeployment.station.installation", 
-                                                 propertyName:"name", 
+             new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.name"],
+                                                associationName: "receiverDeployment.station.installation",
+                                                 propertyName:"name",
                                                 lookupPath:"/installation/lookupByName"),
-             new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.name"], 
-                                                associationName: "receiverDeployment.station", 
-                                                 propertyName:"name", 
+             new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.name"],
+                                                associationName: "receiverDeployment.station",
+                                                 propertyName:"name",
                                                 lookupPath:"/installationStation/lookupByName"),
-             new AjaxMultiSelectReportParameter(label: propertyToLabel["transmitterId"], 
-                                                associationName: "", 
-                                                 propertyName:"transmitterId", 
+             new AjaxMultiSelectReportParameter(label: propertyToLabel["transmitterId"],
+                                                associationName: "",
+                                                 propertyName:"transmitterId",
                                                 lookupPath:"/sensor/lookupByTransmitterId"),
-             new AjaxMultiSelectReportParameter(label: propertyToLabel["detectionSurgeries.surgery.release.animal.species.spcode"], 
-                                                associationName: "detectionSurgeries.surgery.release.animal.species", 
-                                                 propertyName:"spcode", 
-                                                lookupPath:"/species/lookupByNameAndReturnSpcode"),
              new DateRangeReportParameter(label: propertyToLabel["timestamp"],
                                            propertyName:"timestamp",
                                           minRange:timestampMin,
                                           maxRange:timestampMax)]
- 
+
         def eventFilterParams =
             [new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"],
-                                                associationName: "receiverDeployment.station.installation.project", 
+                                                associationName: "receiverDeployment.station.installation.project",
                                                  propertyName:"name",
                                                 lookupPath:"/project/lookupByName"),
              new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.name"],
-                                                associationName: "receiverDeployment.station.installation", 
+                                                associationName: "receiverDeployment.station.installation",
                                                 propertyName:"name",
                                                 lookupPath:"/installation/lookupByName"),
              new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.name"],
-                                                associationName: "receiverDeployment.station", 
+                                                associationName: "receiverDeployment.station",
                                                 propertyName:"name",
                                                 lookupPath:"/installationStation/lookupByName"),
              new DateRangeReportParameter(label: propertyToLabel["timestamp"],
@@ -209,87 +201,87 @@ class ReportInfoService
 
         def installationFilterParams =
             [new ListReportParameter(
-                label: propertyToLabel["project.name"], 
-                associationName: "project", 
-                propertyName:"name", 
+                label: propertyToLabel["project.name"],
+                associationName: "project",
+                propertyName:"name",
                 range:projectRange)]
 
-        def installationStationFilterParams = 
+        def installationStationFilterParams =
             [new ListReportParameter(
-                label: propertyToLabel["installation.project.name"], 
+                label: propertyToLabel["installation.project.name"],
                 associationName: "installation.project",
-                propertyName:"name", 
+                propertyName:"name",
                 range:projectRange)]
 
         def personFilterParams =
             [new ListReportParameter(
-                label: propertyToLabel["organisation.name"], 
+                label: propertyToLabel["organisation.name"],
                 associationName: "organisation",
-                propertyName:"name", 
+                propertyName:"name",
                 range:organisationRange),
              new ListReportParameter(
-                 label: propertyToLabel["projectRoles.project.name"], 
+                 label: propertyToLabel["projectRoles.project.name"],
                  associationName: "projectRoles.project",
-                 propertyName:"name", 
+                 propertyName:"name",
                  range:projectRange)]
-        
-        def receiverFilterParams = 
+
+        def receiverFilterParams =
             [new ListReportParameter(
-                label: propertyToLabel["organisation.name"], 
+                label: propertyToLabel["organisation.name"],
                 associationName: "organisation",
                 propertyName:"name",
                 range:organisationRange)]
-            
-        def receiverDeploymentFilterParams = 
+
+        def receiverDeploymentFilterParams =
             [new ListReportParameter(
-                label: propertyToLabel["station.installation.project.name"], 
+                label: propertyToLabel["station.installation.project.name"],
                 associationName: "station.installation.project",
-                propertyName:"name", 
+                propertyName:"name",
                 range:projectRange),
              new ListReportParameter(
-                 label: propertyToLabel["station.installation.name"], 
+                 label: propertyToLabel["station.installation.name"],
                  associationName: "station.installation",
-                 propertyName:"name", 
+                 propertyName:"name",
                  range:installationRange)]
-            
-        def receiverRecoveryFilterParams = 
+
+        def receiverRecoveryFilterParams =
             [new ListReportParameter(
-                label: propertyToLabel["station.installation.project.name"], 
+                label: propertyToLabel["station.installation.project.name"],
                 associationName: "station.installation.project",
-                propertyName: "name", 
+                propertyName: "name",
                 range:projectRange),
              new AjaxMultiSelectReportParameter(label: propertyToLabel["station.installation.name"],
-                                                associationName: "station.installation", 
+                                                associationName: "station.installation",
                                                 propertyName:"name",
                                                 lookupPath:"/installation/lookupByName"),
              new IsNullReportParameter(
                  label: propertyToLabel["recovery"],
-                 associationName: "recovery", 
+                 associationName: "recovery",
                  propertyName:"recovery")]
-            
+
         def sensorFilterParams =
             [new ListReportParameter(
                 label: propertyToLabel["tag.project.name"],
-                associationName: "tag.project", 
-                propertyName:"name", 
+                associationName: "tag.project",
+                propertyName:"name",
                 range:projectRange),
-             new AjaxMultiSelectReportParameter(label: propertyToLabel["transmitterId"], 
-                                                 propertyName:"transmitterId", 
+             new AjaxMultiSelectReportParameter(label: propertyToLabel["transmitterId"],
+                                                 propertyName:"transmitterId",
                                                 lookupPath:"/sensor/lookupByTransmitterId")]
-            
+
         def tagFilterParams =
             [new ListReportParameter(
                 label: propertyToLabel["project.name"],
-                associationName: "project", 
-                propertyName:"name", 
+                associationName: "project",
+                propertyName:"name",
                 range:projectRange),
-             new AjaxMultiSelectReportParameter(label: propertyToLabel["codeName"], 
-                                                 propertyName:"codeName", 
+             new AjaxMultiSelectReportParameter(label: propertyToLabel["codeName"],
+                                                 propertyName:"codeName",
                                                 lookupPath:"/tag/lookupByCodeName")]
 
-            
-        return [(AnimalReleaseSummaryService.class):new ReportInfo(displayName:"Tag Summary", 
-                                                          jrxmlFilename:[PDF:"animalReleaseSummary"], 
+
+        return [(AnimalReleaseSummaryService.class):new ReportInfo(displayName:"Tag Summary",
+                                                          jrxmlFilename:[PDF:"animalReleaseSummary"],
                                                           filterParams:[]),
                 (AnimalRelease.class): new ReportInfo(displayName:"Tag Releases",
                                                       jrxmlFilename:[:],
@@ -307,28 +299,28 @@ class ReportInfoService
                 (Person.class):new ReportInfo(displayName:"People",
                                                            jrxmlFilename:[:],
                                                            filterParams:personFilterParams),
-                (Receiver.class):new ReportInfo(displayName:"Receivers", 
+                (Receiver.class):new ReportInfo(displayName:"Receivers",
                                                 jrxmlFilename:[PDF:"receiverList",
-                                                               CSV:"receiverExtract"], 
+                                                               CSV:"receiverExtract"],
                                                 filterParams:receiverFilterParams),
-                (ReceiverDeployment.class):new ReportInfo(displayName:"Receiver Deployments", 
-                                                          jrxmlFilename:[PDF:"receiverDeploymentList"], 
+                (ReceiverDeployment.class):new ReportInfo(displayName:"Receiver Deployments",
+                                                          jrxmlFilename:[PDF:"receiverDeploymentList"],
                                                           filterParams:receiverDeploymentFilterParams),
-                (ReceiverRecovery.class):new ReportInfo(displayName:"Receiver Recoveries", 
-                                                          jrxmlFilename:[:], 
+                (ReceiverRecovery.class):new ReportInfo(displayName:"Receiver Recoveries",
+                                                          jrxmlFilename:[:],
                                                           filterParams:receiverRecoveryFilterParams),
-                (ValidReceiverEvent.class):new ReportInfo(displayName:"Receiver Events", 
-                                                     jrxmlFilename:[CSV:"receiverEventExtract"], 
+                (ValidReceiverEvent.class):new ReportInfo(displayName:"Receiver Events",
+                                                     jrxmlFilename:[CSV:"receiverEventExtract"],
                                                      filterParams:eventFilterParams),
-                (Sensor.class):new ReportInfo(displayName:"Tags", 
-                                              jrxmlFilename:[CSV:"sensorExtract"], 
+                (Sensor.class):new ReportInfo(displayName:"Tags",
+                                              jrxmlFilename:[CSV:"sensorExtract"],
                                               filterParams:sensorFilterParams),
-                (Tag.class):new ReportInfo(displayName:"Tags", 
-                                           jrxmlFilename:[CSV:"tagExtract"], 
+                (Tag.class):new ReportInfo(displayName:"Tags",
+                                           jrxmlFilename:[CSV:"tagExtract"],
                                            filterParams:tagFilterParams)
                 ]
     }
-    
+
     /**
      * Return report info for a particular domain class.
      */
@@ -337,12 +329,12 @@ class ReportInfoService
         log.debug("getReportInfo(Class)")
         return getReportInfo().get(domain)
     }
-    
+
     Class getClassForName(String name)
     {
         return reportNameToClass[name]
     }
-    
+
     /**
      * Return report info for a particular name.
      */
@@ -355,44 +347,44 @@ class ReportInfoService
             log.error("No domain class mapped to report name: " + name)
             return null
         }
-        
+
         log.debug("Report name: " + name + ", domain class name: " + domainClassName)
-        
+
         Class reportDomainClass = Thread.currentThread().contextClassLoader.loadClass(domainClassName)
         return getReportInfo(reportDomainClass)
     }
-    
+
     /**
      * Useful for converting a map of nested map of filter paramaters to entries
      * of the form:
-     * 
-     *  "level1.level2":"value" 
+     *
+     *  "level1.level2":"value"
      */
     Map<String, Object> filterParamsToReportFormat(params)
     {
         log.debug("Converting params to report format, params: " + params)
-        
+
         if (!params)
         {
             return [:]
         }
-        
+
         def filterParamsInReportFormat = [:]
-        
+
         def flattenedParams = params.flatten()
-        
+
         flattenedParams.each
         {
             k, v ->
-            
+
             if (k.endsWith(".eq"))
             {
                 assert (v.size() == 2): "Invalid filter parameter: k: " + k + ", v: " + v
-                
+
                 def reportKey = k[0..k.size() - 4]
                 reportKey += "." + v[0]
-                
-                def reportValue = v[1]  
+
+                def reportValue = v[1]
                 if (reportValue != null && reportValue != "")
                 {
                     filterParamsInReportFormat[propertyToLabel[reportKey]] = reportValue
@@ -403,7 +395,7 @@ class ReportInfoService
                 filterParamsInReportFormat[k] = v
             }
         }
-        
+
         return filterParamsInReportFormat
     }
 }

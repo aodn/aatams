@@ -98,42 +98,29 @@ class ValidDetection extends RawDetection implements Embargoable
     // Convenience method.
     Project getProject()
     {
-        return firstDetectionSurgery?.surgery?.release?.project
+        if (this.surgeries.isEmpty())
+        {
+            return null
+        }
+
+        return this.surgeries.last().project
     }
 
     def getSurgeries()
     {
-        // TODO: implement this!
-        return Collections.emptyList()
-    }
-
-    /**
-     * Null object used where a detection has no associated surgeries.
-     */
-    static DetectionSurgery NULL_DETECTION_SURGERY = null
-
-    DetectionSurgery getFirstDetectionSurgery()
-    {
-        if (detectionSurgeries.isEmpty())
+        def sensor = Sensor.findByTransmitterId(this.transmitterId)
+        if (!sensor)
         {
-            if (!NULL_DETECTION_SURGERY)
-            {
-                // Employ the null object pattern so that we don't have to have
-                // conditionals in the extract report.
-                Species species = new Species(name:"")
-                Animal animal = new Animal(species:species)
-                AnimalRelease release = new AnimalRelease(animal:animal)
-                Surgery surgery = new Surgery(release:release)
-
-                def sensor = new Sensor(transmitterId:"")
-
-                NULL_DETECTION_SURGERY = new DetectionSurgery(surgery:surgery, sensor:sensor)
-            }
-
-            return NULL_DETECTION_SURGERY
+            return []
         }
 
-        return new ArrayList(detectionSurgeries)[0]
+        def tag = sensor.tag
+
+        def surgeries = Surgery.findAllByTag(tag, [sort: "timestamp"])
+
+        return surgeries.grep {
+            it.isInWindow(this.timestamp)
+        }
     }
 
     String getSensorIds()
@@ -180,11 +167,11 @@ class ValidDetection extends RawDetection implements Embargoable
     {
         boolean isEmbargoed = false
 
-        detectionSurgeries.each
+        surgeries.each
         {
-            if (it.surgery.release.isEmbargoed())
+            if (it.release.isEmbargoed())
             {
-                            isEmbargoed = true
+                isEmbargoed = true
             }
         }
 

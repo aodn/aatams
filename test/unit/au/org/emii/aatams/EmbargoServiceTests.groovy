@@ -5,39 +5,38 @@ import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import grails.test.*
 import org.joda.time.DateTime
 
-class EmbargoServiceTests extends AbstractGrailsUnitTestCase  
+class EmbargoServiceTests extends AbstractGrailsUnitTestCase
 {
     def embargoService
     def permissionUtilsService
-    
+
     def acceptedPermissionString
-    
+
     Project installationProject
     Project releaseProject
 
     ValidDetection det
     AnimalRelease release
     Surgery surgery
-    DetectionSurgery detSurgery
-    
-    protected void setUp() 
+
+    protected void setUp()
     {
         super.setUp()
-        
+
         embargoService = new EmbargoService()
         permissionUtilsService = new PermissionUtilsService()
         embargoService.permissionUtilsService = permissionUtilsService
-        
+
         hasRole = false
-        
+
         installationProject = new Project(name: "installationProject")
-        
+
         Installation installation = new Installation(project: installationProject)
         InstallationStation station = new InstallationStation(installation: installation)
         ReceiverDeployment deployment = new ReceiverDeployment(station: station)
-        
+
         releaseProject = new Project(name: "releaseProject")
-        
+
         mockDomain(Project, [installationProject, releaseProject])
         [installationProject, releaseProject].each {
             it.save()
@@ -46,42 +45,47 @@ class EmbargoServiceTests extends AbstractGrailsUnitTestCase
         mockLogging(AnimalRelease)
         release = new AnimalRelease(project: releaseProject, embargoDate: new DateTime().plusDays(1).toDate())
         surgery = new Surgery(release: release)
-        det = new ValidDetection(receiverDeployment: deployment)
-        detSurgery = new DetectionSurgery(surgery: surgery, detection: det)
-        
-        mockDomain(ValidDetection, [det])
-        
-        det.addToDetectionSurgeries(detSurgery)
-    }
+        det = new ValidDetection(receiverDeployment: deployment, transmitterId: 'A69-1303-1234')
 
-    protected void tearDown() 
-    {
-        super.tearDown()
+        mockDomain(ValidDetection, [det])
+        mockDomain(Sensor)
+        mockDomain(Surgery, [surgery])
+
+        det.metaClass.getProject = {
+            return releaseProject
+        }
+        det.metaClass.getSurgeries = {
+            return [surgery]
+        }
     }
 
     void testReadPermissionDetectionNoAssociatedRelease()
     {
-        det.detectionSurgeries.clear()
+        det.metaClass.getProject = {
+            return null
+        }
+
         assertTrue(embargoService.hasReadPermission(det))
     }
-    
-    void testDetectionEmbargoMemberOfDeploymentProject() 
+
+    void testDetectionEmbargoMemberOfDeploymentProject()
     {
         acceptedPermissionString = "project:${installationProject.id}:read"
+        assertNull(embargoService.applyEmbargo(det))
 
-        [det, detSurgery, surgery, release].each {
+        [det, surgery, release].each {
             assertNull(embargoService.applyEmbargo(it))
         }
     }
-    
-    void testDetectionEmbargoMemberOfReleaseProject() 
+
+    void testDetectionEmbargoMemberOfReleaseProject()
     {
         acceptedPermissionString = "project:${releaseProject.id}:read"
-        [det, detSurgery, surgery, release].each {
+        [det, surgery, release].each {
             assertNotNull(embargoService.applyEmbargo(it))
         }
     }
-    
+
     protected boolean isPermitted(permission)
     {
         return permission == acceptedPermissionString

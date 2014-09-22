@@ -8,4 +8,5 @@ databaseChangeLog = {
     include file: 'trim_serial_numbers.groovy'
     include file: '20140827-AS-AddUnavailabilityNotification.groovy'
     include file: 'matviews_entries.groovy'
+    include file: 'drop_detection_surgery.groovy'
 }

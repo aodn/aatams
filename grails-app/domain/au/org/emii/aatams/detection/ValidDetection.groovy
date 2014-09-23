@@ -21,7 +21,7 @@ class ValidDetection extends RawDetection implements Embargoable
 {
     static belongsTo = [receiverDownload:ReceiverDownloadFile, receiverDeployment: ReceiverDeployment]
     static transients = RawDetection.transients +
-        ['project', 'firstDetectionSurgery', 'sensorIds', 'speciesNames', 'surgeries', 'placemark']
+        ['project', 'sensorIds', 'speciesNames', 'surgeries', 'placemark', 'release', 'mostRecentSurgery', 'mostRecentRelease']
 
     /**
      * This is a part of an optimisation for #2239.  All new detections are marked provisional.  Subsequently,
@@ -31,27 +31,7 @@ class ValidDetection extends RawDetection implements Embargoable
      */
     boolean provisional = true
 
-    /**
-     * This is modelled as a many-to-many relationship, due to the fact that tags
-     * transmit only code map and ping ID which is not guaranteed to be unique
-     * between manufacturers, although in reality the relationship will *usually*
-     * be one-to-one.
-     *
-     * Additionally, the relationship is modelled via surgery, due to the fact
-     * that a tag could potentially be reused on several animals.
-     */
-    // Note: initialise with empty set so that detectionSurgeries.isEmpty()
-    // returns true (I thought that the initialisation should happen when save()
-    // is called but apparently not.
-    Set<DetectionSurgery> detectionSurgeries = new HashSet<DetectionSurgery>()
-    static hasMany = [detectionSurgeries:DetectionSurgery]
-
     static constraints = RawDetection.constraints
-
-    static mapping =
-    {
-        detectionSurgeries cache:true
-    }
 
     static boolean isDuplicate(other)
     {
@@ -108,39 +88,53 @@ class ValidDetection extends RawDetection implements Embargoable
 
     def getSurgeries()
     {
-        def sensor = Sensor.findByTransmitterId(this.transmitterId)
-        if (!sensor)
+        def sensors = Sensor.findAllByTransmitterId(this.transmitterId)
+        if (!sensors)
         {
             return []
         }
 
-        def tag = sensor.tag
-
-        def surgeries = Surgery.findAllByTag(tag, [sort: "timestamp"])
+        def surgeries = Surgery.findAllByTagInList(sensors*.tag, [sort: "timestamp"])
 
         return surgeries.grep {
             it.isInWindow(this.timestamp)
         }
     }
 
-    String getSensorIds()
+    def getMostRecentSurgery()
     {
-        return getSensorIds(detectionSurgeries)
+        def theSurgeries = this.getSurgeries()
+        return theSurgeries.isEmpty() ? null : theSurgeries.last()
     }
 
-    private String getSensorIds(theDetectionSurgeries)
+    def getReleases()
     {
-        return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.sensor.transmitterId)
+        return this.getSurgeries()*.release
+    }
+
+    def getMostRecentRelease()
+    {
+        return this.getMostRecentSurgery()?.release
+    }
+
+    String getSensorIds()
+    {
+        return getSensorIds(surgeries)
+    }
+
+    private String getSensorIds(theSurgeries)
+    {
+        return StringUtils.removeSurroundingBrackets(theSurgeries*.tag.sensors*.transmitterId)
     }
 
     String getSpeciesNames()
     {
-        return getSpeciesNames(detectionSurgeries)
+        return getSpeciesNames(surgeries)
     }
 
-    private String getSpeciesNames(theDetectionSurgeries)
+    private String getSpeciesNames(theSurgeries)
     {
-        return StringUtils.removeSurroundingBrackets(theDetectionSurgeries*.surgery.release.animal.species.name)
+        return StringUtils.removeSurroundingBrackets(theSurgeries*.release.animal.species.name)
     }
 
     static String toSqlInsert(detection)

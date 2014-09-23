@@ -30,9 +30,9 @@ class SensorTrackKml extends Kml
 {
     private final TreeMap<String, TreeSet<ValidDetection>> detsBySensor
     private final String serverURL
-    
+
     private static DateTimeFormatter fmt = ISODateTimeFormat.dateTime()
-    
+
 
     public SensorTrackKml(detections, serverURL)
     {
@@ -41,55 +41,56 @@ class SensorTrackKml extends Kml
         loadDetections(detections)
         refresh()
     }
-    
+
     private void loadDetections(dets)
     {
         dets.each
         {
             det ->
-            
+
             def detsForSingleSensor = detsBySensor[det.transmitter_id]
-            
+
             if (!detsForSingleSensor)
             {
                 detsForSingleSensor = new TreeSet<ValidDetection>([compare: {a, b -> a.timestamp <=> b.timestamp} ] as Comparator)
                 detsBySensor[det.transmitter_id] = detsForSingleSensor
             }
-            
+
             detsForSingleSensor.add(det)
         }
     }
-    
+
     private void refresh()
     {
         Document doc = createAndSetDocument()
-        
+
         if (detsBySensor.isEmpty())
         {
             return
         }
-        
+
         insertDefaultDetectionStyle(doc)
         insertDefaultReleaseStyle(doc)
-        
-        Folder releasesFolder = doc.createAndAddFolder().withName("Releases")    
-        Folder detectionsFolder = doc.createAndAddFolder().withName("Detections")    
-        
-        detsBySensor.each 
+
+        Folder releasesFolder = doc.createAndAddFolder().withName("Releases")
+        Folder detectionsFolder = doc.createAndAddFolder().withName("Detections")
+
+        detsBySensor.each
         {
             transmitterId, detsForSingleSensor ->
-            
+
             assert(!detsForSingleSensor.isEmpty()): "No detections for sensor"
-            
-            AnimalRelease release = DetectionSurgery.findByDetection(ValidDetection.get(detsForSingleSensor.iterator().next().detection_id))?.surgery?.release
+
+            def detection = ValidDetection.get(detsForSingleSensor.iterator().next().detection_id)
+            AnimalRelease release = detection?.getMostRecentRelease()
             Sensor sensor = Sensor.findByTransmitterId(transmitterId, [cache: true])
-            
+
             createAndAddReleasePlacemark(transmitterId, release, sensor, detsForSingleSensor, releasesFolder)
             createAndAddDetectionPlacemark(transmitterId, release, sensor, detsForSingleSensor, detectionsFolder)
         }
     }
 
-    private void createAndAddReleasePlacemark(String transmitterId, AnimalRelease release, Sensor sensor, def detsForSingleSensor, Folder releasesFolder) 
+    private void createAndAddReleasePlacemark(String transmitterId, AnimalRelease release, Sensor sensor, def detsForSingleSensor, Folder releasesFolder)
     {
         if (release && release.releaseLocation)
         {
@@ -100,7 +101,7 @@ class SensorTrackKml extends Kml
         }
     }
 
-    private void createAndAddDetectionPlacemark(String transmitterId, AnimalRelease release, Sensor sensor, def detsForSingleSensor, Folder detectionsFolder) 
+    private void createAndAddDetectionPlacemark(String transmitterId, AnimalRelease release, Sensor sensor, def detsForSingleSensor, Folder detectionsFolder)
     {
         Placemark detectionPlacemark = createBasePlacemark(transmitterId, release, sensor)
         detectionPlacemark.setStyleUrl("#defaultDetectionStyle")
@@ -113,20 +114,20 @@ class SensorTrackKml extends Kml
         Point releasePoint = new Point()
         releasePoint.setAltitudeMode(AltitudeMode.CLAMP_TO_GROUND)
         releasePoint.addToCoordinates(release.scrambledReleaseLocation.x, release.scrambledReleaseLocation.y)
-        
+
         LineString releaseToFirstDetLine = new LineString()
         releaseToFirstDetLine.setAltitudeMode(AltitudeMode.CLAMP_TO_GROUND)
         releaseToFirstDetLine.addToCoordinates(release.scrambledReleaseLocation.x, release.scrambledReleaseLocation.y)
         releaseToFirstDetLine.addToCoordinates(GeometryUtils.scrambleCoordinate(firstDetection.longitude), GeometryUtils.scrambleCoordinate(firstDetection.latitude))
-        
+
         MultiGeometry geometry = new MultiGeometry()
         geometry.addToGeometry(releasePoint)
         geometry.addToGeometry(releaseToFirstDetLine)
 
-        releasePlacemark.setGeometry(geometry)    
+        releasePlacemark.setGeometry(geometry)
     }
-    
-    private void addTrack(Placemark detectionPlacemark, def detsForSingleSensor) 
+
+    private void addTrack(Placemark detectionPlacemark, def detsForSingleSensor)
     {
         Track track = new Track()
         track.setAltitudeMode(AltitudeMode.CLAMP_TO_GROUND)
@@ -145,7 +146,7 @@ class SensorTrackKml extends Kml
         detectionPlacemark.setGeometry(track)
     }
 
-    private Placemark createBasePlacemark(def transmitterId, AnimalRelease release, Sensor sensor) 
+    private Placemark createBasePlacemark(def transmitterId, AnimalRelease release, Sensor sensor)
     {
         Placemark placemark = new Placemark()
         placemark.setName(transmitterId)
@@ -172,14 +173,14 @@ class SensorTrackKml extends Kml
         extData.addToData(new Data(String.valueOf(release?.animal?.species?.name)).withName("releaseSpecies"))
         placemark.setExtendedData(extData)
     }
-    
-    private void addSensorData(Sensor sensor, Placemark placemark) 
+
+    private void addSensorData(Sensor sensor, Placemark placemark)
     {
         ExtendedData extData = placemark.getExtendedData()?: new ExtendedData()
         extData.addToData(new Data(String.valueOf(sensor.tag.id)).withName("tagId"))
         placemark.setExtendedData(extData)
     }
-    
+
     private void insertDefaultDetectionStyle(Document doc)
     {
         doc.createAndAddStyle()
@@ -187,7 +188,7 @@ class SensorTrackKml extends Kml
             .withIconStyle(new IconStyle().withScale(1.0).withHeading(0.0).withIcon(new Icon().withHref("files/fish.png")))
             .withLineStyle(new LineStyle().withColor("ffface87").withWidth(2))
     }
-    
+
     private void insertDefaultReleaseStyle(Document doc)
     {
         doc.createAndAddStyle()
@@ -195,14 +196,14 @@ class SensorTrackKml extends Kml
             .withIconStyle(new IconStyle().withScale(1.0).withHeading(0.0).withIcon(new Icon().withHref("files/red_fish.png")))
             .withLineStyle(new LineStyle().withColor("aa0000ff").withWidth(2))
     }
-    
+
     // TODO: refactor to GSP template.
     private String getDescription(tag, release)
     {
         StringBuilder desc = new StringBuilder('''<div>
                     <link rel="stylesheet" type="text/css" href="files/main.css" />
                     <div class="description">
-                    
+
                         <!--  "Header" data. -->
                         <div class="dialog">
                             <table>
@@ -215,7 +216,7 @@ class SensorTrackKml extends Kml
     <td valign="top" class="name">Release</td>
     <td valign="top" class="value"><a href="''' + serverURL + '''/animalRelease/show/$[releaseId]">$[releaseSpecies]</a></td>
 </tr>''')
-        }    
+        }
         else
         {
             desc.append('''<tr class="prop">
@@ -230,7 +231,7 @@ class SensorTrackKml extends Kml
     <td valign="top" class="name">Tag</td>
     <td valign="top" class="value"><a href="''' + serverURL + '''/tag/show/$[tagId]">$[name]</a></td>
 </tr>''')
-        }    
+        }
         else
         {
             desc.append('''<tr class="prop">
@@ -239,16 +240,16 @@ class SensorTrackKml extends Kml
 </tr>''')
         }
 
-        desc.append('''                                
+        desc.append('''
                                     <tr class="prop">
                                         <td valign="top" class="name">Link to the Data</td>
                                         <td valign="top" class="value"><a href="''' + serverURL + '''/detection/list?filter.in=transmitterId&filter.in=$[name]">Detections for $[name]</a></td>
                                     </tr>
-                                    
+
                                 </tbody>
                             </table>
                         </div>
-                       
+
                     </div>
                 </div>''')
 

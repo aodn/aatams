@@ -4,45 +4,44 @@ import groovy.sql.Sql
 
 import org.springframework.jdbc.core.JdbcTemplate
 
-import au.org.emii.aatams.DetectionSurgery
 import au.org.emii.aatams.FileProcessingException
 import au.org.emii.aatams.ReceiverDownloadFile
 import au.org.emii.aatams.Statistics
 
 /**
  *  Uses JDBC template (rather than GORM) to persist detection records.
- *  
+ *
  * @author jburgess
  *
  */
-class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProcessorService 
+class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProcessorService
 {
     static transactional = true
-    
+
     def dataSource
     def grailsApplication
     def jdbcTemplateDetectionFactoryService
-    
+
     protected int getBatchSize()
     {
         return 500
     }
-    
+
     void process(ReceiverDownloadFile downloadFile) throws FileProcessingException
     {
         super.process(downloadFile)
 
         promoteProvisional()
     }
-    
+
     protected void startBatch(context)
     {
         log.debug("Start batch")
-        
+
         // Create lists
         context.detectionBatch = new ArrayList<Map>()
     }
-    
+
     protected void endBatch(context)
     {
         if (context.detectionBatch.isEmpty())
@@ -54,28 +53,28 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
             log.debug("Start mark duplicates...")
             markDuplicates(context)
             log.debug("End mark duplicates.")
-            
+
             log.debug("End batch, inserting detections...")
             insertDetections(context)
         }
-        
+
         super.endBatch(context)
     }
-    
+
     private void markDuplicates(context)
     {
-        context.detectionBatch.each 
+        context.detectionBatch.each
         {
             newDetection ->
-            
+
             def c = ValidDetection.createCriteria()
-            def duplicateCount = c.get() 
+            def duplicateCount = c.get()
             {
                 projections
                 {
                     rowCount()
                 }
-                
+
                 and
                 {
                     eq("receiverName", newDetection.receiverName)
@@ -83,7 +82,7 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
                     eq("transmitterId", newDetection.transmitterId)
                 }
             }
-            
+
             if (duplicateCount > 0)
             {
                 newDetection["clazz"] = "au.org.emii.aatams.detection.InvalidDetection"
@@ -92,23 +91,16 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
             }
         }
     }
-    
+
     private void insertDetections(context)
     {
         def insertStatementList = []
-        
+
         context.detectionBatch.each
         {
             if (it.clazz == "au.org.emii.aatams.detection.ValidDetection")
             {
                 insertStatementList += ValidDetection.toSqlInsert(it)
-
-                it.detectionSurgeries.each
-                {
-                    detSurgery ->
-    
-                    insertStatementList.add(DetectionSurgery.toSqlInsert(detSurgery, true))
-                }
             }
             else if (it.clazz == "au.org.emii.aatams.detection.InvalidDetection")
             {
@@ -119,18 +111,18 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
                 assert(false): "Unknown detection class: " + it.clazz
             }
         }
-        
+
         batchUpdate(insertStatementList.toArray(new String[0]))
     }
-    
+
     void batchUpdate(String[] statements)
     {
         log.debug("Inserting " + statements.size() + " records...")
         JdbcTemplate insert = new JdbcTemplate(dataSource)
         insert.batchUpdate(statements)
-        log.debug("Batch successfully inserted")    
+        log.debug("Batch successfully inserted")
     }
-    
+
     void processSingleRecord(downloadFile, map, context) throws FileProcessingException
     {
         def detection = jdbcTemplateDetectionFactoryService.newDetection(downloadFile, map)

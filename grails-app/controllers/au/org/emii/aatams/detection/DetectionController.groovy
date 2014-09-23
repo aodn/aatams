@@ -10,42 +10,18 @@ class DetectionController extends ReportController
     def candidateEntitiesService
     def dataSource
     def detectionExtractService
-    
+
     static allowedMethods = [update: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
     }
 
-    def list = 
+    def list =
     {
-        if (queryService.hasFilter(params)) {
-            def countParams = params.clone()
-            def clazz = reportInfoService.getClassForName("detection")
-
-            params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
-
-            def resultList = queryService.queryWithoutCount(clazz, params, false)
-
-            countParams.max = grailsApplication.config.detection.filter.count.max + 1
-            def count = queryService.queryCountOnly(clazz, countParams)
-
-            flattenParams()
-
-            if (count < countParams.max) {
-                flash.message = "${count} matching records (${clazz.count()} total)."
-            }
-            else {
-                flash.message = "&gt; ${grailsApplication.config.detection.filter.count.max} matching records (${clazz.count()} total)."
-                count = count - 1
-            }
-            return [entityList: resultList.results, total: count]
-        }
-        else {
-            return doList("detection")
-        }
+        doList("detection")
     }
-    
+
     protected void cleanDateParams()
     {
         [1, 2].each
@@ -63,7 +39,7 @@ class DetectionController extends ReportController
             }
         }
     }
-    
+
     protected def getResultList(queryName)
     {
         params.sql = new Sql(dataSource)
@@ -72,20 +48,23 @@ class DetectionController extends ReportController
         // The data params get turned in to strings on the way back to front-end - need to change
         // them back to java.util.Dates again.
         cleanDateParams()
-        
+
         def detections = detectionExtractService.applyEmbargo(detectionExtractService.extractPage(params), params)
         detections = detections.collect {
             ValidDetection.get(it.detection_id)
         }
 
-        def count = detectionExtractService.getCount(params)
+        def paramsClone = params.clone()
+
+        paramsClone.max = grailsApplication.config.filter.count.max + 1
+        def count = detectionExtractService.getCount(paramsClone)
 
         params.remove("sql")
         params.remove("projectPermissionCache")
-        
+
         [results: detections, count: count]
     }
-    
+
     def export =
     {
         if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export))
@@ -97,13 +76,13 @@ class DetectionController extends ReportController
             detectionExtractService.generateReport(params, request, response)
         }
     }
-    
-    def create = 
+
+    def create =
     {
-        redirect(controller:"receiverDownloadFile", 
-                 action:"createDetections") 
+        redirect(controller:"receiverDownloadFile",
+                 action:"createDetections")
     }
-    
+
     def show = {
         def detectionInstance = ValidDetection.get(params.id)
         if (!detectionInstance) {
@@ -121,7 +100,7 @@ class DetectionController extends ReportController
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'detection.label', default: 'ValidDetection'), params.id])}"
             redirect(action: "list")
         }
-        else 
+        else
         {
             def model = [detectionInstance: detectionInstance]
             model.candidateDeployments = candidateEntitiesService.deployments()
@@ -135,7 +114,7 @@ class DetectionController extends ReportController
             if (params.version) {
                 def version = params.version.toLong()
                 if (detectionInstance.version > version) {
-                    
+
                     detectionInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'detection.label', default: 'ValidDetection')] as Object[], "Another user has updated this ValidDetection while you were editing")
                     render(view: "edit", model: [detectionInstance: detectionInstance])
                     return

@@ -5,7 +5,7 @@ import grails.converters.JSON
 
 /**
  * Represents a physical tag (which may be attached at any one time to an animal via a surgery).
- * 
+ *
  * @author jburgess
  *
  */
@@ -13,18 +13,18 @@ class Tag extends Device implements Embargoable
 {
     DeviceStatus status
 
-    static hasMany = [sensors:Sensor, 
+    static hasMany = [sensors:Sensor,
                       surgeries:Surgery]
 
     Project project
     static belongsTo = [codeMap: CodeMap]
     static auditable = true
-    
+
     /**
      * The expected lifetime (in days) of a tag once is it deployed.  This
-     * value is used to derive the "window of operation" of a Surgery when 
+     * value is used to derive the "window of operation" of a Surgery when
      * searching for surgeries to match against detections.
-     * 
+     *
      * If not specified, then assume infinity.
      */
     Integer expectedLifeTimeDays
@@ -34,18 +34,17 @@ class Tag extends Device implements Embargoable
         project(nullable:true)
         expectedLifeTimeDays(nullable:true)
     }
-    
+
     static transients = ['expectedLifeTimeDaysAsString', 'deviceID', 'pinger', 'pingCode', 'pingCodes', 'transmitterTypeNames', 'nonPingerSensors', 'owningPIs']
-    
+
     static searchable = [only: ['serialNumber']]
-    
+
     static mapping =
     {
         cache true
         surgeries cache:true
-        detectionSurgeries cache:true
     }
-    
+
     // For reports...
     String getExpectedLifeTimeDaysAsString()
     {
@@ -53,20 +52,20 @@ class Tag extends Device implements Embargoable
         {
             return ""
         }
-        
+
         return String.valueOf(expectedLifeTimeDays)
     }
-    
+
     String toString()
     {
         return getDeviceID()
     }
-    
+
     String getDeviceID()
     {
         return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.toString()))
     }
-    
+
     Sensor getPinger()
     {
         def searchPinger = sensors.find
@@ -75,7 +74,7 @@ class Tag extends Device implements Embargoable
         }
         return searchPinger
     }
-    
+
     void setPingCode(Integer newPingCode)
     {
         if (!pinger)
@@ -87,28 +86,28 @@ class Tag extends Device implements Embargoable
         {
             assert(pinger)
             pinger.pingCode = newPingCode
-        }    
+        }
     }
-    
+
     Integer getPingCode()
     {
         return pinger?.pingCode
     }
-    
+
     void setCodeMap(CodeMap codeMap)
     {
         this.codeMap = codeMap
         sensors.each
         {
             it?.refreshTransmitterId()
-        }    
+        }
     }
-    
+
     String getPingCodes()
     {
         return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.pingCode?.sort()))
     }
-    
+
     String getTransmitterTypeNames()
     {
         return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.transmitterType?.transmitterTypeName))
@@ -118,11 +117,11 @@ class Tag extends Device implements Embargoable
     {
         return Sensor.findAllByTagAndTransmitterTypeNotEqual(this, TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]), [sort:"transmitterId"])
     }
-    
+
     def applyEmbargo()
     {
         boolean embargoed = false
-        
+
         surgeries.each
         {
             embargoed |= it.release.isEmbargoed()
@@ -140,21 +139,21 @@ class Tag extends Device implements Embargoable
         {
             return this
         }
-        
+
         log.debug("Tag is embargoed, id: " + id)
         return null
     }
-    
+
     List<Person> getOwningPIs()
     {
         if (project)
         {
             return project.getPrincipalInvestigators()
         }
-        
+
         return []
     }
-    
+
     static void registerObjectMarshaller()
     {
         JSON.registerObjectMarshaller(Tag.class)
@@ -170,7 +169,7 @@ class Tag extends Device implements Embargoable
             returnArray['expectedLifeTimeDays'] = it.expectedLifeTimeDays
             returnArray['status'] = it.status
             returnArray['pingCode'] = it.pingCodes
-            
+
             return returnArray
         }
     }

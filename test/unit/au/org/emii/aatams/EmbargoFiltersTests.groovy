@@ -104,7 +104,8 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         assertTrue(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(project1.id)))
         assertFalse(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(project2.id)))
 
-        mockConfig("grails.gorm.default.list.max = 10")
+        mockConfig('''grails.gorm.default.list.max = 10
+                      filter.count.max = 10000''')
 
         mockLogging(QueryService)
         queryService = new QueryService()
@@ -238,7 +239,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
 
     private void setupControllers() {
 
-        [AnimalController, AnimalMeasurementController, AnimalReleaseController, DetectionController, DetectionSurgeryController, SensorController, SurgeryController, TagController
+        [AnimalController, AnimalMeasurementController, AnimalReleaseController, DetectionController, SensorController, SurgeryController, TagController
         ].each {
             clazz ->
 
@@ -254,7 +255,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         surgeryController = new SurgeryController()
         tagController = new TagController()
 
-        [animalController, animalMeasurementController, releaseController, detectionController, /*detectionSurgeryController,*/ sensorController, surgeryController, tagController].each {
+        [animalController, animalMeasurementController, releaseController, detectionController, sensorController, surgeryController, tagController].each {
             controller ->
 
                 controller.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}

@@ -6,7 +6,7 @@ import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
-class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase 
+class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
 {
     PermissionUtilsService permService
     Project activeProj
@@ -18,7 +18,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
     Receiver imosReceiver
     Receiver csiroReceiver
     ReceiverDeployment activeDeployment
-    
+
     AnimalReleaseController animalReleaseController
     DetectionController detectionController
     InstallationController installationController
@@ -26,31 +26,31 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
     ReceiverDeploymentController receiverDeploymentController
     ReceiverRecoveryController receiverRecoveryController
     TagController tagController
-    
-    protected void setUp() 
+
+    protected void setUp()
     {
         super.setUp()
-        
+
         mockLogging(PermissionUtilsService)
         permService = new PermissionUtilsService()
-        
+
         def newStatus = new DeviceStatus(status:"NEW")
         def deployedStatus = new DeviceStatus(status:"DEPLOYED")
         def recoveredStatus = new DeviceStatus(status:"RECOVERED")
-        
+
         def statusList = [newStatus, deployedStatus, recoveredStatus]
         mockDomain(DeviceStatus, statusList)
         statusList.each { it.save() }
-        
+
         // User belongs to IMOS, but not to CSIRO.
         def imos = new Organisation(name:"IMSO")
         def csiro = new Organisation(name:"CSIRO")
         def orgList = [imos, csiro]
         mockDomain(Organisation, orgList)
         orgList.each { it.save() }
-        
+
         // Active projects that user belongs to.
-        activeProj = 
+        activeProj =
             new Project(name:"Active Project",
                         status:EntityStatus.ACTIVE)
         pendingProj =
@@ -58,36 +58,36 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
                         status:EntityStatus.PENDING)
 
         // User can't write to this project.
-        nonWriteProj = 
+        nonWriteProj =
             new Project(name:"Non-member project",
                         status:EntityStatus.ACTIVE)
 
         def projList = [activeProj, pendingProj, nonWriteProj]
         mockDomain(Project, projList)
         projList.each { it.save() }
-        
+
         person = new Person(username:"person",
                                    organisation:imos)
-                               
+
         mockDomain(Person, [person])
         person.save()
-        
+
         ProjectRoleType roleType = new ProjectRoleType(displayName:"some role")
         ProjectRoleType piRoleType = new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR)
         def roleTypeList = [piRoleType, roleType]
         mockDomain(ProjectRoleType, roleTypeList)
-        
-        ProjectRole activeProjRole = 
+
+        ProjectRole activeProjRole =
             new ProjectRole(project:activeProj,
                             person:person,
                             roleType:roleType,
                             access:ProjectAccess.READ_WRITE)
-        ProjectRole pendingProjRole = 
+        ProjectRole pendingProjRole =
             new ProjectRole(project:pendingProj,
                             person:person,
                             roleType:roleType,
                             access:ProjectAccess.READ_WRITE)
-        ProjectRole nonWriteProjRole = 
+        ProjectRole nonWriteProjRole =
             new ProjectRole(project:nonWriteProj,
                             person:person,
                             roleType:roleType,
@@ -95,19 +95,19 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         def roles = [activeProjRole, pendingProjRole, nonWriteProjRole]
         mockDomain(ProjectRole, roles)
         roles.each { permService.setPermissions(it) }
-        
+
         mockDomain(AnimalRelease)
-        
-        activeInstallation = 
+
+        activeInstallation =
             new Installation(project:activeProj,
                              name:"installationActive")
-        Installation pendingInstallation = 
+        Installation pendingInstallation =
             new Installation(project:pendingProj,
                              name:"installationPending")
-        Installation nonWriteInstallation = 
+        Installation nonWriteInstallation =
             new Installation(project:nonWriteProj,
                              name:"installationNonWrite")
-                         
+
         def installList = [activeInstallation, pendingInstallation, nonWriteInstallation]
         mockDomain(Installation, installList)
         Installation.metaClass.static.createCriteria = {[list: {Closure cls -> [activeInstallation]}]}
@@ -115,26 +115,26 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
 
         activeStation =
             new InstallationStation(installation:activeInstallation)
-        def pendingStation = 
+        def pendingStation =
             new InstallationStation(installation:pendingInstallation)
         def nonWriteStation =
             new InstallationStation(installation:nonWriteInstallation)
-        def stationList = [activeStation, pendingStation, nonWriteInstallation] 
+        def stationList = [activeStation, pendingStation, nonWriteInstallation]
         mockDomain(InstallationStation, stationList)
         stationList.each { it.save() }
-        
+
         imosReceiver = new Receiver(organisation:imos)
         csiroReceiver = new Receiver(organisation:csiro)
         def receiverList = [imosReceiver, csiroReceiver]
         mockDomain(Receiver, receiverList)
         receiverList.each { it.save() }
-        
+
         imos.addToReceivers(imosReceiver)
         imos.save()
-        
+
         csiro.addToReceivers(csiroReceiver)
         csiro.save()
-        
+
         activeDeployment =
             new ReceiverDeployment(station:activeStation,
                                    receiver:imosReceiver)
@@ -147,13 +147,13 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         def deploymentList = [activeDeployment, pendingDeployment, nonWriteDeployment]
         mockDomain(ReceiverDeployment, deploymentList)
         deploymentList.each { it.save() }
-        
+
         mockDomain(Surgery)
         mockDomain(Tag)
 
         CandidateEntitiesService candEntitiesService = new CandidateEntitiesService()
         candEntitiesService.permissionUtilsService = permService
-        
+
         mockController(AnimalReleaseController)
         mockLogging(AnimalReleaseController, true)
         animalReleaseController = new AnimalReleaseController()
@@ -165,7 +165,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         detectionController = new DetectionController()
         detectionController.metaClass.message = { Map map -> return "error message" }
         detectionController.candidateEntitiesService = candEntitiesService
-        
+
         mockController(InstallationController)
         mockLogging(InstallationController, true)
         installationController = new InstallationController()
@@ -193,9 +193,10 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         receiverRecoveryController.queryService = new QueryService()
         receiverRecoveryController.queryService.embargoService = new EmbargoService()
         receiverRecoveryController.reportInfoService = new ReportInfoService()
-        mockConfig("grails.gorm.default.list.max = 10")
+        mockConfig('''grails.gorm.default.list.max = 10
+                      filter.count.max = 10000''')
         receiverRecoveryController.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
-        
+
 
         mockController(TagController)
         mockLogging(TagController, true)
@@ -204,7 +205,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         tagController.candidateEntitiesService = candEntitiesService
     }
 
-    protected void tearDown() 
+    protected void tearDown()
     {
         super.tearDown()
     }
@@ -213,7 +214,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
     {
         return person.id
     }
-    
+
     protected boolean isPermitted(String permString)
     {
         if (permString == "project:" + activeProj.id + ":write")
@@ -236,39 +237,14 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         {
             return true
         }
-        
+
         return false
     }
-    
+
     void testAnimalReleaseCreate()
     {
         def model = animalReleaseController.create()
-        
-        assertNotNull(model.candidateProjects)
-        assertEquals(1, model.candidateProjects.size())
-        assertTrue(model.candidateProjects.contains(activeProj))
-        
-        // embargoPeriods
-        assertNotNull(model.embargoPeriods)
-        assertEquals(3, model.embargoPeriods.size())
-        model.embargoPeriods.each
-        {
-            if (it.key == 6) assertEquals("6 months", it.value)
-            if (it.key == 12) assertEquals("12 months", it.value)
-            if (it.key == 36) assertEquals("3 years", it.value)
-        }
-    }
-    
-    void testAnimalReleaseEdit()
-    {
-        AnimalRelease release = new AnimalRelease()
-        mockDomain(AnimalRelease, [release])
-        release.save()
-        assertNotNull(release.id)
-        
-        animalReleaseController.params.id = release.id
-        def model = animalReleaseController.edit()
-        
+
         assertNotNull(model.candidateProjects)
         assertEquals(1, model.candidateProjects.size())
         assertTrue(model.candidateProjects.contains(activeProj))
@@ -283,71 +259,96 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
             if (it.key == 36) assertEquals("3 years", it.value)
         }
     }
-    
+
+    void testAnimalReleaseEdit()
+    {
+        AnimalRelease release = new AnimalRelease()
+        mockDomain(AnimalRelease, [release])
+        release.save()
+        assertNotNull(release.id)
+
+        animalReleaseController.params.id = release.id
+        def model = animalReleaseController.edit()
+
+        assertNotNull(model.candidateProjects)
+        assertEquals(1, model.candidateProjects.size())
+        assertTrue(model.candidateProjects.contains(activeProj))
+
+        // embargoPeriods
+        assertNotNull(model.embargoPeriods)
+        assertEquals(3, model.embargoPeriods.size())
+        model.embargoPeriods.each
+        {
+            if (it.key == 6) assertEquals("6 months", it.value)
+            if (it.key == 12) assertEquals("12 months", it.value)
+            if (it.key == 36) assertEquals("3 years", it.value)
+        }
+    }
+
     void testDetectionEdit()
     {
         ValidDetection detection = new ValidDetection()
         mockDomain(ValidDetection, [detection])
         detection.save()
-        
+
         // candidateDeployments
         detectionController.params.id = detection.id
         def model = detectionController.edit()
-        
+
         assertNotNull(model.candidateDeployments)
         assertEquals(1, model.candidateDeployments.size())
         assertTrue(model.candidateDeployments.contains(activeDeployment))
     }
-    
+
     void testInstallationCreate()
     {
         // candidateProjects
         def model = installationController.create()
-        
+
         assertNotNull(model.candidateProjects)
         assertEquals(1, model.candidateProjects.size())
         assertTrue(model.candidateProjects.contains(activeProj))
     }
-    
+
     void testInstallationEdit()
     {
         def installation = new Installation()
         mockDomain(Installation, [installation])
         installation.save()
-        
+
         // candidateProjects
         installationController.params.id = installation.id
         def model = installationController.edit()
-        
+
         assertNotNull(model.candidateProjects)
         assertEquals(1, model.candidateProjects.size())
         assertTrue(model.candidateProjects.contains(activeProj))
     }
-    
+
     void testInstallationStationCreate()
     {
         // candidateInstallations
         def model = installationStationController.create()
-        
+
         assertNotNull(model.candidateInstallations)
         assertEquals(1, model.candidateInstallations.size())
         assertTrue(model.candidateInstallations.contains(activeInstallation))
     }
-    
+
     void testInstallationStationEdit()
     {
         InstallationStation station = new InstallationStation()
         mockDomain(InstallationStation, [station])
         station.save()
-        
+
         installationStationController.params.id = station.id
         def model = installationStationController.edit()
-        
+
         assertNotNull(model.candidateInstallations)
         assertEquals(1, model.candidateInstallations.size())
         assertTrue(model.candidateInstallations.contains(activeInstallation))
     }
-    
+
     void testReceiverDeploymentCreate()
     {
         def model = receiverDeploymentController.create()
@@ -362,7 +363,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         assertEquals(2, model.candidateReceivers.size())
         assertTrue(model.candidateReceivers.contains(imosReceiver))
         assertTrue(model.candidateReceivers.contains(csiroReceiver))
-        
+
         // candidateReceivers (as non SysAdmin)
         setNonAdminUser()
         model = receiverDeploymentController.create()
@@ -371,13 +372,13 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         assertEquals(1, model.candidateReceivers.size())
         assertTrue(model.candidateReceivers.contains(imosReceiver))
     }
-    
+
     void testReceiverDeploymentEdit()
     {
         def deployment = new ReceiverDeployment()
         mockDomain(ReceiverDeployment, [deployment])
         deployment.save()
-        
+
         receiverDeploymentController.params.id = deployment.id
         def model = receiverDeploymentController.edit()
 
@@ -391,7 +392,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         assertEquals(2, model.candidateReceivers.size())
         assertTrue(model.candidateReceivers.contains(imosReceiver))
         assertTrue(model.candidateReceivers.contains(csiroReceiver))
-        
+
         // candidateReceivers (as non SysAdmin)
         setNonAdminUser()
         model = receiverDeploymentController.edit()
@@ -399,26 +400,26 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         assertEquals(1, model.candidateReceivers.size())
         assertTrue(model.candidateReceivers.contains(imosReceiver))
     }
-    
+
     void testReceiverRecoveryList()
     {
         def model = receiverRecoveryController.list()
-        
+
         assertNotNull(model.readableProjects)
         assertEquals(2, model.readableProjects.size())
         assertTrue(model.readableProjects.contains(activeProj))
         assertTrue(model.readableProjects.contains(nonWriteProj))
     }
-    
+
     void testTagCreate()
     {
         DeviceStatus status = new DeviceStatus(status:"NEW")
         mockDomain(DeviceStatus, [status])
         status.save()
-        
+
         // candidateProjects
         def model = tagController.create()
-        
+
         assertNotNull(model.candidateProjects)
         assertEquals(1, model.candidateProjects.size())
         assertTrue(model.candidateProjects.contains(activeProj))
@@ -429,16 +430,16 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         def tag = new Tag()
         mockDomain(Tag, [tag])
         tag.save()
-        
+
         // candidateProjects
         tagController.params.id = tag.id
         def model = tagController.edit()
-        
+
         assertNotNull(model.candidateProjects)
         assertEquals(1, model.candidateProjects.size())
         assertTrue(model.candidateProjects.contains(activeProj))
     }
-    
+
     private void setNonAdminUser()
     {
         hasRole = false

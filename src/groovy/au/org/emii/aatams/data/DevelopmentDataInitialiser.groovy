@@ -17,7 +17,7 @@ import shiro.*
 
 /**
  * Set up data used in development.
- * 
+ *
  * @author jburgess
  */
 class DevelopmentDataInitialiser extends AbstractDataInitialiser
@@ -26,18 +26,18 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
     {
         super(service)
     }
-    
+
     void execute()
     {
         initData()
     }
-    
+
     def initData()
     {
         TransmitterType pinger =
             new TransmitterType(transmitterTypeName:"PINGER").save(failOnError:true)
         assert(!pinger.hasErrors())
-        
+
 
         Notification receiverRecoveryCreate =
             new Notification(key:"RECEIVER_RECOVERY_CREATE",
@@ -49,7 +49,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                              htmlFragment:"Click here to register to use AATAMS",
                              anchorSelector:"#userlogin > [href\$='/person/create']",
                              unauthenticated:true).save(failOnError:true)
-        
+
         //
         // Addresses.
         //
@@ -70,8 +70,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         //
         // Organisations.
         //
-        Organisation csiroOrg = 
-            new Organisation(name:'CSIRO', 
+        Organisation csiroOrg =
+            new Organisation(name:'CSIRO',
                              department:'CMAR',
                              phoneNumber:'1234',
                              faxNumber:'1234',
@@ -93,8 +93,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         country:'Australia',
                         postcode:'3000').save()
 
-        Organisation imosOrg = 
-            new Organisation(name:'IMOS', 
+        Organisation imosOrg =
+            new Organisation(name:'IMOS',
                              department:'eMII',
                              phoneNumber:'5678',
                              faxNumber:'5678',
@@ -116,8 +116,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         country:'Australia',
                         postcode:'3000').save()
 
-        Organisation imosOrg2 = 
-            new Organisation(name:'IMOS 2', 
+        Organisation imosOrg2 =
+            new Organisation(name:'IMOS 2',
                              department:'AATAMS',
                              phoneNumber:'5678',
                              faxNumber:'5678',
@@ -147,16 +147,16 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         OrganisationProject csiroSeals =
             new OrganisationProject(organisation:csiroOrg,
                                     project:sealCountProject)
-                                
+
         sealCountProject.addToOrganisationProjects(csiroSeals)
         csiroOrg.addToOrganisationProjects(csiroSeals)
         sealCountProject.save(failOnError:true)
         csiroOrg.save(failOnError:true)
-        
+
         OrganisationProject csiroTuna =
             new OrganisationProject(organisation:csiroOrg,
                                     project:tunaProject)
-                                
+
         tunaProject.addToOrganisationProjects(csiroTuna)
         csiroOrg.addToOrganisationProjects(csiroTuna)
         tunaProject.save(failOnError:true)
@@ -168,7 +168,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         SecRole sysAdmin = new SecRole(name:"SysAdmin")
         sysAdmin.addToPermissions("*:*")
         sysAdmin.save(failOnError: true)
-            
+
         //
         // People.
         //
@@ -193,7 +193,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                        emailAddress:'jbloggs@blah.au',
                        status:EntityStatus.ACTIVE,
                        defaultTimeZone:DateTimeZone.forID("Australia/Perth"))
-                   
+
         Person johnCitizen =
             new Person(username:'jcitizen',
                        passwordHash:new Sha256Hash("password").toHex(),
@@ -228,29 +228,29 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             principalInvestigator =
                 new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save(failOnError: true)
         }
-        
+
         ProjectRoleType administrator = ProjectRoleType.findByDisplayName('Administrator')
         if (!administrator)
         {
             administrator =
                 new ProjectRoleType(displayName:'Administrator').save(failOnError: true)
         }
-        
+
         ProjectRole tunaAdmin =
             new ProjectRole(project:tunaProject,
                             person: joeBloggs,
                             roleType: administrator,
                             access:ProjectAccess.READ_WRITE)
-        tunaProject.addToProjectRoles(tunaAdmin).save(failOnError:true)           
+        tunaProject.addToProjectRoles(tunaAdmin).save(failOnError:true)
         joeBloggs.addToProjectRoles(tunaAdmin).save(failOnError:true, flush:true)   // flush required to keep compass happy
         permissionUtilsService.setPermissions(tunaAdmin)
-        
+
         ProjectRole sealProjectInvestigator =
             new ProjectRole(project:sealCountProject,
                             person: joeBloggs,
                             roleType: principalInvestigator,
                             access:ProjectAccess.READ_WRITE)
-                        
+
         sealCountProject.addToProjectRoles(sealProjectInvestigator).save(failOnError:true, flush:true)
         joeBloggs.addToProjectRoles(sealProjectInvestigator).save(failOnError:true, flush:true)
         permissionUtilsService.setPermissions(sealProjectInvestigator)
@@ -273,7 +273,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         //
         // Devices.
         //
-        DeviceManufacturer vemco = 
+        DeviceManufacturer vemco =
             new DeviceManufacturer(manufacturerName:'Vemco').save(failOnError: true)
 
         DeviceModel vemcoVR2 =
@@ -281,7 +281,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         assert(!vemcoVR2.hasErrors())
         DeviceModel vemcoVR2W =
             new ReceiverDeviceModel(modelName:'VR2W', manufacturer:vemco).save(failOnError: true)
-        
+
         DeviceModel vemcoV8 =
             new TagDeviceModel(modelName:'V8', manufacturer:vemco).save(failOnError: true)
 
@@ -295,7 +295,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                          model:vemcoVR2W,
                          organisation:csiroOrg,
                          comment:'RX 1 belonging to CSIRO').save(failOnError: true)
-        
+
         Receiver rx2 =
             new Receiver(serialNumber:'101337',
                          status:deployedStatus,
@@ -303,19 +303,19 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                          organisation:csiroOrg).save(failOnError: true)
         csiroOrg.addToReceivers(rx1)
         csiroOrg.addToReceivers(rx2)
-        
+
         Receiver rx3 =
             new Receiver(serialNumber:'101338',
                          status:newStatus,
                          model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
-                     
+
         Receiver rx4 =
             new Receiver(serialNumber:'101344',
                          status:newStatus,
                          model:vemcoVR2,
                          organisation:imosOrg).save(failOnError: true)
-                     
+
         Receiver rx5 =
             new Receiver(serialNumber:'101355',
                          status:newStatus,
@@ -327,7 +327,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                          status:newStatus,
                          model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
-                         
+
         Receiver rxWhale =
             new Receiver(serialNumber:'103377',
                          status:deployedStatus,
@@ -338,16 +338,16 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         imosOrg.addToReceivers(rx5)
         imosOrg.addToReceivers(rx6)
         imosOrg.addToReceivers(rxWhale)
-        
+
         csiroOrg.save(failOnError:true)
         imosOrg.save(failOnError:true)
-        
+
         // CodeMaps.
         createCodeMaps()
-            
-        def a69_111053 = CodeMap.findByCodeMap('A69-1105')    
+
+        def a69_111053 = CodeMap.findByCodeMap('A69-1105')
         def a69_1303 = CodeMap.findByCodeMap('A69-1303')
-        
+
         //
         // Tags.
         //
@@ -358,7 +358,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
              model:vemcoV8,
              project:sealCountProject,
              status:deployedStatus])
-        
+
         Tag tag2 = createTag(
             [serialNumber:'46601',
              codeMap:a69_1303,
@@ -366,7 +366,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
              model:vemcoV8,
              project:sealCountProject,
              status:deployedStatus])
-                    
+
         Tag tag3 = createTag(
             [serialNumber:'1111',
              codeMap:a69_1303,
@@ -374,7 +374,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
              model:vemcoV8,
              project:sealCountProject,
              status:newStatus])
-            
+
         // Bug #352 - this tag won't be selectable if animal release project
         // set to "tuna".
         Tag tag5 = createTag(
@@ -385,7 +385,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
              project:tunaProject,
              status:newStatus,
              expectedLifeTimeDays:100])
-                    
+
         Tag tag6 = createTag(
             [serialNumber:'4444',
              codeMap:a69_1303,
@@ -393,14 +393,14 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
              model:vemcoV8,
              project:tunaProject,
              status:newStatus])
-            
+
         Tag orphanTag = createTag(
             [serialNumber:'5555',
              codeMap:a69_1303,
              pingCode:'5555',
              model:vemcoV8,
              status:newStatus])
-        
+
         Tag nonEmbargoedTag = createTag(
             [serialNumber:'6666',
                 codeMap:a69_1303,
@@ -427,8 +427,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     unit:'m',
                     slope:1,
                     intercept:0)
-        
-        
+
+
         Sensor sensor2 =
             new Sensor(pingCode:'65000',
                     tag:tag1,
@@ -436,12 +436,12 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     unit:'k',
                     slope:1,
                     intercept:0)
-        tag1.addToSensors(sensor1)    
+        tag1.addToSensors(sensor1)
         tag1.addToSensors(sensor2)
         tag1.save(failOnError:true)
-        
+
         a69_1303.save(failOnError:true)
-        
+
         //
         // Installation data.
         //
@@ -453,13 +453,13 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         Installation bondiLine =
             new Installation(name:'Bondi Line',
                              configuration:curtain,
-                             project:sealCountProject).save(failOnError:true)                     
-                         
+                             project:sealCountProject).save(failOnError:true)
+
         Installation ningalooArray =
             new Installation(name:'Ningaloo Array',
                              configuration:array,
                              project:tunaProject).save(failOnError:true)
-                         
+
         Installation heronCurtain =
             new Installation(name:'Heron Island Curtain',
                              configuration:curtain,
@@ -469,37 +469,37 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             new Installation(name:'Whale Curtain',
                              configuration:curtain,
                              project:whaleProject).save(failOnError:true)
-                             
+
         WKTReader reader = new WKTReader();
 
         Point location = (Point)reader.read("POINT(30.1234 30.1234)")
         location.setSRID(4326)
-        
-        InstallationStation bondiSW1 = 
+
+        InstallationStation bondiSW1 =
             new InstallationStation(installation:bondiLine,
                                     name:'Bondi SW1',
                                     curtainPosition:1,
                                     location:location).save(failOnError:true)
 
-        InstallationStation bondiSW2 = 
+        InstallationStation bondiSW2 =
             new InstallationStation(installation:bondiLine,
                                     name:'Bondi SW2',
                                     curtainPosition:2,
                                     location:(Point)reader.read("POINT(-10.1234 -10.1234)")).save(failOnError:true)
 
-        InstallationStation bondiSW3 = 
+        InstallationStation bondiSW3 =
             new InstallationStation(installation:bondiLine,
                                     name:'Bondi SW3',
                                     curtainPosition:3,
                                     location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
-                                
-        InstallationStation ningalooS1 = 
+
+        InstallationStation ningalooS1 =
             new InstallationStation(installation:ningalooArray,
                                     name:'Ningaloo S1',
                                     curtainPosition:1,
                                     location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
 
-        InstallationStation ningalooS2 = 
+        InstallationStation ningalooS2 =
             new InstallationStation(installation:ningalooArray,
                                     name:'Ningaloo S2',
                                     curtainPosition:2,
@@ -516,13 +516,13 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                     name:'Heron S2',
                                     curtainPosition:2,
                                     location:(Point)reader.read("POINT(76.02 -20.1234)")).save(failOnError:true)
-        
+
         InstallationStation whaleStation =
             new InstallationStation(installation:whaleInstallation,
                                     name:'Whale Station',
                                     curtainPosition:1,
                                     location:(Point)reader.read("POINT(76.02 -20.1234)")).save(failOnError:true)
-                                    
+
         //
         //  Receiver Deployments.
         //
@@ -543,7 +543,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                    location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
         rx1.addToDeployments(rx1Bondi)
         rx1.save()
-        
+
         ReceiverDeployment rx2Bondi =
             new ReceiverDeployment(station:bondiSW2,
                                    receiver:rx2,
@@ -571,7 +571,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                    receiverOrientation:ReceiverOrientation.UP,
                                    batteryLifeDays:90,
                                    location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
-                               
+
         ReceiverDeployment rx4Heron =
             new ReceiverDeployment(station:heronS1,
                                    receiver:rx4,
@@ -614,7 +614,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                    receiverOrientation:ReceiverOrientation.UP,
                                    batteryLifeDays:90,
                                    location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
-        
+
         ReceiverDeployment whaleDeployment =
             new ReceiverDeployment(station:whaleStation,
                                    receiver:rxWhale,
@@ -628,7 +628,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                    receiverOrientation:ReceiverOrientation.UP,
                                    batteryLifeDays:90,
                                    location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
-                                   
+
         //
         // Animals and Animal Releases etc.
         //
@@ -636,8 +636,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         CaabSpecies blueFinTuna = new CaabSpecies(scientificName:"Thunnus maccoyii", commonName:"Southern Bluefin Tuna", spcode:"37441004").save(failOnError:true)
         CaabSpecies blueEyeTrevalla = new CaabSpecies(scientificName:"Hyperoglyphe antarctica", commonName:"Blue-eye Trevalla", spcode:"37445001").save(failOnError:true)
         CaabSpecies southernRightWhale = new CaabSpecies(scientificName:"Eubalaena australis", commonName:"southern right whale", spcode:"41110001").save(failOnError:true)
-        
-        
+
+
         Sex male = new Sex(sex:'MALE').save(failOnError:true)
         Sex female = new Sex(sex:'FEMALE').save(failOnError:true)
 
@@ -647,7 +647,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                         sex:male).save(failOnError:true)
         Animal blueFinTuna1 = new Animal(species:blueFinTuna,
                                          sex:female).save(failOnError:true)
-                                         
+
         Animal nonEmbargoedWhale = new Animal(species:southernRightWhale,
                                                sex:female).save(failOnError:true)
         Animal embargoedWhale = new Animal(species:southernRightWhale,
@@ -695,7 +695,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                               releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
                               releaseDateTime:new DateTime("2011-05-15T14:15:00"),
                               embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2015-05-15 12:34:56")).save(failOnError:true)
-                          
+
         AnimalRelease blueFinTuna1Release =
             new AnimalRelease(project:tunaProject,
                               surgeries:[],
@@ -708,7 +708,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                               releaseLocality:'Neptune Islands',
                               releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
                               releaseDateTime:new DateTime("2011-05-15T14:15:00")).save(failOnError:true)
-    
+
         AnimalRelease nonEmbargoedWhaleRelease =
             new AnimalRelease(project:whaleProject,
                         surgeries:[],
@@ -721,7 +721,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         releaseLocality:'Neptune Islands',
                         releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
                         releaseDateTime:new DateTime("2011-05-15T14:15:00")).save(failOnError:true)
-                  
+
         AnimalRelease embargoedWhaleRelease =
             new AnimalRelease(project:whaleProject,
                         surgeries:[],
@@ -735,15 +735,15 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
                         releaseDateTime:new DateTime("2011-05-15T14:15:00"),
                         embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2020-05-15 12:34:56")).save(failOnError:true)
-                        
-        AnimalMeasurement whiteShark1Length = 
+
+        AnimalMeasurement whiteShark1Length =
             new AnimalMeasurement(release:whiteShark1Release,
                                   type:length,
                                   value:2.5f,
                                   unit:metres,
                                   estimate:false).save(failOnError:true)
 
-        AnimalMeasurement whiteShark1Weight = 
+        AnimalMeasurement whiteShark1Weight =
             new AnimalMeasurement(release:whiteShark1Release,
                                   type:weight,
                                   value:200f,
@@ -751,7 +751,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                   estimate:true).save(failOnError:true)
 
 
-        Surgery surgery1 = 
+        Surgery surgery1 =
             new Surgery(release:whiteShark1Release,
                         tag:tag1,
                         timestamp:new DateTime("2011-05-15T14:12:00"),
@@ -760,7 +760,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         tag1.addToSurgeries(surgery1).save(failOnError:true)
         whiteShark1Release.addToSurgeries(surgery1).save(failOnError:true)
 
-        Surgery surgery2 = 
+        Surgery surgery2 =
             new Surgery(release:whiteShark1Release,
                         tag:tag2,
                         timestamp:new DateTime("2011-05-15T14:13:00"),
@@ -768,26 +768,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         treatmentType:antibiotic)
         tag2.addToSurgeries(surgery2).save(failOnError:true)
         whiteShark1Release.addToSurgeries(surgery2).save(failOnError:true)
-        
-        Surgery surgery3 = 
-            new Surgery(release:whiteShark2Release,
-                        tag:tag1,   // Can't really have a tag on two different animals.
-                        timestamp:new DateTime("2011-05-15T14:12:00"),
-                        type:external,
-                        treatmentType:antibiotic)
-        tag1.addToSurgeries(surgery3).save(failOnError:true)
-        whiteShark2Release.addToSurgeries(surgery3).save(failOnError:true)
-        
-        Surgery surgery4 = 
-            new Surgery(release:blueFinTuna1Release,
-                        tag:tag1,   // Can't really have a tag on two different animals.
-                        timestamp:new DateTime("2011-05-15T14:12:00"),
-                        type:external,
-                        treatmentType:antibiotic)
-        tag1.addToSurgeries(surgery4).save(failOnError:true)
-        blueFinTuna1Release.addToSurgeries(surgery4).save(failOnError:true)
-        
-        Surgery nonEmbargoedWhaleSurgery = 
+
+        Surgery nonEmbargoedWhaleSurgery =
             new Surgery(release:nonEmbargoedWhaleRelease,
                         tag:nonEmbargoedTag,
                         timestamp:new DateTime("2011-05-15T14:15:00"),
@@ -795,8 +777,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         treatmentType:antibiotic)
         nonEmbargoedTag.addToSurgeries(nonEmbargoedWhaleSurgery).save(failOnError:true)
         nonEmbargoedWhaleRelease.addToSurgeries(nonEmbargoedWhaleSurgery).save(failOnError:true)
-        
-        Surgery embargoedWhaleSurgery = 
+
+        Surgery embargoedWhaleSurgery =
             new Surgery(release:embargoedWhaleRelease,
                         tag:embargoedTag,
                         timestamp:new DateTime("2011-05-15T14:15:00"),
@@ -804,7 +786,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         treatmentType:antibiotic)
         embargoedTag.addToSurgeries(embargoedWhaleSurgery).save(failOnError:true)
         embargoedWhaleRelease.addToSurgeries(embargoedWhaleSurgery).save(failOnError:true)
-        
+
         // Receiver Recovery.
         Calendar cal = Calendar.getInstance()
         cal.set(Calendar.HOUR_OF_DAY, 12)
@@ -835,7 +817,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  deployment:rx2Bondi,
                                  batteryLife:12.5f,
                                  batteryVoltage:3.7f).save(failOnError:true)
-                             
+
         ReceiverRecovery recovery3 =
             new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
                                  location:(Point)reader.read("POINT(20.1234 20.1234)"),
@@ -844,7 +826,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  deployment:rx6Heron,
                                  batteryLife:12.5f,
                                  batteryVoltage:3.7f).save(failOnError:true)
-                             
+
         ReceiverRecovery recoveryWhale =
             new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
                                  location:(Point)reader.read("POINT(20.1234 20.1234)"),
@@ -853,28 +835,25 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                  deployment:whaleDeployment,
                                  batteryLife:12.5f,
                                  batteryVoltage:3.7f).save(failOnError:true)
-                                 
+
         createExportWithDetections("export1.csv", jonBurgess, rx1Bondi, rx1, tag1, surgery1, 10)
-        createExportWithDetections("export6.csv", jonBurgess, rx1Bondi, rx1, tag2, surgery4, 3)
-        createExportWithDetections("export3.csv", jonBurgess, rx2Bondi, rx2, tag2, surgery4, 3)
-        createExportWithDetections("export4.csv", jonBurgess, rx3Ningaloo, rx3, tag3, surgery4, 3)
         createExportWithDetections("export5.csv", jonBurgess, rx4Heron, rx4, tag5, null, 3)
 
         createExportWithDetections("nonEmbargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, nonEmbargoedTag, nonEmbargoedWhaleSurgery, 3)
         createExportWithDetections("embargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, embargoedTag, embargoedWhaleSurgery, 3)
         createExportWithDetections("unknownTagWhale.csv", joeBloggs, whaleDeployment, rxWhale, [pinger:[transmitterId:"A69-1303-8888"]], null, 3)
-        
+
         new Statistics(key: "numValidDetections", value: 31).save(failOnError: true)
-        
-        ReceiverDownloadFile export2 = 
+
+        ReceiverDownloadFile export2 =
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
                                      name:"export2.csv",
                                      importDate:new DateTime("2013-05-17T12:54:56").toDate(),
                                      status:FileProcessingStatus.PROCESSED,
                                      errMsg:"",
                                      requestingUser:jonBurgess).save(failOnError:true)
-        
-        DateTime eventDate = new DateTime("2013-05-17T12:54:56")                             
+
+        DateTime eventDate = new DateTime("2013-05-17T12:54:56")
         10.times
         {
             ValidReceiverEvent event =
@@ -884,10 +863,10 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                   description:"desc",
                                   data:"123",
                                   units:"m")
-                              
+
             export2.addToEvents(event)
         }
-        
+
         5.times
         {
             ValidReceiverEvent event =
@@ -897,7 +876,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                   description:"other desc",
                                   data:"23.4",
                                   units:"C")
-                              
+
             export2.addToEvents(event)
         }
 
@@ -906,19 +885,19 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
     private void createExportWithDetections(String exportName, Person uploader, ReceiverDeployment deployment, Receiver receiver, tag, Surgery surgery, int numDetections)
     {
-        ReceiverDownloadFile export = 
+        ReceiverDownloadFile export =
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
                                      name:exportName,
                                      importDate:new DateTime("2013-05-17T12:54:56").toDate(),
                                      status:FileProcessingStatus.PROCESSED,
                                      errMsg:"",
                                      requestingUser:uploader).save(failOnError:true)
-                                 
+
         createDetections(deployment, receiver, tag, export, surgery, numDetections)
         export.save(failOnError:true)
     }
-    
-    private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, tag, ReceiverDownloadFile export1, Surgery surgery1, int numDetections) 
+
+    private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, tag, ReceiverDownloadFile export1, Surgery surgery1, int numDetections)
     {
         numDetections.times
         {
@@ -930,39 +909,31 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     receiverDownload: export1,
                     provisional: false)
 
-            if (surgery1)
-            {    
-                DetectionSurgery detSurgery =
-                        new DetectionSurgery(surgery:surgery1,
-                        detection:detection,
-                        sensor:tag.pinger)
-                detection.addToDetectionSurgeries(detSurgery)
-            }
             export1.addToDetections(detection)
         }
     }
-    
+
     private void createCodeMaps()
     {
         ["A69", "A180"].each
         {
             freq ->
-            
+
             ["1303", "1601", "9001", "9003", "1206", "1105", "9002", "9004"].each
             {
                 codeSpace ->
-                
+
                 CodeMap codeMap = new CodeMap(codeMap:freq + "-" + codeSpace).save(failOnError:true, flush:true)
             }
         }
     }
-    
+
     private Tag createTag(params)
     {
         TransmitterType pinger =
             TransmitterType.findByTransmitterTypeName("PINGER")
         assert(pinger)
-        
+
         Tag tag =
             new Tag(serialNumber:params.serialNumber,
                     codeMap:params.codeMap,
@@ -970,14 +941,13 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     project:params.project,
                     status:params.status,
                     expectedLifeTimeDays:params.expectedLifeTimeDays)
-            
+
         Sensor sensor = new Sensor(tag:tag, pingCode: params.pingCode, transmitterType: pinger)
         tag.addToSensors(sensor)
-        
+
         tag.save(failOnError:true, flush:true)
         params.codeMap.addToTags(tag)
-        
+
         return tag
     }
 }
-

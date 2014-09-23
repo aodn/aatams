@@ -242,7 +242,7 @@ tag.expectedLifeTime.gracePeriodDays = 182 // 6 months
 animalRelease.embargoExpiration.warningPeriodMonths = 1
 
 // The count figure to cut off at to prevent long running tag detection queries
-detection.filter.count.max = 300000
+filter.count.max = 300000
 
 
 grails.gorm.default.list.max = 20
@@ -309,10 +309,12 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
             left join receiver_download_file on receiver_download_id = receiver_download_file.id
             left join sec_user on receiver_download_file.requesting_user_id = sec_user.id
             left join organisation on device.organisation_id = organisation.id
-            left join detection_surgery on valid_detection.id = detection_surgery.detection_id
-            left join sensor on detection_surgery.sensor_id = sensor.id
 
-            left join surgery on detection_surgery.surgery_id = surgery.id
+            left join sensor on valid_detection.transmitter_id = sensor.transmitter_id
+            left join device tag on sensor.tag_id = tag.id
+
+            left join surgery on tag.id = surgery.tag_id
             left join animal_release on surgery.release_id = animal_release.id
+
             left join animal on animal_release.animal_id = animal.id
             left join species on animal.species_id = species.id'''

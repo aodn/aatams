@@ -6,6 +6,7 @@ COPY (
         installation_station.name as station_name,
         species.common_name,
         count(distinct transmitter_id) as distinct_tag_count,
+        array_to_string(array_agg(distinct transmitter_id), ',') as tag_ids,
         st_y(receiver_deployment.location) as latitude, st_x(receiver_deployment.location) as longitude,
         depth_below_surfacem, deploymentdatetime_timestamp as deployment_datetime
 

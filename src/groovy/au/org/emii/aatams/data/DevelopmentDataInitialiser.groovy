@@ -906,8 +906,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                     timestamp: new DateTime("2011-05-17T02:54:00+00:00").plusSeconds(it).toDate(),
                     receiverName: rx1.name,
                     transmitterId: tag.pinger.transmitterId,
-                    receiverDownload: export1,
-                    provisional: false)
+                    receiverDownload: export1)
 
             export1.addToDetections(detection)
         }

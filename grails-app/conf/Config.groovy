@@ -242,7 +242,7 @@ tag.expectedLifeTime.gracePeriodDays = 182 // 6 months
 animalRelease.embargoExpiration.warningPeriodMonths = 1
 
 // The count figure to cut off at to prevent long running tag detection queries
-filter.count.max = 300000
+filter.count.max = 50000
 
 
 grails.gorm.default.list.max = 20
@@ -272,49 +272,4 @@ grails.gorm.default.mapping = {
     "user-type" type: org.joda.time.contrib.hibernate.PersistentPeriod, class: org.joda.time.Period
 }
 
-rawDetection.extract.limit = 50000
-rawDetection.extract.view.name = 'detection_extract_view'
-rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp,
-            installation_station.name as station,
-            installation_station.id as station_id,
-            installation_station.location as location,
-            st_y(installation_station.location) as latitude, st_x(installation_station.location) as longitude,
-            (device_model.model_name || '-' || device.serial_number) as receiver_name,
-            COALESCE(sensor.transmitter_id, '') as sensor_id,
-            COALESCE((species.spcode || ' - ' || species.scientific_name || ' (' || species.common_name || ')'), '') as species_name,
-
-            sec_user.name as uploader,
-            valid_detection.transmitter_id as "transmitter_id",
-            organisation.name as organisation,
-            project.name as project,
-            installation.name as installation,
-            COALESCE(species.spcode, '') as spcode,
-            animal_release.id as animal_release_id,
-            animal_release.embargo_date as embargo_date,
-            project.id as project_id,
-            valid_detection.id as detection_id,
-
-            animal_release.project_id as release_project_id,
-            valid_detection.sensor_value, valid_detection.sensor_unit,
-            valid_detection.provisional
-
-            from valid_detection
-
-            left join receiver_deployment on receiver_deployment_id = receiver_deployment.id
-            left join installation_station on receiver_deployment.station_id = installation_station.id
-            left join installation on installation_station.installation_id = installation.id
-            left join project on installation.project_id = project.id
-            left join device on receiver_deployment.receiver_id = device.id
-            left join device_model on device.model_id = device_model.id
-            left join receiver_download_file on receiver_download_id = receiver_download_file.id
-            left join sec_user on receiver_download_file.requesting_user_id = sec_user.id
-            left join organisation on device.organisation_id = organisation.id
-
-            left join sensor on valid_detection.transmitter_id = sensor.transmitter_id
-            left join device tag on sensor.tag_id = tag.id
-
-            left join surgery on tag.id = surgery.tag_id
-            left join animal_release on surgery.release_id = animal_release.id
-
-            left join animal on animal_release.animal_id = animal.id
-            left join species on animal.species_id = species.id'''
+rawDetection.extract.limit = 20000

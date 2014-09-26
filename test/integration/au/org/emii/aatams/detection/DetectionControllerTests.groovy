@@ -3,7 +3,6 @@ package au.org.emii.aatams.detection
 import au.org.emii.aatams.export.AbstractStreamingExporterService;
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.test.*
-import groovy.sql.Sql
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class DetectionControllerTests extends AbstractControllerUnitTestCase
@@ -17,14 +16,6 @@ class DetectionControllerTests extends AbstractControllerUnitTestCase
 
         permitted = true
         controller.params.format = "CSV"
-
-        def sql = new Sql(dataSource)
-
-        def viewName = ConfigurationHolder.config.rawDetection.extract.view.name
-        def viewSelect = ConfigurationHolder.config.rawDetection.extract.view.select
-        sql.execute ('create view ' + viewName + ' as ' + viewSelect)
-
-        detectionExtractService.metaClass.getDetectionExtractViewName = { viewName }
     }
 
     void testExecuteDetectionExtract()

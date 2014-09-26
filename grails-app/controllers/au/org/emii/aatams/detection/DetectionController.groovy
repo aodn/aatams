@@ -56,7 +56,7 @@ class DetectionController extends ReportController
 
         def paramsClone = params.clone()
 
-        paramsClone.max = grailsApplication.config.detection.filter.count.max + 1
+        paramsClone.max = grailsApplication.config.filter.count.max + 1
         def count = detectionExtractService.getCount(paramsClone)
 
         params.remove("sql")

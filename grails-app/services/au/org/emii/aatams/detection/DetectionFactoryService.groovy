@@ -64,9 +64,9 @@ class DetectionFactoryService
         def invalidDetectionGroupByClause = "receiver_name, transmitter_id, timestamp, id, version, location, message, reason, receiver_download_id, sensor_unit, sensor_value, station_name, transmitter_name, transmitter_serial_number"
 
         return "insert into valid_detection \
-                    (${validDetectionColumnNames}, provisional) \
+                    (${validDetectionColumnNames}) \
                         ( \
-                            select ${invalidDetectionSelectFields}, true as provisional from invalid_detection \
+                            select ${invalidDetectionSelectFields} from invalid_detection \
                                 where ${condition} \
                                 group by ${invalidDetectionGroupByClause} \
                         ); \

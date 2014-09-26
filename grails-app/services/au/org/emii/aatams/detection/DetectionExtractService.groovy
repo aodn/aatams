@@ -17,9 +17,10 @@ class DetectionExtractService extends AbstractStreamingExporterService
 
     public List extractPage(filterParams)
     {
+        def startTime = System.currentTimeMillis()
         log.debug("Querying database, offset: " + filterParams.offset)
         def results = filterParams.sql.rows(constructQuery(filterParams, filterParams.max, filterParams.offset))
-        log.debug("Query finished, num results: " + results.size())
+        log.debug("Query finished in ${System.currentTimeMillis() - startTime}ms with ${results.size()} results")
 
         return results
     }
@@ -31,9 +32,10 @@ class DetectionExtractService extends AbstractStreamingExporterService
             return ValidDetection.count()
         }
 
-        log.debug("Querying database, offset: " + filterParams.offset)
+        def startTime = System.currentTimeMillis()
+        log.debug("Querying database")
         def results = filterParams.sql.rows(constructQuery(filterParams, filterParams.max, null, true))
-        log.debug("results: " + results)
+        log.debug("Count query finished in ${System.currentTimeMillis() - startTime}ms with ${results.count[0]} results")
 
         return results.count[0]
     }
@@ -67,14 +69,6 @@ class DetectionExtractService extends AbstractStreamingExporterService
         super.writeCsvData(filterParams, out)
     }
 
-    /**
-     * Allow mocking in tests (where "create_matview" function is not available).
-     */
-    private String getDetectionExtractViewName()
-    {
-        return "detection_extract_view"
-    }
-
     private String constructQuery(filterParams, limit, offset)
     {
         return constructQuery(filterParams, limit, offset, false)
@@ -86,19 +80,21 @@ class DetectionExtractService extends AbstractStreamingExporterService
 
         if (count)
         {
-            query = "select count(*) from ${getDetectionExtractViewName()} "
+            query = SELECT_COUNT
         }
         else
         {
-            query = "select * from ${getDetectionExtractViewName()} "
+            query = SELECT
         }
+
+        query += " "
 
         List<String> whereClauses = []
 
-        ["project": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
-         "installation": filterParams?.filter?.receiverDeployment?.station?.installation?.in?.getAt(1),
-         "station": filterParams?.filter?.receiverDeployment?.station?.in?.getAt(1),
-         "transmitter_id": filterParams?.filter?.in?.getAt(1),
+        ["project.name": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
+         "installation.name": filterParams?.filter?.receiverDeployment?.station?.installation?.in?.getAt(1),
+         "installation_station.name": filterParams?.filter?.receiverDeployment?.station?.in?.getAt(1),
+         "valid_detection.transmitter_id": filterParams?.filter?.in?.getAt(1),
          "spcode": filterParams?.filter?.surgeries?.release?.animal?.species?.in?.getAt(1)
          ].each
          {
@@ -239,4 +235,54 @@ class DetectionExtractService extends AbstractStreamingExporterService
         assert(params.projectPermissionCache.containsKey(projectId))
         return params.projectPermissionCache[projectId]
     }
+
+    static String SELECT = '''select timestamp, to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp,
+            installation_station.name as station,
+            installation_station.id as station_id,
+            installation_station.location as location,
+            st_y(installation_station.location) as latitude, st_x(installation_station.location) as longitude,
+            (device_model.model_name || '-' || device.serial_number) as receiver_name,
+            COALESCE(sensor.transmitter_id, '') as sensor_id,
+            COALESCE((species.spcode || ' - ' || species.scientific_name || ' (' || species.common_name || ')'), '') as species_name,
+
+            sec_user.name as uploader,
+            valid_detection.transmitter_id as "transmitter_id",
+            organisation.name as organisation,
+            project.name as project,
+            installation.name as installation,
+            COALESCE(species.spcode, '') as spcode,
+            animal_release.id as animal_release_id,
+            animal_release.embargo_date as embargo_date,
+            project.id as project_id,
+            valid_detection.id as detection_id,
+
+            animal_release.project_id as release_project_id,
+            valid_detection.sensor_value, valid_detection.sensor_unit
+''' + " ${FROM_JOIN}"
+
+    static String SELECT_COUNT = "select count(*) ${FROM_JOIN}"
+
+    static String FROM_JOIN = '''from valid_detection
+
+            -- receiver metadata must exist (otherwise the detection would be invalid)
+	    join receiver_deployment on receiver_deployment_id = receiver_deployment.id
+            join installation_station on receiver_deployment.station_id = installation_station.id
+            join installation on installation_station.installation_id = installation.id
+            join project on installation.project_id = project.id
+            join device on receiver_deployment.receiver_id = device.id
+            join device_model on device.model_id = device_model.id
+            join receiver_download_file on receiver_download_id = receiver_download_file.id
+            join sec_user on receiver_download_file.requesting_user_id = sec_user.id
+            join organisation on device.organisation_id = organisation.id
+
+            -- tag metadata *may* exist
+            left join sensor on valid_detection.transmitter_id = sensor.transmitter_id
+            left join device tag on sensor.tag_id = tag.id
+
+            -- as with surgery metadata
+            left join surgery on tag.id = surgery.tag_id
+            left join animal_release on surgery.release_id = animal_release.id
+            left join animal on animal_release.animal_id = animal.id
+            left join species on animal.species_id = species.id'''
+
 }

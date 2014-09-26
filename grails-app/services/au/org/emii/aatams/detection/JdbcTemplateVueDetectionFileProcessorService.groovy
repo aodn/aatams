@@ -1,7 +1,5 @@
 package au.org.emii.aatams.detection
 
-import groovy.sql.Sql
-
 import org.springframework.jdbc.core.JdbcTemplate
 
 import au.org.emii.aatams.FileProcessingException
@@ -19,7 +17,6 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
     static transactional = true
 
     def dataSource
-    def grailsApplication
     def jdbcTemplateDetectionFactoryService
 
     protected int getBatchSize()
@@ -31,7 +28,7 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
     {
         super.process(downloadFile)
 
-        promoteProvisional()
+        updateNumValidDets(downloadFile)
     }
 
     protected void startBatch(context)
@@ -129,20 +126,11 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
         context.detectionBatch.addAll(detection)
     }
 
-    private void promoteProvisional()
+    private void updateNumValidDets(downloadFile)
     {
-        def sql = Sql.newInstance(dataSource)
-
-        // Insert provisional dets in to materialized view.
-        def provDetsCount = sql.firstRow('select count(*) from detection_extract_view where provisional = true;').count
-        sql.execute("insert into detection_extract_view_mv (select * from detection_extract_view where provisional = true)")
-
         // Update statistics.
         def numValidDets = Statistics.findByKey("numValidDetections")
-        numValidDets.value += provDetsCount
-
-        // Clear 'provisional' flag on detections.
-        sql.execute("update valid_detection set provisional = false where provisional = true")
-        sql.execute("update detection_extract_view_mv set provisional = false where provisional = true")
+        numValidDets.value += ValidDetection.countByReceiverDownload(downloadFile)
+        numValidDets.save()
     }
 }

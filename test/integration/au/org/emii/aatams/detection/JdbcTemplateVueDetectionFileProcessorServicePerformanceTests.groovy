@@ -5,14 +5,16 @@ import au.org.emii.aatams.test.*
 
 import org.perf4j.StopWatch
 
-class JdbcTemplateVueDetectionFileProcessorServicePerformanceTests extends AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests
+class JdbcTemplateVueDetectionFileProcessorServicePerformanceTests extends AbstractGrailsUnitTestCase
 {
+    def jdbcTemplateVueDetectionFileProcessorService
+
     void testProcess()
     {
         ReceiverDownloadFile download
-        
+
         try
-        { 
+        {
             download = new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV)
             download.initialiseForProcessing("thefilename")
             download.requestingUser = Person.findByUsername('jbloggs')
@@ -23,7 +25,7 @@ class JdbcTemplateVueDetectionFileProcessorServicePerformanceTests extends Abstr
             }
 
             StopWatch stopWatch = new StopWatch();
-            
+
             jdbcTemplateVueDetectionFileProcessorService.process(download)
             stopWatch.stop()
 

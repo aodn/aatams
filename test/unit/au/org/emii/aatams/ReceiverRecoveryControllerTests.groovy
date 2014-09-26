@@ -48,6 +48,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         }
 
         controller.candidateEntitiesService = candidateEntitiesService
+        controller.metaClass.runAsync = { Closure c -> }
 
         // Create the required entities.
         def installation1 = new Installation(id:1, project:projectList[0])
@@ -174,10 +175,19 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         controller.params.deployment = [initialisationDateTime: initDate]
         controller.params.id = recovery.id
 
+        boolean rescanCalled = false
+        controller.metaClass.rescanDetections =
+        {
+            theDeployment ->
+
+            rescanCalled = true
+        }
+
         controller.update()
 
         assertEquals(initDate, deployment.initialisationDateTime)
         assertFalse(recovery.hasErrors())
+        assertTrue(rescanCalled)
     }
 
     private InstallationStation createStation() {

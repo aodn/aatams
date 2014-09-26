@@ -124,6 +124,9 @@ class ReceiverRecoveryController extends AbstractController
             if (   !receiverRecoveryInstance.deployment.hasErrors()
                 && !receiverRecoveryInstance.hasErrors()
                 && receiverRecoveryInstance.deployment.save(flush: true)) {
+
+                rescanDetections(receiverRecoveryInstance.deployment)
+
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.toString()])}"
                 redirect(action: "show", id: receiverRecoveryInstance.id)
             }

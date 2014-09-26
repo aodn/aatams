@@ -71,6 +71,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         stationList.each { it.save() }
 
         controller.metaClass.message = { LinkedHashMap args -> return args }
+        controller.metaClass.runAsync = { Closure c -> }
 
         candidateEntitiesService = new CandidateEntitiesService()
         candidateEntitiesService.metaClass.stations =
@@ -106,12 +107,21 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
     {
         assertEquals(0, station1.numDeployments)
 
+        boolean rescanCalled = false
+        controller.metaClass.rescanDetections =
+        {
+            theDeployment ->
+
+            rescanCalled = true
+        }
+
         controller.params.deploymentDateTime = deploymentDateTime
         controller.params.receiver = receiver
         controller.save()
 
         assertEquals("show", controller.redirectArgs.action)
         assertEquals(1, station1.numDeployments)
+        assertTrue(rescanCalled)
 
         def deployment = ReceiverDeployment.get(controller.redirectArgs.id)
         assertNotNull(deployment)
@@ -120,6 +130,14 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
 
     private void assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime)
     {
+        boolean rescanCalled = false
+        controller.metaClass.rescanDetections =
+        {
+            theDeployment ->
+
+            rescanCalled = true
+        }
+
         controller.params.deploymentDateTime = deploymentDateTime
         controller.params.id = existingDeployment.id
         controller.update()

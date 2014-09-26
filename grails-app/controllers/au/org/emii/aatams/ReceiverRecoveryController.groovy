@@ -117,8 +117,9 @@ class ReceiverRecoveryController extends AbstractController
                 }
             }
 
+            def deployment = params.remove('deployment')
             receiverRecoveryInstance.properties = params
-            receiverRecoveryInstance.deployment.properties = params.deployment
+            receiverRecoveryInstance.deployment.properties = deployment
 
             if (   !receiverRecoveryInstance.deployment.hasErrors()
                 && !receiverRecoveryInstance.hasErrors()

@@ -177,6 +177,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         controller.update()
 
         assertEquals(initDate, deployment.initialisationDateTime)
+        assertFalse(recovery.hasErrors())
     }
 
     private InstallationStation createStation() {

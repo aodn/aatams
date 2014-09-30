@@ -7,4 +7,5 @@ databaseChangeLog = {
     include file: 'add_project_name_index.groovy'
     include file: 'trim_serial_numbers.groovy'
     include file: '20140827-AS-AddUnavailabilityNotification.groovy'
+    include file: 'matviews_entries.groovy'
 }

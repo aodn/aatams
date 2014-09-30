@@ -7,6 +7,7 @@ import org.joda.time.contrib.hibernate.*
 class ReceiverDeploymentController extends ReportController
 {
     def candidateEntitiesService
+    def detectionFactoryService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -49,12 +50,24 @@ class ReceiverDeploymentController extends ReportController
         }
 
         if (receiverDeploymentInstance.save(flush: true)) {
+
+            rescanDetections(receiverDeploymentInstance)
+
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
             redirect(action: "show", id: receiverDeploymentInstance.id)
         }
         else
         {
             renderCreateWithDefaultModel(receiverDeploymentInstance)
+        }
+    }
+
+    def rescanDetections(deployment)
+    {
+        runAsync
+        {
+            deployment.refresh()
+            detectionFactoryService.rescanForDeployment(deployment)
         }
     }
 
@@ -188,6 +201,9 @@ class ReceiverDeploymentController extends ReportController
             addReceiverToStation(receiverDeploymentInstance)
 
             if (!receiverDeploymentInstance.hasErrors() && isValidDeployment(receiverDeploymentInstance) && receiverDeploymentInstance.save(flush: true)) {
+
+                rescanDetections(receiverDeploymentInstance)
+
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
                 redirect(action: "show", id: receiverDeploymentInstance.id)
             }

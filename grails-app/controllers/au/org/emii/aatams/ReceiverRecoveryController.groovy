@@ -13,66 +13,66 @@ class ReceiverRecoveryController extends AbstractController
     def candidateEntitiesService
     def detectionFactoryService
     def sessionFactory
-    
+
     def index = {
         redirect(action: "list", params: params)
     }
-    
-    def list = 
+
+    def list =
     {
         doList("receiverRecovery") + [readableProjects:candidateEntitiesService.readableProjects()]
     }
-    
-    def create = 
+
+    def create =
     {
         ReceiverDeployment deployment = ReceiverDeployment.get(params.deploymentId)
-        
+
         def receiverRecoveryInstance = new ReceiverRecovery()
         receiverRecoveryInstance.properties = params
         receiverRecoveryInstance.deployment = deployment
-        
+
         receiverRecoveryInstance.location = determineDefaultLocation(deployment)
-        
+
         return [receiverRecoveryInstance: receiverRecoveryInstance]
     }
 
     private Point determineDefaultLocation(deployment)
     {
         assert(deployment)
-        
+
         if (deployment.location)
         {
             return deployment.location
         }
-        
+
         return deployment.station?.location
     }
-    
-    def save = 
+
+    def save =
     {
         ReceiverDeployment deployment = ReceiverDeployment.get(params.deploymentId)
         deployment.properties = params.deployment
-        
+
         log.debug("deployment: " + deployment)
-        
+
         def receiverRecoveryInstance = new ReceiverRecovery(params)
         receiverRecoveryInstance.deployment = deployment
 
         deployment?.recovery = receiverRecoveryInstance
-        
-        if (deployment?.save(flush: true)) 
+
+        if (deployment?.save(flush: true))
         {
             rescanDetections(deployment)
-            
+
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.toString()])}"
             redirect(action: "show", id: receiverRecoveryInstance.id)
         }
-        else 
+        else
         {
             render(view: "create", model: [receiverRecoveryInstance: receiverRecoveryInstance])
         }
     }
-    
+
     def rescanDetections(deployment)
     {
         runAsync
@@ -81,7 +81,7 @@ class ReceiverRecoveryController extends AbstractController
             detectionFactoryService.rescanForDeployment(deployment)
         }
     }
-    
+
     def show = {
         def receiverRecoveryInstance = ReceiverRecovery.get(params.id)
         if (!receiverRecoveryInstance) {
@@ -110,19 +110,23 @@ class ReceiverRecoveryController extends AbstractController
             if (params.version) {
                 def version = params.version.toLong()
                 if (receiverRecoveryInstance.version > version) {
-                    
+
                     receiverRecoveryInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery')] as Object[], "Another user has updated this ReceiverRecovery while you were editing")
                     render(view: "edit", model: [receiverRecoveryInstance: receiverRecoveryInstance])
                     return
                 }
             }
-            
+
+            def deployment = params.remove('deployment')
             receiverRecoveryInstance.properties = params
-            receiverRecoveryInstance.deployment.properties = params.deployment
-            
-            if (   !receiverRecoveryInstance.deployment.hasErrors() 
-                && !receiverRecoveryInstance.hasErrors() 
+            receiverRecoveryInstance.deployment.properties = deployment
+
+            if (   !receiverRecoveryInstance.deployment.hasErrors()
+                && !receiverRecoveryInstance.hasErrors()
                 && receiverRecoveryInstance.deployment.save(flush: true)) {
+
+                rescanDetections(receiverRecoveryInstance.deployment)
+
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.toString()])}"
                 redirect(action: "show", id: receiverRecoveryInstance.id)
             }
@@ -139,12 +143,12 @@ class ReceiverRecoveryController extends AbstractController
     def delete = {
         def receiverRecoveryInstance = ReceiverRecovery.get(params.id)
         if (receiverRecoveryInstance) {
-            try 
+            try
             {
                 def deployment = receiverRecoveryInstance.deployment
                 deployment.recovery = null
                 deployment.save()
-                
+
                 receiverRecoveryInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.toString()])}"
                 redirect(action: "list")

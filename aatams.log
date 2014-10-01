@@ -1,0 +1,816 @@
+2014-10-01 10:51:09,621 [main] [] INFO  Http11Protocol - Initializing Coyote HTTP/1.1 on http-8080
+2014-10-01 10:51:09,624 [main] [] INFO  StandardService - Starting service Tomcat
+2014-10-01 10:51:09,626 [main] [] INFO  StandardEngine - Starting Servlet Engine: Apache Tomcat/6.0-snapshot
+2014-10-01 10:51:09,816 [main] [] INFO  ContextConfig - No default web.xml
+2014-10-01 10:51:10,149 [main] [] INFO  Digester - TLD skipped. URI: http://www.springframework.org/tags is already defined
+2014-10-01 10:51:10,342 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/core is already defined
+2014-10-01 10:51:10,364 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/fmt is already defined
+2014-10-01 10:51:10,418 [main] [] INFO  Digester - TLD skipped. URI: http://shiro.apache.org/tags is already defined
+2014-10-01 10:51:10,435 [main] [] INFO  [/aatams] - Initializing Spring root WebApplicationContext
+2014-10-01 10:51:15,578 [main] [] INFO  BeanBuilder - [RuntimeConfiguration] Configuring data source for environment: DEVELOPMENT
+2014-10-01 10:51:16,480 [main] [] INFO  BeanBuilder - Registering realm: shiro.SecDbRealm
+2014-10-01 10:51:17,949 [main] [] INFO  HBSpatialExtension - Initializing HBSpatialExtension
+2014-10-01 10:51:17,950 [main] [] INFO  HBSpatialExtension - Attempting to load Hibernate Spatial Provider org.hibernatespatial.postgis.DialectProvider
+2014-10-01 10:51:17,951 [main] [] INFO  HBSpatialExtension - Checking for default configuration file.
+2014-10-01 10:51:17,952 [main] [] INFO  HSConfiguration - No configuration file hibernate-spatial.cfg.xml on the classpath.
+2014-10-01 10:51:25,283 [main] [] INFO  SchedulerSignalerImpl - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2014-10-01 10:51:25,283 [main] [] INFO  QuartzScheduler - Quartz Scheduler v.1.6.1 created.
+2014-10-01 10:51:25,284 [main] [] INFO  RAMJobStore - RAMJobStore initialized.
+2014-10-01 10:51:25,284 [main] [] INFO  StdSchedulerFactory - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2014-10-01 10:51:25,284 [main] [] INFO  StdSchedulerFactory - Quartz scheduler version: 1.6.1
+2014-10-01 10:51:25,284 [main] [] INFO  QuartzScheduler - JobFactory set to: org.codehaus.groovy.grails.plugins.quartz.GrailsJobFactory@70e082d9
+2014-10-01 10:51:25,836 [main] [] INFO  DefaultGrailsTemplateGenerator - Scaffolding template generator set to use resource loader org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext@1818c82e: startup date [Wed Oct 01 10:51:16 EST 2014]; parent: Root WebApplicationContext
+2014-10-01 10:51:26,045 [main] [] INFO  EnvironmentSearchableCompassConfigurator - Setting Compass connection to [/home/dnahodil/.grails/projects/aatams/searchable-index/development]
+2014-10-01 10:51:26,238 [main] [] WARN  CompassMappingUtils - Cannot find domain class for property 'project' of class 'au.org.emii.aatams.Sensor
+2014-10-01 10:51:26,364 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Sensor.cpm.xml]
+2014-10-01 10:51:26,377 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Person.cpm.xml]
+2014-10-01 10:51:26,397 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverRecovery.cpm.xml]
+2014-10-01 10:51:26,409 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Project.cpm.xml]
+2014-10-01 10:51:26,437 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverDeployment.cpm.xml]
+2014-10-01 10:51:26,449 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ProjectRole.cpm.xml]
+2014-10-01 10:51:26,462 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Installation.cpm.xml]
+2014-10-01 10:51:26,474 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Surgery.cpm.xml]
+2014-10-01 10:51:26,482 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Receiver.cpm.xml]
+2014-10-01 10:51:26,502 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/AnimalRelease.cpm.xml]
+2014-10-01 10:51:26,511 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/InstallationStation.cpm.xml]
+2014-10-01 10:51:26,521 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Organisation.cpm.xml]
+2014-10-01 10:51:26,529 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Tag.cpm.xml]
+2014-10-01 10:51:26,767 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 10:51:26,771 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 10:51:26,845 [main] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 10:51:26,847 [main] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 10:51:26,847 [main] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 10:51:28,551 [main] [] WARN  TestDataConfigurationHolder - TestDataConfig.groovy not found, build-test-data plugin proceeding without config file
+2014-10-01 10:51:31,022 [main] [] INFO  MigrationRunner - Running script 'changelog.groovy'
+2014-10-01 10:51:31,095 [main] [] INFO  liquibase - Successfully acquired change log lock
+2014-10-01 10:51:38,167 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 10:51:38,247 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 10:51:38,731 [main] [] INFO  liquibase - Successfully released change log lock
+2014-10-01 10:51:38,823 [Thread-16] [] INFO  CompassGpsUtils - Starting Searchable Plugin bulk index
+2014-10-01 10:51:38,829 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 10:51:38,830 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 10:51:38,923 [main] [] INFO  GrailsConfigUtils - [GrailsContextLoader] Grails application loaded.
+2014-10-01 10:51:38,945 [main] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2014-10-01 10:51:40,260 [main] [] INFO  [/aatams] - Initializing Spring FrameworkServlet 'grails'
+2014-10-01 10:51:40,353 [main] [] INFO  Http11Protocol - Starting Coyote HTTP/1.1 on http-8080
+2014-10-01 10:51:40,431 [Thread-16] [] INFO  DefaultCompass - Closing Compass [default]
+2014-10-01 10:51:40,431 [Thread-16] [] INFO  DefaultCompass - Closed Compass [default]
+2014-10-01 10:51:40,432 [Thread-16] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 10:51:40,432 [Thread-16] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 10:51:40,433 [Thread-16] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 10:51:40,434 [Thread-16] [] INFO  CompassGpsUtils - Finished Searchable Plugin bulk index, 1 secs, 610 ms
+2014-10-01 11:03:44,905 [main] [] INFO  Http11Protocol - Initializing Coyote HTTP/1.1 on http-8080
+2014-10-01 11:03:44,906 [main] [] INFO  StandardService - Starting service Tomcat
+2014-10-01 11:03:44,908 [main] [] INFO  StandardEngine - Starting Servlet Engine: Apache Tomcat/6.0-snapshot
+2014-10-01 11:03:45,057 [main] [] INFO  ContextConfig - No default web.xml
+2014-10-01 11:03:45,387 [main] [] INFO  Digester - TLD skipped. URI: http://www.springframework.org/tags is already defined
+2014-10-01 11:03:45,539 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/core is already defined
+2014-10-01 11:03:45,571 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/fmt is already defined
+2014-10-01 11:03:45,635 [main] [] INFO  Digester - TLD skipped. URI: http://shiro.apache.org/tags is already defined
+2014-10-01 11:03:45,662 [main] [] INFO  [/aatams] - Initializing Spring root WebApplicationContext
+2014-10-01 11:03:49,926 [main] [] INFO  BeanBuilder - [RuntimeConfiguration] Configuring data source for environment: DEVELOPMENT
+2014-10-01 11:03:50,897 [main] [] INFO  BeanBuilder - Registering realm: shiro.SecDbRealm
+2014-10-01 11:03:52,295 [main] [] INFO  HBSpatialExtension - Initializing HBSpatialExtension
+2014-10-01 11:03:52,296 [main] [] INFO  HBSpatialExtension - Attempting to load Hibernate Spatial Provider org.hibernatespatial.postgis.DialectProvider
+2014-10-01 11:03:52,297 [main] [] INFO  HBSpatialExtension - Checking for default configuration file.
+2014-10-01 11:03:52,298 [main] [] INFO  HSConfiguration - No configuration file hibernate-spatial.cfg.xml on the classpath.
+2014-10-01 11:03:59,332 [main] [] INFO  SchedulerSignalerImpl - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2014-10-01 11:03:59,333 [main] [] INFO  QuartzScheduler - Quartz Scheduler v.1.6.1 created.
+2014-10-01 11:03:59,336 [main] [] INFO  RAMJobStore - RAMJobStore initialized.
+2014-10-01 11:03:59,336 [main] [] INFO  StdSchedulerFactory - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2014-10-01 11:03:59,336 [main] [] INFO  StdSchedulerFactory - Quartz scheduler version: 1.6.1
+2014-10-01 11:03:59,336 [main] [] INFO  QuartzScheduler - JobFactory set to: org.codehaus.groovy.grails.plugins.quartz.GrailsJobFactory@76c1b53a
+2014-10-01 11:03:59,914 [main] [] INFO  DefaultGrailsTemplateGenerator - Scaffolding template generator set to use resource loader org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext@43569009: startup date [Wed Oct 01 11:03:51 EST 2014]; parent: Root WebApplicationContext
+2014-10-01 11:04:00,123 [main] [] INFO  EnvironmentSearchableCompassConfigurator - Setting Compass connection to [/home/dnahodil/.grails/projects/aatams/searchable-index/development]
+2014-10-01 11:04:00,319 [main] [] WARN  CompassMappingUtils - Cannot find domain class for property 'project' of class 'au.org.emii.aatams.Sensor
+2014-10-01 11:04:00,484 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverDeployment.cpm.xml]
+2014-10-01 11:04:00,498 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Receiver.cpm.xml]
+2014-10-01 11:04:00,514 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Surgery.cpm.xml]
+2014-10-01 11:04:00,525 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/InstallationStation.cpm.xml]
+2014-10-01 11:04:00,545 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/AnimalRelease.cpm.xml]
+2014-10-01 11:04:00,553 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Installation.cpm.xml]
+2014-10-01 11:04:00,565 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ProjectRole.cpm.xml]
+2014-10-01 11:04:00,575 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Project.cpm.xml]
+2014-10-01 11:04:00,584 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Tag.cpm.xml]
+2014-10-01 11:04:00,596 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverRecovery.cpm.xml]
+2014-10-01 11:04:00,604 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Person.cpm.xml]
+2014-10-01 11:04:00,622 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Sensor.cpm.xml]
+2014-10-01 11:04:00,633 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Organisation.cpm.xml]
+2014-10-01 11:04:00,890 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 11:04:00,895 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 11:04:00,939 [main] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 11:04:00,940 [main] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 11:04:00,941 [main] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 11:04:02,705 [main] [] WARN  TestDataConfigurationHolder - TestDataConfig.groovy not found, build-test-data plugin proceeding without config file
+2014-10-01 11:04:05,328 [main] [] INFO  MigrationRunner - Running script 'changelog.groovy'
+2014-10-01 11:04:05,397 [main] [] INFO  liquibase - Successfully acquired change log lock
+2014-10-01 11:04:12,063 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 11:04:12,141 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 11:04:12,595 [main] [] INFO  liquibase - Marking ChangeSet: matviews_entries.groovy::1412032256000-1::dnahodil::(Checksum: 3:0f9f3d3b6c8ae072de1bdb46c97de4a5) ran despite precondition failure due to onFail='MARK_RAN': 
+          changelog.groovy : SQL Precondition failed.  Expected '0' got '1'
+
+2014-10-01 11:04:12,621 [main] [] INFO  liquibase - ChangeSet matviews_entries.groovy::1412032256000-2::dnahodil ran successfully in 10ms
+2014-10-01 11:04:12,656 [main] [] INFO  liquibase - Successfully released change log lock
+2014-10-01 11:04:12,730 [Thread-16] [] INFO  CompassGpsUtils - Starting Searchable Plugin bulk index
+2014-10-01 11:04:12,734 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 11:04:12,734 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 11:04:12,837 [main] [] INFO  GrailsConfigUtils - [GrailsContextLoader] Grails application loaded.
+2014-10-01 11:04:12,856 [main] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2014-10-01 11:04:14,312 [main] [] INFO  [/aatams] - Initializing Spring FrameworkServlet 'grails'
+2014-10-01 11:04:14,414 [main] [] INFO  Http11Protocol - Starting Coyote HTTP/1.1 on http-8080
+2014-10-01 11:04:14,518 [Thread-16] [] INFO  DefaultCompass - Closing Compass [default]
+2014-10-01 11:04:14,518 [Thread-16] [] INFO  DefaultCompass - Closed Compass [default]
+2014-10-01 11:04:14,518 [Thread-16] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 11:04:14,519 [Thread-16] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 11:04:14,519 [Thread-16] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 11:04:14,521 [Thread-16] [] INFO  CompassGpsUtils - Finished Searchable Plugin bulk index, 1 secs, 790 ms
+2014-10-01 11:05:33,017 [main] [] INFO  Http11Protocol - Initializing Coyote HTTP/1.1 on http-8080
+2014-10-01 11:05:33,019 [main] [] INFO  StandardService - Starting service Tomcat
+2014-10-01 11:05:33,021 [main] [] INFO  StandardEngine - Starting Servlet Engine: Apache Tomcat/6.0-snapshot
+2014-10-01 11:05:33,137 [main] [] INFO  ContextConfig - No default web.xml
+2014-10-01 11:05:33,410 [main] [] INFO  Digester - TLD skipped. URI: http://www.springframework.org/tags is already defined
+2014-10-01 11:05:33,500 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/core is already defined
+2014-10-01 11:05:33,528 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/fmt is already defined
+2014-10-01 11:05:33,595 [main] [] INFO  Digester - TLD skipped. URI: http://shiro.apache.org/tags is already defined
+2014-10-01 11:05:33,622 [main] [] INFO  [/aatams] - Initializing Spring root WebApplicationContext
+2014-10-01 11:05:37,843 [main] [] INFO  BeanBuilder - [RuntimeConfiguration] Configuring data source for environment: DEVELOPMENT
+2014-10-01 11:05:38,653 [main] [] INFO  BeanBuilder - Registering realm: shiro.SecDbRealm
+2014-10-01 11:05:40,015 [main] [] INFO  HBSpatialExtension - Initializing HBSpatialExtension
+2014-10-01 11:05:40,016 [main] [] INFO  HBSpatialExtension - Attempting to load Hibernate Spatial Provider org.hibernatespatial.postgis.DialectProvider
+2014-10-01 11:05:40,017 [main] [] INFO  HBSpatialExtension - Checking for default configuration file.
+2014-10-01 11:05:40,018 [main] [] INFO  HSConfiguration - No configuration file hibernate-spatial.cfg.xml on the classpath.
+2014-10-01 11:05:47,090 [main] [] INFO  SchedulerSignalerImpl - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2014-10-01 11:05:47,091 [main] [] INFO  QuartzScheduler - Quartz Scheduler v.1.6.1 created.
+2014-10-01 11:05:47,092 [main] [] INFO  RAMJobStore - RAMJobStore initialized.
+2014-10-01 11:05:47,093 [main] [] INFO  StdSchedulerFactory - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2014-10-01 11:05:47,093 [main] [] INFO  StdSchedulerFactory - Quartz scheduler version: 1.6.1
+2014-10-01 11:05:47,093 [main] [] INFO  QuartzScheduler - JobFactory set to: org.codehaus.groovy.grails.plugins.quartz.GrailsJobFactory@4d137538
+2014-10-01 11:05:47,675 [main] [] INFO  DefaultGrailsTemplateGenerator - Scaffolding template generator set to use resource loader org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext@3f651673: startup date [Wed Oct 01 11:05:38 EST 2014]; parent: Root WebApplicationContext
+2014-10-01 11:05:47,903 [main] [] INFO  EnvironmentSearchableCompassConfigurator - Setting Compass connection to [/home/dnahodil/.grails/projects/aatams/searchable-index/development]
+2014-10-01 11:05:48,070 [main] [] WARN  CompassMappingUtils - Cannot find domain class for property 'project' of class 'au.org.emii.aatams.Sensor
+2014-10-01 11:05:48,208 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverDeployment.cpm.xml]
+2014-10-01 11:05:48,225 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverRecovery.cpm.xml]
+2014-10-01 11:05:48,242 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Person.cpm.xml]
+2014-10-01 11:05:48,262 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Surgery.cpm.xml]
+2014-10-01 11:05:48,274 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Organisation.cpm.xml]
+2014-10-01 11:05:48,287 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ProjectRole.cpm.xml]
+2014-10-01 11:05:48,299 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/InstallationStation.cpm.xml]
+2014-10-01 11:05:48,311 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Tag.cpm.xml]
+2014-10-01 11:05:48,329 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Sensor.cpm.xml]
+2014-10-01 11:05:48,338 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Installation.cpm.xml]
+2014-10-01 11:05:48,348 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Receiver.cpm.xml]
+2014-10-01 11:05:48,366 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/AnimalRelease.cpm.xml]
+2014-10-01 11:05:48,377 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Project.cpm.xml]
+2014-10-01 11:05:48,627 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 11:05:48,631 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 11:05:48,679 [main] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 11:05:48,680 [main] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 11:05:48,681 [main] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 11:05:50,485 [main] [] WARN  TestDataConfigurationHolder - TestDataConfig.groovy not found, build-test-data plugin proceeding without config file
+2014-10-01 11:05:52,871 [main] [] INFO  MigrationRunner - Running script 'changelog.groovy'
+2014-10-01 11:05:52,944 [main] [] INFO  liquibase - Successfully acquired change log lock
+2014-10-01 11:06:00,151 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 11:06:00,231 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 11:06:00,711 [main] [] INFO  liquibase - ChangeSet matviews_entries.groovy::1412032256000-1::dnahodil ran successfully in 10ms
+2014-10-01 11:06:00,733 [main] [] INFO  liquibase - Marking ChangeSet: matviews_entries.groovy::1412032256000-2::dnahodil::(Checksum: 3:13d4fff94b892675b03b3b20f5be4158) ran despite precondition failure due to onFail='MARK_RAN': 
+          changelog.groovy : SQL Precondition failed.  Expected '0' got '1'
+
+2014-10-01 11:06:00,758 [main] [] INFO  liquibase - Successfully released change log lock
+2014-10-01 11:06:00,826 [Thread-16] [] INFO  CompassGpsUtils - Starting Searchable Plugin bulk index
+2014-10-01 11:06:00,830 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 11:06:00,830 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 11:06:00,946 [main] [] INFO  GrailsConfigUtils - [GrailsContextLoader] Grails application loaded.
+2014-10-01 11:06:00,964 [main] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2014-10-01 11:06:02,273 [main] [] INFO  [/aatams] - Initializing Spring FrameworkServlet 'grails'
+2014-10-01 11:06:02,384 [main] [] INFO  Http11Protocol - Starting Coyote HTTP/1.1 on http-8080
+2014-10-01 11:06:02,448 [Thread-16] [] INFO  DefaultCompass - Closing Compass [default]
+2014-10-01 11:06:02,449 [Thread-16] [] INFO  DefaultCompass - Closed Compass [default]
+2014-10-01 11:06:02,449 [Thread-16] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 11:06:02,449 [Thread-16] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 11:06:02,450 [Thread-16] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 11:06:02,451 [Thread-16] [] INFO  CompassGpsUtils - Finished Searchable Plugin bulk index, 1 secs, 624 ms
+2014-10-01 11:07:03,167 [main] [] INFO  Http11Protocol - Initializing Coyote HTTP/1.1 on http-8080
+2014-10-01 11:07:03,169 [main] [] INFO  StandardService - Starting service Tomcat
+2014-10-01 11:07:03,171 [main] [] INFO  StandardEngine - Starting Servlet Engine: Apache Tomcat/6.0-snapshot
+2014-10-01 11:07:03,311 [main] [] INFO  ContextConfig - No default web.xml
+2014-10-01 11:07:03,685 [main] [] INFO  Digester - TLD skipped. URI: http://www.springframework.org/tags is already defined
+2014-10-01 11:07:03,732 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/core is already defined
+2014-10-01 11:07:03,753 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/fmt is already defined
+2014-10-01 11:07:03,797 [main] [] INFO  Digester - TLD skipped. URI: http://shiro.apache.org/tags is already defined
+2014-10-01 11:07:03,817 [main] [] INFO  [/aatams] - Initializing Spring root WebApplicationContext
+2014-10-01 11:07:08,394 [main] [] INFO  BeanBuilder - [RuntimeConfiguration] Configuring data source for environment: DEVELOPMENT
+2014-10-01 11:07:09,309 [main] [] INFO  BeanBuilder - Registering realm: shiro.SecDbRealm
+2014-10-01 11:07:10,736 [main] [] INFO  HBSpatialExtension - Initializing HBSpatialExtension
+2014-10-01 11:07:10,738 [main] [] INFO  HBSpatialExtension - Attempting to load Hibernate Spatial Provider org.hibernatespatial.postgis.DialectProvider
+2014-10-01 11:07:10,738 [main] [] INFO  HBSpatialExtension - Checking for default configuration file.
+2014-10-01 11:07:10,740 [main] [] INFO  HSConfiguration - No configuration file hibernate-spatial.cfg.xml on the classpath.
+2014-10-01 11:07:17,957 [main] [] INFO  SchedulerSignalerImpl - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2014-10-01 11:07:17,957 [main] [] INFO  QuartzScheduler - Quartz Scheduler v.1.6.1 created.
+2014-10-01 11:07:17,958 [main] [] INFO  RAMJobStore - RAMJobStore initialized.
+2014-10-01 11:07:17,958 [main] [] INFO  StdSchedulerFactory - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2014-10-01 11:07:17,958 [main] [] INFO  StdSchedulerFactory - Quartz scheduler version: 1.6.1
+2014-10-01 11:07:17,958 [main] [] INFO  QuartzScheduler - JobFactory set to: org.codehaus.groovy.grails.plugins.quartz.GrailsJobFactory@c2f063e
+2014-10-01 11:07:18,516 [main] [] INFO  DefaultGrailsTemplateGenerator - Scaffolding template generator set to use resource loader org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext@2c84b7c4: startup date [Wed Oct 01 11:07:09 EST 2014]; parent: Root WebApplicationContext
+2014-10-01 11:07:18,736 [main] [] INFO  EnvironmentSearchableCompassConfigurator - Setting Compass connection to [/home/dnahodil/.grails/projects/aatams/searchable-index/development]
+2014-10-01 11:07:18,906 [main] [] WARN  CompassMappingUtils - Cannot find domain class for property 'project' of class 'au.org.emii.aatams.Sensor
+2014-10-01 11:07:19,022 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverRecovery.cpm.xml]
+2014-10-01 11:07:19,035 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Installation.cpm.xml]
+2014-10-01 11:07:19,048 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Receiver.cpm.xml]
+2014-10-01 11:07:19,063 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Person.cpm.xml]
+2014-10-01 11:07:19,080 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Project.cpm.xml]
+2014-10-01 11:07:19,092 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Tag.cpm.xml]
+2014-10-01 11:07:19,101 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/InstallationStation.cpm.xml]
+2014-10-01 11:07:19,112 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Organisation.cpm.xml]
+2014-10-01 11:07:19,141 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/AnimalRelease.cpm.xml]
+2014-10-01 11:07:19,163 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Sensor.cpm.xml]
+2014-10-01 11:07:19,176 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Surgery.cpm.xml]
+2014-10-01 11:07:19,187 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ProjectRole.cpm.xml]
+2014-10-01 11:07:19,209 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverDeployment.cpm.xml]
+2014-10-01 11:07:19,466 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 11:07:19,471 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 11:07:19,517 [main] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 11:07:19,519 [main] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 11:07:19,520 [main] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 11:07:21,326 [main] [] WARN  TestDataConfigurationHolder - TestDataConfig.groovy not found, build-test-data plugin proceeding without config file
+2014-10-01 11:07:23,625 [main] [] INFO  MigrationRunner - Running script 'changelog.groovy'
+2014-10-01 11:07:23,704 [main] [] INFO  liquibase - Successfully acquired change log lock
+2014-10-01 11:07:30,384 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 11:07:30,452 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 11:07:30,902 [main] [] INFO  liquibase - ChangeSet matviews_entries.groovy::1412032256000-1::dnahodil ran successfully in 8ms
+2014-10-01 11:07:30,930 [main] [] INFO  liquibase - ChangeSet matviews_entries.groovy::1412032256000-2::dnahodil ran successfully in 14ms
+2014-10-01 11:07:30,949 [main] [] INFO  liquibase - Successfully released change log lock
+2014-10-01 11:07:31,016 [Thread-16] [] INFO  CompassGpsUtils - Starting Searchable Plugin bulk index
+2014-10-01 11:07:31,024 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 11:07:31,025 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 11:07:31,120 [main] [] INFO  GrailsConfigUtils - [GrailsContextLoader] Grails application loaded.
+2014-10-01 11:07:31,138 [main] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2014-10-01 11:07:32,452 [main] [] INFO  [/aatams] - Initializing Spring FrameworkServlet 'grails'
+2014-10-01 11:07:32,545 [main] [] INFO  Http11Protocol - Starting Coyote HTTP/1.1 on http-8080
+2014-10-01 11:07:32,653 [Thread-16] [] INFO  DefaultCompass - Closing Compass [default]
+2014-10-01 11:07:32,653 [Thread-16] [] INFO  DefaultCompass - Closed Compass [default]
+2014-10-01 11:07:32,653 [Thread-16] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 11:07:32,654 [Thread-16] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 11:07:32,654 [Thread-16] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 11:07:32,655 [Thread-16] [] INFO  CompassGpsUtils - Finished Searchable Plugin bulk index, 1 secs, 639 ms
+2014-10-01 11:12:06,680 [main] [] INFO  Http11Protocol - Initializing Coyote HTTP/1.1 on http-8080
+2014-10-01 11:12:06,682 [main] [] INFO  StandardService - Starting service Tomcat
+2014-10-01 11:12:06,683 [main] [] INFO  StandardEngine - Starting Servlet Engine: Apache Tomcat/6.0-snapshot
+2014-10-01 11:12:06,788 [main] [] INFO  ContextConfig - No default web.xml
+2014-10-01 11:12:06,965 [main] [] INFO  Digester - TLD skipped. URI: http://www.springframework.org/tags is already defined
+2014-10-01 11:12:06,999 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/core is already defined
+2014-10-01 11:12:07,016 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/fmt is already defined
+2014-10-01 11:12:07,055 [main] [] INFO  Digester - TLD skipped. URI: http://shiro.apache.org/tags is already defined
+2014-10-01 11:12:07,098 [main] [] INFO  [/aatams] - Initializing Spring root WebApplicationContext
+2014-10-01 11:12:11,047 [main] [] INFO  BeanBuilder - [RuntimeConfiguration] Configuring data source for environment: DEVELOPMENT
+2014-10-01 11:12:11,942 [main] [] INFO  BeanBuilder - Registering realm: shiro.SecDbRealm
+2014-10-01 11:12:13,264 [main] [] INFO  HBSpatialExtension - Initializing HBSpatialExtension
+2014-10-01 11:12:13,265 [main] [] INFO  HBSpatialExtension - Attempting to load Hibernate Spatial Provider org.hibernatespatial.postgis.DialectProvider
+2014-10-01 11:12:13,265 [main] [] INFO  HBSpatialExtension - Checking for default configuration file.
+2014-10-01 11:12:13,266 [main] [] INFO  HSConfiguration - No configuration file hibernate-spatial.cfg.xml on the classpath.
+2014-10-01 11:12:20,132 [main] [] INFO  SchedulerSignalerImpl - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2014-10-01 11:12:20,132 [main] [] INFO  QuartzScheduler - Quartz Scheduler v.1.6.1 created.
+2014-10-01 11:12:20,133 [main] [] INFO  RAMJobStore - RAMJobStore initialized.
+2014-10-01 11:12:20,133 [main] [] INFO  StdSchedulerFactory - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2014-10-01 11:12:20,133 [main] [] INFO  StdSchedulerFactory - Quartz scheduler version: 1.6.1
+2014-10-01 11:12:20,134 [main] [] INFO  QuartzScheduler - JobFactory set to: org.codehaus.groovy.grails.plugins.quartz.GrailsJobFactory@59cbd975
+2014-10-01 11:12:20,678 [main] [] INFO  DefaultGrailsTemplateGenerator - Scaffolding template generator set to use resource loader org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext@4fda464b: startup date [Wed Oct 01 11:12:12 EST 2014]; parent: Root WebApplicationContext
+2014-10-01 11:12:20,898 [main] [] INFO  EnvironmentSearchableCompassConfigurator - Setting Compass connection to [/home/dnahodil/.grails/projects/aatams/searchable-index/development]
+2014-10-01 11:12:21,067 [main] [] WARN  CompassMappingUtils - Cannot find domain class for property 'project' of class 'au.org.emii.aatams.Sensor
+2014-10-01 11:12:21,196 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverRecovery.cpm.xml]
+2014-10-01 11:12:21,220 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Sensor.cpm.xml]
+2014-10-01 11:12:21,237 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Tag.cpm.xml]
+2014-10-01 11:12:21,253 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Installation.cpm.xml]
+2014-10-01 11:12:21,279 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/AnimalRelease.cpm.xml]
+2014-10-01 11:12:21,289 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/InstallationStation.cpm.xml]
+2014-10-01 11:12:21,303 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Organisation.cpm.xml]
+2014-10-01 11:12:21,315 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Person.cpm.xml]
+2014-10-01 11:12:21,331 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ProjectRole.cpm.xml]
+2014-10-01 11:12:21,371 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverDeployment.cpm.xml]
+2014-10-01 11:12:21,386 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Project.cpm.xml]
+2014-10-01 11:12:21,400 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Surgery.cpm.xml]
+2014-10-01 11:12:21,409 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Receiver.cpm.xml]
+2014-10-01 11:12:21,671 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 11:12:21,676 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 11:12:21,722 [main] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 11:12:21,723 [main] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 11:12:21,724 [main] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 11:12:23,535 [main] [] WARN  TestDataConfigurationHolder - TestDataConfig.groovy not found, build-test-data plugin proceeding without config file
+2014-10-01 11:12:25,724 [main] [] INFO  MigrationRunner - Running script 'changelog.groovy'
+2014-10-01 11:12:25,794 [main] [] INFO  liquibase - Successfully acquired change log lock
+2014-10-01 11:12:32,187 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 11:12:32,268 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 11:12:32,750 [main] [] INFO  liquibase - Marking ChangeSet: matviews_entries.groovy::1412032256000-1::dnahodil::(Checksum: 3:0f9f3d3b6c8ae072de1bdb46c97de4a5) ran despite precondition failure due to onFail='MARK_RAN': 
+          changelog.groovy : SQL Precondition failed.  Expected '0' got '1'
+
+2014-10-01 11:12:32,773 [main] [] INFO  liquibase - Marking ChangeSet: matviews_entries.groovy::1412032256000-2::dnahodil::(Checksum: 3:13d4fff94b892675b03b3b20f5be4158) ran despite precondition failure due to onFail='MARK_RAN': 
+          changelog.groovy : SQL Precondition failed.  Expected '0' got '1'
+
+2014-10-01 11:12:32,805 [main] [] INFO  liquibase - Successfully released change log lock
+2014-10-01 11:12:32,877 [Thread-16] [] INFO  CompassGpsUtils - Starting Searchable Plugin bulk index
+2014-10-01 11:12:32,883 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 11:12:32,884 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 11:12:33,000 [main] [] INFO  GrailsConfigUtils - [GrailsContextLoader] Grails application loaded.
+2014-10-01 11:12:33,024 [main] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2014-10-01 11:12:34,346 [main] [] INFO  [/aatams] - Initializing Spring FrameworkServlet 'grails'
+2014-10-01 11:12:34,435 [main] [] INFO  Http11Protocol - Starting Coyote HTTP/1.1 on http-8080
+2014-10-01 11:12:34,464 [Thread-16] [] INFO  DefaultCompass - Closing Compass [default]
+2014-10-01 11:12:34,464 [Thread-16] [] INFO  DefaultCompass - Closed Compass [default]
+2014-10-01 11:12:34,464 [Thread-16] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 11:12:34,465 [Thread-16] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 11:12:34,465 [Thread-16] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 11:12:34,466 [Thread-16] [] INFO  CompassGpsUtils - Finished Searchable Plugin bulk index, 1 secs, 588 ms
+2014-10-01 13:25:40,906 [main] [] INFO  BeanBuilder - [RuntimeConfiguration] Configuring data source for environment: DEVELOPMENT
+2014-10-01 13:25:41,715 [main] [] INFO  BeanBuilder - Registering realm: shiro.SecDbRealm
+2014-10-01 13:25:43,318 [main] [] INFO  HBSpatialExtension - Initializing HBSpatialExtension
+2014-10-01 13:25:43,320 [main] [] INFO  HBSpatialExtension - Attempting to load Hibernate Spatial Provider org.hibernatespatial.postgis.DialectProvider
+2014-10-01 13:25:43,320 [main] [] INFO  HBSpatialExtension - Checking for default configuration file.
+2014-10-01 13:25:43,321 [main] [] INFO  HSConfiguration - No configuration file hibernate-spatial.cfg.xml on the classpath.
+2014-10-01 13:25:51,434 [main] [] INFO  SchedulerSignalerImpl - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2014-10-01 13:25:51,434 [main] [] INFO  QuartzScheduler - Quartz Scheduler v.1.6.1 created.
+2014-10-01 13:25:51,435 [main] [] INFO  RAMJobStore - RAMJobStore initialized.
+2014-10-01 13:25:51,435 [main] [] INFO  StdSchedulerFactory - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2014-10-01 13:25:51,435 [main] [] INFO  StdSchedulerFactory - Quartz scheduler version: 1.6.1
+2014-10-01 13:25:51,435 [main] [] INFO  QuartzScheduler - JobFactory set to: org.codehaus.groovy.grails.plugins.quartz.GrailsJobFactory@4a697e3b
+2014-10-01 13:25:52,067 [main] [] INFO  DefaultGrailsTemplateGenerator - Scaffolding template generator set to use resource loader org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext@2b1b2385: startup date [Wed Oct 01 13:25:41 EST 2014]; parent: org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext@68328bc5
+2014-10-01 13:25:52,314 [main] [] INFO  EnvironmentSearchableCompassConfigurator - Setting Compass connection to [/home/dnahodil/.grails/projects/aatams/searchable-index/development]
+2014-10-01 13:25:52,571 [main] [] WARN  CompassMappingUtils - Cannot find domain class for property 'project' of class 'au.org.emii.aatams.Sensor
+2014-10-01 13:25:52,729 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Person.cpm.xml]
+2014-10-01 13:25:52,758 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverRecovery.cpm.xml]
+2014-10-01 13:25:52,790 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Sensor.cpm.xml]
+2014-10-01 13:25:52,815 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Surgery.cpm.xml]
+2014-10-01 13:25:52,838 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/AnimalRelease.cpm.xml]
+2014-10-01 13:25:52,850 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Project.cpm.xml]
+2014-10-01 13:25:52,884 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverDeployment.cpm.xml]
+2014-10-01 13:25:52,897 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ProjectRole.cpm.xml]
+2014-10-01 13:25:52,906 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Tag.cpm.xml]
+2014-10-01 13:25:52,915 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/InstallationStation.cpm.xml]
+2014-10-01 13:25:52,924 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Installation.cpm.xml]
+2014-10-01 13:25:52,935 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Organisation.cpm.xml]
+2014-10-01 13:25:52,944 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Receiver.cpm.xml]
+2014-10-01 13:25:53,180 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 13:25:53,184 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 13:25:53,250 [main] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 13:25:53,252 [main] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 13:25:53,253 [main] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 13:25:55,075 [main] [] WARN  TestDataConfigurationHolder - TestDataConfig.groovy not found, build-test-data plugin proceeding without config file
+2014-10-01 13:25:57,446 [Thread-21] [] INFO  CompassGpsUtils - Starting Searchable Plugin bulk index
+2014-10-01 13:25:57,455 [Thread-21] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 13:25:57,457 [Thread-21] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 13:25:57,791 [Compass Gps Index [pool-5-thread-5]] [] ERROR JDBCExceptionReporter - ERROR: column this_.is_protected does not exist
+  Position: 98
+2014-10-01 13:25:57,792 [Compass Gps Index [pool-5-thread-5]] [] ERROR ScrollableHibernateIndexEntitiesIndexer - {hibernate}: Failed to index the database
+org.hibernate.exception.SQLGrammarException: could not execute query using scroll
+	at org.hibernate.exception.SQLStateConverter.convert(SQLStateConverter.java:90)
+	at org.hibernate.exception.JDBCExceptionHelper.convert(JDBCExceptionHelper.java:66)
+	at org.hibernate.loader.Loader.scroll(Loader.java:2336)
+	at org.hibernate.loader.criteria.CriteriaLoader.scroll(CriteriaLoader.java:113)
+	at org.hibernate.impl.SessionImpl.scroll(SessionImpl.java:1560)
+	at org.hibernate.impl.CriteriaImpl.scroll(CriteriaImpl.java:320)
+	at org.compass.gps.device.hibernate.indexer.ScrollableHibernateIndexEntitiesIndexer.performIndex(ScrollableHibernateIndexEntitiesIndexer.java:118)
+	at org.compass.gps.device.support.parallel.ConcurrentParallelIndexExecutor$1$1.doInCompassWithoutResult(ConcurrentParallelIndexExecutor.java:104)
+	at org.compass.core.CompassCallbackWithoutResult.doInCompass(CompassCallbackWithoutResult.java:29)
+	at org.compass.core.CompassTemplate.execute(CompassTemplate.java:133)
+	at org.compass.gps.impl.SingleCompassGps.executeForIndex(SingleCompassGps.java:147)
+	at org.compass.gps.device.support.parallel.ConcurrentParallelIndexExecutor$1.call(ConcurrentParallelIndexExecutor.java:102)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.postgresql.util.PSQLException: ERROR: column this_.is_protected does not exist
+  Position: 98
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2102)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:1835)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:257)
+	at org.postgresql.jdbc2.AbstractJdbc2Statement.execute(AbstractJdbc2Statement.java:500)
+	at org.postgresql.jdbc2.AbstractJdbc2Statement.executeWithFlags(AbstractJdbc2Statement.java:388)
+	at org.postgresql.jdbc2.AbstractJdbc2Statement.executeQuery(AbstractJdbc2Statement.java:273)
+	at org.apache.commons.dbcp.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:96)
+	at org.apache.commons.dbcp.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:96)
+	at org.hibernate.jdbc.AbstractBatcher.getResultSet(AbstractBatcher.java:208)
+	at org.hibernate.loader.Loader.getResultSet(Loader.java:1808)
+	at org.hibernate.loader.Loader.scroll(Loader.java:2301)
+	... 13 more
+2014-10-01 13:25:59,640 [Compass Gps Index [pool-5-thread-7]] [] ERROR JDBCExceptionReporter - ERROR: column project0_.is_protected does not exist
+  Position: 110
+2014-10-01 13:25:59,646 [Compass Gps Index [pool-5-thread-7]] [] ERROR ScrollableHibernateIndexEntitiesIndexer - {hibernate}: Failed to index the database
+org.hibernate.exception.SQLGrammarException: could not load an entity: [au.org.emii.aatams.Project#13]
+	at org.hibernate.exception.SQLStateConverter.convert(SQLStateConverter.java:90)
+	at org.hibernate.exception.JDBCExceptionHelper.convert(JDBCExceptionHelper.java:66)
+	at org.hibernate.loader.Loader.loadEntity(Loader.java:1895)
+	at org.hibernate.loader.entity.AbstractEntityLoader.load(AbstractEntityLoader.java:71)
+	at org.hibernate.loader.entity.AbstractEntityLoader.load(AbstractEntityLoader.java:65)
+	at org.hibernate.persister.entity.AbstractEntityPersister.load(AbstractEntityPersister.java:3072)
+	at org.hibernate.event.def.DefaultLoadEventListener.loadFromDatasource(DefaultLoadEventListener.java:434)
+	at org.hibernate.event.def.DefaultLoadEventListener.doLoad(DefaultLoadEventListener.java:415)
+	at org.hibernate.event.def.DefaultLoadEventListener.load(DefaultLoadEventListener.java:165)
+	at org.hibernate.event.def.DefaultLoadEventListener.onLoad(DefaultLoadEventListener.java:121)
+	at org.hibernate.impl.SessionImpl.fireLoad(SessionImpl.java:905)
+	at org.hibernate.impl.SessionImpl.immediateLoad(SessionImpl.java:863)
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:95)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:140)
+	at org.codehaus.groovy.grails.orm.hibernate.proxy.GroovyAwareJavassistLazyInitializer.invoke(GroovyAwareJavassistLazyInitializer.java:195)
+	at au.org.emii.aatams.Project_$$_javassist_55.getPrincipalInvestigators(Project_$$_javassist_55.java)
+	at au.org.emii.aatams.Project_$$_javassist_55$getPrincipalInvestigators.call(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:40)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:116)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:120)
+	at au.org.emii.aatams.Tag.getOwningPIs(Tag.groovy:152)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.codehaus.groovy.grails.orm.hibernate.proxy.GroovyAwareJavassistLazyInitializer.invoke(GroovyAwareJavassistLazyInitializer.java:202)
+	at au.org.emii.aatams.Tag_$$_javassist_39.getOwningPIs(Tag_$$_javassist_39.java)
+	at au.org.emii.aatams.Tag_$$_javassist_39$getOwningPIs.call(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:40)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:116)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:120)
+	at au.org.emii.aatams.Sensor.getOwningPIs(Sensor.groovy:112)
+	at au.org.emii.aatams.SensorMethodReflectioninvoke50.invoke(Unknown Source)
+	at org.compass.core.accessor.BasicPropertyAccessor$BasicGetter.get(BasicPropertyAccessor.java:124)
+	at org.compass.core.converter.mapping.osem.ClassMappingConverter.doMarshall(ClassMappingConverter.java:209)
+	at org.compass.core.converter.mapping.osem.ClassMappingConverter.marshall(ClassMappingConverter.java:97)
+	at org.compass.core.marshall.DefaultMarshallingStrategy.marshall(DefaultMarshallingStrategy.java:154)
+	at org.compass.core.impl.DefaultCompassSession.create(DefaultCompassSession.java:408)
+	at org.compass.core.impl.DefaultCompassSession.create(DefaultCompassSession.java:397)
+	at org.compass.core.impl.ExistingCompassSession.create(ExistingCompassSession.java:305)
+	at org.compass.gps.device.hibernate.indexer.ScrollableHibernateIndexEntitiesIndexer$RowBuffer.flush(ScrollableHibernateIndexEntitiesIndexer.java:212)
+	at org.compass.gps.device.hibernate.indexer.ScrollableHibernateIndexEntitiesIndexer$RowBuffer.close(ScrollableHibernateIndexEntitiesIndexer.java:206)
+	at org.compass.gps.device.hibernate.indexer.ScrollableHibernateIndexEntitiesIndexer.performIndex(ScrollableHibernateIndexEntitiesIndexer.java:151)
+	at org.compass.gps.device.support.parallel.ConcurrentParallelIndexExecutor$1$1.doInCompassWithoutResult(ConcurrentParallelIndexExecutor.java:104)
+	at org.compass.core.CompassCallbackWithoutResult.doInCompass(CompassCallbackWithoutResult.java:29)
+	at org.compass.core.CompassTemplate.execute(CompassTemplate.java:133)
+	at org.compass.gps.impl.SingleCompassGps.executeForIndex(SingleCompassGps.java:147)
+	at org.compass.gps.device.support.parallel.ConcurrentParallelIndexExecutor$1.call(ConcurrentParallelIndexExecutor.java:102)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.postgresql.util.PSQLException: ERROR: column project0_.is_protected does not exist
+  Position: 110
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2102)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:1835)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:257)
+	at org.postgresql.jdbc2.AbstractJdbc2Statement.execute(AbstractJdbc2Statement.java:500)
+	at org.postgresql.jdbc2.AbstractJdbc2Statement.executeWithFlags(AbstractJdbc2Statement.java:388)
+	at org.postgresql.jdbc2.AbstractJdbc2Statement.executeQuery(AbstractJdbc2Statement.java:273)
+	at org.apache.commons.dbcp.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:96)
+	at org.apache.commons.dbcp.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:96)
+	at org.hibernate.jdbc.AbstractBatcher.getResultSet(AbstractBatcher.java:208)
+	at org.hibernate.loader.Loader.getResultSet(Loader.java:1808)
+	at org.hibernate.loader.Loader.doQuery(Loader.java:697)
+	at org.hibernate.loader.Loader.doQueryAndInitializeNonLazyCollections(Loader.java:259)
+	at org.hibernate.loader.Loader.loadEntity(Loader.java:1881)
+	... 49 more
+2014-10-01 13:26:00,379 [main] [] INFO  GrailsDiffStatusListener - Reading tables for aatams @ jdbc:postgresql://localhost:25432/aatams_rc ...
+2014-10-01 13:26:00,386 [main] [] INFO  GrailsDiffStatusListener - Reading views for aatams @ jdbc:postgresql://localhost:25432/aatams_rc ...
+2014-10-01 13:26:00,543 [main] [] INFO  GrailsDiffStatusListener - Reading foreign keys for aatams @ jdbc:postgresql://localhost:25432/aatams_rc ...
+2014-10-01 13:26:00,564 [main] [] INFO  GrailsDiffStatusListener - Reading primary keys for aatams @ jdbc:postgresql://localhost:25432/aatams_rc ...
+2014-10-01 13:26:00,568 [main] [] INFO  GrailsDiffStatusListener - Reading columns for aatams @ jdbc:postgresql://localhost:25432/aatams_rc ...
+2014-10-01 13:26:00,650 [main] [] INFO  GrailsDiffStatusListener - Reading unique constraints for aatams @ jdbc:postgresql://localhost:25432/aatams_rc ...
+2014-10-01 13:26:00,696 [main] [] INFO  GrailsDiffStatusListener - Reading indexes for aatams @ jdbc:postgresql://localhost:25432/aatams_rc ...
+2014-10-01 13:26:00,701 [main] [] INFO  GrailsDiffStatusListener - Reading sequences for aatams @ jdbc:postgresql://localhost:25432/aatams_rc ...
+2014-10-01 13:26:01,072 [Thread-22] [] INFO  DefaultCompass - Closing Compass [default]
+2014-10-01 13:26:01,074 [Thread-19] [] INFO  DefaultCompass - Closing Compass [default]
+2014-10-01 13:26:01,074 [Thread-22] [] INFO  DefaultCompass - Closed Compass [default]
+2014-10-01 13:26:01,076 [Thread-19] [] INFO  DefaultCompass - Closed Compass [default]
+2014-10-01 13:26:01,100 [Thread-20] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+2014-10-01 13:26:01,101 [Thread-20] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2014-10-01 13:26:01,101 [Thread-20] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+2014-10-01 13:31:40,302 [main] [] INFO  Http11Protocol - Initializing Coyote HTTP/1.1 on http-8080
+2014-10-01 13:31:40,304 [main] [] INFO  StandardService - Starting service Tomcat
+2014-10-01 13:31:40,306 [main] [] INFO  StandardEngine - Starting Servlet Engine: Apache Tomcat/6.0-snapshot
+2014-10-01 13:31:40,454 [main] [] INFO  ContextConfig - No default web.xml
+2014-10-01 13:31:40,716 [main] [] INFO  Digester - TLD skipped. URI: http://www.springframework.org/tags is already defined
+2014-10-01 13:31:40,763 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/core is already defined
+2014-10-01 13:31:40,785 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/fmt is already defined
+2014-10-01 13:31:40,822 [main] [] INFO  Digester - TLD skipped. URI: http://shiro.apache.org/tags is already defined
+2014-10-01 13:31:40,860 [main] [] INFO  [/aatams] - Initializing Spring root WebApplicationContext
+2014-10-01 13:31:44,830 [main] [] INFO  BeanBuilder - [RuntimeConfiguration] Configuring data source for environment: DEVELOPMENT
+2014-10-01 13:31:45,867 [main] [] INFO  BeanBuilder - Registering realm: shiro.SecDbRealm
+2014-10-01 13:31:47,255 [main] [] INFO  HBSpatialExtension - Initializing HBSpatialExtension
+2014-10-01 13:31:47,256 [main] [] INFO  HBSpatialExtension - Attempting to load Hibernate Spatial Provider org.hibernatespatial.postgis.DialectProvider
+2014-10-01 13:31:47,257 [main] [] INFO  HBSpatialExtension - Checking for default configuration file.
+2014-10-01 13:31:47,258 [main] [] INFO  HSConfiguration - No configuration file hibernate-spatial.cfg.xml on the classpath.
+2014-10-01 13:31:54,692 [main] [] INFO  SchedulerSignalerImpl - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2014-10-01 13:31:54,692 [main] [] INFO  QuartzScheduler - Quartz Scheduler v.1.6.1 created.
+2014-10-01 13:31:54,693 [main] [] INFO  RAMJobStore - RAMJobStore initialized.
+2014-10-01 13:31:54,693 [main] [] INFO  StdSchedulerFactory - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2014-10-01 13:31:54,693 [main] [] INFO  StdSchedulerFactory - Quartz scheduler version: 1.6.1
+2014-10-01 13:31:54,694 [main] [] INFO  QuartzScheduler - JobFactory set to: org.codehaus.groovy.grails.plugins.quartz.GrailsJobFactory@2bc7f561
+2014-10-01 13:31:55,271 [main] [] INFO  DefaultGrailsTemplateGenerator - Scaffolding template generator set to use resource loader org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext@67c24931: startup date [Wed Oct 01 13:31:45 EST 2014]; parent: Root WebApplicationContext
+2014-10-01 13:31:55,472 [main] [] INFO  EnvironmentSearchableCompassConfigurator - Setting Compass connection to [/home/dnahodil/.grails/projects/aatams/searchable-index/development]
+2014-10-01 13:31:55,675 [main] [] WARN  CompassMappingUtils - Cannot find domain class for property 'project' of class 'au.org.emii.aatams.Sensor
+2014-10-01 13:31:55,802 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ProjectRole.cpm.xml]
+2014-10-01 13:31:55,819 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Organisation.cpm.xml]
+2014-10-01 13:31:55,837 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverRecovery.cpm.xml]
+2014-10-01 13:31:55,880 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverDeployment.cpm.xml]
+2014-10-01 13:31:55,891 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/InstallationStation.cpm.xml]
+2014-10-01 13:31:55,900 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Tag.cpm.xml]
+2014-10-01 13:31:55,912 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Installation.cpm.xml]
+2014-10-01 13:31:55,930 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Sensor.cpm.xml]
+2014-10-01 13:31:55,940 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Receiver.cpm.xml]
+2014-10-01 13:31:55,952 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Surgery.cpm.xml]
+2014-10-01 13:31:55,971 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/AnimalRelease.cpm.xml]
+2014-10-01 13:31:55,980 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Project.cpm.xml]
+2014-10-01 13:31:55,990 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Person.cpm.xml]
+2014-10-01 13:31:56,240 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 13:31:56,244 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 13:31:56,291 [main] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 13:31:56,292 [main] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 13:31:56,293 [main] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 13:31:58,172 [main] [] WARN  TestDataConfigurationHolder - TestDataConfig.groovy not found, build-test-data plugin proceeding without config file
+2014-10-01 13:32:00,306 [main] [] INFO  MigrationRunner - Running script 'changelog.groovy'
+2014-10-01 13:32:00,396 [main] [] INFO  liquibase - Successfully acquired change log lock
+2014-10-01 13:32:06,756 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 13:32:06,829 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 13:32:07,344 [main] [] INFO  liquibase - Successfully released change log lock
+2014-10-01 13:32:07,427 [Thread-16] [] INFO  CompassGpsUtils - Starting Searchable Plugin bulk index
+2014-10-01 13:32:07,434 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 13:32:07,435 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 13:32:07,565 [main] [] INFO  GrailsConfigUtils - [GrailsContextLoader] Grails application loaded.
+2014-10-01 13:32:07,613 [main] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2014-10-01 13:32:07,722 [Compass Gps Index [pool-5-thread-5]] [] ERROR JDBCExceptionReporter - ERROR: column this_.is_protected does not exist
+  Position: 95
+2014-10-01 13:32:07,724 [Compass Gps Index [pool-5-thread-5]] [] ERROR ScrollableHibernateIndexEntitiesIndexer - {hibernate}: Failed to index the database
+org.hibernate.exception.SQLGrammarException: could not execute query using scroll
+	at org.hibernate.exception.SQLStateConverter.convert(SQLStateConverter.java:90)
+	at org.hibernate.exception.JDBCExceptionHelper.convert(JDBCExceptionHelper.java:66)
+	at org.hibernate.loader.Loader.scroll(Loader.java:2336)
+	at org.hibernate.loader.criteria.CriteriaLoader.scroll(CriteriaLoader.java:113)
+	at org.hibernate.impl.SessionImpl.scroll(SessionImpl.java:1560)
+	at org.hibernate.impl.CriteriaImpl.scroll(CriteriaImpl.java:320)
+	at org.compass.gps.device.hibernate.indexer.ScrollableHibernateIndexEntitiesIndexer.performIndex(ScrollableHibernateIndexEntitiesIndexer.java:118)
+	at org.compass.gps.device.support.parallel.ConcurrentParallelIndexExecutor$1$1.doInCompassWithoutResult(ConcurrentParallelIndexExecutor.java:104)
+	at org.compass.core.CompassCallbackWithoutResult.doInCompass(CompassCallbackWithoutResult.java:29)
+	at org.compass.core.CompassTemplate.execute(CompassTemplate.java:133)
+	at org.compass.gps.impl.SingleCompassGps.executeForIndex(SingleCompassGps.java:147)
+	at org.compass.gps.device.support.parallel.ConcurrentParallelIndexExecutor$1.call(ConcurrentParallelIndexExecutor.java:102)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.postgresql.util.PSQLException: ERROR: column this_.is_protected does not exist
+  Position: 95
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2102)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:1835)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:257)
+	at org.postgresql.jdbc2.AbstractJdbc2Statement.execute(AbstractJdbc2Statement.java:500)
+	at org.postgresql.jdbc2.AbstractJdbc2Statement.executeWithFlags(AbstractJdbc2Statement.java:388)
+	at org.postgresql.jdbc2.AbstractJdbc2Statement.executeQuery(AbstractJdbc2Statement.java:273)
+	at org.apache.commons.dbcp.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:96)
+	at org.apache.commons.dbcp.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:96)
+	at org.hibernate.jdbc.AbstractBatcher.getResultSet(AbstractBatcher.java:208)
+	at org.hibernate.loader.Loader.getResultSet(Loader.java:1808)
+	at org.hibernate.loader.Loader.scroll(Loader.java:2301)
+	... 13 more
+2014-10-01 13:32:08,652 [Compass Gps Index [pool-5-thread-7]] [] ERROR JDBCExceptionReporter - ERROR: column project0_.is_protected does not exist
+  Position: 107
+2014-10-01 13:32:08,660 [Compass Gps Index [pool-5-thread-7]] [] ERROR ScrollableHibernateIndexEntitiesIndexer - {hibernate}: Failed to index the database
+org.hibernate.exception.SQLGrammarException: could not load an entity: [au.org.emii.aatams.Project#13]
+	at org.hibernate.exception.SQLStateConverter.convert(SQLStateConverter.java:90)
+	at org.hibernate.exception.JDBCExceptionHelper.convert(JDBCExceptionHelper.java:66)
+	at org.hibernate.loader.Loader.loadEntity(Loader.java:1895)
+	at org.hibernate.loader.entity.AbstractEntityLoader.load(AbstractEntityLoader.java:71)
+	at org.hibernate.loader.entity.AbstractEntityLoader.load(AbstractEntityLoader.java:65)
+	at org.hibernate.persister.entity.AbstractEntityPersister.load(AbstractEntityPersister.java:3072)
+	at org.hibernate.event.def.DefaultLoadEventListener.loadFromDatasource(DefaultLoadEventListener.java:434)
+	at org.hibernate.event.def.DefaultLoadEventListener.doLoad(DefaultLoadEventListener.java:415)
+	at org.hibernate.event.def.DefaultLoadEventListener.load(DefaultLoadEventListener.java:165)
+	at org.hibernate.event.def.DefaultLoadEventListener.onLoad(DefaultLoadEventListener.java:121)
+	at org.hibernate.impl.SessionImpl.fireLoad(SessionImpl.java:905)
+	at org.hibernate.impl.SessionImpl.immediateLoad(SessionImpl.java:863)
+	at org.hibernate.proxy.AbstractLazyInitializer.initialize(AbstractLazyInitializer.java:95)
+	at org.hibernate.proxy.AbstractLazyInitializer.getImplementation(AbstractLazyInitializer.java:140)
+	at org.codehaus.groovy.grails.orm.hibernate.proxy.GroovyAwareJavassistLazyInitializer.invoke(GroovyAwareJavassistLazyInitializer.java:195)
+	at au.org.emii.aatams.Project_$$_javassist_55.getPrincipalInvestigators(Project_$$_javassist_55.java)
+	at au.org.emii.aatams.Project_$$_javassist_55$getPrincipalInvestigators.call(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:40)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:116)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:120)
+	at au.org.emii.aatams.Tag.getOwningPIs(Tag.groovy:152)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.codehaus.groovy.grails.orm.hibernate.proxy.GroovyAwareJavassistLazyInitializer.invoke(GroovyAwareJavassistLazyInitializer.java:202)
+	at au.org.emii.aatams.Tag_$$_javassist_39.getOwningPIs(Tag_$$_javassist_39.java)
+	at au.org.emii.aatams.Tag_$$_javassist_39$getOwningPIs.call(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:40)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:116)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:120)
+	at au.org.emii.aatams.Sensor.getOwningPIs(Sensor.groovy:112)
+	at au.org.emii.aatams.SensorMethodReflectioninvoke72.invoke(Unknown Source)
+	at org.compass.core.accessor.BasicPropertyAccessor$BasicGetter.get(BasicPropertyAccessor.java:124)
+	at org.compass.core.converter.mapping.osem.ClassMappingConverter.doMarshall(ClassMappingConverter.java:209)
+	at org.compass.core.converter.mapping.osem.ClassMappingConverter.marshall(ClassMappingConverter.java:97)
+	at org.compass.core.marshall.DefaultMarshallingStrategy.marshall(DefaultMarshallingStrategy.java:154)
+	at org.compass.core.impl.DefaultCompassSession.create(DefaultCompassSession.java:408)
+	at org.compass.core.impl.DefaultCompassSession.create(DefaultCompassSession.java:397)
+	at org.compass.core.impl.ExistingCompassSession.create(ExistingCompassSession.java:305)
+	at org.compass.gps.device.hibernate.indexer.ScrollableHibernateIndexEntitiesIndexer$RowBuffer.flush(ScrollableHibernateIndexEntitiesIndexer.java:212)
+	at org.compass.gps.device.hibernate.indexer.ScrollableHibernateIndexEntitiesIndexer$RowBuffer.close(ScrollableHibernateIndexEntitiesIndexer.java:206)
+	at org.compass.gps.device.hibernate.indexer.ScrollableHibernateIndexEntitiesIndexer.performIndex(ScrollableHibernateIndexEntitiesIndexer.java:151)
+	at org.compass.gps.device.support.parallel.ConcurrentParallelIndexExecutor$1$1.doInCompassWithoutResult(ConcurrentParallelIndexExecutor.java:104)
+	at org.compass.core.CompassCallbackWithoutResult.doInCompass(CompassCallbackWithoutResult.java:29)
+	at org.compass.core.CompassTemplate.execute(CompassTemplate.java:133)
+	at org.compass.gps.impl.SingleCompassGps.executeForIndex(SingleCompassGps.java:147)
+	at org.compass.gps.device.support.parallel.ConcurrentParallelIndexExecutor$1.call(ConcurrentParallelIndexExecutor.java:102)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:262)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.postgresql.util.PSQLException: ERROR: column project0_.is_protected does not exist
+  Position: 107
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2102)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:1835)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:257)
+	at org.postgresql.jdbc2.AbstractJdbc2Statement.execute(AbstractJdbc2Statement.java:500)
+	at org.postgresql.jdbc2.AbstractJdbc2Statement.executeWithFlags(AbstractJdbc2Statement.java:388)
+	at org.postgresql.jdbc2.AbstractJdbc2Statement.executeQuery(AbstractJdbc2Statement.java:273)
+	at org.apache.commons.dbcp.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:96)
+	at org.apache.commons.dbcp.DelegatingPreparedStatement.executeQuery(DelegatingPreparedStatement.java:96)
+	at org.hibernate.jdbc.AbstractBatcher.getResultSet(AbstractBatcher.java:208)
+	at org.hibernate.loader.Loader.getResultSet(Loader.java:1808)
+	at org.hibernate.loader.Loader.doQuery(Loader.java:697)
+	at org.hibernate.loader.Loader.doQueryAndInitializeNonLazyCollections(Loader.java:259)
+	at org.hibernate.loader.Loader.loadEntity(Loader.java:1881)
+	... 49 more
+2014-10-01 13:32:08,882 [main] [] INFO  [/aatams] - Initializing Spring FrameworkServlet 'grails'
+2014-10-01 13:32:09,004 [main] [] INFO  Http11Protocol - Starting Coyote HTTP/1.1 on http-8080
+2014-10-01 13:33:15,967 [main] [] INFO  Http11Protocol - Initializing Coyote HTTP/1.1 on http-8080
+2014-10-01 13:33:15,969 [main] [] INFO  StandardService - Starting service Tomcat
+2014-10-01 13:33:15,970 [main] [] INFO  StandardEngine - Starting Servlet Engine: Apache Tomcat/6.0-snapshot
+2014-10-01 13:33:16,060 [main] [] INFO  ContextConfig - No default web.xml
+2014-10-01 13:33:16,220 [main] [] INFO  Digester - TLD skipped. URI: http://www.springframework.org/tags is already defined
+2014-10-01 13:33:16,254 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/core is already defined
+2014-10-01 13:33:16,272 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/fmt is already defined
+2014-10-01 13:33:16,340 [main] [] INFO  Digester - TLD skipped. URI: http://shiro.apache.org/tags is already defined
+2014-10-01 13:33:16,356 [main] [] INFO  [/aatams] - Initializing Spring root WebApplicationContext
+2014-10-01 13:33:20,495 [main] [] INFO  BeanBuilder - [RuntimeConfiguration] Configuring data source for environment: DEVELOPMENT
+2014-10-01 13:33:21,437 [main] [] INFO  BeanBuilder - Registering realm: shiro.SecDbRealm
+2014-10-01 13:33:22,876 [main] [] INFO  HBSpatialExtension - Initializing HBSpatialExtension
+2014-10-01 13:33:22,877 [main] [] INFO  HBSpatialExtension - Attempting to load Hibernate Spatial Provider org.hibernatespatial.postgis.DialectProvider
+2014-10-01 13:33:22,878 [main] [] INFO  HBSpatialExtension - Checking for default configuration file.
+2014-10-01 13:33:22,879 [main] [] INFO  HSConfiguration - No configuration file hibernate-spatial.cfg.xml on the classpath.
+2014-10-01 13:33:29,772 [main] [] INFO  SchedulerSignalerImpl - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2014-10-01 13:33:29,772 [main] [] INFO  QuartzScheduler - Quartz Scheduler v.1.6.1 created.
+2014-10-01 13:33:29,774 [main] [] INFO  RAMJobStore - RAMJobStore initialized.
+2014-10-01 13:33:29,774 [main] [] INFO  StdSchedulerFactory - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2014-10-01 13:33:29,774 [main] [] INFO  StdSchedulerFactory - Quartz scheduler version: 1.6.1
+2014-10-01 13:33:29,774 [main] [] INFO  QuartzScheduler - JobFactory set to: org.codehaus.groovy.grails.plugins.quartz.GrailsJobFactory@3c2bc5
+2014-10-01 13:33:30,309 [main] [] INFO  DefaultGrailsTemplateGenerator - Scaffolding template generator set to use resource loader org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext@251fb3dd: startup date [Wed Oct 01 13:33:21 EST 2014]; parent: Root WebApplicationContext
+2014-10-01 13:33:30,518 [main] [] INFO  EnvironmentSearchableCompassConfigurator - Setting Compass connection to [/home/dnahodil/.grails/projects/aatams/searchable-index/development]
+2014-10-01 13:33:30,704 [main] [] WARN  CompassMappingUtils - Cannot find domain class for property 'project' of class 'au.org.emii.aatams.Sensor
+2014-10-01 13:33:30,820 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Surgery.cpm.xml]
+2014-10-01 13:33:30,840 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Organisation.cpm.xml]
+2014-10-01 13:33:30,861 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Receiver.cpm.xml]
+2014-10-01 13:33:30,876 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Person.cpm.xml]
+2014-10-01 13:33:30,889 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Installation.cpm.xml]
+2014-10-01 13:33:30,908 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverRecovery.cpm.xml]
+2014-10-01 13:33:30,921 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Tag.cpm.xml]
+2014-10-01 13:33:30,937 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ProjectRole.cpm.xml]
+2014-10-01 13:33:30,949 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Project.cpm.xml]
+2014-10-01 13:33:30,969 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Sensor.cpm.xml]
+2014-10-01 13:33:31,005 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverDeployment.cpm.xml]
+2014-10-01 13:33:31,015 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/InstallationStation.cpm.xml]
+2014-10-01 13:33:31,032 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/AnimalRelease.cpm.xml]
+2014-10-01 13:33:31,268 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 13:33:31,273 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 13:33:31,318 [main] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 13:33:31,320 [main] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 13:33:31,321 [main] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 13:33:33,268 [main] [] WARN  TestDataConfigurationHolder - TestDataConfig.groovy not found, build-test-data plugin proceeding without config file
+2014-10-01 13:33:35,375 [main] [] INFO  MigrationRunner - Running script 'changelog.groovy'
+2014-10-01 13:33:35,443 [main] [] INFO  liquibase - Successfully acquired change log lock
+2014-10-01 13:33:42,191 [main] [] INFO  liquibase - Successfully released change log lock
+2014-10-01 13:33:42,200 [main] [] ERROR GrailsContextLoader - Error executing bootstraps: liquibase.exception.ChangeLogParseException: Unknown Liquibase extension: alterTable. Are you missing a jar from your classpath?
+org.codehaus.groovy.runtime.InvokerInvocationException: liquibase.exception.ChangeLogParseException: Unknown Liquibase extension: alterTable. Are you missing a jar from your classpath?
+	at org.grails.tomcat.TomcatServer.start(TomcatServer.groovy:212)
+	at grails.web.container.EmbeddableServer$start.call(Unknown Source)
+	at _GrailsRun_groovy$_run_closure5_closure12.doCall(_GrailsRun_groovy:158)
+	at _GrailsRun_groovy$_run_closure5_closure12.doCall(_GrailsRun_groovy)
+	at _GrailsSettings_groovy$_run_closure10.doCall(_GrailsSettings_groovy:280)
+	at _GrailsSettings_groovy$_run_closure10.call(_GrailsSettings_groovy)
+	at _GrailsRun_groovy$_run_closure5.doCall(_GrailsRun_groovy:149)
+	at _GrailsRun_groovy$_run_closure5.call(_GrailsRun_groovy)
+	at _GrailsRun_groovy.runInline(_GrailsRun_groovy:116)
+	at _GrailsRun_groovy.this$4$runInline(_GrailsRun_groovy)
+	at _GrailsRun_groovy$_run_closure1.doCall(_GrailsRun_groovy:59)
+	at RunApp$_run_closure1.doCall(RunApp.groovy:33)
+	at gant.Gant$_dispatch_closure5.doCall(Gant.groovy:381)
+	at gant.Gant$_dispatch_closure7.doCall(Gant.groovy:415)
+	at gant.Gant$_dispatch_closure7.doCall(Gant.groovy)
+	at gant.Gant.withBuildListeners(Gant.groovy:427)
+	at gant.Gant.this$2$withBuildListeners(Gant.groovy)
+	at gant.Gant$this$2$withBuildListeners.callCurrent(Unknown Source)
+	at gant.Gant.dispatch(Gant.groovy:415)
+	at gant.Gant.this$2$dispatch(Gant.groovy)
+	at gant.Gant.invokeMethod(Gant.groovy)
+	at gant.Gant.executeTargets(Gant.groovy:590)
+	at gant.Gant.executeTargets(Gant.groovy:589)
+	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:134)
+Caused by: liquibase.exception.ChangeLogParseException: Unknown Liquibase extension: alterTable. Are you missing a jar from your classpath?
+	at grails.plugin.databasemigration.DslBuilder.processChange(DslBuilder.groovy:476)
+	at grails.plugin.databasemigration.DslBuilder.this$4$processChange(DslBuilder.groovy)
+	at grails.plugin.databasemigration.DslBuilder$this$4$processChange.callCurrent(Unknown Source)
+	at grails.plugin.databasemigration.DslBuilder$this$4$processChange.callCurrent(Unknown Source)
+	at grails.plugin.databasemigration.DslBuilder.createNode(DslBuilder.groovy:185)
+	at grails.plugin.databasemigration.DslBuilder.createNode(DslBuilder.groovy:587)
+	at grails.plugin.databasemigration.DslBuilder.super$3$invokeMethod(DslBuilder.groovy)
+	at grails.plugin.databasemigration.DslBuilder.invokeMethod(DslBuilder.groovy:114)
+	at Script1$_run_closure1_closure2.doCall(Script1.groovy:3)
+	at Script1$_run_closure1_closure2.doCall(Script1.groovy)
+	at grails.plugin.databasemigration.DslBuilder.super$3$invokeMethod(DslBuilder.groovy)
+	at grails.plugin.databasemigration.DslBuilder.invokeMethod(DslBuilder.groovy:114)
+	at Script1$_run_closure1.doCall(Script1.groovy:2)
+	at Script1$_run_closure1.doCall(Script1.groovy)
+	at grails.plugin.databasemigration.GrailsChangeLogParser.parse(GrailsChangeLogParser.groovy:73)
+	at liquibase.parser.ChangeLogParser$parse.call(Unknown Source)
+	at grails.plugin.databasemigration.DslBuilder.handleIncludedChangeLog(DslBuilder.groovy:739)
+	at grails.plugin.databasemigration.DslBuilder.this$4$handleIncludedChangeLog(DslBuilder.groovy)
+	at grails.plugin.databasemigration.DslBuilder$this$4$handleIncludedChangeLog.callCurrent(Unknown Source)
+	at grails.plugin.databasemigration.DslBuilder.createNode(DslBuilder.groovy:136)
+	at grails.plugin.databasemigration.DslBuilder.createNode(DslBuilder.groovy:587)
+	at grails.plugin.databasemigration.DslBuilder.super$3$invokeMethod(DslBuilder.groovy)
+	at grails.plugin.databasemigration.DslBuilder.invokeMethod(DslBuilder.groovy:114)
+	at Script1$_run_closure1.doCall(Script1.groovy:11)
+	at Script1$_run_closure1.doCall(Script1.groovy)
+	at grails.plugin.databasemigration.GrailsChangeLogParser.parse(GrailsChangeLogParser.groovy:73)
+	at liquibase.Liquibase.update(Liquibase.java:106)
+	at liquibase.Liquibase$update.call(Unknown Source)
+	at grails.plugin.databasemigration.MigrationRunner$_autoRun_closure1.doCall(MigrationRunner.groovy:50)
+	at grails.plugin.databasemigration.MigrationRunner$_autoRun_closure1.doCall(MigrationRunner.groovy)
+	at grails.plugin.databasemigration.MigrationUtils.executeInSession(MigrationUtils.groovy:99)
+	at grails.plugin.databasemigration.MigrationUtils$executeInSession.call(Unknown Source)
+	at grails.plugin.databasemigration.MigrationRunner.autoRun(MigrationRunner.groovy:46)
+	at grails.plugin.databasemigration.MigrationRunner$autoRun.call(Unknown Source)
+	at DatabaseMigrationGrailsPlugin$_closure2.doCall(DatabaseMigrationGrailsPlugin.groovy:84)
+	... 24 more
+2014-10-01 13:33:42,205 [Thread-14] [] INFO  DefaultCompass - Closing Compass [default]
+2014-10-01 13:33:42,217 [Thread-14] [] INFO  DefaultCompass - Closed Compass [default]
+2014-10-01 13:33:42,241 [Thread-15] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutting down.
+2014-10-01 13:33:42,242 [Thread-15] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED paused.
+2014-10-01 13:33:42,243 [Thread-15] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED shutdown complete.
+2014-10-01 13:35:07,286 [main] [] INFO  Http11Protocol - Initializing Coyote HTTP/1.1 on http-8080
+2014-10-01 13:35:07,288 [main] [] INFO  StandardService - Starting service Tomcat
+2014-10-01 13:35:07,290 [main] [] INFO  StandardEngine - Starting Servlet Engine: Apache Tomcat/6.0-snapshot
+2014-10-01 13:35:07,426 [main] [] INFO  ContextConfig - No default web.xml
+2014-10-01 13:35:07,598 [main] [] INFO  Digester - TLD skipped. URI: http://www.springframework.org/tags is already defined
+2014-10-01 13:35:07,632 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/core is already defined
+2014-10-01 13:35:07,649 [main] [] INFO  Digester - TLD skipped. URI: http://java.sun.com/jsp/jstl/fmt is already defined
+2014-10-01 13:35:07,703 [main] [] INFO  Digester - TLD skipped. URI: http://shiro.apache.org/tags is already defined
+2014-10-01 13:35:07,728 [main] [] INFO  [/aatams] - Initializing Spring root WebApplicationContext
+2014-10-01 13:35:13,024 [main] [] INFO  BeanBuilder - [RuntimeConfiguration] Configuring data source for environment: DEVELOPMENT
+2014-10-01 13:35:13,994 [main] [] INFO  BeanBuilder - Registering realm: shiro.SecDbRealm
+2014-10-01 13:35:15,516 [main] [] INFO  HBSpatialExtension - Initializing HBSpatialExtension
+2014-10-01 13:35:15,517 [main] [] INFO  HBSpatialExtension - Attempting to load Hibernate Spatial Provider org.hibernatespatial.postgis.DialectProvider
+2014-10-01 13:35:15,518 [main] [] INFO  HBSpatialExtension - Checking for default configuration file.
+2014-10-01 13:35:15,519 [main] [] INFO  HSConfiguration - No configuration file hibernate-spatial.cfg.xml on the classpath.
+2014-10-01 13:35:23,541 [main] [] INFO  SchedulerSignalerImpl - Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+2014-10-01 13:35:23,542 [main] [] INFO  QuartzScheduler - Quartz Scheduler v.1.6.1 created.
+2014-10-01 13:35:23,543 [main] [] INFO  RAMJobStore - RAMJobStore initialized.
+2014-10-01 13:35:23,543 [main] [] INFO  StdSchedulerFactory - Quartz scheduler 'quartzScheduler' initialized from an externally provided properties instance.
+2014-10-01 13:35:23,543 [main] [] INFO  StdSchedulerFactory - Quartz scheduler version: 1.6.1
+2014-10-01 13:35:23,543 [main] [] INFO  QuartzScheduler - JobFactory set to: org.codehaus.groovy.grails.plugins.quartz.GrailsJobFactory@1fef9b2e
+2014-10-01 13:35:24,258 [main] [] INFO  DefaultGrailsTemplateGenerator - Scaffolding template generator set to use resource loader org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext@45312237: startup date [Wed Oct 01 13:35:14 EST 2014]; parent: Root WebApplicationContext
+2014-10-01 13:35:24,651 [main] [] INFO  EnvironmentSearchableCompassConfigurator - Setting Compass connection to [/home/dnahodil/.grails/projects/aatams/searchable-index/development]
+2014-10-01 13:35:24,893 [main] [] WARN  CompassMappingUtils - Cannot find domain class for property 'project' of class 'au.org.emii.aatams.Sensor
+2014-10-01 13:35:25,086 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ProjectRole.cpm.xml]
+2014-10-01 13:35:25,110 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Organisation.cpm.xml]
+2014-10-01 13:35:25,128 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Receiver.cpm.xml]
+2014-10-01 13:35:25,148 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverRecovery.cpm.xml]
+2014-10-01 13:35:25,161 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Tag.cpm.xml]
+2014-10-01 13:35:25,175 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Installation.cpm.xml]
+2014-10-01 13:35:25,212 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/ReceiverDeployment.cpm.xml]
+2014-10-01 13:35:25,221 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Person.cpm.xml]
+2014-10-01 13:35:25,233 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/InstallationStation.cpm.xml]
+2014-10-01 13:35:25,263 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/AnimalRelease.cpm.xml]
+2014-10-01 13:35:25,279 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Project.cpm.xml]
+2014-10-01 13:35:25,296 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Surgery.cpm.xml]
+2014-10-01 13:35:25,313 [main] [] INFO  CompassConfiguration - Mapping InputStream [au/org/emii/aatams/Sensor.cpm.xml]
+2014-10-01 13:35:25,626 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 13:35:25,631 [main] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 13:35:25,690 [main] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 13:35:25,692 [main] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 13:35:25,693 [main] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 13:35:28,114 [main] [] WARN  TestDataConfigurationHolder - TestDataConfig.groovy not found, build-test-data plugin proceeding without config file
+2014-10-01 13:35:30,296 [main] [] INFO  MigrationRunner - Running script 'changelog.groovy'
+2014-10-01 13:35:30,362 [main] [] INFO  liquibase - Successfully acquired change log lock
+2014-10-01 13:35:38,519 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 13:35:38,588 [main] [] INFO  liquibase - Reading from aatams.databasechangelog
+2014-10-01 13:35:39,210 [main] [] INFO  liquibase - ChangeSet protected_species_flag.groovy::1412133664000-1::dnahodil ran successfully in 51ms
+2014-10-01 13:35:39,233 [main] [] INFO  liquibase - Successfully released change log lock
+2014-10-01 13:35:39,326 [Thread-16] [] INFO  CompassGpsUtils - Starting Searchable Plugin bulk index
+2014-10-01 13:35:39,331 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_simple]
+2014-10-01 13:35:39,332 [Thread-16] [] INFO  LuceneAnalyzerManager - Building analyzer [searchableplugin_whitespace]
+2014-10-01 13:35:39,484 [main] [] INFO  GrailsConfigUtils - [GrailsContextLoader] Grails application loaded.
+2014-10-01 13:35:39,514 [main] [] INFO  QuartzScheduler - Scheduler quartzScheduler_$_NON_CLUSTERED started.
+2014-10-01 13:35:40,948 [main] [] INFO  [/aatams] - Initializing Spring FrameworkServlet 'grails'
+2014-10-01 13:35:41,112 [main] [] INFO  Http11Protocol - Starting Coyote HTTP/1.1 on http-8080
+2014-10-01 13:35:41,165 [Thread-16] [] INFO  DefaultCompass - Closing Compass [default]
+2014-10-01 13:35:41,165 [Thread-16] [] INFO  DefaultCompass - Closed Compass [default]
+2014-10-01 13:35:41,166 [Thread-16] [] INFO  LuceneSearchEngineOptimizerManager - Starting scheduled optimizer [class org.compass.core.lucene.engine.optimizer.DefaultLuceneSearchEngineOptimizer] with period [10000ms]
+2014-10-01 13:35:41,166 [Thread-16] [] INFO  DefaultLuceneSearchEngineIndexManager - Starting scheduled index manager with period [60000ms]
+2014-10-01 13:35:41,168 [Thread-16] [] INFO  IndexHoldersCache - Starting scheduled refresh cache with period [5000ms]
+2014-10-01 13:35:41,170 [Thread-16] [] INFO  CompassGpsUtils - Finished Searchable Plugin bulk index, 1 secs, 843 ms

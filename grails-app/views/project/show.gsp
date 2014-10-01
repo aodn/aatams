@@ -101,6 +101,13 @@
                           </tr>
                         </shiro:hasRole>
 
+                        <g:if test="${projectInstance?.isProtected}">
+                            <tr class="prop">
+                                <td valign="top" class="name"><g:message code="project.isProtected.label" default="Protected" /></td>
+
+                                <td valign="top" class="value">This Project is protected</td>
+                            </tr>
+                        </g:if>
                     </tbody>
                 </table>
             </div>

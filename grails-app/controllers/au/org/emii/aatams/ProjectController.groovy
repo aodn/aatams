@@ -65,12 +65,14 @@ class ProjectController {
             if (userIsAdmin())
             {
                 projectInstance.status = EntityStatus.ACTIVE
+                projectInstance.isProtected = createProjectCmd.isProtected
             }
             else
             {
                 projectInstance.status = EntityStatus.PENDING
                 Person user = Person.get(SecurityUtils.getSubject().getPrincipal())
                 projectInstance.requestingUser = user
+                projectInstance.isProtected = false
             }
 
             if (projectInstance.save(flush: true))
@@ -152,7 +154,14 @@ class ProjectController {
                     return
                 }
             }
+
+            def newIsProtected = params.remove('isProtected')
             projectInstance.properties = params
+
+            if (userIsAdmin()) {
+                projectInstance.isProtected = newIsProtected
+            }
+
             if (!projectInstance.hasErrors() && projectInstance.save(flush: true))
             {
                 // Notify project activated.

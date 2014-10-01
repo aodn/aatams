@@ -21,7 +21,7 @@ class ProjectController {
         def projectTotal = Project.count()
         def projectList = Project.list(params)
 
-        if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
+        if (!userIsAdmin())
         {
             // Filter out non-ACTIVE organisations (only sys admin should see these).
             projectList = projectList.grep
@@ -62,7 +62,7 @@ class ProjectController {
 
             // If SysAdmin, then set Organisation's status to ACTIVE, otherwise,
             // set to PENDING and record the requesting user.
-            if (SecurityUtils.getSubject().hasRole("SysAdmin"))
+            if (userIsAdmin())
             {
                 projectInstance.status = EntityStatus.ACTIVE
             }
@@ -88,7 +88,7 @@ class ProjectController {
                     permissionUtilsService.setPermissions(projectRole)
                 }
 
-                if (SecurityUtils.getSubject().hasRole("SysAdmin"))
+                if (userIsAdmin())
                 {
                     flash.message = "${message(code: 'default.created.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.toString()])}"
                 }
@@ -229,5 +229,9 @@ class ProjectController {
         def projectsMatchingName = Project.findAllByNameIlike('%' + params.term + '%')
         log.debug("Matching projects: " + projectsMatchingName)
         render(projectsMatchingName as JSON)
+    }
+
+    def userIsAdmin() {
+        SecurityUtils.subject.hasRole("SysAdmin")
     }
 }

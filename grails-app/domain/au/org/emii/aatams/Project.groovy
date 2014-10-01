@@ -16,7 +16,7 @@ class Project
 
     String name
     String description
-    Boolean isProtected
+    boolean isProtected = false
 
     // These couple of attributes allow any authenticated user to request
     // project creation.

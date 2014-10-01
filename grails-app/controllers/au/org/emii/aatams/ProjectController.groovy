@@ -159,7 +159,7 @@ class ProjectController {
             projectInstance.properties = params
 
             if (userIsAdmin()) {
-                projectInstance.isProtected = newIsProtected
+                projectInstance.isProtected = newIsProtected ?: false
             }
 
             if (!projectInstance.hasErrors() && projectInstance.save(flush: true))

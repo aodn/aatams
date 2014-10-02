@@ -337,7 +337,7 @@
                                 </tr>
                             </shiro:lacksRole>
 
-                            <g:if test="${animalReleaseInstance?.project.isProtected}">
+                            <g:if test="${animalReleaseInstance?.protected}">
                                 <tr class="prop">
                                     <td valign="top" class="name"><g:message code="project.isProtected.label" default="Protected" /></td>
 

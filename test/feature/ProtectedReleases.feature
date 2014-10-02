@@ -52,7 +52,7 @@ Scenario Outline: protection notification
 Scenario Outline: detection and release visibility
     Given there is a protected release with associated detections
     And I am <auth level>
-    And the current date is <relative date> the protected release's embargo expiry date  # before or equal to
+    And the current date is <relative date> the protected release's embargo expiry date
     Then the detections, releases and associated entities shall be <visibility>
 
     Examples:

@@ -190,7 +190,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         receiverRecoveryController.metaClass.message = { Map map -> return "error message" }
         receiverRecoveryController.candidateEntitiesService = candEntitiesService
         receiverRecoveryController.queryService = new QueryService()
-        receiverRecoveryController.queryService.embargoService = new EmbargoService()
+        receiverRecoveryController.queryService.visibilityControlService = new VisibilityControlService()
         receiverRecoveryController.reportInfoService = new ReportInfoService()
         mockConfig('''grails.gorm.default.list.max = 10
                       filter.count.max = 10000''')

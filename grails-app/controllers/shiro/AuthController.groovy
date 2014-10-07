@@ -13,7 +13,7 @@ import groovy.xml.MarkupBuilder
 class AuthController {
     def shiroSecurityManager
 
-    def embargoService
+    def visibilityControlService
 
     def index = { redirect(action: "login", params: params) }
 
@@ -50,7 +50,7 @@ class AuthController {
             // password is incorrect.
             doLogin(authToken)
 
-            embargoService.clearCache()
+            visibilityControlService.clearCache()
 
             redirectToTargetUrl(targetUri)
         }
@@ -115,7 +115,7 @@ class AuthController {
         // Log the user out of the application.
         SecurityUtils.subject?.logout()
 
-        embargoService.clearCache()
+        visibilityControlService.clearCache()
 
         // For now, redirect back to the home page.
         redirect(uri: "/")

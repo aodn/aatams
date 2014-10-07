@@ -11,9 +11,9 @@ import org.codehaus.groovy.grails.plugins.web.filters.FilterConfig
 
 import org.apache.shiro.SecurityUtils
 
-class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
+class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
 {
-    def embargoService
+    def visibilityControlService
     def permissionUtilsService
 
     Project project1
@@ -68,7 +68,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     ValidDetection detectionEmbargoedNonReadableProject
     ValidDetection detectionPastEmbargoed
 
-    def queryService = queryService
+    def queryService
     def reportInfoService
 
     Person user
@@ -77,14 +77,14 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
     {
         super.setUp()
 
-        mockLogging(EmbargoService, true)
-        embargoService = new EmbargoService()
+        mockLogging(VisibilityControlService, true)
+        visibilityControlService = new VisibilityControlService()
 
         mockLogging(PermissionUtilsService, true)
         permissionUtilsService = new PermissionUtilsService()
 
-        filters.embargoService = embargoService
-        embargoService.permissionUtilsService = permissionUtilsService
+        filters.visibilityControlService = visibilityControlService
+        visibilityControlService.permissionUtilsService = permissionUtilsService
 
         project1 = new Project(name: "project 1")
         project2 = new Project(name: "project 2")
@@ -259,8 +259,8 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
                 controller.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
                 controller.reportInfoService = reportInfoService
                 controller.queryService = queryService
-                controller.queryService.embargoService = new EmbargoService()
-                controller.queryService.embargoService.permissionUtilsService = permissionUtilsService
+                controller.queryService.visibilityControlService = new VisibilityControlService()
+                controller.queryService.visibilityControlService.permissionUtilsService = permissionUtilsService
         }
     }
 
@@ -504,7 +504,7 @@ class EmbargoFiltersTests extends AbstractFiltersUnitTestCase
         FilterConfig filter = getFilter("genericNotList")
         assertNotNull(filter)
 
-        EmbargoFilters.metaClass.getTargetUri =
+        VisibilityControlFilters.metaClass.getTargetUri =
         {
             params ->
 

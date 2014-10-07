@@ -28,7 +28,7 @@ class AuthControllerTests extends ControllerUnitTestCase
             }
         }
 
-        controller.embargoService = new EmbargoService()
+        controller.visibilityControlService = new VisibilityControlService()
     }
 
     void testLoginFromReportExtract()

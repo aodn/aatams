@@ -15,6 +15,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     def permissionUtilsService
 
     def grailsApplication
+    def visibilityControlService
 
     def dataSource
 

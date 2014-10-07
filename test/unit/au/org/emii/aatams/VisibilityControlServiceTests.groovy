@@ -4,9 +4,9 @@ import au.org.emii.aatams.detection.ValidDetection
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import org.joda.time.DateTime
 
-class EmbargoServiceTests extends AbstractGrailsUnitTestCase
+class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase
 {
-    def embargoService
+    def visibilityControlService
     def permissionUtilsService
 
     def acceptedPermissionString
@@ -22,9 +22,9 @@ class EmbargoServiceTests extends AbstractGrailsUnitTestCase
     {
         super.setUp()
 
-        embargoService = new EmbargoService()
+        visibilityControlService = new VisibilityControlService()
         permissionUtilsService = new PermissionUtilsService()
-        embargoService.permissionUtilsService = permissionUtilsService
+        visibilityControlService.permissionUtilsService = permissionUtilsService
 
         hasRole = false
 

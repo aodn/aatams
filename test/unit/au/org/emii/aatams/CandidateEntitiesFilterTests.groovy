@@ -1,6 +1,5 @@
 package au.org.emii.aatams
 
-import grails.test.*
 import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService

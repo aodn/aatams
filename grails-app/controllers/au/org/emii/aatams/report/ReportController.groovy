@@ -23,34 +23,34 @@ class ReportController extends AbstractController
     def jasperService
     def kmlService
     def permissionUtilsService
-    
+
     def index = { }
-    
+
     def create =
     {
         renderDefaultModel(params)
     }
 
-    private renderDefaultModel(Map params) 
+    private renderDefaultModel(Map params)
     {
-        def model = 
+        def model =
             [name:params.name,
              displayName:reportInfoService.getReportInfo(params.name).displayName,
              formats:params.formats]
     }
-    
+
     def execute =
     {
         log.debug("Executing report, params: " + params)
-        
+
         indicateExportStart()
-        
+
         // The only time this will be set is in integration tests (to "CSV").
         if (!params._format)
         {
             params._format = params._action_execute
         }
-        
+
         if (params._name == "detection"  && params._format == "CSV")
         {
             detectionExtractService.generateReport(params, request, response)
@@ -58,33 +58,33 @@ class ReportController extends AbstractController
         else
         {
             def resultList = generateResultList(params)
-            
+
             if (!checkResultList(resultList, flash, params))
             {
                 return
             }
-            
+
             if (params._format == "KML")
             {
                 long startTime = System.currentTimeMillis()
                 assert(!resultList.isEmpty())
                 generateKml(params, resultList)
-    
+
                 log.debug("KML generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
             }
             else
             {
                 long startTime = System.currentTimeMillis()
-                
+
                 params.SUBREPORT_DIR = servletContext.getRealPath('/reports') + "/"
                 params._file = reportInfoService.getReportInfo(params._name).jrxmlFilename[params._action_execute]
-        
+
                 generateReport(params, log, request, resultList)
-    
+
                 log.debug("Report generated, time: " + (System.currentTimeMillis() - startTime) + "ms.")
             }
         }
-        
+
         response.flushBuffer()
     }
 
@@ -93,13 +93,16 @@ class ReportController extends AbstractController
         response.setHeader("Content-disposition", "attachment; filename=" + params._name + ".kml");
         response.contentType = "application/vnd.google-earth.kml+xml"
         response.characterEncoding = "UTF-8"
-        
+
         final Kml kml = kmlService.toKml(resultList)
         kml.marshal(response.outputStream)
         response.outputStream.flush()
     }
-    
-    private generateReport(Map params, org.apache.commons.logging.Log log, javax.servlet.http.HttpServletRequest request, List resultList)
+
+    private generateReport(
+        Map params, org.apache.commons.logging.Log log,
+        javax.servlet.http.HttpServletRequest request,
+        List resultList)
     {
         def filterParams = [:]
 
@@ -140,16 +143,16 @@ class ReportController extends AbstractController
             redirect(action:action, params:redirectParams)
             return false
         }
-        
+
         return true
     }
 
-    private List generateResultList(Map params) 
+    private List generateResultList(Map params)
     {
         def results = []
 
         long startTime = System.currentTimeMillis()
-        
+
         // Special handling for animal release summary.
         // TODO: refactor to remove dependency of this controller on to
         // AnimalReleaseSummaryService.
@@ -160,11 +163,11 @@ class ReportController extends AbstractController
         }
         else
         {
-            
+
             results = queryService.query(reportInfoService.getClassForName(params._name),
                                          params).results
         }
-        
+
         log.debug("Report query executed, time: " + (System.currentTimeMillis() - startTime) + "ms.")
         return results
     }
@@ -172,23 +175,23 @@ class ReportController extends AbstractController
    /**
     * Generate a html response.
     */
-    def generateResponse = 
+    def generateResponse =
     {
         reportDef ->
-    
-        if (!reportDef.fileFormat.inline && !reportDef.parameters._inline) 
+
+        if (!reportDef.fileFormat.inline && !reportDef.parameters._inline)
         {
             response.setHeader("Content-disposition", "attachment; filename="+(reportDef.parameters._name ?: reportDef.name) + "." + reportDef.fileFormat.extension);
             response.contentType = reportDef.fileFormat.mimeTyp
             response.characterEncoding = "UTF-8"
             response.outputStream << reportDef.contentStream.toByteArray()
-        } 
+        }
         else
         {
             render(text: reportDef.contentStream, contentType: reportDef.fileFormat.mimeTyp, encoding: reportDef.parameters.encoding ? reportDef.parameters.encoding : 'UTF-8');
         }
     }
-    
+
     def animalReleaseSummaryCreate =
     {
         redirect(action:"create", params:[name:"animalReleaseSummary", formats:["PDF"]])

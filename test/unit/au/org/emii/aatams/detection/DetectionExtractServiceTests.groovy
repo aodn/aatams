@@ -7,13 +7,17 @@ import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import grails.test.*
 
-class DetectionExtractServiceTests extends AbstractGrailsUnitTestCase
-{
+class DetectionExtractServiceTests extends AbstractGrailsUnitTestCase {
     def detectionExtractService
-    def permissionUtilsService
+    def des
 
-    protected void setUp()
-    {
+    def permissionUtilsService
+    def newline = System.getProperty("line.separator")
+
+    DateTime startTime = new DateTime("2010-01-01T12:34:56+11:00")
+    DateTime endTime = new DateTime("2010-01-01T17:00:01+11:00")
+
+    protected void setUp() {
         super.setUp()
 
         mockLogging(DetectionExtractService, true)
@@ -21,88 +25,225 @@ class DetectionExtractServiceTests extends AbstractGrailsUnitTestCase
 
         mockLogging(PermissionUtilsService, true)
         detectionExtractService.permissionUtilsService = new PermissionUtilsService()
+
+        des = detectionExtractService   // shorthand alias.
     }
 
-    protected void tearDown()
-    {
-        super.tearDown()
+    void testConstructQuery() {
+        assertEquals(
+            [des.getSelect(), des.getWhereClause(), des.getOrderByClause(), des.getLimitClause()]
+                .grep { it }
+                .join(newline),
+            detectionExtractService.constructQuery()
+        )
     }
 
-    def getExpectedViewName()
-    {
-        return "detection_extract_view"
+    void testGetSelectNoConstraint() {
+        assertTrue(des.getSelect().startsWith("SELECT ${des.selectColumns} FROM valid_detection"))
     }
 
-    void testConstructQueryNoFilterParams()
-    {
-        println "query: " + detectionExtractService.constructQuery([:], 10000, 0)
-        assertEquals("${DetectionExtractService.SELECT} limit 10000 offset 0", detectionExtractService.constructQuery([:], 10000, 0))
+    void testGetSelectCountOnlyFalse() {
+        assertTrue(des.getSelect(countOnly: false).startsWith("SELECT ${des.selectColumns} FROM valid_detection"))
     }
 
-    void testConstructQueryOneProject()
-    {
-        assertEquals("${DetectionExtractService.SELECT} where project.name in ('Whales') limit 10000 offset 0",
-                     detectionExtractService.constructQuery([filter: [receiverDeployment:[station:[installation:[project:[in: ["name", "Whales, "]]]]]]], 10000, 0))
+    void testGetSelectCountOnlyTrue() {
+        assertTrue(des.getSelect(countOnly: true).startsWith("SELECT ${des.selectCountColumns} FROM valid_detection"))
     }
 
-    void testConstructQueryTwoProjects()
-    {
-        assertEquals("${DetectionExtractService.SELECT} where project.name in ('Whales', 'Sharks') limit 10000 offset 0",
-                     detectionExtractService.constructQuery([filter: [receiverDeployment:[station:[installation:[project:[in:["name", "Whales, Sharks, "]]]]]]], 10000, 0))
+
+    void testGetWhereClauseOneProject() {
+        def filter = [
+            'in': [
+                [ field: 'project.name', values: ['Whales'] ]
+            ]
+        ]
+
+        assertEquals("WHERE project.name IN ('Whales')", des.getWhereClause(filter: filter))
     }
 
-    void testConstructQueryOneProjectOneInstallation()
-    {
-        assertEquals("${DetectionExtractService.SELECT} where project.name in ('Whales') and installation.name in ('Bondi') limit 10000 offset 0",
-                     detectionExtractService.constructQuery([filter: [receiverDeployment:[station:[installation:[project:[in:["name", "Whales, "]], in:["name", "Bondi"]]]]]], 10000, 0))
+    void testGetWhereClauseOneProjectBlank() {
+        def filter = [
+            'in': [
+                [ field: 'project.name', values: [' '] ]
+            ]
+        ]
+
+        assertEquals("", des.getWhereClause(filter: filter))
     }
 
-    void testConstructQueryTwoProjectsOneInstallation()
-    {
-        assertEquals("${DetectionExtractService.SELECT} where project.name in ('Whales', 'Sharks') and installation.name in ('Bondi') limit 10000 offset 0",
-                     detectionExtractService.constructQuery([filter: [receiverDeployment:[station:[installation:[project:[in:["name", "Whales, Sharks, "]], in:["name", "Bondi"]]]]]], 10000, 0))
+    void testGetWhereClauseTwoProjects() {
+        def filter = [
+            'in': [
+                [ field: 'project.name', values: ['Whales', 'Sharks'] ]
+            ]
+        ]
+
+        assertEquals("WHERE project.name IN ('Whales', 'Sharks')", des.getWhereClause(filter: filter))
     }
 
-    void testConstructQueryOneInstallation()
-    {
-        assertEquals("${DetectionExtractService.SELECT} where installation.name in ('Bondi') limit 10000 offset 0",
-                     detectionExtractService.constructQuery([filter: [receiverDeployment:[station:[installation:[in:["name", "Bondi, "]]]]]], 10000, 0))
+    void testGetWhereClauseTwoProjectsOneInstallation() {
+        def filter = [
+            'in': [
+                [ field: 'project.name', values: ['Whales', 'Sharks'] ],
+                [ field: 'installation.name', values: ['Bondi'] ]
+            ]
+        ]
+
+        assertEquals(
+            "WHERE project.name IN ('Whales', 'Sharks') AND installation.name IN ('Bondi')",
+            des.getWhereClause(filter: filter))
     }
 
-    void testConstructQueryOneStation()
-    {
-        assertEquals("${DetectionExtractService.SELECT} where installation_station.name in ('CTBAR East') limit 10000 offset 0",
-                     detectionExtractService.constructQuery([filter: [receiverDeployment:[station:[in:["name", "CTBAR East, "]]]]], 10000, 0))
+    void testGetWhereClauseTimestampRange() {
+        def filter = [
+            'between': [
+                [ field: 'timestamp', start: startTime, end: endTime ]
+            ]
+        ]
+
+        assertEquals(
+            "WHERE timestamp BETWEEN '2010-01-01T12:34:56.000+11:00' AND '2010-01-01T17:00:01.000+11:00'",
+            des.getWhereClause(filter: filter))
     }
 
-    void testConstructQueryOneTagID()
-    {
-        assertEquals("${DetectionExtractService.SELECT} where valid_detection.transmitter_id in ('A69-1303-12345') limit 10000 offset 0",
-                     detectionExtractService.constructQuery([filter: [in:["transmitterId", "A69-1303-12345, "]]], 10000, 0))
+    void testGetWhereClauseTimestampRangeAndOneProject() {
+        def filter = [
+            'between': [
+                [ field: 'timestamp', start: startTime, end: endTime ]
+            ],
+            'in': [
+                [ field: 'project.name', values: ['Whales'] ]
+            ]
+        ]
+
+        assertEquals(
+            "WHERE project.name IN ('Whales') AND " +
+                "timestamp BETWEEN '2010-01-01T12:34:56.000+11:00' AND '2010-01-01T17:00:01.000+11:00'",
+            des.getWhereClause(filter: filter))
     }
 
-    void testConstructQueryOneSpecies()
-    {
-        assertEquals("${DetectionExtractService.SELECT} where spcode in ('12345') limit 10000 offset 0",
-                     detectionExtractService.constructQuery([filter: [surgeries:[release:[animal:[species:[in:["spcode", "12345, "]]]]]]], 10000, 0))
+    void testGetWhereClausePageIndex() {
+        PageIndex index = new PageIndex(
+            timestamp: new DateTime("2010-01-01T12:34:56+11:00"),
+            receiverName: 'VR2W-1234',
+            transmitterId: 'A69-1303-5678'
+        )
+
+        assertEquals(
+            "WHERE (timestamp, receiver_name, valid_detection.transmitter_id) > " +
+              "('2010-01-01T12:34:56.000+11:00', 'VR2W-1234', 'A69-1303-5678')",
+            des.getWhereClause(pageIndex: index)
+        )
     }
 
-    void testConstructQueryTimestampRange()
-    {
-        DateTime startTime = new DateTime("2010-01-01T12:34:56")
-        DateTime endTime = new DateTime("2010-01-01T17:00:01")
+    void testGetWhereClauseOneProjectAndPageIndex() {
+        def filter = [
+            'in': [
+                [ field: 'project.name', values: ['Whales'] ]
+            ]
+        ]
 
-        assertEquals("${DetectionExtractService.SELECT} where timestamp between '2010-01-01 12:34:56.0' and '2010-01-01 17:00:01.0' limit 10000 offset 0",
-                     detectionExtractService.constructQuery([filter: [between: ["0": "timestamp", "1": startTime.toDate(), "2": endTime.toDate()]]], 10000, 0))
+        assertEquals("WHERE project.name IN ('Whales')", des.getWhereClause(filter: filter))
+        PageIndex index = new PageIndex(
+            timestamp: new DateTime("2010-01-01T12:34:56+11:00"),
+            receiverName: 'VR2W-1234',
+            transmitterId: 'A69-1303-5678'
+        )
+
+        assertEquals(
+            "WHERE (timestamp, receiver_name, valid_detection.transmitter_id) > " +
+              "('2010-01-01T12:34:56.000+11:00', 'VR2W-1234', 'A69-1303-5678') " +
+              "AND project.name IN ('Whales')",
+            des.getWhereClause(filter: filter, pageIndex: index)
+        )
     }
 
-    void testConstructQueryTimestampRangeOneProject()
-    {
-        DateTime startTime = new DateTime("2010-01-01T12:34:56")
-        DateTime endTime = new DateTime("2010-01-01T17:00:01")
+    // test order by count only
+    void testGetOrderByNoConstraint() {
+        assertEquals('ORDER BY timestamp, receiver_name, valid_detection.transmitter_id', des.getOrderByClause())
+    }
 
-        assertEquals("${DetectionExtractService.SELECT} where project.name in ('Whales') and timestamp between '2010-01-01 12:34:56.0' and '2010-01-01 17:00:01.0' limit 10000 offset 0",
-                     detectionExtractService.constructQuery([filter: [between: ["0": "timestamp", "1": startTime.toDate(), "2": endTime.toDate()],
-                                                              receiverDeployment:[station:[installation:[project:[in:["name", "Whales, "]]]]]]], 10000, 0))
+    void testGetOrderByCountOnlyFalse() {
+        assertEquals(
+            'ORDER BY timestamp, receiver_name, valid_detection.transmitter_id',
+            des.getOrderByClause(countOnly: false)
+        )
+    }
+
+    void testGetOrderByCountOnlyTrue() {
+        assertEquals(
+            '',
+            des.getOrderByClause(countOnly: true)
+        )
+    }
+
+    void testGetLimitNoConstraint() {
+        assertEquals('', des.getLimitClause())
+    }
+
+    void testGetLimitConstraintHasLimit() {
+        assertEquals('LIMIT 20', des.getLimitClause(limit: 20))
+    }
+
+    void testRequestParamsToFilter() {
+
+        // (K, V) is (input request parameter map, expected filter map)
+        def requestParamsToExpectedFilter = [
+
+            [:]:
+            null,
+
+            [ filter: [receiverDeployment: [station: [installation: [project: [in: ["name", "Whales, "]]]]]]]:
+            [ 'in': [ [ field: 'project.name', values: ['Whales']]]],
+
+            [ filter: [receiverDeployment: [station: [installation: [project: [in: ["name", "Whales, Sharks,  "]]]]]]]:
+            [ 'in': [ [ field: 'project.name', values: ['Whales', 'Sharks']]]],
+
+            [ filter: [receiverDeployment: [station: [installation: [project: [in: ["name", "Whales, "]], in:["name", "Bondi"]]]]]]:
+            [ 'in': [
+                [ field: 'project.name', values: ['Whales']],
+                [ field: 'installation.name', values: ['Bondi']]
+            ]],
+
+            [ filter: [receiverDeployment: [station: [installation: [project: [in: ["name", "Whales, Sharks, "]], in:["name", "Bondi"]]]]]]:
+            [ 'in': [
+                [ field: 'project.name', values: ['Whales', 'Sharks']],
+                [ field: 'installation.name', values: ['Bondi']]
+            ]],
+
+            [ filter: [receiverDeployment:[station:[installation:[in:["name", "Bondi, "]]]]]]:
+            [ 'in': [ [ field: 'installation.name', values: ['Bondi']]]],
+
+            [ filter: [receiverDeployment:[station:[in:["name", "CTBAR East, "]]]]]:
+            [ 'in': [ [ field: 'installation_station.name', values: ['CTBAR East']]]],
+
+            [ filter: [in:["transmitterId", "A69-1303-12345, "]]]:
+            [ 'in': [ [ field: 'valid_detection.transmitter_id', values: ['A69-1303-12345']]]],
+
+            [ filter: [surgeries:[release:[animal:[species:[in:["spcode", "12345, "]]]]]]]:
+            [ 'in': [ [ field: 'spcode', values: ['12345']]]],
+
+            [ filter: [between: ["0": "timestamp", "1": startTime.toDate(), "2": endTime.toDate()]]]:
+            [ 'between': [ [ field: 'timestamp', start: startTime, end: endTime ]]],
+
+            [
+                filter: [
+                    between: ["0": "timestamp", "1": startTime.toDate(), "2": endTime.toDate()],
+                    receiverDeployment: [station: [installation: [project: [in: ["name", "Whales, "]]]]]
+                ],
+            ]:
+            [
+                'in': [
+                    [ field: 'project.name', values: ['Whales'] ]
+                ],
+                'between': [ [ field: 'timestamp', start: startTime, end: endTime ]]
+            ]
+        ]
+
+        requestParamsToExpectedFilter.each {
+            requestParams, filter ->
+
+            assertEquals(filter, des.requestParamsToFilter(requestParams))
+        }
     }
 }

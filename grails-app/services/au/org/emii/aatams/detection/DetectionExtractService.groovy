@@ -3,6 +3,7 @@ package au.org.emii.aatams.detection
 import java.io.OutputStream;
 
 import org.apache.shiro.SecurityUtils
+import org.joda.time.DateTime
 
 import au.org.emii.aatams.export.AbstractStreamingExporterService
 import au.org.emii.aatams.util.GeometryUtils
@@ -18,8 +19,8 @@ class DetectionExtractService extends AbstractStreamingExporterService
     public List extractPage(filterParams)
     {
         def startTime = System.currentTimeMillis()
-        log.debug("Querying database, offset: " + filterParams.offset)
-        def results = filterParams.sql.rows(constructQuery(filterParams, filterParams.max, filterParams.offset))
+        def results = filterParams.sql.rows(constructQuery(filterParams))
+
         log.debug("Query finished in ${System.currentTimeMillis() - startTime}ms with ${results.size()} results")
 
         return results
@@ -27,14 +28,16 @@ class DetectionExtractService extends AbstractStreamingExporterService
 
     public Long getCount(filterParams)
     {
+        assert false: "shouldn't get here"
+
         if (!filterParams || filterParams.isEmpty() || filterParams?.filter == null || filterParams?.filter == [:])
         {
             return ValidDetection.count()
         }
 
         def startTime = System.currentTimeMillis()
-        log.debug("Querying database")
-        def results = filterParams.sql.rows(constructQuery(filterParams, filterParams.max, null, true))
+        filterParams.countOnly = true
+        def results = filterParams.sql.rows(constructQuery(filterParams))
         log.debug("Count query finished in ${System.currentTimeMillis() - startTime}ms with ${results.count[0]} results")
 
         return results.count[0]
@@ -69,88 +72,6 @@ class DetectionExtractService extends AbstractStreamingExporterService
         super.writeCsvData(filterParams, out)
     }
 
-    private String constructQuery(filterParams, limit, offset)
-    {
-        return constructQuery(filterParams, limit, offset, false)
-    }
-
-    private String constructQuery(filterParams, limit, offset, count)
-    {
-        String query
-
-        if (count)
-        {
-            query = SELECT_COUNT
-        }
-        else
-        {
-            query = SELECT
-        }
-
-        query += " "
-
-        List<String> whereClauses = []
-
-        ["project.name": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
-         "installation.name": filterParams?.filter?.receiverDeployment?.station?.installation?.in?.getAt(1),
-         "installation_station.name": filterParams?.filter?.receiverDeployment?.station?.in?.getAt(1),
-         "valid_detection.transmitter_id": filterParams?.filter?.in?.getAt(1),
-         "spcode": filterParams?.filter?.surgeries?.release?.animal?.species?.in?.getAt(1)
-         ].each
-         {
-            k, v ->
-
-            if (v)
-            {
-                whereClauses += (k + " in (" + toSqlFormat(v) + ") ")
-            }
-        }
-
-        ["timestamp": filterParams?.filter?.between].each
-        {
-            k, v ->
-
-            if (v)
-            {
-                assert(v?."1") : "Start date/time must be specified"
-                assert(v?."2") : "End date/time must be specified"
-
-                whereClauses += (k + " between '" + new java.sql.Timestamp(v?."1"?.getTime()) + "' and '" + new java.sql.Timestamp(v?."2"?.getTime()) + "' ")
-            }
-        }
-
-        if (whereClauses.size() > 0)
-        {
-            query += "where "
-
-            whereClauses.eachWithIndex
-            {
-                clause, i ->
-
-                if (i != 0)
-                {
-                    query += "and "
-                }
-
-                query += clause
-            }
-        }
-
-        if (limit != null)
-        {
-            query += "limit " + limit
-        }
-
-        if (offset != null)
-        {
-            query += " offset " + offset
-        }
-
-        log.debug("Query: " + query)
-
-        return query
-    }
-
     def generateReport(filterParams, req, res)
     {
         super.generateReport(filterParams, req, res)
@@ -168,17 +89,17 @@ class DetectionExtractService extends AbstractStreamingExporterService
             row ->
 
             out << row.formatted_timestamp << ","
-            out << row.station << ","
+            out << row.installation_station_name << ","
             out << GeometryUtils.scrambleCoordinate(row.latitude) << ","
             out << GeometryUtils.scrambleCoordinate(row.longitude) << ","
             out << row.receiver_name << ","
-            out << row.sensor_id << ","
-            out << row.species_name << ","
+            out << (row.transmitter_id ?: '') << ","
+            out << (row.spcode ? ("${row.spcode} - ${row.scientific_name} (${row.common_name})") : '') << ","
             out << row.uploader << ","
-            out << row.transmitter_id << ","
-            out << row.organisation << ","
-            out << ((row.sensor_value == null) ? "" : row.sensor_value) << ","
-            out << ((row.sensor_unit == null) ? "" : row.sensor_unit)
+            out << row.valid_detection_transmitter_id << ","
+            out << row.organisation_name << ","
+            out << (row.sensor_value ?: '') << ","
+            out << (row.sensor_unit ?: '')
 
             out << "\n"
         }
@@ -202,6 +123,17 @@ class DetectionExtractService extends AbstractStreamingExporterService
         out << "sensor unit"
 
         out << "\n"
+    }
+
+    protected void updateIndex(results, params) {
+        if (results.size() > 0) {
+
+            params.pageIndex = PageIndex.fromRequestParams([
+                timestamp: results.last().timestamp,
+                receiverName: results.last().receiver_name,
+                transmitterId: results.last().valid_detection_transmitter_id
+            ])
+        }
     }
 
     private String toSqlFormat(String formParam)
@@ -236,53 +168,144 @@ class DetectionExtractService extends AbstractStreamingExporterService
         return params.projectPermissionCache[projectId]
     }
 
-    static String SELECT = '''select timestamp, to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp,
-            installation_station.name as station,
-            installation_station.id as station_id,
-            installation_station.location as location,
-            st_y(installation_station.location) as latitude, st_x(installation_station.location) as longitude,
-            (device_model.model_name || '-' || device.serial_number) as receiver_name,
-            COALESCE(sensor.transmitter_id, '') as sensor_id,
-            COALESCE((species.spcode || ' - ' || species.scientific_name || ' (' || species.common_name || ')'), '') as species_name,
+    private String constructQuery(constraints)
+    {
+        def query = [
+            getSelect(constraints),
+            getWhereClause(
+                filter: requestParamsToFilter(constraints),
+                pageIndex: constraints?.pageIndex
+            ),
+            getOrderByClause(constraints),
+            getLimitClause(limit: constraints?.max)
+        ].grep { it }
+        .join(System.getProperty("line.separator"))
 
-            sec_user.name as uploader,
-            valid_detection.transmitter_id as "transmitter_id",
-            organisation.name as organisation,
-            project.name as project,
-            installation.name as installation,
-            COALESCE(species.spcode, '') as spcode,
-            animal_release.id as animal_release_id,
-            animal_release.embargo_date as embargo_date,
-            project.id as project_id,
-            valid_detection.id as detection_id,
+        log.debug("Query: ${query}")
 
-            animal_release.project_id as release_project_id,
-            valid_detection.sensor_value, valid_detection.sensor_unit
-''' + " ${FROM_JOIN}"
+        return query
+    }
 
-    static String SELECT_COUNT = "select count(*) ${FROM_JOIN}"
+    private String getSelect(constraints) {
+        return String.format(SELECT, constraints?.countOnly ? selectCountColumns: selectColumns)
+    }
 
-    static String FROM_JOIN = '''from valid_detection
+    private String getSelectColumns() {
+        // Need to alias some columns due to name clashes.
+        [
+            "valid_detection.id as valid_detection_id",
+            "to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp",
+            "valid_detection.transmitter_id as valid_detection_transmitter_id",
+            "installation_station.name as installation_station_name",
+            "st_y(installation_station.location) as latitude",
+            "st_x(installation_station.location) as longitude",
+            "sec_user.name as uploader",
+            "organisation.name as organisation_name",
+            "animal_release.project_id as release_project_id",
+            "*"
+        ].join(', ')
+    }
 
-            -- receiver metadata must exist (otherwise the detection would be invalid)
-	    join receiver_deployment on receiver_deployment_id = receiver_deployment.id
-            join installation_station on receiver_deployment.station_id = installation_station.id
-            join installation on installation_station.installation_id = installation.id
-            join project on installation.project_id = project.id
-            join device on receiver_deployment.receiver_id = device.id
-            join device_model on device.model_id = device_model.id
-            join receiver_download_file on receiver_download_id = receiver_download_file.id
-            join sec_user on receiver_download_file.requesting_user_id = sec_user.id
-            join organisation on device.organisation_id = organisation.id
+    private String getSelectCountColumns() {
+        return "COUNT(*)"
+    }
 
-            -- tag metadata *may* exist
-            left join sensor on valid_detection.transmitter_id = sensor.transmitter_id
-            left join device tag on sensor.tag_id = tag.id
+    private String getWhereClause(constraints)
+    {
+        if (!constraints?.filter && !constraints?.pageIndex)
+        {
+            return ''
+        }
 
-            -- as with surgery metadata
-            left join surgery on tag.id = surgery.tag_id
-            left join animal_release on surgery.release_id = animal_release.id
-            left join animal on animal_release.animal_id = animal.id
-            left join species on animal.species_id = species.id'''
+        def pageIndexClause = constraints?.pageIndex?.toSqlString()
 
+        def inClauses = constraints?.filter?.in?.collect {
+            def values = it.values.collect { val -> val.trim() }.grep { val -> val }.collect { val ->  "'${val}'" }.join(', ')
+            if (!values.isEmpty()) {
+                return "${it.field} IN (${values})"
+            }
+
+            return ''
+        }
+
+        def betweenClauses = constraints?.filter?.between?.collect {
+            return "${it.field} BETWEEN '${it.start}' AND '${it.end}'"
+        }
+
+        def nonEmptyClauses = [pageIndexClause, inClauses, betweenClauses].flatten().grep {it}
+
+        if (!nonEmptyClauses.isEmpty()) {
+            return "WHERE ${nonEmptyClauses.join(' AND ')}"
+        }
+
+        return ''
+    }
+
+    private String getOrderByClause(constraints)
+    {
+        return constraints?.countOnly ? '' : 'ORDER BY timestamp, receiver_name, valid_detection.transmitter_id'
+    }
+
+    private String getLimitClause(constraints)
+    {
+        return constraints?.limit ? "LIMIT ${constraints?.limit}" : ''
+    }
+
+    private def requestParamsToFilter(requestParams) {
+
+        if (!requestParams?.filter) {
+            return null
+        }
+
+        def filter = [:]
+
+        filter.in = [
+            "project.name": requestParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
+            "installation.name": requestParams?.filter?.receiverDeployment?.station?.installation?.in?.getAt(1),
+            "installation_station.name": requestParams?.filter?.receiverDeployment?.station?.in?.getAt(1),
+            "valid_detection.transmitter_id": requestParams?.filter?.in?.getAt(1),
+            "spcode": requestParams?.filter?.surgeries?.release?.animal?.species?.in?.getAt(1)
+        ].findAll { it.value }
+        .collect {
+            k, v ->
+
+            [field: k, values: v.trim().split(',').grep { it }.collect { it.trim() }]
+        }
+
+        filter.between = [
+            "timestamp": requestParams?.filter?.between
+        ].findAll { it.value }
+        .collect {
+            k, v ->
+
+                assert (v && v.'0' && v.'1' && v.'2') : "Invalid timestamp range query."
+
+            [field: k, start: new DateTime(v.'1'), end: new DateTime(v.'2')]
+        }
+
+        return filter.findAll { !it.value.isEmpty() }
+    }
+
+    static String SELECT = '''SELECT %s FROM valid_detection
+
+-- tag metadata *may* or *may not* exist
+left join sensor on valid_detection.transmitter_id = sensor.transmitter_id
+left join device tag on sensor.tag_id = tag.id
+
+-- as with surgery metadata
+left join surgery on tag.id = surgery.tag_id
+left join animal_release on surgery.release_id = animal_release.id
+left join animal on animal_release.animal_id = animal.id
+left join species on animal.species_id = species.id
+
+-- receiver metadata must exist (otherwise the detection would be invalid)
+join receiver_deployment on receiver_deployment_id = receiver_deployment.id
+join installation_station on receiver_deployment.station_id = installation_station.id
+join installation on installation_station.installation_id = installation.id
+join project on installation.project_id = project.id
+join device on receiver_deployment.receiver_id = device.id
+join device_model on device.model_id = device_model.id
+join receiver_download_file on receiver_download_id = receiver_download_file.id
+join sec_user on receiver_download_file.requesting_user_id = sec_user.id
+join organisation on device.organisation_id = organisation.id'''
 }

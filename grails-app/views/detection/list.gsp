@@ -1,4 +1,3 @@
-
 <%@ page import="au.org.emii.aatams.detection.ValidDetection" %>
 <html>
     <head>
@@ -19,31 +18,31 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
-            
-            <g:listControlForm name="detection" 
-                               formats="${['CSV', 'KMZ (tag tracks)', 'KMZ (bubble plot)']}" />       
-            
+
+            <g:listControlForm name="detection"
+                               formats="${['CSV', 'KMZ (tag tracks)', 'KMZ (bubble plot)']}" />
+
             <div class="list">
                 <table>
                     <thead>
                         <tr>
-                        
+
                             <td/>
-                            
+
                             <g:sortableColumn property="timestamp" title="${message(code: 'detection.timestamp.label', default: 'Timestamp')}" params="${params}"/>
-                        
+
                             <g:sortableColumn property="receiverName" title="${message(code: 'detection.receiverName.label', default: 'Receiver Name')}" params="${params}"/>
-                        
+
                             <g:sortableColumn property="receiverDeployment" title="${message(code: 'detection.receiverDeployment.label', default: 'Receiver Deployment')}" params="${params}"/>
-                        
+
                             <g:sortableColumn property="transmitterId" title="${message(code: 'detection.transmitterId.label', default: 'Transmitter ID')}" params="${params}"/>
 
                             <g:sortableColumn property="transmitterName" title="${message(code: 'detection.transmitterName.label', default: 'Transmitter Name')}" params="${params}"/>
-                        
+
                             <g:sortableColumn property="transmitterSerialNumber" title="${message(code: 'detection.transmitterSerialNumber.label', default: 'Transmitter Serial Number')}" params="${params}"/>
-                        
+
                             <g:sortableColumn property="stationName" title="${message(code: 'detection.stationName.label', default: 'Station Name')}" params="${params}"/>
-                        
+
                             <g:sortableColumn property="receiverDownload.requestingUser" title="${message(code: 'receiverDownloadFile.requestingUser.label', default: 'Uploader')}" params="${params}"/>
 
                         </tr>
@@ -51,25 +50,25 @@
                     <tbody>
                     <g:each in="${entityList}" status="i" var="detectionInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-                        
+
                             <td class="rowButton"><g:link class="show" action="show" id="${detectionInstance.id}">.</g:link></td>
-                    
+
                             <td><g:formatDate date="${detectionInstance.timestamp}"
                                               format="yyyy-MM-dd'T'HH:mm:ssZ"
                                               timeZone='${TimeZone.getTimeZone("UTC")}'/></td>
-                        
+
                             <td>${fieldValue(bean: detectionInstance, field: "receiverName")}</td>
 
                             <td><g:link controller="receiverDeployment" action="show" id="${detectionInstance?.receiverDeployment?.id}">${fieldValue(bean: detectionInstance, field: "receiverDeployment")}</g:link></td>
-                        
+
                             <td>${fieldValue(bean: detectionInstance, field: "transmitterId")}</td>
-                        
+
                             <td>${fieldValue(bean: detectionInstance, field: "transmitterName")}</td>
-                        
+
                             <td>${fieldValue(bean: detectionInstance, field: "transmitterSerialNumber")}</td>
-                        
+
                             <td>${fieldValue(bean: detectionInstance, field: "stationName")}</td>
-                        
+
                             <td><g:link controller="person" action="show" id="${detectionInstance?.receiverDownload?.requestingUser?.id}">${fieldValue(bean: detectionInstance.receiverDownload, field: "requestingUser")}</g:link></td>
 
                         </tr>
@@ -78,7 +77,9 @@
                 </table>
             </div>
             <div class="paginateButtons">
-                <g:paginate total="${total}" params="${params}"/>
+                <g:if test="${pageIndex}">
+                    <g:paginateDetections pageIndex="${pageIndex}" params="${params}" />
+                </g:if>
             </div>
         </div>
     </body>

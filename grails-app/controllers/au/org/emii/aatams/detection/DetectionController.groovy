@@ -19,7 +19,19 @@ class DetectionController extends ReportController
 
     def list =
     {
-        doList("detection")
+        def detList = doList("detection")
+
+        if (!detList.entityList.isEmpty()) {
+            detList.pageIndex = PageIndex.fromRequestParams(
+                [
+                    timestamp: detList.entityList.last()?.timestamp,
+                    receiverName: detList.entityList.last()?.receiverName,
+                    transmitterId: detList.entityList.last()?.transmitterId
+                ]
+            )
+        }
+
+        return detList
     }
 
     protected void cleanDateParams()
@@ -45,24 +57,22 @@ class DetectionController extends ReportController
         params.sql = new Sql(dataSource)
         params.projectPermissionCache = [:]
 
-        // The data params get turned in to strings on the way back to front-end - need to change
+        // The date params get turned in to strings on the way back to front-end - need to change
         // them back to java.util.Dates again.
         cleanDateParams()
 
-        def detections = detectionExtractService.applyEmbargo(detectionExtractService.extractPage(params), params)
+        params.pageIndex = PageIndex.fromRequestParams(params)
+
+        def detections = detectionExtractService.applyEmbargo(
+            detectionExtractService.extractPage(params),
+            params
+        )
+
         detections = detections.collect {
-            ValidDetection.get(it.detection_id)
+            ValidDetection.get(it.valid_detection_id)
         }
 
-        def paramsClone = params.clone()
-
-        paramsClone.max = grailsApplication.config.filter.count.max + 1
-        def count = detectionExtractService.getCount(paramsClone)
-
-        params.remove("sql")
-        params.remove("projectPermissionCache")
-
-        [results: detections, count: count]
+        [ results: detections ]
     }
 
     def export =

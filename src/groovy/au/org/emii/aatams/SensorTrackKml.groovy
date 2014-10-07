@@ -81,7 +81,7 @@ class SensorTrackKml extends Kml
 
             assert(!detsForSingleSensor.isEmpty()): "No detections for sensor"
 
-            def detection = ValidDetection.get(detsForSingleSensor.iterator().next().detection_id)
+            def detection = ValidDetection.get(detsForSingleSensor.iterator().next().valid_detection_id)
             AnimalRelease release = detection?.getMostRecentRelease()
             Sensor sensor = Sensor.findByTransmitterId(transmitterId, [cache: true])
 

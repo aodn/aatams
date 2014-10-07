@@ -23,11 +23,6 @@ class SensorTrackKmlTests extends AbstractKmlTest
         mockDomain(ValidDetection)
     }
 
-    protected void tearDown()
-    {
-        super.tearDown()
-    }
-
     void testTrackNoDetections()
     {
         Kml kml = new SensorTrackKml([], "http://localhost:8090/aatams")
@@ -167,7 +162,7 @@ class SensorTrackKmlTests extends AbstractKmlTest
         Kml kml =
             new SensorTrackKml(
                 [
-                    [detection_id: detection.id,
+                    [valid_detection_id: detection.id,
                      transmitter_id: 'A69-1303-5566',
                      timestamp: new DateTime("2010-05-28T02:02:09+10:00").toDate(),
                      latitude: 37f,

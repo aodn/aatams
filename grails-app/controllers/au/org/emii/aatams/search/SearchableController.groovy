@@ -9,7 +9,7 @@ import org.compass.core.engine.SearchEngineQueryParseException
  */
 class SearchableController
 {
-    def embargoService
+    def visibilityControlService
     def searchableService
 
     /**
@@ -29,7 +29,7 @@ class SearchableController
             // Results are lazy-loaded, hence associations are null.
             def res = searchableService.search(addImplicitWildCards(params.q), params)
             def hibernateAttachedResults = refresh(res.results)
-            res.results = embargoService.applyEmbargo(hibernateAttachedResults)
+            res.results = visibilityControlService.applyVisibilityControls(hibernateAttachedResults)
 
             return [searchResult: res]
         }

@@ -9,7 +9,7 @@ import org.codehaus.groovy.grails.plugins.jasper.*
 
 class ReportControllerTests extends AbstractControllerUnitTestCase
 {
-    def embargoService
+    def visibilityControlService
     def jasperService
     def permissionUtilsService
     def reportInfoService
@@ -21,9 +21,9 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
     {
         super.setUp()
 
-        mockLogging(EmbargoService)
-        embargoService = new EmbargoService()
-        embargoService.permissionUtilsService = permissionUtilsService
+        mockLogging(VisibilityControlService)
+        visibilityControlService = new VisibilityControlService()
+        visibilityControlService.permissionUtilsService = permissionUtilsService
 
         mockLogging(JasperService)
         jasperService = new JasperService()
@@ -33,7 +33,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 
         mockLogging(QueryService, true)
         queryService = new QueryService()
-        queryService.embargoService = embargoService
+        queryService.visibilityControlService = visibilityControlService
 
         mockLogging(ReportInfoService)
         reportInfoService = new ReportInfoService()

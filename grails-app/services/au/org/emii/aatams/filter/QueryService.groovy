@@ -13,7 +13,7 @@ class QueryService
 {
     static transactional = false
 
-    def embargoService
+    def visibilityControlService
 
     Map<Long, Collection> query(clazz, params)
     {
@@ -25,21 +25,21 @@ class QueryService
      *
      * count, rows
      *
-     * Important note: skpEmbargoChecking should only be set to true
+     * Important note: skipVisibilityControlChecks should only be set to true
      * when you are certain that the returned data will not expose
-     * any possible embargoed information (e.g. the sensor track
+     * any possible embargoed or protected information (e.g. the sensor track
      * KML export).
      *
      * It is provided purely for performance reasons.
      *
      * @return
      */
-    Map<Long, Collection> query(clazz, params, skipEmbargoChecking)
+    Map<Long, Collection> query(clazz, params, skipVisibilityControlChecks)
     {
-        return [results: queryWithoutCount(clazz, params, skipEmbargoChecking)['results'], count: queryCountOnly(clazz, params)]
+        return [results: queryWithoutCount(clazz, params, skipVisibilityControlChecks)['results'], count: queryCountOnly(clazz, params)]
     }
 
-    Map<Long, Collection> queryWithoutCount(clazz, params, skipEmbargoChecking)
+    Map<Long, Collection> queryWithoutCount(clazz, params, skipVisibilityControlChecks)
     {
         def results = []
 
@@ -59,9 +59,9 @@ class QueryService
             results = clazz.list(params)
         }
 
-        if (!skipEmbargoChecking)
+        if (!skipVisibilityControlChecks)
         {
-            results = embargoService.applyEmbargo(results)
+            results = visibilityControlService.applyVisibilityControls(results)
         }
 
         return [results: results]

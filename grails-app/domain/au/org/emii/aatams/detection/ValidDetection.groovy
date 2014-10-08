@@ -146,19 +146,22 @@ class ValidDetection extends RawDetection implements Embargoable
         return detectionBuff.toString()
     }
 
-    def applyEmbargo()
-    {
-        boolean isEmbargoed = false
+    def applyEmbargo() {
 
-        surgeries.each
-        {
-            if (it.release.isEmbargoed())
-            {
-                isEmbargoed = true
+        // Return a temporary detection, with embargoed surgeries removed.
+        def censoredDetection = new ValidDetection(this.properties)
+        censoredDetection.surgeries = new HashSet<Surgery>()
+
+        surgeries.each {
+            if (!it.release.isEmbargoed()) {
+
+                censoredDetection.surgeries.add(it)
             }
         }
+        censoredDetection.metaClass.getSensorIds = { -> getSensorIds(censoredDetection.detectionSurgeries) }
+        censoredDetection.metaClass.getSpeciesNames = { -> getSpeciesNames(censoredDetection.detectionSurgeries) }
 
-        return isEmbargoed ? null : this
+        return censoredDetection
     }
 
     static Kml toKml(List<ValidDetection> detections, serverURL)

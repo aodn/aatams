@@ -73,7 +73,7 @@ class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase
         assertNull(embargoService.applyEmbargo(det))
 
         [det, surgery, release].each {
-            assertNull(embargoService.applyEmbargo(it))
+            assertNull(visibilityControlService.applyVisibilityControls(it))
         }
     }
 

@@ -6,8 +6,7 @@ import au.org.emii.aatams.export.AbstractStreamingExporterService
 import au.org.emii.aatams.util.GeometryUtils
 import groovy.sql.Sql
 
-class DetectionExtractService extends AbstractStreamingExporterService
-{
+class DetectionExtractService extends AbstractStreamingExporterService {
     static transactional = false
 
     def dataSource
@@ -25,10 +24,8 @@ class DetectionExtractService extends AbstractStreamingExporterService
         return results
     }
 
-    public Long getCount(filterParams)
-    {
-        if (!filterParams || filterParams.isEmpty() || filterParams?.filter == null || filterParams?.filter == [:])
-        {
+    public Long getCount(filterParams) {
+        if (!filterParams || filterParams.isEmpty() || filterParams?.filter == null || filterParams?.filter == [:]) {
             return ValidDetection.count()
         }
 
@@ -41,22 +38,26 @@ class DetectionExtractService extends AbstractStreamingExporterService
         return results.count[0]
     }
 
-    protected String getReportName()
-    {
+    protected String getReportName() {
         return "detection"
     }
 
-    protected def applyEmbargo(results, params)
-    {
+    protected def applyEmbargo(results, params) {
+
         def now = new Date()
 
-        results = results.grep {
-
+        results.each {
             row ->
 
-            boolean isEmbargoed = (row.embargo_date && row.embargo_date.after(now) && !hasReadPermission(row.release_project_id, params))
+            if (row.embargo_date && row.embargo_date.after(now)) {
 
-            return !isEmbargoed
+                if (!hasReadPermission(row.project_id, params)) {
+
+                    row.species_name = ""
+                    row.spcode = ""
+                    row.sensor_id = ""
+                }
+            }
         }
 
         return results

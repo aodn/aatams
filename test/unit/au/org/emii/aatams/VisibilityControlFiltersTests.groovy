@@ -161,7 +161,6 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
 
         detectionNonEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
         detectionEmbargoedReadableProject = new ValidDetection(receiverDownload:receiverDownload)
-
         detectionEmbargoedNonReadableProject = new ValidDetection(receiverDownload:receiverDownload)
         detectionPastEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
 
@@ -391,8 +390,12 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         filter.after(model)
         assertNotNull(model)
 
-        assertTrue(model.entityList.containsAll(detectionNonEmbargoed, detectionPastEmbargoed, detectionEmbargoedReadableProject))
-        assertFalse(model.entityList.contains(detectionEmbargoedNonReadableProject))
+        def filtered = model.entityList
+
+        assertNotNull(filtered.find{ it.isDuplicate(detectionNonEmbargoed) })
+        assertNotNull(filtered.find{ it.isDuplicate(detectionPastEmbargoed) })
+        assertNotNull(filtered.find{ it.isDuplicate(detectionEmbargoedReadableProject) })
+        assertNotNull(filtered.find{ it.isDuplicate(detectionEmbargoedNonReadableProject) })
     }
 
     void testDetectionNotList()
@@ -452,14 +455,18 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         filter.after(model)
         assertNotNull(model)
         assertEquals(1, model.size())
+        assertNotNull(model.detectionInstance)
+        assertNotNull(model.detectionInstance.receiverDownload)
+        assertNotNull(model.detectionInstance.receiverDownload.requestingUser)
+        assertEquals('jbloggs', model.detectionInstance.receiverDownload.requestingUser.username)
+        assertEquals(detection.timestamp, model.detectionInstance.timestamp)
 
-        if (isEmbargoed)
-        {
-            assertNull(model.detectionInstance)
+        if (isEmbargoed) {
+            // ... but not the associated detectionSurgeries (which links detection back to tag/release)
+            assertTrue(model.detectionInstance.detectionSurgeries.isEmpty())
         }
-        else
-        {
-            assertNotNull(model.detectionInstance)
+        else {
+            assertEquals(1, model.detectionInstance.detectionSurgeries.size())
         }
     }
 

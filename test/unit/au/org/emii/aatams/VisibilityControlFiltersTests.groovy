@@ -474,8 +474,19 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
     {
         controller.params._name = "entityName"
 
-        int expectedNum = (entityName == 'sensor') ? 6 : 3
-        int expectedTotal = (entityName == 'sensor') ? 8 : 4
+        int expectedNum = 3
+        int expectedTotal = 4
+        int expectedNumAfterEmbargo = 3
+        int expectedTotalAfterEmbargo = 4
+
+        if (entityName == 'sensor') {
+            // Twice as many sensor objects as others
+            expectedNum *= 2
+            expectedTotal *= 2
+            expectedNumAfterEmbargo *= 2
+            expectedTotalAfterEmbargo *= 2
+        }
+
         def model = controller.list()
 
         assertEquals(expectedNum, model.entityList.size())
@@ -488,8 +499,6 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         filter.after(model)
         assertNotNull(model)
 
-        int expectedNumAfterEmbargo = (entityName == 'sensor') ? 6 : 3
-        int expectedTotalAfterEmbargo = (entityName == 'sensor') ? 8 : 4
         assertEquals(expectedNumAfterEmbargo, model.entityList.size())
         assertEquals(expectedTotalAfterEmbargo, model.total)
     }

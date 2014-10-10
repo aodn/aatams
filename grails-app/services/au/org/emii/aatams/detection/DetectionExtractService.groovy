@@ -42,7 +42,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         return "detection"
     }
 
-    protected def applyEmbargo(results, params) {
+    protected def applyEmbargo(results, params) { // Todo - DN: THIS WON't GET HIT IN CURRENT UNIT TESTS
 
         def now = new Date()
 

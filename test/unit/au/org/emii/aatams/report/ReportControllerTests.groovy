@@ -66,7 +66,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 
     protected boolean isPermitted(permission)
     {
-        if (permission == "project:" + project1.id + ":read")
+        if (permission == "project:" + projectWithMembership.id + ":read")
         {
             return true
         }

@@ -27,46 +27,60 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
     SurgeryController surgeryController
     TagController tagController
 
-    def releaseList
-
     Animal animalNonEmbargoed
     Animal animalEmbargoedReadableProject
     Animal animalEmbargoedNonReadableProject
     Animal animalPastEmbargoed
+    Animal animalProtectedReadableProject
+    Animal animalProtectedNonReadableProject
 
     AnimalMeasurement animalMeasurementNonEmbargoed
     AnimalMeasurement animalMeasurementEmbargoedReadableProject
     AnimalMeasurement animalMeasurementEmbargoedNonReadableProject
     AnimalMeasurement animalMeasurementPastEmbargoed
+    AnimalMeasurement animalMeasurementProtectedReadableProject
+    AnimalMeasurement animalMeasurementProtectedNonReadableProject
 
     AnimalRelease releaseNonEmbargoed
     AnimalRelease releaseEmbargoedReadableProject
     AnimalRelease releaseEmbargoedNonReadableProject
     AnimalRelease releasePastEmbargoed
+    AnimalRelease releaseProtectedReadableProject
+    AnimalRelease releaseProtectedNonReadableProject
 
     Tag tagNonEmbargoed
     Tag tagEmbargoedReadableProject
     Tag tagEmbargoedNonReadableProject
     Tag tagPastEmbargoed
+    Tag tagProtectedReadableProject
+    Tag tagProtectedNonReadableProject
 
     Sensor sensorNonEmbargoed
     Sensor sensorEmbargoedReadableProject
     Sensor sensorEmbargoedNonReadableProject
     Sensor sensorPastEmbargoed
+    Sensor sensorProtectedReadableProject
+    Sensor sensorProtectedNonReadableProject
     Sensor sensorPingerNonEmbargoed
     Sensor sensorPingerEmbargoedReadableProject
     Sensor sensorPingerEmbargoedNonReadableProject
     Sensor sensorPingerPastEmbargoed
+    Sensor sensorPingerProtectedReadableProject
+    Sensor sensorPingerProtectedNonReadableProject
 
     Surgery surgeryNonEmbargoed
     Surgery surgeryEmbargoedReadableProject
     Surgery surgeryEmbargoedNonReadableProject
     Surgery surgeryPastEmbargoed
+    Surgery surgeryProtectedReadableProject
+    Surgery surgeryProtectedNonReadableProject
 
     ValidDetection detectionNonEmbargoed
     ValidDetection detectionEmbargoedReadableProject
     ValidDetection detectionEmbargoedNonReadableProject
     ValidDetection detectionPastEmbargoed
+    ValidDetection detectionProtectedReadableProject
+    ValidDetection detectionProtectedNonReadableProject
 
     def queryService
     def reportInfoService
@@ -124,36 +138,50 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         tagEmbargoedReadableProject = new Tag(project:project1, codeMap:codeMap)
         tagEmbargoedNonReadableProject = new Tag(project:project2, codeMap:codeMap)
         tagPastEmbargoed = new Tag(project:project2, codeMap:codeMap)
+        tagProtectedReadableProject = new Tag(project:project1, codeMap:codeMap)
+        tagProtectedNonReadableProject = new Tag(project:project2, codeMap:codeMap)
 
         sensorNonEmbargoed = new Sensor(tag:tagNonEmbargoed, pingCode:1111)
         sensorEmbargoedReadableProject = new Sensor(tag:tagEmbargoedReadableProject, pingCode:2222)
         sensorEmbargoedNonReadableProject = new Sensor(tag:tagEmbargoedNonReadableProject, pingCode:3333)
         sensorPastEmbargoed = new Sensor(tag:tagPastEmbargoed, pingCode:4444)
+        sensorProtectedReadableProject = new Sensor(tag:tagProtectedReadableProject, pingCode:9999)
+        sensorProtectedNonReadableProject = new Sensor(tag:tagProtectedNonReadableProject, pingCode:10000)
 
         sensorPingerNonEmbargoed = new Sensor(tag:tagNonEmbargoed, pingCode:5555)
         sensorPingerEmbargoedReadableProject = new Sensor(tag:tagEmbargoedReadableProject, pingCode:6666)
         sensorPingerEmbargoedNonReadableProject = new Sensor(tag:tagEmbargoedNonReadableProject, pingCode:7777)
         sensorPingerPastEmbargoed = new Sensor(tag:tagPastEmbargoed, pingCode:8888)
+        sensorPingerProtectedReadableProject = new Sensor(tag:tagProtectedReadableProject, pingCode:10001)
+        sensorPingerProtectedNonReadableProject = new Sensor(tag:tagProtectedNonReadableProject, pingCode:10002)
 
         animalNonEmbargoed = new Animal()
         animalEmbargoedReadableProject = new Animal()
         animalEmbargoedNonReadableProject = new Animal()
         animalPastEmbargoed = new Animal()
+        animalProtectedReadableProject = new Animal()
+        animalProtectedNonReadableProject = new Animal()
 
         animalMeasurementNonEmbargoed = new AnimalMeasurement()
         animalMeasurementEmbargoedReadableProject = new AnimalMeasurement()
         animalMeasurementEmbargoedNonReadableProject = new AnimalMeasurement()
         animalMeasurementPastEmbargoed = new AnimalMeasurement()
+        animalMeasurementProtectedReadableProject = new AnimalMeasurement()
+        animalMeasurementProtectedNonReadableProject = new AnimalMeasurement()
 
         releaseNonEmbargoed = new AnimalRelease(project:project1)
         releaseEmbargoedReadableProject = new AnimalRelease(project:project1, embargoDate:nextYear())
         releaseEmbargoedNonReadableProject = new AnimalRelease(project:project2, embargoDate:nextYear())
         releasePastEmbargoed = new AnimalRelease(project:project2, embargoDate:lastYear())
+        releaseProtectedReadableProject = new AnimalRelease(project:project1, embargoDate:nextYear())
+        releaseProtectedNonReadableProject = new AnimalRelease(project:project2, embargoDate:nextYear())
 
         surgeryNonEmbargoed = new Surgery(tag:tagNonEmbargoed, release:releaseNonEmbargoed)
         surgeryEmbargoedReadableProject = new Surgery(tag:tagEmbargoedReadableProject, release:releaseEmbargoedReadableProject)
         surgeryEmbargoedNonReadableProject = new Surgery(tag:tagEmbargoedNonReadableProject, release:releaseEmbargoedNonReadableProject)
         surgeryPastEmbargoed = new Surgery(tag:tagPastEmbargoed, release:releasePastEmbargoed)
+        surgeryProtectedReadableProject = new Surgery(tag:tagProtectedReadableProject, release:releaseProtectedReadableProject)
+        surgeryProtectedNonReadableProject = new Surgery(tag:tagProtectedNonReadableProject, release:releaseProtectedNonReadableProject)
 
         ReceiverDownloadFile receiverDownload = new ReceiverDownloadFile(requestingUser:user)
         mockDomain(ReceiverDownloadFile, [receiverDownload])
@@ -163,6 +191,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         detectionEmbargoedReadableProject = new ValidDetection(receiverDownload:receiverDownload)
         detectionEmbargoedNonReadableProject = new ValidDetection(receiverDownload:receiverDownload)
         detectionPastEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
+        detectionProtectedReadableProject = new ValidDetection(receiverDownload:receiverDownload)
+        detectionProtectedNonReadableProject = new ValidDetection(receiverDownload:receiverDownload)
 
         def animalList = [animalNonEmbargoed,  animalEmbargoedReadableProject,  animalEmbargoedNonReadableProject, animalPastEmbargoed]
         def animalMeasurementList = [animalMeasurementNonEmbargoed,  animalMeasurementEmbargoedReadableProject,  animalMeasurementEmbargoedNonReadableProject, animalMeasurementPastEmbargoed]
@@ -213,10 +243,30 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         animalPastEmbargoed.addToReleases(releasePastEmbargoed)
         animalMeasurementPastEmbargoed.release = releasePastEmbargoed
 
+        releaseProtectedReadableProject.addToSurgeries(surgeryProtectedReadableProject)
+        tagProtectedReadableProject.addToSurgeries(surgeryProtectedReadableProject)
+        tagProtectedReadableProject.addToSensors(sensorProtectedReadableProject)
+        tagProtectedReadableProject.addToSensors(sensorPingerProtectedReadableProject)
+        sensorProtectedReadableProject.addToDetectionSurgeries(detectionSurgeryProtectedReadableProject)
+        detectionProtectedReadableProject.addToDetectionSurgeries(detectionSurgeryProtectedReadableProject)
+        animalProtectedReadableProject.addToReleases(releaseProtectedReadableProject)
+        animalMeasurementProtectedReadableProject.release = releaseProtectedReadableProject
+
+        releaseProtectedNonReadableProject.addToSurgeries(surgeryProtectedNonReadableProject)
+        tagProtectedNonReadableProject.addToSurgeries(surgeryProtectedNonReadableProject)
+        tagProtectedNonReadableProject.addToSensors(sensorProtectedNonReadableProject)
+        tagProtectedNonReadableProject.addToSensors(sensorPingerProtectedNonReadableProject)
+        sensorProtectedNonReadableProject.addToDetectionSurgeries(detectionSurgeryProtectedNonReadableProject)
+        detectionProtectedNonReadableProject.addToDetectionSurgeries(detectionSurgeryProtectedNonReadableProject)
+        animalProtectedNonReadableProject.addToReleases(releaseProtectedNonReadableProject)
+        animalMeasurementProtectedNonReadableProject.release = releaseProtectedNonReadableProject
+
         detectionNonEmbargoed.metaClass.getProject = { project1 }
         detectionEmbargoedReadableProject.metaClass.getProject = { project1 }
         detectionEmbargoedNonReadableProject.metaClass.getProject = { project2 }
         detectionPastEmbargoed.metaClass.getProject = { project2 }
+        detectionProtectedReadableProject.metaClass.getProject = { project1 }
+        detectionProtectedNonReadableProject.metaClass.getProject = { project2 }
 
         detectionNonEmbargoed.metaClass.getSurgeries = { [surgeryNonEmbargoed] }
         detectionEmbargoedReadableProject.metaClass.getSurgeries = { [surgeryEmbargoedReadableProject] }
@@ -261,6 +311,13 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
                 controller.queryService.visibilityControlService = new VisibilityControlService()
                 controller.queryService.visibilityControlService.permissionUtilsService = permissionUtilsService
         }
+    }
+
+    protected void tearDown()
+    {
+        super.tearDown()
+
+        VisibilityControlFilters.metaClass = null
     }
 
     protected def getPrincipal()
@@ -311,6 +368,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkEmbargoed(animalController, animalEmbargoedReadableProject, false, 'animal')
         checkEmbargoed(animalController, animalEmbargoedNonReadableProject, true, 'animal')
         checkEmbargoed(animalController, animalPastEmbargoed, false, 'animal')
+        checkEmbargoed(animalController, animalProtectedReadableProject, false, 'animal')
+        checkEmbargoed(animalController, animalProtectedNonReadableProject, true, 'animal')
     }
 
     void testAnimalMeasurementList()
@@ -327,6 +386,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkEmbargoed(animalMeasurementController, animalMeasurementEmbargoedReadableProject, false, 'animalMeasurement')
         checkEmbargoed(animalMeasurementController, animalMeasurementEmbargoedNonReadableProject, true, 'animalMeasurement')
         checkEmbargoed(animalMeasurementController, animalMeasurementPastEmbargoed, false, 'animalMeasurement')
+        checkEmbargoed(animalMeasurementController, animalMeasurementProtectedReadableProject, false, 'animalMeasurement')
+        checkEmbargoed(animalMeasurementController, animalMeasurementProtectedNonReadableProject, true, 'animalMeasurement')
     }
 
     void testAnimalReleaseList()
@@ -343,6 +404,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkEmbargoed(releaseController, releaseEmbargoedReadableProject, false, 'animalRelease')
         checkEmbargoed(releaseController, releaseEmbargoedNonReadableProject, true, 'animalRelease')
         checkEmbargoed(releaseController, releasePastEmbargoed, false, 'animalRelease')
+        checkEmbargoed(releaseController, releaseProtectedReadableProject, false, 'animalRelease')
+        checkEmbargoed(releaseController, releaseProtectedNonReadableProject, true, 'animalRelease')
     }
 
     void testTagNotList()
@@ -354,6 +417,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkEmbargoed(tagController, tagEmbargoedReadableProject, false, 'tag')
         checkEmbargoed(tagController, tagEmbargoedNonReadableProject, true, 'tag')
         checkEmbargoed(tagController, tagPastEmbargoed, false, 'tag')
+        checkEmbargoed(tagController, tagProtectedReadableProject, false, 'tag')
+        checkEmbargoed(tagController, tagProtectedNonReadableProject, true, 'tag')
     }
 
     void testSensorList()
@@ -370,11 +435,15 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkEmbargoed(sensorController, sensorEmbargoedReadableProject, false, 'sensor')
         checkEmbargoed(sensorController, sensorEmbargoedNonReadableProject, true, 'sensor')
         checkEmbargoed(sensorController, sensorPastEmbargoed, false, 'sensor')
+        checkEmbargoed(sensorController, sensorProtectedReadableProject, false, 'sensor')
+        checkEmbargoed(sensorController, sensorProtectedNonReadableProject, true, 'sensor')
 
         checkEmbargoed(sensorController, sensorPingerNonEmbargoed, false, 'sensor')
         checkEmbargoed(sensorController, sensorPingerEmbargoedReadableProject, false, 'sensor')
         checkEmbargoed(sensorController, sensorPingerEmbargoedNonReadableProject, true, 'sensor')
         checkEmbargoed(sensorController, sensorPingerPastEmbargoed, false, 'sensor')
+        checkEmbargoed(sensorController, sensorPingerProtectedReadableProject, false, 'sensor')
+        checkEmbargoed(sensorController, sensorPingerProtectedNonReadableProject, true, 'sensor')
     }
 
     void testDetectionList()
@@ -393,9 +462,11 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         def filtered = model.entityList
 
         assertNotNull(filtered.find{ it.isDuplicate(detectionNonEmbargoed) })
-        assertNotNull(filtered.find{ it.isDuplicate(detectionPastEmbargoed) })
         assertNotNull(filtered.find{ it.isDuplicate(detectionEmbargoedReadableProject) })
         assertNotNull(filtered.find{ it.isDuplicate(detectionEmbargoedNonReadableProject) })
+        assertNotNull(filtered.find{ it.isDuplicate(detectionPastEmbargoed) })
+        assertNotNull(filtered.find{ it.isDuplicate(detectionProtectedReadableProject) })
+        assertNotNull(filtered.find{ it.isDuplicate(detectionProtectedNonReadableProject) })
     }
 
     void testDetectionNotList()
@@ -407,6 +478,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkDetection(detectionEmbargoedReadableProject, false)
         checkDetection(detectionEmbargoedNonReadableProject, true)
         checkDetection(detectionPastEmbargoed, false)
+        checkDetection(detectionProtectedReadableProject, false)
+        checkDetection(detectionProtectedNonReadableProject, true)
     }
 
     void testSurgeryList() {
@@ -423,20 +496,40 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkEmbargoed(surgeryController, surgeryPastEmbargoed, false, 'surgery')
     }
 
-    void testRedirectToLoginWhenNotAuthenticated()
+    void testRedirectToLoginWhenEmbargoedAndNotAuthenticated()
     {
         controllerName = "sensor"
         actionName = "show"
         authenticated = false
+
         checkEmbargoed(sensorController, sensorEmbargoedNonReadableProject, true, 'sensor', "login", "/sensor/show/" + sensorEmbargoedNonReadableProject.id)
     }
 
-    void testRedirectToUnauthorizedWhenAuthenticated()
+    void testRedirectToLoginWhenProtectedAndNotAuthenticated()
+    {
+        controllerName = "sensor"
+        actionName = "show"
+        authenticated = false
+
+        checkEmbargoed(sensorController, sensorProtectedNonReadableProject, true, 'sensor', "login", "/sensor/show/" + sensorProtectedNonReadableProject.id)
+    }
+
+    void testRedirectToUnauthorizedWhenEmbargoedAndAuthenticated()
     {
         controllerName = "sensor"
         actionName = "show"
         authenticated = true
+
         checkEmbargoed(sensorController, sensorEmbargoedNonReadableProject, true, 'sensor', "unauthorized", null)
+    }
+
+    void testRedirectToUnauthorizedWhenProtectedAndAuthenticated()
+    {
+        controllerName = "sensor"
+        actionName = "show"
+        authenticated = true
+
+        checkEmbargoed(sensorController, sensorProtectedNonReadableProject, true, 'sensor', "unauthorized", null)
     }
 
     private void checkDetection(def detection, boolean isEmbargoed)
@@ -474,10 +567,10 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
     {
         controller.params._name = "entityName"
 
-        int expectedNum = 3
-        int expectedTotal = 4
-        int expectedNumAfterEmbargo = 3
-        int expectedTotalAfterEmbargo = 4
+        int expectedNum = 4
+        int expectedTotal = 6
+        int expectedNumAfterEmbargo = 4
+        int expectedTotalAfterEmbargo = 6
 
         if (entityName == 'sensor') {
             // Twice as many sensor objects as others

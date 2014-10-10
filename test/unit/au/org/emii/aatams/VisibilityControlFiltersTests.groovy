@@ -18,6 +18,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
 
     Project projectWithMembership
     Project projectNoMembership
+    Project protectedProjectWithMembership
+    Project protectedProjectNoMembership
 
     AnimalController animalController
     AnimalMeasurementController animalMeasurementController
@@ -102,7 +104,9 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
 
         projectWithMembership = new Project(name: "project 1 (member of)")
         projectNoMembership = new Project(name: "project 2 (not member of)")
-        def projectList = [projectWithMembership, projectNoMembership]
+        protectedProjectWithMembership = new Project(name: "project 3 (member of, protected)", isProtected: true)
+        protectedProjectNoMembership = new Project(name: "project 4 (not member, protected)", isProtected: true)
+        def projectList = [projectWithMembership, projectNoMembership, protectedProjectWithMembership, protectedProjectNoMembership]
         mockDomain(Project, projectList)
         projectList.each{ it.save() }
 
@@ -115,6 +119,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         // Check permissions are behaving correctly.
         assertTrue(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(projectWithMembership.id)))
         assertFalse(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(projectNoMembership.id)))
+        assertTrue(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(protectedProjectWithMembership.id)))
+        assertFalse(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(protectedProjectNoMembership.id)))
 
         mockConfig('''grails.gorm.default.list.max = 10
                       filter.count.max = 10000''')
@@ -138,8 +144,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         tagEmbargoedReadableProject = new Tag(project:projectWithMembership, codeMap:codeMap)
         tagEmbargoedNonReadableProject = new Tag(project:projectNoMembership, codeMap:codeMap)
         tagPastEmbargoed = new Tag(project:projectNoMembership, codeMap:codeMap)
-        tagProtectedReadableProject = new Tag(project:projectWithMembership, codeMap:codeMap)
-        tagProtectedNonReadableProject = new Tag(project:projectNoMembership, codeMap:codeMap)
+        tagProtectedReadableProject = new Tag(project:protectedProjectWithMembership, codeMap:codeMap)
+        tagProtectedNonReadableProject = new Tag(project:protectedProjectNoMembership, codeMap:codeMap)
 
         sensorNonEmbargoed = new Sensor(tag:tagNonEmbargoed, pingCode:1111)
         sensorEmbargoedReadableProject = new Sensor(tag:tagEmbargoedReadableProject, pingCode:2222)
@@ -173,8 +179,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         releaseEmbargoedReadableProject = new AnimalRelease(project:projectWithMembership, embargoDate:nextYear())
         releaseEmbargoedNonReadableProject = new AnimalRelease(project:projectNoMembership, embargoDate:nextYear())
         releasePastEmbargoed = new AnimalRelease(project:projectNoMembership, embargoDate:lastYear())
-        releaseProtectedReadableProject = new AnimalRelease(project:projectWithMembership, embargoDate:nextYear())
-        releaseProtectedNonReadableProject = new AnimalRelease(project:projectNoMembership, embargoDate:nextYear())
+        releaseProtectedReadableProject = new AnimalRelease(project:protectedProjectWithMembership, embargoDate:nextYear())
+        releaseProtectedNonReadableProject = new AnimalRelease(project:protectedProjectNoMembership, embargoDate:nextYear())
 
         surgeryNonEmbargoed = new Surgery(tag:tagNonEmbargoed, release:releaseNonEmbargoed)
         surgeryEmbargoedReadableProject = new Surgery(tag:tagEmbargoedReadableProject, release:releaseEmbargoedReadableProject)
@@ -265,8 +271,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         detectionEmbargoedReadableProject.metaClass.getProject = { projectWithMembership }
         detectionEmbargoedNonReadableProject.metaClass.getProject = { projectNoMembership }
         detectionPastEmbargoed.metaClass.getProject = { projectNoMembership }
-        detectionProtectedReadableProject.metaClass.getProject = { projectWithMembership }
-        detectionProtectedNonReadableProject.metaClass.getProject = { projectNoMembership }
+        detectionProtectedReadableProject.metaClass.getProject = { protectedProjectWithMembership }
+        detectionProtectedNonReadableProject.metaClass.getProject = { protectedProjectNoMembership }
 
         detectionNonEmbargoed.metaClass.getSurgeries = { [surgeryNonEmbargoed] }
         detectionEmbargoedReadableProject.metaClass.getSurgeries = { [surgeryEmbargoedReadableProject] }
@@ -327,12 +333,10 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
 
     protected boolean isPermitted(String permString)
     {
-        if (permString == "project:" + projectWithMembership.id + ":read")
-        {
-            return true
-        }
+        def memberProjects = [projectWithMembership, protectedProjectWithMembership]
+        def permissions = memberProjects.collect{ "project:${it.id}:read" }*.toString()
 
-        return false
+        return permissions.contains(permString)
     }
 
     private Date now()

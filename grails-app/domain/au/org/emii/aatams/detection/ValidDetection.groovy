@@ -138,7 +138,7 @@ class ValidDetection extends RawDetection implements Embargoable
 
         detectionBuff.append("nextval('hibernate_sequence'),")
         detectionBuff.append("0,")
-        detectionBuff.append("'" + new java.sql.Timestamp(detection["timestamp"].getTime()) + "',")
+        detectionBuff.append("'${ISODateTimeFormat.basicDateTime().print(detection['timestamp'].getTime())}',")
         SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDownloadId"])
         SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
                                                                "transmitterSerialNumber"])

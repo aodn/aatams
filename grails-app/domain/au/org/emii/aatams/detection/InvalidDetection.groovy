@@ -1,5 +1,7 @@
 package au.org.emii.aatams.detection
 
+import org.joda.time.format.ISODateTimeFormat
+
 import au.org.emii.aatams.ReceiverDownloadFile
 import au.org.emii.aatams.util.SqlUtils
 
@@ -25,7 +27,7 @@ class InvalidDetection extends RawDetection
 
         detectionBuff.append("nextval('hibernate_sequence'),")
         detectionBuff.append("0,")
-        detectionBuff.append("'" + new java.sql.Timestamp(detection["timestamp"].getTime()) + "',")
+        detectionBuff.append("'${ISODateTimeFormat.basicDateTime().print(detection['timestamp'].getTime())}',")
         SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDownloadId"])
         SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
             "transmitterSerialNumber", "message", "reason"])

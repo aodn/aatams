@@ -74,8 +74,8 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
 
                 and
                 {
-                    eq("receiverName", newDetection.receiverName)
                     eq("timestamp", newDetection.timestamp)
+                    eq("receiverName", newDetection.receiverName)
                     eq("transmitterId", newDetection.transmitterId)
                 }
             }

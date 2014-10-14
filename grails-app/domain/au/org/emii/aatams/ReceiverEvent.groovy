@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import org.joda.time.format.ISODateTimeFormat
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat
 
@@ -52,7 +54,7 @@ class ReceiverEvent
 
         eventBuff.append("nextval('hibernate_sequence'),")
         eventBuff.append("0,")
-        eventBuff.append("'" + new java.sql.Timestamp(event["timestamp"].getTime()) + "',")
+        eventBuff.append("'${ISODateTimeFormat.basicDateTime().print(event['timestamp'].getTime())}',")
 
         SqlUtils.appendIntegerParams(eventBuff, event, ["receiverDeploymentId", "receiverDownloadId"])
         SqlUtils.appendStringParams(eventBuff, event, ["data", "description", "receiverName", "units", "clazz", "message", "reason"])

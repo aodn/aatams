@@ -1,5 +1,6 @@
 package au.org.emii.aatams.detection
 
+import au.org.emii.aatams.Project
 import org.apache.shiro.SecurityUtils
 
 import au.org.emii.aatams.export.AbstractStreamingExporterService
@@ -42,9 +43,12 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         return "detection"
     }
 
-    protected def applyEmbargo(results, params) { // Todo - DN: THIS WON't GET HIT IN CURRENT UNIT TESTS
+    protected def applyEmbargo(results, params) {
 
         def now = new Date()
+        def resultsToKeep = []
+
+        clearProjectIsProtectedCache()
 
         results.each {
             row ->
@@ -53,14 +57,41 @@ class DetectionExtractService extends AbstractStreamingExporterService {
 
                 if (!hasReadPermission(row.project_id, params)) {
 
+                    // Todo - DN: CHECK PERFORMANCE
+
+                    if (projectIsProtected(row.project_id)) {
+                        return true // Break this iteration of row.each{...}
+                    }
+
                     row.species_name = ""
                     row.spcode = ""
                     row.sensor_id = ""
                 }
             }
+
+            resultsToKeep << row
         }
 
-        return results
+        return resultsToKeep
+    }
+
+    def _projectIsProtectedCache
+
+    def clearProjectIsProtectedCache(){
+
+        _projectIsProtectedCache = [:]
+    }
+
+    def projectIsProtected(projectId) {
+
+        if (!_projectIsProtectedCache.containsKey(projectId)) {
+
+            def project = Project.get(projectId) // Todo - DN: Project object might be cached meaning caching results myself in unnecessary
+
+            _projectIsProtectedCache[projectId] = project.isProtected
+        }
+
+        return _projectIsProtectedCache[projectId]
     }
 
     protected void writeCsvData(final filterParams, OutputStream out)

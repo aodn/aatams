@@ -482,8 +482,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkDetection(detectionEmbargoedReadableProject, false)
         checkDetection(detectionEmbargoedNonReadableProject, true)
         checkDetection(detectionPastEmbargoed, false)
-        checkDetection(detectionProtectedReadableProject, false)
-        checkDetection(detectionProtectedNonReadableProject, true)
+        checkDetectionProtected(detectionProtectedReadableProject, true)
+        checkDetectionProtected(detectionProtectedNonReadableProject, false)
     }
 
     void testSurgeryList() {
@@ -564,6 +564,27 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         }
         else {
             assertEquals(1, model.detectionInstance.detectionSurgeries.size())
+        }
+    }
+
+    private void checkDetectionProtected(detection, shouldBeVisible) {
+
+        assertNotNull(detection)
+
+        detectionController.params.id = detection.id
+        def model = detectionController.show()
+        assertNotNull(model)
+        assertEquals(1, model.size())
+
+        FilterConfig filter = getFilter("genericNotList")
+        assertNotNull(filter)
+        filter.after(model)
+
+        if (shouldBeVisible) {
+            assertNotNull(model.detectionInstance)
+        }
+        else {
+            assertNull(model.detectionInstance)
         }
     }
 

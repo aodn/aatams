@@ -63,7 +63,7 @@ class DetectionController extends ReportController
         detections = detections.collect {
             ValidDetection.get(it.detection_id)
         }
-        // Todo - DN: Apply embargo on valid dections here
+        // Todo - DN: Apply embargo on valid dections here?
 
         def paramsClone = params.clone()
 

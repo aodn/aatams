@@ -148,18 +148,27 @@ class ValidDetection extends RawDetection implements Embargoable
 
     def applyEmbargo() {
 
+        def anyReleaseEmbargoed = false
+
         // Return a temporary detection, with embargoed surgeries removed.
-        def censoredDetection = new ValidDetection(this.properties)
+        def censoredDetection = new HashMap(this.properties)
         censoredDetection.surgeries = new HashSet<Surgery>()
 
         surgeries.each {
-            if (!it.release.isEmbargoed()) {
 
-                censoredDetection.surgeries.add(it)
+            if (it.surgery.release.isEmbargoed()) {
+                anyReleaseEmbargoed = true
+            }
+            else {
+                censoredDetection.detectionSurgeries.add(it)
             }
         }
         censoredDetection.metaClass.getSensorIds = { -> getSensorIds(censoredDetection.detectionSurgeries) }
         censoredDetection.metaClass.getSpeciesNames = { -> getSpeciesNames(censoredDetection.detectionSurgeries) }
+
+        if (project.isProtected && anyReleaseEmbargoed) {
+            return null
+        }
 
         return censoredDetection
     }

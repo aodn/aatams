@@ -87,4 +87,23 @@ databaseChangeLog = {
         dropColumn(columnName: "embargo_date", tableName: "receiver_deployment")
         dropColumn(columnName: "embargo_date", tableName: "species")
     }
+
+    // Index some columns used for joins.
+    changeSet(author: "jburgess", id: "14123169288000-05") {
+        createIndex(indexName: "sensor_tag_id_index", tableName: "sensor") {
+            column(name: "tag_id")
+        }
+
+        createIndex(indexName: "surgery_release_id_index", tableName: "surgery") {
+            column(name: "release_id")
+        }
+
+        createIndex(indexName: "animal_release_animal_id_index", tableName: "animal_release") {
+            column(name: "animal_id")
+        }
+
+        createIndex(indexName: "animal_species_id_index", tableName: "animal") {
+            column(name: "species_id")
+        }
+    }
 }

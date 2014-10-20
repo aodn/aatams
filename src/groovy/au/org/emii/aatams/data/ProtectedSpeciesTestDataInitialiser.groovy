@@ -120,17 +120,17 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
         // Projects.
         //
         Project unembargoedProject =
-                new Project(name:'Unembargoed',
+                new Project(name:'unembargoed',
                         description:'',
                         status:EntityStatus.ACTIVE).save(failOnError: true)
 
         Project embargoedProject =
-                new Project(name:'Embargoed',
+                new Project(name:'embargoed',
                         description:'',
                         status:EntityStatus.ACTIVE).save(failOnError: true)
 
         Project protectedProject =
-                new Project(name:'Protected',
+                new Project(name:'protected',
                         description:'',
                         status:EntityStatus.ACTIVE,
                         isProtected: true).save(failOnError: true)
@@ -552,4 +552,3 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
         return tag
     }
 }
-

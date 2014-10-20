@@ -1,13 +1,11 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.*
-import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import static ProtectedSpeciesTests.AuthLevel.*
 import static ProtectedSpeciesTests.ProtectionLevel.*
 import static ProtectedSpeciesTests.FilterStatus.*
 
-// class ProtectedSpeciesTests extends AbstractGrailsUnitTestCase {
 class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests {
 
     def permissionUtilsService
@@ -95,7 +93,6 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         controller.params.filter = filter
 
         def actualResults = controller.list().entityList.grep {
-            def detSurgeries = DetectionSurgery.findAllByDetection(it)
             DetectionSurgery.findAllByDetection(it).first()?.surgery.release.project == project
         }
 
@@ -117,7 +114,7 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
                 break
 
             default:
-                fail "Unhandled visibility"
+                fail "Unhandled visibility $expectedResult"
         }
     }
 
@@ -136,14 +133,20 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
                 authenticated = false
                 permitted = false
                 break
+
             case NON_PROJECT_MEMBER:
                 authenticated = true
                 permitted = false
                 break
+
             case PROJECT_MEMBER:
             case SYS_ADMIN:
                 authenticated = true
                 permitted = true
+                break;
+
+            default:
+                fail "Unhandled auth level $authLevel"
         }
     }
 

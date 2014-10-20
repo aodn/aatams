@@ -5,6 +5,7 @@ import au.org.emii.aatams.detection.*
 import static ProtectedSpeciesTests.AuthLevel.*
 import static ProtectedSpeciesTests.ProtectionLevel.*
 import static ProtectedSpeciesTests.FilterStatus.*
+import static ProtectedSpeciesTests.ExpectedResult.*
 
 class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests {
 
@@ -73,15 +74,15 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
     }
 
     void assertVisible(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet) {
-        assertCorrectResult(authLevel, protectionLevel, speciesFilterSet, ExpectedResult.VISIBLE)
+        assertCorrectResult(authLevel, protectionLevel, speciesFilterSet, VISIBLE)
     }
 
     void assertVisibleButSanitised(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet) {
-        assertCorrectResult(authLevel, protectionLevel, speciesFilterSet, ExpectedResult.VISIBLE_BUT_SANITISED)
+        assertCorrectResult(authLevel, protectionLevel, speciesFilterSet, VISIBLE_BUT_SANITISED)
     }
 
     void assertNotVisible(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet) {
-        assertCorrectResult(authLevel, protectionLevel, speciesFilterSet, ExpectedResult.NOT_VISIBLE)
+        assertCorrectResult(authLevel, protectionLevel, speciesFilterSet, NOT_VISIBLE)
     }
 
     void assertCorrectResult(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet, ExpectedResult expectedResult) {
@@ -96,21 +97,23 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
             DetectionSurgery.findAllByDetection(it).first()?.surgery.release.project == project
         }
 
-        println "${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} ${actualResults}"
+        def description = "${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} ${actualResults}"
+
+        println description
 
         switch (expectedResult) {
-            case ExpectedResult.VISIBLE:
-                assertEquals(1, actualResults.size())
-                assertNotSanitised(actualResults[0])
+            case VISIBLE:
+                assertEquals(description, 1, actualResults.size())
+                assertNotSanitised(description, actualResults[0])
                 break
 
-            case ExpectedResult.VISIBLE_BUT_SANITISED:
-                assertEquals(1, actualResults.size())
-                assertSanitised(actualResults[0])
+            case VISIBLE_BUT_SANITISED:
+                assertEquals(description, 1, actualResults.size())
+                assertSanitised(description, actualResults[0])
                 break
 
-            case ExpectedResult.NOT_VISIBLE:
-                assertTrue(actualResults.isEmpty())
+            case NOT_VISIBLE:
+                assertTrue(description, actualResults.isEmpty())
                 break
 
             default:
@@ -118,11 +121,11 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         }
     }
 
-    void assertSanitised(detection) {
+    void assertSanitised(description, detection) {
         //fail "Not implemented"
     }
 
-    void assertNotSanitised(detection) {
+    void assertNotSanitised(description, detection) {
         //fail "Not implemented"
     }
 

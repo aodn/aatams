@@ -61,7 +61,7 @@ class ValidDetection extends RawDetection implements Embargoable
 
     String toString()
     {
-        return timestamp.toString() + " " + String.valueOf(receiverDeployment?.receiver)
+        return "${timestamp.toString()}, ${String.valueOf(receiverDeployment?.receiver)}, ${transmitterId}"
     }
 
     // Convenience method.

@@ -30,159 +30,14 @@ class DetectionExtractServiceTests extends AbstractGrailsUnitTestCase {
     }
 
     void testConstructQuery() {
-        assertEquals(
-            [des.getSelect(), des.getWhereClause(), des.getOrderByClause(), des.getLimitClause()]
-                .grep { it }
-                .join(newline),
-            detectionExtractService.constructQuery()
-        )
-    }
+        des.metaClass.getQueryBuilder = {
+            def queryBuilder = new DetectionQueryBuilder()
+            queryBuilder.metaClass.toSql = { 'some sql' }
 
-    void testGetSelectNoConstraint() {
-        assertTrue(des.getSelect().startsWith("SELECT ${des.selectColumns} FROM valid_detection"))
-    }
+            return queryBuilder
+        }
 
-    void testGetSelectCountOnlyFalse() {
-        assertTrue(des.getSelect(countOnly: false).startsWith("SELECT ${des.selectColumns} FROM valid_detection"))
-    }
-
-    void testGetSelectCountOnlyTrue() {
-        assertTrue(des.getSelect(countOnly: true).startsWith("SELECT ${des.selectCountColumns} FROM valid_detection"))
-    }
-
-
-    void testGetWhereClauseOneProject() {
-        def filter = [
-            'in': [
-                [ field: 'project.name', values: ['Whales'] ]
-            ]
-        ]
-
-        assertEquals("WHERE project.name IN ('Whales')", des.getWhereClause(filter: filter))
-    }
-
-    void testGetWhereClauseOneProjectBlank() {
-        def filter = [
-            'in': [
-                [ field: 'project.name', values: [' '] ]
-            ]
-        ]
-
-        assertEquals("", des.getWhereClause(filter: filter))
-    }
-
-    void testGetWhereClauseTwoProjects() {
-        def filter = [
-            'in': [
-                [ field: 'project.name', values: ['Whales', 'Sharks'] ]
-            ]
-        ]
-
-        assertEquals("WHERE project.name IN ('Whales', 'Sharks')", des.getWhereClause(filter: filter))
-    }
-
-    void testGetWhereClauseTwoProjectsOneInstallation() {
-        def filter = [
-            'in': [
-                [ field: 'project.name', values: ['Whales', 'Sharks'] ],
-                [ field: 'installation.name', values: ['Bondi'] ]
-            ]
-        ]
-
-        assertEquals(
-            "WHERE project.name IN ('Whales', 'Sharks') AND installation.name IN ('Bondi')",
-            des.getWhereClause(filter: filter))
-    }
-
-    void testGetWhereClauseTimestampRange() {
-        def filter = [
-            'between': [
-                [ field: 'timestamp', start: startTime, end: endTime ]
-            ]
-        ]
-
-        assertEquals(
-            "WHERE timestamp BETWEEN '2010-01-01T12:34:56.000+11:00' AND '2010-01-01T17:00:01.000+11:00'",
-            des.getWhereClause(filter: filter))
-    }
-
-    void testGetWhereClauseTimestampRangeAndOneProject() {
-        def filter = [
-            'between': [
-                [ field: 'timestamp', start: startTime, end: endTime ]
-            ],
-            'in': [
-                [ field: 'project.name', values: ['Whales'] ]
-            ]
-        ]
-
-        assertEquals(
-            "WHERE project.name IN ('Whales') AND " +
-                "timestamp BETWEEN '2010-01-01T12:34:56.000+11:00' AND '2010-01-01T17:00:01.000+11:00'",
-            des.getWhereClause(filter: filter))
-    }
-
-    void testGetWhereClausePageIndex() {
-        PageIndex index = new PageIndex(
-            timestamp: new DateTime("2010-01-01T12:34:56+11:00"),
-            receiverName: 'VR2W-1234',
-            transmitterId: 'A69-1303-5678'
-        )
-
-        assertEquals(
-            "WHERE (timestamp, receiver_name, valid_detection.transmitter_id) > " +
-              "('2010-01-01T12:34:56.000+11:00', 'VR2W-1234', 'A69-1303-5678')",
-            des.getWhereClause(pageIndex: index)
-        )
-    }
-
-    void testGetWhereClauseOneProjectAndPageIndex() {
-        def filter = [
-            'in': [
-                [ field: 'project.name', values: ['Whales'] ]
-            ]
-        ]
-
-        assertEquals("WHERE project.name IN ('Whales')", des.getWhereClause(filter: filter))
-        PageIndex index = new PageIndex(
-            timestamp: new DateTime("2010-01-01T12:34:56+11:00"),
-            receiverName: 'VR2W-1234',
-            transmitterId: 'A69-1303-5678'
-        )
-
-        assertEquals(
-            "WHERE (timestamp, receiver_name, valid_detection.transmitter_id) > " +
-              "('2010-01-01T12:34:56.000+11:00', 'VR2W-1234', 'A69-1303-5678') " +
-              "AND project.name IN ('Whales')",
-            des.getWhereClause(filter: filter, pageIndex: index)
-        )
-    }
-
-    // test order by count only
-    void testGetOrderByNoConstraint() {
-        assertEquals('ORDER BY timestamp, receiver_name, valid_detection.transmitter_id', des.getOrderByClause())
-    }
-
-    void testGetOrderByCountOnlyFalse() {
-        assertEquals(
-            'ORDER BY timestamp, receiver_name, valid_detection.transmitter_id',
-            des.getOrderByClause(countOnly: false)
-        )
-    }
-
-    void testGetOrderByCountOnlyTrue() {
-        assertEquals(
-            '',
-            des.getOrderByClause(countOnly: true)
-        )
-    }
-
-    void testGetLimitNoConstraint() {
-        assertEquals('', des.getLimitClause())
-    }
-
-    void testGetLimitConstraintHasLimit() {
-        assertEquals('LIMIT 20', des.getLimitClause(limit: 20))
+        assertEquals('some sql', des.constructQuery())
     }
 
     void testRequestParamsToFilter() {
@@ -245,5 +100,11 @@ class DetectionExtractServiceTests extends AbstractGrailsUnitTestCase {
 
             assertEquals(filter, des.requestParamsToFilter(requestParams))
         }
+    }
+
+    void testRequestParamsToQueryBuilderParams() {
+        def requestParams = [ max: 123 ]
+
+        assertEquals(123, des.requestParamsToQueryBuilderParams(requestParams).limit)
     }
 }

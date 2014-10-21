@@ -225,7 +225,6 @@ class BootStrap
         // Performance optimisation (select count(*) is slow on large tables).
         ValidDetection.metaClass.static.count =
         {
-
             return Statistics.getStatistic('numValidDetections')
         }
 

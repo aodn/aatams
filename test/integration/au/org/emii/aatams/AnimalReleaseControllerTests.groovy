@@ -1,49 +1,51 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
 import grails.test.*
 
-class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase 
+class AnimalReleaseControllerTests extends ControllerUnitTestCase
 {
-    protected void setUp() 
+    void testPingerType()
     {
-        super.setUp()
-    }
+        CodeMap a69_1303 = CodeMap.build(codeMap: 'A69-1303')
+        TagDeviceModel v8 = TagDeviceModel.build(modelName: 'V8')
+        SurgeryType internal = SurgeryType.build(type: 'INTERNAL')
+        SurgeryTreatmentType antibiotic = SurgeryTreatmentType.build(type: 'antibiotic')
+        CaptureMethod net = CaptureMethod.build(name: 'NET')
+        Project whale = Project.build(name: 'Whale')
+        CaabSpecies whiteShark = CaabSpecies.build(commonName: 'White Shark')
+        Sex male = Sex.build(sex: 'MALE')
 
-    protected void tearDown() 
-    {
-        super.tearDown()
-    }
-
-    void testPingerType() 
-    {
-//        2011-10-26 09:40:34,694 [http-8080-3] DEBUG grails.app.controller.au.org.emii.aatams.AnimalReleaseController - params:
         controller.params.releaseDateTime_hour = '9'
-        
-        def tag = [codeMap:CodeMap.findByCodeMap("A69-1303"), pingCode:"11111", serialNumber:"1111", model:TagDeviceModel.findByModelName('V8')]
-        def surgery = [0:[timestamp_minute:"40", 
-                          tag:tag, 
-                          timestamp_year:"2011", 
-                          timestamp_hour:"9", 
-                          comments:null, 
-                          timestamp_day:"26", 
+
+        def tag = [
+            codeMap: a69_1303,
+            pingCode: "11111",
+            serialNumber:"1111",
+            model: v8
+        ]
+
+        def surgery = [0:[timestamp_minute:"40",
+                          tag:tag,
+                          timestamp_year:"2011",
+                          timestamp_hour:"9",
+                          comments:null,
+                          timestamp_day:"26",
                           timestamp_zone:"Australia/Hobart",
-                          type:SurgeryType.findByType('INTERNAL'),
-                          treatmentType:SurgeryTreatmentType.findByType('ANTIBIOTIC'), 
+                          type: internal,
+                          treatmentType: antibiotic,
                           timestamp_month:"10"]]
         controller.params.surgery = surgery
 
         controller.params.releaseDateTime_zone = "Australia/Hobart"
         controller.params.releaseDateTime_minute = "40"
         controller.params.releaseLocality = "Somewhere"
-//        controller.params.releaseLocation= null
         controller.params.releaseDateTime_month = "10"
         controller.params.releaseLocation_lat = null
         controller.params.releaseDateTime_year = '2011'
         controller.params.releaseLocation_srid = null
         controller.params.releaseLocation_lon = null
         controller.params.releaseDateTime_day = '26'
-        
+
         controller.params.captureLocation_lon = null
         controller.params.captureLocality = null
         controller.params.captureLocation_srid = null
@@ -52,16 +54,16 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         controller.params.captureDateTime_minute = '40'
         controller.params.captureLocation_lat = null
         controller.params.captureDateTime_month = '10'
-        controller.params.captureMethod = CaptureMethod.findByName('NET')
+        controller.params.captureMethod = net
         controller.params.captureDateTime_zone = "Australia/Hobart"
         controller.params.captureDateTime_hour = '9'
-        
-        controller.params.project = Project.findByName('Whale')
-        
-        CaabSpecies species = CaabSpecies.findByCommonName("White Shark")
+
+        controller.params.project = whale
+
+        CaabSpecies species = whiteShark
         controller.params.speciesName = species.name
         controller.params.speciesId = species.id
-        controller.params.sex = Sex.findBySex('MALE')
+        controller.params.sex = male
         controller.params.animal = [id:null]
         controller.params.embargoPeriod = null
         controller.params.comments = null

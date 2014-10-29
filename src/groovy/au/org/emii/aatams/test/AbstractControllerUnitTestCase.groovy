@@ -100,10 +100,11 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 
         if (!person)
         {
-            person = new Person(username:"jkburges", name: "Joe Bloggs")
+            person = new Person(username:"jkburges", name: "Jon Burgess")
         }
 
         return person
+
     }
 
     protected def getPrincipal()

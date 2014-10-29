@@ -119,8 +119,20 @@ class DetectionFactoryService
                     where ${condition};"
     }
 
+    //
+    // The is necessary because we are mixing hibernate and "direct" sql, we want to make sure that any
+    // pending objects are flushed from hibernate session to the DB (so that the two methods are consistent).
+    //
+    void flushAndClearSession() {
+        def session = sessionFactory.currentSession
+        session.flush()
+        session.clear()
+    }
+
     void rescanForDeployment(ReceiverDeployment deployment)
     {
+        flushAndClearSession()
+
         assert(deployment.recovery) : "Deployment must have associated recovery"
 
         log.info("Rescanning invalid detections, deployment: ${deployment}...")
@@ -175,6 +187,7 @@ class DetectionFactoryService
     private def createDetectionSurgeryForDetection(detection)
     {
         def sensor = Sensor.findByTransmitterId(detection.transmitter_id, [cache: true])
+
         if (sensor)
         {
             Surgery.findAllByTag(sensor.tag).each

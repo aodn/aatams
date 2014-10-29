@@ -70,7 +70,6 @@ class ReceiverDownloadFile
             path = path + File.separator
         }
 
-        assert(id): "Download file ID cannot be null"
         path += (id + File.separator + name)
     }
 
@@ -95,7 +94,7 @@ class ReceiverDownloadFile
         return String.valueOf(path)
     }
 
-    def toXml() 
+    def toXml()
     {
         this as XML
     }

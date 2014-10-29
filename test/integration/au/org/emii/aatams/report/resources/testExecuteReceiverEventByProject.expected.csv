@@ -1,6 +1,3 @@
 station name,receiver ID,timestamp,description,data,units
-Ningaloo S1,VR2W-101338,2013-05-17 02:58:56,other desc,23.4,C
-Ningaloo S1,VR2W-101338,2013-05-17 02:54:56,other desc,23.4,C
-Ningaloo S1,VR2W-101338,2013-05-17 02:56:56,other desc,23.4,C
-Ningaloo S1,VR2W-101338,2013-05-17 02:57:56,other desc,23.4,C
-Ningaloo S1,VR2W-101338,2013-05-17 02:55:56,other desc,23.4,C
+Tuna station,VR2W-101338,2012-02-02 17:05:00,desc,123,m
+Tuna station,VR2W-101338,2012-02-02 17:05:01,desc,123,m

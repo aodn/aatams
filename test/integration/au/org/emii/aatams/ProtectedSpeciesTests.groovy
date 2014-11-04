@@ -160,18 +160,24 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
     def loadFilter(speciesFilterSet) {
 
         def speciesFilter = [
-//                "animal.species.in":["spcode", ""],
-animal: [
-//            "species.in":["spcode", ""],
-species: [
-        in:["spcode", "37010003"]
-]
-]
+            // "animal.species.in":["spcode", ""],
+            animal: [
+                // "species.in":["spcode", ""],
+                species: [
+                    in:["spcode", "37010003"]
+                ]
+            ]
         ]
 
-        [
-            FILTER_SET: speciesFilter,
-            FILTER_NOT_SET: null
-        ][speciesFilterSet]
+        switch(speciesFilterSet) {
+            case FILTER_SET:
+                return speciesFilter
+
+            case FILTER_NOT_SET:
+                return null
+
+            default:
+                fail "Unhandled filter option $speciesFilterSet"
+        }
     }
 }

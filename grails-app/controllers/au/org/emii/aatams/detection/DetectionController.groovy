@@ -19,7 +19,9 @@ class DetectionController extends ReportController
 
     def list =
     {
-        doList("detection")
+        def result = doList("detection")
+        flattenParams() // Todo - DN: Required??
+        return result
     }
 
     protected void cleanDateParams()
@@ -61,9 +63,10 @@ class DetectionController extends ReportController
 
         def detections = detectionExtractService.applyEmbargo(detectionExtractService.extractPage(params), params)
         detections = detections.collect {
-            ValidDetection.get(it.detection_id)
+            def validDetection = ValidDetection.get(it.detection_id)
+
+            detectionExtractService.hasReadPermission(validDetection.project.id, params) ? validDetection : validDetection.applyEmbargo()
         }
-        // Todo - DN: Apply embargo on valid dections here?
 
         def paramsClone = params.clone()
 

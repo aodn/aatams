@@ -280,6 +280,7 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
                  model:tagDeviceModel,
                  project:unembargoedProject,
                  status:deployedStatus])
+        unembargoedProject.addToTags(unembargoedTag).save(failOnError:true)
 
         println "Creatign embargoedTag"
         Tag embargoedTag = createTag(
@@ -289,6 +290,7 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
                  model:tagDeviceModel,
                  project:embargoedProject,
                  status:deployedStatus])
+        embargoedProject.addToTags(embargoedTag).save(failOnError:true)
 
         println "Creatign protectedTag"
         Tag protectedTag = createTag(
@@ -298,6 +300,7 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
                  model:tagDeviceModel,
                  project:protectedProject,
                  status:newStatus])
+        protectedProject.addToTags(protectedTag).save(failOnError:true)
 
         a69_1303.save(failOnError:true)
 

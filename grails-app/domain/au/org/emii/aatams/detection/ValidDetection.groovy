@@ -162,8 +162,9 @@ class ValidDetection extends RawDetection implements Embargoable
                 censoredDetection.detectionSurgeries.add(it)
             }
         }
-        censoredDetection.metaClass.getSensorIds = { -> getSensorIds(censoredDetection.detectionSurgeries) }
-        censoredDetection.metaClass.getSpeciesNames = { -> getSpeciesNames(censoredDetection.detectionSurgeries) }
+
+        censoredDetection.sensorIds = getSensorIds(censoredDetection.detectionSurgeries)
+        censoredDetection.speciesNames = getSpeciesNames(censoredDetection.detectionSurgeries)
 
         if (project.isProtected && anyReleaseEmbargoed) {
             return null

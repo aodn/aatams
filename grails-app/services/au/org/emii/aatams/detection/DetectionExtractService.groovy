@@ -55,11 +55,11 @@ class DetectionExtractService extends AbstractStreamingExporterService {
 
             if (row.embargo_date && row.embargo_date.after(now)) {
 
-                if (!hasReadPermission(row.project_id, params)) {
+                if (!hasReadPermission(row.release_project_id, params)) { // Todo - DN: Check with Jon that this should be release_project_id
 
                     // Todo - DN: CHECK PERFORMANCE
 
-                    if (projectIsProtected(row.project_id)) {
+                    if (projectIsProtected(row.release_project_id)) {
                         return true // Break this iteration of row.each{...}
                     }
 

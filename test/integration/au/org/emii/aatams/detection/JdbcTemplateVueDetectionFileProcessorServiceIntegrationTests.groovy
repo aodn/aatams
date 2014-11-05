@@ -46,14 +46,6 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 
     protected void tearDown()
     {
-        // def jbloggs = Person.findByUsername('jbloggs')
-        // println "jbloggs: " + jbloggs
-
-        // itemsToDelete.remove(jbloggs)
-        // jbloggs.delete(flush: true)
-
-        // exportFile?.delete()
-        // getRefreshedExport(export)?.delete()
         itemsToDelete.each {
             it.delete()
         }

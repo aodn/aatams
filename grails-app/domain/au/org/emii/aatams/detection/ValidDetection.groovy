@@ -146,7 +146,11 @@ class ValidDetection extends RawDetection implements Embargoable
         return detectionBuff.toString()
     }
 
-    def applyEmbargo() {
+    def applyEmbargo(allowSanitised = true) {
+
+        println "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        println "~ ValidDetection.applyEmbargo($allowSanitised) ~"
+        println "On: $this"
 
         def anyReleaseEmbargoed = false
 
@@ -167,7 +171,23 @@ class ValidDetection extends RawDetection implements Embargoable
         censoredDetection.sensorIds = getSensorIds(censoredDetection.detectionSurgeries)
         censoredDetection.speciesNames = getSpeciesNames(censoredDetection.detectionSurgeries)
 
-        if (project.isProtected && anyReleaseEmbargoed) {
+        def protectionRequired = project.isProtected && anyReleaseEmbargoed
+        def hideFromResults = anyReleaseEmbargoed && !allowSanitised
+
+        println """
+project             = $project
+project.isProtected = ${project.isProtected}
+anyReleaseEmbargoed = ${anyReleaseEmbargoed}
+allowSanitised      = ${allowSanitised}
+
+protectionRequired = $protectionRequired
+hideFromResults    = $hideFromResults
+
+protectionRequired || hideFromResults = ${protectionRequired || hideFromResults}
+"""
+        println "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+        if (protectionRequired || hideFromResults) {
             return null
         }
 

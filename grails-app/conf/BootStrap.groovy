@@ -249,10 +249,10 @@ class BootStrap
             development
             {
 
-                initialiser = new ProtectedSpeciesTestDataInitialiser(permissionUtilsService)
+                /*initialiser = new ProtectedSpeciesTestDataInitialiser(permissionUtilsService)
 
                 assert(initialiser): "Initialiser cannot be null"
-                initialiser.execute()
+                initialiser.execute()*/
 
                 /*if (Boolean.getBoolean('initialiseWithData'))
                 {

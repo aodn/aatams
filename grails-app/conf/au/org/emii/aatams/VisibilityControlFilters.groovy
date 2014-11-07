@@ -21,13 +21,18 @@ class VisibilityControlFilters
     {
         genericList(controller: visibilityControlControllers, action:'list')
         {
-            after =
-            {
+            after = {
                 model ->
 
                 // Filter out entities which are embargoed.
-                model.entityList =
-                        visibilityControlService.applyVisibilityControls(model.entityList)
+                if (controllerName != 'detection') {
+                    model.entityList =
+                            visibilityControlService.applyVisibilityControls(model.entityList)
+                }
+                    else {
+
+                    println "Not filtering"
+                }
             }
         }
 

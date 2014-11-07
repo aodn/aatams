@@ -84,14 +84,27 @@ class KmlService implements ApplicationContextAware
 
         if (clazz == ValidDetection)
         {
+            println  "For ValidDetection"
+
             params.sql = new Sql(dataSource)
             params.projectPermissionCache = [:]
-            result = detectionExtractService.extractPage(params)
+
+            println "params.allowSanitisedResults: ${params.allowSanitisedResults}"
+
+//            result = detectionExtractService.extractPage(params)
+//            result = detectionExtractService.applyEmbargo(detectionExtractService.extractPage(params), params)
+            result = detectionExtractService.extractPage(params, true)
         }
         else
         {
             result = queryService.query(clazz, params, true).results
         }
+
+        println "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++="
+        println "result: ${result.size()}"
+        println "result: $result"
+        println "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++="
+
 
         if (clazz == InstallationStation)
         {

@@ -19,9 +19,52 @@ class DetectionController extends ReportController
 
     def list =
     {
+//        if (queryService.hasFilter(params)) {
+//            def countParams = params.clone()
+//            def clazz = reportInfoService.getClassForName("detection")
+//
+//            params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
+//
+//            def resultList = queryService.queryWithoutCount(clazz, params, false)
+//
+//            countParams.max = grailsApplication.config.detection.filter.count.max + 1
+//            def count = queryService.queryCountOnly(clazz, countParams)
+//
+//            flattenParams()
+//
+//            if (count < countParams.max) {
+//                flash.message = "${count} matching records (${clazz.count()} total)."
+//            }
+//            else {
+//                flash.message = "&gt; ${grailsApplication.config.detection.filter.count.max} matching records (${clazz.count()} total)."
+//                count = count - 1
+//            }
+//            return [entityList: resultList.results, total: count]
+//        }
+//        else {
+//            println "#NOFILTER"
+
+        def speciesFilter = params.filter?.animal?.species
+
+        if (speciesFilter) {
+            println "Has species filter:- $speciesFilter"
+
+            println "So how do we behave differently?"
+
+            println "DAVID, CONTINUE HERE!!!!"
+        }
+
         def result = doList("detection")
-        flattenParams() // Todo - DN: Required??
+
+        def el = result.entityList
+        println "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        println "el: (${el.getClass()})"
+        println el.join("\n")
+        println "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+        flattenParams()
         return result
+//        }
     }
 
     protected void cleanDateParams()
@@ -61,12 +104,22 @@ class DetectionController extends ReportController
         cleanDateParams()
 
 
-        def detections = detectionExtractService.applyEmbargo(detectionExtractService.extractPage(params), params)
+        _checkSpeciesFilter()
+//        def detections = detectionExtractService.applyEmbargo(detectionExtractService.extractPage(params), params) // Todo - DN: I wonder if we need to bother with applyEmbargo() here?
+        def detections = detectionExtractService.extractPage(params, true)
+//        def detections = detectionExtractService.extractPage(params)/*.grep { it }*/
+
+        def previousSize = detections.size()
+
         detections = detections.collect {
             def validDetection = ValidDetection.get(it.detection_id)
 
-            detectionExtractService.hasReadPermission(validDetection.project.id, params) ? validDetection : validDetection.applyEmbargo()
-        }
+            def retVal = detectionExtractService.hasReadPermission(validDetection.project.id, params) ? validDetection : validDetection.applyEmbargo(params.allowSanitisedResults)
+            println "retVal: $retVal"
+            retVal
+        }.findAll { it != null }
+
+        println "detections.size() = $previousSize -> ${detections.size()}"
 
         def paramsClone = params.clone()
 
@@ -81,6 +134,8 @@ class DetectionController extends ReportController
 
     def export =
     {
+        _checkSpeciesFilter()
+
         if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export))
         {
             doExport("detection")
@@ -166,5 +221,14 @@ class DetectionController extends ReportController
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'detection.label', default: 'ValidDetection'), params.id])}"
             redirect(action: "list")
         }
+    }
+
+    def _checkSpeciesFilter() {
+        def speciesFilterValue = params.filter?.detectionSurgeries?.surgery?.release?.animal?.species?.in.grep{ it.trim() }
+        def filteredOnSpecies = speciesFilterValue.size() > 1
+
+        println "filteredOnSpecies: $filteredOnSpecies"
+
+        params.allowSanitisedResults = !filteredOnSpecies
     }
 }

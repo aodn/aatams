@@ -13,7 +13,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
     def dataSource
     def permissionUtilsService
 
-    public List extractPage(filterParams)
+    public List extractPage(filterParams, applyEmbargoOnResults = false) // Todo - DN: Or create new method?
     {
         def query = new QueryBuilder().constructQuery(filterParams)
 
@@ -22,7 +22,11 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         def endTime = System.currentTimeMillis()
         log.debug("Query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}")
 
-        return results
+        println "Maybe change behaviour here for species filter?"
+
+        println applyEmbargoOnResults ? ">> Applying embargo in extractPage()" : ">> Not applying embargo in extractPage()"
+
+        return applyEmbargoOnResults ? applyEmbargo(results, filterParams) : results
     }
 
     public Long getCount(filterParams) {
@@ -45,34 +49,63 @@ class DetectionExtractService extends AbstractStreamingExporterService {
 
     protected def applyEmbargo(results, params) {
 
-        def now = new Date()
-        def resultsToKeep = []
+        println "DetectionExtractService.applyEmbargo(${results.size()}, $params)"
+        println "allowSanitisedResults: ${_allowSanitisedResults(params)}"
 
         clearProjectIsProtectedCache()
 
-        results.each {
-            row ->
+        def resultsToKeep = results.grep { row ->
+            shouldKeepRow(row, params)
+        }
 
-            if (row.embargo_date && row.embargo_date.after(now)) {
+        resultsToKeep.findAll { it }.each { row ->
 
-                if (!hasReadPermission(row.release_project_id, params)) { // Todo - DN: Check with Jon that this should be release_project_id
-
-                    // Todo - DN: CHECK PERFORMANCE
-
-                    if (projectIsProtected(row.release_project_id)) {
-                        return true // Break this iteration of row.each{...}
-                    }
-
-                    row.species_name = ""
-                    row.spcode = ""
-                    row.sensor_id = ""
-                }
+            if (shouldSanitiseRow(row, params)) { // Todo - DN: if clause to closure
+                sanitise(row)
             }
-
-            resultsToKeep << row
         }
 
         return resultsToKeep
+    }
+
+    def shouldKeepRow(row, params) {
+
+        println "shouldKeepRow => ${_isPublic(row)} || ${_isReadable(row, params)} || ${(_allowSanitisedResults(params) && !_isProtected(row))} -- $row"
+
+        _isPublic(row) || _isReadable(row, params) || (_allowSanitisedResults(params) && !_isProtected(row))
+    }
+
+    def shouldSanitiseRow(row, params) {
+
+        println "shouldSanitiseRow => ${_isEmbargoed(row)} && ${!_isProtected(row)} && ${!_isReadable(row, params)} -- $row"
+
+        _isEmbargoed(row) && !_isProtected(row) && !_isReadable(row, params)
+    }
+
+    def _isPublic(row) {
+        !(_isEmbargoed(row) || _isProtected(row))
+    }
+
+    def _isReadable(row, params) {
+        hasReadPermission(row.release_project_id, params)
+    }
+
+    def _isProtected(row) {
+        projectIsProtected(row.release_project_id)
+    }
+
+    def _isEmbargoed(row) {
+        row.embargo_date && row.embargo_date.after(new Date())
+    }
+
+    def _allowSanitisedResults(params) {
+        params.allowSanitisedResults
+    }
+
+    def sanitise(row) {
+        row.species_name = ""
+        row.spcode = ""
+        row.sensor_id = ""
     }
 
     def _projectIsProtectedCache
@@ -114,7 +147,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
 
     protected def writeCsvChunk(resultList, OutputStream out)
     {
-        resultList.each
+        resultList./*grep { it }.*/each
         {
             row ->
 

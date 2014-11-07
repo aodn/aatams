@@ -11,6 +11,7 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
 
     def permissionUtilsService
     def controller
+    def kmlService
 
     enum AuthLevel {
         UNAUTHENTICATED,
@@ -158,11 +159,15 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         def filter = loadFilter(speciesFilterSet)
 
         assertCorrectResultsForListAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter)
-
-        assertCorrectResultsForExportAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter)
+        assertCorrectResultsForCsvExportAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter)
+        assertCorrectResultsForKmlExportAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter)
     }
 
     void assertCorrectResultsForListAction(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet, ExpectedResult expectedResult, project, filter) {
+
+        def description = "Checking list action:   ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
+
+        println description
 
         controller.params.filter = filter
 
@@ -176,8 +181,6 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         }
 
         def resultsFromListAction = controller.list().entityList.grep(resultsForProject)
-
-        def description = "Checking list action:   ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
 
         switch (expectedResult) {
             case VISIBLE:
@@ -205,7 +208,11 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         }
     }
 
-    void assertCorrectResultsForExportAction(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet, ExpectedResult expectedResult, project, filter) {
+    void assertCorrectResultsForCsvExportAction(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet, ExpectedResult expectedResult, project, filter) {
+
+        def description = "Checking CSV export action: ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
+
+        println description
 
         controller.params.filter = filter
 
@@ -214,14 +221,17 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         def resultsFromExportAction = controller.response.contentAsString
         def resultsForProject = resultsFromExportAction.readLines().findAll{
             def tag = project.tags.sort().first()
+            println "Finding '$tag' in '$it'"
             it.contains(tag.toString())
         }
 
-        def description = "Checking export action: ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
+        println "${resultsFromExportAction.readLines().size()} -> ${resultsForProject.size()}"
 
         switch (expectedResult) {
             case VISIBLE:
                 assertEquals description, 1, resultsForProject.size()
+
+                println "project.tags.sort().first() - ${project.tags.sort().first()}"
 
                 def detectionExport = resultsForProject.first()
                 assertTrue description, detectionExport.contains(",37010003 - Carcharodon carcharias (White Shark),")
@@ -237,6 +247,71 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
 
             case NOT_VISIBLE:
                 assertEquals description, [], resultsForProject
+                break
+
+            default:
+                fail "Unhandled visibility $expectedResult"
+        }
+    }
+
+    void assertCorrectResultsForKmlExportAction(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet, ExpectedResult expectedResult, project, filter) {
+
+        def description = "Checking KML export action: ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
+
+        println description
+
+        def params = [
+            format: "KMZ (tag tracks)",
+            filter: [
+                detectionSurgeries: [
+                    surgery: [
+                        release: [
+                            project: [
+                                in: ['id', String.valueOf(project.id)]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            allowSanitisedResults: (speciesFilterSet == FILTER_NOT_SET)
+        ]
+
+
+        def kml = kmlService.generateKml(ValidDetection, params)
+
+        println "KML"
+        println "${kml.class}"
+        println "${kml}"
+
+        def baos = new ByteArrayOutputStream()
+        kml.marshal(baos)
+        def kmlAsText = new String(baos.toByteArray())
+
+        println "_____________________________________________-"
+        println "kmlAsText: ${kmlAsText.size()}"
+        println kmlAsText
+        println "_____________________________________________-"
+
+        switch (expectedResult) {
+            case VISIBLE:
+                assertEquals description, 1, kmlAsText.count('<name>Releases</name>')
+                assertEquals description, 1, kmlAsText.count('<name>Detections</name>')
+                assertTrue description, kmlAsText.contains("37010003 - Carcharodon carcharias (White Shark)")
+                assertTrue description, kmlAsText.contains("${project.tags.sort().first()}")
+                break
+
+            case VISIBLE_BUT_SANITISED:
+                assertEquals description, 1, kmlAsText.count('<name>Releases</name>')
+                assertEquals description, 1, kmlAsText.count('<name>Detections</name>')
+                assertFalse description, kmlAsText.contains("37010003 - Carcharodon carcharias (White Shark)")
+                assertFalse description, kmlAsText.contains("${project.tags.sort().first()}")
+                break
+
+            case NOT_VISIBLE:
+                assertEquals description, 0, kmlAsText.count('<name>Releases</name>')
+                assertEquals description, 0, kmlAsText.count('<name>Detections</name>')
+                assertFalse description, kmlAsText.contains("37010003 - Carcharodon carcharias (White Shark)")
+                assertFalse description, kmlAsText.contains("${project.tags.sort().first()}")
                 break
 
             default:
@@ -274,12 +349,27 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
 
     def loadFilter(speciesFilterSet) {
 
-        def speciesFilter = [
-            // "animal.species.in":["spcode", ""],
+/*        def speciesFilter = [ // Todo - DN: "Definitely wrong" - jkburges
+                              // "animal.species.in":["spcode", ""],
             animal: [
                 // "species.in":["spcode", ""],
                 species: [
                     in:["spcode", "37010003"]
+                ]
+            ]
+        ]*/
+
+        // params.filter?.detectionSurgeries?.surgery?.release?.animal?.species?.in.grep{
+        def speciesFilter = [
+            detectionSurgeries: [
+                surgery: [
+                    release: [
+                        animal: [
+                            species: [
+                                in:["spcode", "37010003"]
+                            ]
+                        ]
+                    ]
                 ]
             ]
         ]

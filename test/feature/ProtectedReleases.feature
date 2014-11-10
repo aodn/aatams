@@ -43,11 +43,11 @@ Scenario Outline: protection notification
 # tag -                 http://aatams-rc.emii.org.au/aatams/tag
 #
 # Notes:
-# 
+#
 # - "Visibility" in this context means "list" and "show" views, as well as downloads (i.e. CSV and KMZ exports).
 # - A release is considered to be protected if it's owning project is protected and it is currently under embargo.
+# - If a detection is "sanitised" it means the tag ID and species information are not visible for that detection
 #
-
 
 Scenario Outline: detection and release visibility
     Given there is a protected release with associated detections

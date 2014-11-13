@@ -42,22 +42,6 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
     // Test for #2055
     void testNothing()
     {
-
-    }
-
-    void testNoDetectionSurgeryForDuplicateDetection()
-    {
-        def timestamp = '2011-05-17 02:54:05'
-        def testReceiver = 'VR2W-101336'
-        def testTransmitter = 'A69-1303-62339'
-        exportFile << "$timestamp,$testReceiver,$testTransmitter\n"
-
-        def detSurgeryCount = DetectionSurgery.count()
-        jdbcTemplateVueDetectionFileProcessorService.process(export)
-        assertEquals(detSurgeryCount, DetectionSurgery.count())
-
-        // Cleanup (because the transaction has been comitted this won't happen automatically)
-        InvalidDetection.findWhere(receiverName: testReceiver, transmitterId: testTransmitter, reason: InvalidDetectionReason.DUPLICATE).delete(flush: true)
     }
 
     void testPromoteProvisional()

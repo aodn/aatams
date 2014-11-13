@@ -10,20 +10,20 @@ import org.apache.shiro.SecurityUtils
 class SecSecurityFilters
 {
     def permissionUtilsService
-    
-    def accessibleByAllControllersRegexp = 
+
+    def accessibleByAllControllersRegexp =
         "animal|animalMeasurement|auditLogEvent|bulkImport|bulkImportRecord|notification|" + \
         "organisation|organisationProject|project|projectRole|person|" + \
         "installation|installationStation|receiver|species|tag|sensor|" + \
         "animalRelease|detection|receiverDeployment|receiverRecovery|" + \
         "receiverEvent|navigationMenu|receiverDownloadFile|" + \
         "searchable|" + \
-        "surgery|detectionSurgery|" + \
+        "surgery|" + \
         "gettingStarted|about|report|jasper"
 
     def authenticatedOnlyControllersRegexp =
         "receiverDownloadFile"
-         
+
     //
     // Only Sys Admins can delete (except for the following child/association
     // entities, which users with project write access can delete).
@@ -94,10 +94,10 @@ class SecSecurityFilters
         }
 
         //
-        // Anyone (including unauthenticated users) can list/index/show the 
+        // Anyone (including unauthenticated users) can list/index/show the
         // accessible by all controllers.
         //
-        // Note that for some entities (e.g. surgery, detection surgery) the results are still subject 
+        // Note that for some entities (e.g. surgery, detection surgery) the results are still subject
         // to "embargo" filtering
         //
         listIndexShow(controller:accessibleByAllControllersRegexp, action:'list|index|show|acknowledge')
@@ -116,7 +116,7 @@ class SecSecurityFilters
                 return true
             }
         }
-        
+
         //
         // Only authenticated users can list|index|show the authenticated only controllers
         // Redirect to login page if not authenticated before allowing access
@@ -141,7 +141,7 @@ class SecSecurityFilters
             {
                 def receiverDownloadFile = ReceiverDownloadFile.get(params.id)
                 def currentUser = Person.get(SecurityUtils.subject.principal)
-                
+
                 if (SecurityUtils.subject.hasRole("SysAdmin")
                     || currentUser.id == receiverDownloadFile?.requestingUser?.id)
                 {
@@ -308,7 +308,7 @@ class SecSecurityFilters
         // principal has write access to the associated project.
         //
         def projectAccessWriteControllers =
-            "animalMeasurement|installation|installationStation|tag|animalRelease|detection|detectionSurgery|" + \
+            "animalMeasurement|installation|installationStation|tag|animalRelease|detection|" + \
             "projectRole|receiverDeployment|receiverDownloadFile|receiverRecovery|receiverEvent|" + \
             "organisationProject|sensor|surgery"
 

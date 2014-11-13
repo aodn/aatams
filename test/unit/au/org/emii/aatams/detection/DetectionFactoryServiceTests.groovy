@@ -117,7 +117,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-        assertTrue(detection.detectionSurgeries?.isEmpty())
+        assertTrue(detection.surgeries.isEmpty())
     }
 
     void testOneMatchingPingerSurgery()
@@ -131,10 +131,9 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-        def detectionSurgery = DetectionSurgery.list()[0]
-        assertEquals(1, DetectionSurgery.count())
-        assertEquals(sensor0, detectionSurgery.sensor)
-        assertEquals(surgery, detectionSurgery.surgery)
+        def matchingSurgery = detection.mostRecentSurgery
+        assertNotNull(matchingSurgery)
+        assertEquals(surgery, matchingSurgery)
     }
 
     void testOneMatchingSensorSurgery()
@@ -149,10 +148,9 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-        def detectionSurgery = DetectionSurgery.list()[0]
-        assertEquals(1, DetectionSurgery.count())
-        assertEquals(sensor, detectionSurgery.sensor)
-        assertEquals(surgery, detectionSurgery.surgery)
+        def matchingSurgery = detection.mostRecentSurgery
+        assertNotNull(matchingSurgery)
+        assertEquals(surgery, matchingSurgery)
     }
 
     void testMultipleMatchingSurgeries()
@@ -167,15 +165,9 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-        assertEquals(2, DetectionSurgery.count())
-
-        def detectionSurgery1 = DetectionSurgery.list()[0]
-        assertEquals(sensor1, detectionSurgery1.sensor)
-        assertEquals(surgery1, detectionSurgery1.surgery)
-
-        def detectionSurgery2 = DetectionSurgery.list()[1]
-        assertEquals(sensor2, detectionSurgery2.sensor)
-        assertEquals(surgery2, detectionSurgery2.surgery)
+        def surgeries = detection.surgeries
+        assertEquals(surgery1, surgeries[0])
+        assertEquals(surgery2, surgeries[1])
     }
 
     void testReleaseStatusNonCurrent()
@@ -191,7 +183,7 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-        assertTrue(detection.detectionSurgeries.isEmpty())
+        assertTrue(detection.surgeries.isEmpty())
     }
 
     void testTagRetired()
@@ -212,10 +204,9 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-        assertEquals(1, DetectionSurgery.count())
-        def detectionSurgery = DetectionSurgery.list()[0]
-        assertEquals(sensor2, detectionSurgery.sensor)
-        assertEquals(surgery2, detectionSurgery.surgery)
+        assertEquals(1, detection.surgeries.size())
+        assertEquals(surgery2, detection.surgeries[0])
+        assertTrue(detection.surgeries[0].tag.sensors.contains(sensor2))
     }
 
     void testBeforeTagWindow()
@@ -233,10 +224,11 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-           assertEquals(1, DetectionSurgery.count())
-        def detectionSurgery = DetectionSurgery.list()[0]
-        assertEquals(sensor2, detectionSurgery.sensor)
-        assertEquals(surgery2, detectionSurgery.surgery)
+        def surgeries = detection.surgeries
+
+        assertEquals(1, surgeries.size())
+        assertEquals(surgery2, surgeries[0])
+        assertTrue(surgeries[0].tag.sensors.contains(sensor2))
     }
 
     void testAfterTagWindow()
@@ -253,8 +245,6 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         release1.releaseDateTime = new DateTime("2009-11-18T06:44:24")
         release1.save()
 
-        assertEquals(0, DetectionSurgery.count())
-
         def detection =
             newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
 
@@ -262,10 +252,9 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         assertTrue(detection instanceof ValidDetection)
         assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
 
-        assertEquals(1, DetectionSurgery.count())
-        def detectionSurgery = DetectionSurgery.list()[0]
-        assertEquals(sensor2, detectionSurgery.sensor)
-        assertEquals(surgery2, detectionSurgery.surgery)
+        def surgeries = detection.surgeries
+        assertEquals(1, surgeries.size())
+        assertEquals(surgery2, surgeries[0])
 
         // So we don't get a duplicate.
         detection.setTimestamp(new Date())
@@ -275,62 +264,14 @@ class DetectionFactoryServiceTests extends AbstractDetectionFactoryServiceTests
         release1.releaseDateTime = new DateTime("2009-11-19T06:44:24")
         release1.save()
 
-        assertEquals(1, DetectionSurgery.count())
-
         // "2009-12-08 06:44:24"
         detection =
             newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
 
-        assertEquals(3, DetectionSurgery.count())
-        def detectionSurgery1 = DetectionSurgery.list()[1]
-        assertEquals(sensor1, detectionSurgery1.sensor)
-        assertEquals(surgery1, detectionSurgery1.surgery)
-        def detectionSurgery2 = DetectionSurgery.list()[2]
-        assertEquals(sensor2, detectionSurgery2.sensor)
-        assertEquals(surgery2, detectionSurgery2.surgery)
-    }
-
-    void testRescanForSurgery()
-    {
-        def detection =
-            newDetection(new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV), standardParams)
-
-        assertNotNull(detection)
-        assertTrue(detection instanceof ValidDetection)
-        assertNotNull(ValidDetection.findByTimestamp(detection.timestamp))
-        assertTrue(detection.detectionSurgeries.isEmpty())
-
-        setupData()
-
-        Collection<DetectionSurgery> newDetSurgeries = detectionFactoryService.rescanForSurgery(surgery)
-        assertEquals(1, newDetSurgeries.size())
-        assertEquals(detection, newDetSurgeries[0].detection)
-
-        assertEquals(1, DetectionSurgery.count())
-        def detectionSurgery = DetectionSurgery.list()[0]
-        assertEquals(sensor0, detectionSurgery.sensor)
-        assertEquals(surgery, detectionSurgery.surgery)
-    }
-
-    void testCreateDetectionSurgeryForDetectionBug69()
-    {
-        registerMetaClass Sensor
-
-        Sensor.metaClass.static.findByTransmitterId =
-        {
-            id, params ->
-
-            null
-        }
-
-        try
-        {
-            detectionFactoryService.createDetectionSurgeryForDetection([ transmitter_id: '1234' ])
-        }
-        catch (NullPointerException e)
-        {
-            fail(e.message)
-        }
+        surgeries = detection.surgeries
+        assertEquals(2, surgeries.size())
+        assertEquals(surgery1, surgeries[0])
+        assertEquals(surgery2, surgeries[1])
     }
 
     void testBuildRescanDeploymentSql()

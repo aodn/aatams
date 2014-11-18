@@ -11,7 +11,7 @@ class SurgeryController extends AbstractController {
     def detectionFactoryService
     def jdbcTemplateDetectionFactoryService
     def tagFactoryService
-    
+
     def index = {
         redirect(action: "list", params: params)
     }
@@ -26,7 +26,7 @@ class SurgeryController extends AbstractController {
         return [surgeryInstance: surgeryInstance]
     }
 
-    def save = 
+    def save =
     {
         def surgeryInstance = new Surgery(params)
 
@@ -34,7 +34,7 @@ class SurgeryController extends AbstractController {
         params.tag['project'] = Project.get(params.projectId)
         params.tag['status'] = DeviceStatus.findByStatus('DEPLOYED')
         params.tag['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
-    
+
         def tag = null
         try
         {
@@ -50,14 +50,13 @@ class SurgeryController extends AbstractController {
         assert(tag): "tag cannot be null"
         surgeryInstance.tag = tag
         tag.addToSurgeries(surgeryInstance)
-        detectionFactoryService.rescanForSurgery(surgeryInstance)
-        
-        if (surgeryInstance.save(flush: true)) 
+
+        if (surgeryInstance.save(flush: true))
         {
             flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tagging.label', default: 'Tagging'), surgeryInstance.toString()])}"
             render ([instance:surgeryInstance, message:flash] as JSON)
         }
-        else 
+        else
         {
             log.error(surgeryInstance.errors)
             render ([errors:surgeryInstance.errors] as JSON)
@@ -92,7 +91,7 @@ class SurgeryController extends AbstractController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (surgeryInstance.version > version) {
-                    
+
                     surgeryInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'surgery.label', default: 'Surgery')] as Object[], "Another user has updated this Surgery while you were editing")
                     render(view: "edit", model: [surgeryInstance: surgeryInstance])
                     return

@@ -21,7 +21,7 @@ h1 {
     color: #67695E;
     font-weight: bold;
     font-size: 14px;
-    margin-top: 30px;    
+    margin-top: 30px;
     margin-bottom: 5px;
 }
 h2,h3,h4,h5 {
@@ -76,7 +76,7 @@ h5 {
 }
 
 #boxes .window {
-  
+
   display:none;
   z-index:9999;
   padding:5px;
@@ -496,7 +496,7 @@ th.desc a {
 input.KMZ[disabled], input.KML[disabled] {
 /*     border: 1px solid #999;
     background-color: #ddd;
- */    
+ */
     cursor: default;
 	filter:alpha(opacity=60); /* IE */
 	opacity: 0.6; /* Safari, Opera */

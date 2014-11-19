@@ -43,7 +43,7 @@ class ReceiverRecovery
 
     static constraints =
     {
-        recoveryDateTime()
+        recoveryDateTime(validator: recoveryDateTimeValidator)
         location()
         status()
         recoverer()
@@ -54,6 +54,14 @@ class ReceiverRecovery
     static searchable =
     {
         deployment(component:true)
+    }
+
+    static def recoveryDateTimeValidator = {
+        recoveryDateTime, obj ->
+
+        return recoveryDateTime.isAfter(obj.deployment.deploymentDateTime) ?
+            true :
+            ['invalid.beforeDeploymentDateTime', recoveryDateTime, obj.deployment.deploymentDateTime]
     }
 
     String toString()

@@ -7,14 +7,14 @@ import grails.plugin.searchable.SearchableService
 import grails.test.GrailsUnitTestCase;
 import org.joda.time.DateTime
 
-abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestCase 
+abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestCase
 {
     def eventFactoryService
     def searchableService
     def vueEventFileProcessorService
-    
+
     ReceiverDownloadFile download
-    
+
     protected void setUp()
     {
         super.setUp()
@@ -28,38 +28,37 @@ abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestC
         AbstractBatchProcessor.metaClass.getReader = { getReader(it) }
         AbstractBatchProcessor.metaClass.getNumRecords = { 16 }
         AbstractBatchProcessor.metaClass.flushSession = {  }
-        
+
         mockDomain(ReceiverDownloadFileProgress)
         ReceiverDownloadFileProgress.metaClass.static.withNewTransaction = { it() }
-        
+
         ReceiverDeviceModel model = new ReceiverDeviceModel(modelName:"VR2W")
         mockDomain(ReceiverDeviceModel, [model])
         model.save()
-        
+
         Receiver receiver = new Receiver(model: model, serialNumber: "103335")
         def receiverList = [receiver]
         mockDomain(Receiver, receiverList)
 
         ReceiverRecovery recovery = new ReceiverRecovery(recoveryDateTime: new DateTime("2010-12-08T01:45:29"))
         mockDomain(ReceiverRecovery, [recovery])
-        recovery.save()
-        
-        ReceiverDeployment deployment = new ReceiverDeployment(recovery: recovery, receiver: receiver, 
+
+        ReceiverDeployment deployment = new ReceiverDeployment(recovery: recovery, receiver: receiver,
                                                                deploymentDateTime: new DateTime("2009-12-08T01:45:29"),
                                                                initialisationDateTime: new DateTime("2009-12-08T00:45:29"))
         mockDomain(ReceiverDeployment, [deployment])
         deployment.save()
-        
+
         recovery.deployment = deployment
         recovery.save()
-        
+
         receiver.addToDeployments(deployment)
         receiverList.each { it.save() }
-        
+
         mockDomain(ReceiverEvent)
         mockDomain(ValidReceiverEvent)
         mockDomain(InvalidReceiverEvent)
-        
+
         download = new ReceiverDownloadFile()
         mockDomain(ReceiverDownloadFile, [download])
         download.importDate = new Date()

@@ -27,11 +27,6 @@ class TimeZoneTests extends AbstractGrailsUnitTestCase
 
     }
 
-    protected void tearDown()
-    {
-        super.tearDown()
-    }
-
     protected def getPrincipal()
     {
         return person.id
@@ -72,11 +67,18 @@ class TimeZoneTests extends AbstractGrailsUnitTestCase
 
     void testReceiverRecovery()
     {
-        ReceiverRecovery recoveryNotSpec = new ReceiverRecovery()
-        ReceiverRecovery recoverySpec = new ReceiverRecovery(recoveryDateTime:new DateTime(specifiedTZ))
+        mockDomain(ReceiverRecovery)
+
+        def deploymentDateTime = new DateTime(specifiedTZ)
+        ReceiverDeployment deployment = new ReceiverDeployment(deploymentDateTime: deploymentDateTime)
+
+        ReceiverRecovery recoveryNotSpec = new ReceiverRecovery(deployment: deployment)
+        ReceiverRecovery recoverySpec =
+            new ReceiverRecovery(deployment: deployment,
+                                 recoveryDateTime: deploymentDateTime.plusDays(1))
+
 
         def recoveryList = [recoveryNotSpec, recoverySpec]
-        mockDomain(ReceiverRecovery, recoveryList)
         recoveryList.each { it.save() }
 
 //        assertEquals(specifiedTZ, recoverySpec.recoveryDateTime.zone)

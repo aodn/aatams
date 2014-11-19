@@ -58,6 +58,8 @@ class ReceiverRecoveryController extends AbstractController
         def receiverRecoveryInstance = new ReceiverRecovery(params)
         receiverRecoveryInstance.deployment = deployment
 
+        receiverRecoveryInstance.clearErrors()
+
         deployment?.recovery = receiverRecoveryInstance
 
         if (deployment?.save(flush: true))

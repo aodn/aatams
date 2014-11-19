@@ -171,7 +171,19 @@
                                         </tr>
 
                                       </g:each>
-                                      <tr><td><br/></td></tr>
+
+                                      <g:if test="${animalReleaseInstance.surgeries.isEmpty()}">
+                                          <tr>
+                                              <shiro:hasPermission permission="project:${projectId}:write">
+                                                  <td/>
+                                              </shiro:hasPermission>
+                                              <td colspan="6"><div class="warning"><b>No Taggings</b> - At least one tagging must be added for this release to be automatically associated with any detections.</div></td>
+                                          </tr>
+                                      </g:if>
+                                      <g:else>
+                                          <tr><td><br/></td></tr>
+                                      </g:else>
+
                                       <tr>
                                         <td colspan="5">
                                           <a href="#"

@@ -24,58 +24,58 @@
             <div class="dialog">
                 <table>
                     <tbody>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.project.label" default="Project" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="project" action="show" id="${animalReleaseInstance?.project?.id}">${animalReleaseInstance?.project?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
-                    
-                        
+
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.animal.species.label" default="Species" /></td>
-                            
+
                             <td valign="top" class="value">${animalReleaseInstance?.animal?.species}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.animal.sex.label" default="Sex" /></td>
-                            
+
                             <td valign="top" class="value">${animalReleaseInstance?.animal?.sex}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.captureLocality.label" default="Capture Locality" /></td>
-                            
+
                             <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "captureLocality")}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></td>
-                            
+
                             <td valign="top" class="value">
-                              <g:point name="captureLocation" 
+                              <g:point name="captureLocation"
                                        value="${animalReleaseInstance?.captureLocation}"/>
                             </td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></td>
-                            
+
                             <td valign="top" class="value"><joda:format value="${animalReleaseInstance?.captureDateTime}" /></td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.captureMethod.label" default="Capture Method" /></td>
-                            
+
                             <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "captureMethod")}</td>
-                            
+
                         </tr>
                         <tr>
                             <td valign="top" class="name">
@@ -115,7 +115,7 @@
                                 </tbody>
                               </table>
 
-                            </td>  
+                            </td>
                         </tr>
 
                         <tr>
@@ -141,8 +141,8 @@
                                     <tr>
 
                                       <td class="rowButton">
-                                        <g:link class="show" 
-                                                controller="animalMeasurement" 
+                                        <g:link class="show"
+                                                controller="animalMeasurement"
                                                 action="show"
                                                 id="${m?.id}">.</g:link>
                                       </td>
@@ -161,45 +161,45 @@
 
                             </td>
                         </tr>
-                        
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.releaseLocality.label" default="Release Locality" /></td>
-                            
+
                             <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "releaseLocality")}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></td>
-                            
+
                             <td valign="top" class="value">
-                              <g:point name="scrambledReleaseLocation" 
+                              <g:point name="scrambledReleaseLocation"
                                        value="${animalReleaseInstance?.scrambledReleaseLocation}"/>
                             </td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></td>
-                            
+
                             <td valign="top" class="value"><joda:format value="${animalReleaseInstance?.releaseDateTime}" /></td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.comments.label" default="Comments" /></td>
-                            
+
                             <td valign="top" class="value">${fieldValue(bean: animalReleaseInstance, field: "comments")}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="animalRelease.embargoDate.label" default="Embargo Date" /></td>
-                            
+
                             <td valign="top" class="value"><g:formatDate date="${animalReleaseInstance?.embargoDate}" /></td>
-                            
+
                         </tr>
-                    
+
                     </tbody>
                 </table>
             </div>

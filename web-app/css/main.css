@@ -21,7 +21,7 @@ h1 {
     color: #67695E;
     font-weight: bold;
     font-size: 14px;
-    margin-top: 30px;    
+    margin-top: 30px;
     margin-bottom: 5px;
 }
 h2,h3,h4,h5 {
@@ -76,7 +76,7 @@ h5 {
 }
 
 #boxes .window {
-  
+
   display:none;
   z-index:9999;
   padding:5px;
@@ -268,6 +268,13 @@ input:focus, select:focus, textarea:focus {
     color: #006dba;
     margin: 10px 0 5px 0;
     padding: 5px 5px 5px 30px
+}
+
+.warning {
+    background: lemonchiffon url(../images/skin/information.png) 8px 50% no-repeat;
+    border: 1px solid #eac117;
+    margin: 10px 0 5px 0;
+    padding-left: 30px
 }
 
 div.errors {
@@ -496,7 +503,7 @@ th.desc a {
 input.KMZ[disabled], input.KML[disabled] {
 /*     border: 1px solid #999;
     background-color: #ddd;
- */    
+ */
     cursor: default;
 	filter:alpha(opacity=60); /* IE */
 	opacity: 0.6; /* Safari, Opera */

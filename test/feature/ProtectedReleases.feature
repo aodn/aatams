@@ -1,7 +1,7 @@
 Feature: protected releases
     As a tag data provider, I would like to limit visibility of detections of my tags to authorised users only.
 
-# Version: 0.0.2
+# Version: 0.0.3
 
 
 Scenario Outline: project protection configuration
@@ -43,11 +43,11 @@ Scenario Outline: protection notification
 # tag -                 http://aatams-rc.emii.org.au/aatams/tag
 #
 # Notes:
-# 
+#
 # - "Visibility" in this context means "list" and "show" views, as well as downloads (i.e. CSV and KMZ exports).
 # - A release is considered to be protected if it's owning project is protected and it is currently under embargo.
+# - If a detection is "sanitised" it means the tag ID and species information are not visible for that detection
 #
-
 
 Scenario Outline: detection and release visibility
     Given there is a protected release with associated detections
@@ -74,28 +74,32 @@ Scenario Outline: filtering
 
     Examples:
 
-        | auth level                      | protection level | filter set | visibility  |
-        |                                 |                  |            |             |
-        | unathenticated                  | unembargoed      | set        | visible     |
-        | unathenticated                  | embargoed        | not set    | visible     |
-        | unathenticated                  | embargoed        | set        | not visible |
-        | unathenticated                  | protected        | not set    | not visible |
-        | unathenticated                  | protected        | set        | not visible |
-        |                                 |                  |            |             |
-        | authenticated, non project user | unembargoed      | set        | visible     |
-        | authenticated, non project user | embargoed        | not set    | visible     |
-        | authenticated, non project user | embargoed        | set        | not visible |
-        | authenticated, non project user | protected        | not set    | not visible |
-        | authenticated, non project user | protected        | set        | not visible |
-        |                                 |                  |            |             |
-        | authenticated, project user     | unembargoed      | set        | visible     |
-        | authenticated, project user     | embargoed        | not set    | visible     |
-        | authenticated, project user     | embargoed        | set        | visible     |
-        | authenticated, project user     | protected        | not set    | visible     |
-        | authenticated, project user     | protected        | set        | visible     |
-        |                                 |                  |            |             |
-        | sys-admin user                  | unembargoed      | set        | visible     |
-        | sys-admin user                  | embargoed        | not set    | visible     |
-        | sys-admin user                  | embargoed        | set        | visible     |
-        | sys-admin user                  | protected        | not set    | visible     |
-        | sys-admin user                  | protected        | set        | visible     |
+        | auth level                      | protection level      | filter set | visibility          |
+        |                                 |                       |            |                     |
+        | unathenticated                  | none                  | not set    | visible             |
+        | unathenticated                  | none                  | set        | visible             |
+        | unathenticated                  | embargoed             | not set    | visible (sanitised) |
+        | unathenticated                  | embargoed             | set        | not visible         |
+        | unathenticated                  | embargoed + protected | not set    | not visible         |
+        | unathenticated                  | embargoed + protected | set        | not visible         |
+        |                                 |                       |            |                     |
+        | authenticated, non project user | none                  | not set    | visible             |
+        | authenticated, non project user | none                  | set        | visible             |
+        | authenticated, non project user | embargoed             | not set    | visible (sanitised) |
+        | authenticated, non project user | embargoed             | set        | not visible         |
+        | authenticated, non project user | embargoed + protected | not set    | not visible         |
+        | authenticated, non project user | embargoed + protected | set        | not visible         |
+        |                                 |                       |            |                     |
+        | authenticated, project user     | none                  | not set    | visible             |
+        | authenticated, project user     | none                  | set        | visible             |
+        | authenticated, project user     | embargoed             | not set    | visible             |
+        | authenticated, project user     | embargoed             | set        | visible             |
+        | authenticated, project user     | embargoed + protected | not set    | visible             |
+        | authenticated, project user     | embargoed + protected | set        | visible             |
+        |                                 |                       |            |                     |
+        | sys-admin user                  | none                  | not set    | visible             |
+        | sys-admin user                  | none                  | set        | visible             |
+        | sys-admin user                  | embargoed             | not set    | visible             |
+        | sys-admin user                  | embargoed             | set        | visible             |
+        | sys-admin user                  | embargoed + protected | not set    | visible             |
+        | sys-admin user                  | embargoed + protected | set        | visible             |

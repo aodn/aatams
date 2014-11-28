@@ -17,17 +17,17 @@
     <script type="text/javascript" src="${resource(dir:'js',file:'jquery.selectlist.js')}"></script>
 
     <g:javascript src="asAbove.js"/>
-    
+
     <g:javascript src="jquery.blockUI.js"/>
     <g:javascript src="jquery.qtip-1.0.0-rc3.min.js"/>
     <g:javascript src="jquery.cookie.js"/>
     <g:javascript src="notification.js"/>
     <g:javascript src="rememberFormFields.js"/>
     <g:javascript src="autocompleteForLargeSelects.js"/>
-    
-    
+
+
     <g:javascript src="blockUIConfig.js"/>
-    
+
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'custom-theme/jquery-ui-1.8.13.custom.css')}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui-combobox.css')}"/>
@@ -35,11 +35,11 @@
 
     <!-- Shiro tags, used for security -->
     <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-    
+
     <script>
-      
+
       var contextPath = "${request.contextPath}";
-      
+
       // important. leave here for main_extras.js
       var grailsServerURL = "${grailsApplication.config.grails.serverURL}";
 
@@ -53,14 +53,14 @@
         });
       </g:if>
     </script>
-    
+
     <g:layoutHead />
-    
+
     <script type="text/javascript">
 
     var myLayout; // a var is required because this page utilizes: myLayout.allowOverflow() method
 
-    $(document).ready(function () 
+    $(document).ready(function ()
     {
       myLayout = $('body').layout(
       {
@@ -103,7 +103,7 @@
   </head>
   <body>
 
-    
+
    <div id="boxes">
       <div id="dialog" class="window fixed">
         <a href="#" class="close right">Close</a>
@@ -112,7 +112,7 @@
       </div>
       <div id="mask"></div>
     </div>
-    
+
     <div id="spinner" class="spinner" style="display:none;">
       <img src="${resource(dir:'images',file:'spinner.gif')}" alt="${message(code:'spinner.alt',default:'Loading...')}" />
     </div>
@@ -126,11 +126,11 @@
         <g:notification value="${it}" />
       </g:each>
     </div>
-    
+
     <div class="ui-layout-north">
       <div id="logo">
         <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS_Facility_8.png')}" alt="IMOS Logo"  /></a>
-        
+
         <div id="userlogin">
           <!-- Shown if not logged in. -->
           <shiro:guest>
@@ -141,14 +141,14 @@
           <!-- Shown if logged in. -->
           <shiro:user>
             <g:set var="principal" value="${PermissionUtilsService.principal()}" />
-          
+
             <div id="userlogout">
               Logged in as <g:link controller="person" action="show" id="${principal.id}">${principal.name}</g:link> (<g:link controller="auditLogEvent" action="list">activity</g:link> | <g:link controller="auth" action="signOut">logout</g:link>)
             </div>
           </shiro:user>
         </div>
       </div>
-      
+
     </div>
 
     <!-- allowOverflow auto-attached by option: west__showOverflowOnHover = true -->
@@ -162,12 +162,12 @@
     </div>
 
     <div class="ui-layout-center">
-      
+
       <g:layoutBody />
-      
+
     </div>
-    
-    <g:listFilterIncludes/>
+
+     <g:listFilterIncludes/>
     <script>
       $(document).ready(function()
       {
@@ -175,12 +175,12 @@
           {
               // Set focus to second visible element (the first is the search
               // textfield at top left of navigation panel).
-              $(':input:enabled:visible:eq(1)').focus();          
+              $(':input:enabled:visible:eq(1)').focus();
           }
       });
     </script>
 
-    
-  </body>    
-    
+
+  </body>
+
 </html>

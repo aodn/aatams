@@ -1,5 +1,3 @@
-<g:javascript src="ajaxMultiSelectReportParameter.js" />
-
 <div class="reportFilter">
   <table>
     <tbody>

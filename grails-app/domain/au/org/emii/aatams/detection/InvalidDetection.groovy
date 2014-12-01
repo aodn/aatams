@@ -25,7 +25,7 @@ class InvalidDetection extends RawDetection
 
         detectionBuff.append("nextval('hibernate_sequence'),")
         detectionBuff.append("0,")
-        detectionBuff.append("'" + new java.sql.Timestamp(detection["timestamp"].getTime()) + "',")
+        detectionBuff.append("'${formatTimestamp(detection['timestamp'], 'yyyy-MM-dd HH:mm:ssZ')}',")
         SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDownloadId"])
         SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
             "transmitterSerialNumber", "message", "reason"])

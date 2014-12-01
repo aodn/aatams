@@ -17,29 +17,29 @@ import java.util.Map
 /**
  * A 1:1 mapping of a single CSV record from receiver export.
  */
-abstract class RawDetection 
+abstract class RawDetection
 {
     /**
      * UTC timestamp.
      */
     Date timestamp
-    
+
     String receiverName
-    
+
     String stationName
-    
+
     /**
      * Record the actual ID transmitted by the tag.
      */
     String transmitterId
-    
+
     /**
      * May be different (as with station name above).
      */
     String transmitterName
-    
+
     String transmitterSerialNumber
-    
+
     /**
      * May be different (as with station name above).
      */
@@ -47,10 +47,10 @@ abstract class RawDetection
 
     Float sensorValue
     String sensorUnit
-    
+
     static transients = ['scrambledLocation', 'valid', 'formattedTimestamp']
 
-    static constraints = 
+    static constraints =
     {
         transmitterName(nullable:true, blank:true)
         transmitterSerialNumber(nullable:true, blank:true)
@@ -58,7 +58,7 @@ abstract class RawDetection
         sensorUnit(nullable:true, blank:true)
         stationName(nullable:true, blank:true)
         location(nullable:true)
-        
+
         // Workaround for problem where jenkins build is failing - not sure why.
         // Getting "ValidationException" when trying to save ValidDetection.
         scrambledLocation(nullable:true)
@@ -66,7 +66,7 @@ abstract class RawDetection
     }
 
 //    static belongsTo = [receiverDownload:ReceiverDownloadFile]
-    
+
     static mapping =
     {
 //        timestamp index:'timestamp_index'
@@ -75,12 +75,12 @@ abstract class RawDetection
         cache true
         location type: GeometryUserType
     }
-    
+
     boolean isValid()
     {
         return true
     }
-    
+
     /**
      * Non-authenticated users can only see scrambled locations.
      */
@@ -88,22 +88,13 @@ abstract class RawDetection
     {
         return GeometryUtils.scrambleLocation(location)
     }
-    
-    static DateFormat formatter
-    
+
     String getFormattedTimestamp()
     {
-        if (timestamp)
-        {
-            if (!formatter)
-            {
-                formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-            }
-            
-            return formatter.format(timestamp)
-        }
-        
-        return null
+        return formatTimestamp(timestamp, "yyyy-MM-dd HH:mm:ss")
+    }
+
+    static formatTimestamp(timestamp, format) {
+        return SqlUtils.formatTimestamp(timestamp, format)
     }
 }

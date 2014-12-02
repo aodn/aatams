@@ -1,0 +1,235 @@
+SET
+SET
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.00..120.22 rows=100 width=296) (actual time=0.223..1.054 rows=100 loops=1)
+   ->  Seq Scan on detection_extract_view_mv  (cost=0.00..35932427.15 rows=29888199 width=296) (actual time=0.192..0.672 rows=100 loops=1)
+         Filter: ((project)::text = 'AATAMS Heron Island'::text)
+ Total runtime: 1.499 ms
+(4 rows)
+
+                                                                QUERY PLAN                                                                 
+-------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.00..79.25 rows=100 width=296) (actual time=0.014..0.332 rows=100 loops=1)
+   ->  Seq Scan on detection_extract_view_mv  (cost=0.00..35932427.15 rows=45340754 width=296) (actual time=0.010..0.151 rows=100 loops=1)
+         Filter: ((spcode)::text = '37018030'::text)
+ Total runtime: 0.460 ms
+(4 rows)
+
+                                                                          QUERY PLAN                                                                           
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.00..19.01 rows=100 width=296) (actual time=0.019..0.631 rows=100 loops=1)
+   ->  Seq Scan on detection_extract_view_mv  (cost=0.00..37590426.38 rows=197691361 width=296) (actual time=0.015..0.254 rows=100 loops=1)
+         Filter: (("timestamp" >= '2012-03-01 00:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-09-01 00:00:00+00'::timestamp with time zone))
+ Total runtime: 0.910 ms
+(4 rows)
+
+                                                                QUERY PLAN                                                                
+------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.00..1839.64 rows=100 width=296) (actual time=0.021..0.669 rows=100 loops=1)
+   ->  Seq Scan on detection_extract_view_mv  (cost=0.00..37590426.38 rows=2043357 width=296) (actual time=0.015..0.310 rows=100 loops=1)
+         Filter: (((project)::text = 'AATAMS Heron Island'::text) AND ((spcode)::text = '37018030'::text))
+ Total runtime: 0.951 ms
+(4 rows)
+
+                                                                                                    QUERY PLAN                                                                                                     
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.00..440.53 rows=100 width=296) (actual time=0.020..0.691 rows=100 loops=1)
+   ->  Seq Scan on detection_extract_view_mv  (cost=0.00..39248425.61 rows=8909291 width=296) (actual time=0.016..0.331 rows=100 loops=1)
+         Filter: (("timestamp" >= '2012-03-01 00:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-09-01 00:00:00+00'::timestamp with time zone) AND ((project)::text = 'AATAMS Heron Island'::text))
+ Total runtime: 0.928 ms
+(4 rows)
+
+                                                                                              QUERY PLAN                                                                                               
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.00..290.40 rows=100 width=296) (actual time=0.020..0.720 rows=100 loops=1)
+   ->  Seq Scan on detection_extract_view_mv  (cost=0.00..39248425.61 rows=13515500 width=296) (actual time=0.015..0.317 rows=100 loops=1)
+         Filter: (("timestamp" >= '2012-03-01 00:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-09-01 00:00:00+00'::timestamp with time zone) AND ((spcode)::text = '37018030'::text))
+ Total runtime: 0.950 ms
+(4 rows)
+
+                                                                                                                        QUERY PLAN                                                                                                                         
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.00..6715.89 rows=100 width=296) (actual time=0.038..0.721 rows=100 loops=1)
+   ->  Seq Scan on detection_extract_view_mv  (cost=0.00..40906424.84 rows=609099 width=296) (actual time=0.033..0.363 rows=100 loops=1)
+         Filter: (("timestamp" >= '2012-03-01 00:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-09-01 00:00:00+00'::timestamp with time zone) AND ((project)::text = 'AATAMS Heron Island'::text) AND ((spcode)::text = '37018030'::text))
+ Total runtime: 0.987 ms
+(4 rows)
+
+                                                                                      QUERY PLAN                                                                                       
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.70..404.46 rows=100 width=296) (actual time=3.446..4.661 rows=100 loops=1)
+   ->  Index Scan using detection_extract_view_mv_project_index on detection_extract_view_mv  (cost=0.70..535550.75 rows=132640 width=296) (actual time=3.442..4.310 rows=100 loops=1)
+         Index Cond: ((project)::text = 'AATAMS Coffs Harbour line'::text)
+ Total runtime: 4.917 ms
+(4 rows)
+
+                                                                                       QUERY PLAN                                                                                       
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.57..356.48 rows=100 width=296) (actual time=1.175..2.487 rows=100 loops=1)
+   ->  Index Scan using detection_extract_view_mv_spcode_index on detection_extract_view_mv  (cost=0.57..4674486.25 rows=1313416 width=296) (actual time=1.171..2.132 rows=100 loops=1)
+         Index Cond: ((spcode)::text = '37018003'::text)
+ Total runtime: 2.722 ms
+(4 rows)
+
+                                                                                      QUERY PLAN                                                                                       
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.57..395.17 rows=100 width=296) (actual time=0.190..2.223 rows=100 loops=1)
+   ->  Index Scan using detection_extract_view_mv_timestamp_index on detection_extract_view_mv  (cost=0.57..65144.54 rows=16509 width=296) (actual time=0.185..1.842 rows=100 loops=1)
+         Index Cond: (("timestamp" >= '2014-07-30 12:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2014-07-30 18:00:00+00'::timestamp with time zone))
+ Total runtime: 2.468 ms
+(4 rows)
+
+                                                                                                          QUERY PLAN                                                                                                           
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=5741.42..5753.47 rows=3 width=296) (actual time=14.486..14.727 rows=55 loops=1)
+   ->  Bitmap Heap Scan on detection_extract_view_mv  (cost=5741.42..5753.47 rows=3 width=296) (actual time=14.483..14.625 rows=55 loops=1)
+         Recheck Cond: (("timestamp" >= '2014-07-30 12:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2014-07-30 18:00:00+00'::timestamp with time zone) AND ((project)::text = 'AATAMS Coffs Harbour line'::text))
+         ->  BitmapAnd  (cost=5741.42..5741.42 rows=3 width=0) (actual time=14.440..14.440 rows=0 loops=1)
+               ->  Bitmap Index Scan on detection_extract_view_mv_timestamp_index  (cost=0.00..377.67 rows=16509 width=0) (actual time=3.640..3.640 rows=13081 loops=1)
+                     Index Cond: (("timestamp" >= '2014-07-30 12:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2014-07-30 18:00:00+00'::timestamp with time zone))
+               ->  Bitmap Index Scan on detection_extract_view_mv_project_index  (cost=0.00..5363.50 rows=132640 width=0) (actual time=10.657..10.657 rows=5945 loops=1)
+                     Index Cond: ((project)::text = 'AATAMS Coffs Harbour line'::text)
+ Total runtime: 14.868 ms
+(9 rows)
+
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=36271.08..36671.65 rows=100 width=296) (actual time=7.820..8.206 rows=100 loops=1)
+   ->  Bitmap Heap Scan on detection_extract_view_mv  (cost=36271.08..37324.59 rows=263 width=296) (actual time=7.817..8.022 rows=100 loops=1)
+         Recheck Cond: (((project)::text = 'AATAMS Coffs Harbour line'::text) AND ((spcode)::text = '37018003'::text))
+         ->  BitmapAnd  (cost=36271.08..36271.08 rows=263 width=0) (actual time=7.752..7.752 rows=0 loops=1)
+               ->  Bitmap Index Scan on detection_extract_view_mv_project_index  (cost=0.00..5363.50 rows=132640 width=0) (actual time=2.139..2.139 rows=5945 loops=1)
+                     Index Cond: ((project)::text = 'AATAMS Coffs Harbour line'::text)
+               ->  Bitmap Index Scan on detection_extract_view_mv_spcode_index  (cost=0.00..30907.19 rows=1313416 width=0) (actual time=5.496..5.496 rows=16940 loops=1)
+                     Index Cond: ((spcode)::text = '37018003'::text)
+ Total runtime: 8.351 ms
+(9 rows)
+
+                                                                                                          QUERY PLAN                                                                                                           
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=5741.42..5753.47 rows=1 width=296) (actual time=8.190..8.549 rows=55 loops=1)
+   ->  Bitmap Heap Scan on detection_extract_view_mv  (cost=5741.42..5753.47 rows=1 width=296) (actual time=8.185..8.350 rows=55 loops=1)
+         Recheck Cond: (("timestamp" >= '2014-07-30 12:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2014-07-30 18:00:00+00'::timestamp with time zone) AND ((project)::text = 'AATAMS Coffs Harbour line'::text))
+         Filter: ((spcode)::text = '37018003'::text)
+         ->  BitmapAnd  (cost=5741.42..5741.42 rows=3 width=0) (actual time=8.159..8.159 rows=0 loops=1)
+               ->  Bitmap Index Scan on detection_extract_view_mv_timestamp_index  (cost=0.00..377.67 rows=16509 width=0) (actual time=4.246..4.246 rows=13081 loops=1)
+                     Index Cond: (("timestamp" >= '2014-07-30 12:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2014-07-30 18:00:00+00'::timestamp with time zone))
+               ->  Bitmap Index Scan on detection_extract_view_mv_project_index  (cost=0.00..5363.50 rows=132640 width=0) (actual time=3.639..3.639 rows=5945 loops=1)
+                     Index Cond: ((project)::text = 'AATAMS Coffs Harbour line'::text)
+ Total runtime: 8.728 ms
+(10 rows)
+
+                                                                                      QUERY PLAN                                                                                      
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.70..1356.90 rows=100 width=296) (actual time=0.198..0.567 rows=100 loops=1)
+   ->  Index Scan using detection_extract_view_mv_project_index on detection_extract_view_mv  (cost=0.70..536213.95 rows=39538 width=296) (actual time=0.195..0.388 rows=100 loops=1)
+         Index Cond: ((project)::text = 'AATAMS Coffs Harbour line'::text)
+         Filter: (("timestamp" >= '2012-03-01 00:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-09-01 00:00:00+00'::timestamp with time zone))
+         Rows Removed by Filter: 16
+ Total runtime: 0.692 ms
+(6 rows)
+
+                                                                                    QUERY PLAN                                                                                     
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.57..8765.62 rows=100 width=296) (actual time=6.489..8.672 rows=4 loops=1)
+   ->  Index Scan using detection_extract_view_mv_timestamp_index on detection_extract_view_mv  (cost=0.57..72575.18 rows=828 width=296) (actual time=6.487..8.661 rows=4 loops=1)
+         Index Cond: (("timestamp" >= '2013-06-08 00:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-06-08 01:00:00+00'::timestamp with time zone))
+         Filter: ((project)::text = 'AATAMS Heron Island'::text)
+         Rows Removed by Filter: 2003
+ Total runtime: 8.711 ms
+(6 rows)
+
+                                                                                      QUERY PLAN                                                                                      
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.57..7903.41 rows=100 width=296) (actual time=0.243..0.763 rows=100 loops=1)
+   ->  Index Scan using detection_extract_view_mv_spcode_index on detection_extract_view_mv  (cost=0.57..4677769.79 rows=59191 width=296) (actual time=0.240..0.583 rows=100 loops=1)
+         Index Cond: ((spcode)::text = '37346004'::text)
+         Filter: ((project)::text = 'AATAMS Heron Island'::text)
+         Rows Removed by Filter: 15
+ Total runtime: 0.905 ms
+(6 rows)
+
+                                                                                      QUERY PLAN                                                                                      
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.70..24937.03 rows=100 width=296) (actual time=0.742..20.602 rows=100 loops=1)
+   ->  Index Scan using detection_extract_view_mv_project_index on detection_extract_view_mv  (cost=0.70..535882.35 rows=2149 width=296) (actual time=0.737..20.230 rows=100 loops=1)
+         Index Cond: ((project)::text = 'AATAMS Coffs Harbour line'::text)
+         Filter: ((spcode)::text = '37018021'::text)
+         Rows Removed by Filter: 4820
+ Total runtime: 20.839 ms
+(6 rows)
+
+                                                                                                 QUERY PLAN                                                                                                  
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=31655.75..31916.75 rows=3 width=296) (actual time=7.664..7.676 rows=2 loops=1)
+   ->  Bitmap Heap Scan on detection_extract_view_mv  (cost=31655.75..31916.75 rows=3 width=296) (actual time=7.659..7.665 rows=2 loops=1)
+         Recheck Cond: (("timestamp" >= '2013-04-02 05:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-04-02 07:00:00+00'::timestamp with time zone) AND ((spcode)::text = '37346004'::text))
+         Filter: ((project)::text = 'AATAMS Heron Island'::text)
+         ->  BitmapAnd  (cost=31655.75..31655.75 rows=65 width=0) (actual time=7.636..7.636 rows=0 loops=1)
+               ->  Bitmap Index Scan on detection_extract_view_mv_timestamp_index  (cost=0.00..748.31 rows=32773 width=0) (actual time=6.656..6.656 rows=3129 loops=1)
+                     Index Cond: (("timestamp" >= '2013-04-02 05:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-04-02 07:00:00+00'::timestamp with time zone))
+               ->  Bitmap Index Scan on detection_extract_view_mv_spcode_index  (cost=0.00..30907.19 rows=1313416 width=0) (actual time=0.923..0.923 rows=464 loops=1)
+                     Index Cond: ((spcode)::text = '37346004'::text)
+ Total runtime: 7.763 ms
+(10 rows)
+
+                                                                                                          QUERY PLAN                                                                                                           
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=7022.56..7082.82 rows=1 width=296) (actual time=28.136..28.225 rows=13 loops=1)
+   ->  Bitmap Heap Scan on detection_extract_view_mv  (cost=7022.56..7082.82 rows=1 width=296) (actual time=28.131..28.169 rows=13 loops=1)
+         Recheck Cond: (("timestamp" >= '2013-09-24 00:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-09-24 04:00:00+00'::timestamp with time zone) AND ((project)::text = 'AATAMS Coffs Harbour line'::text))
+         Filter: ((spcode)::text = '37018021'::text)
+         ->  BitmapAnd  (cost=7022.56..7022.56 rows=15 width=0) (actual time=28.082..28.082 rows=0 loops=1)
+               ->  Bitmap Index Scan on detection_extract_view_mv_timestamp_index  (cost=0.00..1658.81 rows=72623 width=0) (actual time=23.391..23.391 rows=51300 loops=1)
+                     Index Cond: (("timestamp" >= '2013-09-24 00:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-09-24 04:00:00+00'::timestamp with time zone))
+               ->  Bitmap Index Scan on detection_extract_view_mv_project_index  (cost=0.00..5363.50 rows=132640 width=0) (actual time=3.900..3.900 rows=5945 loops=1)
+                     Index Cond: ((project)::text = 'AATAMS Coffs Harbour line'::text)
+ Total runtime: 28.330 ms
+(10 rows)
+
+                                                                                                    QUERY PLAN                                                                                                     
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.57..26549.75 rows=100 width=296) (actual time=0.121..1.331 rows=4 loops=1)
+   ->  Index Scan using detection_extract_view_mv_spcode_index on detection_extract_view_mv  (cost=0.57..4684336.87 rows=17644 width=296) (actual time=0.117..1.310 rows=4 loops=1)
+         Index Cond: ((spcode)::text = '37346004'::text)
+         Filter: (("timestamp" >= '2012-03-01 00:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-09-01 00:00:00+00'::timestamp with time zone) AND ((project)::text = 'AATAMS Heron Island'::text))
+         Rows Removed by Filter: 460
+ Total runtime: 1.402 ms
+(6 rows)
+
+                                                                                              QUERY PLAN                                                                                               
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.70..83705.04 rows=100 width=296) (actual time=0.592..11.837 rows=54 loops=1)
+   ->  Index Scan using detection_extract_view_mv_project_index on detection_extract_view_mv  (cost=0.70..536545.55 rows=641 width=296) (actual time=0.586..11.627 rows=54 loops=1)
+         Index Cond: ((project)::text = 'AATAMS Coffs Harbour line'::text)
+         Filter: (("timestamp" >= '2012-03-01 00:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-09-01 00:00:00+00'::timestamp with time zone) AND ((spcode)::text = '37018021'::text))
+         Rows Removed by Filter: 5891
+ Total runtime: 12.001 ms
+(6 rows)
+
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=36270.98..37325.81 rows=78 width=296) (actual time=9.784..10.367 rows=100 loops=1)
+   ->  Bitmap Heap Scan on detection_extract_view_mv  (cost=36270.98..37325.81 rows=78 width=296) (actual time=9.778..10.011 rows=100 loops=1)
+         Recheck Cond: (((project)::text = 'AATAMS Coffs Harbour line'::text) AND ((spcode)::text = '37018003'::text))
+         Filter: (("timestamp" >= '2012-03-01 00:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-09-01 00:00:00+00'::timestamp with time zone))
+         Rows Removed by Filter: 325
+         ->  BitmapAnd  (cost=36270.98..36270.98 rows=263 width=0) (actual time=9.531..9.531 rows=0 loops=1)
+               ->  Bitmap Index Scan on detection_extract_view_mv_project_index  (cost=0.00..5363.50 rows=132640 width=0) (actual time=3.407..3.407 rows=5945 loops=1)
+                     Index Cond: ((project)::text = 'AATAMS Coffs Harbour line'::text)
+               ->  Bitmap Index Scan on detection_extract_view_mv_spcode_index  (cost=0.00..30907.19 rows=1313416 width=0) (actual time=5.962..5.962 rows=16940 loops=1)
+                     Index Cond: ((spcode)::text = '37018003'::text)
+ Total runtime: 10.695 ms
+(11 rows)
+
+                                                                                      QUERY PLAN                                                                                      
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.57..128159.80 rows=100 width=296) (actual time=0.362..17.759 rows=52 loops=1)
+   ->  Index Scan using detection_extract_view_mv_timestamp_index on detection_extract_view_mv  (cost=0.57..129441.40 rows=101 width=296) (actual time=0.358..17.544 rows=52 loops=1)
+         Index Cond: (("timestamp" >= '2013-04-02 05:00:00+00'::timestamp with time zone) AND ("timestamp" <= '2013-04-02 07:00:00+00'::timestamp with time zone))
+         Filter: (((project)::text = 'AATAMS Heron Island'::text) AND ((spcode)::text = '37018030'::text))
+         Rows Removed by Filter: 3077
+ Total runtime: 17.929 ms
+(6 rows)
+

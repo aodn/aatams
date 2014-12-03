@@ -51,8 +51,6 @@ class ReceiverDeploymentController extends ReportController
 
         if (receiverDeploymentInstance.save(flush: true)) {
 
-            rescanDetections(receiverDeploymentInstance)
-
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
             redirect(action: "show", id: receiverDeploymentInstance.id)
         }
@@ -202,7 +200,9 @@ class ReceiverDeploymentController extends ReportController
 
             if (!receiverDeploymentInstance.hasErrors() && isValidDeployment(receiverDeploymentInstance) && receiverDeploymentInstance.save(flush: true)) {
 
-                rescanDetections(receiverDeploymentInstance)
+                if (receiverDeploymentInstance.recovery) {
+                    rescanDetections(receiverDeploymentInstance)
+                }
 
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
                 redirect(action: "show", id: receiverDeploymentInstance.id)

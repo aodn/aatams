@@ -2,7 +2,7 @@
 
 ### Background
 
-The tag detection list page (https://aatams.emii.org.au/aatams/detection/list) is currently supported by a materialised view which is problematic (refer ...).  
+The tag detection list page (https://aatams.emii.org.au/aatams/detection/list) is currently supported by a materialised view which is problematic.  
 
 This page looks at whether it is possible to use a simple view or views on the source tables instead of the materialised view to support the tag detection list page and in particular whether it is possible to do so with acceptable performance.
 
@@ -73,7 +73,6 @@ Sorting of results for pagination
 * Effective cache size - 2GB
 * Shared memory - 4 GB
 * [Current view (more or less)](detections_performance_analysis/initial-test/detection_view_initial.sql)
-* Limited to first 100 records
 * [Test script (limited to first 100 records)](detections_performance_analysis/initial-test/benchmark-initial.sql)
 
 Results 

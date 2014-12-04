@@ -36,7 +36,7 @@ The benchmarking test cases were created as follows:
 Test Cases
 
 Test Case | Project (low) | Project (high) | Species (low) | Species (high) | Timestamp (low) | Timestamp (high)
- ---| --- | --- | ---| --- | --- | ---| --- | ---
+ :---:| :---: | :---: | :---:| :---: | :---: | :---:| :---: | :---:
 1 | | x 
 2 | | | | x
 3 | | | | | | x

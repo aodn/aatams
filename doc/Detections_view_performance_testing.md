@@ -72,7 +72,7 @@ Sorting of results for pagination
 
 * Effective cache size - 2GB
 * Shared memory - 4 GB
-* [Current view (more or less)](detections_performance_analysis/initial-test/detection_view_initial.sql)
+* [Current view](detections_performance_analysis/initial-test/detection_view_initial.sql)
 * [Test script (limited to first 100 records)](detections_performance_analysis/initial-test/benchmark-initial.sql)
 
 Results 
@@ -87,7 +87,7 @@ Results
 
 * Effective cache size - 6GB
 * Shared memory - 12 GB
-* [Current view (more or less)](detections_performance_analysis/initial-test/detection_view_initial.sql)
+* [Current view](detections_performance_analysis/initial-test/detection_view_initial.sql)
 * [Test script (limited to first 100 records)](detections_performance_analysis/initial-test/benchmark-initial.sql)
 
 Results 

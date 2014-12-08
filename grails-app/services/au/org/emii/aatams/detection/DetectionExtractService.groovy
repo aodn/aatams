@@ -210,7 +210,11 @@ class DetectionExtractService extends AbstractStreamingExporterService
 
     private String toSqlFormat(String formParam)
     {
-        List<String> values = Arrays.asList(formParam.trim().split(",")).collect { it.trim() }
+        List values = formParam.tokenize("|").collect {
+            it.trim()
+        }.grep {
+            it
+        }
 
         String sqlFormat = ""
         values.eachWithIndex

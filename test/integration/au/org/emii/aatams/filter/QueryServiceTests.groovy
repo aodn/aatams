@@ -7,14 +7,14 @@ import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.report.ReportInfoService
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
-class QueryServiceTests extends AbstractGrailsUnitTestCase 
+class QueryServiceTests extends AbstractGrailsUnitTestCase
 {
     def queryService
-    
-    protected void setUp() 
+
+    protected void setUp()
     {
         super.setUp()
-        
+
         permitted = true
     }
 
@@ -28,13 +28,13 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
     {
         assertQuery(InstallationStation, InstallationStation.list(), null)
         assertQuery(InstallationStation, InstallationStation.list(), [:])
-        
+
         assertQuery(
-            Installation, 
+            Installation,
             Installation.list(),
             ["filter.project.eq":["name", ""] as Object[], filter:["project.eq":["name", ""] as Object[], project:[eq:["name", ""] as Object[]]], action:"list", controller:"installation"])
     }
-    
+
     void testSortAndOrderWithoutFilter()
     {
         assertQuery(InstallationStation,
@@ -46,7 +46,7 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
     {
         assertQuery(InstallationStation, InstallationStation.findAllByName("Bondi SW1"), [filter:[eq: ["name", "Bondi SW1"]]])
         assertQuery(InstallationStation, InstallationStation.findAllByName("Bondi SW2"), [filter:[eq: ["name", "Bondi SW2"]]])
-        
+
         assertQuery(InstallationStation,
             ["Bondi SW1", "Ningaloo S1", "Heron S1", "Whale Station"].collect
             {
@@ -55,22 +55,22 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
             [filter:[eq: ["curtainPosition", 1]]])
     }
 
-// Not passing currently, but there is not filtering on two different properties from same association     
+// Not passing currently, but there is not filtering on two different properties from same association
 //    void testTwoEqualsRestrictions()
 //    {
-//        assertQuery(InstallationStation, InstallationStation.findAllByName("Bondi SW1"), 
+//        assertQuery(InstallationStation, InstallationStation.findAllByName("Bondi SW1"),
 //                    [filter:[eq: [["name", "Bondi SW1"], ["curtainPosition", 1]]]])
 //    }
-    
+
     void testOneInRestriction()
     {
-        assertQuery(InstallationStation, 
+        assertQuery(InstallationStation,
             ["Bondi SW1", "Ningaloo S1"].collect
             {
                 InstallationStation.findByName(it)
             },
-            [filter: [in: ["name", "Bondi SW1, Ningaloo S1"]]])
-        
+            [filter: [in: ["name", "Bondi SW1 | Ningaloo S1"]]])
+
         assertQuery(
             InstallationStation,
             InstallationStation.createCriteria().list
@@ -80,7 +80,7 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
                     "in"("name", "Bondi Line", "Whale Curtain")
                 }
             },
-            [filter: [installation: ["in": ["name", "Bondi Line ,  Whale Curtain, "]]]])
+            [filter: [installation: ["in": ["name", "Bondi Line | Whale Curtain | "]]]])
     }
 
     void testBetweenRestriction()
@@ -95,7 +95,7 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
         assertQuery(ValidDetection,
                     ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
                     [
-                        filter: 
+                        filter:
                         [
                             between: [aaa:"aaa", "0": "timestamp", "1": new DateTime("2011-05-17T02:53:00+00:00").toDate(), "2": new DateTime("2011-05-17T02:54:00+00:00").toDate()],
                             "between.0": "timestamp",
@@ -109,21 +109,21 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
                             between_second: ["timestamp", 17, 17]
                         ]
                     ])
-        
+
         assertQuery(ValidDetection,
             ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
             [
                 "filter.between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(),
                 "filter.between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate(),
-                filter: 
-                [    
+                filter:
+                [
                     between: [aaa:"aaa", "0": "timestamp", "1": new DateTime("2011-05-17T02:53:00+00:00").toDate(), "2": new DateTime("2011-05-17T02:54:00+00:00").toDate()],
                     "between.0": "timestamp",
                     "between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(),
                     "between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate()
                 ]
             ])
-        
+
         assertQuery(ValidDetection,
             ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
             [
@@ -152,14 +152,14 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
 
     void testOneAssociation()
     {
-        assertQuery(InstallationStation, 
+        assertQuery(InstallationStation,
             ["Bondi SW1", "Bondi SW2", "Bondi SW3"].collect
             {
                 InstallationStation.findByName(it)
             },
             [filter: [installation: [eq: ["name", "Bondi Line"]]]])
     }
-    
+
     void testMultiLevelAssociation()
     {
         assertQuery(
@@ -180,13 +180,13 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
     void testDottedKeyNamesIgnored()
     {
         def params = [filter: ["project.eq":["name", "Seal Count"], project:[eq:["name", "Seal Count"]]]]
-            
+
         assertQuery(Installation,
                     Installation.findAllByProject(Project.findByName("Seal Count")),
                     params)
     }
 
-    // Don't think this test is any longer valid.                    
+    // Don't think this test is any longer valid.
 //    void testDottedRestrictionTypesIgnored()
 //    {
 //        assertQuery(
@@ -208,7 +208,7 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
             },
             [filter:[eq: ["curtainPosition", 1]], sort: "name", order: "asc"])
     }
-    
+
      void testSortWithRestrictionOnSameField()
     {
         assertQuery(
@@ -226,7 +226,7 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
                 InstallationStation.findByName(it)
             },
             [filter:[ilike: ["name", "Bondi SW%"]], sort: "name", order: "asc"])
-        
+
         assertQuery(
             InstallationStation,
             ["Bondi SW1", "Bondi SW2", "Bondi SW3"].reverse().collect
@@ -242,17 +242,17 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
         ["Bondi SW1", "Bondi SW2", "Bondi SW3"].each
         {
             stationName ->
-            
+
             assertQuery(
                 InstallationStation,
                 InstallationStation.findAllByName(stationName),
                 [filter:[ilike: ["name", "Bondi SW%"]], max: 1, offset: offset])
-            
+
             offset++
         }
     }
-    
-// TODO: occasionally failing because of non-specified ordering of projects - need to fix.    
+
+// TODO: occasionally failing because of non-specified ordering of projects - need to fix.
 //    void testMemberProjectsRestriction()
 //    {
 //        def projects = Project.findAllByNameInList(["Seal Count", "Tuna"])
@@ -260,22 +260,22 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
 //        {
 //            return projects
 //        }
-//        
-//        assertQuery(Installation, 
-//                    Installation.findAllByProjectInList(projects), 
+//
+//        assertQuery(Installation,
+//                    Installation.findAllByProjectInList(projects),
 //                    [filter: [project: [eq: ["name", ReportInfoService.MEMBER_PROJECTS]]]])
-//        
+//
 //        queryService.metaClass.getMemberProjects =
 //        {
 //            return []
 //        }
-//        
+//
 //        assertQuery(Installation,
 //                    [],
 //                    [filter: [project: [eq: ["name", ReportInfoService.MEMBER_PROJECTS]]]])
 //    }
 
-    def realParams = 
+    def realParams =
     [
         codeName_textFieldId: "filter.in.codeName",
         "filter.project.eq": ["name", "Tuna"],
@@ -286,14 +286,14 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
             [
                 eq:["name", "Tuna"]
             ],
-        
-        
+
+
             "surgeries.detectionSurgeries.sensor.in":["transmitterId", ""],
-             
+
             surgeries:
             [
                 "detectionSurgeries.sensor.in":["transmitterId", ""],
-                
+
                 detectionSurgeries:
                 [
                     sensor:
@@ -302,7 +302,7 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
                     ]
                 ]
             ],
-        
+
             "animal.species.in":["spcode", ""],
             animal:
             [
@@ -321,11 +321,11 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
         action:"list",
         controller:"animalRelease"
     ]
-    
+
     void testRealQueryOneParameter()
     {
         def params = realParams
-        
+
         assertQuery(AnimalRelease,
                     AnimalRelease.createCriteria().list
                     {
@@ -336,7 +336,7 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
                     },
                     params)
     }
-    
+
     void testRealQueryOneParameterWithSort()
     {
         def params = realParams + [sort: "project.name", order: "asc"]
@@ -351,7 +351,7 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
                         }
                     },
                     params)
-        
+
         params.order = "desc"
         assertQuery(AnimalRelease,
                     AnimalRelease.createCriteria().list
@@ -363,7 +363,7 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
                         }
                     },
                     params)
-        
+
     }
 
     void testRealQueryTwoParameters()
@@ -379,7 +379,7 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
                             eq("name", "Tuna")
                             order("name", "asc")
                         }
-                        
+
                         animal
                         {
                             sex
@@ -393,13 +393,13 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
 
     void testDuplicateAssociationPath()
     {
-        def params = 
+        def params =
         [
-            sort:"recovery.recoverer.person.name", 
-            order:"asc", 
+            sort:"recovery.recoverer.person.name",
+            order:"asc",
             filter: [recovery: [isNull: true]]
         ]
-        
+
         assertQuery(ReceiverDeployment,
                     ReceiverDeployment.list().grep
                     {
@@ -413,9 +413,9 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
         def actualResults = new ArrayList(queryService.query(clazz, queryParams).results)
         println "expected: " + expectedResults
         println "actual: " + actualResults
-        
+
         assertContainsAll(expectedResults, actualResults)
-        
+
         return actualResults
     }
 

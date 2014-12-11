@@ -40,6 +40,20 @@ class SensorController extends ReportController
 
         def sensorInstance = new Sensor(params)
 
+        if (tag.hasErrors()) {
+            if (params.responseType == 'json') {
+                render([errors: tag.errors] as JSON)
+            }
+            else {
+                render view: "create", model: [
+                    sensorInstance: sensorInstance,
+                    candidateProjects:candidateEntitiesService.projects()
+                ]
+            }
+
+            return
+        }
+
         // Workaround for http://jira.grails.org/browse/GRAILS-3783
         tag.addToSensors(sensorInstance)
 

@@ -1,5 +1,3 @@
-
-
 <%@ page import="au.org.emii.aatams.Sensor" %>
 <html>
     <head>
@@ -32,7 +30,7 @@
                 <div class="dialog">
                     <table>
                         <tbody>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="transmitterType"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></label>
@@ -42,7 +40,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="pingCode"><g:message code="sensor.pingCode.label" default="Ping Code" /></label>
@@ -52,7 +50,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="slope"><g:message code="sensor.slope.label" default="Slope" /></label>
@@ -62,7 +60,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="intercept"><g:message code="sensor.intercept.label" default="Intercept" /></label>
@@ -72,7 +70,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="unit"><g:message code="sensor.unit.label" default="Unit" /></label>
@@ -82,7 +80,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="status"><g:message code="sensor.status.label" default="Status" /></label>
@@ -92,7 +90,7 @@
 
                                 </td>
                             </tr>
-                        
+
                         </tbody>
                     </table>
                 </div>

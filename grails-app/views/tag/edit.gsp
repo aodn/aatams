@@ -1,5 +1,3 @@
-
-
 <%@ page import="au.org.emii.aatams.Tag" %>
 <%@ page import="au.org.emii.aatams.TransmitterType" %>
 <html>
@@ -34,28 +32,28 @@
                 <div class="dialog">
                     <table>
                         <tbody>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="deviceID"><g:message code="tag.deviceID.label" default="IDs" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'deviceID', 'errors')}">${tagInstance?.deviceID}</td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label for="project"><g:message code="tag.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'project', 'errors')}">
-                                    <g:select name="project.id" 
-                                              from="${candidateProjects}" 
-                                              optionKey="id" 
-                                              value="${tagInstance?.project?.id}" 
+                                    <g:select name="project.id"
+                                              from="${candidateProjects}"
+                                              optionKey="id"
+                                              value="${tagInstance?.project?.id}"
                                               noSelection="['':'unassigned']" />
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="model"><g:message code="tag.model.label" default="Model" /></label>
@@ -65,7 +63,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="serialNumber"><g:message code="tag.serialNumber.label" default="Serial Number" /></label>
@@ -75,7 +73,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="codeMap"><g:message code="tag.codeMap.label" default="Code Map" /></label>
@@ -85,7 +83,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="pingCode"><g:message code="tag.pingIDCode.label" default="Ping ID Code" /></label>
@@ -94,7 +92,7 @@
                                     <g:textField name="pingCode" value="${tagInstance?.pingCode}" placeholder="e.g. '46601'" />
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label for="expectedLifeTimeDays"><g:message code="tag.expectedLifeTimeDays.label" default="Expected Life Time (days)" /></label>
@@ -104,7 +102,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="status"><g:message code="tag.status.label" default="Status" /></label>
@@ -114,7 +112,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name"><g:message code="tag.sensors.label" default="Sensors" /></td>
 
@@ -162,7 +160,7 @@
                                       <tr><td><br/></td></tr>
                                       <tr>
                                         <td colspan="5">
-                                          <a href="#" 
+                                          <a href="#"
                                              id='add_sensor_to_tag'>${message(code: 'default.add.label', args: [message(code: 'sensor.label', default: 'Sensor...')])}</a>
                                         </td>
                                       </tr>
@@ -171,7 +169,7 @@
                                 </td>
 
                             </tr>
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -183,7 +181,7 @@
                 </div>
             </g:form>
         </div>
-      
+
       <!--
             Dialog presented when adding sensor to tag.
             TODO: get this on demand (i.e. with AJAX)
@@ -199,9 +197,9 @@
                                 <label class="compulsory" for="transmitterType"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
-                                <g:select name="transmitterTypeId" 
-                                          from="${TransmitterType.sensorTypes()}" 
-                                          optionKey="id" 
+                                <g:select name="transmitterTypeId"
+                                          from="${TransmitterType.sensorTypes()}"
+                                          optionKey="id"
                                           value="${sensorInstance?.transmitterType?.id}"  />
 
                             </td>

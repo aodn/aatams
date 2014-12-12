@@ -1,14 +1,8 @@
 package au.org.emii.aatams.detection
 
-import java.util.List;
-import java.util.Map;
-
-import org.joda.time.DateTime;
+import org.joda.time.DateTime
 
 import au.org.emii.aatams.*
-import grails.test.*
-
-import org.springframework.jdbc.core.JdbcTemplate
 
 class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetectionFileProcessorServiceTests {
     ReceiverDownloadFile download

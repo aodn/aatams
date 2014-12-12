@@ -36,7 +36,7 @@
                                   <label class="compulsory" for="transmitterType"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
-                                    <g:select name="transmitterType.id" from="${au.org.emii.aatams.TransmitterType.list()}" optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
+                                    <g:select name="transmitterType.id" from="${sensorInstance.typesCanChangeTo}" optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
 
                                 </td>
                             </tr>

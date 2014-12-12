@@ -9,6 +9,9 @@ class TagTests extends GrailsUnitTestCase
     CodeMap a69_9002
 
     Tag tag
+    TransmitterType pinger
+    TransmitterType temp
+    TransmitterType pressure
     Sensor pingerSensor
     Sensor tempSensor
     Sensor pressureSensor
@@ -32,9 +35,9 @@ class TagTests extends GrailsUnitTestCase
         mockDomain(Tag, [tag])
         tag.save()
 
-        TransmitterType pinger = new TransmitterType(transmitterTypeName: 'PINGER')
-        TransmitterType temp = new TransmitterType(transmitterTypeName: 'TEMPERATURE')
-        TransmitterType pressure = new TransmitterType(transmitterTypeName: 'PRESSURE')
+        pinger = new TransmitterType(transmitterTypeName: 'PINGER')
+        temp = new TransmitterType(transmitterTypeName: 'TEMPERATURE')
+        pressure = new TransmitterType(transmitterTypeName: 'PRESSURE')
         def transmitterTypeList = [pinger, temp, pressure]
         mockDomain(TransmitterType, transmitterTypeList)
         transmitterTypeList.each { it.save() }
@@ -187,5 +190,30 @@ class TagTests extends GrailsUnitTestCase
 
         def tagAsJson = (tag as JSON)
         assertEquals("1111, 2222, 3333", JSON.parse(tagAsJson.toString()).pingCode)
+    }
+
+    void testUnusedTransmitterTypes() {
+
+        assertEquals([], tag.unusedTransmitterTypes)
+
+        tag.removeFromSensors(pingerSensor)
+
+        assertEquals([pinger], tag.unusedTransmitterTypes)
+
+        tag.removeFromSensors(tempSensor)
+
+        assertEquals([pinger, temp], tag.unusedTransmitterTypes)
+    }
+
+    void testUnusedSensorTypes() {
+
+        assertEquals([], tag.unusedSensorTypes)
+
+        tag.removeFromSensors(tempSensor)
+
+        assertEquals([temp], tag.unusedSensorTypes)
+
+        def newTag = new Tag()
+        assertFalse newTag.unusedSensorTypes.contains(pinger)
     }
 }

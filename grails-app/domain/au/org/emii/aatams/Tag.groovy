@@ -154,6 +154,22 @@ class Tag extends Device implements Embargoable
         return []
     }
 
+    List<TransmitterType> getUnusedTransmitterTypes() {
+
+        def typesOnThis = sensors*.transmitterType
+        def unusedTypes = TransmitterType.list() - typesOnThis
+
+        return unusedTypes
+    }
+
+    List<TransmitterType> getUnusedSensorTypes() {
+
+        def typesOnThis = sensors*.transmitterType
+        def unusedTypes = TransmitterType.sensorTypes() - typesOnThis
+
+        return unusedTypes
+    }
+
     static void registerObjectMarshaller()
     {
         JSON.registerObjectMarshaller(Tag.class)

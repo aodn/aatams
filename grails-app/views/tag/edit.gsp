@@ -160,8 +160,9 @@
                                       <tr><td><br/></td></tr>
                                       <tr>
                                         <td colspan="5">
-                                          <a href="#"
-                                             id='add_sensor_to_tag'>${message(code: 'default.add.label', args: [message(code: 'sensor.label', default: 'Sensor...')])}</a>
+                                          <g:if test="${!tagInstance.unusedSensorTypes.isEmpty()}">
+                                            <a href="#" id='add_sensor_to_tag'>${message(code: 'default.add.label', args: [message(code: 'sensor.label', default: 'Sensor...')])}</a>
+                                          </g:if>
                                         </td>
                                       </tr>
                                     </tbody>
@@ -198,7 +199,7 @@
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
                                 <g:select name="transmitterTypeId"
-                                          from="${TransmitterType.sensorTypes()}"
+                                          from="${tagInstance.unusedSensorTypes}"
                                           optionKey="id"
                                           value="${sensorInstance?.transmitterType?.id}"  />
 

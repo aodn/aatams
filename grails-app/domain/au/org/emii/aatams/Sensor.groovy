@@ -138,4 +138,9 @@ class Sensor implements Embargoable
 
         return groupedSensors
     }
+
+    List<TransmitterType> getTypesCanChangeTo() {
+
+        return tag.unusedTransmitterTypes + transmitterType
+    }
 }

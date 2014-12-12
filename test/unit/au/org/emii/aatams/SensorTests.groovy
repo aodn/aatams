@@ -12,6 +12,9 @@ class SensorTests extends GrailsUnitTestCase
     Person charlie
 
     def sensorList
+    TransmitterType pinger
+    TransmitterType temp
+    TransmitterType pressure
     Sensor a69_1303_1111
     Sensor a69_1303_2222
     Sensor a69_1303_3333
@@ -85,19 +88,27 @@ class SensorTests extends GrailsUnitTestCase
         mockDomain(Tag, tagList)
         tagList.each { it.save() }
 
-        a69_1303_1111 = new Sensor(tag: tag1303, pingCode: 1111)
-        a69_1303_2222 = new Sensor(tag: tag1303, pingCode: 2222)
-        a69_1303_3333 = new Sensor(tag: tag1303, pingCode: 3333)
-        a69_9002_1111 = new Sensor(tag: tag9002, pingCode: 1111)
-        a69_9002_2222 = new Sensor(tag: tag9002, pingCode: 2222)
-        a69_9002_3333 = new Sensor(tag: tag9002, pingCode: 3333)
+        pinger = new TransmitterType(transmitterTypeName: 'PINGER')
+        temp = new TransmitterType(transmitterTypeName: 'TEMPERATURE')
+        pressure = new TransmitterType(transmitterTypeName: 'PRESSURE')
+        def transmitterTypeList = [pinger, temp, pressure]
+        mockDomain(TransmitterType, transmitterTypeList)
+        transmitterTypeList.each { it.save() }
+
+        a69_1303_1111 = new Sensor(tag: tag1303, pingCode: 1111, transmitterType: pinger)
+        a69_1303_2222 = new Sensor(tag: tag1303, pingCode: 2222, transmitterType: temp)
+        a69_1303_3333 = new Sensor(tag: tag1303, pingCode: 3333, transmitterType: pressure)
+        tag1303.addToSensors(a69_1303_1111)
+        tag1303.addToSensors(a69_1303_2222)
+        tag1303.addToSensors(a69_1303_3333)
+        a69_9002_1111 = new Sensor(tag: tag9002, pingCode: 1111, transmitterType: pinger)
+        a69_9002_2222 = new Sensor(tag: tag9002, pingCode: 2222, transmitterType: temp)
+        a69_9002_3333 = new Sensor(tag: tag9002, pingCode: 3333, transmitterType: pressure)
+        tag9002.addToSensors(a69_9002_1111)
+        tag9002.addToSensors(a69_9002_2222)
+        tag9002.addToSensors(a69_9002_3333)
 
         sensorList = [a69_1303_1111, a69_1303_2222, a69_1303_3333, a69_9002_1111, a69_9002_2222, a69_9002_3333]
-    }
-
-    protected void tearDown()
-    {
-        super.tearDown()
     }
 
     void testTransmitterIdInit()
@@ -145,6 +156,19 @@ class SensorTests extends GrailsUnitTestCase
         assertNotNull(sensorsGroupedByPI[adam])
         assertNotNull(sensorsGroupedByPI[bruce])
         assertNull(sensorsGroupedByPI[charlie])
+    }
+
+    void testTypeCanChangeTo() {
+
+        assertContainsAll([pinger], a69_1303_1111.typesCanChangeTo)
+
+        tag1303.removeFromSensors(a69_1303_2222)
+
+        assertContainsAll([pinger, temp], a69_1303_1111.typesCanChangeTo)
+
+        tag1303.removeFromSensors(a69_1303_3333)
+
+        assertContainsAll([pinger, temp, pressure], a69_1303_1111.typesCanChangeTo)
     }
 
     private assertContainsAll(listA, listB)

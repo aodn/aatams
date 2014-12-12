@@ -36,7 +36,7 @@ class VueDetectionFormat extends FileFormat
                 stationName:row[STATION_NAME_COLUMN]]
 
         // Latitude and longitude are optional.
-        if ((row[LATITUDE_COLUMN] != null) && (row[LONGITUDE_COLUMN] != null))
+        if ((row[LATITUDE_COLUMN]) && (row[LONGITUDE_COLUMN]))
         {
             Point location = new GeometryFactory().createPoint(new Coordinate(getFloat(row[LONGITUDE_COLUMN]), getFloat(row[LATITUDE_COLUMN])))
             location.setSRID(4326)

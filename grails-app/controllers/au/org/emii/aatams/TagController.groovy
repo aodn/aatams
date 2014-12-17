@@ -3,7 +3,7 @@ package au.org.emii.aatams
 import au.org.emii.aatams.report.ReportController
 import grails.converters.JSON
 
-class TagController extends ReportController 
+class TagController extends ReportController
 {
     def candidateEntitiesService
 
@@ -13,7 +13,7 @@ class TagController extends ReportController
         redirect(action: "list", params: params)
     }
 
-    def list = 
+    def list =
     {
         redirect(controller: "sensor", action: "list")
     }
@@ -21,11 +21,11 @@ class TagController extends ReportController
     def create = {
         def tagInstance = new Tag()
         tagInstance.properties = params
-        
+
         // Default to NEW.
         tagInstance.status = DeviceStatus.findByStatus('NEW')
-        
-        def model = 
+
+        def model =
             [tagInstance: tagInstance] +
             [candidateProjects:candidateEntitiesService.projects()]
         return model
@@ -33,13 +33,13 @@ class TagController extends ReportController
 
     def save = {
         def tagInstance = new Tag(params)
-        
+
         if (tagInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'tag.label', default: 'Tag'), tagInstance.toString()])}"
             redirect(action: "show", id: tagInstance.id)
         }
         else {
-            def model = 
+            def model =
                 [tagInstance: tagInstance] +
                 [candidateProjects:candidateEntitiesService.projects()]
             render(view: "create", model: model)
@@ -76,7 +76,7 @@ class TagController extends ReportController
             if (params.version) {
                 def version = params.version.toLong()
                 if (tagInstance.version > version) {
-                    
+
                     tagInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'tag.label', default: 'Tag')] as Object[], "Another user has updated this Tag while you were editing")
                     render(view: "edit", model: [tagInstance: tagInstance])
                     return
@@ -115,22 +115,22 @@ class TagController extends ReportController
             redirect(action: "list")
         }
     }
-    
+
     /**
      * Allows auto-complete functionality on front-end.
      */
     def lookupNonDeployedBySerialNumber =
     {
         log.debug("Looking up non-deployed tags, serialNumber: " + params.term)
-        
+
         def tags = Tag.findAllBySerialNumberIlikeAndStatusNotEqual(params.term + "%", DeviceStatus.findByStatus("DEPLOYED"))
-        
+
         // Limit so that all results fit on screen.
         if (tags?.size() > 20)
         {
             tags = tags[0..19]
         }
-        
+
         log.debug("Returning: " + (tags as JSON))
         render tags as JSON
     }
@@ -138,18 +138,18 @@ class TagController extends ReportController
     def lookupBySerialNumber =
     {
         def tags = Tag.findAllBySerialNumberIlike(params.term + "%", [sort: "serialNumber"])
-        
+
         // Limit so that all results fit on screen.
         if (tags?.size() > 20)
         {
             tags = tags[0..19]
         }
-        
+
         log.debug("Returning: " + (tags as JSON))
         render tags as JSON
     }
 
-    def lookupByCodeName = 
+    def lookupByCodeName =
     {
         def tags = Tag.findAllByCodeNameIlike("%" + params.term + "%", [max:20, sort:"codeName", order:"asc"])
         def jsonResults = tags.collect

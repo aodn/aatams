@@ -1,15 +1,12 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.FileFormat;
-import au.org.emii.aatams.bulk.BulkImportException
 import au.org.emii.aatams.bulk.FileFormatException
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
 import com.vividsolutions.jts.geom.Point
 
-import java.util.Map;
-
-class VueDetectionFormat extends FileFormat 
+class VueDetectionFormat extends FileFormat
 {
     static final String DATE_AND_TIME_COLUMN = "Date and Time (UTC)"
     static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
@@ -22,14 +19,12 @@ class VueDetectionFormat extends FileFormat
     static final String STATION_NAME_COLUMN = "Station Name"
     static final String LATITUDE_COLUMN = "Latitude"
     static final String LONGITUDE_COLUMN = "Longitude"
-    
-    static final String TRANSMITTER_ID_DELIM = "-"
 
     Map parseRow(row) throws FileFormatException
     {
 
         def timestamp = getUtcDate(row, DATE_AND_TIME_COLUMN, DATE_FORMAT)
-        
+
         def retMap =
                [timestamp:timestamp,
                 receiverName:row[RECEIVER_COLUMN],
@@ -41,7 +36,7 @@ class VueDetectionFormat extends FileFormat
                 stationName:row[STATION_NAME_COLUMN]]
 
         // Latitude and longitude are optional.
-        if ((row[LATITUDE_COLUMN] != null) && (row[LONGITUDE_COLUMN] != null))
+        if ((row[LATITUDE_COLUMN]) && (row[LONGITUDE_COLUMN]))
         {
             Point location = new GeometryFactory().createPoint(new Coordinate(getFloat(row[LONGITUDE_COLUMN]), getFloat(row[LATITUDE_COLUMN])))
             location.setSRID(4326)
@@ -51,7 +46,7 @@ class VueDetectionFormat extends FileFormat
         {
             retMap.location = null
         }
-        
+
         return retMap
     }
 

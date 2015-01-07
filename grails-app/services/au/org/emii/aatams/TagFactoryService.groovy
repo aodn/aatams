@@ -18,6 +18,8 @@ class TagFactoryService {
             log.debug("Tag with serial number " + params.serialNumber + " found.")
         }
 
+        loadDeviceStatus(tag, params)
+
         if (!tag.project)
         {
             tag.project = params.project
@@ -52,5 +54,10 @@ class TagFactoryService {
         {
             params.status = DeviceStatus.findByStatus('NEW')
         }
+    }
+
+    private loadDeviceStatus(tag, params) {
+
+        tag.status = DeviceStatus.get(params.status.id)
     }
 }

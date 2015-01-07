@@ -9,4 +9,5 @@ databaseChangeLog = {
     include file: '20140827-AS-AddUnavailabilityNotification.groovy'
     include file: 'matviews_entries.groovy'
     include file: 'drop_detection_surgery.groovy'
+    include file: 'detection_query_optimisation.groovy'
 }

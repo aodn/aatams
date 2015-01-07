@@ -44,10 +44,20 @@ class DetectionController extends ReportController
     {
         params.sql = new Sql(dataSource)
         params.projectPermissionCache = [:]
+        params.limit = params.max
+
+        if (params.limit) {
+            params.limit = Integer.valueOf(params.limit)
+        }
+
+        if (params.offset) {
+            params.offset = Integer.valueOf(params.offset)
+        }
 
         // The data params get turned in to strings on the way back to front-end - need to change
         // them back to java.util.Dates again.
         cleanDateParams()
+
 
         def detections = detectionExtractService.applyEmbargo(detectionExtractService.extractPage(params), params)
         detections = detections.collect {

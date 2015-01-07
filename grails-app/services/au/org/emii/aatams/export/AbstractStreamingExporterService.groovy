@@ -15,21 +15,21 @@ import javax.servlet.http.Cookie
 
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
-abstract class AbstractStreamingExporterService 
+abstract class AbstractStreamingExporterService
 {
     protected abstract void writeCsvHeader(OutputStream out)
     protected abstract def writeCsvChunk(resultList, OutputStream out)
     protected def applyEmbargo(results, params) { return results }
     protected abstract List readData(filterParams)
     protected abstract String getReportName()
-    
+
     protected generateReport(params, req, res)
     {
         long startTime = System.currentTimeMillis()
-        
+
         res.reset()
         OutputStream out = null
-        
+
         // Select the appropriate content encoding based on the
         // client's Accept-Encoding header. Choose GZIP if the header
         // includes "gzip". Choose ZIP if the header includes "compress".
@@ -53,7 +53,7 @@ abstract class AbstractStreamingExporterService
             // No compression
             out = res.getOutputStream();
         }
-        
+
         res.setHeader("Vary", "Accept-Encoding");
         res.setHeader("Content-disposition", "attachment; filename=" + getReportName() + ".csv")
         res.contentType = "text/csv"
@@ -69,7 +69,7 @@ abstract class AbstractStreamingExporterService
             // Write the compression trailer and close the output stream
             out.close()
             res.flushBuffer()
-            
+
             log.info("Elapsed time (ms): " + (System.currentTimeMillis() - startTime))
         }
     }
@@ -78,15 +78,15 @@ abstract class AbstractStreamingExporterService
     {
         return ConfigurationHolder.config.rawDetection.extract.limit
     }
-    
+
     protected void writeCsvData(final params, OutputStream out)
     {
-        params.max = getLimit()
+        params.limit = getLimit()
         params.offset = 0
 
         def results = readData(params)
         params.offset = params.offset + results.size()
-        
+
         indicateExportStart(params)
         writeCsvHeader(out)
 
@@ -94,12 +94,12 @@ abstract class AbstractStreamingExporterService
         {
             results = applyEmbargo(results, params)
             writeCsvChunk(results, out)
-            
+
             results = readData(params)
             params.offset = params.offset + results.size()
-        }        
+        }
     }
-    
+
     protected void indicateExportStart(params)
     {
         // Indicate to the client that we have received the export request.

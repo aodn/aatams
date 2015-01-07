@@ -8,6 +8,12 @@ import au.org.emii.aatams.export.AbstractStreamingExporterService
 import au.org.emii.aatams.util.GeometryUtils
 import groovy.sql.Sql
 
+import org.jooq.*
+import org.jooq.conf.ParamType
+import org.jooq.impl.DSL
+
+import static org.jooq.impl.DSL.*
+
 class DetectionExtractService extends AbstractStreamingExporterService
 {
     static transactional = false
@@ -18,7 +24,9 @@ class DetectionExtractService extends AbstractStreamingExporterService
     public List extractPage(filterParams)
     {
         log.debug("Querying database, offset: " + filterParams.offset)
-        def results = filterParams.sql.rows(constructQuery(filterParams, filterParams.max, filterParams.offset))
+        def query = constructQuery(filterParams)
+        def results = filterParams.sql.rows(query.getSQL(), query.getBindValues())
+
         log.debug("Query finished, num results: " + results.size())
 
         return results
@@ -31,9 +39,8 @@ class DetectionExtractService extends AbstractStreamingExporterService
             return ValidDetection.count()
         }
 
-        log.debug("Querying database, offset: " + filterParams.offset)
-        def results = filterParams.sql.rows(constructQuery(filterParams, filterParams.max, null, true))
-        log.debug("results: " + results)
+        def query = constructCountQuery(filterParams)
+        def results = filterParams.sql.rows(query.getSQL(), query.getBindValues())
 
         return results.count[0]
     }
@@ -72,88 +79,133 @@ class DetectionExtractService extends AbstractStreamingExporterService
      */
     private String getDetectionExtractViewName()
     {
-        return "detection_extract_view_mv"
+        return "detection_view"
     }
 
-    private String constructQuery(filterParams, limit, offset)
-    {
-        return constructQuery(filterParams, limit, offset, false)
+    private def constructCountQuery(filterParams) {
+        filterParams.count = true
+
+        return constructQuery(filterParams)
     }
 
-    private String constructQuery(filterParams, limit, offset, count)
+    private def constructQuery(filterParams)
     {
-        String query
+        DSLContext create = DSL.using(SQLDialect.POSTGRES);
 
-        if (count)
-        {
-            query = "select count(*) from ${getDetectionExtractViewName()} "
-        }
-        else
-        {
-            query = "select * from ${getDetectionExtractViewName()} "
-        }
+        def query = filterParams.count ?
+            create.selectCount() : create.select().limit(filterParams.limit).offset(filterParams.offset)
 
-        List<String> whereClauses = []
+        query.from(table(getDetectionExtractViewName()))
 
+        // Add 'in' where clauses.
         ["project": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
          "installation": filterParams?.filter?.receiverDeployment?.station?.installation?.in?.getAt(1),
          "station": filterParams?.filter?.receiverDeployment?.station?.in?.getAt(1),
          "transmitter_id": filterParams?.filter?.in?.getAt(1),
          "spcode": filterParams?.filter?.surgeries?.release?.animal?.species?.in?.getAt(1)
-         ].each
-         {
-            k, v ->
+        ].each {
+            field, filterValues ->
 
-            if (v)
-            {
-                whereClauses += (k + " in (" + toSqlFormat(v) + ") ")
+            if (filterValues) {
+                query.where(DSL.fieldByName(field).in(delimitedFilterValuesToList(filterValues)))
             }
         }
 
+        // Add 'between' clauses.
         ["timestamp": filterParams?.filter?.between].each
         {
-            k, v ->
+            field, filterValues ->
 
-            if (v)
+            if (filterValues)
             {
-                assert(v?."1") : "Start date/time must be specified"
-                assert(v?."2") : "End date/time must be specified"
+                assert(filterValues?."1") : "Start date/time must be specified"
+                assert(filterValues?."2") : "End date/time must be specified"
 
-                whereClauses += (k + " between '" + new java.sql.Timestamp(v?."1"?.getTime()) + "' and '" + new java.sql.Timestamp(v?."2"?.getTime()) + "' ")
+                query.where(DSL.fieldByName(field).between(new java.sql.Timestamp(filterValues?."1"?.getTime())).and(new java.sql.Timestamp(filterValues?."2"?.getTime())))
             }
         }
-
-        if (whereClauses.size() > 0)
-        {
-            query += "where "
-
-            whereClauses.eachWithIndex
-            {
-                clause, i ->
-
-                if (i != 0)
-                {
-                    query += "and "
-                }
-
-                query += clause
-            }
-        }
-
-        if (limit != null)
-        {
-            query += "limit " + limit
-        }
-
-        if (offset != null)
-        {
-            query += " offset " + offset
-        }
-
-        log.debug("Query: " + query)
 
         return query
     }
+
+    private List delimitedFilterValuesToList(delimVals) {
+        return delimVals.tokenize("|").collect { it.trim() }.grep { it }
+    }
+
+    // private def constructQuery(filterParams, limit, offset, count)
+    // {
+    //     String query
+
+    //     if (count)
+    //     {
+    //         query = "select count(*) from ${getDetectionExtractViewName()} "
+    //     }
+    //     else
+    //     {
+    //         query = "select * from ${getDetectionExtractViewName()} "
+    //     }
+
+    //     List<String> whereClauses = []
+
+    //     ["project": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
+    //      "installation": filterParams?.filter?.receiverDeployment?.station?.installation?.in?.getAt(1),
+    //      "station": filterParams?.filter?.receiverDeployment?.station?.in?.getAt(1),
+    //      "transmitter_id": filterParams?.filter?.in?.getAt(1),
+    //      "spcode": filterParams?.filter?.surgeries?.release?.animal?.species?.in?.getAt(1)
+    //      ].each
+    //      {
+    //         k, v ->
+
+    //         if (v)
+    //         {
+    //             whereClauses += (k + " in (" + toSqlFormat(v) + ") ")
+    //         }
+    //     }
+
+    //     ["timestamp": filterParams?.filter?.between].each
+    //     {
+    //         k, v ->
+
+    //         if (v)
+    //         {
+    //             assert(v?."1") : "Start date/time must be specified"
+    //             assert(v?."2") : "End date/time must be specified"
+
+    //             whereClauses += (k + " between '" + new java.sql.Timestamp(v?."1"?.getTime()) + "' and '" + new java.sql.Timestamp(v?."2"?.getTime()) + "' ")
+    //         }
+    //     }
+
+    //     if (whereClauses.size() > 0)
+    //     {
+    //         query += "where "
+
+    //         whereClauses.eachWithIndex
+    //         {
+    //             clause, i ->
+
+    //             if (i != 0)
+    //             {
+    //                 query += "and "
+    //             }
+
+    //             query += clause
+    //         }
+    //     }
+
+    //     if (limit != null)
+    //     {
+    //         query += "limit " + limit
+    //     }
+
+    //     if (offset != null)
+    //     {
+    //         query += " offset " + offset
+    //     }
+
+    //     log.debug("Query: " + query)
+
+    //     return query
+    // }
 
     def generateReport(filterParams, req, res)
     {
@@ -208,24 +260,24 @@ class DetectionExtractService extends AbstractStreamingExporterService
         out << "\n"
     }
 
-    private String toSqlFormat(String formParam)
-    {
-        List values = formParam.tokenize("|").collect {
-            it.trim()
-        }.grep {
-            it
-        }
+    // private String toSqlFormat(String formParam)
+    // {
+    //     List values = formParam.tokenize("|").collect {
+    //         it.trim()
+    //     }.grep {
+    //         it
+    //     }
 
-        String sqlFormat = ""
-        values.eachWithIndex
-        {
-            value, i ->
+    //     String sqlFormat = ""
+    //     values.eachWithIndex
+    //     {
+    //         value, i ->
 
-            sqlFormat += "'" + value + "'" + ", "
-        }
+    //         sqlFormat += "'" + value + "'" + ", "
+    //     }
 
-        return sqlFormat[0..sqlFormat.length() - 3]
-    }
+    //     return sqlFormat[0..sqlFormat.length() - 3]
+    // }
 
     private boolean hasReadPermission(projectId, params)
     {

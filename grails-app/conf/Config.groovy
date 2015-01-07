@@ -272,6 +272,8 @@ grails.gorm.default.mapping = {
     "user-type" type: org.joda.time.contrib.hibernate.PersistentPeriod, class: org.joda.time.Period
 }
 
+
+// TODO: this has to go.
 rawDetection.extract.limit = 50000
 rawDetection.extract.view.name = 'detection_extract_view'
 rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp,
@@ -318,3 +320,70 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
 
             left join animal on animal_release.animal_id = animal.id
             left join species on animal.species_id = species.id'''
+
+detection {
+    extract {
+        limit = 50000
+        columns = '''
+            valid_detection."timestamp",
+            to_char(timezone('00:00'::text, valid_detection."timestamp"), 'YYYY-MM-DD HH24:MI:SS'::text) AS formatted_timestamp,
+            installation_station.name AS station,
+            installation_station.id AS station_id,
+            installation_station.location,
+            st_y(installation_station.location) AS latitude,
+            st_x(installation_station.location) AS longitude,
+            (device_model.model_name::text || '-'::text) || receiver.serial_number::text AS receiver_name,
+            COALESCE(sensor.transmitter_id, ''::character varying) AS sensor_id,
+            COALESCE(((((species.spcode::text || ' - '::text) || species.scientific_name::text) || ' ('::text) || species.common_name::text) || ')'::text, ''::text) AS species_name,
+            sec_user.name AS uploader,
+            valid_detection.transmitter_id,
+            organisation.name AS organisation,
+            receiver_project.name AS project,
+            installation.name AS installation,
+            COALESCE(species.spcode, ''::character varying) AS spcode,
+            animal_release.id AS animal_release_id,
+            animal_release.embargo_date,
+            receiver_project.id AS project_id,
+            valid_detection.id AS detection_id,
+            animal_release.project_id AS release_project_id,
+            valid_detection.sensor_value,
+            valid_detection.sensor_unit,
+            valid_detection.provisional'''
+
+        receiver_joins = '''
+            JOIN receiver_deployment ON valid_detection.receiver_deployment_id = receiver_deployment.id
+            JOIN installation_station ON receiver_deployment.station_id = installation_station.id
+            JOIN installation ON installation_station.installation_id = installation.id
+            JOIN project receiver_project ON installation.project_id = receiver_project.id
+            JOIN device receiver ON receiver_deployment.receiver_id = receiver.id
+            JOIN device_model ON receiver.model_id = device_model.id
+            JOIN organisation ON receiver.organisation_id = organisation.id
+            JOIN receiver_download_file ON valid_detection.receiver_download_id = receiver_download_file.id'''
+
+        detection_view {
+            definition = """SELECT ${columns}
+            FROM valid_detection
+            ${receiver_joins}
+            LEFT OUTER JOIN sec_user ON receiver_download_file.requesting_user_id = sec_user.id
+            LEFT JOIN sensor ON valid_detection.transmitter_id::text = sensor.transmitter_id::text
+            LEFT JOIN device tag ON sensor.tag_id = tag.id
+            LEFT JOIN surgery ON tag.id = surgery.tag_id
+            LEFT JOIN animal_release ON surgery.release_id = animal_release.id
+            LEFT JOIN animal ON animal_release.animal_id = animal.id
+            LEFT JOIN species ON animal.species_id = species.id;"""
+        }
+
+        detection_by_species_view {
+            definition = """SELECT ${columns}
+            FROM species
+            JOIN animal ON animal.species_id = species.id
+            JOIN animal_release ON animal_release.animal_id = animal.id
+            JOIN surgery ON surgery.release_id = animal_release.id
+            JOIN device tag ON tag.id = surgery.tag_id
+            LEFT JOIN sensor ON sensor.tag_id = tag.id
+            JOIN valid_detection ON valid_detection.transmitter_id::text = sensor.transmitter_id::text
+            ${receiver_joins}
+            LEFT OUTER JOIN sec_user ON receiver_download_file.requesting_user_id = sec_user.id;"""
+        }
+    }
+}

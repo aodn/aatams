@@ -23,6 +23,7 @@ grails.project.dependency.resolution = {
         runtime 'commons-io:commons-io:2.1'
         runtime 'postgresql:postgresql:9.0-801.jdbc4'
         compile 'org.apache.commons:commons-compress:1.4'
+        compile 'org.jooq:jooq:3.5.1'
         test "xmlunit:xmlunit:1.3"
     }
 

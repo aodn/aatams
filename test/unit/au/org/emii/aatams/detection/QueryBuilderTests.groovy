@@ -9,27 +9,8 @@ import grails.test.*
 
 import org.jooq.conf.ParamType
 
-class DetectionExtractServiceTests extends AbstractGrailsUnitTestCase
+class QueryBuilderTests extends GrailsUnitTestCase
 {
-    def detectionExtractService
-    def permissionUtilsService
-
-    protected void setUp()
-    {
-        super.setUp()
-
-        mockLogging(DetectionExtractService, true)
-        detectionExtractService = new DetectionExtractService()
-
-        mockLogging(PermissionUtilsService, true)
-        detectionExtractService.permissionUtilsService = new PermissionUtilsService()
-    }
-
-    def getExpectedViewName()
-    {
-        return "detection_view"
-    }
-
     void testConstructQueryNoFilterParams() {
         assertQueryFromFilterEquals('', [:])
     }
@@ -121,17 +102,17 @@ class DetectionExtractServiceTests extends AbstractGrailsUnitTestCase
         )
     }
 
-    void testConstuctCountQuery() {
+    void testConstructCountQuery() {
         assertEquals(
-            "select count(*) from ${expectedViewName}".trim(),
-            detectionExtractService.constructCountQuery([:]).getSQL(ParamType.INLINED).trim()
+            "select count(*) from ${QueryBuilder.getViewName()}".trim(),
+            new QueryBuilder().constructCountQuery([:]).getSQL(ParamType.INLINED).trim()
         )
     }
 
     def assertQueryFromFilterEquals(expectedSql, filter) {
         assertEquals(
-            "select * from ${expectedViewName} ${expectedSql}".trim(),
-            detectionExtractService.constructQuery(filter).getSQL(ParamType.INLINED).trim()
+            "select * from ${QueryBuilder.getViewName()} ${expectedSql}".trim(),
+            new QueryBuilder().constructQuery(filter).getSQL(ParamType.INLINED).trim()
         )
     }
 }

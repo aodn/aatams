@@ -14,6 +14,9 @@ import au.org.emii.aatams.export.ExportService
 import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService
 
+import groovy.sql.Sql
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
+
 abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 {
     protected hasRole = true
@@ -187,5 +190,17 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
         }
 
         return retString
+    }
+
+    static void createDetectionViews(dataSource) {
+        println("createDetectionViews")
+
+        def sql = new Sql(dataSource)
+
+        [ 'detection_view', 'detection_by_species_view' ].each {
+            viewName ->
+
+            sql.execute(String.valueOf("create or replace view ${viewName} as ${ConfigurationHolder.config.detection.extract[viewName].definition}"))
+        }
     }
 }

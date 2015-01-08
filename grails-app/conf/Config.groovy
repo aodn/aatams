@@ -321,12 +321,13 @@ rawDetection.extract.view.select = '''select timestamp, to_char((timestamp::time
             left join animal on animal_release.animal_id = animal.id
             left join species on animal.species_id = species.id'''
 
+
 detection {
     extract {
         limit = 50000
         columns = '''
             valid_detection."timestamp",
-            to_char(timezone('00:00'::text, valid_detection."timestamp"), 'YYYY-MM-DD HH24:MI:SS'::text) AS formatted_timestamp,
+            to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp,
             installation_station.name AS station,
             installation_station.id AS station_id,
             installation_station.location,

@@ -1,10 +1,17 @@
+package au.org.emii.aatams.detection
+
 import org.jooq.*
 import org.jooq.conf.ParamType
 import org.jooq.impl.DSL
 
+import org.apache.log4j.Logger
+
 import static org.jooq.impl.DSL.*
 
 class QueryBuilder {
+
+    def log = Logger.getLogger(QueryBuilder.class)
+
     def constructCountQuery(filterParams) {
         filterParams.count = true
 
@@ -18,19 +25,23 @@ class QueryBuilder {
         def query = filterParams.count ?
             create.selectCount() : create.select().limit(filterParams.limit).offset(filterParams.offset)
 
-        query.from(table(getViewName()))
+        query.from(table(getViewName(filterParams)))
         addInClauses(query, filterParams)
         addBetweenClauses(query, filterParams)
 
-        println "query: ${query.getSQL(org.jooq.conf.ParamType.INLINED)}"
+        log.debug("query: ${query.getSQL(org.jooq.conf.ParamType.INLINED)}")
+
         return query
     }
 
-    /**
-     * Allow mocking in tests (where "create_matview" function is not available).
-     */
-    static String getViewName() {
-        return "detection_view"
+    static String getViewName(filterParams) {
+        return hasSpeciesFilter(filterParams) ? "detection_by_species_view" : "detection_view"
+    }
+
+    static boolean hasSpeciesFilter(filterParams) {
+        def speciesInFilter = filterParams?.filter?.surgeries?.release?.animal?.species?.in
+
+        return speciesInFilter && (speciesInFilter.size() == 2) && (!speciesInFilter[1].isEmpty())
     }
 
     private void addInClauses(query, filterParams) {

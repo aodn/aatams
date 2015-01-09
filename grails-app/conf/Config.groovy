@@ -203,7 +203,8 @@ log4j =
                 file name: 'file', file: 'aatams.log', layout: pattern(conversionPattern: log4jConversionPattern)
             }
 
-            debug  "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",
+            debug  "au.org.emii.aatams.detection.QueryBuilder",
+                   "grails.app.controller.au.org.emii.aatams.ReceiverRecoveryController",
                    "grails.app.controller.au.org.emii.aatams.ReceiverDownloadFileController",
                    "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService",
                    "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
@@ -212,6 +213,7 @@ log4j =
                    "grails.app.domain.au.org.emii.aatams.ReceiverDownloadFile",
                    "grails.app.service.au.org.emii.aatams.filter.QueryService",
                    "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
+                   "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService",
                    "grails.app.service.au.org.emii.aatams.detection.DetectionNotificationService",
                    "grails.app.service.au.org.emii.aatams.detection.JdbcTemplateDetectionFactoryService",
                    "grails.app.service.au.org.emii.aatams.report.KmlService"

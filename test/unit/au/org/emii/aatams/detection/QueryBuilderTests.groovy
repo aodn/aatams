@@ -64,13 +64,6 @@ class QueryBuilderTests extends GrailsUnitTestCase
         )
     }
 
-    void testConstructQueryOneSpecies() {
-        assertQueryFromFilterEquals(
-            '''where "spcode" in ('12345')''',
-            [filter: [surgeries:[release:[animal:[species:[in:["spcode", "12345 | "]]]]]]]
-        )
-    }
-
     void testConstructQueryTimestampRange() {
         DateTime startTime = new DateTime("2010-01-01T12:34:56")
         DateTime endTime = new DateTime("2010-01-01T17:00:01")
@@ -106,6 +99,41 @@ class QueryBuilderTests extends GrailsUnitTestCase
         assertEquals(
             "select count(*) from ${QueryBuilder.getViewName()}".trim(),
             new QueryBuilder().constructCountQuery([:]).getSQL(ParamType.INLINED).trim()
+        )
+    }
+
+    void testGetViewNameNoFilter() {
+        assertEquals("detection_view", QueryBuilder.getViewName([:]))
+    }
+
+    void testGetViewNameOneProjectFilter() {
+        assertEquals(
+            "detection_view",
+            QueryBuilder.getViewName([filter: [receiverDeployment:[station:[installation:[project:[in: ["name", "Whales | "]]]]]]])
+        )
+    }
+
+    void testGetViewNameOneSpeciesFilter() {
+        assertEquals(
+            "detection_by_species_view",
+            QueryBuilder.getViewName([filter: [surgeries:[release:[animal:[species:[in:["spcode", "12345 | "]]]]]]])
+        )
+    }
+
+    void testGetViewNameEmptySpeciesFilter() {
+        assertEquals(
+            "detection_view",
+            QueryBuilder.getViewName([filter: [surgeries:[release:[animal:[species:[in:["spcode", ""]]]]]]])
+        )
+    }
+
+    void testGetViewNameOneSpeciesOneProjectFilter() {
+        assertEquals(
+            "detection_by_species_view",
+            QueryBuilder.getViewName(
+                [filter: [receiverDeployment:[station:[installation:[project:[in: ["name", "Whales | "]]]]],
+                          surgeries:[release:[animal:[species:[in:["spcode", "12345 | "]]]]]]]
+            )
         )
     }
 

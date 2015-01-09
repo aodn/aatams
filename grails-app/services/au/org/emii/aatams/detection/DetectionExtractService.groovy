@@ -17,12 +17,12 @@ class DetectionExtractService extends AbstractStreamingExporterService
 
     public List extractPage(filterParams)
     {
-        log.debug("Querying database, offset: " + filterParams.offset)
         def query = new QueryBuilder().constructQuery(filterParams)
-        log.error("query: ${query.getSQL(org.jooq.conf.ParamType.INLINED)}")
-        def results = filterParams.sql.rows(query.getSQL(), query.getBindValues())
 
-        log.debug("Query finished, num results: " + results.size())
+        def startTime = System.currentTimeMillis()
+        def results = filterParams.sql.rows(query.getSQL(), query.getBindValues())
+        def endTime = System.currentTimeMillis()
+        log.debug("Query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}")
 
         return results
     }
@@ -35,7 +35,10 @@ class DetectionExtractService extends AbstractStreamingExporterService
         }
 
         def query = new QueryBuilder().constructCountQuery(filterParams)
+        def startTime = System.currentTimeMillis()
         def results = filterParams.sql.rows(query.getSQL(), query.getBindValues())
+        def endTime = System.currentTimeMillis()
+        log.debug("Count query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}")
 
         return results.count[0]
     }

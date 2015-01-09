@@ -193,8 +193,6 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
     }
 
     static void createDetectionViews(dataSource) {
-        println("createDetectionViews")
-
         def sql = new Sql(dataSource)
 
         [ 'detection_view', 'detection_by_species_view' ].each {

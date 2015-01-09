@@ -76,7 +76,7 @@ abstract class AbstractStreamingExporterService
 
     protected int getLimit()
     {
-        return ConfigurationHolder.config.rawDetection.extract.limit
+        return ConfigurationHolder.config.detection.extract.limit
     }
 
     protected void writeCsvData(final params, OutputStream out)

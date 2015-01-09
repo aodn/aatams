@@ -5,6 +5,7 @@ import groovy.lang.MetaClass;
 
 import au.org.emii.aatams.*
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
+import au.org.emii.aatams.test.TestUtils
 import au.org.emii.aatams.filter.QueryService
 
 import org.codehaus.groovy.grails.plugins.jasper.*
@@ -48,16 +49,11 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 
         permitted = true
 
-        createDetectionViews(dataSource)
+        TestUtils.createDetectionViews(dataSource)
 
         // For some reason, reading asynchronously is not returning results when run within context
         // of integration test.
         controller.detectionExtractService.metaClass.shouldReadAsync = { return false }
-    }
-
-    protected void tearDown()
-    {
-        super.tearDown()
     }
 
     void testExecuteAnimalReleaseSummary()

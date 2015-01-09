@@ -46,10 +46,10 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 
     void testPromoteProvisional()
     {
-        def origMatViewCount = sql.firstRow('select count(*) from detection_extract_view_mv;').count
-        def origValidDetCount = sql.firstRow('select count(*) from valid_detection;').count
+        def origDetectionViewCount = getDetectionViewCount()
+        def origValidDetCount = getValidDetectionCount()
         def origInvalidDetCount = InvalidDetection.count()
-        assertEquals(origMatViewCount, origValidDetCount)
+        assertEquals(origDetectionViewCount, origValidDetCount)
 
         def origStatisticsNumValidDetCount = Statistics.findByKey('numValidDetections')?.value
 
@@ -69,20 +69,28 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 
         jdbcTemplateVueDetectionFileProcessorService.process(export)
 
-        def finalMatViewCount = sql.firstRow('select count(*) from detection_extract_view_mv;').count
-        def finalValidDetCount = sql.firstRow('select count(*) from valid_detection;').count
+        def finalDetectionViewCount = getDetectionViewCount()
+        def finalValidDetCount = getValidDetectionCount()
         def finalProvDetCount = ValidDetection.findAllByProvisional(true).size()
         def finalStatisticsNumValidDetCount = Statistics.getStatistic('numValidDetections')
 
         assertEquals(origInvalidDetCount, InvalidDetection.count())
         assertEquals(0, finalProvDetCount)
-        assertEquals(origMatViewCount + numNewDets, finalMatViewCount)
+        assertEquals(origDetectionViewCount + numNewDets, finalDetectionViewCount)
         assertEquals(origValidDetCount + numNewDets, finalValidDetCount)
         assertEquals(origStatisticsNumValidDetCount + numNewDets, finalStatisticsNumValidDetCount)
 
         // Cleanup (because the transaction has been comitted this won't happen automatically)
         def ts = [timestamp1, timestamp2, timestamp3]
         ValidDetection.findAllWhere(receiverName: testReceiver, transmitterId: testTransmitter).findAll{ ts.contains(it.formattedTimestamp) }*.delete(flush: true)
+    }
+
+    private def getDetectionViewCount() {
+        return sql.firstRow(String.valueOf("select count(*) from ${QueryBuilder.getViewName()};")).count
+    }
+
+    private def getValidDetectionCount() {
+        return sql.firstRow('select count(*) from valid_detection;').count
     }
 
     private def getRefreshedExport(export)

@@ -1,7 +1,9 @@
 package au.org.emii.aatams.detection
 
-import au.org.emii.aatams.export.AbstractStreamingExporterService;
+import au.org.emii.aatams.export.AbstractStreamingExporterService
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
+import au.org.emii.aatams.test.TestUtils
+
 import grails.test.*
 
 class DetectionControllerTests extends AbstractControllerUnitTestCase
@@ -16,7 +18,7 @@ class DetectionControllerTests extends AbstractControllerUnitTestCase
         permitted = true
         controller.params.format = "CSV"
 
-        createDetectionViews(dataSource)
+        TestUtils.createDetectionViews(dataSource)
     }
 
     void testExecuteDetectionExtract()

@@ -2,6 +2,7 @@ package au.org.emii.aatams
 
 import grails.test.*
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
+import au.org.emii.aatams.test.TestUtils
 
 import org.joda.time.DateTimeZone
 

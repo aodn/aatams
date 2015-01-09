@@ -2,6 +2,7 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.command.*
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
+import au.org.emii.aatams.test.TestUtils
 
 import org.apache.shiro.crypto.hash.Sha256Hash
 import grails.converters.JSON

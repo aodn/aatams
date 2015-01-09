@@ -13,10 +13,9 @@ class ValidDetection extends RawDetection implements Embargoable
         ['project', 'sensorIds', 'speciesNames', 'surgeries', 'placemark', 'release', 'mostRecentSurgery', 'mostRecentRelease']
 
     /**
-     * This is a part of an optimisation for #2239.  All new detections are marked provisional.  Subsequently,
-     * the set of provisional detections are used to update the 'detection_extract_view_mv' materialized view,
-     * the 'detection_count_per_station_mv' materialized view and also the Statistics table.  After this, they
-     * are no longer considered provisional.
+     * All new detections are marked provisional being upload processing is completed.
+     * At the end of upload processing, the count of provisional detections is used to update the Statistics table.
+     * After this, they are no longer considered provisional.
      */
     boolean provisional = true
 

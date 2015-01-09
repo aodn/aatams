@@ -133,16 +133,12 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
     {
         def sql = Sql.newInstance(dataSource)
 
-        // Insert provisional dets in to materialized view.
-        def provDetsCount = sql.firstRow('select count(*) from detection_extract_view where provisional = true;').count
-        sql.execute("insert into detection_extract_view_mv (select * from detection_extract_view where provisional = true)")
-
         // Update statistics.
+        def provDetsCount = sql.firstRow(String.valueOf("select count(*) from ${QueryBuilder.getViewName()} where provisional = true;")).count
         def numValidDets = Statistics.findByKey("numValidDetections")
         numValidDets.value += provDetsCount
 
         // Clear 'provisional' flag on detections.
         sql.execute("update valid_detection set provisional = false where provisional = true")
-        sql.execute("update detection_extract_view_mv set provisional = false where provisional = true")
     }
 }

@@ -367,7 +367,7 @@ detection {
             definition = """SELECT ${columns}
             FROM valid_detection
             ${receiver_joins}
-            LEFT OUTER JOIN sec_user ON receiver_download_file.requesting_user_id = sec_user.id
+            LEFT JOIN sec_user ON receiver_download_file.requesting_user_id = sec_user.id
             LEFT JOIN sensor ON valid_detection.transmitter_id::text = sensor.transmitter_id::text
             LEFT JOIN device tag ON sensor.tag_id = tag.id
             LEFT JOIN surgery ON tag.id = surgery.tag_id
@@ -386,7 +386,7 @@ detection {
             LEFT JOIN sensor ON sensor.tag_id = tag.id
             JOIN valid_detection ON valid_detection.transmitter_id::text = sensor.transmitter_id::text
             ${receiver_joins}
-            LEFT OUTER JOIN sec_user ON receiver_download_file.requesting_user_id = sec_user.id;"""
+            LEFT JOIN sec_user ON receiver_download_file.requesting_user_id = sec_user.id;"""
         }
     }
 }

@@ -64,15 +64,15 @@ class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase
             return null
         }
 
-        assertTrue(embargoService.hasReadPermission(det))
+        assertTrue(visibilityControlService.hasReadPermission(det))
     }
 
     void testDetectionEmbargoMemberOfDeploymentProject()
     {
         acceptedPermissionString = "project:${installationProject.id}:read"
-        assertNull(embargoService.applyEmbargo(det))
+        // assertNull(embargoService.applyEmbargo(det)) // Detection is now being sanitised (and therefore not null)
 
-        [det, surgery, release].each {
+        [surgery, release].each {
             assertNull(visibilityControlService.applyVisibilityControls(it))
         }
     }
@@ -81,7 +81,7 @@ class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase
     {
         acceptedPermissionString = "project:${releaseProject.id}:read"
         [det, surgery, release].each {
-            assertNotNull(embargoService.applyEmbargo(it))
+            assertNotNull(visibilityControlService.applyVisibilityControls(it))
         }
     }
 

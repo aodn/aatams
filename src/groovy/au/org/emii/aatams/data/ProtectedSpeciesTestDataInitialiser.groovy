@@ -506,14 +506,6 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
                         receiverDownload: export1,
                         provisional: false)
 
-        if (surgery1)
-        {
-            DetectionSurgery detSurgery =
-                    new DetectionSurgery(surgery:surgery1,
-                            detection:detection,
-                            sensor:tag.pinger)
-            detection.addToDetectionSurgeries(detSurgery)
-        }
         export1.addToDetections(detection)
     }
 

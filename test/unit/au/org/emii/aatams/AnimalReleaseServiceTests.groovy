@@ -3,43 +3,43 @@ package au.org.emii.aatams
 import grails.test.*
 import org.joda.time.DateTime
 
-class AnimalReleaseServiceTests extends GrailsUnitTestCase 
+class AnimalReleaseServiceTests extends GrailsUnitTestCase
 {
     def releaseService
     def params
     def animalReleaseInstance
-    
+
     def animalFactoryService
     def tagFactoryService
-    
+
     def codeMap
-    
+
     protected void setUp()
     {
         super.setUp()
-        
+
         mockLogging(AnimalFactoryService, true)
         animalFactoryService = new AnimalFactoryService()
-        
+
         mockLogging(TagFactoryService, true)
         tagFactoryService = new TagFactoryService()
-        
+
         mockLogging(AnimalReleaseService, true)
         releaseService = new AnimalReleaseService()
         releaseService.animalFactoryService = animalFactoryService
         releaseService.tagFactoryService = tagFactoryService
         releaseService.metaClass.runAsync = { Closure c -> }
-        
+
         codeMap = new CodeMap(codeMap:"A69-1303")
         mockDomain(CodeMap, [codeMap])
         codeMap.save()
 
         params = setupParams()
-        
+
         animalReleaseInstance = new AnimalRelease()
     }
 
-    protected void tearDown() 
+    protected void tearDown()
     {
         super.tearDown()
     }
@@ -49,51 +49,51 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         params = [:]
         assertExceptionWithGlobalError("Parameters cannot be empty.", null)
     }
-    
+
     void testSaveWithValidParamsExistingAnimalAndTag()
     {
         assertNoExceptionAfterSave()
     }
-    
+
     void testSaveWithNoSpeciesOrAnimal()
     {
         params.animal = null
         params.species = null
-        
+
         assertExceptionWithGlobalError("Species or existing animal must be specified.", "animalRelease.noSpeciesOrAnimal")
         assertNull(animalReleaseInstance.animal)
     }
-    
+
     void testSaveWithNoCaptureLocality()
     {
         params.captureLocality = null
         assertExceptionWithFieldError("captureLocality", "nullable")
     }
-    
+
     void testSaveWithNoCaptureLocation()
     {
         params.captureLocation = null
         assertNoExceptionAfterSave()
     }
-    
+
     void testSaveWithNoCaptureDateTime()
     {
         params.captureDateTime = null
         assertExceptionWithFieldError("captureDateTime", "nullable")
     }
-    
+
     void testSaveWithNoCaptureMethod()
     {
         params.captureMethod = null
         assertExceptionWithFieldError("captureMethod", "nullable")
     }
-    
+
     void testSaveWithNoSurgery()
     {
         params.surgery = [:]
         assertExceptionWithGlobalError("Animal release must have at least one tagging.", "animalRelease.noTaggings")
     }
-    
+
     void testSaveWithOneSurgeryExistingTag()
     {
         saveMultipleSurgeries(1)
@@ -104,7 +104,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         saveMultipleSurgeries(1)
         assertEquals(DeviceStatus.findByStatus('DEPLOYED'), Tag.get(1).status)
         assertEquals(1, AnimalRelease.count())
-        
+
         releaseService.delete(animalReleaseInstance)
         assertEquals(DeviceStatus.findByStatus('NEW'), Tag.get(1).status)
         assertEquals(0, AnimalRelease.count())
@@ -124,17 +124,17 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
     {
         saveMultipleSurgeriesWithNewTags(2)
     }
-    
+
     void testSaveWithTwoSurgeriesOneExistingTagOneNewTag()
     {
         assertEquals(2, Tag.count())
-        
+
         Tag tag = Tag.get(1)
         assertNotNull(tag)
         assertEquals(DeviceStatus.findByStatus('NEW'), tag.status)
 
         params.surgery = [:]
-        
+
         def surgeryExisting = [
                     timestamp_day: 1,
                     timestamp_month: 6,
@@ -170,7 +170,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         def surgeries = Surgery.findAllByRelease(animalReleaseInstance)
         assertEquals(2, surgeries.size())
         assertNotNull(tag)
-        
+
         surgeries = Surgery.findAllByTag(tag)
         assertTrue(surgeries*.tag.id.contains(tag.id))
         assertEquals(1, surgeries.size())
@@ -183,27 +183,27 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
     {
         Animal animal = Animal.get(1)
         assertNotNull(animal)
-        
+
         AnimalRelease prevRelease = new AnimalRelease(status:AnimalReleaseStatus.CURRENT)
         animal.addToReleases(prevRelease)
         animal.save()
-        
+
         assertEquals(AnimalReleaseStatus.CURRENT, prevRelease.status)
         assertNoExceptionAfterSave()
         assertEquals(AnimalReleaseStatus.FINISHED, prevRelease.status)
     }
-    
+
     void testSaveWithNoMeasurement()
     {
         params.measurement = null
         assertNoExceptionAfterSave()
     }
-    
+
     void testSaveWithOneMeasurement()
     {
         saveMultipleMeasurements(1)
     }
-    
+
     void testSaveWithTwoMeasurements()
     {
         saveMultipleMeasurements(2)
@@ -214,13 +214,13 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         params.releaseLocality = null
         assertExceptionWithFieldError("releaseLocality", "nullable")
     }
-    
+
     void testSaveWithNoReleaseLocation()
     {
         params.releaseLocation = null
         assertNoExceptionAfterSave()
     }
-    
+
     void testSaveWithNoReleaseDateTime()
     {
         params.releaseDateTime = null
@@ -232,7 +232,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         params.animal = [id:1]
         assertNoExceptionAfterSave()
     }
-        
+
     void testSaveWithSpeciesNoSex()
     {
         params.animal = null
@@ -243,67 +243,67 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         assertNull(animalReleaseInstance.animal.sex)
         assertEquals(Species.findByName('White Shark'), animalReleaseInstance.animal.species)
     }
-        
+
     void testSaveWithSpeciesAndSex()
     {
         params.animal = null
         params.speciesId = Species.findByName('White Shark').id
         params.sex = [id:Sex.findBySex('MALE').id]
-        
+
         assertNoExceptionAfterSave()
-        
+
         assertNotNull(animalReleaseInstance.animal.sex)
         assertEquals('MALE', animalReleaseInstance.animal.sex.sex)
     }
-    
+
     void testSaveNoEmbargo()
-    {       
+    {
         assertNoExceptionAfterSave()
         assertNull(animalReleaseInstance.embargoDate)
     }
 
     void testSave3MonthsEmbargo()
-    {    
+    {
         //new DateTime("2011-03-03T12:12:12")
         params.embargoPeriod = 3
 
         assertNoExceptionAfterSave()
         assertNotNull(animalReleaseInstance.embargoDate)
-        
+
         // Embargo date == 2011-08-15"
         DateTime expectedEmbargoDateTime = animalReleaseInstance.releaseDateTime.plusMonths(3)
         Calendar expectedCal = Calendar.getInstance()
         expectedCal.setTime(expectedEmbargoDateTime.toDate())
-        
+
         Calendar embargoCal = Calendar.getInstance()
         embargoCal.setTime(animalReleaseInstance.embargoDate)
-        
+
         assertTrue("year", expectedCal.get(Calendar.YEAR) == embargoCal.get(Calendar.YEAR))
         assertTrue("day", expectedCal.get(Calendar.DAY_OF_YEAR) == embargoCal.get(Calendar.DAY_OF_YEAR))
     }
-        
+
     private void assertNoExceptionAfterSave()
     {
         try
         {
             releaseService.save(animalReleaseInstance, params)
-            
+
             assertNotNull(animalReleaseInstance)
             assertFalse(animalReleaseInstance.hasErrors())
-            
+
             assertNotNull(animalReleaseInstance.animal)
             assertNotNull(animalReleaseInstance.animal.species)
-            
+
             assertNotNull(AnimalRelease.get(animalReleaseInstance.id))
-            
+
             def surgeries = Surgery.findAllByRelease(animalReleaseInstance)
             assertFalse(surgeries.isEmpty())
-            
+
             surgeries.each
             {
                 assertFalse(it.hasErrors())
             }
-            
+
             def animalId = animalReleaseInstance.animal.id
             assertFalse(Animal.get(animalId).releases.isEmpty())
         }
@@ -312,7 +312,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
             fail("Unexpected IllegalArgumentException: " + e.getMessage())
         }
     }
-    
+
     private void assertExceptionWithGlobalError(msg, errorCode)
     {
         assertException(msg, errorCode)
@@ -333,7 +333,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         }
     }
 
-    private assertException(msg, errorCode) 
+    private assertException(msg, errorCode)
     {
         try
         {
@@ -346,7 +346,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
             {
                 assertEquals(msg, e.getMessage())
             }
-            
+
             if (errorCode)
             {
                 assertTrue(animalReleaseInstance.hasErrors())
@@ -354,7 +354,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         }
     }
 
-    private Map setupParams() 
+    private Map setupParams()
     {
         mockDomain(AnimalRelease)
         mockDomain(Surgery)
@@ -362,11 +362,11 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         Species whiteShark = new Species(name:'White Shark')
         mockDomain(Species, [whiteShark])
         whiteShark.save()
-        
+
         Sex male = new Sex(sex:'MALE')
         mockDomain(Sex, [male])
         male.save()
-        
+
         DeviceStatus newStatus = new DeviceStatus(status:'NEW')
         DeviceStatus deployedStatus = new DeviceStatus(status:'DEPLOYED')
         def statusList = [newStatus, deployedStatus]
@@ -396,24 +396,24 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         TagDeviceModel tagModel = new TagDeviceModel()
         mockDomain(TagDeviceModel, [tagModel])
         tagModel.save()
-        
+
         TransmitterType pinger = new TransmitterType(transmitterTypeName:"PINGER")
         mockDomain(TransmitterType, [pinger])
         pinger.save()
-        
+
         Tag tag1 = new Tag(codeMap:codeMap, serialNumber:"12345", model:tagModel, status:newStatus)
         Tag tag2 = new Tag(codeMap:codeMap, serialNumber:"22222", model:tagModel, status:newStatus)
         def tagList = [tag1, tag2]
         mockDomain(Tag, tagList)
-        
+
         Sensor sensor1 = new Sensor(pingCode:12345, transmitterType:pinger, tag:tag1)
         Sensor sensor2 = new Sensor(pingCode:22222, transmitterType:pinger, tag:tag2)
         def sensorList = [sensor1, sensor2]
         mockDomain(Sensor, sensorList)
-        
+
         tag1.addToSensors(sensor1)
         tag2.addToSensors(sensor2)
-        
+
         tagList.each { it.save() }
 
         def surgeryParams = [timestamp:new DateTime(),
@@ -421,7 +421,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
                              treatmentType:surgeryTreatmentType,
                              tag:[serialNumber: tag1.serialNumber]]
 
-        Map params = 
+        Map params =
             [project:project,
                animal:[id:animal.id],
               captureLocality:"Neptune Islands",
@@ -430,11 +430,11 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
              releaseLocality:"Neptune Islands",
              releaseDateTime:new DateTime("2011-03-03T12:12:12"),
              surgery:['0':surgeryParams]]
-            
+
         return params
     }
 
-    private saveMultipleSurgeries(int numSurgeries) 
+    private saveMultipleSurgeries(int numSurgeries)
     {
         params.surgery = [:]
 
@@ -460,7 +460,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         }
 
         assertNoExceptionAfterSave()
-        
+
         def surgeries = Surgery.findAllByRelease(animalReleaseInstance)
         assertEquals(numSurgeries, surgeries.size())
 
@@ -468,7 +468,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         {
             Tag tag = Tag.get(it + 1)
             assertNotNull(tag)
-            
+
             surgeries = Surgery.findAllByTag(tag)
             assertTrue(surgeries*.tag.id.contains(tag.id))
             assertEquals(1, surgeries.size())

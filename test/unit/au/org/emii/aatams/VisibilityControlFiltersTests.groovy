@@ -29,6 +29,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
     SurgeryController surgeryController
     TagController tagController
 
+    def releaseList
+
     Animal animalNonEmbargoed
     Animal animalEmbargoedReadableProject
     Animal animalEmbargoedNonReadableProject
@@ -122,7 +124,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         assertTrue(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(protectedProjectWithMembership.id)))
         assertFalse(SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(protectedProjectNoMembership.id)))
 
-        mockConfig('''grails.gorm.default.list.max = 10
+        mockConfig('''grails.gorm.default.list.max = 100
                       filter.count.max = 10000''')
 
         mockLogging(QueryService)
@@ -200,15 +202,14 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         detectionProtectedReadableProject = new ValidDetection(receiverDownload:receiverDownload)
         detectionProtectedNonReadableProject = new ValidDetection(receiverDownload:receiverDownload)
 
-        def animalList = [animalNonEmbargoed,  animalEmbargoedReadableProject,  animalEmbargoedNonReadableProject, animalPastEmbargoed]
-        def animalMeasurementList = [animalMeasurementNonEmbargoed,  animalMeasurementEmbargoedReadableProject,  animalMeasurementEmbargoedNonReadableProject, animalMeasurementPastEmbargoed]
-        def tagList =     [tagNonEmbargoed,     tagEmbargoedReadableProject,     tagEmbargoedNonReadableProject,     tagPastEmbargoed]
-        def sensorList =  [sensorNonEmbargoed,  sensorEmbargoedReadableProject,  sensorEmbargoedNonReadableProject,  sensorPastEmbargoed]
-        sensorList +=  [sensorPingerNonEmbargoed,  sensorPingerEmbargoedReadableProject,  sensorPingerEmbargoedNonReadableProject,  sensorPingerPastEmbargoed]
-        releaseList =     [releaseNonEmbargoed, releaseEmbargoedReadableProject, releaseEmbargoedNonReadableProject, releasePastEmbargoed]
-        def surgeryList = [surgeryNonEmbargoed, surgeryEmbargoedReadableProject, surgeryEmbargoedNonReadableProject, surgeryPastEmbargoed]
-        def detectionList =
-                          [detectionNonEmbargoed, detectionEmbargoedReadableProject, detectionEmbargoedNonReadableProject, detectionPastEmbargoed]
+        def animalList = [animalNonEmbargoed, animalEmbargoedReadableProject, animalEmbargoedNonReadableProject, animalPastEmbargoed, animalProtectedReadableProject, animalProtectedNonReadableProject]
+        def animalMeasurementList = [animalMeasurementNonEmbargoed, animalMeasurementEmbargoedReadableProject, animalMeasurementEmbargoedNonReadableProject, animalMeasurementPastEmbargoed, animalMeasurementProtectedReadableProject, animalMeasurementProtectedNonReadableProject]
+        def tagList = [tagNonEmbargoed, tagEmbargoedReadableProject, tagEmbargoedNonReadableProject, tagPastEmbargoed, tagProtectedReadableProject, tagProtectedNonReadableProject]
+        def sensorList = [sensorNonEmbargoed, sensorEmbargoedReadableProject, sensorEmbargoedNonReadableProject, sensorPastEmbargoed, sensorProtectedReadableProject, sensorProtectedNonReadableProject,
+                          sensorPingerNonEmbargoed, sensorPingerEmbargoedReadableProject, sensorPingerEmbargoedNonReadableProject, sensorPingerPastEmbargoed, sensorPingerProtectedReadableProject, sensorPingerProtectedNonReadableProject]
+        releaseList = [releaseNonEmbargoed, releaseEmbargoedReadableProject, releaseEmbargoedNonReadableProject, releasePastEmbargoed, releaseProtectedReadableProject, releaseProtectedNonReadableProject]
+        def surgeryList = [surgeryNonEmbargoed, surgeryEmbargoedReadableProject, surgeryEmbargoedNonReadableProject, surgeryPastEmbargoed, surgeryProtectedReadableProject, surgeryProtectedNonReadableProject]
+        def detectionList = [detectionNonEmbargoed, detectionEmbargoedReadableProject, detectionEmbargoedNonReadableProject, detectionPastEmbargoed, detectionProtectedReadableProject, detectionProtectedNonReadableProject]
         detectionList.each {
             it.receiverDeployment = new ReceiverDeployment(location: new GeometryFactory().createPoint(new Coordinate(145f, -42f)))
         }
@@ -253,8 +254,6 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         tagProtectedReadableProject.addToSurgeries(surgeryProtectedReadableProject)
         tagProtectedReadableProject.addToSensors(sensorProtectedReadableProject)
         tagProtectedReadableProject.addToSensors(sensorPingerProtectedReadableProject)
-        sensorProtectedReadableProject.addToDetectionSurgeries(detectionSurgeryProtectedReadableProject)
-        detectionProtectedReadableProject.addToDetectionSurgeries(detectionSurgeryProtectedReadableProject)
         animalProtectedReadableProject.addToReleases(releaseProtectedReadableProject)
         animalMeasurementProtectedReadableProject.release = releaseProtectedReadableProject
 
@@ -262,8 +261,6 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         tagProtectedNonReadableProject.addToSurgeries(surgeryProtectedNonReadableProject)
         tagProtectedNonReadableProject.addToSensors(sensorProtectedNonReadableProject)
         tagProtectedNonReadableProject.addToSensors(sensorPingerProtectedNonReadableProject)
-        sensorProtectedNonReadableProject.addToDetectionSurgeries(detectionSurgeryProtectedNonReadableProject)
-        detectionProtectedNonReadableProject.addToDetectionSurgeries(detectionSurgeryProtectedNonReadableProject)
         animalProtectedNonReadableProject.addToReleases(releaseProtectedNonReadableProject)
         animalMeasurementProtectedNonReadableProject.release = releaseProtectedNonReadableProject
 
@@ -279,8 +276,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         detectionEmbargoedNonReadableProject.metaClass.getSurgeries = { [surgeryEmbargoedNonReadableProject] }
         detectionPastEmbargoed.metaClass.getSurgeries = { [surgeryPastEmbargoed] }
 
-        animalList.each {  it.save() }
-        animalMeasurementList.each {  it.save() }
+        animalList.each { it.save() }
+        animalMeasurementList.each { it.save() }
         tagList.each { it.save() }
         sensorList.each { it.save() }
         releaseList.each { it.save() }
@@ -560,10 +557,10 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
 
         if (isEmbargoed) {
             // ... but not the associated detectionSurgeries (which links detection back to tag/release)
-            assertTrue(model.detectionInstance.detectionSurgeries.isEmpty())
+            assertTrue(model.detectionInstance.surgeries.isEmpty())
         }
         else {
-            assertEquals(1, model.detectionInstance.detectionSurgeries.size())
+            assertEquals(1, model.detectionInstance.surgeries.size())
         }
     }
 

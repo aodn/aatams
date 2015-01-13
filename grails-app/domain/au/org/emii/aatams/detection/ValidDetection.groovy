@@ -160,16 +160,16 @@ class ValidDetection extends RawDetection implements Embargoable
 
         surgeries.each {
 
-            if (it.surgery.release.isEmbargoed()) {
+            if (it.release.isEmbargoed()) {
                 anyReleaseEmbargoed = true
             }
             else {
-                censoredDetection.detectionSurgeries.add(it)
+                censoredDetection.surgeries.add(it)
             }
         }
 
-        censoredDetection.sensorIds = getSensorIds(censoredDetection.detectionSurgeries)
-        censoredDetection.speciesNames = getSpeciesNames(censoredDetection.detectionSurgeries)
+        censoredDetection.sensorIds = getSensorIds(censoredDetection.surgeries)
+        censoredDetection.speciesNames = getSpeciesNames(censoredDetection.surgeries)
 
         def protectionRequired = project.isProtected && anyReleaseEmbargoed
         def hideFromResults = anyReleaseEmbargoed && !allowSanitised

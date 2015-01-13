@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/aodn/aatams.png?branch=master)](https://travis-ci.org/aodn/aatams)
-
 ## Overview
 The Australian Animal Tagging and Monitoring System (AATAMS) is one of eleven facilities of the Integrated Marine Observing System (IMOS). AATAMS represents the higher biological monitoring of the marine environment for the IMOS program.
 

@@ -17,9 +17,12 @@ class DetectionExtractService extends AbstractStreamingExporterService
 
     public List extractPage(filterParams)
     {
-        log.debug("Querying database, offset: " + filterParams.offset)
-        def results = filterParams.sql.rows(constructQuery(filterParams, filterParams.max, filterParams.offset))
-        log.debug("Query finished, num results: " + results.size())
+        def query = new QueryBuilder().constructQuery(filterParams)
+
+        def startTime = System.currentTimeMillis()
+        def results = filterParams.sql.rows(query.getSQL(), query.getBindValues())
+        def endTime = System.currentTimeMillis()
+        log.debug("Query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}")
 
         return results
     }
@@ -31,9 +34,11 @@ class DetectionExtractService extends AbstractStreamingExporterService
             return ValidDetection.count()
         }
 
-        log.debug("Querying database, offset: " + filterParams.offset)
-        def results = filterParams.sql.rows(constructQuery(filterParams, filterParams.max, null, true))
-        log.debug("results: " + results)
+        def query = new QueryBuilder().constructCountQuery(filterParams)
+        def startTime = System.currentTimeMillis()
+        def results = filterParams.sql.rows(query.getSQL(), query.getBindValues())
+        def endTime = System.currentTimeMillis()
+        log.debug("Count query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}")
 
         return results.count[0]
     }
@@ -65,94 +70,6 @@ class DetectionExtractService extends AbstractStreamingExporterService
         filterParams.projectPermissionCache = [:]
 
         super.writeCsvData(filterParams, out)
-    }
-
-    /**
-     * Allow mocking in tests (where "create_matview" function is not available).
-     */
-    private String getDetectionExtractViewName()
-    {
-        return "detection_extract_view_mv"
-    }
-
-    private String constructQuery(filterParams, limit, offset)
-    {
-        return constructQuery(filterParams, limit, offset, false)
-    }
-
-    private String constructQuery(filterParams, limit, offset, count)
-    {
-        String query
-
-        if (count)
-        {
-            query = "select count(*) from ${getDetectionExtractViewName()} "
-        }
-        else
-        {
-            query = "select * from ${getDetectionExtractViewName()} "
-        }
-
-        List<String> whereClauses = []
-
-        ["project": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
-         "installation": filterParams?.filter?.receiverDeployment?.station?.installation?.in?.getAt(1),
-         "station": filterParams?.filter?.receiverDeployment?.station?.in?.getAt(1),
-         "transmitter_id": filterParams?.filter?.in?.getAt(1),
-         "spcode": filterParams?.filter?.surgeries?.release?.animal?.species?.in?.getAt(1)
-         ].each
-         {
-            k, v ->
-
-            if (v)
-            {
-                whereClauses += (k + " in (" + toSqlFormat(v) + ") ")
-            }
-        }
-
-        ["timestamp": filterParams?.filter?.between].each
-        {
-            k, v ->
-
-            if (v)
-            {
-                assert(v?."1") : "Start date/time must be specified"
-                assert(v?."2") : "End date/time must be specified"
-
-                whereClauses += (k + " between '" + new java.sql.Timestamp(v?."1"?.getTime()) + "' and '" + new java.sql.Timestamp(v?."2"?.getTime()) + "' ")
-            }
-        }
-
-        if (whereClauses.size() > 0)
-        {
-            query += "where "
-
-            whereClauses.eachWithIndex
-            {
-                clause, i ->
-
-                if (i != 0)
-                {
-                    query += "and "
-                }
-
-                query += clause
-            }
-        }
-
-        if (limit != null)
-        {
-            query += "limit " + limit
-        }
-
-        if (offset != null)
-        {
-            query += " offset " + offset
-        }
-
-        log.debug("Query: " + query)
-
-        return query
     }
 
     def generateReport(filterParams, req, res)
@@ -206,25 +123,6 @@ class DetectionExtractService extends AbstractStreamingExporterService
         out << "sensor unit"
 
         out << "\n"
-    }
-
-    private String toSqlFormat(String formParam)
-    {
-        List values = formParam.tokenize("|").collect {
-            it.trim()
-        }.grep {
-            it
-        }
-
-        String sqlFormat = ""
-        values.eachWithIndex
-        {
-            value, i ->
-
-            sqlFormat += "'" + value + "'" + ", "
-        }
-
-        return sqlFormat[0..sqlFormat.length() - 3]
     }
 
     private boolean hasReadPermission(projectId, params)

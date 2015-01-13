@@ -5,33 +5,30 @@ import grails.test.*
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
-class InstallationStationControllerTests extends AbstractControllerUnitTestCase 
+class InstallationStationControllerTests extends AbstractControllerUnitTestCase
 {
     def dataSource
     def slurper = new XmlSlurper()
-    
+
     void testExecuteInstallationStationNoFilter()
     {
         assertExport([:], "testExecuteInstallationStationNoFilter")
     }
-    
+
     void testExecuteInstallationStationByProject()
     {
         assertExport([installation: [project: [eq: ["name", "Seal Count"]]]], "testExecuteInstallationStationByProject")
     }
-    
+
     // TODO: move this to ExportServiceTests
     // Need to refactor the KML stuff out of ExportService and in to KmlService.
     void testExecuteStationKmlExtract()
     {
-        def sql = new Sql(dataSource)
-        def viewName = ConfigurationHolder.config.rawDetection.extract.view.name
-        def viewSelect = ConfigurationHolder.config.rawDetection.extract.view.select
-        sql.execute ('create view ' + viewName + ' as ' + viewSelect)
-        
+        createDetectionViews(dataSource)
+
         InstallationStation.metaClass.toKmlDescription = { "some description" }
         controller.params.format = "KML"
-        
+
         assertExport([:], "testExecuteStationKmlExtract")
     }
 }

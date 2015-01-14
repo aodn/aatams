@@ -2,7 +2,7 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class TagFactoryServiceTests extends GrailsUnitTestCase 
+class TagFactoryServiceTests extends GrailsUnitTestCase
 {
     def tagService
     def params
@@ -10,26 +10,26 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
     TransmitterType pinger
     Project sealProject
     Project tunaProject
-    
-    protected void setUp() 
+
+    protected void setUp()
     {
         super.setUp()
-        
+
         mockLogging(TagFactoryService)
         tagService = new TagFactoryService()
-        
+
         mockDomain(Tag)
-        
+
         codeMap = new CodeMap(codeMap:"A69-1303")
         mockDomain(CodeMap, [codeMap])
         codeMap.save()
-        
+
         TagDeviceModel model = new TagDeviceModel()
         mockDomain(TagDeviceModel, [model])
         model.save()
 
         mockDomain(TransmitterType)
-        
+
         pinger = new TransmitterType(transmitterTypeName: 'PINGER')
         mockDomain(TransmitterType, [pinger])
         pinger.save()
@@ -39,8 +39,8 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
         def projectList = [sealProject, tunaProject]
         mockDomain(Project, projectList)
         projectList.each { it.save() }
-        
-        params = 
+
+        params =
             [codeMap:codeMap,
             pingCode:1234,
             serialNumber:"1111",
@@ -49,11 +49,6 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
             transmitterType:new TransmitterType()]
     }
 
-    protected void tearDown() 
-    {
-        super.tearDown()
-    }
-    
     void testValidParamsNew()
     {
         assertEquals(0, Tag.count())
@@ -72,30 +67,30 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
     void testValidParamsExisting()
     {
         def existingTag = createExistingTag()
-        
+
         assertEquals(1, Tag.count())
         def retTag = lookupOrCreate()
         assertEquals(1, Tag.count())
         assertEquals(1, Sensor.count())
-        
+
         def existingSensor = Sensor.findByTag(existingTag)
         assertEquals(existingSensor, retTag.pinger)
     }
-    
+
     void testTagProjectSetToReleasesProject()
     {
         def existingTag = createExistingTag()
         assertEquals(sealProject, existingTag.project)
-        
+
         params += [project: tunaProject]
         def foundTag = lookupOrCreate()
-        
+
         assertEquals(sealProject, foundTag.project)
     }
-    
+
     private Tag createExistingTag()
     {
-        Tag existingTag = 
+        Tag existingTag =
             new Tag(codeMap:codeMap,
                     serialNumber:"1111",
                     model:new DeviceModel(),
@@ -113,10 +108,10 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
         codeMap.save()
 
         existingTag.save()
-        
+
         return existingTag
     }
-    
+
     private Tag lookupOrCreate()
     {
         Tag tag = tagService.lookupOrCreate(params)
@@ -124,7 +119,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
         assertFalse(tag.hasErrors())
         assertNotNull(Tag.get(tag.id))
         assertEquals(codeMap, tag.codeMap)
-        
+
         return tag
     }
 }

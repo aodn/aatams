@@ -58,6 +58,9 @@ class TagFactoryService {
 
     private loadDeviceStatus(tag, params) {
 
-        tag.status = DeviceStatus.get(params.status.id)
+        if (params.status?.id) {
+
+            tag.status = DeviceStatus.get(params.status.id)
+        }
     }
 }

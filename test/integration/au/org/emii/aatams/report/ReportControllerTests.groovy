@@ -1,15 +1,6 @@
 package au.org.emii.aatams.report
 
-import grails.test.*
-import groovy.lang.MetaClass;
-
-import au.org.emii.aatams.*
-import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
-import au.org.emii.aatams.filter.QueryService
-
-import org.codehaus.groovy.grails.plugins.jasper.*
-import org.codehaus.groovy.grails.web.pages.GroovyPagesTemplateEngine;
-import org.apache.commons.lang.StringUtils
+import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import javax.servlet.ServletContext
 
@@ -19,19 +10,12 @@ import javax.servlet.ServletContext
  */
 class ReportControllerTests extends AbstractControllerUnitTestCase
 {
-    def reportInfoService
     def queryService
     def permissionUtilsService
 
     def grailsApplication
-    def grailsTemplateEngineService
-    def jasperService
-    def kmlService
-    def embargoService
 
     def dataSource
-
-    def slurper = new XmlSlurper()
 
     protected void setUp()
     {
@@ -53,11 +37,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         // For some reason, reading asynchronously is not returning results when run within context
         // of integration test.
         controller.detectionExtractService.metaClass.shouldReadAsync = { return false }
-    }
-
-    protected void tearDown()
-    {
-        super.tearDown()
     }
 
     void testExecuteAnimalReleaseSummary()

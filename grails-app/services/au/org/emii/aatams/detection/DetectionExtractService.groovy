@@ -1,7 +1,5 @@
 package au.org.emii.aatams.detection
 
-import java.io.OutputStream;
-
 import org.apache.shiro.SecurityUtils
 
 import au.org.emii.aatams.export.AbstractStreamingExporterService

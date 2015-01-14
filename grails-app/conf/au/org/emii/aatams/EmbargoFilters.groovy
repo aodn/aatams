@@ -6,7 +6,7 @@ import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
 /**
  * Filters tag/receiver/species if it is embargoed and principal doesn't have
  * read access on associated project.
- * 
+ *
  * @author jburgess
  */
 class EmbargoFilters
@@ -16,21 +16,21 @@ class EmbargoFilters
 
     def notListActions = 'show|edit|update|delete'
     def embargoControllers = 'animal|animalRelease|detection|detectionSurgery|sensor|surgery|tag'
-    
-    def filters = 
+
+    def filters =
     {
         genericList(controller: embargoControllers, action:'list')
         {
-            after = 
+            after =
             {
                 model ->
 
                 // Filter out entities which are embargoed.
-                model.entityList = 
+                model.entityList =
                     embargoService.applyEmbargo(model.entityList)
             }
         }
-        
+
         genericNotList(controller: embargoControllers, action:notListActions)
         {
             after =
@@ -42,7 +42,7 @@ class EmbargoFilters
                         model?.detectionInstance = embargoService.applyEmbargo(detectionInstance)
                     }
                     else {
-                        
+
                         def instanceName = "${controllerName}Instance"
                         if (embargoService.isEmbargoed(model[instanceName]))
                         {
@@ -52,7 +52,7 @@ class EmbargoFilters
             }
         }
     }
-    
+
     def getRedirectParams(params)
     {
         if (SecurityUtils.subject.isAuthenticated())
@@ -65,7 +65,7 @@ class EmbargoFilters
         }
     }
 
-    def getTargetUri(params) 
+    def getTargetUri(params)
     {
         return new ApplicationTagLib().createLink(absolute: true, controller: params.controllerName, action: params.actionName, id: params.id)
     }

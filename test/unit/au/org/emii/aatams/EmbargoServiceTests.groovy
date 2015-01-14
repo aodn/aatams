@@ -2,7 +2,6 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.ValidDetection
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
-import grails.test.*
 import org.joda.time.DateTime
 
 class EmbargoServiceTests extends AbstractGrailsUnitTestCase

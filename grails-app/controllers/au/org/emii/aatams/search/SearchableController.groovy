@@ -7,7 +7,7 @@ import org.compass.core.engine.SearchEngineQueryParseException
  *
  * @author Maurice Nicholson
  */
-class SearchableController 
+class SearchableController
 {
     def embargoService
     def searchableService
@@ -15,40 +15,40 @@ class SearchableController
     /**
      * Index page with search form and results
      */
-    def index = 
+    def index =
     {
         params.max = 20
-        
-        if (!params.q?.trim()) 
+
+        if (!params.q?.trim())
         {
             return [:]
         }
-        
-        try 
+
+        try
         {
             // Results are lazy-loaded, hence associations are null.
             def res = searchableService.search(addImplicitWildCards(params.q), params)
             def hibernateAttachedResults = refresh(res.results)
             res.results = embargoService.applyEmbargo(hibernateAttachedResults)
-            
+
             return [searchResult: res]
-        } 
-        catch (SearchEngineQueryParseException ex) 
+        }
+        catch (SearchEngineQueryParseException ex)
         {
             return [parseException: true]
         }
     }
-    
+
     def refresh(results)
     {
         results.collect
         {
             result ->
-            
+
             result.get(result.id)
         }
     }
-    
+
     def addImplicitWildCards(searchTerm)
     {
         return '*' + searchTerm + '*'

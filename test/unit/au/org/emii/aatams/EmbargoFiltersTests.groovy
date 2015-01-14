@@ -7,8 +7,6 @@ import au.org.emii.aatams.test.AbstractFiltersUnitTestCase
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
 
-import grails.test.*
-
 import org.codehaus.groovy.grails.plugins.web.filters.FilterConfig
 
 import org.apache.shiro.SecurityUtils

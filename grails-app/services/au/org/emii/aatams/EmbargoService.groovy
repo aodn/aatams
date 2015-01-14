@@ -1,7 +1,6 @@
 package au.org.emii.aatams
 
 import org.apache.shiro.SecurityUtils
-import java.util.Arrays
 
 class EmbargoService
 {

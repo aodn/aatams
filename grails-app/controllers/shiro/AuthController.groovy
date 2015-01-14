@@ -3,10 +3,8 @@ package shiro
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException
 import org.apache.shiro.authc.UsernamePasswordToken
-import org.apache.shiro.web.util.SavedRequest
 import org.apache.shiro.web.util.WebUtils
 
-import au.org.emii.aatams.EmbargoService
 import au.org.emii.aatams.EntityStatus
 import au.org.emii.aatams.Person
 

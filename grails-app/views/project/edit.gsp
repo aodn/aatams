@@ -1,6 +1,5 @@
-
-
 <%@ page import="au.org.emii.aatams.Project" %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -34,7 +33,7 @@
                 <div class="dialog">
                     <table>
                         <tbody>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="name"><g:message code="project.name.label" default="Name" /></label>
@@ -44,7 +43,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <!--
                                 Organisations.
                             -->
@@ -77,13 +76,13 @@
                                       <tr><td><br/></td></tr>
                                       <tr>
                                         <td colspan="5">
-                                          <a href="#" 
+                                          <a href="#"
                                              id='add_organisation_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Organisation...')])}</a>
                                         </td>
                                       </tr>
                                     </tbody>
                                   </table>
-                                    
+
                                 </td>
                             </tr>
 
@@ -96,14 +95,14 @@
                                 </td>
 
                                 <td valign="top" class="value">
-                                  
+
                                   <table class="nested">
                                     <thead>
                                       <tr>
                                         <th/>
                                         <shiro:hasPermission permission="project:${projectInstance?.id}:write">
                                           <th/>
-                                        </shiro:hasPermission>                                        
+                                        </shiro:hasPermission>
                                         <th>Name</th>
                                         <th>Project Role</th>
                                         <th>Access</th>
@@ -129,12 +128,12 @@
                                           <td valign="top" class="value">${p?.roleType}</td>
                                           <td valign="top" class="value">${p?.access}</td>
                                         </tr>
-                                        
+
                                       </g:each>
                                       <tr><td><br/></td></tr>
                                       <tr>
                                         <td colspan="5">
-                                          <a href="#" 
+                                          <a href="#"
                                              id='add_person_to_project'>${message(code: 'default.add.label', args: [message(code: 'organisationProject.label', default: 'Person...')])}</a>
                                         </td>
                                       </tr>
@@ -142,9 +141,9 @@
                                     </tbody>
                                   </table>
 
-                                </td>  
+                                </td>
                             </tr>
-                            
+
                             <shiro:hasRole name="SysAdmin">
                               <tr class="prop">
                                   <td valign="top" class="name">
@@ -156,7 +155,7 @@
                                   </td>
                               </tr>
                             </shiro:hasRole>
-                        
+
                         </tbody>
                     </table>
                 </div>
@@ -164,14 +163,14 @@
                     <shiro:hasPermission permission="${'project:' + projectInstance?.id + ':write'}">
                       <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
                     </shiro:hasPermission>
-                    
+
                     <shiro:hasRole name="SysAdmin">
                       <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
                     </shiro:hasRole>
                 </div>
             </g:form>
         </div>
-      
+
       <!--
             Dialog presented when adding organisation to project.
             TODO: get this on demand (i.e. with AJAX)
@@ -181,7 +180,7 @@
                 <div class="dialog">
                     <table>
                         <tbody>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="projectId"><g:message code="organisationProject.project.label" default="Project" /></label>
@@ -192,7 +191,7 @@
                                   <label class="compulsory" id="project">${projectInstance}</label>
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="organisationId"><g:message code="organisationProject.organisation.label" default="Organisation" /></label>
@@ -201,13 +200,13 @@
                                   <g:select name="organisationId" from="${unrelatedOrganisations}" optionKey="id"/>
                                 </td>
                             </tr>
-                        
+
                         </tbody>
                     </table>
                 </div>
             </g:form>
       </div>
-      
+
       <!--
             Dialog presented when adding person (with role) to project.
             TODO: get this on demand (i.e. with AJAX)

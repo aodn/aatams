@@ -4,7 +4,6 @@ import grails.test.ControllerUnitTestCase
 
 import net.sf.jasperreports.engine.export.JRCsvExporter
 import org.apache.shiro.subject.Subject
-import org.apache.shiro.util.ThreadContext
 import org.apache.shiro.SecurityUtils
 
 import au.org.emii.aatams.EmbargoService

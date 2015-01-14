@@ -1,21 +1,10 @@
 package au.org.emii.aatams.detection
 
-import java.util.Map;
-
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormatter
-import org.joda.time.format.ISODateTimeFormat
-
 import au.org.emii.aatams.*
 import au.org.emii.aatams.util.StringUtils
 import au.org.emii.aatams.util.SqlUtils
 
-import com.vividsolutions.jts.geom.Point
-
-import de.micromata.opengis.kml.v_2_2_0.Feature
 import de.micromata.opengis.kml.v_2_2_0.Kml
-import de.micromata.opengis.kml.v_2_2_0.Placemark
-import de.micromata.opengis.kml.v_2_2_0.TimeStamp
 
 class ValidDetection extends RawDetection implements Embargoable
 {

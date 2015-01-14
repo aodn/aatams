@@ -3,24 +3,23 @@ package au.org.emii.aatams
 import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
-import grails.test.*
 import grails.converters.JSON
 
-class TagControllerTests extends AbstractControllerUnitTestCase 
+class TagControllerTests extends AbstractControllerUnitTestCase
 {
     DeviceStatus newStatus
     DeviceStatus deployedStatus
     DeviceStatus recoveredStatus
-    
+
     def candidateEntitiesService
-    
+
     def project1
     def project2
-    
+
     def queryService
     def reportInfoService
 
-    protected void setUp() 
+    protected void setUp()
     {
         super.setUp()
 
@@ -30,16 +29,16 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         def statusList = [newStatus, deployedStatus, recoveredStatus]
         mockDomain(DeviceStatus, statusList)
         statusList.each { it.save() }
-        
+
         project1 = new Project()
         project2 = new Project()
-        
+
         candidateEntitiesService = new CandidateEntitiesService()
         candidateEntitiesService.metaClass.projects =
         {
             return [project1, project2]
         }
-        
+
         mockLogging(QueryService)
         queryService = new QueryService()
         mockLogging(ReportInfoService)
@@ -50,7 +49,7 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         controller.queryService.embargoService.permissionUtilsService = new PermissionUtilsService()
         controller.candidateEntitiesService = candidateEntitiesService
         mockDomain(Tag)
-        
+
         mockConfig("grails.gorm.default.list.max = 10")
         controller.metaClass.getGrailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
 
@@ -64,58 +63,51 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         def tagList = [newTag, deployedTag, recoveredTag]
         mockDomain(Tag, tagList)
         tagList.each { it.save() }
-        
+
         mockDomain(Sensor)
         mockDomain(TransmitterType)
-        
     }
 
-    protected void tearDown() 
-    {
-        super.tearDown()
-    }
-
-    void testLookupNonDeployedBySerialNumber() 
+    void testLookupNonDeployedBySerialNumber()
     {
         controller.params.term = '1111'
         controller.lookupNonDeployedBySerialNumber()
-        
+
         def controllerResponse = controller.response.contentAsString
         def jsonResult = JSON.parse(controllerResponse)
-        
+
         assertEquals(2, jsonResult.size())
-        
+
         assertEquals('1111-A', jsonResult[0].serialNumber)
         assertEquals(newStatus.status, jsonResult[0].status.status)
         assertEquals('1111-B', jsonResult[1].serialNumber)
         assertEquals(recoveredStatus.status, jsonResult[1].status.status)
     }
-    
-    void testCreate() 
+
+    void testCreate()
     {
         def model = controller.create()
-        
+
         assertNotNull(model.tagInstance)
         assertEquals(2, model.candidateProjects.size())
         assertTrue(model.candidateProjects.contains(project1))
         assertTrue(model.candidateProjects.contains(project2))
     }
 
-    void testSaveError() 
+    void testSaveError()
     {
         TransmitterType pinger = new TransmitterType(transmitterTypeName:"PINGER")
         mockDomain(TransmitterType, [pinger])
         pinger.save()
-        
+
         def model = controller.save()
-        
+
         assertNotNull(model.tagInstance)
         assertEquals(2, model.candidateProjects.size())
         assertTrue(model.candidateProjects.contains(project1))
         assertTrue(model.candidateProjects.contains(project2))
     }
-    
-    
+
     void testLookupBySerialNumber()
     {
         assertLookupWithTerm(2, "11")
@@ -123,7 +115,7 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         assertLookupWithTerm(0, "1111-AB")
         assertLookupWithTerm(1, "22")
     }
-    
+
     private void assertLookupWithTerm(expectedNumResults, term)
     {
         controller.params.term = term

@@ -1,10 +1,6 @@
 package au.org.emii.aatams
 
 import javax.servlet.http.Cookie
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-
-import au.org.emii.aatams.detection.*
 
 class AbstractController
 {

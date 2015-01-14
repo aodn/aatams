@@ -1,13 +1,5 @@
 package au.org.emii.aatams.export
 
-import grails.plugin.executor.SessionBinderUtils;
-import grails.plugin.executor.SessionBoundRunnable
-
-import java.io.OutputStream
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.TimeUnit
 import java.util.zip.GZIPOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream

@@ -1,5 +1,5 @@
-
 <%@ page import="au.org.emii.aatams.Project" %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -23,17 +23,17 @@
             <div class="dialog">
                 <table>
                     <tbody>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="project.name.label" default="Name" /></td>
-                            
+
                             <td valign="top" class="value">${fieldValue(bean: projectInstance, field: "name")}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="project.organisationProjects.label" default="Organisations" /></td>
-                            
+
                             <td valign="top" style="text-align: left;" class="value">
                               <table class="nested">
                                 <tbody>
@@ -50,7 +50,7 @@
                               </table>
                             </td>
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name">
                               <label for="projectRoles"><g:message code="project.projectRoles.people.label" default="People" /></label>
@@ -82,7 +82,7 @@
                                 </tbody>
                               </table>
 
-                            </td>  
+                            </td>
                          </tr>
 
                         <shiro:hasRole name="SysAdmin">
@@ -107,11 +107,11 @@
             <div class="buttons">
                 <g:form>
                     <g:hiddenField name="id" value="${projectInstance?.id}" />
-                    
+
                     <shiro:hasPermission permission="${'project:' + projectInstance?.id + ':write'}">
                       <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                     </shiro:hasPermission>
-                    
+
                     <shiro:hasRole name="SysAdmin">
                       <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
                     </shiro:hasRole>

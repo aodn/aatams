@@ -12,12 +12,12 @@ class ProjectCreateCommand
     Person person   // TODO: rename to principalInvestigator
     String name
     String description
-    
+
     Project createProject()
     {
         def project = new Project(name:name, description:description)
         project.addToOrganisationProjects(new OrganisationProject(organisation:organisation, project:project))
-        
+
         return project
     }
 }

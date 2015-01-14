@@ -205,11 +205,6 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         tagController.candidateEntitiesService = candEntitiesService
     }
 
-    protected void tearDown()
-    {
-        super.tearDown()
-    }
-
     protected def getPrincipal()
     {
         return person.id

@@ -1,13 +1,10 @@
 package au.org.emii.aatams.detection
 
-import au.org.emii.aatams.export.AbstractStreamingExporterService;
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
-import grails.test.*
 
 class DetectionControllerTests extends AbstractControllerUnitTestCase
 {
     def dataSource
-    // def detectionExtractService
 
     protected void setUp()
     {

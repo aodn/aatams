@@ -1,7 +1,6 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
-import grails.test.*
 import groovy.sql.Sql
 import org.joda.time.DateTime
 
@@ -60,7 +59,6 @@ class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
             assertNotNull(InvalidDetection.get(it.id))
         }
     }
-
 
     private def createInvalidDetection(params)
     {

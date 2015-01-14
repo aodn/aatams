@@ -1,17 +1,9 @@
 package au.org.emii.aatams.report
 
-import grails.test.*
-
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.filter.QueryService
-import au.org.emii.aatams.report.filter.*
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
-
-import com.vividsolutions.jts.geom.Coordinate
-import com.vividsolutions.jts.geom.GeometryFactory
-
-import net.sourceforge.cobertura.coveragedata.ProjectData;
 
 import org.codehaus.groovy.grails.plugins.jasper.*
 
@@ -67,11 +59,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         user.save()
     }
 
-    protected void tearDown()
-    {
-        super.tearDown()
-    }
-
     protected def getPrincipal()
     {
         return user?.id
@@ -86,6 +73,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 
         return false
     }
+
     void testNoResults()
     {
         controller.params._name = "receiver"
@@ -93,7 +81,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         controller.params._format = "PDF"
         controller.params._type = "report"
 
-        def model = controller.execute()
+        controller.execute()
 
         assertEquals("create", redirectArgs['action'])
         assertEquals("receiver", redirectArgs.params.name)

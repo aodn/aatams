@@ -113,7 +113,6 @@ class ProjectController {
         }
     }
 
-
     def show = {
         def projectInstance = Project.get(params.id)
         if (!projectInstance) {

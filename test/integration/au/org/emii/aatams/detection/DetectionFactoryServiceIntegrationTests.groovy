@@ -12,6 +12,8 @@ class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
     // Test for #1751
     void testRescanForDeployment()
     {
+        // Note: this test seems to fail intermittently for me - DN
+
         def initValidCount = 22
         def initInvalidCount = 0
         def initDetSurgeryCount = 6

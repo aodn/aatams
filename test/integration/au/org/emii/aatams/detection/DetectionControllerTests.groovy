@@ -18,6 +18,8 @@ class DetectionControllerTests extends AbstractControllerUnitTestCase
 
     void testExecuteDetectionExtract()
     {
+        // Note: This test seems to fail intermittently for me - DN
+
         assertExport([:], "testExecuteDetection")
     }
 

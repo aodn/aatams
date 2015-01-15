@@ -6,6 +6,7 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 {
     ReceiverDownloadFile export
     def exportFile
+    static final int YEAR_2010 = 110
 
     protected void setUp()
     {
@@ -27,8 +28,7 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 
         exportFile = new File(export.path)
         exportFile.getParentFile().mkdirs()
-        exportFile << '''Date and Time (UTC),Receiver,Transmitter,Transmitter Name,Transmitter Serial,Sensor Value,Sensor Unit,Station Name,Latitude,Longitude
-'''
+        exportFile << '''Date and Time (UTC),Receiver,Transmitter,Transmitter Name,Transmitter Serial,Sensor Value,Sensor Unit,Station Name,Latitude,Longitude\n'''
     }
 
     protected void tearDown()
@@ -39,23 +39,18 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
         super.tearDown()
     }
 
-    // Test for #2055
-    void testNothing()
-    {
-    }
-
     void testPromoteProvisional()
     {
-        def origMatViewCount = sql.firstRow('select count(*) from detection_extract_view_mv;').count
-        def origValidDetCount = sql.firstRow('select count(*) from valid_detection;').count
+        def origMatViewCount = getMatViewCount(sql)
+        def origValidDetCount = getValidDetectionCount(sql)
         def origInvalidDetCount = InvalidDetection.count()
         assertEquals(origMatViewCount, origValidDetCount)
 
         def origStatisticsNumValidDetCount = Statistics.findByKey('numValidDetections')?.value
 
-        def timestamp1 = '2011-05-17 03:54:05'
-        def timestamp2 = '2011-05-17 04:54:05'
-        def timestamp3 = '2011-05-17 05:54:05'
+        def timestamp1 = '2010-05-17 03:54:05'
+        def timestamp2 = '2010-05-17 04:54:05'
+        def timestamp3 = '2010-05-17 05:54:05'
         def testReceiver = 'VR2W-101336'
         def testTransmitter = 'A69-1303-12345'
         def detRows = [
@@ -69,8 +64,8 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 
         jdbcTemplateVueDetectionFileProcessorService.process(export)
 
-        def finalMatViewCount = sql.firstRow('select count(*) from detection_extract_view_mv;').count
-        def finalValidDetCount = sql.firstRow('select count(*) from valid_detection;').count
+        def finalMatViewCount = getMatViewCount(sql)
+        def finalValidDetCount = getValidDetectionCount(sql)
         def finalProvDetCount = ValidDetection.findAllByProvisional(true).size()
         def finalStatisticsNumValidDetCount = Statistics.getStatistic('numValidDetections')
 
@@ -81,8 +76,16 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
         assertEquals(origStatisticsNumValidDetCount + numNewDets, finalStatisticsNumValidDetCount)
 
         // Cleanup (because the transaction has been comitted this won't happen automatically)
-        def ts = [timestamp1, timestamp2, timestamp3]
-        ValidDetection.findAllWhere(receiverName: testReceiver, transmitterId: testTransmitter).findAll{ ts.contains(it.formattedTimestamp) }*.delete(flush: true)
+        ValidDetection.findAllWhere(receiverName: testReceiver, transmitterId: testTransmitter).findAll{ it.timestamp.year == YEAR_2010 }*.delete(flush: true)
+        assertEquals(origValidDetCount, getValidDetectionCount(sql))
+    }
+
+    def getMatViewCount = { sql ->
+        sql.firstRow('select count(*) from detection_extract_view_mv;').count
+    }
+
+    def getValidDetectionCount = { sql ->
+        sql.firstRow('select count(*) from valid_detection;').count
     }
 
     private def getRefreshedExport(export)

@@ -2,17 +2,10 @@ package au.org.emii.aatams.detection
 
 import org.hibernatespatial.GeometryUserType
 
-import au.org.emii.aatams.ReceiverDownloadFile
 import au.org.emii.aatams.util.GeometryUtils
 import au.org.emii.aatams.util.SqlUtils
 
 import com.vividsolutions.jts.geom.*
-
-import java.text.DateFormat
-import java.text.ParseException
-import java.text.SimpleDateFormat;
-import java.util.Map
-
 
 /**
  * A 1:1 mapping of a single CSV record from receiver export.

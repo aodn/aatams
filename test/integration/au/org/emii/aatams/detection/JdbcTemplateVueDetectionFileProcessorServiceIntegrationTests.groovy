@@ -40,8 +40,8 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 
     void testPromoteProvisional()
     {
-        def origMatViewCount = sql.firstRow('select count(*) from detection_extract_view_mv;').count
-        def origValidDetCount = sql.firstRow('select count(*) from valid_detection;').count
+        def origMatViewCount = getMatViewCount(sql)
+        def origValidDetCount = getValidDetectionCount(sql)
         def origInvalidDetCount = InvalidDetection.count()
         assertEquals(origMatViewCount, origValidDetCount)
 
@@ -63,8 +63,8 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 
         jdbcTemplateVueDetectionFileProcessorService.process(export)
 
-        def finalMatViewCount = sql.firstRow('select count(*) from detection_extract_view_mv;').count
-        def finalValidDetCount = sql.firstRow('select count(*) from valid_detection;').count
+        def finalMatViewCount = getMatViewCount(sql)
+        def finalValidDetCount = getValidDetectionCount(sql)
         def finalProvDetCount = ValidDetection.findAllByProvisional(true).size()
         def finalStatisticsNumValidDetCount = Statistics.getStatistic('numValidDetections')
 
@@ -77,6 +77,14 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
         // Cleanup (because the transaction has been comitted this won't happen automatically)
         def ts = [timestamp1, timestamp2, timestamp3]
         ValidDetection.findAllWhere(receiverName: testReceiver, transmitterId: testTransmitter).findAll{ ts.contains(it.formattedTimestamp) }*.delete(flush: true)
+    }
+
+    def getMatViewCount = { sql ->
+        sql.firstRow('select count(*) from detection_extract_view_mv;').count
+    }
+
+    def getValidDetectionCount = { sql ->
+        sql.firstRow('select count(*) from valid_detection;').count
     }
 
     private def getRefreshedExport(export)

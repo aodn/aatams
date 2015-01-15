@@ -27,8 +27,7 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 
         exportFile = new File(export.path)
         exportFile.getParentFile().mkdirs()
-        exportFile << '''Date and Time (UTC),Receiver,Transmitter,Transmitter Name,Transmitter Serial,Sensor Value,Sensor Unit,Station Name,Latitude,Longitude
-'''
+        exportFile << '''Date and Time (UTC),Receiver,Transmitter,Transmitter Name,Transmitter Serial,Sensor Value,Sensor Unit,Station Name,Latitude,Longitude\n'''
     }
 
     protected void tearDown()
@@ -37,11 +36,6 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
         getRefreshedExport(export)?.delete()
 
         super.tearDown()
-    }
-
-    // Test for #2055
-    void testNothing()
-    {
     }
 
     void testPromoteProvisional()

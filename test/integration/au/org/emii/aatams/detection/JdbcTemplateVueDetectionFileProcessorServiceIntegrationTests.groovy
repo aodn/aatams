@@ -6,6 +6,7 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 {
     ReceiverDownloadFile export
     def exportFile
+    static final int YEAR_2010 = 110
 
     protected void setUp()
     {
@@ -47,9 +48,9 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 
         def origStatisticsNumValidDetCount = Statistics.findByKey('numValidDetections')?.value
 
-        def timestamp1 = '2011-05-17 03:54:05'
-        def timestamp2 = '2011-05-17 04:54:05'
-        def timestamp3 = '2011-05-17 05:54:05'
+        def timestamp1 = '2010-05-17 03:54:05'
+        def timestamp2 = '2010-05-17 04:54:05'
+        def timestamp3 = '2010-05-17 05:54:05'
         def testReceiver = 'VR2W-101336'
         def testTransmitter = 'A69-1303-12345'
         def detRows = [
@@ -75,8 +76,8 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
         assertEquals(origStatisticsNumValidDetCount + numNewDets, finalStatisticsNumValidDetCount)
 
         // Cleanup (because the transaction has been comitted this won't happen automatically)
-        def ts = [timestamp1, timestamp2, timestamp3]
-        ValidDetection.findAllWhere(receiverName: testReceiver, transmitterId: testTransmitter).findAll{ ts.contains(it.formattedTimestamp) }*.delete(flush: true)
+        ValidDetection.findAllWhere(receiverName: testReceiver, transmitterId: testTransmitter).findAll{ it.timestamp.year == YEAR_2010 }*.delete(flush: true)
+        assertEquals(origValidDetCount, getValidDetectionCount(sql))
     }
 
     def getMatViewCount = { sql ->

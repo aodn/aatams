@@ -191,13 +191,7 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
 
                 def detection = resultsFromListAction.first()
                 assertEquals description, "37010003 - Carcharodon carcharias (White Shark)", detection.speciesNames
-
-                println "___________________________________________"
-                println project.tags.sort().first().toString()
-                println detection.getSensorIds(detection.mostRecentSurgery)
-                println "___________________________________________"
-
-                // assertEquals description, project.tags.sort().first().toString(), detection.getSensorIds(detection.mostRecentSurgery) // Todo - DN: REINTRODUCE THIS TEST (Check w/ Jon re: changes to getSurgeries())
+                assertEquals description, project.tags.sort().first().toString(), detection.sensorIds
                 break
 
             case VISIBLE_BUT_SANITISED:

@@ -110,9 +110,9 @@ class ValidDetection extends RawDetection implements Embargoable
         return getSensorIds(surgeries)
     }
 
-    private String getSensorIds(theSurgeries)
+    static String getSensorIds(theSurgeries)
     {
-        return StringUtils.removeSurroundingBrackets(theSurgeries*.tag.sensors*.transmitterId)
+        return theSurgeries*.tag.sensors*.transmitterId.flatten().join(", ")
     }
 
     String getSpeciesNames()
@@ -120,9 +120,9 @@ class ValidDetection extends RawDetection implements Embargoable
         return getSpeciesNames(surgeries)
     }
 
-    private String getSpeciesNames(theSurgeries)
+    static String getSpeciesNames(theSurgeries)
     {
-        return StringUtils.removeSurroundingBrackets(theSurgeries*.release.animal.species.name)
+        return theSurgeries*.release.animal.species.name.flatten().join(", ")
     }
 
     static String toSqlInsert(detection)

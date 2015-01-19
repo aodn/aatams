@@ -105,12 +105,12 @@ class Tag extends Device implements Embargoable
 
     String getPingCodes()
     {
-        return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.pingCode?.sort()))
+        return sensors*.pingCode?.sort().join(", ")
     }
 
     String getTransmitterTypeNames()
     {
-        return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.transmitterType?.transmitterTypeName))
+        return sensors*.transmitterType?.transmitterTypeName.join(", ")
     }
 
     List<Sensor> getNonPingerSensors()

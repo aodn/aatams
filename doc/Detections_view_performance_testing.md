@@ -70,8 +70,8 @@ Sorting of results for pagination
 
 ### Initial Test
 
-* Effective cache size - 2GB
-* Shared memory - 4 GB
+* Shared memory - 2 GB
+* Effective cache size - 4 GB
 * [Current view](detections_performance_analysis/initial-test/detection_view_initial.sql)
 * [Test script (limited to first 100 records)](detections_performance_analysis/initial-test/benchmark-initial.sql)
 
@@ -85,8 +85,8 @@ Results
 
 ### Adjusting memory settings
 
-* Effective cache size - 6GB
-* Shared memory - 12 GB
+* Shared memory - 6 GB
+* Effective cache size - 12 GB
 * [Current view](detections_performance_analysis/initial-test/detection_view_initial.sql)
 * [Test script (limited to first 100 records)](detections_performance_analysis/initial-test/benchmark-initial.sql)
 
@@ -100,8 +100,8 @@ Results
 
 ### Using species specific view when filtering on species - option #1
 
-* Effective cache size - 6GB
-* Shared memory - 12 GB
+* Shared memory - 6 GB
+* Effective cache size - 12 GB
 * [Specific view for species filtering - postgres decides optimal plan](detections_performance_analysis/test-3/species_detection_extract_view_postgres_decides.sql)
 * [Testscript (limited to first 100 records)](detections_performance_analysis/test-3/benchmark-species-view.sql)
 
@@ -115,8 +115,8 @@ Results
 
 ### Using species specific view when filtering on species - option #2
 
-* Effective cache size - 6GB
-* Shared memory - 12 GB
+* Shared memory - 6 GB
+* Effective cache size - 12 GB
 * [Specific view for species filtering - force use of species filter first](detections_performance_analysis/test-4/species_detection_extract_view_force_use_of_species_filter_first.sql)
 * [Testscript (limited to first 100 records)](detections_performance_analysis/test-3/benchmark-species-view.sql)
 
@@ -130,8 +130,8 @@ Results
 
 ### Downloading/Counts
 
-* Effective cache size - 6GB
-* Shared memory - 12 GB
+* Shared memory - 6 GB
+* Effective cache size - 12 GB
 * [Specific view for species filtering - force use of species filter first](detections_performance_analysis/test-4/species_detection_extract_view_force_use_of_species_filter_first.sql)
 * [Test script (limited to first 300000 records)](detections_performance_analysis/test-5/benchmark-species-view-limit-300000.sql)
 

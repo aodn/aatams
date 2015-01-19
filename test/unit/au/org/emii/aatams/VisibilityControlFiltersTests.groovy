@@ -588,6 +588,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
     private void checkList(controller, entityName)
     {
         controller.params._name = "entityName"
+        controllerName = entityName
 
         int expectedNum = 4
         int expectedTotal = 6

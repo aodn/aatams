@@ -47,7 +47,11 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         AbstractControllerUnitTestCase.createDetectionViews(dataSource)// Todo - DN: Is this a smell?
     }
 
-    void testProtectedSpeciesFilteringA() {
+    void testTodoUncommentAllOtherTests() {
+        fail "Uncomment all the other tests, yo"
+    }
+
+    /*void testProtectedSpeciesFilteringA() {
         assertVisible(UNAUTHENTICATED, UNEMBARGOED, FILTER_NOT_SET)
     }
 
@@ -141,7 +145,7 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
 
     void testProtectedSpeciesFilteringY() {
         assertVisible(SYS_ADMIN, PROTECTED, FILTER_SET)
-    }
+    }*/
 
     void assertVisible(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet) {
         assertCorrectResult(authLevel, protectionLevel, speciesFilterSet, VISIBLE)

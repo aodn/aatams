@@ -1,7 +1,6 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
-import au.org.emii.aatams.util.StringUtils
 import au.org.emii.aatams.util.SqlUtils
 
 import de.micromata.opengis.kml.v_2_2_0.Kml

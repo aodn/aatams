@@ -1,6 +1,5 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.util.StringUtils
 import grails.converters.JSON
 
 /**
@@ -63,7 +62,7 @@ class Tag extends Device implements Embargoable
 
     String getDeviceID()
     {
-        return StringUtils.removeSurroundingBrackets(String.valueOf(sensors*.toString()))
+        return sensors?.join(", ")
     }
 
     Sensor getPinger()
@@ -105,12 +104,12 @@ class Tag extends Device implements Embargoable
 
     String getPingCodes()
     {
-        return sensors*.pingCode?.sort().join(", ")
+        return sensors*.pingCode?.sort()?.join(", ")
     }
 
     String getTransmitterTypeNames()
     {
-        return sensors*.transmitterType?.transmitterTypeName.join(", ")
+        return sensors*.transmitterType?.transmitterTypeName?.join(", ")
     }
 
     List<Sensor> getNonPingerSensors()

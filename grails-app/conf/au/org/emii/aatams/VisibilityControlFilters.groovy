@@ -29,10 +29,6 @@ class VisibilityControlFilters
                     model.entityList =
                             visibilityControlService.applyVisibilityControls(model.entityList)
                 }
-                    else {
-
-                    println "Not filtering"
-                }
             }
         }
 
@@ -43,12 +39,12 @@ class VisibilityControlFilters
                 model ->
 
                     if (controllerName == "detection") {
-                        def detectionInstance = model?.detectionInstance
-                        model?.detectionInstance = visibilityControlService.applyVisibilityControls(detectionInstance)
+                        model.detectionInstance = visibilityControlService.applyVisibilityControls(model.detectionInstance)
                     }
                     else {
 
                         def instanceName = "${controllerName}Instance"
+
                         if (visibilityControlService.isAccessControlled(model[instanceName]))
                         {
                             redirect(getRedirectParams(id: model[instanceName].id, controllerName: controllerName, actionName: actionName))

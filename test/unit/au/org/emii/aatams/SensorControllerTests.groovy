@@ -144,6 +144,8 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
         Sensor sensor = new Sensor(tag: owningTag, pingCode: 123, transmitterType: pinger)
         sensor.save()
 
+        owningTag.addToSensors(sensor)
+
         assertLookupWithTerm(0, "A7")
         assertLookupWithTerm(1, "A69")
         assertLookupWithTerm(1, "A69-1303-123")

@@ -480,7 +480,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkDetection(detectionEmbargoedNonReadableProject, true)
         checkDetection(detectionPastEmbargoed, false)
         checkDetectionProtected(detectionProtectedReadableProject, true)
-        checkDetectionProtected(detectionProtectedNonReadableProject, false)
+        checkDetectionProtected(detectionProtectedNonReadableProject, true) // Todo - DN: Check with Jon. I think these tests are now unclear because they don't take into account sanitisation. Is this behaviour then being tested somewhere else making these redundant?
     }
 
     void testSurgeryList() {

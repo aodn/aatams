@@ -1,19 +1,19 @@
 package au.org.emii.aatams.detection
 
+import au.org.emii.aatams.Project
 import org.apache.shiro.SecurityUtils
 
 import au.org.emii.aatams.export.AbstractStreamingExporterService
 import au.org.emii.aatams.util.GeometryUtils
 import groovy.sql.Sql
 
-class DetectionExtractService extends AbstractStreamingExporterService
-{
+class DetectionExtractService extends AbstractStreamingExporterService {
     static transactional = false
 
     def dataSource
     def permissionUtilsService
 
-    public List extractPage(filterParams)
+    public List extractPage(filterParams, applyEmbargoOnResults = false) // Todo - DN: Or create new method?
     {
         def query = new QueryBuilder().constructQuery(filterParams)
 
@@ -22,13 +22,15 @@ class DetectionExtractService extends AbstractStreamingExporterService
         def endTime = System.currentTimeMillis()
         log.debug("Query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}")
 
-        return results
+        println "Maybe change behaviour here for species filter?"
+
+        println applyEmbargoOnResults ? ">> Applying embargo in extractPage()" : ">> Not applying embargo in extractPage()"
+
+        return applyEmbargoOnResults ? applyEmbargo(results, filterParams) : results
     }
 
-    public Long getCount(filterParams)
-    {
-        if (!filterParams || filterParams.isEmpty() || filterParams?.filter == null || filterParams?.filter == [:])
-        {
+    public Long getCount(filterParams) {
+        if (!filterParams || filterParams.isEmpty() || filterParams?.filter == null || filterParams?.filter == [:]) {
             return ValidDetection.count()
         }
 
@@ -41,25 +43,88 @@ class DetectionExtractService extends AbstractStreamingExporterService
         return results.count[0]
     }
 
-    protected String getReportName()
-    {
+    protected String getReportName() {
         return "detection"
     }
 
-    protected def applyEmbargo(results, params)
-    {
-        def now = new Date()
+    protected def applyEmbargo(results, params) {
 
-        results = results.grep {
+        println "DetectionExtractService.applyEmbargo(${results.size()}, $params)"
+        println "allowSanitisedResults: ${_allowSanitisedResults(params)}"
 
-            row ->
+        clearProjectIsProtectedCache()
 
-            boolean isEmbargoed = (row.embargo_date && row.embargo_date.after(now) && !hasReadPermission(row.release_project_id, params))
-
-            return !isEmbargoed
+        def resultsToKeep = results.grep { row ->
+            shouldKeepRow(row, params)
         }
 
-        return results
+        resultsToKeep.findAll { it }.each { row ->
+
+            if (shouldSanitiseRow(row, params)) { // Todo - DN: if clause to closure
+                sanitise(row)
+            }
+        }
+
+        return resultsToKeep
+    }
+
+    def shouldKeepRow(row, params) {
+
+        println "shouldKeepRow => ${_isPublic(row)} || ${_isReadable(row, params)} || ${(_allowSanitisedResults(params) && !_isProtected(row))} -- $row"
+
+        _isPublic(row) || _isReadable(row, params) || (_allowSanitisedResults(params) && !_isProtected(row))
+    }
+
+    def shouldSanitiseRow(row, params) {
+
+        println "shouldSanitiseRow => ${_isEmbargoed(row)} && ${!_isProtected(row)} && ${!_isReadable(row, params)} -- $row"
+
+        _isEmbargoed(row) && !_isProtected(row) && !_isReadable(row, params)
+    }
+
+    def _isPublic(row) {
+        !(_isEmbargoed(row) || _isProtected(row))
+    }
+
+    def _isReadable(row, params) {
+        hasReadPermission(row.release_project_id, params)
+    }
+
+    def _isProtected(row) {
+        projectIsProtected(row.release_project_id)
+    }
+
+    def _isEmbargoed(row) {
+        row.embargo_date && row.embargo_date.after(new Date())
+    }
+
+    def _allowSanitisedResults(params) {
+        params.allowSanitisedResults
+    }
+
+    def sanitise(row) {
+        row.species_name = ""
+        row.spcode = ""
+        row.sensor_id = ""
+    }
+
+    def _projectIsProtectedCache
+
+    def clearProjectIsProtectedCache(){
+
+        _projectIsProtectedCache = [:]
+    }
+
+    def projectIsProtected(projectId) {
+
+        if (!_projectIsProtectedCache.containsKey(projectId)) {
+
+            def project = Project.get(projectId) // Todo - DN: Project object might be cached meaning caching results myself in unnecessary
+
+            _projectIsProtectedCache[projectId] = project.isProtected
+        }
+
+        return _projectIsProtectedCache[projectId]
     }
 
     protected void writeCsvData(final filterParams, OutputStream out)
@@ -82,7 +147,7 @@ class DetectionExtractService extends AbstractStreamingExporterService
 
     protected def writeCsvChunk(resultList, OutputStream out)
     {
-        resultList.each
+        resultList./*grep { it }.*/each
         {
             row ->
 

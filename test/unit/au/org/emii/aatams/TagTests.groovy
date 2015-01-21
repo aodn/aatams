@@ -183,6 +183,62 @@ class TagTests extends GrailsUnitTestCase
         }
     }
 
+    void testGetDeviceIdMultipleSensors() {
+        def tag = [
+                sensors: ['AAAA', 'BBBB']
+        ] as Tag
+
+        assertEquals "AAAA, BBBB", tag.deviceID
+    }
+
+
+    void testGetDeviceIdOneSensor() {
+        def tag = [
+                sensors: ['AAAA', 'BBBB']
+        ] as Tag
+
+        assertEquals "AAAA, BBBB", tag.deviceID
+    }
+
+    void testGetDeviceIdNoSensors() {
+        def tag = [
+                sensors: []
+        ] as Tag
+
+        assertEquals "", tag.deviceID
+    }
+
+    void testGetTransmitterTypeNamesMultipleSensors() {
+
+        def tag = [
+                sensors: [
+                        [transmitterType: [transmitterTypeName: 'AAAA']],
+                        [transmitterType: [transmitterTypeName: 'BBBB']],
+                        [:]
+                ]
+        ] as Tag
+
+        assertEquals "AAAA, BBBB", tag.transmitterTypeNames
+    }
+
+    void testGetTransmitterTypeNamesOneSensor() {
+
+        def tag = [
+            sensors: [
+                [transmitterType:  [transmitterTypeName: 'AAAA']]
+            ]
+        ] as Tag
+
+        assertEquals "AAAA", tag.transmitterTypeNames
+    }
+
+    void testGetTransmitterTypeNamesNoSensors() {
+
+        def tag = [sensors: []] as Tag
+
+        assertEquals "", tag.transmitterTypeNames
+    }
+
     // Test for #1863.
     void testTagAsJson()
     {

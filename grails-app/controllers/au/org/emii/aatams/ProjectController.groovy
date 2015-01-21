@@ -21,7 +21,7 @@ class ProjectController {
         def projectTotal = Project.count()
         def projectList = Project.list(params)
 
-        if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
+        if (!userIsAdmin())
         {
             // Filter out non-ACTIVE organisations (only sys admin should see these).
             projectList = projectList.grep
@@ -62,15 +62,17 @@ class ProjectController {
 
             // If SysAdmin, then set Organisation's status to ACTIVE, otherwise,
             // set to PENDING and record the requesting user.
-            if (SecurityUtils.getSubject().hasRole("SysAdmin"))
+            if (userIsAdmin())
             {
                 projectInstance.status = EntityStatus.ACTIVE
+                projectInstance.isProtected = createProjectCmd.isProtected
             }
             else
             {
                 projectInstance.status = EntityStatus.PENDING
                 Person user = Person.get(SecurityUtils.getSubject().getPrincipal())
                 projectInstance.requestingUser = user
+                projectInstance.isProtected = false
             }
 
             if (projectInstance.save(flush: true))
@@ -88,7 +90,7 @@ class ProjectController {
                     permissionUtilsService.setPermissions(projectRole)
                 }
 
-                if (SecurityUtils.getSubject().hasRole("SysAdmin"))
+                if (userIsAdmin())
                 {
                     flash.message = "${message(code: 'default.created.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.toString()])}"
                 }
@@ -152,7 +154,14 @@ class ProjectController {
                     return
                 }
             }
+
+            def newIsProtected = params.remove('isProtected')
             projectInstance.properties = params
+
+            if (userIsAdmin()) {
+                projectInstance.isProtected = newIsProtected ?: false
+            }
+
             if (!projectInstance.hasErrors() && projectInstance.save(flush: true))
             {
                 // Notify project activated.
@@ -229,5 +238,9 @@ class ProjectController {
         def projectsMatchingName = Project.findAllByNameIlike('%' + params.term + '%')
         log.debug("Matching projects: " + projectsMatchingName)
         render(projectsMatchingName as JSON)
+    }
+
+    def userIsAdmin() {
+        SecurityUtils.subject.hasRole("SysAdmin")
     }
 }

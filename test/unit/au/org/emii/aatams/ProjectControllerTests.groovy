@@ -157,6 +157,7 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
             name:'new project',
             organisation:activeOrg,
             person:joeBloggs,
+            isProtected:true,
             description:"test desc")
         mockForConstraintsTests(ProjectCreateCommand, [cmd])
         assertTrue(cmd.validate())
@@ -184,6 +185,7 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
             name:'new project',
             organisation:activeOrg,
             person:joeBloggs,
+            isProtected:true,
             description:"test desc")
         mockForConstraintsTests(ProjectCreateCommand, [cmd])
         assertTrue(cmd.validate())
@@ -193,6 +195,34 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
         assertEquals("show", redirectArgs['action'])
         assertEquals(EntityStatus.PENDING, Project.get(redirectArgs['id']).status)
         assertTrue(mailSent)
+    }
+
+    void testUpdateAsSysAdmin()
+    {
+        hasRole = true
+
+        mockParams.id = sealCountProject.id
+        mockParams.isProtected = true
+
+        assertFalse sealCountProject.isProtected
+
+        controller.update()
+
+        assertTrue sealCountProject.isProtected
+    }
+
+    void testUpdateAsNonSysAdmin()
+    {
+        hasRole = false
+
+        mockParams.id = sealCountProject.id
+        mockParams.isProtected = true
+
+        assertFalse sealCountProject.isProtected
+
+        controller.update()
+
+        assertFalse sealCountProject.isProtected
     }
 
     void testLookupByName()

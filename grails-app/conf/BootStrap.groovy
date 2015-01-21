@@ -236,20 +236,25 @@ class BootStrap
         {
             test
             {
-                initialiser = new TestDataInitialiser(permissionUtilsService)
-                assert(initialiser): "Initialiser cannot be null"
-                initialiser.execute()
+                new TestDataInitialiser(permissionUtilsService).execute()
+                new ProtectedSpeciesTestDataInitialiser(permissionUtilsService).execute()
             }
 
             development
             {
-                if (Boolean.getBoolean('initialiseWithData'))
+
+                /*initialiser = new ProtectedSpeciesTestDataInitialiser(permissionUtilsService)
+
+                assert(initialiser): "Initialiser cannot be null"
+                initialiser.execute()*/
+
+                /*if (Boolean.getBoolean('initialiseWithData'))
                 {
                     initialiser = new DevelopmentDataInitialiser(permissionUtilsService)
 
                     assert(initialiser): "Initialiser cannot be null"
                     initialiser.execute()
-                }
+                }*/
             }
 
             performance

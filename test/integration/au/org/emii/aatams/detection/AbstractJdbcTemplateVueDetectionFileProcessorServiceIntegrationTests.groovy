@@ -3,34 +3,28 @@ package au.org.emii.aatams.detection
 import au.org.emii.aatams.*
 import au.org.emii.aatams.test.*
 
-import grails.test.*
 import groovy.sql.*
-import groovy.lang.MetaClass
 
-abstract class AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends AbstractGrailsUnitTestCase 
+abstract class AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends AbstractGrailsUnitTestCase
 {
-    // If running in transaction, entities are not visible to inner transactions (e.g. the
-    // download file progess).
-    static transactional = false
-
     def dataSource
     def grailsApplication
     def jdbcTemplateVueDetectionFileProcessorService
     def sql
 
-    protected void setUp() 
+    protected void setUp()
     {
         super.setUp()
-        
+
         sql = Sql.newInstance(dataSource)
         createMatviews()
     }
 
-    protected void tearDown() 
+    protected void tearDown()
     {
         Statistics.findByKey('numValidDetections')?.delete()
         dropMatviews()
-        
+
         super.tearDown()
     }
 
@@ -54,7 +48,7 @@ abstract class AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTe
         // Also, some work needs to be done to reconcile reference data and bootstrap initialised data
         // (it should probably all be done in migrations specific to test env).
         //
-        
+
         def viewName = grailsApplication.config.rawDetection.extract.view.name
         def viewSelect = grailsApplication.config.rawDetection.extract.view.select
         sql.execute ('DROP VIEW IF EXISTS ' + viewName)
@@ -77,28 +71,28 @@ abstract class AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTe
                             entry matviews%ROWTYPE;
                         BEGIN
                             SELECT * INTO entry FROM matviews WHERE mv_name = matview;
-                        
+
                             IF FOUND THEN
                                 RAISE EXCEPTION 'Materialized view % already exists.', matview;
                             END IF;
-                        
+
                             EXECUTE 'REVOKE ALL ON ' || view_name || ' FROM PUBLIC';
-                        
+
                             EXECUTE 'GRANT SELECT ON ' || view_name || ' TO PUBLIC';
-                        
+
                             EXECUTE 'CREATE TABLE ' || matview || ' AS SELECT * FROM ' || view_name;
-                        
+
                             EXECUTE 'REVOKE ALL ON ' || matview || ' FROM PUBLIC';
-                        
+
                             EXECUTE 'GRANT SELECT ON ' || matview || ' TO PUBLIC';
-                        
+
                             INSERT INTO matviews (mv_name, v_name, last_refresh)
                               VALUES (matview, view_name, CURRENT_TIMESTAMP);
-                            
+
                             RETURN;
                         END;
                         $$''')
-        
+
         sql.execute('DROP TABLE IF EXISTS detection_extract_view_mv')
         sql.execute("select create_matview('detection_extract_view_mv', 'detection_extract_view');")
 

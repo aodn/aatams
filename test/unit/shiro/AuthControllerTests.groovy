@@ -21,14 +21,14 @@ class AuthControllerTests extends ControllerUnitTestCase
 
         controller.metaClass.message = { LinkedHashMap args -> return "${args.code}" }
         controller.metaClass.checkForPendingUser = { Map params -> }
-        controller.metaClass.doLogin = { UsernamePasswordToken token -> 
-            if (!loginSuccess) 
+        controller.metaClass.doLogin = { UsernamePasswordToken token ->
+            if (!loginSuccess)
             {
                 throw new AuthenticationException()
             }
         }
 
-        controller.embargoService = new EmbargoService()
+        controller.visibilityControlService = new VisibilityControlService()
     }
 
     void testLoginFromReportExtract()

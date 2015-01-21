@@ -1,10 +1,8 @@
 package au.org.emii.aatams.filter
 
-import grails.test.*
 import org.joda.time.DateTime
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
-import au.org.emii.aatams.report.ReportInfoService
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 class QueryServiceTests extends AbstractGrailsUnitTestCase
@@ -16,11 +14,6 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
         super.setUp()
 
         permitted = true
-    }
-
-    protected void tearDown()
-    {
-        super.tearDown()
     }
 
     // no restriction
@@ -286,7 +279,6 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
             [
                 eq:["name", "Tuna"]
             ],
-
 
             "surgeries.detectionSurgeries.sensor.in":["transmitterId", ""],
 

@@ -6,7 +6,7 @@ import net.sf.jasperreports.engine.export.JRCsvExporter
 import org.apache.shiro.subject.Subject
 import org.apache.shiro.SecurityUtils
 
-import au.org.emii.aatams.EmbargoService
+import au.org.emii.aatams.VisibilityControlService
 import au.org.emii.aatams.PermissionUtilsService;
 import au.org.emii.aatams.Person;
 import au.org.emii.aatams.export.ExportService
@@ -57,11 +57,11 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
             mockLogging(ReportInfoService, true)
             controller.queryService = new QueryService()
 
-            mockLogging(EmbargoService, true)
-            controller.queryService.embargoService = new EmbargoService()
+            mockLogging(VisibilityControlService, true)
+            controller.queryService.visibilityControlService = new VisibilityControlService()
 
             mockLogging(PermissionUtilsService, true)
-            controller.queryService.embargoService.permissionUtilsService = new PermissionUtilsService()
+            controller.queryService.visibilityControlService.permissionUtilsService = new PermissionUtilsService()
 
             controller.reportInfoService = new ReportInfoService()
             controller.reportInfoService.permissionUtilsService = new PermissionUtilsService()
@@ -169,7 +169,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
     protected String removePageFooter(String s)
     {
         def lineCount = 0
-        s.eachLine { lineCount ++}
+        s.eachLine { lineCount ++ }
 
         def retString = ""
         int index = 0

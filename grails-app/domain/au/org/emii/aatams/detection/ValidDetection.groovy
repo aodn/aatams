@@ -1,7 +1,6 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
-import au.org.emii.aatams.util.StringUtils
 import au.org.emii.aatams.util.SqlUtils
 
 import de.micromata.opengis.kml.v_2_2_0.Kml
@@ -61,7 +60,7 @@ class ValidDetection extends RawDetection implements Embargoable
 
     String toString()
     {
-        return timestamp.toString() + " " + String.valueOf(receiverDeployment?.receiver)
+        return "${timestamp.toString()}, ${String.valueOf(receiverDeployment?.receiver)}, ${transmitterId}"
     }
 
     // Convenience method.
@@ -111,9 +110,9 @@ class ValidDetection extends RawDetection implements Embargoable
         return getSensorIds(surgeries)
     }
 
-    private String getSensorIds(theSurgeries)
+    static String getSensorIds(theSurgeries)
     {
-        return StringUtils.removeSurroundingBrackets(theSurgeries*.tag.sensors*.transmitterId)
+        return theSurgeries*.tag.sensors*.transmitterId.flatten().join(", ")
     }
 
     String getSpeciesNames()
@@ -121,9 +120,9 @@ class ValidDetection extends RawDetection implements Embargoable
         return getSpeciesNames(surgeries)
     }
 
-    private String getSpeciesNames(theSurgeries)
+    static String getSpeciesNames(theSurgeries)
     {
-        return StringUtils.removeSurroundingBrackets(theSurgeries*.release.animal.species.name)
+        return theSurgeries*.release.animal.species.name.flatten().join(", ")
     }
 
     static String toSqlInsert(detection)
@@ -146,19 +145,52 @@ class ValidDetection extends RawDetection implements Embargoable
         return detectionBuff.toString()
     }
 
-    def applyEmbargo()
-    {
-        boolean isEmbargoed = false
+    def applyEmbargo(allowSanitised = true) {
 
-        surgeries.each
-        {
-            if (it.release.isEmbargoed())
-            {
-                isEmbargoed = true
+        println "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        println "~ ValidDetection.applyEmbargo($allowSanitised) ~"
+        println "On: $this"
+
+        def anyReleaseEmbargoed = false
+
+        // Return a temporary detection, with embargoed surgeries removed.
+        def censoredDetection = new HashMap(this.properties)
+        censoredDetection.surgeries = new HashSet<Surgery>()
+
+        surgeries.each {
+
+            if (it.release.isEmbargoed()) {
+                anyReleaseEmbargoed = true
+            }
+            else {
+                censoredDetection.surgeries.add(it)
             }
         }
 
-        return isEmbargoed ? null : this
+        censoredDetection.sensorIds = getSensorIds(censoredDetection.surgeries)
+        censoredDetection.speciesNames = getSpeciesNames(censoredDetection.surgeries)
+
+        def protectionRequired = project.isProtected && anyReleaseEmbargoed
+        def hideFromResults = anyReleaseEmbargoed && !allowSanitised
+
+        println """
+project             = $project
+project.isProtected = ${project.isProtected}
+anyReleaseEmbargoed = ${anyReleaseEmbargoed}
+allowSanitised      = ${allowSanitised}
+
+protectionRequired = $protectionRequired
+hideFromResults    = $hideFromResults
+
+protectionRequired || hideFromResults = ${protectionRequired || hideFromResults}
+"""
+        println "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
+        if (protectionRequired || hideFromResults) {
+            return null
+        }
+
+        return censoredDetection
     }
 
     static Kml toKml(List<ValidDetection> detections, serverURL)

@@ -154,6 +154,15 @@
 
                                   </td>
                               </tr>
+
+                                <tr class="prop">
+                                    <td valign="top" class="name">
+                                        <label for="isProtected"><g:message code="project.isProtected.label" default="Protected" /></label>
+                                    </td>
+                                    <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'isProtected', 'errors')}">
+                                        <g:checkBox name="isProtected" value="${projectInstance?.isProtected}" checked="${projectInstance?.isProtected}" />
+                                    </td>
+                                </tr>
                             </shiro:hasRole>
 
                         </tbody>

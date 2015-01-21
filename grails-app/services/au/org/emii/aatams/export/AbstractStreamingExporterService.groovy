@@ -76,18 +76,24 @@ abstract class AbstractStreamingExporterService
         params.limit = getLimit()
         params.offset = 0
 
+        println "[1]"
         def results = readData(params)
         params.offset = params.offset + results.size()
 
         indicateExportStart(params)
         writeCsvHeader(out)
 
+        println "results.size() : ${results.size()}"
+
         while (results.size() > 0)
         {
             results = applyEmbargo(results, params)
+            println "(after embargo) results.size() : ${results.size()}"
             writeCsvChunk(results, out)
 
+            println "[2]"
             results = readData(params)
+            println "(in while loop) results.size() : ${results.size()}"
             params.offset = params.offset + results.size()
         }
     }

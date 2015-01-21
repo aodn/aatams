@@ -9,42 +9,43 @@ import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
  *
  * @author jburgess
  */
-class EmbargoFilters
+class VisibilityControlFilters
 {
     def grailsApplication
-    def embargoService
+    def visibilityControlService
 
     def notListActions = 'show|edit|update|delete'
-    def embargoControllers = 'animal|animalRelease|detection|detectionSurgery|sensor|surgery|tag'
+    def visibilityControlControllers = 'animal|animalRelease|detection|detectionSurgery|sensor|surgery|tag'
 
     def filters =
     {
-        genericList(controller: embargoControllers, action:'list')
+        genericList(controller: visibilityControlControllers, action:'list')
         {
-            after =
-            {
+            after = {
                 model ->
 
                 // Filter out entities which are embargoed.
-                model.entityList =
-                    embargoService.applyEmbargo(model.entityList)
+                if (controllerName != 'detection') {
+                    model.entityList =
+                            visibilityControlService.applyVisibilityControls(model.entityList)
+                }
             }
         }
 
-        genericNotList(controller: embargoControllers, action:notListActions)
+        genericNotList(controller: visibilityControlControllers, action:notListActions)
         {
             after =
             {
                 model ->
 
                     if (controllerName == "detection") {
-                        def detectionInstance = model?.detectionInstance
-                        model?.detectionInstance = embargoService.applyEmbargo(detectionInstance)
+                        model.detectionInstance = visibilityControlService.applyVisibilityControls(model.detectionInstance)
                     }
                     else {
 
                         def instanceName = "${controllerName}Instance"
-                        if (embargoService.isEmbargoed(model[instanceName]))
+
+                        if (visibilityControlService.isAccessControlled(model[instanceName]))
                         {
                             redirect(getRedirectParams(id: model[instanceName].id, controllerName: controllerName, actionName: actionName))
                         }

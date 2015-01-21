@@ -12,11 +12,8 @@ class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
     // Test for #1751
     void testRescanForDeployment()
     {
-        // Note: this test seems to fail intermittently for me - DN
-
-        def initValidCount = 22
-        def initInvalidCount = 0
-        def initDetSurgeryCount = 6
+        def initValidCount = ValidDetection.count()
+        def initInvalidCount = InvalidDetection.count()
 
         def sql = new Sql(dataSource)
         ValidDetection.metaClass.static.count = {
@@ -34,9 +31,9 @@ class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
         assertEquals(initInvalidCount, InvalidDetection.count())
 
         // 1) invaliddetection - inside time range - no deployment
-        InvalidDetection insideTimeRangeUnknownReceiver = createInvalidDetection(reason: InvalidDetectionReason.UNKNOWN_RECEIVER)
-        InvalidDetection insideTimeRangeNoDeployment = createInvalidDetection(reason: InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME)
-        InvalidDetection insideTimeRangeNoRecovery = createInvalidDetection(reason: InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME)
+        createInvalidDetection(reason: InvalidDetectionReason.UNKNOWN_RECEIVER)
+        createInvalidDetection(reason: InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME)
+        createInvalidDetection(reason: InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME)
 
         // 2) invaliddetection - outside time range
         InvalidDetection beforeTimeRange = createInvalidDetection(timestamp: new DateTime("2009-01-01T00:00:00").toDate(), reason: InvalidDetectionReason.UNKNOWN_RECEIVER)
@@ -46,7 +43,7 @@ class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
         InvalidDetection insideTimeRangeDuplicate = createInvalidDetection(reason: InvalidDetectionReason.DUPLICATE)
         InvalidDetection insideTimeRangeDifferentReceiver = createInvalidDetection(receiverName: "VR2W-5678", reason: InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME)
 
-        assertEquals(initValidCount + 0, ValidDetection.count())
+        assertEquals(initValidCount, ValidDetection.count())
         assertEquals(initInvalidCount + 7, InvalidDetection.count())
 
         ReceiverDeployment deploymentBondi1 =

@@ -169,7 +169,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
     protected String removePageFooter(String s)
     {
         def lineCount = 0
-        s.eachLine { lineCount ++}
+        s.eachLine { lineCount ++ }
 
         def retString = ""
         int index = 0

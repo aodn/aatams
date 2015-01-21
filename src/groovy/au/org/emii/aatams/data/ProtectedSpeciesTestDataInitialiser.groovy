@@ -3,7 +3,6 @@ package au.org.emii.aatams.data
 import au.org.emii.aatams.*
 
 import au.org.emii.aatams.detection.*
-import au.org.emii.aatams.notification.*
 
 import com.vividsolutions.jts.geom.Point
 import com.vividsolutions.jts.io.WKTReader
@@ -27,95 +26,6 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
 
     def initData()
     {
-        TransmitterType pinger = new TransmitterType(transmitterTypeName:"PINGER").save(failOnError:true)
-        assert(!pinger.hasErrors())
-
-        Notification receiverRecoveryCreate =
-                new Notification(key:"RECEIVER_RECOVERY_CREATE",
-                        htmlFragment:"Click here to create a receiver recovery",
-                        anchorSelector:"td.rowButton > [href*='/receiverRecovery/create']:first").save(failOnError:true)
-
-        Notification register =
-                new Notification(key:"REGISTER",
-                        htmlFragment:"Click here to register to use AATAMS",
-                        anchorSelector:"#userlogin > [href\$='/person/create']",
-                        unauthenticated:true).save(failOnError:true)
-        //
-        // Addresses.
-        //
-        Address csiroStreetAddress =
-                new Address(streetAddress:'12 Smith Street',
-                        suburbTown:'Hobart',
-                        state:'TAS',
-                        country:'Australia',
-                        postcode:'7000').save()
-
-        Address csiroPostalAddress =
-                new Address(streetAddress:'34 Queen Street',
-                        suburbTown:'Melbourne',
-                        state:'VIC',
-                        country:'Australia',
-                        postcode:'3000').save()
-
-        //
-        // Organisations.
-        //
-        Organisation csiroOrg =
-                new Organisation(name:'CSIRO',
-                        department:'CMAR',
-                        phoneNumber:'1234',
-                        faxNumber:'1234',
-                        streetAddress:csiroStreetAddress,
-                        postalAddress:csiroPostalAddress,
-                        status:EntityStatus.ACTIVE).save(failOnError: true)
-
-        Address imosStreetAddress =
-                new Address(streetAddress:'12 Smith Street',
-                        suburbTown:'Hobart',
-                        state:'TAS',
-                        country:'Australia',
-                        postcode:'7000').save()
-
-        Address imosPostalAddress =
-                new Address(streetAddress:'34 Queen Street',
-                        suburbTown:'Melbourne',
-                        state:'VIC',
-                        country:'Australia',
-                        postcode:'3000').save()
-
-        Organisation imosOrg =
-                new Organisation(name:'IMOS',
-                        department:'eMII',
-                        phoneNumber:'5678',
-                        faxNumber:'5678',
-                        streetAddress:imosStreetAddress,
-                        postalAddress:imosPostalAddress,
-                        status:EntityStatus.PENDING).save(failOnError: true)
-
-        Address imosStreetAddress2 =
-                new Address(streetAddress:'12 Smith Street',
-                        suburbTown:'Hobart',
-                        state:'TAS',
-                        country:'Australia',
-                        postcode:'7000').save()
-
-        Address imosPostalAddress2 =
-                new Address(streetAddress:'34 Queen Street',
-                        suburbTown:'Melbourne',
-                        state:'VIC',
-                        country:'Australia',
-                        postcode:'3000').save()
-
-        Organisation imosOrg2 =
-                new Organisation(name:'IMOS 2',
-                        department:'AATAMS',
-                        phoneNumber:'5678',
-                        faxNumber:'5678',
-                        streetAddress:imosStreetAddress2,
-                        postalAddress:imosPostalAddress2,
-                        status:EntityStatus.PENDING).save(failOnError: true)
-
-
         //
         // Projects.
         //
@@ -135,34 +45,13 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
                         status:EntityStatus.ACTIVE,
                         isProtected: true).save(failOnError: true)
 
-        /*OrganisationProject csiroSeals =
-                new OrganisationProject(organisation:csiroOrg,
-                        project:sealCountProject)*/
+            def imosOrg = Organisation.findByName('IMOS')
+            def csiroOrg = Organisation.findByName('CSIRO')
 
-//        sealCountProject.addToOrganisationProjects(csiroSeals)
-//        csiroOrg.addToOrganisationProjects(csiroSeals)
-//        sealCountProject.save(failOnError:true)
-//        csiroOrg.save(failOnError:true)
-
-/*        OrganisationProject csiroTuna =
-                new OrganisationProject(organisation:csiroOrg,
-                        project:tunaProject)
-
-        tunaProject.addToOrganisationProjects(csiroTuna)
-        csiroOrg.addToOrganisationProjects(csiroTuna)
-        tunaProject.save(failOnError:true)
-        csiroOrg.save(failOnError:true)
-*/
-        //
-        // Security/people.
-        //
-        SecRole sysAdmin = new SecRole(name:"SysAdmin")
-        sysAdmin.addToPermissions("*:*")
-        sysAdmin.save(failOnError: true)
-
-        //
-        // People.
-        //
+            def sysAdmin = SecRole.findByName('SysAdmin')
+            ProjectRoleType administrator = ProjectRoleType.findByDisplayName('Administrator')
+            def newStatus = DeviceStatus.findByStatus('NEW')
+            def rx1 = Receiver.findBySerialNumber('101336')
 
         Person sysAdminUser = new Person(username:'admin',
                 passwordHash:new Sha256Hash("password").toHex(),
@@ -197,28 +86,6 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
                         defaultTimeZone:DateTimeZone.forID("Australia/Perth"))
         nonProjectUser.save(failOnError: true);
 
-//        csiroOrg.addToPeople(joeBloggs)
-//        csiroOrg.addToPeople(johnCitizen)
-//        csiroOrg.addToPeople(mrPending)
-//        csiroOrg.save(failOnError:true)
-
-        //
-        // Project Roles.
-        //
-        ProjectRoleType principalInvestigator = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
-        if (!principalInvestigator)
-        {
-            principalInvestigator =
-                    new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save(failOnError: true)
-        }
-
-        ProjectRoleType administrator = ProjectRoleType.findByDisplayName('Administrator')
-        if (!administrator)
-        {
-            administrator =
-                    new ProjectRoleType(displayName:'Administrator').save(failOnError: true)
-        }
-
         ProjectRole protectedRole =
                 new ProjectRole(project:protectedProject,
                         person: projectUser,
@@ -237,66 +104,41 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
         projectUser.addToProjectRoles(embargoedRole).save(failOnError:true, flush:true)   // flush required to keep compass happy
         permissionUtilsService.setPermissions(embargoedRole)
 
-        //
-        // Devices.
-        //
-        DeviceManufacturer vemco =
-                new DeviceManufacturer(manufacturerName:'Vemco').save(failOnError: true)
-
-        DeviceModel vemcoVR2 =
-                new ReceiverDeviceModel(modelName:'VR2', manufacturer:vemco).save(failOnError: true)
-
-        DeviceModel tagDeviceModel = new TagDeviceModel(modelName: 'Tag Device', manufacturer: vemco).save(failOnError: true)
-
-        DeviceStatus newStatus = new DeviceStatus(status:'NEW').save(failOnError: true)
-        DeviceStatus deployedStatus = new DeviceStatus(status:'DEPLOYED').save(failOnError: true)
-        DeviceStatus recoveredStatus = new DeviceStatus(status:'RECOVERED').save(failOnError: true)
-
-        Receiver rx1 =
-                new Receiver(serialNumber:'101336',
-                        status:deployedStatus,
-                        model:vemcoVR2,
-                        organisation:csiroOrg,
-                        comment:'RX 1 belonging to CSIRO').save(failOnError: true)
-
-        csiroOrg.addToReceivers(rx1)
-
-        csiroOrg.save(failOnError:true)
-        imosOrg.save(failOnError:true)
-
-        // CodeMaps.
-        createCodeMaps()
-
         def a69_1303 = CodeMap.findByCodeMap('A69-1303')
+
+        def tagDeviceModel = TagDeviceModel.findByModelName('V8')
+
+        def deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
+        def recoveredStatus = DeviceStatus.findByStatus('RECOVERED')
 
         //
         // Tags.
         //
-        println "Creatign unembargoedTag"
+        println "Creating unembargoedTag"
         Tag unembargoedTag = createTag(
-                [serialNumber:'1111',
+                [serialNumber:'01111',
                  codeMap:a69_1303,
-                 pingCode:'1111',
+                 pingCode:'01111',
                  model:tagDeviceModel,
                  project:unembargoedProject,
                  status:deployedStatus])
         unembargoedProject.addToTags(unembargoedTag).save(failOnError:true)
 
-        println "Creatign embargoedTag"
+        println "Creating embargoedTag"
         Tag embargoedTag = createTag(
-                [serialNumber:'2222',
+                [serialNumber:'02222',
                  codeMap:a69_1303,
-                 pingCode:'2222',
+                 pingCode:'02222',
                  model:tagDeviceModel,
                  project:embargoedProject,
                  status:deployedStatus])
         embargoedProject.addToTags(embargoedTag).save(failOnError:true)
 
-        println "Creatign protectedTag"
+        println "Creating protectedTag"
         Tag protectedTag = createTag(
-                [serialNumber:'3333',
+                [serialNumber:'03333',
                  codeMap:a69_1303,
-                 pingCode:'3333',
+                 pingCode:'03333',
                  model:tagDeviceModel,
                  project:protectedProject,
                  status:newStatus])
@@ -304,33 +146,13 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
 
         a69_1303.save(failOnError:true)
 
-        //
-        // Installation data.
-        //
-        InstallationConfiguration array =
-                new InstallationConfiguration(type:'ARRAY').save(failOnError:true)
-
-        Installation bondiLine =
-                new Installation(name:'Bondi Line',
-                        configuration:array,
-                        project:unembargoedProject).save(failOnError:true)
-
-
-        WKTReader reader = new WKTReader();
-
-        Point location = (Point)reader.read("POINT(30.1234 30.1234)")
-        location.setSRID(4326)
-
-        InstallationStation bondiSW1 =
-                new InstallationStation(installation:bondiLine,
-                        name:'Bondi SW1',
-                        curtainPosition:1,
-                        location:location).save(failOnError:true)
+        WKTReader reader = new WKTReader()
+        def bondiSW1 = InstallationStation.findByName('Bondi SW1')
 
         //
         //  Receiver Deployments.
         //
-        MooringType concreteMooring = new MooringType(type:'CONCRETE BLOCK').save(failOnError:true)
+        MooringType concreteMooring = MooringType.findByType('CONCRETE BLOCK')
 
         ReceiverDeployment rx1Bondi =
                 new ReceiverDeployment(station:bondiSW1,
@@ -351,26 +173,15 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
         //
         // Animals and Animal Releases etc.
         //
-        CaabSpecies whiteShark = new CaabSpecies(scientificName:"Carcharodon carcharias", commonName:"White Shark", spcode:"37010003").save(failOnError:true)
-
-        Sex male = new Sex(sex:'MALE').save(failOnError:true)
+        CaabSpecies whiteShark = CaabSpecies.findBySpcode("37010003")
+        Sex male = Sex.findBySex('MALE')
 
         Animal whiteShark1 = new Animal(species:whiteShark,
                 sex:male).save(failOnError:true)
 
-        AnimalMeasurementType length = new AnimalMeasurementType(type:'LENGTH').save(failOnError:true)
-        AnimalMeasurementType weight = new AnimalMeasurementType(type:'WEIGHT').save(failOnError:true)
-        MeasurementUnit metres = new MeasurementUnit(unit:'m').save(failOnError:true)
-        MeasurementUnit kg = new MeasurementUnit(unit:'kg').save(failOnError:true)
-
-        SurgeryTreatmentType antibiotic = new SurgeryTreatmentType(type:'ANTIBIOTIC').save(failOnError:true)
-        SurgeryTreatmentType anesthetic = new SurgeryTreatmentType(type:'ANESTHETIC').save(failOnError:true)
-        SurgeryType internal = new SurgeryType(type:'INTERNAL').save(failOnError:true)
-        SurgeryType external = new SurgeryType(type:'EXTERNAL').save(failOnError:true)
-
-        CaptureMethod net = new CaptureMethod(name:'NET').save(failOnError:true)
-        CaptureMethod line = new CaptureMethod(name:'LINE').save(failOnError:true)
-        CaptureMethod longLine = new CaptureMethod(name:'LONG LINE').save(failOnError:true)
+        SurgeryTreatmentType antibiotic = SurgeryTreatmentType.findByType('ANTIBIOTIC')
+        SurgeryType external = SurgeryType.findByType('EXTERNAL')
+        CaptureMethod net = CaptureMethod.findByName('NET')
 
         AnimalRelease unembargoedRelease =
                 new AnimalRelease(project:unembargoedProject,
@@ -440,43 +251,6 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
         protectedTag.addToSurgeries(protectedSurgery).save(failOnError:true)
         protectedRelease.addToSurgeries(protectedSurgery).save(failOnError:true)
 
-        // Receiver Recovery.
-        Calendar cal = Calendar.getInstance()
-        cal.set(Calendar.HOUR_OF_DAY, 12)
-        cal.set(Calendar.MINUTE, 34)
-        cal.set(Calendar.SECOND, 56)
-        cal.set(Calendar.MILLISECOND, 0)
-        cal.add(Calendar.DATE, 2)
-
-        DateTime recoveryDateTimeRx1 = new DateTime(cal.getTime().getTime())
-
-        cal.set(Calendar.MINUTE, 54)
-        DateTime recoveryDateTimeRx2 = new DateTime(cal.getTime().getTime())
-
-        ReceiverRecovery recovery1 =
-                new ReceiverRecovery(recoveryDateTime: new DateTime("2014-10-15T00:00:00Z"),
-                        location:(Point)reader.read("POINT(10.1234 10.1234)"),
-                        status:recoveredStatus,
-                        recoverer:protectedRole,
-                        deployment:rx1Bondi,
-                        batteryLife:12.5f,
-                        batteryVoltage:3.7f).save(failOnError:true)
-
-/*
-        createExportWithDetections("export1.csv", jonBurgess, rx1Bondi, rx1, unembargoedTag, unembargoedSurgery, 10)
-        createExportWithDetections("export6.csv", jonBurgess, rx1Bondi, rx1, embargoedTag, surgery4, 3)
-        createExportWithDetections("export3.csv", jonBurgess, rx2Bondi, rx2, embargoedTag, surgery4, 3)
-        createExportWithDetections("export4.csv", jonBurgess, rx3Ningaloo, rx3, protectedTag, surgery4, 3)
-        createExportWithDetections("export5.csv", jonBurgess, rx4Heron, rx4, tag5, null, 3)
-
-        createExportWithDetections("nonEmbargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, nonEmbargoedTag, nonEmbargoedWhaleSurgery, 3)
-        createExportWithDetections("embargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, embargoedTag, embargoedWhaleSurgery, 3)
-        createExportWithDetections("unknownTagWhale.csv", joeBloggs, whaleDeployment, rxWhale, [pinger:[transmitterId:"A69-1303-8888"]], null, 3)
-*/
-
-
-
-
         ReceiverDownloadFile export =
                 new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
                         name:"asdfmate",
@@ -487,12 +261,9 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
 
         export.save(failOnError:true)
 
-        //        createDetections(rx1Bondi, rx1, null /* todo - Tag with no release*/, )
         createDetections(rx1Bondi, rx1, unembargoedTag, export, unembargoedSurgery)
         createDetections(rx1Bondi, rx1, embargoedTag, export, embargoedSurgery)
         createDetections(rx1Bondi, rx1, protectedTag, export, protectedSurgery)
-
-        new Statistics(key: "numValidDetections", value: 3).save(failOnError: true)
     }
 
     private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, tag, ReceiverDownloadFile export1, Surgery surgery1)

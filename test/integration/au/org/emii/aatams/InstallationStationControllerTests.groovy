@@ -1,9 +1,9 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
+import au.org.emii.aatams.test.TestUtils
+
 import grails.test.*
-import groovy.sql.Sql
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class InstallationStationControllerTests extends AbstractControllerUnitTestCase
 {
@@ -24,7 +24,7 @@ class InstallationStationControllerTests extends AbstractControllerUnitTestCase
     // Need to refactor the KML stuff out of ExportService and in to KmlService.
     void testExecuteStationKmlExtract()
     {
-        createDetectionViews(dataSource)
+        TestUtils.createDetectionViews(dataSource)
 
         InstallationStation.metaClass.toKmlDescription = { "some description" }
         controller.params.format = "KML"

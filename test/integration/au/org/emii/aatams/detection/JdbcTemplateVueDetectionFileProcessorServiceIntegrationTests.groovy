@@ -41,10 +41,10 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 
     void testPromoteProvisional()
     {
-        def origMatViewCount = getMatViewCount(sql)
-        def origValidDetCount = getValidDetectionCount(sql)
+        def origDetectionViewCount = getDetectionViewCount()
+        def origValidDetCount = getValidDetectionCount()
         def origInvalidDetCount = InvalidDetection.count()
-        assertEquals(origMatViewCount, origValidDetCount)
+        assertEquals(origDetectionViewCount, origValidDetCount)
 
         def origStatisticsNumValidDetCount = Statistics.findByKey('numValidDetections')?.value
 
@@ -64,14 +64,14 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 
         jdbcTemplateVueDetectionFileProcessorService.process(export)
 
-        def finalMatViewCount = getMatViewCount(sql)
-        def finalValidDetCount = getValidDetectionCount(sql)
+        def finalDetectionViewCount = getDetectionViewCount()
+        def finalValidDetCount = getValidDetectionCount()
         def finalProvDetCount = ValidDetection.findAllByProvisional(true).size()
         def finalStatisticsNumValidDetCount = Statistics.getStatistic('numValidDetections')
 
         assertEquals(origInvalidDetCount, InvalidDetection.count())
         assertEquals(0, finalProvDetCount)
-        assertEquals(origMatViewCount + numNewDets, finalMatViewCount)
+        assertEquals(origDetectionViewCount + numNewDets, finalDetectionViewCount)
         assertEquals(origValidDetCount + numNewDets, finalValidDetCount)
         assertEquals(origStatisticsNumValidDetCount + numNewDets, finalStatisticsNumValidDetCount)
 
@@ -86,6 +86,14 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
 
     def getValidDetectionCount = { sql ->
         sql.firstRow('select count(*) from valid_detection;').count
+    }
+
+    private def getDetectionViewCount() {
+        return sql.firstRow(String.valueOf("select count(*) from ${QueryBuilder.getViewName()};")).count
+    }
+
+    private def getValidDetectionCount() {
+        return sql.firstRow('select count(*) from valid_detection;').count
     }
 
     private def getRefreshedExport(export)

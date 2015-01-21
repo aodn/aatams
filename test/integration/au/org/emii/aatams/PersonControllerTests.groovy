@@ -5,18 +5,18 @@ import org.joda.time.DateTimeZone
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
 
-class PersonControllerTests extends AbstractControllerUnitTestCase 
+class PersonControllerTests extends AbstractControllerUnitTestCase
 {
     boolean mailSent
     String toAddress
-    
+
     protected void setUp()
     {
         super.setUp()
 
         toAddress = null
         mailSent = false
-        controller.metaClass.sendMail = 
+        controller.metaClass.sendMail =
         {
             mailSent = true
         }
@@ -24,16 +24,11 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
         controller.metaClass.message = { LinkedHashMap args -> return "${args.code}" }
     }
 
-    protected void tearDown() 
-    {
-        super.tearDown()
-    }
-
-    void testRegisterThenDelete() 
+    void testRegisterThenDelete()
     {
         hasRole = false
         user = null
-        
+
         def cmd = new PersonCreateCommand(
                       name: "John",
                       username: "John",
@@ -44,11 +39,11 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
                       phoneNumber:"1234",
                       emailAddress:"john@asdf.com",
                       defaultTimeZone:DateTimeZone.forID("Australia/Melbourne"))
-                  
+
         assertTrue(cmd.validate())
 
         controller.save(cmd)
-        
+
         assertNotNull(Person.findByName("John"))
         assertEquals("john", Person.findByName("John").username)
         assertEquals(EntityStatus.PENDING, Person.findByName("John").status)
@@ -56,15 +51,15 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
         def unlistedOrg = Organisation.findByName("unlisted")
         assertNotNull(unlistedOrg)
         assertEquals(EntityStatus.PENDING, unlistedOrg.status)
-        
-        
+
+
         assertEquals(unlistedOrg, Person.findByName("John").organisation)
         assertEquals(Person.findByName("John").username, unlistedOrg.request.requester.username)
-        
+
         assertEquals("show", controller.redirectArgs.action)
-    
+
         assertTrue(mailSent)
-        
+
         // Now delete the org (and check that the just registered user is deleted).
         try
         {
@@ -83,11 +78,11 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
             fail()
         }
     }
-    
+
     void testSaveUsernameToLowerCase()
     {
-        Organisation org = 
-            new Organisation(name:"org", 
+        Organisation org =
+            new Organisation(name:"org",
                              department:"dep",
                              phoneNumber:"1234",
                              faxNumber:"1234",
@@ -95,7 +90,7 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
                              postalAddress:Address.build(),
                              status:EntityStatus.ACTIVE)
         org.save()
-        
+
         def cmd = new PersonCreateCommand(
                       name: "John",
                       username: "John",
@@ -105,37 +100,37 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
                       phoneNumber:"1234",
                       emailAddress:"john@asdf.com",
                       defaultTimeZone:DateTimeZone.forID("Australia/Melbourne"))
-                  
+
 //        mockForConstraintsTests(PersonCreateCommand, [cmd])
         assertTrue(cmd.validate())
 
         controller.save(cmd)
-        
+
         assertEquals("john", Person.findByName("John").username)
         assertEquals("show", controller.redirectArgs.action)
-        
+
         // Try to save "john".
         cmd.name = "john"
         assertTrue(cmd.validate())
         controller.save(cmd)
         assertEquals("create", controller.renderArgs.view)
     }
-    
+
     void testSaveExistingOrganisation()
     {
         hasRole = false
-        
-        Organisation org = 
-            new Organisation(name:"org", 
+
+        Organisation org =
+            new Organisation(name:"org",
                              department:"dep",
                              phoneNumber:"1234",
                              faxNumber:"1234",
                              streetAddress:Address.build(),
                              postalAddress:Address.build(),
                              status:EntityStatus.ACTIVE)
-                         
+
         org.save()
-        
+
         def cmd = new PersonCreateCommand(
                       name: "John",
                       username: "John",
@@ -146,23 +141,23 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
                       phoneNumber:"1234",
                       emailAddress:"john@asdf.com",
                       defaultTimeZone:DateTimeZone.forID("Australia/Melbourne"))
-                  
+
 //        mockForConstraintsTests(PersonCreateCommand, [cmd])
         assertTrue(cmd.validate())
 
         controller.save(cmd)
-        
+
         assertEquals("john", Person.findByName("John").username)
         assertEquals("show", controller.redirectArgs.action)
-        
+
         assertTrue(mailSent)
     }
-    
+
     void testSaveUnlistedOrganisation()
     {
         hasRole = false
         user = null
-        
+
         def cmd = new PersonCreateCommand(
                       name: "John",
                       username: "John",
@@ -173,12 +168,12 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
                       phoneNumber:"1234",
                       emailAddress:"john@asdf.com",
                       defaultTimeZone:DateTimeZone.forID("Australia/Melbourne"))
-                  
+
 //        mockForConstraintsTests(PersonCreateCommand, [cmd])
         assertTrue(cmd.validate())
 
         controller.save(cmd)
-        
+
         assertNotNull(Person.findByName("John"))
         assertEquals("john", Person.findByName("John").username)
         assertEquals(EntityStatus.PENDING, Person.findByName("John").status)
@@ -187,9 +182,9 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
         assertEquals(EntityStatus.PENDING, Organisation.findByName("unlisted").status)
         assertEquals(Organisation.findByName("unlisted"), Person.findByName("John").organisation)
         assertEquals(Person.findByName("John").username, Organisation.findByName("unlisted").request.requester.username)
-        
+
         assertEquals("show", controller.redirectArgs.action)
-    
+
         assertTrue(mailSent)
     }
 }

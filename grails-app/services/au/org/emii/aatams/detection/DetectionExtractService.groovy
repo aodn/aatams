@@ -70,14 +70,14 @@ class DetectionExtractService extends AbstractStreamingExporterService {
 
     def shouldKeepRow(row, params) {
 
-        println "shouldKeepRow => ${_isPublic(row)} || ${_isReadable(row, params)} || ${(_allowSanitisedResults(params) && !_isProtected(row))} -- $row"
+        // println "shouldKeepRow => ${_isPublic(row)} || ${_isReadable(row, params)} || ${(_allowSanitisedResults(params) && !_isProtected(row))} -- $row"
 
         _isPublic(row) || _isReadable(row, params) || (_allowSanitisedResults(params) && !_isProtected(row))
     }
 
     def shouldSanitiseRow(row, params) {
 
-        println "shouldSanitiseRow => ${_isEmbargoed(row)} && ${!_isProtected(row)} && ${!_isReadable(row, params)} -- $row"
+        // println "shouldSanitiseRow => ${_isEmbargoed(row)} && ${!_isProtected(row)} && ${!_isReadable(row, params)} -- $row"
 
         _isEmbargoed(row) && !_isProtected(row) && !_isReadable(row, params)
     }
@@ -91,7 +91,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
     }
 
     def _isProtected(row) {
-        projectIsProtected(row.release_project_id)
+        row.release_project_id && projectIsProtected(row.release_project_id)
     }
 
     def _isEmbargoed(row) {
@@ -116,7 +116,6 @@ class DetectionExtractService extends AbstractStreamingExporterService {
     }
 
     def projectIsProtected(projectId) {
-
         if (!_projectIsProtectedCache.containsKey(projectId)) {
 
             def project = Project.get(projectId) // Todo - DN: Project object might be cached meaning caching results myself in unnecessary

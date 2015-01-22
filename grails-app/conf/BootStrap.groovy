@@ -21,7 +21,6 @@ import shiro.*
 
 class BootStrap
 {
-    def dataSource
     def grailsApplication
     def permissionUtilsService
     def searchableService
@@ -219,19 +218,6 @@ class BootStrap
                 new ApplicationTagLib().createLink(action: 'show', id: rxrDownloadFile.id, absolute:true))
         }
 
-        // Required for following metaclass override to "stick".
-        ValidDetection.count()
-
-        // Performance optimisation (select count(*) is slow on large tables).
-        ValidDetection.metaClass.static.count =
-        {
-
-            return Statistics.getStatistic('numValidDetections')
-        }
-
-        assert(permissionUtilsService): "permissionUtilsService cannot be null"
-        DataInitialiser initialiser  //= new DevelopmentDataInitialiser(permissionUtilsService)
-
         environments
         {
             test
@@ -259,14 +245,17 @@ class BootStrap
 
             performance
             {
-                initialiser = new PerformanceDataInitialiser(permissionUtilsService)
-                assert(initialiser): "Initialiser cannot be null"
-                initialiser.execute()
+                new PerformanceDataInitialiser(permissionUtilsService).execute()
             }
         }
-    }
 
-    def destroy =
-    {
+        // Required for following metaclass override to "stick".
+        ValidDetection.count()
+
+        // Performance optimisation (select count(*) is slow on large tables).
+        ValidDetection.metaClass.static.count =
+        {
+            return Statistics.getStatistic('numValidDetections')
+        }
     }
 }

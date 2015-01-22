@@ -14,9 +14,9 @@ import shiro.*
 
 class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
 {
-    ProtectedSpeciesTestDataInitialiser(def service)
+    ProtectedSpeciesTestDataInitialiser(permissionUtilsService)
     {
-        super(service)
+        super(permissionUtilsService)
     }
 
     void execute()
@@ -116,9 +116,9 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
         //
         println "Creating unembargoedTag"
         Tag unembargoedTag = createTag(
-                [serialNumber:'01111',
+                [serialNumber:'21111',
                  codeMap:a69_1303,
-                 pingCode:'01111',
+                 pingCode:'21111',
                  model:tagDeviceModel,
                  project:unembargoedProject,
                  status:deployedStatus])
@@ -126,9 +126,9 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
 
         println "Creating embargoedTag"
         Tag embargoedTag = createTag(
-                [serialNumber:'02222',
+                [serialNumber:'22222',
                  codeMap:a69_1303,
-                 pingCode:'02222',
+                 pingCode:'22222',
                  model:tagDeviceModel,
                  project:embargoedProject,
                  status:deployedStatus])
@@ -136,9 +136,9 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
 
         println "Creating protectedTag"
         Tag protectedTag = createTag(
-                [serialNumber:'03333',
+                [serialNumber:'23333',
                  codeMap:a69_1303,
-                 pingCode:'03333',
+                 pingCode:'23333',
                  model:tagDeviceModel,
                  project:protectedProject,
                  status:newStatus])

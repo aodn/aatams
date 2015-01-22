@@ -27,7 +27,6 @@ class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
         assertNotNull(pinger46601)
 
         assertEquals(initValidCount, ValidDetection.count())
-
         assertEquals(initInvalidCount, InvalidDetection.count())
 
         // 1) invaliddetection - inside time range - no deployment

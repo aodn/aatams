@@ -9,12 +9,11 @@ import au.org.emii.aatams.PermissionUtilsService
 abstract class AbstractDataInitialiser implements DataInitialiser
 {
     protected final def permissionUtilsService
-    
-    AbstractDataInitialiser(def service)
+
+    AbstractDataInitialiser(thePermissionUtilsService)
     {
-        permissionUtilsService = service
+        permissionUtilsService = thePermissionUtilsService
     }
-    
+
     abstract void execute()
 }
-

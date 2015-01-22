@@ -109,17 +109,19 @@ class DetectionController extends ReportController
         def detections = detectionExtractService.extractPage(params, true)
 //        def detections = detectionExtractService.extractPage(params)/*.grep { it }*/
 
-        def previousSize = detections.size()
+        // def previousSize = detections.size()
 
+        // TODO: move this in to DetectionExtractService - no, because it would be too slow to read each ValidDetection
+        // for large extracts?
         detections = detections.collect {
             def validDetection = ValidDetection.get(it.detection_id)
 
-            def retVal = detectionExtractService.hasReadPermission(validDetection.project.id, params) ? validDetection : validDetection.applyEmbargo(params.allowSanitisedResults)
+            def retVal = detectionExtractService.hasReadPermission(validDetection.project?.id, params) ? validDetection : validDetection.applyEmbargo(params.allowSanitisedResults)
             println "retVal: $retVal"
             retVal
         }.findAll { it != null }
 
-        println "detections.size() = $previousSize -> ${detections.size()}"
+        // println "detections.size() = $previousSize -> ${detections.size()}"
 
         def paramsClone = params.clone()
 

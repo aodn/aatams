@@ -9,6 +9,8 @@ import com.vividsolutions.jts.geom.Point
 import com.vividsolutions.jts.io.ParseException
 import com.vividsolutions.jts.io.WKTReader
 
+import groovy.sql.Sql
+
 import org.apache.shiro.crypto.hash.Sha256Hash
 import org.joda.time.*
 import org.joda.time.format.DateTimeFormat
@@ -22,9 +24,9 @@ import shiro.*
  */
 class DevelopmentDataInitialiser extends AbstractDataInitialiser
 {
-    DevelopmentDataInitialiser(def service)
+    DevelopmentDataInitialiser(permissionUtilsService)
     {
-        super(service)
+        super(permissionUtilsService)
     }
 
     void execute()
@@ -843,7 +845,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         createExportWithDetections("embargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, embargoedTag, embargoedWhaleSurgery, 3)
         createExportWithDetections("unknownTagWhale.csv", joeBloggs, whaleDeployment, rxWhale, [pinger:[transmitterId:"A69-1303-8888"]], null, 3)
 
-        new Statistics(key: "numValidDetections", value: 31).save(failOnError: true)
+
+        initStatistics()
 
         ReceiverDownloadFile export2 =
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
@@ -881,6 +884,13 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         }
 
         export2.save(failOnError:true)
+    }
+
+    private void initStatistics() {
+        new Statistics(
+            key: "numValidDetections",
+            value: 25
+        ).save(failOnError: true)
     }
 
     private void createExportWithDetections(String exportName, Person uploader, ReceiverDeployment deployment, Receiver receiver, tag, Surgery surgery, int numDetections)

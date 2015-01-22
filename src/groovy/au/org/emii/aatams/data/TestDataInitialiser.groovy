@@ -4,14 +4,13 @@ import au.org.emii.aatams.PermissionUtilsService
 
 /**
  * Initialise data for integration tests.
- * 
+ *
  * @author jburgess
  */
 class TestDataInitialiser extends DevelopmentDataInitialiser
 {
-    TestDataInitialiser(def service)
+    TestDataInitialiser(permissionUtilsService)
     {
-        super(service)
+        super(permissionUtilsService)
     }
 }
-

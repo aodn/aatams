@@ -91,8 +91,6 @@ class KmlService implements ApplicationContextAware
 
             println "params.allowSanitisedResults: ${params.allowSanitisedResults}"
 
-//            result = detectionExtractService.extractPage(params)
-//            result = detectionExtractService.applyEmbargo(detectionExtractService.extractPage(params), params)
             result = detectionExtractService.extractPage(params, true)
         }
         else

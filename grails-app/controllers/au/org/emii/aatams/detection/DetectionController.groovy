@@ -19,10 +19,7 @@ class DetectionController extends ReportController
 
     def list =
     {
-        def result = doList("detection")
-
-        flattenParams()
-        return result
+        doList("detection")
     }
 
     protected void cleanDateParams()

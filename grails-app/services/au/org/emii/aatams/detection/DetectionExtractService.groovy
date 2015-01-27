@@ -51,11 +51,10 @@ class DetectionExtractService extends AbstractStreamingExporterService {
             shouldKeepRow(row, params)
         }
 
-        resultsToKeep.findAll { it }.each { row ->
-
-            if (shouldSanitiseRow(row, params)) {
-                sanitise(row)
-            }
+        resultsToKeep.findAll { row ->
+            row != null && shouldSanitiseRow(row, params)
+        }.each{
+            sanitise(it)
         }
 
         return resultsToKeep

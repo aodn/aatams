@@ -13,7 +13,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
     def dataSource
     def permissionUtilsService
 
-    public List extractPage(filterParams, applyEmbargoOnResults = false)
+    public List extractPage(filterParams)
     {
         def query = new QueryBuilder().constructQuery(filterParams)
 
@@ -22,7 +22,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         def endTime = System.currentTimeMillis()
         log.debug("Query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}")
 
-        return applyEmbargoOnResults ? applyEmbargo(results, filterParams) : results
+        return applyEmbargo(results, filterParams)
     }
 
     public Long getCount(filterParams) {
@@ -38,7 +38,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
 
         return results.count[0]
     }
-
+    
     protected String getReportName() {
         return "detection"
     }

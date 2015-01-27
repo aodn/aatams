@@ -44,46 +44,100 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         controller = new DetectionController()
     }
 
-    void testProtectedSpecies() {
-        assertVisible(UNAUTHENTICATED, UNEMBARGOED, FILTER_NOT_SET)
-        assertVisible(UNAUTHENTICATED, UNEMBARGOED, FILTER_SET)
-        assertVisibleButSanitised(UNAUTHENTICATED, EMBARGOED, FILTER_NOT_SET)
-        assertNotVisible(UNAUTHENTICATED, EMBARGOED, FILTER_SET)
-        assertNotVisible(UNAUTHENTICATED, PROTECTED, FILTER_NOT_SET)
-        assertNotVisible(UNAUTHENTICATED, PROTECTED, FILTER_SET)
-
-        assertVisible(NON_PROJECT_MEMBER, UNEMBARGOED, FILTER_NOT_SET)
-        assertVisible(NON_PROJECT_MEMBER, UNEMBARGOED, FILTER_SET)
-        assertVisibleButSanitised(NON_PROJECT_MEMBER, EMBARGOED, FILTER_NOT_SET)
-        assertNotVisible(NON_PROJECT_MEMBER, EMBARGOED, FILTER_SET)
-        assertNotVisible(NON_PROJECT_MEMBER, PROTECTED, FILTER_NOT_SET)
-        assertNotVisible(NON_PROJECT_MEMBER, PROTECTED, FILTER_SET)
-
-        assertVisible(PROJECT_MEMBER, UNEMBARGOED, FILTER_NOT_SET)
-        assertVisible(PROJECT_MEMBER, UNEMBARGOED, FILTER_SET)
-        assertVisible(PROJECT_MEMBER, EMBARGOED, FILTER_NOT_SET)
-        assertVisible(PROJECT_MEMBER, EMBARGOED, FILTER_SET)
-        assertVisible(PROJECT_MEMBER, PROTECTED, FILTER_NOT_SET)
-        assertVisible(PROJECT_MEMBER, PROTECTED, FILTER_SET)
-
-        assertVisible(SYS_ADMIN, UNEMBARGOED, FILTER_NOT_SET)
-        assertVisible(SYS_ADMIN, UNEMBARGOED, FILTER_SET)
-        assertVisible(SYS_ADMIN, EMBARGOED, FILTER_NOT_SET)
-        assertVisible(SYS_ADMIN, EMBARGOED, FILTER_SET)
-        assertVisible(SYS_ADMIN, PROTECTED, FILTER_NOT_SET)
-        assertVisible(SYS_ADMIN, PROTECTED, FILTER_SET)
+    void testProtectedSpeciesFilteringA() {
+        assertCorrectResult(UNAUTHENTICATED, UNEMBARGOED, FILTER_NOT_SET, VISIBLE)
     }
 
-    void assertVisible(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet) {
-        assertCorrectResult(authLevel, protectionLevel, speciesFilterSet, VISIBLE)
+    void testProtectedSpeciesFilteringB() {
+        assertCorrectResult(UNAUTHENTICATED, UNEMBARGOED, FILTER_SET, VISIBLE)
     }
 
-    void assertVisibleButSanitised(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet) {
-        assertCorrectResult(authLevel, protectionLevel, speciesFilterSet, VISIBLE_BUT_SANITISED)
+    void testProtectedSpeciesFilteringC() {
+        assertCorrectResult(UNAUTHENTICATED, EMBARGOED, FILTER_NOT_SET, VISIBLE_BUT_SANITISED)
     }
 
-    void assertNotVisible(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet) {
-        assertCorrectResult(authLevel, protectionLevel, speciesFilterSet, NOT_VISIBLE)
+    void testProtectedSpeciesFilteringD() {
+        assertCorrectResult(UNAUTHENTICATED, EMBARGOED, FILTER_SET, NOT_VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringE() {
+        assertCorrectResult(UNAUTHENTICATED, PROTECTED, FILTER_NOT_SET, NOT_VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringF() {
+        assertCorrectResult(UNAUTHENTICATED, PROTECTED, FILTER_SET, NOT_VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringG() {
+        assertCorrectResult(NON_PROJECT_MEMBER, UNEMBARGOED, FILTER_NOT_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringH() {
+        assertCorrectResult(NON_PROJECT_MEMBER, UNEMBARGOED, FILTER_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringI() {
+        assertCorrectResult(NON_PROJECT_MEMBER, EMBARGOED, FILTER_NOT_SET, VISIBLE_BUT_SANITISED)
+    }
+
+    void testProtectedSpeciesFilteringJ() {
+        assertCorrectResult(NON_PROJECT_MEMBER, EMBARGOED, FILTER_SET, NOT_VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringK() {
+        assertCorrectResult(NON_PROJECT_MEMBER, PROTECTED, FILTER_NOT_SET, NOT_VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringL() {
+        assertCorrectResult(NON_PROJECT_MEMBER, PROTECTED, FILTER_SET, NOT_VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringM() {
+        assertCorrectResult(PROJECT_MEMBER, UNEMBARGOED, FILTER_NOT_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringO() {
+        assertCorrectResult(PROJECT_MEMBER, UNEMBARGOED, FILTER_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringP() {
+        assertCorrectResult(PROJECT_MEMBER, EMBARGOED, FILTER_NOT_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringQ() {
+        assertCorrectResult(PROJECT_MEMBER, EMBARGOED, FILTER_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringR() {
+        assertCorrectResult(PROJECT_MEMBER, PROTECTED, FILTER_NOT_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringS() {
+        assertCorrectResult(PROJECT_MEMBER, PROTECTED, FILTER_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringT() {
+        assertCorrectResult(SYS_ADMIN, UNEMBARGOED, FILTER_NOT_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringU() {
+        assertCorrectResult(SYS_ADMIN, UNEMBARGOED, FILTER_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringV() {
+        assertCorrectResult(SYS_ADMIN, EMBARGOED, FILTER_NOT_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringW() {
+        assertCorrectResult(SYS_ADMIN, EMBARGOED, FILTER_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringX() {
+        assertCorrectResult(SYS_ADMIN, PROTECTED, FILTER_NOT_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringY() {
+        assertCorrectResult(SYS_ADMIN, PROTECTED, FILTER_SET, VISIBLE)
     }
 
     void assertCorrectResult(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet, ExpectedResult expectedResult) {
@@ -265,7 +319,6 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
 
     def loadFilter(speciesFilterSet) {
 
-        // params.filter?.detectionSurgeries?.surgery?.release?.animal?.species?.in.grep{
         def speciesFilter = [
             detectionSurgeries: [
                 surgery: [

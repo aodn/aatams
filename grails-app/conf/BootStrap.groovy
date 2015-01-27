@@ -216,7 +216,6 @@ class BootStrap
             test
             {
                 new TestDataInitialiser(permissionUtilsService).execute()
-                new ProtectedSpeciesTestDataInitialiser(permissionUtilsService).execute()
             }
 
             development

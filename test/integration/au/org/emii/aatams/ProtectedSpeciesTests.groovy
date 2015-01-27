@@ -1,7 +1,6 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.*
-import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import static ProtectedSpeciesTests.AuthLevel.*
 import static ProtectedSpeciesTests.ProtectionLevel.*
@@ -45,103 +44,33 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         controller = new DetectionController()
     }
 
-    // void testTodoUncommentAllOtherTests() {
-    //     fail "Uncomment all the other tests, yo"
-    // }
-
-    void testProtectedSpeciesFilteringA() {
+    void testProtectedSpecies() {
         assertVisible(UNAUTHENTICATED, UNEMBARGOED, FILTER_NOT_SET)
-    }
-
-    void testProtectedSpeciesFilteringB() {
         assertVisible(UNAUTHENTICATED, UNEMBARGOED, FILTER_SET)
-    }
-
-    void testProtectedSpeciesFilteringC() {
         assertVisibleButSanitised(UNAUTHENTICATED, EMBARGOED, FILTER_NOT_SET)
-    }
-
-    void testProtectedSpeciesFilteringD() {
         assertNotVisible(UNAUTHENTICATED, EMBARGOED, FILTER_SET)
-    }
-
-    void testProtectedSpeciesFilteringE() {
         assertNotVisible(UNAUTHENTICATED, PROTECTED, FILTER_NOT_SET)
-    }
-
-    void testProtectedSpeciesFilteringF() {
         assertNotVisible(UNAUTHENTICATED, PROTECTED, FILTER_SET)
-    }
 
-    void testProtectedSpeciesFilteringG() {
         assertVisible(NON_PROJECT_MEMBER, UNEMBARGOED, FILTER_NOT_SET)
-    }
-
-    void testProtectedSpeciesFilteringH() {
         assertVisible(NON_PROJECT_MEMBER, UNEMBARGOED, FILTER_SET)
-    }
-
-    void testProtectedSpeciesFilteringI() {
         assertVisibleButSanitised(NON_PROJECT_MEMBER, EMBARGOED, FILTER_NOT_SET)
-    }
-
-    void testProtectedSpeciesFilteringJ() {
         assertNotVisible(NON_PROJECT_MEMBER, EMBARGOED, FILTER_SET)
-    }
-
-    void testProtectedSpeciesFilteringK() {
         assertNotVisible(NON_PROJECT_MEMBER, PROTECTED, FILTER_NOT_SET)
-    }
-
-    void testProtectedSpeciesFilteringL() {
         assertNotVisible(NON_PROJECT_MEMBER, PROTECTED, FILTER_SET)
-    }
 
-    void testProtectedSpeciesFilteringM() {
         assertVisible(PROJECT_MEMBER, UNEMBARGOED, FILTER_NOT_SET)
-    }
-
-    void testProtectedSpeciesFilteringO() {
         assertVisible(PROJECT_MEMBER, UNEMBARGOED, FILTER_SET)
-    }
-
-    void testProtectedSpeciesFilteringP() {
         assertVisible(PROJECT_MEMBER, EMBARGOED, FILTER_NOT_SET)
-    }
-
-    void testProtectedSpeciesFilteringQ() {
         assertVisible(PROJECT_MEMBER, EMBARGOED, FILTER_SET)
-    }
-
-    void testProtectedSpeciesFilteringR() {
         assertVisible(PROJECT_MEMBER, PROTECTED, FILTER_NOT_SET)
-    }
-
-    void testProtectedSpeciesFilteringS() {
         assertVisible(PROJECT_MEMBER, PROTECTED, FILTER_SET)
-    }
 
-    void testProtectedSpeciesFilteringT() {
         assertVisible(SYS_ADMIN, UNEMBARGOED, FILTER_NOT_SET)
-    }
-
-    void testProtectedSpeciesFilteringU() {
         assertVisible(SYS_ADMIN, UNEMBARGOED, FILTER_SET)
-    }
-
-    void testProtectedSpeciesFilteringV() {
         assertVisible(SYS_ADMIN, EMBARGOED, FILTER_NOT_SET)
-    }
-
-    void testProtectedSpeciesFilteringW() {
         assertVisible(SYS_ADMIN, EMBARGOED, FILTER_SET)
-    }
-
-    void testProtectedSpeciesFilteringX() {
         assertVisible(SYS_ADMIN, PROTECTED, FILTER_NOT_SET)
-    }
-
-    void testProtectedSpeciesFilteringY() {
         assertVisible(SYS_ADMIN, PROTECTED, FILTER_SET)
     }
 
@@ -165,14 +94,14 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
 
         assertCorrectResultsForListAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter)
         assertCorrectResultsForCsvExportAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter)
-        assertCorrectResultsForKmlExportAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter)
+
+        // KML feature disabled for now (see: https://github.com/aodn/aatams/issues/170)
+        // assertCorrectResultsForKmlExportAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter)
     }
 
     void assertCorrectResultsForListAction(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet, ExpectedResult expectedResult, project, filter) {
 
-        def description = "Checking list action:   ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
-
-        println description
+        def description = "Checking list action: ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
 
         controller.params.filter = filter
 
@@ -217,8 +146,6 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
 
         def description = "Checking CSV export action: ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
 
-        println description
-
         controller.params.filter = filter
 
         controller.export()
@@ -226,17 +153,12 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         def resultsFromExportAction = controller.response.contentAsString
         def resultsForProject = resultsFromExportAction.readLines().findAll{
             def tag = project.tags.sort().first()
-            println "Finding '$tag' in '$it'"
             it.contains(tag.toString())
         }
-
-        println "${resultsFromExportAction.readLines().size()} -> ${resultsForProject.size()}"
 
         switch (expectedResult) {
             case VISIBLE:
                 assertEquals description, 1, resultsForProject.size()
-
-                println "project.tags.sort().first() - ${project.tags.sort().first()}"
 
                 def detectionExport = resultsForProject.first()
                 assertTrue description, detectionExport.contains(",37010003 - Carcharodon carcharias (White Shark),")
@@ -263,8 +185,6 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
 
         def description = "Checking KML export action: ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
 
-        println description
-
         def params = [
             format: "KMZ (tag tracks)",
             filter: [
@@ -284,18 +204,9 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
 
         def kml = kmlService.generateKml(ValidDetection, params)
 
-        println "KML"
-        println "${kml.class}"
-        println "${kml}"
-
         def baos = new ByteArrayOutputStream()
         kml.marshal(baos)
         def kmlAsText = new String(baos.toByteArray())
-
-        println "_____________________________________________-"
-        println "kmlAsText: ${kmlAsText.size()}"
-        println kmlAsText
-        println "_____________________________________________-"
 
         switch (expectedResult) {
             case VISIBLE:
@@ -353,16 +264,6 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
     }
 
     def loadFilter(speciesFilterSet) {
-
-/*        def speciesFilter = [ // Todo - DN: "Definitely wrong" - jkburges
-                              // "animal.species.in":["spcode", ""],
-            animal: [
-                // "species.in":["spcode", ""],
-                species: [
-                    in:["spcode", "37010003"]
-                ]
-            ]
-        ]*/
 
         // params.filter?.detectionSurgeries?.surgery?.release?.animal?.species?.in.grep{
         def speciesFilter = [

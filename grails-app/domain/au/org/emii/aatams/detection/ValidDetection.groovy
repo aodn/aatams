@@ -146,10 +146,6 @@ class ValidDetection extends RawDetection implements Embargoable
 
     def applyEmbargo(allowSanitised = true) {
 
-        println "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-        println "~ ValidDetection.applyEmbargo($allowSanitised) ~"
-        println "On: $this"
-
         def anyReleaseEmbargoed = false
 
         // Return a temporary detection, with embargoed surgeries removed.
@@ -171,19 +167,6 @@ class ValidDetection extends RawDetection implements Embargoable
 
         def protectionRequired = project.isProtected && anyReleaseEmbargoed
         def hideFromResults = anyReleaseEmbargoed && !allowSanitised
-
-        println """
-project             = $project
-project.isProtected = ${project.isProtected}
-anyReleaseEmbargoed = ${anyReleaseEmbargoed}
-allowSanitised      = ${allowSanitised}
-
-protectionRequired = $protectionRequired
-hideFromResults    = $hideFromResults
-
-protectionRequired || hideFromResults = ${protectionRequired || hideFromResults}
-"""
-        println "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 
         if (protectionRequired || hideFromResults) {
             return null

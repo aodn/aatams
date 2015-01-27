@@ -109,7 +109,6 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
         def tagDeviceModel = TagDeviceModel.findByModelName('V8')
 
         def deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
-        def recoveredStatus = DeviceStatus.findByStatus('RECOVERED')
 
         //
         // Tags.
@@ -261,12 +260,12 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
 
         export.save(failOnError:true)
 
-        createDetections(rx1Bondi, rx1, unembargoedTag, export, unembargoedSurgery)
-        createDetections(rx1Bondi, rx1, embargoedTag, export, embargoedSurgery)
-        createDetections(rx1Bondi, rx1, protectedTag, export, protectedSurgery)
+        createDetections(rx1Bondi, rx1, unembargoedTag, export)
+        createDetections(rx1Bondi, rx1, embargoedTag, export)
+        createDetections(rx1Bondi, rx1, protectedTag, export)
     }
 
-    private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, tag, ReceiverDownloadFile export1, Surgery surgery1)
+    private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, tag, ReceiverDownloadFile export1)
     {
 
         ValidDetection detection =
@@ -278,21 +277,6 @@ class ProtectedSpeciesTestDataInitialiser extends AbstractDataInitialiser
                         provisional: false)
 
         export1.addToDetections(detection)
-    }
-
-    private void createCodeMaps()
-    {
-        ["A69", "A180"].each
-                {
-                    freq ->
-
-                        ["1303", "1601", "9001", "9003", "1206", "1105", "9002", "9004"].each
-                                {
-                                    codeSpace ->
-
-                                        CodeMap codeMap = new CodeMap(codeMap:freq + "-" + codeSpace).save(failOnError:true, flush:true)
-                                }
-                }
     }
 
     private Tag createTag(params)

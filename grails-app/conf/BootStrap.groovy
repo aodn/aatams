@@ -5,19 +5,12 @@ import au.org.emii.aatams.detection.*
 import grails.converters.JSON
 import grails.converters.XML
 
-import com.vividsolutions.jts.geom.Point
-import com.vividsolutions.jts.io.ParseException
-import com.vividsolutions.jts.io.WKTReader
-
-import org.apache.shiro.crypto.hash.Sha256Hash
 import org.joda.time.*
 import org.joda.time.format.DateTimeFormat
 
 import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
 
 import com.vividsolutions.jts.geom.Point
-
-import shiro.*
 
 class BootStrap
 {
@@ -228,19 +221,10 @@ class BootStrap
 
             development
             {
-
-                /*initialiser = new ProtectedSpeciesTestDataInitialiser(permissionUtilsService)
-
-                assert(initialiser): "Initialiser cannot be null"
-                initialiser.execute()*/
-
-                /*if (Boolean.getBoolean('initialiseWithData'))
+                if (Boolean.getBoolean('initialiseWithData'))
                 {
-                    initialiser = new DevelopmentDataInitialiser(permissionUtilsService)
-
-                    assert(initialiser): "Initialiser cannot be null"
-                    initialiser.execute()
-                }*/
+                    new DevelopmentDataInitialiser(permissionUtilsService).execute()
+                }
             }
 
             performance

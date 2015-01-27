@@ -22,11 +22,14 @@ class AbstractController
         flattenParams()
 
         def clazz = reportInfoService.getClassForName(queryName)
-        if (resultList.count < grailsApplication.config.filter.count.max + 1) {
-            flash.message = "${resultList.count} matching records (${clazz.count()} total)."
-        }
-        else {
-            flash.message = "&gt; ${grailsApplication.config.filter.count.max} matching records (${clazz.count()} total)."
+
+        if (queryName != "detection") {
+            if (resultList.count < grailsApplication.config.filter.count.max + 1) {
+                flash.message = "${resultList.count} matching records (${clazz.count()} total)."
+            }
+            else {
+                flash.message = "&gt; ${grailsApplication.config.filter.count.max} matching records (${clazz.count()} total)."
+            }
         }
 
         [entityList: resultList.results,

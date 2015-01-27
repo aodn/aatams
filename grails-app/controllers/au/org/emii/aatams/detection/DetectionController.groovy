@@ -79,7 +79,8 @@ class DetectionController extends ReportController
     {
         if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export))
         {
-            doExport("detection")
+            //            doExport("detection")
+            assert(false): "This is functionality is currently disabled, in order to implement to 'Protected Species' feature."
         }
         else
         {

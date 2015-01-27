@@ -49,6 +49,7 @@
                     </thead>
                     <tbody>
                     <g:each in="${entityList}" status="i" var="detectionInstance">
+
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 
                             <td class="rowButton"><g:link class="show" action="show" id="${detectionInstance.id}">.</g:link></td>
@@ -57,19 +58,19 @@
                                               format="yyyy-MM-dd'T'HH:mm:ssZ"
                                               timeZone='${TimeZone.getTimeZone("UTC")}'/></td>
 
-                            <td>${fieldValue(bean: detectionInstance, field: "receiverName")}</td>
+                            <td>${detectionInstance.receiverName}</td>
 
-                            <td><g:link controller="receiverDeployment" action="show" id="${detectionInstance?.receiverDeployment?.id}">${fieldValue(bean: detectionInstance, field: "receiverDeployment")}</g:link></td>
+                            <td><g:link controller="receiverDeployment" action="show" id="${detectionInstance?.receiverDeployment?.id}">${detectionInstance.receiverDeployment}</g:link></td>
 
-                            <td>${fieldValue(bean: detectionInstance, field: "transmitterId")}</td>
+                            <td>${detectionInstance.transmitterId}</td>
 
-                            <td>${fieldValue(bean: detectionInstance, field: "transmitterName")}</td>
+                            <td>${detectionInstance.transmitterName}</td>
 
-                            <td>${fieldValue(bean: detectionInstance, field: "transmitterSerialNumber")}</td>
+                            <td>${detectionInstance.transmitterSerialNumber}</td>
 
-                            <td>${fieldValue(bean: detectionInstance, field: "stationName")}</td>
+                            <td>${detectionInstance.stationName}</td>
 
-                            <td><g:link controller="person" action="show" id="${detectionInstance?.receiverDownload?.requestingUser?.id}">${fieldValue(bean: detectionInstance.receiverDownload, field: "requestingUser")}</g:link></td>
+                            <td><g:link controller="person" action="show" id="${detectionInstance?.receiverDownload?.requestingUser?.id}">${detectionInstance.receiverDownload.requestingUser}</g:link></td>
 
                         </tr>
                     </g:each>

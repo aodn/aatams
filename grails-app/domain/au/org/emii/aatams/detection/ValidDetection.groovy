@@ -179,4 +179,22 @@ class ValidDetection extends RawDetection implements Embargoable
     {
         return new SensorTrackKml(detections, serverURL)
     }
+
+    static def toPresentationFormat(detectionRow) {
+
+        def validDetection = ValidDetection.get(detectionRow.detection_id)
+
+        def dto = [:]
+
+        [ 'id', 'project', 'timestamp', 'receiverName', 'receiverDeployment', 'transmitterId', 'transmitterName',
+          'transmitterSerialNumber', 'stationName', 'receiverDownload'
+        ].each {
+            dto[it] = validDetection[it]
+        }
+
+        dto.speciesNames = detectionRow.species_name
+        dto.sensorIds = detectionRow.sensor_id
+
+        return dto
+    }
 }

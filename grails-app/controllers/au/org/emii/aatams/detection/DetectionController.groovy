@@ -58,16 +58,7 @@ class DetectionController extends ReportController
         // them back to java.util.Dates again.
         cleanDateParams()
 
-        _checkSpeciesFilter()
-        def detections = detectionExtractService.extractPage(params, true)
-
-        // TODO: move this in to DetectionExtractService - no, because it would be too slow to read each ValidDetection
-        // for large extracts?
-        detections = detections.collect {
-            def validDetection = ValidDetection.get(it.detection_id)
-
-            detectionExtractService.hasReadPermission(validDetection.project?.id, params) ? validDetection : validDetection.applyEmbargo(params.allowSanitisedResults)
-        }.findAll { it != null }
+        def detections = detectionExtractService.extractPage(params, true).collect { ValidDetection.toPresentationFormat(it) }
 
         def paramsClone = params.clone()
 
@@ -82,8 +73,6 @@ class DetectionController extends ReportController
 
     def export =
     {
-        _checkSpeciesFilter()
-
         if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export))
         {
             //            doExport("detection")
@@ -170,12 +159,5 @@ class DetectionController extends ReportController
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'detection.label', default: 'ValidDetection'), params.id])}"
             redirect(action: "list")
         }
-    }
-
-    def _checkSpeciesFilter() {
-        def speciesFilterValue = params.filter?.detectionSurgeries?.surgery?.release?.animal?.species?.in.grep{ it.trim() }
-        def filteredOnSpecies = speciesFilterValue.size() > 1
-
-        params.allowSanitisedResults = !filteredOnSpecies
     }
 }

@@ -51,8 +51,8 @@ class DetectionExtractService extends AbstractStreamingExporterService {
             shouldKeepRow(row, params)
         }
 
-        resultsToKeep.findAll { row ->
-            row != null && shouldSanitiseRow(row, params)
+        resultsToKeep.findAll{ it }.findAll { row ->
+            shouldSanitiseRow(row, params)
         }.each{
             sanitise(it)
         }
@@ -87,7 +87,12 @@ class DetectionExtractService extends AbstractStreamingExporterService {
     }
 
     def _allowSanitisedResults(params) {
-        params.allowSanitisedResults
+        !_isFilteredOnSpecies(params.filter)
+    }
+
+    def _isFilteredOnSpecies(filter) {
+        def speciesFilterValue = filter?.detectionSurgeries?.surgery?.release?.animal?.species?.in?.grep{ it.trim() }
+        speciesFilterValue?.size() > 1
     }
 
     def sanitise(row) {

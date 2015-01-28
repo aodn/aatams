@@ -15,12 +15,8 @@ class DetectionExtractService extends AbstractStreamingExporterService {
 
     public List extractPage(filterParams)
     {
-        def query = new QueryBuilder().constructQuery(filterParams)
-
-        def startTime = System.currentTimeMillis()
-        def results = filterParams.sql.rows(query.getSQL(), query.getBindValues())
-        def endTime = System.currentTimeMillis()
-        log.debug("Query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}")
+        def query =  new QueryBuilder().constructQuery(filterParams)
+        def results = performQuery(filterParams.sql, query)
 
         return applyEmbargo(results, filterParams)
     }
@@ -30,15 +26,23 @@ class DetectionExtractService extends AbstractStreamingExporterService {
             return ValidDetection.count()
         }
 
-        def query = new QueryBuilder().constructCountQuery(filterParams)
-        def startTime = System.currentTimeMillis()
-        def results = filterParams.sql.rows(query.getSQL(), query.getBindValues())
-        def endTime = System.currentTimeMillis()
-        log.debug("Count query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}")
+        def query =  new QueryBuilder().constructCountQuery(filterParams)
+        def results = performQuery(filterParams.sql, query)
 
         return results.count[0]
     }
-    
+
+    def performQuery(sql, query) {
+
+        def startTime = System.currentTimeMillis()
+        def results = sql.rows(query.getSQL(), query.getBindValues())
+        def endTime = System.currentTimeMillis()
+
+        log.debug("Query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}, query: ${query}")
+
+        return results
+    }
+
     protected String getReportName() {
         return "detection"
     }
@@ -61,12 +65,10 @@ class DetectionExtractService extends AbstractStreamingExporterService {
     }
 
     def shouldKeepRow(row, params) {
-
         _isPublic(row) || _isReadable(row, params) || (_allowSanitisedResults(params) && !_isProtected(row))
     }
 
     def shouldSanitiseRow(row, params) {
-
         _isEmbargoed(row) && !_isProtected(row) && !_isReadable(row, params)
     }
 

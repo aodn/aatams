@@ -70,7 +70,6 @@ class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase
     void testDetectionEmbargoMemberOfDeploymentProject()
     {
         acceptedPermissionString = "project:${installationProject.id}:read"
-        // assertNull(embargoService.applyEmbargo(det)) // Detection is now being sanitised (and therefore not null)
 
         [surgery, release].each {
             assertNull(visibilityControlService.applyVisibilityControls(it))

@@ -32,7 +32,7 @@
                 <div class="dialog">
                     <table>
                         <tbody>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="name"><g:message code="project.name.label" default="Name" /></label>
@@ -42,7 +42,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="organisation"><g:message code="project.organisation.label" default="Organisation" /></label>
@@ -52,7 +52,7 @@
 
                                 </td>
                             </tr>
-                            
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="person"><g:message code="project.organisation.label" default="Project Investigator" /></label>
@@ -62,8 +62,17 @@
 
                                 </td>
                             </tr>
-                            
-                            
+
+                            <shiro:hasRole name="SysAdmin">
+                                <tr class="prop">
+                                    <td valign="top" class="name">
+                                        <label for="isProtected"><g:message code="project.isProtected.label" default="Protected" /></label>
+                                    </td>
+                                    <td valign="top" class="value ${hasErrors(bean: projectInstance, field: 'isProtected', 'errors')}">
+                                        <g:checkBox name="isProtected" value="${projectInstance?.isProtected}" checked="${projectInstance?.isProtected}" />
+                                    </td>
+                                </tr>
+                            </shiro:hasRole>
                         </tbody>
                     </table>
                 </div>

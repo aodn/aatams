@@ -84,7 +84,6 @@ abstract class AbstractStreamingExporterService
 
         while (results.size() > 0)
         {
-//            results = applyEmbargo(results, params)
             writeCsvChunk(results, out)
 
             results = readData(params)

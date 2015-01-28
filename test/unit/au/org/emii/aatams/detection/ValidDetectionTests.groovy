@@ -1,19 +1,8 @@
 package au.org.emii.aatams.detection
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter
-import org.joda.time.format.ISODateTimeFormat;
-
 import au.org.emii.aatams.*
 import grails.test.*
 import com.vividsolutions.jts.geom.*
-
-import de.micromata.opengis.kml.v_2_2_0.Document
-import de.micromata.opengis.kml.v_2_2_0.Folder;
-import de.micromata.opengis.kml.v_2_2_0.Kml
-import de.micromata.opengis.kml.v_2_2_0.Placemark;
-import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
-import de.micromata.opengis.kml.v_2_2_0.gx.Track;
 
 class ValidDetectionTests extends GrailsUnitTestCase
 {

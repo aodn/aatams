@@ -200,7 +200,7 @@
 
                         </tr>
 
-                        <g:if test="${animalReleaseInstance?.protected}">
+                        <g:if test="${animalReleaseInstance?.protectionActive}">
                             <tr class="prop">
                                 <td valign="top" class="name"><g:message code="project.isProtected.label" default="Protected" /></td>
 

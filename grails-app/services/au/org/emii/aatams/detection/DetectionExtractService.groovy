@@ -1,8 +1,5 @@
 package au.org.emii.aatams.detection
 
-import au.org.emii.aatams.Project
-import org.apache.shiro.SecurityUtils
-
 import au.org.emii.aatams.export.AbstractStreamingExporterService
 import au.org.emii.aatams.util.GeometryUtils
 import groovy.sql.Sql
@@ -49,76 +46,11 @@ class DetectionExtractService extends AbstractStreamingExporterService {
 
     protected def applyEmbargo(results, params) {
 
-        clearProjectIsProtectedCache()
+        def projectIsProtectedCache = [:]
 
-        def resultsToKeep = results.grep { row ->
-            shouldKeepRow(row, params)
-        }
-
-        resultsToKeep.findAll{ it }.findAll { row ->
-            shouldSanitiseRow(row, params)
-        }.each{
-            sanitise(it)
-        }
-
-        return resultsToKeep
-    }
-
-    def shouldKeepRow(row, params) {
-        _isPublic(row) || _isReadable(row, params) || (_allowSanitisedResults(params) && !_isProtected(row))
-    }
-
-    def shouldSanitiseRow(row, params) {
-        _isEmbargoed(row) && !_isProtected(row) && !_isReadable(row, params)
-    }
-
-    def _isPublic(row) {
-        !(_isEmbargoed(row) || _isProtected(row))
-    }
-
-    def _isReadable(row, params) {
-        hasReadPermission(row.release_project_id, params)
-    }
-
-    def _isProtected(row) {
-        row.release_project_id && projectIsProtected(row.release_project_id)
-    }
-
-    def _isEmbargoed(row) {
-        row.embargo_date && row.embargo_date.after(new Date())
-    }
-
-    def _allowSanitisedResults(params) {
-        !_isFilteredOnSpecies(params.filter)
-    }
-
-    def _isFilteredOnSpecies(filter) {
-        def speciesFilterValue = filter?.detectionSurgeries?.surgery?.release?.animal?.species?.in?.grep{ it.trim() }
-        speciesFilterValue?.size() > 1
-    }
-
-    def sanitise(row) {
-        row.species_name = ""
-        row.spcode = ""
-        row.sensor_id = ""
-    }
-
-    def _projectIsProtectedCache
-
-    def clearProjectIsProtectedCache(){
-
-        _projectIsProtectedCache = [:]
-    }
-
-    def projectIsProtected(projectId) {
-        if (!_projectIsProtectedCache.containsKey(projectId)) {
-
-            def project = Project.get(projectId)
-
-            _projectIsProtectedCache[projectId] = project.isProtected
-        }
-
-        return _projectIsProtectedCache[projectId]
+        results.collect { row ->
+            new DetectionVisibilityChecker(row, params, permissionUtilsService, projectIsProtectedCache).apply()
+        }.findAll{ it }
     }
 
     protected void writeCsvData(final filterParams, OutputStream out)
@@ -180,22 +112,5 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         out << "sensor unit"
 
         out << "\n"
-    }
-
-    private boolean hasReadPermission(projectId, params)
-    {
-        if (projectId == null)
-        {
-            return true
-        }
-
-        if (!params.projectPermissionCache.containsKey(projectId))
-        {
-            String permissionString = permissionUtilsService.buildProjectReadPermission(projectId)
-            params.projectPermissionCache.put(projectId, SecurityUtils.subject.isPermitted(permissionString))
-        }
-
-        assert(params.projectPermissionCache.containsKey(projectId))
-        return params.projectPermissionCache[projectId]
     }
 }

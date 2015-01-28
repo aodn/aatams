@@ -497,6 +497,24 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkEmbargoed(surgeryController, surgeryPastEmbargoed, false, 'surgery')
     }
 
+    void testRedirectToLoginWhenEmbargoedAndNotAuthenticatedForJon()
+    {
+        controllerName = "detection"
+        actionName = "show"
+        authenticated = false
+
+        checkEmbargoed(detectionController, detectionEmbargoedNonReadableProject, true, 'detection', "login", "/detection/show/" + detectionEmbargoedNonReadableProject.id)
+    }
+
+    void testRedirectToLoginWhenProtectedAndNotAuthenticatedForJon()
+    {
+        controllerName = "detection"
+        actionName = "show"
+        authenticated = false
+
+        checkEmbargoed(detectionController, detectionProtectedNonReadableProject, true, 'detection', "login", "/detection/show/" + detectionProtectedNonReadableProject.id)
+    }
+
     void testRedirectToLoginWhenEmbargoedAndNotAuthenticated()
     {
         controllerName = "sensor"

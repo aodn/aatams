@@ -70,14 +70,17 @@ class VisibilityControlService
     {
         if (!(itemToControl instanceof Embargoable))
         {
+            println "Not Embargoable"
             return itemToControl
         }
 
         if (hasReadPermission(itemToControl))
         {
+            println "Has Read permission"
             return itemToControl
         }
 
+        println "Returning: ${itemToControl.applyEmbargo() == null}"
         return itemToControl.applyEmbargo()
     }
 

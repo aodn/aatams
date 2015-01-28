@@ -32,24 +32,17 @@ class VisibilityControlFilters
             }
         }
 
-        genericNotList(controller: visibilityControlControllers, action:notListActions)
+        genericNotList(controller: visibilityControlControllers, action: notListActions)
         {
-            after =
-            {
+            after = {
                 model ->
 
-                    if (controllerName == "detection") {
-                        model.detectionInstance = visibilityControlService.applyVisibilityControls(model.detectionInstance)
-                    }
-                    else {
+                def instanceName = "${controllerName}Instance"
 
-                        def instanceName = "${controllerName}Instance"
-
-                        if (visibilityControlService.isAccessControlled(model[instanceName]))
-                        {
-                            redirect(getRedirectParams(id: model[instanceName].id, controllerName: controllerName, actionName: actionName))
-                        }
-                    }
+                if (visibilityControlService.isAccessControlled(model[instanceName]))
+                {
+                    redirect(getRedirectParams(id: model[instanceName].id, controllerName: controllerName, actionName: actionName))
+                }
             }
         }
     }

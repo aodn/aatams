@@ -5,14 +5,14 @@ class Animal implements Embargoable
     static hasMany = [releases: AnimalRelease]
     Species species
     Sex sex
-    
+
     static constraints =
     {
         sex(nullable:true)
     }
 
     static transients = ['embargoed', 'project']
-    
+
     String toString()
     {
         // Cast is necessary to avoid NPE.
@@ -24,10 +24,10 @@ class Animal implements Embargoable
         buf.append("tags (")
         buf.append(releases*.surgeries*.tag)
         buf.append(")")
-        
+
         return buf.toString()
     }
-    
+
     boolean isEmbargoed()
     {
         def embargoed = false
@@ -35,7 +35,7 @@ class Animal implements Embargoable
         releases.each {
             embargoed |= it.embargoed
         }
-        
+
         return embargoed
     }
 
@@ -49,7 +49,7 @@ class Animal implements Embargoable
         if (releases.isEmpty()) {
             return null
         }
-        
+
         return (releases as List).first()?.project
     }
 }

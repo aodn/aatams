@@ -81,8 +81,8 @@ class VisibilityControlService
         return itemToControl.applyEmbargo()
     }
 
-    boolean isAccessControlled(Embargoable embargoee)
-    {
+    boolean isAccessControlled(Embargoable embargoee) {
+
         if (embargoee == null)
         {
             return false

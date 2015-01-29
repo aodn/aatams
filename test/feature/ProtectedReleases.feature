@@ -17,23 +17,33 @@ Scenario Outline: project protection configuration
         | authenticated, project user | not visible |
 
 
-Scenario Outline: protection notification
-    Given I have navigated to the "Edit/Show" <screen> screen
+Scenario Outline: protection notification in project screen
+    Given I have navigated to the "Edit/Show" project screen
     And the project is <protection level>
-    Then a notification <screen> "is protected" will be <visibility>
+    Then a notification "Project is protected" will be <visibility>
 
     Examples:
 
-        | screen  | protection level | relative date | visibility  |
-        |         |                  |               |             |
-        | Project | protected        | before        | visible     |
-        | Project | protected        | after         | not visible |
-        | Project | non protected    | before        | not visible |
-        | Project | non protected    | after         | not visible |
-        | Release | protected        | before        | visible     |
-        | Release | protected        | after         | not visible |
-        | Release | non protected    | before        | not visible |
-        | Release | non protected    | after         | not visible |
+        | protection level | visibility  |
+        |                  |             |
+        | protected        | visible     |
+        | non protected    | not visible |
+
+
+Scenario Outline: protection notification in release screen
+    Given I have navigated to the "Edit/Show" release screen
+    And the release's project is <protection level>
+    And the current date is <relative date> the release's embargo expiry date
+    Then a notification "Release is protected" will be <visibility>
+
+    Examples:
+
+        | protection level | relative date | visibility  |
+        |                  |               |             |
+        | protected        | before        | visible     |
+        | protected        | after         | not visible |
+        | non protected    | before        | not visible |
+        | non protected    | after         | not visible |
 
 
 #

@@ -24,4 +24,10 @@ class TestUtils
             sql.execute(String.valueOf("create or replace view ${viewName} as ${ConfigurationHolder.config.detection.extract[viewName].definition}"))
         }
     }
+
+    enum VisibilityLevel {
+        VISIBLE,
+        VISIBLE_BUT_SANITISED,
+        NOT_VISIBLE
+    }
 }

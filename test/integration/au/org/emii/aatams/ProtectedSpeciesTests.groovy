@@ -5,7 +5,7 @@ import au.org.emii.aatams.detection.*
 import static ProtectedSpeciesTests.AuthLevel.*
 import static ProtectedSpeciesTests.ProtectionLevel.*
 import static ProtectedSpeciesTests.FilterStatus.*
-import static ProtectedSpeciesTests.ExpectedResult.*
+import static au.org.emii.aatams.test.TestUtils.VisibilityLevel.*
 
 class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests {
 
@@ -29,12 +29,6 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
     enum FilterStatus {
         FILTER_SET,
         FILTER_NOT_SET
-    }
-
-    enum ExpectedResult {
-        VISIBLE,
-        VISIBLE_BUT_SANITISED,
-        NOT_VISIBLE
     }
 
     @Override
@@ -140,7 +134,7 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         assertCorrectResult(SYS_ADMIN, PROTECTED, FILTER_SET, VISIBLE)
     }
 
-    void assertCorrectResult(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet, ExpectedResult expectedResult) {
+    void assertCorrectResult(authLevel, protectionLevel, speciesFilterSet, expectedResult) {
 
         configureAccess(authLevel)
         def project = loadProject(protectionLevel)
@@ -153,7 +147,7 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         // assertCorrectResultsForKmlExportAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter)
     }
 
-    void assertCorrectResultsForListAction(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet, ExpectedResult expectedResult, project, filter) {
+    void assertCorrectResultsForListAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter) {
 
         def description = "Checking list action: ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
 
@@ -196,7 +190,7 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         }
     }
 
-    void assertCorrectResultsForCsvExportAction(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet, ExpectedResult expectedResult, project, filter) {
+    void assertCorrectResultsForCsvExportAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter) {
 
         def description = "Checking CSV export action: ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
 
@@ -235,7 +229,7 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         }
     }
 
-    void assertCorrectResultsForKmlExportAction(AuthLevel authLevel, ProtectionLevel protectionLevel, FilterStatus speciesFilterSet, ExpectedResult expectedResult, project, filter) {
+    void assertCorrectResultsForKmlExportAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter) {
 
         def description = "Checking KML export action: ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
 

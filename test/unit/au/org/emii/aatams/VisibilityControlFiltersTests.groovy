@@ -11,6 +11,8 @@ import org.codehaus.groovy.grails.plugins.web.filters.FilterConfig
 
 import org.apache.shiro.SecurityUtils
 
+import static au.org.emii.aatams.test.TestUtils.VisibilityLevel.*
+
 class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
 {
     def visibilityControlService
@@ -275,6 +277,8 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         detectionEmbargoedReadableProject.metaClass.getSurgeries = { [surgeryEmbargoedReadableProject] }
         detectionEmbargoedNonReadableProject.metaClass.getSurgeries = { [surgeryEmbargoedNonReadableProject] }
         detectionPastEmbargoed.metaClass.getSurgeries = { [surgeryPastEmbargoed] }
+        detectionProtectedReadableProject.metaClass.getSurgeries = { [surgeryProtectedReadableProject] }
+        detectionProtectedNonReadableProject.metaClass.getSurgeries = { [surgeryProtectedNonReadableProject] }
 
         animalList.each { it.save() }
         animalMeasurementList.each { it.save() }
@@ -365,12 +369,12 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         controllerName = "animal"
         actionName = "show"
 
-        checkEmbargoed(animalController, animalNonEmbargoed, false, 'animal')
-        checkEmbargoed(animalController, animalEmbargoedReadableProject, false, 'animal')
-        checkEmbargoed(animalController, animalEmbargoedNonReadableProject, true, 'animal')
-        checkEmbargoed(animalController, animalPastEmbargoed, false, 'animal')
-        checkEmbargoed(animalController, animalProtectedReadableProject, false, 'animal')
-        checkEmbargoed(animalController, animalProtectedNonReadableProject, true, 'animal')
+        checkVisibility(animalController, animalNonEmbargoed, VISIBLE, 'animal')
+        checkVisibility(animalController, animalEmbargoedReadableProject, VISIBLE, 'animal')
+        checkVisibility(animalController, animalEmbargoedNonReadableProject, NOT_VISIBLE, 'animal')
+        checkVisibility(animalController, animalPastEmbargoed, VISIBLE, 'animal')
+        checkVisibility(animalController, animalProtectedReadableProject, VISIBLE, 'animal')
+        checkVisibility(animalController, animalProtectedNonReadableProject, NOT_VISIBLE, 'animal')
     }
 
     void testAnimalMeasurementList()
@@ -383,12 +387,12 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         controllerName = "animalMeasurement"
         actionName = "show"
 
-        checkEmbargoed(animalMeasurementController, animalMeasurementNonEmbargoed, false, 'animalMeasurement')
-        checkEmbargoed(animalMeasurementController, animalMeasurementEmbargoedReadableProject, false, 'animalMeasurement')
-        checkEmbargoed(animalMeasurementController, animalMeasurementEmbargoedNonReadableProject, true, 'animalMeasurement')
-        checkEmbargoed(animalMeasurementController, animalMeasurementPastEmbargoed, false, 'animalMeasurement')
-        checkEmbargoed(animalMeasurementController, animalMeasurementProtectedReadableProject, false, 'animalMeasurement')
-        checkEmbargoed(animalMeasurementController, animalMeasurementProtectedNonReadableProject, true, 'animalMeasurement')
+        checkVisibility(animalMeasurementController, animalMeasurementNonEmbargoed, VISIBLE, 'animalMeasurement')
+        checkVisibility(animalMeasurementController, animalMeasurementEmbargoedReadableProject, VISIBLE, 'animalMeasurement')
+        checkVisibility(animalMeasurementController, animalMeasurementEmbargoedNonReadableProject, NOT_VISIBLE, 'animalMeasurement')
+        checkVisibility(animalMeasurementController, animalMeasurementPastEmbargoed, VISIBLE, 'animalMeasurement')
+        checkVisibility(animalMeasurementController, animalMeasurementProtectedReadableProject, VISIBLE, 'animalMeasurement')
+        checkVisibility(animalMeasurementController, animalMeasurementProtectedNonReadableProject, NOT_VISIBLE, 'animalMeasurement')
     }
 
     void testAnimalReleaseList()
@@ -401,12 +405,12 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         controllerName = "animalRelease"
         actionName = "show"
 
-        checkEmbargoed(releaseController, releaseNonEmbargoed, false, 'animalRelease')
-        checkEmbargoed(releaseController, releaseEmbargoedReadableProject, false, 'animalRelease')
-        checkEmbargoed(releaseController, releaseEmbargoedNonReadableProject, true, 'animalRelease')
-        checkEmbargoed(releaseController, releasePastEmbargoed, false, 'animalRelease')
-        checkEmbargoed(releaseController, releaseProtectedReadableProject, false, 'animalRelease')
-        checkEmbargoed(releaseController, releaseProtectedNonReadableProject, true, 'animalRelease')
+        checkVisibility(releaseController, releaseNonEmbargoed, VISIBLE, 'animalRelease')
+        checkVisibility(releaseController, releaseEmbargoedReadableProject, VISIBLE, 'animalRelease')
+        checkVisibility(releaseController, releaseEmbargoedNonReadableProject, NOT_VISIBLE, 'animalRelease')
+        checkVisibility(releaseController, releasePastEmbargoed, VISIBLE, 'animalRelease')
+        checkVisibility(releaseController, releaseProtectedReadableProject, VISIBLE, 'animalRelease')
+        checkVisibility(releaseController, releaseProtectedNonReadableProject, NOT_VISIBLE, 'animalRelease')
     }
 
     void testTagNotList()
@@ -414,12 +418,12 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         controllerName = "tag"
         actionName = "show"
 
-        checkEmbargoed(tagController, tagNonEmbargoed, false, 'tag')
-        checkEmbargoed(tagController, tagEmbargoedReadableProject, false, 'tag')
-        checkEmbargoed(tagController, tagEmbargoedNonReadableProject, true, 'tag')
-        checkEmbargoed(tagController, tagPastEmbargoed, false, 'tag')
-        checkEmbargoed(tagController, tagProtectedReadableProject, false, 'tag')
-        checkEmbargoed(tagController, tagProtectedNonReadableProject, true, 'tag')
+        checkVisibility(tagController, tagNonEmbargoed, VISIBLE, 'tag')
+        checkVisibility(tagController, tagEmbargoedReadableProject, VISIBLE, 'tag')
+        checkVisibility(tagController, tagEmbargoedNonReadableProject, NOT_VISIBLE, 'tag')
+        checkVisibility(tagController, tagPastEmbargoed, VISIBLE, 'tag')
+        checkVisibility(tagController, tagProtectedReadableProject, VISIBLE, 'tag')
+        checkVisibility(tagController, tagProtectedNonReadableProject, NOT_VISIBLE, 'tag')
     }
 
     void testSensorList()
@@ -432,19 +436,19 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         controllerName = "sensor"
         actionName = "show"
 
-        checkEmbargoed(sensorController, sensorNonEmbargoed, false, 'sensor')
-        checkEmbargoed(sensorController, sensorEmbargoedReadableProject, false, 'sensor')
-        checkEmbargoed(sensorController, sensorEmbargoedNonReadableProject, true, 'sensor')
-        checkEmbargoed(sensorController, sensorPastEmbargoed, false, 'sensor')
-        checkEmbargoed(sensorController, sensorProtectedReadableProject, false, 'sensor')
-        checkEmbargoed(sensorController, sensorProtectedNonReadableProject, true, 'sensor')
+        checkVisibility(sensorController, sensorNonEmbargoed, VISIBLE, 'sensor')
+        checkVisibility(sensorController, sensorEmbargoedReadableProject, VISIBLE, 'sensor')
+        checkVisibility(sensorController, sensorEmbargoedNonReadableProject, NOT_VISIBLE, 'sensor')
+        checkVisibility(sensorController, sensorPastEmbargoed, VISIBLE, 'sensor')
+        checkVisibility(sensorController, sensorProtectedReadableProject, VISIBLE, 'sensor')
+        checkVisibility(sensorController, sensorProtectedNonReadableProject, NOT_VISIBLE, 'sensor')
 
-        checkEmbargoed(sensorController, sensorPingerNonEmbargoed, false, 'sensor')
-        checkEmbargoed(sensorController, sensorPingerEmbargoedReadableProject, false, 'sensor')
-        checkEmbargoed(sensorController, sensorPingerEmbargoedNonReadableProject, true, 'sensor')
-        checkEmbargoed(sensorController, sensorPingerPastEmbargoed, false, 'sensor')
-        checkEmbargoed(sensorController, sensorPingerProtectedReadableProject, false, 'sensor')
-        checkEmbargoed(sensorController, sensorPingerProtectedNonReadableProject, true, 'sensor')
+        checkVisibility(sensorController, sensorPingerNonEmbargoed, VISIBLE, 'sensor')
+        checkVisibility(sensorController, sensorPingerEmbargoedReadableProject, VISIBLE, 'sensor')
+        checkVisibility(sensorController, sensorPingerEmbargoedNonReadableProject, NOT_VISIBLE, 'sensor')
+        checkVisibility(sensorController, sensorPingerPastEmbargoed, VISIBLE, 'sensor')
+        checkVisibility(sensorController, sensorPingerProtectedReadableProject, VISIBLE, 'sensor')
+        checkVisibility(sensorController, sensorPingerProtectedNonReadableProject, NOT_VISIBLE, 'sensor')
     }
 
     void testDetectionList()
@@ -475,12 +479,12 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         controllerName = "detection"
         actionName = "show"
 
-        checkDetection(detectionNonEmbargoed, false)
-        checkDetection(detectionEmbargoedReadableProject, false)
-        checkDetection(detectionEmbargoedNonReadableProject, true)
-        checkDetection(detectionPastEmbargoed, false)
-        checkDetectionProtected(detectionProtectedReadableProject, true)
-        checkDetectionProtected(detectionProtectedNonReadableProject, true)
+        checkVisibility(detectionController, detectionNonEmbargoed, VISIBLE, 'detection')
+        checkVisibility(detectionController, detectionEmbargoedReadableProject, VISIBLE, 'detection')
+        checkVisibility(detectionController, detectionEmbargoedNonReadableProject, VISIBLE_BUT_SANITISED, 'detection')
+        checkVisibility(detectionController, detectionPastEmbargoed, VISIBLE, 'detection')
+        checkVisibility(detectionController, detectionProtectedReadableProject, VISIBLE, 'detection')
+        checkVisibility(detectionController, detectionProtectedNonReadableProject, NOT_VISIBLE, 'detection')
     }
 
     void testSurgeryList() {
@@ -491,28 +495,10 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         controllerName = "surgery"
         actionName = "show"
 
-        checkEmbargoed(surgeryController, surgeryNonEmbargoed, false, 'surgery')
-        checkEmbargoed(surgeryController, surgeryEmbargoedReadableProject, false, 'surgery')
-        checkEmbargoed(surgeryController, surgeryEmbargoedNonReadableProject, true, 'surgery')
-        checkEmbargoed(surgeryController, surgeryPastEmbargoed, false, 'surgery')
-    }
-
-    void testRedirectToLoginWhenEmbargoedAndNotAuthenticatedForJon()
-    {
-        controllerName = "detection"
-        actionName = "show"
-        authenticated = false
-
-        checkEmbargoed(detectionController, detectionEmbargoedNonReadableProject, true, 'detection', "login", "/detection/show/" + detectionEmbargoedNonReadableProject.id)
-    }
-
-    void testRedirectToLoginWhenProtectedAndNotAuthenticatedForJon()
-    {
-        controllerName = "detection"
-        actionName = "show"
-        authenticated = false
-
-        checkEmbargoed(detectionController, detectionProtectedNonReadableProject, true, 'detection', "login", "/detection/show/" + detectionProtectedNonReadableProject.id)
+        checkVisibility(surgeryController, surgeryNonEmbargoed, VISIBLE, 'surgery')
+        checkVisibility(surgeryController, surgeryEmbargoedReadableProject, VISIBLE, 'surgery')
+        checkVisibility(surgeryController, surgeryEmbargoedNonReadableProject, NOT_VISIBLE, 'surgery')
+        checkVisibility(surgeryController, surgeryPastEmbargoed, VISIBLE, 'surgery')
     }
 
     void testRedirectToLoginWhenEmbargoedAndNotAuthenticated()
@@ -521,7 +507,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         actionName = "show"
         authenticated = false
 
-        checkEmbargoed(sensorController, sensorEmbargoedNonReadableProject, true, 'sensor', "login", "/sensor/show/" + sensorEmbargoedNonReadableProject.id)
+        checkVisibility(sensorController, sensorEmbargoedNonReadableProject, NOT_VISIBLE, "login", "/sensor/show/" + sensorEmbargoedNonReadableProject.id, 'sensor')
     }
 
     void testRedirectToLoginWhenProtectedAndNotAuthenticated()
@@ -530,7 +516,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         actionName = "show"
         authenticated = false
 
-        checkEmbargoed(sensorController, sensorProtectedNonReadableProject, true, 'sensor', "login", "/sensor/show/" + sensorProtectedNonReadableProject.id)
+        checkVisibility(sensorController, sensorProtectedNonReadableProject, NOT_VISIBLE, "login", "/sensor/show/" + sensorProtectedNonReadableProject.id, 'sensor')
     }
 
     void testRedirectToUnauthorizedWhenEmbargoedAndAuthenticated()
@@ -539,7 +525,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         actionName = "show"
         authenticated = true
 
-        checkEmbargoed(sensorController, sensorEmbargoedNonReadableProject, true, 'sensor', "unauthorized", null)
+        checkVisibility(sensorController, sensorEmbargoedNonReadableProject, NOT_VISIBLE, "unauthorized", null, 'sensor')
     }
 
     void testRedirectToUnauthorizedWhenProtectedAndAuthenticated()
@@ -548,10 +534,10 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         actionName = "show"
         authenticated = true
 
-        checkEmbargoed(sensorController, sensorProtectedNonReadableProject, true, 'sensor', "unauthorized", null)
+        checkVisibility(sensorController, sensorProtectedNonReadableProject, NOT_VISIBLE, "unauthorized", null, 'sensor')
     }
 
-    private void checkDetection(def detection, boolean isEmbargoed)
+    private void checkDetection(detection, visibilityLevel)
     {
         assert(detection)
 
@@ -573,12 +559,21 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         assertEquals('jbloggs', model.detectionInstance.receiverDownload.requestingUser.username)
         assertEquals(detection.timestamp, model.detectionInstance.timestamp)
 
-        if (isEmbargoed) {
-            // ... but not the associated detectionSurgeries (which links detection back to tag/release)
-            assertTrue(model.detectionInstance.surgeries.isEmpty())
-        }
-        else {
-            assertEquals(1, model.detectionInstance.surgeries.size())
+        switch (visibilityLevel) {
+            case VISIBLE:
+                assertEquals(1, model.detectionInstance.surgeries.size())
+                break
+
+            case VISIBLE_BUT_SANITISED:
+                fail "Don't forget"
+                break
+
+            case NOT_VISIBLE:
+                assertTrue(model.detectionInstance.surgeries.isEmpty())
+                break
+
+            default:
+                fail "Unknown VisibilityLevel: $visibilityLevel"
         }
     }
 
@@ -637,12 +632,12 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         assertEquals(expectedTotalAfterEmbargo, model.total)
     }
 
-    private void checkEmbargoed(def controller, def entity, boolean isEmbargoed, String entityName)
+    private void checkVisibility(controller, entity, expectedVisibilityLevel, entityName)
     {
-        checkEmbargoed(controller, entity, isEmbargoed, entityName, "unauthorized", null)
+        checkVisibility(controller, entity, expectedVisibilityLevel, "unauthorized", null, entityName)
     }
 
-    private void checkEmbargoed(def controller, def entity, boolean isEmbargoed, String entityName, expectedRedirectAction, expectedTargetUri)
+    private void checkVisibility(controller, entity, expectedVisibilityLevel, expectedRedirectAction, expectedTargetUri, entityName)
     {
         controller.params.id = entity.id
         assert(controller.params)
@@ -661,21 +656,31 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
             return expectedTargetUri
         }
 
-        boolean result = filter.after(model)
+        filter.after(model)
 
-        if (isEmbargoed)
-        {
-            // redirect auth/unauthorized
-            assertEquals("auth", redirectArgs.controller)
-            assertEquals(expectedRedirectAction, redirectArgs.action)
-            if (expectedTargetUri)
-            {
-                assertEquals(expectedTargetUri, redirectArgs.params.targetUri)
-            }
-        }
-        else
-        {
-            assertNull(result)
+        def instance = model["${entityName}Instance"]
+
+        switch (expectedVisibilityLevel) {
+            case VISIBLE:
+                assertNotNull instance
+                break
+
+            case VISIBLE_BUT_SANITISED:
+                assertNotNull instance.metaClass.respondsTo(entity, "isSanitised")
+                assertTrue instance.isSanitised()
+                break
+
+            case NOT_VISIBLE:
+                // redirect auth/unauthorized
+                assertEquals("auth", redirectArgs.controller)
+                assertEquals(expectedRedirectAction, redirectArgs.action)
+                if (expectedTargetUri) {
+                    assertEquals(expectedTargetUri, redirectArgs.params.targetUri)
+                }
+                break
+
+            default:
+                fail "Unknown VisibilityLevel: $expectedVisibilityLevel"
         }
     }
 }

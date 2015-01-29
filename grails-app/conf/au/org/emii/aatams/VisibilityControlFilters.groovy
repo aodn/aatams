@@ -34,14 +34,17 @@ class VisibilityControlFilters
 
         genericNotList(controller: visibilityControlControllers, action: notListActions)
         {
-            after = {
-                model ->
+            after = { model ->
 
                 def instanceName = "${controllerName}Instance"
+                def instance = model[instanceName]
 
-                if (visibilityControlService.isAccessControlled(model[instanceName]))
+                if (visibilityControlService.isAccessControlled(instance))
                 {
-                    redirect(getRedirectParams(id: model[instanceName].id, controllerName: controllerName, actionName: actionName))
+                    redirect(getRedirectParams(id: instance.id, controllerName: controllerName, actionName: actionName))
+                }
+                else {
+                    model[instanceName] = visibilityControlService.applyVisibilityControls(instance)
                 }
             }
         }

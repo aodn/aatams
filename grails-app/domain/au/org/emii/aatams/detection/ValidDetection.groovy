@@ -9,7 +9,7 @@ class ValidDetection extends RawDetection implements Embargoable
 {
     static belongsTo = [receiverDownload:ReceiverDownloadFile, receiverDeployment: ReceiverDeployment]
     static transients = RawDetection.transients +
-        ['project', 'sensorIds', 'speciesNames', 'surgeries', 'placemark', 'release', 'mostRecentSurgery', 'mostRecentRelease']
+        ['project', 'sensorIds', 'speciesNames', 'surgeries', 'placemark', 'release', 'mostRecentSurgery', 'mostRecentRelease', 'sanitised']
 
     /**
      * All new detections are marked provisional being upload processing is completed.
@@ -164,8 +164,10 @@ class ValidDetection extends RawDetection implements Embargoable
 
         censoredDetection.sensorIds = getSensorIds(censoredDetection.surgeries)
         censoredDetection.speciesNames = getSpeciesNames(censoredDetection.surgeries)
+        censoredDetection.isSanitised = { -> true }
 
         def protectionRequired = project.isProtected && anyReleaseEmbargoed
+
         def hideFromResults = anyReleaseEmbargoed && !allowSanitised
 
         if (protectionRequired || hideFromResults) {
@@ -173,6 +175,10 @@ class ValidDetection extends RawDetection implements Embargoable
         }
 
         return censoredDetection
+    }
+
+    def isSanitised() {
+        !sensorIds && !speciesNames
     }
 
     static Kml toKml(List<ValidDetection> detections, serverURL)

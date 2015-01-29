@@ -10,12 +10,15 @@ class DetectionExtractService extends AbstractStreamingExporterService {
     def dataSource
     def permissionUtilsService
 
-    public List extractPage(filterParams)
-    {
+    public def extractPage(filterParams) {
+
         def query =  new QueryBuilder().constructQuery(filterParams)
         def results = performQuery(filterParams.sql, query)
+        def rowCount = results.size()
 
-        return applyEmbargo(results, filterParams)
+        return [
+            results: applyEmbargo(results, filterParams), rowCount: rowCount
+        ]
     }
 
     public Long getCount(filterParams) {
@@ -61,12 +64,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         super.writeCsvData(filterParams, out)
     }
 
-    def generateReport(filterParams, req, res)
-    {
-        super.generateReport(filterParams, req, res)
-    }
-
-    protected List readData(filterParams)
+    protected def readData(filterParams)
     {
         return extractPage(filterParams)
     }

@@ -76,7 +76,7 @@ class DetectionVisibilityChecker {
     }
 
     def _isFilteredOnSpecies(filter) {
-        def speciesFilterValue = filter?.detectionSurgeries?.surgery?.release?.animal?.species?.in?.grep{ it.trim() }
+        def speciesFilterValue = filter?.surgeries?.release?.animal?.species?.in?.grep{ it.trim() }
         speciesFilterValue?.size() > 1
     }
 

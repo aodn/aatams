@@ -5,15 +5,16 @@ import au.org.emii.aatams.ValidReceiverEvent
 class ReceiverEventExportService extends AbstractStreamingExporterService
 {
     def queryService
-    
+
     protected String getReportName()
     {
         return "receiverEvent"
     }
-    
-    protected List readData(filterParams)
+
+    protected def readData(filterParams)
     {
-        return queryService.query(ValidReceiverEvent.class, filterParams).results
+        def queryResult = queryService.query(ValidReceiverEvent.class, filterParams)
+        return [results: queryResult.results, rowCount: queryResult.count]
     }
 
     protected def writeCsvChunk(resultList, OutputStream out)
@@ -29,7 +30,7 @@ class ReceiverEventExportService extends AbstractStreamingExporterService
             out << row.data << ","
             out << row.units << "\n"
         }
-        
+
         return resultList.size()
     }
 

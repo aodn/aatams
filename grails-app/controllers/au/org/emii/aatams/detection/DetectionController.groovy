@@ -58,7 +58,7 @@ class DetectionController extends ReportController
         // them back to java.util.Dates again.
         cleanDateParams()
 
-        def detections = detectionExtractService.extractPage(params).collect { ValidDetection.toPresentationFormat(it) }
+        def detections = detectionExtractService.extractPage(params).results.collect { ValidDetection.toPresentationFormat(it) }
 
         def paramsClone = params.clone()
 

@@ -236,12 +236,10 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
         def params = [
             format: "KMZ (tag tracks)",
             filter: [
-                detectionSurgeries: [
-                    surgery: [
-                        release: [
-                            project: [
-                                in: ['id', String.valueOf(project.id)]
-                            ]
+                surgeries: [
+                    release: [
+                        project: [
+                            in: ['id', String.valueOf(project.id)]
                         ]
                     ]
                 ]
@@ -314,13 +312,11 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
     def loadFilter(speciesFilterSet) {
 
         def speciesFilter = [
-            detectionSurgeries: [
-                surgery: [
-                    release: [
-                        animal: [
-                            species: [
-                                in:["spcode", "37010003"]
-                            ]
+            surgeries: [
+                release: [
+                    animal: [
+                        species: [
+                            in:["spcode", "37010003"]
                         ]
                     ]
                 ]

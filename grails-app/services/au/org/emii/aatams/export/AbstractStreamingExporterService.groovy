@@ -12,7 +12,7 @@ abstract class AbstractStreamingExporterService
     protected abstract void writeCsvHeader(OutputStream out)
     protected abstract def writeCsvChunk(resultList, OutputStream out)
     protected def applyEmbargo(results, params) { return results }
-    protected abstract List readData(filterParams)
+    protected abstract def readData(filterParams)
     protected abstract String getReportName()
 
     protected generateReport(params, req, res)
@@ -76,8 +76,10 @@ abstract class AbstractStreamingExporterService
         params.limit = getLimit()
         params.offset = 0
 
-        def results = readData(params)
-        params.offset = params.offset + results.size()
+        def data = readData(params)
+        def results = data.results
+        def rowCount = data.rowCount
+        params.offset = params.offset + rowCount
 
         indicateExportStart(params)
         writeCsvHeader(out)
@@ -86,8 +88,10 @@ abstract class AbstractStreamingExporterService
         {
             writeCsvChunk(results, out)
 
-            results = readData(params)
-            params.offset = params.offset + results.size()
+            data = readData(params)
+            results = data.results
+            rowCount = data.rowCount
+            params.offset = params.offset + rowCount
         }
     }
 

@@ -537,67 +537,6 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkVisibility(sensorController, sensorProtectedNonReadableProject, NOT_VISIBLE, "unauthorized", null, 'sensor')
     }
 
-    private void checkDetection(detection, visibilityLevel)
-    {
-        assert(detection)
-
-        detectionController.params.id = detection.id
-        def model = detectionController.show()
-        assertNotNull(model)
-        assertEquals(1, model.size())
-
-        FilterConfig filter = getFilter("genericNotList")
-        assertNotNull(filter)
-
-        // All entities should be there...
-        filter.after(model)
-        assertNotNull(model)
-        assertEquals(1, model.size())
-        assertNotNull(model.detectionInstance)
-        assertNotNull(model.detectionInstance.receiverDownload)
-        assertNotNull(model.detectionInstance.receiverDownload.requestingUser)
-        assertEquals('jbloggs', model.detectionInstance.receiverDownload.requestingUser.username)
-        assertEquals(detection.timestamp, model.detectionInstance.timestamp)
-
-        switch (visibilityLevel) {
-            case VISIBLE:
-                assertEquals(1, model.detectionInstance.surgeries.size())
-                break
-
-            case VISIBLE_BUT_SANITISED:
-                fail "Don't forget"
-                break
-
-            case NOT_VISIBLE:
-                assertTrue(model.detectionInstance.surgeries.isEmpty())
-                break
-
-            default:
-                fail "Unknown VisibilityLevel: $visibilityLevel"
-        }
-    }
-
-    private void checkDetectionProtected(detection, shouldBeVisible) {
-
-        assertNotNull(detection)
-
-        detectionController.params.id = detection.id
-        def model = detectionController.show()
-        assertNotNull(model)
-        assertEquals(1, model.size())
-
-        FilterConfig filter = getFilter("genericNotList")
-        assertNotNull(filter)
-        filter.after(model)
-
-        if (shouldBeVisible) {
-            assertNotNull(model.detectionInstance)
-        }
-        else {
-            assertNull(model.detectionInstance)
-        }
-    }
-
     private void checkList(controller, entityName)
     {
         controller.params._name = "entityName"

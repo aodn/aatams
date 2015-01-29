@@ -11,7 +11,6 @@ import javax.servlet.ServletContext
  */
 class ReportControllerTests extends AbstractControllerUnitTestCase
 {
-    def queryService
     def permissionUtilsService
 
     def grailsApplication

@@ -16,6 +16,7 @@ class Project
 
     String name
     String description
+    boolean isProtected = false
 
     // These couple of attributes allow any authenticated user to request
     // project creation.
@@ -28,6 +29,7 @@ class Project
         description(nullable:true, blank:true)
         status()
         requestingUser(nullable:true)
+        isProtected()
     }
 
     static mapping =

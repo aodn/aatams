@@ -38,7 +38,7 @@ environments {
 
     test {
         dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop','update'
+            dbCreate = "create" // one of 'create', 'create-drop','update'
             url = "jdbc:postgresql://localhost:5432/aatams_test"
             username = "aatams_test"
             password = "aatams_test"

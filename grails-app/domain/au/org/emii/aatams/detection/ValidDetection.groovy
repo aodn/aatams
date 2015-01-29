@@ -1,7 +1,6 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
-import au.org.emii.aatams.util.StringUtils
 import au.org.emii.aatams.util.SqlUtils
 
 import de.micromata.opengis.kml.v_2_2_0.Kml
@@ -10,7 +9,7 @@ class ValidDetection extends RawDetection implements Embargoable
 {
     static belongsTo = [receiverDownload:ReceiverDownloadFile, receiverDeployment: ReceiverDeployment]
     static transients = RawDetection.transients +
-        ['project', 'sensorIds', 'speciesNames', 'surgeries', 'placemark', 'release', 'mostRecentSurgery', 'mostRecentRelease']
+        ['project', 'sensorIds', 'speciesNames', 'surgeries', 'placemark', 'release', 'mostRecentSurgery', 'mostRecentRelease', 'sanitised']
 
     /**
      * All new detections are marked provisional being upload processing is completed.
@@ -60,7 +59,7 @@ class ValidDetection extends RawDetection implements Embargoable
 
     String toString()
     {
-        return timestamp.toString() + " " + String.valueOf(receiverDeployment?.receiver)
+        return "${timestamp.toString()}, ${String.valueOf(receiverDeployment?.receiver)}, ${transmitterId}"
     }
 
     // Convenience method.
@@ -110,9 +109,9 @@ class ValidDetection extends RawDetection implements Embargoable
         return getSensorIds(surgeries)
     }
 
-    private String getSensorIds(theSurgeries)
+    static String getSensorIds(theSurgeries)
     {
-        return StringUtils.removeSurroundingBrackets(theSurgeries*.tag.sensors*.transmitterId)
+        return theSurgeries*.tag.sensors*.transmitterId.flatten().join(", ")
     }
 
     String getSpeciesNames()
@@ -120,9 +119,9 @@ class ValidDetection extends RawDetection implements Embargoable
         return getSpeciesNames(surgeries)
     }
 
-    private String getSpeciesNames(theSurgeries)
+    static String getSpeciesNames(theSurgeries)
     {
-        return StringUtils.removeSurroundingBrackets(theSurgeries*.release.animal.species.name)
+        return theSurgeries*.release.animal.species.name.flatten().join(", ")
     }
 
     static String toSqlInsert(detection)
@@ -145,23 +144,63 @@ class ValidDetection extends RawDetection implements Embargoable
         return detectionBuff.toString()
     }
 
-    def applyEmbargo()
-    {
-        boolean isEmbargoed = false
+    def applyEmbargo(allowSanitised = true) {
 
-        surgeries.each
-        {
-            if (it.release.isEmbargoed())
-            {
-                isEmbargoed = true
+        def anyReleaseEmbargoed = false
+
+        // Return a temporary detection, with embargoed surgeries removed.
+        def censoredDetection = new HashMap(this.properties)
+        censoredDetection.surgeries = new HashSet<Surgery>()
+
+        surgeries.each {
+
+            if (it.release.isEmbargoed()) {
+                anyReleaseEmbargoed = true
+            }
+            else {
+                censoredDetection.surgeries.add(it)
             }
         }
 
-        return isEmbargoed ? null : this
+        censoredDetection.sensorIds = getSensorIds(censoredDetection.surgeries)
+        censoredDetection.speciesNames = getSpeciesNames(censoredDetection.surgeries)
+        censoredDetection.isSanitised = { -> true }
+
+        def protectionRequired = project.isProtected && anyReleaseEmbargoed
+
+        def hideFromResults = anyReleaseEmbargoed && !allowSanitised
+
+        if (protectionRequired || hideFromResults) {
+            return null
+        }
+
+        return censoredDetection
+    }
+
+    def isSanitised() {
+        !sensorIds && !speciesNames
     }
 
     static Kml toKml(List<ValidDetection> detections, serverURL)
     {
         return new SensorTrackKml(detections, serverURL)
+    }
+
+    static def toPresentationFormat(detectionRow) {
+
+        def validDetection = ValidDetection.get(detectionRow.detection_id)
+
+        def dto = [:]
+
+        [ 'id', 'project', 'timestamp', 'receiverName', 'receiverDeployment', 'transmitterId', 'transmitterName',
+          'transmitterSerialNumber', 'stationName', 'receiverDownload'
+        ].each {
+            dto[it] = validDetection[it]
+        }
+
+        dto.speciesNames = detectionRow.species_name
+        dto.sensorIds = detectionRow.sensor_id
+
+        return dto
     }
 }

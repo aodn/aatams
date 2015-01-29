@@ -45,8 +45,8 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         reportInfoService = new ReportInfoService()
         controller.reportInfoService = reportInfoService
         controller.queryService = queryService
-        controller.queryService.embargoService = new EmbargoService()
-        controller.queryService.embargoService.permissionUtilsService = new PermissionUtilsService()
+        controller.queryService.visibilityControlService = new VisibilityControlService()
+        controller.queryService.visibilityControlService.permissionUtilsService = new PermissionUtilsService()
         controller.candidateEntitiesService = candidateEntitiesService
         mockDomain(Tag)
 

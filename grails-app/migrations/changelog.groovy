@@ -11,4 +11,5 @@ databaseChangeLog = {
     include file: 'drop_detection_surgery.groovy'
     include file: 'detection_query_optimisation.groovy'
     include file: 'remove_detection_matview.groovy'
+    include file: 'protected_species_flag.groovy'
 }

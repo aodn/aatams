@@ -3,7 +3,6 @@ package au.org.emii.aatams.detection
 import au.org.emii.aatams.*
 import au.org.emii.aatams.test.*
 
-import grails.test.*
 import groovy.sql.*
 
 abstract class AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends AbstractGrailsUnitTestCase

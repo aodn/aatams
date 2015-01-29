@@ -1,19 +1,8 @@
 package au.org.emii.aatams.detection
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter
-import org.joda.time.format.ISODateTimeFormat;
-
 import au.org.emii.aatams.*
 import grails.test.*
 import com.vividsolutions.jts.geom.*
-
-import de.micromata.opengis.kml.v_2_2_0.Document
-import de.micromata.opengis.kml.v_2_2_0.Folder;
-import de.micromata.opengis.kml.v_2_2_0.Kml
-import de.micromata.opengis.kml.v_2_2_0.Placemark;
-import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
-import de.micromata.opengis.kml.v_2_2_0.gx.Track;
 
 class ValidDetectionTests extends GrailsUnitTestCase
 {
@@ -97,5 +86,71 @@ class ValidDetectionTests extends GrailsUnitTestCase
         def detection = new ValidDetection(transmitterId: transmitterId)
 
         assertEquals([surgery], detection.surgeries)
+    }
+
+    void testGetSensorIdsMultipleSurgeries() {
+
+        def surgeries = [
+            [tag: [sensors: [
+                [transmitterId: '1111'],
+                [transmitterId: '2222']
+            ]]],
+            [tag: [sensors: [
+                [transmitterId: '3333']
+            ]]]
+        ]
+
+        assertEquals "1111, 2222, 3333", ValidDetection.getSensorIds(surgeries)
+    }
+
+    void testGetSensorIdsOneSurgery() {
+
+        def surgeries = [
+            [tag: [sensors: [
+                [transmitterId: '1111']
+            ]]]
+        ]
+
+        assertEquals "1111", ValidDetection.getSensorIds(surgeries)
+    }
+
+    void testGetSensorIdsNoSurgeries() {
+
+        def surgeries = []
+
+        assertEquals "", ValidDetection.getSensorIds(surgeries)
+    }
+
+    void testSpeciesNamesMultipleSurgeries() {
+
+        def surgeries = [
+            [release: [animal: [
+                [species: [name: 'AAAA']],
+                [species: [name: 'BBBB']]
+            ]]],
+            [release: [animal: [
+                [species: [name: 'CCCC']]
+            ]]]
+        ]
+
+        assertEquals "AAAA, BBBB, CCCC", ValidDetection.getSpeciesNames(surgeries)
+    }
+
+    void testSpeciesNamesOneSurgery() {
+
+        def surgeries = [
+            [release: [animal: [
+                [species: [name: 'AAAA']]
+            ]]]
+        ]
+
+        assertEquals "AAAA", ValidDetection.getSpeciesNames(surgeries)
+    }
+
+    void testSpeciesNamesNoSurgeries() {
+
+        def surgeries = []
+
+        assertEquals "", ValidDetection.getSpeciesNames(surgeries)
     }
 }

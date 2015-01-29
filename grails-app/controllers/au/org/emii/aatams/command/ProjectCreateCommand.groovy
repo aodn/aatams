@@ -12,6 +12,7 @@ class ProjectCreateCommand
     Person person   // TODO: rename to principalInvestigator
     String name
     String description
+    boolean isProtected
 
     Project createProject()
     {

@@ -86,7 +86,8 @@ class KmlService implements ApplicationContextAware
         {
             params.sql = new Sql(dataSource)
             params.projectPermissionCache = [:]
-            result = detectionExtractService.extractPage(params)
+
+            result = detectionExtractService.extractPage(params).results
         }
         else
         {

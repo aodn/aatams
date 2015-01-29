@@ -5,11 +5,6 @@ import au.org.emii.aatams.detection.*
 import grails.converters.JSON
 import grails.converters.XML
 
-import com.vividsolutions.jts.geom.Point
-import com.vividsolutions.jts.io.ParseException
-import com.vividsolutions.jts.io.WKTReader
-
-import org.apache.shiro.crypto.hash.Sha256Hash
 import org.joda.time.*
 import org.joda.time.format.DateTimeFormat
 
@@ -17,11 +12,8 @@ import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
 
 import com.vividsolutions.jts.geom.Point
 
-import shiro.*
-
 class BootStrap
 {
-    def dataSource
     def grailsApplication
     def permissionUtilsService
     def searchableService
@@ -219,49 +211,34 @@ class BootStrap
                 new ApplicationTagLib().createLink(action: 'show', id: rxrDownloadFile.id, absolute:true))
         }
 
-        // Required for following metaclass override to "stick".
-        ValidDetection.count()
-
-        // Performance optimisation (select count(*) is slow on large tables).
-        ValidDetection.metaClass.static.count =
-        {
-
-            return Statistics.getStatistic('numValidDetections')
-        }
-
-        assert(permissionUtilsService): "permissionUtilsService cannot be null"
-        DataInitialiser initialiser  //= new DevelopmentDataInitialiser(permissionUtilsService)
-
         environments
         {
             test
             {
-                initialiser = new TestDataInitialiser(permissionUtilsService)
-                assert(initialiser): "Initialiser cannot be null"
-                initialiser.execute()
+                new TestDataInitialiser(permissionUtilsService).execute()
             }
 
             development
             {
                 if (Boolean.getBoolean('initialiseWithData'))
                 {
-                    initialiser = new DevelopmentDataInitialiser(permissionUtilsService)
-
-                    assert(initialiser): "Initialiser cannot be null"
-                    initialiser.execute()
+                    new DevelopmentDataInitialiser(permissionUtilsService).execute()
                 }
             }
 
             performance
             {
-                initialiser = new PerformanceDataInitialiser(permissionUtilsService)
-                assert(initialiser): "Initialiser cannot be null"
-                initialiser.execute()
+                new PerformanceDataInitialiser(permissionUtilsService).execute()
             }
         }
-    }
 
-    def destroy =
-    {
+        // Required for following metaclass override to "stick".
+        ValidDetection.count()
+
+        // Performance optimisation (select count(*) is slow on large tables).
+        ValidDetection.metaClass.static.count =
+        {
+            return Statistics.getStatistic('numValidDetections')
+        }
     }
 }

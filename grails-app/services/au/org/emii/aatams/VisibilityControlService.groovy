@@ -2,7 +2,7 @@ package au.org.emii.aatams
 
 import org.apache.shiro.SecurityUtils
 
-class EmbargoService
+class VisibilityControlService
 {
     static transactional = false
 
@@ -15,27 +15,27 @@ class EmbargoService
         projectPermissionCache.clear()
     }
 
-    List applyEmbargo(Class domain, List embargoees)
+    List applyVisibilityControls(Class domain, List itemsToControl)
     {
         if (!Arrays.asList(domain.getInterfaces()).contains(Embargoable.class))
         {
-            return embargoees
+            return itemsToControl
         }
 
-        return applyEmbargo(embargoees)
+        return applyVisibilityControls(itemsToControl)
     }
 
     /**
      * Filter embargoed entities from the given list, where the user doesn't
      * have sufficient permissions.
      */
-    List applyEmbargo(List embargoees)
+    List applyVisibilityControls(List embargoees)
     {
         clearCache()
 
         def retList = embargoees.collect
         {
-            applyEmbargo(it)
+            applyVisibilityControls(it)
         }
 
         retList.removeAll
@@ -46,9 +46,9 @@ class EmbargoService
        return retList
     }
 
-    private boolean hasReadPermission(embargoee)
+    private boolean hasReadPermission(itemToControl)
     {
-        def projectId = embargoee.project?.id
+        def projectId = itemToControl.project?.id
 
         // Some detections have no related project, as far as embargoes go.
         if (projectId == null)
@@ -66,30 +66,28 @@ class EmbargoService
         return projectPermissionCache[projectId]
     }
 
-    Object applyEmbargo(Object embargoee)
+    Object applyVisibilityControls(Object itemToControl)
     {
-        if (!(embargoee instanceof Embargoable))
+        if (!(itemToControl instanceof Embargoable))
         {
-            return embargoee
+            return itemToControl
         }
 
-        if (hasReadPermission(embargoee))
+        if (hasReadPermission(itemToControl))
         {
-            return embargoee
+            return itemToControl
         }
-        else
-        {
-            return embargoee.applyEmbargo()
-        }
+
+        return itemToControl.applyEmbargo()
     }
 
-    boolean isEmbargoed(Embargoable embargoee)
-    {
+    boolean isAccessControlled(Embargoable embargoee) {
+
         if (embargoee == null)
         {
             return false
         }
 
-        return (applyEmbargo(embargoee) == null)
+        return (applyVisibilityControls(embargoee) == null)
     }
 }

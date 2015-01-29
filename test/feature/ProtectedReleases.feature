@@ -1,33 +1,49 @@
 Feature: protected releases
     As a tag data provider, I would like to limit visibility of detections of my tags to authorised users only.
 
-# Version: 0.0.3
+# Version: 0.0.4
 
 
 Scenario Outline: project protection configuration
-    Given I have navigated to the "Create/Edit Project" screen
     Given I am <auth level>
+    And I have navigated to the "Create/Edit Project" screen
     Then a check box labelled "Protected" will be <visibility>
 
     Examples:
 
         | auth level                  | visibility  |
+        |                             |             |
         | sys-admin user              | visible     |
         | authenticated, project user | not visible |
 
 
-Scenario Outline: protection notification
-    Given I have navigated to the "Create/Edit/Show" <screen> screen
+Scenario Outline: protection notification in project screen
+    Given I have navigated to the "Edit/Show" project screen
     And the project is <protection level>
-    Then a notification <screen> "is protected" will be <visibility>
+    Then a notification "Project is protected" will be <visibility>
 
     Examples:
 
-        | screen  | protection level | visibility  |
-        | Project | protected        | visible     |
-        | Project | non protected    | not visible |
-        | Release | protected        | visible     |
-        | Release | non protected    | not visible |
+        | protection level | visibility  |
+        |                  |             |
+        | protected        | visible     |
+        | non protected    | not visible |
+
+
+Scenario Outline: protection notification in release screen
+    Given I have navigated to the "Edit/Show" release screen
+    And the release's project is <protection level>
+    And the current date is <relative date> the release's embargo expiry date
+    Then a notification "Release is protected" will be <visibility>
+
+    Examples:
+
+        | protection level | relative date | visibility  |
+        |                  |               |             |
+        | protected        | before        | visible     |
+        | protected        | after         | not visible |
+        | non protected    | before        | not visible |
+        | non protected    | after         | not visible |
 
 
 #
@@ -36,7 +52,6 @@ Scenario Outline: protection notification
 #
 # animal -              http://aatams-rc.emii.org.au/aatams/animal
 # detection -           http://aatams-rc.emii.org.au/aatams/detection
-# detectionSurgery -    http://aatams-rc.emii.org.au/aatams/detectionSurgery
 # sensor -              http://aatams-rc.emii.org.au/aatams/sensor
 # surgery -             http://aatams-rc.emii.org.au/aatams/surgery
 # release -             http://aatams-rc.emii.org.au/aatams/animalRelease

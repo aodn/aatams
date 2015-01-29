@@ -1,65 +1,59 @@
 package au.org.emii.aatams.detection
 
-import org.apache.shiro.SecurityUtils
-
 import au.org.emii.aatams.export.AbstractStreamingExporterService
 import au.org.emii.aatams.util.GeometryUtils
 import groovy.sql.Sql
 
-class DetectionExtractService extends AbstractStreamingExporterService
-{
+class DetectionExtractService extends AbstractStreamingExporterService {
     static transactional = false
 
     def dataSource
     def permissionUtilsService
 
-    public List extractPage(filterParams)
-    {
-        def query = new QueryBuilder().constructQuery(filterParams)
+    public def extractPage(filterParams) {
 
-        def startTime = System.currentTimeMillis()
-        def results = filterParams.sql.rows(query.getSQL(), query.getBindValues())
-        def endTime = System.currentTimeMillis()
-        log.debug("Query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}")
+        def query =  new QueryBuilder().constructQuery(filterParams)
+        def results = performQuery(filterParams.sql, query)
+        def rowCount = results.size()
 
-        return results
+        return [
+            results: applyEmbargo(results, filterParams), rowCount: rowCount
+        ]
     }
 
-    public Long getCount(filterParams)
-    {
-        if (!filterParams || filterParams.isEmpty() || filterParams?.filter == null || filterParams?.filter == [:])
-        {
+    public Long getCount(filterParams) {
+        if (!filterParams || filterParams.isEmpty() || filterParams?.filter == null || filterParams?.filter == [:]) {
             return ValidDetection.count()
         }
 
-        def query = new QueryBuilder().constructCountQuery(filterParams)
-        def startTime = System.currentTimeMillis()
-        def results = filterParams.sql.rows(query.getSQL(), query.getBindValues())
-        def endTime = System.currentTimeMillis()
-        log.debug("Count query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}")
+        def query =  new QueryBuilder().constructCountQuery(filterParams)
+        def results = performQuery(filterParams.sql, query)
 
         return results.count[0]
     }
 
-    protected String getReportName()
-    {
+    def performQuery(sql, query) {
+
+        def startTime = System.currentTimeMillis()
+        def results = sql.rows(query.getSQL(), query.getBindValues())
+        def endTime = System.currentTimeMillis()
+
+        log.debug("Query finished, num results: ${results.size()}, elapsed time (ms): ${endTime - startTime}, query: ${query}")
+
+        return results
+    }
+
+    protected String getReportName() {
         return "detection"
     }
 
-    protected def applyEmbargo(results, params)
-    {
-        def now = new Date()
+    protected def applyEmbargo(results, params) {
 
-        results = results.grep {
+        def projectIsProtectedCache = [:]
 
-            row ->
-
-            boolean isEmbargoed = (row.embargo_date && row.embargo_date.after(now) && !hasReadPermission(row.release_project_id, params))
-
-            return !isEmbargoed
-        }
-
-        return results
+        results.collect { row ->
+            new DetectionVisibilityChecker(row, params, permissionUtilsService, projectIsProtectedCache).apply()
+        }.findAll{ it }
     }
 
     protected void writeCsvData(final filterParams, OutputStream out)
@@ -70,12 +64,7 @@ class DetectionExtractService extends AbstractStreamingExporterService
         super.writeCsvData(filterParams, out)
     }
 
-    def generateReport(filterParams, req, res)
-    {
-        super.generateReport(filterParams, req, res)
-    }
-
-    protected List readData(filterParams)
+    protected def readData(filterParams)
     {
         return extractPage(filterParams)
     }
@@ -121,22 +110,5 @@ class DetectionExtractService extends AbstractStreamingExporterService
         out << "sensor unit"
 
         out << "\n"
-    }
-
-    private boolean hasReadPermission(projectId, params)
-    {
-        if (projectId == null)
-        {
-            return true
-        }
-
-        if (!params.projectPermissionCache.containsKey(projectId))
-        {
-            String permissionString = permissionUtilsService.buildProjectReadPermission(projectId)
-            params.projectPermissionCache.put(projectId, SecurityUtils.subject.isPermitted(permissionString))
-        }
-
-        assert(params.projectPermissionCache.containsKey(projectId))
-        return params.projectPermissionCache[projectId]
     }
 }

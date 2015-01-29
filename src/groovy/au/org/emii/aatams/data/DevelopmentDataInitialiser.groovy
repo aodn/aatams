@@ -6,12 +6,10 @@ import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.notification.*
 
 import com.vividsolutions.jts.geom.Point
-import com.vividsolutions.jts.io.ParseException
 import com.vividsolutions.jts.io.WKTReader
 
 import org.apache.shiro.crypto.hash.Sha256Hash
 import org.joda.time.*
-import org.joda.time.format.DateTimeFormat
 
 import shiro.*
 
@@ -22,14 +20,15 @@ import shiro.*
  */
 class DevelopmentDataInitialiser extends AbstractDataInitialiser
 {
-    DevelopmentDataInitialiser(def service)
+    DevelopmentDataInitialiser(permissionUtilsService)
     {
-        super(service)
+        super(permissionUtilsService)
     }
 
     void execute()
     {
         initData()
+        initProtectedSpeciesData()
     }
 
     def initData()
@@ -800,50 +799,46 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         cal.set(Calendar.MINUTE, 54)
         DateTime recoveryDateTimeRx2 = new DateTime(cal.getTime().getTime())
 
-        ReceiverRecovery recovery1 =
-            new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx1,
-                                 location:(Point)reader.read("POINT(10.1234 10.1234)"),
-                                 status:recoveredStatus,
-                                 recoverer:sealProjectInvestigator,
-                                 deployment:rx1Bondi,
-                                 batteryLife:12.5f,
-                                 batteryVoltage:3.7f).save(failOnError:true)
+        new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx1,
+                             location:(Point)reader.read("POINT(10.1234 10.1234)"),
+                             status:recoveredStatus,
+                             recoverer:sealProjectInvestigator,
+                             deployment:rx1Bondi,
+                             batteryLife:12.5f,
+                             batteryVoltage:3.7f).save(failOnError:true)
 
-        ReceiverRecovery recovery2 =
-            new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
-                                 location:(Point)reader.read("POINT(20.1234 20.1234)"),
-                                 status:recoveredStatus,
-                                 recoverer:sealProjectInvestigator,
-                                 deployment:rx2Bondi,
-                                 batteryLife:12.5f,
-                                 batteryVoltage:3.7f).save(failOnError:true)
+        new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
+                             location:(Point)reader.read("POINT(20.1234 20.1234)"),
+                             status:recoveredStatus,
+                             recoverer:sealProjectInvestigator,
+                             deployment:rx2Bondi,
+                             batteryLife:12.5f,
+                             batteryVoltage:3.7f).save(failOnError:true)
 
-        ReceiverRecovery recovery3 =
-            new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
-                                 location:(Point)reader.read("POINT(20.1234 20.1234)"),
-                                 status:recoveredStatus,
-                                 recoverer:sealProjectInvestigator,
-                                 deployment:rx6Heron,
-                                 batteryLife:12.5f,
-                                 batteryVoltage:3.7f).save(failOnError:true)
+        new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
+                             location:(Point)reader.read("POINT(20.1234 20.1234)"),
+                             status:recoveredStatus,
+                             recoverer:sealProjectInvestigator,
+                             deployment:rx6Heron,
+                             batteryLife:12.5f,
+                             batteryVoltage:3.7f).save(failOnError:true)
 
-        ReceiverRecovery recoveryWhale =
-            new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
-                                 location:(Point)reader.read("POINT(20.1234 20.1234)"),
-                                 status:recoveredStatus,
-                                 recoverer:sealProjectInvestigator,
-                                 deployment:whaleDeployment,
-                                 batteryLife:12.5f,
-                                 batteryVoltage:3.7f).save(failOnError:true)
+        new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
+                             location:(Point)reader.read("POINT(20.1234 20.1234)"),
+                             status:recoveredStatus,
+                             recoverer:sealProjectInvestigator,
+                             deployment:whaleDeployment,
+                             batteryLife:12.5f,
+                             batteryVoltage:3.7f).save(failOnError:true)
 
-        createExportWithDetections("export1.csv", jonBurgess, rx1Bondi, rx1, tag1, surgery1, 10)
-        createExportWithDetections("export5.csv", jonBurgess, rx4Heron, rx4, tag5, null, 3)
+        createExportWithDetections("export1.csv", jonBurgess, rx1Bondi, rx1, tag1, 10)
+        createExportWithDetections("export5.csv", jonBurgess, rx4Heron, rx4, tag5, 3)
 
-        createExportWithDetections("nonEmbargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, nonEmbargoedTag, nonEmbargoedWhaleSurgery, 3)
-        createExportWithDetections("embargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, embargoedTag, embargoedWhaleSurgery, 3)
-        createExportWithDetections("unknownTagWhale.csv", joeBloggs, whaleDeployment, rxWhale, [pinger:[transmitterId:"A69-1303-8888"]], null, 3)
+        createExportWithDetections("nonEmbargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, nonEmbargoedTag, 3)
+        createExportWithDetections("embargoedWhale.csv", joeBloggs, whaleDeployment, rxWhale, embargoedTag, 3)
+        createExportWithDetections("unknownTagWhale.csv", joeBloggs, whaleDeployment, rxWhale, [pinger:[transmitterId:"A69-1303-8888"]], 3)
 
-        new Statistics(key: "numValidDetections", value: 31).save(failOnError: true)
+        initStatistics()
 
         ReceiverDownloadFile export2 =
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
@@ -883,7 +878,252 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         export2.save(failOnError:true)
     }
 
-    private void createExportWithDetections(String exportName, Person uploader, ReceiverDeployment deployment, Receiver receiver, tag, Surgery surgery, int numDetections)
+    def initProtectedSpeciesData()
+    {
+        //
+        // Projects.
+        //
+        Project unembargoedProject =
+                new Project(name:'unembargoed',
+                        description:'',
+                        status:EntityStatus.ACTIVE).save(failOnError: true)
+
+        Project embargoedProject =
+                new Project(name:'embargoed',
+                        description:'',
+                        status:EntityStatus.ACTIVE).save(failOnError: true)
+
+        Project protectedProject =
+                new Project(name:'protected',
+                        description:'',
+                        status:EntityStatus.ACTIVE,
+                        isProtected: true).save(failOnError: true)
+
+        def imosOrg = Organisation.findByName('IMOS')
+        def csiroOrg = Organisation.findByName('CSIRO')
+
+        def sysAdmin = SecRole.findByName('SysAdmin')
+        ProjectRoleType administrator = ProjectRoleType.findByDisplayName('Administrator')
+        def newStatus = DeviceStatus.findByStatus('NEW')
+        def rx1 = Receiver.findBySerialNumber('101336')
+
+        Person sysAdminUser = new Person(username:'admin',
+                passwordHash:new Sha256Hash("password").toHex(),
+                name:'Admin',
+                organisation:imosOrg,
+                phoneNumber:'1234',
+                emailAddress:'jkburges@utas.edu.au',
+                status:EntityStatus.ACTIVE,
+                defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
+        sysAdminUser.addToRoles(sysAdmin)
+        sysAdminUser.save(failOnError: true)
+
+        Person projectUser =
+                new Person(username:'project',
+                        passwordHash:new Sha256Hash("password").toHex(),
+                        name:'Project User',
+                        organisation:imosOrg,
+                        phoneNumber:'1234',
+                        emailAddress:'jkburges@utas.edu.au',
+                        status:EntityStatus.ACTIVE,
+                        defaultTimeZone:DateTimeZone.forID("Australia/Hobart"))
+        projectUser.save(failOnError: true)
+
+        Person nonProjectUser =
+                new Person(username:'nonProject',
+                        passwordHash:new Sha256Hash("password").toHex(),
+                        name:'Joe "Non Project" Bloggs',
+                        organisation:csiroOrg,
+                        phoneNumber:'1234',
+                        emailAddress:'jbloggs@blah.au',
+                        status:EntityStatus.ACTIVE,
+                        defaultTimeZone:DateTimeZone.forID("Australia/Perth"))
+        nonProjectUser.save(failOnError: true);
+
+        ProjectRole protectedRole =
+                new ProjectRole(project:protectedProject,
+                        person: projectUser,
+                        roleType: administrator,
+                        access:ProjectAccess.READ_WRITE)
+        protectedProject.addToProjectRoles(protectedRole).save(failOnError:true)
+        projectUser.addToProjectRoles(protectedRole).save(failOnError:true, flush:true)   // flush required to keep compass happy
+        permissionUtilsService.setPermissions(protectedRole)
+
+        ProjectRole embargoedRole =
+                new ProjectRole(project:embargoedProject,
+                        person: projectUser,
+                        roleType: administrator,
+                        access:ProjectAccess.READ_WRITE)
+        embargoedProject.addToProjectRoles(embargoedRole).save(failOnError:true)
+        projectUser.addToProjectRoles(embargoedRole).save(failOnError:true, flush:true)   // flush required to keep compass happy
+        permissionUtilsService.setPermissions(embargoedRole)
+
+        def a69_1303 = CodeMap.findByCodeMap('A69-1303')
+
+        def tagDeviceModel = TagDeviceModel.findByModelName('V8')
+
+        def deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
+
+        //
+        // Tags.
+        //
+        Tag unembargoedTag = createTag(
+                [serialNumber:'21111',
+                 codeMap:a69_1303,
+                 pingCode:'21111',
+                 model:tagDeviceModel,
+                 project:unembargoedProject,
+                 status:deployedStatus])
+        unembargoedProject.addToTags(unembargoedTag).save(failOnError:true)
+
+        Tag embargoedTag = createTag(
+                [serialNumber:'22222',
+                 codeMap:a69_1303,
+                 pingCode:'22222',
+                 model:tagDeviceModel,
+                 project:embargoedProject,
+                 status:deployedStatus])
+        embargoedProject.addToTags(embargoedTag).save(failOnError:true)
+
+        Tag protectedTag = createTag(
+                [serialNumber:'23333',
+                 codeMap:a69_1303,
+                 pingCode:'23333',
+                 model:tagDeviceModel,
+                 project:protectedProject,
+                 status:newStatus])
+        protectedProject.addToTags(protectedTag).save(failOnError:true)
+
+        a69_1303.save(failOnError:true)
+
+        WKTReader reader = new WKTReader()
+        def bondiSW1 = InstallationStation.findByName('Bondi SW1')
+
+        //
+        //  Receiver Deployments.
+        //
+        MooringType concreteMooring = MooringType.findByType('CONCRETE BLOCK')
+
+        ReceiverDeployment rx1Bondi =
+                new ReceiverDeployment(station:bondiSW1,
+                        receiver:rx1,
+                        deploymentNumber:1,
+                        initialisationDateTime:new DateTime("2010-02-15T00:34:56+10:00"),
+                        deploymentDateTime:new DateTime("2010-02-15T12:34:56+10:00"),
+                        acousticReleaseID:"asdf",
+                        mooringType:concreteMooring,
+                        bottomDepthM:12f,
+                        depthBelowSurfaceM:5f,
+                        receiverOrientation:ReceiverOrientation.UP,
+                        batteryLifeDays:90,
+                        location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
+        rx1.addToDeployments(rx1Bondi)
+        rx1.save()
+
+        //
+        // Animals and Animal Releases etc.
+        //
+        CaabSpecies whiteShark = CaabSpecies.findBySpcode("37010003")
+        Sex male = Sex.findBySex('MALE')
+
+        Animal whiteShark1 = new Animal(species:whiteShark,
+                sex:male).save(failOnError:true)
+
+        SurgeryTreatmentType antibiotic = SurgeryTreatmentType.findByType('ANTIBIOTIC')
+        SurgeryType external = SurgeryType.findByType('EXTERNAL')
+        CaptureMethod net = CaptureMethod.findByName('NET')
+
+        AnimalRelease unembargoedRelease =
+                new AnimalRelease(project:unembargoedProject,
+                        surgeries:[],
+                        measurements:[],
+                        animal:whiteShark1,
+                        captureLocality:'Neptune Islands',
+                        captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
+                        captureDateTime:new DateTime("2010-02-16T14:10:00"),
+                        captureMethod:net,
+                        releaseLocality:'Neptune Islands',
+                        releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
+                        releaseDateTime:new DateTime("2010-02-16T14:15:00")).save(failOnError:true)
+
+        AnimalRelease embargoedRelease =
+                new AnimalRelease(project:embargoedProject,
+                        surgeries:[],
+                        measurements:[],
+                        animal:whiteShark1,
+                        captureLocality:'Neptune Islands',
+                        captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
+                        captureDateTime:new DateTime("2010-02-16T14:10:00"),
+                        captureMethod:net,
+                        releaseLocality:'Neptune Islands',
+                        releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
+                        releaseDateTime:new DateTime("2010-02-16T14:15:00"),
+                        embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2020-05-15 12:34:56")).save(failOnError:true)
+
+        AnimalRelease protectedRelease =
+                new AnimalRelease(project:protectedProject,
+                        surgeries:[],
+                        measurements:[],
+                        animal:whiteShark1,
+                        captureLocality:'Neptune Islands',
+                        captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
+                        captureDateTime:new DateTime("2010-02-16T14:10:00"),
+                        captureMethod:net,
+                        releaseLocality:'Neptune Islands',
+                        releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
+                        releaseDateTime:new DateTime("2010-02-16T14:15:00"),
+                        embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2020-05-15 12:34:56")).save(failOnError:true)
+
+        Surgery unembargoedSurgery =
+                new Surgery(release:unembargoedRelease,
+                        tag:unembargoedTag,
+                        timestamp:new DateTime("2011-05-15T14:12:00"),
+                        type:external,
+                        treatmentType:antibiotic)
+        unembargoedTag.addToSurgeries(unembargoedSurgery).save(failOnError:true)
+        unembargoedRelease.addToSurgeries(unembargoedSurgery).save(failOnError:true)
+
+        Surgery embargoedSurgery =
+                new Surgery(release:embargoedRelease,
+                        tag:embargoedTag,
+                        timestamp:new DateTime("2011-05-15T14:13:00"),
+                        type:external,
+                        treatmentType:antibiotic)
+        embargoedTag.addToSurgeries(embargoedSurgery).save(failOnError:true)
+        embargoedRelease.addToSurgeries(embargoedSurgery).save(failOnError:true)
+
+        Surgery protectedSurgery =
+                new Surgery(release:protectedRelease,
+                        tag:protectedTag,   // Can't really have a tag on two different animals.
+                        timestamp:new DateTime("2011-05-15T14:12:00"),
+                        type:external,
+                        treatmentType:antibiotic)
+        protectedTag.addToSurgeries(protectedSurgery).save(failOnError:true)
+        protectedRelease.addToSurgeries(protectedSurgery).save(failOnError:true)
+
+        ReceiverDownloadFile export =
+                new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
+                        name:"asdfmate",
+                        importDate:new DateTime("2013-05-17T12:54:56").toDate(),
+                        status:FileProcessingStatus.PROCESSED,
+                        errMsg:"",
+                        requestingUser:projectUser).save(failOnError:true)
+
+        export.save(failOnError:true)
+
+        createDetections(rx1Bondi, rx1, unembargoedTag, export)
+        createDetections(rx1Bondi, rx1, embargoedTag, export)
+        createDetections(rx1Bondi, rx1, protectedTag, export)
+    }
+
+    private void initStatistics() {
+        new Statistics(
+            key: "numValidDetections",
+            value: 25
+        ).save(failOnError: true)
+    }
+
+    private void createExportWithDetections(String exportName, Person uploader, ReceiverDeployment deployment, Receiver receiver, tag, int numDetections)
     {
         ReceiverDownloadFile export =
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
@@ -893,11 +1133,11 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                      errMsg:"",
                                      requestingUser:uploader).save(failOnError:true)
 
-        createDetections(deployment, receiver, tag, export, surgery, numDetections)
+        createDetections(deployment, receiver, tag, export, numDetections)
         export.save(failOnError:true)
     }
 
-    private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, tag, ReceiverDownloadFile export1, Surgery surgery1, int numDetections)
+    private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, tag, ReceiverDownloadFile export1, int numDetections = 1)
     {
         numDetections.times
         {

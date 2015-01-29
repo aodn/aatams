@@ -20,7 +20,7 @@ class AnimalRelease implements Embargoable
 {
     static belongsTo = [project: Project, animal: Animal]
     static hasMany = [surgeries: Surgery, measurements: AnimalMeasurement]
-    static transients = ['scrambledReleaseLocation', 'current', 'embargoed']
+    static transients = ['scrambledReleaseLocation', 'current', 'embargoed', 'protectionActive']
     static auditable = true
 
     static mapping =
@@ -124,6 +124,11 @@ class AnimalRelease implements Embargoable
     boolean isEmbargoed()
     {
         return (embargoDate != null) && (embargoDate.compareTo(new Date()) > 0)
+    }
+
+    boolean isProtectionActive()
+    {
+        return embargoed && project.isProtected
     }
 
     def applyEmbargo()

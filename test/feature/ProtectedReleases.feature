@@ -89,32 +89,40 @@ Scenario Outline: filtering
 
     Examples:
 
-        | auth level                      | protection level      | filter set | visibility          |
-        |                                 |                       |            |                     |
-        | unathenticated                  | none                  | not set    | visible             |
-        | unathenticated                  | none                  | set        | visible             |
-        | unathenticated                  | embargoed             | not set    | visible (sanitised) |
-        | unathenticated                  | embargoed             | set        | not visible         |
-        | unathenticated                  | embargoed + protected | not set    | not visible         |
-        | unathenticated                  | embargoed + protected | set        | not visible         |
-        |                                 |                       |            |                     |
-        | authenticated, non project user | none                  | not set    | visible             |
-        | authenticated, non project user | none                  | set        | visible             |
-        | authenticated, non project user | embargoed             | not set    | visible (sanitised) |
-        | authenticated, non project user | embargoed             | set        | not visible         |
-        | authenticated, non project user | embargoed + protected | not set    | not visible         |
-        | authenticated, non project user | embargoed + protected | set        | not visible         |
-        |                                 |                       |            |                     |
-        | authenticated, project user     | none                  | not set    | visible             |
-        | authenticated, project user     | none                  | set        | visible             |
-        | authenticated, project user     | embargoed             | not set    | visible             |
-        | authenticated, project user     | embargoed             | set        | visible             |
-        | authenticated, project user     | embargoed + protected | not set    | visible             |
-        | authenticated, project user     | embargoed + protected | set        | visible             |
-        |                                 |                       |            |                     |
-        | sys-admin user                  | none                  | not set    | visible             |
-        | sys-admin user                  | none                  | set        | visible             |
-        | sys-admin user                  | embargoed             | not set    | visible             |
-        | sys-admin user                  | embargoed             | set        | visible             |
-        | sys-admin user                  | embargoed + protected | not set    | visible             |
-        | sys-admin user                  | embargoed + protected | set        | visible             |
+        | auth level                      | protection level           | filter set | visibility          |
+        |                                 |                            |            |                     |
+        | unathenticated                  | none                       | not set    | visible             |
+        | unathenticated                  | none                       | set        | visible             |
+        | unathenticated                  | embargoed                  | not set    | visible (sanitised) |
+        | unathenticated                  | embargoed                  | set        | not visible         |
+        | unathenticated                  | embargoed + protected      | not set    | not visible         |
+        | unathenticated                  | embargoed + protected      | set        | not visible         |
+        | unathenticated                  | embargo passed + protected | not set    | visible             |
+        | unathenticated                  | embargo passed + protected | set        | visible             |
+        |                                 |                            |            |                     |
+        | authenticated, non project user | none                       | not set    | visible             |
+        | authenticated, non project user | none                       | set        | visible             |
+        | authenticated, non project user | embargoed                  | not set    | visible (sanitised) |
+        | authenticated, non project user | embargoed                  | set        | not visible         |
+        | authenticated, non project user | embargoed + protected      | not set    | not visible         |
+        | authenticated, non project user | embargoed + protected      | set        | not visible         |
+        | authenticated, non project user | embargo passed + protected | set        | visible             |
+        | authenticated, non project user | embargo passed + protected | not set    | visible             |
+        |                                 |                            |            |                     |
+        | authenticated, project user     | none                       | not set    | visible             |
+        | authenticated, project user     | none                       | set        | visible             |
+        | authenticated, project user     | embargoed                  | not set    | visible             |
+        | authenticated, project user     | embargoed                  | set        | visible             |
+        | authenticated, project user     | embargoed + protected      | not set    | visible             |
+        | authenticated, project user     | embargoed + protected      | set        | visible             |
+        | authenticated, project user     | embargo passed + protected | not set    | visible             |
+        | authenticated, project user     | embargo passed + protected | set        | visible             |
+        |                                 |                            |            |                     |
+        | sys-admin user                  | none                       | not set    | visible             |
+        | sys-admin user                  | none                       | set        | visible             |
+        | sys-admin user                  | embargoed                  | not set    | visible             |
+        | sys-admin user                  | embargoed                  | set        | visible             |
+        | sys-admin user                  | embargoed + protected      | not set    | visible             |
+        | sys-admin user                  | embargoed + protected      | set        | visible             |
+        | sys-admin user                  | embargo passed + protected | not set    | visible             |
+        | sys-admin user                  | embargo passed + protected | set        | visible             |

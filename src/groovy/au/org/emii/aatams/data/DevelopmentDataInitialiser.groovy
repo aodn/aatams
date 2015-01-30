@@ -894,7 +894,13 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         status:EntityStatus.ACTIVE).save(failOnError: true)
 
         Project protectedProject =
-                new Project(name:'protected',
+                new Project(name:'protected embargoed',
+                        description:'',
+                        status:EntityStatus.ACTIVE,
+                        isProtected: true).save(failOnError: true)
+
+        Project protectedPastEmbargoProject =
+                new Project(name:'protected embargo passed',
                         description:'',
                         status:EntityStatus.ACTIVE,
                         isProtected: true).save(failOnError: true)
@@ -949,6 +955,15 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         projectUser.addToProjectRoles(protectedRole).save(failOnError:true, flush:true)   // flush required to keep compass happy
         permissionUtilsService.setPermissions(protectedRole)
 
+        ProjectRole protectedpastEmbargoRole =
+                new ProjectRole(project:protectedPastEmbargoProject,
+                        person: projectUser,
+                        roleType: administrator,
+                        access:ProjectAccess.READ_WRITE)
+        protectedPastEmbargoProject.addToProjectRoles(protectedpastEmbargoRole).save(failOnError:true)
+        projectUser.addToProjectRoles(protectedpastEmbargoRole).save(failOnError:true, flush:true)   // flush required to keep compass happy
+        permissionUtilsService.setPermissions(protectedpastEmbargoRole)
+
         ProjectRole embargoedRole =
                 new ProjectRole(project:embargoedProject,
                         person: projectUser,
@@ -993,6 +1008,15 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                  project:protectedProject,
                  status:newStatus])
         protectedProject.addToTags(protectedTag).save(failOnError:true)
+
+        Tag protectedPastEmbargoTag = createTag(
+                [serialNumber:'24444',
+                 codeMap:a69_1303,
+                 pingCode:'24444',
+                 model:tagDeviceModel,
+                 project:protectedPastEmbargoProject,
+                 status:newStatus])
+        protectedPastEmbargoProject.addToTags(protectedPastEmbargoTag).save(failOnError:true)
 
         a69_1303.save(failOnError:true)
 
@@ -1074,6 +1098,20 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         releaseDateTime:new DateTime("2010-02-16T14:15:00"),
                         embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2020-05-15 12:34:56")).save(failOnError:true)
 
+        AnimalRelease protectedPastEmbargoRelease =
+                new AnimalRelease(project:protectedPastEmbargoProject,
+                        surgeries:[],
+                        measurements:[],
+                        animal:whiteShark1,
+                        captureLocality:'Neptune Islands',
+                        captureLocation:(Point)reader.read("POINT(10.1234 20.1234)"),
+                        captureDateTime:new DateTime("2010-02-16T14:10:00"),
+                        captureMethod:net,
+                        releaseLocality:'Neptune Islands',
+                        releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
+                        releaseDateTime:new DateTime("1900-02-16T14:15:00"),
+                        embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "1900-05-15 12:34:56")).save(failOnError:true)
+
         Surgery unembargoedSurgery =
                 new Surgery(release:unembargoedRelease,
                         tag:unembargoedTag,
@@ -1101,6 +1139,15 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         protectedTag.addToSurgeries(protectedSurgery).save(failOnError:true)
         protectedRelease.addToSurgeries(protectedSurgery).save(failOnError:true)
 
+        Surgery protectedPastEmbargoSurgery =
+                new Surgery(release:protectedPastEmbargoRelease,
+                        tag:protectedPastEmbargoTag,
+                        timestamp:new DateTime("2011-05-15T14:12:00"),
+                        type:external,
+                        treatmentType:antibiotic)
+        protectedPastEmbargoTag.addToSurgeries(protectedPastEmbargoSurgery).save(failOnError:true)
+        protectedPastEmbargoRelease.addToSurgeries(protectedPastEmbargoSurgery).save(failOnError:true)
+
         ReceiverDownloadFile export =
                 new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
                         name:"asdfmate",
@@ -1114,6 +1161,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         createDetections(rx1Bondi, rx1, unembargoedTag, export)
         createDetections(rx1Bondi, rx1, embargoedTag, export)
         createDetections(rx1Bondi, rx1, protectedTag, export)
+        createDetections(rx1Bondi, rx1, protectedPastEmbargoTag, export)
     }
 
     private void initStatistics() {

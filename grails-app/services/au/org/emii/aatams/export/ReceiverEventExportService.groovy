@@ -13,8 +13,8 @@ class ReceiverEventExportService extends AbstractStreamingExporterService
 
     protected def readData(filterParams)
     {
-        def queryResult = queryService.query(ValidReceiverEvent.class, filterParams)
-        return [results: queryResult.results, rowCount: queryResult.count]
+        def queryResult = queryService.queryWithoutCount(ValidReceiverEvent.class, filterParams)
+        return [results: queryResult.results, rowCount: queryResult.results.size()]
     }
 
     protected def writeCsvChunk(resultList, OutputStream out)

@@ -84,7 +84,7 @@ abstract class AbstractStreamingExporterService
         indicateExportStart(params)
         writeCsvHeader(out)
 
-        while (results.size() > 0)
+        while (rowCount > 0)
         {
             writeCsvChunk(results, out)
 

@@ -36,7 +36,15 @@ class QueryService
      */
     Map<Long, Collection> query(clazz, params, skipVisibilityControlChecks)
     {
-        return [results: queryWithoutCount(clazz, params, skipVisibilityControlChecks)['results'], count: queryCountOnly(clazz, params)]
+        return [
+            results: queryWithoutCount(clazz, params, skipVisibilityControlChecks)['results'],
+            count: queryCountOnly(clazz, params)
+        ]
+    }
+
+    Map<Long, Collection> queryWithoutCount(clazz, params)
+    {
+        return queryWithoutCount(clazz, params, false)
     }
 
     Map<Long, Collection> queryWithoutCount(clazz, params, skipVisibilityControlChecks)

@@ -23,7 +23,8 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
     enum ProtectionLevel {
         UNEMBARGOED,
         EMBARGOED,
-        PROTECTED
+        PROTECTED_EMBARGOED,
+        PROTECTED_EMBARGO_PASSED
     }
 
     enum FilterStatus {
@@ -55,11 +56,19 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
     }
 
     void testProtectedSpeciesFilteringE() {
-        assertCorrectResult(UNAUTHENTICATED, PROTECTED, FILTER_NOT_SET, NOT_VISIBLE)
+        assertCorrectResult(UNAUTHENTICATED, PROTECTED_EMBARGOED, FILTER_NOT_SET, NOT_VISIBLE)
     }
 
     void testProtectedSpeciesFilteringF() {
-        assertCorrectResult(UNAUTHENTICATED, PROTECTED, FILTER_SET, NOT_VISIBLE)
+        assertCorrectResult(UNAUTHENTICATED, PROTECTED_EMBARGOED, FILTER_SET, NOT_VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringAA() {
+        assertCorrectResult(UNAUTHENTICATED, PROTECTED_EMBARGO_PASSED, FILTER_NOT_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringAB() {
+        assertCorrectResult(UNAUTHENTICATED, PROTECTED_EMBARGO_PASSED, FILTER_SET, VISIBLE)
     }
 
     void testProtectedSpeciesFilteringG() {
@@ -79,11 +88,19 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
     }
 
     void testProtectedSpeciesFilteringK() {
-        assertCorrectResult(NON_PROJECT_MEMBER, PROTECTED, FILTER_NOT_SET, NOT_VISIBLE)
+        assertCorrectResult(NON_PROJECT_MEMBER, PROTECTED_EMBARGOED, FILTER_NOT_SET, NOT_VISIBLE)
     }
 
     void testProtectedSpeciesFilteringL() {
-        assertCorrectResult(NON_PROJECT_MEMBER, PROTECTED, FILTER_SET, NOT_VISIBLE)
+        assertCorrectResult(NON_PROJECT_MEMBER, PROTECTED_EMBARGOED, FILTER_SET, NOT_VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringAC() {
+        assertCorrectResult(NON_PROJECT_MEMBER, PROTECTED_EMBARGO_PASSED, FILTER_NOT_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringAD() {
+        assertCorrectResult(NON_PROJECT_MEMBER, PROTECTED_EMBARGO_PASSED, FILTER_SET, VISIBLE)
     }
 
     void testProtectedSpeciesFilteringM() {
@@ -103,11 +120,19 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
     }
 
     void testProtectedSpeciesFilteringR() {
-        assertCorrectResult(PROJECT_MEMBER, PROTECTED, FILTER_NOT_SET, VISIBLE)
+        assertCorrectResult(PROJECT_MEMBER, PROTECTED_EMBARGOED, FILTER_NOT_SET, VISIBLE)
     }
 
     void testProtectedSpeciesFilteringS() {
-        assertCorrectResult(PROJECT_MEMBER, PROTECTED, FILTER_SET, VISIBLE)
+        assertCorrectResult(PROJECT_MEMBER, PROTECTED_EMBARGOED, FILTER_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringAE() {
+        assertCorrectResult(PROJECT_MEMBER, PROTECTED_EMBARGO_PASSED, FILTER_NOT_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringAF() {
+        assertCorrectResult(PROJECT_MEMBER, PROTECTED_EMBARGO_PASSED, FILTER_SET, VISIBLE)
     }
 
     void testProtectedSpeciesFilteringT() {
@@ -127,11 +152,19 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
     }
 
     void testProtectedSpeciesFilteringX() {
-        assertCorrectResult(SYS_ADMIN, PROTECTED, FILTER_NOT_SET, VISIBLE)
+        assertCorrectResult(SYS_ADMIN, PROTECTED_EMBARGOED, FILTER_NOT_SET, VISIBLE)
     }
 
     void testProtectedSpeciesFilteringY() {
-        assertCorrectResult(SYS_ADMIN, PROTECTED, FILTER_SET, VISIBLE)
+        assertCorrectResult(SYS_ADMIN, PROTECTED_EMBARGOED, FILTER_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringAG() {
+        assertCorrectResult(SYS_ADMIN, PROTECTED_EMBARGO_PASSED, FILTER_NOT_SET, VISIBLE)
+    }
+
+    void testProtectedSpeciesFilteringAH() {
+        assertCorrectResult(SYS_ADMIN, PROTECTED_EMBARGO_PASSED, FILTER_SET, VISIBLE)
     }
 
     void assertCorrectResult(authLevel, protectionLevel, speciesFilterSet, expectedResult) {
@@ -306,7 +339,7 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
     }
 
     def loadProject(protectionLevel) {
-        Project.findByName(protectionLevel.toString().toLowerCase())
+        Project.findByName(protectionLevel.toString().toLowerCase().replace("_", " "))
     }
 
     def loadFilter(speciesFilterSet) {

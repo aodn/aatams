@@ -1,19 +1,19 @@
 package au.org.emii.aatams.detection
 
-import au.org.emii.aatams.Project
+import au.org.emii.aatams.AnimalRelease
 import org.apache.shiro.SecurityUtils
 
 class DetectionVisibilityChecker {
     def row
     def params
     def permissionUtilsService
-    def projectIsProtectedCache
+    def releaseIsProtectedCache
 
     DetectionVisibilityChecker(theRow, theParams, thePermissionUtilsService, theProjectIsProtectedCache) {
         row = theRow
         params = theParams
         permissionUtilsService = thePermissionUtilsService
-        projectIsProtectedCache = theProjectIsProtectedCache
+        releaseIsProtectedCache = theProjectIsProtectedCache
     }
 
     def apply() {
@@ -52,20 +52,22 @@ class DetectionVisibilityChecker {
     }
 
     def _isProtected() {
-        row.release_project_id && projectIsProtected(row.release_project_id)
+        row.release_project_id && releaseIsProtected()
     }
 
-    def projectIsProtected(projectId) {
-        if (!projectIsProtectedCache.containsKey(projectId)) {
+    def releaseIsProtected() {
 
-            def project = Project.get(projectId)
+        def releaseId = row.animal_release_id
 
-            projectIsProtectedCache[projectId] = project.isProtected
+        if (!releaseIsProtectedCache.containsKey(releaseId)) {
+
+            def release = AnimalRelease.get(releaseId)
+
+            releaseIsProtectedCache[releaseId] = release.protectionActive
         }
 
-        return projectIsProtectedCache[projectId]
+        return releaseIsProtectedCache[releaseId]
     }
-
 
     def _isEmbargoed() {
         row.embargo_date && row.embargo_date.after(new Date())

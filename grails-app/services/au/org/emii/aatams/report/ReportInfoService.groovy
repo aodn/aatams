@@ -45,6 +45,7 @@ class ReportInfoService
          "tag": "au.org.emii.aatams.Tag"
          ]
 
+    static def receiverProjectLabel = "receiver project"
     static def speciesCaabLabel = "species (CAAB, common or scientific name)"
     static def speciesCommonName = "species common name"
     static def speciesScientificName = "species scientific name"
@@ -56,7 +57,7 @@ class ReportInfoService
          "animal.species.scientificName": speciesScientificName,
          "codeName": tagId,
          "releaseDateTime": "release date/time",
-         "receiverDeployment.station.installation.project.name": "project",
+         "receiverDeployment.station.installation.project.name": receiverProjectLabel,
          "receiverDeployment.station.installation.name": "installation",
          "receiverDeployment.station.name": "station",
          "recovery": "unrecovered deployments only",
@@ -67,11 +68,11 @@ class ReportInfoService
          "organisationProject.project.name": "project",
          "organisationProject.organisation.name": "organisation",
          "installation.project.name": "project",
-         "station.installation.project.name": "project",
+         "station.installation.project.name": receiverProjectLabel,
          "station.installation.name": "installation",
          "surgeries.release.animal.species.spcode": speciesCaabLabel,
          "surgeries.tag.sensors.transmitterId": tagId,
-         "tag.project.name": "project",
+         "tag.project.name": "tag project",
          "timestamp": "timestamp",
          "transmitterId": tagId]
 

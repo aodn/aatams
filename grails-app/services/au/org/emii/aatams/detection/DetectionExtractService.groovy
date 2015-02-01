@@ -49,10 +49,10 @@ class DetectionExtractService extends AbstractStreamingExporterService {
 
     protected def applyEmbargo(results, params) {
 
-        def projectIsProtectedCache = [:]
+        def releaseIsProtectedCache = [:]
 
         results.collect { row ->
-            new DetectionVisibilityChecker(row, params, permissionUtilsService, projectIsProtectedCache).apply()
+            new DetectionVisibilityChecker(row, params, permissionUtilsService, releaseIsProtectedCache).apply()
         }.findAll{ it }
     }
 

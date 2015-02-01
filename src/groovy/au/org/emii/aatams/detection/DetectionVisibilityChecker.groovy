@@ -9,11 +9,11 @@ class DetectionVisibilityChecker {
     def permissionUtilsService
     def releaseIsProtectedCache
 
-    DetectionVisibilityChecker(theRow, theParams, thePermissionUtilsService, theProjectIsProtectedCache) {
+    DetectionVisibilityChecker(theRow, theParams, thePermissionUtilsService, theReleaseIsProtectedCache) {
         row = theRow
         params = theParams
         permissionUtilsService = thePermissionUtilsService
-        releaseIsProtectedCache = theProjectIsProtectedCache
+        releaseIsProtectedCache = theReleaseIsProtectedCache
     }
 
     def apply() {

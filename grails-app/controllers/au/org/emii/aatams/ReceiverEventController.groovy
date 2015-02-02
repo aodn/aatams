@@ -5,26 +5,27 @@ import au.org.emii.aatams.report.ReportController
 class ReceiverEventController extends ReportController
 {
     def receiverEventExportService
-    
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
     }
 
-    def list = 
+    def list =
     {
+        params.max = params.max ?: grailsApplication.config.grails.gorm.default.list.nonPaginatedMax
         doList("receiverEvent")
     }
-    
+
     def export =
     {
         receiverEventExportService.generateReport(params, request, response)
     }
 
     def create = {
-        redirect(controller:"receiverDownloadFile", 
-                 action:"createEvents") 
+        redirect(controller:"receiverDownloadFile",
+                 action:"createEvents")
     }
 
     def save = {
@@ -66,7 +67,7 @@ class ReceiverEventController extends ReportController
             if (params.version) {
                 def version = params.version.toLong()
                 if (receiverEventInstance.version > version) {
-                    
+
                     receiverEventInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'receiverEvent.label', default: 'ReceiverEvent')] as Object[], "Another user has updated this ReceiverEvent while you were editing")
                     render(view: "edit", model: [receiverEventInstance: receiverEventInstance])
                     return

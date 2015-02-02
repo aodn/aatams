@@ -19,6 +19,7 @@ class DetectionController extends ReportController
 
     def list =
     {
+        params.max = params.max ?: grailsApplication.config.grails.gorm.default.list.nonPaginatedMax
         doList("detection")
     }
 

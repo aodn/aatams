@@ -77,9 +77,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="paginateButtons">
-                <g:paginate total="${total}" params="${params}"/>
-            </div>
+            <g:nonPaginatedWarning />
         </div>
     </body>
 </html>

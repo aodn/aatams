@@ -1,7 +1,6 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
-import grails.test.*
 
 class SensorControllerTests extends AbstractControllerUnitTestCase
 {
@@ -11,7 +10,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
 
         controller.params.format = "CSV"
     }
-    
+
     void testExecuteSensorPermitted()
     {
         permitted = true

@@ -12,14 +12,14 @@ class DetectionFactoryServiceIntegrationTests extends GroovyTestCase {
     // Test for #1751
     void testRescanForDeployment()
     {
-        def initValidCount = ValidDetection.count()
-        def initInvalidCount = InvalidDetection.count()
-
         def sql = new Sql(dataSource)
         ValidDetection.metaClass.static.count = {
 
             return sql.firstRow('select count(*) from valid_detection').count
         }
+
+        def initValidCount = ValidDetection.count()
+        def initInvalidCount = InvalidDetection.count()
 
         Tag releasedTag = Tag.findBySerialNumber('46601')
         assertNotNull(releasedTag)

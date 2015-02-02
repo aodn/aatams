@@ -173,8 +173,7 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         def filterParams = detectionReportInfo.filterParams
         assertNotNull(filterParams)
 
-        // Project
-        assertEquals("project", filterParams[0].label)
+        assertEquals("receiver project", filterParams[0].label)
         assertTrue(filterParams[0] instanceof AjaxMultiSelectReportParameter)
         assertEquals("receiverDeployment.station.installation.project", filterParams[0].associationName)
         assertEquals("name", filterParams[0].propertyName)

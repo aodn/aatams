@@ -11,27 +11,23 @@ class ReceiverEventExportService extends AbstractStreamingExporterService
         return "receiverEvent"
     }
 
-    protected def readData(filterParams)
+    protected def eachRow(filterParams, closure)
     {
-        def queryResult = queryService.queryWithoutCount(ValidReceiverEvent.class, filterParams)
-        return [results: queryResult.results, rowCount: queryResult.results.size()]
+        def queryResult = queryService.query(ValidReceiverEvent.class, filterParams)
+
+        queryResult.results.each { row ->
+            closure.call(row)
+        }
     }
 
-    protected def writeCsvChunk(resultList, OutputStream out)
+    protected def writeCsvRow(row, OutputStream out)
     {
-        resultList.each
-        {
-            row ->
-
-            out << row.receiverDeployment.station.name << ","
-            out << row.receiverName << ","
-            out << row.formattedTimestamp << ","
-            out << row.description << ","
-            out << row.data << ","
-            out << row.units << "\n"
-        }
-
-        return resultList.size()
+        out << row.receiverDeployment.station.name << ","
+        out << row.receiverName << ","
+        out << row.formattedTimestamp << ","
+        out << row.description << ","
+        out << row.data << ","
+        out << row.units << "\n"
     }
 
     protected void writeCsvHeader(OutputStream out)

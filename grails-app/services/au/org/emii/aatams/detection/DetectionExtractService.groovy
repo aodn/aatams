@@ -2,7 +2,7 @@ package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.export.AbstractStreamingExporterService
 import au.org.emii.aatams.util.GeometryUtils
-import groovy.sql.Sql
+import au.org.emii.aatams.sql.Sql
 
 class DetectionExtractService extends AbstractStreamingExporterService {
     static transactional = false
@@ -14,10 +14,11 @@ class DetectionExtractService extends AbstractStreamingExporterService {
 
         def query =  new QueryBuilder().constructQuery(filterParams)
         def results = performQuery(filterParams.sql, query)
+        def releaseIsProtectedCache = [:]
         def rowCount = results.size()
 
         return [
-            results: applyEmbargo(results, filterParams), rowCount: rowCount
+            results: applyEmbargo(results, filterParams, releaseIsProtectedCache), rowCount: rowCount
         ]
     }
 
@@ -47,10 +48,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         return "detection"
     }
 
-    protected def applyEmbargo(results, params) {
-
-        def releaseIsProtectedCache = [:]
-
+    protected def applyEmbargo(results, params, releaseIsProtectedCache) {
         results.collect { row ->
             new DetectionVisibilityChecker(row, params, permissionUtilsService, releaseIsProtectedCache).apply()
         }.findAll{ it }
@@ -59,39 +57,49 @@ class DetectionExtractService extends AbstractStreamingExporterService {
     protected void writeCsvData(final filterParams, OutputStream out)
     {
         filterParams.sql = new Sql(dataSource)
+        filterParams.sql.fetchSize = getFetchSize()
+        filterParams.sql.autoCommit = false
         filterParams.projectPermissionCache = [:]
 
         super.writeCsvData(filterParams, out)
     }
 
-    protected def readData(filterParams)
+    protected def eachRow(params, closure)
     {
-        return extractPage(filterParams)
-    }
-
-    protected def writeCsvChunk(resultList, OutputStream out)
-    {
-        resultList.each
-        {
-            row ->
-
-            out << row.formatted_timestamp << ","
-            out << row.station << ","
-            out << GeometryUtils.scrambleCoordinate(row.latitude) << ","
-            out << GeometryUtils.scrambleCoordinate(row.longitude) << ","
-            out << row.receiver_name << ","
-            out << row.sensor_id << ","
-            out << row.species_name << ","
-            out << row.uploader << ","
-            out << row.transmitter_id << ","
-            out << row.organisation << ","
-            out << ((row.sensor_value == null) ? "" : row.sensor_value) << ","
-            out << ((row.sensor_unit == null) ? "" : row.sensor_unit)
-
-            out << "\n"
+        def startTime = System.currentTimeMillis()
+        def query =  new QueryBuilder().constructQuery(params)
+        def releaseIsProtectedCache = [:]
+        int count = 0
+        
+        params.sql.eachRow(query.getSQL(), query.getBindValues()) { row ->
+            def checker = new DetectionVisibilityChecker(row.toRowResult(), params, permissionUtilsService, releaseIsProtectedCache)
+            def checkedRow = checker.apply()
+            if (checkedRow) {
+                closure.call(checkedRow)
+            }
+            count++
         }
 
-        return resultList.size()
+        def endTime = System.currentTimeMillis()
+        log.debug("Export finished, num results: ${count}, elapsed time (ms): ${endTime - startTime}, query: ${query}")
+    }
+
+    protected def writeCsvRow(row, OutputStream out)
+    {
+        out << row.formatted_timestamp << ","
+        out << row.station << ","
+        out << GeometryUtils.scrambleCoordinate(row.latitude) << ","
+        out << GeometryUtils.scrambleCoordinate(row.longitude) << ","
+        out << row.receiver_name << ","
+        out << row.sensor_id << ","
+        out << row.species_name << ","
+        out << row.uploader << ","
+        out << row.transmitter_id << ","
+        out << row.organisation << ","
+        out << ((row.sensor_value == null) ? "" : row.sensor_value) << ","
+        out << ((row.sensor_unit == null) ? "" : row.sensor_unit)
+
+        out << "\n"
     }
 
     protected void writeCsvHeader(OutputStream out)

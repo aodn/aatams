@@ -277,7 +277,7 @@ grails.gorm.default.mapping = {
 
 detection {
     extract {
-        limit = 50000
+        fetchSize = 1000
         columns = '''
             valid_detection."timestamp",
             to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp,

@@ -248,6 +248,7 @@ filter.count.max = 300000
 
 
 grails.gorm.default.list.max = 20
+grails.gorm.default.list.nonPaginatedMax = 100
 
 // Added by the Joda-Time plugin:
 grails.gorm.default.mapping = {

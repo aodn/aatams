@@ -23,6 +23,10 @@ class DetectionController extends ReportController
         doList("detection")
     }
 
+    protected def displayCountMessage(resultList, queryName)
+    {
+    }
+
     protected void cleanDateParams()
     {
         [1, 2].each
@@ -61,15 +65,10 @@ class DetectionController extends ReportController
 
         def detections = detectionExtractService.extractPage(params).results.collect { ValidDetection.toPresentationFormat(it) }
 
-        def paramsClone = params.clone()
-
-        paramsClone.max = grailsApplication.config.filter.count.max + 1
-        def count = detectionExtractService.getCount(paramsClone)
-
         params.remove("sql")
         params.remove("projectPermissionCache")
 
-        [results: detections, count: count]
+        [results: detections]
     }
 
     def export =

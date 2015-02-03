@@ -10,9 +10,9 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 abstract class AbstractStreamingExporterService
 {
     protected abstract void writeCsvHeader(OutputStream out)
-    protected abstract def writeCsvChunk(resultList, OutputStream out)
+    protected abstract def writeCsvRow(resultList, OutputStream out)
     protected def applyEmbargo(results, params) { return results }
-    protected abstract def readData(filterParams)
+    protected abstract def eachRow(filterParams, closure)
     protected abstract String getReportName()
 
     protected generateReport(params, req, res)
@@ -66,32 +66,18 @@ abstract class AbstractStreamingExporterService
         }
     }
 
-    protected int getLimit()
+    protected int getFetchSize()
     {
-        return ConfigurationHolder.config.detection.extract.limit
+        return ConfigurationHolder.config.detection.extract.fetchSize
     }
 
     protected void writeCsvData(final params, OutputStream out)
     {
-        params.limit = getLimit()
-        params.offset = 0
-
-        def data = readData(params)
-        def results = data.results
-        def rowCount = data.rowCount
-        params.offset = params.offset + rowCount
-
         indicateExportStart(params)
         writeCsvHeader(out)
 
-        while (rowCount > 0)
-        {
-            writeCsvChunk(results, out)
-
-            data = readData(params)
-            results = data.results
-            rowCount = data.rowCount
-            params.offset = params.offset + rowCount
+        eachRow(params) { row ->
+            writeCsvRow(row, out)
         }
     }
 

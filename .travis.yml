@@ -1,0 +1,42 @@
+sudo: false  # use containter-based infrastructure
+
+
+language: groovy
+
+jdk:
+  - openjdk7
+
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gvm'
+
+env:
+    global
+    - TZ="Australia/Hobart" JAVA_OPTS="-Xmx1G -Xms512m -XX:PermSize=64m -XX:MaxPermSize=512m"
+
+addons:
+  postgresql: "9.3"
+
+before_install:
+  - rm -rf ~/.gvm
+  - curl -s get.gvmtool.net > ~/install_gvm.sh
+  - chmod 775 ~/install_gvm.sh
+  - ~/install_gvm.sh
+  - echo "gvm_auto_answer=true" > ~/.gvm/etc/config
+  - source ~/.gvm/bin/gvm-init.sh
+  - gvm install grails 1.3.7
+  - gvm use grails 1.3.7
+
+before_script:
+  - psql -U postgres -c "create user aatams_test unencrypted password 'aatams_test';"
+  - psql -U postgres -c "create database aatams_test owner aatams_test;"
+  - psql -U postgres -c "create extension postgis" aatams_test
+  - psql -U postgres -c "alter database aatams_test set timezone to 'Australia/Hobart';" aatams_test
+
+script: grails test-app --echoOut
+
+notifications:
+  email:
+    - jkburges@gmail.com
+    - dnahodil@utas.edu.au

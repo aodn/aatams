@@ -15,7 +15,7 @@ class VisibilityControlFilters
     def visibilityControlService
 
     def notListActions = 'show|edit|update|delete'
-    def visibilityControlControllers = 'animal|animalRelease|detection|detectionSurgery|sensor|surgery|tag'
+    def visibilityControlControllers = 'animal|animalRelease|detection|sensor|surgery|tag'
 
     def filters =
     {

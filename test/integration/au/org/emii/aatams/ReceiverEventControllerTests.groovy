@@ -1,13 +1,19 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
+import au.org.emii.aatams.test.TestUtils
+
 import grails.test.*
 
 class ReceiverEventControllerTests extends AbstractControllerUnitTestCase
 {
+    def dataSource
+
     protected void setUp()
     {
         super.setUp()
+
+        TestUtils.createReceiverEventView(dataSource)
 
         controller.params.format = "CSV"
     }
@@ -19,6 +25,6 @@ class ReceiverEventControllerTests extends AbstractControllerUnitTestCase
 
     void testExecuteReceiverEventByProject()
     {
-        assertExport([receiverDeployment: [station: [installation: [project: [eq: ["name", "Tuna"]]]]]], "testExecuteReceiverEventByProject")
+        assertExport([receiverDeployment: [station: [installation: [project: [in: ["name", "Tuna"]]]]]], "testExecuteReceiverEventByProject")
     }
 }

@@ -1,5 +1,6 @@
 package au.org.emii.aatams.export
 
+import au.org.emii.aatams.ReceiverEventQueryBuilder
 import au.org.emii.aatams.ValidReceiverEvent
 
 class ReceiverEventExportService extends AbstractStreamingExporterService
@@ -11,20 +12,26 @@ class ReceiverEventExportService extends AbstractStreamingExporterService
         return "receiverEvent"
     }
 
-    protected def eachRow(filterParams, closure)
+    protected def eachRow(params, closure)
     {
-        def queryResult = queryService.query(ValidReceiverEvent.class, filterParams)
+        def startTime = System.currentTimeMillis()
+        def query =  new ReceiverEventQueryBuilder().constructQuery(params)
+        int count = 0
 
-        queryResult.results.each { row ->
+        params.sql.eachRow(query.getSQL(), query.getBindValues()) { row ->
             closure.call(row)
+            count++
         }
+
+        def endTime = System.currentTimeMillis()
+        log.debug("Export finished, num results: ${count}, elapsed time (ms): ${endTime - startTime}, query: ${query}")
     }
 
     protected def writeCsvRow(row, OutputStream out)
     {
-        out << row.receiverDeployment.station.name << ","
-        out << row.receiverName << ","
-        out << row.formattedTimestamp << ","
+        out << row.station << ","
+        out << row.receiver_name << ","
+        out << row.formatted_timestamp << ","
         out << row.description << ","
         out << row.data << ","
         out << row.units << "\n"

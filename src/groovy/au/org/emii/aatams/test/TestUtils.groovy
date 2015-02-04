@@ -25,6 +25,12 @@ class TestUtils
         }
     }
 
+    static void createReceiverEventView(dataSource) {
+        def sql = new Sql(dataSource)
+
+        sql.execute(String.valueOf("create or replace view receiver_event_view as ${ConfigurationHolder.config.receiver_event.extract.receiver_event_view.definition}"))
+    }
+
     enum VisibilityLevel {
         VISIBLE,
         VISIBLE_BUT_SANITISED,

@@ -9,7 +9,7 @@ import grails.test.*
 
 import org.jooq.conf.ParamType
 
-class QueryBuilderTests extends GrailsUnitTestCase
+class DetectionQueryBuilderTests extends GrailsUnitTestCase
 {
     void testConstructQueryNoFilterParams() {
         assertQueryFromFilterEquals('', [:])
@@ -97,40 +97,40 @@ class QueryBuilderTests extends GrailsUnitTestCase
 
     void testConstructCountQuery() {
         assertEquals(
-            "select count(*) from ${QueryBuilder.getViewName()}".trim(),
-            new QueryBuilder().constructCountQuery([:]).getSQL(ParamType.INLINED).trim()
+            "select count(*) from ${new DetectionQueryBuilder().getViewName()}".trim(),
+            new DetectionQueryBuilder().constructCountQuery([:]).getSQL(ParamType.INLINED).trim()
         )
     }
 
     void testGetViewNameNoFilter() {
-        assertEquals("detection_view", QueryBuilder.getViewName([:]))
+        assertEquals("detection_view", new DetectionQueryBuilder().getViewName([:]))
     }
 
     void testGetViewNameOneProjectFilter() {
         assertEquals(
             "detection_view",
-            QueryBuilder.getViewName([filter: [receiverDeployment:[station:[installation:[project:[in: ["name", "Whales | "]]]]]]])
+            new DetectionQueryBuilder().getViewName([filter: [receiverDeployment:[station:[installation:[project:[in: ["name", "Whales | "]]]]]]])
         )
     }
 
     void testGetViewNameOneSpeciesFilter() {
         assertEquals(
             "detection_by_species_view",
-            QueryBuilder.getViewName([filter: [surgeries:[release:[animal:[species:[in:["spcode", "12345 | "]]]]]]])
+            new DetectionQueryBuilder().getViewName([filter: [surgeries:[release:[animal:[species:[in:["spcode", "12345 | "]]]]]]])
         )
     }
 
     void testGetViewNameEmptySpeciesFilter() {
         assertEquals(
             "detection_view",
-            QueryBuilder.getViewName([filter: [surgeries:[release:[animal:[species:[in:["spcode", ""]]]]]]])
+            new DetectionQueryBuilder().getViewName([filter: [surgeries:[release:[animal:[species:[in:["spcode", ""]]]]]]])
         )
     }
 
     void testGetViewNameOneSpeciesOneProjectFilter() {
         assertEquals(
             "detection_by_species_view",
-            QueryBuilder.getViewName(
+            new DetectionQueryBuilder().getViewName(
                 [filter: [receiverDeployment:[station:[installation:[project:[in: ["name", "Whales | "]]]]],
                           surgeries:[release:[animal:[species:[in:["spcode", "12345 | "]]]]]]]
             )
@@ -139,8 +139,8 @@ class QueryBuilderTests extends GrailsUnitTestCase
 
     def assertQueryFromFilterEquals(expectedSql, filter) {
         assertEquals(
-            "select * from ${QueryBuilder.getViewName()} ${expectedSql}".trim(),
-            new QueryBuilder().constructQuery(filter).getSQL(ParamType.INLINED).trim()
+            "select * from ${new DetectionQueryBuilder().getViewName()} ${expectedSql}".trim(),
+            new DetectionQueryBuilder().constructQuery(filter).getSQL(ParamType.INLINED).trim()
         )
     }
 }

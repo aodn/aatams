@@ -134,7 +134,7 @@ class JdbcTemplateVueDetectionFileProcessorService extends VueDetectionFileProce
         def sql = Sql.newInstance(dataSource)
 
         // Update statistics.
-        def provDetsCount = sql.firstRow(String.valueOf("select count(*) from ${QueryBuilder.getViewName()} where provisional = true;")).count
+        def provDetsCount = sql.firstRow(String.valueOf("select count(*) from ${new DetectionQueryBuilder().getViewName()} where provisional = true;")).count
         def numValidDets = Statistics.findByKey("numValidDetections")
         numValidDets.value += provDetsCount
 

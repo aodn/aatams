@@ -2,17 +2,15 @@ package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.export.AbstractStreamingExporterService
 import au.org.emii.aatams.util.GeometryUtils
-import au.org.emii.aatams.sql.Sql
 
 class DetectionExtractService extends AbstractStreamingExporterService {
     static transactional = false
 
-    def dataSource
     def permissionUtilsService
 
     public def extractPage(filterParams) {
 
-        def query =  new QueryBuilder().constructQuery(filterParams)
+        def query =  new DetectionQueryBuilder().constructQuery(filterParams)
         def results = performQuery(filterParams.sql, query)
         def releaseIsProtectedCache = [:]
         def rowCount = results.size()
@@ -27,7 +25,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
             return ValidDetection.count()
         }
 
-        def query =  new QueryBuilder().constructCountQuery(filterParams)
+        def query =  new DetectionQueryBuilder().constructCountQuery(filterParams)
         def results = performQuery(filterParams.sql, query)
 
         return results.count[0]
@@ -56,9 +54,6 @@ class DetectionExtractService extends AbstractStreamingExporterService {
 
     protected void writeCsvData(final filterParams, OutputStream out)
     {
-        filterParams.sql = new Sql(dataSource)
-        filterParams.sql.fetchSize = getFetchSize()
-        filterParams.sql.autoCommit = false
         filterParams.projectPermissionCache = [:]
 
         super.writeCsvData(filterParams, out)
@@ -67,10 +62,10 @@ class DetectionExtractService extends AbstractStreamingExporterService {
     protected def eachRow(params, closure)
     {
         def startTime = System.currentTimeMillis()
-        def query =  new QueryBuilder().constructQuery(params)
+        def query =  new DetectionQueryBuilder().constructQuery(params)
         def releaseIsProtectedCache = [:]
         int count = 0
-        
+
         params.sql.eachRow(query.getSQL(), query.getBindValues()) { row ->
             def checker = new DetectionVisibilityChecker(row.toRowResult(), params, permissionUtilsService, releaseIsProtectedCache)
             def checkedRow = checker.apply()

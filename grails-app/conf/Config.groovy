@@ -342,3 +342,28 @@ detection {
         }
     }
 }
+
+receiver_event {
+    extract {
+        receiver_event_view {
+            definition = """SELECT
+            timestamp,
+            receiver_project.name as project,
+            installation.name as installation,
+            installation_station.name as station,
+            receiver_name,
+            to_char((timestamp::timestamp with time zone) at time zone '00:00', 'YYYY-MM-DD HH24:MI:SS') as formatted_timestamp,
+            receiver_event.description,
+            data,
+            units
+
+            FROM receiver_event
+            JOIN receiver_deployment ON receiver_event.receiver_deployment_id = receiver_deployment.id
+            JOIN device receiver ON receiver_deployment.receiver_id = receiver.id
+            JOIN device_model ON receiver.model_id = device_model.id
+            JOIN installation_station ON receiver_deployment.station_id = installation_station.id
+            JOIN installation ON installation_station.installation_id = installation.id
+            JOIN project receiver_project ON installation.project_id = receiver_project.id;"""
+        }
+    }
+}

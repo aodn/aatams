@@ -1,5 +1,7 @@
 package au.org.emii.aatams.export
 
+import au.org.emii.aatams.sql.Sql
+
 import java.util.zip.GZIPOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
@@ -9,6 +11,8 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 abstract class AbstractStreamingExporterService
 {
+    def dataSource
+
     protected abstract void writeCsvHeader(OutputStream out)
     protected abstract def writeCsvRow(resultList, OutputStream out)
     protected def applyEmbargo(results, params) { return results }
@@ -73,6 +77,10 @@ abstract class AbstractStreamingExporterService
 
     protected void writeCsvData(final params, OutputStream out)
     {
+        params.sql = new Sql(dataSource)
+        params.sql.fetchSize = getFetchSize()
+        params.sql.autoCommit = false
+
         indicateExportStart(params)
         writeCsvHeader(out)
 

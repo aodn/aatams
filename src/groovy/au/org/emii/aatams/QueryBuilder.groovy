@@ -1,4 +1,4 @@
-package au.org.emii.aatams.detection
+package au.org.emii.aatams
 
 import org.jooq.*
 import org.jooq.conf.ParamType
@@ -8,9 +8,11 @@ import org.apache.log4j.Logger
 
 import static org.jooq.impl.DSL.*
 
-class QueryBuilder {
+abstract class QueryBuilder {
 
     def log = Logger.getLogger(QueryBuilder.class)
+
+    abstract String getViewName(filterParams)
 
     def constructCountQuery(filterParams) {
         filterParams.count = true
@@ -32,16 +34,6 @@ class QueryBuilder {
         log.debug("query: ${query.getSQL(org.jooq.conf.ParamType.INLINED)}")
 
         return query
-    }
-
-    static String getViewName(filterParams) {
-        return hasSpeciesFilter(filterParams) ? "detection_by_species_view" : "detection_view"
-    }
-
-    static boolean hasSpeciesFilter(filterParams) {
-        def speciesInFilter = filterParams?.filter?.surgeries?.release?.animal?.species?.in
-
-        return speciesInFilter && (speciesInFilter.size() == 2) && (!speciesInFilter[1].isEmpty())
     }
 
     private void addInClauses(query, filterParams) {
@@ -74,7 +66,7 @@ class QueryBuilder {
         }
     }
 
-    private List delimitedFilterValuesToList(delimVals) {
+    List delimitedFilterValuesToList(delimVals) {
         return delimVals.tokenize("|").collect { it.trim() }.grep { it }
     }
 }

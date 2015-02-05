@@ -89,7 +89,7 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
     }
 
     private def getDetectionViewCount() {
-        return sql.firstRow(String.valueOf("select count(*) from ${QueryBuilder.getViewName()};")).count
+        return sql.firstRow(String.valueOf("select count(*) from ${new DetectionQueryBuilder().getViewName()};")).count
     }
 
     private def getValidDetectionCount() {

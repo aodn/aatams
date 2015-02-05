@@ -138,7 +138,7 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
 
     protected boolean isPermitted(String permission)
     {
-        if (permission == "project:" + permittedProject.id + ":write")
+        if (permission == "project:" + permittedProject.id + ":edit_children")
         {
             return true
         }

@@ -15,7 +15,7 @@ class VisibilityControlFilters
     def visibilityControlService
 
     def notListActions = 'show|edit|update|delete'
-    def visibilityControlControllers = 'animal|animalRelease|detection|detectionSurgery|sensor|surgery|tag'
+    def visibilityControlControllers = 'animal|animalRelease|detection|sensor|surgery|tag'
 
     def filters =
     {
@@ -36,15 +36,16 @@ class VisibilityControlFilters
         {
             after = { model ->
 
-                def instanceName = "${controllerName}Instance"
-                def instance = model[instanceName]
+                if (model) {
+                    def instanceName = "${controllerName}Instance"
+                    def instance = model[instanceName]
 
-                if (visibilityControlService.isAccessControlled(instance))
-                {
-                    redirect(getRedirectParams(id: instance.id, controllerName: controllerName, actionName: actionName))
-                }
-                else {
-                    model[instanceName] = visibilityControlService.applyVisibilityControls(instance)
+                    if (visibilityControlService.isAccessControlled(instance)) {
+                        redirect(getRedirectParams(id: instance.id, controllerName: controllerName, actionName: actionName))
+                    }
+                    else {
+                        model[instanceName] = visibilityControlService.applyVisibilityControls(instance)
+                    }
                 }
             }
         }

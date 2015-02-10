@@ -82,64 +82,74 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
 
         def date1 = dateFromString("2011-05-17T02:53:00+00:00")
         def date2 = dateFromString("2011-05-17T02:54:00+00:00")
+        def expectedResults = ValidDetection.findAllByTimestamp(date2)
 
-        assertQuery(ValidDetection,
-                    ValidDetection.findAllByTimestamp(date2),
-                    [filter: [between: [aaa:"aaa", "0": "timestamp", "1": date1, "2": date2],
-                              "between.0": "timestamp",
-                              "between.1": date1,
-                              "between.2": date2]])
-
-        assertQuery(ValidDetection,
-                    ValidDetection.findAllByTimestamp(date2),
-                    [
-                        filter:
-                        [
-                            between: [aaa:"aaa", "0": "timestamp", "1": date1, "2": date2],
-                            "between.0": "timestamp",
-                            "between.1": date1,
-                            "between.2": date2,
-                            between_year: ["timestamp", 17, 17],
-                            between_month: ["timestamp", 17, 17],
-                            between_day: ["timestamp", 17, 17],
-                            between_hour: ["timestamp", 17, 17],
-                            between_minute: ["timestamp", 17, 17],
-                            between_second: ["timestamp", 17, 17]
-                        ]
-                    ])
-
-        assertQuery(ValidDetection,
-            ValidDetection.findAllByTimestamp(date2),
+        assertQuery(
+            ValidDetection,
+            expectedResults,
             [
-                "filter.between.1": date1,
-                "filter.between.2": date2,
-                filter:
-                [
+                filter: [
                     between: [aaa:"aaa", "0": "timestamp", "1": date1, "2": date2],
                     "between.0": "timestamp",
                     "between.1": date1,
                     "between.2": date2
                 ]
-            ])
+            ]
+        )
+
+        assertQuery(
+            ValidDetection,
+            expectedResults,
+            [
+                filter: [
+                    between: [aaa:"aaa", "0": "timestamp", "1": date1, "2": date2],
+                    "between.0": "timestamp",
+                    "between.1": date1,
+                    "between.2": date2,
+                    between_year: ["timestamp", 17, 17],
+                    between_month: ["timestamp", 17, 17],
+                    between_day: ["timestamp", 17, 17],
+                    between_hour: ["timestamp", 17, 17],
+                    between_minute: ["timestamp", 17, 17],
+                    between_second: ["timestamp", 17, 17]
+                ]
+            ]
+        )
+
+        assertQuery(
+            ValidDetection,
+            expectedResults,
+            [
+                "filter.between.1": date1,
+                "filter.between.2": date2,
+                filter: [
+                    between: [aaa:"aaa", "0": "timestamp", "1": date1, "2": date2],
+                    "between.0": "timestamp",
+                    "between.1": date1,
+                    "between.2": date2
+                ]
+            ]
+        )
 
         def testFormat = "EEE MMM dd HH:mm:ss z yyyy"
         def formattedDate1 = date1.format(testFormat)
         def formattedDate2 = date2.format(testFormat)
 
-        assertQuery(ValidDetection,
-            ValidDetection.findAllByTimestamp(date2),
+        assertQuery(
+            ValidDetection,
+            expectedResults,
             [
                 //  Thu Jun 18 12:38:00 EST 2009
                 "filter.between.1": formattedDate1,
                 "filter.between.2": formattedDate2,
-                filter:
-                [
+                filter: [
                     between: [aaa:"aaa", "0": "timestamp", "1": formattedDate1, "2": formattedDate2],
                     "between.0": "timestamp",
                     "between.1": formattedDate1,
                     "between.2": formattedDate2
                 ]
-            ])
+            ]
+        )
     }
 
     static def dateFromString(String s) {

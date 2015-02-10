@@ -18,8 +18,7 @@ class JdbcTemplateDetectionFactoryService extends DetectionFactoryService
                    "receiverDeploymentId": params.receiverDeployment.id,
                    "message": "",
                    "reason": "",
-                   "provisional": true,
-                   "detectionSurgeries": new ArrayList()])
+                   "provisional": true])
     }
 
     protected def createInvalidDetection(params)
@@ -27,8 +26,7 @@ class JdbcTemplateDetectionFactoryService extends DetectionFactoryService
         return (params
                 + ["valid": false,
                    "clazz": "au.org.emii.aatams.detection.InvalidDetection",
-                   "receiverDownloadId": params.receiverDownload.id,
-                   "detectionSurgeries": new ArrayList()])
+                   "receiverDownloadId": params.receiverDownload.id])
     }
 
     void batchUpdate(String[] statements)

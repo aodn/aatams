@@ -5,6 +5,12 @@ import java.text.SimpleDateFormat
 
 import au.org.emii.aatams.util.SqlUtils
 
+import org.jooq.*
+import org.jooq.conf.ParamType
+import org.jooq.impl.DSL
+
+import static org.jooq.impl.DSL.*
+
 /**
  * Receivers (or more correctly deployments) have a number of (usually daily)
  * events associated with them.
@@ -44,38 +50,51 @@ class ReceiverEvent
 
     static transients = ['formattedTimestamp']
 
-    static String toSqlInsert(Map event)
+    static String toSqlInsert(event)
     {
-        StringBuilder eventBuff = new StringBuilder(
-                "INSERT INTO RECEIVER_EVENT (ID, VERSION, TIMESTAMP, RECEIVER_DEPLOYMENT_ID, RECEIVER_DOWNLOAD_ID, DATA, DESCRIPTION, RECEIVER_NAME, UNITS, CLASS, MESSAGE, REASON)" +
-                " VALUES(")
+        DSLContext create = DSL.using(SQLDialect.POSTGRES);
 
-        eventBuff.append("nextval('hibernate_sequence'),")
-        eventBuff.append("0,")
-        eventBuff.append("'${SqlUtils.formatTimestamp(event['timestamp'], 'yyyy-MM-dd HH:mm:ssZ')}',")
+        def insert = create.insertInto(
+            table('RECEIVER_EVENT'),
+            field('ID'),
+            field('VERSION'),
+            field('TIMESTAMP'),
+            field('RECEIVER_DEPLOYMENT_ID'),
+            field('RECEIVER_DOWNLOAD_ID'),
+            field('DATA'),
+            field('DESCRIPTION'),
+            field('RECEIVER_NAME'),
+            field('UNITS'),
+            field('CLASS'),
+            field('MESSAGE'),
+            field('REASON')
+        )
+        .values(
+            sequenceByName('hibernate_sequence').nextval(),
+            0,
+            formatTimestamp(event['timestamp'], 'yyyy-MM-dd HH:mm:ssZ'),
+            event.receiverDeploymentId,
+            event.receiverDownloadId,
+            event.data,
+            event.description,
+            event.receiverName,
+            event.units,
+            event.clazz,
+            event.message,
+            event.reason
+        )
 
-        SqlUtils.appendIntegerParams(eventBuff, event, ["receiverDeploymentId", "receiverDownloadId"])
-        SqlUtils.appendStringParams(eventBuff, event, ["data", "description", "receiverName", "units", "clazz", "message", "reason"])
-        SqlUtils.removeTrailingCommaAndAddBracket(eventBuff)
-
-        return eventBuff.toString()
+        return insert.getSQL(ParamType.INLINED)
     }
 
     static DateFormat formatter
 
     String getFormattedTimestamp()
     {
-        if (timestamp)
-        {
-            if (!formatter)
-            {
-                formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-            }
+        return formatTimestamp(timestamp, "yyyy-MM-dd HH:mm:ss")
+    }
 
-            return formatter.format(timestamp)
-        }
-
-        return null
+    static formatTimestamp(timestamp, format) {
+        return SqlUtils.formatTimestamp(timestamp, format)
     }
 }

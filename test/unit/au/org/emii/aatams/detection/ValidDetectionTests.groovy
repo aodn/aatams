@@ -3,6 +3,7 @@ package au.org.emii.aatams.detection
 import au.org.emii.aatams.*
 import grails.test.*
 import com.vividsolutions.jts.geom.*
+import org.joda.time.DateTime
 
 class ValidDetectionTests extends GrailsUnitTestCase
 {
@@ -152,5 +153,47 @@ class ValidDetectionTests extends GrailsUnitTestCase
         def surgeries = []
 
         assertEquals "", ValidDetection.getSpeciesNames(surgeries)
+    }
+
+    void testToSql() {
+        assertSql()
+    }
+
+    void testToSqlWithApostrophe() {
+        assertSql([ stationName: "spider's ledge" ], [ stationName: "spider''s ledge" ])
+    }
+
+    private void assertSql(overrideInputs = null, overrideOutpus = null) {
+        def date = '2015-10-02'
+        def time = '02:34:56+0000'
+        def detection = [
+            timestamp: new DateTime("${date}T${time}".toString()).toDate(),
+            receiverDownloadId: 123,
+            receiverName: 'VR2W-1234',
+            sensorUnit: 'C',
+            sensorValue: '20.3',
+            stationName: 'station',
+            transmitterId: 'A69-1303-1234',
+            transmitterName: 'trans name',
+            transmitterSerialNumber: '1234',
+            receiverDeploymentId: 99,
+            provisional: true
+        ]
+
+        if (overrideInputs) {
+            detection << overrideInputs
+        }
+
+        def sql = ValidDetection.toSqlInsert(detection)
+        println "sql: ${sql}"
+
+        if (overrideOutpus) {
+            detection << overrideOutpus
+        }
+
+        assertEquals(
+            "insert into VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) values (nextval('\"hibernate_sequence\"'), 0, '${date} ${time}', ${detection.receiverDownloadId}, '${detection.receiverName}', '${detection.sensorUnit}', '${detection.sensorValue}', '${detection.stationName}', '${detection.transmitterId}', '${detection.transmitterName}', '${detection.transmitterSerialNumber}', ${detection.receiverDeploymentId}, ${detection.provisional})",
+            sql
+        )
     }
 }

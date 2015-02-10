@@ -76,24 +76,27 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
             [filter: [installation: ["in": ["name", "Bondi Line | Whale Curtain | "]]]])
     }
 
-    void testBetweenRestriction()
-    {
+    void testBetweenRestriction() {
+
+        def date1 = dateFromString("2011-05-17T02:53:00+00:00")
+        def date2 = dateFromString("2011-05-17T02:54:00+00:00")
+        
         assertQuery(ValidDetection,
-                    ValidDetection.findAllByTimestamp(dateFromString("2011-05-17T02:54:00+00:00")),
-                    [filter: [between: [aaa:"aaa", "0": "timestamp", "1": dateFromString("2011-05-17T02:53:00+00:00"), "2": dateFromString("2011-05-17T02:54:00+00:00")],
+                    ValidDetection.findAllByTimestamp(date2),
+                    [filter: [between: [aaa:"aaa", "0": "timestamp", "1": date1, "2": date2],
                               "between.0": "timestamp",
-                              "between.1": dateFromString("2011-05-17T02:53:00+00:00"),
-                              "between.2": dateFromString("2011-05-17T02:54:00+00:00")]])
+                              "between.1": date1,
+                              "between.2": date2]])
 
         assertQuery(ValidDetection,
-                    ValidDetection.findAllByTimestamp(dateFromString("2011-05-17T02:54:00+00:00")),
+                    ValidDetection.findAllByTimestamp(date2),
                     [
                         filter:
                         [
-                            between: [aaa:"aaa", "0": "timestamp", "1": dateFromString("2011-05-17T02:53:00+00:00"), "2": dateFromString("2011-05-17T02:54:00+00:00")],
+                            between: [aaa:"aaa", "0": "timestamp", "1": date1, "2": date2],
                             "between.0": "timestamp",
-                            "between.1": dateFromString("2011-05-17T02:53:00+00:00"),
-                            "between.2": dateFromString("2011-05-17T02:54:00+00:00"),
+                            "between.1": date1,
+                            "between.2": date2,
                             between_year: ["timestamp", 17, 17],
                             between_month: ["timestamp", 17, 17],
                             between_day: ["timestamp", 17, 17],
@@ -104,21 +107,21 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
                     ])
 
         assertQuery(ValidDetection,
-            ValidDetection.findAllByTimestamp(dateFromString("2011-05-17T02:54:00+00:00")),
+            ValidDetection.findAllByTimestamp(date2),
             [
-                "filter.between.1": dateFromString("2011-05-17T02:53:00+00:00"),
-                "filter.between.2": dateFromString("2011-05-17T02:54:00+00:00"),
+                "filter.between.1": date1,
+                "filter.between.2": date2,
                 filter:
                 [
-                    between: [aaa:"aaa", "0": "timestamp", "1": dateFromString("2011-05-17T02:53:00+00:00"), "2": dateFromString("2011-05-17T02:54:00+00:00")],
+                    between: [aaa:"aaa", "0": "timestamp", "1": date1, "2": date2],
                     "between.0": "timestamp",
-                    "between.1": dateFromString("2011-05-17T02:53:00+00:00"),
-                    "between.2": dateFromString("2011-05-17T02:54:00+00:00")
+                    "between.1": date1,
+                    "between.2": date2
                 ]
             ])
 
         assertQuery(ValidDetection,
-            ValidDetection.findAllByTimestamp(dateFromString("2011-05-17T02:54:00+00:00")),
+            ValidDetection.findAllByTimestamp(date2),
             [
                 //  Thu Jun 18 12:38:00 EST 2009
                 "filter.between.1": "Tue May 17 12:53:00 EST 2011",

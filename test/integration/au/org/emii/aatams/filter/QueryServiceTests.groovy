@@ -5,6 +5,8 @@ import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
+import java.text.SimpleDateFormat
+
 class QueryServiceTests extends AbstractGrailsUnitTestCase
 {
     def queryService
@@ -80,7 +82,7 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
 
         def date1 = dateFromString("2011-05-17T02:53:00+00:00")
         def date2 = dateFromString("2011-05-17T02:54:00+00:00")
-        
+
         assertQuery(ValidDetection,
                     ValidDetection.findAllByTimestamp(date2),
                     [filter: [between: [aaa:"aaa", "0": "timestamp", "1": date1, "2": date2],
@@ -120,18 +122,22 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
                 ]
             ])
 
+        def testFormat = "EEE MMM dd HH:mm:ss z yyyy"
+        def formattedDate1 = date1.format(testFormat)
+        def formattedDate2 = date2.format(testFormat)
+
         assertQuery(ValidDetection,
             ValidDetection.findAllByTimestamp(date2),
             [
                 //  Thu Jun 18 12:38:00 EST 2009
-                "filter.between.1": "Tue May 17 12:53:00 EST 2011",
-                "filter.between.2": "Tue May 17 12:54:00 EST 2011",
+                "filter.between.1": formattedDate1,
+                "filter.between.2": formattedDate2,
                 filter:
                 [
-                    between: [aaa:"aaa", "0": "timestamp", "1": "Tue May 17 12:53:00 EST 2011", "2": "Tue May 17 12:54:00 EST 2011"],
+                    between: [aaa:"aaa", "0": "timestamp", "1": formattedDate1, "2": formattedDate2],
                     "between.0": "timestamp",
-                    "between.1": "Tue May 17 12:53:00 EST 2011",
-                    "between.2": "Tue May 17 12:54:00 EST 2011"
+                    "between.1": formattedDate1,
+                    "between.2": formattedDate2
                 ]
             ])
     }

@@ -5,6 +5,8 @@ import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
+import java.text.SimpleDateFormat
+
 class QueryServiceTests extends AbstractGrailsUnitTestCase
 {
     def queryService
@@ -76,61 +78,82 @@ class QueryServiceTests extends AbstractGrailsUnitTestCase
             [filter: [installation: ["in": ["name", "Bondi Line | Whale Curtain | "]]]])
     }
 
-    void testBetweenRestriction()
-    {
-        assertQuery(ValidDetection,
-                    ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
-                    [filter: [between: [aaa:"aaa", "0": "timestamp", "1": new DateTime("2011-05-17T02:53:00+00:00").toDate(), "2": new DateTime("2011-05-17T02:54:00+00:00").toDate()],
-                              "between.0": "timestamp",
-                              "between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(),
-                              "between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate()]])
+    void testBetweenRestriction() {
 
-        assertQuery(ValidDetection,
-                    ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
-                    [
-                        filter:
-                        [
-                            between: [aaa:"aaa", "0": "timestamp", "1": new DateTime("2011-05-17T02:53:00+00:00").toDate(), "2": new DateTime("2011-05-17T02:54:00+00:00").toDate()],
-                            "between.0": "timestamp",
-                            "between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(),
-                            "between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate(),
-                            between_year: ["timestamp", 17, 17],
-                            between_month: ["timestamp", 17, 17],
-                            between_day: ["timestamp", 17, 17],
-                            between_hour: ["timestamp", 17, 17],
-                            between_minute: ["timestamp", 17, 17],
-                            between_second: ["timestamp", 17, 17]
-                        ]
-                    ])
+        def date1 = dateFromString("2011-05-17T02:53:00+00:00")
+        def date2 = dateFromString("2011-05-17T02:54:00+00:00")
+        def expectedResults = ValidDetection.findAllByTimestamp(date2)
 
-        assertQuery(ValidDetection,
-            ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
+        assertQuery(
+            ValidDetection,
+            expectedResults,
             [
-                "filter.between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(),
-                "filter.between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate(),
-                filter:
-                [
-                    between: [aaa:"aaa", "0": "timestamp", "1": new DateTime("2011-05-17T02:53:00+00:00").toDate(), "2": new DateTime("2011-05-17T02:54:00+00:00").toDate()],
+                filter: [
+                    between: [aaa:"aaa", "0": "timestamp", "1": date1, "2": date2],
                     "between.0": "timestamp",
-                    "between.1": new DateTime("2011-05-17T02:53:00+00:00").toDate(),
-                    "between.2": new DateTime("2011-05-17T02:54:00+00:00").toDate()
+                    "between.1": date1,
+                    "between.2": date2
                 ]
-            ])
+            ]
+        )
 
-        assertQuery(ValidDetection,
-            ValidDetection.findAllByTimestamp(new DateTime("2011-05-17T02:54:00+00:00").toDate()),
+        assertQuery(
+            ValidDetection,
+            expectedResults,
+            [
+                filter: [
+                    between: [aaa:"aaa", "0": "timestamp", "1": date1, "2": date2],
+                    "between.0": "timestamp",
+                    "between.1": date1,
+                    "between.2": date2,
+                    between_year: ["timestamp", 17, 17],
+                    between_month: ["timestamp", 17, 17],
+                    between_day: ["timestamp", 17, 17],
+                    between_hour: ["timestamp", 17, 17],
+                    between_minute: ["timestamp", 17, 17],
+                    between_second: ["timestamp", 17, 17]
+                ]
+            ]
+        )
+
+        assertQuery(
+            ValidDetection,
+            expectedResults,
+            [
+                "filter.between.1": date1,
+                "filter.between.2": date2,
+                filter: [
+                    between: [aaa:"aaa", "0": "timestamp", "1": date1, "2": date2],
+                    "between.0": "timestamp",
+                    "between.1": date1,
+                    "between.2": date2
+                ]
+            ]
+        )
+
+        def testFormat = "EEE MMM dd HH:mm:ss z yyyy"
+        def formattedDate1 = date1.format(testFormat)
+        def formattedDate2 = date2.format(testFormat)
+
+        assertQuery(
+            ValidDetection,
+            expectedResults,
             [
                 //  Thu Jun 18 12:38:00 EST 2009
-                "filter.between.1": "Tue May 17 12:53:00 EST 2011",
-                "filter.between.2": "Tue May 17 12:54:00 EST 2011",
-                filter:
-                [
-                    between: [aaa:"aaa", "0": "timestamp", "1": "Tue May 17 12:53:00 EST 2011", "2": "Tue May 17 12:54:00 EST 2011"],
+                "filter.between.1": formattedDate1,
+                "filter.between.2": formattedDate2,
+                filter: [
+                    between: [aaa:"aaa", "0": "timestamp", "1": formattedDate1, "2": formattedDate2],
                     "between.0": "timestamp",
-                    "between.1": "Tue May 17 12:53:00 EST 2011",
-                    "between.2": "Tue May 17 12:54:00 EST 2011"
+                    "between.1": formattedDate1,
+                    "between.2": formattedDate2
                 ]
-            ])
+            ]
+        )
+    }
+
+    static def dateFromString(String s) {
+        new DateTime(s).toDate()
     }
 
      void testIsNullRestriction()

@@ -5,6 +5,12 @@ import au.org.emii.aatams.util.SqlUtils
 
 import de.micromata.opengis.kml.v_2_2_0.Kml
 
+import org.jooq.*
+import org.jooq.conf.ParamType
+import org.jooq.impl.DSL
+
+import static org.jooq.impl.DSL.*
+
 class ValidDetection extends RawDetection implements Embargoable
 {
     static belongsTo = [receiverDownload:ReceiverDownloadFile, receiverDeployment: ReceiverDeployment]
@@ -124,24 +130,46 @@ class ValidDetection extends RawDetection implements Embargoable
         return theSurgeries*.release.animal.species.name.flatten().join(", ")
     }
 
-    static String toSqlInsert(detection)
-    {
-        StringBuilder detectionBuff = new StringBuilder(
-            "INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, " +
-            "STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) " +
-            " VALUES(")
+    def toSqlInsertInlined() {
+        toSqlInsert(this)
+    }
 
-        detectionBuff.append("nextval('hibernate_sequence'),")
-        detectionBuff.append("0,")
-        detectionBuff.append("'${formatTimestamp(detection['timestamp'], 'yyyy-MM-dd HH:mm:ssZ')}',")
-        SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDownloadId"])
-        SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
-                                                               "transmitterSerialNumber"])
-        SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDeploymentId"])
-        SqlUtils.appendBooleanParams(detectionBuff, detection, ["provisional"])
-        SqlUtils.removeTrailingCommaAndAddBracket(detectionBuff)
+    static def toSqlInsert(det) {
+        DSLContext create = DSL.using(SQLDialect.POSTGRES);
 
-        return detectionBuff.toString()
+        def insert = create.insertInto(
+            table('VALID_DETECTION'),
+            field('ID'),
+            field('VERSION'),
+            field('TIMESTAMP'),
+            field('RECEIVER_DOWNLOAD_ID'),
+            field('RECEIVER_NAME'),
+            field('SENSOR_UNIT'),
+            field('SENSOR_VALUE'),
+            field('STATION_NAME'),
+            field('TRANSMITTER_ID'),
+            field('TRANSMITTER_NAME'),
+            field('TRANSMITTER_SERIAL_NUMBER'),
+            field('RECEIVER_DEPLOYMENT_ID'),
+            field('PROVISIONAL')
+        )
+        .values(
+            sequenceByName('hibernate_sequence').nextval(),
+            0,
+            formatTimestamp(det['timestamp'], 'yyyy-MM-dd HH:mm:ssZ'),
+            det.receiverDownloadId,
+            det.receiverName,
+            det.sensorUnit,
+            det.sensorValue,
+            det.stationName,
+            det.transmitterId,
+            det.transmitterName,
+            det.transmitterSerialNumber,
+            det.receiverDeploymentId,
+            det.provisional
+        )
+
+        return insert.getSQL(ParamType.INLINED)
     }
 
     def applyEmbargo(allowSanitised = true) {

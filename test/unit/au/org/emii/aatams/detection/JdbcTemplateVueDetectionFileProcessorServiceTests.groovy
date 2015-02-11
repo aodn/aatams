@@ -90,38 +90,6 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
         vueDetectionFileProcessorService.process(download)
     }
 
-    /*
-     * This does not call into the correct getReader method, i.e. getBadDateFormatReader never gets called
-     * so the dates pass
-     */
-//    void testInvalidDateFormat()
-//    {
-//        AbstractBatchProcessor.metaClass.getReader = { getBadDateFormatReader(it) }
-//        VueDetectionFileProcessorService.metaClass.getReader = { getBadDateFormatReader(it) }
-//        JdbcTemplateVueDetectionFileProcessorService.metaClass.getReader = { getBadDateFormatReader(it) }
-//        vueDetectionFileProcessorService.metaClass.getReader = { getBadDateFormatReader(it) }
-//
-//        registerMetaClass AbstractBatchProcessor
-//        registerMetaClass VueDetectionFileProcessorService
-//        registerMetaClass JdbcTemplateVueDetectionFileProcessorService
-//        try
-//        {
-//            vueDetectionFileProcessorService.metaClass.batchUpdate = { String[] statements -> batchUpdate(statements) }
-//            vueDetectionFileProcessorService.metaClass.getBatchSize = { 10000 }
-//            vueDetectionFileProcessorService.process(download)
-//
-//            fail("Date format should have thrown a FileProcessingException")
-//        }
-//        catch (FileProcessingException fpe)
-//        {
-//            assert true
-//        }
-//        catch (Throwable t)
-//        {
-//            fail("Expected FileProcessingException but caught ${t.toString()}")
-//        }
-//    }
-
     protected String getData() {
         return super.getData() + '''
 2009-12-08 06:50:24,VR3UWM-354,A69-1303-62347,shark tag,1234,,,Neptune SW 1,-40.1234,45.1234
@@ -153,18 +121,18 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
         if (count == 0) {
             assertEach(
             [
-                "INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 06:44:24+0000',1,'VR3UWM-354','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234',1,true)",
-                "INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 06:44:24+0000',1,'VR3UWM-354','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234',1,true)",
-                "INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 06:44:24+0000',1,'AAA-111','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234','Unknown receiver code name AAA-111','UNKNOWN_RECEIVER')",
-                "INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 06:44:24+0000',1,'BBB-111','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234','Unknown receiver code name BBB-111','UNKNOWN_RECEIVER')",
+                "insert into VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-08 06:44:24+0000', 1, 'VR3UWM-354', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 1, true)",
+                "insert into VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-08 06:44:24+0000', 1, 'VR3UWM-354', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 1, true)",
+                "insert into INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-08 06:44:24+0000', 1, 'AAA-111', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 'Unknown receiver code name AAA-111', 'UNKNOWN_RECEIVER')",
+                "insert into INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-08 06:44:24+0000', 1, 'BBB-111', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 'Unknown receiver code name BBB-111', 'UNKNOWN_RECEIVER')",
             ], statementList)
         }
         else if (count == 1) {
             assertEach([
-                "INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 06:47:24+0000',1,'BBB-111','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234','Unknown receiver code name BBB-111','UNKNOWN_RECEIVER')",
-                "INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON)  VALUES(nextval('hibernate_sequence'),0,'2007-12-08 06:44:24+0000',1,'VR3UWM-354','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234','No deployment at time 2007-12-08 06:44:24 for receiver VR3UWM-354','NO_DEPLOYMENT_AT_DATE_TIME')",
-                "INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON)  VALUES(nextval('hibernate_sequence'),0,'2010-12-08 06:44:24+0000',1,'VR3UWM-354','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234','No recovery at time 2010-12-08 06:44:24 for receiver VR3UWM-354','NO_RECOVERY_AT_DATE_TIME')",
-                "INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 06:50:24+0000',1,'VR3UWM-354','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234',1,true)",
+                "insert into INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-08 06:47:24+0000', 1, 'BBB-111', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 'Unknown receiver code name BBB-111', 'UNKNOWN_RECEIVER')",
+                "insert into INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON) values (nextval('\"hibernate_sequence\"'), 0, '2007-12-08 06:44:24+0000', 1, 'VR3UWM-354', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 'No deployment at time 2007-12-08 06:44:24 for receiver VR3UWM-354', 'NO_DEPLOYMENT_AT_DATE_TIME')",
+                "insert into INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON) values (nextval('\"hibernate_sequence\"'), 0, '2010-12-08 06:44:24+0000', 1, 'VR3UWM-354', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 'No recovery at time 2010-12-08 06:44:24 for receiver VR3UWM-354', 'NO_RECOVERY_AT_DATE_TIME')",
+                "insert into VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-08 06:50:24+0000', 1, 'VR3UWM-354', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 1, true)",
             ], statementList)
         }
 
@@ -174,14 +142,14 @@ class JdbcTemplateVueDetectionFileProcessorServiceTests extends AbstractVueDetec
     private void batchUpdate(String[] statementList) {
 
         assertEach([
-            "INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 06:44:24+0000',1,'VR3UWM-354','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234',1,true)",
-            "INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 06:44:24+0000',1,'VR3UWM-354','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234',1,true)",
-            "INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 06:44:24+0000',1,'AAA-111','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234','Unknown receiver code name AAA-111','UNKNOWN_RECEIVER')",
-            "INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 06:44:24+0000',1,'BBB-111','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234','Unknown receiver code name BBB-111','UNKNOWN_RECEIVER')",
-            "INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 06:47:24+0000',1,'BBB-111','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234','Unknown receiver code name BBB-111','UNKNOWN_RECEIVER')",
-            "INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON)  VALUES(nextval('hibernate_sequence'),0,'2007-12-08 06:44:24+0000',1,'VR3UWM-354','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234','No deployment at time 2007-12-08 06:44:24 for receiver VR3UWM-354','NO_DEPLOYMENT_AT_DATE_TIME')",
-            "INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON)  VALUES(nextval('hibernate_sequence'),0,'2010-12-08 06:44:24+0000',1,'VR3UWM-354','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234','No recovery at time 2010-12-08 06:44:24 for receiver VR3UWM-354','NO_RECOVERY_AT_DATE_TIME')",
-            "INSERT INTO VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL)  VALUES(nextval('hibernate_sequence'),0,'2009-12-08 06:50:24+0000',1,'VR3UWM-354','',null,'Neptune SW 1','A69-1303-62347','shark tag','1234',1,true)"
+            "insert into VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-08 06:44:24+0000', 1, 'VR3UWM-354', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 1, true)",
+            "insert into VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-08 06:44:24+0000', 1, 'VR3UWM-354', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 1, true)",
+            "insert into INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-08 06:44:24+0000', 1, 'AAA-111', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 'Unknown receiver code name AAA-111', 'UNKNOWN_RECEIVER')",
+            "insert into INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-08 06:44:24+0000', 1, 'BBB-111', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 'Unknown receiver code name BBB-111', 'UNKNOWN_RECEIVER')",
+            "insert into INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-08 06:47:24+0000', 1, 'BBB-111', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 'Unknown receiver code name BBB-111', 'UNKNOWN_RECEIVER')",
+            "insert into INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON) values (nextval('\"hibernate_sequence\"'), 0, '2007-12-08 06:44:24+0000', 1, 'VR3UWM-354', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 'No deployment at time 2007-12-08 06:44:24 for receiver VR3UWM-354', 'NO_DEPLOYMENT_AT_DATE_TIME')",
+            "insert into INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON) values (nextval('\"hibernate_sequence\"'), 0, '2010-12-08 06:44:24+0000', 1, 'VR3UWM-354', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 'No recovery at time 2010-12-08 06:44:24 for receiver VR3UWM-354', 'NO_RECOVERY_AT_DATE_TIME')",
+            "insert into VALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, RECEIVER_DEPLOYMENT_ID, PROVISIONAL) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-08 06:50:24+0000', 1, 'VR3UWM-354', '', null, 'Neptune SW 1', 'A69-1303-62347', 'shark tag', '1234', 1, true)"
         ], statementList)
     }
 

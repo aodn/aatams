@@ -3,6 +3,12 @@ package au.org.emii.aatams.detection
 import au.org.emii.aatams.ReceiverDownloadFile
 import au.org.emii.aatams.util.SqlUtils
 
+import org.jooq.*
+import org.jooq.conf.ParamType
+import org.jooq.impl.DSL
+
+import static org.jooq.impl.DSL.*
+
 class InvalidDetection extends RawDetection
 {
     InvalidDetectionReason reason
@@ -16,22 +22,43 @@ class InvalidDetection extends RawDetection
         return false
     }
 
-    static String toSqlInsert(detection)
+    static def toSqlInsert(det)
     {
-        StringBuilder detectionBuff = new StringBuilder(
-                "INSERT INTO INVALID_DETECTION (ID, VERSION, TIMESTAMP, RECEIVER_DOWNLOAD_ID, RECEIVER_NAME, SENSOR_UNIT, SENSOR_VALUE, " +
-                "STATION_NAME, TRANSMITTER_ID, TRANSMITTER_NAME, TRANSMITTER_SERIAL_NUMBER, MESSAGE, REASON) " +
-                " VALUES(")
+        DSLContext create = DSL.using(SQLDialect.POSTGRES);
 
-        detectionBuff.append("nextval('hibernate_sequence'),")
-        detectionBuff.append("0,")
-        detectionBuff.append("'${formatTimestamp(detection['timestamp'], 'yyyy-MM-dd HH:mm:ssZ')}',")
-        SqlUtils.appendIntegerParams(detectionBuff, detection, ["receiverDownloadId"])
-        SqlUtils.appendStringParams(detectionBuff, detection, ["receiverName", "sensorUnit", "sensorValue", "stationName", "transmitterId", "transmitterName",
-            "transmitterSerialNumber", "message", "reason"])
-        SqlUtils.removeTrailingCommaAndAddBracket(detectionBuff)
+        def insert = create.insertInto(
+            table('INVALID_DETECTION'),
+            field('ID'),
+            field('VERSION'),
+            field('TIMESTAMP'),
+            field('RECEIVER_DOWNLOAD_ID'),
+            field('RECEIVER_NAME'),
+            field('SENSOR_UNIT'),
+            field('SENSOR_VALUE'),
+            field('STATION_NAME'),
+            field('TRANSMITTER_ID'),
+            field('TRANSMITTER_NAME'),
+            field('TRANSMITTER_SERIAL_NUMBER'),
+            field('MESSAGE'),
+            field('REASON')
+        )
+        .values(
+            sequenceByName('hibernate_sequence').nextval(),
+            0,
+            formatTimestamp(det['timestamp'], 'yyyy-MM-dd HH:mm:ssZ'),
+            det.receiverDownloadId,
+            det.receiverName,
+            det.sensorUnit,
+            det.sensorValue,
+            det.stationName,
+            det.transmitterId,
+            det.transmitterName,
+            det.transmitterSerialNumber,
+            det.message,
+            det.reason
+        )
 
-        return detectionBuff.toString()
+        return insert.getSQL(ParamType.INLINED)
     }
 
     String toString()

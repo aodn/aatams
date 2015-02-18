@@ -150,9 +150,11 @@ class ReceiverDownloadFileController
 
         def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
         if (receiverDownloadFileInstance) {
-            FileDeletionJob.triggerNow([receiverDownloadFileInstance: receiverDownloadFileInstance])
 
             receiverDownloadFileInstance.status = FileProcessingStatus.DELETING
+            receiverDownloadFileInstance.save(flush: true)
+
+            FileDeletionJob.triggerNow([receiverDownloadFileId: receiverDownloadFileInstance.id])
 
             flash.message = "${message(code: 'default.deleting.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.toString()])}"
             redirect(action: "list")

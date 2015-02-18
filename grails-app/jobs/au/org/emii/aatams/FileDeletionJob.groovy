@@ -6,13 +6,12 @@ class FileDeletionJob {
 
     def execute(context) {
 
-        def receiverDownloadFileInstance = context.mergedJobDataMap.get('receiverDownloadFileInstance')
+        def receiverDownloadFileId = context.mergedJobDataMap.get('receiverDownloadFileId')
+
+        def receiverDownloadFileInstance = ReceiverDownloadFile.get(receiverDownloadFileId)
 
         try {
             receiverDownloadFileInstance.delete(flush: true)
-        }
-        catch (FileProcessingException e) {
-            _logException(receiverDownloadFileInstance, e, e.getMessage())
         }
         catch (Throwable t) {
             _logException(receiverDownloadFileInstance, t, "System Error - Contact eMII")

@@ -215,7 +215,7 @@
                     <g:hiddenField name="id" value="${animalReleaseInstance?.id}" />
                     <g:hiddenField name="project.id" value="${projectId}" />
 
-                    <shiro:hasPermission permission="project:${projectId}:write">
+                    <shiro:hasPermission permission="project:${projectId}:edit_children">
                       <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                     </shiro:hasPermission>
                     <shiro:hasRole name="SysAdmin">

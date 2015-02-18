@@ -73,25 +73,42 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
 
     void testBuildProjectWritePermission()
     {
-        assertEquals("project:" + projectA.id + ":write",
-                     service.buildProjectWritePermission(projectA.id))
+        assertEquals("project:" + projectA.id + ":edit_children",
+                     service.buildProjectEditChildrenPermission(projectA.id))
     }
     
     void testBuildProjectWritePermissionStringId()
     {
-        assertEquals("project:" + projectA.id + ":write",
-                     service.buildProjectWritePermission(String.valueOf(projectA.id)))
+        assertEquals("project:" + projectA.id + ":edit_children",
+                     service.buildProjectEditChildrenPermission(String.valueOf(projectA.id)))
     }
     
     void testBuildProjectWritePermissionNullId()
     {
-        assertEquals("notPermitted", service.buildProjectWritePermission(null))
+        assertEquals("notPermitted", service.buildProjectEditChildrenPermission(null))
     }
     
     void testBuildProjectWriteAnyPermission()
     {
         assertEquals("projectWriteAny",
                      service.buildProjectWriteAnyPermission())
+    }
+
+    void testBuildProjectEditPermission()
+    {
+        assertEquals("project:" + projectA.id + ":edit",
+                service.buildProjectEditPermission(projectA.id))
+    }
+
+    void testBuildProjectEditPermissionStringId()
+    {
+        assertEquals("project:" + projectA.id + ":edit",
+                service.buildProjectEditPermission(String.valueOf(projectA.id)))
+    }
+
+    void testBuildProjectEditPermissionNullId()
+    {
+        assertEquals("notPermitted", service.buildProjectEditPermission(null))
     }
     
     void testBuildPrincipalInvestigatorPermission()
@@ -177,7 +194,7 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
             service.buildPersonWriteAnyPermission(),
             service.buildReceiverCreatePermission(),
             service.buildPrincipalInvestigatorPermission(project.id),
-            service.buildProjectWritePermission(project.id),
+            service.buildProjectEditChildrenPermission(project.id),
             service.buildProjectWriteAnyPermission()])
         
         assertIsPermitted([
@@ -211,7 +228,7 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         assertIsPermitted([
             service.buildProjectReadPermission(project.id),
             service.buildProjectReadAnyPermission(),
-            service.buildProjectWritePermission(project.id),
+            service.buildProjectEditChildrenPermission(project.id),
             service.buildProjectWriteAnyPermission()])
         
         return nonPiWrite
@@ -241,7 +258,8 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
             service.buildProjectReadAnyPermission()])
             
         assertIsNotPermitted([
-            service.buildProjectWritePermission(project.id),
+            service.buildProjectEditPermission(project.id),
+            service.buildProjectEditChildrenPermission(project.id),
             service.buildProjectWriteAnyPermission()])
         
         return piRead
@@ -269,7 +287,7 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
             service.buildPrincipalInvestigatorPermission(project.id),
             service.buildProjectReadPermission(project.id),
             service.buildProjectReadAnyPermission(),
-            service.buildProjectWritePermission(project.id),
+            service.buildProjectEditChildrenPermission(project.id),
             service.buildProjectWriteAnyPermission()])
         
         return piWrite
@@ -346,7 +364,8 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
             service.buildProjectWriteAnyPermission(),
             service.buildPrincipalInvestigatorPermission(projectB.id),
             service.buildProjectReadPermission(projectB.id),
-            service.buildProjectWritePermission(projectB.id)])
+            service.buildProjectEditPermission(projectB.id),
+            service.buildProjectEditChildrenPermission(projectB.id)])
         
 
         assertEquals(person, service.removePermissions(piWriteB))
@@ -385,7 +404,7 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
             service.buildProjectReadAnyPermission(),
             service.buildProjectWriteAnyPermission(),
             service.buildProjectReadPermission(projectB.id),
-            service.buildProjectWritePermission(projectB.id)])
+            service.buildProjectEditChildrenPermission(projectB.id)])
 
         assertEquals(person, service.removePermissions(nonpiWriteB))
         nonpiWriteB.delete()

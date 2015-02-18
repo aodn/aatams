@@ -115,7 +115,7 @@
                 <g:form>
                     <g:hiddenField name="id" value="${projectInstance?.id}" />
 
-                    <shiro:hasPermission permission="${'project:' + projectInstance?.id + ':write'}">
+                    <shiro:hasPermission permission="${'project:' + projectInstance?.id + ':edit'}">
                       <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                     </shiro:hasPermission>
 

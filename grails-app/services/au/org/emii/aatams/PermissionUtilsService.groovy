@@ -20,7 +20,8 @@ class PermissionUtilsService
 
 
     private static final Map<Long, String> PROJECT_READ = [:]
-    private static final Map<Long, String> PROJECT_WRITE = [:]
+    private static final Map<Long, String> PROJECT_EDIT_CHILDREN = [:]
+    private static final Map<Long, String> PROJECT_EDIT = [:]
     private static final Map<Long, String> PI = [:]
     private static final Map<Long, String> RECEIVER = [:]
 
@@ -51,8 +52,19 @@ class PermissionUtilsService
         // Principal Investigators have special permissions.
         log.debug("Comparing roleTypes, person's roleType: " + projectRole.roleType + ", PI role type: " + getPIRoleType())
 
-        if (   projectRole.roleType
-            == getPIRoleType())
+        if (projectRole.roleType == getPIRoleType() && projectRole.access == ProjectAccess.READ_ONLY) {
+            log.debug("Adding PI permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
+
+            user.addToPermissions(buildPersonWriteAnyPermission())
+            user.addToPermissions(buildReceiverCreatePermission())
+            String permission = buildPrincipalInvestigatorPermission(projectRole.project.id)
+            user.addToPermissions(permission)
+            log.debug("Added permission: " + permission)
+
+            user.save()
+        }
+
+        if (projectRole.roleType == getPIRoleType() && projectRole.access == ProjectAccess.READ_WRITE)
         {
             log.debug("Adding PI permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
 
@@ -60,6 +72,8 @@ class PermissionUtilsService
             user.addToPermissions(buildReceiverCreatePermission())
             String permission = buildPrincipalInvestigatorPermission(projectRole.project.id)
             user.addToPermissions(permission)
+            user.addToPermissions(buildProjectEditPermission(projectRole.project.id))
+            user.addToPermissions(buildProjectEditChildrenPermission(projectRole.project.id))
             log.debug("Added permission: " + permission)
 
             user.save()
@@ -80,7 +94,7 @@ class PermissionUtilsService
         if (projectRole.access == ProjectAccess.READ_WRITE)
         {
             log.debug("Adding write permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
-            String permission = buildProjectWritePermission(projectRole.project.id)
+            String permission = buildProjectEditChildrenPermission(projectRole.project.id)
             user.addToPermissions(buildProjectWriteAnyPermission())
             user.addToPermissions(permission).save()
             log.debug("Added permission: " + permission)
@@ -102,6 +116,8 @@ class PermissionUtilsService
             == getPIRoleType())
         {
             user.removeFromPermissions(buildPrincipalInvestigatorPermission(projectRole.project.id))
+            user.removeFromPermissions(buildProjectEditPermission(projectRole.project.id))
+            user.removeFromPermissions(buildProjectEditChildrenPermission(projectRole.project.id))
 
             // Only remove these if the user is not a PI on any projects.
             if (!piOnAnyProject(user, projectRole))
@@ -126,7 +142,7 @@ class PermissionUtilsService
 
         if (projectRole.access == ProjectAccess.READ_WRITE)
         {
-            user.removeFromPermissions(buildProjectWritePermission(projectRole.project.id))
+            user.removeFromPermissions(buildProjectEditChildrenPermission(projectRole.project.id))
 
             if (!writeAnyProject(user, projectRole))
             {
@@ -192,14 +208,19 @@ class PermissionUtilsService
         return PROJECT_READ_ANY
     }
 
-    String buildProjectWritePermission(projectId)
+    String buildProjectEditChildrenPermission(projectId)
     {
-        return buildPermission(projectId, PROJECT_WRITE, "project:%d:write")
+        return buildPermission(projectId, PROJECT_EDIT_CHILDREN, "project:%d:edit_children")
     }
 
     String buildProjectWriteAnyPermission()
     {
         return PROJECT_WRITE_ANY
+    }
+
+    String buildProjectEditPermission(projectId)
+    {
+        return buildPermission(projectId, PROJECT_EDIT, "project:%d:edit")
     }
 
     String buildPrincipalInvestigatorPermission(projectId)

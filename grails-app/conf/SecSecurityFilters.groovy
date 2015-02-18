@@ -66,7 +66,7 @@ class SecSecurityFilters
                 }
 
                 if (   SecurityUtils.subject.isAuthenticated()
-                    && SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(projectId)))
+                    && SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectEditChildrenPermission(projectId)))
                 {
                     return true
                 }
@@ -344,7 +344,7 @@ class SecSecurityFilters
 
                 // Non-authenticated users can't update.
                 if (   SecurityUtils.subject.isAuthenticated()
-                    && SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectWritePermission(projectId)))
+                    && SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectEditChildrenPermission(projectId)))
                 {
                     return true
                 }

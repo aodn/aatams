@@ -103,7 +103,7 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase
     private void assertProjectInvestigatorPermissions() 
     {
         assertPermissions(
-                [permissionUtilsService.buildProjectWritePermission(sealCount.id),
+                [permissionUtilsService.buildProjectEditChildrenPermission(sealCount.id),
                     permissionUtilsService.buildProjectReadPermission(sealCount.id),
                     permissionUtilsService.PROJECT_WRITE_ANY,
                     permissionUtilsService.PROJECT_READ_ANY,
@@ -114,7 +114,7 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase
 
     private void assertAdministratorPermissions()
     {
-        assertPermissions([permissionUtilsService.buildProjectWritePermission(sealCount.id),
+        assertPermissions([permissionUtilsService.buildProjectEditChildrenPermission(sealCount.id),
                            permissionUtilsService.buildProjectReadPermission(sealCount.id),
                            permissionUtilsService.PROJECT_WRITE_ANY,
                            permissionUtilsService.PROJECT_READ_ANY],
@@ -125,7 +125,7 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase
     private void assertNoPermissions() 
     {
         assertPermissions([],
-        [permissionUtilsService.buildProjectWritePermission(sealCount.id),
+        [permissionUtilsService.buildProjectEditChildrenPermission(sealCount.id),
             permissionUtilsService.buildProjectReadPermission(sealCount.id),
             permissionUtilsService.PROJECT_WRITE_ANY,
             permissionUtilsService.PROJECT_READ_ANY,

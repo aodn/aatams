@@ -134,7 +134,7 @@
                                     <thead>
                                       <tr>
                                         <th/>
-                                        <shiro:hasPermission permission="project:${projectId}:write">
+                                        <shiro:hasPermission permission="project:${projectId}:edit_children">
                                           <th/>
                                         </shiro:hasPermission>
                                         <th>Date/Time</th>
@@ -149,7 +149,7 @@
                                         <tr>
 
                                           <td class="rowButton"><g:link class="show" controller="surgery" action="show" id="${s?.id}">.</g:link></td>
-                                          <shiro:hasPermission permission="project:${projectId}:write">
+                                          <shiro:hasPermission permission="project:${projectId}:edit_children">
                                             <td class="rowButton">
                                               <g:link controller="surgery"
                                                       action="delete"
@@ -173,7 +173,7 @@
 
                                       <g:if test="${animalReleaseInstance.surgeries.isEmpty()}">
                                           <tr>
-                                              <shiro:hasPermission permission="project:${projectId}:write">
+                                              <shiro:hasPermission permission="project:${projectId}:edit_children">
                                                   <td/>
                                               </shiro:hasPermission>
                                               <td colspan="6"><div class="warning"><b>No Taggings</b> - At least one tagging must be added for this release to be automatically associated with any detections.</div></td>
@@ -207,7 +207,7 @@
                                     <thead>
                                       <tr>
                                         <th/>
-                                        <shiro:hasPermission permission="project:${projectId}:write">
+                                        <shiro:hasPermission permission="project:${projectId}:edit_children">
                                           <th/>
                                         </shiro:hasPermission>
 
@@ -228,7 +228,7 @@
                                                     action="show"
                                                     id="${m?.id}">.</g:link>
                                           </td>
-                                          <shiro:hasPermission permission="project:${projectId}:write">
+                                          <shiro:hasPermission permission="project:${projectId}:edit_children">
                                             <td class="rowButton">
                                               <g:link controller="animalMeasurement"
                                                       action="delete"

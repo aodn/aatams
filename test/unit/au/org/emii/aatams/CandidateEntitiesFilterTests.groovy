@@ -211,11 +211,11 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
 
     protected boolean isPermitted(String permString)
     {
-        if (permString == "project:" + activeProj.id + ":write")
+        if (permString == "project:" + activeProj.id + ":edit_children")
         {
             return true
         }
-        else if (permString == "project:" + pendingProj.id + ":write")
+        else if (permString == "project:" + pendingProj.id + ":edit_children")
         {
             return true
         }

@@ -28,10 +28,12 @@
 
     <g:javascript src="blockUIConfig.js"/>
 
-    <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui.css')}"/>
-    <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'custom-theme/jquery-ui-1.8.13.custom.css')}"/>
-    <link rel="stylesheet" type="text/css" href="${resource(dir:'css',file:'jquery-ui-combobox.css')}"/>
-    <link rel="stylesheet" type="text/css"href="${resource(dir:'css',file:'main.css')}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'jquery-ui.css')}"/>
+    <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'custom-theme/jquery-ui-1.8.13.custom.css')}"/>
+    <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'jquery-ui-combobox.css')}"/>
+
+    <g:set var="versionedMainCssName" value="main.css?v=${grailsApplication.metadata.'app.version'}" />
+    <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: versionedMainCssName)}" />
 
     <!-- Shiro tags, used for security -->
     <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>

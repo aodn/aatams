@@ -1,5 +1,5 @@
 
-<%@ page import="au.org.emii.aatams.ReceiverDownloadFile" %>
+<%@ page import="au.org.emii.aatams.FileProcessingStatus; au.org.emii.aatams.ReceiverDownloadFile" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -48,9 +48,13 @@
                     <tbody>
                     <g:each in="${receiverDownloadFileInstanceList}" status="i" var="receiverDownloadFileInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-                        
-                            <td class="rowButton"><g:link class="show" action="show" id="${receiverDownloadFileInstance.id}">.</g:link></td>
-                        
+
+                            <td class="rowButton">
+                                <g:if test="${(receiverDownloadFileInstance.status != FileProcessingStatus.DELETING)}">
+                                    <g:link class="show" action="show" id="${receiverDownloadFileInstance.id}">.</g:link>
+                                </g:if>
+                            </td>
+
                             <td>${fieldValue(bean: receiverDownloadFileInstance, field: "type")}</td>
                         
                             <shiro:hasRole name="SysAdmin">

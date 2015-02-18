@@ -10,7 +10,8 @@ enum FileProcessingStatus
     PENDING('Pending'),
     PROCESSING('Processing'),
     PROCESSED('Processed'),
-    ERROR('Error')
+    ERROR('Error'),
+    DELETING('Deleting')
     
     String displayStatus
     
@@ -21,7 +22,7 @@ enum FileProcessingStatus
     
     static list()
     {
-        [ARCHIVED, PENDING, PROCESSING, PROCESSED, ERROR]
+        [ARCHIVED, PENDING, PROCESSING, PROCESSED, ERROR, DELETING]
     }
 }
 

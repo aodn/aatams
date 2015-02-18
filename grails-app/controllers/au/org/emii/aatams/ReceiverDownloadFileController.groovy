@@ -147,17 +147,17 @@ class ReceiverDownloadFileController
     }
 
     def delete = {
+
         def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
         if (receiverDownloadFileInstance) {
-            try {
-                receiverDownloadFileInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.toString()])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.toString()])}"
-                redirect(action: "show", id: params.id)
-            }
+
+            receiverDownloadFileInstance.status = FileProcessingStatus.DELETING
+            receiverDownloadFileInstance.save(flush: true)
+
+            FileDeletionJob.triggerNow([receiverDownloadFileId: receiverDownloadFileInstance.id])
+
+            flash.message = "${message(code: 'default.deleting.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.toString()])}"
+            redirect(action: "list")
         }
         else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), params.id])}"

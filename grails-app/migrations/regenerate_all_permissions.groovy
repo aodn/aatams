@@ -15,4 +15,10 @@ databaseChangeLog = {
             }
         }
     }
+
+    changeSet(author: "dnahodil", id: "1424388299000-01") {
+        delete(tableName: 'sec_user_permissions') {
+            where "permissions_string like 'project:%:write'"
+        }
+    }
 }

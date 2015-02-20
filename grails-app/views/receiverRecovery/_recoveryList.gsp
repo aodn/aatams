@@ -79,7 +79,7 @@
 
                     <td class="rowButton">
                       <g:if test="${receiverDeployment?.recovery == null}">
-                        <shiro:hasPermission permission="project:${projectId:receiverDeployment?.station?.installation?.project?.id}:write">
+                        <shiro:hasPermission permission="project:${projectId:receiverDeployment?.station?.installation?.project?.id}:edit_children">
                           <g:link class="create" controller="receiverRecovery" action="create"
                                   params="[deploymentId:receiverDeployment.id, projectId:receiverDeployment?.station?.installation?.project?.id]"></g:link>
                         </shiro:hasPermission>

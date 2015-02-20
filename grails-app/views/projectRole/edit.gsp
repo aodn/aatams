@@ -30,7 +30,7 @@
                 <div class="dialog">
                     <table>
                         <tbody>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="access"><g:message code="projectRole.access.label" default="Access" /></label>
@@ -40,7 +40,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="person"><g:message code="projectRole.person.label" default="Person" /></label>
@@ -50,7 +50,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="project"><g:message code="projectRole.project.label" default="Project" /></label>
@@ -60,7 +60,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="roleType"><g:message code="projectRole.roleType.label" default="Role Type" /></label>
@@ -70,13 +70,13 @@
 
                                 </td>
                             </tr>
-                        
+
                         </tbody>
                     </table>
                 </div>
                 <div class="buttons">
                     <g:hiddenField name="projectId" value="${projectRoleInstance?.project?.id}" />
-                    <shiro:hasPermission permission="project:${projectRoleInstance?.project?.id}:write">
+                    <shiro:hasPermission permission="project:${projectRoleInstance?.project?.id}:edit">
                       <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
                       <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
                     </shiro:hasPermission>

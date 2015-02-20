@@ -21,21 +21,21 @@
             <div class="dialog">
                 <table>
                     <tbody>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="organisationProject.organisation.label" default="Organisation" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="organisation" action="show" id="${organisationProjectInstance?.organisation?.id}">${organisationProjectInstance?.organisation?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="organisationProject.project.label" default="Project" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="project" action="show" id="${organisationProjectInstance?.project?.id}">${organisationProjectInstance?.project?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
-                    
+
                     </tbody>
                 </table>
             </div>
@@ -43,7 +43,7 @@
                 <g:form>
                     <g:hiddenField name="id" value="${organisationProjectInstance?.id}" />
                     <g:hiddenField name="projectId" value="${organisationProjectInstance?.project?.id}" />
-                    <shiro:hasPermission permission="project:${organisationProjectInstance?.project?.id}:write">
+                    <shiro:hasPermission permission="project:${organisationProjectInstance?.project?.id}:edit">
                       <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                       <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
                     </shiro:hasPermission>

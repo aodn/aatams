@@ -57,7 +57,7 @@
                                       <g:each in="${projectInstance.organisationProjects}" var="op">
                                         <tr>
                                           <td class="rowButton"><g:link class="show" controller="organisationProject" action="show" id="${op?.id}">.</g:link></td>
-                                          <shiro:hasPermission permission="project:${projectInstance?.id}:write">
+                                          <shiro:hasPermission permission="project:${projectInstance?.id}:edit">
                                             <td class="rowButton">
                                               <g:link controller="organisationProject"
                                                       action="delete"
@@ -100,7 +100,7 @@
                                     <thead>
                                       <tr>
                                         <th/>
-                                        <shiro:hasPermission permission="project:${projectInstance?.id}:write">
+                                        <shiro:hasPermission permission="project:${projectInstance?.id}:edit">
                                           <th/>
                                         </shiro:hasPermission>
                                         <th>Name</th>
@@ -112,7 +112,7 @@
                                       <g:each in="${projectInstance?.projectRoles?}" var="p">
                                         <tr>
                                           <td class="rowButton"><g:link class="show" controller="projectRole" action="show" id="${p?.id}">.</g:link></td>
-                                          <shiro:hasPermission permission="project:${projectInstance?.id}:write">
+                                          <shiro:hasPermission permission="project:${projectInstance?.id}:edit">
                                             <td class="rowButton">
                                               <g:link controller="projectRole"
                                                       action="delete"
@@ -178,7 +178,7 @@
                     </table>
                 </div>
                 <div class="buttons">
-                    <shiro:hasPermission permission="${'project:' + projectInstance?.id + ':write'}">
+                    <shiro:hasPermission permission="${'project:' + projectInstance?.id + ':edit'}">
                       <span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
                     </shiro:hasPermission>
 

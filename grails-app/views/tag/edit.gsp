@@ -121,7 +121,7 @@
                                     <thead>
                                       <tr>
                                         <th></th>
-                                        <shiro:hasPermission permission="project:${tagInstance?.project?.id}:write">
+                                        <shiro:hasPermission permission="project:${tagInstance?.project?.id}:edit_children">
                                           <th/>
                                         </shiro:hasPermission>
                                         <th>Tag Type</th>
@@ -138,7 +138,7 @@
                                           <td class="rowButton">
                                             <g:link class="show" controller="sensor" action="show" id="${s?.id}"></g:link>
                                           </td>
-                                          <shiro:hasPermission permission="project:${tagInstance?.project?.id}:write">
+                                          <shiro:hasPermission permission="project:${tagInstance?.project?.id}:edit_children">
                                             <td class="rowButton">
                                               <g:link controller="sensor"
                                                       action="delete"

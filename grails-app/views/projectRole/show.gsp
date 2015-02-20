@@ -21,35 +21,35 @@
             <div class="dialog">
                 <table>
                     <tbody>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="projectRole.access.label" default="Access" /></td>
-                            
+
                             <td valign="top" class="value">${projectRoleInstance?.access?.encodeAsHTML()}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="projectRole.person.label" default="Person" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="person" action="show" id="${projectRoleInstance?.person?.id}">${projectRoleInstance?.person?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="projectRole.project.label" default="Project" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="project" action="show" id="${projectRoleInstance?.project?.id}">${projectRoleInstance?.project?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="projectRole.roleType.label" default="Role Type" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="projectRoleType" action="show" id="${projectRoleInstance?.roleType?.id}">${projectRoleInstance?.roleType?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
-                    
+
                     </tbody>
                 </table>
             </div>

@@ -23,49 +23,49 @@
             <div class="dialog">
                 <table>
                     <tbody>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="transmitterType" action="show" id="${sensorInstance?.transmitterType?.id}">${sensorInstance?.transmitterType?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
 
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.pingCode.label" default="Ping Code" /></td>
-                            
+
                             <td valign="top" class="value">${sensorInstance?.pingCode}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.slope.label" default="Slope" /></td>
-                            
+
                             <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "slope")}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.intercept.label" default="Intercept" /></td>
-                            
+
                             <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "intercept")}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.unit.label" default="Unit" /></td>
-                            
+
                             <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "unit")}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.status.label" default="Status" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${sensorInstance?.status?.id}">${sensorInstance?.status?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
-                    
+
                     </tbody>
                 </table>
             </div>
@@ -73,7 +73,7 @@
                 <g:form>
                     <g:hiddenField name="id" value="${sensorInstance?.id}" />
                     <g:hiddenField name="projectId" value="${sensorInstance?.project?.id}" />
-                    <shiro:hasPermission permission="project:${sensorInstance?.project?.id}:write">
+                    <shiro:hasPermission permission="project:${sensorInstance?.project?.id}:edit_children">
                       <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                       <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
                     </shiro:hasPermission>

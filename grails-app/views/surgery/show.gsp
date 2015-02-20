@@ -21,49 +21,49 @@
             <div class="dialog">
                 <table>
                     <tbody>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="surgery.timestamp.label" default="Timestamp" /></td>
-                            
+
                             <td valign="top" class="value"><joda:format value="${surgeryInstance?.timestamp}" /></td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="surgery.release.label" default="Release" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="animalRelease" action="show" id="${surgeryInstance?.release?.id}">${surgeryInstance?.release?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="surgery.tag.label" default="Tag" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="tag" action="show" id="${surgeryInstance?.tag?.id}">${surgeryInstance?.tag?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="surgery.treatmentType.label" default="Treatment Type" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="surgeryTreatmentType" action="show" id="${surgeryInstance?.treatmentType?.id}">${surgeryInstance?.treatmentType?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="surgery.comments.label" default="Comments" /></td>
-                            
+
                             <td valign="top" class="value">${fieldValue(bean: surgeryInstance, field: "comments")}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="surgery.type.label" default="Type" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="surgeryType" action="show" id="${surgeryInstance?.type?.id}">${surgeryInstance?.type?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
-                    
+
                     </tbody>
                 </table>
             </div>

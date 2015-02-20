@@ -23,49 +23,49 @@
             <div class="dialog">
                 <table>
                     <tbody>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="transmitterType" action="show" id="${sensorInstance?.transmitterType?.id}">${sensorInstance?.transmitterType?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
 
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.pingCode.label" default="Ping Code" /></td>
-                            
+
                             <td valign="top" class="value">${sensorInstance?.pingCode}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.slope.label" default="Slope" /></td>
-                            
+
                             <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "slope")}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.intercept.label" default="Intercept" /></td>
-                            
+
                             <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "intercept")}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.unit.label" default="Unit" /></td>
-                            
+
                             <td valign="top" class="value">${fieldValue(bean: sensorInstance, field: "unit")}</td>
-                            
+
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.status.label" default="Status" /></td>
-                            
+
                             <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${sensorInstance?.status?.id}">${sensorInstance?.status?.encodeAsHTML()}</g:link></td>
-                            
+
                         </tr>
-                    
+
                     </tbody>
                 </table>
             </div>

@@ -30,7 +30,7 @@
                 <div class="dialog">
                     <table>
                         <tbody>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="organisation"><g:message code="organisationProject.organisation.label" default="Organisation" /></label>
@@ -40,7 +40,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                   <label class="compulsory" for="project"><g:message code="organisationProject.project.label" default="Project" /></label>
@@ -50,7 +50,7 @@
 
                                 </td>
                             </tr>
-                        
+
                         </tbody>
                     </table>
                 </div>

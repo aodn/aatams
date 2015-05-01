@@ -14,4 +14,5 @@ databaseChangeLog = {
     include file: 'protected_species_flag.groovy'
     include file: 'receiver_event_view.groovy'
     include file: 'regenerate_all_permissions.groovy'
+    include file: 'join_dets_and_rxrs.groovy'
 }

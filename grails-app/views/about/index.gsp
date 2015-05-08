@@ -31,12 +31,7 @@
                     and other physical changes that affect animals within the marine environment.<br/><br/>
                     Currently a large range of fish, sharks and mammals are collecting a wide range of data.
                     This includes behavioural and physical data such as the depth, temperature, salinity
-                    and movement effort of individual marine animals.</p><br/>
-
-                <p>IMOS data is made freely available under the
-                    <a href="http://imos.org.au/fileadmin/user_upload/shared/IMOS%20General/documents/internal/IMOS_Policy_documents/Policy-Acknowledgement_of_use_of_IMOS_data_11Jun09.pdf">Conditions of Use</a>.
-                </p>
-
+                    and movement effort of individual marine animals.</p>
             </div>
         </div>
 
@@ -104,16 +99,16 @@
             <a href="http://www.utas.edu.au/"><img src="https://static.emii.org.au/images/logo/utas/UTAS_MONO_Stacked_208w.png"   height="80" alt="Utas Logo" /></a>
 
             <p><a title="Integrated Marine Observing System" href="http://www.imos.org.au">IMOS</a>
-                is a national collaborative research infrastructure, supported by the Australian Government. It is led by the
+                is a national collaborative research infrastructure, supported by Australian Government. It is led by
                 <a href="http://www.utas.edu.au/">University of Tasmania</a>
                 in partnership with the Australian marine & climate science community.
             </p>
 
-            <p>You accept all risks and responsibility for losses, damages, costs and other consequences resulting directly or
-            indirectly from using this site and any information or material available from it. If you have any concerns about
-            the veracity of the data, please make enquiries via <a href="mailto:${grailsApplication.config.grails.mail.supportEmailAddress}">${grailsApplication.config.grails.mail.supportEmailAddress}</a> to be directed to the data custodian.
-            </p>
+            <br/>
 
+            <p><a href="http://help.aodn.org.au/help/?q=node/90" target="_blank" class="external">Acknowledgement</a>
+             | 
+             <a href="http://help.aodn.org.au/help/?q=node/80" target="_blank" class="external">Disclaimer</a></p>
         </div>
 
     </div>

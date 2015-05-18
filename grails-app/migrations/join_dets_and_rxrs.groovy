@@ -116,20 +116,35 @@ databaseChangeLog = {
                  END;
                $$ LANGUAGE plpgsql;'''
         )
+    }
 
+    changeSet(author: "jburgess", id: "1430268900000-05", runOnChange: true) {
         createView(
             '''
               SELECT
                 detection.id AS detection_id,
                 detection."timestamp",
-                detection.transmitter_id,
                 detection.receiver_name,
-                invalid_reason(detection.*, receiver.*, deployment_and_recovery.*) AS invalid_reason,
+                detection.transmitter_id AS transmitter_id,
+                detection.transmitter_name,
+                detection.transmitter_serial_number,
+                detection.sensor_value,
+                detection.sensor_unit,
+                detection.station_name AS detection_station_name,
+                detection.latitude AS detection_latitude,
+                detection.longitude AS detection_longitude,
+                detection.receiver_download_id,
+
+                deployment_and_recovery.receiver_deployment_id,
                 rxr_project.name AS rxr_project_name,
                 installation.name AS installation_name,
+                station.id AS station_id,
                 station.name AS station_name,
                 species.spcode,
-                detection.receiver_download_id
+                invalid_reason(detection.*, receiver.*, deployment_and_recovery.*) AS invalid_reason,
+
+                surgery.id AS surgery_id
+
               FROM detection
                 LEFT JOIN receiver ON detection.receiver_name::text = receiver.receiver_name
                 LEFT JOIN deployment_and_recovery deployment_and_recovery
@@ -147,8 +162,8 @@ databaseChangeLog = {
                 LEFT JOIN animal_release release ON surgery.release_id = release.id
                 LEFT JOIN animal ON release.animal_id = animal.id
                 LEFT JOIN species ON animal.species_id = species.id
-    ''',
-                   viewName: 'detection_view'
+             ''',
+             viewName: 'detection_view'
         )
 
         createView(
@@ -162,6 +177,11 @@ databaseChangeLog = {
         )
 
     }
+
+    // embargo date
+    // receiver_deployment_id?
+    // txr_project_name
+    // release_project_id
 
     // TODO: vacuum full analyze.
 

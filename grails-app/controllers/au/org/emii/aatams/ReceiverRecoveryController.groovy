@@ -64,23 +64,12 @@ class ReceiverRecoveryController extends AbstractController
 
         if (deployment?.save(flush: true))
         {
-            rescanDetections(deployment)
-
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.toString()])}"
             redirect(action: "show", id: receiverRecoveryInstance.id)
         }
         else
         {
             render(view: "create", model: [receiverRecoveryInstance: receiverRecoveryInstance])
-        }
-    }
-
-    def rescanDetections(deployment)
-    {
-        runAsync
-        {
-            deployment.refresh()
-            detectionFactoryService.rescanForDeployment(deployment)
         }
     }
 
@@ -126,8 +115,6 @@ class ReceiverRecoveryController extends AbstractController
             if (   !receiverRecoveryInstance.deployment.hasErrors()
                 && !receiverRecoveryInstance.hasErrors()
                 && receiverRecoveryInstance.deployment.save(flush: true)) {
-
-                rescanDetections(receiverRecoveryInstance.deployment)
 
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.toString()])}"
                 redirect(action: "show", id: receiverRecoveryInstance.id)

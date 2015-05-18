@@ -95,7 +95,7 @@ class ReceiverDownloadFile
         return String.valueOf(path)
     }
 
-    def toXml() 
+    def toXml()
     {
         this as XML
     }
@@ -122,41 +122,45 @@ class ReceiverDownloadFile
 
     def validDetectionCount()
     {
-        return executeCountCriteria(ValidDetection)
+        return 1
+        //return executeCountCriteria(ValidDetection)
     }
 
     def invalidDetectionCount()
     {
-        return executeCountCriteria(InvalidDetection)
+        return 1
+        //return executeCountCriteria(InvalidDetection)
     }
 
     def invalidDetectionCount(reason)
     {
-        return executeCountCriteria(InvalidDetection,
-        {
-            eq("reason", reason)
-        })
+        return 1
+        // return executeCountCriteria(InvalidDetection,
+        // {
+        //     eq("reason", reason)
+        // })
     }
 
     def unknownReceivers()
     {
-        def c = InvalidDetection.createCriteria()
-        def results = c.list
-        {
-            receiverDownload
-            {
-                eq("id", Long.valueOf(id))
-            }
+        return [ "TODO" ]
+        // def c = InvalidDetection.createCriteria()
+        // def results = c.list
+        // {
+        //     receiverDownload
+        //     {
+        //         eq("id", Long.valueOf(id))
+        //     }
 
-            eq("reason", InvalidDetectionReason.UNKNOWN_RECEIVER)
+        //     eq("reason", InvalidDetectionReason.UNKNOWN_RECEIVER)
 
-            projections
-            {
-                distinct("receiverName")
-            }
-        }
+        //     projections
+        //     {
+        //         distinct("receiverName")
+        //     }
+        // }
 
-        return results
+        // return results
     }
 
     private def executeCountCriteria(clazz)

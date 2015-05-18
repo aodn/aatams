@@ -8,9 +8,9 @@ class FileProcessorService
 {
     static transactional = true
 
-    def jdbcTemplateVueDetectionFileProcessorService
+    def vueDetectionFileProcessorService
     def jdbcTemplateVueEventFileProcessorService
-    
+
     def grailsApplication
     def mailService
 
@@ -18,16 +18,16 @@ class FileProcessorService
      * When uploading CSV, firefox and chrome report "text/csv", IE reports "text/plain".
      */
     private static final CSV_CONTENT_TYPES = ["text/csv", "text/plain"]
-    
+
     void process(receiverDownloadFileId, MultipartFile file, showLink) throws FileProcessingException
     {
         log.debug("Processing receiver export, download file ID: " + receiverDownloadFileId + ", content type: " + file.getContentType())
-        
+
         def receiverDownloadFile = ReceiverDownloadFile.get(receiverDownloadFileId)
         assert(receiverDownloadFile != null): "receiverDownloadFile cannot be null"
-        
+
         validateContent(receiverDownloadFile, file)
-            
+
         // Save the file to disk.
         saveToDiskAndProcess(receiverDownloadFile, file,showLink)
     }
@@ -49,22 +49,22 @@ class FileProcessorService
             {
                 case ReceiverDownloadFileType.DETECTIONS_CSV:
 
-                // Delegate to VUE Detection Processor...
+                    // Delegate to VUE Detection Processor...
                     log.debug("Delegating to VUE detection file processor...")
-                    jdbcTemplateVueDetectionFileProcessorService.process(receiverDownloadFile)
+                    vueDetectionFileProcessorService.process(receiverDownloadFile)
 
                     break;
 
                 case ReceiverDownloadFileType.EVENTS_CSV:
 
-                // Delegate to VUE Event Processor...
+                    // Delegate to VUE Event Processor...
                     log.debug("Processing events...")
                     jdbcTemplateVueEventFileProcessorService.process(receiverDownloadFile)
                     break;
 
                 default:
 
-                // No processing - just update the status.
+                    // No processing - just update the status.
                     receiverDownloadFile.status = FileProcessingStatus.PROCESSED
                     receiverDownloadFile.save()
             }
@@ -85,15 +85,15 @@ class FileProcessorService
             sendNotification(receiverDownloadFile, showLink)
         }
     }
-    
+
     boolean isParseable(downloadFile)
     {
         return true
     }
-    
+
     def sendNotification(receiverDownloadFile, showLink)
     {
-        mailService.sendMail 
+        mailService.sendMail
         {
             // Required to avoid hibernate exception, since session is flushed and cleared above.
             receiverDownloadFile = ReceiverDownloadFile.get(receiverDownloadFile.id)
@@ -106,7 +106,7 @@ class FileProcessorService
                  + showLink
         }
     }
-    
+
     private void validateContent(ReceiverDownloadFile receiverDownloadFile, MultipartFile file) throws FileProcessingException
     {
         if (file.isEmpty())
@@ -119,7 +119,7 @@ class FileProcessorService
         log.debug("Validating file with content type: " + file.getContentType())
 
         // See: http://blog.futtta.be/2009/08/24/http-upload-mime-type-hell/ as to why we're no longer validating mime-type
-            
+
         if (!file.getOriginalFilename().endsWith(ReceiverDownloadFileType.getExtension(receiverDownloadFile.type)))
         {
             def errMsg = "Invalid " + ReceiverDownloadFileType.getCategory(receiverDownloadFile.type) + \

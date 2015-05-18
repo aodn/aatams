@@ -6,19 +6,20 @@ import au.org.emii.aatams.Sensor
 import grails.test.*
 import org.springframework.context.support.DelegatingMessageSource
 
-class DetectionNotificationServiceTests extends AbstractVueDetectionFileProcessorServiceTests 
+class DetectionNotificationServiceTests extends GrailsUnitTestCase
 {
      def messageSource
     def detectionNotificationService
-    
-    protected void setUp() 
+
+    protected void setUp()
     {
         super.setUp()
-        
+
+        mockDomain(Sensor)
         mockLogging(DetectionNotificationService, true)
         detectionNotificationService = new DetectionNotificationService()
         messageSource = new DelegatingMessageSource()
-        
+
         detectionNotificationService.messageSource = messageSource
     }
 
@@ -28,13 +29,13 @@ class DetectionNotificationServiceTests extends AbstractVueDetectionFileProcesso
         mockDomain(ReceiverDownloadFile)
         ReceiverDownloadFile.metaClass.getUniqueTransmitterIds =
         {
-            
+
         }
-        
+
         ReceiverDownloadFile download = new ReceiverDownloadFile()
         download.save()
         download.id = 123
-        
+
         download.grailsApplication = [config: [fileimport: [path: "some path"]]]
 
         Sensor.metaClass.static.groupByOwningPI = {
@@ -45,11 +46,11 @@ class DetectionNotificationServiceTests extends AbstractVueDetectionFileProcesso
         }
 
         int sendEmailToPersonCallCount = 0
-        
+
         detectionNotificationService.metaClass.sendDetectionNotificationEmailToPerson =
         {
             recipient, sensors, downloadFile ->
-            
+
             if (sendEmailToPersonCallCount == 0)
             {
                 assertEquals('adam', recipient.name)
@@ -64,15 +65,15 @@ class DetectionNotificationServiceTests extends AbstractVueDetectionFileProcesso
             {
                 fail()
             }
-            
+
             sendEmailToPersonCallCount++
         }
-        
+
         detectionNotificationService.sendDetectionNotificationEmails(download)
-        
+
         assertEquals(2, sendEmailToPersonCallCount)
     }
-    
+
     private assertContainsAll(listA, listB)
     {
         assertEquals(listA.size(), listB.size())

@@ -1,4 +1,3 @@
-<%@ page import="au.org.emii.aatams.detection.ValidDetection" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -27,9 +26,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="detection.timestamp.label" default="Timestamp" /></td>
 
-                            <td valign="top" class="value"><g:formatDate date="${detectionInstance?.timestamp}"
-                                                                         format="yyyy-MM-dd'T'HH:mm:ssZ"
-                                                                         timeZone='${TimeZone.getTimeZone("UTC")}'/></td>
+                            <td valign="top" class="value"><joda:format value="${detectionInstance.timestamp}" /></td>
 
                         </tr>
 

@@ -1,10 +1,6 @@
 package au.org.emii.aatams
 
-/**
- *
- * @author jburgess
- */
-interface Embargoable 
+interface Embargoable
 {
     /**
      * Applies embargoing rules, e.g. remove embargoed child entities.
@@ -12,4 +8,3 @@ interface Embargoable
      */
     def applyEmbargo()
 }
-

@@ -18,13 +18,13 @@ class DetectionVisibilityChecker {
 
     def apply() {
 
-        if (!shouldKeep()) {
-            return null
-        }
+        // if (!shouldKeep()) {
+        //     return null
+        // }
 
-        if (shouldSanitise()) {
-            sanitise()
-        }
+        // if (shouldSanitise()) {
+        //     sanitise()
+        // }
 
         return row
     }

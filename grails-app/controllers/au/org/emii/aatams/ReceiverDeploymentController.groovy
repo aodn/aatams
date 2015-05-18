@@ -60,15 +60,6 @@ class ReceiverDeploymentController extends ReportController
         }
     }
 
-    def rescanDetections(deployment)
-    {
-        runAsync
-        {
-            deployment.refresh()
-            detectionFactoryService.rescanForDeployment(deployment)
-        }
-    }
-
     private boolean isValidDeployment(ReceiverDeployment receiverDeploymentInstance)
     {
         if (!receiverDeploymentInstance.receiver?.canDeploy(receiverDeploymentInstance))
@@ -199,10 +190,6 @@ class ReceiverDeploymentController extends ReportController
             addReceiverToStation(receiverDeploymentInstance)
 
             if (!receiverDeploymentInstance.hasErrors() && isValidDeployment(receiverDeploymentInstance) && receiverDeploymentInstance.save(flush: true)) {
-
-                if (receiverDeploymentInstance.recovery) {
-                    rescanDetections(receiverDeploymentInstance)
-                }
 
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
                 redirect(action: "show", id: receiverDeploymentInstance.id)

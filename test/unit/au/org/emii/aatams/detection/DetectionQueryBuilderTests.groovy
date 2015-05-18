@@ -17,42 +17,42 @@ class DetectionQueryBuilderTests extends GrailsUnitTestCase
 
     void testConstructQueryOneProject() {
         assertQueryFromFilterEquals(
-            '''where "project" in ('Whales')''',
+            '''where "rxr_project_name" in ('Whales')''',
             [filter: [receiverDeployment:[station:[installation:[project:[in: ["name", "Whales | "]]]]]]]
         )
     }
 
     void testConstructQueryTwoProjects() {
         assertQueryFromFilterEquals(
-            '''where "project" in ('Whales', 'Sharks')''',
+            '''where "rxr_project_name" in ('Whales', 'Sharks')''',
             [filter: [receiverDeployment:[station:[installation:[project:[in:["name", "Whales | Sharks | "]]]]]]]
         )
     }
 
     void testConstructQueryOneProjectOneInstallation() {
         assertQueryFromFilterEquals(
-            '''where ("project" in ('Whales') and "installation" in ('Bondi'))''',
+            '''where ("rxr_project_name" in ('Whales') and "installation_name" in ('Bondi'))''',
             [filter: [receiverDeployment:[station:[installation:[project:[in:["name", "Whales | "]], in:["name", "Bondi"]]]]]]
         )
     }
 
     void testConstructQueryTwoProjectsOneInstallation() {
         assertQueryFromFilterEquals(
-            '''where ("project" in ('Whales', 'Sharks') and "installation" in ('Bondi'))''',
+            '''where ("rxr_project_name" in ('Whales', 'Sharks') and "installation_name" in ('Bondi'))''',
             [filter: [receiverDeployment:[station:[installation:[project:[in:["name", "Whales | Sharks | "]], in:["name", "Bondi"]]]]]]
         )
     }
 
     void testConstructQueryOneInstallation() {
         assertQueryFromFilterEquals(
-            '''where "installation" in ('Bondi')''',
+            '''where "installation_name" in ('Bondi')''',
             [filter: [receiverDeployment:[station:[installation:[in:["name", "Bondi | "]]]]]]
         )
     }
 
     void testConstructQueryOneStation() {
         assertQueryFromFilterEquals(
-            '''where "station" in ('CTBAR East')''',
+            '''where "station_name" in ('CTBAR East')''',
             [filter: [receiverDeployment:[station:[in:["name", "CTBAR East | "]]]]]
         )
     }
@@ -79,7 +79,7 @@ class DetectionQueryBuilderTests extends GrailsUnitTestCase
         DateTime endTime = new DateTime("2010-01-01T17:00:01")
 
         assertQueryFromFilterEquals(
-            """where ("project" in ('Whales') and "timestamp" between timestamp '2010-01-01 12:34:56.0' and timestamp '2010-01-01 17:00:01.0')""",
+            """where ("rxr_project_name" in ('Whales') and "timestamp" between timestamp '2010-01-01 12:34:56.0' and timestamp '2010-01-01 17:00:01.0')""",
             [filter: [between: ["0": "timestamp", "1": startTime.toDate(), "2": endTime.toDate()],
                       receiverDeployment:[station:[installation:[project:[in:["name", "Whales | "]]]]]]]
         )
@@ -103,33 +103,33 @@ class DetectionQueryBuilderTests extends GrailsUnitTestCase
     }
 
     void testGetViewNameNoFilter() {
-        assertEquals("detection_view", new DetectionQueryBuilder().getViewName([:]))
+        assertEquals("valid_detection", new DetectionQueryBuilder().getViewName([:]))
     }
 
     void testGetViewNameOneProjectFilter() {
         assertEquals(
-            "detection_view",
+            "valid_detection",
             new DetectionQueryBuilder().getViewName([filter: [receiverDeployment:[station:[installation:[project:[in: ["name", "Whales | "]]]]]]])
         )
     }
 
     void testGetViewNameOneSpeciesFilter() {
         assertEquals(
-            "detection_by_species_view",
+            "valid_detection",
             new DetectionQueryBuilder().getViewName([filter: [surgeries:[release:[animal:[species:[in:["spcode", "12345 | "]]]]]]])
         )
     }
 
     void testGetViewNameEmptySpeciesFilter() {
         assertEquals(
-            "detection_view",
+            "valid_detection",
             new DetectionQueryBuilder().getViewName([filter: [surgeries:[release:[animal:[species:[in:["spcode", ""]]]]]]])
         )
     }
 
     void testGetViewNameOneSpeciesOneProjectFilter() {
         assertEquals(
-            "detection_by_species_view",
+            "valid_detection",
             new DetectionQueryBuilder().getViewName(
                 [filter: [receiverDeployment:[station:[installation:[project:[in: ["name", "Whales | "]]]]],
                           surgeries:[release:[animal:[species:[in:["spcode", "12345 | "]]]]]]]

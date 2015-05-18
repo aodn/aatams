@@ -11,7 +11,10 @@ class DetectionExtractService extends AbstractStreamingExporterService {
     public def extractPage(filterParams) {
 
         def query =  new DetectionQueryBuilder().constructQuery(filterParams)
-        def results = performQuery(filterParams.sql, query)
+        def results = performQuery(filterParams.sql, query).collect {
+            DetectionView.fromSqlRow(it)
+        }
+
         def releaseIsProtectedCache = [:]
         def rowCount = results.size()
 

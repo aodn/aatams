@@ -80,6 +80,7 @@ grails.mail.props = ["mail.smtp.auth":"false"]
 grails.plugin.databasemigration.updateOnStart = true
 grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
 grails.plugin.databasemigration.updateOnStartDefaultSchema = "aatams"
+grails.plugin.databasemigration.autoMigrateScripts = [ 'RunApp', 'TestApp' ]
 
 auditLog {
     actorClosure = { request, session ->
@@ -117,8 +118,8 @@ environments
     {
         grails.serverURL = "http://localhost:8090/${grails.util.Metadata.current.getApplicationName()}"
         grails.serverHost = "http://localhost:8090"
-        grails.plugin.databasemigration.updateOnStart = false
         grails.mail.disabled = true
+
         fileimport.path = "/tmp"
     }
 }

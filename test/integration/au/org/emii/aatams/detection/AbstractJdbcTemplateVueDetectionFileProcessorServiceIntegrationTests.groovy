@@ -1,7 +1,7 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
-import au.org.emii.aatams.test.*
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import groovy.sql.*
 
@@ -18,7 +18,6 @@ abstract class AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTe
 
         sql = Sql.newInstance(dataSource)
 
-        TestUtils.createDetectionViews(dataSource)
         def statistics = Statistics.findByKey('numValidDetections')?: new Statistics(key: 'numValidDetections', value: sql.firstRow('select count(*) from valid_detection;').count)
         statistics.save(failOnError: true, flush: true)
     }

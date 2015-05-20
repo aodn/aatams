@@ -1,7 +1,6 @@
 package au.org.emii.aatams.report
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
-import au.org.emii.aatams.test.TestUtils
 
 import javax.servlet.ServletContext
 
@@ -32,7 +31,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 
         permitted = true
 
-        TestUtils.createDetectionViews(dataSource)
 
         // For some reason, reading asynchronously is not returning results when run within context
         // of integration test.

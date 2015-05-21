@@ -84,20 +84,30 @@ class DetectionExtractService extends AbstractStreamingExporterService {
 
     protected def writeCsvRow(row, OutputStream out)
     {
-        out << row.formatted_timestamp << ","
-        out << row.station << ","
-        out << GeometryUtils.scrambleCoordinate(row.latitude) << ","
-        out << GeometryUtils.scrambleCoordinate(row.longitude) << ","
-        out << row.receiver_name << ","
-        out << row.sensor_id << ","
-        out << row.species_name << ","
-        out << row.uploader << ","
-        out << row.transmitter_id << ","
-        out << row.organisation << ","
-        out << ((row.sensor_value == null) ? "" : row.sensor_value) << ","
-        out << ((row.sensor_unit == null) ? "" : row.sensor_unit)
+        def formattedCols = []
 
-        out << "\n"
+        formattedCols << row.timestamp
+        formattedCols << row.station_name
+        formattedCols << GeometryUtils.scrambleCoordinate(row.latitude)
+        formattedCols << GeometryUtils.scrambleCoordinate(row.longitude)
+        formattedCols << row.receiver_name
+        formattedCols << (row.sensor_id ?: '')
+        formattedCols << getSpeciesValueFromRow(row)
+        formattedCols << row.uploader
+        formattedCols << row.transmitter_id
+        formattedCols << row.organisation_name
+        formattedCols << (row.sensor_value ?: '')
+        formattedCols << (row.sensor_unit ?: '')
+
+        out << formattedCols.join(',') << '\n'
+    }
+
+    def getSpeciesValueFromRow(row) {
+        if (!row.spcode) {
+            return ''
+        }
+
+        return "${row.spcode} - ${row.scientific_name} - ${row.common_name}"
     }
 
     protected void writeCsvHeader(OutputStream out)

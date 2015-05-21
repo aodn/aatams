@@ -8,6 +8,8 @@ import au.org.emii.aatams.notification.*
 import com.vividsolutions.jts.geom.Point
 import com.vividsolutions.jts.io.WKTReader
 
+import groovy.sql.Sql
+
 import org.apache.shiro.crypto.hash.Sha256Hash
 import org.joda.time.*
 
@@ -20,11 +22,6 @@ import shiro.*
  */
 class DevelopmentDataInitialiser extends AbstractDataInitialiser
 {
-    DevelopmentDataInitialiser(permissionUtilsService)
-    {
-        super(permissionUtilsService)
-    }
-
     void execute()
     {
         initData()
@@ -1156,7 +1153,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                         errMsg:"",
                         requestingUser:projectUser).save(failOnError:true)
 
-        export.save(failOnError:true)
+        export.save(failOnError:true, flush: true)
 
         createDetections(rx1Bondi, rx1, unembargoedTag, export)
         createDetections(rx1Bondi, rx1, embargoedTag, export)
@@ -1181,23 +1178,30 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                      errMsg:"",
                                      requestingUser:uploader).save(failOnError:true)
 
+            export.save(failOnError:true, flush: true)
         createDetections(deployment, receiver, tag, export, numDetections)
-        export.save(failOnError:true)
     }
 
-    private void createDetections(ReceiverDeployment rx1Bondi, Receiver rx1, tag, ReceiverDownloadFile export1, int numDetections = 1)
-    {
-        numDetections.times
-        {
-            ValidDetection detection =
-                    new ValidDetection(receiverDeployment:rx1Bondi,
-                    timestamp: new DateTime("2011-05-17T02:54:00+00:00").plusSeconds(it).toDate(),
-                    receiverName: rx1.name,
-                    transmitterId: tag.pinger.transmitterId,
-                    receiverDownload: export1,
-                    provisional: false)
+    private void createDetections(
+        ReceiverDeployment deployment,
+        Receiver rxr,
+        tag,
+        ReceiverDownloadFile export,
+        int numDetections = 1
+    ) {
 
-            export1.addToDetections(detection)
+        def sql = new Sql(dataSource)
+
+        numDetections.times {
+
+            def detection = new Detection(
+                timestamp: new DateTime("2011-05-17T02:54:00+00:00").plusSeconds(it),
+                receiverName: rxr.name,
+                transmitterId: tag.pinger.transmitterId,
+                receiverDownloadId: export.id
+            )
+
+            sql.execute(detection.toSqlInsertInlined())
         }
     }
 

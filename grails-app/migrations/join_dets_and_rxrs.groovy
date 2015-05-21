@@ -54,7 +54,7 @@ databaseChangeLog = {
             change {
                 sql.execute(
                     '''CREATE MATERIALIZED VIEW receiver as
-                         SELECT device.id, model_name || '-' || serial_number AS receiver_name
+                         SELECT device.id, model_name || '-' || serial_number AS receiver_name, device.organisation_id
                          FROM device
                          JOIN device_model ON device.model_id = device_model.id
                          WHERE device.class = 'au.org.emii.aatams.Receiver'
@@ -133,20 +133,33 @@ databaseChangeLog = {
                 detection.station_name AS detection_station_name,
                 detection.latitude AS detection_latitude,
                 detection.longitude AS detection_longitude,
+
                 detection.receiver_download_id,
+                sec_user.name AS uploader,
+                rxr_organisation.name as organisation_name,
 
                 deployment_and_recovery.receiver_deployment_id,
                 rxr_project.name AS rxr_project_name,
                 installation.name AS installation_name,
                 station.id AS station_id,
                 station.name AS station_name,
+                st_y(station.location) AS latitude,
+                st_x(station.location) AS longitude,
                 species.spcode,
+                species.scientific_name,
+                species.common_name,
                 invalid_reason(detection.*, receiver.*, deployment_and_recovery.*) AS invalid_reason,
 
+                sensor.transmitter_id as sensor_id,
                 surgery.id AS surgery_id
 
               FROM detection
+
+                JOIN receiver_download_file ON detection.receiver_download_id = receiver_download_file.id
+                JOIN sec_user ON receiver_download_file.requesting_user_id = sec_user.id
+
                 LEFT JOIN receiver ON detection.receiver_name::text = receiver.receiver_name
+                LEFT JOIN organisation rxr_organisation ON receiver.organisation_id = rxr_organisation.id
                 LEFT JOIN deployment_and_recovery deployment_and_recovery
                   ON receiver.id = deployment_and_recovery.receiver_id
                   AND detection."timestamp" >= deployment_and_recovery.initialisationdatetime_timestamp

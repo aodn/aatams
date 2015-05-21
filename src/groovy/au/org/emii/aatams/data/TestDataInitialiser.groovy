@@ -7,10 +7,5 @@ import au.org.emii.aatams.PermissionUtilsService
  *
  * @author jburgess
  */
-class TestDataInitialiser extends DevelopmentDataInitialiser
-{
-    TestDataInitialiser(permissionUtilsService)
-    {
-        super(permissionUtilsService)
-    }
+class TestDataInitialiser extends DevelopmentDataInitialiser {
 }

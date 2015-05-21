@@ -9,7 +9,7 @@ abstract class AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTe
 {
     def dataSource
     def grailsApplication
-    def jdbcTemplateVueDetectionFileProcessorService
+    def vueDetectionFileProcessorService
     def sql
 
     protected void setUp()

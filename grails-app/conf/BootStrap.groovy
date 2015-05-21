@@ -14,6 +14,7 @@ import com.vividsolutions.jts.geom.Point
 
 class BootStrap
 {
+    def dataSource
     def grailsApplication
     def permissionUtilsService
     def searchableService
@@ -21,16 +22,6 @@ class BootStrap
     def init =
     {
         servletContext ->
-
-        // // Eager initialize GORM Domain Mixin Methods.
-        // // See: http://grails.1312388.n4.nabble.com/GORM-dynamic-save-method-intermittently-not-found-td3859120.html
-        // // Without this, can get a groovy.lang.MissingMethodException when load testing concurrent detection uploads.
-        // grailsApplication.domainClasses.each
-        // {
-        //     dc ->
-
-        //     dc.clazz.count()
-        // }
 
         Map.metaClass.flatten =
         {
@@ -211,24 +202,25 @@ class BootStrap
                 new ApplicationTagLib().createLink(action: 'show', id: rxrDownloadFile.id, absolute:true))
         }
 
-        environments
-        {
-            test
-            {
-                new TestDataInitialiser(permissionUtilsService).execute()
+        environments {
+            def initialiserParams = [
+                dataSource: dataSource,
+                permissionUtilsService: permissionUtilsService
+            ]
+
+            test {
+                new TestDataInitialiser(initialiserParams).execute()
             }
 
-            development
-            {
+            development {
                 if (Boolean.getBoolean('initialiseWithData'))
                 {
-                    new DevelopmentDataInitialiser(permissionUtilsService).execute()
+                    new DevelopmentDataInitialiser(initialiserParams).execute()
                 }
             }
 
-            performance
-            {
-                new PerformanceDataInitialiser(permissionUtilsService).execute()
+            performance {
+                new PerformanceDataInitialiser(initialiserParams).execute()
             }
         }
 

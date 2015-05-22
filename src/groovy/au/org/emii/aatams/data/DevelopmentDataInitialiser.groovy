@@ -679,7 +679,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                               releaseLocality:'Neptune Islands',
                               releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
                               releaseDateTime:new DateTime("2011-05-15T14:15:00"),
-                              embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2025-05-15 12:34:56")).save(failOnError:true)
+                              embargoDate: new DateTime().plusYears(10).toDate()).save(failOnError:true)
 
         AnimalRelease whiteShark2Release =
             new AnimalRelease(project:tunaProject,
@@ -693,7 +693,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                               releaseLocality:'Neptune Islands',
                               releaseLocation:(Point)reader.read("POINT(30.1234 40.1234)"),
                               releaseDateTime:new DateTime("2011-05-15T14:15:00"),
-                              embargoDate:Date.parse("yyyy-MM-dd hh:mm:ss", "2025-05-15 12:34:56")).save(failOnError:true)
+                              embargoDate: new DateTime().plusYears(10).toDate()).save(failOnError:true)
 
         AnimalRelease blueFinTuna1Release =
             new AnimalRelease(project:tunaProject,

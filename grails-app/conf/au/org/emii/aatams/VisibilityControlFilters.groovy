@@ -68,4 +68,3 @@ class VisibilityControlFilters
         return new ApplicationTagLib().createLink(absolute: true, controller: params.controllerName, action: params.actionName, id: params.id)
     }
 }
-

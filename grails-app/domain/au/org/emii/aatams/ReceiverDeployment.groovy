@@ -107,8 +107,6 @@ class ReceiverDeployment
      * Date when data from this deployment is no longer embargoed (may be null to
      * indicate that no embargo exists).
      */
-    Date embargoDate
-
 
     static constraints =
     {
@@ -127,7 +125,6 @@ class ReceiverDeployment
         location(nullable:true)
         comments(nullable:true)
         recovery(nullable:true)
-        embargoDate(nullable:true)
         batteryLifeDays(nullable:true)
     }
 

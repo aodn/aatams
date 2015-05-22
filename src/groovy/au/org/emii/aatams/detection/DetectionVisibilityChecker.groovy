@@ -2,15 +2,16 @@ package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.AnimalRelease
 import org.apache.shiro.SecurityUtils
+import org.joda.time.DateTime
 
 class DetectionVisibilityChecker {
-    def row
+    def detection
     def params
     def permissionUtilsService
     def releaseIsProtectedCache
 
-    DetectionVisibilityChecker(theRow, theParams, thePermissionUtilsService, theReleaseIsProtectedCache) {
-        row = theRow
+    DetectionVisibilityChecker(theDetection, theParams, thePermissionUtilsService, theReleaseIsProtectedCache) {
+        detection = theDetection
         params = theParams
         permissionUtilsService = thePermissionUtilsService
         releaseIsProtectedCache = theReleaseIsProtectedCache
@@ -18,21 +19,22 @@ class DetectionVisibilityChecker {
 
     def apply() {
 
-        // if (!shouldKeep()) {
-        //     return null
-        // }
+        if (!shouldKeep()) {
+            return null
+        }
 
-        // if (shouldSanitise()) {
-        //     sanitise()
-        // }
+        if (shouldSanitise()) {
+            sanitise()
+        }
 
-        return row
+        return detection
     }
 
     def sanitise() {
-        row.species_name = ""
-        row.spcode = ""
-        row.sensor_id = ""
+        detection.spcode = ''
+        detection.scientificName = ''
+        detection.commonName = ''
+        detection.sensorId = ''
     }
 
     def shouldKeep() {
@@ -48,16 +50,16 @@ class DetectionVisibilityChecker {
     }
 
     def _isReadable() {
-        hasReadPermission(row.release_project_id)
+        hasReadPermission(detection.releaseProjectId)
     }
 
     def _isProtected() {
-        row.release_project_id && releaseIsProtected()
+        detection.releaseProjectId && releaseIsProtected()
     }
 
     def releaseIsProtected() {
 
-        def releaseId = row.animal_release_id
+        def releaseId = detection.releaseId
 
         if (!releaseIsProtectedCache.containsKey(releaseId)) {
 
@@ -70,7 +72,7 @@ class DetectionVisibilityChecker {
     }
 
     def _isEmbargoed() {
-        row.embargo_date && row.embargo_date.after(new Date())
+        detection.embargoDate && detection.embargoDate.isAfter(new DateTime())
     }
 
     def _allowSanitisedResults() {

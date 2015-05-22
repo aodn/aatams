@@ -6,6 +6,7 @@ import groovy.sql.Sql
 
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
+import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.ISODateTimeFormat
 
 import org.jooq.*
@@ -16,7 +17,8 @@ import static org.jooq.impl.DSL.*
 
 class Detection {
 
-    static def TIMESTAMP_FORMATTER = ISODateTimeFormat.dateTime()
+    static def ISO8601_TIMESTAMP_FORMATTER = ISODateTimeFormat.dateTime()
+    static def CSV_TIMESTAMP_FORMATTER = DateTimeFormat.forPattern('yyyy-MM-dd HH:mm:ss')
 
     Long id
 
@@ -60,7 +62,7 @@ class Detection {
         )
         .values(
             sequenceByName('hibernate_sequence').nextval(),
-            TIMESTAMP_FORMATTER.print(det.timestamp),
+            ISO8601_TIMESTAMP_FORMATTER.print(det.timestamp),
             det.receiverName,
             det.transmitterId,
             det.transmitterName,
@@ -86,13 +88,17 @@ class Detection {
             transmitterSerialNumber: row.transmitter_serial_number,
             sensorValue: row.sensor_value,
             sensorUnit: row.sensor_unit,
-            stationName: row.detection_station_name,  // TODO: these might change.
-            latitude: row.detection_latitude,
-            longitude: row.detection_longitude,
+            stationName: row.station_name,
+            latitude: row.latitude,
+            longitude: row.longitude,
             receiverDownloadId: row.receiver_download_id
         ]
 
         return detection
+    }
+
+    String getCsvFormattedTimestamp() {
+        return CSV_TIMESTAMP_FORMATTER.print(timestamp)
     }
 
     ReceiverDownloadFile getReceiverDownload() {

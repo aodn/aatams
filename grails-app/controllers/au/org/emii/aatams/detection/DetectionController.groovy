@@ -65,10 +65,6 @@ class DetectionController extends ReportController
 
         def detections = detectionExtractService.extractPage(params).results
 
-        //.collect {
-        //     ValidDetection.toPresentationFormat(it)
-        // }
-
         params.remove("sql")
         params.remove("projectPermissionCache")
 

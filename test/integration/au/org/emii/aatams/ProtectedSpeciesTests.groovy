@@ -202,16 +202,16 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
                 assertEquals(description, 1, resultsFromListAction.size())
 
                 def detection = resultsFromListAction.first()
-                assertEquals description, "37010003 - Carcharodon carcharias (White Shark)", detection.speciesNames
-                assertEquals description, project.tags.sort().first().toString(), detection.sensorIds
+                assertEquals description, "37010003 - Carcharodon carcharias (White Shark)", detection.speciesName
+                assertEquals description, project.tags.sort().first().toString(), detection.sensorId
                 break
 
             case VISIBLE_BUT_SANITISED:
                 assertEquals description, 1, resultsFromListAction.size()
 
                 def detection = resultsFromListAction.first()
-                assertEquals description, "", detection.speciesNames
-                assertEquals description, "", detection.sensorIds
+                assertEquals description, "", detection.speciesName
+                assertEquals description, "", detection.sensorId
                 break
 
             case NOT_VISIBLE:

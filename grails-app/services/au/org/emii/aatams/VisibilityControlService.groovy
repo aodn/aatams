@@ -50,6 +50,8 @@ class VisibilityControlService
     {
         def projectId = itemToControl.project?.id
 
+        println "projectId: ${projectId}"
+
         // Some detections have no related project, as far as embargoes go.
         if (projectId == null)
         {

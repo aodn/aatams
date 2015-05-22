@@ -119,6 +119,12 @@ databaseChangeLog = {
     }
 
     changeSet(author: "jburgess", id: "1430268900000-05", runOnChange: true) {
+        [ 'receiver_deployment', 'species' ].each { tableName ->
+            dropColumn(tableName: tableName, columnName: 'embargo_date')
+        }
+    }
+
+    changeSet(author: "jburgess", id: "1430268900000-06", runOnChange: true) {
         createView(
             '''
               SELECT
@@ -130,9 +136,9 @@ databaseChangeLog = {
                 detection.transmitter_serial_number,
                 detection.sensor_value,
                 detection.sensor_unit,
-                detection.station_name AS detection_station_name,
-                detection.latitude AS detection_latitude,
-                detection.longitude AS detection_longitude,
+                detection.station_name,
+                detection.latitude,
+                detection.longitude,
 
                 detection.receiver_download_id,
                 sec_user.name AS uploader,
@@ -142,16 +148,21 @@ databaseChangeLog = {
                 rxr_project.name AS rxr_project_name,
                 installation.name AS installation_name,
                 station.id AS station_id,
-                station.name AS station_name,
-                st_y(station.location) AS latitude,
-                st_x(station.location) AS longitude,
+                station.name AS station_station_name,
+                st_y(station.location) AS station_latitude,
+                st_x(station.location) AS station_longitude,
                 species.spcode,
                 species.scientific_name,
                 species.common_name,
                 invalid_reason(detection.*, receiver.*, deployment_and_recovery.*) AS invalid_reason,
 
                 sensor.transmitter_id as sensor_id,
-                surgery.id AS surgery_id
+                tag.project_id as tag_project_id,
+                surgery.id AS surgery_id,
+                release.id AS release_id,
+                release.project_id AS release_project_id,
+                embargo_date
+
 
               FROM detection
 
@@ -190,12 +201,6 @@ databaseChangeLog = {
         )
 
     }
-
-    // embargo date
-    // receiver_deployment_id?
-    // txr_project_name
-    // release_project_id
-
     // TODO: vacuum full analyze.
 
 }

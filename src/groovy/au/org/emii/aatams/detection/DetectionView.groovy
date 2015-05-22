@@ -5,6 +5,7 @@ import au.org.emii.aatams.InstallationStation
 import au.org.emii.aatams.ReceiverDeployment
 import au.org.emii.aatams.Project
 import au.org.emii.aatams.Surgery
+import au.org.emii.aatams.Tag
 
 import com.vividsolutions.jts.geom.Point
 
@@ -28,28 +29,44 @@ import static org.jooq.impl.DSL.*
  */
 class DetectionView extends Detection implements Embargoable {
 
+    DateTime embargoDate
+    Double stationLatitude
+    Double stationLongitude
     Long receiverDeploymentId
-
+    Long releaseId
+    Long releaseProjectId
     Long stationId
     Long surgeryId
-
-// embargo date
-    // receiver_deployment_id?
-    // txr_project_name
-    // release_project_id
+    Long tagProjectId
+    String commonName
+    String organisationName
+    String scientificName
+    String sensorId
+    String spcode
+    String stationStationName
+    String uploader
 
     static def fromSqlRow(def row) {
         def detection = Detection.fromSqlRow(row) as DetectionView
 
+        detection.commonName = row.common_name
+        detection.embargoDate = new DateTime(row.embargo_date).withZone(DateTimeZone.UTC)
+        detection.organisationName = row.organisation_name
         detection.receiverDeploymentId = row.receiver_deployment_id
+        detection.releaseId = row.release_id
+        detection.releaseProjectId = row.release_project_id
+        detection.tagProjectId = row.tag_project_id
+        detection.scientificName = row.scientific_name
+        detection.sensorId = row.sensor_id
+        detection.spcode = row.spcode
         detection.stationId = row.station_id
+        detection.stationLatitude = row.station_latitude
+        detection.stationLongitude = row.station_longitude
+        detection.stationStationName = row.station_station_name
         detection.surgeryId = row.surgery_id
+        detection.uploader = row.uploader
 
         return detection
-    }
-
-    def applyEmbargo() {
-        return this
     }
 
     InstallationStation getInstallationStation() {
@@ -60,16 +77,6 @@ class DetectionView extends Detection implements Embargoable {
         return ReceiverDeployment.get(receiverDeploymentId)
     }
 
-    Project getTransmitterProject() {
-        // TODO
-        return null
-    }
-
-    // Alias for transmitterProject - for compatibility with existing code - VisibilityControlService.
-    Project getProject() {
-        return this.transmitterProject
-    }
-
     /**
      * Non-authenticated users can only see scrambled locations.
      */
@@ -77,8 +84,60 @@ class DetectionView extends Detection implements Embargoable {
         return installationStation?.scrambledLocation
     }
 
-    List<Surgery> getSurgeries() {
-        []
+    Project getTagProject() {
+        return Project.get(tagProjectId)
+    }
+
+    // Alias for transmitterProject - for compatibility with existing code - VisibilityControlService.
+    Project getProject() {
+        return this.tagProject
+    }
+
+    Surgery getSurgery() {
+        return Surgery.get(surgeryId)
+    }
+
+    String getSpeciesName() {
+        if (!spcode) {
+            return ''
+        }
+
+        return "${spcode} - ${scientificName} (${commonName})"
+    }
+
+    def applyEmbargo(allowSanitised = true) {
+
+        def releaseEmbargoed = surgery.release.isEmbargoed()
+
+        def censoredDetection = new HashMap(this.properties)
+
+        if (releaseEmbargoed) {
+            censoredDetection.surgery = null
+            censoredDetection.spcode = ''
+            censoredDetection.sensorId = ''
+            censoredDetection.speciesName = ''
+        }
+        else {
+            censoredDetection.surgery = surgery
+            censoredDetection.sensorId = sensorId
+            censoredDetection.speciesName = speciesName
+        }
+
+        censoredDetection.isSanitised = { -> true }
+
+        def protectionRequired = project.isProtected && releaseEmbargoed
+
+        def hideFromResults = releaseEmbargoed && !allowSanitised
+
+        if (protectionRequired || hideFromResults) {
+            return null
+        }
+
+        return censoredDetection
+    }
+
+    def isSanitised() {
+        !sensorId && !speciesName
     }
 
     // GORM-like methods.

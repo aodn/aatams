@@ -3,27 +3,27 @@ package au.org.emii.aatams
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
 import grails.test.*
 
-class InstallationControllerTests extends AbstractControllerUnitTestCase 
+class InstallationControllerTests extends AbstractControllerUnitTestCase
 {
     def grailsApplication
-    
+
     List<Installation> installations = []
     int numInstallations = 10
-    
-    protected void setUp() 
+
+    protected void setUp()
     {
         super.setUp()
-        
+
         installations.addAll(Installation.list())
-        
+
         createInstallationsForProject(Project.findByName("Tuna"))
         createInstallationsForProject(Project.findByName("Seal Count"))
     }
 
-    private void createInstallationsForProject(Project project) 
+    private void createInstallationsForProject(Project project)
     {
         InstallationConfiguration array = InstallationConfiguration.findByType('ARRAY')
-        
+
         assert(project)
         numInstallations.times
         {
@@ -33,21 +33,21 @@ class InstallationControllerTests extends AbstractControllerUnitTestCase
         }
     }
 
-    protected void tearDown() 
+    protected void tearDown()
     {
-        installations.each 
+        installations.each
         {
             it.delete()
         }
-        
+
         super.tearDown()
     }
 
-    void testListPagination() 
+    void testListPagination()
     {
         int max = 5
         int offset = 0
-        
+
         3.times
         {
             assertListPagination(max, offset, installations)
@@ -58,24 +58,9 @@ class InstallationControllerTests extends AbstractControllerUnitTestCase
     void testListWithFilter()
     {
         controller.params.filter = [project: [eq: ["name", "Tuna"]]]
-        
+
         def matchingInstallations = installations.grep { it.project.name == "Tuna" }
         assertListPagination(null, null, matchingInstallations)
-    }
-        
-    void testListPaginationWithFilter()
-    {
-        int max = 5
-        int offset = 0
-        
-        def matchingInstallations = installations.grep { it.project.name == "Tuna" }
-        
-        2.times
-        {
-            controller.params.filter = [project: [eq: ["name", "Tuna"]]]
-            assertListPagination(max, offset, matchingInstallations)
-            offset += max
-        }
     }
 
     void testListSortByName()
@@ -94,9 +79,9 @@ class InstallationControllerTests extends AbstractControllerUnitTestCase
     {
         int max = 5
         int offset = 0
-        
+
         def matchingInstallations = installations.grep { it.project.name == "Tuna" }
-        
+
         2.times
         {
             controller.params.filter = [project: [eq: ["name", "Tuna"]]]
@@ -114,20 +99,20 @@ class InstallationControllerTests extends AbstractControllerUnitTestCase
 
             a[params.sort] <=> b[params.sort]
         }
-        
+
         assertListPagination(params.max, params.offset, sortedInstallations)
     }
-    
-    private void assertListPagination(def max, def offset, List matchingInstallations) 
+
+    private void assertListPagination(def max, def offset, List matchingInstallations)
     {
         int maxResults = max?: matchingInstallations.size()
         maxResults = Math.min(maxResults, matchingInstallations.size())
-        
+
         if (max)
         {
             controller.params.max = max
         }
-        
+
         if (offset)
         {
             controller.params.offset = offset
@@ -135,9 +120,12 @@ class InstallationControllerTests extends AbstractControllerUnitTestCase
         int offsetResults = offset?: 0
 
         def model = controller.list()
-        
+
         assertEquals(maxResults, model.entityList.size())
         assertEquals(matchingInstallations.size(), model.total)
-        assertEquals(matchingInstallations[offsetResults..(offsetResults + maxResults - 1)]*.name, model.entityList*.name)
+        assertEquals(
+            matchingInstallations[offsetResults..(offsetResults + maxResults - 1)]*.name.sort(),
+            model.entityList*.name.sort()
+        )
     }
 }

@@ -1,7 +1,5 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.detection.ValidDetection
-import au.org.emii.aatams.detection.InvalidDetection
 import org.joda.time.DateTime
 
 /**
@@ -10,13 +8,8 @@ import org.joda.time.DateTime
  */
 class Receiver extends Device
 {
-    /**
-     * Detections recorded at the receiver.
-     */
-    Set<ValidDetection> detections = new HashSet<ValidDetection>()
-
-    static hasMany = [detections: ValidDetection, deployments: ReceiverDeployment]
-    static belongsTo = [organisation: Organisation]
+    static hasMany = [ deployments: ReceiverDeployment ]
+    static belongsTo = [ organisation: Organisation ]
     static transients = ['name',
                          'deviceID',
                          'status',
@@ -32,8 +25,6 @@ class Receiver extends Device
     {
         organisation sort:'name'
         cache true
-        validDetections cache:true
-        invalidDetections cache:true
     }
 
     static searchable = [only: ['name']]

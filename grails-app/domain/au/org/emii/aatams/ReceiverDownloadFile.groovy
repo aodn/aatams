@@ -1,9 +1,6 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.detection.InvalidDetection
 import au.org.emii.aatams.detection.InvalidDetectionReason
-import au.org.emii.aatams.detection.RawDetection
-import au.org.emii.aatams.detection.ValidDetection
 
 import groovy.sql.Sql
 import org.apache.shiro.SecurityUtils

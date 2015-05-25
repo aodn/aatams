@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.detection.ValidDetection
+import au.org.emii.aatams.detection.DetectionView
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import org.joda.time.DateTime
 
@@ -14,7 +14,7 @@ class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase
     Project installationProject
     Project releaseProject
 
-    ValidDetection det
+    DetectionView det
     AnimalRelease release
     Surgery surgery
 
@@ -44,17 +44,17 @@ class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase
         mockLogging(AnimalRelease)
         release = new AnimalRelease(project: releaseProject, embargoDate: new DateTime().plusDays(1).toDate())
         surgery = new Surgery(release: release)
-        det = new ValidDetection(receiverDeployment: deployment, transmitterId: 'A69-1303-1234')
 
-        mockDomain(ValidDetection, [det])
         mockDomain(Sensor)
         mockDomain(Surgery, [surgery])
+
+        det = new DetectionView()
 
         det.metaClass.getProject = {
             return releaseProject
         }
-        det.metaClass.getSurgeries = {
-            return [surgery]
+        det.metaClass.getSurgery = {
+            return surgery
         }
     }
 

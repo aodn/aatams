@@ -93,7 +93,7 @@ class DetectionController extends ReportController
     def show = {
         def detectionInstance = DetectionView.get(params.id, dataSource)
         if (!detectionInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'detection.label', default: 'ValidDetection'), params.id])}"
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'detection.label', default: 'DetectionView'), params.id])}"
             redirect(action: "list")
         }
         else {

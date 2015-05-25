@@ -1,7 +1,9 @@
 package au.org.emii.aatams.report
 
 import au.org.emii.aatams.*
-import au.org.emii.aatams.detection.ValidDetection
+import au.org.emii.aatams.detection.DetectionView
+
+import org.joda.time.DateTime
 
 /**
  * This service allows clients to  retrieve a list of available reports, along
@@ -15,7 +17,6 @@ class ReportInfoService
 
     def permissionUtilsService
 
-    def detectionTimestampMin
     def eventTimestampMin
 
     static final String MEMBER_PROJECTS = "My Projects"
@@ -30,7 +31,7 @@ class ReportInfoService
          "animalMeasurement": "au.org.emii.aatams.AnimalMeasurement",
          "animalReleaseSummary": "au.org.emii.aatams.report.AnimalReleaseSummaryService",
          "animalRelease": "au.org.emii.aatams.AnimalRelease",
-         "detection": "au.org.emii.aatams.detection.ValidDetection",
+         "detection": "au.org.emii.aatams.detection.DetectionView",
          "installation": "au.org.emii.aatams.Installation",
          "installationStation": "au.org.emii.aatams.InstallationStation",
          "person": "au.org.emii.aatams.Person",
@@ -81,7 +82,7 @@ class ReportInfoService
          "animalMeasurement": AnimalMeasurement.class,
          "animalReleaseSummary": AnimalReleaseSummaryService.class,
          "animalRelease": AnimalRelease.class,
-         "detection": ValidDetection.class,
+         "detection": DetectionView.class,
          "installation": Installation.class,
          "installationStation": InstallationStation.class,
          "organisation": Organisation.class,
@@ -98,18 +99,8 @@ class ReportInfoService
 
     private def getDetectionTimestampMin()
     {
-        if (!detectionTimestampMin)
-        {
-            detectionTimestampMin = ValidDetection.createCriteria().get
-            {
-                projections
-                {
-                    min('timestamp')
-                }
-            }
-        }
-
-        return detectionTimestampMin
+        // TODO: remove hardcoding :-)
+        return new DateTime('2007-08-01T00:00:00Z').toDate()
     }
 
     private def getEventTimestampMin()
@@ -290,9 +281,9 @@ class ReportInfoService
                 (AnimalRelease.class): new ReportInfo(displayName:"Tag Releases",
                                                       jrxmlFilename:[:],
                                                       filterParams:animalReleaseFilterParams),
-                (ValidDetection.class):new ReportInfo(displayName:"Detections",
-                                                    jrxmlFilename:[CSV:"detectionExtract"],
-                                                    filterParams:detectionFilterParams),
+                (DetectionView.class): new ReportInfo(displayName:"Detections",
+                                                      jrxmlFilename:[CSV:"detectionExtract"],
+                                                      filterParams:detectionFilterParams),
                 (Installation.class):new ReportInfo(displayName:"Installations",
                                                     jrxmlFilename:[CSV:"installationExtract"],
                                                     filterParams:installationFilterParams),

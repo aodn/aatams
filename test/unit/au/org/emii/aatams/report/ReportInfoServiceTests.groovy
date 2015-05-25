@@ -2,7 +2,7 @@ package au.org.emii.aatams.report
 
 import grails.test.*
 import au.org.emii.aatams.*
-import au.org.emii.aatams.detection.ValidDetection
+import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import org.joda.time.*
@@ -71,17 +71,6 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         mockDomain(InstallationStation)
         mockDomain(ReceiverEvent)
         mockDomain(Tag)
-
-        ValidDetection detFirst = new ValidDetection(timestamp:new DateTime("2011-03-01T12:34:56").toDate())
-        ValidDetection detLast = new ValidDetection(timestamp:new DateTime("2012-03-01T12:34:56").toDate())
-        def detectionList = [detFirst, detLast]
-        mockDomain(ValidDetection, detectionList)
-        detectionList.each { it.save() }
-    }
-
-    protected void tearDown()
-    {
-        super.tearDown()
     }
 
     protected def getPrincipal()
@@ -164,7 +153,7 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
 
         assertEquals(12, reportInfos.size())
 
-        ReportInfo detectionReportInfo = reportInfos.get(ValidDetection.class)
+        ReportInfo detectionReportInfo = reportInfos.get(DetectionView.class)
 
         assertNotNull(detectionReportInfo)
         assertEquals("Detections", detectionReportInfo.getDisplayName())

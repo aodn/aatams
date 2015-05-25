@@ -23,17 +23,6 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         ]
     }
 
-    public Long getCount(filterParams) {
-        if (!filterParams || filterParams.isEmpty() || filterParams?.filter == null || filterParams?.filter == [:]) {
-            return ValidDetection.count()
-        }
-
-        def query =  new DetectionQueryBuilder().constructCountQuery(filterParams)
-        def results = performQuery(filterParams.sql, query)
-
-        return results.count[0]
-    }
-
     def performQuery(sql, query) {
 
         def startTime = System.currentTimeMillis()

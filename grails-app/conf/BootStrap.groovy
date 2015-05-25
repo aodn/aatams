@@ -223,14 +223,5 @@ class BootStrap
                 new PerformanceDataInitialiser(initialiserParams).execute()
             }
         }
-
-        // Required for following metaclass override to "stick".
-        ValidDetection.count()
-
-        // Performance optimisation (select count(*) is slow on large tables).
-        ValidDetection.metaClass.static.count =
-        {
-            return Statistics.getStatistic('numValidDetections')
-        }
     }
 }

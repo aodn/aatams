@@ -49,7 +49,6 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         mockDomain(Project)
         mockDomain(Receiver)
         mockDomain(ReceiverEvent)
-        mockDomain(ValidDetection)
 
         user = new Person(username: 'user')
         hasRole = true

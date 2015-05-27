@@ -29,12 +29,57 @@ databaseChangeLog = {
             column(name: "receiver_download_id", type: "int8") {
                 constraints(nullable: "false")
             }
+
+            column(name: "duplicate", type: "boolean")
+        }
+
+        createProcedure(
+            '''CREATE OR REPLACE FUNCTION set_detection_duplicate_status()
+               RETURNS TRIGGER AS $$
+
+                DECLARE
+                  changed_row detection%ROWTYPE;
+
+                BEGIN
+                  IF (TG_OP = 'DELETE') THEN
+                    changed_row = OLD;
+                  ELSE
+                    changed_row = NEW;
+                  END IF;
+
+                  UPDATE detection
+                  SET duplicate = subquery.duplicate
+                  FROM (
+                    SELECT id,
+                    ROW_NUMBER() OVER(PARTITION BY timestamp, transmitter_id, receiver_name ORDER BY id asc) > 1
+                      AS duplicate
+                    FROM detection
+                    WHERE timestamp = changed_row.timestamp
+                      AND transmitter_id = changed_row.transmitter_id
+                      AND receiver_name = changed_row.receiver_name
+                  ) subquery
+                  WHERE detection.id = subquery.id;
+
+                  RETURN changed_row;
+                END;
+
+                $$ LANGUAGE plpgsql;'''
+        )
+
+        grailsChange {
+            change {
+                sql.execute(
+                    '''CREATE TRIGGER check_for_detection_duplicates
+                       AFTER INSERT OR DELETE ON detection
+                         FOR EACH ROW EXECUTE PROCEDURE set_detection_duplicate_status();'''
+                )
+            }
         }
     }
 
     changeSet(author: "jburgess", id: "1430268900000-02") {
 
-        [ 'timestamp', 'receiver_name', 'transmitter_id', 'receiver_download_id' ].each { columnName ->
+        [ 'timestamp', 'receiver_name', 'transmitter_id', 'receiver_download_id', 'duplicate' ].each { columnName ->
             createIndex(indexName: "detection_${columnName}_index", tableName: 'detection', unique: 'false') {
                 column(name: columnName)
             }
@@ -104,11 +149,11 @@ databaseChangeLog = {
                  deployment_and_recovery deployment_and_recovery)
                RETURNS text AS $$
                  BEGIN
-                   IF receiver.id IS NULL THEN
+                   IF detection.duplicate THEN
+                     RETURN 'DUPLICATE';
+                   ELSIF receiver.id IS NULL THEN
                      RETURN 'UNKNOWN_RECEIVER';
-                   END IF;
-
-                   IF deployment_and_recovery.receiver_deployment_id IS NULL THEN
+                   ELSIF deployment_and_recovery.receiver_deployment_id IS NULL THEN
                      RETURN 'NO_DEPLOYMENT_AND_RECOVERY_AT_DATE_TIME';
                    END IF;
 
@@ -199,8 +244,5 @@ databaseChangeLog = {
             '''SELECT * FROM detection_view WHERE invalid_reason IS NOT NULL''',
                    viewName: 'invalid_detection'
         )
-
     }
-    // TODO: vacuum full analyze.
-
 }

@@ -9,7 +9,7 @@ import grails.converters.JSON
 import groovy.xml.MarkupBuilder
 
 
-class ReceiverDownloadFileController 
+class ReceiverDownloadFileController
 {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -22,25 +22,25 @@ class ReceiverDownloadFileController
         [receiverDownloadFileInstanceList: ReceiverDownloadFile.list(params), receiverDownloadFileInstanceTotal: ReceiverDownloadFile.count()]
     }
 
-    def create()  
+    def create()
     {
         def receiverDownloadFileInstance = new ReceiverDownloadFile()
         receiverDownloadFileInstance.properties = params
-        
+
         return [receiverDownloadFileInstance: receiverDownloadFileInstance]
     }
 
-    def createDetections =  
+    def createDetections =
     {
         return create()
     }
 
-    def createEvents =  
+    def createEvents =
     {
         return create()
     }
 
-    def save = 
+    def save =
     {
         log.debug("Processing receiver export, params: " + params)
         def receiverDownloadFileInstance = new ReceiverDownloadFile(type: params.type)
@@ -79,9 +79,9 @@ class ReceiverDownloadFileController
         MultipartFile file = (request.fileMap.values() as List)[0]
         receiverDownloadFileInstance.initialiseForProcessing(file.getOriginalFilename())
         receiverDownloadFileInstance.save(flush: true, failOnError: true)
-            
+
         flash.message = "${message(code: 'default.processing.receiverUpload.message')}"
-            
+
         // Define this in web thread, as it fails if done async.
         def downloadFileId = receiverDownloadFileInstance.id
         def showLink = createLink(action:'show', id:downloadFileId, absolute:true)
@@ -108,44 +108,6 @@ class ReceiverDownloadFileController
         }
     }
 
-    def edit = {
-        def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
-        if (!receiverDownloadFileInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [receiverDownloadFileInstance: receiverDownloadFileInstance]
-        }
-    }
-
-    def update = {
-        def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
-        if (receiverDownloadFileInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (receiverDownloadFileInstance.version > version) {
-                    
-                    receiverDownloadFileInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile')] as Object[], "Another user has updated this ReceiverDownloadFile while you were editing")
-                    render(view: "edit", model: [receiverDownloadFileInstance: receiverDownloadFileInstance])
-                    return
-                }
-            }
-            receiverDownloadFileInstance.properties = params
-            if (!receiverDownloadFileInstance.hasErrors() && receiverDownloadFileInstance.save(flush: true)) {
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), receiverDownloadFileInstance.toString()])}"
-                redirect(action: "show", id: receiverDownloadFileInstance.id)
-            }
-            else {
-                render(view: "edit", model: [receiverDownloadFileInstance: receiverDownloadFileInstance])
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), params.id])}"
-            redirect(action: "list")
-        }
-    }
-
     def delete = {
 
         def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
@@ -164,21 +126,21 @@ class ReceiverDownloadFileController
             redirect(action: "list")
         }
     }
-    
+
     /**
      * User has chosen to download the actual file.
      */
     def download =
     {
         def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
-        if (!receiverDownloadFileInstance) 
+        if (!receiverDownloadFileInstance)
         {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), params.id])}"
             redirect(action: "list")
         }
-        else 
+        else
         {
-            def file = new File(receiverDownloadFileInstance.path)    
+            def file = new File(receiverDownloadFileInstance.path)
             response.setContentType("application/octet-stream")
             response.setHeader("Content-disposition", "attachment;filename=${file.getName()}")
 
@@ -186,11 +148,11 @@ class ReceiverDownloadFileController
             [receiverDownloadFileInstance: receiverDownloadFileInstance]
         }
     }
-    
-    def status = 
+
+    def status =
     {
         ReceiverDownloadFile download = ReceiverDownloadFile.get(params.id)
-        
+
         def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
         if (!receiverDownloadFileInstance)
         {

@@ -29,8 +29,8 @@ class ReceiverDownloadFile
 
     Set<ReceiverEvent> events = new HashSet<ReceiverEvent>()
 
-    static hasMany = [events:ReceiverEvent]
-    static hasOne = [progress: ReceiverDownloadFileProgress]
+    static hasMany = [ events: ReceiverEvent ]
+    static hasOne = [ progress: ReceiverDownloadFileProgress ]
     static auditable = true
 
     static constraints =
@@ -40,7 +40,7 @@ class ReceiverDownloadFile
         progress(nullable: true)
     }
 
-    static transients = ['knownSensors', 'uniqueTransmitterIds', 'percentComplete', 'path']
+    static transients = ['knownSensors', 'uniqueTransmitterIds', 'percentComplete', 'path', 'statistics' ]
 
     static mapping =
     {
@@ -96,86 +96,14 @@ class ReceiverDownloadFile
         progress.percentComplete = percentComplete
     }
 
-    def totalDetectionCount()
-    {
-        return validDetectionCount() + invalidDetectionCount()
+    def getStatistics() {
+        def stats = new ReceiverDownloadFileStatistics()
+        stats.refresh(dataSource, this)
+
+        return stats
     }
 
-    def validDetectionCount()
-    {
-        return 1
-        //return executeCountCriteria(ValidDetection)
-    }
-
-    def invalidDetectionCount()
-    {
-        return 1
-        //return executeCountCriteria(InvalidDetection)
-    }
-
-    def invalidDetectionCount(reason)
-    {
-        return 1
-        // return executeCountCriteria(InvalidDetection,
-        // {
-        //     eq("reason", reason)
-        // })
-    }
-
-    def unknownReceivers()
-    {
-        return [ "TODO" ]
-        // def c = InvalidDetection.createCriteria()
-        // def results = c.list
-        // {
-        //     receiverDownload
-        //     {
-        //         eq("id", Long.valueOf(id))
-        //     }
-
-        //     eq("reason", InvalidDetectionReason.UNKNOWN_RECEIVER)
-
-        //     projections
-        //     {
-        //         distinct("receiverName")
-        //     }
-        // }
-
-        // return results
-    }
-
-    private def executeCountCriteria(clazz)
-    {
-        executeCountCriteria(clazz, null)
-    }
-
-    private def executeCountCriteria(clazz, customRestriction)
-    {
-        def c = clazz.createCriteria()
-        def count = c.get()
-        {
-            projections
-            {
-                rowCount()
-            }
-
-            receiverDownload
-            {
-                eq("id", Long.valueOf(id))
-            }
-
-            if (customRestriction)
-            {
-                customRestriction.delegate = delegate
-                customRestriction.call()
-            }
-        }
-
-        return count
-    }
-
-    List<String> getUniqueTransmitterIds()
-    {
+    List<String> getUniqueTransmitterIds() {
         def sql = new Sql(dataSource)
 
         def uniqueTransmitterIds =
@@ -185,8 +113,7 @@ class ReceiverDownloadFile
         return uniqueTransmitterIds
     }
 
-    List<Long> getKnownSensors()
-    {
+    List<Long> getKnownSensors() {
         return Sensor.findAllByTransmitterIdInList(getUniqueTransmitterIds())
     }
 }

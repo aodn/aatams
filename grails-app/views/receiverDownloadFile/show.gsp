@@ -1,4 +1,3 @@
-
 <%@ page import="au.org.emii.aatams.FileProcessingStatus" %>
 <%@ page import="au.org.emii.aatams.ReceiverDownloadFile" %>
 <%@ page import="au.org.emii.aatams.ReceiverDownloadFileType" %>
@@ -29,123 +28,111 @@
             <div class="dialog">
                 <table>
                     <tbody>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.type.label" default="Type" /></td>
                             <td valign="top" class="value">${receiverDownloadFileInstance?.type?.encodeAsHTML()}</td>
                         </tr>
-                    
+
                         <shiro:hasRole name="SysAdmin">
                           <tr class="prop">
                               <td valign="top" class="name"><g:message code="receiverDownloadFile.path.label" default="Path" /></td>
                               <td valign="top" class="value">${fieldValue(bean: receiverDownloadFileInstance, field: "path")}</td>
                           </tr>
                         </shiro:hasRole>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.errMsg.label" default="Err Msg" /></td>
                             <td valign="top" class="value">${fieldValue(bean: receiverDownloadFileInstance, field: "errMsg")}</td>
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.importDate.label" default="Import Date" /></td>
                             <td valign="top" class="value"><g:formatDate format="dd/MM/yyyy HH:mm:ss" date="${receiverDownloadFileInstance?.importDate}" /></td>
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.name.label" default="Name" /></td>
                             <td valign="top" class="value">${fieldValue(bean: receiverDownloadFileInstance, field: "name")}</td>
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.requestingUser.label" default="Uploader" /></td>
                             <td valign="top" class="value"><g:link controller="person" action="show" id="${receiverDownloadFileInstance?.requestingUser?.id}">${receiverDownloadFileInstance?.requestingUser?.encodeAsHTML()}</g:link></td>
                         </tr>
-                    
+
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDownloadFile.status.label" default="Status" /></td>
                             <td valign="top" class="value">${receiverDownloadFileInstance?.status?.encodeAsHTML()}</td>
                         </tr>
-                    
+
                         <g:hiddenField name="status" value="${receiverDownloadFileInstance?.status}"/>
                         <g:hiddenField name="receiverDownloadId" value="${receiverDownloadFileInstance?.id}"/>
-                        
+
                         <g:if test="${ (receiverDownloadFileInstance.status == FileProcessingStatus.PROCESSING) }">
                             <tr class="prop">
                                 <td valign="top" class="name"><g:message code="receiverDownloadFile.percentComplete.label" default="Progress" /></td>
                                 <td valign="top" class="value"><div id="progressbar"></div></td>
                             </tr>
                         </g:if>
-                        
-                        <g:if test="${   (receiverDownloadFileInstance.status != FileProcessingStatus.PROCESSING) 
+
+                        <g:if test="${   (receiverDownloadFileInstance.status != FileProcessingStatus.PROCESSING)
                                       && (   (receiverDownloadFileInstance.type == ReceiverDownloadFileType.DETECTIONS_CSV)
                                           || (receiverDownloadFileInstance.type == ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV))}">
-                                      
-                          <!-- Total -->
+
+                          <g:set var="stats" value="${receiverDownloadFileInstance.statistics}" />
+
                           <tr class="prop">
-                              <td valign="top" class="name"><g:message code="receiverDownloadFile.totalDetections.label" default="Total Detections" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.totalDetectionCount()}</td>
+                              <td valign="top" class="name">Total Detections</td>
+                              <td valign="top" class="value">${stats?.totalCount}</td>
                           </tr>
 
-                          <!-- Num valid -->
                           <tr class="prop">
-                              <td valign="top" class="name"><g:message code="receiverDownloadFile.validCount.label" default="Valid Count" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.validDetectionCount()}</td>
+                              <td valign="top" class="name">Valid Count</td>
+                              <td valign="top" class="value">${stats?.validCount}</td>
                           </tr>
 
-                          <!-- Num invalid -->
                           <tr class="prop">
-                              <td valign="top" class="name"><g:message code="receiverDownloadFile.invalidCount.label" default="Invalid Count" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetectionCount()}</td>
+                              <td valign="top" class="name">Invalid Count</td>
+                              <td valign="top" class="value">${stats?.invalidCount}</td>
                           </tr>
 
-                          <!-- Num duplicate -->
                           <tr class="prop">
-                              <td valign="top" class="name"><g:message code="receiverDownloadFile.duplicateCount.label" default="Duplicate Count" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetectionCount(InvalidDetectionReason.DUPLICATE)}</td>
+                              <td valign="top" class="name">Duplicate Count</td>
+                              <td valign="top" class="value">${stats?.duplicateCount}</td>
                           </tr>
 
-                          <!-- Num unknown receiver -->
                           <tr class="prop">
-                              <td valign="top" class="name"><g:message code="receiverDownloadFile.unknownReceiverCount.label" default="Unknown Receiver Count" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetectionCount(InvalidDetectionReason.UNKNOWN_RECEIVER)}</td>
+                              <td valign="top" class="name">Unknown Receiver Count</td>
+                              <td valign="top" class="value">${stats?.unknownReceiverCount}</td>
                           </tr>
 
-                          <!-- unknown receivers -->
                           <tr class="prop">
-                              <td valign="top" class="name"><g:message code="receiverDownloadFile.unknownReceivers.label" default="Unknown Receivers" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.unknownReceivers()}</td>
+                              <td valign="top" class="name">Unknown Receivers</td>
+                              <td valign="top" class="value">${stats?.unknownReceivers}</td>
                           </tr>
 
-                          <!-- Num no deployment -->
                           <tr class="prop">
-                              <td valign="top" class="name"><g:message code="receiverDownloadFile.noDeploymentsCount.label" default="No Deployment at Time  Count" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetectionCount(InvalidDetectionReason.NO_DEPLOYMENT_AT_DATE_TIME)}</td>
+                              <td valign="top" class="name">No Deployment and Recovery at Time  Count</td>
+                              <td valign="top" class="value">${stats?.noDeploymentAndRecoveryCount}</td>
                           </tr>
 
-                          <!-- Num no recovery -->
-                          <tr class="prop">
-                              <td valign="top" class="name"><g:message code="receiverDownloadFile.noRecoveryCount.label" default="No Recovery at Time Count" /></td>
-                              <td valign="top" class="value">${receiverDownloadFileInstance?.invalidDetectionCount(InvalidDetectionReason.NO_RECOVERY_AT_DATE_TIME)}</td>
-                          </tr>
-                          
                         </g:if>
-                        
+
 
                     </tbody>
                 </table>
             </div>
             <div class="buttons">
-              
+
                 <g:form>
                     <g:hiddenField name="id" value="${receiverDownloadFileInstance?.id}" />
                     <shiro:user>
                       <span class="button"><g:actionSubmit class="download" action="download" value="${message(code: 'default.button.download.label', default: 'Download')}" /></span>
                     </shiro:user>
                     <shiro:hasRole name="SysAdmin">
-                      <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                       <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
-                    </shiro:hasRole>              
+                    </shiro:hasRole>
                 </g:form>
             </div>
         </div>

@@ -38,7 +38,7 @@ databaseChangeLog = {
                RETURNS TRIGGER AS $$
 
                 DECLARE
-                  changed_row detection%ROWTYPE;
+                  changed_row aatams.detection%ROWTYPE;
 
                 BEGIN
                   IF (TG_OP = 'DELETE') THEN
@@ -47,13 +47,13 @@ databaseChangeLog = {
                     changed_row = NEW;
                   END IF;
 
-                  UPDATE detection
+                  UPDATE aatams.detection
                   SET duplicate = subquery.duplicate
                   FROM (
                     SELECT id,
                     ROW_NUMBER() OVER(PARTITION BY timestamp, transmitter_id, receiver_name ORDER BY id asc) > 1
                       AS duplicate
-                    FROM detection
+                    FROM aatams.detection
                     WHERE timestamp = changed_row.timestamp
                       AND transmitter_id = changed_row.transmitter_id
                       AND receiver_name = changed_row.receiver_name

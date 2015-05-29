@@ -32,7 +32,38 @@ databaseChangeLog = {
 
             column(name: "duplicate", type: "boolean")
         }
+    }
 
+    changeSet(author: "jburgess", id: "1430268900000-02") {
+        grailsChange {
+            change {
+                log.warn "Waiting for file '/tmp/detections_loaded' to appear before moving on..."
+                while (!new File('/tmp/detections_loaded').exists()) {
+                    sleep(10000)
+                }
+
+                sql.execute("""
+                    UPDATE detection
+                    SET duplicate = true
+                    WHERE id IN (
+                      SELECT id FROM (
+                        SELECT
+                          id,
+                          ROW_NUMBER() OVER(PARTITION BY
+                            timestamp,
+                            transmitter_id,
+                            receiver_name ORDER BY id ASC
+                          ) > 1 AS duplicate
+                        FROM detection
+                      ) d
+                      WHERE duplicate = true
+                    );
+                    """)
+            }
+        }
+    }
+
+    changeSet(author: "jburgess", id: "1430268900000-03") {
         createProcedure(
             '''CREATE OR REPLACE FUNCTION set_detection_duplicate_status()
                RETURNS TRIGGER AS $$
@@ -77,7 +108,7 @@ databaseChangeLog = {
         }
     }
 
-    changeSet(author: "jburgess", id: "1430268900000-02") {
+    changeSet(author: "jburgess", id: "1430268900000-04") {
 
         [ 'timestamp', 'receiver_name', 'transmitter_id', 'receiver_download_id', 'duplicate' ].each { columnName ->
             createIndex(indexName: "detection_${columnName}_index", tableName: 'detection', unique: 'false') {
@@ -88,12 +119,12 @@ databaseChangeLog = {
         addForeignKeyConstraint(baseColumnNames: "receiver_download_id", baseTableName: "detection", constraintName: "receiver_download_id_detection_fk", deferrable: "false", initiallyDeferred: "false", onDelete: "NO ACTION", onUpdate: "NO ACTION", referencedColumnNames: "id", referencedTableName: "receiver_download_file", referencesUniqueColumn: "false")
     }
 
-    changeSet(author: "jburgess", id: "1430268900000-03") {
+    changeSet(author: "jburgess", id: "1430268900000-05") {
         dropTable(tableName: 'invalid_detection', cascadeConstraints: true)
         dropTable(tableName: 'valid_detection', cascadeConstraints: true)
     }
 
-    changeSet(author: "jburgess", id: "1430268900000-04", runOnChange: true) {
+    changeSet(author: "jburgess", id: "1430268900000-06", runOnChange: true) {
 
         grailsChange {
             change {
@@ -163,13 +194,13 @@ databaseChangeLog = {
         )
     }
 
-    changeSet(author: "jburgess", id: "1430268900000-05", runOnChange: true) {
+    changeSet(author: "jburgess", id: "1430268900000-07", runOnChange: true) {
         [ 'receiver_deployment', 'species' ].each { tableName ->
             dropColumn(tableName: tableName, columnName: 'embargo_date')
         }
     }
 
-    changeSet(author: "jburgess", id: "1430268900000-06", runOnChange: true) {
+    changeSet(author: "jburgess", id: "1430268900000-08", runOnChange: true) {
         createView(
             '''
               SELECT

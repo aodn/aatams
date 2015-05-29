@@ -2,7 +2,7 @@
 
 # TODO: dos2unix
 
-DOWNLOAD_ID_QUERY="select id from aatams.receiver_download_file order by id"
+DOWNLOAD_ID_QUERY="select id from aatams.receiver_download_file where type = 'DETECTIONS_CSV' order by id"
 PSQL_CMD="psql aatams3 -t -c"
 
 for receiver_download_id in `$PSQL_CMD "$DOWNLOAD_ID_QUERY"`; do

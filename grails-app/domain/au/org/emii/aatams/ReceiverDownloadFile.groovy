@@ -67,7 +67,6 @@ class ReceiverDownloadFile
             path = path + File.separator
         }
 
-        assert(id): "Download file ID cannot be null"
         path += (id + File.separator + name)
     }
 

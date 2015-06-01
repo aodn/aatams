@@ -47,7 +47,6 @@ class Detection {
 
         def insert = create.insertInto(
             table('DETECTION'),
-            field('ID'),
             field('TIMESTAMP'),
             field('RECEIVER_NAME'),
             field('TRANSMITTER_ID'),
@@ -61,7 +60,6 @@ class Detection {
             field('RECEIVER_DOWNLOAD_ID')
         )
         .values(
-            sequenceByName('hibernate_sequence').nextval(),
             ISO8601_TIMESTAMP_FORMATTER.print(det.timestamp),
             det.receiverName,
             det.transmitterId,
@@ -78,24 +76,31 @@ class Detection {
         return insert.getSQL(ParamType.INLINED)
     }
 
-    static def fromSqlRow(def row) {
-        def detection = [
-            id: row.detection_id,
-            timestamp: new DateTime(row.timestamp).withZone(DateTimeZone.UTC),
-            receiverName: row.receiver_name,
-            transmitterId: row.transmitter_id,
-            transmitterName: row.transmitter_name,
-            transmitterSerialNumber: row.transmitter_serial_number,
-            sensorValue: row.sensor_value,
-            sensorUnit: row.sensor_unit,
-            stationName: row.station_name,
-            latitude: row.latitude,
-            longitude: row.longitude,
-            receiverDownloadId: row.receiver_download_id
-        ]
+    static def fromSqlRow(def row, def detection) {
+        detection.id = row.detection_id
+        detection.timestamp = new DateTime(row.timestamp).withZone(DateTimeZone.UTC)
+        detection.receiverName = row.receiver_name
+        detection.transmitterId = row.transmitter_id
+        detection.transmitterName = row.transmitter_name
+        detection.transmitterSerialNumber = row.transmitter_serial_number
+        detection.sensorValue = row.sensor_value
+        detection.sensorUnit = row.sensor_unit
+        detection.stationName = row.station_name
+        detection.latitude = row.latitude
+        detection.longitude = row.longitude
+        detection.receiverDownloadId = row.receiver_download_id
 
-        return detection
+        return detection as Detection
     }
+
+    def save(dataSource) {
+        def sql = new Sql(dataSource)
+        def insertedIds = sql.executeInsert(toSqlInsertInlined())
+        def id = insertedIds[0][0]
+
+        return DetectionView.get(id, dataSource)
+    }
+
 
     String getCsvFormattedTimestamp() {
         return CSV_TIMESTAMP_FORMATTER.print(timestamp)

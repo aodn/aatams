@@ -39,35 +39,13 @@ class DetectionView extends Detection implements Embargoable {
     Long surgeryId
     Long tagProjectId
     String commonName
+    String invalidReason
     String organisationName
     String scientificName
     String sensorId
     String spcode
     String stationStationName
     String uploader
-
-    static def fromSqlRow(def row) {
-        def detection = Detection.fromSqlRow(row) as DetectionView
-
-        detection.commonName = row.common_name
-        detection.embargoDate = new DateTime(row.embargo_date).withZone(DateTimeZone.UTC)
-        detection.organisationName = row.organisation_name
-        detection.receiverDeploymentId = row.receiver_deployment_id
-        detection.releaseId = row.release_id
-        detection.releaseProjectId = row.release_project_id
-        detection.tagProjectId = row.tag_project_id
-        detection.scientificName = row.scientific_name
-        detection.sensorId = row.sensor_id
-        detection.spcode = row.spcode
-        detection.stationId = row.station_id
-        detection.stationLatitude = row.station_latitude
-        detection.stationLongitude = row.station_longitude
-        detection.stationStationName = row.station_station_name
-        detection.surgeryId = row.surgery_id
-        detection.uploader = row.uploader
-
-        return detection
-    }
 
     InstallationStation getInstallationStation() {
         return InstallationStation.get(stationId)
@@ -140,8 +118,47 @@ class DetectionView extends Detection implements Embargoable {
         !sensorId && !speciesName
     }
 
+    static def fromSqlRow(def row, def detection) {
+        Detection.fromSqlRow(row, detection)
+
+        detection.commonName = row.common_name
+        detection.embargoDate = new DateTime(row.embargo_date).withZone(DateTimeZone.UTC)
+        detection.invalidReason = row.invalid_reason
+        detection.organisationName = row.organisation_name
+        detection.receiverDeploymentId = row.receiver_deployment_id
+        detection.releaseId = row.release_id
+        detection.releaseProjectId = row.release_project_id
+        detection.tagProjectId = row.tag_project_id
+        detection.scientificName = row.scientific_name
+        detection.sensorId = row.sensor_id
+        detection.spcode = row.spcode
+        detection.stationId = row.station_id
+        detection.stationLatitude = row.station_latitude
+        detection.stationLongitude = row.station_longitude
+        detection.stationStationName = row.station_station_name
+        detection.surgeryId = row.surgery_id
+        detection.uploader = row.uploader
+
+        return detection as DetectionView
+
+    }
+
+    static def fromSqlRow(def row) {
+        def detection = [:]
+        return fromSqlRow(row, detection)
+    }
+
     // GORM-like methods.
+    def refresh(dataSource) {
+        get(this.id, dataSource, this)
+    }
+
     static Detection get(id, dataSource) {
+        return get(id, dataSource, [:])
+    }
+
+    static Detection get(id, dataSource, detection) {
+
         DSLContext create = DSL.using(SQLDialect.POSTGRES);
         def query =
             create
@@ -151,7 +168,7 @@ class DetectionView extends Detection implements Embargoable {
 
         def sql = new Sql(dataSource)
 
-        return DetectionView.fromSqlRow(sql.firstRow(query.getSQL(), query.getBindValues()))
+        return DetectionView.fromSqlRow(sql.firstRow(query.getSQL(), query.getBindValues()), detection)
     }
 
     static String getViewName() {

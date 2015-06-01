@@ -37,27 +37,23 @@ databaseChangeLog = {
     changeSet(author: "jburgess", id: "1430268900000-02") {
         grailsChange {
             change {
-                log.warn "Waiting for file '/tmp/detections_loaded' to appear before moving on..."
-                while (!new File('/tmp/detections_loaded').exists()) {
+                // This provides a way to "pause" the migrations, in order to complete the manual load.
+                log.warn "Waiting for file '/tmp/detections_loading' to disappear before moving on..."
+                while (new File('/tmp/detections_loading').exists()) {
                     sleep(10000)
                 }
 
                 sql.execute("""
-                    UPDATE detection
+                    UPDATE aatams.detection
                     SET duplicate = true
-                    WHERE id IN (
-                      SELECT id FROM (
-                        SELECT
-                          id,
-                          ROW_NUMBER() OVER(PARTITION BY
-                            timestamp,
-                            transmitter_id,
-                            receiver_name ORDER BY id ASC
-                          ) > 1 AS duplicate
-                        FROM detection
-                      ) d
-                      WHERE duplicate = true
-                    );
+                    WHERE ctid = ANY(
+                      ARRAY(
+                        SELECT ctid FROM (
+                          SELECT id, ROW_NUMBER() OVER(PARTITION BY timestamp, transmitter_id, receiver_name ORDER BY id ASC) > 1 AS duplicate, ctid
+                          FROM aatams.detection
+                        ) d WHERE duplicate = true
+                      )
+                    )
                     """)
             }
         }

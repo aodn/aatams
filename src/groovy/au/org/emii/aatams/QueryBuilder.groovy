@@ -52,17 +52,13 @@ abstract class QueryBuilder {
     }
 
     private void addBetweenClauses(query, filterParams) {
-        ["timestamp": filterParams?.filter?.between].each
-        {
-            field, filterValues ->
+        def fromTimestamp = filterParams?.filter?.'between.1'
+        def toTimestamp = filterParams?.filter?.'between.2'
 
-            if (filterValues)
-            {
-                assert(filterValues?."1") : "Start date/time must be specified"
-                assert(filterValues?."2") : "End date/time must be specified"
-
-                query.where(DSL.fieldByName(field).between(new java.sql.Timestamp(filterValues?."1"?.getTime())).and(new java.sql.Timestamp(filterValues?."2"?.getTime())))
-            }
+        if (fromTimestamp && toTimestamp) {
+            query.where(DSL.fieldByName('timestamp')
+                        .between(new java.sql.Timestamp(fromTimestamp.getTime()))
+                        .and(new java.sql.Timestamp(toTimestamp.getTime())))
         }
     }
 

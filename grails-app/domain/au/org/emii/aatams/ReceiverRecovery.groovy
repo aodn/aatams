@@ -1,12 +1,10 @@
 package au.org.emii.aatams
 
-import org.hibernatespatial.GeometryUserType
-
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
 import org.joda.time.*
-import org.joda.time.contrib.hibernate.*
+import org.jadira.usertype.dateandtime.joda.*
 
 /**
  * Receiver recovery is the process of retrieving a receiver from the field and
@@ -24,14 +22,13 @@ class ReceiverRecovery
     static belongsTo = [deployment: ReceiverDeployment, recoverer: ProjectRole]
     static mapping =
     {
-        recoveryDateTime type: PersistentDateTimeTZ,
+        recoveryDateTime type: PersistentDateTimeWithZone,
         {
             column name: "recoveryDateTime_timestamp"
             column name: "recoveryDateTime_zone"
         }
 
         comments type: 'text'
-        location type: GeometryUserType
     }
     static auditable = true
 

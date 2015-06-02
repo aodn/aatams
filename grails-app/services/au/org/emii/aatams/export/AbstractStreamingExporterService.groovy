@@ -7,11 +7,10 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import javax.servlet.http.Cookie
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
-
 abstract class AbstractStreamingExporterService
 {
     def dataSource
+    def grailsApplication
 
     protected abstract void writeCsvHeader(OutputStream out)
     protected abstract def writeCsvRow(resultList, OutputStream out)
@@ -72,7 +71,7 @@ abstract class AbstractStreamingExporterService
 
     protected int getFetchSize()
     {
-        return ConfigurationHolder.config.detection.extract.fetchSize
+        return grailsApplication.config.detection.extract.fetchSize
     }
 
     protected void writeCsvData(final params, OutputStream out)

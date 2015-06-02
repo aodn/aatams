@@ -2,8 +2,6 @@ package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder as GrailsConfig
-
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;

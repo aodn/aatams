@@ -1,7 +1,5 @@
 package au.org.emii.aatams.detection
 
-import org.hibernatespatial.GeometryUserType
-
 import au.org.emii.aatams.util.GeometryUtils
 import au.org.emii.aatams.util.SqlUtils
 
@@ -58,15 +56,8 @@ abstract class RawDetection
         formattedTimestamp(nullable:true)
     }
 
-//    static belongsTo = [receiverDownload:ReceiverDownloadFile]
-
-    static mapping =
-    {
-//        timestamp index:'timestamp_index'
-//        transmitterId index:'transmitterId_index'
-//        receiverName index:'receiverName_index'
+    static mapping = {
         cache true
-        location type: GeometryUserType
     }
 
     boolean isValid()

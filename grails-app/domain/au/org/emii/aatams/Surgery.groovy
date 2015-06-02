@@ -1,7 +1,7 @@
 package au.org.emii.aatams
 
 import org.joda.time.*
-import org.joda.time.contrib.hibernate.*
+import org.jadira.usertype.dateandtime.joda.*
 
 /**
  * Surgery is the process of attaching/implanting a tag to/in an animal (given
@@ -16,7 +16,7 @@ class Surgery implements Embargoable
 
     static mapping =
     {
-        timestamp type: PersistentDateTimeTZ,
+        timestamp type: PersistentDateTimeWithZone,
         {
             column name: "timestamp_timestamp"
             column name: "timestamp_zone"

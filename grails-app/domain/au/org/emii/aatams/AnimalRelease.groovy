@@ -1,12 +1,10 @@
 package au.org.emii.aatams
 
-import org.hibernatespatial.GeometryUserType
-
 import au.org.emii.aatams.util.GeometryUtils
 
 import com.vividsolutions.jts.geom.Point
 import org.joda.time.*
-import org.joda.time.contrib.hibernate.*
+import org.jadira.usertype.dateandtime.joda.*
 
 /**
  * Animal release is the process of capturing, tagging and releasing an animal,
@@ -25,21 +23,19 @@ class AnimalRelease implements Embargoable
 
     static mapping =
     {
-        captureDateTime type: PersistentDateTimeTZ,
+        captureDateTime type: PersistentDateTimeWithZone,
         {
             column name: "captureDateTime_timestamp"
             column name: "captureDateTime_zone"
         }
 
-        releaseDateTime type: PersistentDateTimeTZ,
+        releaseDateTime type: PersistentDateTimeWithZone,
         {
             column name: "releaseDateTime_timestamp"
             column name: "releaseDateTime_zone"
         }
 
         comments type: 'text'
-        captureLocation type: GeometryUserType
-        releaseLocation type: GeometryUserType
     }
 
     static searchable =

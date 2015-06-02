@@ -4,8 +4,9 @@ import org.codehaus.groovy.grails.web.pages.GroovyPagesTemplateEngine
 import org.springframework.web.context.request.RequestContextHolder
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
 import org.springframework.web.context.support.WebApplicationContextUtils
-import org.codehaus.groovy.grails.plugins.PluginManagerHolder
-import org.codehaus.groovy.grails.commons.GrailsResourceUtils
+
+import grails.util.Holders
+import org.codehaus.groovy.grails.io.support.GrailsResourceUtils
 
 class GrailsTemplateEngineService {
 
@@ -44,7 +45,7 @@ class GrailsTemplateEngineService {
         // Try plugin view if not found in application
         if ((!r || !r.exists()) && pluginName) {
             // Caution, this uses views/ always, whereas our app view resolution uses the PATH_TO_MAILVIEWS which may in future be orthogonal!
-            def plugin = PluginManagerHolder.pluginManager.getGrailsPlugin(pluginName)
+            def plugin = Holders.pluginManager.getGrailsPlugin(pluginName)
             String pathToView
             if (plugin) {
                 pathToView = '/plugins/'+plugin.name+'-'+plugin.version+'/'+GrailsResourceUtils.GRAILS_APP_DIR+'/views'+templateName
@@ -56,7 +57,7 @@ class GrailsTemplateEngineService {
             }
         }
         def t = engine.createTemplate( r )
-        
+
         def out = new StringWriter();
         def originalOut = requestAttributes.getOut()
         requestAttributes.setOut(out)
@@ -108,4 +109,3 @@ class GrailsTemplateEngineService {
     }
 
 }
-

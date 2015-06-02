@@ -1,32 +1,32 @@
 package au.org.emii.aatams.bulk
 
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.joda.time.DateTime
 
-import au.org.emii.aatams.Organisation;
+import au.org.emii.aatams.Organisation
 
-class BulkImport 
+class BulkImport
 {
+    def grailsApplication
     Organisation organisation
     DateTime importStartDate
     DateTime importFinishDate
     BulkImportStatus status
     String filename
-    
+
     static hasMany = [records: BulkImportRecord]
-    
+
     static transients = ['path']
-    
-    static constraints = 
+
+    static constraints =
     {
         importFinishDate(nullable:true)
     }
-    
+
     String getPath()
     {
-        return ConfigurationHolder.config.bulkimport.path + File.separator + id + File.separator + filename
+        return grailsApplication.config.bulkimport.path + File.separator + id + File.separator + filename
     }
-    
+
     String toString()
     {
         return "Organisation: " + String.valueOf(organisation) + " on " + String.valueOf(importStartDate)

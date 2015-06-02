@@ -2,7 +2,6 @@ package au.org.emii.aatams
 
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware

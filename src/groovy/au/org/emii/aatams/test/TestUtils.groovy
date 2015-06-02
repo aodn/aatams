@@ -1,8 +1,5 @@
 package au.org.emii.aatams.test
 
-import groovy.sql.Sql
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
-
 /**
  * Utility methods common to all tests.
  *

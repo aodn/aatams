@@ -7,8 +7,6 @@ import grails.converters.XML
 
 class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
 {
-    def user
-
     protected void setUp()
     {
         super.setUp()
@@ -75,7 +73,7 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
         controller.request.format = 'xml'
         controller.params.type = 'VUE_XML_ZIPPED'
         controller.params.'example.zip' = '@example.zip'
-        
+
         controller.request.metaClass.getFileMap = {
             ['example.zip': []]
         }
@@ -93,7 +91,7 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
         controller.request.format = 'xml'
         controller.params.type = 'VUE_XML_ZIPPED'
         controller.params.'example.zip' = '@example.zip'
-        
+
         // No file attached.
         controller.request.metaClass.getFileMap = {
             [:]
@@ -123,7 +121,7 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
         assertEquals("some xml", controller.response.contentAsString)
     }
 
-    def createDownload() 
+    def createDownload()
     {
         ReceiverDownloadFile download = new ReceiverDownloadFile(status: FileProcessingStatus.PROCESSING)
         download.save()

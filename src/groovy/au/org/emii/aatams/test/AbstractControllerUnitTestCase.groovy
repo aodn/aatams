@@ -16,7 +16,7 @@ import au.org.emii.aatams.report.ReportInfoService
 abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 {
     protected hasRole = true
-    protected user
+    protected Person user
     protected authenticated = true
     protected permitted = false
 
@@ -69,6 +69,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
         }
 
         controller.params.format = "PDF"
+        controller.request.method = 'POST'
 
         ExportService.metaClass.getExporter =
         {

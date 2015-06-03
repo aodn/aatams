@@ -14,8 +14,6 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
 
     boolean mailSent
 
-    def user
-
     protected void setUp()
     {
         super.setUp()

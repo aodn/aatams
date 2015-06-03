@@ -130,11 +130,6 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         permitted = true
     }
 
-    protected void tearDown()
-    {
-        super.tearDown()
-    }
-
     protected boolean isPermitted()
     {
         return true
@@ -173,6 +168,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
     void testSaveNoAnimalOrSpecies()
     {
         addOneSurgeryToParams()
+
         def model = controller.save()
 
         assertNull(model.animalReleaseInstance.animal)

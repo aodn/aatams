@@ -31,7 +31,7 @@ class JdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends Abstr
         exportFile << '''Date and Time (UTC),Receiver,Transmitter,Transmitter Name,Transmitter Serial,Sensor Value,Sensor Unit,Station Name,Latitude,Longitude\n'''
     }
 
-    protected void tearDown()
+    void tearDown()
     {
         exportFile?.delete()
         getRefreshedExport(export)?.delete()

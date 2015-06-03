@@ -41,6 +41,7 @@ environments {
             url = "jdbc:postgresql://localhost:5432/aatams_test"
             username = "aatams_test"
             password = "aatams_test"
+            grails.plugin.databasemigration.dropOnStart = true
         }
     }
 

@@ -1,5 +1,3 @@
-
-
 <%@ page import="au.org.emii.aatams.AnimalRelease" %>
 <html>
     <head>
@@ -7,7 +5,7 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'animalRelease.label', default: 'AnimalRelease')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
-        
+
         <g:javascript src="speciesLookup.js" />
         <g:javascript src="animalLookup.js" />
         <g:javascript src="animalRelease.js" />
@@ -38,7 +36,7 @@
                 <div class="dialog">
                     <table>
                         <tbody>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="project"><g:message code="animalRelease.project.label" default="Project" /></label>
@@ -48,7 +46,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="species"><g:message code="animalRelease.animal.species.label" default="Species" /></label>
@@ -58,30 +56,31 @@
                                   <g:textField name="speciesName" value="${species?.name}" />
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="sex"><g:message code="animalRelease.animal.sex.label" default="Sex" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'sex', 'errors')}">
-                                    <g:select name="sex.id" 
-                                              from="${au.org.emii.aatams.Sex.list()}" 
-                                              optionKey="id" value="${animalReleaseInstance?.animal?.sex?.id}" 
+                                    <g:select name="sex.id"
+                                              from="${au.org.emii.aatams.Sex.list()}"
+                                              optionKey="id" value="${animalReleaseInstance?.animal?.sex?.id}"
                                               noSelection="['':'Not specified']"/>
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="animal"><g:message code="animalRelease.animal.label" default="Animal" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'animal', 'errors')}">
-                                    <g:select name="animal.id" 
-                                              optionKey="id" 
+                                    <g:select name="animal.id"
+                                              from="[]"
+                                              optionKey="id"
                                               noSelection="['':'New animal']"/>
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="captureLocality"><g:message code="animalRelease.captureLocality.label" default="Capture Locality" /></label>
@@ -91,31 +90,31 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label for="captureLocation"><g:message code="animalRelease.captureLocation.label" default="Capture Location" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureLocation', 'errors')}">
-                                  <g:point name="captureLocation" 
+                                  <g:point name="captureLocation"
                                            value="${animalReleaseInstance?.captureLocation}"
                                            editable="${true}"/>
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="captureDateTime"><g:message code="animalRelease.captureDateTime.label" default="Capture Date Time" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'captureDateTime', 'errors')}">
-                                    <joda:dateTimePicker name="captureDateTime" 
+                                    <joda:dateTimePicker name="captureDateTime"
                                                          class="remember"
                                                          value="${animalReleaseInstance?.captureDateTime}"
                                                          useZone="true"/>
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="captureMethod"><g:message code="animalRelease.captureMethod.label" default="Capture Method" /></label>
@@ -124,7 +123,7 @@
                                     <g:select name="captureMethod.id" class="remember" from="${au.org.emii.aatams.CaptureMethod.list()}" optionKey="id" value="${animalReleaseInstance?.captureMethod?.id}"  />
                                 </td>
                             </tr>
-                        
+
                             <!-- Surgeries -->
                             <tr>
                                 <td valign="top" class="name">
@@ -132,7 +131,7 @@
                                 </td>
 
                                 <td valign="top" class="value">
-                                  
+
                                   <table class="nested">
                                     <thead>
                                       <tr>
@@ -149,7 +148,7 @@
                                       <tr><td><br/></td></tr>
                                       <tr>
                                         <td colspan="5">
-                                          <a href="#" 
+                                          <a href="#"
                                              id='add_surgery_to_animal_release'>${message(code: 'default.addModal.label', args: [message(code: 'surgery.label', default: 'Tagging')])}</a>
                                         </td>
                                       </tr>
@@ -157,9 +156,9 @@
                                     </tbody>
                                   </table>
 
-                                </td>  
+                                </td>
                             </tr>
-                            
+
                             <!-- Measurements -->
                             <tr>
                                 <td valign="top" class="name">
@@ -167,7 +166,7 @@
                                 </td>
 
                                 <td valign="top" class="value">
-                                  
+
                                   <table class="nested">
                                     <thead>
                                       <tr>
@@ -184,7 +183,7 @@
                                       <tr><td><br/></td></tr>
                                       <tr>
                                         <td colspan="5">
-                                          <a href="#" 
+                                          <a href="#"
                                              id='add_measurement_to_animal_release'>${message(code: 'default.addModal.label', args: [message(code: 'measurement.label', default: 'Measurement...')])}</a>
                                         </td>
                                       </tr>
@@ -194,7 +193,7 @@
 
                                 </td>
                             </tr>
-                            
+
 
                             <tr class="prop">
                                 <td valign="top" class="name">
@@ -205,7 +204,7 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label for="releaseLocation"><g:message code="animalRelease.releaseLocation.label" default="Release Location" /></label>
@@ -216,19 +215,19 @@
                                            editable="${true}"/>
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="releaseDateTime"><g:message code="animalRelease.releaseDateTime.label" default="Release Date Time" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'releaseDateTime', 'errors')}">
-                                    <joda:dateTimePicker name="releaseDateTime" 
+                                    <joda:dateTimePicker name="releaseDateTime"
                                                          value="${animalReleaseInstance?.releaseDateTime}"
                                                          useZone="true"/>
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label for="comments"><g:message code="animalRelease.comments.label" default="Comments" /></label>
@@ -246,15 +245,14 @@
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'embargoDate', 'errors')}">
                                     <g:select from="${embargoPeriods}"
                                               class="noAutocompleteCombo"
-                                              name="embargoPeriod" 
+                                              name="embargoPeriod"
                                               value=""
                                               optionKey="key"
                                               optionValue="value"
                                               noSelection="['':'No embargo']"/>
                                 </td>
                             </tr>
-                        
-                        
+
                         </tbody>
                     </table>
                 </div>
@@ -263,7 +261,7 @@
                 </div>
             </g:form>
         </div>
-      
+
         <div id='dialog-form-add-surgery'></div>
         <div id='dialog-form-add-measurement'></div>
     </body>

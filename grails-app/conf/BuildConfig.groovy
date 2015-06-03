@@ -38,6 +38,7 @@ grails.project.dependency.resolution = {
         compile('org.postgis:postgis-jdbc:1.3.3') {
             excludes 'postgis-stubs'
         }
+        runtime 'org.grails:grails-web-databinding-spring:2.4.4'
         runtime 'org.postgresql:postgresql:9.4-1201-jdbc41'
         test 'xmlunit:xmlunit:1.6'
     }
@@ -48,13 +49,16 @@ grails.project.dependency.resolution = {
 
         compile ':audit-logging:1.0.4'
         compile ':csv:0.3.1'
+        compile ":executor:0.3"
         compile ':hibernate-spatial:0.0.4'
         compile ':hibernate-spatial-postgresql:0.0.4'
         compile(':jasper:1.11.0') {
             excludes 'lucene-core', 'lucene-analyzers-common', 'lucene-queryparser'
         }
         compile ':joda-time:1.5'
+        compile ":mail:1.0.7"
         compile ':plugin-config:0.2.0'
+        compile ":quartz:1.0.2"
         compile ':scaffolding:2.1.2'
         compile ':searchable:0.6.9'
         compile ':shiro:1.2.1'
@@ -63,8 +67,6 @@ grails.project.dependency.resolution = {
         runtime ':hibernate:3.6.10.19'
 
 // plugins.build-test-data=1.1.1
-// plugins.executor=0.2
-// plugins.mail=1.0-SNAPSHOT
 // plugins.quartz=0.4.2
 
 
@@ -72,6 +74,7 @@ grails.project.dependency.resolution = {
 // plugins.code-coverage=1.2.4
 // plugins.csv=0.3
 // plugins.database-migration=1.0
+// plugins.executor=0.2
 // plugins.file-uploader=1.1
 // plugins.functional-test-development=0.2
 // plugins.grails-template-engine=0.2
@@ -80,6 +83,7 @@ grails.project.dependency.resolution = {
 // plugins.hibernate-spatial-postgresql=0.0.4
 // plugins.jasper=1.5.3
 // plugins.joda-time=1.2
+// plugins.mail=1.0-SNAPSHOT
 // plugins.perf4j=0.1.1
 // plugins.plugin-config=0.1.5
 // plugins.searchable=0.6.3

@@ -57,6 +57,7 @@ grails.exceptionresolver.params.exclude = ['password']
 
 grails.gsp.tldScanPattern='classpath*:/META-INF/*.tld,/WEB-INF/tld/*.tld'
 grails.databinding.convertEmptyStringsToNull = false
+grails.databinding.useSpringBinder = true
 
 //
 // JSON config.
@@ -201,6 +202,7 @@ log4j =
                    "grails.app.domain.au.org.emii.aatams.Receiver",
                    "grails.app.domain.au.org.emii.aatams.bulk",
                    "grails.app.domain.au.org.emii.aatams.ReceiverDownloadFile",
+                   "grails.app.service.au.org.emii.aatams.FileProcessorService",
                    "grails.app.service.au.org.emii.aatams.filter.QueryService",
                    "grails.app.service.au.org.emii.aatams.detection.VueDetectionFileProcessorService",
                    "grails.app.service.au.org.emii.aatams.detection.DetectionExtractService",

@@ -15,7 +15,6 @@ class Project
     static auditable = true
 
     String name
-    String description
     boolean isProtected = false
 
     // These couple of attributes allow any authenticated user to request
@@ -26,7 +25,6 @@ class Project
     static constraints =
     {
         name(blank:false, unique:true)
-        description(nullable:true, blank:true)
         status()
         requestingUser(nullable:true)
         isProtected()
@@ -39,7 +37,7 @@ class Project
         sort "name"
     }
 
-    static searchable = [only: ['name', 'description']]
+    static searchable = [only: ['name']]
 
     String toString()
     {

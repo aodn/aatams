@@ -11,15 +11,13 @@ class ProjectCreateCommand
     Organisation organisation
     Person person   // TODO: rename to principalInvestigator
     String name
-    String description
     boolean isProtected
 
     Project createProject()
     {
-        def project = new Project(name:name, description:description)
+        def project = new Project(name: name)
         project.addToOrganisationProjects(new OrganisationProject(organisation:organisation, project:project))
 
         return project
     }
 }
-

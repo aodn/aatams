@@ -9,13 +9,15 @@ class ReceiverTests extends GrailsUnitTestCase
     Receiver rx1
     Receiver rx2
 
-    protected void setUp()
+    @Override
+    void setUp()
     {
         super.setUp()
 
         ReceiverDeviceModel model = new ReceiverDeviceModel(modelName: "VR2W")
         mockDomain(ReceiverDeviceModel, [model])
 
+        mockDomain(Receiver)
         rx1 = new Receiver(serialNumber:"1111",
                            model:model,
                            organisation:new Organisation())
@@ -23,8 +25,7 @@ class ReceiverTests extends GrailsUnitTestCase
                            model:model,
                            organisation:new Organisation())
 
-        mockDomain(Receiver, [rx1, rx2])
-        mockForConstraintsTests(Receiver, [rx1, rx2])
+        [ rx1, rx2 ].each { it.save() }
 
         DeviceStatus newStatus = new DeviceStatus(status: 'NEW')
         DeviceStatus deployedStatus = new DeviceStatus(status: 'DEPLOYED')
@@ -37,11 +38,6 @@ class ReceiverTests extends GrailsUnitTestCase
         mockDomain(ReceiverDeployment)
         mockDomain(ReceiverRecovery)
         mockLogging(Receiver)
-    }
-
-    protected void tearDown()
-    {
-        super.tearDown()
     }
 
     void testNonUniqueSerialNumber()

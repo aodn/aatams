@@ -1,0 +1,21 @@
+
+h1. toCsvMapReader
+
+h2. Purpose
+
+
+
+h2. Examples
+
+{code:java}
+foo.toCsvMapReader(object)
+{code}
+
+h2. Description
+
+
+
+Arguments:
+
+[* @object@
+]

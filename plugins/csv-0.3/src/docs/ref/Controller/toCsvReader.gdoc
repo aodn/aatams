@@ -1,0 +1,21 @@
+
+h1. toCsvReader
+
+h2. Purpose
+
+
+
+h2. Examples
+
+{code:java}
+foo.toCsvReader(object)
+{code}
+
+h2. Description
+
+
+
+Arguments:
+
+[* @object@
+]

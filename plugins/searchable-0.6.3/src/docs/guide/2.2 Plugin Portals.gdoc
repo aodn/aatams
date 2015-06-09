@@ -1,0 +1,3 @@
+When a Grails plugin is published to a repository, a plugin portal can optionally be notified of the release. For example, when you publish a plugin to the Grails Central Plugin Repository, the command will automatically notify the [main plugin portal|http://grails.org/plugins] on the grails.org website. That means that people can see the details of the new release almost immediately.
+
+

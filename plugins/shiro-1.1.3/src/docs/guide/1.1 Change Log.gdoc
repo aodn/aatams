@@ -1,0 +1,51 @@
+The plugin has gone through several versions. Find out what changed between them here.
+
+h2. Version 1.1
+
+* SHA-256 is now used by the default credential matcher
+* New ShiroSecurityService that can be used to encode passwords with the same hash algorithm as the configured credential matcher
+* Uses the 1.1 release of Apache Shiro
+* Renamed @quick-start@ command to @shiro-quick-start@ \ 
+* Realms can implement the @org.apache.shiro.authc.LogoutAware@ interface and be notified of when the user logs out
+* the @security.shiro.filter.config@ setting is deprecated in favour of @security.shiro.filter.filterChainDefinitions@ + other configuration options. It will continue to work though.
+
+
+h3. Breaking changes
+
+*  @WebUtils@  and  @SavedRequest@  (used in the recent  @AuthController@  templates) have moved from the  @org.apache.shiro.web@  package to  @org.apache.shiro.web.util@ \ 
+* shiroSecurityManager no longer has a @login()@ method, so @AuthController@ should use @SecurityUtils.subject.login()@ instead
+
+You can also see which issues have been fixed in the [JIRA release notes|http://jira.codehaus.org/secure/ReleaseNote.jspa?projectId=11450&version=15888].
+
+h2. Version 1.0
+
+* These are changes from the last version of the JSecurity plugin*
+
+* Configuration settings now start  @security.shiro@  rather than  @jsecurity@ .
+
+* Except  @jsecurity.legacy.filter.enabled@  which is now  @security.shiro.annotationdriven.enabled@ .
+
+* All  @org.jsecurity@  packages are now  @org.apache.shiro@ .
+
+* New  @create-wildcard-realm@  command that creates a database realm based on Shiro's wildcard string permissions. This is simpler than the old DB realm.
+
+* Access control by convention now uses wildcard permissions rather than  @JsecBasicPermission@ .
+
+* You can now configure an alternative login URL that the plugin will redirect to:  @security.shiro.redirect.uri@ .
+
+* You can now override the default permission resolver, remember me manager and authentication strategy by defining your own beans with the appropriate names ( @shiroPermissionResolver@ ,  @shiroRememberMeManager@ ,  @shiroAuthenticationStrategy@ ).
+
+* Implemented [GRAILSPLUGINS-627|http://jira.codehaus.org/browse/GRAILSPLUGINS-627]: you can now protect URLs using Shiro's standard  @FormAuthenticationFilter@ .
+
+* Fixed [GRAILSPLUGINS-869|http://jira.codehaus.org/browse/GRAILSPLUGINS-869]: HTTP Basic authentication no longer throws an exception for an empty username or password.
+
+* The  @quick-start@  command now creates a wildcard permission based database realm, although it has the default name  @ShiroDbRealm@  when installed.
+
+There is one important breaking change if you already have an  @AuthController@  class generated from an earlier version of the Shiro or JSecurity plugins:
+{code}
+this.securityManager.login(authToken)
+{code}becomes
+{code}
+SecurityUtils.subject.login(authToken)
+{code}
+

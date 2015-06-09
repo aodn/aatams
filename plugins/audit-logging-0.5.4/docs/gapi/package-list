@@ -1,0 +1,7 @@
+DefaultPackage
+grails-app.conf
+grails-app.controllers.org.codehaus.groovy.grails.plugins.orm.auditable
+grails-app.domain.org.codehaus.groovy.grails.plugins.orm.auditable
+scripts
+src.groovy.org.codehaus.groovy.grails.plugins.orm.auditable
+test.integration

@@ -1,0 +1,24 @@
+<plugin name='transaction-handling' version='0.1.3' grailsVersion='1.2.5 &gt; *'>
+  <author>Daniel Henrique Alves Lima</author>
+  <authorEmail>email_daniel_h@yahoo.com.br</authorEmail>
+  <title>Grails Transaction Handling Plugin</title>
+  <description>\
+Plugin for advanced management of transactions in Grails.
+Possibly a backport of http://jira.grails.org/browse/GRAILS-7093. 
+</description>
+  <documentation>http://grails.org/plugin/transaction-handling</documentation>
+  <resources>
+    <resource>BuildConfig</resource>
+    <resource>Config</resource>
+    <resource>DataSource</resource>
+    <resource>TransactionHandlingDefaultConfig</resource>
+    <resource>UrlMappings</resource>
+    <resource>grails.plugin.transaction.handling.TestUser</resource>
+    <resource>grails.plugin.transaction.handling.TestAnnotatedService</resource>
+    <resource>grails.plugin.transaction.handling.TestService</resource>
+  </resources>
+  <dependencies>
+    <plugin name='pluginConfig' version='0.1.3 &gt; *' />
+  </dependencies>
+  <behavior />
+</plugin>

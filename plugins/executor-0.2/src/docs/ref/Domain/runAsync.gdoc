@@ -1,0 +1,21 @@
+
+h1. runAsync
+
+h2. Purpose
+
+
+
+h2. Examples
+
+{code:java}
+foo.runAsync(runnable)
+{code}
+
+h2. Description
+
+
+
+Arguments:
+
+[* @runnable@
+]

@@ -2,6 +2,8 @@ grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 
+grails.project.plugins.dir = "./plugins"
+
 grails.project.dependency.resolution = {
 
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
@@ -10,12 +12,12 @@ grails.project.dependency.resolution = {
     }
 
     repositories {
-        grailsPlugins()
         grailsHome()
-        grailsCentral()
         mavenLocal()
         mavenCentral()
         mavenRepo "http://download.java.net/maven/2/"
+        mavenRepo "https://repo.grails.org/grails"
+        mavenRepo "https://repo.grails.org/grails/plugins"
     }
 
     dependencies {

@@ -1,0 +1,9 @@
+Anybody familiar with the Grails @release-plugin@ command should have little trouble switching to @publish-plugin@, but there are some important differences.
+
+h4. No --zipOnly option
+
+The @publish-plugin@ command does not manage your source control system, so you will have to manually check out the repository and commit your changes.
+
+h4. Configuration changes
+
+Although your old repository configurations will continue to work, i.e. ones like @grails.plugin.repos.distribution.<id>@, there is far more flexibility if you migrate to the latest style of repository and portal configuration.

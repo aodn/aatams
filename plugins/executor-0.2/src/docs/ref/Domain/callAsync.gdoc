@@ -1,0 +1,21 @@
+
+h1. callAsync
+
+h2. Purpose
+
+
+
+h2. Examples
+
+{code:java}
+foo.callAsync(closure)
+{code}
+
+h2. Description
+
+
+
+Arguments:
+
+[* @closure@
+]

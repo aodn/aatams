@@ -1,0 +1,30 @@
+<plugin name='executor' version='0.2' grailsVersion='1.2 &gt; *'>
+  <author>Joshua Burnett</author>
+  <authorEmail>joshua@greenbill.com</authorEmail>
+  <title>Concurrency / asynchronous /background process plugin</title>
+  <description>\ its all concurrent baby.</description>
+  <documentation>http://github.com/basejump/grails-executor</documentation>
+  <resources>
+    <resource>BuildConfig</resource>
+    <resource>Config</resource>
+    <resource>DataSource</resource>
+    <resource>UrlMappings</resource>
+    <resource>executor.test.Book</resource>
+  </resources>
+  <dependencies />
+  <behavior>
+    <method name='runAsync' artefact='Domain' type='executor.test.Book'>
+      <description />
+      <argument type='java.lang.Runnable' />
+    </method>
+    <method name='callAsync' artefact='Domain' type='executor.test.Book'>
+      <description />
+      <argument type='groovy.lang.Closure' />
+    </method>
+    <method name='callAsync' artefact='Domain' type='executor.test.Book'>
+      <description />
+      <argument type='java.lang.Runnable' />
+      <argument type='java.lang.Object' />
+    </method>
+  </behavior>
+</plugin>

@@ -1,0 +1,13 @@
+<plugin name='perf4j' version='0.1.1' grailsVersion='1.1 &gt; *'>
+  <author>Daniel Rinser</author>
+  <authorEmail>grails@danielrinser.de</authorEmail>
+  <title>Perf4J Integration Plugin</title>
+  <description>This plugin integrates the Perf4J performance statistics library (http://perf4j.codehaus.org) into Grails applications. It provides idiomatic 
+ways to profile individual code blocks and automatic, customizable profiling of service methods.</description>
+  <documentation>http://www.grails.org/plugin/perf4j</documentation>
+  <resources />
+  <dependencies>
+    <resolvers />
+  </dependencies>
+  <behavior />
+</plugin>

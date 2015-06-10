@@ -1,0 +1,19 @@
+<plugin name='hibernate-spatial' version='0.0.4' grailsVersion='1.2.0 &gt; *'>
+  <author>Daniel Henrique Alves Lima</author>
+  <authorEmail>email_daniel_h@yahoo.com.br</authorEmail>
+  <title>Hibernate Spatial Grails Plugin</title>
+  <description>\
+Provides support for using the Hibernate Spatial (http://www.hibernatespatial.org/) in Grails.
+</description>
+  <documentation>http://grails.org/plugin/hibernate-spatial</documentation>
+  <resources>
+    <resource>BuildConfig</resource>
+    <resource>Config</resource>
+    <resource>DataSource</resource>
+    <resource>UrlMappings</resource>
+  </resources>
+  <dependencies>
+    <plugin name='pluginConfig' version='0.1.5 &gt; *' />
+  </dependencies>
+  <behavior />
+</plugin>

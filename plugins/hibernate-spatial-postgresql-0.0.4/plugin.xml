@@ -1,0 +1,19 @@
+<plugin name='hibernate-spatial-postgresql' version='0.0.4' grailsVersion='1.2.0 &gt; *'>
+  <author>Daniel Henrique Alves Lima</author>
+  <authorEmail>email_daniel_h@yahoo.com.br</authorEmail>
+  <title>Hibernate Spatial PostgreSQL/PostGIS Grails Plugin</title>
+  <description>\
+Hibernate Spatial Provider for PostgreSQL/PostGIS (http://www.hibernatespatial.org/hibernate-spatial-postgis/).
+</description>
+  <documentation>http://grails.org/plugin/hibernate-spatial-postgresql</documentation>
+  <resources>
+    <resource>BuildConfig</resource>
+    <resource>Config</resource>
+    <resource>DataSource</resource>
+    <resource>UrlMappings</resource>
+  </resources>
+  <dependencies>
+    <plugin name='hibernateSpatial' version='0.0.4' />
+  </dependencies>
+  <behavior />
+</plugin>

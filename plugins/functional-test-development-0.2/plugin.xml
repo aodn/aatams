@@ -1,0 +1,17 @@
+<plugin name='functional-test-development' version='0.2' grailsVersion='* &gt; 1.3.5'>
+  <author>Luke Daley</author>
+  <authorEmail>ld@ldaley.com</authorEmail>
+  <title>Functional Test Development</title>
+  <description>Provides a script to make developing functional tests quicker</description>
+  <documentation>http://grails.org/plugin/functional-test-development</documentation>
+  <resources>
+    <resource>BuildConfig</resource>
+    <resource>Config</resource>
+    <resource>DataSource</resource>
+    <resource>UrlMappings</resource>
+    <resource>TheController</resource>
+    <resource>TheService</resource>
+  </resources>
+  <dependencies />
+  <behavior />
+</plugin>

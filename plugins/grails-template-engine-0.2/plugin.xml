@@ -1,0 +1,13 @@
+<plugin name='grails-template-engine' version='0.2' grailsVersion='1.1 &gt; *'>
+  <author>Peter Delahunty</author>
+  <authorEmail>peter.delahunty@solution51.com</authorEmail>
+  <title>Grails Template Engine</title>
+  <description>\
+This plugin exposes the GSP engine as a service. It allows you use the gsp template engine to render gsp out side the standard response.
+</description>
+  <documentation>http://grails.org/GrailsTemplateEngine+Plugin</documentation>
+  <resources>
+    <resource>GrailsTemplateEngineService</resource>
+  </resources>
+  <dependencies />
+</plugin>

@@ -1,0 +1,21 @@
+
+h1. eachLine
+
+h2. Purpose
+
+
+
+h2. Examples
+
+{code:java}
+foo.eachLine(object)
+{code}
+
+h2. Description
+
+
+
+Arguments:
+
+[* @object@
+]

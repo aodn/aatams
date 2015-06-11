@@ -66,7 +66,6 @@ abstract class AbstractBatchProcessor
         catch (Throwable t)
         {
             log.error t
-            log.error t.cause.nextException
 
             downloadFileError(downloadFile, t)
             throw t

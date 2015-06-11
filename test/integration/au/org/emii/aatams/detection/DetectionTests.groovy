@@ -1,15 +1,17 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
-
-import grails.test.*
-import groovy.sql.Sql
 import org.joda.time.DateTime
 
 class DetectionTests extends GroovyTestCase {
 
     def dataSource
+
     def now = new DateTime()
+    def yesterday = now.minusDays(1)
+    def dayBeforeYesterday = yesterday.minusDays(1)
+    def tomorrow = now.plusDays(1)
+    def dayAfterTomorrow = tomorrow.plusDays(1)
 
     void testInvalidReasonNoReceiver() {
         def detection = createDetection()
@@ -34,8 +36,8 @@ class DetectionTests extends GroovyTestCase {
 
     void testInvalidReasonRecoveryInitDateAfter() {
         def receiver = createReceiver()
-        def deployment = createDeployment(receiver: receiver, initDateTime: now.plusDays(1))
-        def recovery = createRecovery(deployment: deployment, recoveryDateTime: now.plusDays(2))
+        def deployment = createDeployment(receiver: receiver, initDateTime: tomorrow)
+        createRecovery(deployment: deployment, recoveryDateTime: dayAfterTomorrow)
         def detection = createDetection()
 
         assertInvalidReason(InvalidDetectionReason.NO_DEPLOYMENT_AND_RECOVERY_AT_DATE_TIME, detection)
@@ -43,8 +45,8 @@ class DetectionTests extends GroovyTestCase {
 
     void testInvalidReasonRecoveryRecoveryDateBefore() {
         def receiver = createReceiver()
-        def deployment = createDeployment(receiver: receiver, initDateTime: now.minusDays(2))
-        def recovery = createRecovery(deployment: deployment, recoveryDateTime: now.minusDays(1))
+        def deployment = createDeployment(receiver: receiver, initDateTime: dayBeforeYesterday)
+        createRecovery(deployment: deployment, recoveryDateTime: yesterday)
         def detection = createDetection()
 
         assertInvalidReason(InvalidDetectionReason.NO_DEPLOYMENT_AND_RECOVERY_AT_DATE_TIME, detection)
@@ -52,8 +54,8 @@ class DetectionTests extends GroovyTestCase {
 
     void testInvalidReasonDuplicate() {
         def receiver = createReceiver()
-        def deployment = createDeployment(receiver: receiver, initDateTime: now.minusDays(2))
-        def recovery = createRecovery(deployment: deployment, recoveryDateTime: now.plusDays(1))
+        def deployment = createDeployment(receiver: receiver, initDateTime: dayBeforeYesterday)
+        createRecovery(deployment: deployment, recoveryDateTime: tomorrow)
         def detection = createDetection()
 
         def duplicateDetection = createDetection()
@@ -64,8 +66,8 @@ class DetectionTests extends GroovyTestCase {
 
     void testValid() {
         def receiver = createReceiver()
-        def deployment = createDeployment(receiver: receiver, initDateTime: now.minusDays(2))
-        def recovery = createRecovery(deployment: deployment, recoveryDateTime: now.plusDays(1))
+        def deployment = createDeployment(receiver: receiver, initDateTime: dayBeforeYesterday)
+        createRecovery(deployment: deployment, recoveryDateTime: tomorrow)
         def detection = createDetection()
 
         assertInvalidReason(null, detection)
@@ -80,15 +82,15 @@ class DetectionTests extends GroovyTestCase {
         detection.refresh(dataSource)
         assertInvalidReason(InvalidDetectionReason.NO_DEPLOYMENT_AND_RECOVERY_AT_DATE_TIME, detection)
 
-        def deployment = createDeployment(receiver: receiver, initDateTime: now.minusDays(2))
+        def deployment = createDeployment(receiver: receiver, initDateTime: dayBeforeYesterday)
         detection.refresh(dataSource)
         assertInvalidReason(InvalidDetectionReason.NO_DEPLOYMENT_AND_RECOVERY_AT_DATE_TIME, detection)
 
-        def recovery = createRecovery(deployment: deployment, recoveryDateTime: now.minusDays(1))
+        def recovery = createRecovery(deployment: deployment, recoveryDateTime: yesterday)
         detection.refresh(dataSource)
         assertInvalidReason(InvalidDetectionReason.NO_DEPLOYMENT_AND_RECOVERY_AT_DATE_TIME, detection)
 
-        recovery.recoveryDateTime = now.plusDays(1)
+        recovery.recoveryDateTime = tomorrow
         recovery.save(flush: true)
         detection.refresh(dataSource)
         assertInvalidReason(null, detection)

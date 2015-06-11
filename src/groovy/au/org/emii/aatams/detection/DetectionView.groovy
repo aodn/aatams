@@ -153,11 +153,7 @@ class DetectionView extends Detection implements Embargoable {
         get(this.id, dataSource, this)
     }
 
-    static Detection get(id, dataSource) {
-        return get(id, dataSource, [:])
-    }
-
-    static Detection get(id, dataSource, detection) {
+    static Detection get(id, dataSource, detection = [:]) {
 
         DSLContext create = DSL.using(SQLDialect.POSTGRES);
         def query =

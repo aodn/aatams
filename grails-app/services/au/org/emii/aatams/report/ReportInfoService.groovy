@@ -1,6 +1,7 @@
 package au.org.emii.aatams.report
 
 import au.org.emii.aatams.*
+import au.org.emii.aatams.detection.Detection
 import au.org.emii.aatams.detection.DetectionView
 
 import org.joda.time.DateTime
@@ -15,6 +16,7 @@ class ReportInfoService
 {
     static transactional = false
 
+    def dataSource
     def permissionUtilsService
 
     def eventTimestampMin
@@ -99,8 +101,7 @@ class ReportInfoService
 
     private def getDetectionTimestampMin()
     {
-        // TODO: remove hardcoding :-)
-        return new DateTime('2007-08-01T00:00:00Z').toDate()
+        return Detection.getMinTimestamp(dataSource).toDate()
     }
 
     private def getEventTimestampMin()
@@ -133,9 +134,6 @@ class ReportInfoService
 
         def organisationRange = Organisation.findAllByStatus(EntityStatus.ACTIVE)*.name
         def installationRange = Installation.list()*.name
-
-        def timestampMin = getDetectionTimestampMin()
-        def timestampMax = new Date()
 
         def animalReleaseFilterParams =
         [
@@ -172,9 +170,9 @@ class ReportInfoService
                                                  propertyName:"spcode",
                                                 lookupPath:"/species/lookupByNameAndReturnSpcode"),
              new DateRangeReportParameter(label: propertyToLabel["timestamp"],
-                                           propertyName:"timestamp",
-                                          minRange:timestampMin,
-                                          maxRange:timestampMax)]
+                                          propertyName: "timestamp",
+                                          minRange: getDetectionTimestampMin(),
+                                          maxRange: new Date())]
 
         def eventFilterParams =
             [new AjaxMultiSelectReportParameter(label: propertyToLabel["receiverDeployment.station.installation.project.name"],

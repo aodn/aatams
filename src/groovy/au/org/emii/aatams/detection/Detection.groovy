@@ -101,7 +101,6 @@ class Detection {
         return DetectionView.get(id, dataSource)
     }
 
-
     String getCsvFormattedTimestamp() {
         return CSV_TIMESTAMP_FORMATTER.print(timestamp)
     }
@@ -118,5 +117,14 @@ class Detection {
         return this.timestamp == other.timestamp &&
                this.receiverName == other.receiverName &&
                this.transmitterId == other.transmitterId
+    }
+
+    static DateTime getMinTimestamp(dataSource) {
+        def min = using(dataSource, SQLDialect.POSTGRES)
+            .select(min(fieldByName('timestamp')))
+            .from(table('detection'))
+            .fetchOne(fieldByName('min'))
+
+       return new DateTime(min).withZone(DateTimeZone.UTC)
     }
 }

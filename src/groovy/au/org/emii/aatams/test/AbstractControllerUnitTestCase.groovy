@@ -62,6 +62,8 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 
             controller.reportInfoService = new ReportInfoService()
             controller.reportInfoService.permissionUtilsService = new PermissionUtilsService()
+            controller.reportInfoService.metaClass.getDetectionTimestampMin = { null }
+
         }
         catch (MissingPropertyException e)
         {

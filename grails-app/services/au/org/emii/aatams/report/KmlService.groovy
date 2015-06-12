@@ -1,16 +1,7 @@
 package au.org.emii.aatams.report
 
 import au.org.emii.aatams.*
-import au.org.emii.aatams.detection.ValidDetection
-import de.micromata.opengis.kml.v_2_2_0.Document
-import de.micromata.opengis.kml.v_2_2_0.Folder
-import de.micromata.opengis.kml.v_2_2_0.Icon
-import de.micromata.opengis.kml.v_2_2_0.IconStyle
-import de.micromata.opengis.kml.v_2_2_0.Kml
-import de.micromata.opengis.kml.v_2_2_0.LabelStyle
-import de.micromata.opengis.kml.v_2_2_0.ScreenOverlay
-import de.micromata.opengis.kml.v_2_2_0.Units
-import de.micromata.opengis.kml.v_2_2_0.Vec2
+import de.micromata.opengis.kml.v_2_2_0.*
 import groovy.sql.Sql
 
 import java.util.zip.ZipEntry
@@ -33,12 +24,10 @@ class KmlService implements ApplicationContextAware
     {
         assert(isSupportedFormat(params.format))
 
-        if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params.format))
-        {
+        if (params.format == 'KMZ') {
             generateKmz(generateKml(clazz, params), out)
         }
-        else if (params.format == "KML")
-        {
+        else if (params.format == "KML") {
             def kml = generateKml(clazz, params)
             kml.marshal(out)
         }
@@ -74,40 +63,13 @@ class KmlService implements ApplicationContextAware
 
     public boolean isSupportedFormat(String format)
     {
-        return ["KML", "KMZ", "KMZ (tag tracks)", "KMZ (bubble plot)"].contains(format)
+        return ["KML", "KMZ"].contains(format)
     }
 
     public Kml generateKml(clazz, params)
     {
-        def kml
-        def result
-
-        if (clazz == ValidDetection)
-        {
-            params.sql = new Sql(dataSource)
-            params.projectPermissionCache = [:]
-
-            result = detectionExtractService.extractPage(params).results
-        }
-        else
-        {
-            result = queryService.query(clazz, params, true).results
-        }
-
-        if (clazz == InstallationStation)
-        {
-            kml = toKml(result)
-        }
-        else if (params.format == "KMZ (tag tracks)")
-        {
-            kml = new SensorTrackKml(result, grailsApplication.config.grails.serverURL)
-        }
-        else if (params.format == "KMZ (bubble plot)")
-        {
-            kml = new DetectionBubblePlotKml(result, grailsApplication.config.grails.serverURL)
-        }
-
-        return kml
+        def result = queryService.query(clazz, params, true).results
+        return toKml(result)
     }
 
     public void generateKmz(kml, out)

@@ -175,9 +175,6 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
 
         assertCorrectResultsForListAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter)
         assertCorrectResultsForCsvExportAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter)
-
-        // KML feature disabled for now (see: https://github.com/aodn/aatams/issues/170)
-        // assertCorrectResultsForKmlExportAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter)
     }
 
     void assertCorrectResultsForListAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter) {
@@ -202,16 +199,16 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
                 assertEquals(description, 1, resultsFromListAction.size())
 
                 def detection = resultsFromListAction.first()
-                assertEquals description, "37010003 - Carcharodon carcharias (White Shark)", detection.speciesNames
-                assertEquals description, project.tags.sort().first().toString(), detection.sensorIds
+                assertEquals description, "37010003 - Carcharodon carcharias (White Shark)", detection.speciesName
+                assertEquals description, project.tags.sort().first().toString(), detection.sensorId
                 break
 
             case VISIBLE_BUT_SANITISED:
                 assertEquals description, 1, resultsFromListAction.size()
 
                 def detection = resultsFromListAction.first()
-                assertEquals description, "", detection.speciesNames
-                assertEquals description, "", detection.sensorIds
+                assertEquals description, "", detection.speciesName
+                assertEquals description, "", detection.sensorId
                 break
 
             case NOT_VISIBLE:
@@ -255,58 +252,6 @@ class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcesso
 
             case NOT_VISIBLE:
                 assertEquals description, [], resultsForProject
-                break
-
-            default:
-                fail "Unhandled visibility $expectedResult"
-        }
-    }
-
-    void assertCorrectResultsForKmlExportAction(authLevel, protectionLevel, speciesFilterSet, expectedResult, project, filter) {
-
-        def description = "Checking KML export action: ${authLevel} ${protectionLevel} ${speciesFilterSet} ${expectedResult} p:${project} f:${filter}"
-
-        def params = [
-            format: "KMZ (tag tracks)",
-            filter: [
-                surgeries: [
-                    release: [
-                        project: [
-                            in: ['id', String.valueOf(project.id)]
-                        ]
-                    ]
-                ]
-            ],
-            allowSanitisedResults: (speciesFilterSet == FILTER_NOT_SET)
-        ]
-
-
-        def kml = kmlService.generateKml(ValidDetection, params)
-
-        def baos = new ByteArrayOutputStream()
-        kml.marshal(baos)
-        def kmlAsText = new String(baos.toByteArray())
-
-        switch (expectedResult) {
-            case VISIBLE:
-                assertEquals description, 1, kmlAsText.count('<name>Releases</name>')
-                assertEquals description, 1, kmlAsText.count('<name>Detections</name>')
-                assertTrue description, kmlAsText.contains("37010003 - Carcharodon carcharias (White Shark)")
-                assertTrue description, kmlAsText.contains("${project.tags.sort().first()}")
-                break
-
-            case VISIBLE_BUT_SANITISED:
-                assertEquals description, 1, kmlAsText.count('<name>Releases</name>')
-                assertEquals description, 1, kmlAsText.count('<name>Detections</name>')
-                assertFalse description, kmlAsText.contains("37010003 - Carcharodon carcharias (White Shark)")
-                assertFalse description, kmlAsText.contains("${project.tags.sort().first()}")
-                break
-
-            case NOT_VISIBLE:
-                assertEquals description, 0, kmlAsText.count('<name>Releases</name>')
-                assertEquals description, 0, kmlAsText.count('<name>Detections</name>')
-                assertFalse description, kmlAsText.contains("37010003 - Carcharodon carcharias (White Shark)")
-                assertFalse description, kmlAsText.contains("${project.tags.sort().first()}")
                 break
 
             default:

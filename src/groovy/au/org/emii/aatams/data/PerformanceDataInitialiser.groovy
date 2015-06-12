@@ -18,15 +18,8 @@ import shiro.*
  *
  * @author jburgess
  */
-class PerformanceDataInitialiser extends AbstractDataInitialiser
-{
-    PerformanceDataInitialiser(permissionUtilsService)
-    {
-        super(permissionUtilsService)
-    }
-
-    void execute()
-    {
+class PerformanceDataInitialiser extends AbstractDataInitialiser {
+    void execute() {
         initPerformanceData()
     }
 

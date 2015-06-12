@@ -73,12 +73,6 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         def animalFactoryService = new AnimalFactoryService()
         controller.animalFactoryService = animalFactoryService
 
-        mockDomain(ValidDetection)
-        ValidDetection.metaClass.findAllByTransmitterId =
-        {
-            return null
-        }
-
         mockLogging(DetectionFactoryService)
         def detectionFactoryService = new DetectionFactoryService()
         controller.detectionFactoryService = detectionFactoryService

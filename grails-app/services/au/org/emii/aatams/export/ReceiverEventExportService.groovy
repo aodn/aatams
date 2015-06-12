@@ -12,7 +12,7 @@ class ReceiverEventExportService extends AbstractStreamingExporterService
         return "receiverEvent"
     }
 
-    protected def eachRow(params, closure)
+    protected def writeCsvRows(params, closure)
     {
         def startTime = System.currentTimeMillis()
         def query =  new ReceiverEventQueryBuilder().constructQuery(params)

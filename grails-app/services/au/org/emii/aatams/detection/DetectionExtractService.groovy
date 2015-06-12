@@ -11,24 +11,16 @@ class DetectionExtractService extends AbstractStreamingExporterService {
     public def extractPage(filterParams) {
 
         def query =  new DetectionQueryBuilder().constructQuery(filterParams)
-        def results = performQuery(filterParams.sql, query)
-        def releaseIsProtectedCache = [:]
-        def rowCount = results.size()
-
-        return [
-            results: applyEmbargo(results, filterParams, releaseIsProtectedCache), rowCount: rowCount
-        ]
-    }
-
-    public Long getCount(filterParams) {
-        if (!filterParams || filterParams.isEmpty() || filterParams?.filter == null || filterParams?.filter == [:]) {
-            return ValidDetection.count()
+        def detections = performQuery(filterParams.sql, query).collect {
+            DetectionView.fromSqlRow(it)
         }
 
-        def query =  new DetectionQueryBuilder().constructCountQuery(filterParams)
-        def results = performQuery(filterParams.sql, query)
+        def releaseIsProtectedCache = [:]
+        def rowCount = detections.size()
 
-        return results.count[0]
+        return [
+            results: applyEmbargo(detections, filterParams, releaseIsProtectedCache), rowCount: rowCount
+        ]
     }
 
     def performQuery(sql, query) {
@@ -46,10 +38,15 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         return "detection"
     }
 
-    protected def applyEmbargo(results, params, releaseIsProtectedCache) {
-        results.collect { row ->
-            new DetectionVisibilityChecker(row, params, permissionUtilsService, releaseIsProtectedCache).apply()
-        }.findAll{ it }
+    protected def applyEmbargo(detections, params, releaseIsProtectedCache) {
+        detections.collect { detection ->
+            new DetectionVisibilityChecker(
+                detection,
+                params,
+                permissionUtilsService,
+                releaseIsProtectedCache
+            ).apply()
+        }.findAll { it }
     }
 
     protected void writeCsvData(final filterParams, OutputStream out)
@@ -59,7 +56,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         super.writeCsvData(filterParams, out)
     }
 
-    protected def eachRow(params, closure)
+    protected def writeCsvRows(params, closure)
     {
         def startTime = System.currentTimeMillis()
         def query =  new DetectionQueryBuilder().constructQuery(params)
@@ -67,10 +64,19 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         int count = 0
 
         params.sql.eachRow(query.getSQL(), query.getBindValues()) { row ->
-            def checker = new DetectionVisibilityChecker(row.toRowResult(), params, permissionUtilsService, releaseIsProtectedCache)
-            def checkedRow = checker.apply()
-            if (checkedRow) {
-                closure.call(checkedRow)
+
+            def detection = DetectionView.fromSqlRow(row)
+
+            def checker = new DetectionVisibilityChecker(
+                detection,
+                params,
+                permissionUtilsService,
+                releaseIsProtectedCache
+            )
+
+            def checkedDetection = checker.apply()
+            if (checkedDetection) {
+                closure.call(checkedDetection)
             }
             count++
         }
@@ -79,22 +85,24 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         log.debug("Export finished, num results: ${count}, elapsed time (ms): ${endTime - startTime}, query: ${query}")
     }
 
-    protected def writeCsvRow(row, OutputStream out)
+    protected def writeCsvRow(detection, OutputStream out)
     {
-        out << row.formatted_timestamp << ","
-        out << row.station << ","
-        out << GeometryUtils.scrambleCoordinate(row.latitude) << ","
-        out << GeometryUtils.scrambleCoordinate(row.longitude) << ","
-        out << row.receiver_name << ","
-        out << row.sensor_id << ","
-        out << row.species_name << ","
-        out << row.uploader << ","
-        out << row.transmitter_id << ","
-        out << row.organisation << ","
-        out << ((row.sensor_value == null) ? "" : row.sensor_value) << ","
-        out << ((row.sensor_unit == null) ? "" : row.sensor_unit)
+        def formattedCols = []
 
-        out << "\n"
+        formattedCols << detection.csvFormattedTimestamp
+        formattedCols << detection.stationStationName
+        formattedCols << GeometryUtils.scrambleCoordinate(detection.stationLatitude)
+        formattedCols << GeometryUtils.scrambleCoordinate(detection.stationLongitude)
+        formattedCols << detection.receiverName
+        formattedCols << (detection.sensorId ?: '')
+        formattedCols << detection.speciesName
+        formattedCols << detection.uploader
+        formattedCols << detection.transmitterId
+        formattedCols << detection.organisationName
+        formattedCols << (detection.sensorValue ?: '')
+        formattedCols << (detection.sensorUnit ?: '')
+
+        out << formattedCols.join(',') << '\n'
     }
 
     protected void writeCsvHeader(OutputStream out)

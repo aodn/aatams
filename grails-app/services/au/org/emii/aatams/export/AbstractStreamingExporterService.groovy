@@ -16,7 +16,7 @@ abstract class AbstractStreamingExporterService
     protected abstract void writeCsvHeader(OutputStream out)
     protected abstract def writeCsvRow(resultList, OutputStream out)
     protected def applyEmbargo(results, params) { return results }
-    protected abstract def eachRow(filterParams, closure)
+    protected abstract def writeCsvRows(filterParams, closure)
     protected abstract String getReportName()
 
     protected generateReport(params, req, res)
@@ -84,7 +84,7 @@ abstract class AbstractStreamingExporterService
         indicateExportStart(params)
         writeCsvHeader(out)
 
-        eachRow(params) { row ->
+        writeCsvRows(params) { row ->
             writeCsvRow(row, out)
         }
     }

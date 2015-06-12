@@ -123,26 +123,8 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertEquals(1, deployment.deploymentNumber)
     }
 
-    private void assertSuccessfulUpdateDeploymentWithoutRecovery(existingDeployment, deploymentDateTime)
+    private void assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime)
     {
-        assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime, false)
-    }
-
-    private void assertSuccessfulUpdateDeploymentWithRecovery(existingDeployment, deploymentDateTime)
-    {
-        assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime, true)
-    }
-
-    private void assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime, expectRescanCalled)
-    {
-        boolean rescanCalled = false
-        controller.metaClass.rescanDetections =
-        {
-            theDeployment ->
-
-            rescanCalled = true
-        }
-
         controller.params.deploymentDateTime = deploymentDateTime
         controller.params.id = existingDeployment.id
         controller.update()
@@ -152,7 +134,6 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         def updatedDeployment = ReceiverDeployment.get(controller.redirectArgs.id)
         assertNotNull(updatedDeployment)
         assertEquals(deploymentDateTime, updatedDeployment.deploymentDateTime)
-        assertEquals(expectRescanCalled, rescanCalled)
     }
 
     private void assertFailedDeployment(deploymentDateTime, field, fieldErrorCode)
@@ -257,11 +238,11 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         def deploymentDateTime = new DateTime()
         ReceiverDeployment existingDeployment = createDeployment(deploymentDateTime)
 
-        assertSuccessfulUpdateDeploymentWithoutRecovery(existingDeployment, deploymentDateTime.plusDays(2))
-        assertSuccessfulUpdateDeploymentWithoutRecovery(existingDeployment, deploymentDateTime.minusDays(3))
+        assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime.plusDays(2))
+        assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime.minusDays(3))
 
         createRecovery(deploymentDateTime.plusDays(3), existingDeployment, recoveredStatus)
-        assertSuccessfulUpdateDeploymentWithRecovery(existingDeployment, deploymentDateTime.minusDays(3))
+        assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime.minusDays(3))
     }
 
     void testSaveScheduledRecoveryDateBeforeDeploymentDate()

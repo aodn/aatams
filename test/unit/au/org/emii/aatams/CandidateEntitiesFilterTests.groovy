@@ -279,21 +279,6 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         }
     }
 
-    void testDetectionEdit()
-    {
-        ValidDetection detection = new ValidDetection()
-        mockDomain(ValidDetection, [detection])
-        detection.save()
-
-        // candidateDeployments
-        detectionController.params.id = detection.id
-        def model = detectionController.edit()
-
-        assertNotNull(model.candidateDeployments)
-        assertEquals(1, model.candidateDeployments.size())
-        assertTrue(model.candidateDeployments.contains(activeDeployment))
-    }
-
     void testInstallationCreate()
     {
         // candidateProjects

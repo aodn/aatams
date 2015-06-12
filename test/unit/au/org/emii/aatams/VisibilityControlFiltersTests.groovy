@@ -81,12 +81,13 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
     Surgery surgeryProtectedReadableProject
     Surgery surgeryProtectedNonReadableProject
 
-    ValidDetection detectionNonEmbargoed
-    ValidDetection detectionEmbargoedReadableProject
-    ValidDetection detectionEmbargoedNonReadableProject
-    ValidDetection detectionPastEmbargoed
-    ValidDetection detectionProtectedReadableProject
-    ValidDetection detectionProtectedNonReadableProject
+    DetectionView detectionNonEmbargoed
+    DetectionView detectionEmbargoedReadableProject
+    DetectionView detectionEmbargoedNonReadableProject
+    DetectionView detectionPastEmbargoed
+    DetectionView detectionProtectedReadableProject
+    DetectionView detectionProtectedNonReadableProject
+    def detectionList
 
     def queryService
     def reportInfoService
@@ -140,7 +141,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         mockLogging(Sensor)
         mockLogging(AnimalRelease)
         mockLogging(Surgery)
-        mockLogging(ValidDetection)
+        mockLogging(DetectionView)
 
         // Set up some data.
         CodeMap codeMap = new CodeMap(codeMap:"A69-1303")
@@ -197,12 +198,12 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         mockDomain(ReceiverDownloadFile, [receiverDownload])
         receiverDownload.save()
 
-        detectionNonEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
-        detectionEmbargoedReadableProject = new ValidDetection(receiverDownload:receiverDownload)
-        detectionEmbargoedNonReadableProject = new ValidDetection(receiverDownload:receiverDownload)
-        detectionPastEmbargoed = new ValidDetection(receiverDownload:receiverDownload)
-        detectionProtectedReadableProject = new ValidDetection(receiverDownload:receiverDownload)
-        detectionProtectedNonReadableProject = new ValidDetection(receiverDownload:receiverDownload)
+        detectionNonEmbargoed = new DetectionView(receiverDownloadId: receiverDownload.id, id: 0)
+        detectionEmbargoedReadableProject = new DetectionView(receiverDownloadId: receiverDownload.id, id: 1)
+        detectionEmbargoedNonReadableProject = new DetectionView(receiverDownloadId: receiverDownload.id, id: 2)
+        detectionPastEmbargoed = new DetectionView(receiverDownloadId: receiverDownload.id, id: 3)
+        detectionProtectedReadableProject = new DetectionView(receiverDownloadId: receiverDownload.id, id: 4)
+        detectionProtectedNonReadableProject = new DetectionView(receiverDownloadId: receiverDownload.id, id: 5)
 
         def animalList = [animalNonEmbargoed, animalEmbargoedReadableProject, animalEmbargoedNonReadableProject, animalPastEmbargoed, animalProtectedReadableProject, animalProtectedNonReadableProject]
         def animalMeasurementList = [animalMeasurementNonEmbargoed, animalMeasurementEmbargoedReadableProject, animalMeasurementEmbargoedNonReadableProject, animalMeasurementPastEmbargoed, animalMeasurementProtectedReadableProject, animalMeasurementProtectedNonReadableProject]
@@ -211,9 +212,9 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
                           sensorPingerNonEmbargoed, sensorPingerEmbargoedReadableProject, sensorPingerEmbargoedNonReadableProject, sensorPingerPastEmbargoed, sensorPingerProtectedReadableProject, sensorPingerProtectedNonReadableProject]
         releaseList = [releaseNonEmbargoed, releaseEmbargoedReadableProject, releaseEmbargoedNonReadableProject, releasePastEmbargoed, releaseProtectedReadableProject, releaseProtectedNonReadableProject]
         def surgeryList = [surgeryNonEmbargoed, surgeryEmbargoedReadableProject, surgeryEmbargoedNonReadableProject, surgeryPastEmbargoed, surgeryProtectedReadableProject, surgeryProtectedNonReadableProject]
-        def detectionList = [detectionNonEmbargoed, detectionEmbargoedReadableProject, detectionEmbargoedNonReadableProject, detectionPastEmbargoed, detectionProtectedReadableProject, detectionProtectedNonReadableProject]
+        detectionList = [detectionNonEmbargoed, detectionEmbargoedReadableProject, detectionEmbargoedNonReadableProject, detectionPastEmbargoed, detectionProtectedReadableProject, detectionProtectedNonReadableProject]
         detectionList.each {
-            it.receiverDeployment = new ReceiverDeployment(location: new GeometryFactory().createPoint(new Coordinate(145f, -42f)))
+            it.metaClass.getReceiverDeployment = { new ReceiverDeployment(location: new GeometryFactory().createPoint(new Coordinate(145f, -42f))) }
         }
 
         mockDomain(Tag, tagList)
@@ -222,7 +223,6 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         mockDomain(AnimalMeasurement, animalMeasurementList)
         mockDomain(AnimalRelease, releaseList)
         mockDomain(Surgery, surgeryList)
-        mockDomain(ValidDetection, detectionList)
 
         releaseNonEmbargoed.addToSurgeries(surgeryNonEmbargoed)
         tagNonEmbargoed.addToSurgeries(surgeryNonEmbargoed)
@@ -273,12 +273,12 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         detectionProtectedReadableProject.metaClass.getProject = { protectedProjectWithMembership }
         detectionProtectedNonReadableProject.metaClass.getProject = { protectedProjectNoMembership }
 
-        detectionNonEmbargoed.metaClass.getSurgeries = { [surgeryNonEmbargoed] }
-        detectionEmbargoedReadableProject.metaClass.getSurgeries = { [surgeryEmbargoedReadableProject] }
-        detectionEmbargoedNonReadableProject.metaClass.getSurgeries = { [surgeryEmbargoedNonReadableProject] }
-        detectionPastEmbargoed.metaClass.getSurgeries = { [surgeryPastEmbargoed] }
-        detectionProtectedReadableProject.metaClass.getSurgeries = { [surgeryProtectedReadableProject] }
-        detectionProtectedNonReadableProject.metaClass.getSurgeries = { [surgeryProtectedNonReadableProject] }
+        detectionNonEmbargoed.metaClass.getSurgery = { surgeryNonEmbargoed }
+        detectionEmbargoedReadableProject.metaClass.getSurgery = { surgeryEmbargoedReadableProject }
+        detectionEmbargoedNonReadableProject.metaClass.getSurgery = { surgeryEmbargoedNonReadableProject }
+        detectionPastEmbargoed.metaClass.getSurgery = { surgeryPastEmbargoed }
+        detectionProtectedReadableProject.metaClass.getSurgery = { surgeryProtectedReadableProject }
+        detectionProtectedNonReadableProject.metaClass.getSurgery = { surgeryProtectedNonReadableProject }
 
         animalList.each { it.save() }
         animalMeasurementList.each { it.save() }
@@ -286,7 +286,6 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         sensorList.each { it.save() }
         releaseList.each { it.save() }
         surgeryList.each { it.save() }
-        detectionList.each { it.save() }
 
         ReceiverDownloadFile.metaClass.getPath = { "/some/path" }
     }
@@ -455,7 +454,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
     {
         controllerName = "detection"
 
-        def model = [entityList: ValidDetection.list(), total: ValidDetection.count()]
+        def model = [ entityList: detectionList, total: detectionList.size() ]
         assertNotNull(model)
 
         FilterConfig filter = getFilter("genericList")
@@ -466,25 +465,28 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
 
         def filtered = model.entityList
 
-        assertNotNull(filtered.find{ it.isDuplicate(detectionNonEmbargoed) })
-        assertNotNull(filtered.find{ it.isDuplicate(detectionEmbargoedReadableProject) })
-        assertNotNull(filtered.find{ it.isDuplicate(detectionEmbargoedNonReadableProject) })
-        assertNotNull(filtered.find{ it.isDuplicate(detectionPastEmbargoed) })
-        assertNotNull(filtered.find{ it.isDuplicate(detectionProtectedReadableProject) })
-        assertNotNull(filtered.find{ it.isDuplicate(detectionProtectedNonReadableProject) })
+        assertNotNull(filtered.find{ it.equals(detectionNonEmbargoed) })
+        assertNotNull(filtered.find{ it.equals(detectionEmbargoedReadableProject) })
+        assertNotNull(filtered.find{ it.equals(detectionEmbargoedNonReadableProject) })
+        assertNotNull(filtered.find{ it.equals(detectionPastEmbargoed) })
+        assertNotNull(filtered.find{ it.equals(detectionProtectedReadableProject) })
+        assertNotNull(filtered.find{ it.equals(detectionProtectedNonReadableProject) })
     }
 
-    void testDetectionNotList()
-    {
+    void testDetectionNotList() {
+        checkDetectionVisibility(detectionNonEmbargoed, VISIBLE)
+        checkDetectionVisibility(detectionEmbargoedReadableProject, VISIBLE)
+        checkDetectionVisibility(detectionEmbargoedNonReadableProject, VISIBLE_BUT_SANITISED)
+        checkDetectionVisibility(detectionPastEmbargoed, VISIBLE)
+        checkDetectionVisibility(detectionProtectedReadableProject, VISIBLE)
+        checkDetectionVisibility(detectionProtectedNonReadableProject, NOT_VISIBLE)
+    }
+
+    def checkDetectionVisibility(detection, visibility) {
         controllerName = "detection"
         actionName = "show"
 
-        checkVisibility(detectionController, detectionNonEmbargoed, VISIBLE, 'detection')
-        checkVisibility(detectionController, detectionEmbargoedReadableProject, VISIBLE, 'detection')
-        checkVisibility(detectionController, detectionEmbargoedNonReadableProject, VISIBLE_BUT_SANITISED, 'detection')
-        checkVisibility(detectionController, detectionPastEmbargoed, VISIBLE, 'detection')
-        checkVisibility(detectionController, detectionProtectedReadableProject, VISIBLE, 'detection')
-        checkVisibility(detectionController, detectionProtectedNonReadableProject, NOT_VISIBLE, 'detection')
+        checkVisibilityWithModel([ detectionInstance: detection ], detection, visibility, "unauthorized", null, 'detection')
     }
 
     void testSurgeryList() {
@@ -582,6 +584,11 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         assert(controller.params)
 
         def model = controller.show()
+
+        checkVisibilityWithModel(model, entity, expectedVisibilityLevel, expectedRedirectAction, expectedTargetUri, entityName)
+    }
+
+    private void checkVisibilityWithModel(model, entity, expectedVisibilityLevel, expectedRedirectAction, expectedTargetUri, entityName) {
         assertNotNull(model)
         assertEquals(1, model.size())
 

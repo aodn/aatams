@@ -7,16 +7,9 @@ class Species
 {
     String name
 
-    /**
-     * Data for sensitive species may be embargoed.
-     */
-    Date embargoDate
-
-
     static constraints =
     {
         name(nullable:true)
-        embargoDate(nullable:true)
     }
 
     String toString()

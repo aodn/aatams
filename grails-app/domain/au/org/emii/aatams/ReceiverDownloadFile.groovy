@@ -1,10 +1,8 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.detection.InvalidDetection
 import au.org.emii.aatams.detection.InvalidDetectionReason
-import au.org.emii.aatams.detection.RawDetection
-import au.org.emii.aatams.detection.ValidDetection
 
+import groovy.sql.Sql
 import org.apache.shiro.SecurityUtils
 
 import grails.converters.XML
@@ -15,6 +13,7 @@ import grails.converters.XML
  */
 class ReceiverDownloadFile
 {
+    def dataSource
     def grailsApplication
 
     ReceiverDownloadFileType type
@@ -28,12 +27,10 @@ class ReceiverDownloadFile
 
     Person requestingUser
 
-    Set<ValidDetection> validDetections = new HashSet<ValidDetection>()
-    Set<InvalidDetection> invalidDetections = new HashSet<InvalidDetection>()
     Set<ReceiverEvent> events = new HashSet<ReceiverEvent>()
 
-    static hasMany = [validDetections:ValidDetection, invalidDetections:InvalidDetection, events:ReceiverEvent]
-    static hasOne = [progress: ReceiverDownloadFileProgress]
+    static hasMany = [ events: ReceiverEvent ]
+    static hasOne = [ progress: ReceiverDownloadFileProgress ]
     static auditable = true
 
     static constraints =
@@ -43,7 +40,7 @@ class ReceiverDownloadFile
         progress(nullable: true)
     }
 
-    static transients = ['knownSensors', 'uniqueTransmitterIds', 'percentComplete', 'path']
+    static transients = ['knownSensors', 'uniqueTransmitterIds', 'percentComplete', 'path', 'statistics' ]
 
     static mapping =
     {
@@ -70,24 +67,7 @@ class ReceiverDownloadFile
             path = path + File.separator
         }
 
-        assert(id): "Download file ID cannot be null"
         path += (id + File.separator + name)
-    }
-
-    void addToDetections(detection)
-    {
-        if (detection instanceof ValidDetection)
-        {
-            validDetections += detection
-        }
-        else if (detection instanceof InvalidDetection)
-        {
-            invalidDetections += detection
-        }
-        else
-        {
-            assert(false): "Unknown detection class: " + detection.class
-        }
     }
 
     String toString()
@@ -95,7 +75,7 @@ class ReceiverDownloadFile
         return String.valueOf(path)
     }
 
-    def toXml() 
+    def toXml()
     {
         this as XML
     }
@@ -115,91 +95,24 @@ class ReceiverDownloadFile
         progress.percentComplete = percentComplete
     }
 
-    def totalDetectionCount()
-    {
-        return validDetectionCount() + invalidDetectionCount()
+    def getStatistics() {
+        def stats = new ReceiverDownloadFileStatistics()
+        stats.refresh(dataSource, this)
+
+        return stats
     }
 
-    def validDetectionCount()
-    {
-        return executeCountCriteria(ValidDetection)
-    }
+    List<String> getUniqueTransmitterIds() {
+        def sql = new Sql(dataSource)
 
-    def invalidDetectionCount()
-    {
-        return executeCountCriteria(InvalidDetection)
-    }
-
-    def invalidDetectionCount(reason)
-    {
-        return executeCountCriteria(InvalidDetection,
-        {
-            eq("reason", reason)
-        })
-    }
-
-    def unknownReceivers()
-    {
-        def c = InvalidDetection.createCriteria()
-        def results = c.list
-        {
-            receiverDownload
-            {
-                eq("id", Long.valueOf(id))
-            }
-
-            eq("reason", InvalidDetectionReason.UNKNOWN_RECEIVER)
-
-            projections
-            {
-                distinct("receiverName")
-            }
-        }
-
-        return results
-    }
-
-    private def executeCountCriteria(clazz)
-    {
-        executeCountCriteria(clazz, null)
-    }
-
-    private def executeCountCriteria(clazz, customRestriction)
-    {
-        def c = clazz.createCriteria()
-        def count = c.get()
-        {
-            projections
-            {
-                rowCount()
-            }
-
-            receiverDownload
-            {
-                eq("id", Long.valueOf(id))
-            }
-
-            if (customRestriction)
-            {
-                customRestriction.delegate = delegate
-                customRestriction.call()
-            }
-        }
-
-        return count
-    }
-
-    List<String> getUniqueTransmitterIds()
-    {
         def uniqueTransmitterIds =
-            ValidDetection.executeQuery("select distinct det.transmitterId from ValidDetection det where receiverDownload = ? order by det.transmitterId", this)
+            sql.rows("select distinct det.transmitter_id from valid_detection det where receiver_download_id = ? order by det.transmitter_id", this.id).collect { it.transmitter_id }
         log.debug("Unique transmitter IDs: " + uniqueTransmitterIds)
 
         return uniqueTransmitterIds
     }
 
-    List<Long> getKnownSensors()
-    {
+    List<Long> getKnownSensors() {
         return Sensor.findAllByTransmitterIdInList(getUniqueTransmitterIds())
     }
 }

@@ -117,20 +117,10 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         controller.params.location = new GeometryFactory().createPoint(new Coordinate(34f, 34f))
         controller.params.status = new DeviceStatus()
 
-        // Test for #1751
-        boolean rescanCalled = false
-        controller.metaClass.rescanDetections =
-        {
-            theDeployment ->
-
-            rescanCalled = true
-        }
-
         controller.save()
 
         assertEquals("show", controller.redirectArgs.action)
         assertEquals(initDate, deployment.initialisationDateTime)
-        assertTrue(rescanCalled)
         def recovery = ReceiverRecovery.get(controller.redirectArgs.id)
         assertNotNull(deployment)
     }
@@ -176,19 +166,10 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         controller.params.deployment = [initialisationDateTime: initDate]
         controller.params.id = recovery.id
 
-        boolean rescanCalled = false
-        controller.metaClass.rescanDetections =
-        {
-            theDeployment ->
-
-            rescanCalled = true
-        }
-
         controller.update()
 
         assertEquals(initDate, deployment.initialisationDateTime)
         assertFalse(recovery.hasErrors())
-        assertTrue(rescanCalled)
     }
 
     private InstallationStation createStation() {

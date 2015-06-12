@@ -1,11 +1,14 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import org.perf4j.StopWatch
 
-class JdbcTemplateVueDetectionFileProcessorServicePerformanceTests extends AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests
+class VueDetectionFileProcessorServicePerformanceTests extends AbstractGrailsUnitTestCase
 {
+    def vueDetectionFileProcessorService
+
     void testProcess()
     {
         ReceiverDownloadFile download
@@ -23,7 +26,7 @@ class JdbcTemplateVueDetectionFileProcessorServicePerformanceTests extends Abstr
 
             StopWatch stopWatch = new StopWatch();
 
-            jdbcTemplateVueDetectionFileProcessorService.process(download)
+            vueDetectionFileProcessorService.process(download)
             stopWatch.stop()
 
             def elapsedTimeMs = stopWatch.getElapsedTime()

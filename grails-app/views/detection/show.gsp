@@ -97,15 +97,14 @@
 
                               <table class="nested">
                                 <tbody>
-                                  <g:each in="${detectionInstance?.surgeries}" var="surgery">
-                                    <tr>
-                                      <td class="rowButton"><g:link class="show" controller="surgery" action="show" id="${surgery?.id}">.</g:link></td>
-                                      <td>
-                                        <g:link controller="tag" action="show" id="${surgery?.tag?.id}">${surgery?.tag?.encodeAsHTML()}</g:link>
-                                      </td>
-                                    </tr>
+                                  <g:set var="surgery" value="${detectionInstance?.surgery}" />
+                                  <tr>
+                                    <td class="rowButton"><g:link class="show" controller="surgery" action="show" id="${surgery?.id}">.</g:link></td>
+                                    <td>
+                                      <g:link controller="tag" action="show" id="${surgery?.tag?.id}">${surgery?.tag?.encodeAsHTML()}</g:link>
+                                    </td>
+                                  </tr>
 
-                                  </g:each>
                                 </tbody>
                               </table>
 

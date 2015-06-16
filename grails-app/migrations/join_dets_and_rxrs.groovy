@@ -290,7 +290,7 @@ databaseChangeLog = {
                   station_station_name,
                   count(station_station_name) AS detection_count
                 FROM aatams.detection_view GROUP BY station_station_name
-                ) t))::double precISion)) * (10)::double precISion) AS relative_detection_count,
+                ) t))::double precision)) * (10)::double precision) AS relative_detection_count,
               station_id
 
             FROM aatams.detection_view

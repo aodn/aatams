@@ -272,4 +272,57 @@ databaseChangeLog = {
                    viewName: 'invalid_detection'
         )
     }
+
+    changeSet(author: "jburgess", id: "1430268900000-09") {
+        createView("""
+            SELECT
+              station_station_name AS station,
+              installation_name AS installation,
+              rxr_project_name AS project,
+              aatams.scramblepoint(st_makepoint(station_longitude, station_latitude)) AS public_location,
+              st_x(aatams.scramblepoint(st_makepoint(station_longitude, station_latitude))) AS public_lon,
+              st_y(aatams.scramblepoint(st_makepoint(station_longitude, station_latitude))) AS public_lat,
+              ('http://localhost:8080/aatams/installationStation/show/'::text || station_id) AS installation_station_url,
+              ('http://localhost:8080/aatams/detection/lISt?filter.receiverDeployment.station.in=name&filter.receiverDeployment.station.in='::text || (station_station_name)::text) AS detection_download_url,
+              count(*) AS detection_count,
+              ((log((GREATEST(count(*), (1)::bigint))::double precISion) / log(((SELECT max(t.detection_count) AS max FROM (
+                SELECT
+                  station_station_name,
+                  count(station_station_name) AS detection_count
+                FROM aatams.detection_view GROUP BY station_station_name
+                ) t))::double precision)) * (10)::double precision) AS relative_detection_count,
+              station_id
+
+            FROM aatams.detection_view
+            WHERE station_id IS not null
+
+            GROUP BY
+              station_station_name,
+              installation_name,
+              rxr_project_name,
+              station_longitude,
+              station_latitude,
+              station_id
+
+            UNION ALL
+            SELECT
+              installation_station.name AS station,
+              installation.name AS installation,
+              project.name AS project,
+              aatams.scramblepoint(installation_station.location) AS public_location,
+              st_x(aatams.scramblepoint(installation_station.location)) AS public_lon,
+              st_y(aatams.scramblepoint(installation_station.location)) AS public_lat,
+              ('http://localhost:8080/aatams/installationStation/show/'::text || installation_station.id) AS installation_station_url,
+              '' AS detection_download_url,
+              0 AS detection_count,
+              0 AS relative_detection_count,
+              installation_station.id AS station_id
+            FROM (((aatams.installation_station LEFT JOIN aatams.installation ON ((installation_station.installation_id = installation.id)))
+              LEFT JOIN aatams.project ON ((installation.project_id = project.id)))
+              LEFT JOIN aatams.detection_view ON ((installation_station.id = detection_view.station_id)))
+            WHERE (detection_view.station_id IS NULL);
+                        """,
+                   viewName: 'detection_count_per_station'
+                  )
+    }
 }

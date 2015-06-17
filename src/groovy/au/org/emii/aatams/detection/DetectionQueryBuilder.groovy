@@ -13,7 +13,7 @@ class DetectionQueryBuilder extends QueryBuilder {
         [
             "rxr_project_name": filterParams?.filter?.receiverDeployment?.station?.installation?.project?.in?.getAt(1),
             "installation_name": filterParams?.filter?.receiverDeployment?.station?.installation?.in?.getAt(1),
-            "station_name": filterParams?.filter?.receiverDeployment?.station?.in?.getAt(1),
+            "station_station_name": filterParams?.filter?.receiverDeployment?.station?.in?.getAt(1),
             "transmitter_id": filterParams?.filter?.in?.getAt(1),
             "spcode": filterParams?.filter?.surgeries?.release?.animal?.species?.in?.getAt(1)
         ].each {

@@ -52,7 +52,7 @@ class DetectionQueryBuilderTests extends GrailsUnitTestCase
 
     void testConstructQueryOneStation() {
         assertQueryFromFilterEquals(
-            '''where "station_name" in ('CTBAR East')''',
+            '''where "station_station_name" in ('CTBAR East')''',
             [filter: [receiverDeployment:[station:[in:["name", "CTBAR East | "]]]]]
         )
     }

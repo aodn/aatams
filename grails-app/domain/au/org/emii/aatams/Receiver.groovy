@@ -181,7 +181,6 @@ class Receiver extends Device
 
     boolean canDeployAtTime(dateTime)
     {
-
         log.debug("Status: ${getStatus(dateTime)}, at time: ${dateTime}")
         if ([DeviceStatus.DEPLOYED, DeviceStatus.RETIRED].contains(getStatus(dateTime)))
         {
@@ -189,6 +188,14 @@ class Receiver extends Device
         }
 
         return true
+    }
+
+    boolean same(Object other) {
+        if (other == null) {
+            return false
+        }
+
+        return (this.name == other.name)
     }
 
     /**

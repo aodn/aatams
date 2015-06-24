@@ -50,7 +50,6 @@ class ReceiverDeploymentController extends ReportController
         }
 
         if (receiverDeploymentInstance.save(flush: true)) {
-
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
             redirect(action: "show", id: receiverDeploymentInstance.id)
         }

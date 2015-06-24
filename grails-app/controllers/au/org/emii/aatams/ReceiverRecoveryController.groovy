@@ -69,6 +69,7 @@ class ReceiverRecoveryController extends AbstractController
         }
         else
         {
+            println deployment.errors
             render(view: "create", model: [receiverRecoveryInstance: receiverRecoveryInstance])
         }
     }

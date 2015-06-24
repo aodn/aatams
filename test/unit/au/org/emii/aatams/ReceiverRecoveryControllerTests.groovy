@@ -18,10 +18,10 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
 
     DeviceStatus recovered
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
+        JodaOverrides.mock()
         mockDomain(Person)
 
         // See http://jira.grails.org/browse/GRAILS-5926
@@ -84,13 +84,12 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         receiver.save()
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
+        JodaOverrides.unmock()
         super.tearDown()
     }
 
-    void testList()
-    {
+    void testList() {
         def model = controller.list()
 
         assertEquals(2, model.readableProjects.size())
@@ -100,8 +99,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         assertEquals(3, model.total)
     }
 
-    void testSave()
-    {
+    void testSave() {
         def deployment = createDeployment(createStation(), new GeometryFactory().createPoint(new Coordinate(34f, 34f)))
         deployment.mooringType = new MooringType()
         deployment.save(failOnError:true)
@@ -122,8 +120,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         assertNotNull(deployment)
     }
 
-    void testCreateUseDeploymentsLocation()
-    {
+    void testCreateUseDeploymentsLocation() {
         Point deploymentLocation = new GeometryFactory().createPoint(new Coordinate(34f, 34f))
         deploymentLocation.setSRID(4326)
 
@@ -136,8 +133,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         assertRecoveryDefaults(model, deployment, deploymentLocation)
     }
 
-    void testCreateUseStationsLocation()
-    {
+    void testCreateUseStationsLocation() {
         InstallationStation station = createStation()
         ReceiverDeployment deployment = createDeployment(station, null)
 
@@ -146,8 +142,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         assertRecoveryDefaults(model, deployment, station.location)
     }
 
-    void testUpdate()
-    {
+    void testUpdate() {
         def deployment = createDeployment(createStation(), new GeometryFactory().createPoint(new Coordinate(34f, 34f)))
         deployment.mooringType = new MooringType()
         deployment.save(failOnError:true)
@@ -177,8 +172,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         return station
     }
 
-    private ReceiverDeployment createDeployment(InstallationStation station, location)
-    {
+    private ReceiverDeployment createDeployment(InstallationStation station, location) {
         ReceiverDeployment deployment = new ReceiverDeployment(location:location, station:station, receiver:receiver)
         mockDomain(ReceiverDeployment, [deployment])
         deployment.save()
@@ -189,8 +183,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         return deployment
     }
 
-    private void assertRecoveryDefaults(model, ReceiverDeployment deployment, Point deploymentLocation)
-    {
+    private void assertRecoveryDefaults(model, ReceiverDeployment deployment, Point deploymentLocation) {
         assertNotNull(model.receiverRecoveryInstance)
         assertEquals(deployment, model.receiverRecoveryInstance.deployment)
         assertEquals(deploymentLocation, model.receiverRecoveryInstance.location)

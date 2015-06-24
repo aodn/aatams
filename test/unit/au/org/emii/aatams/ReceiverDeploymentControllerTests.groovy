@@ -20,10 +20,10 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
     Receiver receiver1
     Receiver receiver2
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
+        JodaOverrides.mock()
         mockDomain(Person)
 
 
@@ -79,25 +79,20 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         mockLogging(Receiver)
     }
 
-    void testSaveNoReceiver()
-    {
+    protected void tearDown() {
+        JodaOverrides.unmock()
+        super.tearDown()
+    }
+
+    void testSaveNoReceiver() {
         controller.params.deploymentDateTime = new DateTime()
         controller.save()
         def model = controller.renderArgs.model
         assertEquals("nullable",  model.receiverDeploymentInstance.errors.getFieldError("receiver").getCode())
     }
 
-    private void assertSuccessfulSaveDeployment(deploymentDateTime)
-    {
+    private void assertSuccessfulSaveDeployment(deploymentDateTime) {
         assertEquals(0, station1.numDeployments)
-
-        boolean rescanCalled = false
-        controller.metaClass.rescanDetections =
-        {
-            theDeployment ->
-
-            rescanCalled = true
-        }
 
         controller.params.deploymentDateTime = deploymentDateTime
         controller.params.receiver = receiver
@@ -105,15 +100,16 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
 
         assertEquals("show", controller.redirectArgs.action)
         assertEquals(1, station1.numDeployments)
-        assertFalse(rescanCalled)
+
+        println controller.redirectArgs
+        println ReceiverDeployment.list()*.id
 
         def deployment = ReceiverDeployment.get(controller.redirectArgs.id)
         assertNotNull(deployment)
         assertEquals(1, deployment.deploymentNumber)
     }
 
-    private void assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime)
-    {
+    private void assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime) {
         controller.params.deploymentDateTime = deploymentDateTime
         controller.params.id = existingDeployment.id
         controller.update()
@@ -125,8 +121,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertEquals(deploymentDateTime, updatedDeployment.deploymentDateTime)
     }
 
-    private void assertFailedDeployment(deploymentDateTime, field, fieldErrorCode)
-    {
+    private void assertFailedDeployment(deploymentDateTime, field, fieldErrorCode) {
         assertEquals(0, station1.numDeployments)
 
         controller.params.deploymentDateTime = deploymentDateTime
@@ -137,15 +132,14 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertEquals(fieldErrorCode, model.receiverDeploymentInstance.errors.getFieldError(field).getCode())
     }
 
-    void testSaveNoDeployment()
-    {
+    void testSaveNoDeployment() {
         assertSuccessfulSaveDeployment(new DateTime())
     }
 
-    private ReceiverDeployment createDeployment(dateTime)
-    {
+    private ReceiverDeployment createDeployment(dateTime) {
         ReceiverDeployment deployment =
             new ReceiverDeployment(deploymentDateTime: dateTime,
+                                   initialisationDateTime: dateTime,
                                    receiver: receiver,
                                    mooringType: new MooringType(),
                                    station: new InstallationStation())
@@ -155,8 +149,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         return deployment
     }
 
-    private ReceiverRecovery createRecovery(dateTime, deployment, status)
-    {
+    private ReceiverRecovery createRecovery(dateTime, deployment, status) {
         ReceiverRecovery recovery = new ReceiverRecovery(recoveryDateTime: dateTime, deployment: deployment, status: status)
         recovery.save()
         deployment.recovery = recovery
@@ -164,16 +157,14 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         return recovery
     }
 
-    void testSaveFutureDeployment()
-    {
+    void testSaveFutureDeployment() {
         def deploymentDateTime = new DateTime()
         createDeployment(deploymentDateTime.plusDays(1))
 
         assertSuccessfulSaveDeployment(deploymentDateTime)
     }
 
-    void testSaveCurrentDeployment()
-    {
+    void testSaveCurrentDeployment() {
         def deploymentDateTime = new DateTime()
         def existingDeployment = createDeployment(deploymentDateTime.minusDays(1))
 
@@ -186,8 +177,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertSuccessfulSaveDeployment(deploymentDateTime)
     }
 
-    void testSavePastRecoveryRecovered()
-    {
+    void testSavePastRecoveryRecovered() {
         def deploymentDateTime = new DateTime()
         ReceiverDeployment pastDeployment = createDeployment(deploymentDateTime.minusDays(2))
         ReceiverRecovery pastRecovery = createRecovery(deploymentDateTime.minusDays(1), pastDeployment, DeviceStatus.RECOVERED)
@@ -195,8 +185,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertSuccessfulSaveDeployment(deploymentDateTime)
     }
 
-    void testSavePastRecoveryRetired()
-    {
+    void testSavePastRecoveryRetired() {
         def deploymentDateTime = new DateTime()
         ReceiverDeployment pastDeployment = createDeployment(deploymentDateTime.minusDays(2))
         ReceiverRecovery pastRecovery = createRecovery(deploymentDateTime.minusDays(1), pastDeployment, DeviceStatus.RETIRED)
@@ -204,8 +193,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertFailedDeployment(deploymentDateTime, "receiver", "receiverDeployment.receiver.invalidStateAtDateTime")
     }
 
-    void testSaveFutureRecoveryRecovered()
-    {
+    void testSaveFutureRecoveryRecovered() {
         def deploymentDateTime = new DateTime()
         ReceiverDeployment futureDeployment = createDeployment(deploymentDateTime.plusDays(2))
         ReceiverRecovery futureRecovery = createRecovery(deploymentDateTime.plusDays(3), futureDeployment, DeviceStatus.RECOVERED)
@@ -213,8 +201,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertSuccessfulSaveDeployment(deploymentDateTime)
     }
 
-    void testSaveFutureRecoveryRetired()
-    {
+    void testSaveFutureRecoveryRetired() {
         def deploymentDateTime = new DateTime()
         ReceiverDeployment futureDeployment = createDeployment(deploymentDateTime.plusDays(2))
         ReceiverRecovery futureRecovery = createRecovery(deploymentDateTime.plusDays(3), futureDeployment, DeviceStatus.RETIRED)
@@ -222,8 +209,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertSuccessfulSaveDeployment(deploymentDateTime)
     }
 
-    void testUpdateExistingDeployment()
-    {
+    void testUpdateExistingDeployment() {
         def deploymentDateTime = new DateTime()
         ReceiverDeployment existingDeployment = createDeployment(deploymentDateTime)
 
@@ -234,8 +220,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime.minusDays(3))
     }
 
-    void testSaveScheduledRecoveryDateBeforeDeploymentDate()
-    {
+    void testSaveScheduledRecoveryDateBeforeDeploymentDate() {
         def deploymentDateTime = new DateTime()
 
         controller.params.deploymentDateTime = deploymentDateTime
@@ -255,16 +240,14 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertTrue(model.candidateStations.contains(station2))
     }
 
-    void testCreate()
-    {
+    void testCreate() {
         def model = controller.create()
 
         assertNull(model.receiverDeploymentInstance.recoveryDate)
         assertDefaultValues(model)
     }
 
-    private assertDefaultValues(def model)
-    {
+    private assertDefaultValues(def model) {
         assertNotNull(model.receiverDeploymentInstance)
         assertEquals(2, model.candidateReceivers.size())
         assertTrue(model.candidateReceivers.contains(receiver1))
@@ -274,16 +257,14 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertTrue(model.candidateStations.contains(station2))
     }
 
-    void testSaveError()
-    {
+    void testSaveError() {
         controller.save()
         def model = controller.modelAndView.model
 
         assertDefaultValues(model)
     }
 
-    void testSaveCheckStationsReceivers()
-    {
+    void testSaveCheckStationsReceivers() {
         assertFalse(station1.receivers.contains(receiver))
         assertFalse(station1.receivers.contains(csiroReceiver))
 
@@ -300,8 +281,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertTrue(station1.receivers.contains(csiroReceiver))
     }
 
-    void testUpdateCheckStationsReceivers()
-    {
+    void testUpdateCheckStationsReceivers() {
         assertFalse(station1.receivers.contains(receiver))
         assertFalse(station1.receivers.contains(csiroReceiver))
 
@@ -320,8 +300,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertTrue(station1.receivers.contains(csiroReceiver))
     }
 
-    void testEditIncludesCurrentlyDeployedReceiverAndStation()
-    {
+    void testEditIncludesCurrentlyDeployedReceiverAndStation() {
         def model = controller.create()
         assertEquals(2, model.candidateReceivers.size())
         assertEquals(2, model.candidateStations.size())

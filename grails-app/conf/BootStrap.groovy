@@ -23,6 +23,8 @@ class BootStrap
     {
         servletContext ->
 
+        JodaOverrides.apply()
+
         Map.metaClass.flatten =
         {
             String prefix='' ->

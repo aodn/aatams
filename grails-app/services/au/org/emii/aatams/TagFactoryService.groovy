@@ -52,15 +52,11 @@ class TagFactoryService {
     {
         if (!params.status)
         {
-            params.status = DeviceStatus.findByStatus('NEW')
+            params.status = DeviceStatus.NEW
         }
     }
 
     private loadDeviceStatus(tag, params) {
-
-        if (params.status?.id) {
-
-            tag.status = DeviceStatus.get(params.status.id)
-        }
+        tag.status = params.status
     }
 }

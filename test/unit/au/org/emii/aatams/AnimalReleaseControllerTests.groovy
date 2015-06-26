@@ -81,10 +81,6 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         def tagFactoryService = new TagFactoryService()
         controller.tagFactoryService = tagFactoryService
 
-        DeviceStatus newStatus = new DeviceStatus(status:"NEW")
-        DeviceStatus deployedStatus = new DeviceStatus(status:"DEPLOYED")
-        mockDomain(DeviceStatus, [newStatus, deployedStatus])
-        deployedStatus.save()
 
         pinger = new TransmitterType(transmitterTypeName:'PINGER')
         mockDomain(TransmitterType, [pinger])
@@ -295,7 +291,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         tag = new Tag(codeMap:codeMap,
                       serialNumber:"11111",
                       model:deviceModel,
-                      status:new DeviceStatus(status:'NEW'))
+                      status:DeviceStatus.NEW)
         mockDomain(Tag, [tag])
 
         def pinger = new Sensor(pingCode:11111,
@@ -347,7 +343,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         // tag should now be deployed
         surgeries.each(
         {
-            assertEquals(new DeviceStatus(status:'DEPLOYED').status, it.tag.status.status)
+            assertEquals(DeviceStatus.DEPLOYED, it.tag.status)
         })
 
         assertEquals(project, tag.project)
@@ -419,7 +415,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         // tag should now be deployed
         surgeries.each(
         {
-            assertEquals(new DeviceStatus(status:'DEPLOYED').status, it.tag.status.status)
+            assertEquals(DeviceStatus.DEPLOYED, it.tag.status)
         })
 
         assertEquals(tagProject, tag.project)
@@ -456,7 +452,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
                                  serialNumber:String.valueOf(it),
                                  transmitterType:pinger,
                                  model:deviceModel,
-                                 status:new DeviceStatus(status:'NEW'))
+                                 status:DeviceStatus.NEW)
             tags.add(newTag)
 
             def surgery = [
@@ -492,7 +488,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         // tag should now be deployed
         surgeries.each(
         {
-            assertEquals(new DeviceStatus(status:'DEPLOYED').status, it.tag.status.status)
+            assertEquals(DeviceStatus.DEPLOYED, it.tag.status)
         })
     }
 
@@ -551,7 +547,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         {
             Tag tag = it.tag
             assertNotNull(tag)
-            assertEquals(new DeviceStatus(status:'DEPLOYED').status, tag.status.status)
+            assertEquals(DeviceStatus.DEPLOYED, tag.status)
             assertEquals(project, tag.project)
         })
     }

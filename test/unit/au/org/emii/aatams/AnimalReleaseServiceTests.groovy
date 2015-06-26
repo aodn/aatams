@@ -102,11 +102,11 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
     void testDeleteTagStatusRevertsToNew()
     {
         saveMultipleSurgeries(1)
-        assertEquals(DeviceStatus.findByStatus('DEPLOYED'), Tag.get(1).status)
+        assertEquals(DeviceStatus.DEPLOYED, Tag.get(1).status)
         assertEquals(1, AnimalRelease.count())
 
         releaseService.delete(animalReleaseInstance)
-        assertEquals(DeviceStatus.findByStatus('NEW'), Tag.get(1).status)
+        assertEquals(DeviceStatus.NEW, Tag.get(1).status)
         assertEquals(0, AnimalRelease.count())
     }
 
@@ -131,7 +131,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
 
         Tag tag = Tag.get(1)
         assertNotNull(tag)
-        assertEquals(DeviceStatus.findByStatus('NEW'), tag.status)
+        assertEquals(DeviceStatus.NEW, tag.status)
 
         params.surgery = [:]
 
@@ -174,7 +174,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         surgeries = Surgery.findAllByTag(tag)
         assertTrue(surgeries*.tag.id.contains(tag.id))
         assertEquals(1, surgeries.size())
-        assertEquals(DeviceStatus.findByStatus('DEPLOYED'), tag.status)
+        assertEquals(DeviceStatus.DEPLOYED, tag.status)
         assertEquals(animalReleaseInstance.project.id, tag.project.id)
         assertEquals(3, Tag.count())
     }
@@ -367,11 +367,6 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         mockDomain(Sex, [male])
         male.save()
 
-        DeviceStatus newStatus = new DeviceStatus(status:'NEW')
-        DeviceStatus deployedStatus = new DeviceStatus(status:'DEPLOYED')
-        def statusList = [newStatus, deployedStatus]
-        mockDomain(DeviceStatus, statusList)
-        statusList.each { it.save() }
 
         Project project = new Project()
         mockDomain(Project, [project])
@@ -401,8 +396,8 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         mockDomain(TransmitterType, [pinger])
         pinger.save()
 
-        Tag tag1 = new Tag(codeMap:codeMap, serialNumber:"12345", model:tagModel, status:newStatus)
-        Tag tag2 = new Tag(codeMap:codeMap, serialNumber:"22222", model:tagModel, status:newStatus)
+        Tag tag1 = new Tag(codeMap:codeMap, serialNumber:"12345", model:tagModel, status:DeviceStatus.NEW)
+        Tag tag2 = new Tag(codeMap:codeMap, serialNumber:"22222", model:tagModel, status:DeviceStatus.NEW)
         def tagList = [tag1, tag2]
         mockDomain(Tag, tagList)
 
@@ -442,7 +437,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
         {
             Tag tag = Tag.get(it + 1)
             assertNotNull(tag)
-            assertEquals(DeviceStatus.findByStatus('NEW'), tag.status)
+            assertEquals(DeviceStatus.NEW, tag.status)
 
             def surgery = [
                         timestamp_day: 1,
@@ -472,7 +467,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase
             surgeries = Surgery.findAllByTag(tag)
             assertTrue(surgeries*.tag.id.contains(tag.id))
             assertEquals(1, surgeries.size())
-            assertEquals(DeviceStatus.findByStatus('DEPLOYED'), tag.status)
+            assertEquals(DeviceStatus.DEPLOYED, tag.status)
             assertEquals(animalReleaseInstance.project.id, tag.project.id)
         }
     }

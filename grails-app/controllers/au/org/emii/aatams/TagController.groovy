@@ -23,7 +23,7 @@ class TagController extends ReportController
         tagInstance.properties = params
 
         // Default to NEW.
-        tagInstance.status = DeviceStatus.findByStatus('NEW')
+        tagInstance.status = DeviceStatus.NEW
 
         def model =
             [tagInstance: tagInstance] +
@@ -123,7 +123,7 @@ class TagController extends ReportController
     {
         log.debug("Looking up non-deployed tags, serialNumber: " + params.term)
 
-        def tags = Tag.findAllBySerialNumberIlikeAndStatusNotEqual(params.term + "%", DeviceStatus.findByStatus("DEPLOYED"))
+        def tags = Tag.findAllBySerialNumberIlikeAndStatusNotEqual(params.term + "%", DeviceStatus.DEPLOYED)
 
         // Limit so that all results fit on screen.
         if (tags?.size() > 20)

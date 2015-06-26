@@ -57,8 +57,6 @@ class PerformanceDataInitialiser extends AbstractDataInitialiser {
     ProjectRoleType principalInvestigator = new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save()
     ProjectRoleType student = new ProjectRoleType(displayName:'student').save()
     DeviceModel deviceModel = DeviceModel.build().save()
-    DeviceStatus newStatus = DeviceStatus.build(status:'NEW').save()
-    DeviceStatus deployedStatus = DeviceStatus.build(status:'DEPLOYED').save()
     WKTReader reader = new WKTReader();
 
     InstallationConfiguration installationConfig = InstallationConfiguration.build(type:'ARRAY').save()
@@ -212,7 +210,7 @@ class PerformanceDataInitialiser extends AbstractDataInitialiser {
                               pingCode:totalTagCount,
                               project:project,
                               model:deviceModel,
-                              status:deployedStatus,
+                              status:DeviceStatus.DEPLOYED,
                               transmitterType:pinger,
                               serialNumber:"1234").save(failOnError:true)
 
@@ -333,7 +331,7 @@ class PerformanceDataInitialiser extends AbstractDataInitialiser {
                 def receiver = new Receiver(codeName: codeName,
                                             model: deviceModel,
                                             serialNumber: "1234",
-                                            status: deployedStatus,
+                                            status: DeviceStatus.DEPLOYED,
                                             organisation: org).save(flush:true)
                 org.addToReceivers(receiver).save(flush:true)
 
@@ -350,7 +348,7 @@ class PerformanceDataInitialiser extends AbstractDataInitialiser {
                                          recoverer:recoverer,
                                          recoveryDateTime:recoveryDateTime,
                                          location:(Point)reader.read("POINT(10.1234 10.1234)"),
-                                         status: deployedStatus)
+                                         status: DeviceStatus.DEPLOYED)
 
                 receiverDeployment.recovery = receiverRecovery
                 receiver.save()

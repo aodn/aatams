@@ -7,9 +7,6 @@ import grails.converters.JSON
 
 class TagControllerTests extends AbstractControllerUnitTestCase
 {
-    DeviceStatus newStatus
-    DeviceStatus deployedStatus
-    DeviceStatus recoveredStatus
 
     def candidateEntitiesService
 
@@ -23,12 +20,6 @@ class TagControllerTests extends AbstractControllerUnitTestCase
     {
         super.setUp()
 
-        newStatus = new DeviceStatus(status:'NEW')
-        deployedStatus = new DeviceStatus(status:'DEPLOYED')
-        recoveredStatus = new DeviceStatus(status:'RECOVERED')
-        def statusList = [newStatus, deployedStatus, recoveredStatus]
-        mockDomain(DeviceStatus, statusList)
-        statusList.each { it.save() }
 
         project1 = new Project()
         project2 = new Project()
@@ -57,9 +48,9 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         mockDomain(CodeMap, [codeMap])
         codeMap.save()
 
-        Tag newTag = new Tag(codeMap:codeMap, serialNumber:'1111-A', status:newStatus)
-        Tag deployedTag = new Tag(codeMap:codeMap, serialNumber:'2222', status:deployedStatus)
-        Tag recoveredTag = new Tag(codeMap:codeMap, serialNumber:'1111-B', status:recoveredStatus)
+        Tag newTag = new Tag(codeMap:codeMap, serialNumber:'1111-A', status:DeviceStatus.NEW)
+        Tag deployedTag = new Tag(codeMap:codeMap, serialNumber:'2222', status:DeviceStatus.DEPLOYED)
+        Tag recoveredTag = new Tag(codeMap:codeMap, serialNumber:'1111-B', status:DeviceStatus.RECOVERED)
         def tagList = [newTag, deployedTag, recoveredTag]
         mockDomain(Tag, tagList)
         tagList.each { it.save() }
@@ -79,9 +70,9 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         assertEquals(2, jsonResult.size())
 
         assertEquals('1111-A', jsonResult[0].serialNumber)
-        assertEquals(newStatus.status, jsonResult[0].status.status)
+        assertEquals(DeviceStatus.NEW.key, jsonResult[0].status.name)
         assertEquals('1111-B', jsonResult[1].serialNumber)
-        assertEquals(recoveredStatus.status, jsonResult[1].status.status)
+        assertEquals(DeviceStatus.RECOVERED.key, jsonResult[1].status.name)
     }
 
     void testCreate()

@@ -30,7 +30,7 @@ class TagTests extends GrailsUnitTestCase
             new Tag(codeMap:a69_1303,
                     model:new TagDeviceModel(),
                     serialNumber:"1111",
-                    status:new DeviceStatus())
+                    status:DeviceStatus.NEW)
 
         mockDomain(Tag, [tag])
         tag.save()
@@ -73,7 +73,7 @@ class TagTests extends GrailsUnitTestCase
                            model:model,
                            project:new Project(),
                            serialNumber:"1111",
-                           status:new DeviceStatus(),
+                           status:DeviceStatus.NEW,
                            transmitterType:new TransmitterType())
 
 
@@ -87,7 +87,7 @@ class TagTests extends GrailsUnitTestCase
                                model:model,
                                project:new Project(),
                                serialNumber:"1111",
-                               status:new DeviceStatus(),
+                               status:DeviceStatus.NEW,
                                transmitterType:new TransmitterType())
             tag2.save(failOnError:true)
 
@@ -159,7 +159,7 @@ class TagTests extends GrailsUnitTestCase
             new Tag(codeMap:a69_1303,
                     model:new TagDeviceModel(),
                     serialNumber:"1111",
-                    status:new DeviceStatus())
+                    status:DeviceStatus.NEW)
 
         assertNull(newTag.sensors)
         newTag.setPingCode(1234)

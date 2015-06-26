@@ -67,10 +67,6 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
             return "web-app/reports/"
         }
 
-        def deployed = new DeviceStatus(status: "DEPLOYED")
-        mockDomain(DeviceStatus, [deployed])
-        deployed.save()
-
         def vemco = new DeviceManufacturer(manufacturerName: "Vemco")
         mockDomain(DeviceManufacturer, [vemco])
         vemco.save()
@@ -142,7 +138,7 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
 ,user:,,,,Joe Bloggs,,,,,,,,
 ,,,code name,,,status,,manufacturer,,model,serial number,,
 ,organisation:,,,IMOS,,,total receivers:,,0,,,,
-,,,vr2w-1,,,null,,Vemco,,vr2w,1,,
+,,,vr2w-1,,,NEW,,Vemco,,vr2w,1,,
 '''
         assertExport(expectedOutput, [receiverList[0]])
     }
@@ -154,8 +150,8 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
 ,user:,,,,Joe Bloggs,,,,,,,,
 ,,,code name,,,status,,manufacturer,,model,serial number,,
 ,organisation:,,,IMOS,,,total receivers:,,0,,,,
-,,,vr2w-1,,,null,,Vemco,,vr2w,1,,
-,,,vr2w-2,,,null,,Vemco,,vr2w,2,,
+,,,vr2w-1,,,NEW,,Vemco,,vr2w,1,,
+,,,vr2w-2,,,NEW,,Vemco,,vr2w,2,,
 '''
 
         assertExport(expectedOutput, [receiverList[0], receiverList[1]])

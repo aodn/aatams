@@ -45,7 +45,6 @@ class ReceiverRecovery
     {
         recoveryDateTime(validator: recoveryDateTimeValidator)
         location()
-        status()
         recoverer()
         deployment()
         comments(nullable:true)

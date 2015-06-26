@@ -13,7 +13,7 @@
 	<parameter name="FILTER_PARAMS" class="java.util.Collection" isForPrompting="false"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false"/>
 	<field name="name" class="java.lang.String"/>
-	<field name="status.status" class="java.lang.String"/>
+	<field name="status.key" class="java.lang.String"/>
 	<field name="model.modelName" class="java.lang.String"/>
 	<field name="model.manufacturer.manufacturerName" class="java.lang.String"/>
 	<field name="serialNumber" class="java.lang.String"/>
@@ -114,7 +114,7 @@
 			<textField>
 				<reportElement style="fieldValue" x="132" y="0" width="100" height="20"/>
 				<textElement/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{status.status}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{status.key}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="fieldValue" x="232" y="0" width="100" height="20"/>

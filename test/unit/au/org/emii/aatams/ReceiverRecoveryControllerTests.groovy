@@ -75,11 +75,8 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
 
         mockDomain(ReceiverRecovery)
 
-        DeviceStatus deployed = new DeviceStatus(status: 'DEPLOYED')
-        recovered = new DeviceStatus(status: 'RECOVERED')
-        def statusList = [deployed, recovered]
-        mockDomain(DeviceStatus, statusList)
-        statusList.each { it.save() }
+        DeviceStatus deployed = DeviceStatus.DEPLOYED
+        recovered = DeviceStatus.RECOVERED
 
         ReceiverDeviceModel model = new ReceiverDeviceModel(modelName: "VR2W")
         receiver = new Receiver(model: model, serialNumber: "1234")
@@ -115,7 +112,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
         controller.params.recoverer = new ProjectRole()
         controller.params.recoveryDateTime = new DateTime()
         controller.params.location = new GeometryFactory().createPoint(new Coordinate(34f, 34f))
-        controller.params.status = new DeviceStatus()
+        controller.params.status = DeviceStatus.NEW
 
         controller.save()
 

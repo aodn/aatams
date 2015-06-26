@@ -213,7 +213,7 @@ class ReceiverDeploymentLoader extends AbstractLoader
         recovery.recoverer = ProjectRole.findByRoleTypeAndProject(ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR), record.station.installation.project)
         recovery.recoveryDateTime = record.recoveryDateTime
         recovery.location = record.deployment.location
-        recovery.status = DeviceStatus.findByStatus("RECOVERED")
+        recovery.status = DeviceStatus.RECOVERED
         recovery.comments = record[RCD_OTHER_FAILURE_COL]
             
         recovery.save(failOnError: true)

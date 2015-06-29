@@ -251,35 +251,6 @@ class ReceiverTests extends GrailsUnitTestCase
         assertStatus(DeviceStatus.RECOVERED, receiver, recoveryDate.plusDays(1))
     }
 
-    // TODO: this can go?
-    void testCanDeploy() {
-        Receiver receiver = new Receiver()
-        receiver.save()
-
-        def deploymentDateTime = new DateTime()
-        ReceiverDeployment existingDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: deploymentDateTime)
-        existingDeployment.save()
-        receiver.addToDeployments(existingDeployment)
-
-        ReceiverRecovery existingRecovery = new ReceiverRecovery(deployment: existingDeployment,
-                                                                 recoveryDateTime: deploymentDateTime.plusDays(1),
-                                                                 status: DeviceStatus.RETIRED)
-        existingRecovery.save()
-        existingDeployment.recovery = existingRecovery
-
-        // Create second deployment before existing.
-        def secondDeploymentDateTime = deploymentDateTime.minusDays(5)
-        ReceiverDeployment secondDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDateTime)
-        receiver.addToDeployments(secondDeployment)
-        assertTrue(receiver.canDeploy(secondDeployment))
-        secondDeployment.save()
-
-        // Update date/time to be future
-        secondDeploymentDateTime = deploymentDateTime.plusDays(2)
-        secondDeployment.deploymentDateTime = secondDeploymentDateTime
-        assertFalse(receiver.canDeploy(secondDeployment))
-    }
-
     private void assertStatus(expectedStatus, receiver) {
         assertNotNull(receiver.status)
         assertEquals(expectedStatus, receiver.status)

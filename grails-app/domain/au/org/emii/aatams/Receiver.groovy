@@ -13,7 +13,6 @@ class Receiver extends Device
     static transients = ['name',
                          'deviceID',
                          'status',
-                         'statusNotIncludingDeployment',
                          'mostRecentRecovery',
                          'mostRecentDeployment',
                          'recoveriesBeforeOrEqualToDateTime',
@@ -135,59 +134,9 @@ class Receiver extends Device
         return new DateTime()
     }
 
-    DeviceStatus getStatusNotIncludingDeployment(ReceiverDeployment deployment)
-    {
-        return withoutDeployment(
-            deployment,
-            {
-                return getStatus(deployment.deploymentDateTime)
-            }
-        )
-    }
-
-    boolean canDeploy(deployment)
-    {
-        return withoutDeployment(
-            deployment,
-            {
-                return canDeployAtTime(deployment.deploymentDateTime)
-            }
-        )
-    }
-
-    private withoutDeployment(deployment, testClosure)
-    {
-        boolean hasDeployment = hasDeployment(deployment)
-
-        if (hasDeployment)
-        {
-            removeFromDeployments(deployment)
-        }
-
-        def retVal = testClosure.call()
-
-        if (hasDeployment)
-        {
-            addToDeployments(deployment)
-        }
-
-        return retVal
-    }
-
     private boolean hasDeployment(deployment)
     {
         return deployments*.id?.contains(deployment.id)
-    }
-
-    boolean canDeployAtTime(dateTime)
-    {
-        log.debug("Status: ${getStatus(dateTime)}, at time: ${dateTime}")
-        if ([DeviceStatus.DEPLOYED, DeviceStatus.RETIRED].contains(getStatus(dateTime)))
-        {
-            return false
-        }
-
-        return true
     }
 
     boolean same(Object other) {

@@ -101,9 +101,6 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertEquals("show", controller.redirectArgs.action)
         assertEquals(1, station1.numDeployments)
 
-        println controller.redirectArgs
-        println ReceiverDeployment.list()*.id
-
         def deployment = ReceiverDeployment.get(controller.redirectArgs.id)
         assertNotNull(deployment)
         assertEquals(1, deployment.deploymentNumber)
@@ -119,17 +116,6 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         def updatedDeployment = ReceiverDeployment.get(controller.redirectArgs.id)
         assertNotNull(updatedDeployment)
         assertEquals(deploymentDateTime, updatedDeployment.deploymentDateTime)
-    }
-
-    private void assertFailedDeployment(deploymentDateTime, field, fieldErrorCode) {
-        assertEquals(0, station1.numDeployments)
-
-        controller.params.deploymentDateTime = deploymentDateTime
-        controller.params.receiver = receiver
-        controller.save()
-
-        def model = controller.renderArgs.model
-        assertEquals(fieldErrorCode, model.receiverDeploymentInstance.errors.getFieldError(field).getCode())
     }
 
     void testSaveNoDeployment() {
@@ -162,35 +148,6 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         createDeployment(deploymentDateTime.plusDays(1))
 
         assertSuccessfulSaveDeployment(deploymentDateTime)
-    }
-
-    void testSaveCurrentDeployment() {
-        def deploymentDateTime = new DateTime()
-        def existingDeployment = createDeployment(deploymentDateTime.minusDays(1))
-
-        assertFailedDeployment(deploymentDateTime, "receiver", "receiverDeployment.receiver.invalidStateAtDateTime")
-
-        // Should work if we delete the existing deployment then try again.
-        existingDeployment.delete()
-        receiver.deployments.clear()
-
-        assertSuccessfulSaveDeployment(deploymentDateTime)
-    }
-
-    void testSavePastRecoveryRecovered() {
-        def deploymentDateTime = new DateTime()
-        ReceiverDeployment pastDeployment = createDeployment(deploymentDateTime.minusDays(2))
-        ReceiverRecovery pastRecovery = createRecovery(deploymentDateTime.minusDays(1), pastDeployment, DeviceStatus.RECOVERED)
-
-        assertSuccessfulSaveDeployment(deploymentDateTime)
-    }
-
-    void testSavePastRecoveryRetired() {
-        def deploymentDateTime = new DateTime()
-        ReceiverDeployment pastDeployment = createDeployment(deploymentDateTime.minusDays(2))
-        ReceiverRecovery pastRecovery = createRecovery(deploymentDateTime.minusDays(1), pastDeployment, DeviceStatus.RETIRED)
-
-        assertFailedDeployment(deploymentDateTime, "receiver", "receiverDeployment.receiver.invalidStateAtDateTime")
     }
 
     void testSaveFutureRecoveryRecovered() {

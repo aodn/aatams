@@ -66,7 +66,9 @@
                                 <g:recoveryList entityList="${receiverInstance?.deployments?.sort({a, b -> a.deploymentDateTime <=> b.deploymentDateTime})}" 
                                                 hideColumns="${['receiver', 'deploymentLocation', 'recoveryLocation']}" 
                                                 clazz="nested"
-                                                sortable="${false}" />
+                                                sortable="${false}",
+                                                deploymentCols="6"
+                                                recoveryCols="4" />
                             </td>
                         </tr>
                         

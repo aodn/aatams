@@ -20,7 +20,13 @@
             
             <g:listControlForm name="receiverRecovery" formats="${[]}" />       
             
-            <g:recoveryList entityList="${entityList}" params="${params}" sortable="${true}"/>
+            <g:recoveryList
+                entityList="${entityList}"
+                params="${params}"
+                sortable="${true}"
+                deploymentCols="8"
+                recoveryCols="5"
+            />
             
             <div class="paginateButtons">
                 <g:paginate total="${total}" params="${params}" />

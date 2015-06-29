@@ -3,14 +3,17 @@
         <table class="${clazz}">
             <thead>
               <tr>
-                  <th colspan="7">Deployment Details</th>
-                  <th colspan="5">Recovery Details</th>
+                  <th colspan="${deploymentCols}">Deployment Details</th>
+                  <th colspan="${recoveryCols}">Recovery Details</th>
               </tr>
             </thead>
             <thead>
                 <tr>
 
                     <td/>
+                    <g:column property="initialisationDateTime" title="${message(code: 'receiverDeployment.initialisationDateTime.label', default: 'Initialisation Date')}"
+                              params="${params}" sortable="${sortable}" />
+
                     <g:column property="deploymentDateTime" title="${message(code: 'receiverDeployment.deploymentDateTime.label', default: 'Deployment Date')}"
                               params="${params}" sortable="${sortable}" />
 
@@ -57,6 +60,8 @@
                 <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 
                     <td class="rowButton"><g:link class="show" controller="receiverDeployment" action="show" id="${receiverDeployment.id}">.</g:link></td>
+
+                    <td><joda:format value="${receiverDeployment.initialisationDateTime}" /></td>
 
                     <td><joda:format value="${receiverDeployment.deploymentDateTime}" /></td>
 

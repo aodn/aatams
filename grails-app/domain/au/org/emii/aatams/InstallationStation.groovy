@@ -24,7 +24,7 @@ class InstallationStation
 
     static belongsTo = [installation: Installation]
     static hasMany = [deployments: ReceiverDeployment]
-    static transients = [ 'curtainPositionAsString', 'scrambledLocation', 'latitude', 'longitude', 'active', 'detectionCount', 'receivers' ]
+    static transients = [ 'curtainPositionAsString', 'scrambledLocation', 'latitude', 'longitude', 'active', 'detectionCount', 'receivers', 'numDeployments' ]
     static auditable = true
 
     static mapping =
@@ -44,11 +44,6 @@ class InstallationStation
      * Not applicable to some installation configurations (e.g. array).
      */
     Integer curtainPosition
-
-    /**
-     * Number of deployments at this particular station.
-     */
-    Integer numDeployments = 0
 
     /**
      * Geographic position of this station.
@@ -102,7 +97,11 @@ class InstallationStation
     }
 
     def getReceivers() {
-        deployments*.receiver
+        deployments*.receiver.unique()
+    }
+
+    def getNumDeployments() {
+        deployments ? deployments.count() : 0
     }
 
     /**

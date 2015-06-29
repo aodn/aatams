@@ -87,10 +87,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertEquals("nullable",  model.receiverDeploymentInstance.errors.getFieldError("receiver").getCode())
     }
 
-    private void assertSuccessfulSaveDeployment(deploymentDateTime)
-    {
-        assertEquals(0, station1.numDeployments)
-
+    private void assertSuccessfulSaveDeployment(deploymentDateTime) {
         boolean rescanCalled = false
         controller.metaClass.rescanDetections =
         {
@@ -104,12 +101,10 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         controller.save()
 
         assertEquals("show", controller.redirectArgs.action)
-        assertEquals(1, station1.numDeployments)
         assertFalse(rescanCalled)
 
         def deployment = ReceiverDeployment.get(controller.redirectArgs.id)
         assertNotNull(deployment)
-        assertEquals(1, deployment.deploymentNumber)
     }
 
     private void assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime)

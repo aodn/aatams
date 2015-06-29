@@ -40,7 +40,6 @@ class ReceiverDeploymentController extends ReportController
         {
             if (isValidDeployment(receiverDeploymentInstance))
             {
-                incNumDeployments(receiverDeploymentInstance)
             }
             else
             {
@@ -76,19 +75,6 @@ class ReceiverDeploymentController extends ReportController
         }
 
         return true
-    }
-
-    private void incNumDeployments(ReceiverDeployment deployment)
-    {
-        if (deployment?.station?.numDeployments != null)
-        {
-            deployment?.station?.numDeployments =
-                    deployment?.station?.numDeployments + 1
-            deployment?.station?.save()
-        }
-
-        // And record the deployment number against the actual deployment.
-        deployment?.deploymentNumber = deployment?.station?.numDeployments
     }
 
     private renderCreateWithDefaultModel(ReceiverDeployment receiverDeploymentInstance)

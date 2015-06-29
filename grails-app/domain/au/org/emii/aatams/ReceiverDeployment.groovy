@@ -19,12 +19,10 @@ import com.vividsolutions.jts.geom.Point
 class ReceiverDeployment
 {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
-    static transients = ['scrambledLocation', 'active', 'latitude', 'longitude']
+    static transients = [ 'scrambledLocation', 'active', 'latitude', 'longitude', 'deploymentNumber' ]
     static auditable = true
 
     static hasMany = [ events: ValidReceiverEvent ]
-
-    Integer deploymentNumber
 
     DateTime initialisationDateTime = new DateTime(Person.defaultTimeZone())
 
@@ -113,7 +111,6 @@ class ReceiverDeployment
         receiver()
         station()
         initialisationDateTime(nullable:true)
-        deploymentNumber(nullable:true, min:0)
         deploymentDateTime()
         recoveryDate(nullable:true, validator:recoveryDateValidator)
         acousticReleaseID(nullable:true)
@@ -181,5 +178,11 @@ class ReceiverDeployment
         }
 
         return (!deploymentDateTime.isAfter(dateTime)) && dateTime.isBefore(recovery?.recoveryDateTime)
+    }
+
+    def getDeploymentNumber() {
+        receiver?.deployments?.sort { it.deploymentDateTime }.findIndexOf {
+            it.same(this)
+        } + 1
     }
 }

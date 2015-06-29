@@ -203,4 +203,10 @@ class ReceiverDeployment
             it.same(this)
         } + 1
     }
+
+    def getDeploymentNumber() {
+        receiver?.deployments?.sort { it.deploymentDateTime }.findIndexOf {
+            it.same(this)
+        } + 1
+    }
 }

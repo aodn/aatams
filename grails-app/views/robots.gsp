@@ -21,3 +21,6 @@ Disallow: /aatams/surgery/*
 
 User-agent: *
 Disallow: /aatams/tag/*
+
+User-agent: *
+Disallow: /aatams/receiverEvent/*

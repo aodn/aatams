@@ -32,7 +32,6 @@ class ReceiverDeploymentTests extends GrailsUnitTestCase {
         ReceiverDeployment deployment =
             new ReceiverDeployment(station: new InstallationStation(),
                                    receiver: new Receiver(),
-                                   deploymentNumber: 1,
                                    deploymentDateTime:new DateTime(),
                                    recoveryDate:new DateTime().minusHours(1).toDate(),
                                    acousticReleaseID:"1234",

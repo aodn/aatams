@@ -92,18 +92,14 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
     }
 
     private void assertSuccessfulSaveDeployment(deploymentDateTime) {
-        assertEquals(0, station1.numDeployments)
-
         controller.params.deploymentDateTime = deploymentDateTime
         controller.params.receiver = receiver
         controller.save()
 
         assertEquals("show", controller.redirectArgs.action)
-        assertEquals(1, station1.numDeployments)
 
         def deployment = ReceiverDeployment.get(controller.redirectArgs.id)
         assertNotNull(deployment)
-        assertEquals(1, deployment.deploymentNumber)
     }
 
     private void assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime) {

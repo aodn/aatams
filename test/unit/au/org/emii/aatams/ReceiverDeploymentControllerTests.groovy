@@ -52,9 +52,9 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         mockDomain(ReceiverDeployment)
         mockDomain(ReceiverRecovery)
 
-        station1 = new InstallationStation(name:'station1', receivers:new HashSet<Receiver>())
-        station2 = new InstallationStation(name:'station2', receivers:new HashSet<Receiver>())
-        newStation = new InstallationStation(name:'newStation', receivers:new HashSet<Receiver>())
+        station1 = new InstallationStation(name:'station1')
+        station2 = new InstallationStation(name:'station2')
+        newStation = new InstallationStation(name:'newStation')
         def stationList = [station1, station2, newStation]
         mockDomain(InstallationStation, stationList)
         stationList.each { it.save() }
@@ -282,46 +282,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertDefaultValues(model)
     }
 
-    void testSaveCheckStationsReceivers()
-    {
-        assertFalse(station1.receivers.contains(receiver))
-        assertFalse(station1.receivers.contains(csiroReceiver))
-
-        controller.params.receiver = receiver
-        controller.save()
-
-        assertTrue(station1.receivers.contains(receiver))
-        assertFalse(station1.receivers.contains(csiroReceiver))
-
-        controller.params.receiver = csiroReceiver
-        controller.save()
-
-        assertTrue(station1.receivers.contains(receiver))
-        assertTrue(station1.receivers.contains(csiroReceiver))
-    }
-
-    void testUpdateCheckStationsReceivers()
-    {
-        assertFalse(station1.receivers.contains(receiver))
-        assertFalse(station1.receivers.contains(csiroReceiver))
-
-        controller.params.receiver = receiver
-        controller.save()
-
-        assertTrue(station1.receivers.contains(receiver))
-        assertFalse(station1.receivers.contains(csiroReceiver))
-
-        controller.params.clear()
-        controller.params.id = controller.redirectArgs.id
-        controller.params.receiver = csiroReceiver
-        controller.update()
-
-        assertFalse(station1.receivers.contains(receiver))
-        assertTrue(station1.receivers.contains(csiroReceiver))
-    }
-
-    void testEditIncludesCurrentlyDeployedReceiverAndStation()
-    {
+    void testEditIncludesCurrentlyDeployedReceiverAndStation() {
         def model = controller.create()
         assertEquals(2, model.candidateReceivers.size())
         assertEquals(2, model.candidateStations.size())

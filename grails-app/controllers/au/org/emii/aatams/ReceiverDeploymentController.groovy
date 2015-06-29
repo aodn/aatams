@@ -89,19 +89,6 @@ class ReceiverDeploymentController extends ReportController
 
         // And record the deployment number against the actual deployment.
         deployment?.deploymentNumber = deployment?.station?.numDeployments
-
-        addReceiverToStation(deployment)
-    }
-
-    private addReceiverToStation(ReceiverDeployment deployment)
-    {
-        deployment.station.addToReceivers(deployment.receiver)
-    }
-
-    private removeReceiverFromStation(ReceiverDeployment deployment)
-    {
-        deployment.station.removeFromReceivers(deployment.receiver)
-        deployment.receiver.save()
     }
 
     private renderCreateWithDefaultModel(ReceiverDeployment receiverDeploymentInstance)
@@ -184,10 +171,7 @@ class ReceiverDeploymentController extends ReportController
                 }
             }
 
-//            boolean isValidDeployment = isValidDeployment(receiverDeploymentInstance)
-            removeReceiverFromStation(receiverDeploymentInstance)
             receiverDeploymentInstance.properties = params
-            addReceiverToStation(receiverDeploymentInstance)
 
             if (!receiverDeploymentInstance.hasErrors() && isValidDeployment(receiverDeploymentInstance) && receiverDeploymentInstance.save(flush: true)) {
 

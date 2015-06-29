@@ -1,6 +1,6 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.bulk.ReceiverDownloadFileProgressUpdater
+import au.org.emii.aatams.ReceiverDownloadFileProgressUpdater
 import org.apache.commons.io.input.BOMInputStream;
 import org.grails.plugins.csv.CSVMapReader
 

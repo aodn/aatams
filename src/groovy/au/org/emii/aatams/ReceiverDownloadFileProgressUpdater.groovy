@@ -1,4 +1,4 @@
-package au.org.emii.aatams.bulk
+package au.org.emii.aatams
 
 import au.org.emii.aatams.ReceiverDownloadFileProgress
 import org.slf4j.Logger

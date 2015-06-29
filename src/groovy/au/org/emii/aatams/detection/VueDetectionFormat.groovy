@@ -1,7 +1,7 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.FileFormat
-import au.org.emii.aatams.bulk.FileFormatException
+import au.org.emii.aatams.FileFormatException
 
 import org.joda.time.DateTimeZone
 import org.joda.time.format.DateTimeFormat

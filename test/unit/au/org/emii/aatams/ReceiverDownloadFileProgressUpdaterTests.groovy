@@ -1,9 +1,6 @@
-package au.org.emii.aatams.bulk
+package au.org.emii.aatams
 
-import au.org.emii.aatams.FileProcessingStatus
-import au.org.emii.aatams.ReceiverDownloadFile
-import au.org.emii.aatams.ReceiverDownloadFileProgress
-import au.org.emii.aatams.ReceiverDownloadFileType
+import au.org.emii.aatams.*
 import grails.test.*
 
 class ReceiverDownloadFileProgressUpdaterTests extends GrailsUnitTestCase {

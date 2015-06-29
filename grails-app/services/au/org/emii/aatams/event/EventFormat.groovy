@@ -1,7 +1,7 @@
 package au.org.emii.aatams.event
 
 import au.org.emii.aatams.FileFormat
-import au.org.emii.aatams.bulk.FileFormatException
+import au.org.emii.aatams.FileFormatException
 
 class EventFormat extends FileFormat
 {
@@ -16,12 +16,12 @@ class EventFormat extends FileFormat
     Map parseRow(row) throws FileFormatException
     {
         def timestamp = getUtcDate(row, DATE_AND_TIME_COLUMN, DATE_FORMAT)
-        
+
         // nullable string properties which are blank are saved as null, so do that here too
         // so that the comparison when checking for duplicates works properly.
         def data = row[DATA_COLUMN] == "" ? null : row[DATA_COLUMN]
         def units = row[UNITS_COLUMN] == "" ? null : row[UNITS_COLUMN]
-        
+
         UNITS_DETAILS_COLUMNS.each
         {
             columnName ->
@@ -31,7 +31,7 @@ class EventFormat extends FileFormat
                 units += "," + row[columnName]
             }
         }
-        
+
         return [timestamp: timestamp,
                 receiverName: row[RECEIVER_COLUMN],
                 description: row[DESCRIPTION_COLUMN],

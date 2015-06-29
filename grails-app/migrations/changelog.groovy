@@ -16,4 +16,5 @@ databaseChangeLog = {
     include file: 'regenerate_all_permissions.groovy'
     include file: 'join_dets_and_rxrs.groovy'
     include file: 'device_status_as_enum.groovy'
+    include file: 'deployment_related_tidy_up.groovy'
 }

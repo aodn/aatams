@@ -73,24 +73,7 @@
 
                                 </td>
                             </tr>
-<!--                        
-                            <tr class="prop">
-                                <td valign="top" class="name">
-                                  <label class="compulsory" for="receivers"><g:message code="installationStation.receivers.label" default="Receivers" /></label>
-                                </td>
-                                <td valign="top" class="value ${hasErrors(bean: installationStationInstance, field: 'receivers', 'errors')}">
-                                    
-<ul>
-<g:each in="${installationStationInstance?.receivers?}" var="r">
-    <li><g:link controller="receiver" action="show" id="${r.id}">${r?.encodeAsHTML()}</g:link></li>
-</g:each>
-</ul>
-<g:link controller="receiver" action="create" params="['installationStation.id': installationStationInstance?.id]">${message(code: 'default.add.label', args: [message(code: 'receiver.label', default: 'Receiver')])}</g:link>
 
-
-                                </td>
-                            </tr>
-                        -->
                         </tbody>
                     </table>
                 </div>

@@ -33,13 +33,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
         mockLogging(PermissionUtilsService)
         permService = new PermissionUtilsService()
 
-        def newStatus = new DeviceStatus(status:"NEW")
-        def deployedStatus = new DeviceStatus(status:"DEPLOYED")
-        def recoveredStatus = new DeviceStatus(status:"RECOVERED")
 
-        def statusList = [newStatus, deployedStatus, recoveredStatus]
-        mockDomain(DeviceStatus, statusList)
-        statusList.each { it.save() }
 
         // User belongs to IMOS, but not to CSIRO.
         def imos = new Organisation(name:"IMSO")
@@ -392,9 +386,7 @@ class CandidateEntitiesFilterTests extends AbstractGrailsUnitTestCase
 
     void testTagCreate()
     {
-        DeviceStatus status = new DeviceStatus(status:"NEW")
-        mockDomain(DeviceStatus, [status])
-        status.save()
+        DeviceStatus status = DeviceStatus.NEW
 
         // candidateProjects
         def model = tagController.create()

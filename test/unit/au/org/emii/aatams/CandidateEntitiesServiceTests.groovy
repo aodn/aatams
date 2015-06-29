@@ -75,13 +75,7 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
 
         projectList.each { it.save() }
 
-        DeviceStatus newStatus = new DeviceStatus(status:"NEW")
-        DeviceStatus deployedStatus = new DeviceStatus(status:"DEPLOYED")
-        DeviceStatus recoveredStatus = new DeviceStatus(status:"RECOVERED")
 
-        def statusList = [newStatus, deployedStatus, recoveredStatus]
-        mockDomain(DeviceStatus, statusList)
-        statusList.each { it.save() }
 
         newReceiver = new Receiver(serialNumber:"111", organisation:imos)
         deployedReceiver = new Receiver(serialNumber:"222", organisation:imos)

@@ -75,13 +75,13 @@ class SensorTests extends GrailsUnitTestCase
         tag1303 = new Tag(codeMap: a69_1303,
                           model:new TagDeviceModel(),
                           serialNumber:"1111",
-                          status:new DeviceStatus(),
+                          status:DeviceStatus.NEW,
                           project: sealProject)
 
         tag9002 = new Tag(codeMap: a69_9002,
                           model:new TagDeviceModel(),
                           serialNumber:"2222",
-                          status:new DeviceStatus(),
+                          status:DeviceStatus.NEW,
                           project: tunaProject)
 
         def tagList = [tag1303, tag9002]

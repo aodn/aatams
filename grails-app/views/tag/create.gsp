@@ -98,7 +98,7 @@
                                     <label class="compulsory" for="status"><g:message code="tag.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'status', 'errors')}">
-                                    <g:select name="status.id" class="remember" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${tagInstance?.status?.id}"  />
+                                    <g:select name="status" class="remember" from="${au.org.emii.aatams.DeviceStatus.values()}" optionKey="key" value="${tagInstance?.status?.key}"  />
 
                                 </td>
                             </tr>

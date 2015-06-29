@@ -10,10 +10,6 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
     Receiver receiver
     Receiver csiroReceiver
 
-    DeviceStatus newStatus
-    DeviceStatus deployedStatus
-    DeviceStatus recoveredStatus
-    DeviceStatus retiredStatus
 
     def candidateEntitiesService
 
@@ -29,14 +25,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         super.setUp()
 
         mockDomain(Person)
-        newStatus = new DeviceStatus(status:"NEW")
-        deployedStatus = new DeviceStatus(status:"DEPLOYED")
-        recoveredStatus = new DeviceStatus(status:"RECOVERED")
-        retiredStatus = new DeviceStatus(status:"RETIRED")
 
-        def statusList = [newStatus, deployedStatus, recoveredStatus, retiredStatus]
-        mockDomain(DeviceStatus, statusList)
-        statusList.each { it.save() }
 
         def imos = new Organisation(name:"IMSO")
         def csiro = new Organisation(name:"CSIRO")
@@ -201,7 +190,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
     {
         def deploymentDateTime = new DateTime()
         ReceiverDeployment pastDeployment = createDeployment(deploymentDateTime.minusDays(2))
-        ReceiverRecovery pastRecovery = createRecovery(deploymentDateTime.minusDays(1), pastDeployment, recoveredStatus)
+        ReceiverRecovery pastRecovery = createRecovery(deploymentDateTime.minusDays(1), pastDeployment, DeviceStatus.RECOVERED)
 
         assertSuccessfulSaveDeployment(deploymentDateTime)
     }
@@ -210,7 +199,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
     {
         def deploymentDateTime = new DateTime()
         ReceiverDeployment pastDeployment = createDeployment(deploymentDateTime.minusDays(2))
-        ReceiverRecovery pastRecovery = createRecovery(deploymentDateTime.minusDays(1), pastDeployment, retiredStatus)
+        ReceiverRecovery pastRecovery = createRecovery(deploymentDateTime.minusDays(1), pastDeployment, DeviceStatus.RETIRED)
 
         assertFailedDeployment(deploymentDateTime, "receiver", "receiverDeployment.receiver.invalidStateAtDateTime")
     }
@@ -219,7 +208,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
     {
         def deploymentDateTime = new DateTime()
         ReceiverDeployment futureDeployment = createDeployment(deploymentDateTime.plusDays(2))
-        ReceiverRecovery futureRecovery = createRecovery(deploymentDateTime.plusDays(3), futureDeployment, recoveredStatus)
+        ReceiverRecovery futureRecovery = createRecovery(deploymentDateTime.plusDays(3), futureDeployment, DeviceStatus.RECOVERED)
 
         assertSuccessfulSaveDeployment(deploymentDateTime)
     }
@@ -228,7 +217,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
     {
         def deploymentDateTime = new DateTime()
         ReceiverDeployment futureDeployment = createDeployment(deploymentDateTime.plusDays(2))
-        ReceiverRecovery futureRecovery = createRecovery(deploymentDateTime.plusDays(3), futureDeployment, retiredStatus)
+        ReceiverRecovery futureRecovery = createRecovery(deploymentDateTime.plusDays(3), futureDeployment, DeviceStatus.RETIRED)
 
         assertSuccessfulSaveDeployment(deploymentDateTime)
     }
@@ -241,7 +230,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime.plusDays(2))
         assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime.minusDays(3))
 
-        createRecovery(deploymentDateTime.plusDays(3), existingDeployment, recoveredStatus)
+        createRecovery(deploymentDateTime.plusDays(3), existingDeployment, DeviceStatus.RECOVERED)
         assertSuccessfulUpdateDeployment(existingDeployment, deploymentDateTime.minusDays(3))
     }
 

@@ -86,7 +86,7 @@ class AnimalReleaseService
                 Surgery surgery = new Surgery(cleanSurgeryParams)
                 surgery.save(failOnError:true)
 
-                tag.status = DeviceStatus.findByStatus('DEPLOYED')
+                tag.status = DeviceStatus.DEPLOYED
 
                 if (!tag.project)
                 {
@@ -178,7 +178,7 @@ class AnimalReleaseService
         def surgeries = Surgery.findAllByRelease(animalReleaseInstance)
         surgeries.each
         {
-            it.tag.status = DeviceStatus.findByStatus('NEW', [cache:true])
+            it.tag.status = DeviceStatus.NEW
             it.tag.save()
         }
 

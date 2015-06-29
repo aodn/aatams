@@ -86,7 +86,7 @@
                                   <label class="compulsory" for="status"><g:message code="sensor.status.label" default="Status" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'status', 'errors')}">
-                                    <g:select name="status.id" from="${au.org.emii.aatams.DeviceStatus.list()}" optionKey="id" value="${sensorInstance?.status?.id}" />
+                                    <g:select name="status" from="${au.org.emii.aatams.DeviceStatus.values()}" optionKey="key" value="${sensorInstance?.status.key}" />
 
                                 </td>
                             </tr>

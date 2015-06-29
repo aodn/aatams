@@ -32,7 +32,7 @@ class SurgeryController extends AbstractController {
 
         // Lookup or create tag (after inserting some required parameters)...
         params.tag['project'] = Project.get(params.projectId)
-        params.tag['status'] = DeviceStatus.findByStatus('DEPLOYED')
+        params.tag['status'] = DeviceStatus.DEPLOYED
         params.tag['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
 
         def tag = null

@@ -20,17 +20,17 @@ class ReceiverDownloadFileTests extends GrailsUnitTestCase
         tag111 = new Tag(codeMap: a69_1303,
                           model:new TagDeviceModel(),
                           serialNumber:"111",
-                          status:new DeviceStatus())
+                          status:DeviceStatus.NEW)
 
         tag222 = new Tag(codeMap: a69_1303,
             model:new TagDeviceModel(),
             serialNumber:"222",
-            status:new DeviceStatus())
+            status:DeviceStatus.NEW)
 
         tag333 = new Tag(codeMap: a69_1303,
             model:new TagDeviceModel(),
             serialNumber:"333",
-            status:new DeviceStatus())
+            status:DeviceStatus.NEW)
 
         def tagList = [tag111, tag222, tag333]
         mockDomain(Tag, tagList)

@@ -94,7 +94,7 @@ class CsiroDetectionFormatTests extends GrailsUnitTestCase
             codeMap: new CodeMap(codeMap: "A69-1303"),
             model: new TagDeviceModel(),
             serialNumber: "1234",
-            status: new DeviceStatus())
+            status: DeviceStatus.NEW)
         
         def sensor = new Sensor(tag: tag, pingCode: 1111)
         

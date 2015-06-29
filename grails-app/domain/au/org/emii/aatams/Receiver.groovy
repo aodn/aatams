@@ -111,7 +111,7 @@ class Receiver extends Device
     {
         if (hasActiveDeployment(dateTime))
         {
-            return DeviceStatus.findByStatus(DeviceStatus.DEPLOYED)
+            return DeviceStatus.DEPLOYED
         }
         else
         {
@@ -122,7 +122,7 @@ class Receiver extends Device
             }
         }
 
-        return DeviceStatus.findByStatus(DeviceStatus.NEW, [cache:true])
+        return DeviceStatus.NEW
     }
 
     DeviceStatus getStatus()
@@ -181,11 +181,9 @@ class Receiver extends Device
 
     boolean canDeployAtTime(dateTime)
     {
-        DeviceStatus deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
-        DeviceStatus retiredStatus = DeviceStatus.findByStatus('RETIRED')
 
         log.debug("Status: ${getStatus(dateTime)}, at time: ${dateTime}")
-        if ([deployedStatus, retiredStatus].contains(getStatus(dateTime)))
+        if ([DeviceStatus.DEPLOYED, DeviceStatus.RETIRED].contains(getStatus(dateTime)))
         {
             return false
         }

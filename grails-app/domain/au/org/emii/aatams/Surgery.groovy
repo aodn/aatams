@@ -71,8 +71,7 @@ class Surgery implements Embargoable
         }
 
         // Is the tag retired?
-        DeviceStatus retiredStatus = DeviceStatus.findByStatus(DeviceStatus.RETIRED)
-        if (tag.status == retiredStatus)
+        if (tag.status == DeviceStatus.RETIRED)
         {
             return false
         }

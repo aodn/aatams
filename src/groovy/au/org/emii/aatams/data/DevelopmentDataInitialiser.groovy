@@ -281,20 +281,16 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         DeviceModel vemcoV8 =
             new TagDeviceModel(modelName:'V8', manufacturer:vemco).save(failOnError: true)
 
-        DeviceStatus newStatus = new DeviceStatus(status:'NEW').save(failOnError: true)
-        DeviceStatus deployedStatus = new DeviceStatus(status:'DEPLOYED').save(failOnError: true)
-        DeviceStatus recoveredStatus = new DeviceStatus(status:'RECOVERED').save(failOnError: true)
-
         Receiver rx1 =
             new Receiver(serialNumber:'101336',
-                         status:deployedStatus,
+                         status:DeviceStatus.DEPLOYED,
                          model:vemcoVR2W,
                          organisation:csiroOrg,
                          comment:'RX 1 belonging to CSIRO').save(failOnError: true)
 
         Receiver rx2 =
             new Receiver(serialNumber:'101337',
-                         status:deployedStatus,
+                         status:DeviceStatus.DEPLOYED,
                          model:vemcoVR2,
                          organisation:csiroOrg).save(failOnError: true)
         csiroOrg.addToReceivers(rx1)
@@ -302,31 +298,31 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
         Receiver rx3 =
             new Receiver(serialNumber:'101338',
-                         status:newStatus,
+                         status:DeviceStatus.NEW,
                          model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
 
         Receiver rx4 =
             new Receiver(serialNumber:'101344',
-                         status:newStatus,
+                         status:DeviceStatus.NEW,
                          model:vemcoVR2,
                          organisation:imosOrg).save(failOnError: true)
 
         Receiver rx5 =
             new Receiver(serialNumber:'101355',
-                         status:newStatus,
+                         status:DeviceStatus.NEW,
                          model:vemcoVR2,
                          organisation:imosOrg).save(failOnError: true)
 
         Receiver rx6 =
             new Receiver(serialNumber:'103366',
-                         status:newStatus,
+                         status:DeviceStatus.NEW,
                          model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
 
         Receiver rxWhale =
             new Receiver(serialNumber:'103377',
-                         status:deployedStatus,
+                         status:DeviceStatus.DEPLOYED,
                          model:vemcoVR2W,
                          organisation:imosOrg).save(failOnError: true)
         imosOrg.addToReceivers(rx3)
@@ -353,7 +349,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
              pingCode:'62339',
              model:vemcoV8,
              project:sealCountProject,
-             status:deployedStatus])
+             status:DeviceStatus.DEPLOYED])
 
         Tag tag2 = createTag(
             [serialNumber:'46601',
@@ -361,7 +357,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
              pingCode:'46601',
              model:vemcoV8,
              project:sealCountProject,
-             status:deployedStatus])
+             status:DeviceStatus.DEPLOYED])
 
         Tag tag3 = createTag(
             [serialNumber:'1111',
@@ -369,7 +365,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
              pingCode:'11111',
              model:vemcoV8,
              project:sealCountProject,
-             status:newStatus])
+             status:DeviceStatus.NEW])
 
         // Bug #352 - this tag won't be selectable if animal release project
         // set to "tuna".
@@ -379,7 +375,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
              pingCode:'3333',
              model:vemcoV8,
              project:tunaProject,
-             status:newStatus,
+             status:DeviceStatus.NEW,
              expectedLifeTimeDays:100])
 
         Tag tag6 = createTag(
@@ -388,28 +384,28 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
              pingCode:'4444',
              model:vemcoV8,
              project:tunaProject,
-             status:newStatus])
+             status:DeviceStatus.NEW])
 
         Tag orphanTag = createTag(
             [serialNumber:'5555',
              codeMap:a69_1303,
              pingCode:'5555',
              model:vemcoV8,
-             status:newStatus])
+             status:DeviceStatus.NEW])
 
         Tag nonEmbargoedTag = createTag(
             [serialNumber:'6666',
                 codeMap:a69_1303,
                 pingCode:'6666',
                 model:vemcoV8,
-                status:deployedStatus])
+                status:DeviceStatus.DEPLOYED])
 
         Tag embargoedTag = createTag(
             [serialNumber:'7777',
                 codeMap:a69_1303,
                 pingCode:'7777',
                 model:vemcoV8,
-                status:deployedStatus])
+                status:DeviceStatus.DEPLOYED])
 
         TransmitterType depth =
             new TransmitterType(transmitterTypeName:"DEPTH").save(failOnError:true)
@@ -798,7 +794,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
         new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx1,
                              location:(Point)reader.read("POINT(10.1234 10.1234)"),
-                             status:recoveredStatus,
+                             status:DeviceStatus.RECOVERED,
                              recoverer:sealProjectInvestigator,
                              deployment:rx1Bondi,
                              batteryLife:12.5f,
@@ -806,7 +802,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
         new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
                              location:(Point)reader.read("POINT(20.1234 20.1234)"),
-                             status:recoveredStatus,
+                             status:DeviceStatus.RECOVERED,
                              recoverer:sealProjectInvestigator,
                              deployment:rx2Bondi,
                              batteryLife:12.5f,
@@ -814,7 +810,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
         new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
                              location:(Point)reader.read("POINT(20.1234 20.1234)"),
-                             status:recoveredStatus,
+                             status:DeviceStatus.RECOVERED,
                              recoverer:sealProjectInvestigator,
                              deployment:rx6Heron,
                              batteryLife:12.5f,
@@ -822,7 +818,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
         new ReceiverRecovery(recoveryDateTime: recoveryDateTimeRx2,
                              location:(Point)reader.read("POINT(20.1234 20.1234)"),
-                             status:recoveredStatus,
+                             status:DeviceStatus.RECOVERED,
                              recoverer:sealProjectInvestigator,
                              deployment:whaleDeployment,
                              batteryLife:12.5f,
@@ -907,7 +903,6 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
         def sysAdmin = SecRole.findByName('SysAdmin')
         ProjectRoleType administrator = ProjectRoleType.findByDisplayName('Administrator')
-        def newStatus = DeviceStatus.findByStatus('NEW')
         def rx1 = Receiver.findBySerialNumber('101336')
 
         Person sysAdminUser = new Person(username:'admin',
@@ -974,7 +969,6 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
         def tagDeviceModel = TagDeviceModel.findByModelName('V8')
 
-        def deployedStatus = DeviceStatus.findByStatus('DEPLOYED')
 
         //
         // Tags.
@@ -985,7 +979,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                  pingCode:'21111',
                  model:tagDeviceModel,
                  project:unembargoedProject,
-                 status:deployedStatus])
+                 status:DeviceStatus.DEPLOYED])
         unembargoedProject.addToTags(unembargoedTag).save(failOnError:true)
 
         Tag embargoedTag = createTag(
@@ -994,7 +988,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                  pingCode:'22222',
                  model:tagDeviceModel,
                  project:embargoedProject,
-                 status:deployedStatus])
+                 status:DeviceStatus.DEPLOYED])
         embargoedProject.addToTags(embargoedTag).save(failOnError:true)
 
         Tag protectedTag = createTag(
@@ -1003,7 +997,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                  pingCode:'23333',
                  model:tagDeviceModel,
                  project:protectedProject,
-                 status:newStatus])
+                 status:DeviceStatus.NEW])
         protectedProject.addToTags(protectedTag).save(failOnError:true)
 
         Tag protectedPastEmbargoTag = createTag(
@@ -1012,7 +1006,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                  pingCode:'24444',
                  model:tagDeviceModel,
                  project:protectedPastEmbargoProject,
-                 status:newStatus])
+                 status:DeviceStatus.NEW])
         protectedPastEmbargoProject.addToTags(protectedPastEmbargoTag).save(failOnError:true)
 
         a69_1303.save(failOnError:true)

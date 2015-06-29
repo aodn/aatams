@@ -5,7 +5,6 @@ import grails.test.*
 class ReceiverControllerTests extends ControllerUnitTestCase 
 {
 
-    DeviceStatus newStatus
 
     def imos
     
@@ -15,11 +14,7 @@ class ReceiverControllerTests extends ControllerUnitTestCase
     {
         super.setUp()
         
-        newStatus = new DeviceStatus(status:"NEW")
         
-        def statusList = [newStatus]
-        mockDomain(DeviceStatus, statusList)
-        statusList.each { it.save() }
         
         imos = new Organisation(name:"IMSO")
         def csiro = new Organisation(name:"CSIRO")
@@ -61,7 +56,7 @@ class ReceiverControllerTests extends ControllerUnitTestCase
         
         assertEquals("show", controller.redirectArgs.action)
         assertEquals("model-12345", receiver.name)
-        assertEquals(newStatus, receiver.status)
+        assertEquals(DeviceStatus.NEW, receiver.status)
     }
     
     void testDefaultModelIsVR2W()

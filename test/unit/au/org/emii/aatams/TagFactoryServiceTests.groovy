@@ -45,7 +45,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
             pingCode:1234,
             serialNumber:"1111",
             model:model,
-            status:new DeviceStatus(),
+            status:DeviceStatus.NEW,
             transmitterType:new TransmitterType()]
     }
 
@@ -94,7 +94,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
             new Tag(codeMap:codeMap,
                     serialNumber:"1111",
                     model:new DeviceModel(),
-                    status:new DeviceStatus(),
+                    status:DeviceStatus.NEW,
                     project: sealProject)
 
         Sensor existingSensor = new Sensor(tag: existingTag,

@@ -26,14 +26,11 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
         mockDomain(CodeMap, [a69_1303])
         a69_1303.save()
 
-        DeviceStatus newStatus = new DeviceStatus(status:"NEW")
-        mockDomain(DeviceStatus, [newStatus])
-        newStatus.save()
 
         model = new TagDeviceModel(modelName:"V16")
         mockDomain(TagDeviceModel, [model])
 
-        owningTag = new Tag(codeMap:a69_1303, model:model, status:newStatus)
+        owningTag = new Tag(codeMap:a69_1303, model:model, status:DeviceStatus.NEW)
         mockDomain(Tag, [owningTag])
         owningTag.save()
 
@@ -76,7 +73,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
                     model:model,
                     codeMap:a69_1303,
                     expectedLifeTimeDays:100,
-                    status:new DeviceStatus()],
+                    status:DeviceStatus.NEW],
               transmitterType:pinger,
               pingCode:2222]
 
@@ -97,7 +94,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
                 model:model,
                 codeMap:a69_1303,
                 expectedLifeTimeDays:100,
-                status:new DeviceStatus())
+                status:DeviceStatus.NEW)
         tag.save()
         assertFalse(tag.hasErrors())
     }
@@ -111,7 +108,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
                                 model:model,
                                 codeMap:a69_1303,
                                 expectedLifeTimeDays:100,
-                                status:new DeviceStatus()],
+                                status:DeviceStatus.NEW],
                           transmitterType:transmitterType,
                           pingCode:pingCode]
 

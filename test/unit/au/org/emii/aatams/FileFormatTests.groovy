@@ -4,43 +4,32 @@ import grails.test.*
 
 import java.text.ParseException
 
-import au.org.emii.aatams.bulk.FileFormatException
-import au.org.emii.aatams.detection.CsiroDetectionFormat
+import au.org.emii.aatams.FileFormatException
 import au.org.emii.aatams.detection.VueDetectionFormat
 import au.org.emii.aatams.event.EventFormat
 
-class FileFormatTests extends GrailsUnitTestCase 
+class FileFormatTests extends GrailsUnitTestCase
 {
     FileFormat format
-    
-    protected void setUp() 
+
+    protected void setUp()
     {
         super.setUp()
-        
+
         // Instantiate abstract FileFormat by mocking abstract parseRow method
         format = [ parseRow: { -> return [:] } ] as FileFormat
     }
 
-    protected void tearDown() 
-    {
-        super.tearDown()
-    }
-    
-    void testDetectionsCSV() 
+    void testDetectionsCSV()
     {
         assertTrue(FileFormat.newFormat(ReceiverDownloadFileType.DETECTIONS_CSV) instanceof VueDetectionFormat)
     }
-    
-    void testCsiroDetectionsCSV()
-    {
-        assertTrue(FileFormat.newFormat(ReceiverDownloadFileType.CSIRO_DETECTIONS_CSV) instanceof CsiroDetectionFormat)
-    }
-    
+
     void testEventsCSV()
     {
         assertTrue(FileFormat.newFormat(ReceiverDownloadFileType.EVENTS_CSV) instanceof EventFormat)
     }
-    
+
     void testUnknownDetectionFormat()
     {
         try
@@ -53,7 +42,7 @@ class FileFormatTests extends GrailsUnitTestCase
             assertEquals("Unknown detection format: XYZ", e.message)
         }
     }
-    
+
     void testNullDateTime()
     {
         try

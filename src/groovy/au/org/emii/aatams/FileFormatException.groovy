@@ -1,7 +1,7 @@
-package au.org.emii.aatams.bulk
+package au.org.emii.aatams
 
 
-class FileFormatException extends BulkImportException {
+class FileFormatException extends FileProcessingException {
 
     public FileFormatException()
     {

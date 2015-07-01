@@ -465,7 +465,6 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         WKTReader reader = new WKTReader();
 
         Point location = (Point)reader.read("POINT(30.1234 30.1234)")
-        location.setSRID(4326)
 
         InstallationStation bondiSW1 =
             new InstallationStation(installation:bondiLine,

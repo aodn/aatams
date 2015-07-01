@@ -139,13 +139,16 @@ class ReceiverDeployment
             !it.same(deployment) && it.undeployableInterval
         }.findAll {
             def checkInterval = it.undeployableInterval
-            checkInterval.contains([
-                deployment.initialisationDateTime,
-                deployment.deploymentDateTime
-            ]) ||
 
-            // deployment.deployedInterval?.overlaps(checkInterval)
-            deployment.undeployableInterval?.overlaps(checkInterval)
+            def containedBy =
+                checkInterval.containsAny([
+                    deployment.initialisationDateTime,
+                    deployment.deploymentDateTime
+                ])
+
+            def overlappedBy = deployment.undeployableInterval?.overlaps(checkInterval)
+
+            return containedBy || overlappedBy
         }
 
         if (conflictingDeployments.isEmpty()) {
@@ -204,22 +207,15 @@ class ReceiverDeployment
     }
 
     def getUndeployableInterval() {
-        def startDateTime = initialisationDateTime ? initialisationDateTime : deploymentDateTime
+        def startDateTime = initialisationDateTime ?: deploymentDateTime
 
-        if (startDateTime) {
-            if (recovery?.status == DeviceStatus.RECOVERED) {
+        if (startDateTime && recovery) {
+            if (recovery.status == DeviceStatus.RECOVERED) {
                 return new Interval(startDateTime, recovery.recoveryDateTime)
             }
-
-            if (recovery?.status) {
+            else {
                 return new OpenInterval(startDateTime)
             }
-        }
-    }
-
-    def getDeployedInterval() {
-        if (undeployableInterval instanceof Interval) {
-            return undeployableInterval
         }
     }
 

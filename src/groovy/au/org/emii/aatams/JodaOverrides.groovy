@@ -11,12 +11,12 @@ class JodaOverrides {
     // An extension module would avoid the need to mock/unmock in every test
     // which executes the overlapsAny code.
     static void apply() {
-        AbstractInterval.metaClass.contains = { List instantList ->
+        AbstractInterval.metaClass.containsAny = { List instantList ->
             def owningInterval = delegate
 
-            null != instantList.find {
+            instantList.find {
                 it && owningInterval.contains(it)
-            }
+            } != null
         }
 
         AbstractInterval.metaClass.overlaps = { OpenInterval openInterval ->
@@ -25,7 +25,7 @@ class JodaOverrides {
     }
 
     static void mock() {
-        AbstractInterval.metaClass.contains = { List instantList ->
+        AbstractInterval.metaClass.containsAny = { List instantList ->
             false
         }
         AbstractInterval.metaClass.overlaps = { OpenInterval openInterval ->

@@ -151,7 +151,6 @@ class ReceiverDeploymentTests extends GrailsUnitTestCase {
         assertConflictingDeployment(otherDeployments, now.plusDays(3), now.plusDays(3), null, null, false)
         assertConflictingDeployment(otherDeployments, now.plusDays(3), now.plusDays(3), now.plusDays(4), DeviceStatus.RECOVERED, false)
 
-        // TODO: fix this.
         assertConflictingDeployment(otherDeployments, now.minusDays(2), now.minusDays(2), now.minusDays(1), DeviceStatus.LOST, true)
 
         otherDeployments = [

@@ -19,12 +19,12 @@ class AbstractIntervalTests extends GrailsUnitTestCase {
     }
 
     void tearDown() {
-        AbstractInterval.metaClass = null
+        JodaOverrides.unmock()
         super.tearDown()
     }
 
     void testContainsList() {
-        def interval = new Interval(
+        def nextThreeDays = new Interval(
             now,
             now.plusDays(3)
         )
@@ -33,16 +33,16 @@ class AbstractIntervalTests extends GrailsUnitTestCase {
         def tomorrow = now.plusDays(1)
         def nextWeek = now.plusWeeks(1)
 
-        assertTrue(interval.contains([ yesterday, tomorrow ]))
-        assertTrue(interval.contains([ tomorrow ]))
-        assertTrue(interval.contains([ now ]))
-        assertFalse(interval.contains([ yesterday, nextWeek ]))
-        assertTrue(interval.contains([ yesterday, tomorrow, nextWeek ]))
+        assertTrue(nextThreeDays.containsAny([ yesterday, tomorrow ]))
+        assertTrue(nextThreeDays.containsAny([ tomorrow ]))
+        assertTrue(nextThreeDays.containsAny([ now ]))
+        assertFalse(nextThreeDays.containsAny([ yesterday, nextWeek ]))
+        assertTrue(nextThreeDays.containsAny([ yesterday, tomorrow, nextWeek ]))
 
-        assertFalse(interval.contains([ ]))
-        assertFalse(interval.contains([ null ]))
-        assertFalse(interval.contains([ null, yesterday ]))
-        assertTrue(interval.contains([ null, tomorrow ]))
+        assertFalse(nextThreeDays.containsAny([ ]))
+        assertFalse(nextThreeDays.containsAny([ null ]))
+        assertFalse(nextThreeDays.containsAny([ null, yesterday ]))
+        assertTrue(nextThreeDays.containsAny([ null, tomorrow ]))
     }
 
     void testOverlapsOpenInterval() {

@@ -28,7 +28,6 @@
                         <tr>
                             <td/>
                             
-                            <%--<g:sortableColumn property="name" title="${message(code: 'receiver.name.label', default: 'ID')}" params="${params}"/> --%>
                             <th><g:message code="name.label" default="ID" /></th>
                         
                             <th><g:message code="receiver.model.label" default="Model" /></th>

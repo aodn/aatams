@@ -13,6 +13,20 @@ class ReceiverController extends ReportController {
         doList("receiver")
     }
 
+    def listInvalid = {
+
+        def invalidReceivers = Receiver.list().findAll { rxr ->
+            !rxr.deployments.findAll { deployment ->
+                !deployment.validate()
+            }.isEmpty()
+        }.sort { rxr ->
+
+            rxr.name
+        }
+
+        render(view: 'list', model: [entityList: invalidReceivers, total: invalidReceivers.size()])
+    }
+
     def export = {
         doExport("receiver")
     }

@@ -109,7 +109,7 @@ class ReceiverDeployment
         receiver()
         station()
         initialisationDateTime(nullable: true, validator: conflictingDeploymentValidator)
-        deploymentDateTime()
+        deploymentDateTime(validator: dateTimeValidator)
         recoveryDate(nullable: true, validator: recoveryDateValidator)
         acousticReleaseID(nullable: true)
         mooringType()
@@ -138,6 +138,24 @@ class ReceiverDeployment
         ReceiverDeploymentValidator.conflictingDeploymentValidator(
             initialisationDateTime, deployment
         )
+    }
+
+    static def dateTimeValidator = { deploymentDateTime, deployment ->
+        def initDateTime = deployment.initialisationDateTime
+        if (!initDateTime) {
+            return true
+        }
+
+        if (!deploymentDateTime.isBefore(initDateTime)) {
+            return true
+        }
+
+        [
+            'receiverDeployment.deploymentDateTime.notAfterInitialisationDateTime',
+            deployment.receiver,
+            deploymentDateTime,
+            initDateTime
+        ]
     }
 
     // Don't want to override 'equals()' as this causes unexpected behaviour with GORM.

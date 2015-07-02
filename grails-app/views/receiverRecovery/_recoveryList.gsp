@@ -59,7 +59,9 @@
 
             <g:each in="${entityList}" status="i" var="receiverDeployment">
 
-                <g:set var="hasErrors" value="${!receiverDeployment.validate()}" />
+                <shiro:user>
+                    <g:set var="hasErrors" value="${!receiverDeployment.validate()}" />
+                </shiro:user>
 
                 <tr class="${(i % 2) == 0 ? 'odd' : 'even'} ${hasErrors ? 'errors' : ''}">
 

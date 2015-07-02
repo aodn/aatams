@@ -1,5 +1,5 @@
 databaseChangeLog = {
-    changeSet(author: 'jburgess', id: '1435639819-01') {
+    changeSet(author: 'jburgess', id: '1435639819000-01') {
 
         [
             [ name: "initialisationdatetime_timestamp", type: "TIMESTAMP WITH TIME ZONE" ],
@@ -41,6 +41,7 @@ with deployments as (
 
 """
 
+        // Log the overlapping deployments which will be "auto-corrected".
         grailsChange {
             change {
                 log.warn("Setting initialisation date equal to deployment date for following deployments:")
@@ -65,6 +66,7 @@ order by lhs.receiver_name, lhs.initialisationdatetime_timestamp
             }
         }
 
+        // Do the auto-correct (of overlaps).
         sql(deployments_cte + """
 
 update receiver_deployment
@@ -78,6 +80,27 @@ where id in (
     and lhs.receiver_deployment_id != rhs.receiver_deployment_id
     and lhs.initialisationdatetime_timestamp <= rhs.initialisationdatetime_timestamp -- just so that we get only one record for each overlap
 )
+""")
+
+        // Log deployments where initialisation date > deployment date.
+        grailsChange {
+            change {
+                log.warn("Setting initialisation date equal to deployment date for following deployments:")
+                sql.eachRow("""
+select id, receiver_id, initialisationdatetime_timestamp, deploymentdatetime_timestamp
+from receiver_deployment
+where initialisationdatetime_timestamp > deploymentdatetime_timestamp
+""") { row ->
+    log.warn(row)
+                }
+            }
+        }
+
+        // Do the auto-correct (of init date > deployment date)
+        sql("""
+update receiver_deployment
+set initialisationdatetime_timestamp = deploymentdatetime_timestamp
+where initialisationdatetime_timestamp > deploymentdatetime_timestamp
 """)
     }
 }

@@ -14,6 +14,7 @@ class ReceiverController extends ReportController {
     }
 
     def listInvalid = {
+        params.max = 1000
 
         def invalidReceivers = Receiver.list().findAll { rxr ->
             !rxr.deployments.findAll { deployment ->

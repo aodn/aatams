@@ -19,8 +19,10 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
-            
-            <g:listControlForm name="receiver" formats="${['PDF', 'CSV']}" />       
+
+            <g:if test="${params.action != 'listInvalid'}" >
+                <g:listControlForm name="receiver" formats="${['PDF', 'CSV']}" />       
+            </g:if>
             
             <div class="list">
                 <table>

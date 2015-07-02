@@ -1,25 +1,34 @@
 package au.org.emii.aatams
 
-import java.util.Date
-import java.util.Set
-
 import org.joda.time.DateTime
+import org.joda.time.Interval
 
 import com.vividsolutions.jts.geom.Point
 import com.vividsolutions.jts.io.WKTReader
 
 import grails.test.*
 
-class ReceiverDeploymentTests extends GrailsUnitTestCase
-{
-    void testScheduledRecoveryDateBeforeDeploymentDate()
-    {
+class ReceiverDeploymentTests extends GrailsUnitTestCase {
+    static def now = new DateTime()
+
+    void setUp() {
+        super.setUp()
+
+        JodaOverrides.apply()
+        mockDomain(ReceiverDeployment)
+    }
+
+    void tearDown() {
+        JodaOverrides.unmock()
+        super.tearDown()
+    }
+
+    void testScheduledRecoveryDateBeforeDeploymentDate() {
         WKTReader reader = new WKTReader()
 
         ReceiverDeployment deployment =
             new ReceiverDeployment(station: new InstallationStation(),
                                    receiver: new Receiver(),
-                                   deploymentNumber: 1,
                                    deploymentDateTime:new DateTime(),
                                    recoveryDate:new DateTime().minusHours(1).toDate(),
                                    acousticReleaseID:"1234",
@@ -32,14 +41,12 @@ class ReceiverDeploymentTests extends GrailsUnitTestCase
                                    batteryLifeDays:60,
                                    comments:"some comment")
 
-        mockDomain(ReceiverDeployment, [deployment])
         deployment.save()
 
         assertTrue(deployment.hasErrors())
     }
 
-    void testIsActive()
-    {
+    void testIsActive() {
         def deploymentDateTime = new DateTime().plusDays(1)
         ReceiverDeployment deployment = new ReceiverDeployment(deploymentDateTime:deploymentDateTime)
         assertFalse(deployment.isActive())
@@ -56,8 +63,7 @@ class ReceiverDeploymentTests extends GrailsUnitTestCase
         assertFalse(deployment.isActive())
     }
 
-    void testIsActiveAtTime()
-    {
+    void testIsActiveAtTime() {
         def deploymentDateTime = new DateTime().plusDays(1)
         ReceiverDeployment deployment = new ReceiverDeployment(deploymentDateTime:deploymentDateTime)
         assertFalse(deployment.isActive())
@@ -92,5 +98,45 @@ class ReceiverDeploymentTests extends GrailsUnitTestCase
         assertTrue(deployment.isActive(recoveryDateTime.minusDays(1)))
         assertFalse(deployment.isActive(recoveryDateTime))
         assertFalse(deployment.isActive(recoveryDateTime.plusDays(1)))
+    }
+
+    void testUndeployableIntervalNoRecovery() {
+         assertInterval(null, null, null, null, null)
+         assertInterval(now, null, null, null, null)
+         assertInterval(null, now, null, null, null)
+         assertInterval(now, now.plusDays(1), null, null, null)
+    }
+
+    void testUndeployableIntervalWithRecovery() {
+         assertInterval(now, now, now.plusDays(2), DeviceStatus.RECOVERED, new Interval(now, now.plusDays(2)))
+         assertInterval(now, now, now.plusDays(2), DeviceStatus.LOST, new OpenInterval(now))
+    }
+
+    void assertInterval(initDateTime, deployDateTime, recoveryDateTime, recoveryStatus, expectedInterval) {
+        def deployment = new ReceiverDeployment(
+            initialisationDateTime: initDateTime,
+            deploymentDateTime: deployDateTime
+        )
+
+        if (recoveryDateTime && recoveryStatus) {
+            def recovery = new ReceiverRecovery(
+                deployment: deployment,
+                recoveryDateTime: recoveryDateTime,
+                status: recoveryStatus
+            )
+            deployment.recovery = recovery
+        }
+
+        assertEquals(expectedInterval, deployment.undeployableInterval)
+    }
+
+    void testToString() {
+        def deployment = [
+            receiver: [ toString: { 'VR2W-1234' } ] as Receiver,
+                          station: [ toString: { 'BL1' } ] as InstallationStation,
+                          deploymentDateTime: new DateTime('2014-06-01T12:34:56+10:00')
+        ] as ReceiverDeployment
+
+        assertEquals('VR2W-1234 @ BL1, deployed 2014-06-01T12:34:56+10:00', deployment.toString())
     }
 }

@@ -3,6 +3,7 @@ package au.org.emii.aatams
 import org.hibernatespatial.GeometryUserType
 import org.joda.time.*
 import org.joda.time.contrib.hibernate.*
+import org.joda.time.format.ISODateTimeFormat
 
 import au.org.emii.aatams.util.GeometryUtils
 
@@ -19,19 +20,16 @@ import com.vividsolutions.jts.geom.Point
 class ReceiverDeployment
 {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
-    static transients = ['scrambledLocation', 'active', 'latitude', 'longitude']
+    static transients = [ 'scrambledLocation', 'active', 'latitude', 'longitude', 'deploymentInterval', 'deploymentNumber' ]
     static auditable = true
 
     static hasMany = [ events: ValidReceiverEvent ]
 
-    Integer deploymentNumber
-
-    DateTime initialisationDateTime = new DateTime(Person.defaultTimeZone())
+    DateTime initialisationDateTime
 
     DateTime deploymentDateTime = new DateTime(Person.defaultTimeZone())
 
-    static mapping =
-    {
+    static mapping = {
         initialisationDateTime type: PersistentDateTimeTZ,
         {
             column name: "initialisationDateTime_timestamp"
@@ -53,8 +51,7 @@ class ReceiverDeployment
         location type: GeometryUserType
     }
 
-    static searchable =
-    {
+    static searchable = {
         receiver(component:true)
         station(component:true)
     }
@@ -108,28 +105,25 @@ class ReceiverDeployment
      * indicate that no embargo exists).
      */
 
-    static constraints =
-    {
+    static constraints = {
         receiver()
         station()
-        initialisationDateTime(nullable:true)
-        deploymentNumber(nullable:true, min:0)
+        initialisationDateTime(nullable: true, validator: conflictingDeploymentValidator)
         deploymentDateTime()
-        recoveryDate(nullable:true, validator:recoveryDateValidator)
-        acousticReleaseID(nullable:true)
+        recoveryDate(nullable: true, validator: recoveryDateValidator)
+        acousticReleaseID(nullable: true)
         mooringType()
-        mooringDescriptor(nullable:true, blank:true)
-        bottomDepthM(nullable:true, min:0F)
-        depthBelowSurfaceM(nullable:true, min:0F)
-        receiverOrientation(nullable:true)
-        location(nullable:true)
-        comments(nullable:true)
-        recovery(nullable:true)
-        batteryLifeDays(nullable:true)
+        mooringDescriptor(nullable: true, blank: true)
+        bottomDepthM(nullable: true, min: 0F)
+        depthBelowSurfaceM(nullable: true, min: 0F)
+        receiverOrientation(nullable: true)
+        location(nullable: true)
+        comments(nullable: true)
+        recovery(nullable: true)
+        batteryLifeDays(nullable: true)
     }
 
-    static def recoveryDateValidator =
-    {
+    static def recoveryDateValidator = {
         recoveryDate, obj ->
 
         if (recoveryDate)
@@ -140,46 +134,73 @@ class ReceiverDeployment
         return true
     }
 
-    String toString()
-    {
-        return String.valueOf(receiver) + " - " + String.valueOf(deploymentDateTime)
+    static def conflictingDeploymentValidator = { initialisationDateTime, deployment ->
+        ReceiverDeploymentValidator.conflictingDeploymentValidator(
+            initialisationDateTime, deployment
+        )
+    }
+
+    // Don't want to override 'equals()' as this causes unexpected behaviour with GORM.
+    boolean same(Object other) {
+        if (other == null) {
+            return false
+        }
+
+        return (this.receiver.same(other.receiver) && this.undeployableInterval == other.undeployableInterval)
+    }
+
+    String toString() {
+        return "${String.valueOf(receiver)} @ ${String.valueOf(station)}, " +
+        "deployed ${ISODateTimeFormat.dateTimeNoMillis().print(deploymentDateTime)}"
     }
 
     /**
      * Non-authenticated users can only see scrambled locations.
      */
-    Point getScrambledLocation()
-    {
+    Point getScrambledLocation() {
         return GeometryUtils.scrambleLocation(location ?: station?.location)
     }
 
-    double getLatitude()
-    {
+    double getLatitude() {
         return getScrambledLocation()?.coordinate?.y
     }
 
-    double getLongitude()
-    {
+    double getLongitude() {
         return getScrambledLocation()?.coordinate?.x
     }
 
-    private DateTime now()
-    {
+    private DateTime now() {
         return new DateTime()
     }
 
-    boolean isActive()
-    {
+    boolean isActive() {
         isActive(now())
     }
 
-    boolean isActive(dateTime)
-    {
-        if (!recovery)
-        {
+    boolean isActive(dateTime) {
+        if (!recovery) {
             return !deploymentDateTime.isAfter(dateTime)
         }
 
         return (!deploymentDateTime.isAfter(dateTime)) && dateTime.isBefore(recovery?.recoveryDateTime)
+    }
+
+    def getUndeployableInterval() {
+        def startDateTime = initialisationDateTime ?: deploymentDateTime
+
+        if (startDateTime && recovery) {
+            if (recovery.status == DeviceStatus.RECOVERED) {
+                return new Interval(startDateTime, recovery.recoveryDateTime)
+            }
+            else {
+                return new OpenInterval(startDateTime)
+            }
+        }
+    }
+
+    def getDeploymentNumber() {
+        receiver?.deployments?.sort { it.deploymentDateTime }.findIndexOf {
+            it.same(this)
+        } + 1
     }
 }

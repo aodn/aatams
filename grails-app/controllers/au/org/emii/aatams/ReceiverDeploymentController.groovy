@@ -36,21 +36,7 @@ class ReceiverDeploymentController extends ReportController
     {
         def receiverDeploymentInstance = new ReceiverDeployment(params)
 
-        if (receiverDeploymentInstance.receiver)
-        {
-            if (isValidDeployment(receiverDeploymentInstance))
-            {
-                incNumDeployments(receiverDeploymentInstance)
-            }
-            else
-            {
-                renderCreateWithDefaultModel(receiverDeploymentInstance)
-                return
-            }
-        }
-
         if (receiverDeploymentInstance.save(flush: true)) {
-
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
             redirect(action: "show", id: receiverDeploymentInstance.id)
         }
@@ -58,50 +44,6 @@ class ReceiverDeploymentController extends ReportController
         {
             renderCreateWithDefaultModel(receiverDeploymentInstance)
         }
-    }
-
-    private boolean isValidDeployment(ReceiverDeployment receiverDeploymentInstance)
-    {
-        if (!receiverDeploymentInstance.receiver?.canDeploy(receiverDeploymentInstance))
-        {
-            def args = [receiverDeploymentInstance?.receiver?.toString(),
-                receiverDeploymentInstance?.receiver?.getStatusNotIncludingDeployment(receiverDeploymentInstance)?.toString(),
-                receiverDeploymentInstance.deploymentDateTime]
-            receiverDeploymentInstance.errors.rejectValue("receiver",
-                    "receiverDeployment.receiver.invalidStateAtDateTime",
-                    args as Object[],
-                    null)
-
-            return false
-        }
-
-        return true
-    }
-
-    private void incNumDeployments(ReceiverDeployment deployment)
-    {
-        if (deployment?.station?.numDeployments != null)
-        {
-            deployment?.station?.numDeployments =
-                    deployment?.station?.numDeployments + 1
-            deployment?.station?.save()
-        }
-
-        // And record the deployment number against the actual deployment.
-        deployment?.deploymentNumber = deployment?.station?.numDeployments
-
-        addReceiverToStation(deployment)
-    }
-
-    private addReceiverToStation(ReceiverDeployment deployment)
-    {
-        deployment.station.addToReceivers(deployment.receiver)
-    }
-
-    private removeReceiverFromStation(ReceiverDeployment deployment)
-    {
-        deployment.station.removeFromReceivers(deployment.receiver)
-        deployment.receiver.save()
     }
 
     private renderCreateWithDefaultModel(ReceiverDeployment receiverDeploymentInstance)
@@ -184,12 +126,9 @@ class ReceiverDeploymentController extends ReportController
                 }
             }
 
-//            boolean isValidDeployment = isValidDeployment(receiverDeploymentInstance)
-            removeReceiverFromStation(receiverDeploymentInstance)
             receiverDeploymentInstance.properties = params
-            addReceiverToStation(receiverDeploymentInstance)
 
-            if (!receiverDeploymentInstance.hasErrors() && isValidDeployment(receiverDeploymentInstance) && receiverDeploymentInstance.save(flush: true)) {
+            if (!receiverDeploymentInstance.hasErrors() && receiverDeploymentInstance.save(flush: true)) {
 
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
                 redirect(action: "show", id: receiverDeploymentInstance.id)

@@ -113,7 +113,7 @@ class ReceiverRecoveryController extends AbstractController
             receiverRecoveryInstance.deployment.properties = deployment
 
             if (   !receiverRecoveryInstance.deployment.hasErrors()
-                && !receiverRecoveryInstance.hasErrors()
+                && receiverRecoveryInstance.validate()
                 && receiverRecoveryInstance.deployment.save(flush: true)) {
 
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.toString()])}"

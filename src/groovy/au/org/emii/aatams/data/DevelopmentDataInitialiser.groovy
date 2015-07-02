@@ -1012,27 +1012,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
 
         WKTReader reader = new WKTReader()
         def bondiSW1 = InstallationStation.findByName('Bondi SW1')
-
-        //
-        //  Receiver Deployments.
-        //
-        MooringType concreteMooring = MooringType.findByType('CONCRETE BLOCK')
-
-        ReceiverDeployment rx1Bondi =
-                new ReceiverDeployment(station:bondiSW1,
-                        receiver:rx1,
-                        deploymentNumber:1,
-                        initialisationDateTime:new DateTime("2010-02-15T00:34:56+10:00"),
-                        deploymentDateTime:new DateTime("2010-02-15T12:34:56+10:00"),
-                        acousticReleaseID:"asdf",
-                        mooringType:concreteMooring,
-                        bottomDepthM:12f,
-                        depthBelowSurfaceM:5f,
-                        receiverOrientation:ReceiverOrientation.UP,
-                        batteryLifeDays:90,
-                        location:(Point)reader.read("POINT(10.1234 10.1234)")).save(failOnError:true)
-        rx1.addToDeployments(rx1Bondi)
-        rx1.save()
+        def rx1Bondi = ReceiverDeployment.findByStationAndReceiver(bondiSW1, rx1)
 
         //
         // Animals and Animal Releases etc.

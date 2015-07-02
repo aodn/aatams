@@ -15,9 +15,10 @@ abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestC
 
     ReceiverDownloadFile download
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
+
+        JodaOverrides.mock()
         mockLogging(SearchableService, true)
         searchableService = new SearchableService()
         searchableService.metaClass.startMirroring = {}
@@ -68,13 +69,12 @@ abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestC
         download.save()
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
+        JodaOverrides.unmock()
         super.tearDown()
     }
 
-    public Reader getReader(downloadFile)
-    {
+    public Reader getReader(downloadFile) {
         return new StringReader('''Date/Time,Receiver,Description,Data,Units,
 2009-12-09 01:45:29,VR2W-103335,Initialization,,
 2009-12-09 01:45:29,VR2W-103335,PC Time,2009-12-09 12:45:29+11:00,

@@ -1,6 +1,9 @@
 package au.org.emii.aatams
 
-import org.joda.time.DateTime;
+import org.joda.time.DateTime
+
+import com.vividsolutions.jts.geom.Point
+import com.vividsolutions.jts.io.WKTReader
 
 import grails.test.*
 
@@ -9,9 +12,10 @@ class ReceiverTests extends GrailsUnitTestCase
     Receiver rx1
     Receiver rx2
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
+
+        JodaOverrides.mock()
 
         ReceiverDeviceModel model = new ReceiverDeviceModel(modelName: "VR2W")
         mockDomain(ReceiverDeviceModel, [model])
@@ -32,14 +36,17 @@ class ReceiverTests extends GrailsUnitTestCase
         mockLogging(Receiver)
     }
 
-    void testNonUniqueSerialNumber()
-    {
+    protected void tearDown() {
+        JodaOverrides.unmock()
+        super.tearDown()
+    }
+
+    void testNonUniqueSerialNumber() {
         rx2.serialNumber = rx1.serialNumber
         assertFalse(rx2.validate())
     }
 
-    void testName()
-    {
+    void testName() {
         ReceiverDeviceModel model = new ReceiverDeviceModel(modelName:"VR2W")
         mockDomain(ReceiverDeviceModel, [model])
         model.save()
@@ -49,8 +56,7 @@ class ReceiverTests extends GrailsUnitTestCase
         assertEquals("VR2W-12345", rxr.name)
     }
 
-    void testFindByName()
-    {
+    void testFindByName() {
         assertNotNull(Receiver.findByName("VR2W-1111"))
         assertNotNull(Receiver.findByName("VR2W-1111", [cache:true]))
         assertNull(Receiver.findByName("VR2W-3333"))
@@ -66,8 +72,7 @@ class ReceiverTests extends GrailsUnitTestCase
         }
     }
 
-    void testFindByNameWhereModelIncludesHyphen()
-    {
+    void testFindByNameWhereModelIncludesHyphen() {
         ReceiverDeviceModel vr4UwmModel = new ReceiverDeviceModel(modelName: "VR4-UWM")
         mockDomain(ReceiverDeviceModel, [vr4UwmModel])
         vr4UwmModel.save()
@@ -79,16 +84,14 @@ class ReceiverTests extends GrailsUnitTestCase
         assertEquals(vr4uwmRxr, Receiver.findByName('VR4-UWM-1234'))
     }
 
-    void testStatusNoDeployments()
-    {
+    void testStatusNoDeployments() {
         Receiver newReceiver = new Receiver()
         newReceiver.save()
 
         assertStatus(DeviceStatus.NEW, newReceiver)
     }
 
-    void testStatusWithDeployment()
-    {
+    void testStatusWithDeployment() {
         Receiver receiver = new Receiver()
         receiver.save()
         assertStatus(DeviceStatus.NEW, receiver)
@@ -101,13 +104,16 @@ class ReceiverTests extends GrailsUnitTestCase
         assertStatus(DeviceStatus.DEPLOYED, receiver)
     }
 
-    void testStatusWithDeploymentAndRecovery()
-    {
+    void testStatusWithDeploymentAndRecovery() {
         Receiver receiver = new Receiver()
         receiver.save()
         assertStatus(DeviceStatus.NEW, receiver)
 
-        ReceiverDeployment deployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: new DateTime().minusDays(2))
+        ReceiverDeployment deployment = new ReceiverDeployment(
+            receiver: receiver,
+            deploymentDateTime: new DateTime().minusDays(2),
+            initialisationDateTime: new DateTime().minusDays(2)
+        )
         deployment.save()
         receiver.addToDeployments(deployment)
         receiver.save()
@@ -121,8 +127,7 @@ class ReceiverTests extends GrailsUnitTestCase
         assertStatus(DeviceStatus.RECOVERED, receiver)
     }
 
-    void testStatusWithDeploymentAndRecoveryAtTime()
-    {
+    void testStatusWithDeploymentAndRecoveryAtTime() {
         Receiver receiver = new Receiver()
         receiver.save()
 
@@ -131,7 +136,11 @@ class ReceiverTests extends GrailsUnitTestCase
         assertStatus(DeviceStatus.NEW, receiver, new DateTime().plusDays(1))
 
         def deploymentDate = new DateTime().minusDays(5)
-        ReceiverDeployment deployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: deploymentDate)
+        ReceiverDeployment deployment = new ReceiverDeployment(
+            receiver: receiver,
+            deploymentDateTime: deploymentDate,
+            initialisationDateTime: deploymentDate
+        )
         deployment.save()
         receiver.addToDeployments(deployment)
         receiver.save()
@@ -184,8 +193,7 @@ class ReceiverTests extends GrailsUnitTestCase
         assertStatus(DeviceStatus.RECOVERED, receiver, secondRecoveryDate.plusDays(1))
     }
 
-    void testStatusWithTwoUnrecoveredDeployments()
-    {
+    void testStatusWithTwoUnrecoveredDeployments() {
         Receiver receiver = new Receiver()
         receiver.save()
 
@@ -209,18 +217,19 @@ class ReceiverTests extends GrailsUnitTestCase
         assertStatus(DeviceStatus.DEPLOYED, receiver, secondDeploymentDate.plusDays(1))
     }
 
-    void testStatusWithOneUnrecoveredBeforeOneRecoveredDeployment()
-    {
+    void testStatusWithOneUnrecoveredBeforeOneRecoveredDeployment() {
         Receiver receiver = new Receiver()
         receiver.save()
 
         def firstDeploymentDate = new DateTime().minusDays(5)
-        ReceiverDeployment firstDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: firstDeploymentDate)
+        ReceiverDeployment firstDeployment =
+            new ReceiverDeployment(receiver: receiver, deploymentDateTime: firstDeploymentDate, initialisationDateTime: firstDeploymentDate)
         firstDeployment.save()
         receiver.addToDeployments(firstDeployment)
 
         def secondDeploymentDate = new DateTime().minusDays(3)
-        ReceiverDeployment secondDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDate)
+        ReceiverDeployment secondDeployment =
+            new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDate, initialisationDateTime: secondDeploymentDate)
         secondDeployment.save()
         receiver.addToDeployments(secondDeployment)
 
@@ -242,43 +251,12 @@ class ReceiverTests extends GrailsUnitTestCase
         assertStatus(DeviceStatus.RECOVERED, receiver, recoveryDate.plusDays(1))
     }
 
-    void testCanDeploy()
-    {
-        Receiver receiver = new Receiver()
-        receiver.save()
-
-        def deploymentDateTime = new DateTime()
-        ReceiverDeployment existingDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: deploymentDateTime)
-        existingDeployment.save()
-        receiver.addToDeployments(existingDeployment)
-
-        ReceiverRecovery existingRecovery = new ReceiverRecovery(deployment: existingDeployment,
-                                                                 recoveryDateTime: deploymentDateTime.plusDays(1),
-                                                                 status: DeviceStatus.RETIRED)
-        existingRecovery.save()
-        existingDeployment.recovery = existingRecovery
-
-        // Create second deployment before existing.
-        def secondDeploymentDateTime = deploymentDateTime.minusDays(5)
-        ReceiverDeployment secondDeployment = new ReceiverDeployment(receiver: receiver, deploymentDateTime: secondDeploymentDateTime)
-        receiver.addToDeployments(secondDeployment)
-        assertTrue(receiver.canDeploy(secondDeployment))
-        secondDeployment.save()
-
-        // Update date/time to be future
-        secondDeploymentDateTime = deploymentDateTime.plusDays(2)
-        secondDeployment.deploymentDateTime = secondDeploymentDateTime
-        assertFalse(receiver.canDeploy(secondDeployment))
-    }
-
-    private void assertStatus(expectedStatus, receiver)
-    {
+    private void assertStatus(expectedStatus, receiver) {
         assertNotNull(receiver.status)
         assertEquals(expectedStatus, receiver.status)
     }
 
-    private void assertStatus(expectedStatus, receiver, dateTime)
-    {
+    private void assertStatus(expectedStatus, receiver, dateTime) {
         assert(receiver)
         assert(dateTime)
 

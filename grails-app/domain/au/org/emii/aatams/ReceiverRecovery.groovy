@@ -55,12 +55,19 @@ class ReceiverRecovery
         deployment(component:true)
     }
 
-    static def recoveryDateTimeValidator = {
-        recoveryDateTime, obj ->
+    static def recoveryDateTimeValidator = { recoveryDateTime, obj ->
 
-        return recoveryDateTime.isAfter(obj.deployment.deploymentDateTime) ?
-            true :
-            ['invalid.beforeDeploymentDateTime', recoveryDateTime, obj.deployment.deploymentDateTime]
+        if (!recoveryDateTime.isAfter(obj.deployment.deploymentDateTime)) {
+            return [
+                'invalid.beforeDeploymentDateTime',
+                recoveryDateTime,
+                obj.deployment.deploymentDateTime
+            ]
+        }
+
+        ReceiverDeploymentValidator.conflictingDeploymentValidator(
+            obj.deployment.initialisationDateTime, obj.deployment
+        )
     }
 
     String toString()

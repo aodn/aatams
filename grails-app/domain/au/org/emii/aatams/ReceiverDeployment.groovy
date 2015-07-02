@@ -207,6 +207,14 @@ class ReceiverDeployment
         def startDateTime = initialisationDateTime ?: deploymentDateTime
 
         if (startDateTime && recovery) {
+            // A validation check for this condition has only been recently introduced. Ideally,
+            // we wouldn't need this check, but there are invalid records in the DB currently,
+            // so we need to check, otherwise the creation of the Interval below fails.
+            if (startDateTime > recovery.recoveryDateTime) {
+                log.warn("Invalid interval for deployment: ${String.valueOf(this)}")
+                return
+            }
+
             if (recovery.status == DeviceStatus.RECOVERED) {
                 return new Interval(startDateTime, recovery.recoveryDateTime)
             }

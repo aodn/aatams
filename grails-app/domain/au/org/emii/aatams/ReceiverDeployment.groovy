@@ -3,6 +3,7 @@ package au.org.emii.aatams
 import org.hibernatespatial.GeometryUserType
 import org.joda.time.*
 import org.joda.time.contrib.hibernate.*
+import org.joda.time.format.ISODateTimeFormat
 
 import au.org.emii.aatams.util.GeometryUtils
 
@@ -172,7 +173,8 @@ class ReceiverDeployment
     }
 
     String toString() {
-        return String.valueOf(receiver) + " - " + String.valueOf(undeployableInterval)
+        return "${String.valueOf(receiver)} @ ${String.valueOf(station)}, " +
+        "deployed ${ISODateTimeFormat.dateTimeNoMillis().print(deploymentDateTime)}"
     }
 
     /**

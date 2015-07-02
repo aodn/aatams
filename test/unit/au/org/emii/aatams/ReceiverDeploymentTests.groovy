@@ -184,4 +184,14 @@ class ReceiverDeploymentTests extends GrailsUnitTestCase {
 
         assertTrue(deployment.validate() != expectConflict)
     }
+
+    void testToString() {
+        def deployment = [
+            receiver: [ toString: { 'VR2W-1234' } ] as Receiver,
+                          station: [ toString: { 'BL1' } ] as InstallationStation,
+                          deploymentDateTime: new DateTime('2014-06-01T12:34:56+10:00')
+        ] as ReceiverDeployment
+
+        assertEquals('VR2W-1234 @ BL1, deployed 2014-06-01T12:34:56+10:00', deployment.toString())
+    }
 }

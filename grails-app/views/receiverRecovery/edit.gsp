@@ -20,6 +20,7 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
+
             <g:hasErrors bean="${receiverRecoveryInstance}">
             <div class="errors">
                 <g:renderErrors bean="${receiverRecoveryInstance}" as="list" />

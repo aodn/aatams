@@ -85,7 +85,7 @@ class DetectionView extends Detection implements Embargoable {
 
     def applyEmbargo(allowSanitised = true) {
 
-        def releaseEmbargoed = surgery.release.isEmbargoed()
+        def releaseEmbargoed = surgery?.release?.isEmbargoed()
 
         def censoredDetection = new HashMap(this.properties)
 

@@ -87,6 +87,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
     DetectionView detectionPastEmbargoed
     DetectionView detectionProtectedReadableProject
     DetectionView detectionProtectedNonReadableProject
+    DetectionView detectionProtectedNonReadableProjectNoSurgery
     def detectionList
 
     def queryService
@@ -204,6 +205,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         detectionPastEmbargoed = new DetectionView(receiverDownloadId: receiverDownload.id, id: 3)
         detectionProtectedReadableProject = new DetectionView(receiverDownloadId: receiverDownload.id, id: 4)
         detectionProtectedNonReadableProject = new DetectionView(receiverDownloadId: receiverDownload.id, id: 5)
+        detectionProtectedNonReadableProjectNoSurgery = new DetectionView(receiverDownloadId: receiverDownload.id, id: 6)
 
         def animalList = [animalNonEmbargoed, animalEmbargoedReadableProject, animalEmbargoedNonReadableProject, animalPastEmbargoed, animalProtectedReadableProject, animalProtectedNonReadableProject]
         def animalMeasurementList = [animalMeasurementNonEmbargoed, animalMeasurementEmbargoedReadableProject, animalMeasurementEmbargoedNonReadableProject, animalMeasurementPastEmbargoed, animalMeasurementProtectedReadableProject, animalMeasurementProtectedNonReadableProject]
@@ -212,7 +214,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
                           sensorPingerNonEmbargoed, sensorPingerEmbargoedReadableProject, sensorPingerEmbargoedNonReadableProject, sensorPingerPastEmbargoed, sensorPingerProtectedReadableProject, sensorPingerProtectedNonReadableProject]
         releaseList = [releaseNonEmbargoed, releaseEmbargoedReadableProject, releaseEmbargoedNonReadableProject, releasePastEmbargoed, releaseProtectedReadableProject, releaseProtectedNonReadableProject]
         def surgeryList = [surgeryNonEmbargoed, surgeryEmbargoedReadableProject, surgeryEmbargoedNonReadableProject, surgeryPastEmbargoed, surgeryProtectedReadableProject, surgeryProtectedNonReadableProject]
-        detectionList = [detectionNonEmbargoed, detectionEmbargoedReadableProject, detectionEmbargoedNonReadableProject, detectionPastEmbargoed, detectionProtectedReadableProject, detectionProtectedNonReadableProject]
+        detectionList = [detectionNonEmbargoed, detectionEmbargoedReadableProject, detectionEmbargoedNonReadableProject, detectionPastEmbargoed, detectionProtectedReadableProject, detectionProtectedNonReadableProject, detectionProtectedNonReadableProjectNoSurgery]
         detectionList.each {
             it.metaClass.getReceiverDeployment = { new ReceiverDeployment(location: new GeometryFactory().createPoint(new Coordinate(145f, -42f))) }
         }
@@ -272,6 +274,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         detectionPastEmbargoed.metaClass.getProject = { projectNoMembership }
         detectionProtectedReadableProject.metaClass.getProject = { protectedProjectWithMembership }
         detectionProtectedNonReadableProject.metaClass.getProject = { protectedProjectNoMembership }
+        detectionProtectedNonReadableProjectNoSurgery.metaClass.getProject = { protectedProjectNoMembership }
 
         detectionNonEmbargoed.metaClass.getSurgery = { surgeryNonEmbargoed }
         detectionEmbargoedReadableProject.metaClass.getSurgery = { surgeryEmbargoedReadableProject }
@@ -279,6 +282,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         detectionPastEmbargoed.metaClass.getSurgery = { surgeryPastEmbargoed }
         detectionProtectedReadableProject.metaClass.getSurgery = { surgeryProtectedReadableProject }
         detectionProtectedNonReadableProject.metaClass.getSurgery = { surgeryProtectedNonReadableProject }
+        detectionProtectedNonReadableProjectNoSurgery.metaClass.getSurgery = { null }
 
         animalList.each { it.save() }
         animalMeasurementList.each { it.save() }
@@ -471,6 +475,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         assertNotNull(filtered.find{ it.equals(detectionPastEmbargoed) })
         assertNotNull(filtered.find{ it.equals(detectionProtectedReadableProject) })
         assertNotNull(filtered.find{ it.equals(detectionProtectedNonReadableProject) })
+        assertNotNull(filtered.find{ it.equals(detectionProtectedNonReadableProjectNoSurgery) })
     }
 
     void testDetectionNotList() {
@@ -480,6 +485,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkDetectionVisibility(detectionPastEmbargoed, VISIBLE)
         checkDetectionVisibility(detectionProtectedReadableProject, VISIBLE)
         checkDetectionVisibility(detectionProtectedNonReadableProject, NOT_VISIBLE)
+        checkDetectionVisibility(detectionProtectedNonReadableProjectNoSurgery, VISIBLE)
     }
 
     def checkDetectionVisibility(detection, visibility) {

@@ -18,6 +18,15 @@ class ReceiverEventController extends ReportController
         doList("receiverEvent")
     }
 
+    protected def getResultList(queryName) {
+        return queryService.queryWithoutCount(
+            reportInfoService.getClassForName(queryName), params
+        )
+    }
+
+    protected def displayCountMessage(resultList, queryName) {
+    }
+
     def export =
     {
         receiverEventExportService.generateReport(params, request, response)

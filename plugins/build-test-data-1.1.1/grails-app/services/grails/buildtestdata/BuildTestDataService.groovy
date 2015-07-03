@@ -13,7 +13,7 @@ class BuildTestDataService {
 
     public addBuildMethods(domainArtefact) {
         log.debug "Adding build methods to $domainArtefact"
-		
+
         def domainInstanceBuilder = new DomainInstanceBuilder(domainArtefact)
 
         domainInstanceBuilders[domainArtefact] = domainInstanceBuilder
@@ -61,7 +61,7 @@ class BuildTestDataService {
 		}
 
         domainClass.metaClass.buildCascadingSave = { circularTrap ->
-            domainInstanceBuilder.save(delegate, circularTrap)   
+            domainInstanceBuilder.save(delegate, circularTrap)
         }
     }
 

@@ -83,7 +83,7 @@ class DynamicDomainMethodUtils {
             grailsDomainClass.metaClass.'static'.suggestQuery << { Object[] args ->
                 searchableMethodFactory.getMethod(delegate, "suggestQuery").invoke(*processStringArgs(args))
             }
-            
+
             /**
              * index: Adds class instances to the search index
              */

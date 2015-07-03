@@ -26,10 +26,10 @@ public class ConfigurableTransactionAttributeSource implements TransactionAttrib
         this.source = source;
         Assert.notNull(this.source);
         Assert.notNull(config);
-        
+
         if (!config.isEmpty()) {
             TransactionPropertiesUtil txPropsUtil = new TransactionPropertiesUtil();
-            
+
             this.configuredDefaults = new RuleBasedTransactionAttribute();
             config = txPropsUtil.expand(config)
             if (ignoreReadOnly) {
@@ -38,12 +38,12 @@ public class ConfigurableTransactionAttributeSource implements TransactionAttrib
                 config = txPropsUtil.removeImmutableDefaults(config)
             }
             txPropsUtil.applyTo config, configuredDefaults
-            
+
             this.defaults = new RuleBasedTransactionAttribute();
         } else {
             this.configuredDefaults = null;
             this.defaults = null;
-        }        
+        }
     }
 
     @Override
@@ -59,15 +59,15 @@ public class ConfigurableTransactionAttributeSource implements TransactionAttrib
             if (newAtt == null) {
                 Constructor c = null
                 if (att != null) {
-                    Class attClass = att.getClass() 
-                    c = attClass.getConstructor(attClass)                    
-                } 
-                
-                if (c != null) {                    
+                    Class attClass = att.getClass()
+                    c = attClass.getConstructor(attClass)
+                }
+
+                if (c != null) {
                     if (att.metaClass.hasProperty(att, 'rollbackRules')) {
                         /* Workaround: new RuleBasedTransactionAttribute(RuleBasedTransactionAttribute) is broken for rollbackRules == null */
                         att.rollbackRules
-                    } 
+                    }
                     newAtt = c.newInstance(att)
                 } else {
                     if (att != null) {
@@ -79,8 +79,8 @@ public class ConfigurableTransactionAttributeSource implements TransactionAttrib
                 if (log.isDebugEnabled()) {
                     log.debug("getTransactionAttribute(): newAtt ${newAtt}")
                 }
-                
-                
+
+
                 for (key in BeanUtils.describe(configuredDefaults).keySet()) {
                     if (log.isDebugEnabled()) {
                         log.debug("getTransactionAttribute(): key ${key}")

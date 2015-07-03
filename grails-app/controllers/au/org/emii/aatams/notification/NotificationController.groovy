@@ -4,9 +4,9 @@ import grails.converters.JSON
 
 class NotificationController  {
     def notificationService
-    
+
     static allowedMethods = [acknowledge: "POST"]
-    
+
     def acknowledge =  {
         try {
             notificationService.acknowledge(params.key)

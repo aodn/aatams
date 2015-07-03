@@ -6,7 +6,7 @@ class DeviceModelTests extends GrailsUnitTestCase  {
     DeviceModel vemcoVR2
     DeviceModel vemcoVR2W
     DeviceModel vemcoVR3UWM
-    
+
     DeviceModel vemcoV6180
     DeviceModel vemcoV7
     DeviceModel vemcoV8
@@ -14,14 +14,14 @@ class DeviceModelTests extends GrailsUnitTestCase  {
     DeviceModel vemcoV9AP
     DeviceModel vemcoV13
     DeviceModel vemcoV16
-    
+
     protected void setUp()  {
         super.setUp()
-        
-        DeviceManufacturer vemco = 
+
+        DeviceManufacturer vemco =
             new DeviceManufacturer(manufacturerName:'Vemco')
-        mockDomain(DeviceManufacturer, [vemco])    
-        
+        mockDomain(DeviceManufacturer, [vemco])
+
 
         // Receiver models.
         vemcoVR2 =
@@ -33,7 +33,7 @@ class DeviceModelTests extends GrailsUnitTestCase  {
         def receiverModels = [vemcoVR2, vemcoVR2W, vemcoVR3UWM]
         mockDomain(ReceiverDeviceModel, receiverModels)
         receiverModels.each { it.save() }
-            
+
         // Tag models.
         vemcoV6180 =
             new TagDeviceModel(modelName:'V6-180kHz', manufacturer:vemco)
@@ -60,9 +60,9 @@ class DeviceModelTests extends GrailsUnitTestCase  {
 
     void testTagDeviceModelList()  {
         def tagList = TagDeviceModel.list()
-        
+
         assertEquals(7, tagList.size())
-        
+
         assertTrue(tagList.contains(vemcoV6180))
         assertTrue(tagList.contains(vemcoV7))
         assertTrue(tagList.contains(vemcoV8))
@@ -74,9 +74,9 @@ class DeviceModelTests extends GrailsUnitTestCase  {
 
     void testReceiverDeviceModelList()  {
         def receiverList = ReceiverDeviceModel.list()
-        
+
         assertEquals(3, receiverList.size())
-        
+
         assertTrue(receiverList.contains(vemcoVR2))
         assertTrue(receiverList.contains(vemcoVR2W))
         assertTrue(receiverList.contains(vemcoVR3UWM))

@@ -14,7 +14,7 @@ class AnimalControllerTests extends ControllerUnitTestCase  {
     void testLookupAnimalWithEmptySpecies()  {
         controller.params.project = [id: ""]
         controller.params.species = [id: ""]
-        
+
         controller.lookup()
     }
 }

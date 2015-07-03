@@ -58,7 +58,7 @@ class SecUserController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (secUserInstance.version > version) {
-                    
+
                     secUserInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'secUser.label', default: 'SecUser')] as Object[], "Another user has updated this SecUser while you were editing")
                     render(view: "edit", model: [secUserInstance: secUserInstance])
                     return

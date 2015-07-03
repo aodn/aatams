@@ -11,7 +11,7 @@ class AboutController  {
             render(view:"index")
         }
     }
-    
+
     def index = {
         render(view:"index")
     }

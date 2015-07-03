@@ -10,7 +10,7 @@ class ReportTagLib  {
 
     def reportFilterParameter = {
         attrs, body ->
-        
+
         log.debug("Rendering filter parameter, attrs: " + attrs)
         out << render(template:attrs.template,
                       model:attrs.model)
@@ -18,7 +18,7 @@ class ReportTagLib  {
 
     def reportFilter =  {
         attrs, body ->
-          
+
         ReportInfo reportInfo = reportInfoService.getReportInfo(attrs.name)
         if (!reportInfo) {
             // TODO: error
@@ -29,19 +29,19 @@ class ReportTagLib  {
                           model:[filterParams:reportInfo.filterParams])
         }
     }
-    
+
     def report = {
         attrs, body ->
 
         delegateTemplate(attrs, body, true, "report")
     }
-    
+
     def extract = {
         attrs, body ->
 
         delegateTemplate(attrs, body, true, "extract")
     }
-    
+
     def delegateTemplate(attrs, body, showFilter, type) {
         if (!attrs.name) {
             // TODO: error
@@ -54,7 +54,7 @@ class ReportTagLib  {
             else {
                 log.debug("Report info: " + reportInfo)
                 log.debug("Formats: " + attrs.formats)
-                
+
                 out << render(template:"/report/reportTemplate",
                               model:[displayName:attrs.displayName,
                                      name:attrs.name,

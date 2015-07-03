@@ -45,26 +45,26 @@ sendMail {
     def documentation = "http://plugin.grails.org/mail"
 
     def observe = ['controllers','services']
-    
+
     def mailConfigHash = null
     def mailConfig = null
     def createdSession = false
-    
+
     def doWithSpring = {
         mailConfig = application.config.grails.mail
         mailConfigHash = mailConfig.hashCode()
-        
+
         configureMailSender(delegate, mailConfig)
-        
+
         mailMessageBuilderFactory(MailMessageBuilderFactory) {
             it.autowire = true
         }
-        
+
         mailMessageContentRenderer(MailMessageContentRenderer) {
             it.autowire = true
         }
     }
-   
+
     def doWithApplicationContext = { applicationContext ->
         configureSendMail(application, applicationContext)
     }
@@ -72,31 +72,31 @@ sendMail {
     def onChange = { event ->
         configureSendMail(event.application, event.ctx)
     }
-    
+
     def onConfigChange = { event ->
         def newMailConfig = event.source.grails.mail
         def newMailConfigHash = newMailConfig.hashCode()
-        
+
         if (newMailConfigHash != mailConfigHash) {
             if (createdSession) {
                 event.ctx.removeBeanDefinition("mailSession")
             }
 
             event.ctx.removeBeanDefinition("mailSender")
-            
+
             mailConfig = newMailConfig
             mailConfigHash = newMailConfigHash
-            
+
             def newBeans = beans {
                 configureMailSender(delegate, mailConfig)
             }
-            
+
             newBeans.beanDefinitions.each { name, definition ->
                 event.ctx.registerBeanDefinition(name, definition)
             }
         }
     }
-    
+
     def configureMailSender(builder, config) {
         builder.with {
             if (config.jndiName && !springConfig.containsBean("mailSession")) {
@@ -107,7 +107,7 @@ sendMail {
             } else {
                 createdSession = false
             }
-            
+
             mailSender(JavaMailSenderImpl) {
                 if (config.host) {
                     host = config.host
@@ -141,7 +141,7 @@ sendMail {
             }
         }
     }
-    
+
     def configureSendMail(application, applicationContext) {
         //adding sendMail to controllers
         for (controllerClass in application.controllerClasses) {
@@ -151,7 +151,7 @@ sendMail {
         }
 
         def mailServiceClassName = applicationContext.mailService.class.name
-        
+
         //adding sendMail to all services, besides the mailService of the plugin
         for (serviceClass in application.serviceClasses) {
             if (serviceClass.clazz.name != mailServiceClassName) {

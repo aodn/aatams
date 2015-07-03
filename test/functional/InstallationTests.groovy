@@ -7,7 +7,7 @@ class InstallationTests extends GrailsCrudTest  {
     def showPage = InstallationShowPage
     def createPage = InstallationCreatePage
     def editPage = InstallationEditPage
-    
+
     @Test
     void testList() {
         doTestList(3,
@@ -15,7 +15,7 @@ class InstallationTests extends GrailsCrudTest  {
                    [],
                    [stations: ["Bondi SW1", "Bondi SW3", "Bondi SW2"]])
     }
-    
+
     @Test
     void testShow() {
         doTestShow(
@@ -24,7 +24,7 @@ class InstallationTests extends GrailsCrudTest  {
              configuration: "CURTAIN",
              project: "Seal Count"])
     }
-    
+
     @Test
     void testCreate() {
         doTestCreate(
@@ -33,7 +33,7 @@ class InstallationTests extends GrailsCrudTest  {
              projectSelect:"13"],    // Tuna
             [name: "Derwent Array", project: "Tuna", configuration: "ARRAY"])
     }
-    
+
     @Test
     void testEdit() {
         doTestEdit("Bondi Line")

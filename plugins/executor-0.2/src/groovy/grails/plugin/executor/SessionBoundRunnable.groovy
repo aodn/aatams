@@ -25,14 +25,14 @@ import org.slf4j.LoggerFactory
 */
 public class SessionBoundRunnable implements Runnable {
 	private final Runnable task;
-	private final SessionFactory sessionFactory; 
-	
+	private final SessionFactory sessionFactory;
+
 	public SessionBoundRunnable(Runnable task,SessionFactory sessionFactory) {
 		if (task == null || sessionFactory == null) throw new NullPointerException();
 		this.task = task;
 		this.sessionFactory = sessionFactory;
 	}
-	
+
 	public void run(){
 		SessionBinderUtils.bindSession(sessionFactory);
 		try {

@@ -59,7 +59,7 @@ class AnimalController extends AbstractController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (animalInstance.version > version) {
-                    
+
                     animalInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'animal.label', default: 'Animal')] as Object[], "Another user has updated this Animal while you were editing")
                     render(view: "edit", model: [animalInstance: animalInstance])
                     return
@@ -98,14 +98,14 @@ class AnimalController extends AbstractController {
             redirect(action: "list")
         }
     }
-   
+
     def lookup = {
         if ((params.project.id == "") || (params.species.id == "")) {
             return [] as JSON
         }
-        
+
         def criteria = Animal.createCriteria()
-        
+
         def animals = criteria {
             and {
                 releases {
@@ -113,7 +113,7 @@ class AnimalController extends AbstractController {
                         eq("id", Long.valueOf(params.project.id))
                     }
                 }
-                
+
                 species {
                     eq("id", Long.valueOf(params.species.id))
                 }

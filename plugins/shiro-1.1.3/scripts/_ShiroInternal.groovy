@@ -19,7 +19,7 @@
  * Modified 2009 Kapil Sachdeva, Gemalto Inc, Ported to Apache Shiro
  */
 
- 
+
 /**
  * Installs a Shiro template into the current project, where the
  * new file has the same name as the template.
@@ -187,7 +187,7 @@ target(createLdapRealm: "Creates a new LDAP realm.") {
             ant.replacefilter(token: '@realm.name@', value: className)
         }
     }
-    
+
     event("CreatedArtefact", ['Realm', className])
 }
 

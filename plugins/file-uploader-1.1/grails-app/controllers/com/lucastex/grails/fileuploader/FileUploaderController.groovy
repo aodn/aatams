@@ -1,7 +1,7 @@
 package com.lucastex.grails.fileuploader
 
 class FileUploaderController {
-	
+
 	//messagesource
 	def messageSource
 
@@ -12,18 +12,18 @@ class FileUploaderController {
 
 		//upload group
 		def upload = params.upload
-				
+
 		//config handler
 		def config = grailsApplication.config.fileuploader[upload]
-		
+
 		//request file
 		def file = request.getFile("file")
-		
+
 		//base path to save file
 		def path = config.path
 		if (!path.endsWith('/'))
 			path = path+"/"
-		
+
 		/**************************
 			check if file exists
 		**************************/
@@ -34,7 +34,7 @@ class FileUploaderController {
 			redirect controller: params.errorController, action: params.errorAction, id: params.id
 			return
 		}
-		
+
 		/***********************
 			check extensions
 		************************/
@@ -48,8 +48,8 @@ class FileUploaderController {
 				return
 			}
 		}
-		
-		
+
+
 		/*********************
 			check file size
 		**********************/
@@ -61,22 +61,22 @@ class FileUploaderController {
 				redirect controller: params.errorController, action: params.errorAction, id: params.id
 				return
 			}
-		} 
-		
+		}
+
 		//reaches here if file.size is smaller or equal config.maxSize or if config.maxSize ain't configured (in this case
 		//plugin will accept any size of files).
-		
+
 		//sets new path
 		def currentTime = System.currentTimeMillis()
 		path = path+currentTime+"/"
 		if (!new File(path).mkdirs())
 			log.error "FileUploader plugin couldn't create directories: [${path}]"
 		path = path+file.originalFilename
-		
+
 		//move file
 		log.debug "FileUploader plugin received a ${file.size}b file. Moving to ${path}"
 		file.transferTo(new File(path))
-		
+
 		//save it on the database
 		def ufile = new UFile()
 		ufile.name = file.originalFilename
@@ -86,10 +86,10 @@ class FileUploaderController {
 		ufile.path = path
 		ufile.downloads = 0
 		ufile.save()
-		
+
 		redirect controller: params.successController, action: params.successAction, params:[ufileId:ufile.id, id: params.id]
 	}
-    
+
     def show={
 			def ufile = UFile.get(params.int("id"))
             println "aaa--------------------------------------------------------"+ufile
@@ -105,7 +105,7 @@ class FileUploaderController {
 				out.write(file.bytes)
 		        out.close();
 			}
-	
+
 	}
 
 }

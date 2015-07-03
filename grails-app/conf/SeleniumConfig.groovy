@@ -1,6 +1,6 @@
 selenium {
     browser = "*firefox"
-    
+
     screenshot {
         dir = "./target/test-reports/screenshots"    // directory where screenshots are placed relative to project root
         onFail = true                                // true to capture screenshots on test failures

@@ -6,11 +6,11 @@ import grails.converters.JSON
 class SpeciesControllerTests extends ControllerUnitTestCase  {
     protected void setUp()  {
         super.setUp()
-        
+
         mockLogging(SpeciesService)
         def speciesService = new SpeciesService()
         controller.speciesService = speciesService
-        
+
         CaabSpecies whiteShark = new CaabSpecies(scientificName:"Carcharodon carcharias", commonName:"White Shark", spcode:"37010003", name: "37010003 - Carcharodon carcharias (White Shark)")
         CaabSpecies blueFinTuna = new CaabSpecies(scientificName:"Thunnus maccoyii", commonName:"Southern Bluefin Tuna", spcode:"37441004")
         CaabSpecies blueEyeTrevalla = new CaabSpecies(scientificName:"Hyperoglyphe antarctica", commonName:"Blue-eye Trevalla", spcode:"37445001")
@@ -22,7 +22,7 @@ class SpeciesControllerTests extends ControllerUnitTestCase  {
     protected void tearDown()  {
         super.tearDown()
     }
-    
+
     void testNoDuplicatesInLookupByName() {
         // Bug #1729.
         assertLookupByNameWithTerm(1, "White Shark")
@@ -36,21 +36,21 @@ class SpeciesControllerTests extends ControllerUnitTestCase  {
         assertLookupByNameAndReturnSpcodeWithTerm(1, '370')
         assertLookupByNameAndReturnSpcodeWithTerm(2, '44')
     }
-    
+
     private void assertLookupByNameWithTerm(expectedNumResults, term)  {
         controller.params.term = term
         controller.lookupByName()
-        
+
         checkJsonResponse(expectedNumResults)
     }
 
     private void assertLookupByNameAndReturnSpcodeWithTerm(expectedNumResults, term) {
         controller.params.term = term
         controller.lookupByNameAndReturnSpcode()
-        
+
         checkJsonResponse(expectedNumResults)
     }
-    
+
     private void checkJsonResponse(expectedNumResults)  {
         def jsonResponse = JSON.parse(controller.response.contentAsString)
         assertEquals(expectedNumResults, jsonResponse.size())

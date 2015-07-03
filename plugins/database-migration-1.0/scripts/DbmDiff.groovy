@@ -65,7 +65,7 @@ target(dbmDiff: 'Writes description of differences to standard out') {
 
 // TODO this will fail with JNDI or encryption codec
 buildOtherDatabase = { String otherEnv ->
-	
+
 	try {
 		// check if it's a full name
 		Environment.valueOf otherEnv
@@ -77,7 +77,7 @@ buildOtherDatabase = { String otherEnv ->
 			otherEnv = fullName
 		}
 	}
-	
+
 	def configSlurper = new ConfigSlurper(otherEnv)
 	configSlurper.binding = binding.variables
 	def otherDsConfig = configSlurper.parse(classLoader.loadClass('DataSource')).dataSource

@@ -15,19 +15,19 @@ import org.codehaus.groovy.grails.plugins.orm.auditable.AuditLogListenerUtil
  * first is Kevin Burke's HibernateEventsGrailsPlugin
  * second is the AuditLogging post by Rob Monie at
  * http://www.hibernate.org/318.html
- * 
+ *
  * I've combined the two sources to create a Grails
  * Audit Logging plugin that will track individual
  * changes to columns.
- * 
+ *
  * See Documentation:
  * http://grails.org/plugin/audit-logging
- * 
+ *
  * Changes:
  * Release 0.3
  *      * actorKey and username features allow for the logging of
  *        user or userPrincipal for most security systems.
- * 
+ *
  * Release 0.4
  * 		* custom serializable implementation for AuditLogEvent so events can happen
  *        inside a webflow context.
@@ -52,7 +52,7 @@ import org.codehaus.groovy.grails.plugins.orm.auditable.AuditLogListenerUtil
  */
 class AuditLoggingGrailsPlugin {
     def version = "0.5.4"
-    def grailsVersion = '1.1 > *'    
+    def grailsVersion = '1.1 > *'
     def author = "Shawn Hartsock"
     def authorEmail = "hartsock@acm.org"
     def title = "adds auditable to GORM domain classes"
@@ -96,16 +96,16 @@ Stable Releases:
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional)
     }
-	                                      
+
     def doWithDynamicMethods = { ctx ->
         // TODO Implement registering dynamic methods to classes (optional)
     }
-	
+
     def onChange = { event ->
-        // TODO Implement code that is executed when this class plugin class is changed  
+        // TODO Implement code that is executed when this class plugin class is changed
         // the event contains: event.application and event.applicationContext objects
     }
-                                                                                  
+
     def onApplicationChange = { event ->
         // TODO Implement code that is executed when any class in a GrailsApplication changes
         // the event contain: event.source, event.application and event.applicationContext objects

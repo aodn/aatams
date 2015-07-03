@@ -23,10 +23,10 @@ import org.apache.commons.logging.LogFactory
 * @author Daniel Henrique Alves Lima
 */
 class TransactionHandlingGrailsPlugin {
-    
+
     private final Log log = LogFactory.getLog(getClass())
     private final GroovyDynamicMethods dynamicMethods = new GroovyDynamicMethods()
-    
+
     // the plugin version
     def version = "0.1.3"
     // the version or versions of Grails the plugin is designed for
@@ -54,14 +54,14 @@ class TransactionHandlingGrailsPlugin {
     def title = 'Grails Transaction Handling Plugin'
     def description = '''\\
 Plugin for advanced management of transactions in Grails.
-Possibly a backport of http://jira.grails.org/browse/GRAILS-7093. 
+Possibly a backport of http://jira.grails.org/browse/GRAILS-7093.
 '''
 
     // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/transaction-handling"
 
     def doWithWebDescriptor = { xml ->
-        // TODO Implement additions to web.xml (optional), this event occurs before 
+        // TODO Implement additions to web.xml (optional), this event occurs before
     }
 
     def doWithSpring = {
@@ -92,8 +92,8 @@ Possibly a backport of http://jira.grails.org/browse/GRAILS-7093.
         // TODO Implement code that is executed when the project configuration changes.
         // The event is the same as for 'onChange'.
     }
-    
-    
+
+
     def doWithDynamicMethodsImpl(ctx, application, targetDomainClass = null) {
         dynamicMethods.doWith(ctx, application, targetDomainClass = null)
     }

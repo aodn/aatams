@@ -4,19 +4,19 @@ import au.org.emii.aatams.DatumService
 
 class GeometryTagLib  {
     def datumService
-    
+
     /**
      * Generic tag for Point types.
      *
      * The template used depends on whether the "editable" attribute is set.
      */
     def point = { attrs, body ->
-        
+
         def pointAsString = ""
         def lon = null
         def lat = null
         def srid = null
-        
+
         if ((attrs.value == null) && !attrs.editable) {
             // Do nothing - we just display an empty string.
         }
@@ -48,10 +48,10 @@ class GeometryTagLib  {
                 pointAsString += " (datum:" + datumService.getName(srid) + ")"
             }
         }
-        
+
         if (attrs.editable) {
-            out << render(template:"/common/geometry/pointInputTemplate", 
-                          model:[pointName:attrs.name, 
+            out << render(template:"/common/geometry/pointInputTemplate",
+                          model:[pointName:attrs.name,
                                  value:pointAsString,
                                  lon:lon,
                                  lonEastOrWest:(lon >= 0 ? 'E' : 'W'),
@@ -59,12 +59,12 @@ class GeometryTagLib  {
                                  latNorthOrSouth:(lat > 0 ? 'N' : 'S'),
                                  srid:srid,
                                  datums:datumService.datums,
-                                 clazz:attrs.class]) 
+                                 clazz:attrs.class])
         }
         else {
-            out << render(template:"/common/geometry/pointOutputTemplate", 
-                          model:[pointName:attrs.name, 
-                                 value:pointAsString])  
+            out << render(template:"/common/geometry/pointOutputTemplate",
+                          model:[pointName:attrs.name,
+                                 value:pointAsString])
         }
     }
 }

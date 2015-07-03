@@ -8,17 +8,17 @@ class AuthenticationTests extends TestBase {
     void signInUnknownUsername() {
         assertFailedLogin("asdf", "password")
     }
-    
+
     @Test
     void signInIncorrectPassword() {
         assertFailedLogin("jkburges", "xyz")
     }
-    
+
     @Test
     void signInPendingUser() {
         assertFailedLogin("pending", "pending")
     }
-    
+
     private void assertFailedLogin(username, password) {
         login(username, password)
         assert at(LoginPage)
@@ -26,7 +26,7 @@ class AuthenticationTests extends TestBase {
         assert usernameTextField.value() == username
         assert passwordTextField.value() == ""
     }
-    
+
     @Test
     void signInAsSysAdmin() {
         loginAsSysAdmin()

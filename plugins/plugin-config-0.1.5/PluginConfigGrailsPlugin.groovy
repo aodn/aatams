@@ -53,9 +53,9 @@ Plugin to simplify plugin configuration tasks.
         "file:./grails-app/config/**/*DefaultConfig.groovy",
         "file:../../plugins/**/grails-app/config/**/*DefaultConfig.groovy"
     ]
-    
+
     private DefaultConfigHelper configHelper = new DefaultConfigHelper()
-    
+
     //def defaultConfig = PluginConfigDefaultConfig
 
     def doWithWebDescriptor = { xml ->
@@ -93,8 +93,8 @@ Plugin to simplify plugin configuration tasks.
         // The event is the same as for 'onChange'.
         configHelper.notifyConfigChange()
     }
-    
-    
+
+
     private def enhanceClasses = {pluginManager ->
         configHelper.defaultPluginManager = pluginManager
         configHelper.enhanceClasses()

@@ -58,7 +58,7 @@ class AddressController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (addressInstance.version > version) {
-                    
+
                     addressInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'address.label', default: 'Address')] as Object[], "Another user has updated this Address while you were editing")
                     render(view: "edit", model: [addressInstance: addressInstance])
                     return

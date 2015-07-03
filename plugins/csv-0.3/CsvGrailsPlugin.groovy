@@ -37,11 +37,11 @@ class CsvGrailsPlugin {
     def observe = [
         "controllers"
     ]
-    
+
     def loadAfter = [
         "controllers"
     ]
-    
+
     // TODO Fill in these fields
     def author = "Les Hazlewood"
     def authorEmail = "les@katasoft.com"
@@ -108,7 +108,7 @@ class CsvGrailsPlugin {
     def documentation = "http://grails.org/plugin/csv"
 
     def doWithWebDescriptor = { xml ->
-        // TODO Implement additions to web.xml (optional), this event occurs before 
+        // TODO Implement additions to web.xml (optional), this event occurs before
     }
 
     def doWithSpring = {
@@ -119,7 +119,7 @@ class CsvGrailsPlugin {
         new RenderCsvMethod(delegate).call(args, definition)
         false
     }
-    
+
     def doWithDynamicMethods = { ctx ->
 		//TODO this should really all be in a utility method so it can easily be called for unit testing
         CSVReader.metaClass.eachLine = { closure ->
@@ -162,7 +162,7 @@ class CsvGrailsPlugin {
 		String.metaClass.toCsvMapReader = { settingsMap ->
 			return new CSVMapReader(new StringReader(delegate),settingsMap)
         }
-        
+
         application.controllerClasses.each {
             it.clazz.metaClass.renderCsv = renderCsvMethod
         }

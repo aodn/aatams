@@ -14,24 +14,24 @@ class PagedBeanDataSource extends JRAbstractBeanDataSource {
     private int index = 0
     private Object currBean
     private static Map fieldNameMap = new HashMap()
-    
+
     private QueryService queryService
     private Class clazz
     private Map filterParams
-    
+
     private List resultPage;
     private int pageStart = Integer.MAX_VALUE;
     private int pageEnd = Integer.MIN_VALUE;
     private static final int PAGE_SIZE = 500
-    
+
     public PagedBeanDataSource(QueryService queryService, Class clazz, Map filterParams) {
         super(true)
-        
+
         this.queryService = queryService
         this.clazz = clazz
         this.filterParams = filterParams
     }
-    
+
     @Override
     public void moveFirst() throws JRException  {
         index = 0
@@ -43,7 +43,7 @@ class PagedBeanDataSource extends JRAbstractBeanDataSource {
         currBean = getObject(index++);
         return (currBean != null);
     }
-    
+
     @Override
     public Object getFieldValue(JRField field) throws JRException  {
         String nameField = getFieldName(field.getName())
@@ -58,9 +58,9 @@ class PagedBeanDataSource extends JRAbstractBeanDataSource {
     public List getObjects(int firstResult,    int maxResults)  {
         filterParams.offset = firstResult
         filterParams.max = maxResults
-        
+
         List queryResults = query(clazz, filterParams)
-        
+
         if (resultPage == null)  {
             resultPage = new ArrayList(queryResults.size());
         }
@@ -70,28 +70,28 @@ class PagedBeanDataSource extends JRAbstractBeanDataSource {
         }
         pageStart = firstResult;
         pageEnd = firstResult + queryResults.size() - 1;
-        
+
         return resultPage;
     }
 
     private List query(clazz, filterParams) {
         return queryService.query(clazz, filterParams).results
     }
-    
+
     public final Object getObject(int index)  {
         if (   (resultPage == null)
             || (index < pageStart)
             || (index > pageEnd))  {
             resultPage = getObjects(index, PAGE_SIZE);
         }
-        
+
         Object result = null;
         int pos = index - pageStart;
         if (   (resultPage != null)
             && (resultPage.size() > pos))  {
             result = resultPage.get(pos);
         }
-        
+
         return result;
     }
 
@@ -104,7 +104,7 @@ class PagedBeanDataSource extends JRAbstractBeanDataSource {
     */
     private String getFieldName(String fieldName)  {
         String filteredFieldName = (String) fieldNameMap.get(fieldName);
-        
+
         if (filteredFieldName == null)  {
             filteredFieldName = fieldName.replace('_','.');
             fieldNameMap.put(fieldName,filteredFieldName);

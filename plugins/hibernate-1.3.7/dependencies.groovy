@@ -16,19 +16,19 @@ grails.project.dependency.resolution = {
 			excludes 'hibernate'
 		}
         compile 'org.hibernate:hibernate-annotations:3.4.0.GA'
-				
+
 		runtime('org.hibernate:hibernate-validator:3.1.0.GA') {
 					excludes 'sl4j-api', 'hibernate.core', 'hibernate-commons-annotations', 'hibernate-entitymanager'
-		}				
+		}
 		runtime 'javassist:javassist:3.11.0.GA'
-		runtime 'antlr:antlr:2.7.6'		
+		runtime 'antlr:antlr:2.7.6'
 		runtime( 'dom4j:dom4j:1.6.1' ) {
 			excludes 'xml-apis'
-		}				
+		}
 		runtime( 'org.hibernate:hibernate-ehcache:3.3.1.GA' ) {
 			excludes 'ehcache', 'hibernate-core'
 		}
-		
+
     }
 
 }

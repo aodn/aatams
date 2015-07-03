@@ -7,7 +7,7 @@ class InstallationStationRow extends Module  {
     static content = {
         cell { $("td", it) }
         cellText { cell(it).text() }
-        
+
         showLink (to: InstallationStationShowPage) { cell(0).find("a") }
         name { cellText(1) }
         arrayPosition { cellText(2) }

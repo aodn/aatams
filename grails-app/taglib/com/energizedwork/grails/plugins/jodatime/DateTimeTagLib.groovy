@@ -239,7 +239,7 @@ class DateTimeTagLib {
         // do zone select
         if (attrs.useZone == "true") {
             log.debug "rendering time zone"
-            
+
             out.println dateTimeZoneSelect(name: "${name}_zone", value: DateTimeZone.forID(value?.chronology?.zone?.ID), "class": "${attrs.class}")
 
         }

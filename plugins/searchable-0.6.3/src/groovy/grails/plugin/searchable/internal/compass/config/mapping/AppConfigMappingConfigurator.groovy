@@ -39,7 +39,7 @@ class AppConfigMappingConfigurator implements SearchableGrailsDomainClassMapping
     private SearchableGrailsDomainClassCompassClassMapper classMapper
     private SearchableCompassClassMappingXmlBuilder compassClassMappingXmlBuilder
     private config
-    
+
     public AppConfigMappingConfigurator(config) {
         this.config = config;
     }
@@ -52,27 +52,27 @@ class AppConfigMappingConfigurator implements SearchableGrailsDomainClassMapping
     Collection getMappedBy(Collection grailsDomainClasses) {
         Set mappedBy = []
         def searchableDomainConfig = config.searchable.domain
-        
+
         if (!searchableDomainConfig) return mappedBy
-        
+
         for (gdc in grailsDomainClasses) {
             if (searchableDomainConfig."${gdc.logicalPropertyName}") mappedBy << gdc
         }
-        
+
         return mappedBy
     }
-    
+
     Collection getUnmapped(Collection grailsDomainClasses) {
         Set unmapped = []
         def searchableDomainConfig = config.searchable.domain
-        
+
         if (!searchableDomainConfig) return unmapped
-        
+
         for (gdc in grailsDomainClasses) {
             def dcConfig = searchableDomainConfig."${gdc.logicalPropertyName}"
             if (dcConfig instanceof Boolean && !dcConfig) unmapped << gdc
         }
-        
+
         return unmapped
     }
 

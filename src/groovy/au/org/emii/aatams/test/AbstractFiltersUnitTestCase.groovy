@@ -15,7 +15,7 @@ abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase {
     protected Person user
     protected authenticated = true
     protected permitted = false
-    
+
     private MetaClass originalSecurityUtilsMetaClass
 
     protected void setUp() {
@@ -26,7 +26,7 @@ abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase {
         permitted = false
 
         user =  new Person(username:"jkburges")
-        
+
         def subject = [ getPrincipal: { getPrincipal() },
                         isAuthenticated: { isAuthenticated() },
                         hasRole: { hasRole() },
@@ -48,7 +48,7 @@ abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase {
 
         super.tearDown()
     }
-    
+
     protected def getPrincipal() {
         return user?.id
     }

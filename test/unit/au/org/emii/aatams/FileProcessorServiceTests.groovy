@@ -7,10 +7,10 @@ import org.springframework.mock.web.MockMultipartFile;
 
 class FileProcessorServiceTests extends GrailsUnitTestCase {
     FileProcessorService fileProcessorService
-    
+
     protected void setUp()  {
         super.setUp()
-        
+
         mockLogging(FileProcessorService, true)
         fileProcessorService = new FileProcessorService()
         fileProcessorService.metaClass.saveToDiskAndProcess = { ReceiverDownloadFile receiverDownloadFile, MultipartFile file, showLink -> }
@@ -24,7 +24,7 @@ class FileProcessorServiceTests extends GrailsUnitTestCase {
         assertInvalidFilenames(["mockFile.rld", "mockFile.vrl", "mockFile.xyz", "asdf"], ReceiverDownloadFileType.EVENTS_CSV)
         assertValidFilenames(["mockFile.csv"], ReceiverDownloadFileType.EVENTS_CSV)
     }
-    
+
     void testValidateDetectionsCSVFilename() {
         assertInvalidFilenames(["mockFile.rld", "mockFile.vrl", "mockFile.xyz", "asdf"], ReceiverDownloadFileType.DETECTIONS_CSV)
         assertValidFilenames(["mockFile.csv"], ReceiverDownloadFileType.DETECTIONS_CSV)
@@ -51,14 +51,14 @@ class FileProcessorServiceTests extends GrailsUnitTestCase {
     private void assertInvalidFilenames(filenames, fileType) {
         filenames.each {
             def errMsg = "Invalid " + ReceiverDownloadFileType.getCategory(fileType) + " filename (" + it + ") - must have extension \"." + ReceiverDownloadFileType.getExtension(fileType) + "\"."
-            
+
             assertFileProcessingException(it,
                 "asdfasdf".getBytes(),
                 fileType,
                 errMsg)
         }
     }
-    
+
     void testProcessEventsEmptyFile() {
         def emptyFile =
             new MockMultipartFile("emptyFile",
@@ -68,49 +68,49 @@ class FileProcessorServiceTests extends GrailsUnitTestCase {
 
         assertFileProcessingException("emptyFile.csv", new byte[0], ReceiverDownloadFileType.EVENTS_CSV, "File is empty")
     }
-    
+
     private void assertFileProcessingException(filename, data, downloadType, errMsg) {
-        def mockFile = 
-            new MockMultipartFile("mockFile", 
-                                  filename, 
+        def mockFile =
+            new MockMultipartFile("mockFile",
+                                  filename,
                                   "text/csv",
                                   data)
-            
+
         ReceiverDownloadFile export = createExport(filename, downloadType)
-            
+
         try {
             fileProcessorService.process(export.id, mockFile, "some link")
             fail("Exception should be thrown")
         }
         catch (FileProcessingException e) {
             assertEquals(errMsg, e.getMessage())
-        } 
+        }
     }
 
     private void assertNoFileProcessingException(filename, data, downloadType) {
-        def mockFile = 
-            new MockMultipartFile("mockFile", 
-                                  filename, 
+        def mockFile =
+            new MockMultipartFile("mockFile",
+                                  filename,
                                   "text/csv",
                                   data)
-            
+
         ReceiverDownloadFile export = createExport(filename, downloadType)
-            
+
         try {
             fileProcessorService.process(export.id, mockFile, "some link")
         }
         catch (FileProcessingException e) {
             fail("Exception should not be thrown")
-        } 
+        }
     }
 
     private ReceiverDownloadFile createExport(filename, downloadType)  {
         ReceiverDownloadFile export =
                 new ReceiverDownloadFile(name:filename,
                                          type:downloadType)
-                
-        export.grailsApplication = [config: [fileimport: [path: System.getProperty("java.io.tmpdir") + "fileProcessorServiceTests"]]]        
-                
+
+        export.grailsApplication = [config: [fileimport: [path: System.getProperty("java.io.tmpdir") + "fileProcessorServiceTests"]]]
+
         mockDomain(ReceiverDownloadFile, [export])
         export.save()
         return export

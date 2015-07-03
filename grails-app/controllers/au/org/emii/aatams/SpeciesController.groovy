@@ -5,7 +5,7 @@ import grails.converters.JSON
 class SpeciesController {
 
     def speciesService
-    
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -62,7 +62,7 @@ class SpeciesController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (speciesInstance.version > version) {
-                    
+
                     speciesInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'species.label', default: 'Species')] as Object[], "Another user has updated this Species while you were editing")
                     render(view: "edit", model: [speciesInstance: speciesInstance])
                     return
@@ -101,28 +101,28 @@ class SpeciesController {
             redirect(action: "list")
         }
     }
-    
+
     /**
      * Allows auto-complete functionality on front-end.
      */
     def lookupByName = {
         log.debug("Looking up species, name: " + params.term)
-        
+
         // Delegate to the species service (limit to the first 25 items
         // since any more than that will barely fit on the screen).
         def species = speciesService.lookup(params.term) + CaabSpecies.findAllByNameIlike("%" + params.term + "%")
-        
+
         // Fix for #1729 - remove duplicates (matched in both speciesService.lookup() and findAllByNameIlike() above).
         species = species.unique()
-        
+
         if (species.size() > 20) {
             species = species[0..19]
         }
-        
+
         log.debug("Returning: " + (species as JSON))
         render species as JSON
     }
-    
+
     def lookupByNameAndReturnSpcode = {
         def species = speciesService.lookup(params.term)
         def jsonResults = species.collect  {

@@ -29,7 +29,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 */
 class SessionBinderUtils {
 	private static Logger log = LoggerFactory.getLogger(SessionBinderUtils)
-	
+
 	static boolean bindSession(SessionFactory sessionFactory) {
 		SessionHolder sessionHolder = TransactionSynchronizationManager.getResource(sessionFactory)
 		if(sessionHolder){
@@ -37,7 +37,7 @@ class SessionBinderUtils {
 				sessionHolder.getSession().flush()
 			}
 			return false
-		} 
+		}
 		else {
 			def session = SessionFactoryUtils.getSession(sessionFactory, true)
 			session.flushMode = FlushMode.AUTO

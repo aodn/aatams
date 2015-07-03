@@ -58,7 +58,7 @@ class InstallationConfigurationController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (installationConfigurationInstance.version > version) {
-                    
+
                     installationConfigurationInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'installationConfiguration.label', default: 'InstallationConfiguration')] as Object[], "Another user has updated this InstallationConfiguration while you were editing")
                     render(view: "edit", model: [installationConfigurationInstance: installationConfigurationInstance])
                     return

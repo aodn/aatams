@@ -20,7 +20,7 @@ class ListUtils  {
         if (retString.endsWith(separator)) {
             retString = retString.substring(0, retString.length() - separator.length())
         }
-        
+
         return retString
     }
 }

@@ -58,7 +58,7 @@ class ReceiverDeviceModelController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (receiverDeviceModelInstance.version > version) {
-                    
+
                     receiverDeviceModelInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'receiverDeviceModel.label', default: 'ReceiverDeviceModel')] as Object[], "Another user has updated this ReceiverDeviceModel while you were editing")
                     render(view: "edit", model: [receiverDeviceModelInstance: receiverDeviceModelInstance])
                     return

@@ -70,7 +70,7 @@ class FileUploaderService {
 
     return ufile.save()
   }
-  
+
   def boolean deleteFile(def idUfile) {
     def borro = false;
     def ufile = UFile.get(idUfile)

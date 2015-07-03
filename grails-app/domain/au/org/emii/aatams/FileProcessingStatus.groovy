@@ -11,13 +11,13 @@ enum FileProcessingStatus  {
     PROCESSED('Processed'),
     ERROR('Error'),
     DELETING('Deleting')
-    
+
     String displayStatus
-    
+
     FileProcessingStatus(String displayStatus) {
         this.displayStatus = displayStatus
     }
-    
+
     static list() {
         [ARCHIVED, PENDING, PROCESSING, PROCESSED, ERROR, DELETING]
     }

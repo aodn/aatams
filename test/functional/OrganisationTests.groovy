@@ -17,15 +17,15 @@ class OrganisationTests extends GrailsCrudTest  {
         listOrganisationsAsUnauthorised()
         listOrganisationsAsSysAdmin()
     }
-    
+
     @Test
     void testShow() {
-        doTestShow("CSIRO",  
-                   [name:"CSIRO", 
-                    department:"CMAR", 
-                    phoneNumber:"1234", 
-                    faxNumber:"1234", 
-                    streetAddress:"12 Smith Street, Hobart, TAS, Australia, 7000", 
+        doTestShow("CSIRO",
+                   [name:"CSIRO",
+                    department:"CMAR",
+                    phoneNumber:"1234",
+                    faxNumber:"1234",
+                    streetAddress:"12 Smith Street, Hobart, TAS, Australia, 7000",
                     postalAddress:"34 Queen Street, Melbourne, VIC, Australia, 3000",
                     people:["Pending Pending", "Joe Bloggs", "John Citizen"]])
     }
@@ -34,7 +34,7 @@ class OrganisationTests extends GrailsCrudTest  {
     void testEdit() {
         doTestEdit("CSIRO")
     }
-    
+
     @Test
     void testCreate() {
         doTestCreate(
@@ -42,32 +42,32 @@ class OrganisationTests extends GrailsCrudTest  {
              departmentTextField:"Marine",
              phoneNumberTextField:"1234",
              faxNumberTextField:"4321",
-             streetAddressStreetAddressTextField:"12 Smith Street", 
-             streetAddressSuburbTownTextField:"Hobart", 
-             streetAddressStateTextField:"TAS", 
-             streetAddressPostcodeTextField:"7000", 
-             streetAddressCountryTextField:"Australia", 
-             postalAddressStreetAddressTextField:"PO Box 1234", 
+             streetAddressStreetAddressTextField:"12 Smith Street",
+             streetAddressSuburbTownTextField:"Hobart",
+             streetAddressStateTextField:"TAS",
+             streetAddressPostcodeTextField:"7000",
+             streetAddressCountryTextField:"Australia",
+             postalAddressStreetAddressTextField:"PO Box 1234",
              postalAddressSuburbTownTextField:"Melbourne",
-             postalAddressStateTextField:"VIC", 
+             postalAddressStateTextField:"VIC",
              postalAddressPostcodeTextField:"3000",
              postalAddressCountryTextField:"Australia"],
              [])
     }
-    
+
     private void listOrganisationsAsUnauthorised() {
         doTestList(
             1,
-            [name:"CSIRO", 
-             department:"CMAR", 
-             phoneNumber:"1234", 
-             faxNumber:"1234", 
-             streetAddress:"12 Smith Street, Hobart, TAS, Australia, 7000", 
+            [name:"CSIRO",
+             department:"CMAR",
+             phoneNumber:"1234",
+             faxNumber:"1234",
+             streetAddress:"12 Smith Street, Hobart, TAS, Australia, 7000",
              postalAddress:"34 Queen Street, Melbourne, VIC, Australia, 3000"],
             [],
             [])
     }
-    
+
     private void listOrganisationsAsSysAdmin() {
         loginAsSysAdmin()
         doTestList(3, [name:"CSIRO"], [], [])

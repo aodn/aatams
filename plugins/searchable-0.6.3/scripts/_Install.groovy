@@ -14,7 +14,7 @@ def ant = binding.variables['ant'] ?: binding.variables['Ant']
 // TODO this is ancient - remove in next version
 if (new File(basedir, 'grails-app/conf/SearchablePluginConfiguration.groovy').exists()) {
     println """
-    
+
         STOP!
 
         It looks like you have an older version of the Searchable Plugin config file at:

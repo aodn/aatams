@@ -2,18 +2,18 @@ package pages
 
 class OrganisationShowPage extends ShowPage {
     static url = "organisation/show" // + "/" + id
-    
+
     static at = {
         title == "Show Organisation"
     }
-    
+
     static content = {
         editButton(to: OrganisationEditPage) { $("input", value: "Edit") }
         deleteButton(to: OrganisationListPage) { $("input", value: "Delete") }
-        
+
         row { $("td.name", text: it).parent() }
         value { row(it).find("td.value").text() }
-        
+
         name { value("Name") }
         department { value("Department") }
         phoneNumber { value("Phone Number") }

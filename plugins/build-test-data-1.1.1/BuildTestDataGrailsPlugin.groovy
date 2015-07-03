@@ -17,7 +17,7 @@ class BuildTestDataGrailsPlugin {
     def loadAfter = ['services']
 
     def author = "Ted Naleid and Joe Hoover"
-    def authorEmail = "contact@naleid.com" 
+    def authorEmail = "contact@naleid.com"
     def title = "Build Test Data Plugin"
     def description = '''\\
 Enables the easy creation of test data by automatic inspection of constraints.  Any properties that are required have

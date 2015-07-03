@@ -7,9 +7,9 @@ class Statistics {
     static transients = ['getStatistic']
 
     static mapping = {
-        key(unique: true) 
+        key(unique: true)
     }
-    
+
     static Long getStatistic(key) {
         return Statistics.findByKey(key)?.value
     }

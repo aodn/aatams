@@ -21,12 +21,12 @@ class GeometryUtils  {
             return coord
         }
     }
-    
+
     static Point scrambleLocation(Point origPoint) {
         if (origPoint == null) {
             return null
         }
-        
+
         try {
             if (!SecurityUtils.subject.isAuthenticated()) {
                 return doScramble(origPoint)
@@ -41,17 +41,17 @@ class GeometryUtils  {
             return doScramble(origPoint)
         }
     }
-    
+
     private static double round(double d, int decimalPlace)  {
         BigDecimal bd = new BigDecimal(d);
         bd = bd.setScale(decimalPlace, BigDecimal.ROUND_DOWN);
         return bd.doubleValue();
     }
-    
+
     private static double truncate2 (double x) {
         return round(x, 2)
     }
-    
+
     private static Point doScramble(Point origPoint) {
         double lon = truncate2(origPoint.getCoordinate().x)
         double lat = truncate2(origPoint.getCoordinate().y)
@@ -59,7 +59,7 @@ class GeometryUtils  {
         Point p = new GeometryFactory().createPoint(
                     new Coordinate(lon, lat))
         p.SRID = origPoint.SRID
-        
+
         return p
     }
 }

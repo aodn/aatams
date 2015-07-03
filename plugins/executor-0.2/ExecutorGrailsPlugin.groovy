@@ -32,7 +32,7 @@ class ExecutorGrailsPlugin {
 			executor = Executors.newCachedThreadPool()
 		}
 	}
-	
+
 	def addAsyncMethods(application,clazz) {
 			clazz.metaClass.runAsync = { Runnable runme ->
 				application.mainContext.executorService.execute(runme)
@@ -57,6 +57,6 @@ class ExecutorGrailsPlugin {
 		}
 	}
 
-	
+
 
 }

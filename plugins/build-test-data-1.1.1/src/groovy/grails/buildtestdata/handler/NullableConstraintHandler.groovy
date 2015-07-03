@@ -15,7 +15,7 @@ public class NullableConstraintHandler implements ConstraintHandler {
             if (propertyIsDomainClass(constrainedProperty.propertyType)) {
                 populateDomainProperty(domain, propertyName, appliedConstraint, constrainedProperty, circularCheckList)
                 return
-            } 
+            }
             value = determineNonStandardValue(constrainedProperty)
         }
 

@@ -5,11 +5,11 @@ package au.org.emii.aatams
  */
 class AnimalMeasurementType  {
     String type
-    
+
     static constraints =  {
         type(blank:false, unique:true)
     }
-    
+
     String toString() {
         return type
     }

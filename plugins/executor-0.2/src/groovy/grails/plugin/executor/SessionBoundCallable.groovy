@@ -8,8 +8,8 @@ import java.util.concurrent.Callable
 */
 public class SessionBoundCallable<T> implements Callable<T> {
 	private final Callable<T> task;
-	private final SessionFactory sessionFactory; 
-	
+	private final SessionFactory sessionFactory;
+
 	public SessionBoundCallable(Callable task,SessionFactory sessionFactory) {
 		if (task == null || sessionFactory == null) throw new NullPointerException();
 		this.task = task;

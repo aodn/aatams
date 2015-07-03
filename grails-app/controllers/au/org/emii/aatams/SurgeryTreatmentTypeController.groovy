@@ -58,7 +58,7 @@ class SurgeryTreatmentTypeController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (surgeryTreatmentTypeInstance.version > version) {
-                    
+
                     surgeryTreatmentTypeInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'surgeryTreatmentType.label', default: 'SurgeryTreatmentType')] as Object[], "Another user has updated this SurgeryTreatmentType while you were editing")
                     render(view: "edit", model: [surgeryTreatmentTypeInstance: surgeryTreatmentTypeInstance])
                     return

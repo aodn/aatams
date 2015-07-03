@@ -13,10 +13,10 @@ class ReportTagLibTests extends TagLibUnitTestCase  {
 
     void testReportFilterParameter()  {
         // Need grails 1.4 to test template rendering.
-        
+
         def attrs = [template:"/report/filter/listTemplate", model:[:]]
         def body = {''}
-        
+
         tagLib.reportFilterParameter(attrs, body)
     }
 }

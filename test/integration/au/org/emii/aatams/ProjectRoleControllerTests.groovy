@@ -9,39 +9,39 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase  {
     def permissionUtilsService
     def searchableService
     def sessionFactory
-    
+
     Person fredSmith
     Project sealCount
     ProjectRoleType administrator
-        
+
     protected void setUp()  {
         super.setUp()
-        
+
         controller.metaClass.message = {}
         controller.permissionUtilsService = permissionUtilsService
-        
+
         fredSmith = new Person(username: "fsmith",
                                passwordHash: "asdf",
-                               name: "Fred Smith", 
-                               emailAddress: "fsmith@asdf.com", 
-                               phoneNumber:"1234", 
-                               status: EntityStatus.ACTIVE, 
+                               name: "Fred Smith",
+                               emailAddress: "fsmith@asdf.com",
+                               phoneNumber:"1234",
+                               status: EntityStatus.ACTIVE,
                                defaultTimeZone: DateTimeZone.forID("Australia/Hobart"),
                                organisation: Organisation.findByName("CSIRO"))
         fredSmith.save(failOnError:true)
-        
+
         assertNotNull(fredSmith)
-        
+
         sealCount = Project.findByName("Seal Count")
         assertNotNull(sealCount)
-        
+
         administrator = ProjectRoleType.findByDisplayName("Administrator")
         assertNotNull(administrator)
     }
 
     protected void tearDown()  {
         fredSmith.delete()
-        
+
         super.tearDown()
     }
 
@@ -49,7 +49,7 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase  {
         assertNoPermissions()
         def projectRole = saveRole(administrator)
         assertAdministratorPermissions()
-    
+
         deleteRole(projectRole)
     }
 
@@ -57,16 +57,16 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase  {
         assertNoPermissions()
         def projectRole = saveRole(administrator)
         assertAdministratorPermissions()
-        
+
         controller.params.id = projectRole.id
         controller.params.person = projectRole.person
         controller.params.project = projectRole.project
         controller.params.roleType = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
         controller.params.access = ProjectAccess.READ_WRITE
         controller.update()
-        
+
         assertProjectInvestigatorPermissions()
-        
+
         deleteRole(projectRole)
     }
 
@@ -77,13 +77,13 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase  {
         controller.params.access = ProjectAccess.READ_WRITE
 
         controller.save()
-        
+
         def jsonResponse = JSON.parse(controller.response.contentAsString)
-        
+
         assertNotNull(jsonResponse.instance)
         def projectRole = ProjectRole.get(jsonResponse.instance.id)
         assertNotNull(projectRole)
-        
+
         return projectRole
     }
 
@@ -112,7 +112,7 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase  {
                           [permissionUtilsService.PERSON_WRITE_ANY,
                            permissionUtilsService.RECEIVER_CREATE])
     }
-    
+
     private void assertNoPermissions()  {
         assertPermissions([],
         [permissionUtilsService.buildProjectEditChildrenPermission(sealCount.id),
@@ -122,12 +122,12 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase  {
             permissionUtilsService.PERSON_WRITE_ANY,
             permissionUtilsService.RECEIVER_CREATE])
     }
-    
+
     private void assertPermissions(truePermissions, falsePermissions) {
         truePermissions.each {
             assertTrue(it, fredSmith.permissions.contains(it))
         }
-        
+
         falsePermissions.each {
             assertFalse(it, fredSmith.permissions.contains(it))
         }

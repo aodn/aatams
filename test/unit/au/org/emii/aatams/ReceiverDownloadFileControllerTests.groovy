@@ -68,7 +68,7 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
         controller.request.format = 'xml'
         controller.params.type = 'VUE_XML_ZIPPED'
         controller.params.'example.zip' = '@example.zip'
-        
+
         controller.request.metaClass.getFileMap = {
             ['example.zip': []]
         }
@@ -85,7 +85,7 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
         controller.request.format = 'xml'
         controller.params.type = 'VUE_XML_ZIPPED'
         controller.params.'example.zip' = '@example.zip'
-        
+
         // No file attached.
         controller.request.metaClass.getFileMap = {
             [:]

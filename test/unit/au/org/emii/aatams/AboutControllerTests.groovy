@@ -16,18 +16,18 @@ class AboutControllerTests extends AbstractControllerUnitTestCase  {
 
     void testUnauthenticated()  {
         authenticated = false
-        
+
         controller.home()
-        
+
         assertEquals("index", controller.renderArgs.view)
         assertTrue(controller.redirectArgs.isEmpty())
     }
 
     void testAuthenticated()  {
         authenticated = true
-        
+
         controller.home()
-        
+
         assertEquals("gettingStarted", controller.redirectArgs.controller)
         assertTrue(controller.renderArgs.isEmpty())
     }

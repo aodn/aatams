@@ -6,18 +6,18 @@ import grails.test.*
 class NavigationMenuControllerTests extends AbstractControllerUnitTestCase  {
     def permissionUtilsService
     def person
-    
+
     protected void setUp()  {
         super.setUp()
-        
+
         mockLogging(PermissionUtilsService)
         permissionUtilsService = new PermissionUtilsService()
         assert(permissionUtilsService)
-        
+
         controller.permissionUtilsService = permissionUtilsService
-        
+
         person = new Person(username:"person")
-                               
+
         mockDomain(Person, [person])
         person.save()
     }
@@ -34,16 +34,16 @@ class NavigationMenuControllerTests extends AbstractControllerUnitTestCase  {
         if (permission == "projectWriteAny") {
             return true
         }
-        
+
         return false
-    }    
-    
+    }
+
     void testFieldDataControllersAsNonSysAdmin()  {
         hasRole = false
-        
+
         def fieldDataControllers =
             controller.index().fieldDataControllers
-        
+
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'sensor', label:'Tags', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'animalRelease', label:'Tag Releases', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'detection', label:'Tag Detections', canCreateNew:true)))
@@ -57,7 +57,7 @@ class NavigationMenuControllerTests extends AbstractControllerUnitTestCase  {
 
         def fieldDataControllers =
             controller.index().fieldDataControllers
-        
+
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'sensor', label:'Tags', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'animalRelease', label:'Tag Releases', canCreateNew:true)))
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'detection', label:'Tag Detections', canCreateNew:true)))

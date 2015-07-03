@@ -20,7 +20,7 @@ class OrganisationProjectController {
         organisationProjectInstance.properties = params
         return [organisationProjectInstance: organisationProjectInstance]
     }
-    
+
     def save = {
         def organisationProjectInstance = new OrganisationProject(params)
         if (organisationProjectInstance.save(flush: true))  {
@@ -28,7 +28,7 @@ class OrganisationProjectController {
                                                                              organisationProjectInstance.organisation.toString(), \
                                                                              message(code: 'project.label', default: 'Project'), \
                                                                              organisationProjectInstance.project.toString()])}"
-                                                                 
+
             render ([instance:organisationProjectInstance, message:flash] as JSON)
         }
         else  {
@@ -36,7 +36,7 @@ class OrganisationProjectController {
             render ([errors:organisationProjectInstance.errors] as JSON)
         }
     }
-    
+
     def show = {
         def organisationProjectInstance = OrganisationProject.get(params.id)
         if (!organisationProjectInstance) {
@@ -65,7 +65,7 @@ class OrganisationProjectController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (organisationProjectInstance.version > version) {
-                    
+
                     organisationProjectInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'organisationProject.label', default: 'OrganisationProject')] as Object[], "Another user has updated this OrganisationProject while you were editing")
                     render(view: "edit", model: [organisationProjectInstance: organisationProjectInstance])
                     return

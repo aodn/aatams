@@ -2,7 +2,7 @@ package au.org.emii.aatams
 
 class ValidReceiverEvent extends ReceiverEvent  {
     static belongsTo = [receiverDeployment: ReceiverDeployment]
-    
+
     static boolean isDuplicate(other) {
         boolean duplicate = false
         ValidReceiverEvent.findByTimestamp(other.timestamp, [cache:true]).each {
@@ -11,10 +11,10 @@ class ValidReceiverEvent extends ReceiverEvent  {
                 return
             }
         }
-        
+
         return duplicate
     }
-    
+
     private boolean duplicate(other) {
         return (
             this.timestamp == other.timestamp

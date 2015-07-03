@@ -199,7 +199,7 @@ def flushReportData() {
         event("StatusError", ["""
 --------------------------------------------
 ***********WARNING*************
-Unable to flush code coverage data.  
+Unable to flush code coverage data.
 This usually happens when tests don't actually test anything;
 e.g. none of the instrumented classes were exercised by tests!
 --------------------------------------------

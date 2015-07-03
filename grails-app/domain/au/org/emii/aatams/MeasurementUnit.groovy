@@ -5,7 +5,7 @@ package au.org.emii.aatams
  */
 class MeasurementUnit  {
     String unit
-    
+
     static constraints = {
         unit(blank:false, unique:true)
     }

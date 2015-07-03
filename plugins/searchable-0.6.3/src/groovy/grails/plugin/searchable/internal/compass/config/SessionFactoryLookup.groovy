@@ -27,11 +27,11 @@ class SessionFactoryLookup implements InitializingBean, FactoryBean{
 
 	SessionFactory sessionFactory
 	SessionFactory resolvedSessionFactory
-	
+
 	def getObject() { resolvedSessionFactory }
 	boolean isSingleton() { true }
 	Class getObjectType() { SessionFactory }
-	
+
 	void afterPropertiesSet() {
 		if("SessionFactoryProxy".equals(sessionFactory.getClass().simpleName)) {
 			resolvedSessionFactory = sessionFactory.getCurrentSessionFactory()

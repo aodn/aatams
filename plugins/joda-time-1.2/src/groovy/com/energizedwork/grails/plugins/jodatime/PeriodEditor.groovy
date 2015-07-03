@@ -35,7 +35,7 @@ class PeriodEditor extends PropertyEditorSupport {
 	PeriodEditor(Class type) {
 		this.type = type
 	}
-	
+
 	String getAsText() {
 		if (!value) {
 			return ""

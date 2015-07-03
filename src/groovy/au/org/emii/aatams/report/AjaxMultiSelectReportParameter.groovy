@@ -4,12 +4,12 @@ import java.util.Map;
 
 class AjaxMultiSelectReportParameter extends ReportParameter  {
     String lookupPath
-    
+
     @Override
     public String getTemplate()  {
         return "/report/filter/ajaxMultiSelectTemplate"
     }
-    
+
     String getRestrictionName() {
         return "in"
     }

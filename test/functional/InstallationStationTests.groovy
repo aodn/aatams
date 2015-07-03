@@ -7,7 +7,7 @@ class InstallationStationTests extends GrailsCrudTest  {
     def showPage = InstallationStationShowPage
     def createPage = InstallationStationCreatePage
     def editPage = InstallationStationEditPage
-    
+
     @Test
     void testList() {
         doTestList(7,
@@ -15,13 +15,13 @@ class InstallationStationTests extends GrailsCrudTest  {
                    [installationLink:"Ningaloo Array", projectLink:"Tuna"],
                    [])
     }
-    
+
     @Test
     void testShow() {
         doTestShow(
             "Ningaloo S1",
             [name:"Ningaloo S1",
-             arrayPosition:"1", 
+             arrayPosition:"1",
              location:"10.12\u00b0N 10.12\u00b0E (datum:null)",
              installation: "Ningaloo Array",
              project: "Tuna"])
@@ -35,10 +35,10 @@ class InstallationStationTests extends GrailsCrudTest  {
              installationSelect: "63"],
             [name: "Some New Station", arrayPosition: "57", location:"10.12\u00b0S 10.12\u00b0E (datum:WGS 84)", installation: "Ningaloo Array"])
     }
-    
+
     protected void doCustomCreateEntry() {
         assert at(getCreatePage())
-        
+
         locationTextField.click()
         locationDialog.latitudeTextField.value("10.12")
         locationDialog.longitudeTextField.value("10.12")

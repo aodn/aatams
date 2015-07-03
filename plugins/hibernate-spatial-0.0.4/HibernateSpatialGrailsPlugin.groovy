@@ -42,7 +42,7 @@ Provides support for using the Hibernate Spatial (http://www.hibernatespatial.or
     def documentation = "http://grails.org/plugin/hibernate-spatial"
 
     def doWithWebDescriptor = { xml ->
-        // TODO Implement additions to web.xml (optional), this event occurs before 
+        // TODO Implement additions to web.xml (optional), this event occurs before
     }
 
     def doWithSpring = {

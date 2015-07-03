@@ -9,35 +9,35 @@ abstract class GrailsCrudTest extends TestBase  {
     abstract protected def getShowPage()
     abstract protected def getCreatePage()
     abstract protected def getEditPage()
-    
+
     @Test
     abstract void testList()
-    
+
     protected void doTestList(numRows, stringValues, linkValues, listValues) {
         to getListPage()
-        
+
         assert detailRows.size() == numRows
-        
+
         def testRow =  findRowByName(detailRows, stringValues.name)
-        
+
         stringValues.each {
             k, v ->
             assert testRow[k] == v
         }
-        
+
         linkValues.each {
             k, v ->
             assert testRow[k].text() == v
         }
-        
+
         listValues.each {
             k,v ->
             assert testRow[k].size() == v.size()
             assert testRow[k].containsAll(v)
         }
-        
+
 //        assert !newButton
-//        
+//
 //        loginAsSysAdmin()
 //        to toPage
 //        assert newButton
@@ -51,7 +51,7 @@ abstract class GrailsCrudTest extends TestBase  {
 
         def detailRow =  findRowByName(detailRows, detailRowName)
         detailRow.showLink.click()
-        
+
         assertShowPageDetails(details)
     }
 
@@ -78,7 +78,7 @@ abstract class GrailsCrudTest extends TestBase  {
             }
         }
     }
-    
+
     @Test
     abstract void testCreate()
 
@@ -86,12 +86,12 @@ abstract class GrailsCrudTest extends TestBase  {
         loginAsSysAdmin()
         to getListPage()
         newButton.click()
-        
+
         assert at(getCreatePage())
-        
+
         values.each {
             k, v ->
-            
+
             this[k].value(v)
         }
 
@@ -101,7 +101,7 @@ abstract class GrailsCrudTest extends TestBase  {
         JavascriptExecutor js = (JavascriptExecutor) driver
         js.executeScript( "document.getElementById('create').click();" );
 //        createButton.click()
-        
+
         try {
             assertShowPageDetails(showValues)
         }
@@ -110,14 +110,14 @@ abstract class GrailsCrudTest extends TestBase  {
             withConfirm { deleteButton.click() }
         }
     }
-    
+
     protected void doCustomCreateEntry() {
-        
+
     }
-    
+
     @Test
     abstract void testEdit()
-    
+
     protected void doTestEdit(detailRowName, value, fieldToEdit) {
         loginAsSysAdmin()
         to getListPage()
@@ -126,7 +126,7 @@ abstract class GrailsCrudTest extends TestBase  {
 
         String currValue = this[value]
         String newValue = "different name"
-        
+
         try {
             assertFieldUpdate(newValue, value, fieldToEdit)
         }
@@ -135,11 +135,11 @@ abstract class GrailsCrudTest extends TestBase  {
             assertFieldUpdate(currValue, value, fieldToEdit)
         }
     }
-    
+
     protected void doTestEdit(detailRowName) {
         doTestEdit(detailRowName, "name", "nameTextField")
     }
-    
+
     @Test
     void testDelete() {
         // Implementations will generally test deletion as part of "testCreate()".
@@ -155,7 +155,7 @@ abstract class GrailsCrudTest extends TestBase  {
         assert at(getShowPage())
         editButton.click()
         assert at(getEditPage())
-        
+
         this[fieldToEdit].value(newValue)
 
         // Workaround for: http://code.google.com/p/selenium/issues/detail?id=2700
@@ -167,7 +167,7 @@ abstract class GrailsCrudTest extends TestBase  {
 //        assert name == newValue
         assert this[value] == newValue
     }
-    
+
     protected void navigateToEditPageFromShowPage()  {
         assert at(getShowPage())
         editButton.click()

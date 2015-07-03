@@ -71,4 +71,3 @@ class JasperGrailsPlugin {
         // the event contain: event.source, event.application and event.applicationContext objects
     }
 }
- 

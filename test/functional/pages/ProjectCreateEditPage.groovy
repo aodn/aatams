@@ -5,7 +5,7 @@ class ProjectCreateEditPage extends LayoutPage {
         nameTextField { $("input", name: "name") }
         organisationSelect { $("select", name: "organisation.id") }
         personSelect { $("select", name: "person.id") }
-        
-        
+
+
     }
 }

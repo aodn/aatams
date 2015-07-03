@@ -1,11 +1,11 @@
 package com.lucastex.grails.fileuploader
 
 class DownloadController {
-	
+
 	def messageSource
-	
-    def index = { 
-	
+
+    def index = {
+
 		UFile ufile = UFile.get(params.id)
 		if (!ufile) {
 			def msg = messageSource.getMessage("fileupload.download.nofile", [params.id] as Object[], request.locale)
@@ -14,7 +14,7 @@ class DownloadController {
 			redirect controller: params.errorController, action: params.errorAction
 			return
 		}
-		
+
 		def file = new File(ufile.path)
 		if (file.exists()) {
 			log.debug "Serving file id=[${ufile.id}] for the ${ufile.downloads} to ${request.remoteAddr}"

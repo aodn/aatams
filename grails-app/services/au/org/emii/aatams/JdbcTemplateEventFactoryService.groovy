@@ -9,7 +9,7 @@ class JdbcTemplateEventFactoryService extends EventFactoryService  {
                    "message": "",
                    "reason": ""])
     }
-    
+
     protected def createInvalidEvent(params) {
         return (params
                 + ["clazz" : "au.org.emii.aatams.InvalidReceiverEvent",

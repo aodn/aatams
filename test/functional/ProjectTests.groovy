@@ -8,7 +8,7 @@ class ProjectTests extends GrailsCrudTest  {
     def showPage = ProjectShowPage
     def createPage = ProjectCreatePage
     def editPage = ProjectEditPage
-    
+
     @Test
     void testList() {
         doTestList(3,
@@ -19,13 +19,13 @@ class ProjectTests extends GrailsCrudTest  {
 
     @Test
     void testShow() {
-        doTestShow("Seal Count",  
-                   [name:"Seal Count", 
-                    projectRoles:[[name:"John Citizen", projectRole:"Administrator", access:"Read Only"], 
+        doTestShow("Seal Count",
+                   [name:"Seal Count",
+                    projectRoles:[[name:"John Citizen", projectRole:"Administrator", access:"Read Only"],
                                   [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"]],
                     organisations:[[name:"CSIRO (CMAR)"]]])
     }
-    
+
     @Test
     void testCreate() {
         doTestCreate(
@@ -45,9 +45,9 @@ class ProjectTests extends GrailsCrudTest  {
 
     private void assertAddPerson() {
         assert at(getEditPage())
-        
+
         addPersonLink.click()
-        
+
         assert addPersonDialog.rows.size() == 4
         assert addPersonDialog.projectLabel.text() == "Seal Count"
         addPersonDialog.personSelect.value("19")    // Joe Bloggs
@@ -56,10 +56,10 @@ class ProjectTests extends GrailsCrudTest  {
 
         try {
             addPersonDialog.createButton.click()
-            
+
             assert at(getEditPage())
             updateButton.click()
-            
+
             assertShowPageDetails(
                 [projectRoles:[[name:"John Citizen", projectRole:"Administrator", access:"Read Only"],
                                [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"],
@@ -67,14 +67,14 @@ class ProjectTests extends GrailsCrudTest  {
         }
         finally {
             navigateToEditPageFromShowPage()
-            
+
             // Cleanup.
             def newRoleRow = findProjectRoleByNameAndRole(projectRoleRows, "Joe Bloggs", "Administrator")
-            
+
             // This fails on firefox 3.6 - the link is clicked twice.
             // See: http://code.google.com/p/selenium/issues/detail?id=2628
             withConfirm { newRoleRow.deleteLink.click() }
-            
+
             assert at(getEditPage())
         }
     }
@@ -83,5 +83,5 @@ class ProjectTests extends GrailsCrudTest  {
         def actualRole = projectRoleRows.find  {
             (it.name == name) && (it.projectRole == projectRole)
         }
-    }    
+    }
 }

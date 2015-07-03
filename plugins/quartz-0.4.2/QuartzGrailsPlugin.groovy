@@ -40,7 +40,7 @@ class QuartzGrailsPlugin {
 
     def version = "0.4.2"
     def grailsVersion = "1.1 > *"
-    
+
     def author = "Sergey Nebolsin"
     def authorEmail = "nebolsin@gmail.com"
     def title = "This plugin adds Quartz job scheduling features to Grails application."

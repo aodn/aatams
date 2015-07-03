@@ -58,7 +58,7 @@ class TransmitterTypeController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (transmitterTypeInstance.version > version) {
-                    
+
                     transmitterTypeInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'transmitterType.label', default: 'TransmitterType')] as Object[], "Another user has updated this TransmitterType while you were editing")
                     render(view: "edit", model: [transmitterTypeInstance: transmitterTypeInstance])
                     return

@@ -5,7 +5,7 @@ grails.project.test.reports.dir	= "target/test-reports"
 
 grails.project.dependency.resolution = {
     inherits "global"
-    log "warn" 
+    log "warn"
     repositories {
         grailsPlugins()
         grailsHome()

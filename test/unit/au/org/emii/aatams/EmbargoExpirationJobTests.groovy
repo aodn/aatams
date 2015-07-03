@@ -5,7 +5,7 @@ import org.apache.log4j.*
 
 class EmbargoExpirationJobTests extends GrailsUnitTestCase  {
     protected def job
-    
+
     AnimalRelease nullRelease
     AnimalRelease yesterdayRelease
     AnimalRelease todayRelease
@@ -13,12 +13,12 @@ class EmbargoExpirationJobTests extends GrailsUnitTestCase  {
 
     protected void setUp()  {
         super.setUp()
-        
+
         mockDomain(Person)
 
         mockLogging(EmbargoExpirationJob, true)
         job = new EmbargoExpirationJob()
-        
+
         Calendar yesterday = Calendar.getInstance()
         yesterday.add(Calendar.DAY_OF_YEAR, -1)
         Calendar tomorrow = Calendar.getInstance()
@@ -29,33 +29,33 @@ class EmbargoExpirationJobTests extends GrailsUnitTestCase  {
         mockDomain(Sensor, [sensor])
         mockDomain(Tag, [tag])
         tag.addToSensors(sensor)
-        
+
         tag.save()
-        
+
         nullRelease = new AnimalRelease()
         yesterdayRelease = new AnimalRelease(embargoDate: yesterday.getTime())
         todayRelease = new AnimalRelease(embargoDate: new Date())
         tomorrowRelease = new AnimalRelease(embargoDate: tomorrow.getTime())
-        
+
         def releases = [nullRelease, yesterdayRelease, todayRelease, tomorrowRelease]
         mockDomain(AnimalRelease, releases)
-        
+
         nullRelease.addToSurgeries(new Surgery(release:nullRelease, tag:tag))
         yesterdayRelease.addToSurgeries(new Surgery(release:yesterdayRelease, tag:tag))
         todayRelease.addToSurgeries(new Surgery(release:todayRelease, tag:tag))
         tomorrowRelease.addToSurgeries(new Surgery(release:tomorrowRelease, tag:tag))
-        
+
         releases.each{ it.save() }
-        
+
         def releaseCriteria = [list: {Closure cls -> [yesterdayRelease, todayRelease, tomorrowRelease]}]
         AnimalRelease.metaClass.static.createCriteria = {releaseCriteria}
-        
+
         mockConfig('''animalRelease  {
                             embargoExpiration  {
                                 warningPeriodMonths = 1
                             }
                         }
-                        
+
                         grails  {
                             serverURL = "http://localhost:8090/aatams"
                         }''')
@@ -71,11 +71,11 @@ class EmbargoExpirationJobTests extends GrailsUnitTestCase  {
         def embargoedReleases = job.findEmbargoedReleases(0)
         assertEquals([todayRelease], embargoedReleases)
     }
-    
+
     void testExpiringSubject() {
         assertEquals("AATAMS tag embargoes expiring today: [A69-1303-1234]", job.createExpiringSubject(todayRelease))
     }
-        
+
     void testExpiringBody() {
         String expectedBody = '''The embargoes on the following tags will expire today.
 

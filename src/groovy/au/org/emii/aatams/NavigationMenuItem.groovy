@@ -8,7 +8,7 @@ class NavigationMenuItem  {
     String controllerName
     String label
     Boolean canCreateNew
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

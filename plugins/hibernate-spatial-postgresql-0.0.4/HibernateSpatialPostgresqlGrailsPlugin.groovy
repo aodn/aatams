@@ -42,7 +42,7 @@ Hibernate Spatial Provider for PostgreSQL/PostGIS (http://www.hibernatespatial.o
     def documentation = "http://grails.org/plugin/hibernate-spatial-postgresql"
 
     def doWithWebDescriptor = { xml ->
-        // TODO Implement additions to web.xml (optional), this event occurs before 
+        // TODO Implement additions to web.xml (optional), this event occurs before
     }
 
     def doWithSpring = {

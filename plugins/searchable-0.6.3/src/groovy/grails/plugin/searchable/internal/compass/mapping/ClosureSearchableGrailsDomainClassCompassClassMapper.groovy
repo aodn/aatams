@@ -63,7 +63,7 @@ class ClosureSearchableGrailsDomainClassCompassClassMapper extends AbstractSearc
     List constantMetadatas;
     boolean hasMappingOption
     Map subIndexHash
-    
+
     /**
      * No special initialisation required.
      */
@@ -266,7 +266,7 @@ class ClosureSearchableGrailsDomainClassCompassClassMapper extends AbstractSearc
                 "The invalid options are: [${invalidOptions.join(', ')}]."
             )
         }
-    
+
         def referenceOptions
         def componentOptions
         boolean implicitReference = defaultTypeReference

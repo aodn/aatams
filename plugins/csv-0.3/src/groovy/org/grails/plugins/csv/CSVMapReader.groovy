@@ -33,15 +33,15 @@ public class CSVMapReader implements Closeable, Iterable {
 
 	//the column names from the first header line in the file
 	def fieldKeys = []
-		
+
 	/**
 	 * If this is >0 then on each iteration, instead of a map, will return a list of maps of this batchSize
 	 * and returnAll or toList will return a list of lists(batches) of maps based on the batchSize
 	 * For example: this is usefull if you have a million rows in the CSV and want each iteration to return a list(batch) of 50 rows(maps) at a time
-	 * so you can process inserts into the db in batches of 50. 
+	 * so you can process inserts into the db in batches of 50.
 	 */
 	Integer batchSize = 0
-	
+
 	public CSVMapReader() {
     }
 
@@ -62,7 +62,7 @@ public class CSVMapReader implements Closeable, Iterable {
      */
     public CSVMapReader(Reader reader, Map settingsMap) {
 		csvReader = CSVReaderUtils.toCsvReader(reader,settingsMap)
-		if(settingsMap?.batchSize) batchSize = settingsMap?.batchSize?.toInteger() 
+		if(settingsMap?.batchSize) batchSize = settingsMap?.batchSize?.toInteger()
     }
 
 	/**
@@ -103,7 +103,7 @@ public class CSVMapReader implements Closeable, Iterable {
 			reslist.add map
 			if(reslist.size() == batchSize) break;
 			map = readNext()
-		}		
+		}
 		return reslist
     }
 
@@ -112,12 +112,12 @@ public class CSVMapReader implements Closeable, Iterable {
 		if(batchSize >0 ) throw new UnsupportedOperationException("batchSize is >0 so you are not getting lines but a list of lines(rows/maps). Use each instead");
 		each(closure)
 	}
-	
+
 	//true it only 1 element in array and its blank
 	boolean isBlankLine(String[] tokenArray){
 		return (!tokenArray[0] && tokenArray.size() <=1 )
 	}
-	
+
 	/**
      * Reads the entire file into a List with each element being a map where keys are the from the 1st header line in file
      *
@@ -138,17 +138,17 @@ public class CSVMapReader implements Closeable, Iterable {
 	Object asType(Class type){
 		if(type == List) return readAll()
 	}
-	
-	
+
+
 	static Map convertArrayToMap(keys,tokens){
 		if(!tokens) return null
 		def map = [:]
 		for ( i in 0..tokens.size()-1 ) {
 			map[keys[i]] = tokens[i]
 		}
-		return map	
+		return map
 	}
-	
+
 	/**
      * Calls close on CSVReader and closes the underlying reader. You should do this if you are working with Stream or Files!
      */

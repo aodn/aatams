@@ -37,21 +37,21 @@ class ConfigurableTransactionInterceptor extends TransactionInterceptor
         super.setTransactionAttributes(transactionAttributes);
     }
 
-    
+
     @Override
     public void setTransactionAttributeSource(
             TransactionAttributeSource transactionAttributeSource) {
         log.debug("setTransactionAttributeSource(): transactionAttributeSource ${transactionAttributeSource}");
         this.transactionAttributeSource = transactionAttributeSource;
     }
-    
-                    
+
+
     @Override
     public void afterPropertiesSet() {
         Assert.notNull(grailsApplication)
-        Assert.notNull(transactionAttributeSource)                     
+        Assert.notNull(transactionAttributeSource)
         Map declarativeConfig = grailsApplication.mergedConfig.asMap(true).grails.plugin.transactionHandling.declarative
-        super.setTransactionAttributeSource(new ConfigurableTransactionAttributeSource(this.transactionAttributeSource, declarativeConfig))              
+        super.setTransactionAttributeSource(new ConfigurableTransactionAttributeSource(this.transactionAttributeSource, declarativeConfig))
         super.afterPropertiesSet();
     }
 

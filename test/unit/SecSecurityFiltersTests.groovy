@@ -24,7 +24,7 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase  {
         super.tearDown()
     }
 
-    def allControllers = 
+    def allControllers =
     [
         "about",
         "address",
@@ -70,8 +70,8 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase  {
         "secRole",
         "secUser"
     ]
-    
-    def accessibleByAllControllers = 
+
+    def accessibleByAllControllers =
     [
         "animal", "animalMeasurement", "organisation", "organisationProject", "project", "projectRole", "person",
         "installation", "installationStation", "receiver", "species", "tag", "sensor",
@@ -80,13 +80,13 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase  {
         "surgery", "detectionSurgery",
         "gettingStarted", "about"
     ]
-    
-    def deleteControllers = 
+
+    def deleteControllers =
         ["animalMeasurement", "organisationProject", "projectRole", "sensor", "surgery"]
-        
-    
+
+
     def actions = ["create", "save", "update", "delete", "list", "index"]
-        
+
     void testDelete()  {
         FilterConfig deleteFilter = getFilter("delete")
 
@@ -95,26 +95,26 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase  {
             hasSysAdminRole ->
 
             hasRole = hasSysAdminRole
-            
+
             [true, false].each {
                 hasProjectWritePermission ->
-                
+
                 permitted = hasProjectWritePermission
-                
+
                 (allControllers - deleteControllers).each {
                     controllerName ->
-                    
+
                     controllerName = controllerName
-                    
+
                     actions.each {
                         actionName ->
-                        
+
                         actionName = actionName
-                        
+
                         boolean retVal = deleteFilter.before()
 
 //                        assertFalse(retVal)
-                        
+
                         println("hasRole: " + hasRole + ", isPermitted: " + permitted + ", controller: " + controllerName + ", action: " + actionName)
                         println("redirectArgs: " + String.valueOf(redirectArgs))
 //                        println("renderArgs: " + renderArgs)
@@ -127,17 +127,17 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase  {
     void testAuthenticatedOnly() {
         FilterConfig filter = initFilter("authenticatedOnly")
 
-        def accessClosure  
-        
-        filter.metaClass.accessControl = { 
+        def accessClosure
+
+        filter.metaClass.accessControl = {
             it ->
-            
+
             accessClosure = it
         }
 
         filter.before()
-        
-        assertTrue accessClosure() 
+
+        assertTrue accessClosure()
     }
 
     void testReceiverDownloadFileShowNotAuthorised() {
@@ -145,9 +145,9 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase  {
 
         Person bob = new Person(username: 'bob')
         Person sally = new Person(username: 'sally')
-        
+
         mockDomain(Person, [bob, sally])
-        
+
         ReceiverDownloadFile file = new ReceiverDownloadFile(requestingUser:bob)
         mockDomain(ReceiverDownloadFile, [file])
 
@@ -156,7 +156,7 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase  {
         mockParams.id = file.id
 
         def result = filter.before()
-        
+
         assertEquals "auth", redirectArgs.controller
         assertEquals "unauthorized", redirectArgs.action
         assertFalse result
@@ -166,7 +166,7 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase  {
         FilterConfig filter = initFilter("receiverDownloadFileShow")
 
         Person sally = new Person(username: 'sally')
-        
+
         mockDomain(Person, [sally])
 
         ReceiverDownloadFile file = new ReceiverDownloadFile(requestingUser:sally)
@@ -177,7 +177,7 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase  {
         mockParams.id = file.id
 
         def result = filter.before()
-        
+
         assertEquals 0, redirectArgs.size()
         assertTrue result
     }
@@ -187,9 +187,9 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase  {
 
         Person bob = new Person(username: 'bob')
         Person sally = new Person(username: 'sally')
-        
+
         mockDomain(Person, [bob, sally])
-        
+
         ReceiverDownloadFile file = new ReceiverDownloadFile(requestingUser:sally)
         mockDomain(ReceiverDownloadFile, [file])
 
@@ -198,7 +198,7 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase  {
         mockParams.id = file.id
 
         def result = filter.before()
-        
+
         assertEquals 0, redirectArgs.size()
         assertTrue result
     }

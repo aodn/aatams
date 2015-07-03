@@ -58,7 +58,7 @@ class SexController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (sexInstance.version > version) {
-                    
+
                     sexInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'sex.label', default: 'Sex')] as Object[], "Another user has updated this Sex while you were editing")
                     render(view: "edit", model: [sexInstance: sexInstance])
                     return

@@ -10,69 +10,69 @@ class CandidateEntitiesService  {
     static transactional = true
 
     def permissionUtilsService
-    
+
     def projects() {
-        def candidateProjects = 
+        def candidateProjects =
             Project.findAllByStatus(EntityStatus.ACTIVE).grep {
                 SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectEditChildrenPermission(it.id))
             }
-            
-        return candidateProjects 
+
+        return candidateProjects
     }
-    
+
     def organisations() {
         def subjectsOrganisations
 
         // SysAdmin "belongs" to all organisations.
-        if (SecurityUtils.subject.hasRole("SysAdmin")) { 
+        if (SecurityUtils.subject.hasRole("SysAdmin")) {
             subjectsOrganisations = Organisation.list()
         }
         else {
             Person person = permissionUtilsService.principal()
             subjectsOrganisations = [person?.organisation]
         }
-        
+
         return subjectsOrganisations
     }
-    
+
     def installations() {
         return Installation.findAllByProjectInList(projects())
     }
-    
+
     def stations() {
         def candidateStations = InstallationStation.findAllByInstallationInList(installations(), [sort:"name"])
 
         return candidateStations
     }
-    
+
     def receivers() {
         def candOrganisations = organisations()
-        
+
         // receivers.organisation in candOrganisations
-        def receivers = 
+        def receivers =
             Receiver.findAllByOrganisationInList(candOrganisations)
-            
+
         receivers = receivers.sort {
             a, b ->
-            
+
             a.toString() <=> b.toString()
         }
-    
+
         return receivers
     }
-    
+
     def tags(Project project) {
         def candidateTags =
             Tag.list().grep( {
                 it?.project == project
             })
-        
+
         return candidateTags
     }
-    
+
     def people(Project project) {
         List<Person> candidatePeople = new ArrayList<Person>()
-        
+
         Person.list().each( {
             if (it?.status == EntityStatus.PENDING) {
                 // Ignore PENDING people.
@@ -85,32 +85,32 @@ class CandidateEntitiesService  {
                 }
             }
         })
-        
+
         return candidatePeople
     }
-    
+
     def deployments() {
         def projects = projects()
-        
+
         def candidateDeployments =
             ReceiverDeployment.list().grep( {
                 projects.contains(it?.station?.installation?.project)
             })
-        
+
         return candidateDeployments
     }
-    
+
     def surgeries() {
         def projects = projects()
-        
+
         def candidateSurgeries =
             Surgery.list().grep( {
                 projects.contains(it?.tag?.project)
             })
-        
+
         return candidateSurgeries
     }
-    
+
     /**
      * The list of projects that the current user has read access on.
      */
@@ -119,7 +119,7 @@ class CandidateEntitiesService  {
         if (!subject) {
             return []
         }
-        
+
         Project.findAllByStatus(EntityStatus.ACTIVE).grep {
             SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(it.id))
         }

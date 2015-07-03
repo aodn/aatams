@@ -86,14 +86,14 @@ public class DomainInstanceBuilder {
     def findRequiredPropertyNames(domainArtefact) {
         def constrainedProperties = domainArtefact.constrainedProperties
         def allPropertyNames = constrainedProperties.keySet()
-        return allPropertyNames.findAll { propName ->                   
+        return allPropertyNames.findAll { propName ->
             !constrainedProperties."$propName".isNullable()
         }
     }
 
     def findDomainProperties(domainArtefact) {
         domainArtefact.constrainedProperties.values().findAll { constrainedProperty ->
-            propertyIsToOneDomainClass(constrainedProperty.propertyType) 
+            propertyIsToOneDomainClass(constrainedProperty.propertyType)
         }
     }
 
@@ -114,7 +114,7 @@ public class DomainInstanceBuilder {
 		def list = domainClass.list(limit: 1)
 		return list ? list.first() : null
 	}
-	
+
     def findExisting(propValues) {
 	    return domainClass.findWhere(propValues)
 	}
@@ -167,7 +167,7 @@ public class DomainInstanceBuilder {
         GrailsDomainClass defDomain = getDomainArtefact(domainInstance.class)
         def domainProp = defDomain.propertyMap[propertyName]
 
-        if (domainProp?.isManyToOne()) {            
+        if (domainProp?.isManyToOne()) {
             // value is an Author and we're a Book, add us to the Author's set of books if there is one
             NullableConstraintHandler.addInstanceToOwningObjectCollection(value, domainInstance, domainProp)
         }
@@ -176,7 +176,7 @@ public class DomainInstanceBuilder {
     def setValueOnNestedProperty(domainInstance, propertyName, value) {
         // this is an embedded property, i.e. 'bar.foo' = 23
         def props = propertyName.split(/\./)
-        props[0..-2].inject(domainInstance) { current, next -> current[next] }[props[-1]] = value        
+        props[0..-2].inject(domainInstance) { current, next -> current[next] }[props[-1]] = value
     }
 
     def findMissingConfigValues(propValues) {
@@ -186,7 +186,7 @@ public class DomainInstanceBuilder {
         missingProperties.each { propertyName ->
             missingConfigValues."$propertyName" = getSuppliedPropertyValue(domainClass.name, propertyName)
         }
-        
+
         return missingConfigValues
     }
 
@@ -227,7 +227,7 @@ public class DomainInstanceBuilder {
         constrainedProperty.validate(domain, domain."$propertyName", errors)
         return errors
     }
-    
+
     def save(domainInstance, circularTrap = []) {
         if (circularTrap.contains(domainInstance) || domainInstance instanceof Enum) return
 
@@ -241,7 +241,7 @@ public class DomainInstanceBuilder {
         if (!domainInstance.save()) {
             throw new Exception("Unable to build valid ${domainInstance.class.name} instance, errors: [${domainInstance.errors.collect {'\t' + it + '\n'}}]")
         }
-        
+
         log.info "After ${domainInstance.class.name}.save() $domainInstance, successful!"
 
         return domainInstance

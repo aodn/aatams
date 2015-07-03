@@ -8,24 +8,24 @@ import grails.converters.JSON
 
 class InstallationStationControllerTests extends ControllerUnitTestCase  {
     def candidateEntitiesService
-    
+
     def installation1
     def installation2
-    
+
     protected void setUp()  {
         super.setUp()
-        
-        
+
+
         candidateEntitiesService = new CandidateEntitiesService()
         candidateEntitiesService.metaClass.installations = {
             return [installation1, installation2]
         }
-        
+
         controller.candidateEntitiesService = candidateEntitiesService
         WKTReader reader = new WKTReader()
         InstallationStation bondi = new InstallationStation(name:'Bondi', location:(Point)reader.read("POINT(30.1234 30.1234)"))
         InstallationStation ningaloo = new InstallationStation(name:'Ningaloo', location:(Point)reader.read("POINT(30.1234 30.1234)"))
-        
+
         def installationStationList = [bondi, ningaloo]
         mockDomain(InstallationStation, installationStationList)
         installationStationList.each { it.save() }
@@ -37,7 +37,7 @@ class InstallationStationControllerTests extends ControllerUnitTestCase  {
 
     void testCreate()  {
         def model = controller.create()
-        
+
         assertNotNull(model.installationStationInstance)
         assertEquals(2, model.candidateInstallations.size())
         assertTrue(model.candidateInstallations.contains(installation1))
@@ -46,7 +46,7 @@ class InstallationStationControllerTests extends ControllerUnitTestCase  {
 
     void testSaveError()  {
         def model = controller.save()
-        
+
         assertNotNull(model.installationStationInstance)
         assertEquals(2, model.candidateInstallations.size())
         assertTrue(model.candidateInstallations.contains(installation1))
@@ -60,14 +60,14 @@ class InstallationStationControllerTests extends ControllerUnitTestCase  {
 //        assertLookupWithTerm(2, 'I')
 //        assertLookupWithTerm(2, 'i')
     }
-    
+
     private void assertLookupWithTerm(expectedNumResults, term)  {
         controller.params.term = term
         controller.lookupByName()
 
         def jsonResponse = JSON.parse(controller.response.contentAsString)
         assertEquals(expectedNumResults, jsonResponse.size())
-        
+
         // Need to reset the response so that this method can be called multiple times within a single test case.
         // Also requires workaround to avoid exception, see: http://jira.grails.org/browse/GRAILS-6483
         mockResponse?.committed = false // Current workaround

@@ -20,11 +20,11 @@ class InstallationStationController  extends ReportController {
     def export = {
         doExport("installationStation")
     }
-    
+
     def create = {
         def installationStationInstance = new InstallationStation()
         installationStationInstance.properties = params
-        
+
         def model =
             [installationStationInstance: installationStationInstance] + [candidateInstallations:candidateEntitiesService.installations()]
         return model
@@ -45,7 +45,7 @@ class InstallationStationController  extends ReportController {
 
     def show = {
         log.debug("params: " + params)
-        
+
         def installationStationInstance = InstallationStation.get(params.id)
         if (!installationStationInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'installationStation.label', default: 'InstallationStation'), params.id])}"
@@ -76,13 +76,13 @@ class InstallationStationController  extends ReportController {
 
     def update =  {
         log.debug("params: " + params)
-        
+
         def installationStationInstance = InstallationStation.get(params.id)
         if (installationStationInstance) {
             if (params.version) {
                 def version = params.version.toLong()
                 if (installationStationInstance.version > version) {
-                    
+
                     installationStationInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'installationStation.label', default: 'InstallationStation')] as Object[], "Another user has updated this InstallationStation while you were editing")
                     render(view: "edit", model: [installationStationInstance: installationStationInstance])
                     return
@@ -124,6 +124,6 @@ class InstallationStationController  extends ReportController {
 
     def lookupByName = {
         def matches = InstallationStation.findAllByNameIlike('%' + params.term + '%')
-        render(matches as JSON) 
+        render(matches as JSON)
     }
 }

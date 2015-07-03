@@ -30,11 +30,11 @@ import java.util.*;
 class AppConfigClassMapper extends CompositeSearchableGrailsDomainClassCompassClassMapper
                            implements SearchableGrailsDomainClassCompassClassMapper {
     private config
-    
+
     AppConfigClassMapper(config) {
         this.config = config
     }
-    
+
     CompassClassMapping getCompassClassMapping(GrailsDomainClass grailsDomainClass, Collection searchableGrailsDomainClasses) {
         def searchableValue = config.searchable.domain."${grailsDomainClass.logicalPropertyName}"
         return getCompassClassMapping(grailsDomainClass, searchableGrailsDomainClasses, searchableValue, getExcludedProperties());

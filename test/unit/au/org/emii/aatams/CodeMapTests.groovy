@@ -14,7 +14,7 @@ class CodeMapTests extends GrailsUnitTestCase  {
     void testSaveValid() {
         CodeMap codeMap = new CodeMap(codeMap:"A69-1303")
         mockDomain(CodeMap, [codeMap])
-        
+
         codeMap.save(failOnError:true)
         assertNotNull(codeMap.id)
     }

@@ -60,7 +60,7 @@ class AnimalMeasurementController extends AbstractController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (animalMeasurementInstance.version > version) {
-                    
+
                     animalMeasurementInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement')] as Object[], "Another user has updated this AnimalMeasurement while you were editing")
                     render(view: "edit", model: [animalMeasurementInstance: animalMeasurementInstance])
                     return
@@ -70,8 +70,8 @@ class AnimalMeasurementController extends AbstractController {
             if (!animalMeasurementInstance.hasErrors() && animalMeasurementInstance.save(flush: true))  {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.toString()])}"
                 def release = animalMeasurementInstance?.release
-                redirect(controller: "animalRelease", 
-                         action: "edit", 
+                redirect(controller: "animalRelease",
+                         action: "edit",
                          id: release?.id,
                          params: [projectId:release?.project?.id])
             }
@@ -95,13 +95,13 @@ class AnimalMeasurementController extends AbstractController {
             catch (org.springframework.dao.DataIntegrityViolationException e) {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.toString()])}"
             }
-            
+
             // Redirect to the "owning" animal release edit, since that is where
             // a normal user (i.e. non sysadmin) would have deleted from).
             def release = animalMeasurementInstance?.release
             log.debug("Redirecting to animalRelease, id: " + release?.id)
-            redirect(controller: "animalRelease", 
-                     action: "edit", 
+            redirect(controller: "animalRelease",
+                     action: "edit",
                      id: release?.id,
                      params: [projectId:release?.project?.id])
         }

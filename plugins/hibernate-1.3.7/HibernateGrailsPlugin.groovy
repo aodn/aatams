@@ -55,13 +55,13 @@ class HibernateGrailsPlugin {
 		def dynamicMethods = HibernatePluginSupport.doWithDynamicMethods
 		dynamicMethods.delegate = delegate
 		dynamicMethods.call(it)
-		
-		// aids in generating appropriate documentation in plugin.xml since 
+
+		// aids in generating appropriate documentation in plugin.xml since
 		// domain class methods are lazily loaded we initialize them here
 		if(plugin.basePlugin) {
 			try {
 				def clz = application.classLoader.loadClass("org.grails.Behavior")
-				clz.count()				
+				clz.count()
 			}
 			catch(e) {
 				// ignore

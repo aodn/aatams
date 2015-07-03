@@ -5,7 +5,7 @@ grails.project.test.reports.dir = "target/test-reports"
 grails.project.dependency.resolution = {
     boolean isNewerGrails = ("$grailsVersion" > "1.3.7") as boolean
     if (isNewerGrails) {checksums false}
-    
+
     // inherit Grails' default dependencies
     inherits("global") {
         // uncomment to disable ehcache
@@ -32,11 +32,11 @@ grails.project.dependency.resolution = {
         compile ("org.hibernatespatial:hibernate-spatial-postgis:${hsVersion}") {
             excludes 'hibernate-core'
         }
-        
+
         runtime ('org.postgis:postgis-jdbc:1.3.0') {
             exclude 'postgresql'
         }
-        
+
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.13'

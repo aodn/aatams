@@ -13,18 +13,18 @@ class OrganisationTests extends GroovyTestCase  {
     }
 
     void testDelete()  {
-        Organisation personsOrg = 
-            new Organisation(name:'personsOrg', 
+        Organisation personsOrg =
+            new Organisation(name:'personsOrg',
                              department:'dep',
                              phoneNumber:'1234',
                              faxNumber:'1234',
                              streetAddress:Address.build(),
                              postalAddress:Address.build())
-                         
+
         personsOrg.save()
         assertFalse(personsOrg.hasErrors())
-        
-        Person person = 
+
+        Person person =
             new Person(username:'name',
                        passwordHash:'asdf',
                        name:'name',
@@ -34,10 +34,10 @@ class OrganisationTests extends GroovyTestCase  {
                        status:EntityStatus.ACTIVE,
                        organisation:personsOrg).save()
         assertFalse(person.hasErrors())
-                   
-                   
-        Organisation org1 = 
-            new Organisation(name:'org1', 
+
+
+        Organisation org1 =
+            new Organisation(name:'org1',
                              department:'dep',
                              phoneNumber:'1234',
                              faxNumber:'1234',
@@ -45,10 +45,10 @@ class OrganisationTests extends GroovyTestCase  {
                              postalAddress:Address.build(),
                              request:new Request(requester:person))
 //                             requestingUser:person)
-                             
-        
-        Organisation org2 = 
-            new Organisation(name:'org2', 
+
+
+        Organisation org2 =
+            new Organisation(name:'org2',
                              department:'dep',
                              phoneNumber:'1234',
                              faxNumber:'1234',
@@ -56,13 +56,13 @@ class OrganisationTests extends GroovyTestCase  {
                              postalAddress:Address.build(),
                              request:new Request(requester:person))
 //                             requestingUser:person)
-             
+
         def orgList = [org1, org2]
         orgList.each { it.save() }
-                             
+
         println(org1.errors)
         assertFalse(org1.hasErrors())
-        
+
         try {
             org1.delete()
             assertNull(Organisation.findByName('org1'))

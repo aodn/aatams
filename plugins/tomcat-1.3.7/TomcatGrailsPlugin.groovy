@@ -21,11 +21,11 @@ class TomcatGrailsPlugin {
     def pluginExcludes = [
             "grails-app/views/error.gsp",
 	    "grails-app/domain/*.groovy",
-	    "grails-app/controllers/*.groovy"		
+	    "grails-app/controllers/*.groovy"
     ]
     // don't package in war
     def scopes = [excludes:'war']
-	
+
     def author = "Graeme Rocher"
     def authorEmail = "graeme.rocher@springsource.com"
     def title = "Apache Tomcat plugin for Grails"

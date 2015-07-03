@@ -128,7 +128,7 @@ public class TransactionHandlingPostProcessor implements BeanPostProcessor,
                     log.debug("postProcessBeanFactory(): def.getBeanClassName() "
                             + defin.getBeanClassName());
                 }
-                
+
                 if (TypeSpecifyableTransactionProxyFactoryBean.class.getName()
                         .equals(defin.getBeanClassName())) {
                     MutablePropertyValues propValues = defin.getPropertyValues();

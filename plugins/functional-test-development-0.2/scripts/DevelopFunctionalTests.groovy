@@ -19,15 +19,15 @@ includeTargets << grailsScript("_GrailsEvents")
 target('default': "Run a Grails applications unit tests") {
 
 	println ""
-	
+
 	appOutputPrefix = "  [app]  "
 	testOutputPrefix = " [test]  "
-	
+
 	def runAppArgs = args.tokenize()
 	def run = true
-	
+
 	app = launchApp(*runAppArgs)
-	
+
 	addShutdownHook {
 		if (isRunning(binding.app)) {
 			println ""
@@ -38,7 +38,7 @@ target('default': "Run a Grails applications unit tests") {
 
 	def input = new BufferedReader(new InputStreamReader(System.in))
 	def last = ""
-	
+
 	while (run) {
 		println ""
 		println "Ready to run tests."
@@ -55,9 +55,9 @@ target('default': "Run a Grails applications unit tests") {
 		print "Command: "
 
 		def line = input.readLine().trim()
-		
+
 		println ""
-				
+
 		if (isExit(line)) {
 			run = false
 			update "stopping app"
@@ -75,17 +75,17 @@ target('default': "Run a Grails applications unit tests") {
 			} else {
 				last = line
 			}
-			
+
 			def args = []
 			def properties = [:]
-			
+
 			buildLaunchArgs(parseCommandLine(line), args, properties, "D")
-			
+
 			def baseUrlArg = "-baseUrl=$baseUrl" as String
 			def tests = runTests(*:properties, "-non-interactive", baseUrlArg, "functional:", *args)
 			def testsOutput = new BufferedReader(new InputStreamReader(tests.in))
 			exhaust(testsOutput, testOutputPrefix)
-			
+
 			println ""
 			update "Output from the application while running tests"
 			try {
@@ -93,7 +93,7 @@ target('default': "Run a Grails applications unit tests") {
 			} catch (IOException e) {
 				// ignore
 			}
-			
+
 			if (!isRunning(app)) {
 				update "the app crashed, restarting it"
 				app = launchApp(*runAppArgs)
@@ -116,21 +116,21 @@ buildLaunchArgs = { tokens, args, properties, propPrefix ->
 launchApp = { String[] givenArgs ->
 	def args = []
 	def properties = [:]
-	
+
 	buildLaunchArgs(givenArgs, args, properties, "P")
-	
+
 	def command = ["run-app"] + args.toList()
 	if (!properties["grails.env"]) {
 		command = ["test"] + command
 	}
-	
+
 	def process = createGrailsProcess(properties, command as String[])
-	
+
 	def inputStream = new PipedInputStream()
 	def outputStream = new PipedOutputStream(inputStream)
 	appOutput = new BufferedReader(new InputStreamReader(inputStream))
 	appOutputReadingThread = process.consumeProcessOutputStream(outputStream)
-	
+
 	try {
 		baseUrl = exhaust(appOutput, appOutputPrefix, false) {
 			def matcher = it =~ ~/Server running. Browse to (\S+).*/
@@ -146,7 +146,7 @@ launchApp = { String[] givenArgs ->
 			die "the application did not start successfully"
 		}
 	}
-		
+
 	process
 }
 
@@ -163,7 +163,7 @@ stopApp = { Map options = [:] ->
 	app.waitFor()
 }
 
-runTests = { Map properties, String[] args -> 
+runTests = { Map properties, String[] args ->
 	def command = ["test-app"] + args.toList()
 	createGrailsProcess(properties, *command)
 }
@@ -179,7 +179,7 @@ createGrailsProcessBuilder = { String[] args ->
 	builder.directory(grailsSettings.baseDir)
 	def env = builder.environment()
 	def props = System.properties
-	
+
 	def javaOpts = []
 	[env.GRAILS_OPTS, env.JAVA_OPTS]*.with {
 		eachMatch(~/-.+?(?=\s+-|-s*$)/) {
@@ -190,34 +190,34 @@ createGrailsProcessBuilder = { String[] args ->
 	if (javaOpts.empty) {
 		javaOpts << "-Xmx512m" << "-XX:MaxPermSize=96m"
 	}
-	
-	["grails.home", "grails.version", "base.dir", "tools.jar", "groovy.starter.conf"].each { 
+
+	["grails.home", "grails.version", "base.dir", "tools.jar", "groovy.starter.conf"].each {
 		javaOpts << ("-D" + it + "=" + props[it])
 	}
-	
+
 	def java = props["java.home"] + "/bin/java"
 	def cmd = [java, *javaOpts, '-classpath', props['java.class.path'], 'org.codehaus.groovy.grails.cli.support.GrailsStarter', '--main', 'org.codehaus.groovy.grails.cli.GrailsScriptRunner', '--conf', props['groovy.starter.conf']]
 
 	builder.command(*cmd, *args)
-	
+
 	builder
 }
 
 getGrailsPath = {
 	def grailsHome = grailsSettings.grailsHome
-	
+
 	if (!grailsHome) {
 		die "GRAILS_HOME is not set in build settings, cannot continue"
 	}
 	if (!grailsHome.exists()) {
 		die "GRAILS_HOME points to $grailsHome.path which does not exist, cannot continue"
 	}
-	
+
 	def starterFile = new File(grailsHome, "bin/grails")
 	if (!starterFile.exists()) {
 		die "GRAILS_HOME points to $grailsHome.path which does not have a 'bin/grails' in it, cannot continue"
 	}
-	
+
 	starterFile.absolutePath
 }
 
@@ -252,7 +252,7 @@ exhaust = { Reader reader, String prefix, boolean noWait = false, Closure stopAt
 	if (noWait && !reader.ready()) {
 		return null
 	}
-	
+
 	def line = reader.readLine()
 	while (line != null) {
 		println "${prefix}${line}"
@@ -262,16 +262,16 @@ exhaust = { Reader reader, String prefix, boolean noWait = false, Closure stopAt
 				return stopped
 			}
 		}
-		
+
 		if (noWait && !reader.ready()) {
 			return null
 		}
-		
+
 		line = reader.readLine()
 	}
 }
 
-ignoreIOExceptions =  [uncaughtException: { Thread t, Throwable e -> 
+ignoreIOExceptions =  [uncaughtException: { Thread t, Throwable e ->
 	if (e instanceof IOException) {
 		// ignore
 	} else {
@@ -283,13 +283,13 @@ parseCommandLine = { line ->
 	line = line.trim()
 	def words = []
 	while (line) {
-		
+
 		def field = ''
 		def snippet
-		
+
 		def match
 		def matches = { pattern -> match = line =~ pattern }
-		
+
 		while (true) {
 			if (matches(~/^("(([^"\\]|\\.)*)").*/)) {
 				line -= match[0][1]
@@ -313,9 +313,9 @@ parseCommandLine = { line ->
 			}
 			field += snippet
 		}
-		
+
 		words << field
 	}
-	
+
 	words
 }

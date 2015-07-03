@@ -7,7 +7,7 @@ class InstallationRow extends Module  {
     static content = {
         cell { $("td", it) }
         cellText { cell(it).text() }
-        
+
         showLink (to: InstallationShowPage) { cell(0).find("a") }
         name { cellText(1) }
         configuration{ cellText(2) }
@@ -19,7 +19,7 @@ class InstallationRow extends Module  {
              def stationArray = stationsAsString.split(",").collect {
                  it.trim()
              }
-             
+
              return stationArray
         }
     }

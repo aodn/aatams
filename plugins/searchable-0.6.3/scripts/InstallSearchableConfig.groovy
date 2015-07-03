@@ -59,7 +59,7 @@ target(installSearchableConfig: "Installs the Searchable Plugin configuration fi
         Searchable configuration file ${exists ? 're-' : ''}created:
 
             ${destFile}
-        
+
     """)
 }
 

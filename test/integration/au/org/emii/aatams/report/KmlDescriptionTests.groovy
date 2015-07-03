@@ -9,11 +9,11 @@ import au.org.emii.aatams.detection.*
 class KmlDescriptionTests extends GroovyPagesTestCase  {
 
     def slurper = new XmlSlurper()
-    
+
     String projectName = "Whale Sharks"
     String installationName = "Ningaloo Array"
     String stationName = "Ningaloo SW1"
-    
+
     protected void setUp()  {
         super.setUp()
     }
@@ -24,18 +24,18 @@ class KmlDescriptionTests extends GroovyPagesTestCase  {
 
     void testNoData()  {
         def div = executeTemplate([:])
-        
+
         def allNodes = div.depthFirst().collect{ it }
         assertEquals(4, allNodes.grep { it.name() == "tr"}.size())
         assertEquals(8, allNodes.grep { it.name() == "td"}.size())
     }
-    
+
     void testHeaderData() {
         InstallationStation stationInstance = setupStation()
         stationInstance.metaClass.getDetectionCount = { -> 0 }
-        
+
         def div = executeTemplate([installationStationInstance:stationInstance])
-        
+
         def allNodes = div.depthFirst().collect{ it }
         def vals = allNodes.grep { it.name() == "td"}
         assertEquals("Project", vals[0].text())
@@ -54,13 +54,13 @@ class KmlDescriptionTests extends GroovyPagesTestCase  {
         InstallationStation stationInstance = new InstallationStation(name: stationName, installation: installation)
         return stationInstance
     }
-    
+
     private def executeTemplate(model)  {
         def kmlDescTemplate = new File("grails-app/views/report/_kmlDescriptionTemplate.gsp")
         assertNotNull(kmlDescTemplate)
 
         def html = applyTemplate(kmlDescTemplate.text, model)
-        
+
         def div = slurper.parseText(html)
         return div
     }

@@ -83,7 +83,7 @@ public class TriggersConfigBuilder extends BuilderSupport {
             GrailsUtil.deprecated("You're using deprecated 'cronTrigger' construction in the ${jobName}, use 'cron' instead.")
             triggerType = 'cron'
         } else if(triggerType == 'customTrigger') {
-            GrailsUtil.deprecated("You're using deprecated 'customTrigger' construction in the ${jobName}, use 'custom' instead.") 
+            GrailsUtil.deprecated("You're using deprecated 'customTrigger' construction in the ${jobName}, use 'custom' instead.")
             triggerType = 'custom'
         }
 
@@ -155,6 +155,6 @@ public class TriggersConfigBuilder extends BuilderSupport {
     }
 
     public Map createEmbeddedCronTrigger(long startDelay, String cronExpression) {
-        return [(jobName):createTrigger('cron', [name: jobName, startDelay:startDelay, cronExpression:cronExpression], null)] 
+        return [(jobName):createTrigger('cron', [name: jobName, startDelay:startDelay, cronExpression:cronExpression], null)]
     }
 }

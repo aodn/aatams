@@ -7,7 +7,7 @@ class ProjectRow extends Module  {
     static content = {
         cell { $("td", it) }
         cellText { cell(it).text() }
-        
+
         showLink (to: ProjectShowPage) { cell(0).find("a") }
         name { cellText(1) }
         organisations { cellText(2) }

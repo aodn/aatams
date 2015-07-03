@@ -6,7 +6,7 @@ grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits "global"
     log "warn"
-    
+
     repositories {
         grailsPlugins()
         grailsHome()

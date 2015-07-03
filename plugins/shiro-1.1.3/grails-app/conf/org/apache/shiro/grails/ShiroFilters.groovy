@@ -59,7 +59,7 @@ class ShiroFilters {
                     }
                 }
             }
-    
+
             // Methods with Shiro @Requires* annotations throw AuthorizationExceptions,
             // so rather than force the user to catch them himself, we deal with them
             // in an 'afterView' filter.

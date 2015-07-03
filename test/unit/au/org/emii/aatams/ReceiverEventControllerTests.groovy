@@ -13,7 +13,7 @@ class ReceiverEventControllerTests extends ControllerUnitTestCase {
 
     void testCreate()  {
         controller.create()
-        
+
         assertEquals("receiverDownloadFile", controller.redirectArgs.controller)
         assertEquals("createEvents", controller.redirectArgs.action)
     }

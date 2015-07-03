@@ -3,10 +3,8 @@ package au.org.emii.aatams
 import grails.test.*
 import grails.converters.JSON
 
-class SpeciesControllerTests extends ControllerUnitTestCase 
-{
-    protected void setUp() 
-    {
+class SpeciesControllerTests extends ControllerUnitTestCase  {
+    protected void setUp()  {
         super.setUp()
         
         mockLogging(SpeciesService)
@@ -21,19 +19,16 @@ class SpeciesControllerTests extends ControllerUnitTestCase
         speciesList.each { it.save() }
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
     
-    void testNoDuplicatesInLookupByName()
-    {
+    void testNoDuplicatesInLookupByName() {
         // Bug #1729.
         assertLookupByNameWithTerm(1, "White Shark")
     }
 
-    void testLookupByNameAndReturnSpcode()
-    {
+    void testLookupByNameAndReturnSpcode() {
         assertLookupByNameAndReturnSpcodeWithTerm(0, 'X')
         assertLookupByNameAndReturnSpcodeWithTerm(3, '0')
         assertLookupByNameAndReturnSpcodeWithTerm(2, '374')
@@ -42,24 +37,21 @@ class SpeciesControllerTests extends ControllerUnitTestCase
         assertLookupByNameAndReturnSpcodeWithTerm(2, '44')
     }
     
-    private void assertLookupByNameWithTerm(expectedNumResults, term) 
-    {
+    private void assertLookupByNameWithTerm(expectedNumResults, term)  {
         controller.params.term = term
         controller.lookupByName()
         
         checkJsonResponse(expectedNumResults)
     }
 
-    private void assertLookupByNameAndReturnSpcodeWithTerm(expectedNumResults, term)
-    {
+    private void assertLookupByNameAndReturnSpcodeWithTerm(expectedNumResults, term) {
         controller.params.term = term
         controller.lookupByNameAndReturnSpcode()
         
         checkJsonResponse(expectedNumResults)
     }
     
-    private void checkJsonResponse(expectedNumResults) 
-    {
+    private void checkJsonResponse(expectedNumResults)  {
         def jsonResponse = JSON.parse(controller.response.contentAsString)
         assertEquals(expectedNumResults, jsonResponse.size())
 

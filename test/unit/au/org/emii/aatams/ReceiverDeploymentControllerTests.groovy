@@ -5,8 +5,7 @@ import grails.test.*
 
 import org.joda.time.*
 
-class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
-{
+class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase {
     Receiver receiver
     Receiver csiroReceiver
 
@@ -41,8 +40,7 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
 
         def receiverList = [receiver, csiroReceiver, receiver1, receiver2]
         mockDomain(Receiver, receiverList)
-        receiverList.each
-        {
+        receiverList.each {
             imos.addToReceivers(it)
             it.save()
         }
@@ -63,12 +61,10 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase
         controller.metaClass.runAsync = { Closure c -> }
 
         candidateEntitiesService = new CandidateEntitiesService()
-        candidateEntitiesService.metaClass.stations =
-        {
+        candidateEntitiesService.metaClass.stations = {
             return stationList - newStation
         }
-        candidateEntitiesService.metaClass.receivers =
-        {
+        candidateEntitiesService.metaClass.receivers = {
             return [receiver1, receiver2]
         }
 

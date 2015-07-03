@@ -1,7 +1,6 @@
 package au.org.emii.aatams
 
-class AnimalMeasurement implements Embargoable
-{
+class AnimalMeasurement implements Embargoable {
     static belongsTo = [release: AnimalRelease]
     
     AnimalMeasurementType type
@@ -15,8 +14,7 @@ class AnimalMeasurement implements Embargoable
     
     String comments
     
-    static constraints =
-    {
+    static constraints = {
         type()
         value()
         unit()
@@ -26,18 +24,15 @@ class AnimalMeasurement implements Embargoable
 
     static transients = ['project', 'embargoed']
     
-    static mapping =
-    {
+    static mapping = {
         comments type: 'text'
     }
     
-    String toString()
-    {
+    String toString() {
         return String.valueOf(type) + ":" + value + " (" + unit + ")"
     }
     
-    boolean isEmbargoed()
-    {
+    boolean isEmbargoed() {
         return release.embargoed
     }
 

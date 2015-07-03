@@ -4,8 +4,7 @@ package au.org.emii.aatams
  *
  * @author jburgess
  */
-enum ReceiverOrientation 
-{
+enum ReceiverOrientation  {
     UP,
     DOWN,
     SIDEWAYS

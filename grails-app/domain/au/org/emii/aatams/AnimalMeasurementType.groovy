@@ -3,17 +3,14 @@ package au.org.emii.aatams
 /**
  * e.g. LENGTH, WEIGHT.
  */
-class AnimalMeasurementType 
-{
+class AnimalMeasurementType  {
     String type
     
-    static constraints = 
-    {
+    static constraints =  {
         type(blank:false, unique:true)
     }
     
-    String toString()
-    {
+    String toString() {
         return type
     }
 }

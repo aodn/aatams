@@ -3,8 +3,7 @@ package au.org.emii.aatams
 /**
  * TODO: get data from "spatial_ref_sys" table.
  */
-class DatumService 
-{
+class DatumService  {
     static transactional = true
 
     private Map<Integer, String> datums = 
@@ -21,18 +20,15 @@ class DatumService
                 28357: "GDA94/ MGA zone 57", 
                 28358: "GDA94/ MGA zone 58"]
     
-    Map<Integer, String> getDatums()
-    {
+    Map<Integer, String> getDatums() {
         return datums
     }
     
-    Map<Integer, String> getDefaultDatum()
-    {
+    Map<Integer, String> getDefaultDatum() {
         return [4326, "WGS 84"]
     }
     
-    String getName(srid)
-    {
+    String getName(srid) {
         return datums[srid]
     }
 }

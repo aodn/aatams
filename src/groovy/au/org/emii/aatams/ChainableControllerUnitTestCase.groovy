@@ -13,10 +13,8 @@ import grails.util.GrailsNameUtils
  * 
  * @author jburgess
  */
-class ChainableControllerUnitTestCase extends ControllerUnitTestCase
-{
-    protected void setUp()
-    {
+class ChainableControllerUnitTestCase extends ControllerUnitTestCase {
+    protected void setUp() {
         super.setUp()
         
         // TODO: promote this to custom super class.

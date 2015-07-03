@@ -1,19 +1,16 @@
 package au.org.emii.aatams
 
-class InstallationConfiguration 
-{
+class InstallationConfiguration  {
     /**
      * Type, e.g. ARRAY, CURTAIN
      */
     String type
     
-    static constraints =
-    {
+    static constraints = {
         type(blank:false, unique:true)
     }
     
-    String toString()
-    {
+    String toString() {
         return type
     }
 }

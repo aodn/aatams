@@ -3,10 +3,8 @@ package module
 import geb.Module
 import pages.ProjectShowPage
 
-class ProjectRow extends Module 
-{
-    static content =
-    {
+class ProjectRow extends Module  {
+    static content = {
         cell { $("td", it) }
         cellText { cell(it).text() }
         

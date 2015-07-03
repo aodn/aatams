@@ -52,8 +52,7 @@ class GroovyDynamicMethods {
             TransactionTemplate template = new TransactionTemplate(ctx.getBean('transactionManager'))            
             txPropsUtil.applyTo properties, template
             
-            template.execute(
-                {status ->
+            template.execute( {status ->
                     callable.call(status)
                 } as TransactionCallback)
         }

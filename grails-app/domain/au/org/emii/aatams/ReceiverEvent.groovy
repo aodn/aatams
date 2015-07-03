@@ -17,8 +17,7 @@ import static org.jooq.impl.DSL.*
  *
  * e.g. initialisation time (once off), daily battery level, daily pings etc.
  */
-class ReceiverEvent
-{
+class ReceiverEvent {
     /**
      * UTC timestamp.
      */
@@ -34,8 +33,7 @@ class ReceiverEvent
 
     String units
 
-    static constraints =
-    {
+    static constraints = {
         timestamp()
         description()
         receiverName()
@@ -43,15 +41,13 @@ class ReceiverEvent
         units(nullable:true, blank:true)
     }
 
-    static mapping =
-    {
+    static mapping = {
         cache true
     }
 
     static transients = ['formattedTimestamp']
 
-    static String toSqlInsert(event)
-    {
+    static String toSqlInsert(event) {
         DSLContext create = DSL.using(SQLDialect.POSTGRES);
 
         def insert = create.insertInto(
@@ -89,8 +85,7 @@ class ReceiverEvent
 
     static DateFormat formatter
 
-    String getFormattedTimestamp()
-    {
+    String getFormattedTimestamp() {
         return formatTimestamp(timestamp, "yyyy-MM-dd HH:mm:ss")
     }
 

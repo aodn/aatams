@@ -5,12 +5,10 @@ import au.org.emii.aatams.*
 /**
  * Renders a filter for a given report.
  */
-class ReportTagLib 
-{
+class ReportTagLib  {
     def reportInfoService
 
-    def reportFilterParameter =
-    {
+    def reportFilterParameter = {
         attrs, body ->
         
         log.debug("Rendering filter parameter, attrs: " + attrs)
@@ -18,52 +16,42 @@ class ReportTagLib
                       model:attrs.model)
     }
 
-    def reportFilter = 
-    {
+    def reportFilter =  {
         attrs, body ->
           
         ReportInfo reportInfo = reportInfoService.getReportInfo(attrs.name)
-        if (!reportInfo)
-        {
+        if (!reportInfo) {
             // TODO: error
         }
-        else if (reportInfo.filterParams)
-        {
+        else if (reportInfo.filterParams) {
             log.debug("Rendering filter, params: " + reportInfo.filterParams)
             out << render(template:"/report/filter/reportFilter",
                           model:[filterParams:reportInfo.filterParams])
         }
     }
     
-    def report =
-    {
+    def report = {
         attrs, body ->
 
         delegateTemplate(attrs, body, true, "report")
     }
     
-    def extract =
-    {
+    def extract = {
         attrs, body ->
 
         delegateTemplate(attrs, body, true, "extract")
     }
     
-    def delegateTemplate(attrs, body, showFilter, type)
-    {
-        if (!attrs.name)
-        {
+    def delegateTemplate(attrs, body, showFilter, type) {
+        if (!attrs.name) {
             // TODO: error
         }
-        else
-        {
+        else {
             ReportInfo reportInfo = reportInfoService.getReportInfo(attrs.name)
-            if (!reportInfo)
-            {
+            if (!reportInfo) {
                 // TODO: error
             }
-            else
-            {
+            else {
                 log.debug("Report info: " + reportInfo)
                 log.debug("Formats: " + attrs.formats)
                 

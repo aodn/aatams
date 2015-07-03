@@ -3,10 +3,8 @@ package module
 import geb.Module
 import pages.*
 
-class ReceiverRow extends Module 
-{
-    static content =
-    {
+class ReceiverRow extends Module  {
+    static content = {
         cell { $("td", it) }
         cellText { cell(it).text() }
         

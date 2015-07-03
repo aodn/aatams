@@ -83,16 +83,14 @@ class PerformanceDataInitialiser extends AbstractDataInitialiser {
     def sessionFactory
     def propertyInstanceMap = org.codehaus.groovy.grails.plugins.DomainClassGrailsPlugin.PROPERTY_INSTANCE_MAP
 
-    def cleanUpGorm()
-    {
+    def cleanUpGorm() {
         def session = sessionFactory.currentSession
         session.flush()
         session.clear()
         propertyInstanceMap.get().clear()
     }
 
-    def initPerformanceData()
-    {
+    def initPerformanceData() {
         def startTimestamp = System.currentTimeMillis()
         def results = new File("/tmp/profiling.csv")
         results.write("project count,elapsed time\n")
@@ -144,8 +142,7 @@ class PerformanceDataInitialiser extends AbstractDataInitialiser {
         jonBurgess.save(failOnError: true)
 
 
-        numOrgs.times
-        {
+        numOrgs.times {
             orgCount ->
 
 //            println("org count: " + orgCount)
@@ -162,8 +159,7 @@ class PerformanceDataInitialiser extends AbstractDataInitialiser {
             org.save(flush:true)
 
             // 5 projects for each organisation, each with 4 people (including one PI).
-            numProjectsPerOrg.times
-            {
+            numProjectsPerOrg.times {
                 projectCount ->
 
                 // Do this to ensure that correct organisation object is used in session (after clearing/flushing).
@@ -198,10 +194,8 @@ class PerformanceDataInitialiser extends AbstractDataInitialiser {
     def totalDetectionCount = 0
     def totalTagCount = 0
 
-    def createTags(org, orgCount, project, projectCount)
-    {
-        numTagsPerProject.times
-        {
+    def createTags(org, orgCount, project, projectCount) {
+        numTagsPerProject.times {
             tagCount ->
 
             // 1 release/surgery per tag.
@@ -267,10 +261,8 @@ class PerformanceDataInitialiser extends AbstractDataInitialiser {
         }
     }
 
-    def createPeople(org, orgCount, project, projectCount)
-    {
-        numPeoplePerProject.times
-        {
+    def createPeople(org, orgCount, project, projectCount) {
+        numPeoplePerProject.times {
             personCount ->
 
             def person = new Person(name: "Person " + orgCount + "." + projectCount + "." + personCount,
@@ -287,8 +279,7 @@ class PerformanceDataInitialiser extends AbstractDataInitialiser {
                                                access:ProjectAccess.READ_WRITE)
 
             // Make the first person on each project a PI.
-            if (personCount == 0)
-            {
+            if (personCount == 0) {
                 role.roleType = principalInvestigator
             }
             role.save(flush:true)
@@ -301,23 +292,20 @@ class PerformanceDataInitialiser extends AbstractDataInitialiser {
     // This is used when creating detections.
     def totalReceiverCount = 0
 
-    def createInstallations(org, orgCount, project, projectCount)
-    {
+    def createInstallations(org, orgCount, project, projectCount) {
         ProjectRole recoverer = new ProjectRole(project:project,
                                    person:jonBurgess,
                                    roleType:principalInvestigator,
                                    access:ProjectAccess.READ_WRITE).save()
 
-        numInstallationsPerProject.times
-        {
+        numInstallationsPerProject.times {
             installationCount ->
 
             def installation = new Installation(name: "Installation " + orgCount + "." + projectCount + "." + installationCount,
                                                 project: project,
                                                 configuration: installationConfig).save()
 
-            numStationsPerInstallation.times
-            {
+            numStationsPerInstallation.times {
                 stationCount ->
 
                 def station = new InstallationStation(name: "InstallationStation " + orgCount + "." + projectCount + "." + installationCount + "." + stationCount,

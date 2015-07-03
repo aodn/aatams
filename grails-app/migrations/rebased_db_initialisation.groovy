@@ -1958,8 +1958,7 @@ databaseChangeLog = {
         createSequence( sequenceName: "hibernate_sequence")
     }
 
-    changeSet(author: "jburgess", id: "1371620272000-1", runOnChange: true)
-    {
+    changeSet(author: "jburgess", id: "1371620272000-1", runOnChange: true) {
         createProcedure('''CREATE OR REPLACE FUNCTION isreleaseembargoed(release_id bigint) RETURNS boolean AS
             $$
             DECLARE
@@ -1971,8 +1970,7 @@ databaseChangeLog = {
             $$ LANGUAGE plpgsql STRICT;''')
     }
     
-    changeSet(author: "jburgess", id: "1371620272000-2", runOnChange: true)
-    {
+    changeSet(author: "jburgess", id: "1371620272000-2", runOnChange: true) {
         createProcedure('''CREATE OR REPLACE FUNCTION scramblepoint(point geometry) RETURNS geometry AS
             $$
             DECLARE
@@ -1988,8 +1986,7 @@ databaseChangeLog = {
             $$ LANGUAGE plpgsql STRICT;''')
     }
     
-    changeSet(author: "jburgess", id: "1371620272000-3", runOnChange: true)
-    {
+    changeSet(author: "jburgess", id: "1371620272000-3", runOnChange: true) {
         createProcedure('''
                         CREATE OR REPLACE FUNCTION create_matview(NAME, NAME)
                         RETURNS VOID
@@ -2025,8 +2022,7 @@ databaseChangeLog = {
                         $$''')
     }
     
-    changeSet(author: "jburgess", id: "1371620272000-4", runOnChange: true)
-    {
+    changeSet(author: "jburgess", id: "1371620272000-4", runOnChange: true) {
         createProcedure('''
                         CREATE OR REPLACE FUNCTION drop_matview(NAME) RETURNS VOID
                         SECURITY DEFINER
@@ -2051,8 +2047,7 @@ databaseChangeLog = {
                         $$''')
     }
 
-    changeSet(author: "jburgess", id: "1371620272000-5", runOnChange: true)
-    {
+    changeSet(author: "jburgess", id: "1371620272000-5", runOnChange: true) {
         createProcedure('''
                         CREATE OR REPLACE FUNCTION refresh_matview(name) RETURNS VOID
                         SECURITY DEFINER

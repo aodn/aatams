@@ -5,8 +5,7 @@ import org.joda.time.DateTimeZone;
 import grails.test.*
 import grails.converters.JSON
 
-class ProjectRoleControllerTests extends ControllerUnitTestCase 
-{
+class ProjectRoleControllerTests extends ControllerUnitTestCase  {
     def permissionUtilsService
     def searchableService
     def sessionFactory
@@ -15,8 +14,7 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase
     Project sealCount
     ProjectRoleType administrator
         
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         controller.metaClass.message = {}
@@ -41,15 +39,13 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase
         assertNotNull(administrator)
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         fredSmith.delete()
         
         super.tearDown()
     }
 
-    void testSave() 
-    {
+    void testSave()  {
         assertNoPermissions()
         def projectRole = saveRole(administrator)
         assertAdministratorPermissions()
@@ -57,8 +53,7 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase
         deleteRole(projectRole)
     }
 
-    void testUpdate()
-    {
+    void testUpdate() {
         assertNoPermissions()
         def projectRole = saveRole(administrator)
         assertAdministratorPermissions()
@@ -75,8 +70,7 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase
         deleteRole(projectRole)
     }
 
-    private def saveRole(roleType) 
-    {
+    private def saveRole(roleType)  {
         controller.params.person = fredSmith
         controller.params.project = sealCount
         controller.params.roleType = roleType
@@ -93,15 +87,13 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase
         return projectRole
     }
 
-    private void deleteRole(projectRole) 
-    {
+    private void deleteRole(projectRole)  {
         controller.params.id = projectRole.id
         controller.delete()
         assertNoPermissions()
     }
 
-    private void assertProjectInvestigatorPermissions() 
-    {
+    private void assertProjectInvestigatorPermissions()  {
         assertPermissions(
                 [permissionUtilsService.buildProjectEditChildrenPermission(sealCount.id),
                     permissionUtilsService.buildProjectReadPermission(sealCount.id),
@@ -112,8 +104,7 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase
                 [])
     }
 
-    private void assertAdministratorPermissions()
-    {
+    private void assertAdministratorPermissions() {
         assertPermissions([permissionUtilsService.buildProjectEditChildrenPermission(sealCount.id),
                            permissionUtilsService.buildProjectReadPermission(sealCount.id),
                            permissionUtilsService.PROJECT_WRITE_ANY,
@@ -122,8 +113,7 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase
                            permissionUtilsService.RECEIVER_CREATE])
     }
     
-    private void assertNoPermissions() 
-    {
+    private void assertNoPermissions()  {
         assertPermissions([],
         [permissionUtilsService.buildProjectEditChildrenPermission(sealCount.id),
             permissionUtilsService.buildProjectReadPermission(sealCount.id),
@@ -133,15 +123,12 @@ class ProjectRoleControllerTests extends ControllerUnitTestCase
             permissionUtilsService.RECEIVER_CREATE])
     }
     
-    private void assertPermissions(truePermissions, falsePermissions)
-    {
-        truePermissions.each
-        {
+    private void assertPermissions(truePermissions, falsePermissions) {
+        truePermissions.each {
             assertTrue(it, fredSmith.permissions.contains(it))
         }
         
-        falsePermissions.each
-        {
+        falsePermissions.each {
             assertFalse(it, fredSmith.permissions.contains(it))
         }
     }

@@ -1,9 +1,7 @@
 package pages
 
-class PersonCreatePage extends PersonCreateEditPage
-{
-    static content =
-    {
+class PersonCreatePage extends PersonCreateEditPage {
+    static content = {
         passwordTextField { $("input", name: "password") }
         passwordConfirmTextField { $("input", name: "passwordConfirm") }
 

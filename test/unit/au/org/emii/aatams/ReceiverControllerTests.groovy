@@ -2,16 +2,14 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class ReceiverControllerTests extends ControllerUnitTestCase 
-{
+class ReceiverControllerTests extends ControllerUnitTestCase  {
 
 
     def imos
     
     def permissionUtilsService
     
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         
@@ -26,8 +24,7 @@ class ReceiverControllerTests extends ControllerUnitTestCase
         
         mockLogging(PermissionUtilsService)
         permissionUtilsService = new PermissionUtilsService()
-        permissionUtilsService.metaClass.receiverCreated =
-        {
+        permissionUtilsService.metaClass.receiverCreated = {
             // no-op.
         }
         
@@ -35,13 +32,11 @@ class ReceiverControllerTests extends ControllerUnitTestCase
         controller.metaClass.message = {}
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testReceiverSave() 
-    {
+    void testReceiverSave()  {
         ReceiverDeviceModel model = new ReceiverDeviceModel(modelName:"model")
         mockDomain(ReceiverDeviceModel, [model])
         model.save()
@@ -59,8 +54,7 @@ class ReceiverControllerTests extends ControllerUnitTestCase
         assertEquals(DeviceStatus.NEW, receiver.status)
     }
     
-    void testDefaultModelIsVR2W()
-    {
+    void testDefaultModelIsVR2W() {
         ReceiverDeviceModel model = new ReceiverDeviceModel(modelName:"VR2W")
         mockDomain(ReceiverDeviceModel, [model])
         model.save()

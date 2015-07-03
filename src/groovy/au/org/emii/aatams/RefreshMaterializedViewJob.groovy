@@ -2,12 +2,10 @@ package au.org.emii.aatams
 
 import org.springframework.jdbc.core.JdbcTemplate
 
-abstract class RefreshMaterializedViewJob
-{
+abstract class RefreshMaterializedViewJob {
     def dataSource
 
-    def execute()
-    {
+    def execute() {
         long startTime = System.currentTimeMillis()
         log.info("'${getViewName()}': refreshing materialized view...")
         JdbcTemplate refreshStatement = new JdbcTemplate(dataSource)

@@ -1,13 +1,11 @@
 package au.org.emii.aatams
 
-class ReceiverDownloadFileProgress 
-{
+class ReceiverDownloadFileProgress  {
     Integer percentComplete
     
     static belongsTo = [receiverDownloadFile: ReceiverDownloadFile]
     
-    static constraints = 
-    {
+    static constraints =  {
         percentComplete(nullable: true, min: 0, max: 100)
     }
 }

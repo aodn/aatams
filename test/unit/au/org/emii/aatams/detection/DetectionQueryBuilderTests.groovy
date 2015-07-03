@@ -9,8 +9,7 @@ import grails.test.*
 
 import org.jooq.conf.ParamType
 
-class DetectionQueryBuilderTests extends GrailsUnitTestCase
-{
+class DetectionQueryBuilderTests extends GrailsUnitTestCase {
     void testConstructQueryNoFilterParams() {
         assertQueryFromFilterEquals('', [:])
     }

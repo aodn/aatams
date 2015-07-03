@@ -4,8 +4,7 @@ package au.org.emii.aatams.report
  *
  * @author jburgess
  */
-class ReportInfo 
-{
+class ReportInfo  {
     /**
      * The name to be displayed to users.
      */
@@ -23,8 +22,7 @@ class ReportInfo
      */
     List<ReportParameter> filterParams
     
-    String toString()
-    {
+    String toString() {
         return displayName
     }
 }

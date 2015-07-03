@@ -1,9 +1,7 @@
 package pages
 
-class OrganisationCreateEditBasePage extends LayoutPage
-{
-    static content =
-    {
+class OrganisationCreateEditBasePage extends LayoutPage {
+    static content = {
         nameTextField { $("input", name: "organisation.name") }
         departmentTextField { $("input", name: "organisation.department") }
         phoneNumberTextField { $("input", name: "organisation.phoneNumber") }

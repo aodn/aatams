@@ -6,34 +6,28 @@ import org.apache.shiro.SecurityUtils
  * A service which provides lists of candidate entities based on the principal's
  * roles and permissions.
  */
-class CandidateEntitiesService 
-{
+class CandidateEntitiesService  {
     static transactional = true
 
     def permissionUtilsService
     
-    def projects()
-    {
+    def projects() {
         def candidateProjects = 
-            Project.findAllByStatus(EntityStatus.ACTIVE).grep
-            {
+            Project.findAllByStatus(EntityStatus.ACTIVE).grep {
                 SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectEditChildrenPermission(it.id))
             }
             
         return candidateProjects 
     }
     
-    def organisations()
-    {
+    def organisations() {
         def subjectsOrganisations
 
         // SysAdmin "belongs" to all organisations.
-        if (SecurityUtils.subject.hasRole("SysAdmin"))
-        { 
+        if (SecurityUtils.subject.hasRole("SysAdmin")) { 
             subjectsOrganisations = Organisation.list()
         }
-        else
-        {
+        else {
             Person person = permissionUtilsService.principal()
             subjectsOrganisations = [person?.organisation]
         }
@@ -41,28 +35,24 @@ class CandidateEntitiesService
         return subjectsOrganisations
     }
     
-    def installations()
-    {
+    def installations() {
         return Installation.findAllByProjectInList(projects())
     }
     
-    def stations()
-    {
+    def stations() {
         def candidateStations = InstallationStation.findAllByInstallationInList(installations(), [sort:"name"])
 
         return candidateStations
     }
     
-    def receivers()
-    {
+    def receivers() {
         def candOrganisations = organisations()
         
         // receivers.organisation in candOrganisations
         def receivers = 
             Receiver.findAllByOrganisationInList(candOrganisations)
             
-        receivers = receivers.sort
-        {
+        receivers = receivers.sort {
             a, b ->
             
             a.toString() <=> b.toString()
@@ -71,33 +61,25 @@ class CandidateEntitiesService
         return receivers
     }
     
-    def tags(Project project)
-    {
+    def tags(Project project) {
         def candidateTags =
-            Tag.list().grep(
-            {
+            Tag.list().grep( {
                 it?.project == project
             })
         
         return candidateTags
     }
     
-    def people(Project project)
-    {
+    def people(Project project) {
         List<Person> candidatePeople = new ArrayList<Person>()
         
-        Person.list().each(
-        {
-            if (it?.status == EntityStatus.PENDING)
-            {
+        Person.list().each( {
+            if (it?.status == EntityStatus.PENDING) {
                 // Ignore PENDING people.
             }
-            else
-            {
-                for (ProjectRole role : it?.projectRoles)
-                {
-                    if (role?.project == project)
-                    {
+            else {
+                for (ProjectRole role : it?.projectRoles) {
+                    if (role?.project == project) {
                         candidatePeople.add(role?.person)
                     }
                 }
@@ -107,26 +89,22 @@ class CandidateEntitiesService
         return candidatePeople
     }
     
-    def deployments()
-    {
+    def deployments() {
         def projects = projects()
         
         def candidateDeployments =
-            ReceiverDeployment.list().grep(
-            {
+            ReceiverDeployment.list().grep( {
                 projects.contains(it?.station?.installation?.project)
             })
         
         return candidateDeployments
     }
     
-    def surgeries()
-    {
+    def surgeries() {
         def projects = projects()
         
         def candidateSurgeries =
-            Surgery.list().grep(
-            {
+            Surgery.list().grep( {
                 projects.contains(it?.tag?.project)
             })
         
@@ -136,16 +114,13 @@ class CandidateEntitiesService
     /**
      * The list of projects that the current user has read access on.
      */
-    def readableProjects()
-    {
+    def readableProjects() {
         def subject = SecurityUtils.subject
-        if (!subject)
-        {
+        if (!subject) {
             return []
         }
         
-        Project.findAllByStatus(EntityStatus.ACTIVE).grep
-        {
+        Project.findAllByStatus(EntityStatus.ACTIVE).grep {
             SecurityUtils.subject.isPermitted(permissionUtilsService.buildProjectReadPermission(it.id))
         }
     }

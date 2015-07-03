@@ -3,8 +3,7 @@ package au.org.emii.aatams
 import au.org.emii.aatams.report.ReportController
 import grails.converters.JSON
 
-class TagController extends ReportController
-{
+class TagController extends ReportController {
     def candidateEntitiesService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -13,8 +12,7 @@ class TagController extends ReportController
         redirect(action: "list", params: params)
     }
 
-    def list =
-    {
+    def list = {
         redirect(controller: "sensor", action: "list")
     }
 
@@ -119,15 +117,13 @@ class TagController extends ReportController
     /**
      * Allows auto-complete functionality on front-end.
      */
-    def lookupNonDeployedBySerialNumber =
-    {
+    def lookupNonDeployedBySerialNumber = {
         log.debug("Looking up non-deployed tags, serialNumber: " + params.term)
 
         def tags = Tag.findAllBySerialNumberIlikeAndStatusNotEqual(params.term + "%", DeviceStatus.DEPLOYED)
 
         // Limit so that all results fit on screen.
-        if (tags?.size() > 20)
-        {
+        if (tags?.size() > 20) {
             tags = tags[0..19]
         }
 
@@ -135,13 +131,11 @@ class TagController extends ReportController
         render tags as JSON
     }
 
-    def lookupBySerialNumber =
-    {
+    def lookupBySerialNumber = {
         def tags = Tag.findAllBySerialNumberIlike(params.term + "%", [sort: "serialNumber"])
 
         // Limit so that all results fit on screen.
-        if (tags?.size() > 20)
-        {
+        if (tags?.size() > 20) {
             tags = tags[0..19]
         }
 
@@ -149,11 +143,9 @@ class TagController extends ReportController
         render tags as JSON
     }
 
-    def lookupByCodeName =
-    {
+    def lookupByCodeName = {
         def tags = Tag.findAllByCodeNameIlike("%" + params.term + "%", [max:20, sort:"codeName", order:"asc"])
-        def jsonResults = tags.collect
-        {
+        def jsonResults = tags.collect {
             [label:it.toString(), value:it.codeName]
         }
         render(jsonResults as JSON)

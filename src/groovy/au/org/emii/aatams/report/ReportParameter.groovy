@@ -12,8 +12,7 @@ package au.org.emii.aatams.report
  * 
  * @author jburgess
  */
-abstract class ReportParameter
-{
+abstract class ReportParameter {
     /**
      * The label which is presented to the user (e.g. for project name, we may
      * only want to display "project", name is implicit).
@@ -43,12 +42,10 @@ abstract class ReportParameter
     /**
      * e.g. "installation.eq.name
      */
-    String getQualifiedParameterName()
-    {
+    String getQualifiedParameterName() {
         String retString = "filter."
         
-        if (associationName)
-        { 
+        if (associationName) { 
             retString += associationName + "."
         }
         
@@ -60,15 +57,13 @@ abstract class ReportParameter
     /**
      * Returns the model which can be passed to GSP/render.
      */
-    Map getModel()
-    {
+    Map getModel() {
         return [label: label,
                 propertyName: propertyName,
                 qualifiedParameterName: qualifiedParameterName]
     }
     
-    String toString()
-    {
+    String toString() {
         return label + ":" + propertyName + ":" + template + ":" + model
     }
 }

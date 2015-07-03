@@ -17,8 +17,7 @@ import com.vividsolutions.jts.geom.Point
  * receiver from its main connection to the mooring so it can float to the
  * surface.  A separate tether keeps the receiver attached to the mooring.
  */
-class ReceiverDeployment
-{
+class ReceiverDeployment {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
     static transients = [ 'scrambledLocation', 'active', 'latitude', 'longitude', 'deploymentInterval', 'deploymentNumber' ]
     static auditable = true
@@ -30,14 +29,12 @@ class ReceiverDeployment
     DateTime deploymentDateTime = new DateTime(Person.defaultTimeZone())
 
     static mapping = {
-        initialisationDateTime type: PersistentDateTimeTZ,
-        {
+        initialisationDateTime type: PersistentDateTimeTZ, {
             column name: "initialisationDateTime_timestamp"
             column name: "initialisationDateTime_zone"
         }
 
-        deploymentDateTime type: PersistentDateTimeTZ,
-        {
+        deploymentDateTime type: PersistentDateTimeTZ, {
             column name: "deploymentDateTime_timestamp"
             column name: "deploymentDateTime_zone"
         }
@@ -126,8 +123,7 @@ class ReceiverDeployment
     static def recoveryDateValidator = {
         recoveryDate, obj ->
 
-        if (recoveryDate)
-        {
+        if (recoveryDate) {
             return recoveryDate.after(obj.deploymentDateTime.toDate())
         }
 

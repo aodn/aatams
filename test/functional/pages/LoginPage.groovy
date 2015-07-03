@@ -1,16 +1,13 @@
 package pages
 
-class LoginPage extends LayoutPage 
-{
+class LoginPage extends LayoutPage  {
     static url = "auth/login"
     
-    static at =
-    {
+    static at = {
         title == "Login"
     }
     
-    static content =
-    {
+    static content = {
         usernameTextField { $("input", name: "username") }
         passwordTextField { $("input", name: "password") }
         

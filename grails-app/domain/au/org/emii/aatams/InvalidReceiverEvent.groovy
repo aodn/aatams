@@ -2,22 +2,18 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.InvalidDetectionReason
 
-class InvalidReceiverEvent extends ReceiverEvent 
-{
+class InvalidReceiverEvent extends ReceiverEvent  {
     InvalidDetectionReason reason
     String message
     
-    static constraints =
-    {
+    static constraints = {
         reason(nullable:false)
         message(nullable:true, blank:true)
     }
     
-    String toString()
-    {
+    String toString() {
         StringBuilder buf = new StringBuilder(String.valueOf(reason))
-        if (message)
-        {
+        if (message) {
             buf.append(": ")
             buf.append(message)
         }

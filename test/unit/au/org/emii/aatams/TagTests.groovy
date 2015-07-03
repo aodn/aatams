@@ -3,8 +3,7 @@ package au.org.emii.aatams
 import grails.test.*
 import grails.converters.JSON
 
-class TagTests extends GrailsUnitTestCase
-{
+class TagTests extends GrailsUnitTestCase {
     CodeMap a69_1303
     CodeMap a69_9002
 
@@ -16,8 +15,7 @@ class TagTests extends GrailsUnitTestCase
     Sensor tempSensor
     Sensor pressureSensor
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         a69_1303 = new CodeMap(codeMap: "A69-1303")
@@ -48,21 +46,18 @@ class TagTests extends GrailsUnitTestCase
         def sensorList = [pingerSensor, tempSensor, pressureSensor]
         mockDomain(Sensor, sensorList)
 
-        sensorList.each
-        {
+        sensorList.each {
             tag.addToSensors(it)
             it.save()
         }
         tag.save()
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         super.tearDown()
     }
 
-    void testUniqueSerialNumbers()
-    {
+    void testUniqueSerialNumbers() {
         mockDomain(Tag)
 
         TagDeviceModel model = new TagDeviceModel()
@@ -79,8 +74,7 @@ class TagTests extends GrailsUnitTestCase
 
         tag1.save(failOnError:true)
 
-        try
-        {
+        try {
             Tag tag2 = new Tag(codeName:'A69-1303-2222',
                                codeMap:new CodeMap(codeMap:'A69-1303'),
                                pingCode:"2222",
@@ -93,14 +87,12 @@ class TagTests extends GrailsUnitTestCase
 
             fail()
         }
-        catch (Throwable)
-        {
+        catch (Throwable) {
 
         }
     }
 
-    void testDeleteProject()
-    {
+    void testDeleteProject() {
         Project project = new Project(name:"some project")
         mockDomain(Project, [project])
 
@@ -124,28 +116,24 @@ class TagTests extends GrailsUnitTestCase
         assertNull(Project.get(tag.project.id))
     }
 
-    void testNullProject()
-    {
+    void testNullProject() {
         tag.project = null
         tag.save()
 
         assertFalse(tag.hasErrors())
     }
 
-    void testNonPingerSensors()
-    {
+    void testNonPingerSensors() {
         assertTrue(tag.getNonPingerSensors().contains(tempSensor))
         assertTrue(tag.getNonPingerSensors().contains(pressureSensor))
         assertFalse(tag.getNonPingerSensors().contains(pingerSensor))
     }
 
-    void testGetPingCode()
-    {
+    void testGetPingCode() {
          assertEquals(pingerSensor.pingCode, tag.pingCode)
     }
 
-    void testSetPingCodeExistingPinger()
-    {
+    void testSetPingCodeExistingPinger() {
         assertEquals(3, tag.sensors.size())
         tag.setPingCode(1234)
 
@@ -153,8 +141,7 @@ class TagTests extends GrailsUnitTestCase
         assertEquals(1234, tag.pinger.pingCode)
     }
 
-    void testSetPingCodeNoExistingPinger()
-    {
+    void testSetPingCodeNoExistingPinger() {
         Tag newTag =
             new Tag(codeMap:a69_1303,
                     model:new TagDeviceModel(),
@@ -168,17 +155,14 @@ class TagTests extends GrailsUnitTestCase
         assertEquals(1234, newTag.pinger.pingCode)
     }
 
-    void testSetCodeMapUpdatesSensorIds()
-    {
-        tag.sensors.each
-        {
+    void testSetCodeMapUpdatesSensorIds() {
+        tag.sensors.each {
             assertTrue(it.transmitterId.startsWith("A69-1303"))
         }
 
         tag.setCodeMap(a69_9002)
 
-        tag.sensors.each
-        {
+        tag.sensors.each {
             assertTrue(it.transmitterId.startsWith("A69-9002"))
         }
     }
@@ -240,8 +224,7 @@ class TagTests extends GrailsUnitTestCase
     }
 
     // Test for #1863.
-    void testTagAsJson()
-    {
+    void testTagAsJson() {
         Tag.registerObjectMarshaller()
 
         def tagAsJson = (tag as JSON)

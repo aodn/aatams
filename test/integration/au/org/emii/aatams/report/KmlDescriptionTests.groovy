@@ -6,8 +6,7 @@ import grails.test.*
 import au.org.emii.aatams.*
 import au.org.emii.aatams.detection.*
 
-class KmlDescriptionTests extends GroovyPagesTestCase 
-{
+class KmlDescriptionTests extends GroovyPagesTestCase  {
 
     def slurper = new XmlSlurper()
     
@@ -15,18 +14,15 @@ class KmlDescriptionTests extends GroovyPagesTestCase
     String installationName = "Ningaloo Array"
     String stationName = "Ningaloo SW1"
     
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testNoData() 
-    {
+    void testNoData()  {
         def div = executeTemplate([:])
         
         def allNodes = div.depthFirst().collect{ it }
@@ -34,8 +30,7 @@ class KmlDescriptionTests extends GroovyPagesTestCase
         assertEquals(8, allNodes.grep { it.name() == "td"}.size())
     }
     
-    void testHeaderData()
-    {
+    void testHeaderData() {
         InstallationStation stationInstance = setupStation()
         stationInstance.metaClass.getDetectionCount = { -> 0 }
         
@@ -53,16 +48,14 @@ class KmlDescriptionTests extends GroovyPagesTestCase
         assertEquals("0", vals[7].text())
     }
 
-    private InstallationStation setupStation() 
-    {
+    private InstallationStation setupStation()  {
         Project project = new Project(name: projectName)
         Installation installation = new Installation(name: installationName, project: project)
         InstallationStation stationInstance = new InstallationStation(name: stationName, installation: installation)
         return stationInstance
     }
     
-    private def executeTemplate(model) 
-    {
+    private def executeTemplate(model)  {
         def kmlDescTemplate = new File("grails-app/views/report/_kmlDescriptionTemplate.gsp")
         assertNotNull(kmlDescTemplate)
 

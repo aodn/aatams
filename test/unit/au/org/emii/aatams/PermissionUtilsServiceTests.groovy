@@ -2,8 +2,7 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class PermissionUtilsServiceTests extends GrailsUnitTestCase 
-{
+class PermissionUtilsServiceTests extends GrailsUnitTestCase  {
     PermissionUtilsService service
     
     ProjectRoleType piRoleType
@@ -12,8 +11,7 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
     ProjectRoleType nonPiType
         
     
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         mockLogging(PermissionUtilsService, true)
@@ -35,152 +33,128 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         projectB = new Project(name:"projectB")
         def projectList = [projectA, projectB]
         mockDomain(Project, projectList)
-        projectList.each 
-        {
+        projectList.each  {
             it.save()
         }
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testBuildProjectReadPermission()
-    {
+    void testBuildProjectReadPermission() {
         assertEquals("project:" + projectA.id + ":read",
                      service.buildProjectReadPermission(projectA.id))
     }
 
-    void testBuildProjectReadPermissionStringId()
-    {
+    void testBuildProjectReadPermissionStringId() {
         assertEquals("project:" + projectA.id + ":read",
                      service.buildProjectReadPermission(String.valueOf(projectA.id)))
     }
 
-    void testBuildProjectReadPermissionBigID()
-    {
+    void testBuildProjectReadPermissionBigID() {
         def id = Long.MAX_VALUE
         
         assertEquals("project:" + id + ":read",
                      service.buildProjectReadPermission(id))
     }
 
-    void testBuildProjectReadAnyPermission()
-    {
+    void testBuildProjectReadAnyPermission() {
         assertEquals("projectReadAny", service.buildProjectReadAnyPermission())
     }
 
-    void testBuildProjectWritePermission()
-    {
+    void testBuildProjectWritePermission() {
         assertEquals("project:" + projectA.id + ":edit_children",
                      service.buildProjectEditChildrenPermission(projectA.id))
     }
     
-    void testBuildProjectWritePermissionStringId()
-    {
+    void testBuildProjectWritePermissionStringId() {
         assertEquals("project:" + projectA.id + ":edit_children",
                      service.buildProjectEditChildrenPermission(String.valueOf(projectA.id)))
     }
     
-    void testBuildProjectWritePermissionNullId()
-    {
+    void testBuildProjectWritePermissionNullId() {
         assertEquals("notPermitted", service.buildProjectEditChildrenPermission(null))
     }
     
-    void testBuildProjectWriteAnyPermission()
-    {
+    void testBuildProjectWriteAnyPermission() {
         assertEquals("projectWriteAny",
                      service.buildProjectWriteAnyPermission())
     }
 
-    void testBuildProjectEditPermission()
-    {
+    void testBuildProjectEditPermission() {
         assertEquals("project:" + projectA.id + ":edit",
                 service.buildProjectEditPermission(projectA.id))
     }
 
-    void testBuildProjectEditPermissionStringId()
-    {
+    void testBuildProjectEditPermissionStringId() {
         assertEquals("project:" + projectA.id + ":edit",
                 service.buildProjectEditPermission(String.valueOf(projectA.id)))
     }
 
-    void testBuildProjectEditPermissionNullId()
-    {
+    void testBuildProjectEditPermissionNullId() {
         assertEquals("notPermitted", service.buildProjectEditPermission(null))
     }
     
-    void testBuildPrincipalInvestigatorPermission()
-    {
+    void testBuildPrincipalInvestigatorPermission() {
         assertEquals(
             "principalInvestigator:" + projectA.id,
             service.buildPrincipalInvestigatorPermission(projectA.id))
     }
     
-    void testBuildPrincipalInvestigatorPermissionStringId()
-    {
+    void testBuildPrincipalInvestigatorPermissionStringId() {
         assertEquals(
             "principalInvestigator:" + projectA.id,
             service.buildPrincipalInvestigatorPermission(String.valueOf(projectA.id)))
     }
     
-    void testBuildPrincipalInvestigatorPermissionNullId()
-    {
+    void testBuildPrincipalInvestigatorPermissionNullId() {
         assertEquals(
             "notPermitted",
             service.buildPrincipalInvestigatorPermission(null))
     }
     
-    void testBuildPersonWriteAnyPermission()
-    {
+    void testBuildPersonWriteAnyPermission() {
         assertEquals(
             "personWriteAny",
             service.buildPersonWriteAnyPermission())
     }
     
-    void testBuildReceiverCreatePermission()
-    {
+    void testBuildReceiverCreatePermission() {
         assertEquals(
             "receiverCreate",
             service.buildReceiverCreatePermission())
     }
     
-    void testBuildReceiverUpdatePermission()
-    {
+    void testBuildReceiverUpdatePermission() {
         Integer receiverId = 3
         
         assertEquals("receiverUpdate:" + receiverId,
                      service.buildReceiverUpdatePermission(receiverId))
     }
     
-    void testBuildReceiverUpdatePermissionStringId()
-    {
+    void testBuildReceiverUpdatePermissionStringId() {
         Integer receiverId = 3
         
         assertEquals("receiverUpdate:" + receiverId,
                      service.buildReceiverUpdatePermission(String.valueOf(receiverId)))
     }
     
-    void testBuildReceiverUpdatePermissionNullId()
-    {
+    void testBuildReceiverUpdatePermissionNullId() {
         assertEquals("notPermitted",
                      service.buildReceiverUpdatePermission(null))
     }
     
-    void testGetPIRoleType()
-    {
+    void testGetPIRoleType() {
         assertNotNull(service.getPIRoleType())
         assertEquals(piRoleType.displayName, service.getPIRoleType().displayName)
     }
     
-    ProjectRole testSetPermissionsNonPIREAD()
-    {
+    ProjectRole testSetPermissionsNonPIREAD() {
         return testSetPermissionsNonPIREAD(projectA)
     }
     
-    ProjectRole testSetPermissionsNonPIREAD(project)
-    {
+    ProjectRole testSetPermissionsNonPIREAD(project) {
         ProjectRole nonPiRead = 
             new ProjectRole(project:project,
                             person:person,
@@ -204,13 +178,11 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         return nonPiRead
     }
 
-    ProjectRole testSetPermissionsNonPIWRITE()
-    {
+    ProjectRole testSetPermissionsNonPIWRITE() {
         return testSetPermissionsNonPIWRITE(projectA)
     }
     
-    ProjectRole testSetPermissionsNonPIWRITE(project)
-    {
+    ProjectRole testSetPermissionsNonPIWRITE(project) {
         ProjectRole nonPiWrite = 
             new ProjectRole(project:project,
                             person:person,
@@ -234,13 +206,11 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         return nonPiWrite
     }
     
-    ProjectRole testSetPermissionsPIREAD()
-    {
+    ProjectRole testSetPermissionsPIREAD() {
         return testSetPermissionsPIREAD(projectA)
     }
     
-    ProjectRole testSetPermissionsPIREAD(project)
-    {
+    ProjectRole testSetPermissionsPIREAD(project) {
         ProjectRole piRead = 
             new ProjectRole(project:project,
                             person:person,
@@ -265,13 +235,11 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         return piRead
     }
 
-    ProjectRole testSetPermissionsPIWRITE()
-    {
+    ProjectRole testSetPermissionsPIWRITE() {
         return testSetPermissionsPIWRITE(projectA)
     }
 
-    ProjectRole testSetPermissionsPIWRITE(project)
-    {
+    ProjectRole testSetPermissionsPIWRITE(project) {
         ProjectRole piWrite =
             new ProjectRole(project:project,
                             person:person,
@@ -293,24 +261,21 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         return piWrite
     }
 
-    void testRemovePermissionsNonPIREAD()
-    {
+    void testRemovePermissionsNonPIREAD() {
         ProjectRole nonPiRead = testSetPermissionsNonPIREAD()
         assertEquals(person, service.removePermissions(nonPiRead))
         
         assertIsOnlyPermitted([])
     }
     
-    void testRemovePermissionsNonPIWRITE()
-    {
+    void testRemovePermissionsNonPIWRITE() {
         ProjectRole nonPiWrite = testSetPermissionsNonPIWRITE()
         assertEquals(person, service.removePermissions(nonPiWrite))
         
         assertIsOnlyPermitted([])
     }
     
-    void testRemovePermissionsPIREAD()
-    {
+    void testRemovePermissionsPIREAD() {
         ProjectRole piRead = testSetPermissionsPIREAD()
         
         assertEquals(person, service.removePermissions(piRead))
@@ -318,8 +283,7 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         assertIsOnlyPermitted([])
     }
 
-    void testRemovePermissionsPIWRITE()
-    {
+    void testRemovePermissionsPIWRITE() {
         ProjectRole piWrite = testSetPermissionsPIWRITE()
         
         assertEquals(person, service.removePermissions(piWrite))
@@ -327,8 +291,7 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         assertIsOnlyPermitted([])
     }
     
-    void testRemovePermissionsMultiRolePIRead()
-    {
+    void testRemovePermissionsMultiRolePIRead() {
         ProjectRole piReadA = testSetPermissionsPIREAD(projectA)
         ProjectRole piReadB = testSetPermissionsPIREAD(projectB)
         
@@ -349,8 +312,7 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         assertIsOnlyPermitted([])
     }
     
-    void testRemovePermissionsMultiRolePIWrite()
-    {
+    void testRemovePermissionsMultiRolePIWrite() {
         ProjectRole piWriteA = testSetPermissionsPIWRITE(projectA)
         ProjectRole piWriteB = testSetPermissionsPIWRITE(projectB)
         
@@ -374,8 +336,7 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         assertIsOnlyPermitted([])
     }
     
-    void testRemovePermissionsMultiRoleNonPIRead()
-    {
+    void testRemovePermissionsMultiRoleNonPIRead() {
         ProjectRole nonpiReadA = testSetPermissionsNonPIREAD(projectA)
         ProjectRole nonpiReadB = testSetPermissionsNonPIREAD(projectB)
         
@@ -392,8 +353,7 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         assertIsOnlyPermitted([])
     }
     
-    void testRemovePermissionsMultiRoleNonPIWrite()
-    {
+    void testRemovePermissionsMultiRoleNonPIWrite() {
         ProjectRole nonpiWriteA = testSetPermissionsNonPIWRITE(projectA)
         ProjectRole nonpiWriteB = testSetPermissionsNonPIWRITE(projectB)
         
@@ -412,33 +372,27 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
         assertIsOnlyPermitted([])
     }
     
-    private void assertIsPermitted(permissionStrings)
-    {
-        permissionStrings.each
-        {
+    private void assertIsPermitted(permissionStrings) {
+        permissionStrings.each {
             permission ->
             
             assertTrue(person.permissions.contains(permission))
         }
     }
     
-    private void assertIsOnlyPermitted(permissionStrings)
-    {
-        if (permissionStrings.isEmpty() && person.permissions.isEmpty())
-        {
+    private void assertIsOnlyPermitted(permissionStrings) {
+        if (permissionStrings.isEmpty() && person.permissions.isEmpty()) {
             return
         }
         
-        if (permissionStrings.size() != person.permissions.size())
-        {
+        if (permissionStrings.size() != person.permissions.size()) {
             println "Expected permissions: " + permissionStrings
             println "Actual permissions: " + person.permissions
         }
         
         assertEquals(permissionStrings.size(), person.permissions.size())
         
-        permissionStrings.each
-        {
+        permissionStrings.each {
             permission ->
             
             assertTrue(person.permissions.contains(permission))
@@ -446,14 +400,11 @@ class PermissionUtilsServiceTests extends GrailsUnitTestCase
     }
     
 
-    private void assertIsNotPermitted(permissionStrings)
-    {
-        permissionStrings.each
-        {
+    private void assertIsNotPermitted(permissionStrings) {
+        permissionStrings.each {
             permission ->
             
-            if (person.permissions.contains(permission))
-            {
+            if (person.permissions.contains(permission)) {
                 println "Permission exists: " + permission
             }
             

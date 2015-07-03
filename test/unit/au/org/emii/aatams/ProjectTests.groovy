@@ -2,15 +2,12 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class ProjectTests extends GrailsUnitTestCase
-{
-    protected void setUp()
-    {
+class ProjectTests extends GrailsUnitTestCase {
+    protected void setUp() {
         super.setUp()
     }
     
-    void testActiveOrgsOnlyInGetOrganisations()
-    {
+    void testActiveOrgsOnlyInGetOrganisations() {
         Project project = new Project(name: "seals")
         mockDomain(Project, [project])
         project.save(validate: false)

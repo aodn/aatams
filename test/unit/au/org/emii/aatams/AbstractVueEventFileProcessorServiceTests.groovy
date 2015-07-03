@@ -7,8 +7,7 @@ import grails.plugin.searchable.SearchableService
 import grails.test.GrailsUnitTestCase;
 import org.joda.time.DateTime
 
-abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestCase
-{
+abstract class AbstractVueEventFileProcessorServiceTests extends GrailsUnitTestCase {
     def eventFactoryService
     def searchableService
     def vueEventFileProcessorService

@@ -1,23 +1,19 @@
 package au.org.emii.aatams
 
-class DeviceModel 
-{
+class DeviceModel  {
     static belongsTo = [manufacturer:DeviceManufacturer]
     String modelName
     
-    static constraints =
-    {
+    static constraints = {
         modelName(blank:false, unique:true)
         manufacturer()
     }
     
-    static mapping =
-    {
+    static mapping = {
         sort "modelName"
     }
     
-    String toString()
-    {
+    String toString() {
         return modelName
     }
 }

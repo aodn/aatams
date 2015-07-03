@@ -2,8 +2,7 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class TagFactoryServiceTests extends GrailsUnitTestCase
-{
+class TagFactoryServiceTests extends GrailsUnitTestCase {
     def tagService
     def params
     CodeMap codeMap
@@ -11,8 +10,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
     Project sealProject
     Project tunaProject
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockLogging(TagFactoryService)
@@ -49,23 +47,20 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
             transmitterType:new TransmitterType()]
     }
 
-    void testValidParamsNew()
-    {
+    void testValidParamsNew() {
         assertEquals(0, Tag.count())
         lookupOrCreate()
         assertEquals(1, Tag.count())
     }
 
-    void testValidParamsNewPingCodeAsString()
-    {
+    void testValidParamsNewPingCodeAsString() {
         params.pingCode = "5678"
         assertEquals(0, Tag.count())
         lookupOrCreate()
         assertEquals(1, Tag.count())
     }
 
-    void testValidParamsExisting()
-    {
+    void testValidParamsExisting() {
         def existingTag = createExistingTag()
 
         assertEquals(1, Tag.count())
@@ -77,8 +72,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
         assertEquals(existingSensor, retTag.pinger)
     }
 
-    void testTagProjectSetToReleasesProject()
-    {
+    void testTagProjectSetToReleasesProject() {
         def existingTag = createExistingTag()
         assertEquals(sealProject, existingTag.project)
 
@@ -88,8 +82,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
         assertEquals(sealProject, foundTag.project)
     }
 
-    private Tag createExistingTag()
-    {
+    private Tag createExistingTag() {
         Tag existingTag =
             new Tag(codeMap:codeMap,
                     serialNumber:"1111",
@@ -112,8 +105,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase
         return existingTag
     }
 
-    private Tag lookupOrCreate()
-    {
+    private Tag lookupOrCreate() {
         Tag tag = tagService.lookupOrCreate(params)
 
         assertFalse(tag.hasErrors())

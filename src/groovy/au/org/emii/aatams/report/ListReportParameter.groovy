@@ -5,28 +5,24 @@ package au.org.emii.aatams.report
  * 
  * @author jburgess
  */
-class ListReportParameter extends ReportParameter
-{
+class ListReportParameter extends ReportParameter {
     /**
      * The range of values to select from.
      */
     List range
     
-    String getTemplate()
-    {
+    String getTemplate() {
         return "/report/filter/listTemplate"
     }
     
-    String getRestrictionName()
-    {
+    String getRestrictionName() {
         return "eq"
     }
     
     /**
      * Returns the model which can be passed to GSP/render.
      */
-    Map getModel()
-    {
+    Map getModel() {
         def model = super.getModel()
         model.range = range
         return model

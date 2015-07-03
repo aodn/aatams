@@ -10,8 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver
 
 // Use htmlunit as the default
 // See: http://code.google.com/p/selenium/wiki/HtmlUnitDriver
-driver = 
-{ 
+driver =  { 
     def driver = new HtmlUnitDriver()
     driver.javascriptEnabled = true
     driver

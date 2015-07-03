@@ -23,8 +23,7 @@ class OrganisationProjectController {
     
     def save = {
         def organisationProjectInstance = new OrganisationProject(params)
-        if (organisationProjectInstance.save(flush: true)) 
-        {
+        if (organisationProjectInstance.save(flush: true))  {
             flash.message = "${message(code: 'default.added.message', args: [message(code: 'organisation.label', default: 'Organisation'), \
                                                                              organisationProjectInstance.organisation.toString(), \
                                                                              message(code: 'project.label', default: 'Project'), \
@@ -32,8 +31,7 @@ class OrganisationProjectController {
                                                                  
             render ([instance:organisationProjectInstance, message:flash] as JSON)
         }
-        else 
-        {
+        else  {
             log.error(organisationProjectInstance.errors)
             render ([errors:organisationProjectInstance.errors] as JSON)
         }

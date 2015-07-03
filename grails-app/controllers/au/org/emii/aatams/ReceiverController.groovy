@@ -47,15 +47,24 @@ class ReceiverController extends ReportController {
     def save = {
 
         def receiverInstance = new Receiver(params)
+<<<<<<< HEAD
 
         if (receiverInstance.save(flush: true)) {
+=======
+
+        if (receiverInstance.save(flush: true))  {
+>>>>>>> Opening brace to end of line rather than newline
             // Need to add update permission to subject.
             permissionUtilsService.receiverCreated(receiverInstance)
 
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.toString()])}"
             redirect(action: "show", id: receiverInstance.id)
         }
+<<<<<<< HEAD
         else {
+=======
+        else  {
+>>>>>>> Opening brace to end of line rather than newline
             render(view: "create", model: [receiverInstance: receiverInstance])
         }
     }
@@ -112,8 +121,12 @@ class ReceiverController extends ReportController {
     def delete = {
         def receiverInstance = Receiver.get(params.id)
         if (receiverInstance) {
+<<<<<<< HEAD
             try
             {
+=======
+            try  {
+>>>>>>> Opening brace to end of line rather than newline
                 receiverInstance.delete(flush: true)
 
                 // Need to delete any update permissions for this receiver.

@@ -11,8 +11,7 @@ class AddressControllerTests extends ControllerUnitTestCase {
         super.tearDown()
     }
 
-    void testSomething() 
-    {
+    void testSomething()  {
         controller.metaClass.message = { LinkedHashMap args -> return "${args.code}" }
         
         def address = new Address(id:1,

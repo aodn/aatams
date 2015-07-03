@@ -8,8 +8,7 @@ import grails.converters.JSON
  * @author jburgess
  *
  */
-class Tag extends Device implements Embargoable
-{
+class Tag extends Device implements Embargoable {
     DeviceStatus status
 
     static hasMany = [sensors:Sensor,
@@ -28,8 +27,7 @@ class Tag extends Device implements Embargoable
      */
     Integer expectedLifeTimeDays
 
-    static constraints =
-    {
+    static constraints = {
         project(nullable:true)
         expectedLifeTimeDays(nullable:true)
     }
@@ -38,104 +36,83 @@ class Tag extends Device implements Embargoable
 
     static searchable = [only: ['serialNumber']]
 
-    static mapping =
-    {
+    static mapping = {
         cache true
         surgeries cache:true
     }
 
     // For reports...
-    String getExpectedLifeTimeDaysAsString()
-    {
-        if (!expectedLifeTimeDays)
-        {
+    String getExpectedLifeTimeDaysAsString() {
+        if (!expectedLifeTimeDays) {
             return ""
         }
 
         return String.valueOf(expectedLifeTimeDays)
     }
 
-    String toString()
-    {
+    String toString() {
         return getDeviceID()
     }
 
-    String getDeviceID()
-    {
+    String getDeviceID() {
         return sensors?.join(", ")
     }
 
-    Sensor getPinger()
-    {
-        def searchPinger = sensors.find
-        {
+    Sensor getPinger() {
+        def searchPinger = sensors.find {
             it.transmitterType == TransmitterType.findByTransmitterTypeName('PINGER', [cache:true])
         }
         return searchPinger
     }
 
-    void setPingCode(Integer newPingCode)
-    {
-        if (!pinger)
-        {
+    void setPingCode(Integer newPingCode) {
+        if (!pinger) {
             Sensor newPinger = new Sensor(tag: this, pingCode: newPingCode, transmitterType: TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]))
             addToSensors(newPinger)
         }
-        else
-        {
+        else {
             assert(pinger)
             pinger.pingCode = newPingCode
         }
     }
 
-    Integer getPingCode()
-    {
+    Integer getPingCode() {
         return pinger?.pingCode
     }
 
-    void setCodeMap(CodeMap codeMap)
-    {
+    void setCodeMap(CodeMap codeMap) {
         this.codeMap = codeMap
-        sensors.each
-        {
+        sensors.each {
             it?.refreshTransmitterId()
         }
     }
 
-    String getPingCodes()
-    {
+    String getPingCodes() {
         return sensors*.pingCode?.sort()?.join(", ")
     }
 
-    String getTransmitterTypeNames()
-    {
+    String getTransmitterTypeNames() {
         return sensors*.transmitterType?.transmitterTypeName?.join(", ")
     }
 
-    List<Sensor> getNonPingerSensors()
-    {
+    List<Sensor> getNonPingerSensors() {
         return Sensor.findAllByTagAndTransmitterTypeNotEqual(this, TransmitterType.findByTransmitterTypeName('PINGER', [cache:true]), [sort:"transmitterId"])
     }
 
-    def applyEmbargo()
-    {
+    def applyEmbargo() {
         boolean embargoed = false
 
-        surgeries.each
-        {
+        surgeries.each {
             embargoed |= it.release.isEmbargoed()
         }
 
-        if (this instanceof Sensor)
-        {
-            tag.surgeries.each
-            {
+        if (this instanceof Sensor) {
+            tag.surgeries.each {
                 embargoed |= it.release.isEmbargoed()
             }
         }
 
-        if (!embargoed)
-        {
+        if (!embargoed) {
             return this
         }
 
@@ -143,10 +120,8 @@ class Tag extends Device implements Embargoable
         return null
     }
 
-    List<Person> getOwningPIs()
-    {
-        if (project)
-        {
+    List<Person> getOwningPIs() {
+        if (project) {
             return project.getPrincipalInvestigators()
         }
 
@@ -169,10 +144,8 @@ class Tag extends Device implements Embargoable
         return unusedTypes
     }
 
-    static void registerObjectMarshaller()
-    {
-        JSON.registerObjectMarshaller(Tag.class)
-        {
+    static void registerObjectMarshaller() {
+        JSON.registerObjectMarshaller(Tag.class) {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['label'] = it.serialNumber

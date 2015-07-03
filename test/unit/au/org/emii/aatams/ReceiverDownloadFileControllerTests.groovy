@@ -5,12 +5,10 @@ import grails.test.*
 import grails.converters.JSON
 import grails.converters.XML
 
-class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
-{
+class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase {
     def user
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockDomain(ReceiverDownloadFile)
@@ -24,13 +22,11 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
         user.save()
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return user?.id
     }
 
-    void testProgressInvalidDownload()
-    {
+    void testProgressInvalidDownload() {
         controller.params.id = 123l
         controller.status()
 
@@ -43,8 +39,7 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
          assertEquals('Unknown receiverDownloadFile id: 123', jsonResult.error.message)
     }
 
-    void testProgressValidDownload()
-    {
+    void testProgressValidDownload() {
         def download = createDownload()
 
         controller.params.id = download.id
@@ -60,8 +55,7 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
         assertEquals(73, jsonResult.percentComplete)
     }
 
-    void testInitialiseForProcessing()
-    {
+    void testInitialiseForProcessing() {
         ReceiverDownloadFile download = new ReceiverDownloadFile(status: FileProcessingStatus.PROCESSING)
         download.initialiseForProcessing("the_filename")
 
@@ -70,8 +64,7 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
         assertEquals("username", download.requestingUser.username)
     }
 
-    void testSaveXmlSuccessRedirectToShow()
-    {
+    void testSaveXmlSuccessRedirectToShow() {
         controller.request.format = 'xml'
         controller.params.type = 'VUE_XML_ZIPPED'
         controller.params.'example.zip' = '@example.zip'
@@ -88,8 +81,7 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
         assertEquals(controller.params, controller.redirectArgs.params)
     }
 
-    void testSaveXmlBadRequest()
-    {
+    void testSaveXmlBadRequest() {
         controller.request.format = 'xml'
         controller.params.type = 'VUE_XML_ZIPPED'
         controller.params.'example.zip' = '@example.zip'
@@ -123,8 +115,7 @@ class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase
         assertEquals("some xml", controller.response.contentAsString)
     }
 
-    def createDownload() 
-    {
+    def createDownload()  {
         ReceiverDownloadFile download = new ReceiverDownloadFile(status: FileProcessingStatus.PROCESSING)
         download.save()
 

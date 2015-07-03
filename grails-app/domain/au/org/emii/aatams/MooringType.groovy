@@ -3,17 +3,14 @@ package au.org.emii.aatams
 /**
  * e.g. CAR TYRE, CONCRETE BLOCK, DEEP WATER.
  */
-class MooringType 
-{
+class MooringType  {
     String type
     
-    static constraints =
-    {
+    static constraints = {
         type(blank:false, unique:true)
     }
      
-    String toString()
-    {
+    String toString() {
         return type
     }
 }

@@ -3,16 +3,14 @@ import org.junit.Test;
 import groovy.lang.MetaClass;
 import pages.*
 
-class ReceiverTests extends GrailsCrudTest 
-{
+class ReceiverTests extends GrailsCrudTest  {
     def listPage = ReceiverListPage
     def showPage = ReceiverShowPage
     def createPage = ReceiverCreatePage
     def editPage = ReceiverEditPage
 
     @Test
-    void testList()
-    {
+    void testList() {
         doTestList(
             6, 
             [name:"VR2W-101336", model: "VR2W", serialNumber: "12345678", organisation: "CSIRO", status: "DEPLOYED"],
@@ -20,8 +18,7 @@ class ReceiverTests extends GrailsCrudTest
     }
     
     @Test
-    void testShow()
-    {
+    void testShow() {
         doTestShow("VR2W-101338",  
                    [name:"VR2W-101338", 
                     organisation: "IMOS (eMII)",
@@ -32,14 +29,12 @@ class ReceiverTests extends GrailsCrudTest
     }
 
     @Test
-    void testEdit()
-    {
+    void testEdit() {
         doTestEdit("VR2W-101338", "serialNumber", "serialNumberTextField")
     }
     
     @Test
-    void testCreate()
-    {
+    void testCreate() {
 //        doTestCreate(
 //            [nameTextField:"Some New Organisation",
 //             departmentTextField:"Marine",

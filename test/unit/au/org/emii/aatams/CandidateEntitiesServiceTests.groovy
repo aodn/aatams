@@ -5,8 +5,7 @@ import org.joda.time.DateTime;
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import grails.test.*
 
-class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
-{
+class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase {
     def candidateEntitiesService
     def permService
     def person
@@ -29,8 +28,7 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
     InstallationStation stationCCC
     InstallationStation stationDDD
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockLogging(PermissionUtilsService)
@@ -84,8 +82,7 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
 
         def receiverList = [recoveredReceiver, newReceiver, deployedReceiver, csiroReceiver]
         mockDomain(Receiver, receiverList)
-        receiverList.each
-        {
+        receiverList.each {
             imos.addToReceivers(it)
             it.save()
         }
@@ -118,34 +115,28 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
         // save out of order
         def stationList = [stationBBB, stationCCC, stationAAA, stationDDD]
         mockDomain(InstallationStation, stationList)
-        stationList.each
-        {
+        stationList.each {
             permittedInstallation1.addToStations(it)
             it.save()
         }
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return person.id
     }
 
-    protected boolean isPermitted(String permission)
-    {
-        if (permission == "project:" + permittedProject.id + ":edit_children")
-        {
+    protected boolean isPermitted(String permission) {
+        if (permission == "project:" + permittedProject.id + ":edit_children") {
             return true
         }
         return false
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         super.tearDown()
     }
 
-    void testReceivers()
-    {
+    void testReceivers() {
         def receivers = candidateEntitiesService.receivers()
 
         assertEquals(4, receivers.size())
@@ -156,16 +147,14 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
         assertEquals(csiroReceiver.serialNumber, receivers[3].serialNumber)
     }
 
-    void testInstallations()
-    {
+    void testInstallations() {
         def installations = candidateEntitiesService.installations()
         assertEquals(2, installations.size())
         assertTrue(installations.contains(permittedInstallation1))
         assertTrue(installations.contains(permittedInstallation2))
     }
 
-    void testProjects()
-    {
+    void testProjects() {
         assertEquals(2, Project.list().size())
         assertEquals(2, Project.findAllByStatus(EntityStatus.ACTIVE).size())
 
@@ -174,10 +163,8 @@ class CandidateEntitiesServiceTests extends AbstractGrailsUnitTestCase
         assertTrue(projects.contains(permittedProject ))
     }
 
-    void testStations()
-    {
-        [stationAAA, stationBBB, stationCCC].each
-        {
+    void testStations() {
+        [stationAAA, stationBBB, stationCCC].each {
             it.metaClass.isActive = { false }
         }
         stationDDD.metaClass.isActive = { true }

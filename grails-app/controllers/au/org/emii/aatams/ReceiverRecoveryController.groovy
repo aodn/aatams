@@ -6,8 +6,7 @@ import org.joda.time.*
 
 import com.vividsolutions.jts.geom.Point
 
-class ReceiverRecoveryController extends AbstractController
-{
+class ReceiverRecoveryController extends AbstractController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def candidateEntitiesService
@@ -18,13 +17,11 @@ class ReceiverRecoveryController extends AbstractController
         redirect(action: "list", params: params)
     }
 
-    def list =
-    {
+    def list = {
         doList("receiverRecovery") + [readableProjects:candidateEntitiesService.readableProjects()]
     }
 
-    def create =
-    {
+    def create = {
         ReceiverDeployment deployment = ReceiverDeployment.get(params.deploymentId)
 
         def receiverRecoveryInstance = new ReceiverRecovery()
@@ -36,20 +33,17 @@ class ReceiverRecoveryController extends AbstractController
         return [receiverRecoveryInstance: receiverRecoveryInstance]
     }
 
-    private Point determineDefaultLocation(deployment)
-    {
+    private Point determineDefaultLocation(deployment) {
         assert(deployment)
 
-        if (deployment.location)
-        {
+        if (deployment.location) {
             return deployment.location
         }
 
         return deployment.station?.location
     }
 
-    def save =
-    {
+    def save = {
         ReceiverDeployment deployment = ReceiverDeployment.get(params.deploymentId)
         deployment.properties = params.deployment
 
@@ -62,13 +56,11 @@ class ReceiverRecoveryController extends AbstractController
 
         deployment?.recovery = receiverRecoveryInstance
 
-        if (deployment?.save(flush: true))
-        {
+        if (deployment?.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverRecovery.label', default: 'ReceiverRecovery'), receiverRecoveryInstance.toString()])}"
             redirect(action: "show", id: receiverRecoveryInstance.id)
         }
-        else
-        {
+        else {
             render(view: "create", model: [receiverRecoveryInstance: receiverRecoveryInstance])
         }
     }
@@ -132,8 +124,7 @@ class ReceiverRecoveryController extends AbstractController
     def delete = {
         def receiverRecoveryInstance = ReceiverRecovery.get(params.id)
         if (receiverRecoveryInstance) {
-            try
-            {
+            try {
                 def deployment = receiverRecoveryInstance.deployment
                 deployment.recovery = null
                 deployment.save()

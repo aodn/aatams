@@ -1,20 +1,17 @@
 package au.org.emii.aatams
 
-class Animal implements Embargoable
-{
+class Animal implements Embargoable {
     static hasMany = [releases: AnimalRelease]
     Species species
     Sex sex
 
-    static constraints =
-    {
+    static constraints = {
         sex(nullable:true)
     }
 
     static transients = ['embargoed', 'project']
 
-    String toString()
-    {
+    String toString() {
         // Cast is necessary to avoid NPE.
         StringBuffer buf = new StringBuffer(String.valueOf(species))
         buf.append("-")
@@ -28,8 +25,7 @@ class Animal implements Embargoable
         return buf.toString()
     }
 
-    boolean isEmbargoed()
-    {
+    boolean isEmbargoed() {
         def embargoed = false
 
         releases.each {

@@ -1,16 +1,13 @@
 package pages
 
-class InstallationShowPage extends ShowPage 
-{
+class InstallationShowPage extends ShowPage  {
     static url = "installation/show"
     
-    static at =
-    {
+    static at = {
         title == "Show Installation"
     }
     
-    static content =
-    {
+    static content = {
         editButton(to: InstallationEditPage) { $("input", value: "Edit") }
         deleteButton(to: InstallationListPage) { $("input", value: "Delete") }
 

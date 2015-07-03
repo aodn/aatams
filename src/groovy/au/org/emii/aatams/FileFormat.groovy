@@ -14,28 +14,22 @@ import au.org.emii.aatams.event.EventFormat
  * @author jburgess
  *
  */
-abstract class FileFormat
-{
+abstract class FileFormat {
     abstract Map parseRow(row) throws FileFormatException
 
-    static FileFormat newFormat(type)
-    {
-        if (type == ReceiverDownloadFileType.DETECTIONS_CSV)
-        {
+    static FileFormat newFormat(type) {
+        if (type == ReceiverDownloadFileType.DETECTIONS_CSV) {
             return new VueDetectionFormat()
         }
-        else if (type == ReceiverDownloadFileType.EVENTS_CSV)
-        {
+        else if (type == ReceiverDownloadFileType.EVENTS_CSV) {
             return new EventFormat()
         }
 
         throw new IllegalArgumentException("Unknown detection format: " + type)
     }
 
-    protected def getUtcDate(row, timestampColumn, dateFormat)
-    {
-        try
-        {
+    protected def getUtcDate(row, timestampColumn, dateFormat) {
+        try {
             return new SimpleDateFormat(dateFormat).parse(row[timestampColumn] + " " + "UTC")
         }
         catch (NullPointerException npe) {

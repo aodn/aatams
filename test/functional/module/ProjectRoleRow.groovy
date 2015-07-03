@@ -2,10 +2,8 @@ package module
 
 import geb.Module;
 
-class ProjectRoleRow extends Module
-{
-    static content =
-    {
+class ProjectRoleRow extends Module {
+    static content = {
         cell { $("td", it) }
         cellText { cell(it).text() }
         

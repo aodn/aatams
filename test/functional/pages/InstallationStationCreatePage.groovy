@@ -1,16 +1,13 @@
 package pages
 
-class InstallationStationCreatePage extends InstallationStationCreateEditPage 
-{
+class InstallationStationCreatePage extends InstallationStationCreateEditPage  {
     static url = "installationStation/create"
     
-    static at =
-    {
+    static at = {
         title == "Create Installation Station"
     }
     
-    static content =
-    {
+    static content = {
         createButton (to: [InstallationStationShowPage]) { $("input", type: "submit") }
     }
 }

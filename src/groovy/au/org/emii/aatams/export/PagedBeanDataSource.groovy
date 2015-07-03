@@ -10,8 +10,7 @@ import org.apache.commons.beanutils.PropertyUtils
 
 import au.org.emii.aatams.filter.QueryService;
 
-class PagedBeanDataSource extends JRAbstractBeanDataSource
-{
+class PagedBeanDataSource extends JRAbstractBeanDataSource {
     private int index = 0
     private Object currBean
     private static Map fieldNameMap = new HashMap()
@@ -25,8 +24,7 @@ class PagedBeanDataSource extends JRAbstractBeanDataSource
     private int pageEnd = Integer.MIN_VALUE;
     private static final int PAGE_SIZE = 500
     
-    public PagedBeanDataSource(QueryService queryService, Class clazz, Map filterParams)
-    {
+    public PagedBeanDataSource(QueryService queryService, Class clazz, Map filterParams) {
         super(true)
         
         this.queryService = queryService
@@ -35,47 +33,39 @@ class PagedBeanDataSource extends JRAbstractBeanDataSource
     }
     
     @Override
-    public void moveFirst() throws JRException 
-    {
+    public void moveFirst() throws JRException  {
         index = 0
         currBean = getObject(index)
     }
 
     @Override
-    public boolean next() throws JRException 
-    {
+    public boolean next() throws JRException  {
         currBean = getObject(index++);
         return (currBean != null);
     }
     
     @Override
-    public Object getFieldValue(JRField field) throws JRException 
-    {
+    public Object getFieldValue(JRField field) throws JRException  {
         String nameField = getFieldName(field.getName())
-        try
-        {
+        try {
             return PropertyUtils.getProperty(currBean, nameField)
         }
-        catch (NestedNullException e)
-        {
+        catch (NestedNullException e) {
             return null
         }
     }
 
-    public List getObjects(int firstResult,    int maxResults) 
-    {
+    public List getObjects(int firstResult,    int maxResults)  {
         filterParams.offset = firstResult
         filterParams.max = maxResults
         
         List queryResults = query(clazz, filterParams)
         
-        if (resultPage == null) 
-        {
+        if (resultPage == null)  {
             resultPage = new ArrayList(queryResults.size());
         }
         resultPage.clear();
-        for (int i = 0; i < queryResults.size(); i++) 
-        {
+        for (int i = 0; i < queryResults.size(); i++)  {
             resultPage.add(queryResults.get(i));
         }
         pageStart = firstResult;
@@ -84,25 +74,21 @@ class PagedBeanDataSource extends JRAbstractBeanDataSource
         return resultPage;
     }
 
-    private List query(clazz, filterParams)
-    {
+    private List query(clazz, filterParams) {
         return queryService.query(clazz, filterParams).results
     }
     
-    public final Object getObject(int index) 
-    {
+    public final Object getObject(int index)  {
         if (   (resultPage == null)
             || (index < pageStart)
-            || (index > pageEnd)) 
-        {
+            || (index > pageEnd))  {
             resultPage = getObjects(index, PAGE_SIZE);
         }
         
         Object result = null;
         int pos = index - pageStart;
         if (   (resultPage != null)
-            && (resultPage.size() > pos)) 
-        {
+            && (resultPage.size() > pos))  {
             result = resultPage.get(pos);
         }
         
@@ -116,12 +102,10 @@ class PagedBeanDataSource extends JRAbstractBeanDataSource
     * @return the value in the cache or make
     * the replacement and return this value
     */
-    private String getFieldName(String fieldName) 
-    {
+    private String getFieldName(String fieldName)  {
         String filteredFieldName = (String) fieldNameMap.get(fieldName);
         
-        if (filteredFieldName == null) 
-        {
+        if (filteredFieldName == null)  {
             filteredFieldName = fieldName.replace('_','.');
             fieldNameMap.put(fieldName,filteredFieldName);
         }

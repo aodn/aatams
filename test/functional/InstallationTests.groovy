@@ -2,16 +2,14 @@ import org.junit.Test;
 
 import pages.*
 
-class InstallationTests extends GrailsCrudTest 
-{
+class InstallationTests extends GrailsCrudTest  {
     def listPage = InstallationListPage
     def showPage = InstallationShowPage
     def createPage = InstallationCreatePage
     def editPage = InstallationEditPage
     
     @Test
-    void testList()
-    {
+    void testList() {
         doTestList(3,
                    [name:"Bondi Line", configuration:"CURTAIN", project:"Seal Count", numStations:"3"],
                    [],
@@ -19,8 +17,7 @@ class InstallationTests extends GrailsCrudTest
     }
     
     @Test
-    void testShow()
-    {
+    void testShow() {
         doTestShow(
             "Bondi Line",
             [name:"Bondi Line",
@@ -29,8 +26,7 @@ class InstallationTests extends GrailsCrudTest
     }
     
     @Test
-    void testCreate()
-    {
+    void testCreate() {
         doTestCreate(
             [nameTextField:"Derwent Array",
              configurationSelect:"60",    // ARRAY
@@ -39,8 +35,7 @@ class InstallationTests extends GrailsCrudTest
     }
     
     @Test
-    void testEdit()
-    {
+    void testEdit() {
         doTestEdit("Bondi Line")
     }
 }

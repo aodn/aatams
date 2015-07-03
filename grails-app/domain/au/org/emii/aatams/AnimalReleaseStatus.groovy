@@ -7,8 +7,7 @@ package au.org.emii.aatams
  * 
  * @author jburgess
  */
-enum AnimalReleaseStatus 
-{
+enum AnimalReleaseStatus  {
     /**
      * The default status set when a release is created.
      */

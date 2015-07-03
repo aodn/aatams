@@ -3,10 +3,8 @@ package module
 import geb.Module
 import pages.PersonEditPage
 
-class ChangePasswordDialog extends Module 
-{
-    static content =
-    {
+class ChangePasswordDialog extends Module  {
+    static content = {
         rows { $("tr") }
         
         value { it.find("td.value").children()[0] }

@@ -3,22 +3,18 @@ package au.org.emii.aatams
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.test.*
 
-class AboutControllerTests extends AbstractControllerUnitTestCase 
-{
-    protected void setUp() 
-    {
+class AboutControllerTests extends AbstractControllerUnitTestCase  {
+    protected void setUp()  {
         super.setUp()
 
         permitted = true
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testUnauthenticated() 
-    {
+    void testUnauthenticated()  {
         authenticated = false
         
         controller.home()
@@ -27,8 +23,7 @@ class AboutControllerTests extends AbstractControllerUnitTestCase
         assertTrue(controller.redirectArgs.isEmpty())
     }
 
-    void testAuthenticated() 
-    {
+    void testAuthenticated()  {
         authenticated = true
         
         controller.home()

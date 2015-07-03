@@ -3,10 +3,8 @@ package module
 import geb.Module
 import pages.ProjectEditPage
 
-class AddPersonToProjectDialog extends Module 
-{
-    static content =
-    {
+class AddPersonToProjectDialog extends Module  {
+    static content = {
         rows { $("tr") }
         
         value { it.find("td.value").children()[0] }

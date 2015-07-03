@@ -11,8 +11,7 @@ import grails.converters.XML
  * Index (and meta-data) to a file which has been downloaded from a receiver as
  * part of the recovery process.
  */
-class ReceiverDownloadFile
-{
+class ReceiverDownloadFile {
     def dataSource
     def grailsApplication
 
@@ -33,8 +32,7 @@ class ReceiverDownloadFile
     static hasOne = [ progress: ReceiverDownloadFileProgress ]
     static auditable = true
 
-    static constraints =
-    {
+    static constraints = {
         type()
         requestingUser(nullable: true)    // Null for bulk import
         progress(nullable: true)
@@ -42,13 +40,11 @@ class ReceiverDownloadFile
 
     static transients = ['knownSensors', 'uniqueTransmitterIds', 'percentComplete', 'path', 'statistics' ]
 
-    static mapping =
-    {
+    static mapping = {
         errMsg type: 'text'
     }
 
-    void initialiseForProcessing(filename)
-    {
+    void initialiseForProcessing(filename) {
         errMsg = ""
         importDate = new Date()
         status = FileProcessingStatus.PROCESSING
@@ -57,38 +53,31 @@ class ReceiverDownloadFile
         progress = new ReceiverDownloadFileProgress(percentComplete: 0, receiverDownloadFile: this)
     }
 
-    String getPath()
-    {
+    String getPath() {
         // Save the file to disk.
         def path = grailsApplication.config.fileimport.path
 
-        if (!path.endsWith(File.separator))
-        {
+        if (!path.endsWith(File.separator)) {
             path = path + File.separator
         }
 
         path += (id + File.separator + name)
     }
 
-    String toString()
-    {
+    String toString() {
         return String.valueOf(path)
     }
 
-    def toXml()
-    {
+    def toXml() {
         this as XML
     }
 
-    Integer getPercentComplete()
-    {
+    Integer getPercentComplete() {
         return progress?.percentComplete
     }
 
-    void setPercentComplete(percentComplete)
-    {
-        if (!progress)
-        {
+    void setPercentComplete(percentComplete) {
+        if (!progress) {
             progress = new ReceiverDownloadFileProgress(receiverDownloadFile: this)
         }
 

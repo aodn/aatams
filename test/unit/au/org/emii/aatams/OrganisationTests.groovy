@@ -2,20 +2,16 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class OrganisationTests extends GrailsUnitTestCase 
-{
-    protected void setUp() 
-    {
+class OrganisationTests extends GrailsUnitTestCase  {
+    protected void setUp()  {
         super.setUp()
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testListActive()
-    {
+    void testListActive() {
         Organisation activeOrg1 = new Organisation(name:"active 1", status:EntityStatus.ACTIVE)
         Organisation pendingOrg1 = new Organisation(name:"pending 1", status:EntityStatus.PENDING)
         Organisation activeOrg2 = new Organisation(name:"active 2", status:EntityStatus.ACTIVE)
@@ -30,8 +26,7 @@ class OrganisationTests extends GrailsUnitTestCase
         assertTrue(activeOrgList.contains(activeOrg2))
     }
     
-    void testNullPostalAddress()
-    {
+    void testNullPostalAddress() {
         Organisation org = new Organisation(name:"org",
                                             department:"asdf",
                                             phoneNumber:"1234",
@@ -45,16 +40,14 @@ class OrganisationTests extends GrailsUnitTestCase
         assertFalse(org.validate())
     }
     
-    void testToString()
-    {
+    void testToString() {
         Organisation org = new Organisation(name: "CSIRO",
                                             department: "CMAR")
                                         
         assertEquals("CSIRO (CMAR)", String.valueOf(org))
     }
     
-    void testSortListByName()
-    {
+    void testSortListByName() {
         Organisation aaa = new Organisation(name: "aaa")
         Organisation bbb = new Organisation(name: "bbb")
         Organisation ccc = new Organisation(name: "ccc")
@@ -71,8 +64,7 @@ class OrganisationTests extends GrailsUnitTestCase
         assertEquals(ccc, retrievedOrgList[2])
     }
     
-    void testTotalReceivers()
-    {
+    void testTotalReceivers() {
         Organisation aaa = new Organisation(name: "aaa")
         Receiver r1 = new Receiver()
         Receiver r2 = new Receiver()
@@ -81,8 +73,7 @@ class OrganisationTests extends GrailsUnitTestCase
         mockDomain(Organisation, [aaa])
         mockDomain(Receiver, receiverList)
         
-        receiverList.each
-        {
+        receiverList.each {
             aaa.addToReceivers(it)
         }
        

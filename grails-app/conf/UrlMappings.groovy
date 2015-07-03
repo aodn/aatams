@@ -1,12 +1,8 @@
-class UrlMappings 
-{
+class UrlMappings  {
     
-    static mappings = 
-    {
-        "/$controller/$action?/$id?"
-        {
-            constraints 
-            {
+    static mappings =  {
+        "/$controller/$action?/$id?" {
+            constraints  {
                 // id must be numeric.
                 id(matches:/\d*/)
             }

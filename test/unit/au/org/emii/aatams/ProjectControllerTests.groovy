@@ -7,15 +7,13 @@ import au.org.emii.aatams.test.TestUtils
 import org.apache.shiro.crypto.hash.Sha256Hash
 import grails.converters.JSON
 
-class ProjectControllerTests extends AbstractControllerUnitTestCase
-{
+class ProjectControllerTests extends AbstractControllerUnitTestCase {
     Project sealCountProject
     Person joeBloggs
     Organisation activeOrg
 
     def permissionUtilsService
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
         TestUtils.setupMessage(controller)
 
@@ -124,8 +122,7 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
         mockDomain(ProjectRole)
     }
 
-    void testListAsSysAdmin()
-    {
+    void testListAsSysAdmin() {
         hasRole = true
 
         def retVal = controller.list()
@@ -133,8 +130,7 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
                      retVal.projectInstanceTotal)
     }
 
-    void testListAsNonSysAdmin()
-    {
+    void testListAsNonSysAdmin() {
         hasRole = false
 
         def retVal = controller.list()
@@ -143,14 +139,12 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
         assertTrue(retVal.projectInstanceList.contains(sealCountProject))
     }
 
-    void testSaveAsSysAdmin()
-    {
+    void testSaveAsSysAdmin() {
         hasRole = true
 
         boolean mailSent = false
 
-        controller.metaClass.sendCreationNotificationEmails =
-        {
+        controller.metaClass.sendCreationNotificationEmails = {
             mailSent = true
         }
         // Status should be set to ACTIVE and no mail sent.
@@ -170,15 +164,13 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
         assertFalse(mailSent)
     }
 
-    void testSaveAsNonSysAdmin()
-    {
+    void testSaveAsNonSysAdmin() {
         // Status should be set to PENDING and mail sent.
         hasRole = false
 
         boolean mailSent = false
 
-        controller.metaClass.sendCreationNotificationEmails =
-        {
+        controller.metaClass.sendCreationNotificationEmails = {
             mailSent = true
         }
 
@@ -198,8 +190,7 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
         assertTrue(mailSent)
     }
 
-    void testUpdateAsSysAdmin()
-    {
+    void testUpdateAsSysAdmin() {
         hasRole = true
 
         mockParams.id = sealCountProject.id
@@ -212,8 +203,7 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
         assertTrue sealCountProject.isProtected
     }
 
-    void testUpdateAsNonSysAdmin()
-    {
+    void testUpdateAsNonSysAdmin() {
         hasRole = false
 
         mockParams.id = sealCountProject.id
@@ -226,8 +216,7 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
         assertFalse sealCountProject.isProtected
     }
 
-    void testLookupByName()
-    {
+    void testLookupByName() {
         assertLookupWithTerm(0, 'X')
         assertLookupWithTerm(1, 'S')
         assertLookupWithTerm(1, 's')
@@ -237,8 +226,7 @@ class ProjectControllerTests extends AbstractControllerUnitTestCase
         assertLookupWithTerm(3, 'a')
     }
 
-    private assertLookupWithTerm(expectedNumResults, term)
-    {
+    private assertLookupWithTerm(expectedNumResults, term) {
         controller.params.term = term
         controller.lookupByName()
 

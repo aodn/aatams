@@ -5,8 +5,7 @@ import groovy.sql.Sql
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
-class DetectionController extends ReportController
-{
+class DetectionController extends ReportController {
     def candidateEntitiesService
     def dataSource
     def detectionExtractService
@@ -17,22 +16,17 @@ class DetectionController extends ReportController
         redirect(action: "list", params: params)
     }
 
-    def list =
-    {
+    def list = {
         params.max = params.max ?: grailsApplication.config.grails.gorm.default.list.nonPaginatedMax
         doList("detection")
     }
 
-    protected def displayCountMessage(resultList, queryName)
-    {
+    protected def displayCountMessage(resultList, queryName) {
     }
 
-    protected void cleanDateParams()
-    {
-        [1, 2].each
-        {
-            if (params["filter.between." + it] && params["filter.between." + it].class == String)
-            {
+    protected void cleanDateParams() {
+        [1, 2].each {
+            if (params["filter.between." + it] && params["filter.between." + it].class == String) {
                 // Thu Jun 18 12:38:00 EST 2009
                 DateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy")
                 def dateAsString = params["filter.between." + it]
@@ -45,8 +39,7 @@ class DetectionController extends ReportController
         }
     }
 
-    protected def getResultList(queryName)
-    {
+    protected def getResultList(queryName) {
         params.sql = new Sql(dataSource)
         params.projectPermissionCache = [:]
         params.limit = params.max
@@ -71,21 +64,17 @@ class DetectionController extends ReportController
         [ results: detections ]
     }
 
-    def export =
-    {
-        if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export))
-        {
+    def export = {
+        if (['KMZ', 'KMZ (tag tracks)', 'KMZ (bubble plot)'].contains(params._action_export)) {
             //            doExport("detection")
             assert(false): "This is functionality is currently disabled, in order to implement to 'Protected Species' feature."
         }
-        else
-        {
+        else {
             detectionExtractService.generateReport(params, request, response)
         }
     }
 
-    def create =
-    {
+    def create = {
         redirect(controller:"receiverDownloadFile",
                  action:"createDetections")
     }

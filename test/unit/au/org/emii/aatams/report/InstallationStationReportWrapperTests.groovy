@@ -8,8 +8,7 @@ import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
 import com.vividsolutions.jts.geom.Point
 
-class InstallationStationReportWrapperTests extends GrailsUnitTestCase 
-{
+class InstallationStationReportWrapperTests extends GrailsUnitTestCase  {
     InstallationStation station
     
     def projectName = "The project"
@@ -21,8 +20,7 @@ class InstallationStationReportWrapperTests extends GrailsUnitTestCase
     def stationLat = 42.45f
     def stationLon = 34.33f
 
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         def project = new Project(name:projectName)
@@ -40,13 +38,11 @@ class InstallationStationReportWrapperTests extends GrailsUnitTestCase
                                     installation:installation)
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testWrapper()
-    {
+    void testWrapper() {
         def wrapper = new InstallationStationReportWrapper(station)
         
         assertEquals(installationName, wrapper.installationName)
@@ -58,8 +54,7 @@ class InstallationStationReportWrapperTests extends GrailsUnitTestCase
         assertEquals(stationLon, wrapper.stationLongitude)
     }                        
         
-    void testWrapperNullCurtainPos()
-    {
+    void testWrapperNullCurtainPos() {
         station.curtainPosition = null
         def wrapper = new InstallationStationReportWrapper(station)
         

@@ -2,17 +2,14 @@ package pages
 
 import module.InstallationStationRow
 
-class InstallationStationListPage extends ListPage 
-{
+class InstallationStationListPage extends ListPage  {
     static url = "installationStation/list"
     
-    static at =
-    {
+    static at = {
         title == "Installation Station List"
     }
     
-    static content =
-    {
+    static content = {
         stationTable { $("div.list table", 0) }
         rowsAsTr(required: false) { stationTable.find("tbody").find("tr") }
         detailRows { rowsAsTr.collect { module InstallationStationRow, it } }

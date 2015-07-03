@@ -20,16 +20,13 @@ import shiro.*
  *
  * @author jburgess
  */
-class DevelopmentDataInitialiser extends AbstractDataInitialiser
-{
-    void execute()
-    {
+class DevelopmentDataInitialiser extends AbstractDataInitialiser {
+    void execute() {
         initData()
         initProtectedSpeciesData()
     }
 
-    def initData()
-    {
+    def initData() {
         TransmitterType pinger =
             new TransmitterType(transmitterTypeName:"PINGER").save(failOnError:true)
         assert(!pinger.hasErrors())
@@ -219,15 +216,13 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         // Project Roles.
         //
         ProjectRoleType principalInvestigator = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
-        if (!principalInvestigator)
-        {
+        if (!principalInvestigator) {
             principalInvestigator =
                 new ProjectRoleType(displayName:ProjectRoleType.PRINCIPAL_INVESTIGATOR).save(failOnError: true)
         }
 
         ProjectRoleType administrator = ProjectRoleType.findByDisplayName('Administrator')
-        if (!administrator)
-        {
+        if (!administrator) {
             administrator =
                 new ProjectRoleType(displayName:'Administrator').save(failOnError: true)
         }
@@ -841,8 +836,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
                                      requestingUser:jonBurgess).save(failOnError:true)
 
         DateTime eventDate = new DateTime("2013-05-17T12:54:56")
-        10.times
-        {
+        10.times {
             ValidReceiverEvent event =
                 new ValidReceiverEvent(timestamp:eventDate.plusMinutes(it).toDate(),
                                   receiverDeployment:rx2Bondi,
@@ -854,8 +848,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
             export2.addToEvents(event)
         }
 
-        5.times
-        {
+        5.times {
             ValidReceiverEvent event =
                 new ValidReceiverEvent(timestamp:eventDate.plusMinutes(it).toDate(),
                                   receiverDeployment:rx3Ningaloo,
@@ -870,8 +863,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         export2.save(failOnError:true)
     }
 
-    def initProtectedSpeciesData()
-    {
+    def initProtectedSpeciesData() {
         //
         // Projects.
         //
@@ -1141,8 +1133,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         ).save(failOnError: true)
     }
 
-    private void createExportWithDetections(String exportName, Person uploader, ReceiverDeployment deployment, Receiver receiver, tag, int numDetections)
-    {
+    private void createExportWithDetections(String exportName, Person uploader, ReceiverDeployment deployment, Receiver receiver, tag, int numDetections) {
         ReceiverDownloadFile export =
             new ReceiverDownloadFile(type:ReceiverDownloadFileType.DETECTIONS_CSV,
                                      name:exportName,
@@ -1178,14 +1169,11 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         }
     }
 
-    private void createCodeMaps()
-    {
-        ["A69", "A180"].each
-        {
+    private void createCodeMaps() {
+        ["A69", "A180"].each {
             freq ->
 
-            ["1303", "1601", "9001", "9003", "1206", "1105", "9002", "9004"].each
-            {
+            ["1303", "1601", "9001", "9003", "1206", "1105", "9002", "9004"].each {
                 codeSpace ->
 
                 CodeMap codeMap = new CodeMap(codeMap:freq + "-" + codeSpace).save(failOnError:true, flush:true)
@@ -1193,8 +1181,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser
         }
     }
 
-    private Tag createTag(params)
-    {
+    private Tag createTag(params) {
         TransmitterType pinger =
             TransmitterType.findByTransmitterTypeName("PINGER")
         assert(pinger)

@@ -49,15 +49,13 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         }.findAll { it }
     }
 
-    protected void writeCsvData(final filterParams, OutputStream out)
-    {
+    protected void writeCsvData(final filterParams, OutputStream out) {
         filterParams.projectPermissionCache = [:]
 
         super.writeCsvData(filterParams, out)
     }
 
-    protected def writeCsvRows(params, closure)
-    {
+    protected def writeCsvRows(params, closure) {
         def startTime = System.currentTimeMillis()
         def query =  new DetectionQueryBuilder().constructQuery(params)
         def releaseIsProtectedCache = [:]
@@ -85,8 +83,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         log.debug("Export finished, num results: ${count}, elapsed time (ms): ${endTime - startTime}, query: ${query}")
     }
 
-    protected def writeCsvRow(detection, OutputStream out)
-    {
+    protected def writeCsvRow(detection, OutputStream out) {
         def formattedCols = []
 
         formattedCols << detection.csvFormattedTimestamp
@@ -105,8 +102,7 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         out << formattedCols.join(',') << '\n'
     }
 
-    protected void writeCsvHeader(OutputStream out)
-    {
+    protected void writeCsvHeader(OutputStream out) {
         out << "timestamp,"
         out << "station name,"
         out << "latitude,"

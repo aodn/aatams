@@ -105,8 +105,7 @@ class SpeciesController {
     /**
      * Allows auto-complete functionality on front-end.
      */
-    def lookupByName =
-    {
+    def lookupByName = {
         log.debug("Looking up species, name: " + params.term)
         
         // Delegate to the species service (limit to the first 25 items
@@ -116,8 +115,7 @@ class SpeciesController {
         // Fix for #1729 - remove duplicates (matched in both speciesService.lookup() and findAllByNameIlike() above).
         species = species.unique()
         
-        if (species.size() > 20)
-        {
+        if (species.size() > 20) {
             species = species[0..19]
         }
         
@@ -125,11 +123,9 @@ class SpeciesController {
         render species as JSON
     }
     
-    def lookupByNameAndReturnSpcode =
-    {
+    def lookupByNameAndReturnSpcode = {
         def species = speciesService.lookup(params.term)
-        def jsonResults = species.collect 
-        {
+        def jsonResults = species.collect  {
             [label:it.toString(), value:it.spcode]
         }
         render(jsonResults as JSON)

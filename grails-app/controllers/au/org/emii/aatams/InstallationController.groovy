@@ -3,8 +3,7 @@ package au.org.emii.aatams
 import au.org.emii.aatams.report.ReportController
 import grails.converters.JSON
 
-class InstallationController extends ReportController
-{
+class InstallationController extends ReportController {
     def candidateEntitiesService
     def grailsApplication
     
@@ -14,13 +13,11 @@ class InstallationController extends ReportController
         redirect(action: "list", params: params)
     }
 
-    def list = 
-    {
+    def list =  {
         doList("installation")
     }
     
-    def export =
-    {
+    def export = {
         doExport("installation")
     }
 
@@ -63,8 +60,7 @@ class InstallationController extends ReportController
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'installation.label', default: 'Installation'), params.id])}"
             redirect(action: "list")
         }
-        else 
-        {
+        else  {
             def model = [installationInstance: installationInstance]
             model.candidateProjects = candidateEntitiesService.projects()
             return model
@@ -117,8 +113,7 @@ class InstallationController extends ReportController
         }
     }
     
-    def lookupByName =
-    {
+    def lookupByName = {
         def matches = Installation.findAllByNameIlike('%' + params.term + '%')
         render(matches as JSON) 
     }

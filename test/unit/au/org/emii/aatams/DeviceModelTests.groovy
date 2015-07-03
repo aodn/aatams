@@ -2,8 +2,7 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class DeviceModelTests extends GrailsUnitTestCase 
-{
+class DeviceModelTests extends GrailsUnitTestCase  {
     DeviceModel vemcoVR2
     DeviceModel vemcoVR2W
     DeviceModel vemcoVR3UWM
@@ -16,8 +15,7 @@ class DeviceModelTests extends GrailsUnitTestCase
     DeviceModel vemcoV13
     DeviceModel vemcoV16
     
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         DeviceManufacturer vemco = 
@@ -56,13 +54,11 @@ class DeviceModelTests extends GrailsUnitTestCase
         tagModels.each { it.save() }
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testTagDeviceModelList() 
-    {
+    void testTagDeviceModelList()  {
         def tagList = TagDeviceModel.list()
         
         assertEquals(7, tagList.size())
@@ -76,8 +72,7 @@ class DeviceModelTests extends GrailsUnitTestCase
         assertTrue(tagList.contains(vemcoV16))
     }
 
-    void testReceiverDeviceModelList() 
-    {
+    void testReceiverDeviceModelList()  {
         def receiverList = ReceiverDeviceModel.list()
         
         assertEquals(3, receiverList.size())

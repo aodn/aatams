@@ -5,10 +5,8 @@ import geb.Module
 import pages.ProjectEditPage
 import pages.ProjectShowPage
 
-class EditableProjectRoleRow extends Module 
-{
-    static content =
-    {
+class EditableProjectRoleRow extends Module  {
+    static content = {
         cell { $("td", it) }
         cellText { cell(it).text() }
         

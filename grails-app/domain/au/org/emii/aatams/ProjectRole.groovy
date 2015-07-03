@@ -6,14 +6,12 @@ package au.org.emii.aatams
  * Each project must have one and only one Project Investigator (who is 
  * implicitly the main contact person for the project).
  */
-class ProjectRole 
-{
+class ProjectRole  {
     static belongsTo = [project:Project, person:Person]
     static transients = ['projectAndRole']
     static hasMany = [recoveries:ReceiverRecovery]
     
-    static searchable =
-    {
+    static searchable = {
         root(false)
         person(component:true)
         project(component:true)
@@ -23,13 +21,11 @@ class ProjectRole
     
     ProjectAccess access
     
-    String toString()
-    {
+    String toString() {
         return getProjectAndRole() + ": " + String.valueOf(person)
     }
     
-    String getProjectAndRole()
-    {
+    String getProjectAndRole() {
         return String.valueOf(project) + " - " + String.valueOf(roleType)
     }
 }

@@ -2,32 +2,27 @@ package au.org.emii.aatams.filter
 
 import grails.test.*
 
-class QueryServiceTests extends GrailsUnitTestCase 
-{
+class QueryServiceTests extends GrailsUnitTestCase  {
     def queryService
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         mockLogging(QueryService, true)
         queryService = new QueryService()
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testTransformParamsWithoutCriteria()
-    {
+    void testTransformParamsWithoutCriteria() {
         def params = [filter: [eq: ["curtainPosition", 1]], sort: "name", order: "asc"]
         def expectedParams = [filter: [eq: ["curtainPosition", 1], order: ["name", "asc"]]]
         
         assertEquals(expectedParams, queryService.transformParams(params))
     }
 
-    void testTransformParamsAssociationWithoutCriteria()
-    {
+    void testTransformParamsAssociationWithoutCriteria() {
         def params = [filter: [eq: ["curtainPosition", 1]], sort: "installation.name", order: "asc"]
         def expectedParams = 
         [
@@ -44,8 +39,7 @@ class QueryServiceTests extends GrailsUnitTestCase
         assertEquals(expectedParams, queryService.transformParams(params))
     }
 
-    void testTransformParamsWithCriteria() 
-    {
+    void testTransformParamsWithCriteria()  {
         def params =
         [
             sort: "station.installation.project.name", 
@@ -92,32 +86,28 @@ class QueryServiceTests extends GrailsUnitTestCase
         assertEquals(expectedTransformedParams, queryService.transformParams(params))
     }
     
-    void testRemoveDottedKeyNames()
-    {
+    void testRemoveDottedKeyNames() {
         def params = [filter: ["station.eq": ["name", "Seal Count"], station: [eq: ["name", "Seal Count"]]]]
         def expectedParams = [filter: [station: [eq: ["name", "Seal Count"]]]]
         
         assertEquals(expectedParams, queryService.transformParams(params))
     }
 
-    void testRemoveBlankValues()
-    {
+    void testRemoveBlankValues() {
         def params = [filter: [station: [eq: ["name", "Bondi SW1"], installation: [eq: ["name", ""] as Object[]]]]]
         def expectedParams = [filter: [station: [eq: ["name", "Bondi SW1"]]]]
         
         assertEquals(expectedParams, queryService.transformParams(params))
     }
 
-    void testRemoveNullValues()
-    {
+    void testRemoveNullValues() {
         def params = [filter: [station: [installation: [eq: ["name", null]]]], action:"list", controller:"installation", max:20]
         def expectedParams = [action:"list", controller:"installation", max:20, filter: [:]]
         
         assertEquals(expectedParams, queryService.transformParams(params))
     }
 
-    void testIntegerValues()
-    {
+    void testIntegerValues() {
         def params = [filter: [station: [eq: ["curtainPosition", 1]]], max: 1]
         def expectedParams = [filter: [station: [eq: ["curtainPosition", 1]]], max: 1]
         

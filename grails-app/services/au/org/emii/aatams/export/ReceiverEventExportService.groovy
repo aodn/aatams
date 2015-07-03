@@ -3,17 +3,14 @@ package au.org.emii.aatams.export
 import au.org.emii.aatams.ReceiverEventQueryBuilder
 import au.org.emii.aatams.ValidReceiverEvent
 
-class ReceiverEventExportService extends AbstractStreamingExporterService
-{
+class ReceiverEventExportService extends AbstractStreamingExporterService {
     def queryService
 
-    protected String getReportName()
-    {
+    protected String getReportName() {
         return "receiverEvent"
     }
 
-    protected def writeCsvRows(params, closure)
-    {
+    protected def writeCsvRows(params, closure) {
         def startTime = System.currentTimeMillis()
         def query =  new ReceiverEventQueryBuilder().constructQuery(params)
         int count = 0
@@ -27,8 +24,7 @@ class ReceiverEventExportService extends AbstractStreamingExporterService
         log.debug("Export finished, num results: ${count}, elapsed time (ms): ${endTime - startTime}, query: ${query}")
     }
 
-    protected def writeCsvRow(row, OutputStream out)
-    {
+    protected def writeCsvRow(row, OutputStream out) {
         out << row.station << ","
         out << row.receiver_name << ","
         out << row.formatted_timestamp << ","
@@ -37,8 +33,7 @@ class ReceiverEventExportService extends AbstractStreamingExporterService
         out << row.units << "\n"
     }
 
-    protected void writeCsvHeader(OutputStream out)
-    {
+    protected void writeCsvHeader(OutputStream out) {
         out << "station name,receiver ID,timestamp,description,data,units\n"
     }
 }

@@ -7,12 +7,10 @@ import org.joda.time.*
 import java.util.Calendar
 import java.util.Date
 
-class AnimalReleaseSummaryServiceTests extends GrailsUnitTestCase 
-{
+class AnimalReleaseSummaryServiceTests extends GrailsUnitTestCase  {
     def service
     
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         mockLogging(AnimalReleaseSummaryService, true)
@@ -51,35 +49,29 @@ class AnimalReleaseSummaryServiceTests extends GrailsUnitTestCase
         releaseList.each { it.save() }
     }
 
-    private Date tomorrow()
-    {
+    private Date tomorrow() {
         Calendar cal = Calendar.getInstance()
         cal.add(Calendar.DAY_OF_YEAR, 1)
         return cal.getTime()
     }
     
-    private DateTime now()
-    {
+    private DateTime now() {
         return new DateTime()
     }
 
-    private DateTime fiftyDaysAgo()
-    {
+    private DateTime fiftyDaysAgo() {
         return now().minusDays(50)
     }
     
-    private DateTime lastYear()
-    {
+    private DateTime lastYear() {
         return now().minusYears(1)
     }
     
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testCountBySpecies()
-    {
+    void testCountBySpecies() {
         def result = service.countBySpecies()
 
         assertEquals(3, result.size())
@@ -104,8 +96,7 @@ class AnimalReleaseSummaryServiceTests extends GrailsUnitTestCase
         assertTrue(count2.percentEmbargoed - 0 < 0.01)
     }
     
-    void testSummary()
-    {
+    void testSummary() {
         def result = service.summary()
         
         assertEquals(50, result["% embargoed"])

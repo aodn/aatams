@@ -8,10 +8,8 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
  *
  * @author jburgess
  */
-class TestUtils
-{
-    static setupMessage(controller)
-    {
+class TestUtils {
+    static setupMessage(controller) {
         controller.metaClass.message = { LinkedHashMap args -> return "${args.code}" }
     }
 

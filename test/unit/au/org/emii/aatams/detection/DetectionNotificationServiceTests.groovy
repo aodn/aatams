@@ -6,13 +6,11 @@ import au.org.emii.aatams.Sensor
 import grails.test.*
 import org.springframework.context.support.DelegatingMessageSource
 
-class DetectionNotificationServiceTests extends GrailsUnitTestCase
-{
+class DetectionNotificationServiceTests extends GrailsUnitTestCase {
      def messageSource
     def detectionNotificationService
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockDomain(Sensor)
@@ -23,12 +21,10 @@ class DetectionNotificationServiceTests extends GrailsUnitTestCase
         detectionNotificationService.messageSource = messageSource
     }
 
-    void testNotificationEmailSent()
-    {
+    void testNotificationEmailSent() {
         mockLogging(ReceiverDownloadFile)
         mockDomain(ReceiverDownloadFile)
-        ReceiverDownloadFile.metaClass.getUniqueTransmitterIds =
-        {
+        ReceiverDownloadFile.metaClass.getUniqueTransmitterIds = {
 
         }
 
@@ -47,22 +43,18 @@ class DetectionNotificationServiceTests extends GrailsUnitTestCase
 
         int sendEmailToPersonCallCount = 0
 
-        detectionNotificationService.metaClass.sendDetectionNotificationEmailToPerson =
-        {
+        detectionNotificationService.metaClass.sendDetectionNotificationEmailToPerson = {
             recipient, sensors, downloadFile ->
 
-            if (sendEmailToPersonCallCount == 0)
-            {
+            if (sendEmailToPersonCallCount == 0) {
                 assertEquals('adam', recipient.name)
                 assertContainsAll([1, 2], sensors*.id)
             }
-            else if (sendEmailToPersonCallCount == 1)
-            {
+            else if (sendEmailToPersonCallCount == 1) {
                 assertEquals('bruce', recipient.name)
                 assertContainsAll([3], sensors*.id)
             }
-            else
-            {
+            else {
                 fail()
             }
 
@@ -74,8 +66,7 @@ class DetectionNotificationServiceTests extends GrailsUnitTestCase
         assertEquals(2, sendEmailToPersonCallCount)
     }
 
-    private assertContainsAll(listA, listB)
-    {
+    private assertContainsAll(listA, listB) {
         assertEquals(listA.size(), listB.size())
         assertTrue(listA.containsAll(listB))
         assertTrue(listB.containsAll(listA))

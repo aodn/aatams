@@ -2,23 +2,19 @@ package au.org.emii.aatams
 
 import org.apache.shiro.SecurityUtils
 
-class VisibilityControlService
-{
+class VisibilityControlService {
     static transactional = false
 
     def permissionUtilsService
 
     private Map<Integer, Boolean> projectPermissionCache = [:]
 
-    public void clearCache()
-    {
+    public void clearCache() {
         projectPermissionCache.clear()
     }
 
-    List applyVisibilityControls(Class domain, List itemsToControl)
-    {
-        if (!Arrays.asList(domain.getInterfaces()).contains(Embargoable.class))
-        {
+    List applyVisibilityControls(Class domain, List itemsToControl) {
+        if (!Arrays.asList(domain.getInterfaces()).contains(Embargoable.class)) {
             return itemsToControl
         }
 
@@ -29,35 +25,29 @@ class VisibilityControlService
      * Filter embargoed entities from the given list, where the user doesn't
      * have sufficient permissions.
      */
-    List applyVisibilityControls(List embargoees)
-    {
+    List applyVisibilityControls(List embargoees) {
         clearCache()
 
-        def retList = embargoees.collect
-        {
+        def retList = embargoees.collect {
             applyVisibilityControls(it)
         }
 
-        retList.removeAll
-        {
+        retList.removeAll {
             it == null
         }
 
        return retList
     }
 
-    private boolean hasReadPermission(itemToControl)
-    {
+    private boolean hasReadPermission(itemToControl) {
         def projectId = itemToControl.project?.id
 
         // Some detections have no related project, as far as embargoes go.
-        if (projectId == null)
-        {
+        if (projectId == null) {
             return true
         }
 
-        if (!projectPermissionCache.containsKey(projectId))
-        {
+        if (!projectPermissionCache.containsKey(projectId)) {
             String permissionString = permissionUtilsService.buildProjectReadPermission(projectId)
             projectPermissionCache.put(projectId, SecurityUtils.subject.isPermitted(permissionString))
         }
@@ -66,15 +56,12 @@ class VisibilityControlService
         return projectPermissionCache[projectId]
     }
 
-    Object applyVisibilityControls(Object itemToControl)
-    {
-        if (!(itemToControl instanceof Embargoable))
-        {
+    Object applyVisibilityControls(Object itemToControl) {
+        if (!(itemToControl instanceof Embargoable)) {
             return itemToControl
         }
 
-        if (hasReadPermission(itemToControl))
-        {
+        if (hasReadPermission(itemToControl)) {
             return itemToControl
         }
 
@@ -83,8 +70,7 @@ class VisibilityControlService
 
     boolean isAccessControlled(Embargoable embargoee) {
 
-        if (embargoee == null)
-        {
+        if (embargoee == null) {
             return false
         }
 

@@ -2,10 +2,8 @@ package module
 
 import geb.Module;
 
-class PointEditDialog extends Module 
-{
-    static content =
-    {
+class PointEditDialog extends Module  {
+    static content = {
         rows { $("tr") }
         
         value { it.find("td.value").children()[0] }

@@ -4,8 +4,7 @@ import org.codehaus.groovy.grails.commons.*
 import org.springframework.web.multipart.MultipartFile
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
-class FileProcessorService
-{
+class FileProcessorService {
     static transactional = true
 
     def vueDetectionFileProcessorService
@@ -19,8 +18,7 @@ class FileProcessorService
      */
     private static final CSV_CONTENT_TYPES = ["text/csv", "text/plain"]
 
-    void process(receiverDownloadFileId, MultipartFile file, showLink) throws FileProcessingException
-    {
+    void process(receiverDownloadFileId, MultipartFile file, showLink) throws FileProcessingException {
         log.debug("Processing receiver export, download file ID: " + receiverDownloadFileId + ", content type: " + file.getContentType())
 
         def receiverDownloadFile = ReceiverDownloadFile.get(receiverDownloadFileId)
@@ -32,8 +30,7 @@ class FileProcessorService
         saveToDiskAndProcess(receiverDownloadFile, file,showLink)
     }
 
-    private void saveToDiskAndProcess(ReceiverDownloadFile receiverDownloadFile, MultipartFile file, showLink) throws FileProcessingException
-    {
+    private void saveToDiskAndProcess(ReceiverDownloadFile receiverDownloadFile, MultipartFile file, showLink) throws FileProcessingException {
         log.debug("Creating file at path: " + receiverDownloadFile.path)
         File outFile = new File(receiverDownloadFile.path)
 
@@ -43,10 +40,8 @@ class FileProcessorService
         // ... then transfer the data.
         file.transferTo(outFile)
 
-        try
-        {
-            switch (receiverDownloadFile.type)
-            {
+        try {
+            switch (receiverDownloadFile.type) {
                 case ReceiverDownloadFileType.DETECTIONS_CSV:
 
                     // Delegate to VUE Detection Processor...
@@ -71,8 +66,7 @@ class FileProcessorService
 
             log.info "Finished processing."
         }
-        catch (Throwable e)
-        {
+        catch (Throwable e) {
             log.error("Error processing file", e)
             receiverDownloadFile.status = FileProcessingStatus.ERROR
             receiverDownloadFile.errMsg = String.valueOf(e)
@@ -80,21 +74,17 @@ class FileProcessorService
 
             throw e
         }
-        finally
-        {
+        finally {
             sendNotification(receiverDownloadFile, showLink)
         }
     }
 
-    boolean isParseable(downloadFile)
-    {
+    boolean isParseable(downloadFile) {
         return true
     }
 
-    def sendNotification(receiverDownloadFile, showLink)
-    {
-        mailService.sendMail
-        {
+    def sendNotification(receiverDownloadFile, showLink) {
+        mailService.sendMail {
             // Required to avoid hibernate exception, since session is flushed and cleared above.
             receiverDownloadFile = ReceiverDownloadFile.get(receiverDownloadFile.id)
             to receiverDownloadFile?.requestingUser?.emailAddress
@@ -107,10 +97,8 @@ class FileProcessorService
         }
     }
 
-    private void validateContent(ReceiverDownloadFile receiverDownloadFile, MultipartFile file) throws FileProcessingException
-    {
-        if (file.isEmpty())
-        {
+    private void validateContent(ReceiverDownloadFile receiverDownloadFile, MultipartFile file) throws FileProcessingException {
+        if (file.isEmpty()) {
             def errMsg = "File is empty"
             log.error(errMsg)
             throw new FileProcessingException(errMsg)
@@ -120,8 +108,7 @@ class FileProcessorService
 
         // See: http://blog.futtta.be/2009/08/24/http-upload-mime-type-hell/ as to why we're no longer validating mime-type
 
-        if (!file.getOriginalFilename().endsWith(ReceiverDownloadFileType.getExtension(receiverDownloadFile.type)))
-        {
+        if (!file.getOriginalFilename().endsWith(ReceiverDownloadFileType.getExtension(receiverDownloadFile.type))) {
             def errMsg = "Invalid " + ReceiverDownloadFileType.getCategory(receiverDownloadFile.type) + \
                          " filename (" + file.getOriginalFilename() + ") - must have extension \"." + ReceiverDownloadFileType.getExtension(receiverDownloadFile.type) + "\"."
             throw new FileProcessingException(errMsg)

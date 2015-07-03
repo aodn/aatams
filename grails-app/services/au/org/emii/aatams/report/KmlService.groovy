@@ -10,8 +10,7 @@ import org.apache.commons.io.IOUtils
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 
-class KmlService implements ApplicationContextAware
-{
+class KmlService implements ApplicationContextAware {
     static transactional = false
 
     ApplicationContext applicationContext
@@ -20,8 +19,7 @@ class KmlService implements ApplicationContextAware
     def grailsApplication
     def queryService
 
-    void export(Class clazz, Map params, OutputStream out)
-    {
+    void export(Class clazz, Map params, OutputStream out) {
         assert(isSupportedFormat(params.format))
 
         if (params.format == 'KMZ') {
@@ -33,8 +31,7 @@ class KmlService implements ApplicationContextAware
         }
     }
 
-    Kml toKml(List<InstallationStation> stations)
-    {
+    Kml toKml(List<InstallationStation> stations) {
         final Kml kml = new Kml()
         Document doc = kml.createAndSetDocument()
 
@@ -43,15 +40,13 @@ class KmlService implements ApplicationContextAware
             .withIconStyle(new IconStyle().withScale(1.0).withHeading(0.0).withIcon(new Icon().withHref("files/station.png")))
             .withLabelStyle(new LabelStyle().withScale(0.0))
 
-        def projects = stations*.installation*.project.unique().sort()
-        {
+        def projects = stations*.installation*.project.unique().sort() {
             a, b ->
 
             a.name <=> b.name
         }
 
-        projects.each
-        {
+        projects.each {
             project ->
 
             Folder projectFolder = project.toKmlFolder()
@@ -61,19 +56,16 @@ class KmlService implements ApplicationContextAware
         return kml
     }
 
-    public boolean isSupportedFormat(String format)
-    {
+    public boolean isSupportedFormat(String format) {
         return ["KML", "KMZ"].contains(format)
     }
 
-    public Kml generateKml(clazz, params)
-    {
+    public Kml generateKml(clazz, params) {
         def result = queryService.query(clazz, params, true).results
         return toKml(result)
     }
 
-    public void generateKmz(kml, out)
-    {
+    public void generateKmz(kml, out) {
         ZipOutputStream kmzStream = new ZipOutputStream(out)
 
         // Write KML file itself.
@@ -98,8 +90,7 @@ class KmlService implements ApplicationContextAware
             "files/red_fish.png": getRedFishIconStream(),
             "files/station.png": getStationIconStream(),
             "files/circle.png": getCircleIconStream()
-        ].each
-         {
+        ].each {
             k, v ->
 
             addZipEntry(kmzStream, k, v)
@@ -108,45 +99,37 @@ class KmlService implements ApplicationContextAware
         kmzStream.close()
     }
 
-    private addZipEntry(kmzStream, entryName, entryStream)
-    {
+    private addZipEntry(kmzStream, entryName, entryStream) {
         ZipEntry entry = new ZipEntry(entryName)
         kmzStream.putNextEntry(entry)
 
-        if (entryStream)
-        {
+        if (entryStream) {
             IOUtils.copy(entryStream, kmzStream)
             kmzStream.closeEntry()
         }
     }
 
-    private InputStream getMainCssStream()
-    {
+    private InputStream getMainCssStream() {
         return applicationContext.getResource("/css/main.css").getInputStream()
     }
 
-    private InputStream getImosLogoStream()
-    {
+    private InputStream getImosLogoStream() {
         return applicationContext.getResource("/images/IMOS-logo.png").getInputStream()
     }
 
-    private InputStream getFishIconStream()
-    {
+    private InputStream getFishIconStream() {
         return applicationContext.getResource("/images/fish.png").getInputStream()
     }
 
-    private InputStream getRedFishIconStream()
-    {
+    private InputStream getRedFishIconStream() {
         return applicationContext.getResource("/images/red_fish.png").getInputStream()
     }
 
-    private InputStream getStationIconStream()
-    {
+    private InputStream getStationIconStream() {
         return applicationContext.getResource("/images/station.png").getInputStream()
     }
 
-    private InputStream getCircleIconStream()
-    {
+    private InputStream getCircleIconStream() {
         return applicationContext.getResource("/images/circle.png").getInputStream()
     }
 }

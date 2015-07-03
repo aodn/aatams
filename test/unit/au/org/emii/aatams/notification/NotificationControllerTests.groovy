@@ -8,8 +8,7 @@ import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import org.joda.time.*
 
-class NotificationControllerTests extends AbstractControllerUnitTestCase 
-{
+class NotificationControllerTests extends AbstractControllerUnitTestCase  {
     def notificationService
     def person
     def otherPerson
@@ -20,8 +19,7 @@ class NotificationControllerTests extends AbstractControllerUnitTestCase
     
     def permissionUtilsService
 
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         mockDomain(Notification)
@@ -71,18 +69,15 @@ class NotificationControllerTests extends AbstractControllerUnitTestCase
         notificationList.each { it.save() }
     }
     
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return person.id
     }
     
-    void testAcknowledgeNoKey() 
-    {
+    void testAcknowledgeNoKey()  {
         controller.acknowledge()
      
         def jsonResponse = JSON.parse(controller.response.contentAsString)
@@ -91,8 +86,7 @@ class NotificationControllerTests extends AbstractControllerUnitTestCase
         assertFalse(jsonResponse.result)
     }
     
-    void testAcknowledgeValidKey() 
-    {
+    void testAcknowledgeValidKey()  {
         controller.params.key = "GETTING_STARTED"
         controller.acknowledge()
      
@@ -102,8 +96,7 @@ class NotificationControllerTests extends AbstractControllerUnitTestCase
         assertTrue(jsonResponse.result)
     }
 
-    void testAcknowledgeInvalidKey() 
-    {
+    void testAcknowledgeInvalidKey()  {
         controller.params.key = "XYZ"
         controller.acknowledge()
      
@@ -113,8 +106,7 @@ class NotificationControllerTests extends AbstractControllerUnitTestCase
         assertFalse(jsonResponse.result)
     }
     
-    void testAcknowledgeUnathenticated()
-    {
+    void testAcknowledgeUnathenticated() {
         authenticated = false
         hasRole = false
         permitted = false

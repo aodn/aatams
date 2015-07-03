@@ -7,8 +7,7 @@ import au.org.emii.aatams.Species
  * 
  * @author jburgess
  */
-class AnimalReleaseCount 
-{
+class AnimalReleaseCount  {
     Species species
     
     Long currentReleases

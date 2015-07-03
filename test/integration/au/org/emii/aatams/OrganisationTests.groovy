@@ -3,20 +3,16 @@ package au.org.emii.aatams
 import grails.test.*
 import org.joda.time.DateTimeZone
 
-class OrganisationTests extends GroovyTestCase 
-{
-    protected void setUp() 
-    {
+class OrganisationTests extends GroovyTestCase  {
+    protected void setUp()  {
         super.setUp()
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testDelete() 
-    {
+    void testDelete()  {
         Organisation personsOrg = 
             new Organisation(name:'personsOrg', 
                              department:'dep',
@@ -67,13 +63,11 @@ class OrganisationTests extends GroovyTestCase
         println(org1.errors)
         assertFalse(org1.hasErrors())
         
-        try
-        {
+        try {
             org1.delete()
             assertNull(Organisation.findByName('org1'))
         }
-        catch (Throwable t)
-        {
+        catch (Throwable t) {
             println(t)
             fail()
         }

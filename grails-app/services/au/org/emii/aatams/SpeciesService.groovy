@@ -1,14 +1,12 @@
 package au.org.emii.aatams
 
-class SpeciesService 
-{
+class SpeciesService  {
     static transactional = true
 
     /**
      * Lookup species with the given token.
      */
-    def lookup(String token) 
-    {
+    def lookup(String token)  {
         // Match CAABSpecies on code, common name and scientific name.
         log.debug("Matching token: " + token)
         

@@ -1,16 +1,13 @@
 package pages
 
-class InstallationEditPage extends InstallationCreateEditPage 
-{
+class InstallationEditPage extends InstallationCreateEditPage  {
     static url = "installation/edit"
     
-    static at =
-    {
+    static at = {
         title == "Edit Installation"
     }
     
-    static content =
-    {
+    static content = {
         updateButton (to: [InstallationShowPage]) { $("input", value:"Update") }
         deleteButton (to: [InstallationListPage]) { $("input", value:"Delete") }
     }

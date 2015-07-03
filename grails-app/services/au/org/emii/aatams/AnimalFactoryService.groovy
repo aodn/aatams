@@ -1,14 +1,11 @@
 package au.org.emii.aatams
 
-class AnimalFactoryService 
-{
+class AnimalFactoryService  {
     static transactional = true
 
-    def lookupOrCreate(params)
-    {
+    def lookupOrCreate(params) {
         // If animal.id is specified, just return that animal.
-        if (params.animal?.id)
-        {
+        if (params.animal?.id) {
             log.debug("Returning existing animal...")
             return Animal.get(params.animal?.id)
         }
@@ -21,21 +18,18 @@ class AnimalFactoryService
         Animal animalInstance = new Animal(sex:sex, species:species).save()
         assert(animalInstance)
         
-        if (animalInstance?.hasErrors())
-        {
+        if (animalInstance?.hasErrors()) {
             log.error(animalInstance?.errors)
         }
         
         return animalInstance
     }
     
-    def lookupOrCreateSpecies(params)
-    {
+    def lookupOrCreateSpecies(params) {
         // Use species ID if specified, otherwise create a new species (from
         // the species name).
         
-        if (params.speciesId)
-        {
+        if (params.speciesId) {
             return Species.get(params.speciesId)
         }
         

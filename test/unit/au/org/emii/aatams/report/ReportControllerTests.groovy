@@ -7,8 +7,7 @@ import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import org.codehaus.groovy.grails.plugins.jasper.*
 
-class ReportControllerTests extends AbstractControllerUnitTestCase
-{
+class ReportControllerTests extends AbstractControllerUnitTestCase {
     def visibilityControlService
     def jasperService
     def permissionUtilsService
@@ -17,8 +16,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 
     Person user
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockLogging(VisibilityControlService)
@@ -58,23 +56,19 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         user.save()
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return user?.id
     }
 
-    protected boolean isPermitted(permission)
-    {
-        if (permission == "project:" + projectWithMembership.id + ":read")
-        {
+    protected boolean isPermitted(permission) {
+        if (permission == "project:" + projectWithMembership.id + ":read") {
             return true
         }
 
         return false
     }
 
-    void testNoResults()
-    {
+    void testNoResults() {
         controller.params._name = "receiver"
         controller.params._file = "receiverList"
         controller.params._format = "PDF"

@@ -12,8 +12,7 @@ import org.joda.time.DateTime
  *
  *   TODO: may move modelling of ReportInfo and associated parameters to domain classes.
  */
-class ReportInfoService
-{
+class ReportInfoService {
     static transactional = false
 
     def dataSource
@@ -99,19 +98,14 @@ class ReportInfoService
          "tag": Tag.class
          ]
 
-    private def getDetectionTimestampMin()
-    {
+    private def getDetectionTimestampMin() {
         return Detection.getMinTimestamp(dataSource).toDate()
     }
 
-    private def getEventTimestampMin()
-    {
-        if (!eventTimestampMin)
-        {
-            eventTimestampMin = ValidReceiverEvent.createCriteria().get
-            {
-                projections
-                {
+    private def getEventTimestampMin() {
+        if (!eventTimestampMin) {
+            eventTimestampMin = ValidReceiverEvent.createCriteria().get {
+                projections {
                     min('timestamp')
                 }
             }
@@ -123,12 +117,10 @@ class ReportInfoService
     /**
      * Return info for all available reports (keyed by the domain class).
      */
-    Map<Class, ReportInfo> getReportInfo()
-    {
+    Map<Class, ReportInfo> getReportInfo() {
         def projectRange = Project.list()*.name
 
-        if (permissionUtilsService.isAuthenticated())
-        {
+        if (permissionUtilsService.isAuthenticated()) {
             projectRange.add(0, MEMBER_PROJECTS)
         }
 
@@ -317,26 +309,22 @@ class ReportInfoService
     /**
      * Return report info for a particular domain class.
      */
-    ReportInfo getReportInfo(Class domain)
-    {
+    ReportInfo getReportInfo(Class domain) {
         log.debug("getReportInfo(Class)")
         return getReportInfo().get(domain)
     }
 
-    Class getClassForName(String name)
-    {
+    Class getClassForName(String name) {
         return reportNameToClass[name]
     }
 
     /**
      * Return report info for a particular name.
      */
-    ReportInfo getReportInfo(String name)
-    {
+    ReportInfo getReportInfo(String name) {
         log.debug("getReportInfo(String)")
         def domainClassName = reportMapping[name]
-        if (!domainClassName)
-        {
+        if (!domainClassName) {
             log.error("No domain class mapped to report name: " + name)
             return null
         }
@@ -353,12 +341,10 @@ class ReportInfoService
      *
      *  "level1.level2":"value"
      */
-    Map<String, Object> filterParamsToReportFormat(params)
-    {
+    Map<String, Object> filterParamsToReportFormat(params) {
         log.debug("Converting params to report format, params: " + params)
 
-        if (!params)
-        {
+        if (!params) {
             return [:]
         }
 
@@ -366,25 +352,21 @@ class ReportInfoService
 
         def flattenedParams = params.flatten()
 
-        flattenedParams.each
-        {
+        flattenedParams.each {
             k, v ->
 
-            if (k.endsWith(".eq"))
-            {
+            if (k.endsWith(".eq")) {
                 assert (v.size() == 2): "Invalid filter parameter: k: " + k + ", v: " + v
 
                 def reportKey = k[0..k.size() - 4]
                 reportKey += "." + v[0]
 
                 def reportValue = v[1]
-                if (reportValue != null && reportValue != "")
-                {
+                if (reportValue != null && reportValue != "") {
                     filterParamsInReportFormat[propertyToLabel[reportKey]] = reportValue
                 }
             }
-            else
-            {
+            else {
                 filterParamsInReportFormat[k] = v
             }
         }

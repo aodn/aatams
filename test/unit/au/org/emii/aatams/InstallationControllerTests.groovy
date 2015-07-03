@@ -3,23 +3,20 @@ package au.org.emii.aatams
 import grails.test.*
 import grails.converters.JSON
 
-class InstallationControllerTests extends ControllerUnitTestCase 
-{
+class InstallationControllerTests extends ControllerUnitTestCase  {
     def candidateEntitiesService
     
     def project1
     def project2
     
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         project1 = new Project()
         project2 = new Project()
         
         candidateEntitiesService = new CandidateEntitiesService()
-        candidateEntitiesService.metaClass.projects =
-        {
+        candidateEntitiesService.metaClass.projects = {
             return [project1, project2]
         }
         
@@ -33,13 +30,11 @@ class InstallationControllerTests extends ControllerUnitTestCase
         installationList.each { it.save() }
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testCreate() 
-    {
+    void testCreate()  {
         def model = controller.create()
         
         assertNotNull(model.installationInstance)
@@ -48,8 +43,7 @@ class InstallationControllerTests extends ControllerUnitTestCase
         assertTrue(model.candidateProjects.contains(project2))
     }
 
-    void testSaveError() 
-    {
+    void testSaveError()  {
         def model = controller.save()
         
         assertNotNull(model.installationInstance)
@@ -58,8 +52,7 @@ class InstallationControllerTests extends ControllerUnitTestCase
         assertTrue(model.candidateProjects.contains(project2))
     }
     
-    void testLookupByName()
-    {
+    void testLookupByName() {
         assertLookupWithTerm(0, 'x')
         assertLookupWithTerm(1, 'B')
         assertLookupWithTerm(1, 'b')
@@ -67,8 +60,7 @@ class InstallationControllerTests extends ControllerUnitTestCase
         assertLookupWithTerm(2, 'i')
     }
     
-    private void assertLookupWithTerm(expectedNumResults, term) 
-    {
+    private void assertLookupWithTerm(expectedNumResults, term)  {
         controller.params.term = term
         controller.lookupByName()
 

@@ -3,10 +3,8 @@ package module
 import geb.Module;
 import pages.OrganisationShowPage
 
-class EditableOrganisationProjectRow extends Module 
-{
-    static content =
-    {
+class EditableOrganisationProjectRow extends Module  {
+    static content = {
         cell { $("td", it) }
         cellText { cell(it).text() }
         

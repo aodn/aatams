@@ -9,8 +9,7 @@ import javax.servlet.http.Cookie
 
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
-abstract class AbstractStreamingExporterService
-{
+abstract class AbstractStreamingExporterService {
     def dataSource
 
     protected abstract void writeCsvHeader(OutputStream out)
@@ -19,8 +18,7 @@ abstract class AbstractStreamingExporterService
     protected abstract def writeCsvRows(filterParams, closure)
     protected abstract String getReportName()
 
-    protected generateReport(params, req, res)
-    {
+    protected generateReport(params, req, res) {
         long startTime = System.currentTimeMillis()
 
         res.reset()
@@ -31,21 +29,18 @@ abstract class AbstractStreamingExporterService
         // includes "gzip". Choose ZIP if the header includes "compress".
         // Choose no compression otherwise.
         String encodings = req.getHeader("Accept-Encoding");
-        if (encodings != null && encodings.indexOf("gzip") != -1)
-        {
+        if (encodings != null && encodings.indexOf("gzip") != -1) {
             // Go with GZIP
             res.setHeader("Content-Encoding", "gzip");
             out = new GZIPOutputStream(res.getOutputStream());
         }
-        else if (encodings != null && encodings.indexOf("compress") != -1)
-        {
+        else if (encodings != null && encodings.indexOf("compress") != -1) {
             // Go with ZIP
             res.setHeader("Content-Encoding", "x-compress");
             out = new ZipOutputStream(res.getOutputStream());
             ((ZipOutputStream)out).putNextEntry(new ZipEntry("dummy name"));
         }
-        else
-        {
+        else {
             // No compression
             out = res.getOutputStream();
         }
@@ -55,13 +50,11 @@ abstract class AbstractStreamingExporterService
         res.contentType = "text/csv"
         res.characterEncoding = "UTF-8"
 
-        try
-        {
+        try {
             params.response = res
             writeCsvData(params, out)
         }
-        finally
-        {
+        finally {
             // Write the compression trailer and close the output stream
             out.close()
             res.flushBuffer()
@@ -70,13 +63,11 @@ abstract class AbstractStreamingExporterService
         }
     }
 
-    protected int getFetchSize()
-    {
+    protected int getFetchSize() {
         return ConfigurationHolder.config.detection.extract.fetchSize
     }
 
-    protected void writeCsvData(final params, OutputStream out)
-    {
+    protected void writeCsvData(final params, OutputStream out) {
         params.sql = new Sql(dataSource)
         params.sql.fetchSize = getFetchSize()
         params.sql.autoCommit = false
@@ -89,8 +80,7 @@ abstract class AbstractStreamingExporterService
         }
     }
 
-    protected void indicateExportStart(params)
-    {
+    protected void indicateExportStart(params) {
         // Indicate to the client that we have received the export request.
         // See: http://geekswithblogs.net/GruffCode/archive/2010/10/28/detecting-the-file-download-dialog-in-the-browser.aspx
         params.response.addCookie(new Cookie("fileDownloadToken", params.downloadTokenValue))

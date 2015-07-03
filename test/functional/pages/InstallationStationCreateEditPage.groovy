@@ -2,10 +2,8 @@ package pages
 
 import module.PointEditDialog
 
-class InstallationStationCreateEditPage extends LayoutPage
-{
-    static content =
-    {
+class InstallationStationCreateEditPage extends LayoutPage {
+    static content = {
         nameTextField { $("input", name: "name") }
         arrayPositionTextField { $("input", name: "curtainPosition") }
         installationSelect { $("select", name: "installation.id") }

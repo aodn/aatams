@@ -8,8 +8,7 @@ import grails.test.*
 import org.codehaus.groovy.grails.plugins.web.filters.FilterConfig
 import org.joda.time.*
 
-class NotificationFiltersTests extends AbstractFiltersUnitTestCase 
-{
+class NotificationFiltersTests extends AbstractFiltersUnitTestCase  {
     def notificationService
     def person
     def otherPerson
@@ -20,8 +19,7 @@ class NotificationFiltersTests extends AbstractFiltersUnitTestCase
     
     def permissionUtilsService
 
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         mockDomain(Notification)
@@ -72,18 +70,15 @@ class NotificationFiltersTests extends AbstractFiltersUnitTestCase
         notificationList.each { it.save() }
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return person.id
     }
     
-    void testInsertNotifications()
-    {
+    void testInsertNotifications() {
         def model = [:]
         
         FilterConfig filter = getFilter("insertActive")

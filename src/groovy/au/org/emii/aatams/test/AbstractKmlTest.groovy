@@ -2,36 +2,30 @@ package au.org.emii.aatams.test
 
 import org.custommonkey.xmlunit.*
 
-class AbstractKmlTest extends AbstractGrailsUnitTestCase
-{
-    protected void setUp()
-    {
+class AbstractKmlTest extends AbstractGrailsUnitTestCase {
+    protected void setUp() {
         super.setUp()
         
         XMLUnit.setIgnoreWhitespace(true)
         XMLUnit.setNormalize(true)
         
-        mockConfig('''grails
-                    {
+        mockConfig('''grails {
                         serverURL = "http://localhost:8090/aatams"
                     }''')
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         super.tearDown()
     }
     
-    protected void assertKmlEquals(String expectedKmlAsString, actualKml)
-    {
+    protected void assertKmlEquals(String expectedKmlAsString, actualKml) {
         StringWriter writer = new StringWriter()
         actualKml.marshal(writer)
         String actualKmlAsString = writer.toString()
         
         def xmlDiff = new Diff(expectedKmlAsString, actualKmlAsString)
         
-        if (!xmlDiff.similar())
-        {
+        if (!xmlDiff.similar()) {
             println "expected:\n" + expectedKmlAsString + "end"
             println "\n\nactual:\n" + actualKmlAsString + "end"
         }

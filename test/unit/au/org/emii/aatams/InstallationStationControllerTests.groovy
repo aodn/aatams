@@ -6,21 +6,18 @@ import com.vividsolutions.jts.io.WKTReader
 import grails.test.*
 import grails.converters.JSON
 
-class InstallationStationControllerTests extends ControllerUnitTestCase 
-{
+class InstallationStationControllerTests extends ControllerUnitTestCase  {
     def candidateEntitiesService
     
     def installation1
     def installation2
     
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         
         candidateEntitiesService = new CandidateEntitiesService()
-        candidateEntitiesService.metaClass.installations =
-        {
+        candidateEntitiesService.metaClass.installations = {
             return [installation1, installation2]
         }
         
@@ -34,13 +31,11 @@ class InstallationStationControllerTests extends ControllerUnitTestCase
         installationStationList.each { it.save() }
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testCreate() 
-    {
+    void testCreate()  {
         def model = controller.create()
         
         assertNotNull(model.installationStationInstance)
@@ -49,8 +44,7 @@ class InstallationStationControllerTests extends ControllerUnitTestCase
         assertTrue(model.candidateInstallations.contains(installation2))
     }
 
-    void testSaveError() 
-    {
+    void testSaveError()  {
         def model = controller.save()
         
         assertNotNull(model.installationStationInstance)
@@ -59,8 +53,7 @@ class InstallationStationControllerTests extends ControllerUnitTestCase
         assertTrue(model.candidateInstallations.contains(installation2))
     }
 
-    void testLookupByName()
-    {
+    void testLookupByName() {
 //        assertLookupWithTerm(0, 'x')
 //        assertLookupWithTerm(1, 'B')
 //        assertLookupWithTerm(1, 'b')
@@ -68,8 +61,7 @@ class InstallationStationControllerTests extends ControllerUnitTestCase
 //        assertLookupWithTerm(2, 'i')
     }
     
-    private void assertLookupWithTerm(expectedNumResults, term) 
-    {
+    private void assertLookupWithTerm(expectedNumResults, term)  {
         controller.params.term = term
         controller.lookupByName()
 

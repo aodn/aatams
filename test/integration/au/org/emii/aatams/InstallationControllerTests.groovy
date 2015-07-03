@@ -3,15 +3,13 @@ package au.org.emii.aatams
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
 import grails.test.*
 
-class InstallationControllerTests extends AbstractControllerUnitTestCase
-{
+class InstallationControllerTests extends AbstractControllerUnitTestCase {
     def grailsApplication
 
     List<Installation> installations = []
     int numInstallations = 10
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         installations.addAll(Installation.list())
@@ -20,81 +18,68 @@ class InstallationControllerTests extends AbstractControllerUnitTestCase
         createInstallationsForProject(Project.findByName("Seal Count"))
     }
 
-    private void createInstallationsForProject(Project project)
-    {
+    private void createInstallationsForProject(Project project) {
         InstallationConfiguration array = InstallationConfiguration.findByType('ARRAY')
 
         assert(project)
-        numInstallations.times
-        {
+        numInstallations.times {
             Installation installation = new Installation(project: project, name: project.name + " installation " + it, configuration:array)
             installation.save()
             installations.add(installation)
         }
     }
 
-    protected void tearDown()
-    {
-        installations.each
-        {
+    protected void tearDown() {
+        installations.each {
             it.delete()
         }
 
         super.tearDown()
     }
 
-    void testListPagination()
-    {
+    void testListPagination() {
         int max = 5
         int offset = 0
 
-        3.times
-        {
+        3.times {
             assertListPagination(max, offset, installations)
             offset += max
         }
     }
 
-    void testListWithFilter()
-    {
+    void testListWithFilter() {
         controller.params.filter = [project: [eq: ["name", "Tuna"]]]
 
         def matchingInstallations = installations.grep { it.project.name == "Tuna" }
         assertListPagination(null, null, matchingInstallations)
     }
 
-    void testListSortByName()
-    {
+    void testListSortByName() {
         assertListSort([sort:"name", order: "asc", max: 50], installations)
     }
 
-    void testListSortWithFilter()
-    {
+    void testListSortWithFilter() {
         controller.params.filter = [project: [eq: ["name", "Tuna"]]]
         def matchingInstallations = installations.grep { it.project.name == "Tuna" }
         assertListSort([sort:"name", order: "asc", max: 50], matchingInstallations)
     }
 
-    void testListSortPaginateWithFilter()
-    {
+    void testListSortPaginateWithFilter() {
         int max = 5
         int offset = 0
 
         def matchingInstallations = installations.grep { it.project.name == "Tuna" }
 
-        2.times
-        {
+        2.times {
             controller.params.filter = [project: [eq: ["name", "Tuna"]]]
             assertListSort([sort:"name", order: "asc", max: 5], matchingInstallations)
             offset += max
         }
     }
 
-    private void assertListSort(params, candidateInstallations)
-    {
+    private void assertListSort(params, candidateInstallations) {
         controller.params.putAll(params)
-        def sortedInstallations = candidateInstallations.sort
-        {
+        def sortedInstallations = candidateInstallations.sort {
             a, b ->
 
             a[params.sort] <=> b[params.sort]
@@ -103,18 +88,15 @@ class InstallationControllerTests extends AbstractControllerUnitTestCase
         assertListPagination(params.max, params.offset, sortedInstallations)
     }
 
-    private void assertListPagination(def max, def offset, List matchingInstallations)
-    {
+    private void assertListPagination(def max, def offset, List matchingInstallations) {
         int maxResults = max?: matchingInstallations.size()
         maxResults = Math.min(maxResults, matchingInstallations.size())
 
-        if (max)
-        {
+        if (max) {
             controller.params.max = max
         }
 
-        if (offset)
-        {
+        if (offset) {
             controller.params.offset = offset
         }
         int offsetResults = offset?: 0

@@ -2,14 +2,12 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class FilterTests extends GroovyTestCase 
-{
+class FilterTests extends GroovyTestCase  {
     def filterInterceptor
     def grailsApplication
     def grailsWebRequest
      
-    def request(Map params, controllerName, actionName) 
-    {
+    def request(Map params, controllerName, actionName)  {
         grailsWebRequest = GrailsWebUtil.bindMockWebRequest(grailsApplication.mainContext)
         grailsWebRequest.params.putAll(params)
         grailsWebRequest.controllerName = controllerName
@@ -17,8 +15,7 @@ class FilterTests extends GroovyTestCase
         filterInterceptor.preHandle(grailsWebRequest.request, grailsWebRequest.response, null)
     }
      
-    def getResponse() 
-    {
+    def getResponse()  {
         grailsWebRequest.currentResponse
     }
      
@@ -30,8 +27,7 @@ class FilterTests extends GroovyTestCase
         super.tearDown()
     }
 
-    def testEmpty()
-    {
+    def testEmpty() {
         
     }
 //    def testFilterRedirects() 

@@ -4,24 +4,20 @@ import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import grails.test.*
 
-class ReceiverEventControllerTests extends AbstractControllerUnitTestCase
-{
+class ReceiverEventControllerTests extends AbstractControllerUnitTestCase {
     def dataSource
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         controller.params.format = "CSV"
     }
 
-    void testExecuteReceiverEventNoFilter()
-    {
+    void testExecuteReceiverEventNoFilter() {
         assertExport([:], "testExecuteReceiverEventNoFilter")
     }
 
-    void testExecuteReceiverEventByProject()
-    {
+    void testExecuteReceiverEventByProject() {
         assertExport([receiverDeployment: [station: [installation: [project: [in: ["name", "Tuna"]]]]]], "testExecuteReceiverEventByProject")
     }
 }

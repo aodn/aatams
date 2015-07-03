@@ -4,13 +4,11 @@ import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
 import grails.test.*
 
-class ReceiverDownloadFileTests extends GrailsUnitTestCase
-{
+class ReceiverDownloadFileTests extends GrailsUnitTestCase {
     Tag tag111, tag222, tag333
     Sensor sensor111, sensor222, sensor333
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         CodeMap a69_1303 = new CodeMap(codeMap: "A69-1303")
@@ -51,30 +49,24 @@ class ReceiverDownloadFileTests extends GrailsUnitTestCase
         mockDomain(ReceiverDownloadFile)
     }
 
-    void testGetKnownSensorIDsOneValid()
-    {
+    void testGetKnownSensorIDsOneValid() {
         assertGetKnownSensors([sensor111.transmitterId], [sensor111])
     }
 
-    void testGetKnownSensorIDsTwoValidSameTag()
-    {
+    void testGetKnownSensorIDsTwoValidSameTag() {
         assertGetKnownSensors([sensor111.transmitterId, sensor111.transmitterId], [sensor111])
     }
 
-    void testGetKnownSensorIDsTwoValidDifferentSensor()
-    {
+    void testGetKnownSensorIDsTwoValidDifferentSensor() {
         assertGetKnownSensors([sensor111.transmitterId, sensor222.transmitterId], [sensor111, sensor222])
     }
 
-    void testGetKnownSensorIDsTwoValidDifferentSensorOneUnknown()
-    {
+    void testGetKnownSensorIDsTwoValidDifferentSensorOneUnknown() {
         assertGetKnownSensors([sensor111.transmitterId, sensor222.transmitterId, "A69-1303-444"], [sensor111, sensor222])
     }
 
-    private void assertGetKnownSensors(transmitterIds, expectedSensors)
-    {
-        ReceiverDownloadFile.metaClass.getUniqueTransmitterIds =
-        {
+    private void assertGetKnownSensors(transmitterIds, expectedSensors) {
+        ReceiverDownloadFile.metaClass.getUniqueTransmitterIds = {
             transmitterIds.unique().sort()
         }
 

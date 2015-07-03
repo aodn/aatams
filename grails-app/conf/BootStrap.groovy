@@ -12,25 +12,21 @@ import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
 
 import com.vividsolutions.jts.geom.Point
 
-class BootStrap
-{
+class BootStrap {
     def dataSource
     def grailsApplication
     def permissionUtilsService
     def searchableService
 
-    def init =
-    {
+    def init = {
         servletContext ->
 
         JodaOverrides.apply()
 
-        Map.metaClass.flatten =
-        {
+        Map.metaClass.flatten = {
             String prefix='' ->
 
-            delegate.inject( [:] )
-            {
+            delegate.inject( [:] ) {
                 map, v ->
                 def kstr = "$prefix${ prefix ? '.' : ''  }$v.key"
 
@@ -40,8 +36,7 @@ class BootStrap
             }
         }
 
-        JSON.registerObjectMarshaller(Animal.class)
-        {
+        JSON.registerObjectMarshaller(Animal.class) {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['name'] = it.toString()
@@ -50,8 +45,7 @@ class BootStrap
         }
 
         // Add "label" property for the jquery autocomplete plugin.
-        JSON.registerObjectMarshaller(Species.class)
-        {
+        JSON.registerObjectMarshaller(Species.class) {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['name'] = it.toString()
@@ -60,8 +54,7 @@ class BootStrap
             return returnArray
         }
 
-        JSON.registerObjectMarshaller(CaabSpecies.class)
-        {
+        JSON.registerObjectMarshaller(CaabSpecies.class) {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['name'] = it.toString()
@@ -70,8 +63,7 @@ class BootStrap
             return returnArray
         }
 
-        JSON.registerObjectMarshaller(Installation.class)
-        {
+        JSON.registerObjectMarshaller(Installation.class) {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['name'] = it.name
@@ -79,8 +71,7 @@ class BootStrap
             return returnArray
         }
 
-        JSON.registerObjectMarshaller(InstallationStation.class)
-        {
+        JSON.registerObjectMarshaller(InstallationStation.class) {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['name'] = it.name
@@ -89,8 +80,7 @@ class BootStrap
             return returnArray
         }
 
-        JSON.registerObjectMarshaller(Project.class)
-        {
+        JSON.registerObjectMarshaller(Project.class) {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['name'] = it.name
@@ -98,8 +88,7 @@ class BootStrap
             return returnArray
         }
 
-        JSON.registerObjectMarshaller(ProjectAccess.class)
-        {
+        JSON.registerObjectMarshaller(ProjectAccess.class) {
             def returnArray = [:]
             returnArray['displayStatus'] = it.displayStatus
             return returnArray
@@ -108,14 +97,12 @@ class BootStrap
         // TODO: this is being ignored for some reason (so we register a
         // custom marshaller for Surgery, which includes a DateTime,
         // instead).
-        JSON.registerObjectMarshaller(DateTime.class, 0)
-        {
+        JSON.registerObjectMarshaller(DateTime.class, 0) {
             println("Formatting date")
             return DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss zz").print(it)
         }
 
-        JSON.registerObjectMarshaller(Surgery.class)
-        {
+        JSON.registerObjectMarshaller(Surgery.class) {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['timestamp'] = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss zz").print(it.timestamp)
@@ -129,15 +116,13 @@ class BootStrap
 
         Tag.registerObjectMarshaller()
 
-        JSON.registerObjectMarshaller(Point.class)
-        {
+        JSON.registerObjectMarshaller(Point.class) {
             return [x:it.coordinate.x,
                     y:it.coordinate.y,
                     srid:it.SRID]
         }
 
-        JSON.registerObjectMarshaller(AnimalMeasurement.class)
-        {
+        JSON.registerObjectMarshaller(AnimalMeasurement.class) {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['type'] = it.type
@@ -149,8 +134,7 @@ class BootStrap
             return returnArray
         }
 
-        JSON.registerObjectMarshaller(ProjectRole.class)
-        {
+        JSON.registerObjectMarshaller(ProjectRole.class) {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['person'] = it.person
@@ -160,8 +144,7 @@ class BootStrap
             return returnArray
         }
 
-        JSON.registerObjectMarshaller(OrganisationProject.class)
-        {
+        JSON.registerObjectMarshaller(OrganisationProject.class) {
             def returnArray = [:]
 
             returnArray['id'] = it.id
@@ -170,8 +153,7 @@ class BootStrap
             return returnArray
         }
 
-        JSON.registerObjectMarshaller(Sensor.class)
-        {
+        JSON.registerObjectMarshaller(Sensor.class) {
             def returnArray = [:]
             returnArray['id'] = it.id
             returnArray['transmitterType'] = it.transmitterType
@@ -215,8 +197,7 @@ class BootStrap
             }
 
             development {
-                if (Boolean.getBoolean('initialiseWithData'))
-                {
+                if (Boolean.getBoolean('initialiseWithData')) {
                     new DevelopmentDataInitialiser(initialiserParams).execute()
                 }
             }

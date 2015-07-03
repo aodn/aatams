@@ -8,12 +8,10 @@ import org.apache.shiro.SecurityUtils
 import org.apache.shiro.subject.Subject
 import org.codehaus.groovy.grails.plugins.web.filters.FilterConfig
 
-class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase 
-{
+class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase  {
     def permissionUtilsService
 
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
 
         mockLogging(PermissionUtilsService, true)
@@ -22,8 +20,7 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase
         filters.permissionUtilsService = permissionUtilsService
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
@@ -90,31 +87,26 @@ class SecSecurityFiltersTests extends AbstractFiltersUnitTestCase
     
     def actions = ["create", "save", "update", "delete", "list", "index"]
         
-    void testDelete() 
-    {
+    void testDelete()  {
         FilterConfig deleteFilter = getFilter("delete")
 
         authenticated = true
-        [true, false].each
-        {
+        [true, false].each {
             hasSysAdminRole ->
 
             hasRole = hasSysAdminRole
             
-            [true, false].each
-            {
+            [true, false].each {
                 hasProjectWritePermission ->
                 
                 permitted = hasProjectWritePermission
                 
-                (allControllers - deleteControllers).each
-                {
+                (allControllers - deleteControllers).each {
                     controllerName ->
                     
                     controllerName = controllerName
                     
-                    actions.each
-                    {
+                    actions.each {
                         actionName ->
                         
                         actionName = actionName

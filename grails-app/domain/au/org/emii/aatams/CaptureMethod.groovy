@@ -1,15 +1,12 @@
 package au.org.emii.aatams
 
-class CaptureMethod 
-{
+class CaptureMethod  {
     String name
     
-    static constraints = 
-    {
+    static constraints =  {
     }
     
-    String toString()
-    {
+    String toString() {
         return name
     }
 }

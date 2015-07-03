@@ -4,8 +4,7 @@ import org.apache.shiro.SecurityUtils
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import grails.util.GrailsUtil
 
-class OrganisationController
-{
+class OrganisationController {
     def permissionUtilsService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -14,28 +13,23 @@ class OrganisationController
         redirect(action: "list", params: params)
     }
 
-    def list =
-    {
+    def list = {
         params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
 
         def organisationTotal = Organisation.count()
         def organisationList = Organisation.list(params)
 
-        if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
-        {
+        if (!SecurityUtils.getSubject().hasRole("SysAdmin")) {
             // Filter out non-ACTIVE organisations (only sys admin should see these).
-            organisationList = organisationList.grep
-            {
+            organisationList = organisationList.grep {
                 return (it.status == EntityStatus.ACTIVE)
             }
 
             // Only count ACTIVE organisations.
             // TODO: why doesn't .count({}) work here?
             organisationTotal = 0
-            Organisation.list().each
-            {
-                if (it.status == EntityStatus.ACTIVE)
-                {
+            Organisation.list().each {
+                if (it.status == EntityStatus.ACTIVE) {
                     organisationTotal++
                 }
             }
@@ -55,8 +49,7 @@ class OrganisationController
         return [organisationInstance: organisationInstance]
     }
 
-    def save =
-    {
+    def save = {
         def streetAddress = new Address(params['streetAddress']).save()
         def postalAddress = new Address(params['postalAddress']).save()
 
@@ -70,23 +63,18 @@ class OrganisationController
         Person user = Person.get(SecurityUtils.getSubject().getPrincipal())
         organisationInstance.request = new Request(requester:user, organisation: organisationInstance)
 
-        if (SecurityUtils.getSubject().hasRole("SysAdmin"))
-        {
+        if (SecurityUtils.getSubject().hasRole("SysAdmin")) {
             organisationInstance.status = EntityStatus.ACTIVE
         }
-        else
-        {
+        else {
             organisationInstance.status = EntityStatus.PENDING
         }
 
-        if (organisationInstance.save(flush: true))
-        {
-            if (SecurityUtils.getSubject().hasRole("SysAdmin"))
-            {
+        if (organisationInstance.save(flush: true)) {
+            if (SecurityUtils.getSubject().hasRole("SysAdmin")) {
                 flash.message = "${message(code: 'default.created.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.toString()])}"
             }
-            else
-            {
+            else {
                 sendCreationNotificationEmails(organisationInstance)
                 flash.message = "${message(code: 'default.requested.message', args: [message(code: 'organisation.label', default: 'Organisation'), organisationInstance.toString()])}"
             }
@@ -137,8 +125,7 @@ class OrganisationController
             organisationInstance.properties = params
             if (!organisationInstance.hasErrors() && organisationInstance.save(flush: true)) {
                 // Notify organisation activated.
-                if (prevPending && (organisationInstance.status == EntityStatus.ACTIVE))
-                {
+                if (prevPending && (organisationInstance.status == EntityStatus.ACTIVE)) {
                     sendActivatedNotificationEmails(organisationInstance)
                 }
 
@@ -181,10 +168,8 @@ class OrganisationController
      *  - the requesting user
      *  - AATAMS sys admins.
      */
-    def sendCreationNotificationEmails(organisation)
-    {
-        sendMail
-        {
+    def sendCreationNotificationEmails(organisation) {
+        sendMail {
             to organisation?.request?.requester?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
@@ -193,10 +178,8 @@ class OrganisationController
         }
     }
 
-    def sendActivatedNotificationEmails(organisation)
-    {
-        sendMail
-        {
+    def sendActivatedNotificationEmails(organisation) {
+        sendMail {
             to organisation?.request?.requester?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress

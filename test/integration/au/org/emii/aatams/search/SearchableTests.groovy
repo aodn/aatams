@@ -7,20 +7,16 @@ import grails.test.*
 
 import java.text.SimpleDateFormat
 
-class SearchableTests extends GrailsUnitTestCase 
-{
-    protected void setUp() 
-    {
+class SearchableTests extends GrailsUnitTestCase  {
+    protected void setUp()  {
         super.setUp()
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testSearchOrganisationByName() 
-    {
+    void testSearchOrganisationByName()  {
         def csiro = Organisation.findByName("CSIRO")
         def imos = Organisation.findByName("IMOS")
         
@@ -30,16 +26,14 @@ class SearchableTests extends GrailsUnitTestCase
         assertFalse(searchResult.results*.name.contains(imos.name))
     }
     
-    void testSearchProjects()
-    {
+    void testSearchProjects() {
         def sealCount = Project.findByName('Seal Count')
         def searchResult = Project.search(sealCount.name)
         
         assertTrue(searchResult.results*.id.contains(sealCount.id))
     }
 
-    void testSearchDeploymentsByReceiver()
-    {
+    void testSearchDeploymentsByReceiver() {
         def rx1 = Receiver.findBySerialNumber('101336')
         def rx2 = Receiver.findBySerialNumber('101337')
 
@@ -52,8 +46,7 @@ class SearchableTests extends GrailsUnitTestCase
         assertFalse(searchResult.results*.id.contains(rx2Bondi.id))
     }
     
-    void testSearchDeploymentsByStations()
-    {
+    void testSearchDeploymentsByStations() {
         def bondiSW1 = InstallationStation.findByName('Bondi SW1')
         def bondiSW2 = InstallationStation.findByName('Bondi SW2')
         
@@ -66,8 +59,7 @@ class SearchableTests extends GrailsUnitTestCase
         assertFalse(searchResult.results*.id.contains(rx2Bondi.id))
     }
     
-    void testSearchRecoveriesByReceiver()
-    {
+    void testSearchRecoveriesByReceiver() {
         def rx1 = Receiver.findBySerialNumber('101336')
 
         Calendar cal = Calendar.getInstance()

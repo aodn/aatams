@@ -1,16 +1,13 @@
 package pages
 
-class PersonShowPage extends ShowPage 
-{
+class PersonShowPage extends ShowPage  {
     static url = "person/show"
     
-    static at =
-    {
+    static at = {
         title == "Show Person"
     }
     
-    static content =
-    {
+    static content = {
         row { $("td.name", text: it).parent() }
         value { row(it).find("td.value").text() }
         
@@ -19,8 +16,7 @@ class PersonShowPage extends ShowPage
         organisation { organisationLink.text() }
         
         projectLinks { row("Projects").find("a") }
-        projects
-        {
+        projects {
             projectLinks.collect { it.text() }
         }
         

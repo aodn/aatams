@@ -1,11 +1,9 @@
 package au.org.emii.aatams
 
-class Request 
-{
+class Request  {
     static belongsTo = [requester:Person, organisation:Organisation]
     
-    String toString()
-    {
+    String toString() {
         return requester.toString()
     }
     

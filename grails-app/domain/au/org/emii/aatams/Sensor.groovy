@@ -4,8 +4,7 @@ package au.org.emii.aatams
  * Represents a single sensor belonging to a tag (there can be more than one
  * sensor on each tag).
  */
-class Sensor implements Embargoable
-{
+class Sensor implements Embargoable {
     static belongsTo = [tag:Tag]
 
     static transients = ['project', 'codeName', 'codeMap', 'status', 'owningPIs']
@@ -33,8 +32,7 @@ class Sensor implements Embargoable
      */
     String transmitterId
 
-    static constraints =
-    {
+    static constraints = {
         tag()
         pingCode()
         transmitterType(unique: 'tag')
@@ -44,90 +42,73 @@ class Sensor implements Embargoable
         transmitterId(nullable:true)
     }
 
-    static mapping =
-    {
+    static mapping = {
         cache true
     }
 
-    static searchable =
-    {
+    static searchable = {
         tag(component:true)
     }
 
-    void setPingCode(Integer pingCode)
-    {
+    void setPingCode(Integer pingCode) {
         this.pingCode = pingCode
         refreshTransmitterId()
     }
 
-    void setTag(Tag tag)
-    {
+    void setTag(Tag tag) {
         this.tag = tag
         refreshTransmitterId()
     }
 
-    private void refreshTransmitterId()
-    {
+    private void refreshTransmitterId() {
         transmitterId = codeMap?.codeMap + '-' + pingCode
     }
 
-    String getCodeName()
-    {
+    String getCodeName() {
         return transmitterId
     }
 
-    DeviceStatus getStatus()
-    {
+    DeviceStatus getStatus() {
         return tag?.getStatus()
     }
 
-    CodeMap getCodeMap()
-    {
+    CodeMap getCodeMap() {
         return tag?.getCodeMap()
     }
 
-    String toString()
-    {
+    String toString() {
         return transmitterId
     }
 
-    Project getProject()
-    {
+    Project getProject() {
         return tag.project
     }
 
-    def applyEmbargo()
-    {
-        if (tag.applyEmbargo())
-        {
+    def applyEmbargo() {
+        if (tag.applyEmbargo()) {
             return this
         }
 
         return null
     }
 
-    List<Person> getOwningPIs()
-    {
+    List<Person> getOwningPIs() {
         return tag.getOwningPIs()
     }
 
-    static Map<Person, SortedSet<Sensor>> groupByOwningPI(List<Sensor> sensors)
-    {
+    static Map<Person, SortedSet<Sensor>> groupByOwningPI(List<Sensor> sensors) {
         def groupedSensors = new HashMap<Person, SortedSet<Sensor>>()
 
-        sensors.each
-        {
+        sensors.each {
             sensor ->
 
             def pis = sensor.getOwningPIs()
 
-            pis.each
-            {
+            pis.each {
                 pi ->
 
                 def sensorsForPI = groupedSensors[pi]
-                if (!sensorsForPI)
-                {
+                if (!sensorsForPI) {
                     sensorsForPI = new TreeSet<Sensor>([compare: {a, b -> a.transmitterId <=> b.transmitterId} ] as Comparator)
                     groupedSensors[pi] = sensorsForPI
                 }

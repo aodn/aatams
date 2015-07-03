@@ -2,8 +2,7 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.report.ReportController
 
-class ReceiverEventController extends ReportController
-{
+class ReceiverEventController extends ReportController {
     def receiverEventExportService
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -12,8 +11,7 @@ class ReceiverEventController extends ReportController
         redirect(action: "list", params: params)
     }
 
-    def list =
-    {
+    def list = {
         params.max = params.max ?: grailsApplication.config.grails.gorm.default.list.nonPaginatedMax
         doList("receiverEvent")
     }
@@ -27,8 +25,7 @@ class ReceiverEventController extends ReportController
     protected def displayCountMessage(resultList, queryName) {
     }
 
-    def export =
-    {
+    def export = {
         receiverEventExportService.generateReport(params, request, response)
     }
 

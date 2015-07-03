@@ -6,8 +6,7 @@ package au.org.emii.aatams.report
  * 
  * @author jburgess
  */
-class KeyValueBean 
-{
+class KeyValueBean  {
     String key
     String value
 }

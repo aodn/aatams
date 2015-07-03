@@ -26,8 +26,7 @@ class SurgeryController extends AbstractController {
         return [surgeryInstance: surgeryInstance]
     }
 
-    def save =
-    {
+    def save = {
         def surgeryInstance = new Surgery(params)
 
         // Lookup or create tag (after inserting some required parameters)...
@@ -36,12 +35,10 @@ class SurgeryController extends AbstractController {
         params.tag['transmitterType'] = TransmitterType.findByTransmitterTypeName('PINGER')
 
         def tag = null
-        try
-        {
+        try {
             tag = tagFactoryService.lookupOrCreate(params.tag)
         }
-        catch (IllegalArgumentException e)
-        {
+        catch (IllegalArgumentException e) {
             log.error(e)
             render ([errors:[localizedMessage:"Invalid code name for tag: " + params.tag?.codeName]] as JSON)
             return
@@ -51,13 +48,11 @@ class SurgeryController extends AbstractController {
         surgeryInstance.tag = tag
         tag.addToSurgeries(surgeryInstance)
 
-        if (surgeryInstance.save(flush: true))
-        {
+        if (surgeryInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.updated.message', args: [message(code: 'tagging.label', default: 'Tagging'), surgeryInstance.toString()])}"
             render ([instance:surgeryInstance, message:flash] as JSON)
         }
-        else
-        {
+        else {
             log.error(surgeryInstance.errors)
             render ([errors:surgeryInstance.errors] as JSON)
         }

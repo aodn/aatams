@@ -1,16 +1,13 @@
 package au.org.emii.aatams
 
-class DeviceManufacturer 
-{
+class DeviceManufacturer  {
     String manufacturerName
     
-    static constraints =
-    {
+    static constraints = {
         manufacturerName(blank:false, unique:true)
     }
     
-    String toString()
-    {
+    String toString() {
         return manufacturerName
     }
 }

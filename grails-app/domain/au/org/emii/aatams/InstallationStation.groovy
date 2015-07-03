@@ -17,8 +17,7 @@ import de.micromata.opengis.kml.v_2_2_0.Placemark
  * receiver deployed at any one time, but may have multiple receivers deployed
  * over time.
  */
-class InstallationStation
-{
+class InstallationStation {
     def dataSource
     def grailsTemplateEngineService
 
@@ -27,8 +26,7 @@ class InstallationStation
     static transients = [ 'curtainPositionAsString', 'scrambledLocation', 'latitude', 'longitude', 'active', 'detectionCount', 'receivers', 'numDeployments' ]
     static auditable = true
 
-    static mapping =
-    {
+    static mapping = {
         // Speed up candidateEntitiesService.
         cache: true
         installation cache:true
@@ -53,8 +51,7 @@ class InstallationStation
     /**
      * Non-authenticated users can only see scrambled locations.
      */
-    Point getScrambledLocation()
-    {
+    Point getScrambledLocation() {
         return GeometryUtils.scrambleLocation(location)
     }
 
@@ -64,32 +61,26 @@ class InstallationStation
      * Point.coordinate.y doesn't conform to that (i.e. there is no getY()
      * method).
      */
-    double getLatitude()
-    {
+    double getLatitude() {
         return getScrambledLocation().coordinate.y
     }
 
-    double getLongitude()
-    {
+    double getLongitude() {
         return getScrambledLocation().coordinate.x
     }
 
-    static constraints =
-    {
+    static constraints = {
         name(blank:false)
         curtainPosition(nullable:true, min:0)
         location()
     }
 
-    String toString()
-    {
+    String toString() {
         return name
     }
 
-    String getCurtainPositionAsString()
-    {
-        if (!curtainPosition)
-        {
+    String getCurtainPositionAsString() {
+        if (!curtainPosition) {
             return ""
         }
 
@@ -108,18 +99,15 @@ class InstallationStation
      * Station is active if there is one or more active deployments at this
      * station.
      */
-    boolean isActive()
-    {
-        def activeDeployments = deployments.grep
-        {
+    boolean isActive() {
+        def activeDeployments = deployments.grep {
             it.isActive()
         }
 
         return activeDeployments.size() >= 1
     }
 
-    Placemark toPlacemark()
-    {
+    Placemark toPlacemark() {
         final Placemark placemark = new Placemark()
 
         placemark.setName(name)
@@ -131,18 +119,15 @@ class InstallationStation
         return placemark
     }
 
-    String toKmlDescription()
-    {
+    String toKmlDescription() {
         return grailsTemplateEngineService.renderView("/report/_kmlDescriptionTemplate", [installationStationInstance:this])
     }
 
-    boolean hasDetections()
-    {
+    boolean hasDetections() {
         return (detectionCount() != 0)
     }
 
-    long getDetectionCount()
-    {
+    long getDetectionCount() {
         def sql = new Sql(AH.application.mainContext.dataSource)
         return sql.firstRow("select coalesce((select detection_count from detection_count_per_station_mv where station_id = ${id}), 0) as detection_count").detection_count
     }

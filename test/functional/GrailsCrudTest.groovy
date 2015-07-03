@@ -4,8 +4,7 @@ import org.openqa.selenium.JavascriptExecutor
 
 import pages.*
 
-abstract class GrailsCrudTest extends TestBase 
-{
+abstract class GrailsCrudTest extends TestBase  {
     abstract protected def getListPage()
     abstract protected def getShowPage()
     abstract protected def getCreatePage()
@@ -14,28 +13,24 @@ abstract class GrailsCrudTest extends TestBase
     @Test
     abstract void testList()
     
-    protected void doTestList(numRows, stringValues, linkValues, listValues)
-    {
+    protected void doTestList(numRows, stringValues, linkValues, listValues) {
         to getListPage()
         
         assert detailRows.size() == numRows
         
         def testRow =  findRowByName(detailRows, stringValues.name)
         
-        stringValues.each
-        {
+        stringValues.each {
             k, v ->
             assert testRow[k] == v
         }
         
-        linkValues.each
-        {
+        linkValues.each {
             k, v ->
             assert testRow[k].text() == v
         }
         
-        listValues.each
-        {
+        listValues.each {
             k,v ->
             assert testRow[k].size() == v.size()
             assert testRow[k].containsAll(v)
@@ -51,8 +46,7 @@ abstract class GrailsCrudTest extends TestBase
     @Test
     abstract void testShow()
 
-    protected void doTestShow(detailRowName, details)
-    {
+    protected void doTestShow(detailRowName, details) {
         to getListPage()
 
         def detailRow =  findRowByName(detailRows, detailRowName)
@@ -61,31 +55,25 @@ abstract class GrailsCrudTest extends TestBase
         assertShowPageDetails(details)
     }
 
-    protected void assertShowPageDetails(details)
-    {
+    protected void assertShowPageDetails(details) {
         assert at(getShowPage())
         assertDetails(details)
     }
 
-    protected void assertEditPageDetails(details)
-    {
+    protected void assertEditPageDetails(details) {
         assert at(getEditPage())
         assertDetails(details)
     }
 
-    private assertDetails(details) 
-    {
-        details.each
-        {
+    private assertDetails(details)  {
+        details.each {
             k, v ->
 
-            if (v instanceof List)
-            {
+            if (v instanceof List) {
                 assert this[k].size() == v.size()
                 assert this[k].containsAll(v)
             }
-            else
-            {
+            else {
                 assert this[k] == v
             }
         }
@@ -94,16 +82,14 @@ abstract class GrailsCrudTest extends TestBase
     @Test
     abstract void testCreate()
 
-    protected void doTestCreate(values, showValues)
-    {
+    protected void doTestCreate(values, showValues) {
         loginAsSysAdmin()
         to getListPage()
         newButton.click()
         
         assert at(getCreatePage())
         
-        values.each
-        {
+        values.each {
             k, v ->
             
             this[k].value(v)
@@ -116,27 +102,23 @@ abstract class GrailsCrudTest extends TestBase
         js.executeScript( "document.getElementById('create').click();" );
 //        createButton.click()
         
-        try
-        {
+        try {
             assertShowPageDetails(showValues)
         }
-        finally
-        {
+        finally {
             // Clean up.
             withConfirm { deleteButton.click() }
         }
     }
     
-    protected void doCustomCreateEntry()
-    {
+    protected void doCustomCreateEntry() {
         
     }
     
     @Test
     abstract void testEdit()
     
-    protected void doTestEdit(detailRowName, value, fieldToEdit)
-    {
+    protected void doTestEdit(detailRowName, value, fieldToEdit) {
         loginAsSysAdmin()
         to getListPage()
         def detailRow = findRowByName(detailRows, detailRowName)
@@ -145,38 +127,31 @@ abstract class GrailsCrudTest extends TestBase
         String currValue = this[value]
         String newValue = "different name"
         
-        try
-        {
+        try {
             assertFieldUpdate(newValue, value, fieldToEdit)
         }
-        finally
-        {
+        finally {
             // Cleanup.
             assertFieldUpdate(currValue, value, fieldToEdit)
         }
     }
     
-    protected void doTestEdit(detailRowName)
-    {
+    protected void doTestEdit(detailRowName) {
         doTestEdit(detailRowName, "name", "nameTextField")
     }
     
     @Test
-    void testDelete()
-    {
+    void testDelete() {
         // Implementations will generally test deletion as part of "testCreate()".
     }
 
-    protected def findRowByName(rows, name) 
-    {
-        rows.find
-        {
+    protected def findRowByName(rows, name)  {
+        rows.find {
             it.name == name
         }
     }
 
-    protected void assertFieldUpdate(newValue, value, fieldToEdit) 
-    {
+    protected void assertFieldUpdate(newValue, value, fieldToEdit)  {
         assert at(getShowPage())
         editButton.click()
         assert at(getEditPage())
@@ -193,8 +168,7 @@ abstract class GrailsCrudTest extends TestBase
         assert this[value] == newValue
     }
     
-    protected void navigateToEditPageFromShowPage() 
-    {
+    protected void navigateToEditPageFromShowPage()  {
         assert at(getShowPage())
         editButton.click()
         assert at(getEditPage())

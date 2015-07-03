@@ -6,23 +6,20 @@ import org.junit.Test
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.Keys
 
-class OrganisationTests extends GrailsCrudTest 
-{
+class OrganisationTests extends GrailsCrudTest  {
     def listPage = OrganisationListPage
     def showPage = OrganisationShowPage
     def createPage = OrganisationCreatePage
     def editPage = OrganisationEditPage
 
     @Test
-    void testList()
-    {
+    void testList() {
         listOrganisationsAsUnauthorised()
         listOrganisationsAsSysAdmin()
     }
     
     @Test
-    void testShow()
-    {
+    void testShow() {
         doTestShow("CSIRO",  
                    [name:"CSIRO", 
                     department:"CMAR", 
@@ -34,14 +31,12 @@ class OrganisationTests extends GrailsCrudTest
     }
 
     @Test
-    void testEdit()
-    {
+    void testEdit() {
         doTestEdit("CSIRO")
     }
     
     @Test
-    void testCreate()
-    {
+    void testCreate() {
         doTestCreate(
             [nameTextField:"Some New Organisation",
              departmentTextField:"Marine",
@@ -60,8 +55,7 @@ class OrganisationTests extends GrailsCrudTest
              [])
     }
     
-    private void listOrganisationsAsUnauthorised()
-    {
+    private void listOrganisationsAsUnauthorised() {
         doTestList(
             1,
             [name:"CSIRO", 
@@ -74,8 +68,7 @@ class OrganisationTests extends GrailsCrudTest
             [])
     }
     
-    private void listOrganisationsAsSysAdmin()
-    {
+    private void listOrganisationsAsSysAdmin() {
         loginAsSysAdmin()
         doTestList(3, [name:"CSIRO"], [], [])
         doTestList(3, [name:"IMOS"], [], [])

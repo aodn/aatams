@@ -3,8 +3,7 @@ package au.org.emii.aatams
 import grails.test.*
 import org.apache.log4j.*
 
-class EmbargoExpirationJobTests extends GrailsUnitTestCase 
-{
+class EmbargoExpirationJobTests extends GrailsUnitTestCase  {
     protected def job
     
     AnimalRelease nullRelease
@@ -12,8 +11,7 @@ class EmbargoExpirationJobTests extends GrailsUnitTestCase
     AnimalRelease todayRelease
     AnimalRelease tomorrowRelease
 
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         mockDomain(Person)
@@ -52,40 +50,33 @@ class EmbargoExpirationJobTests extends GrailsUnitTestCase
         def releaseCriteria = [list: {Closure cls -> [yesterdayRelease, todayRelease, tomorrowRelease]}]
         AnimalRelease.metaClass.static.createCriteria = {releaseCriteria}
         
-        mockConfig('''animalRelease 
-                        {
-                            embargoExpiration 
-                            {
+        mockConfig('''animalRelease  {
+                            embargoExpiration  {
                                 warningPeriodMonths = 1
                             }
                         }
                         
-                        grails 
-                        {
+                        grails  {
                             serverURL = "http://localhost:8090/aatams"
                         }''')
 //        job.grailsApplication = { -> [config: org.codehaus.groovy.grails.commons.ConfigurationHolder.config]}
         job.metaClass.getServerUrl = { -> "http://localhost:8090/aatams" }
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    void testFindEmbargoedReleasesToday()
-    {
+    void testFindEmbargoedReleasesToday() {
         def embargoedReleases = job.findEmbargoedReleases(0)
         assertEquals([todayRelease], embargoedReleases)
     }
     
-    void testExpiringSubject()
-    {
+    void testExpiringSubject() {
         assertEquals("AATAMS tag embargoes expiring today: [A69-1303-1234]", job.createExpiringSubject(todayRelease))
     }
         
-    void testExpiringBody()
-    {
+    void testExpiringBody() {
         String expectedBody = '''The embargoes on the following tags will expire today.
 
 A69-1303-1234

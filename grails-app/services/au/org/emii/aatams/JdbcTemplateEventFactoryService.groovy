@@ -1,9 +1,7 @@
 package au.org.emii.aatams
 
-class JdbcTemplateEventFactoryService extends EventFactoryService 
-{
-    protected def createValidEvent(params)
-    {
+class JdbcTemplateEventFactoryService extends EventFactoryService  {
+    protected def createValidEvent(params) {
         return (params
                 + ["clazz" : "au.org.emii.aatams.ValidReceiverEvent",
                    "receiverDownloadId": params.receiverDownload.id,
@@ -12,8 +10,7 @@ class JdbcTemplateEventFactoryService extends EventFactoryService
                    "reason": ""])
     }
     
-    protected def createInvalidEvent(params)
-    {
+    protected def createInvalidEvent(params) {
         return (params
                 + ["clazz" : "au.org.emii.aatams.InvalidReceiverEvent",
                    "receiverDownloadId": params.receiverDownload.id])

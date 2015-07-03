@@ -3,10 +3,8 @@ package module
 import geb.Module;
 import pages.InstallationShowPage
 
-class InstallationRow extends Module 
-{
-    static content =
-    {
+class InstallationRow extends Module  {
+    static content = {
         cell { $("td", it) }
         cellText { cell(it).text() }
         
@@ -15,12 +13,10 @@ class InstallationRow extends Module
         configuration{ cellText(2) }
         project { cellText(3) }
         numStations { cellText(4) }
-        stations
-        {
+        stations {
              String stationsAsString = cellText(5)
              stationsAsString = stationsAsString.substring(1, stationsAsString.length() - 1)
-             def stationArray = stationsAsString.split(",").collect
-             {
+             def stationArray = stationsAsString.split(",").collect {
                  it.trim()
              }
              

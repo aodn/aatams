@@ -1,16 +1,13 @@
 package pages
 
-class OrganisationShowPage extends ShowPage
-{
+class OrganisationShowPage extends ShowPage {
     static url = "organisation/show" // + "/" + id
     
-    static at =
-    {
+    static at = {
         title == "Show Organisation"
     }
     
-    static content =
-    {
+    static content = {
         editButton(to: OrganisationEditPage) { $("input", value: "Edit") }
         deleteButton(to: OrganisationListPage) { $("input", value: "Delete") }
         

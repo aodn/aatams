@@ -6,8 +6,7 @@ package au.org.emii.aatams.data
  * 
  * @author jburgess
  */
-interface DataInitialiser 
-{
+interface DataInitialiser  {
     void execute()
 }
 

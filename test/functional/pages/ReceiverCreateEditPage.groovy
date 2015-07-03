@@ -1,9 +1,7 @@
 package pages
 
-class ReceiverCreateEditPage extends LayoutPage 
-{
-    static content =
-    {
+class ReceiverCreateEditPage extends LayoutPage  {
+    static content = {
 //        idTextField { TODO }
         organisationSelect { $("select", name: "organisation.id") }
         modelSelect { $("select", name: "model.id") }

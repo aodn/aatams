@@ -3,13 +3,11 @@ package au.org.emii.aatams
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.test.*
 
-class NavigationMenuControllerTests extends AbstractControllerUnitTestCase 
-{
+class NavigationMenuControllerTests extends AbstractControllerUnitTestCase  {
     def permissionUtilsService
     def person
     
-    protected void setUp() 
-    {
+    protected void setUp()  {
         super.setUp()
         
         mockLogging(PermissionUtilsService)
@@ -24,28 +22,23 @@ class NavigationMenuControllerTests extends AbstractControllerUnitTestCase
         person.save()
     }
 
-    protected void tearDown() 
-    {
+    protected void tearDown()  {
         super.tearDown()
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return person.id
     }
 
-    protected boolean isPermitted(String permission)
-    {
-        if (permission == "projectWriteAny")
-        {
+    protected boolean isPermitted(String permission) {
+        if (permission == "projectWriteAny") {
             return true
         }
         
         return false
     }    
     
-    void testFieldDataControllersAsNonSysAdmin() 
-    {
+    void testFieldDataControllersAsNonSysAdmin()  {
         hasRole = false
         
         def fieldDataControllers =
@@ -59,8 +52,7 @@ class NavigationMenuControllerTests extends AbstractControllerUnitTestCase
         assertTrue(fieldDataControllers.contains(new NavigationMenuItem(controllerName:'receiverEvent', label:'Receiver Events', canCreateNew:true)))
     }
 
-    void testFieldDataControllersAsSysAdmin() 
-    {
+    void testFieldDataControllersAsSysAdmin()  {
         hasRole = true
 
         def fieldDataControllers =

@@ -3,11 +3,9 @@ package au.org.emii.aatams.search
 import au.org.emii.aatams.*
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
-class SearchableControllerTests extends AbstractControllerUnitTestCase
-{
+class SearchableControllerTests extends AbstractControllerUnitTestCase {
 
-    void testSearchEmbargoNotAuthenticated()
-    {
+    void testSearchEmbargoNotAuthenticated() {
         authenticated = false
         permitted = false
 
@@ -20,8 +18,7 @@ class SearchableControllerTests extends AbstractControllerUnitTestCase
         assertFalse(model.searchResult.results*.id.contains(tag.id))
     }
 
-    void testSearchEmbargoAuthenticatedNotPermitted()
-    {
+    void testSearchEmbargoAuthenticatedNotPermitted() {
         authenticated = true
         permitted = false
 
@@ -34,8 +31,7 @@ class SearchableControllerTests extends AbstractControllerUnitTestCase
         assertFalse(model.searchResult.results*.id.contains(tag.id))
     }
 
-    void testSearchEmbargoAuthenticatedAndPermitted()
-    {
+    void testSearchEmbargoAuthenticatedAndPermitted() {
         authenticated = true
         permitted = true
 
@@ -48,33 +44,27 @@ class SearchableControllerTests extends AbstractControllerUnitTestCase
         assertTrue(model.searchResult.results*.id.contains(tag.id))
     }
 
-    void testSearchReceiverName()
-    {
+    void testSearchReceiverName() {
         assertSearchReceiver("VR2W-101336", ["VR2W-101336"])
     }
 
-    void testSearchReceiverSerialNumber()
-    {
+    void testSearchReceiverSerialNumber() {
         assertSearchReceiver("101336", ["VR2W-101336"])
     }
 
-    void testSearchReceiverNameImplicitWildCard()
-    {
+    void testSearchReceiverNameImplicitWildCard() {
         assertSearchReceiver("101336", ["VR2W-101336"])
     }
 
-    void testSearchReceiverSerialNumberImplicitWildCard()
-    {
+    void testSearchReceiverSerialNumberImplicitWildCard() {
         assertSearchReceiver("1336", ["VR2W-101336"])
     }
 
-    private void assertSearchReceiver(searchTerm, expectedNames)
-    {
+    private void assertSearchReceiver(searchTerm, expectedNames) {
         controller.params.q = searchTerm
         def model = controller.index()
 
-        def receiverResults = model.searchResult.results.grep
-        {
+        def receiverResults = model.searchResult.results.grep {
             it instanceof Receiver
         }
 

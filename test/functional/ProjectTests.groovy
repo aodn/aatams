@@ -3,16 +3,14 @@ import org.junit.Test
 
 import pages.*
 
-class ProjectTests extends GrailsCrudTest 
-{
+class ProjectTests extends GrailsCrudTest  {
     def listPage = ProjectListPage
     def showPage = ProjectShowPage
     def createPage = ProjectCreatePage
     def editPage = ProjectEditPage
     
     @Test
-    void testList()
-    {
+    void testList() {
         doTestList(3,
                    [name:"Seal Count", organisations:"CSIRO (CMAR)", principalInvestigator:"Joe Bloggs"],
                    [],
@@ -20,8 +18,7 @@ class ProjectTests extends GrailsCrudTest
     }
 
     @Test
-    void testShow()
-    {
+    void testShow() {
         doTestShow("Seal Count",  
                    [name:"Seal Count", 
                     projectRoles:[[name:"John Citizen", projectRole:"Administrator", access:"Read Only"], 
@@ -30,8 +27,7 @@ class ProjectTests extends GrailsCrudTest
     }
     
     @Test
-    void testCreate()
-    {
+    void testCreate() {
         doTestCreate(
             [nameTextField:"Prawns",
              organisationSelect:"5",
@@ -40,16 +36,14 @@ class ProjectTests extends GrailsCrudTest
     }
 
     @Test
-    void testEdit()
-    {
+    void testEdit() {
         doTestEdit("Seal Count")
 
         navigateToEditPageFromShowPage()
         assertAddPerson()
     }
 
-    private void assertAddPerson()
-    {
+    private void assertAddPerson() {
         assert at(getEditPage())
         
         addPersonLink.click()
@@ -60,8 +54,7 @@ class ProjectTests extends GrailsCrudTest
         addPersonDialog.roleTypeSelect.value("18")    // Administrator
         addPersonDialog.accessSelect.value("READ_WRITE")
 
-        try
-        {
+        try {
             addPersonDialog.createButton.click()
             
             assert at(getEditPage())
@@ -72,8 +65,7 @@ class ProjectTests extends GrailsCrudTest
                                [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"],
                                [name:"Joe Bloggs", projectRole:"Administrator", access:"Read/Write"]]])
         }
-        finally
-        {
+        finally {
             navigateToEditPageFromShowPage()
             
             // Cleanup.
@@ -87,10 +79,8 @@ class ProjectTests extends GrailsCrudTest
         }
     }
 
-    private def findProjectRoleByNameAndRole(roles, name, projectRole)
-    {
-        def actualRole = projectRoleRows.find 
-        {
+    private def findProjectRoleByNameAndRole(roles, name, projectRole) {
+        def actualRole = projectRoleRows.find  {
             (it.name == name) && (it.projectRole == projectRole)
         }
     }    

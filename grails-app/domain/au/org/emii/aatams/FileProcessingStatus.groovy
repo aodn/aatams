@@ -4,8 +4,7 @@ package au.org.emii.aatams
  *
  * @author jburgess
  */
-enum FileProcessingStatus 
-{
+enum FileProcessingStatus  {
     ARCHIVED('Archived'),   // But not processed, as such.
     PENDING('Pending'),
     PROCESSING('Processing'),
@@ -15,13 +14,11 @@ enum FileProcessingStatus
     
     String displayStatus
     
-    FileProcessingStatus(String displayStatus)
-    {
+    FileProcessingStatus(String displayStatus) {
         this.displayStatus = displayStatus
     }
     
-    static list()
-    {
+    static list() {
         [ARCHIVED, PENDING, PROCESSING, PROCESSED, ERROR, DELETING]
     }
 }

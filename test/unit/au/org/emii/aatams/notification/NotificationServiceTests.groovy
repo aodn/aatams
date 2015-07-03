@@ -7,8 +7,7 @@ import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import org.joda.time.*
 
-class NotificationServiceTests extends AbstractGrailsUnitTestCase
-{
+class NotificationServiceTests extends AbstractGrailsUnitTestCase {
     def notificationService
     def person
     def otherPerson
@@ -21,8 +20,7 @@ class NotificationServiceTests extends AbstractGrailsUnitTestCase
 
     def authorisedPerson
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockDomain(Notification)
@@ -72,18 +70,15 @@ class NotificationServiceTests extends AbstractGrailsUnitTestCase
         notificationList.each { it.save() }
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         super.tearDown()
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return authorisedPerson?.id
     }
 
-    void testActiveNotifications()
-    {
+    void testActiveNotifications() {
         def notificationList = notificationService.listActive()
 
         assertTrue(notificationList.contains(gettingStarted))
@@ -102,8 +97,7 @@ class NotificationServiceTests extends AbstractGrailsUnitTestCase
         assertTrue(notificationList.contains(register))
     }
 
-    void testAcknowledgeNotifications()
-    {
+    void testAcknowledgeNotifications() {
         def notificationList = notificationService.listActive()
         assertTrue(notificationList.contains(gettingStarted))
         assertTrue(notificationList.contains(receiverRecoveryCreate))
@@ -124,8 +118,7 @@ class NotificationServiceTests extends AbstractGrailsUnitTestCase
 
     }
 
-    void testAcknowledgeNotificationsByKey()
-    {
+    void testAcknowledgeNotificationsByKey() {
         def notificationList = notificationService.listActive()
         assertTrue(notificationList.contains(gettingStarted))
         assertTrue(notificationList.contains(receiverRecoveryCreate))

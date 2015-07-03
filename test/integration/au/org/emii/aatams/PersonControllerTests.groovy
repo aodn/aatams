@@ -5,27 +5,23 @@ import org.joda.time.DateTimeZone
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
 
-class PersonControllerTests extends AbstractControllerUnitTestCase
-{
+class PersonControllerTests extends AbstractControllerUnitTestCase {
     boolean mailSent
     String toAddress
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         toAddress = null
         mailSent = false
-        controller.metaClass.sendMail =
-        {
+        controller.metaClass.sendMail = {
             mailSent = true
         }
 
         controller.metaClass.message = { LinkedHashMap args -> return "${args.code}" }
     }
 
-    void testRegisterThenDelete()
-    {
+    void testRegisterThenDelete() {
         hasRole = false
         user = null
 
@@ -61,8 +57,7 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
         assertTrue(mailSent)
 
         // Now delete the org (and check that the just registered user is deleted).
-        try
-        {
+        try {
             hasRole = true
             def orgController = new OrganisationController()
             orgController.metaClass.message = { LinkedHashMap args -> return "${args.code}" }
@@ -72,15 +67,13 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
             assertNull(Person.findByName("John"))
 //            assertEquals("list", orgController.redirectArgs.action)
         }
-        catch (Throwable t)
-        {
+        catch (Throwable t) {
             println(t)
             fail()
         }
     }
 
-    void testSaveUsernameToLowerCase()
-    {
+    void testSaveUsernameToLowerCase() {
         Organisation org =
             new Organisation(name:"org",
                              department:"dep",
@@ -116,8 +109,7 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
         assertEquals("create", controller.renderArgs.view)
     }
 
-    void testSaveExistingOrganisation()
-    {
+    void testSaveExistingOrganisation() {
         hasRole = false
 
         Organisation org =
@@ -153,8 +145,7 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
         assertTrue(mailSent)
     }
 
-    void testSaveUnlistedOrganisation()
-    {
+    void testSaveUnlistedOrganisation() {
         hasRole = false
         user = null
 

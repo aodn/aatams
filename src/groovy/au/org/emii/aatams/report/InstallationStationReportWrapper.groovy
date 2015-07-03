@@ -19,8 +19,7 @@ import com.vividsolutions.jts.geom.*
  *
  * @author jburgess
  */
-class InstallationStationReportWrapper 
-{
+class InstallationStationReportWrapper  {
     /**
      * The wrapped domain object.
      */
@@ -28,68 +27,56 @@ class InstallationStationReportWrapper
     
     public static final String NULL_CURTAIN_POSITION = "-"
     
-    public InstallationStationReportWrapper(InstallationStation station)
-    {
+    public InstallationStationReportWrapper(InstallationStation station) {
         this.station = station
     }
     
-    public String getInstallationName()
-    {
+    public String getInstallationName() {
         return station.installation.name
     }
     
-    public String getInstallationConfigurationType()
-    {
+    public String getInstallationConfigurationType() {
         return station.installation.configuration.type
     }
     
-    public String getProjectName()
-    {
+    public String getProjectName() {
         return station.installation.project.name
     }
 
-    public String getStationName()
-    {
+    public String getStationName() {
         return station.name
     }
     
-    public String getStationCurtainPosition()
-    {
+    public String getStationCurtainPosition() {
         Integer curtainPos = station.curtainPosition
         
-        if (curtainPos == null)
-        {
+        if (curtainPos == null) {
             return NULL_CURTAIN_POSITION
         }
         
         return String.valueOf(curtainPos)
     }
     
-    public double getStationLatitude()
-    {
+    public double getStationLatitude() {
         return station.location.coordinate.y
     }
     
-    public double getStationLongitude()
-    {
+    public double getStationLongitude() {
         return station.location.coordinate.x
     }
     
     /**
      * This is here just to keep iReport happy.
      */
-    public static Collection<InstallationStationReportWrapper> list()
-    {
+    public static Collection<InstallationStationReportWrapper> list() {
         return Collections.EMPTY_LIST
     }
     
-    boolean hasDetections()
-    {
+    boolean hasDetections() {
         return (detectionCount() != 0) 
     }
     
-    long getDetectionCount()
-    {
+    long getDetectionCount() {
         return 73
     }
 }

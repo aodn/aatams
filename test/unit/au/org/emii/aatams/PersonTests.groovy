@@ -5,13 +5,11 @@ import grails.test.*
 
 import org.joda.time.*
 
-class PersonTests extends AbstractGrailsUnitTestCase
-{
+class PersonTests extends AbstractGrailsUnitTestCase {
     def perthTZ = DateTimeZone.forID("Australia/Perth")
     def person
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         person = new Person(username:"person",
@@ -25,18 +23,15 @@ class PersonTests extends AbstractGrailsUnitTestCase
         hasRole = true
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         super.tearDown()
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return person?.id
     }
 
-    void testDefaultTimeZone()
-    {
+    void testDefaultTimeZone() {
 //        assertEquals(perthTZ, Person.defaultTimeZone())
     }
 }

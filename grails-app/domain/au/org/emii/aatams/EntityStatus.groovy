@@ -9,21 +9,18 @@ package au.org.emii.aatams
  * It is then up to an authorised user (e.g. eMII staff or sys admin) to set the
  * Organisation's status to "ACTIVE", so that it becomes visible to other users.
  */
-enum EntityStatus 
-{
+enum EntityStatus  {
     PENDING('Pending'),
     ACTIVE('Active'),
     DEACTIVATED('Deactivated')
     
     String displayStatus
     
-    EntityStatus(String displayStatus)
-    {
+    EntityStatus(String displayStatus) {
         this.displayStatus = displayStatus;
     }
     
-    static list()
-    {
+    static list() {
         [PENDING, ACTIVE, DEACTIVATED]
     }
 }

@@ -5,17 +5,14 @@ package au.org.emii.aatams
  * 
  * e.g. ANTIBIOTIC, ANISTHETIC.
  */
-class SurgeryTreatmentType 
-{
+class SurgeryTreatmentType  {
     String type
     
-    static constraints =
-    {
+    static constraints = {
         type(blank:false, unique:true)
     }
 
-    String toString()
-    {
+    String toString() {
         return type
     }
 }

@@ -10,8 +10,7 @@ import org.apache.shiro.SecurityUtils
 
 import au.org.emii.aatams.Person
 
-abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase
-{
+abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase {
     protected hasRole = true
     protected Person user
     protected authenticated = true
@@ -19,8 +18,7 @@ abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase
     
     private MetaClass originalSecurityUtilsMetaClass
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         hasRole = true
@@ -44,31 +42,26 @@ abstract class AbstractFiltersUnitTestCase extends FiltersUnitTestCase
         SecurityUtils.metaClass.static.getSubject = { subject }
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         // Restore the old meta class on SecurityUtils.
         GroovySystem.metaClassRegistry.setMetaClass(SecurityUtils, this.originalSecurityUtilsMetaClass)
 
         super.tearDown()
     }
     
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return user?.id
     }
 
-    protected boolean isAuthenticated()
-    {
+    protected boolean isAuthenticated() {
         return authenticated
     }
 
-    protected boolean hasRole()
-    {
+    protected boolean hasRole() {
         return hasRole
     }
 
-    protected boolean isPermitted(permission)
-    {
+    protected boolean isPermitted(permission) {
         return permitted
     }
 }

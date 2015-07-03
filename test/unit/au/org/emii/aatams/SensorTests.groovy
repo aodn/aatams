@@ -2,8 +2,7 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class SensorTests extends GrailsUnitTestCase
-{
+class SensorTests extends GrailsUnitTestCase {
     Tag tag1303
     Tag tag9002
 
@@ -22,8 +21,7 @@ class SensorTests extends GrailsUnitTestCase
     Sensor a69_9002_2222
     Sensor a69_9002_3333
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         adam = new Person(name: "adam", emailAddress: "adam@aatams")
@@ -111,16 +109,14 @@ class SensorTests extends GrailsUnitTestCase
         sensorList = [a69_1303_1111, a69_1303_2222, a69_1303_3333, a69_9002_1111, a69_9002_2222, a69_9002_3333]
     }
 
-    void testTransmitterIdInit()
-    {
+    void testTransmitterIdInit() {
         Sensor sensor = new Sensor(tag: tag1303,
                                    pingCode: 1234)
 
         assertEquals("A69-1303-1234", sensor.transmitterId)
     }
 
-    void testSetPingCode()
-    {
+    void testSetPingCode() {
         Sensor sensor = new Sensor(tag: tag1303,
                                    pingCode: 1234)
 
@@ -129,8 +125,7 @@ class SensorTests extends GrailsUnitTestCase
         assertEquals("A69-1303-5678", sensor.transmitterId)
     }
 
-    void testSetTag()
-    {
+    void testSetTag() {
         Sensor sensor = new Sensor(tag: tag1303,
                                    pingCode: 1234)
 
@@ -139,8 +134,7 @@ class SensorTests extends GrailsUnitTestCase
         assertEquals("A69-9002-1234", sensor.transmitterId)
     }
 
-    void testGetOwningPIs()
-    {
+    void testGetOwningPIs() {
         assertContainsAll([adam, bruce], a69_1303_1111.getOwningPIs())
         assertContainsAll([adam, bruce], a69_1303_2222.getOwningPIs())
         assertContainsAll([adam, bruce], a69_1303_3333.getOwningPIs())
@@ -149,8 +143,7 @@ class SensorTests extends GrailsUnitTestCase
         assertContainsAll([adam], a69_9002_3333.getOwningPIs())
     }
 
-    void testGroupByOwningPI()
-    {
+    void testGroupByOwningPI() {
         def sensorsGroupedByPI = Sensor.groupByOwningPI(sensorList)
 
         assertNotNull(sensorsGroupedByPI[adam])
@@ -171,8 +164,7 @@ class SensorTests extends GrailsUnitTestCase
         assertContainsAll([pinger, temp, pressure], a69_1303_1111.typesCanChangeTo)
     }
 
-    private assertContainsAll(listA, listB)
-    {
+    private assertContainsAll(listA, listB) {
         assertEquals(listA.size(), listB.size())
         assertTrue(listA.containsAll(listB))
         assertTrue(listB.containsAll(listA))

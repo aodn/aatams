@@ -3,8 +3,7 @@ package au.org.emii.aatams
 import au.org.emii.aatams.report.ReportController
 import grails.converters.JSON
 
-class SensorController extends ReportController
-{
+class SensorController extends ReportController {
     def candidateEntitiesService
     def tagFactoryService
 
@@ -14,13 +13,11 @@ class SensorController extends ReportController
         redirect(action: "list", params: params)
     }
 
-    def list =
-    {
+    def list = {
         doList("sensor")
     }
 
-    def export =
-    {
+    def export = {
         doExport("sensor")
     }
 
@@ -31,8 +28,7 @@ class SensorController extends ReportController
                 candidateProjects:candidateEntitiesService.projects()]
     }
 
-    def save =
-    {
+    def save = {
         def tag = tagFactoryService.lookupOrCreate(params.tag)
         assert(tag)
 
@@ -57,30 +53,24 @@ class SensorController extends ReportController
         // Workaround for http://jira.grails.org/browse/GRAILS-3783
         tag.addToSensors(sensorInstance)
 
-        if (sensorInstance.save(flush: true))
-        {
+        if (sensorInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
 
-            if (params.responseType == 'json')
-            {
+            if (params.responseType == 'json') {
                 render ([instance:sensorInstance, message:flash, tag:[id: tag.id]] as JSON)
             }
-            else
-            {
+            else {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
                 redirect(controller: "tag", action: "show", id: sensorInstance.tag?.id)
             }
         }
-        else
-        {
+        else {
             log.error(sensorInstance.errors)
 
-            if (params.responseType == 'json')
-            {
+            if (params.responseType == 'json') {
                 render ([errors:sensorInstance.errors] as JSON)
             }
-            else
-            {
+            else {
                 def model =  [sensorInstance: sensorInstance,
                               candidateProjects:candidateEntitiesService.projects()]
                 render(view: "create", model: model)
@@ -159,13 +149,11 @@ class SensorController extends ReportController
         }
     }
 
-    def lookupByTransmitterId =
-    {
+    def lookupByTransmitterId = {
         def sensors = Sensor.findAllByTransmitterIdIlike("%" + params.term + "%", [sort: "transmitterId"])
 
         // Limit so that all results fit on screen.
-        if (sensors?.size() > 20)
-        {
+        if (sensors?.size() > 20) {
             sensors = sensors[0..19]
         }
 

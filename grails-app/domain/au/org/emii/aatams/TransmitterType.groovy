@@ -3,28 +3,23 @@ package au.org.emii.aatams
 /**
  * Ping or Sensor type (e.g. PINGER, DEPTH, TEMPERATURE, ACCELEROMETER).
  */
-class TransmitterType
-{
+class TransmitterType {
     String transmitterTypeName
 
-    static constraints =
-    {
+    static constraints = {
         transmitterTypeName(blank:false, unique:true)
     }
 
-    String toString()
-    {
+    String toString() {
         return transmitterTypeName
     }
 
-    static def sensorTypes()
-    {
+    static def sensorTypes() {
         return (list() - findByTransmitterTypeName('PINGER'))
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result \
@@ -34,8 +29,7 @@ class TransmitterType
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (this.is(obj))
             return true;
         if (obj == null)

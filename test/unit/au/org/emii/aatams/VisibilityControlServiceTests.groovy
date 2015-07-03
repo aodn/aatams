@@ -4,8 +4,7 @@ import au.org.emii.aatams.detection.DetectionView
 import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import org.joda.time.DateTime
 
-class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase
-{
+class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase {
     def visibilityControlService
     def permissionUtilsService
 
@@ -18,8 +17,7 @@ class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase
     AnimalRelease release
     Surgery surgery
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         visibilityControlService = new VisibilityControlService()
@@ -58,8 +56,7 @@ class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase
         }
     }
 
-    void testReadPermissionDetectionNoAssociatedRelease()
-    {
+    void testReadPermissionDetectionNoAssociatedRelease() {
         det.metaClass.getProject = {
             return null
         }
@@ -67,8 +64,7 @@ class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase
         assertTrue(visibilityControlService.hasReadPermission(det))
     }
 
-    void testDetectionEmbargoMemberOfDeploymentProject()
-    {
+    void testDetectionEmbargoMemberOfDeploymentProject() {
         acceptedPermissionString = "project:${installationProject.id}:read"
 
         [surgery, release].each {
@@ -76,16 +72,14 @@ class VisibilityControlServiceTests extends AbstractGrailsUnitTestCase
         }
     }
 
-    void testDetectionEmbargoMemberOfReleaseProject()
-    {
+    void testDetectionEmbargoMemberOfReleaseProject() {
         acceptedPermissionString = "project:${releaseProject.id}:read"
         [det, surgery, release].each {
             assertNotNull(visibilityControlService.applyVisibilityControls(it))
         }
     }
 
-    protected boolean isPermitted(permission)
-    {
+    protected boolean isPermitted(permission) {
         return permission == acceptedPermissionString
     }
 }

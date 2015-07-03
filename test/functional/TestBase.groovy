@@ -6,33 +6,27 @@ import geb.junit4.GebReportingTest
 
 import pages.*
 
-class TestBase extends GebReportingTest 
-{
-    Configuration createConf()
-    {
+class TestBase extends GebReportingTest  {
+    Configuration createConf() {
         ConfigurationLoader loader = new ConfigurationLoader(gebConfEnv)
         Configuration config = loader.getConf(gebConfScript)
         
-        if (!config.reportsDir)
-        {
+        if (!config.reportsDir) {
             config = loader.getConf(new File('./test/functional/GebConfig.groovy').toURL(), new GroovyClassLoader())
         }
         
-        if (!config.reportsDir)
-        {
+        if (!config.reportsDir) {
             config.reportsDir = new File("./target/test-reports/geb")
         }
         
-        if (!config.baseUrl)
-        {
+        if (!config.baseUrl) {
             config.baseUrl = "http://localhost:8090/aatams/"
         }
         
         return config
     }
 
-    protected void login(username, password) 
-    {
+    protected void login(username, password)  {
         to HomePage
         
         assert heading.text() == "Australian Animal Tagging and Monitoring System (AATAMS)"
@@ -45,8 +39,7 @@ class TestBase extends GebReportingTest
         signInButton.click()
     }
 
-    protected void loginAsSysAdmin() 
-    {
+    protected void loginAsSysAdmin()  {
         login("jkburges", "password")
     }
 }

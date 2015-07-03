@@ -2,8 +2,7 @@ package aatams
 
 import au.org.emii.aatams.Address
 
-class AddressTagLib 
-{
+class AddressTagLib  {
     def addressDetail = {attrs, body ->
                         
         out << render(template:"/address/addressTemplate", 

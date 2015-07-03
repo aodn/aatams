@@ -2,17 +2,14 @@ package pages
 
 import module.ChangePasswordDialog
 
-class PersonEditPage extends PersonCreateEditPage 
-{
+class PersonEditPage extends PersonCreateEditPage  {
     static url = "person/edit"
     
-    static at =
-    {
+    static at = {
         title == "Edit Person"
     }
     
-    static content =
-    {
+    static content = {
         updateButton (to: [PersonShowPage]) { $("input", value:"Update") }
         deleteButton (to: [PersonListPage]) { $("input", value:"Delete") }
         

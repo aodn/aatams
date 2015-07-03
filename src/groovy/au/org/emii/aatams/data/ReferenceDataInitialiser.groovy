@@ -19,20 +19,16 @@ import shiro.*
  *
  * @author jburgess
  */
-class ReferenceDataInitialiser extends AbstractDataInitialiser
-{
-    ReferenceDataInitialiser(def service)
-    {
+class ReferenceDataInitialiser extends AbstractDataInitialiser {
+    ReferenceDataInitialiser(def service) {
         super(service)
     }
 
-    void execute()
-    {
+    void execute() {
         initReferenceData()
     }
 
-    def initReferenceData()
-    {
+    def initReferenceData() {
         Notification receiverRecoveryCreate =
             new Notification(key:"RECEIVER_RECOVERY_CREATE",
                              htmlFragment:"Click here to create a receiver recovery",

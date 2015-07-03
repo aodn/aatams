@@ -20,15 +20,15 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmGenerateChangelog: 'Generates an initial changelog XML file') {
-	depends dbmInit
+    depends dbmInit
 
-	if (!okToWrite(0, true)) return
+    if (!okToWrite(0, true)) return
 
-	doAndClose {
-		executeAndWrite argsList[0], { PrintStream out ->
-			createDiff(database, null).compare().printChangeLog out, database
-		}
-	}
+    doAndClose {
+        executeAndWrite argsList[0], { PrintStream out ->
+            createDiff(database, null).compare().printChangeLog out, database
+        }
+    }
 }
 
 setDefaultTarget dbmGenerateChangelog

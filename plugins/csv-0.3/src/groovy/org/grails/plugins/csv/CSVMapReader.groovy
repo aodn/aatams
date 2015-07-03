@@ -31,18 +31,18 @@ public class CSVMapReader implements Closeable, Iterable {
 
     CSVReader csvReader
 
-	//the column names from the first header line in the file
-	def fieldKeys = []
+    //the column names from the first header line in the file
+    def fieldKeys = []
 
-	/**
-	 * If this is >0 then on each iteration, instead of a map, will return a list of maps of this batchSize
-	 * and returnAll or toList will return a list of lists(batches) of maps based on the batchSize
-	 * For example: this is usefull if you have a million rows in the CSV and want each iteration to return a list(batch) of 50 rows(maps) at a time
-	 * so you can process inserts into the db in batches of 50.
-	 */
-	Integer batchSize = 0
+    /**
+     * If this is >0 then on each iteration, instead of a map, will return a list of maps of this batchSize
+     * and returnAll or toList will return a list of lists(batches) of maps based on the batchSize
+     * For example: this is usefull if you have a million rows in the CSV and want each iteration to return a list(batch) of 50 rows(maps) at a time
+     * so you can process inserts into the db in batches of 50.
+     */
+    Integer batchSize = 0
 
-	public CSVMapReader() {
+    public CSVMapReader() {
     }
 
     /**
@@ -50,8 +50,8 @@ public class CSVMapReader implements Closeable, Iterable {
      *
      * @param reader the reader to an underlying CSV source.
      */
-	public CSVMapReader(Reader reader) {
-		this(reader, null)
+    public CSVMapReader(Reader reader) {
+        this(reader, null)
     }
 
     /**
@@ -61,95 +61,95 @@ public class CSVMapReader implements Closeable, Iterable {
      * @param settingsMap map of settings for the underlying CSVReader.
      */
     public CSVMapReader(Reader reader, Map settingsMap) {
-		csvReader = CSVReaderUtils.toCsvReader(reader,settingsMap)
-		if(settingsMap?.batchSize) batchSize = settingsMap?.batchSize?.toInteger()
+        csvReader = CSVReaderUtils.toCsvReader(reader,settingsMap)
+        if(settingsMap?.batchSize) batchSize = settingsMap?.batchSize?.toInteger()
     }
 
-	/**
+    /**
      * Constructs CSVMapReader using a CSVReader
      *
      * @param csvReader the constructed CSVReader
      */
     public CSVMapReader(CSVReader csvr) {
-		csvReader = csvr
+        csvReader = csvr
     }
 
-	//takes the first header line (assumed from firstreadline) from the file and sets the keys
-	def initFieldKeys(){
-		fieldKeys = fieldKeys?:csvReader.readNext()
-	}
+    //takes the first header line (assumed from firstreadline) from the file and sets the keys
+    def initFieldKeys(){
+        fieldKeys = fieldKeys?:csvReader.readNext()
+    }
 
-	/**
+    /**
      * Reads the next line from the buffer in CSVReader and converts to map.
      */
     Map readNext() throws IOException {
 
         Map result
-		String[] nextLine = csvReader.readNext()
-		//skip blank lines if there is only 1 token and its blank
-		while (nextLine && isBlankLine(nextLine)) {
-			nextLine = csvReader.readNext()
-		}
-		return convertArrayToMap(fieldKeys,nextLine)
+        String[] nextLine = csvReader.readNext()
+        //skip blank lines if there is only 1 token and its blank
+        while (nextLine && isBlankLine(nextLine)) {
+            nextLine = csvReader.readNext()
+        }
+        return convertArrayToMap(fieldKeys,nextLine)
     }
 
-	/**
+    /**
      * Reads the next batched chunk of lines from the buffer in CSVReader and return a list of maps.
      */
     List<Map> readNextBatch() throws IOException {
-		def reslist = []
-		Map map = readNext()
-		while(map){
-			reslist.add map
-			if(reslist.size() == batchSize) break;
-			map = readNext()
-		}
-		return reslist
+        def reslist = []
+        Map map = readNext()
+        while(map){
+            reslist.add map
+            if(reslist.size() == batchSize) break;
+            map = readNext()
+        }
+        return reslist
     }
 
-	//This is here to remain consitent with file's eachLine in case someone uses it. Just calls the each
-	void eachLine(Closure closure){
-		if(batchSize >0 ) throw new UnsupportedOperationException("batchSize is >0 so you are not getting lines but a list of lines(rows/maps). Use each instead");
-		each(closure)
-	}
+    //This is here to remain consitent with file's eachLine in case someone uses it. Just calls the each
+    void eachLine(Closure closure){
+        if(batchSize >0 ) throw new UnsupportedOperationException("batchSize is >0 so you are not getting lines but a list of lines(rows/maps). Use each instead");
+        each(closure)
+    }
 
-	//true it only 1 element in array and its blank
-	boolean isBlankLine(String[] tokenArray){
-		return (!tokenArray[0] && tokenArray.size() <=1 )
-	}
+    //true it only 1 element in array and its blank
+    boolean isBlankLine(String[] tokenArray){
+        return (!tokenArray[0] && tokenArray.size() <=1 )
+    }
 
-	/**
+    /**
      * Reads the entire file into a List with each element being a map where keys are the from the 1st header line in file
      *
      * @return a List of Maps (or list of lists of maps if batchSize>0) with each map representing a line of the
      */
     List readAll() {
-		this.collect{it}
+        this.collect{it}
     }
 
-	/**
+    /**
      * a more groovy alternate to readAll (opencsv syntax) that returns this as a list of maps
      */
     List toList(){
-		return readAll()
+        return readAll()
     }
 
-	//groovy way to cast, can do something like " def list = new CSVMapReader(file) as List
-	Object asType(Class type){
-		if(type == List) return readAll()
-	}
+    //groovy way to cast, can do something like " def list = new CSVMapReader(file) as List
+    Object asType(Class type){
+        if(type == List) return readAll()
+    }
 
 
-	static Map convertArrayToMap(keys,tokens){
-		if(!tokens) return null
-		def map = [:]
-		for ( i in 0..tokens.size()-1 ) {
-			map[keys[i]] = tokens[i]
-		}
-		return map
-	}
+    static Map convertArrayToMap(keys,tokens){
+        if(!tokens) return null
+        def map = [:]
+        for ( i in 0..tokens.size()-1 ) {
+            map[keys[i]] = tokens[i]
+        }
+        return map
+    }
 
-	/**
+    /**
      * Calls close on CSVReader and closes the underlying reader. You should do this if you are working with Stream or Files!
      */
     public void close() throws IOException {
@@ -161,7 +161,7 @@ public class CSVMapReader implements Closeable, Iterable {
             return new CSVMapReaderIterator(this);
         } catch (IOException e) {
             throw new RuntimeException(e);
-		}
+        }
     }
 
 }
@@ -172,12 +172,12 @@ class CSVMapReaderIterator implements Iterator {
 
     CSVMapReaderIterator(CSVMapReader reader) throws IOException {
         this.mapReader = reader;
-		mapReader.initFieldKeys()
+        mapReader.initFieldKeys()
         nextEl = mapReader.batchSize? mapReader.readNextBatch() :mapReader.readNext()
     }
 
     boolean hasNext() {
-		if(!nextEl) mapReader.close()
+        if(!nextEl) mapReader.close()
         return nextEl
     }
 
@@ -186,7 +186,7 @@ class CSVMapReaderIterator implements Iterator {
         try {
             nextEl = mapReader.batchSize? mapReader.readNextBatch() :mapReader.readNext()
         } catch (IOException e) {
-			mapReader.close()
+            mapReader.close()
             throw new RuntimeException(e);
         }
         return curEl;

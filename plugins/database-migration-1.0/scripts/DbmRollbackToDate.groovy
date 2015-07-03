@@ -20,11 +20,11 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmRollbackToDate: 'Rolls back the database to the state it was in at the given date/time') {
-	depends dbmInit
+    depends dbmInit
 
-	doAndClose {
-		liquibase.rollback calculateDate(), contexts
-	}
+    doAndClose {
+        liquibase.rollback calculateDate(), contexts
+    }
 }
 
 setDefaultTarget dbmRollbackToDate

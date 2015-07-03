@@ -94,8 +94,8 @@ This version is recommended for JDK 1.5+
             bean.destroyMethod = "stop"
             name = "hibernate"
             sessionFactory = { SessionFactoryLookup sfl ->
-				sessionFactory = ref("sessionFactory")
-			}
+                sessionFactory = ref("sessionFactory")
+            }
             fetchCount = config.fetchCount ?: 5000
 //            lifecycleInjector = lifecycleInjector
         }

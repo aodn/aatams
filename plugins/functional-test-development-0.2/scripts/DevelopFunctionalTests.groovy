@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *	   http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,304 +18,304 @@ includeTargets << grailsScript("_GrailsEvents")
 
 target('default': "Run a Grails applications unit tests") {
 
-	println ""
+    println ""
 
-	appOutputPrefix = "  [app]  "
-	testOutputPrefix = " [test]  "
+    appOutputPrefix = "  [app]  "
+    testOutputPrefix = " [test]  "
 
-	def runAppArgs = args.tokenize()
-	def run = true
+    def runAppArgs = args.tokenize()
+    def run = true
 
-	app = launchApp(*runAppArgs)
+    app = launchApp(*runAppArgs)
 
-	addShutdownHook {
-		if (isRunning(binding.app)) {
-			println ""
-			update "stopping app"
-			stopApp()
-		}
-	}
+    addShutdownHook {
+        if (isRunning(binding.app)) {
+            println ""
+            update "stopping app"
+            stopApp()
+        }
+    }
 
-	def input = new BufferedReader(new InputStreamReader(System.in))
-	def last = ""
+    def input = new BufferedReader(new InputStreamReader(System.in))
+    def last = ""
 
-	while (run) {
-		println ""
-		println "Ready to run tests."
-		println " - Enter a test target pattern to run tests"
-		if (last) {
-			println " - Enter a blank line to rerun the previous tests (pattern: '$last')"
-			println " - Enter 'all' to run all functional tests"
-		} else {
-			println " - Enter a blank line (or 'all') to run all functional tests"
-		}
-		println " - Enter 'restart' to restart the running application"
-		println " - Enter 'exit' to stop"
-		println ""
-		print "Command: "
+    while (run) {
+        println ""
+        println "Ready to run tests."
+        println " - Enter a test target pattern to run tests"
+        if (last) {
+            println " - Enter a blank line to rerun the previous tests (pattern: '$last')"
+            println " - Enter 'all' to run all functional tests"
+        } else {
+            println " - Enter a blank line (or 'all') to run all functional tests"
+        }
+        println " - Enter 'restart' to restart the running application"
+        println " - Enter 'exit' to stop"
+        println ""
+        print "Command: "
 
-		def line = input.readLine().trim()
+        def line = input.readLine().trim()
 
-		println ""
+        println ""
 
-		if (isExit(line)) {
-			run = false
-			update "stopping app"
-			stopApp(quiet: true)
-		} else if (isRestart(line)) {
-			update "restarting app"
-			stopApp()
-			app = launchApp(*runAppArgs)
-		} else { // is test command
-			if (line == "") {
-				line = last
-			} else if (line == "all") {
-				line = ""
-				last = ""
-			} else {
-				last = line
-			}
+        if (isExit(line)) {
+            run = false
+            update "stopping app"
+            stopApp(quiet: true)
+        } else if (isRestart(line)) {
+            update "restarting app"
+            stopApp()
+            app = launchApp(*runAppArgs)
+        } else { // is test command
+            if (line == "") {
+                line = last
+            } else if (line == "all") {
+                line = ""
+                last = ""
+            } else {
+                last = line
+            }
 
-			def args = []
-			def properties = [:]
+            def args = []
+            def properties = [:]
 
-			buildLaunchArgs(parseCommandLine(line), args, properties, "D")
+            buildLaunchArgs(parseCommandLine(line), args, properties, "D")
 
-			def baseUrlArg = "-baseUrl=$baseUrl" as String
-			def tests = runTests(*:properties, "-non-interactive", baseUrlArg, "functional:", *args)
-			def testsOutput = new BufferedReader(new InputStreamReader(tests.in))
-			exhaust(testsOutput, testOutputPrefix)
+            def baseUrlArg = "-baseUrl=$baseUrl" as String
+            def tests = runTests(*:properties, "-non-interactive", baseUrlArg, "functional:", *args)
+            def testsOutput = new BufferedReader(new InputStreamReader(tests.in))
+            exhaust(testsOutput, testOutputPrefix)
 
-			println ""
-			update "Output from the application while running tests"
-			try {
-				exhaust(appOutput, appOutputPrefix, true)
-			} catch (IOException e) {
-				// ignore
-			}
+            println ""
+            update "Output from the application while running tests"
+            try {
+                exhaust(appOutput, appOutputPrefix, true)
+            } catch (IOException e) {
+                // ignore
+            }
 
-			if (!isRunning(app)) {
-				update "the app crashed, restarting it"
-				app = launchApp(*runAppArgs)
-			}
-		}
-	}
+            if (!isRunning(app)) {
+                update "the app crashed, restarting it"
+                app = launchApp(*runAppArgs)
+            }
+        }
+    }
 }
 
 buildLaunchArgs = { tokens, args, properties, propPrefix ->
-	tokens.each {
-		if (it.startsWith("-$propPrefix")) {
-			def m = it =~ ~/-$propPrefix(.+)=(.+)/
-			properties[m[0][1]] = m[0][2]
-		} else {
-			args << it
-		}
-	}
+    tokens.each {
+        if (it.startsWith("-$propPrefix")) {
+            def m = it =~ ~/-$propPrefix(.+)=(.+)/
+            properties[m[0][1]] = m[0][2]
+        } else {
+            args << it
+        }
+    }
 }
 
 launchApp = { String[] givenArgs ->
-	def args = []
-	def properties = [:]
+    def args = []
+    def properties = [:]
 
-	buildLaunchArgs(givenArgs, args, properties, "P")
+    buildLaunchArgs(givenArgs, args, properties, "P")
 
-	def command = ["run-app"] + args.toList()
-	if (!properties["grails.env"]) {
-		command = ["test"] + command
-	}
+    def command = ["run-app"] + args.toList()
+    if (!properties["grails.env"]) {
+        command = ["test"] + command
+    }
 
-	def process = createGrailsProcess(properties, command as String[])
+    def process = createGrailsProcess(properties, command as String[])
 
-	def inputStream = new PipedInputStream()
-	def outputStream = new PipedOutputStream(inputStream)
-	appOutput = new BufferedReader(new InputStreamReader(inputStream))
-	appOutputReadingThread = process.consumeProcessOutputStream(outputStream)
+    def inputStream = new PipedInputStream()
+    def outputStream = new PipedOutputStream(inputStream)
+    appOutput = new BufferedReader(new InputStreamReader(inputStream))
+    appOutputReadingThread = process.consumeProcessOutputStream(outputStream)
 
-	try {
-		baseUrl = exhaust(appOutput, appOutputPrefix, false) {
-			def matcher = it =~ ~/Server running. Browse to (\S+).*/
-			if (matcher) {
-				def base = matcher[0][1]
-				base.endsWith("/") ? base : base + "/"
-			} else {
-				null
-			}
-		}
-	} catch (IOException e) {
-		if (!(isRunning(process))) {
-			die "the application did not start successfully"
-		}
-	}
+    try {
+        baseUrl = exhaust(appOutput, appOutputPrefix, false) {
+            def matcher = it =~ ~/Server running. Browse to (\S+).*/
+            if (matcher) {
+                def base = matcher[0][1]
+                base.endsWith("/") ? base : base + "/"
+            } else {
+                null
+            }
+        }
+    } catch (IOException e) {
+        if (!(isRunning(process))) {
+            die "the application did not start successfully"
+        }
+    }
 
-	process
+    process
 }
 
 stopApp = { Map options = [:] ->
-	appOutputReadingThread.defaultUncaughtExceptionHandler = ignoreIOExceptions
-	app.destroy()
-	try {
-		exhaust(appOutput, appOutputPrefix)
-	} catch (IOException e) {
-		if (isRunning(app) && options.quiet != true) {
-			throw e
-		}
-	}
-	app.waitFor()
+    appOutputReadingThread.defaultUncaughtExceptionHandler = ignoreIOExceptions
+    app.destroy()
+    try {
+        exhaust(appOutput, appOutputPrefix)
+    } catch (IOException e) {
+        if (isRunning(app) && options.quiet != true) {
+            throw e
+        }
+    }
+    app.waitFor()
 }
 
 runTests = { Map properties, String[] args ->
-	def command = ["test-app"] + args.toList()
-	createGrailsProcess(properties, *command)
+    def command = ["test-app"] + args.toList()
+    createGrailsProcess(properties, *command)
 }
 
 createGrailsProcess = { Map properties, String[] args, err2out = true ->
-	def command = properties.collect { k, v -> "-D$k=$v" } + args.toList()
-	update "Launching grails with '${command.join(' ')}'"
-	createGrailsProcessBuilder(*(command*.toString())).redirectErrorStream(err2out).start()
+    def command = properties.collect { k, v -> "-D$k=$v" } + args.toList()
+    update "Launching grails with '${command.join(' ')}'"
+    createGrailsProcessBuilder(*(command*.toString())).redirectErrorStream(err2out).start()
 }
 
 createGrailsProcessBuilder = { String[] args ->
-	def builder = new ProcessBuilder()
-	builder.directory(grailsSettings.baseDir)
-	def env = builder.environment()
-	def props = System.properties
+    def builder = new ProcessBuilder()
+    builder.directory(grailsSettings.baseDir)
+    def env = builder.environment()
+    def props = System.properties
 
-	def javaOpts = []
-	[env.GRAILS_OPTS, env.JAVA_OPTS]*.with {
-		eachMatch(~/-.+?(?=\s+-|-s*$)/) {
-			javaOpts << it.replace('"', '')
-		}
-	}
+    def javaOpts = []
+    [env.GRAILS_OPTS, env.JAVA_OPTS]*.with {
+        eachMatch(~/-.+?(?=\s+-|-s*$)/) {
+            javaOpts << it.replace('"', '')
+        }
+    }
 
-	if (javaOpts.empty) {
-		javaOpts << "-Xmx512m" << "-XX:MaxPermSize=96m"
-	}
+    if (javaOpts.empty) {
+        javaOpts << "-Xmx512m" << "-XX:MaxPermSize=96m"
+    }
 
-	["grails.home", "grails.version", "base.dir", "tools.jar", "groovy.starter.conf"].each {
-		javaOpts << ("-D" + it + "=" + props[it])
-	}
+    ["grails.home", "grails.version", "base.dir", "tools.jar", "groovy.starter.conf"].each {
+        javaOpts << ("-D" + it + "=" + props[it])
+    }
 
-	def java = props["java.home"] + "/bin/java"
-	def cmd = [java, *javaOpts, '-classpath', props['java.class.path'], 'org.codehaus.groovy.grails.cli.support.GrailsStarter', '--main', 'org.codehaus.groovy.grails.cli.GrailsScriptRunner', '--conf', props['groovy.starter.conf']]
+    def java = props["java.home"] + "/bin/java"
+    def cmd = [java, *javaOpts, '-classpath', props['java.class.path'], 'org.codehaus.groovy.grails.cli.support.GrailsStarter', '--main', 'org.codehaus.groovy.grails.cli.GrailsScriptRunner', '--conf', props['groovy.starter.conf']]
 
-	builder.command(*cmd, *args)
+    builder.command(*cmd, *args)
 
-	builder
+    builder
 }
 
 getGrailsPath = {
-	def grailsHome = grailsSettings.grailsHome
+    def grailsHome = grailsSettings.grailsHome
 
-	if (!grailsHome) {
-		die "GRAILS_HOME is not set in build settings, cannot continue"
-	}
-	if (!grailsHome.exists()) {
-		die "GRAILS_HOME points to $grailsHome.path which does not exist, cannot continue"
-	}
+    if (!grailsHome) {
+        die "GRAILS_HOME is not set in build settings, cannot continue"
+    }
+    if (!grailsHome.exists()) {
+        die "GRAILS_HOME points to $grailsHome.path which does not exist, cannot continue"
+    }
 
-	def starterFile = new File(grailsHome, "bin/grails")
-	if (!starterFile.exists()) {
-		die "GRAILS_HOME points to $grailsHome.path which does not have a 'bin/grails' in it, cannot continue"
-	}
+    def starterFile = new File(grailsHome, "bin/grails")
+    if (!starterFile.exists()) {
+        die "GRAILS_HOME points to $grailsHome.path which does not have a 'bin/grails' in it, cannot continue"
+    }
 
-	starterFile.absolutePath
+    starterFile.absolutePath
 }
 
 die = {
-	println ""
-	event("StatusError", ["Error: $it"])
-	System.exit(1)
+    println ""
+    event("StatusError", ["Error: $it"])
+    System.exit(1)
 }
 
 update = {
-	event("StatusUpdate", ["$it"])
+    event("StatusUpdate", ["$it"])
 }
 
 isRunning = { Process process ->
-	try {
-		process.exitValue()
-		false
-	} catch (IllegalThreadStateException e) {
-		true
-	}
+    try {
+        process.exitValue()
+        false
+    } catch (IllegalThreadStateException e) {
+        true
+    }
 }
 
 isExit = {
-	it.toLowerCase() == "exit"
+    it.toLowerCase() == "exit"
 }
 
 isRestart = {
-	it.toLowerCase() == "restart"
+    it.toLowerCase() == "restart"
 }
 
 exhaust = { Reader reader, String prefix, boolean noWait = false, Closure stopAt = null ->
-	if (noWait && !reader.ready()) {
-		return null
-	}
+    if (noWait && !reader.ready()) {
+        return null
+    }
 
-	def line = reader.readLine()
-	while (line != null) {
-		println "${prefix}${line}"
-		if (stopAt) {
-			def stopped = stopAt(line)
-			if (stopped) {
-				return stopped
-			}
-		}
+    def line = reader.readLine()
+    while (line != null) {
+        println "${prefix}${line}"
+        if (stopAt) {
+            def stopped = stopAt(line)
+            if (stopped) {
+                return stopped
+            }
+        }
 
-		if (noWait && !reader.ready()) {
-			return null
-		}
+        if (noWait && !reader.ready()) {
+            return null
+        }
 
-		line = reader.readLine()
-	}
+        line = reader.readLine()
+    }
 }
 
 ignoreIOExceptions =  [uncaughtException: { Thread t, Throwable e ->
-	if (e instanceof IOException) {
-		// ignore
-	} else {
-		throw e
-	}
+    if (e instanceof IOException) {
+        // ignore
+    } else {
+        throw e
+    }
 }] as Thread.UncaughtExceptionHandler
 
 parseCommandLine = { line ->
-	line = line.trim()
-	def words = []
-	while (line) {
+    line = line.trim()
+    def words = []
+    while (line) {
 
-		def field = ''
-		def snippet
+        def field = ''
+        def snippet
 
-		def match
-		def matches = { pattern -> match = line =~ pattern }
+        def match
+        def matches = { pattern -> match = line =~ pattern }
 
-		while (true) {
-			if (matches(~/^("(([^"\\]|\\.)*)").*/)) {
-				line -= match[0][1]
-				snippet = match[0][2].replace("\\", "")
-			} else if (line.startsWith('"')) {
-				throw new IllegalArgumentException("Unmatched double quote: ${line}")
-			} else if (matches(~/^('([^']*)').*/)) {
-				line -= match[0][1]
-				snippet = match[0][2]
-			} else if (line.startsWith("'")) {
-				throw new IllegalArgumentException("Unmatched single quote: ${line}")
-			} else if (matches(~/^(\\(.)?).*/)) {
-				line -= match[0][1]
-				snippet = match[0][2] ?: "\\"
-			} else if (matches(~/^([^\s\\'"]+)/)) {
-				line -= match[0][1]
-				snippet = match[0][1]
-			} else {
-				line = line.trim()
-				break
-			}
-			field += snippet
-		}
+        while (true) {
+            if (matches(~/^("(([^"\\]|\\.)*)").*/)) {
+                line -= match[0][1]
+                snippet = match[0][2].replace("\\", "")
+            } else if (line.startsWith('"')) {
+                throw new IllegalArgumentException("Unmatched double quote: ${line}")
+            } else if (matches(~/^('([^']*)').*/)) {
+                line -= match[0][1]
+                snippet = match[0][2]
+            } else if (line.startsWith("'")) {
+                throw new IllegalArgumentException("Unmatched single quote: ${line}")
+            } else if (matches(~/^(\\(.)?).*/)) {
+                line -= match[0][1]
+                snippet = match[0][2] ?: "\\"
+            } else if (matches(~/^([^\s\\'"]+)/)) {
+                line -= match[0][1]
+                snippet = match[0][1]
+            } else {
+                line = line.trim()
+                break
+            }
+            field += snippet
+        }
 
-		words << field
-	}
+        words << field
+    }
 
-	words
+    words
 }

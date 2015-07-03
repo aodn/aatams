@@ -31,69 +31,69 @@ import org.springframework.context.ApplicationContext
  */
 class GrailsChangeLogParser implements ChangeLogParser {
 
-	private Logger log = Logger.getLogger(getClass())
+    private Logger log = Logger.getLogger(getClass())
 
-	private ApplicationContext ctx
+    private ApplicationContext ctx
 
-	/**
-	 * Constructor.
-	 * @param ctx the Spring app context
-	 */
-	GrailsChangeLogParser(ApplicationContext ctx) {
-		this.ctx = ctx
-	}
+    /**
+     * Constructor.
+     * @param ctx the Spring app context
+     */
+    GrailsChangeLogParser(ApplicationContext ctx) {
+        this.ctx = ctx
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * @see liquibase.parser.ChangeLogParser#parse(java.lang.String, liquibase.changelog.ChangeLogParameters,
-	 * 	liquibase.resource.ResourceAccessor)
-	 */
-	DatabaseChangeLog parse(String physicalChangeLogLocation,
-			ChangeLogParameters changeLogParameters,
-			ResourceAccessor resourceAccessor) throws ChangeLogParseException {
+    /**
+     * {@inheritDoc}
+     * @see liquibase.parser.ChangeLogParser#parse(java.lang.String, liquibase.changelog.ChangeLogParameters,
+     *     liquibase.resource.ResourceAccessor)
+     */
+    DatabaseChangeLog parse(String physicalChangeLogLocation,
+            ChangeLogParameters changeLogParameters,
+            ResourceAccessor resourceAccessor) throws ChangeLogParseException {
 
-		log.debug "parsing $physicalChangeLogLocation"
+        log.debug "parsing $physicalChangeLogLocation"
 
-		def inputStream = resourceAccessor.getResourceAsStream(physicalChangeLogLocation)
-		if (!inputStream) {
-			throw new ChangeLogParseException("$physicalChangeLogLocation not found")
-		}
+        def inputStream = resourceAccessor.getResourceAsStream(physicalChangeLogLocation)
+        if (!inputStream) {
+            throw new ChangeLogParseException("$physicalChangeLogLocation not found")
+        }
 
-		Script script = new GroovyShell(Thread.currentThread().contextClassLoader,
-			new Binding(MigrationUtils.changelogProperties)).parse(inputStream.text)
-		script.run()
+        Script script = new GroovyShell(Thread.currentThread().contextClassLoader,
+            new Binding(MigrationUtils.changelogProperties)).parse(inputStream.text)
+        script.run()
 
-		setChangelogProperties changeLogParameters
+        setChangelogProperties changeLogParameters
 
-		def builder = new DslBuilder(changeLogParameters, resourceAccessor,
-			physicalChangeLogLocation, ctx)
+        def builder = new DslBuilder(changeLogParameters, resourceAccessor,
+            physicalChangeLogLocation, ctx)
 
-		def root = script.databaseChangeLog
-		root.delegate = builder
-		root()
+        def root = script.databaseChangeLog
+        root.delegate = builder
+        root()
 
-		builder.databaseChangeLog
-	}
+        builder.databaseChangeLog
+    }
 
-	boolean supports(String changeLogFile, ResourceAccessor resourceAccessor) {
-		changeLogFile.toLowerCase().endsWith 'groovy'
-	}
+    boolean supports(String changeLogFile, ResourceAccessor resourceAccessor) {
+        changeLogFile.toLowerCase().endsWith 'groovy'
+    }
 
-	int getPriority() { PRIORITY_DEFAULT }
+    int getPriority() { PRIORITY_DEFAULT }
 
-	private void setChangelogProperties(ChangeLogParameters changeLogParameters) {
+    private void setChangelogProperties(ChangeLogParameters changeLogParameters) {
 
-		MigrationUtils.changelogProperties.each { name, value ->
+        MigrationUtils.changelogProperties.each { name, value ->
 
-			String contexts
-			String databases
-			if (value instanceof Map) {
-				contexts = value.contexts
-				databases = value.databases
-				value = value.value
-			}
+            String contexts
+            String databases
+            if (value instanceof Map) {
+                contexts = value.contexts
+                databases = value.databases
+                value = value.value
+            }
 
-			changeLogParameters.set name, value, contexts, databases
-		}
-	}
+            changeLogParameters.set name, value, contexts, databases
+        }
+    }
 }

@@ -22,15 +22,15 @@ import org.springframework.util.ClassUtils
  */
 class GrailsClassLoaderResourceAccessor implements ResourceAccessor {
 
-	InputStream getResourceAsStream(String file) throws IOException {
-		toClassLoader().getResourceAsStream 'migrations/' + file
-	}
+    InputStream getResourceAsStream(String file) throws IOException {
+        toClassLoader().getResourceAsStream 'migrations/' + file
+    }
 
-	Enumeration<URL> getResources(String packageName) throws IOException {
-		toClassLoader().getResources 'migrations/' + packageName
-	}
+    Enumeration<URL> getResources(String packageName) throws IOException {
+        toClassLoader().getResources 'migrations/' + packageName
+    }
 
-	ClassLoader toClassLoader() {
-		ClassUtils.defaultClassLoader
-	}
+    ClassLoader toClassLoader() {
+        ClassUtils.defaultClassLoader
+    }
 }

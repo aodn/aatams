@@ -26,57 +26,57 @@ import org.joda.time.DateTimeZone
 
 class StructuredDateTimeEditor extends DateTimeEditor implements StructuredPropertyEditor {
 
-	StructuredDateTimeEditor(Class type) {
-		super(type)
-	}
+    StructuredDateTimeEditor(Class type) {
+        super(type)
+    }
 
-	private static final FIELDS_BY_TYPE = [
-			(LocalDate): ["year", "month", "day"].asImmutable(),
-			(LocalTime): ["hour", "minute", "second"].asImmutable(),
-			(LocalDateTime): ["year", "month", "day", "hour", "minute", "second"].asImmutable(),
-			(DateTime): ["year", "month", "day", "hour", "minute", "second", "zone"].asImmutable()
-	].asImmutable()
+    private static final FIELDS_BY_TYPE = [
+            (LocalDate): ["year", "month", "day"].asImmutable(),
+            (LocalTime): ["hour", "minute", "second"].asImmutable(),
+            (LocalDateTime): ["year", "month", "day", "hour", "minute", "second"].asImmutable(),
+            (DateTime): ["year", "month", "day", "hour", "minute", "second", "zone"].asImmutable()
+    ].asImmutable()
 
-	private static final DEFAULT_VALUES = [month: 1, day: 1, hour: 0, minute: 0, second: 0].asImmutable()
+    private static final DEFAULT_VALUES = [month: 1, day: 1, hour: 0, minute: 0, second: 0].asImmutable()
 
-	private static final JODA_PROP_NAMES = [year: "year", month: "monthOfYear", day: "dayOfMonth", hour: "hourOfDay", minute: "minuteOfHour", second: "secondOfMinute"].asImmutable()
+    private static final JODA_PROP_NAMES = [year: "year", month: "monthOfYear", day: "dayOfMonth", hour: "hourOfDay", minute: "minuteOfHour", second: "secondOfMinute"].asImmutable()
 
 
-	List getRequiredFields() {
-		return [FIELDS_BY_TYPE[type].head()]
-	}
+    List getRequiredFields() {
+        return [FIELDS_BY_TYPE[type].head()]
+    }
 
-	List getOptionalFields() {
-		return FIELDS_BY_TYPE[type].tail()
-	}
+    List getOptionalFields() {
+        return FIELDS_BY_TYPE[type].tail()
+    }
 
-	Object assemble(Class type, Map fieldValues) throws IllegalArgumentException {
-		if (fieldValues.isEmpty() || fieldValues.every { !it.value }) return null
+    Object assemble(Class type, Map fieldValues) throws IllegalArgumentException {
+        if (fieldValues.isEmpty() || fieldValues.every { !it.value }) return null
 
-		requiredFields.each {
-			if (!fieldValues."$it") {
-				throw new IllegalArgumentException("Can't populate a $type without a $it")
-			}
-		}
+        requiredFields.each {
+            if (!fieldValues."$it") {
+                throw new IllegalArgumentException("Can't populate a $type without a $it")
+            }
+        }
 
-		try {
-			def dt = new MutableDateTime()
-			dt.secondOfMinute = 0
-			dt.millisOfSecond = 0
-			(requiredFields + optionalFields).each {
-				switch (it) {
-					case "zone":
-						// null is OK here as DateTimeZone.forID(null) returns default zone
-						dt.zoneRetainFields = DateTimeZone.forID(fieldValues[it])
-						break
-					default:
-						dt."${JODA_PROP_NAMES[it]}" = (fieldValues[it]?.toInteger() ?: DEFAULT_VALUES[it])
-				}
-			}
-			return dt.toDateTime()."to$type.simpleName"()
-		}
-		catch (NumberFormatException nfe) {
-			throw new IllegalArgumentException('Unable to parse structured date from request for date ["+propertyName+"]"')
-		}
-	}
+        try {
+            def dt = new MutableDateTime()
+            dt.secondOfMinute = 0
+            dt.millisOfSecond = 0
+            (requiredFields + optionalFields).each {
+                switch (it) {
+                    case "zone":
+                        // null is OK here as DateTimeZone.forID(null) returns default zone
+                        dt.zoneRetainFields = DateTimeZone.forID(fieldValues[it])
+                        break
+                    default:
+                        dt."${JODA_PROP_NAMES[it]}" = (fieldValues[it]?.toInteger() ?: DEFAULT_VALUES[it])
+                }
+            }
+            return dt.toDateTime()."to$type.simpleName"()
+        }
+        catch (NumberFormatException nfe) {
+            throw new IllegalArgumentException('Unable to parse structured date from request for date ["+propertyName+"]"')
+        }
+    }
 }

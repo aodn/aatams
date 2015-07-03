@@ -46,8 +46,8 @@ target(installSearchableConfig: "Installs the Searchable Plugin configuration fi
 
         Are you sure you want to continue?
             """,
-			validargs:"y,n",
-			addproperty:"grails.install.searchable.config.warning")
+            validargs:"y,n",
+            addproperty:"grails.install.searchable.config.warning")
 
        def answer = ant.antProject.properties."grails.install.searchable.config.warning"
 

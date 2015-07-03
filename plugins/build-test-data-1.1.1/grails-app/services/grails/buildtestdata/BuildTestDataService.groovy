@@ -27,7 +27,7 @@ class BuildTestDataService {
 
         // call buildLazy() if you want any instance that already exists, if there aren't any, just build one
         domainClass.metaClass.'static'.buildLazy = {->
-			domainInstanceBuilder.findExisting() ?: domainInstanceBuilder.build([:])
+            domainInstanceBuilder.findExisting() ?: domainInstanceBuilder.build([:])
         }
 
         // call buildWithoutSave() if you want to manually save the object yourself (possibly to tweak some values)
@@ -47,18 +47,18 @@ class BuildTestDataService {
         }
 
         domainClass.metaClass.'static'.buildWithoutSave = { propValues ->
-			domainInstanceBuilder.buildWithoutSave(propValues)
+            domainInstanceBuilder.buildWithoutSave(propValues)
         }
 
-		// I'm not happy with how I had to copy circularCheckList into a ton of method signatures,
+        // I'm not happy with how I had to copy circularCheckList into a ton of method signatures,
         // this might get refactored but I need to think on it more.
         domainClass.metaClass.'static'.build = { propValues, CircularCheckList circularCheckList ->
             domainInstanceBuilder.build(propValues, circularCheckList)
-		}
+        }
 
         domainClass.metaClass.'static'.buildWithoutSave = { propValues, CircularCheckList circularCheckList ->
             domainInstanceBuilder.buildWithoutSave(propValues, circularCheckList)
-		}
+        }
 
         domainClass.metaClass.buildCascadingSave = { circularTrap ->
             domainInstanceBuilder.save(delegate, circularTrap)

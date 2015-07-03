@@ -22,15 +22,15 @@ import org.joda.time.LocalDate
 
 class JodaTimePropertyEditorRegistrar implements PropertyEditorRegistrar {
 
-	void registerCustomEditors(PropertyEditorRegistry registry) {
-		DateTimeEditor.SUPPORTED_TYPES.each { type ->
-			registry.registerCustomEditor type, new StructuredDateTimeEditor(type)
-		}
+    void registerCustomEditors(PropertyEditorRegistry registry) {
+        DateTimeEditor.SUPPORTED_TYPES.each { type ->
+            registry.registerCustomEditor type, new StructuredDateTimeEditor(type)
+        }
 
-		PeriodEditor.SUPPORTED_TYPES.each { type ->
-			registry.registerCustomEditor type, new StructuredPeriodEditor(type)
-		}
+        PeriodEditor.SUPPORTED_TYPES.each { type ->
+            registry.registerCustomEditor type, new StructuredPeriodEditor(type)
+        }
 
-		registry.registerCustomEditor DateTimeZone, new DateTimeZoneEditor()
-	}
+        registry.registerCustomEditor DateTimeZone, new DateTimeZoneEditor()
+    }
 }

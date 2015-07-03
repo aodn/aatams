@@ -21,83 +21,83 @@ package grails.plugin.databasemigration
  */
 class ChangelogXml2Groovy {
 
-	private static final String NEWLINE = System.getProperty('line.separator')
+    private static final String NEWLINE = System.getProperty('line.separator')
 
-	/**
-	 * Convert a Liquibase XML changelog to Groovy DSL format.
-	 * @param xml the XML
-	 * @return DSL format
-	 */
-	static String convert(String xml) {
-		def groovy = new StringBuilder('databaseChangeLog = {')
-		groovy.append NEWLINE
-		for (node in new XmlParser(false, false).parseText(xml)) {
-			convertNode node, groovy, 1
-		}
-		groovy.append '}'
-		groovy.append NEWLINE
-		groovy.toString()
-	}
+    /**
+     * Convert a Liquibase XML changelog to Groovy DSL format.
+     * @param xml the XML
+     * @return DSL format
+     */
+    static String convert(String xml) {
+        def groovy = new StringBuilder('databaseChangeLog = {')
+        groovy.append NEWLINE
+        for (node in new XmlParser(false, false).parseText(xml)) {
+            convertNode node, groovy, 1
+        }
+        groovy.append '}'
+        groovy.append NEWLINE
+        groovy.toString()
+    }
 
-	private static void convertNode(Node node, StringBuilder groovy, int indentLevel) {
+    private static void convertNode(Node node, StringBuilder groovy, int indentLevel) {
 
-		groovy.append NEWLINE
-		appendWithIndent indentLevel, groovy, node.name()
+        groovy.append NEWLINE
+        appendWithIndent indentLevel, groovy, node.name()
 
-		String mixedText
-		def children = []
-		for (child in node.children()) {
-			if (child instanceof String) {
-				mixedText = child
-			}
-			else {
-				children << child
-			}
-		}
+        String mixedText
+        def children = []
+        for (child in node.children()) {
+            if (child instanceof String) {
+                mixedText = child
+            }
+            else {
+                children << child
+            }
+        }
 
-		appendAttrs groovy, node, mixedText
+        appendAttrs groovy, node, mixedText
 
-		if (children) {
-			groovy.append ' {'
-			for (child in children) {
-				convertNode child, groovy, indentLevel + 1
-			}
-			appendWithIndent indentLevel, groovy, '}'
-			groovy.append NEWLINE
-		}
-		else {
-			groovy.append NEWLINE
-		}
-	}
+        if (children) {
+            groovy.append ' {'
+            for (child in children) {
+                convertNode child, groovy, indentLevel + 1
+            }
+            appendWithIndent indentLevel, groovy, '}'
+            groovy.append NEWLINE
+        }
+        else {
+            groovy.append NEWLINE
+        }
+    }
 
-	private static void appendAttrs(StringBuilder groovy, Node node, String text) {
-		def local = new StringBuilder()
+    private static void appendAttrs(StringBuilder groovy, Node node, String text) {
+        def local = new StringBuilder()
 
-		String delimiter = ''
+        String delimiter = ''
 
-		if (text) {
-			local.append '"'
-			local.append text.replaceAll('\n', '\\\\n')
-			local.append '"'
-			delimiter = ', '
-		}
+        if (text) {
+            local.append '"'
+            local.append text.replaceAll('\n', '\\\\n')
+            local.append '"'
+            delimiter = ', '
+        }
 
-		node.attributes().each { name, value ->
-			local.append delimiter
-			local.append name
-			local.append(': "').append(value).append('"')
-			delimiter = ', '
-		}
+        node.attributes().each { name, value ->
+            local.append delimiter
+            local.append name
+            local.append(': "').append(value).append('"')
+            delimiter = ', '
+        }
 
-		if (local.length()) {
-			groovy.append '('
-			groovy.append local.toString()
-			groovy.append ')'
-		}
-	}
+        if (local.length()) {
+            groovy.append '('
+            groovy.append local.toString()
+            groovy.append ')'
+        }
+    }
 
-	private static void appendWithIndent(int indentLevel, StringBuilder groovy, String s) {
-		indentLevel.times { groovy.append '\t' }
-		groovy.append s
-	}
+    private static void appendWithIndent(int indentLevel, StringBuilder groovy, String s) {
+        indentLevel.times { groovy.append '\t' }
+        groovy.append s
+    }
 }

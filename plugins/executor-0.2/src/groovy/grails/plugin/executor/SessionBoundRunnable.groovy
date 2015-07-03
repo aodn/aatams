@@ -24,21 +24,21 @@ import org.slf4j.LoggerFactory
 * A callable that binds a session  and unbinds after its done
 */
 public class SessionBoundRunnable implements Runnable {
-	private final Runnable task;
-	private final SessionFactory sessionFactory;
+    private final Runnable task;
+    private final SessionFactory sessionFactory;
 
-	public SessionBoundRunnable(Runnable task,SessionFactory sessionFactory) {
-		if (task == null || sessionFactory == null) throw new NullPointerException();
-		this.task = task;
-		this.sessionFactory = sessionFactory;
-	}
+    public SessionBoundRunnable(Runnable task,SessionFactory sessionFactory) {
+        if (task == null || sessionFactory == null) throw new NullPointerException();
+        this.task = task;
+        this.sessionFactory = sessionFactory;
+    }
 
-	public void run(){
-		SessionBinderUtils.bindSession(sessionFactory);
-		try {
-			task.run();
-		} finally{
-			SessionBinderUtils.unbindSession(sessionFactory);
-		}
-	}
+    public void run(){
+        SessionBinderUtils.bindSession(sessionFactory);
+        try {
+            task.run();
+        } finally{
+            SessionBinderUtils.unbindSession(sessionFactory);
+        }
+    }
 }

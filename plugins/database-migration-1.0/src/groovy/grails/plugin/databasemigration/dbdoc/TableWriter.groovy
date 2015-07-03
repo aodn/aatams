@@ -25,19 +25,19 @@ import liquibase.database.typeconversion.TypeConverterFactory
  */
 class TableWriter extends HTMLWriter {
 
-	TableWriter(Map files, Database database) {
-		super(files, 'tables', database)
-	}
+    TableWriter(Map files, Database database) {
+        super(files, 'tables', database)
+    }
 
-	@Override
-	protected String createTitle(object) { """Changes affecting table "$object" """ }
+    @Override
+    protected String createTitle(object) { """Changes affecting table "$object" """ }
 
-	@Override
-	protected void writeCustomHTML(StringBuilder content, table, List<Change> changes) {
-		List<List<String>> cells = table.columns.collect {
-			[TypeConverterFactory.instance.findTypeConverter(database).convertToDatabaseTypeString(it, database),
-			 """<a href="columns/${table.name.toLowerCase()}/${it.name.toLowerCase()}">$it.name</a>""".toString()]
-		}
-		writeTable 'Current Columns', cells, content
-	}
+    @Override
+    protected void writeCustomHTML(StringBuilder content, table, List<Change> changes) {
+        List<List<String>> cells = table.columns.collect {
+            [TypeConverterFactory.instance.findTypeConverter(database).convertToDatabaseTypeString(it, database),
+             """<a href="columns/${table.name.toLowerCase()}/${it.name.toLowerCase()}">$it.name</a>""".toString()]
+        }
+        writeTable 'Current Columns', cells, content
+    }
 }

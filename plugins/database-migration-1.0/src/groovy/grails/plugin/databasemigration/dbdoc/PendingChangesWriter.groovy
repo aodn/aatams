@@ -22,21 +22,21 @@ import liquibase.database.Database
  */
 class PendingChangesWriter extends HTMLWriter {
 
-	PendingChangesWriter(Map files, Database database) {
-		super(files, 'pending', database)
-	}
+    PendingChangesWriter(Map files, Database database) {
+        super(files, 'pending', database)
+    }
 
-	@Override
-	protected String createTitle(object) { 'Pending Changes' }
+    @Override
+    protected String createTitle(object) { 'Pending Changes' }
 
-	@Override
-	protected void writeBody(StringBuilder content, object, List<Change> ranChanges, List<Change> changesToRun) {
-		writeCustomHTML(content, object, ranChanges)
-		writeChanges('Pending Changes', content, changesToRun)
-	}
+    @Override
+    protected void writeBody(StringBuilder content, object, List<Change> ranChanges, List<Change> changesToRun) {
+        writeCustomHTML(content, object, ranChanges)
+        writeChanges('Pending Changes', content, changesToRun)
+    }
 
-	@Override
-	protected void writeCustomHTML(StringBuilder content, object, List<Change> changes) {
-		// do nothing
-	}
+    @Override
+    protected void writeCustomHTML(StringBuilder content, object, List<Change> changes) {
+        // do nothing
+    }
 }

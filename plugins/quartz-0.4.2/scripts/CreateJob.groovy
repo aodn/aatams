@@ -28,32 +28,32 @@ grailsHome = Ant.antProject.properties."env.GRAILS_HOME"
 
 
 if(grails.util.GrailsUtil.grailsVersion.startsWith("1.0")) {
-	includeTargets << new File ( "${grailsHome}/scripts/Init.groovy" )
-	includeTargets << new File( "${grailsHome}/scripts/CreateIntegrationTest.groovy")
+    includeTargets << new File ( "${grailsHome}/scripts/Init.groovy" )
+    includeTargets << new File( "${grailsHome}/scripts/CreateIntegrationTest.groovy")
 
-	target('default': "Creates a new Quartz scheduled job") {
-	    depends(checkVersion)
+    target('default': "Creates a new Quartz scheduled job") {
+        depends(checkVersion)
 
-		typeName = "Job"
-		artifactName = "Job"
-		artifactPath = "grails-app/jobs"
+        typeName = "Job"
+        artifactName = "Job"
+        artifactPath = "grails-app/jobs"
 
-		createArtifact()
-		createTestSuite()
-	}
+        createArtifact()
+        createTestSuite()
+    }
 }
 else {
-	includeTargets << grailsScript("_GrailsInit")
-	includeTargets << grailsScript("_GrailsCreateArtifacts")
+    includeTargets << grailsScript("_GrailsInit")
+    includeTargets << grailsScript("_GrailsCreateArtifacts")
 
-	target('default': "Creates a new Quartz scheduled job") {
-	    depends(checkVersion, parseArguments)
+    target('default': "Creates a new Quartz scheduled job") {
+        depends(checkVersion, parseArguments)
 
-	    def type = "Job"
-	    promptForName(type: type)
+        def type = "Job"
+        promptForName(type: type)
 
-	    def name = argsMap["params"][0]
-		createArtifact(name: name, suffix: type, type: type, path: "grails-app/jobs")
-		createUnitTest(name: name, suffix: type)
-	}
+        def name = argsMap["params"][0]
+        createArtifact(name: name, suffix: type, type: type, path: "grails-app/jobs")
+        createUnitTest(name: name, suffix: type)
+    }
 }

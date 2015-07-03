@@ -25,49 +25,49 @@ import liquibase.exception.MigrationFailedException
  */
 class PendingSQLWriter extends HTMLWriter {
 
-	private DatabaseChangeLog databaseChangeLog
+    private DatabaseChangeLog databaseChangeLog
 
-	PendingSQLWriter(Map files, Database database, DatabaseChangeLog databaseChangeLog) {
-		super(files, 'pending', database)
-		this.databaseChangeLog = databaseChangeLog
-	}
+    PendingSQLWriter(Map files, Database database, DatabaseChangeLog databaseChangeLog) {
+        super(files, 'pending', database)
+        this.databaseChangeLog = databaseChangeLog
+    }
 
-	@Override
-	protected String createTitle(object) { 'Pending SQL' }
+    @Override
+    protected String createTitle(object) { 'Pending SQL' }
 
-	protected void writeBody(StringBuilder content, object, List<Change> ranChanges, List<Change> changesToRun) {
-		if (!changesToRun) {
-			content.append '<b>NONE</b>'
-		}
+    protected void writeBody(StringBuilder content, object, List<Change> ranChanges, List<Change> changesToRun) {
+        if (!changesToRun) {
+            content.append '<b>NONE</b>'
+        }
 
-		content.append '<code><pre>'
+        content.append '<code><pre>'
 
-		ChangeSet lastRunChangeSet
+        ChangeSet lastRunChangeSet
 
-		for (Change change : changesToRun) {
-			 ChangeSet thisChangeSet = change.changeSet
-			 if (thisChangeSet.equals(lastRunChangeSet)) {
-				 continue
-			 }
-			 lastRunChangeSet = thisChangeSet
-			 String anchor = thisChangeSet.toString(false).replaceAll('\\W', '_')
-			 content.append("<a name='").append(anchor).append("'/>")
-			 try {
-				 thisChangeSet.execute databaseChangeLog, database
-			 }
-			 catch (MigrationFailedException e) {
-				 content.append 'EXECUTION ERROR: '
-				 content.append change.changeMetaData.description
-				 content.append ': '
-				 content.append e.message
-				 content.append '\n\n'
-			 }
-		}
-		content.append '</pre></code>'
-	}
+        for (Change change : changesToRun) {
+             ChangeSet thisChangeSet = change.changeSet
+             if (thisChangeSet.equals(lastRunChangeSet)) {
+                 continue
+             }
+             lastRunChangeSet = thisChangeSet
+             String anchor = thisChangeSet.toString(false).replaceAll('\\W', '_')
+             content.append("<a name='").append(anchor).append("'/>")
+             try {
+                 thisChangeSet.execute databaseChangeLog, database
+             }
+             catch (MigrationFailedException e) {
+                 content.append 'EXECUTION ERROR: '
+                 content.append change.changeMetaData.description
+                 content.append ': '
+                 content.append e.message
+                 content.append '\n\n'
+             }
+        }
+        content.append '</pre></code>'
+    }
 
-	@Override
-	protected void writeCustomHTML(StringBuilder content, object, List<Change> changes) {
-		// do nothing
-	}
+    @Override
+    protected void writeCustomHTML(StringBuilder content, object, List<Change> changes) {
+        // do nothing
+    }
 }

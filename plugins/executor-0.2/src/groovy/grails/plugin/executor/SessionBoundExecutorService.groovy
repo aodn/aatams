@@ -47,52 +47,52 @@ import org.slf4j.LoggerFactory
  */
 
 class SessionBoundExecutorService extends AbstractExecutorService implements ExecutorService{
-	private final Logger log = LoggerFactory.getLogger(SessionBoundExecutorService)
+    private final Logger log = LoggerFactory.getLogger(SessionBoundExecutorService)
 
-	ExecutorService executor
-	SessionFactory sessionFactory
+    ExecutorService executor
+    SessionFactory sessionFactory
 
-	SessionBoundExecutorService() { }
+    SessionBoundExecutorService() { }
 
-	SessionBoundExecutorService(ExecutorService executor) {
-		this.executor = executor;
-	}
+    SessionBoundExecutorService(ExecutorService executor) {
+        this.executor = executor;
+    }
 
-	protected <T> RunnableFuture<T> newTaskFor(Runnable runnable, T value) {
-		return new SessionFutureTask<T>(runnable,value,sessionFactory);
-	}
+    protected <T> RunnableFuture<T> newTaskFor(Runnable runnable, T value) {
+        return new SessionFutureTask<T>(runnable,value,sessionFactory);
+    }
 
-	protected <T> RunnableFuture<T> newTaskFor(Callable<T> callable) {
-		return new SessionFutureTask<T>(callable,sessionFactory);
-	}
+    protected <T> RunnableFuture<T> newTaskFor(Callable<T> callable) {
+        return new SessionFutureTask<T>(callable,sessionFactory);
+    }
 
-	public void execute(Runnable command) {
-		Runnable runMe = command
-		if(!(command instanceof SessionFutureTask) && !(command instanceof SessionBoundRunnable)){
-			runMe = new SessionBoundRunnable(command,sessionFactory)
-		}
-		executor.execute(runMe);
-	}
+    public void execute(Runnable command) {
+        Runnable runMe = command
+        if(!(command instanceof SessionFutureTask) && !(command instanceof SessionBoundRunnable)){
+            runMe = new SessionBoundRunnable(command,sessionFactory)
+        }
+        executor.execute(runMe);
+    }
 
-	public void shutdown() { executor.shutdown(); }
+    public void shutdown() { executor.shutdown(); }
 
-	public List<Runnable> shutdownNow() { return executor.shutdownNow(); }
+    public List<Runnable> shutdownNow() { return executor.shutdownNow(); }
 
-	public boolean isShutdown() { return executor.isShutdown(); }
+    public boolean isShutdown() { return executor.isShutdown(); }
 
-	public boolean isTerminated() { return executor.isTerminated(); }
+    public boolean isTerminated() { return executor.isTerminated(); }
 
-	public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
-		return executor.awaitTermination(timeout, unit);
-	}
+    public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+        return executor.awaitTermination(timeout, unit);
+    }
 
-	public void destroy() {
-		executor.shutdown()
-		if (!executor.awaitTermination(2, TimeUnit.SECONDS)) {
-			log.warn "ExecutorService did not shutdown in 2 seconds. Forcing shutdown of any scheduled tasks"
-			executor.shutdownNow()
-		}
-	}
+    public void destroy() {
+        executor.shutdown()
+        if (!executor.awaitTermination(2, TimeUnit.SECONDS)) {
+            log.warn "ExecutorService did not shutdown in 2 seconds. Forcing shutdown of any scheduled tasks"
+            executor.shutdownNow()
+        }
+    }
 
 
 }

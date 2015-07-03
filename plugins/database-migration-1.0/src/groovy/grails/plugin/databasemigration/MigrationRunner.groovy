@@ -26,34 +26,34 @@ import org.apache.log4j.Logger
  */
 class MigrationRunner {
 
-	private static Logger LOG = Logger.getLogger(this)
+    private static Logger LOG = Logger.getLogger(this)
 
-	static void autoRun() {
+    static void autoRun() {
 
-		if (!MigrationUtils.canAutoMigrate()) {
-			return
-		}
+        if (!MigrationUtils.canAutoMigrate()) {
+            return
+        }
 
-		def config = MigrationUtils.config
+        def config = MigrationUtils.config
 
-		if (!config.updateOnStart) {
-			LOG.info "updateOnStart disabled; not running migrations"
-			return
-		}
+        if (!config.updateOnStart) {
+            LOG.info "updateOnStart disabled; not running migrations"
+            return
+        }
 
-		def database
-		try {
-			MigrationUtils.executeInSession {
-				database = MigrationUtils.getDatabase(config.updateOnStartDefaultSchema ?: null)
-				for (name in config.updateOnStartFileNames) {
-					LOG.info "Running script '$name'"
-					MigrationUtils.getLiquibase(database, name).update null
-				}
-			}
-		}
-		catch (e) {
-			GrailsUtil.deepSanitize e
-			throw e
-		}
-	}
+        def database
+        try {
+            MigrationUtils.executeInSession {
+                database = MigrationUtils.getDatabase(config.updateOnStartDefaultSchema ?: null)
+                for (name in config.updateOnStartFileNames) {
+                    LOG.info "Running script '$name'"
+                    MigrationUtils.getLiquibase(database, name).update null
+                }
+            }
+        }
+        catch (e) {
+            GrailsUtil.deepSanitize e
+            throw e
+        }
+    }
 }

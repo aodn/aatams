@@ -20,19 +20,19 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmRegisterChangelog: 'Adds an include for the specified changelog to the main changelog') {
-	depends dbmInit
+    depends dbmInit
 
-	String filename = argsList[0]
-	if (!filename) {
-		errorAndDie "The $hyphenatedScriptName script requires a changelog name argument"
-	}
+    String filename = argsList[0]
+    if (!filename) {
+        errorAndDie "The $hyphenatedScriptName script requires a changelog name argument"
+    }
 
-	filename = MigrationUtils.changelogLocation + '/' + filename
-	if (!new File(filename).exists()) {
-		errorAndDie "File $filename not found"
-	}
+    filename = MigrationUtils.changelogLocation + '/' + filename
+    if (!new File(filename).exists()) {
+        errorAndDie "File $filename not found"
+    }
 
-	registerInclude filename
+    registerInclude filename
 }
 
 setDefaultTarget dbmRegisterChangelog

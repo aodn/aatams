@@ -33,124 +33,124 @@ import liquibase.util.StringUtils
  */
 class GroovyAwareStringChangeLogSerializer extends StringChangeLogSerializer {
 
-	private static final int INDENT_LENGTH = 4
+    private static final int INDENT_LENGTH = 4
 
-	String serialize(Change change) {
-		change.changeMetaData.name + ':' + serializeObject(change, 1)
-	}
+    String serialize(Change change) {
+        change.changeMetaData.name + ':' + serializeObject(change, 1)
+    }
 
-	String serialize(SqlVisitor visitor) {
-		visitor.name + ':' + serializeObject(visitor, 1)
-	}
+    String serialize(SqlVisitor visitor) {
+        visitor.name + ':' + serializeObject(visitor, 1)
+    }
 
-	private String serializeObject(objectToSerialize, int indent) {
-		try {
-			StringBuilder buffer = new StringBuilder('[')
+    private String serializeObject(objectToSerialize, int indent) {
+        try {
+            StringBuilder buffer = new StringBuilder('[')
 
-			SortedSet<String> values = new TreeSet<String>()
-			Class classToCheck = objectToSerialize.getClass()
-			while (!classToCheck.equals(Object)) {
-				for (Field field : classToCheck.declaredFields) {
-					field.accessible = true
-					ChangeProperty changePropertyAnnotation = field.getAnnotation(ChangeProperty)
-					if (changePropertyAnnotation && !changePropertyAnnotation.includeInSerialization()) {
-						continue
-					}
+            SortedSet<String> values = new TreeSet<String>()
+            Class classToCheck = objectToSerialize.getClass()
+            while (!classToCheck.equals(Object)) {
+                for (Field field : classToCheck.declaredFields) {
+                    field.accessible = true
+                    ChangeProperty changePropertyAnnotation = field.getAnnotation(ChangeProperty)
+                    if (changePropertyAnnotation && !changePropertyAnnotation.includeInSerialization()) {
+                        continue
+                    }
 
-					String propertyName = field.name
-					if (propertyName in ['serialVersionUID', 'metaClass'] ||
-							propertyName.contains('$') || propertyName.contains('__timeStamp')) {
-						continue
-					}
+                    String propertyName = field.name
+                    if (propertyName in ['serialVersionUID', 'metaClass'] ||
+                            propertyName.contains('$') || propertyName.contains('__timeStamp')) {
+                        continue
+                    }
 
-					def value = field.get(objectToSerialize)
-					if (value instanceof ColumnConfig) {
-						values.add(indentTimes(indent) +
-							serializeColumnConfig(field.get(objectToSerialize), indent + 1))
-					}
-					else if (value instanceof ConstraintsConfig) {
-						values.add(indentTimes(indent) +
-							serializeConstraintsConfig(field.get(objectToSerialize), indent + 1))
-					}
-					else if (value instanceof CustomChange) {
-						values.add(indentTimes(indent) +
-							serializeCustomChange(field.get(objectToSerialize), indent + 1))
-					}
-					else {
-						if (value != null) {
-							if (value instanceof Map || value instanceof Collection) {
-								values.add(indentTimes(indent) + propertyName + '=' + serializeObject(value, indent + 1))
-							}
-							else {
-								values.add(indentTimes(indent) + propertyName + '=\'' + value + '\'')
-							}
-						}
-					}
-				}
-				classToCheck = classToCheck.superclass
-			}
+                    def value = field.get(objectToSerialize)
+                    if (value instanceof ColumnConfig) {
+                        values.add(indentTimes(indent) +
+                            serializeColumnConfig(field.get(objectToSerialize), indent + 1))
+                    }
+                    else if (value instanceof ConstraintsConfig) {
+                        values.add(indentTimes(indent) +
+                            serializeConstraintsConfig(field.get(objectToSerialize), indent + 1))
+                    }
+                    else if (value instanceof CustomChange) {
+                        values.add(indentTimes(indent) +
+                            serializeCustomChange(field.get(objectToSerialize), indent + 1))
+                    }
+                    else {
+                        if (value != null) {
+                            if (value instanceof Map || value instanceof Collection) {
+                                values.add(indentTimes(indent) + propertyName + '=' + serializeObject(value, indent + 1))
+                            }
+                            else {
+                                values.add(indentTimes(indent) + propertyName + '=\'' + value + '\'')
+                            }
+                        }
+                    }
+                }
+                classToCheck = classToCheck.superclass
+            }
 
-			if (values) {
-				buffer.append('\n')
-				buffer.append(StringUtils.join(values, '\n'))
-				buffer.append('\n')
-			}
-			buffer.append(indentTimes(indent - 1)).append(']')
-			return buffer.toString().replace('\r\n', '\n').replace('\r', '\n')
-		}
-		catch (Exception e) {
-			throw new UnexpectedLiquibaseException(e)
-		}
-	}
+            if (values) {
+                buffer.append('\n')
+                buffer.append(StringUtils.join(values, '\n'))
+                buffer.append('\n')
+            }
+            buffer.append(indentTimes(indent - 1)).append(']')
+            return buffer.toString().replace('\r\n', '\n').replace('\r', '\n')
+        }
+        catch (Exception e) {
+            throw new UnexpectedLiquibaseException(e)
+        }
+    }
 
-	private String indentTimes(int indent) {
-		StringUtils.repeat ' ', INDENT_LENGTH * indent
-	}
+    private String indentTimes(int indent) {
+        StringUtils.repeat ' ', INDENT_LENGTH * indent
+    }
 
-	private String serializeObject(Collection collection, int indent) {
-		if (!collection) {
-			return '[]'
-		}
+    private String serializeObject(Collection collection, int indent) {
+        if (!collection) {
+            return '[]'
+        }
 
-		String returnString = '[\n'
-		for (object in collection) {
-			if (object instanceof ColumnConfig) {
-				returnString += indentTimes(indent) + serializeColumnConfig(object, indent + 1) + ',\n'
-			}
-			else {
-				returnString += indentTimes(indent) + object + ',\n'
-			}
-		}
-		returnString = returnString.replaceFirst(',$', '')
-		returnString += indentTimes(indent - 1) + ']'
+        String returnString = '[\n'
+        for (object in collection) {
+            if (object instanceof ColumnConfig) {
+                returnString += indentTimes(indent) + serializeColumnConfig(object, indent + 1) + ',\n'
+            }
+            else {
+                returnString += indentTimes(indent) + object + ',\n'
+            }
+        }
+        returnString = returnString.replaceFirst(',$', '')
+        returnString += indentTimes(indent - 1) + ']'
 
-		returnString
-	}
+        returnString
+    }
 
-	private String serializeObject(Map collection, int indent) {
-		if (!collection) {
-			return '[]'
-		}
+    private String serializeObject(Map collection, int indent) {
+        if (!collection) {
+            return '[]'
+        }
 
-		String returnString = '{\n'
-		for (key in new TreeSet(collection.keySet())) {
-			returnString += indentTimes(indent) + key + '=\'' + collection.get(key) + '\',\n'
-		}
-		returnString = returnString.replaceFirst(',$', '')
-		returnString += indentTimes(indent - 1) + '}'
+        String returnString = '{\n'
+        for (key in new TreeSet(collection.keySet())) {
+            returnString += indentTimes(indent) + key + '=\'' + collection.get(key) + '\',\n'
+        }
+        returnString = returnString.replaceFirst(',$', '')
+        returnString += indentTimes(indent - 1) + '}'
 
-		returnString
-	}
+        returnString
+    }
 
-	private String serializeColumnConfig(ColumnConfig columnConfig, int indent) {
-		'column:' + serializeObject(columnConfig, indent)
-	}
+    private String serializeColumnConfig(ColumnConfig columnConfig, int indent) {
+        'column:' + serializeObject(columnConfig, indent)
+    }
 
-	private String serializeConstraintsConfig(ConstraintsConfig constraintsConfig, int indent) {
-		'constraints:' + serializeObject(constraintsConfig, indent)
-	}
+    private String serializeConstraintsConfig(ConstraintsConfig constraintsConfig, int indent) {
+        'constraints:' + serializeObject(constraintsConfig, indent)
+    }
 
-	private String serializeCustomChange(CustomChange customChange, int indent) {
-		'customChange:' + serializeObject(customChange, indent)
-	}
+    private String serializeCustomChange(CustomChange customChange, int indent) {
+        'customChange:' + serializeObject(customChange, indent)
+    }
 }

@@ -20,16 +20,16 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmGenerateGormChangelog: 'Generates an initial changelog XML file based on the current GORM classes') {
-	depends dbmInit
+    depends dbmInit
 
-	if (!okToWrite(0, true)) return
+    if (!okToWrite(0, true)) return
 
-	doAndClose {
-		executeAndWrite argsList[0], { PrintStream out ->
-			def gormDatabase = createGormDatabase()
-			MigrationUtils.fixDiffResult(createDiff(gormDatabase, null).compare()).printChangeLog out, gormDatabase
-		}
-	}
+    doAndClose {
+        executeAndWrite argsList[0], { PrintStream out ->
+            def gormDatabase = createGormDatabase()
+            MigrationUtils.fixDiffResult(createDiff(gormDatabase, null).compare()).printChangeLog out, gormDatabase
+        }
+    }
 }
 
 setDefaultTarget dbmGenerateGormChangelog

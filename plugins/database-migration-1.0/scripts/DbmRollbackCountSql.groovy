@@ -20,22 +20,22 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmRollbackCountSql: 'Writes SQL to roll back the last <value> change sets to STDOUT') {
-	depends dbmInit
+    depends dbmInit
 
-	def count = argsList[0]
-	if (!count) {
-		errorAndDie "The $hyphenatedScriptName script requires a change set count argument"
-	}
+    def count = argsList[0]
+    if (!count) {
+        errorAndDie "The $hyphenatedScriptName script requires a change set count argument"
+    }
 
-	if (!count.isNumber()) {
-		errorAndDie "The change set count argument '$count' isn't a number"
-	}
+    if (!count.isNumber()) {
+        errorAndDie "The change set count argument '$count' isn't a number"
+    }
 
-	if (!okToWrite(1)) return
+    if (!okToWrite(1)) return
 
-	doAndClose {
-		liquibase.rollback count.toInteger(), contexts, newOutputStreamWriter(1)
-	}
+    doAndClose {
+        liquibase.rollback count.toInteger(), contexts, newOutputStreamWriter(1)
+    }
 }
 
 setDefaultTarget dbmRollbackCountSql

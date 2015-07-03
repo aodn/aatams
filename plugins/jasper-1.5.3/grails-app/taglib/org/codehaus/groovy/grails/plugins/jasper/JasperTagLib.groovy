@@ -86,9 +86,9 @@ class JasperTagLib {
     }
 
     def addReportParameter = {attrs, body ->
-    		def parameterName = attrs['name']
-    		def parameterType = attrs['type']
-    		out << parameterName + parameterType
+            def parameterName = attrs['name']
+            def parameterType = attrs['type']
+            out << parameterName + parameterType
     }
 
     protected String renderJavascriptForForm(jasperNameNoPunct) {

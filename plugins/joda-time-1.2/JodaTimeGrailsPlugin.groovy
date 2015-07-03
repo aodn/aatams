@@ -17,7 +17,7 @@ import com.energizedwork.grails.plugins.jodatime.*
 
 class JodaTimeGrailsPlugin {
     def version = "1.2"
-	def grailsVersion = "1.1 > *"
+    def grailsVersion = "1.1 > *"
     def dependsOn = [core: "1.1 > *", converters: "1.1 > *"]
 
     def author = "Rob Fletcher"
@@ -40,12 +40,12 @@ Grails. The plugin provides:
     def documentation = "http://grails.org/JodaTime+Plugin"
 
     def pluginExcludes = [
-		'grails-app/controllers/**',
-		'grails-app/domain/**',
-		'grails-app/views/**',
-		'grails-app/i18n/**',
-		'web-app/**'
-	]
+        'grails-app/controllers/**',
+        'grails-app/domain/**',
+        'grails-app/views/**',
+        'grails-app/i18n/**',
+        'web-app/**'
+    ]
 
     def doWithSpring = {
         jodaTimePropertyEditorRegistrar(JodaTimePropertyEditorRegistrar)
@@ -53,6 +53,6 @@ Grails. The plugin provides:
 
     def doWithDynamicMethods = { ctx ->
         JodaDynamicMethods.registerDynamicMethods()
-		JodaConverters.registerJsonAndXmlMarshallers()
+        JodaConverters.registerJsonAndXmlMarshallers()
     }
 }

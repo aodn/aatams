@@ -20,21 +20,21 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmChangelogToGroovy: 'Creates a Groovy DSL changelog from a Liquibase XML file') {
-	depends dbmInit
+    depends dbmInit
 
-	String xml = argsList[0]
-	if (!xml) {
-		errorAndDie "Must specify the source XML file path"
-	}
+    String xml = argsList[0]
+    if (!xml) {
+        errorAndDie "Must specify the source XML file path"
+    }
 
-	String groovy = argsList[1] ?: argsList[0][0..-4] + 'groovy'
+    String groovy = argsList[1] ?: argsList[0][0..-4] + 'groovy'
 
-	if (!okToWrite(groovy)) return
+    if (!okToWrite(groovy)) return
 
-	echo "Converting $xml to $groovy"
+    echo "Converting $xml to $groovy"
 
-	ChangelogXml2Groovy = classLoader.loadClass('grails.plugin.databasemigration.ChangelogXml2Groovy')
-	new File(groovy).withWriter { it.write ChangelogXml2Groovy.convert(new File(xml).text) }
+    ChangelogXml2Groovy = classLoader.loadClass('grails.plugin.databasemigration.ChangelogXml2Groovy')
+    new File(groovy).withWriter { it.write ChangelogXml2Groovy.convert(new File(xml).text) }
 }
 
 setDefaultTarget dbmChangelogToGroovy

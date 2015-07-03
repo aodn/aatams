@@ -22,15 +22,15 @@ import liquibase.database.Database
  */
 class AuthorWriter extends HTMLWriter {
 
-	AuthorWriter(Map files, Database database) {
-		super(files, 'authors', database)
-	}
+    AuthorWriter(Map files, Database database) {
+        super(files, 'authors', database)
+    }
 
-	@Override
-	protected String createTitle(object) { "Changes created by author $object" }
+    @Override
+    protected String createTitle(object) { "Changes created by author $object" }
 
-	@Override
-	protected void writeCustomHTML(StringBuilder content, object, List<Change> changes) {
-		// do nothing
-	}
+    @Override
+    protected void writeCustomHTML(StringBuilder content, object, List<Change> changes) {
+        // do nothing
+    }
 }

@@ -19,21 +19,21 @@ package grails.plugin.databasemigration.dbdoc
  */
 class HTMLListWriter {
 
-	private String directory
-	private String filename
-	private String title
-	private Map files
+    private String directory
+    private String filename
+    private String title
+    private Map files
 
-	HTMLListWriter(String title, String filename, String subdir, Map files) {
-		this.title = title
-		this.filename = filename
-		this.directory = subdir
-		this.files = files
-	}
+    HTMLListWriter(String title, String filename, String subdir, Map files) {
+        this.title = title
+        this.filename = filename
+        this.directory = subdir
+        this.files = files
+    }
 
-	void writeHTML(SortedSet objects) {
-		StringBuilder content = new StringBuilder()
-		content.append """\
+    void writeHTML(SortedSet objects) {
+        StringBuilder content = new StringBuilder()
+        content.append """\
 <html>
 <head>
 <title>
@@ -49,15 +49,15 @@ $title
 <td nowrap><font class="FrameItemFont">
 """
 
-		for (object in objects) {
-			String s = object.toString()
-			String hrefName = s.toLowerCase().endsWith('.xml') ? s[0..-5] : s
-			content.append """<a href="$directory/${hrefName.toLowerCase()}" target="objectFrame">"""
-			content.append s
-			content.append "</a><br/>\n"
-		}
+        for (object in objects) {
+            String s = object.toString()
+            String hrefName = s.toLowerCase().endsWith('.xml') ? s[0..-5] : s
+            content.append """<a href="$directory/${hrefName.toLowerCase()}" target="objectFrame">"""
+            content.append s
+            content.append "</a><br/>\n"
+        }
 
-		content.append '''\
+        content.append '''\
 </font></td>
 </tr>
 </table>
@@ -65,6 +65,6 @@ $title
 </body>
 </html>'''
 
-		files[filename] = content.toString()
-	}
+        files[filename] = content.toString()
+    }
 }

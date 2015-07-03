@@ -22,15 +22,15 @@ import liquibase.database.Database
  */
 class ColumnWriter extends HTMLWriter {
 
-	ColumnWriter(Map files, Database database) {
-		super(files, 'columns', database)
-	}
+    ColumnWriter(Map files, Database database) {
+        super(files, 'columns', database)
+    }
 
-	@Override
-	protected String createTitle(object) { """Changes affecting column "$object" """ }
+    @Override
+    protected String createTitle(object) { """Changes affecting column "$object" """ }
 
-	@Override
-	protected void writeCustomHTML(StringBuilder content, object, List<Change> changes) {
-		// do nothing
-	}
+    @Override
+    protected void writeCustomHTML(StringBuilder content, object, List<Change> changes) {
+        // do nothing
+    }
 }

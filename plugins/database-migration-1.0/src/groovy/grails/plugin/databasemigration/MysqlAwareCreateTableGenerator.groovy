@@ -37,40 +37,40 @@ import liquibase.statement.SqlStatement
  */
 class MysqlAwareCreateTableGenerator implements SqlGenerator {
 
-	private CreateTableGenerator _super = new CreateTableGenerator()
+    private CreateTableGenerator _super = new CreateTableGenerator()
 
-	Sql[] generateSql(SqlStatement statement, Database database, SqlGeneratorChain chain) {
-		Sql[] statements = _super.generateSql(statement, database, chain)
-		if (statements && statements.length == 1 && (statements[0] instanceof UnparsedSql)) {
-			statements = updateSql(statements, database)
-		}
-		statements
-	}
+    Sql[] generateSql(SqlStatement statement, Database database, SqlGeneratorChain chain) {
+        Sql[] statements = _super.generateSql(statement, database, chain)
+        if (statements && statements.length == 1 && (statements[0] instanceof UnparsedSql)) {
+            statements = updateSql(statements, database)
+        }
+        statements
+    }
 
-	// no-op in most cases but adds 'ENGINE=InnoDB' if using InnoDB
-	private Sql[] updateSql(Sql[] statements, Database database) {
-		UnparsedSql newSql = new UnparsedSql(statements[0].toSql() + database.dialect.tableTypeString,
-				statements[0].endDelimiter, statements[0].affectedDatabaseObjects as DatabaseObject[])
-		[newSql] as Sql[]
-	}
+    // no-op in most cases but adds 'ENGINE=InnoDB' if using InnoDB
+    private Sql[] updateSql(Sql[] statements, Database database) {
+        UnparsedSql newSql = new UnparsedSql(statements[0].toSql() + database.dialect.tableTypeString,
+                statements[0].endDelimiter, statements[0].affectedDatabaseObjects as DatabaseObject[])
+        [newSql] as Sql[]
+    }
 
-	ValidationErrors validate(SqlStatement statement, Database database, SqlGeneratorChain chain) {
-		_super.validate statement, database, chain
-	}
+    ValidationErrors validate(SqlStatement statement, Database database, SqlGeneratorChain chain) {
+        _super.validate statement, database, chain
+    }
 
-	int getPriority() {
-		_super.priority
-	}
+    int getPriority() {
+        _super.priority
+    }
 
-	boolean supports(SqlStatement statement, Database database) {
-		_super.supports statement, database
-	}
+    boolean supports(SqlStatement statement, Database database) {
+        _super.supports statement, database
+    }
 
-	boolean requiresUpdatedDatabaseMetadata(Database database) {
-		_super.requiresUpdatedDatabaseMetadata database
-	}
+    boolean requiresUpdatedDatabaseMetadata(Database database) {
+        _super.requiresUpdatedDatabaseMetadata database
+    }
 
-	Warnings warn(SqlStatement statementType, Database database, SqlGeneratorChain chain) {
-		_super.warn statementType, database, chain
-	}
+    Warnings warn(SqlStatement statementType, Database database, SqlGeneratorChain chain) {
+        _super.warn statementType, database, chain
+    }
 }

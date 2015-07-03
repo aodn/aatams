@@ -25,26 +25,26 @@ import liquibase.database.typeconversion.core.DefaultTypeConverter
  */
 class GormDatabaseTypeConverter extends DefaultTypeConverter {
 
-	private static final List<String> NAMES = [
-		'longtext', 'mediumtext', 'text', 'tinytext',
-		'tinyblob', 'blob', 'mediumblob', 'longblob']
+    private static final List<String> NAMES = [
+        'longtext', 'mediumtext', 'text', 'tinytext',
+        'tinyblob', 'blob', 'mediumblob', 'longblob']
 
-	@Override
-	String convertToDatabaseTypeString(Column referenceColumn, Database database) {
+    @Override
+    String convertToDatabaseTypeString(Column referenceColumn, Database database) {
 
-		String referenceColumnTypeName = referenceColumn.typeName.toLowerCase()
-		for (name in NAMES) {
-			if (referenceColumnTypeName.startsWith(name)) {
-				return name
-			}
-		}
+        String referenceColumnTypeName = referenceColumn.typeName.toLowerCase()
+        for (name in NAMES) {
+            if (referenceColumnTypeName.startsWith(name)) {
+                return name
+            }
+        }
 
-		super.convertToDatabaseTypeString referenceColumn, database
-	}
+        super.convertToDatabaseTypeString referenceColumn, database
+    }
 
-	@Override
-	int getPriority() { PRIORITY_DATABASE }
+    @Override
+    int getPriority() { PRIORITY_DATABASE }
 
-	@Override
-	boolean supports(Database database) { database instanceof GormDatabase }
+    @Override
+    boolean supports(Database database) { database instanceof GormDatabase }
 }

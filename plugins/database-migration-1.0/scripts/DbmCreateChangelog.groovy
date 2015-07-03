@@ -20,34 +20,34 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmCreateChangelog: 'Creates an empty changelog file') {
-	depends dbmInit
+    depends dbmInit
 
-	String name = argsList[0] ?: MigrationUtils.changelogFileName
-	if (!name.toLowerCase().endsWith('.groovy')) {
-		name += '.groovy'
-	}
+    String name = argsList[0] ?: MigrationUtils.changelogFileName
+    if (!name.toLowerCase().endsWith('.groovy')) {
+        name += '.groovy'
+    }
 
-	try {
-		def file = new File(MigrationUtils.changelogLocation + '/' + name)
-		file.parentFile?.mkdirs()
+    try {
+        def file = new File(MigrationUtils.changelogLocation + '/' + name)
+        file.parentFile?.mkdirs()
 
-		if (!okToWrite(file.path)) return
+        if (!okToWrite(file.path)) return
 
-		String user = (System.getProperty('user.name') ?: '').trim()
-		String author = user ? "$user (generated)" : 'diff-generated';
+        String user = (System.getProperty('user.name') ?: '').trim()
+        String author = user ? "$user (generated)" : 'diff-generated';
 
-		ant.copy(file: "$databaseMigrationPluginDir/src/resources/changelog.template",
-		         tofile: file.path, verbose: true, overwrite: true) {
-			filterset {
-				filter token: 'author', value: author
-				filter token: 'id', value: file.name - '.groovy'
-			}
-		}
-	}
-	catch (e) {
-		printStackTrace e
-		exit 1
-	}
+        ant.copy(file: "$databaseMigrationPluginDir/src/resources/changelog.template",
+                 tofile: file.path, verbose: true, overwrite: true) {
+            filterset {
+                filter token: 'author', value: author
+                filter token: 'id', value: file.name - '.groovy'
+            }
+        }
+    }
+    catch (e) {
+        printStackTrace e
+        exit 1
+    }
 }
 
 setDefaultTarget dbmCreateChangelog

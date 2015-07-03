@@ -121,7 +121,7 @@ class CsvGrailsPlugin {
     }
 
     def doWithDynamicMethods = { ctx ->
-		//TODO this should really all be in a utility method so it can easily be called for unit testing
+        //TODO this should really all be in a utility method so it can easily be called for unit testing
         CSVReader.metaClass.eachLine = { closure ->
             CSVReaderUtils.eachLine((CSVReader) delegate, closure)
         }
@@ -132,8 +132,8 @@ class CsvGrailsPlugin {
         File.metaClass.toCsvReader = { settingsMap ->
             return CSVReaderUtils.toCsvReader((File)delegate, settingsMap)
         }
-		File.metaClass.toCsvMapReader = { settingsMap ->
-			return new CSVMapReader(new FileReader(delegate),settingsMap)
+        File.metaClass.toCsvMapReader = { settingsMap ->
+            return new CSVMapReader(new FileReader(delegate),settingsMap)
         }
 
         InputStream.metaClass.eachCsvLine = { closure ->
@@ -149,8 +149,8 @@ class CsvGrailsPlugin {
         Reader.metaClass.toCsvReader = { settingsMap ->
             return CSVReaderUtils.toCsvReader((Reader)delegate, settingsMap)
         }
-		Reader.metaClass.toCsvMapReader = { settingsMap ->
-			return new CSVMapReader(delegate,settingsMap)
+        Reader.metaClass.toCsvMapReader = { settingsMap ->
+            return new CSVMapReader(delegate,settingsMap)
         }
 
         String.metaClass.eachCsvLine = { closure ->
@@ -159,8 +159,8 @@ class CsvGrailsPlugin {
         String.metaClass.toCsvReader = { settingsMap ->
             return CSVReaderUtils.toCsvReader((String)delegate, settingsMap)
         }
-		String.metaClass.toCsvMapReader = { settingsMap ->
-			return new CSVMapReader(new StringReader(delegate),settingsMap)
+        String.metaClass.toCsvMapReader = { settingsMap ->
+            return new CSVMapReader(new StringReader(delegate),settingsMap)
         }
 
         application.controllerClasses.each {

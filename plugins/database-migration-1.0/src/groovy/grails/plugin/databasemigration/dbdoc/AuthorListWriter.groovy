@@ -19,7 +19,7 @@ package grails.plugin.databasemigration.dbdoc
  */
 class AuthorListWriter extends HTMLListWriter {
 
-	AuthorListWriter(Map files) {
-		super('All Authors', 'authors', 'authors', files)
-	}
+    AuthorListWriter(Map files) {
+        super('All Authors', 'authors', 'authors', files)
+    }
 }

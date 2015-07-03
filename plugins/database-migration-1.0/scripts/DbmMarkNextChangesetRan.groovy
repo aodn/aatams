@@ -20,17 +20,17 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(markNextChangesetRan: 'Mark the next change set as executed in the database') {
-	depends dbmInit
+    depends dbmInit
 
-	doAndClose {
+    doAndClose {
 
-		if (argsList[0] && okToWrite()) {
-			liquibase.markNextChangeSetRan contexts, newPrintWriter()
-		}
-		else {
-			liquibase.markNextChangeSetRan contexts
-		}
-	}
+        if (argsList[0] && okToWrite()) {
+            liquibase.markNextChangeSetRan contexts, newPrintWriter()
+        }
+        else {
+            liquibase.markNextChangeSetRan contexts
+        }
+    }
 }
 
 setDefaultTarget markNextChangesetRan

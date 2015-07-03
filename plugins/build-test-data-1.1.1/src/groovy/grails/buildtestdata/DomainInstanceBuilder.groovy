@@ -109,15 +109,15 @@ public class DomainInstanceBuilder {
         requiredDomainPropertyNames
     }
 
-	def findExisting() {
-		// findWhere doesn't find any elements with an empty param map so we use list instead
-		def list = domainClass.list(limit: 1)
-		return list ? list.first() : null
-	}
+    def findExisting() {
+        // findWhere doesn't find any elements with an empty param map so we use list instead
+        def list = domainClass.list(limit: 1)
+        return list ? list.first() : null
+    }
 
     def findExisting(propValues) {
-	    return domainClass.findWhere(propValues)
-	}
+        return domainClass.findWhere(propValues)
+    }
 
     def buildWithoutSave(propValues, CircularCheckList circularCheckList = new CircularCheckList()) {
         def domainInstance = populateInstance(domainClass.newInstance(), propValues, circularCheckList)

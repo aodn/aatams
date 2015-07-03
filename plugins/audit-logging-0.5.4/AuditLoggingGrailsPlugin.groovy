@@ -29,7 +29,7 @@ import org.codehaus.groovy.grails.plugins.orm.auditable.AuditLogListenerUtil
  *        user or userPrincipal for most security systems.
  *
  * Release 0.4
- * 		* custom serializable implementation for AuditLogEvent so events can happen
+ *         * custom serializable implementation for AuditLogEvent so events can happen
  *        inside a webflow context.
  *      * tweak application.properties for loading in other grails versions
  *      * update to views to show URI in an event

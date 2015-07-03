@@ -1,5 +1,5 @@
 class DbdocUrlMappings {
-	static mappings = {
-		"/dbdoc/$section?/$filename?/$table?/$column?"(controller: 'dbdoc')
-	}
+    static mappings = {
+        "/dbdoc/$section?/$filename?/$table?/$column?"(controller: 'dbdoc')
+    }
 }

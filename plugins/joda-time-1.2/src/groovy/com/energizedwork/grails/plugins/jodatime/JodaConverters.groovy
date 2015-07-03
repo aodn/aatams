@@ -26,25 +26,25 @@ import org.joda.time.DateTimeZone
 
 class JodaConverters {
 
-	static void registerJsonAndXmlMarshallers() {
-		final dateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis()
-		[JSON, XML].each {converter ->
-			converter.registerObjectMarshaller(DateTime, 1) {
-				it?.toString(dateTimeFormatter.withZone(it?.zone))
-			}
-			converter.registerObjectMarshaller(LocalDate, 2) {
-				it?.toString("yyyy-MM-dd")
-			}
-			converter.registerObjectMarshaller(LocalTime, 3) {
-				it?.toString("HH:mm:ss")
-			}
-			converter.registerObjectMarshaller(LocalDateTime, 4) {
-				it?.toString("yyyy-MM-dd'T'HH:mm:ss")
-			}
-			converter.registerObjectMarshaller(DateTimeZone, 5) {
-				it?.ID
-			}
-		}
-	}
+    static void registerJsonAndXmlMarshallers() {
+        final dateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis()
+        [JSON, XML].each {converter ->
+            converter.registerObjectMarshaller(DateTime, 1) {
+                it?.toString(dateTimeFormatter.withZone(it?.zone))
+            }
+            converter.registerObjectMarshaller(LocalDate, 2) {
+                it?.toString("yyyy-MM-dd")
+            }
+            converter.registerObjectMarshaller(LocalTime, 3) {
+                it?.toString("HH:mm:ss")
+            }
+            converter.registerObjectMarshaller(LocalDateTime, 4) {
+                it?.toString("yyyy-MM-dd'T'HH:mm:ss")
+            }
+            converter.registerObjectMarshaller(DateTimeZone, 5) {
+                it?.ID
+            }
+        }
+    }
 
 }

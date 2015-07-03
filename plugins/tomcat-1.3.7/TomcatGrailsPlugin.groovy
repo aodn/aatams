@@ -20,8 +20,8 @@ class TomcatGrailsPlugin {
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
             "grails-app/views/error.gsp",
-	    "grails-app/domain/*.groovy",
-	    "grails-app/controllers/*.groovy"
+        "grails-app/domain/*.groovy",
+        "grails-app/controllers/*.groovy"
     ]
     // don't package in war
     def scopes = [excludes:'war']

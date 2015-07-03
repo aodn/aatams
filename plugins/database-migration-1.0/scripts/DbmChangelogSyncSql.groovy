@@ -20,13 +20,13 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmChangelogSyncSql: 'Writes SQL to mark all changes as executed in the database to STDOUT') {
-	depends dbmInit
+    depends dbmInit
 
-	if (!okToWrite()) return
+    if (!okToWrite()) return
 
-	doAndClose {
-		liquibase.changeLogSync contexts, newPrintWriter()
-	}
+    doAndClose {
+        liquibase.changeLogSync contexts, newPrintWriter()
+    }
 }
 
 setDefaultTarget dbmChangelogSyncSql

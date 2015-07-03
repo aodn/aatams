@@ -30,7 +30,7 @@
                             <g:sortableColumn property="type" title="${message(code: 'receiverDownloadFile.type.label', default: 'Type')}" />
                         
                             <shiro:hasRole name="SysAdmin">
-                              <g:sortableColumn property="path" title="${message(code: 'receiverDownloadFile.path.label', default: 'Path')}" />
+                              <g:column property="path" title="${message(code: 'receiverDownloadFile.path.label', default: 'Path')}" />
                             </shiro:hasRole>
                             
                             <g:sortableColumn property="status" title="${message(code: 'receiverDownloadFile.status.label', default: 'Status')}" />

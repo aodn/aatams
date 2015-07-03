@@ -19,6 +19,10 @@ class ReceiverDownloadFileController
 
     def list = {
         params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
+        if (!params.sort) {
+            params.sort = "importDate"
+            params.order = "desc"
+        }
         [receiverDownloadFileInstanceList: ReceiverDownloadFile.list(params), receiverDownloadFileInstanceTotal: ReceiverDownloadFile.count()]
     }
 

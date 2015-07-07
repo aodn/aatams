@@ -21,7 +21,8 @@ databaseChangeLog = {
             }
         }
 
-        def deployments_cte = """
+        // Do the auto-correct (of overlaps).
+        sql("""
 -- CTE with a proper range type (tstzrange) - then we can use the 'overlaps' (&&) operator below.
 with deployments as (
   select
@@ -39,62 +40,18 @@ with deployments as (
   and receiver_deployment.initialisationdatetime_timestamp <= recoverydatetime_timestamp
 )
 
-"""
-
-        // Log the overlapping deployments which will be "auto-corrected".
-        grailsChange {
-            change {
-                log.warn("Setting initialisation date equal to deployment date for following deployments:")
-                sql.eachRow(deployments_cte + """
-select
-  lhs.receiver_id, lhs.receiver_name,
-  lhs.deployment_interval as lhs_deployment_interval,
-  rhs.deployment_interval as rhs_deployment_interval,
-  'https://aatams.emii.org.au/aatams/receiver/show/' || lhs.receiver_id as receiver_url
-from deployments lhs
-join deployments rhs
-  on lhs.receiver_name = rhs.receiver_name
-  and lhs.deployment_interval && rhs.deployment_interval
-  and lhs.receiver_deployment_id != rhs.receiver_deployment_id
-  and lhs.initialisationdatetime_timestamp <= rhs.initialisationdatetime_timestamp -- just so that we get only one record for each overlap
-  and lhs.station_name != rhs.station_name
-order by lhs.receiver_name, lhs.initialisationdatetime_timestamp
-""")            { row ->
-    log.warn(row)
-                }
-
-            }
-        }
-
-        // Do the auto-correct (of overlaps).
-        sql(deployments_cte + """
-
 update receiver_deployment
 set initialisationdatetime_timestamp = deploymentdatetime_timestamp
 where id in (
-  select receiver_deployment.id as id
+  select rhs.receiver_deployment_id as id
   from deployments lhs
   join deployments rhs
     on lhs.receiver_name = rhs.receiver_name
     and lhs.deployment_interval && rhs.deployment_interval
     and lhs.receiver_deployment_id != rhs.receiver_deployment_id
     and lhs.initialisationdatetime_timestamp <= rhs.initialisationdatetime_timestamp -- just so that we get only one record for each overlap
-)
-""")
-
-        // Log deployments where initialisation date > deployment date.
-        grailsChange {
-            change {
-                log.warn("Setting initialisation date equal to deployment date for following deployments:")
-                sql.eachRow("""
-select id, receiver_id, initialisationdatetime_timestamp, deploymentdatetime_timestamp
-from receiver_deployment
-where initialisationdatetime_timestamp > deploymentdatetime_timestamp
-""") { row ->
-    log.warn(row)
-                }
-            }
-        }
+  )"""
+           )
 
         // Do the auto-correct (of init date > deployment date)
         sql("""

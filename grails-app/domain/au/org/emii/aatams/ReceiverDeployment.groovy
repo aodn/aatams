@@ -211,7 +211,7 @@ class ReceiverDeployment
             // we wouldn't need this check, but there are invalid records in the DB currently,
             // so we need to check, otherwise the creation of the Interval below fails.
             if (startDateTime > recovery.recoveryDateTime) {
-                log.warn("Invalid interval for deployment: ${String.valueOf(this)}")
+                log.debug("Invalid interval for deployment: ${String.valueOf(this)}")
                 return
             }
 

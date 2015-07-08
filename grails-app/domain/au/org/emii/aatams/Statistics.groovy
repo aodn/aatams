@@ -1,19 +1,16 @@
 package au.org.emii.aatams
 
-class Statistics
-{
+class Statistics {
     String key
     Long value
 
     static transients = ['getStatistic']
 
-    static mapping =
-    {
-        key(unique: true) 
+    static mapping = {
+        key(unique: true)
     }
-    
-    static Long getStatistic(key)
-    {
+
+    static Long getStatistic(key) {
         return Statistics.findByKey(key)?.value
     }
 }

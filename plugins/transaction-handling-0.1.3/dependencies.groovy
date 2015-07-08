@@ -30,7 +30,7 @@ grails.project.dependency.resolution = {
 
         // runtime 'mysql:mysql-connector-java:5.1.13'
     }
-    
+
     if ("$grailsVersion" > "1.3.7") {
         plugins {
             compile ":plugin-config:[0.1.3,)"

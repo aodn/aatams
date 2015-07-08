@@ -22,19 +22,19 @@ import liquibase.util.StringUtils
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmDropAll: 'Drops all database objects owned by the user') {
-	depends dbmInit
+    depends dbmInit
 
-	doAndClose {
+    doAndClose {
 
-		String schemas = argsList[0]
-		List<String> schemaNames = schemas ? StringUtils.splitAndTrim(schemas, ',') : null
-		if (schemaNames) {
-			liquibase.dropAll(schemaNames as String[])
-		}
-		else {
-			liquibase.dropAll()
-		}
-	}
+        String schemas = argsList[0]
+        List<String> schemaNames = schemas ? StringUtils.splitAndTrim(schemas, ',') : null
+        if (schemaNames) {
+            liquibase.dropAll(schemaNames as String[])
+        }
+        else {
+            liquibase.dropAll()
+        }
+    }
 }
 
 setDefaultTarget dbmDropAll

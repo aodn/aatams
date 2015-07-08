@@ -15,8 +15,7 @@ import org.joda.time.format.DateTimeFormat
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
-class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
-{
+class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
     WKTReader reader = new WKTReader()
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd")
 
@@ -35,8 +34,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 
     def person
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockLogging(AnimalReleaseController)
@@ -120,23 +118,19 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         permitted = true
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         super.tearDown()
     }
 
-    protected boolean isPermitted()
-    {
+    protected boolean isPermitted() {
         return true
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return person?.id
     }
 
-    void testAddSurgeryNoExistingRelease()
-    {
+    void testAddSurgeryNoExistingRelease() {
         Project project = new Project()
         mockDomain(Project, [project])
         project.save()
@@ -148,8 +142,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertEquals(project, model.animalReleaseInstance.project)
     }
 
-    void testAddSurgeryExistingRelease()
-    {
+    void testAddSurgeryExistingRelease() {
         AnimalRelease release = new AnimalRelease()
         mockDomain(AnimalRelease, [release])
         release.save()
@@ -160,8 +153,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertEquals(release.id, model.animalReleaseInstance.id)
     }
 
-    void testSaveNoAnimalOrSpecies()
-    {
+    void testSaveNoAnimalOrSpecies() {
         addOneSurgeryToParams()
         def model = controller.save()
 
@@ -169,8 +161,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertEquals("animalRelease.noSpeciesOrAnimal", model.animalReleaseInstance.errors.getGlobalError().getCode())
     }
 
-    void testSaveWithAnimalNoSurgery()
-    {
+    void testSaveWithAnimalNoSurgery() {
         Animal animal = new Animal(species:new Species(),
                                    sex:new Sex())
         mockDomain(Animal, [animal])
@@ -184,8 +175,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertEquals("animalRelease.noTaggings", model.animalReleaseInstance.errors.getGlobalError().getCode())
     }
 
-    void testSaveWithAnimal()
-    {
+    void testSaveWithAnimal() {
         Animal animal = new Animal(species:new Species(),
                                    sex:new Sex())
         mockDomain(Animal, [animal])
@@ -201,8 +191,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertNotNull(controller.redirectArgs.id)
     }
 
-    void testSaveWithSpeciesNoSexNoSurgery()
-    {
+    void testSaveWithSpeciesNoSexNoSurgery() {
         Species species = new Species(name:"white shark")
         mockDomain(Species, [species])
         species.save()
@@ -222,8 +211,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertEquals("white shark", model.species.name)
     }
 
-    void testSaveWithSpeciesNoSex()
-    {
+    void testSaveWithSpeciesNoSex() {
         Species species = new Species()
         mockDomain(Species, [species])
         species.save()
@@ -246,8 +234,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertNull(release.animal.sex)
     }
 
-    void testSaveWithSpeciesAndSex()
-    {
+    void testSaveWithSpeciesAndSex() {
         Species species = new Species()
         mockDomain(Species, [species])
         species.save()
@@ -279,8 +266,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
     def surgeryTreatmentType
     TagDeviceModel deviceModel
 
-    private void initSurgeryObjects()
-    {
+    private void initSurgeryObjects() {
         mockDomain(AnimalRelease)
 
         deviceModel = new TagDeviceModel()
@@ -314,8 +300,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         mockForConstraintsTests(Surgery)
     }
 
-    void testSaveWithOneSurgery()
-    {
+    void testSaveWithOneSurgery() {
         Animal animal = new Animal(species:new Species())
         mockDomain(Animal, [animal])
         animal.save()
@@ -341,8 +326,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertEquals(1, surgeries.size())
 
         // tag should now be deployed
-        surgeries.each(
-        {
+        surgeries.each( {
             assertEquals(DeviceStatus.DEPLOYED, it.tag.status)
         })
 
@@ -368,8 +352,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         controller.params.surgery = ['0':surgery0]
     }
 
-    void testSaveTagInDifferentProject()
-    {
+    void testSaveTagInDifferentProject() {
         Animal animal = new Animal(species:new Species())
         mockDomain(Animal, [animal])
         animal.save()
@@ -413,16 +396,14 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertEquals(1, surgeries.size())
 
         // tag should now be deployed
-        surgeries.each(
-        {
+        surgeries.each( {
             assertEquals(DeviceStatus.DEPLOYED, it.tag.status)
         })
 
         assertEquals(tagProject, tag.project)
     }
 
-    void testSaveWithMultipleSurgeries()
-    {
+    void testSaveWithMultipleSurgeries() {
         Animal animal = new Animal(species:new Species())
         mockDomain(Animal, [animal])
         animal.save()
@@ -444,8 +425,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         initSurgeryObjects()
 
         def numSurgeries = 3
-        numSurgeries.times(
-        {
+        numSurgeries.times( {
             Tag newTag = new Tag(codeMap:codeMap,
                                  pingCode:it,
                                  codeName:"A69-1303-" + it,
@@ -486,8 +466,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertEquals(numSurgeries, surgeries.size())
 
         // tag should now be deployed
-        surgeries.each(
-        {
+        surgeries.each( {
             assertEquals(DeviceStatus.DEPLOYED, it.tag.status)
         })
     }
@@ -496,8 +475,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
 //    void testSaveWithMultipleMeasurements()
 //    void testSaveWithSurgeriesAndMeasurements()
 
-    void testSaveOneSurgeryNewTag()
-    {
+    void testSaveOneSurgeryNewTag() {
         Animal animal = new Animal(species:new Species())
         mockDomain(Animal, [animal])
         animal.save()
@@ -543,8 +521,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertEquals(1, surgeries.size())
 
         // tag should be created
-        surgeries.each(
-        {
+        surgeries.each( {
             Tag tag = it.tag
             assertNotNull(tag)
             assertEquals(DeviceStatus.DEPLOYED, tag.status)
@@ -553,8 +530,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
     }
 
 
-    void testSaveNoProject()
-    {
+    void testSaveNoProject() {
         Species species = new Species()
         mockDomain(Species, [species])
         species.save()
@@ -576,8 +552,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
     /**
      * Tests that status is set correctly when an animal is re-released.
      */
-    void testSaveStatusCurrentPreviousFinished()
-    {
+    void testSaveStatusCurrentPreviousFinished() {
         Species species = new Species(name:"flathead")
         mockDomain(Species, [species])
         species.save()
@@ -612,8 +587,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertEquals(AnimalReleaseStatus.FINISHED, release.status)
     }
 
-    void testSaveNoEmbargo()
-    {
+    void testSaveNoEmbargo() {
         Animal animal = new Animal(species:new Species(),
                                    sex:new Sex())
         mockDomain(Animal, [animal])
@@ -631,8 +605,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertNull(release.embargoDate)
     }
 
-    void testSave3MonthsEmbargo()
-    {
+    void testSave3MonthsEmbargo() {
         Animal animal = new Animal(species:new Species(),
                                    sex:new Sex())
         mockDomain(Animal, [animal])
@@ -661,8 +634,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertTrue("day", expectedCal.get(Calendar.DAY_OF_YEAR) == releaseCal.get(Calendar.DAY_OF_YEAR))
     }
 
-    void testUpdateNoEmbargo()
-    {
+    void testUpdateNoEmbargo() {
         // Create the release first...
         Animal animal = new Animal(species:new Species(),
                                    sex:new Sex())
@@ -691,8 +663,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertNull(release.embargoDate)
     }
 
-    void testUpdate3MonthsEmbargo()
-    {
+    void testUpdate3MonthsEmbargo() {
         // Create the release first...
         Animal animal = new Animal(species:new Species(),
                                    sex:new Sex())
@@ -729,8 +700,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertTrue("day", expectedCal.get(Calendar.DAY_OF_YEAR) == releaseCal.get(Calendar.DAY_OF_YEAR))
     }
 
-    void testSave3MonthUpdateNo()
-    {
+    void testSave3MonthUpdateNo() {
         Animal animal = new Animal(species:new Species(),
                                    sex:new Sex())
         mockDomain(Animal, [animal])
@@ -769,8 +739,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertNotNull(release.embargoDate)
     }
 
-    void testCreate()
-    {
+    void testCreate() {
         assertEquals(2, candidateEntitiesService.projects().size())
 
         def model = controller.create()
@@ -783,8 +752,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
         assertEquals("12 months", model.embargoPeriods[12])
     }
 
-    void testSaveWithError()
-    {
+    void testSaveWithError() {
         controller.params.animal = [id:null]
         controller.params.speciesId = null
 

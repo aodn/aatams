@@ -20,13 +20,13 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmListLocks: 'Lists who currently has locks on the database changelog') {
-	depends dbmInit
+    depends dbmInit
 
-	if (!okToWrite()) return
+    if (!okToWrite()) return
 
-	doAndClose {
-		liquibase.reportLocks calculateDestination()
-	}
+    doAndClose {
+        liquibase.reportLocks calculateDestination()
+    }
 }
 
 setDefaultTarget dbmListLocks

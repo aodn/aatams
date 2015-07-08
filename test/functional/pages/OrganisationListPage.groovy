@@ -2,21 +2,18 @@ package pages
 
 import module.*
 
-class OrganisationListPage extends ListPage 
-{
+class OrganisationListPage extends ListPage  {
     static url = "organisation/list"
-    
-    static at =
-    {
+
+    static at = {
         title == "Organisation List"
     }
-    
-    static content =
-    {
+
+    static content = {
         organisationTable { $("div.list table", 0) }
         rowsAsTr(required: false) { organisationTable.find("tbody").find("tr") }
         detailRows { rowsAsTr.collect { module OrganisationRow, it } }
-        
+
         newButton (required: false, to: OrganisationCreatePage) { $("a", text: "New Organisation") }
     }
 }

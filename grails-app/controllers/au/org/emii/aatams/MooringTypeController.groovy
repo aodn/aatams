@@ -58,7 +58,7 @@ class MooringTypeController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (mooringTypeInstance.version > version) {
-                    
+
                     mooringTypeInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'mooringType.label', default: 'MooringType')] as Object[], "Another user has updated this MooringType while you were editing")
                     render(view: "edit", model: [mooringTypeInstance: mooringTypeInstance])
                     return

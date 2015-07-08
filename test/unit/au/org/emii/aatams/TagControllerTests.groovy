@@ -5,8 +5,7 @@ import au.org.emii.aatams.report.ReportInfoService
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.converters.JSON
 
-class TagControllerTests extends AbstractControllerUnitTestCase
-{
+class TagControllerTests extends AbstractControllerUnitTestCase {
 
     def candidateEntitiesService
 
@@ -16,8 +15,7 @@ class TagControllerTests extends AbstractControllerUnitTestCase
     def queryService
     def reportInfoService
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
 
@@ -25,8 +23,7 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         project2 = new Project()
 
         candidateEntitiesService = new CandidateEntitiesService()
-        candidateEntitiesService.metaClass.projects =
-        {
+        candidateEntitiesService.metaClass.projects = {
             return [project1, project2]
         }
 
@@ -59,8 +56,7 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         mockDomain(TransmitterType)
     }
 
-    void testLookupNonDeployedBySerialNumber()
-    {
+    void testLookupNonDeployedBySerialNumber() {
         controller.params.term = '1111'
         controller.lookupNonDeployedBySerialNumber()
 
@@ -75,8 +71,7 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         assertEquals(DeviceStatus.RECOVERED.key, jsonResult[1].status.name)
     }
 
-    void testCreate()
-    {
+    void testCreate() {
         def model = controller.create()
 
         assertNotNull(model.tagInstance)
@@ -85,8 +80,7 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         assertTrue(model.candidateProjects.contains(project2))
     }
 
-    void testSaveError()
-    {
+    void testSaveError() {
         TransmitterType pinger = new TransmitterType(transmitterTypeName:"PINGER")
         mockDomain(TransmitterType, [pinger])
         pinger.save()
@@ -99,16 +93,14 @@ class TagControllerTests extends AbstractControllerUnitTestCase
         assertTrue(model.candidateProjects.contains(project2))
     }
 
-    void testLookupBySerialNumber()
-    {
+    void testLookupBySerialNumber() {
         assertLookupWithTerm(2, "11")
         assertLookupWithTerm(1, "1111-A")
         assertLookupWithTerm(0, "1111-AB")
         assertLookupWithTerm(1, "22")
     }
 
-    private void assertLookupWithTerm(expectedNumResults, term)
-    {
+    private void assertLookupWithTerm(expectedNumResults, term) {
         controller.params.term = term
         controller.lookupBySerialNumber()
 

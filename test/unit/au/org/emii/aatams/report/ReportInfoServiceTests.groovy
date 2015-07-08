@@ -7,8 +7,7 @@ import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import org.joda.time.*
 
-class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
-{
+class ReportInfoServiceTests extends AbstractGrailsUnitTestCase {
     def permissionUtilsService
     def reportInfoService
     Person user
@@ -16,16 +15,13 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
 
     Person authUser
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
-        Map.metaClass.flatten =
-        {
+        Map.metaClass.flatten = {
             String prefix='' ->
 
-            delegate.inject( [:] )
-            {
+            delegate.inject( [:] ) {
                 map, v ->
                 def kstr = "$prefix${ prefix ? '.' : ''  }$v.key"
 
@@ -73,23 +69,19 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         mockDomain(Tag)
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return authUser?.id
     }
 
-    protected boolean isPermitted(permission)
-    {
-        if (permission == "project:" + project1.id + ":read")
-        {
+    protected boolean isPermitted(permission) {
+        if (permission == "project:" + project1.id + ":read") {
             return true
         }
 
         return false
     }
 
-    void testGetReportInfoReceiver()
-    {
+    void testGetReportInfoReceiver() {
         Organisation active = new Organisation(name: "active org", status: EntityStatus.ACTIVE)
         Organisation deactivated = new Organisation(name: "deactivated org", status: EntityStatus.DEACTIVATED)
         mockDomain(Organisation, [active, deactivated])
@@ -110,8 +102,7 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         assertFalse(receiverReportInfo.filterParams[0].range.contains(deactivated.name))
     }
 
-    void testGetReportInfoInstallationStation()
-    {
+    void testGetReportInfoInstallationStation() {
         ReportInfo stationReportInfo = reportInfoService.getReportInfo("installationStation")
         assertNotNull(stationReportInfo)
         assertEquals("Installation Stations", stationReportInfo.displayName)
@@ -127,16 +118,14 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
 
     }
 
-    void testGetReportInfoInstallationStationLoggedIn()
-    {
+    void testGetReportInfoInstallationStationLoggedIn() {
         ReportInfo stationReportInfo = reportInfoService.getReportInfo("installationStation")
         def filterParams = stationReportInfo.filterParams
         assertNotNull(filterParams)
         assertEquals(ReportInfoService.MEMBER_PROJECTS, filterParams[0].range[0])
     }
 
-    void testGetReportInfoInstallationStationNotLoggedIn()
-    {
+    void testGetReportInfoInstallationStationNotLoggedIn() {
         authUser = null
         authenticated = false
 
@@ -146,8 +135,7 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         assertFalse(filterParams[0].range.contains(ReportInfoService.MEMBER_PROJECTS))
     }
 
-    void testGetReportInfoDetection()
-    {
+    void testGetReportInfoDetection() {
 
         def reportInfos = reportInfoService.getReportInfo()
 
@@ -183,8 +171,7 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         assertEquals(new DateTime("2011-03-01T12:34:56").toDate(), filterParams[5].minRange)
     }
 
-    void testFilterParamsToReportFormat()
-    {
+    void testFilterParamsToReportFormat() {
         def filter = [user:"Jon Burgess",
                       organisation:[eq:["name", "CSIRO"]]]
 
@@ -192,8 +179,7 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         assertEquals([user:"Jon Burgess", organisation:"CSIRO"], result)
     }
 
-    void testFilterParamsToReportFormatNullValue()
-    {
+    void testFilterParamsToReportFormatNullValue() {
         def filter = [user:"Jon Burgess",
                   "organisation":null,
                   organisation:[eq:["name", null]]]
@@ -202,8 +188,7 @@ class ReportInfoServiceTests extends AbstractGrailsUnitTestCase
         assertEquals([user:"Jon Burgess"], result)
     }
 
-    void testFilterParamsToReportFormatBlankValue()
-    {
+    void testFilterParamsToReportFormatBlankValue() {
         def filter = [user:"Jon Burgess",
                   "organisation":"",
                   organisation:[eq:["name", ""]]]

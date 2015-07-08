@@ -26,11 +26,11 @@ import org.codehaus.groovy.grails.commons.*
 * @since 0.4
 */
 class HibernateGrailsPlugin {
-	def author = "Graeme Rocher"
-	def title = "Hibernate for Grails"
-	def description = "A plugin that provides integration between Grails and Hibernate through GORM"
+    def author = "Graeme Rocher"
+    def title = "Hibernate for Grails"
+    def description = "A plugin that provides integration between Grails and Hibernate through GORM"
 
-	def grailsVersion = "1.3 > *"
+    def grailsVersion = "1.3 > *"
     def version = "1.3.7"
     def documentation = "http://grails.org/doc/$version"
 
@@ -52,22 +52,22 @@ class HibernateGrailsPlugin {
     def doWithSpring = HibernatePluginSupport.doWithSpring
 
     def doWithDynamicMethods = {
-		def dynamicMethods = HibernatePluginSupport.doWithDynamicMethods
-		dynamicMethods.delegate = delegate
-		dynamicMethods.call(it)
-		
-		// aids in generating appropriate documentation in plugin.xml since 
-		// domain class methods are lazily loaded we initialize them here
-		if(plugin.basePlugin) {
-			try {
-				def clz = application.classLoader.loadClass("org.grails.Behavior")
-				clz.count()				
-			}
-			catch(e) {
-				// ignore
-			}
-		}
-	}
+        def dynamicMethods = HibernatePluginSupport.doWithDynamicMethods
+        dynamicMethods.delegate = delegate
+        dynamicMethods.call(it)
+
+        // aids in generating appropriate documentation in plugin.xml since
+        // domain class methods are lazily loaded we initialize them here
+        if(plugin.basePlugin) {
+            try {
+                def clz = application.classLoader.loadClass("org.grails.Behavior")
+                clz.count()
+            }
+            catch(e) {
+                // ignore
+            }
+        }
+    }
 
     def onChange = {event ->
         if (event.source instanceof Resource) {

@@ -20,18 +20,18 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmRollbackSql: 'Writes SQL to roll back the database to the state it was in when the tag was applied to STDOUT') {
-	depends dbmInit
+    depends dbmInit
 
-	String tag = argsList[0]
-	if (!tag) {
-		errorAndDie "The $hyphenatedScriptName script requires a tag"
-	}
+    String tag = argsList[0]
+    if (!tag) {
+        errorAndDie "The $hyphenatedScriptName script requires a tag"
+    }
 
-	if (!okToWrite(1)) return
+    if (!okToWrite(1)) return
 
-	doAndClose {
-		liquibase.rollback tag, contexts, newOutputStreamWriter(1)
-	}
+    doAndClose {
+        liquibase.rollback tag, contexts, newOutputStreamWriter(1)
+    }
 }
 
 setDefaultTarget dbmRollbackSql

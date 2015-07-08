@@ -40,8 +40,7 @@ class AuthController {
             if (savedRequest.queryString) targetUri = targetUri + '?' + savedRequest.queryString
         }
 
-        try
-        {
+        try {
             // Don't let PENDING users log in.
             checkForPendingUser(params)
 
@@ -84,18 +83,15 @@ class AuthController {
         }
     }
 
-    private redirectToTargetUrl(targetUri)
-    {
+    private redirectToTargetUrl(targetUri) {
         log.info "Redirecting to '${targetUri}'."
 
         // Sometimes we are provided with a full URL (starting with "http(s)://"), which needs a slightly
         // different call to redirect (url instead of uri).
-        if (targetUri =~ /^https?:\/\//)
-        {
+        if (targetUri =~ /^https?:\/\//) {
             redirect(url: targetUri)
         }
-        else
-        {
+        else {
             redirect(uri: targetUri)
         }
     }
@@ -105,8 +101,7 @@ class AuthController {
     }
 
     private checkForPendingUser(Map params) {
-        if (Person.findByUsername(params.username)?.status == EntityStatus.PENDING)
-        {
+        if (Person.findByUsername(params.username)?.status == EntityStatus.PENDING) {
             throw new AuthenticationException("Attempted login by PENDING user: " + params.username)
         }
     }

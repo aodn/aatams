@@ -4,27 +4,23 @@ import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import grails.test.*
 
-class DetectionControllerTests extends AbstractControllerUnitTestCase
-{
+class DetectionControllerTests extends AbstractControllerUnitTestCase {
     def dataSource
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         permitted = true
         controller.params.format = "CSV"
     }
 
-    void testExecuteDetectionExtract()
-    {
+    void testExecuteDetectionExtract() {
         // Note: This test seems to fail intermittently for me - DN
 
         assertExport([:], "testExecuteDetection")
     }
 
-    void testDetectionExtractWithReadPermission()
-    {
+    void testDetectionExtractWithReadPermission() {
         permitted = true
         authenticated = true
 
@@ -43,8 +39,7 @@ class DetectionControllerTests extends AbstractControllerUnitTestCase
 2011-05-17 02:54:00,Whale Station,-20.1234,76.02,VR2W-103377,,,Joe Bloggs,A69-1303-8888,IMOS,,''')
     }
 
-    void testDetectionExtractWithoutReadPermission()
-    {
+    void testDetectionExtractWithoutReadPermission() {
         permitted = false
         authenticated = true
 
@@ -63,8 +58,7 @@ class DetectionControllerTests extends AbstractControllerUnitTestCase
         assertContainsAllLines(controller.response.contentAsString, expected)
     }
 
-    void testDetectionExtractWithoutAuthentication()
-    {
+    void testDetectionExtractWithoutAuthentication() {
         permitted = false
         authenticated = false
 
@@ -84,8 +78,7 @@ class DetectionControllerTests extends AbstractControllerUnitTestCase
         assertContainsAllLines(controller.response.contentAsString, expected)
     }
 
-    private void setupAndExecuteWhaleDetectionExtract()
-    {
+    private void setupAndExecuteWhaleDetectionExtract() {
         hasRole = false
 
         controller.params.filter = [receiverDeployment:[station:[installation:[project:[in:["name", "Whale"]]]]]]

@@ -2,24 +2,20 @@ package au.org.emii.aatams.report
 
 import java.util.Map;
 
-class AjaxMultiSelectReportParameter extends ReportParameter 
-{
+class AjaxMultiSelectReportParameter extends ReportParameter  {
     String lookupPath
-    
+
     @Override
-    public String getTemplate() 
-    {
+    public String getTemplate()  {
         return "/report/filter/ajaxMultiSelectTemplate"
     }
-    
-    String getRestrictionName()
-    {
+
+    String getRestrictionName() {
         return "in"
     }
 
     @Override
-    public Map getModel() 
-    {
+    public Map getModel()  {
         def model = super.getModel()
         model.lookupPath = lookupPath
         return model

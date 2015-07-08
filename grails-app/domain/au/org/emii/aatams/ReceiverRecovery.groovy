@@ -14,18 +14,15 @@ import org.joda.time.contrib.hibernate.*
  * or (b) returning the receiver to the office for downloading and storage for
  * future redeployment.
  */
-class ReceiverRecovery
-{
+class ReceiverRecovery {
     static transients = ['scrambledLocation']
 
     /**
      * Every recovery must have a (chronologically) preceding deployment.
      */
     static belongsTo = [deployment: ReceiverDeployment, recoverer: ProjectRole]
-    static mapping =
-    {
-        recoveryDateTime type: PersistentDateTimeTZ,
-        {
+    static mapping = {
+        recoveryDateTime type: PersistentDateTimeTZ, {
             column name: "recoveryDateTime_timestamp"
             column name: "recoveryDateTime_zone"
         }
@@ -41,8 +38,7 @@ class ReceiverRecovery
 
     String comments
 
-    static constraints =
-    {
+    static constraints = {
         recoveryDateTime(validator: recoveryDateTimeValidator)
         location()
         recoverer()
@@ -50,8 +46,7 @@ class ReceiverRecovery
         comments(nullable:true)
     }
 
-    static searchable =
-    {
+    static searchable = {
         deployment(component:true)
     }
 
@@ -70,16 +65,14 @@ class ReceiverRecovery
         )
     }
 
-    String toString()
-    {
+    String toString() {
         return String.valueOf(deployment?.receiver) + " recovered on " + String.valueOf(recoveryDateTime)
     }
 
     /**
      * Non-authenticated users can only see scrambled locations.
      */
-    Point getScrambledLocation()
-    {
+    Point getScrambledLocation() {
         return GeometryUtils.scrambleLocation(location)
     }
 }

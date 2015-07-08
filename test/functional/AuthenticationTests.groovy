@@ -3,38 +3,32 @@ import org.junit.Test
 
 import pages.*
 
-class AuthenticationTests extends TestBase
-{
+class AuthenticationTests extends TestBase {
     @Test
-    void signInUnknownUsername()
-    {
+    void signInUnknownUsername() {
         assertFailedLogin("asdf", "password")
     }
-    
+
     @Test
-    void signInIncorrectPassword()
-    {
+    void signInIncorrectPassword() {
         assertFailedLogin("jkburges", "xyz")
     }
-    
+
     @Test
-    void signInPendingUser()
-    {
+    void signInPendingUser() {
         assertFailedLogin("pending", "pending")
     }
-    
-    private void assertFailedLogin(username, password)
-    {
+
+    private void assertFailedLogin(username, password) {
         login(username, password)
         assert at(LoginPage)
         assert message == "Invalid username and/or password"
         assert usernameTextField.value() == username
         assert passwordTextField.value() == ""
     }
-    
+
     @Test
-    void signInAsSysAdmin()
-    {
+    void signInAsSysAdmin() {
         loginAsSysAdmin()
         assert at(GettingStartedPage)
     }

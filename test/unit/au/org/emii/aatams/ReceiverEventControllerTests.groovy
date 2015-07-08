@@ -11,10 +11,9 @@ class ReceiverEventControllerTests extends ControllerUnitTestCase {
         super.tearDown()
     }
 
-    void testCreate() 
-    {
+    void testCreate()  {
         controller.create()
-        
+
         assertEquals("receiverDownloadFile", controller.redirectArgs.controller)
         assertEquals("createEvents", controller.redirectArgs.action)
     }

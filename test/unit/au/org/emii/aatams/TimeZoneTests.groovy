@@ -4,15 +4,13 @@ import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import grails.test.*
 import org.joda.time.*
 
-class TimeZoneTests extends AbstractGrailsUnitTestCase
-{
+class TimeZoneTests extends AbstractGrailsUnitTestCase {
     def specifiedTZ = DateTimeZone.forID("Australia/Adelaide")
     def userTZ = DateTimeZone.forID("Australia/Perth")
 
     def person
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         permitted = true
@@ -27,13 +25,11 @@ class TimeZoneTests extends AbstractGrailsUnitTestCase
 
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return person.id
     }
 
-    void testAnimalRelease()
-    {
+    void testAnimalRelease() {
         AnimalRelease releaseNoCaptureOrReleaseDateTime = new AnimalRelease()
         AnimalRelease releaseCaptureDateTime = new AnimalRelease(captureDateTime:new DateTime(specifiedTZ))
         AnimalRelease releaseReleaseDateTime = new AnimalRelease(releaseDateTime:new DateTime(specifiedTZ))
@@ -52,8 +48,7 @@ class TimeZoneTests extends AbstractGrailsUnitTestCase
 //        assertEquals(specifiedTZ, releaseReleaseDateTime.releaseDateTime.zone)
     }
 
-    void testReceiverDeployment()
-    {
+    void testReceiverDeployment() {
         ReceiverDeployment deploymentNotSpec = new ReceiverDeployment()
         ReceiverDeployment deploymentSpec = new ReceiverDeployment(deploymentDateTime:new DateTime(specifiedTZ))
 
@@ -65,8 +60,7 @@ class TimeZoneTests extends AbstractGrailsUnitTestCase
 //        assertEquals(userTZ, deploymentNotSpec.deploymentDateTime.zone)
     }
 
-    void testReceiverRecovery()
-    {
+    void testReceiverRecovery() {
         mockDomain(ReceiverRecovery)
 
         def deploymentDateTime = new DateTime(specifiedTZ)
@@ -85,8 +79,7 @@ class TimeZoneTests extends AbstractGrailsUnitTestCase
 //        assertEquals(userTZ, recoveryNotSpec.recoveryDateTime.zone)
     }
 
-    void testSurgery()
-    {
+    void testSurgery() {
         Surgery surgeryNotSpec = new Surgery()
         Surgery surgerySpec = new Surgery(timestamp:new DateTime(specifiedTZ))
 

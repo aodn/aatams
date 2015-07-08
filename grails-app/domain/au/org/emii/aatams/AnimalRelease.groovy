@@ -16,23 +16,19 @@ import org.joda.time.contrib.hibernate.*
  * hours or days) or where they may be expected to enter an area containing
  * receivers during future movements.
  */
-class AnimalRelease implements Embargoable
-{
+class AnimalRelease implements Embargoable {
     static belongsTo = [project: Project, animal: Animal]
     static hasMany = [surgeries: Surgery, measurements: AnimalMeasurement]
     static transients = ['scrambledReleaseLocation', 'current', 'embargoed', 'protectionActive']
     static auditable = true
 
-    static mapping =
-    {
-        captureDateTime type: PersistentDateTimeTZ,
-        {
+    static mapping = {
+        captureDateTime type: PersistentDateTimeTZ, {
             column name: "captureDateTime_timestamp"
             column name: "captureDateTime_zone"
         }
 
-        releaseDateTime type: PersistentDateTimeTZ,
-        {
+        releaseDateTime type: PersistentDateTimeTZ, {
             column name: "releaseDateTime_timestamp"
             column name: "releaseDateTime_zone"
         }
@@ -42,8 +38,7 @@ class AnimalRelease implements Embargoable
         releaseLocation type: GeometryUserType
     }
 
-    static searchable =
-    {
+    static searchable = {
         surgeries(component:true)
     }
 
@@ -72,8 +67,7 @@ class AnimalRelease implements Embargoable
      */
     AnimalReleaseStatus status = AnimalReleaseStatus.CURRENT
 
-    static constraints =
-    {
+    static constraints = {
         project()
         animal()
         captureLocality(blank:false)
@@ -87,17 +81,14 @@ class AnimalRelease implements Embargoable
         embargoDate(nullable:true)
     }
 
-    String toString()
-    {
+    String toString() {
         StringBuilder buf = new StringBuilder()
-        if (project)
-        {
+        if (project) {
             buf.append(String.valueOf(project))
             buf.append(" - ")
         }
 
-        if (animal?.species)
-        {
+        if (animal?.species) {
             buf.append(String.valueOf(animal?.species))
             buf.append(" - ")
         }
@@ -111,30 +102,24 @@ class AnimalRelease implements Embargoable
      * Non-authenticated users can only see scrambled locations.
      */
 
-    Point getScrambledReleaseLocation()
-    {
+    Point getScrambledReleaseLocation() {
         return GeometryUtils.scrambleLocation(releaseLocation)
     }
 
-    boolean isCurrent()
-    {
+    boolean isCurrent() {
         return (status == AnimalReleaseStatus.CURRENT)
     }
 
-    boolean isEmbargoed()
-    {
+    boolean isEmbargoed() {
         return (embargoDate != null) && (embargoDate.compareTo(new Date()) > 0)
     }
 
-    boolean isProtectionActive()
-    {
+    boolean isProtectionActive() {
         return embargoed && project.isProtected
     }
 
-    def applyEmbargo()
-    {
-        if (isEmbargoed())
-        {
+    def applyEmbargo() {
+        if (isEmbargoed()) {
             log.debug("AnimalRelease is embargoed, id: " + id)
             return null
         }

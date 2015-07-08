@@ -7,22 +7,19 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 
-class EmbargoExpirationJob implements ApplicationContextAware
-{
+class EmbargoExpirationJob implements ApplicationContextAware {
     def grailsApplication
     def mailService
     def applicationContext
 
     def piRoleType
 
-    static triggers =
-    {
+    static triggers = {
         // Execute daily at midnight.
         cron name: 'embargoExpirationDailyTrigger', cronExpression: "30 0 0 * * ?"
     }
 
-    def execute()
-    {
+    def execute() {
         log.info("Executing embargo expiration job...")
 
         // Emails are sent to Principal Investigators for each project.
@@ -32,8 +29,7 @@ class EmbargoExpirationJob implements ApplicationContextAware
         def embargoWarningPeriodMonths = grailsApplication.config.animalRelease.embargoExpiration.warningPeriodMonths
         def warningReleases = findEmbargoedReleases(embargoWarningPeriodMonths)
         log.info("Releases requiring embargo warning: " + warningReleases)
-        warningReleases.each
-        {
+        warningReleases.each {
             sendEmail(it, createWarningSubject(it), createWarningBody(it))
         }
 
@@ -41,14 +37,12 @@ class EmbargoExpirationJob implements ApplicationContextAware
         // Find release embargoes due for expiration with (n-1) to (n+2) months.
         def expiresTodayReleases = findEmbargoedReleases(0)
         log.info("Releases requiring embargo expiration: " + expiresTodayReleases)
-        expiresTodayReleases.each
-        {
+        expiresTodayReleases.each {
             sendEmail(it, createExpiringSubject(it), createExpiringBody(it))
         }
     }
 
-    def findEmbargoedReleases(embargoWarningPeriodMonths)
-    {
+    def findEmbargoedReleases(embargoWarningPeriodMonths) {
         Calendar lowerMonths = Calendar.getInstance()
         lowerMonths.add(Calendar.MONTH, (embargoWarningPeriodMonths - 1))
         Date lowerDate = lowerMonths.getTime()
@@ -60,10 +54,8 @@ class EmbargoExpirationJob implements ApplicationContextAware
         log.debug("Searching for embargoes, lower date: " + String.valueOf(lowerDate) + ", upper date: " + String.valueOf(upperDate))
 
         def c = AnimalRelease.createCriteria()
-        def embargoedReleases = c.list
-        {
-            and
-            {
+        def embargoedReleases = c.list {
+            and {
                 isNotNull("embargoDate")
                 between("embargoDate", lowerDate, upperDate)
             }
@@ -77,18 +69,15 @@ class EmbargoExpirationJob implements ApplicationContextAware
 
         Calendar testCalendar = Calendar.getInstance()
 
-        embargoedReleases = embargoedReleases.grep
-        {
+        embargoedReleases = embargoedReleases.grep {
             testCalendar.setTime(it.embargoDate)
 
-            if (testCalendar.get(Calendar.YEAR) != targetCalendar.get(Calendar.YEAR))
-            {
+            if (testCalendar.get(Calendar.YEAR) != targetCalendar.get(Calendar.YEAR)) {
                 log.debug("Filtering out release based on year, id: " + it.id + ", embargo date: " + String.valueOf(it.embargoDate))
                 return false
             }
 
-            if (testCalendar.get(Calendar.DAY_OF_YEAR) != targetCalendar.get(Calendar.DAY_OF_YEAR))
-            {
+            if (testCalendar.get(Calendar.DAY_OF_YEAR) != targetCalendar.get(Calendar.DAY_OF_YEAR)) {
                 log.debug("Filtering out release based on day of year, id: " + it.id + ", embargo date: " + String.valueOf(it.embargoDate))
                 return false
             }
@@ -102,8 +91,7 @@ class EmbargoExpirationJob implements ApplicationContextAware
         return embargoedReleases
     }
 
-    def sendEmail(release, theSubject, theBody)
-    {
+    def sendEmail(release, theSubject, theBody) {
         // Get the project's PIs.
         def pis =
             ProjectRole.findAllByProjectAndRoleType(release.project,
@@ -111,8 +99,7 @@ class EmbargoExpirationJob implements ApplicationContextAware
 
         log.debug("Sending embargo notification email to PIs: " + String.valueOf(pis))
 
-        mailService.sendMail
-        {
+        mailService.sendMail {
             to pis*.person*.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
@@ -121,32 +108,27 @@ class EmbargoExpirationJob implements ApplicationContextAware
         }
     }
 
-    def createWarningSubject(release)
-    {
+    def createWarningSubject(release) {
         return "AATAMS tag embargo expiration warning: " + release*.surgeries?.tag
     }
 
-    def createWarningBody(release)
-    {
+    def createWarningBody(release) {
         def buf = warningHeader()
 
         return commonBody(buf, release)
     }
 
-    def createExpiringSubject(release)
-    {
+    def createExpiringSubject(release) {
         return "AATAMS tag embargoes expiring today: " + (release*.surgeries?.tag).flatten()
     }
 
-    def createExpiringBody(release)
-    {
+    def createExpiringBody(release) {
         def buf = expiringHeader()
 
         return commonBody(buf, release)
     }
 
-    def warningHeader()
-    {
+    def warningHeader() {
         StringBuilder buf = new StringBuilder("The embargoes on the following tags will expire in ")
         buf.append(grailsApplication.config.animalRelease.embargoExpiration.warningPeriodMonths)
         buf.append(" month(s).")
@@ -161,8 +143,7 @@ class EmbargoExpirationJob implements ApplicationContextAware
         return buf
     }
 
-    def expiringHeader()
-    {
+    def expiringHeader() {
         StringBuilder buf = new StringBuilder("The embargoes on the following tags will expire today.")
         buf.append("\n")
         buf.append("\n")
@@ -170,10 +151,8 @@ class EmbargoExpirationJob implements ApplicationContextAware
         return buf
     }
 
-    def commonBody(buf, release)
-    {
-        release.surgeries.each
-        {
+    def commonBody(buf, release) {
+        release.surgeries.each {
             buf.append(it.tag)
             buf.append("\n")
         }
@@ -186,18 +165,15 @@ class EmbargoExpirationJob implements ApplicationContextAware
         return buf.toString()
     }
 
-    void setApplicationContext(ApplicationContext theApplicationContext)
-    {
+    void setApplicationContext(ApplicationContext theApplicationContext) {
         applicationContext = theApplicationContext
     }
 
-    def createLink(Map urlAttrs)
-    {
+    def createLink(Map urlAttrs) {
         return getServerUrl() + "/" + urlAttrs.controller + "/" + urlAttrs.action + "/" + urlAttrs.id
     }
 
-    def getServerUrl()
-    {
+    def getServerUrl() {
         return grailsApplication.config.grails.serverURL
     }
 }

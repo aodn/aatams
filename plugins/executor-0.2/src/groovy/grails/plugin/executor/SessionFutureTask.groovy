@@ -23,8 +23,8 @@ import java.util.concurrent.FutureTask
 
 public class SessionFutureTask<V> extends FutureTask<V>{
 
-	SessionFutureTask(Callable<V> callable, SessionFactory sessionFactory) {
-		super(new SessionBoundCallable(callable,sessionFactory));
+    SessionFutureTask(Callable<V> callable, SessionFactory sessionFactory) {
+        super(new SessionBoundCallable(callable,sessionFactory));
     }
 
     SessionFutureTask(Runnable r, V result, SessionFactory sessionFactory) {

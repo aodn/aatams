@@ -4,10 +4,8 @@ import grails.test.*
 
 import org.joda.time.*
 
-class InstallationStationTests extends GrailsUnitTestCase
-{
-    void testHasDeployment()
-    {
+class InstallationStationTests extends GrailsUnitTestCase {
+    void testHasDeployment() {
         ReceiverRecovery recovery = new ReceiverRecovery(recoveryDateTime:tomorrow())
         mockDomain(ReceiverRecovery, [recovery])
 
@@ -25,13 +23,11 @@ class InstallationStationTests extends GrailsUnitTestCase
         assertTrue(stationWithDeployment.isActive())
     }
 
-    DateTime yesterday()
-    {
+    DateTime yesterday() {
         return new DateTime().minusDays(1)
     }
 
-    DateTime tomorrow()
-    {
+    DateTime tomorrow() {
         return new DateTime().plusDays(1)
     }
 }

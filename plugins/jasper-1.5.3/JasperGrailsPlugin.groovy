@@ -23,8 +23,8 @@ class JasperGrailsPlugin {
 
     def title = "jasper plugin"
     def description = '''
-	This plugin adds easy support for launching jasper reports from GSP pages.
-	After installing this plugin, run your application and request (app-url)/jasper/demo for a demonstration and instructions.
+    This plugin adds easy support for launching jasper reports from GSP pages.
+    After installing this plugin, run your application and request (app-url)/jasper/demo for a demonstration and instructions.
     '''
     def documentation = "http://www.grails.org/plugin/jasper"
     def dependsOn = [:]
@@ -71,4 +71,3 @@ class JasperGrailsPlugin {
         // the event contain: event.source, event.application and event.applicationContext objects
     }
 }
- 

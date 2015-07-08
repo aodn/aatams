@@ -3,8 +3,7 @@ package au.org.emii.aatams
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.converters.JSON
 
-class SensorControllerTests extends AbstractControllerUnitTestCase
-{
+class SensorControllerTests extends AbstractControllerUnitTestCase {
     CodeMap a69_1303
     Tag owningTag
     Project project
@@ -15,8 +14,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
 
     TagDeviceModel model
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockLogging(TagFactoryService)
@@ -49,20 +47,17 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
         controller.candidateEntitiesService = new CandidateEntitiesService()
     }
 
-    void testSavePingerNoMatchingSerialNumber()
-    {
+    void testSavePingerNoMatchingSerialNumber() {
         assertSaveTag(1111, pinger)
     }
 
-    void testSaveSensorExistingSerialNumber()
-    {
+    void testSaveSensorExistingSerialNumber() {
         createTag("12345")
 
         assertSaveTag(2222, pressure)
     }
 
-    void testSaveSensorExistingSerialNumberSameSensorType()
-    {
+    void testSaveSensorExistingSerialNumberSameSensorType() {
         // #1728
         // Property [transmitterType] of class [class au.org.emii.aatams.Sensor] with value [PINGER] must be unique
         def serialNumber = "12345"
@@ -87,8 +82,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
         assertEquals("unique", renderModel.sensorInstance.errors.getFieldError('transmitterType').getCode())
     }
 
-    private void createTag(serialNumber)
-    {
+    private void createTag(serialNumber) {
         Tag tag = new Tag(serialNumber:serialNumber,
                 project:project,
                 model:model,
@@ -99,8 +93,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
         assertFalse(tag.hasErrors())
     }
 
-    private assertSaveTag(pingCode, transmitterType)
-    {
+    private assertSaveTag(pingCode, transmitterType) {
         assertEquals(0, Sensor.count())
 
         def saveParams = [tag: [serialNumber:"12345",
@@ -131,13 +124,11 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
         assertEquals(tag, sensor.tag)
     }
 
-    void testUpdateWithNullPingCode()
-    {
+    void testUpdateWithNullPingCode() {
         // should remove PINGER sensor from tag.
     }
 
-    void testLookupByTransmitterId()
-    {
+    void testLookupByTransmitterId() {
         Sensor sensor = new Sensor(tag: owningTag, pingCode: 123, transmitterType: pinger)
         sensor.save()
 
@@ -151,8 +142,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase
         assertLookupWithTerm(0, "21")
     }
 
-    private void assertLookupWithTerm(expectedNumResults, term)
-    {
+    private void assertLookupWithTerm(expectedNumResults, term) {
         controller.params.term = term
         controller.lookupByTransmitterId()
 

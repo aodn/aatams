@@ -3,13 +3,11 @@ package module
 import geb.Module
 import pages.*
 
-class ReceiverRow extends Module 
-{
-    static content =
-    {
+class ReceiverRow extends Module  {
+    static content = {
         cell { $("td", it) }
         cellText { cell(it).text() }
-        
+
         showLink (to: ReceiverShowPage) { cell(0).find("a") }
         id { cellText(1) }
         name { id }    // ID, but called name to keep it consistent with other page objects.

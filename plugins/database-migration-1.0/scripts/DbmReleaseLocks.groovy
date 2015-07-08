@@ -20,11 +20,11 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmReleaseLocks: 'Releases all locks on the database changelog') {
-	depends dbmInit
+    depends dbmInit
 
-	doAndClose {
-		liquibase.forceReleaseLocks()
-	}
+    doAndClose {
+        liquibase.forceReleaseLocks()
+    }
 }
 
 setDefaultTarget dbmReleaseLocks

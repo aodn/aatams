@@ -19,7 +19,7 @@ package grails.plugin.databasemigration.dbdoc
  */
 class TableListWriter extends HTMLListWriter {
 
-	TableListWriter(Map files) {
-		super('Current Tables', 'currenttables', 'tables', files)
-	}
+    TableListWriter(Map files) {
+        super('Current Tables', 'currenttables', 'tables', files)
+    }
 }

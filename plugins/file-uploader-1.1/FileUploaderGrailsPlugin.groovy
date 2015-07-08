@@ -9,7 +9,7 @@ class FileUploaderGrailsPlugin {
     def pluginExcludes = [
     ]
 
-	def loadAfter = ['hibernate']
+    def loadAfter = ['hibernate']
 
     // TODO Fill in these fields
     def author = "Lucas Teixeira"
@@ -23,9 +23,9 @@ to handle file uploading with multiple configuration.
     // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/file-uploader"
 
-	def doWithSpring = {
-		// TODO Implement runtime spring config (optional)
-	}
+    def doWithSpring = {
+        // TODO Implement runtime spring config (optional)
+    }
 
     def doWithApplicationContext = { applicationContext ->
         // TODO Implement post initialization spring config (optional)

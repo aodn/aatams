@@ -1,5 +1,4 @@
 package pages
 
-class ShowPage extends LayoutPage 
-{
+class ShowPage extends LayoutPage  {
 }

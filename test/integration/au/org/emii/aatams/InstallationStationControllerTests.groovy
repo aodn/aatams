@@ -4,25 +4,21 @@ import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import grails.test.*
 
-class InstallationStationControllerTests extends AbstractControllerUnitTestCase
-{
+class InstallationStationControllerTests extends AbstractControllerUnitTestCase {
     def dataSource
     def slurper = new XmlSlurper()
 
-    void testExecuteInstallationStationNoFilter()
-    {
+    void testExecuteInstallationStationNoFilter() {
         assertExport([:], "testExecuteInstallationStationNoFilter")
     }
 
-    void testExecuteInstallationStationByProject()
-    {
+    void testExecuteInstallationStationByProject() {
         assertExport([installation: [project: [eq: ["name", "Seal Count"]]]], "testExecuteInstallationStationByProject")
     }
 
     // TODO: move this to ExportServiceTests
     // Need to refactor the KML stuff out of ExportService and in to KmlService.
-    void testExecuteStationKmlExtract()
-    {
+    void testExecuteStationKmlExtract() {
         InstallationStation.metaClass.toKmlDescription = { "some description" }
         controller.params.format = "KML"
 

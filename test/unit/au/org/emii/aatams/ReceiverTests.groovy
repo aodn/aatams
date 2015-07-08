@@ -7,8 +7,7 @@ import com.vividsolutions.jts.io.WKTReader
 
 import grails.test.*
 
-class ReceiverTests extends GrailsUnitTestCase
-{
+class ReceiverTests extends GrailsUnitTestCase {
     Receiver rx1
     Receiver rx2
 
@@ -61,13 +60,11 @@ class ReceiverTests extends GrailsUnitTestCase
         assertNotNull(Receiver.findByName("VR2W-1111", [cache:true]))
         assertNull(Receiver.findByName("VR2W-3333"))
 
-        try
-        {
+        try {
             Receiver.findByName("VR2W111")
             fail()
         }
-        catch (AssertionError e)
-        {
+        catch (AssertionError e) {
             assertEquals("Invalid receiver name: VR2W111. Expression: (tokens.size() >= 2)", e.getMessage())
         }
     }

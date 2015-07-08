@@ -12,16 +12,16 @@ import org.springframework.transaction.interceptor.NoRollbackRuleAttribute;
 import org.springframework.transaction.interceptor.RollbackRuleAttribute;
 
 class TransactionPropertiesUtil {
-    
+
     private final Log log = LogFactory.getLog(getClass())
-    
+
     public LinkedHashMap removeImmutableDefaults(Map properties, String ... k) {
         List keys = ['propagation']
         if (k) {
             keys.addAll(k as List)
         }
-        
-        Map newProperties = new LinkedHashMap(properties)     
+
+        Map newProperties = new LinkedHashMap(properties)
         for (key in keys) {
             for (entry in properties.entrySet()) {
                 if (entry.key.startsWith(key)) {
@@ -29,17 +29,17 @@ class TransactionPropertiesUtil {
                 }
             }
         }
-        return newProperties               
+        return newProperties
     }
-    
+
     public void applyTo(Map properties, Object target) {
-        Map rollbackMapping = [rollbackFor: RollbackRuleAttribute, noRollbackFor: NoRollbackRuleAttribute] 
-        
+        Map rollbackMapping = [rollbackFor: RollbackRuleAttribute, noRollbackFor: NoRollbackRuleAttribute]
+
         int constantModifier = Modifier.FINAL | Modifier.STATIC | Modifier.PUBLIC
         /* [transactionTemplatePropertyAlias: [transactionDefinitionConstantAlias: [name: constantName, value: constantValue]]] */
         Map constantMappings = [propagation: [:], isolation: [:], timeout: [:]]
         Set constantPrefixes = new LinkedHashSet(constantMappings.keySet().collect {it.toUpperCase()})
-                
+
         for (field in TransactionDefinition.class.fields) {
             if ((field.modifiers & constantModifier) == constantModifier) {
                 for (prefix in constantPrefixes) {
@@ -51,21 +51,21 @@ class TransactionPropertiesUtil {
                 }
             }
         }
-        
+
         if (log.isDebugEnabled()) {
             log.debug("apply(): constantMappings ${constantMappings}")
         }
-        
-        
+
+
         /* [transactionTemplatePropertyAlias: [name: transactionTemplatePropertyName, value: transactionDefinitionConstantNameOrValue]] */
         Map propertyMappings = [propagation: [name: 'propagationBehaviorName', value: 'name'],
                                 isolation: [name: 'isolationLevelName', value: 'name'],
                                 timeout: [name: 'timeout', value: 'value']]
-        
+
         if (log.isDebugEnabled()) {
             log.debug("apply(): transaction properties ${properties}")
-        }        
-               
+        }
+
         for (prop in properties) {
             if (!rollbackMapping.containsKey(prop.key)) {
                 String name = prop.key
@@ -96,15 +96,15 @@ class TransactionPropertiesUtil {
                     log.debug("apply(): ${name}=${value}")
                 }
                 target[name] = value
-            } 
+            }
         }
-        
+
         List rollbackRules = null
         for (rollback in rollbackMapping.entrySet()) {
             if (properties.containsKey(rollback.key)) {
-                Constructor stringConstructor = (rollback.value as Class).getConstructor(String) 
+                Constructor stringConstructor = (rollback.value as Class).getConstructor(String)
                 Constructor classConstructor = (rollback.value as Class).getConstructor(Class)
-                
+
                 if (rollbackRules == null) {
                     rollbackRules = []
                 }
@@ -115,23 +115,23 @@ class TransactionPropertiesUtil {
                     } else {
                         exception = classConstructor.newInstance(exception)
                     }
-                    
+
                     rollbackRules << exception
                 }
-                     
+
             }
         }
-        
+
         if (rollbackRules) {
             target.rollbackRules = rollbackRules
         }
     }
-    
+
     public LinkedHashMap expand(Map properties) {
         LinkedHashMap expandedProperties = new LinkedHashMap()
-        
+
         applyTo(properties, expandedProperties);
-        
+
         return expandedProperties
     }
 

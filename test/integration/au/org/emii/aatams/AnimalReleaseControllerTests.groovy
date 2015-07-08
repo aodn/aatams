@@ -2,11 +2,9 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
-class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase
-{
+class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
 
-    void testPingerType()
-    {
+    void testPingerType() {
 //        2011-10-26 09:40:34,694 [http-8080-3] DEBUG grails.app.controller.au.org.emii.aatams.AnimalReleaseController - params:
         controller.params.releaseDateTime_hour = '9'
 

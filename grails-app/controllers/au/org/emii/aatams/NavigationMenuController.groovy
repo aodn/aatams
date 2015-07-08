@@ -15,8 +15,7 @@ import org.apache.shiro.SecurityUtils
  *
  *
  */
-class NavigationMenuController
-{
+class NavigationMenuController {
     def permissionUtilsService
 
     def backgroundDataControllers =
@@ -40,8 +39,7 @@ class NavigationMenuController
         return controllers
     }
 
-    def fieldDataControllers()
-    {
+    def fieldDataControllers() {
         boolean projectWriteAny =
             SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildProjectWriteAnyPermission())
 
@@ -104,8 +102,7 @@ class NavigationMenuController
         'NavigationMenu'
     ]
 
-    def index =
-    {
+    def index = {
         [backgroundDataControllers: backgroundDataControllers,
          installationDataControllers: installationDataControllers(),
          fieldDataControllers: fieldDataControllers(),

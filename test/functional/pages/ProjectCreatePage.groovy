@@ -1,16 +1,13 @@
 package pages
 
-class ProjectCreatePage extends ProjectCreateEditPage 
-{
+class ProjectCreatePage extends ProjectCreateEditPage  {
     static url = "project/create"
-    
-    static at =
-    {
+
+    static at = {
         title == "Create Project"
     }
-    
-    static content =
-    {
+
+    static content = {
         createButton (to: [ProjectShowPage]) { $("input", type: "submit") }
     }
 }

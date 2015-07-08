@@ -93,18 +93,15 @@ compassConnection = new File(
 ).absolutePath
 
 // set per-environment serverURL stem for creating absolute links
-environments
-{
-    production
-    {
+environments {
+    production {
         grails.serverURL = "http://aatams.emii.org.au/${grails.util.Metadata.current.getApplicationName()}"
         grails.serverHost = "http://aatams.emii.org.au"
         fileimport.path = new File(System.getProperty('java.io.tmpdir'), "aatams/test_uploads").toString()
         bulkimport.path = new File(fileimport.path, "bulkimports").toString()
         grails.mail.host = "localhost"
     }
-    development
-    {
+    development {
         grails.serverURL = "http://localhost:8080/${grails.util.Metadata.current.getApplicationName()}"
         grails.serverHost = "http://localhost:8080"
         fileimport.path = new File(System.getProperty('java.io.tmpdir'), "aatams/test_uploads").toString()
@@ -114,8 +111,7 @@ environments
         grails.mail.host = "postoffice.utas.edu.au"
         grails.mail.disabled = true
     }
-    test
-    {
+    test {
         grails.serverURL = "http://localhost:8090/${grails.util.Metadata.current.getApplicationName()}"
         grails.serverHost = "http://localhost:8090"
         grails.mail.disabled = true
@@ -158,10 +154,8 @@ catch (e) {
 
 def log4jConversionPattern = '%d [%t] [%X{username}] %-5p %c{1} - %m%n'
 
-log4j =
-{
-    appenders
-    {
+log4j = {
+    appenders {
         console name: 'stdout', layout: pattern(conversionPattern: log4jConversionPattern)
         'null' name: "stacktrace"
     }
@@ -181,12 +175,9 @@ log4j =
 
     info   "grails.app"
 
-    environments
-    {
-        production
-        {
-            appenders
-            {
+    environments {
+        production {
+            appenders {
                 appender new de.viaboxx.nagios.NagiosAppender(
                     name: 'nagiosAppender',
                     threshold: Level.ERROR,
@@ -200,10 +191,8 @@ log4j =
             }
         }
 
-        development
-        {
-            appenders
-            {
+        development {
+            appenders {
                 file name: 'file', file: 'aatams.log', layout: pattern(conversionPattern: log4jConversionPattern)
             }
 
@@ -224,16 +213,14 @@ log4j =
 
         }
 
-        test
-        {
+        test {
             debug  "grails.app.service.au.org.emii.aatams.AnimalReleaseService",
                    "grails.app.domain.au.org.emii.aatams.bulk"
                    "grails.app.service.au.org.emii.aatams.detection"
         }
     }
 
-    root
-    {
+    root {
         info 'stdout', 'null', 'nagiosAppender', 'file'
     }
 }

@@ -1,16 +1,13 @@
 package pages
 
-class GettingStartedPage extends LayoutPage 
-{
+class GettingStartedPage extends LayoutPage  {
     static url = "gettingStarted"
-    
-    static at =
-    {
+
+    static at = {
         heading.text() ==~ /Getting Started/
     }
-    
-    static content =
-    {
-        
+
+    static content = {
+
     }
 }

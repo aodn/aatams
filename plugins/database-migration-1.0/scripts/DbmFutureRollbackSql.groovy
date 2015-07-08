@@ -20,13 +20,13 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmFutureRollbackSql: 'Writes SQL to roll back the database to the current state after the changes in the changeslog have been applied') {
-	depends dbmInit
+    depends dbmInit
 
-	if (!okToWrite()) return
+    if (!okToWrite()) return
 
-	doAndClose {
-		liquibase.futureRollbackSQL contexts, newPrintWriter()
-	}
+    doAndClose {
+        liquibase.futureRollbackSQL contexts, newPrintWriter()
+    }
 }
 
 setDefaultTarget dbmFutureRollbackSql

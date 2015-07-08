@@ -56,7 +56,7 @@ class GrailsTemplateEngineService {
             }
         }
         def t = engine.createTemplate( r )
-        
+
         def out = new StringWriter();
         def originalOut = requestAttributes.getOut()
         requestAttributes.setOut(out)

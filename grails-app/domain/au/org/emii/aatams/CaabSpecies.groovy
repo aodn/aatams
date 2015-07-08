@@ -5,8 +5,7 @@ package au.org.emii.aatams
  *
  *  http://www.cmar.csiro.au/caab/caab_dump_latest.xls
  */
-class CaabSpecies extends Species
-{
+class CaabSpecies extends Species {
     /**
      * Naming conventions have been kept same as CAAB export file for ease of
      * import in to database.
@@ -43,8 +42,7 @@ class CaabSpecies extends Species
     String SUBORDER
     String INFRAORDER
 
-    static constraints =
-    {
+    static constraints = {
         spcode(unique:true)
         commonName(nullable:true)
         scientificName(nullable:true)
@@ -75,18 +73,15 @@ class CaabSpecies extends Species
         INFRAORDER(nullable:true)
     }
 
-    static mapping =
-    {
+    static mapping = {
         cache true
     }
 
-    String toString()
-    {
+    String toString() {
         return name
     }
 
-    String getName()
-    {
+    String getName() {
         return spcode + " - " + scientificName + " (" + commonName + ")"
     }
 }

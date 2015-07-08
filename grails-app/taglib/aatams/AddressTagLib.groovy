@@ -2,13 +2,12 @@ package aatams
 
 import au.org.emii.aatams.Address
 
-class AddressTagLib 
-{
+class AddressTagLib  {
     def addressDetail = {attrs, body ->
-                        
-        out << render(template:"/address/addressTemplate", 
-                      model:[addressName:attrs.addressName, 
-                             address:attrs.address, 
+
+        out << render(template:"/address/addressTemplate",
+                      model:[addressName:attrs.addressName,
+                             address:attrs.address,
                              body:body(),
                              asAboveElement:attrs.asAboveElement])
     }

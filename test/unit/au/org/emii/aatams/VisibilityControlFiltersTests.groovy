@@ -13,8 +13,7 @@ import org.apache.shiro.SecurityUtils
 
 import static au.org.emii.aatams.test.TestUtils.VisibilityLevel.*
 
-class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
-{
+class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase {
     def visibilityControlService
     def permissionUtilsService
 
@@ -95,8 +94,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
 
     Person user
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockLogging(VisibilityControlService, true)
@@ -323,52 +321,44 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         }
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         super.tearDown()
 
         VisibilityControlFilters.metaClass = null
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return user.id
     }
 
-    protected boolean isPermitted(String permString)
-    {
+    protected boolean isPermitted(String permString) {
         def memberProjects = [projectWithMembership, protectedProjectWithMembership]
         def permissions = memberProjects.collect{ "project:${it.id}:read" }*.toString()
 
         return permissions.contains(permString)
     }
 
-    private Date now()
-    {
+    private Date now() {
         return new Date()
     }
 
-    private Date nextYear()
-    {
+    private Date nextYear() {
         Calendar cal = Calendar.getInstance()
         cal.add(Calendar.YEAR, 1)
         return cal.getTime()
     }
 
-    private Date lastYear()
-    {
+    private Date lastYear() {
         Calendar cal = Calendar.getInstance()
         cal.add(Calendar.YEAR, -1)
         return cal.getTime()
     }
 
-    void testAnimalList()
-    {
+    void testAnimalList() {
         checkList(animalController, "animal")
     }
 
-    void testAnimalNotList()
-    {
+    void testAnimalNotList() {
         controllerName = "animal"
         actionName = "show"
 
@@ -380,13 +370,11 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkVisibility(animalController, animalProtectedNonReadableProject, NOT_VISIBLE, 'animal')
     }
 
-    void testAnimalMeasurementList()
-    {
+    void testAnimalMeasurementList() {
         checkList(animalMeasurementController, "animalMeasurement")
     }
 
-    void testAnimalMeasurementNotList()
-    {
+    void testAnimalMeasurementNotList() {
         controllerName = "animalMeasurement"
         actionName = "show"
 
@@ -398,13 +386,11 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkVisibility(animalMeasurementController, animalMeasurementProtectedNonReadableProject, NOT_VISIBLE, 'animalMeasurement')
     }
 
-    void testAnimalReleaseList()
-    {
+    void testAnimalReleaseList() {
         checkList(releaseController, "animalRelease")
     }
 
-    void testAnimalReleaseNotList()
-    {
+    void testAnimalReleaseNotList() {
         controllerName = "animalRelease"
         actionName = "show"
 
@@ -416,8 +402,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkVisibility(releaseController, releaseProtectedNonReadableProject, NOT_VISIBLE, 'animalRelease')
     }
 
-    void testTagNotList()
-    {
+    void testTagNotList() {
         controllerName = "tag"
         actionName = "show"
 
@@ -429,13 +414,11 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkVisibility(tagController, tagProtectedNonReadableProject, NOT_VISIBLE, 'tag')
     }
 
-    void testSensorList()
-    {
+    void testSensorList() {
         checkList(sensorController, "sensor")
     }
 
-    void testSensorNotList()
-    {
+    void testSensorNotList() {
         controllerName = "sensor"
         actionName = "show"
 
@@ -454,8 +437,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkVisibility(sensorController, sensorPingerProtectedNonReadableProject, NOT_VISIBLE, 'sensor')
     }
 
-    void testDetectionList()
-    {
+    void testDetectionList() {
         controllerName = "detection"
 
         def model = [ entityList: detectionList, total: detectionList.size() ]
@@ -509,8 +491,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkVisibility(surgeryController, surgeryPastEmbargoed, VISIBLE, 'surgery')
     }
 
-    void testRedirectToLoginWhenEmbargoedAndNotAuthenticated()
-    {
+    void testRedirectToLoginWhenEmbargoedAndNotAuthenticated() {
         controllerName = "sensor"
         actionName = "show"
         authenticated = false
@@ -518,8 +499,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkVisibility(sensorController, sensorEmbargoedNonReadableProject, NOT_VISIBLE, "login", "/sensor/show/" + sensorEmbargoedNonReadableProject.id, 'sensor')
     }
 
-    void testRedirectToLoginWhenProtectedAndNotAuthenticated()
-    {
+    void testRedirectToLoginWhenProtectedAndNotAuthenticated() {
         controllerName = "sensor"
         actionName = "show"
         authenticated = false
@@ -527,8 +507,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkVisibility(sensorController, sensorProtectedNonReadableProject, NOT_VISIBLE, "login", "/sensor/show/" + sensorProtectedNonReadableProject.id, 'sensor')
     }
 
-    void testRedirectToUnauthorizedWhenEmbargoedAndAuthenticated()
-    {
+    void testRedirectToUnauthorizedWhenEmbargoedAndAuthenticated() {
         controllerName = "sensor"
         actionName = "show"
         authenticated = true
@@ -536,8 +515,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkVisibility(sensorController, sensorEmbargoedNonReadableProject, NOT_VISIBLE, "unauthorized", null, 'sensor')
     }
 
-    void testRedirectToUnauthorizedWhenProtectedAndAuthenticated()
-    {
+    void testRedirectToUnauthorizedWhenProtectedAndAuthenticated() {
         controllerName = "sensor"
         actionName = "show"
         authenticated = true
@@ -545,8 +523,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         checkVisibility(sensorController, sensorProtectedNonReadableProject, NOT_VISIBLE, "unauthorized", null, 'sensor')
     }
 
-    private void checkList(controller, entityName)
-    {
+    private void checkList(controller, entityName) {
         controller.params._name = "entityName"
         controllerName = entityName
 
@@ -579,13 +556,11 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         assertEquals(expectedTotalAfterEmbargo, model.total)
     }
 
-    private void checkVisibility(controller, entity, expectedVisibilityLevel, entityName)
-    {
+    private void checkVisibility(controller, entity, expectedVisibilityLevel, entityName) {
         checkVisibility(controller, entity, expectedVisibilityLevel, "unauthorized", null, entityName)
     }
 
-    private void checkVisibility(controller, entity, expectedVisibilityLevel, expectedRedirectAction, expectedTargetUri, entityName)
-    {
+    private void checkVisibility(controller, entity, expectedVisibilityLevel, expectedRedirectAction, expectedTargetUri, entityName) {
         controller.params.id = entity.id
         assert(controller.params)
 
@@ -601,8 +576,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase
         FilterConfig filter = getFilter("genericNotList")
         assertNotNull(filter)
 
-        VisibilityControlFilters.metaClass.getTargetUri =
-        {
+        VisibilityControlFilters.metaClass.getTargetUri = {
             params ->
 
             return expectedTargetUri

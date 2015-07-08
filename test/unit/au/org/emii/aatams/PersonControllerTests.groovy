@@ -8,16 +8,14 @@ import org.joda.time.DateTimeZone
 
 import org.apache.shiro.crypto.hash.Sha256Hash
 
-class PersonControllerTests extends AbstractControllerUnitTestCase
-{
+class PersonControllerTests extends AbstractControllerUnitTestCase {
     def permissionUtilsService
 
     boolean mailSent
 
     def user
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockDomain(Address)
@@ -39,18 +37,15 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
         user.save()
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         super.tearDown()
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return user?.id
     }
 
-    static def createDataList()
-    {
+    static def createDataList() {
         Organisation csiro = Organisation.findByName('CSIRO')
 
         Person jonBurgess =
@@ -84,8 +79,7 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
         return personList
     }
 
-    void initData()
-    {
+    void initData() {
         def orgList = OrganisationControllerTests.createDataList()
         mockDomain(Organisation, orgList)
         orgList.each { it.save() }
@@ -96,8 +90,7 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
     }
 
 
-    void testShow()
-    {
+    void testShow() {
         hasRole = true
 
         def address = new Address(id:1,
@@ -178,8 +171,7 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
 //        assertEquals("create", controller.renderArgs.view)
 //    }
 
-    void testUpdateUsernameToLowerCase()
-    {
+    void testUpdateUsernameToLowerCase() {
         Person person = new Person(name:"John",
                                    username:"john")
 
@@ -270,8 +262,7 @@ class PersonControllerTests extends AbstractControllerUnitTestCase
 //        assertTrue(mailSent)
 //    }
 
-    void testSaveBothOrganisationAndOrgName()
-    {
+    void testSaveBothOrganisationAndOrgName() {
         hasRole = false
 
         Organisation org = new Organisation(name:"org", status:EntityStatus.ACTIVE)

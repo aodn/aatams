@@ -21,8 +21,7 @@ enum DeviceStatus {
         name()
     }
 
-    static List listRecoveryStatuses()
-    {
+    static List listRecoveryStatuses() {
         return (values() - DeviceStatus.NEW - DeviceStatus.DEPLOYED)
     }
 }

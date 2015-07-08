@@ -20,11 +20,11 @@ import org.codehaus.groovy.grails.plugins.GrailsPluginManager
 import org.springframework.util.Assert
 
 /**
- * 
+ *
  * @author Daniel Henrique Alves Lima
  *
  */
-class DefaultConfigHelper extends AbstractConfigHelper {    
+class DefaultConfigHelper extends AbstractConfigHelper {
 
     @Override
     public void enhanceClasses() {
@@ -42,10 +42,10 @@ class DefaultConfigHelper extends AbstractConfigHelper {
         //MetaClass mc = GrailsApplication.metaClass
         //if (mc.respondsTo(GrailsApplication, '_notifyConfigChange')) {
             GrailsApplication._notifyConfigChange()
-        //}                 
+        //}
     }
 
-    
+
     protected void enhanceGrailsApplicationClass() {
         if (log.isDebugEnabled()) {
             log.debug("Enhancing ${GrailsApplication}")
@@ -59,7 +59,7 @@ class DefaultConfigHelper extends AbstractConfigHelper {
             Map appsWitCachedConfig = new IdentityHashMap()
             mc._mergedConfig = null
             mc.'static'._appsWitCachedConfig = appsWitCachedConfig
-            
+
             mc.getMergedConfig = {boolean reload = false ->
 
                 if (log.isDebugEnabled()) {
@@ -81,15 +81,15 @@ class DefaultConfigHelper extends AbstractConfigHelper {
 
                 return delegate._mergedConfig
             }
-            
+
             mc.'static'._notifyConfigChange = {
                 /*if (log.isDebugEnabled()) {
                     log.debug("1 appsWitCachedConfig ${appsWitCachedConfig}")
                 }*/
                 for (app in appsWitCachedConfig.keySet()) {
-                    GrailsApplication grailsApplication = (GrailsApplication) app                    
+                    GrailsApplication grailsApplication = (GrailsApplication) app
                     log.debug("Clearing _mergedConfig for ${grailsApplication}")
-                    grailsApplication._mergedConfig = null                    
+                    grailsApplication._mergedConfig = null
                 }
                 appsWitCachedConfig.clear()
             }
@@ -98,19 +98,19 @@ class DefaultConfigHelper extends AbstractConfigHelper {
         Assert.notEmpty mc.respondsTo(GrailsApplication, 'getMergedConfig')
     }
 
-        
+
     protected void enhanceConfigObjectClass() {
         if (log.isDebugEnabled()) {
             log.debug("Enhancing ${ConfigObject}")
         }
-        
+
         MetaClass mc = ConfigObject.metaClass
         if (!mc.respondsTo(ConfigObject, 'asMap')) {
             mc.asMap = {boolean checked = false ->
                 ConfigObject delegate = (ConfigObject) delegate
-                return AbstractConfigHelper.ConfigObjectProxy.newInstance(delegate, checked) 
-            }           
-            
+                return AbstractConfigHelper.ConfigObjectProxy.newInstance(delegate, checked)
+            }
+
             Assert.notEmpty mc.respondsTo(ConfigObject, 'asMap')
         }
     }

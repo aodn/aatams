@@ -58,7 +58,7 @@ class MeasurementUnitController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (measurementUnitInstance.version > version) {
-                    
+
                     measurementUnitInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'measurementUnit.label', default: 'MeasurementUnit')] as Object[], "Another user has updated this MeasurementUnit while you were editing")
                     render(view: "edit", model: [measurementUnitInstance: measurementUnitInstance])
                     return

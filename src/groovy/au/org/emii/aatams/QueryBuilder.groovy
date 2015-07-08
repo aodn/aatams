@@ -20,8 +20,7 @@ abstract class QueryBuilder {
         return constructQuery(filterParams)
     }
 
-    def constructQuery(filterParams)
-    {
+    def constructQuery(filterParams) {
         DSLContext create = DSL.using(SQLDialect.POSTGRES);
 
         def query = filterParams.count ?
@@ -39,12 +38,10 @@ abstract class QueryBuilder {
     abstract void addInClauses(query, filterParams)
 
     private void addBetweenClauses(query, filterParams) {
-        ["timestamp": filterParams?.filter?.between].each
-        {
+        ["timestamp": filterParams?.filter?.between].each {
             field, filterValues ->
 
-            if (filterValues)
-            {
+            if (filterValues) {
                 assert(filterValues?."1") : "Start date/time must be specified"
                 assert(filterValues?."2") : "End date/time must be specified"
 

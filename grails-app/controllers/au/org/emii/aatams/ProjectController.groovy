@@ -21,21 +21,17 @@ class ProjectController {
         def projectTotal = Project.count()
         def projectList = Project.list(params)
 
-        if (!userIsAdmin())
-        {
+        if (!userIsAdmin()) {
             // Filter out non-ACTIVE organisations (only sys admin should see these).
-            projectList = projectList.grep
-            {
+            projectList = projectList.grep {
                 return (it.status == EntityStatus.ACTIVE)
             }
 
             // Only count ACTIVE projects.
             // TODO: why doesn't count({}) work?
             projectTotal = 0
-            Project.list().each
-            {
-                if (it.status == EntityStatus.ACTIVE)
-                {
+            Project.list().each {
+                if (it.status == EntityStatus.ACTIVE) {
                     projectTotal++
                 }
             }
@@ -56,27 +52,23 @@ class ProjectController {
 
         ProjectCreateCommand createProjectCmd ->
 
-        if (createProjectCmd.validate())
-        {
+        if (createProjectCmd.validate()) {
             def projectInstance =  createProjectCmd.createProject()
 
             // If SysAdmin, then set Organisation's status to ACTIVE, otherwise,
             // set to PENDING and record the requesting user.
-            if (userIsAdmin())
-            {
+            if (userIsAdmin()) {
                 projectInstance.status = EntityStatus.ACTIVE
                 projectInstance.isProtected = createProjectCmd.isProtected
             }
-            else
-            {
+            else {
                 projectInstance.status = EntityStatus.PENDING
                 Person user = Person.get(SecurityUtils.getSubject().getPrincipal())
                 projectInstance.requestingUser = user
                 projectInstance.isProtected = false
             }
 
-            if (projectInstance.save(flush: true))
-            {
+            if (projectInstance.save(flush: true)) {
                 // Doing this here rather than in the createProject() method
                 // of the command, as that was causing StackOVerflowError
                 ProjectRoleType pi = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
@@ -85,31 +77,26 @@ class ProjectController {
                                     project:projectInstance,
                                     roleType:pi,
                                     access:ProjectAccess.READ_WRITE)
-                if (projectRole.save(flush:true))
-                {
+                if (projectRole.save(flush:true)) {
                     permissionUtilsService.setPermissions(projectRole)
                 }
 
-                if (userIsAdmin())
-                {
+                if (userIsAdmin()) {
                     flash.message = "${message(code: 'default.created.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.toString()])}"
                 }
-                else
-                {
+                else {
                     sendCreationNotificationEmails(projectInstance)
                     flash.message = "${message(code: 'default.requested.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.toString()])}"
                 }
                 redirect(action: "show", id: projectInstance.id)
             }
-            else
-            {
+            else {
                 log.error("Error saving projectInstance: " + projectInstance.errors)
 //                    render(view: "create", model: [projectInstance: projectInstance])
                 render(view: "create", model: [projectInstance:projectInstance, createProjectCmd:createProjectCmd])
             }
         }
-        else
-        {
+        else {
             log.error("Create project command invalid.")
             render(view: "create", model: [createProjectCmd:createProjectCmd])
         }
@@ -121,8 +108,7 @@ class ProjectController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), params.id])}"
             redirect(action: "list")
         }
-        else
-        {
+        else {
             [projectInstance: projectInstance, unrelatedOrganisations: projectInstance.unrelatedOrganisations()]
         }
     }
@@ -162,11 +148,9 @@ class ProjectController {
                 projectInstance.isProtected = newIsProtected ?: false
             }
 
-            if (!projectInstance.hasErrors() && projectInstance.save(flush: true))
-            {
+            if (!projectInstance.hasErrors() && projectInstance.save(flush: true)) {
                 // Notify project activated.
-                if (prevPending && (projectInstance.status == EntityStatus.ACTIVE))
-                {
+                if (prevPending && (projectInstance.status == EntityStatus.ACTIVE)) {
                     sendActivatedNotificationEmails(projectInstance)
                 }
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'project.label', default: 'Project'), projectInstance.toString()])}"
@@ -208,10 +192,8 @@ class ProjectController {
      *  - the requesting user
      *  - AATAMS sys admins.
      */
-    def sendCreationNotificationEmails(project)
-    {
-        sendMail
-        {
+    def sendCreationNotificationEmails(project) {
+        sendMail {
             to project?.requestingUser?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
@@ -220,10 +202,8 @@ class ProjectController {
         }
     }
 
-    def sendActivatedNotificationEmails(project)
-    {
-        sendMail
-        {
+    def sendActivatedNotificationEmails(project) {
+        sendMail {
             to project?.requestingUser?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
@@ -232,8 +212,7 @@ class ProjectController {
         }
     }
 
-    def lookupByName =
-    {
+    def lookupByName = {
         log.debug("Looking up projects matching: " + params.term)
         def projectsMatchingName = Project.findAllByNameIlike('%' + params.term + '%')
         log.debug("Matching projects: " + projectsMatchingName)

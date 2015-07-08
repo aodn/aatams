@@ -1,31 +1,27 @@
 package pages
 
-class PersonShowPage extends ShowPage 
-{
+class PersonShowPage extends ShowPage  {
     static url = "person/show"
-    
-    static at =
-    {
+
+    static at = {
         title == "Show Person"
     }
-    
-    static content =
-    {
+
+    static content = {
         row { $("td.name", text: it).parent() }
         value { row(it).find("td.value").text() }
-        
+
         name { value("Name") }
         organisationLink { row("Organisation").find("a") }
         organisation { organisationLink.text() }
-        
+
         projectLinks { row("Projects").find("a") }
-        projects
-        {
+        projects {
             projectLinks.collect { it.text() }
         }
-        
+
         defaultTimeZone { value("Default Time Zone") }
-        
+
         // These elements should only be visible to sys admin.
         username { value("Username") }
         phoneNumber { value("Phone Number") }
@@ -34,6 +30,6 @@ class PersonShowPage extends ShowPage
 
         editButton(to: PersonEditPage) { $("input", value: "Edit") }
         deleteButton(to: PersonListPage) { $("input", value: "Delete") }
-        
+
     }
 }

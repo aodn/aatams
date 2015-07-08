@@ -59,7 +59,7 @@ class ShiroGrailsPlugin {
     def pluginExcludes = [
     "grails-app/views/error.gsp"
     ]
-    
+
     def author = "Peter Ledbrook"
     def authorEmail = ""
     def title = "Apache Shiro Integration for Grails"
@@ -67,18 +67,18 @@ class ShiroGrailsPlugin {
 Enables Grails applications to take advantage of the Apache Shiro security layer.
 Adopted from previous JSecurity plugin.
 """
-    
+
     // URL to the plugin's documentation
     def documentation = "http://grails.org/Shiro+Plugin"
-    
+
     def loadAfter = [ "controllers", "services" ]
     def observe = [ "controllers" ]
     def watchedResources = "file:./grails-app/realms/**/*Realm.groovy"
     def artefacts = [ RealmArtefactHandler ]
-    
+
     def roleMaps = [:]
     def permMaps = [:]
-    
+
     def doWithSpring = {
         def securityConfig = application.config.security.shiro
 
@@ -88,10 +88,10 @@ Adopted from previous JSecurity plugin.
         application.realmClasses.each { realmClass ->
             log.info "Registering realm: ${realmClass.fullName}"
             configureRealm.delegate = delegate
-            
+
             realmBeans << configureRealm(realmClass)
         }
-        
+
         lifecycleBeanPostProcessor(LifecycleBeanPostProcessor)
 
         // Shiro annotation support for services...
@@ -114,7 +114,7 @@ Adopted from previous JSecurity plugin.
         passwordHashAdapter(PasswordHashAdapter) {
             credentialMatcher = ref("credentialMatcher")
         }
-        
+
         // Default permission resolver: WildcardPermissionResolver.
         // This converts permission strings into WildcardPermission
         // instances.
@@ -130,7 +130,7 @@ Adopted from previous JSecurity plugin.
 
         // Default remember-me manager.
         shiroRememberMeManager(CookieRememberMeManager)
-        
+
         // The real security manager instance.
         shiroSecurityManager(DefaultWebSecurityManager) { bean ->
             // Shiro doesn't like an empty collection of realms, so we
@@ -138,13 +138,13 @@ Adopted from previous JSecurity plugin.
             if (!realmBeans.isEmpty()) {
                 realms = realmBeans.collect { ref(it) }
             }
-            
+
             // Allow the user to customise the session type: 'http' or
             // 'shiro'.
             if (securityConfig.session.mode) {
                 sessionMode = securityConfig.session.mode
             }
-            
+
             // Allow the user to provide his own versions of these
             // components in resources.xml or resources.groovy.
             authenticator = ref("shiroAuthenticator")
@@ -181,7 +181,7 @@ Adopted from previous JSecurity plugin.
             }
         }
     }
-    
+
     def doWithApplicationContext = { applicationContext ->
         def mgr = applicationContext.getBean("shiroSecurityManager")
 
@@ -209,7 +209,7 @@ Adopted from previous JSecurity plugin.
             mgr.realms.addAll(realms)
         }
     }
-    
+
     /**
      * Adds 'roleMap' and 'permissionMap' properties to controllers
      * so that the before-interceptor can query them to find out
@@ -224,12 +224,12 @@ Adopted from previous JSecurity plugin.
                 processController(controllerClass, log)
             }
         }
-        
+
         application.filtersClasses.each { filterClass ->
             filterClass.clazz.metaClass.getRoleMap = { String controller -> return roleMaps[controller] }
             filterClass.clazz.metaClass.getPermissionMap = { String controller -> return permMaps[controller] }
         }
-        
+
         // Get the config option that determines whether authentication
         // is required for access control or not. By default, it is
         // required.
@@ -237,17 +237,17 @@ Adopted from previous JSecurity plugin.
         if (application.config.security.shiro.authc.required instanceof Boolean) {
             authcRequired = application.config.security.shiro.authc.required
         }
-        
+
         // Add an 'accessControl' method to FilterConfig (so that it's
         // available from Grails filters).
         def mc = FilterConfig.metaClass
-        
+
         mc.accessControl << { -> return accessControlMethod(delegate, authcRequired) }
         mc.accessControl << { Map args -> return accessControlMethod(delegate, authcRequired, args) }
         mc.accessControl << { Closure c -> return accessControlMethod(delegate, authcRequired, [:], c) }
         mc.accessControl << { Map args, Closure c -> return accessControlMethod(delegate, authcRequired, args, c) }
     }
-    
+
     def doWithWebDescriptor = { xml ->
         def contextParam = xml.'context-param'
         contextParam[contextParam.size() - 1] + {
@@ -294,10 +294,10 @@ Adopted from previous JSecurity plugin.
                 'filter-class'('org.apache.shiro.grails.SavedRequestFilter')
             }
         }
-        
+
         // Place the Shiro filters after the Spring character encoding filter, otherwise the latter filter won't work.
         def filter = xml.'filter-mapping'.find { it.'filter-name'.text() == "charEncodingFilter" }
-        
+
         // NOTE: The following shenanigans are designed to ensure that
         // the filter mapping is inserted in the right location under
         // a variety of circumstances. However, at this point in time
@@ -318,7 +318,7 @@ Adopted from previous JSecurity plugin.
                 }
                 i++
             }
-            
+
             if (siteMeshIndex > 0) {
                 /* There is at least one other filter mapping that comes
                  before the SiteMesh one, so we can simply use the filter
@@ -383,7 +383,7 @@ Adopted from previous JSecurity plugin.
 
             // Make sure the new realm class is registered.
             def realmClass = application.addArtefact(RealmArtefactHandler.TYPE, event.source)
-            
+
             // We clone the closure because we're going to change
             // the delegate.
             def beans = beans(configureRealm.curry(realmClass))
@@ -393,12 +393,12 @@ Adopted from previous JSecurity plugin.
 
     def configureRealm = { grailsClass ->
         def realmName = grailsClass.shortName
-        
+
         // Create the realm bean.
         "${realmName}Instance"(grailsClass.clazz) { bean ->
             bean.autowire = "byName"
         }
-        
+
         // Wrap each realm with an adapter that implements the Shiro Realm interface.
         def wrapperName = "${realmName}Wrapper".toString()
         "${wrapperName}"(RealmWrapper) {
@@ -406,11 +406,11 @@ Adopted from previous JSecurity plugin.
             tokenClass = GrailsClassUtils.getStaticPropertyValue(grailsClass.clazz, "authTokenClass")
             permissionResolver = ref("shiroPermissionResolver")
         }
-        
+
         // Return the bean name for this realm.
         return wrapperName
     }
-    
+
     /**
      * Implementation of the "accessControl()" dynamic method available
      * to filters. It requires a reference to the filter so that it can
@@ -433,19 +433,19 @@ Adopted from previous JSecurity plugin.
         // want to check whether the user is authenticated, otherwise
         // we end up in an infinite loop of redirects.
         if (filter.controllerName == "auth") return true
-        
+
         // Get hold of the filters class instance.
         def filtersClass = filter.filtersDefinition
-        
+
         // ...and the HTTP request.
         def request = filter.request
-        
+
         // Is an authenticated user required for this URL? If not,
         // then we can do a permission check for remembered users
         // as well as authenticated ones. Otherwise, remembered
         // users will have to log in.
         def authenticatedUserRequired = args["auth"] || (args["auth"] == null && authcRequired)
-        
+
         // If required, check that the user is authenticated.
         def subject = SecurityUtils.subject
         if (subject.principal == null || (authenticatedUserRequired && !subject.authenticated)) {
@@ -455,7 +455,7 @@ Adopted from previous JSecurity plugin.
             if (filtersClass.metaClass.respondsTo(filtersClass, "onNotAuthenticated")) {
                 doDefault = filtersClass.onNotAuthenticated(subject, filter)
             }
-            
+
             // Continue with the default behaviour of redirecting to
             // the login page, unless the onNotAuthenticated() method
             // requests otherwise.
@@ -495,10 +495,10 @@ Adopted from previous JSecurity plugin.
                             params: [ targetUri: targetUri.toString() ])
                 }
             }
-            
+
             return false
         }
-        
+
         def isPermitted
         if (c == null) {
             // Check that the user has the required permission for the target controller/action.
@@ -517,7 +517,7 @@ Adopted from previous JSecurity plugin.
             c.delegate = new FilterAccessControlBuilder(subject)
             isPermitted = c.call()
         }
-        
+
         if (!isPermitted) {
             // User does not have the required permission(s)
             if (filtersClass.metaClass.respondsTo(filtersClass, "onUnauthorized")) {
@@ -527,28 +527,28 @@ Adopted from previous JSecurity plugin.
                 // Default behaviour is to redirect to the 'unauthorized' page.
                 filter.redirect(controller: "auth", action: "unauthorized")
             }
-            
+
             return false
         }
         else {
             return true
         }
     }
-    
+
     def processController(controllerClass, log) {
         // This is the wrapped class.
         def clazz = controllerClass.clazz
-        
+
         // These maps are made available to controllers via the dynamically injected 'roleMap' and 'permissionMap' properties.
         def roleMap = [:]
         def permissionMap = [:]
         this.roleMaps[controllerClass.logicalPropertyName] = roleMap
         this.permMaps[controllerClass.logicalPropertyName] = permissionMap
-        
+
         // Process any annotations that this controller declares.
         log.debug "Processing annotations on ${controllerClass.shortName}"
         processAnnotations(controllerClass, roleMap, permissionMap, log)
-        
+
         // Check whether this controller class has a static
         // 'accessControl' property. If so, use that as a definition
         // of the controller's role and permission requirements.
@@ -561,31 +561,31 @@ Adopted from previous JSecurity plugin.
                 log.error("Static property [accessControl] on controller [${controllerClass.fullName}] is not a closure.")
                 return
             }
-            
+
             // Process the closure, building a map of actions to permissions and a map of actions to roles.
             def b = new AccessControlBuilder(clazz)
             c.delegate = b
             c.call()
-            
+
             roleMap.putAll(b.roleMap)
             permissionMap.putAll(b.permissionMap)
-            
+
             if (log.isDebugEnabled()) {
                 log.debug("Access control role map for controller '${controllerClass.logicalPropertyName}': ${roleMap}")
                 log.debug("Access control permission map for controller '${controllerClass.logicalPropertyName}': ${permissionMap}")
             }
         }
-        
+
         // Inject the role and permission maps into the controller.
         controllerClass.metaClass.getRoleMap = {->
             return roleMap
         }
-        
+
         controllerClass.metaClass.getPermissionMap = {->
             return permissionMap
         }
     }
-    
+
     /**
      * Process any plugin annotations (RoleRequired or PermissionRequired)
      * on the given controller. Any annotations are evaluated and used
@@ -600,7 +600,7 @@ Adopted from previous JSecurity plugin.
                 if (log.isDebugEnabled()) {
                     log.debug("Annotation role required by controller '${controllerClass.logicalPropertyName}', action '${field.name}': ${ann.value()}")
                 }
-                
+
                 // Found RoleRequired annotation. Configure the interceptor
                 def roles = roleMap[field.name]
                 if (!roles) {
@@ -609,21 +609,21 @@ Adopted from previous JSecurity plugin.
                 }
                 roles << ann.value()
             }
-            
+
             // Now check for permission requirements.
             ann = field.getAnnotation(PermissionRequired)
             if (ann != null) {
                 if (log.isDebugEnabled()) {
                     log.debug("Annotation permission required by controller '${controllerClass.logicalPropertyName}', action '${field.name}': ${ann.value()}")
                 }
-                
+
                 // Found PermissionRequired annotation. Configure the interceptor for this.
                 def permissions = permissionMap[field.name]
                 if (!permissions) {
                     permissions = []
                     permissionMap[field.name] = permissions
                 }
-                
+
                 def constructor = ann.type().getConstructor([ String, String ] as Class[])
                 permissions << constructor.newInstance([ ann.target(), ann.actions() ] as Object[])
             }

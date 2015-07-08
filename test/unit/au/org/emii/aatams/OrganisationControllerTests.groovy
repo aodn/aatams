@@ -4,14 +4,12 @@ import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import au.org.emii.aatams.test.TestUtils
 import grails.test.*
 
-class OrganisationControllerTests extends AbstractControllerUnitTestCase
-{
+class OrganisationControllerTests extends AbstractControllerUnitTestCase {
     String toAddress
     boolean mailSent
     def permissionUtilsService
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockDomain(Person)
@@ -25,8 +23,7 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
 
         toAddress = null
         mailSent = false
-        controller.metaClass.sendMail =
-        {
+        controller.metaClass.sendMail = {
             it ->
 
             it.call()
@@ -34,8 +31,7 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
             mailSent = true
         }
 
-        controller.metaClass.to =
-        {
+        controller.metaClass.to = {
             toAddress = it
         }
 
@@ -50,13 +46,11 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
         controller.permissionUtilsService = permissionUtilsService
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         super.tearDown()
     }
 
-    static def createDataList()
-    {
+    static def createDataList() {
         Address address =
             new Address(streetAddress:'12 Smith Street',
                         suburbTown:'Hobart',
@@ -66,8 +60,7 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
 
         Person somePerson = new Person()
 
-        Person.metaClass.static.get =
-        {
+        Person.metaClass.static.get = {
             new Person(username: "jbloggs", emailAddress: "jbloggs@test.com")
         }
 
@@ -109,8 +102,7 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
         return orgList
     }
 
-    void initData()
-    {
+    void initData() {
         mockDomain(Address)
 
         def orgList = createDataList()
@@ -118,14 +110,12 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
         mockDomain(Organisation, orgList)
 
         // Save each of the domain object so that the IDs are set properly.
-        orgList.each
-        {
+        orgList.each {
             it.save(flush:true, failOnError:true)
         }
     }
 
-    void testListAsSysAdmin()
-    {
+    void testListAsSysAdmin() {
         hasRole = true
 
         // There list of organisations should include non-active.
@@ -135,8 +125,7 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
         assertEquals(3, retVal.organisationInstanceList.size())
     }
 
-    void testListAsNonSysAdmin()
-    {
+    void testListAsNonSysAdmin() {
         hasRole = false
 
         // There list of organisations should include non-active.
@@ -146,8 +135,7 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
         assertEquals(1, retVal.organisationInstanceList.size())
     }
 
-    void testListAsNoone()
-    {
+    void testListAsNoone() {
         hasRole = false
         permitted = false
 
@@ -157,8 +145,7 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
         assertEquals(1, retVal.organisationInstanceList.size())
     }
 
-    void testSaveAsSysAdmin()
-    {
+    void testSaveAsSysAdmin() {
         hasRole = true
 
         // Status should be set to ACTIVE.
@@ -186,8 +173,7 @@ class OrganisationControllerTests extends AbstractControllerUnitTestCase
         assertFalse(mailSent)
     }
 
-    void testSaveAsNonSysAdmin()
-    {
+    void testSaveAsNonSysAdmin() {
         // Status should be set to PENDING.
         hasRole = false
 

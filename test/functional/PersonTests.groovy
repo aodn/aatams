@@ -2,25 +2,22 @@ import org.junit.Test;
 
 import pages.*
 
-class PersonTests extends GrailsCrudTest 
-{
+class PersonTests extends GrailsCrudTest  {
     def listPage = PersonListPage
     def showPage = PersonShowPage
     def createPage = PersonCreatePage
     def editPage = PersonEditPage
-    
+
     @Test
-    void testList()
-    {
+    void testList() {
         doTestList(3,
                    [name:"Joe Bloggs"],
                    [organisationLink:"CSIRO (CMAR)"],
                    [projects: ["Seal Count", "Tuna"]])
     }
-    
+
     @Test
-    void testShow()
-    {
+    void testShow() {
         doTestShow("Joe Bloggs",
                     [name:"Joe Bloggs",
                      organisation:"CSIRO (CMAR)",
@@ -29,8 +26,7 @@ class PersonTests extends GrailsCrudTest
     }
 
     @Test
-    void testCreate()
-    {
+    void testCreate() {
         def personName = "Ricky Ponting"
         def theusername = "rponting"
         def thephoneNumber = "1234 4321"
@@ -50,29 +46,26 @@ class PersonTests extends GrailsCrudTest
     }
 
     @Test
-    void testEdit()
-    {
+    void testEdit() {
         doTestEdit("Joe Bloggs")
 
         navigateToEditPageFromShowPage()
         assertPasswordChange()
     }
-    
-    private void assertPasswordChange()
-    {
+
+    private void assertPasswordChange() {
         changePassword("new password")
         changePassword("password")
     }
-    
-    private void changePassword(password)
-    {
+
+    private void changePassword(password) {
         assert at(PersonEditPage)
         changePasswordLink.click()
-        
+
         assert changePasswordDialog.personLabel.text() == "Joe Bloggs"
         changePasswordDialog.passwordTextField.value(password)
         changePasswordDialog.passwordConfirmTextField.value(password)
-        
+
         changePasswordDialog.updateButton.click()
     }
 }

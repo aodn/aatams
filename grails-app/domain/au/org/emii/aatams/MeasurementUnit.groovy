@@ -3,17 +3,14 @@ package au.org.emii.aatams
 /**
  * e.g. gm, mm.
  */
-class MeasurementUnit 
-{
+class MeasurementUnit  {
     String unit
-    
-    static constraints =
-    {
+
+    static constraints = {
         unit(blank:false, unique:true)
     }
 
-    String toString()
-    {
+    String toString() {
         return unit
     }
 }

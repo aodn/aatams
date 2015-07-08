@@ -5,15 +5,13 @@ import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import groovy.sql.*
 
-abstract class AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends AbstractGrailsUnitTestCase
-{
+abstract class AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests extends AbstractGrailsUnitTestCase {
     def dataSource
     def grailsApplication
     def vueDetectionFileProcessorService
     def sql
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         sql = Sql.newInstance(dataSource)

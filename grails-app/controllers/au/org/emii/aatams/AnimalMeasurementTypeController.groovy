@@ -58,7 +58,7 @@ class AnimalMeasurementTypeController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (animalMeasurementTypeInstance.version > version) {
-                    
+
                     animalMeasurementTypeInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'animalMeasurementType.label', default: 'AnimalMeasurementType')] as Object[], "Another user has updated this AnimalMeasurementType while you were editing")
                     render(view: "edit", model: [animalMeasurementTypeInstance: animalMeasurementTypeInstance])
                     return

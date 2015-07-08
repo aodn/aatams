@@ -7,8 +7,7 @@ import grails.test.*
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import com.vividsolutions.jts.geom.*
 
-class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
-{
+class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase {
     def candidateEntitiesService
 
     def project1
@@ -43,8 +42,7 @@ class ReceiverRecoveryControllerTests extends AbstractControllerUnitTestCase
             new Project(id:3, name:'Project 3'),
         ]
 
-        candidateEntitiesService.metaClass.readableProjects =
-        {
+        candidateEntitiesService.metaClass.readableProjects = {
             return [projectList[0], projectList[1]] // Only return the first two projects.
         }
 

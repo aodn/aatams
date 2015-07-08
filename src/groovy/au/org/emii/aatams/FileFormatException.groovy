@@ -3,23 +3,19 @@ package au.org.emii.aatams
 
 class FileFormatException extends FileProcessingException {
 
-    public FileFormatException()
-    {
+    public FileFormatException() {
         super()
     }
 
-    public FileFormatException(String message)
-    {
+    public FileFormatException(String message) {
         super(message)
     }
 
-    public FileFormatException(String message, Throwable cause)
-    {
+    public FileFormatException(String message, Throwable cause) {
         super(message, cause)
     }
 
-    public FileFormatException(Throwable cause)
-    {
+    public FileFormatException(Throwable cause) {
         super(cause)
     }
 

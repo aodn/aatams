@@ -1,6 +1,6 @@
 testDataConfig {
     sampleData {
-        
+
     }
 }
 

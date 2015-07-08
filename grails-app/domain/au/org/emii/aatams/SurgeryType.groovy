@@ -3,17 +3,14 @@ package au.org.emii.aatams
 /**
  * e.g. INTERNAL, EXTERNAL.
  */
-class SurgeryType 
-{
+class SurgeryType  {
     String type
-    
-    static constraints = 
-    {
+
+    static constraints =  {
         type(blank:false, unique:true)
     }
-    
-    String toString()
-    {
+
+    String toString() {
         return type
     }
 }

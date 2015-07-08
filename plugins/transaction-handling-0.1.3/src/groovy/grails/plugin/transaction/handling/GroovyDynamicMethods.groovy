@@ -15,21 +15,21 @@ import org.springframework.transaction.support.TransactionTemplate
 
 
 class GroovyDynamicMethods {
-    
+
     private final Log log = LogFactory.getLog(getClass())
     private final TransactionPropertiesUtil txPropsUtil = new TransactionPropertiesUtil()
-    
+
     public GroovyDynamicMethods() {
     }
-    
-    public void doWith(ApplicationContext ctx, GrailsApplication application, GrailsClass targetDomainClass = null) {               
+
+    public void doWith(ApplicationContext ctx, GrailsApplication application, GrailsClass targetDomainClass = null) {
         Map pluginConfig = application.mergedConfig.asMap(true).grails.plugin.transactionHandling
-        
-        log.debug("pluginConfig ${pluginConfig}")      
+
+        log.debug("pluginConfig ${pluginConfig}")
 
         Map withTrxDefaults = [propagation: 'required']
         Map withNewTrxDefaults = [propagation: 'requiresNew']
-        
+
         withTrxDefaults.putAll(txPropsUtil.removeImmutableDefaults(pluginConfig.programmatic))
         withNewTrxDefaults.putAll(txPropsUtil.removeImmutableDefaults(pluginConfig.programmatic))
 
@@ -48,12 +48,11 @@ class GroovyDynamicMethods {
             if (log.isDebugEnabled()) {
                 log.debug("transaction properties ${properties}")
             }
-            
-            TransactionTemplate template = new TransactionTemplate(ctx.getBean('transactionManager'))            
+
+            TransactionTemplate template = new TransactionTemplate(ctx.getBean('transactionManager'))
             txPropsUtil.applyTo properties, template
-            
-            template.execute(
-                {status ->
+
+            template.execute( {status ->
                     callable.call(status)
                 } as TransactionCallback)
         }

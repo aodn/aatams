@@ -2,8 +2,7 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.util.ListUtils
 
-class Organisation
-{
+class Organisation {
     static hasMany = [organisationProjects:OrganisationProject,
                       receivers:Receiver,
                       people:Person]
@@ -22,8 +21,7 @@ class Organisation
     // The person requesting creation of Organisation.
     static hasOne = [request:Request]
 
-    static constraints =
-    {
+    static constraints = {
         name(blank:false)
         department(blank:false)
         phoneNumber(blank:false)
@@ -35,32 +33,26 @@ class Organisation
         request(nullable:true)
     }
 
-    static mapping =
-    {
+    static mapping = {
         sort "name"
     }
 
     static searchable = [only: ['name', 'department']]
 
-    String toString()
-    {
+    String toString() {
         return name + " (" + department  + ")"
     }
 
-    String getProjects()
-    {
+    String getProjects() {
         return ListUtils.fold(organisationProjects, "project")
     }
 
-    static List<Organisation> listActive()
-    {
+    static List<Organisation> listActive() {
         return findAllByStatus(EntityStatus.ACTIVE)
     }
 
-    Integer getTotalReceivers()
-    {
-        if (!receivers)
-        {
+    Integer getTotalReceivers() {
+        if (!receivers) {
             return 0
         }
 

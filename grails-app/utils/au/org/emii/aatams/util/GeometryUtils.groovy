@@ -11,68 +11,55 @@ import com.vividsolutions.jts.geom.Point;
  *
  * @author jburgess
  */
-class GeometryUtils 
-{
-    static double scrambleCoordinate(double coord)
-    {
-        if (!SecurityUtils.subject.isAuthenticated())
-        {
+class GeometryUtils  {
+    static double scrambleCoordinate(double coord) {
+        if (!SecurityUtils.subject.isAuthenticated()) {
             return truncate2(coord)
 
         }
-        else
-        {
+        else {
             return coord
         }
     }
-    
-    static Point scrambleLocation(Point origPoint)
-    {
-        if (origPoint == null)
-        {
+
+    static Point scrambleLocation(Point origPoint) {
+        if (origPoint == null) {
             return null
         }
-        
-        try
-        {
-            if (!SecurityUtils.subject.isAuthenticated())
-            {
+
+        try {
+            if (!SecurityUtils.subject.isAuthenticated()) {
                 return doScramble(origPoint)
             }
-            else
-            {
+            else {
                 return origPoint
             }
         }
-        catch (UnavailableSecurityManagerException e)
-        {
+        catch (UnavailableSecurityManagerException e) {
             // It's possible that a security manager isn't yet accessible when
             // this is called (i.e. during start-up).
             return doScramble(origPoint)
         }
     }
-    
-    private static double round(double d, int decimalPlace) 
-    {
+
+    private static double round(double d, int decimalPlace)  {
         BigDecimal bd = new BigDecimal(d);
         bd = bd.setScale(decimalPlace, BigDecimal.ROUND_DOWN);
         return bd.doubleValue();
     }
-    
-    private static double truncate2 (double x)
-    {
+
+    private static double truncate2 (double x) {
         return round(x, 2)
     }
-    
-    private static Point doScramble(Point origPoint)
-    {
+
+    private static Point doScramble(Point origPoint) {
         double lon = truncate2(origPoint.getCoordinate().x)
         double lat = truncate2(origPoint.getCoordinate().y)
 
         Point p = new GeometryFactory().createPoint(
                     new Coordinate(lon, lat))
         p.SRID = origPoint.SRID
-        
+
         return p
     }
 }

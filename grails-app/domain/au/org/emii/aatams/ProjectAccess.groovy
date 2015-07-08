@@ -4,25 +4,21 @@ package au.org.emii.aatams
  * Determines access priviliges that a Person has on a particular Project (via
  * ProjectRole).
  */
-enum ProjectAccess 
-{
+enum ProjectAccess  {
     READ_ONLY('Read Only'),
     READ_WRITE('Read/Write')
-    
+
     String displayStatus
-    
-    ProjectAccess(String displayStatus)
-    {
+
+    ProjectAccess(String displayStatus) {
         this.displayStatus = displayStatus
     }
-    
-    String toString()
-    {
+
+    String toString() {
         return displayStatus
     }
-    
-    static list()
-    {
+
+    static list() {
         [READ_ONLY, READ_WRITE]
     }
 }

@@ -3,13 +3,11 @@ package module
 import geb.Module
 import pages.*
 
-class OrganisationRow extends Module 
-{
-    static content =
-    {
+class OrganisationRow extends Module  {
+    static content = {
         cell { $("td", it) }
         cellText { cell(it).text() }
-        
+
         showLink (to: OrganisationShowPage) { cell(0).find("a") }
         name { cellText(1) }
         department { cellText(2) }

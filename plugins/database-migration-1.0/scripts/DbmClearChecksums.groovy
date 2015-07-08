@@ -20,11 +20,11 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmClearChecksums: 'Removes current checksums from database. On next run checksums will be recomputed') {
-	depends dbmInit
+    depends dbmInit
 
-	doAndClose {
-		liquibase.clearCheckSums()
-	}
+    doAndClose {
+        liquibase.clearCheckSums()
+    }
 }
 
 setDefaultTarget dbmClearChecksums

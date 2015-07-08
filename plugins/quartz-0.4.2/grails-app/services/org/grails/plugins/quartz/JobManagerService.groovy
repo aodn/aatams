@@ -22,7 +22,7 @@ class JobManagerService {
                     triggers.each {trigger ->
                         currentJob.triggerName = trigger.name
                         currentJob.triggerGroup = trigger.group
-                        currentJob.status = quartzScheduler.getTriggerState(trigger.name, trigger.group)                        
+                        currentJob.status = quartzScheduler.getTriggerState(trigger.name, trigger.group)
                     }
                 }
                 jobsList.add(currentJob)
@@ -77,7 +77,7 @@ class JobManagerService {
     }
 
     def resumeTriggerGroup (String group) {
-        quartzScheduler.resumeTriggerGroup (group)    
+        quartzScheduler.resumeTriggerGroup (group)
     }
 
     def pauseJobGroup (String group) {
@@ -85,7 +85,7 @@ class JobManagerService {
     }
 
     def resumeJobGroup (String group) {
-        quartzScheduler.resumeJobGroup (group)    
+        quartzScheduler.resumeJobGroup (group)
     }
 
     def removeJob (String group, String name) {

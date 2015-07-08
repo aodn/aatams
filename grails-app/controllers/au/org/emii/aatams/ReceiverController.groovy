@@ -112,8 +112,7 @@ class ReceiverController extends ReportController {
     def delete = {
         def receiverInstance = Receiver.get(params.id)
         if (receiverInstance) {
-            try
-            {
+            try  {
                 receiverInstance.delete(flush: true)
 
                 // Need to delete any update permissions for this receiver.

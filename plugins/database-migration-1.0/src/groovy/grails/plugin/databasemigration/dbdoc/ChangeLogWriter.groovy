@@ -21,15 +21,15 @@ import liquibase.util.StreamUtil
  * @author <a href='mailto:burt@burtbeckwith.com'>Burt Beckwith</a>
  */
 class ChangeLogWriter {
-	private ResourceAccessor resourceAccessor
-	private Map files
+    private ResourceAccessor resourceAccessor
+    private Map files
 
-	ChangeLogWriter(ResourceAccessor resourceAccessor, Map files) {
-		this.files = files
-		this.resourceAccessor = resourceAccessor
-	}
+    ChangeLogWriter(ResourceAccessor resourceAccessor, Map files) {
+        this.files = files
+        this.resourceAccessor = resourceAccessor
+    }
 
-	void writeChangeLog(String changeLog, String physicalFilePath) {
-		files["changelogs/$physicalFilePath".toString()] = resourceAccessor.getResourceAsStream(physicalFilePath).text
-	}
+    void writeChangeLog(String changeLog, String physicalFilePath) {
+        files["changelogs/$physicalFilePath".toString()] = resourceAccessor.getResourceAsStream(physicalFilePath).text
+    }
 }

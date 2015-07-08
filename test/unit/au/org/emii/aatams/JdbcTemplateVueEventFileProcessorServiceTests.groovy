@@ -2,10 +2,8 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class JdbcTemplateVueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorServiceTests
-{
-    protected void setUp()
-    {
+class JdbcTemplateVueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorServiceTests {
+    protected void setUp() {
         super.setUp()
 
         mockLogging(JdbcTemplateEventFactoryService, true)
@@ -23,15 +21,13 @@ class JdbcTemplateVueEventFileProcessorServiceTests extends AbstractVueEventFile
         download.type = ReceiverDownloadFileType.EVENTS_CSV
     }
 
-    void testProcess()
-    {
+    void testProcess() {
         vueEventFileProcessorService.metaClass.batchUpdate = { String[] statements -> batchUpdate(statements) }
         vueEventFileProcessorService.metaClass.getBatchSize = { 10000 }
         vueEventFileProcessorService.process(download)
     }
 
-    private void batchUpdate(String[] statementList)
-    {
+    private void batchUpdate(String[] statementList) {
         statementList.each { println it }
 
         assertEquals("insert into RECEIVER_EVENT (ID, VERSION, TIMESTAMP, RECEIVER_DEPLOYMENT_ID, RECEIVER_DOWNLOAD_ID, DATA, DESCRIPTION, RECEIVER_NAME, UNITS, CLASS, MESSAGE, REASON) values (nextval('\"hibernate_sequence\"'), 0, '2009-12-09 01:45:29+0000', 1, 1, null, 'Initialization', 'VR2W-103335', null, 'au.org.emii.aatams.ValidReceiverEvent', '', '')", statementList[0])

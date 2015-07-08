@@ -2,17 +2,14 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class EmbargoExpirationJobTests extends GroovyTestCase
-{
+class EmbargoExpirationJobTests extends GroovyTestCase {
     def grailsApplication
 
-    void testFindEmbargoedReleasesToday()
-    {
+    void testFindEmbargoedReleasesToday() {
         EmbargoExpirationJob.triggerNow()
     }
 
-    void testCreateLink()
-    {
+    void testCreateLink() {
         def embargoExpirationJob = new EmbargoExpirationJob()
         embargoExpirationJob.grailsApplication = grailsApplication
 

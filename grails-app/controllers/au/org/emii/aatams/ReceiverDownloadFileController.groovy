@@ -9,8 +9,7 @@ import grails.converters.JSON
 import groovy.xml.MarkupBuilder
 
 
-class ReceiverDownloadFileController
-{
+class ReceiverDownloadFileController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
@@ -26,33 +25,28 @@ class ReceiverDownloadFileController
         [receiverDownloadFileInstanceList: ReceiverDownloadFile.list(params), receiverDownloadFileInstanceTotal: ReceiverDownloadFile.count()]
     }
 
-    def create()
-    {
+    def create() {
         def receiverDownloadFileInstance = new ReceiverDownloadFile()
         receiverDownloadFileInstance.properties = params
 
         return [receiverDownloadFileInstance: receiverDownloadFileInstance]
     }
 
-    def createDetections =
-    {
+    def createDetections = {
         return create()
     }
 
-    def createEvents =
-    {
+    def createEvents = {
         return create()
     }
 
-    def save =
-    {
+    def save = {
         log.debug("Processing receiver export, params: " + params)
         def receiverDownloadFileInstance = new ReceiverDownloadFile(type: params.type)
 
         // Save the file to disk.
         def fileMap = request.getFileMap()
-        if (fileMap.size() != 1)
-        {
+        if (fileMap.size() != 1) {
             withFormat {
                 html {
                     flash.error = "Number of posted files must be exactly one, you posted: " + fileMap.size()
@@ -72,8 +66,7 @@ class ReceiverDownloadFileController
                 }
             }
         }
-        else
-        {
+        else {
             _processRxrDownload(receiverDownloadFileInstance)
             redirect(action: "show", id: receiverDownloadFileInstance.id, params: params)
         }
@@ -134,16 +127,13 @@ class ReceiverDownloadFileController
     /**
      * User has chosen to download the actual file.
      */
-    def download =
-    {
+    def download = {
         def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
-        if (!receiverDownloadFileInstance)
-        {
+        if (!receiverDownloadFileInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'receiverDownloadFile.label', default: 'ReceiverDownloadFile'), params.id])}"
             redirect(action: "list")
         }
-        else
-        {
+        else {
             def file = new File(receiverDownloadFileInstance.path)
             response.setContentType("application/octet-stream")
             response.setHeader("Content-disposition", "attachment;filename=${file.getName()}")
@@ -153,18 +143,15 @@ class ReceiverDownloadFileController
         }
     }
 
-    def status =
-    {
+    def status = {
         ReceiverDownloadFile download = ReceiverDownloadFile.get(params.id)
 
         def receiverDownloadFileInstance = ReceiverDownloadFile.get(params.id)
-        if (!receiverDownloadFileInstance)
-        {
+        if (!receiverDownloadFileInstance) {
             response.status = 404
             render([error: [message: "Unknown receiverDownloadFile id: ${params.id}"]] as JSON)
         }
-        else
-        {
+        else {
             render([status: download.status, percentComplete: download.percentComplete] as JSON)
         }
     }

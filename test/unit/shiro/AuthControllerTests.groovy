@@ -7,12 +7,10 @@ import org.apache.shiro.authc.AuthenticationException
 import org.apache.shiro.authc.UsernamePasswordToken
 import org.apache.shiro.web.util.WebUtils
 
-class AuthControllerTests extends ControllerUnitTestCase
-{
+class AuthControllerTests extends ControllerUnitTestCase {
     def loginSuccess
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         loginSuccess = true
@@ -22,8 +20,7 @@ class AuthControllerTests extends ControllerUnitTestCase
         controller.metaClass.message = { LinkedHashMap args -> return "${args.code}" }
         controller.metaClass.checkForPendingUser = { Map params -> }
         controller.metaClass.doLogin = { UsernamePasswordToken token ->
-            if (!loginSuccess)
-            {
+            if (!loginSuccess) {
                 throw new AuthenticationException()
             }
         }
@@ -31,8 +28,7 @@ class AuthControllerTests extends ControllerUnitTestCase
         controller.visibilityControlService = new VisibilityControlService()
     }
 
-    void testLoginFromReportExtract()
-    {
+    void testLoginFromReportExtract() {
         String targetUri = "/report/extract?name=detection&formats=CSV&formats=KML"
         controller.params.username = "jbloggs"
         controller.params.password = "password"
@@ -43,13 +39,11 @@ class AuthControllerTests extends ControllerUnitTestCase
         assertEquals(targetUri, controller.redirectArgs.uri)
     }
 
-    void testLoginWithUpperCaseName()
-    {
+    void testLoginWithUpperCaseName() {
         controller.params.username = "FredSmith"
         controller.params.password = "paSSwoRD"
 
-        controller.metaClass.doLogin =
-        {
+        controller.metaClass.doLogin = {
             UsernamePasswordToken token ->
 
             assertEquals("fredsmith", token.username)
@@ -59,8 +53,7 @@ class AuthControllerTests extends ControllerUnitTestCase
         controller.signIn()
     }
 
-    void testRedirectToTargetUrlSlash()
-    {
+    void testRedirectToTargetUrlSlash() {
         def targetUri = '/'
         controller.redirectToTargetUrl(targetUri)
 
@@ -68,8 +61,7 @@ class AuthControllerTests extends ControllerUnitTestCase
         assertNull(controller.redirectArgs.url)
     }
 
-    void testRedirectToTargetUrlStartsWithHttp()
-    {
+    void testRedirectToTargetUrlStartsWithHttp() {
         def targetUri = 'http://something'
         controller.redirectToTargetUrl(targetUri)
 
@@ -77,8 +69,7 @@ class AuthControllerTests extends ControllerUnitTestCase
         assertEquals(targetUri, controller.redirectArgs.url)
     }
 
-    void testRedirectToTargetUrlStartsWithHttps()
-    {
+    void testRedirectToTargetUrlStartsWithHttps() {
         def targetUri = 'https://something'
         controller.redirectToTargetUrl(targetUri)
 
@@ -86,8 +77,7 @@ class AuthControllerTests extends ControllerUnitTestCase
         assertEquals(targetUri, controller.redirectArgs.url)
     }
 
-    void testRedirectToTargetUrlStartsWithAnimalRelease()
-    {
+    void testRedirectToTargetUrlStartsWithAnimalRelease() {
         def targetUri = 'animalRelease'
         controller.redirectToTargetUrl(targetUri)
 
@@ -95,8 +85,7 @@ class AuthControllerTests extends ControllerUnitTestCase
         assertNull(controller.redirectArgs.url)
     }
 
-    void testSignInBadAuthNoFormat()
-    {
+    void testSignInBadAuthNoFormat() {
         loginSuccess = false
 
         controller.params.username = "bad"
@@ -108,8 +97,7 @@ class AuthControllerTests extends ControllerUnitTestCase
         assertEquals(200, controller.response.status)
     }
 
-    void testSignInBadAuthXmlFormat()
-    {
+    void testSignInBadAuthXmlFormat() {
         loginSuccess = false
 
         controller.params.username = "bad"

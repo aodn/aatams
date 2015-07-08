@@ -24,9 +24,9 @@ import org.springframework.mail.MailMessage
 class MailService {
 
     static transactional = false
-    
+
     def mailMessageBuilderFactory
-    
+
     MailMessage sendMail(Closure callable) {
         if (isDisabled()) {
             log.warn("Sending emails disabled by configuration option")
@@ -39,13 +39,13 @@ class MailService {
             messageBuilder.sendMessage()
         }
     }
-    
+
     def getMailConfig() {
         org.codehaus.groovy.grails.commons.ConfigurationHolder.config.grails.mail
     }
-    
+
     boolean isDisabled() {
         mailConfig.disabled
     }
-    
+
 }

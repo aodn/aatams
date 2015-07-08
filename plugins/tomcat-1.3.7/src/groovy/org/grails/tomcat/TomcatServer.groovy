@@ -22,82 +22,82 @@ import org.apache.naming.resources.DirContextURLStreamHandler
 
 class TomcatServer implements EmbeddableServer {
 
-	static DEFAULT_JVM_ARGS = ["-Xmx512m"]
-	static DEFAULT_STARTUP_TIMEOUT_SECS = 300 // 5 mins
-	
-	Tomcat tomcat
-	def context
-	PluginBuildSettings pluginSettings
-	def eventListener
-	def grailsConfig
-	
+    static DEFAULT_JVM_ARGS = ["-Xmx512m"]
+    static DEFAULT_STARTUP_TIMEOUT_SECS = 300 // 5 mins
+
+    Tomcat tomcat
+    def context
+    PluginBuildSettings pluginSettings
+    def eventListener
+    def grailsConfig
+
     protected String keystore
     protected File keystoreFile
     protected String keyPassword
-	protected buildSettings
-	protected boolean warRun
-	protected warParams = [:]
-    protected ant	                       
-	
-	TomcatServer(String basedir, String webXml, String contextPath, ClassLoader classLoader) {
-		tomcat = new Tomcat()
-        this.buildSettings = BuildSettingsHolder.getSettings()	
+    protected buildSettings
+    protected boolean warRun
+    protected warParams = [:]
+    protected ant
 
-		if(contextPath=='/') contextPath = ''
+    TomcatServer(String basedir, String webXml, String contextPath, ClassLoader classLoader) {
+        tomcat = new Tomcat()
+        this.buildSettings = BuildSettingsHolder.getSettings()
 
-		def tomcatDir = new File("${buildSettings.projectWorkDir}/tomcat").absolutePath
-		def ant = new AntBuilder()		
-		ant.delete(dir:tomcatDir, failonerror:false)		
-		
-		tomcat.basedir = tomcatDir
-		context = tomcat.addWebapp(contextPath, basedir)
-		tomcat.enableNaming()		
-		
-		// we handle reloading manually
-		context.reloadable = false
-		context.setAltDDName("${buildSettings.projectWorkDir}/resources/web.xml")
+        if(contextPath=='/') contextPath = ''
 
-		def aliases = []
-		def pluginManager = PluginManagerHolder.getPluginManager()
-		def pluginSettings = GPU.getPluginBuildSettings()
-		if(pluginManager!=null) {
-			for(plugin in pluginManager.userPlugins) {
-				  def dir = pluginSettings.getPluginDirForName(GrailsNameUtils.getScriptName(plugin.name))
-				  def webappDir = dir ? new File("${dir.file.absolutePath}/web-app") : null
-				  if (webappDir?.exists())
-				        aliases << "/plugins/${plugin.fileSystemName}=${webappDir.absolutePath}"
+        def tomcatDir = new File("${buildSettings.projectWorkDir}/tomcat").absolutePath
+        def ant = new AntBuilder()
+        ant.delete(dir:tomcatDir, failonerror:false)
+
+        tomcat.basedir = tomcatDir
+        context = tomcat.addWebapp(contextPath, basedir)
+        tomcat.enableNaming()
+
+        // we handle reloading manually
+        context.reloadable = false
+        context.setAltDDName("${buildSettings.projectWorkDir}/resources/web.xml")
+
+        def aliases = []
+        def pluginManager = PluginManagerHolder.getPluginManager()
+        def pluginSettings = GPU.getPluginBuildSettings()
+        if(pluginManager!=null) {
+            for(plugin in pluginManager.userPlugins) {
+                  def dir = pluginSettings.getPluginDirForName(GrailsNameUtils.getScriptName(plugin.name))
+                  def webappDir = dir ? new File("${dir.file.absolutePath}/web-app") : null
+                  if (webappDir?.exists())
+                        aliases << "/plugins/${plugin.fileSystemName}=${webappDir.absolutePath}"
             }
         }
 
-		if(aliases) {
-			context.setAliases(aliases.join(','))
-		}
-		TomcatLoader loader = new TomcatLoader(classLoader)
-		
-		loader.container = context
-		context.loader = loader
-		
-		initialize()
-	}
-	
-	TomcatServer(String warPath, String contextPath) {
+        if(aliases) {
+            context.setAliases(aliases.join(','))
+        }
+        TomcatLoader loader = new TomcatLoader(classLoader)
+
+        loader.container = context
+        context.loader = loader
+
+        initialize()
+    }
+
+    TomcatServer(String warPath, String contextPath) {
         this.buildSettings = BuildSettingsHolder.getSettings()
-		def workDir = buildSettings.projectWorkDir
-		ant = new AntBuilder()
-		def tomcatDir = new File("${workDir}/tomcat").absolutePath
-		def warDir = new File("${workDir}/war").absolutePath
-		ant.delete(dir:tomcatDir, failonerror:false)		
-		ant.delete(dir:warDir, failonerror:false)				
-		ant.unzip(src:warPath, dest:warDir)
+        def workDir = buildSettings.projectWorkDir
+        ant = new AntBuilder()
+        def tomcatDir = new File("${workDir}/tomcat").absolutePath
+        def warDir = new File("${workDir}/war").absolutePath
+        ant.delete(dir:tomcatDir, failonerror:false)
+        ant.delete(dir:warDir, failonerror:false)
+        ant.unzip(src:warPath, dest:warDir)
 
-		if(contextPath=='/') contextPath = ''
+        if(contextPath=='/') contextPath = ''
 
-		warRun = true	
-		warParams.warPath = warDir
-		warParams.contextPath = contextPath
-		warParams.tomcatDir = tomcatDir
-	}
-	
+        warRun = true
+        warParams.warPath = warDir
+        warParams.contextPath = contextPath
+        warParams.tomcatDir = tomcatDir
+    }
+
     protected initialize() {
 
         keystore = "${buildSettings.grailsWorkDir}/ssl/keystore"
@@ -106,21 +106,21 @@ class TomcatServer implements EmbeddableServer {
 
         System.setProperty('org.mortbay.xml.XmlParser.NotValidating', 'true')
     }
-	
+
     /**
      * Starts the container on the default port
      */
     void start() {
-		start(null, 8080)
-	}
+        start(null, 8080)
+    }
 
     /**
      * Starts the container on the given port
      * @param port The port number
      */
     void start(int port) {
-		start(null, port)
-	}
+        start(null, port)
+    }
 
     /**
      * Starts the container on the given port
@@ -128,17 +128,17 @@ class TomcatServer implements EmbeddableServer {
      * @param port The port number
      */
     void start(String host, int port) {
-    	if(warRun) {
+        if(warRun) {
             def outFile = new File(buildSettings.projectTargetDir, "tomcat-out.txt")
             def errFile = new File(buildSettings.projectTargetDir, "tomcat-err.txt")
             [outFile, errFile].each { ant.delete(file: it, failonerror: false) }
-            
+
             def resultProperty = "tomcat.result"
-            
-    	    host = host ?: 'localhost'
-    		warParams.host = host
-    		warParams.port = port
-    		
+
+            host = host ?: 'localhost'
+            warParams.host = host
+            warParams.port = port
+
             Thread.start("tomcat process runner") {
                 ant.java(classname: IsolatedTomcat.name, fork: true, failonerror: false, output: outFile, error: errFile, resultproperty: resultProperty) {
                     classpath {
@@ -159,13 +159,13 @@ class TomcatServer implements EmbeddableServer {
                     }
                 }
             }
-            
-    		Runtime.addShutdownHook {    			
-    			// hit the shutdown port
-    			try {
-    				new URL("http://${host}:${port + 1}").text
-    			}catch(e) {}
-    		}
+
+            Runtime.addShutdownHook {
+                // hit the shutdown port
+                try {
+                    new URL("http://${host}:${port + 1}").text
+                }catch(e) {}
+            }
 
             def timeoutSecs = getConfigParam('startupTimeoutSecs') ?: DEFAULT_STARTUP_TIMEOUT_SECS
             def interval = 500 // half a second
@@ -182,14 +182,14 @@ class TomcatServer implements EmbeddableServer {
                     try { err = errFile.text } catch (IOException e) {}
                     throw new RuntimeException("tomcat exited prematurely with code '$resultCode' (error output: '$err')")
                 }
-                
+
                 // look for the magic string that will be written to output when the app is running
                 try {
                     started = outFile.text.contains("Server running. ")
                 } catch (IOException e) {
                     started = false
                 }
-                
+
                 if (!started) { // wait a bit then try again
                     Thread.sleep(interval as long)
                 }
@@ -198,35 +198,35 @@ class TomcatServer implements EmbeddableServer {
             if (!started) { // we didn't start in the specified timeout
                 throw new RuntimeException("Tomcat failed to start the app in $timeoutSecs seconds (see output in $outFile.path)")
             }
-            
+
             println "Tomcat Server running WAR (output written to: $outFile)"
-    	}
-    	else {
-    		preStart()
-    		tomcat.port = port
-    		if(host) {
-    			tomcat.connector.setAttribute("address", host)
-    		}
-    			
-    		tomcat.connector.URIEncoding = 'UTF-8'
-    		tomcat.start()    		
-    	}
-	}
-	
+        }
+        else {
+            preStart()
+            tomcat.port = port
+            if(host) {
+                tomcat.connector.setAttribute("address", host)
+            }
+
+            tomcat.connector.URIEncoding = 'UTF-8'
+            tomcat.start()
+        }
+    }
+
     private getConfigParam(String name) {
         buildSettings.config.grails.tomcat[name]
     }
 
-	private loadInstance(String name) {
-		tomcat.class.classLoader.loadClass(name).newInstance()
-	}
-	private preStart() {
-        eventListener?.event("ConfigureTomcat", [tomcat])	
-		def jndiEntries = grailsConfig?.grails?.naming?.entries
-		
-		if(jndiEntries instanceof Map) {
-			jndiEntries.each { name, resCfg ->
-				if(resCfg) {
+    private loadInstance(String name) {
+        tomcat.class.classLoader.loadClass(name).newInstance()
+    }
+    private preStart() {
+        eventListener?.event("ConfigureTomcat", [tomcat])
+        def jndiEntries = grailsConfig?.grails?.naming?.entries
+
+        if(jndiEntries instanceof Map) {
+            jndiEntries.each { name, resCfg ->
+                if(resCfg) {
                     if (!resCfg["type"]) {
                         throw new IllegalArgumentException("Must supply a resource type for JNDI configuration")
                     }
@@ -242,53 +242,53 @@ class TomcatServer implements EmbeddableServer {
                     }
 
                     context.namingResources.addResource res
-				}				
-			}			
-		}
+                }
+            }
+        }
     }
 
     /**
      * Starts a secure container running over HTTPS
      */
     void startSecure() {
-		startSecure(8443)
-	}
+        startSecure(8443)
+    }
 
     /**
      * Starts a secure container running over HTTPS for the given port
      * @param port The port
      */
     void startSecure(int port) {
-		startSecure("localhost", 8080, port)
-	}
-	
+        startSecure("localhost", 8080, port)
+    }
+
     /**
      * Starts a secure container running over HTTPS for the given port and host.
      * @param host The server host
      * @param httpPort The port for HTTP traffic.
      * @param httpsPort The port for HTTPS traffic.
      */
-    void startSecure(String host, int httpPort, int httpsPort) {	
-		preStart()
-		tomcat.hostname = host
-		tomcat.port = httpPort
-		tomcat.connector.URIEncoding = 'UTF-8'
+    void startSecure(String host, int httpPort, int httpsPort) {
+        preStart()
+        tomcat.hostname = host
+        tomcat.port = httpPort
+        tomcat.connector.URIEncoding = 'UTF-8'
         if (!(keystoreFile.exists())) {
             createSSLCertificate()
         }
-		
-		def sslConnector = loadInstance('org.apache.catalina.connector.Connector')
-		sslConnector.scheme = "https"
-		sslConnector.secure = true
-		sslConnector.port = httpsPort
-		sslConnector.setProperty("SSLEnabled","true")
-		sslConnector.setAttribute("keystore", keystore)
-		sslConnector.setAttribute("keystorePass", keyPassword)
-		sslConnector.URIEncoding = 'UTF-8'
-		tomcat.service.addConnector sslConnector
-		tomcat.start()
-	}
-	
+
+        def sslConnector = loadInstance('org.apache.catalina.connector.Connector')
+        sslConnector.scheme = "https"
+        sslConnector.secure = true
+        sslConnector.port = httpsPort
+        sslConnector.setProperty("SSLEnabled","true")
+        sslConnector.setAttribute("keystore", keystore)
+        sslConnector.setAttribute("keystorePass", keyPassword)
+        sslConnector.URIEncoding = 'UTF-8'
+        tomcat.service.addConnector sslConnector
+        tomcat.start()
+    }
+
     /**
      * Creates the necessary SSL certificate for running in HTTPS mode
      */
@@ -314,31 +314,31 @@ class TomcatServer implements EmbeddableServer {
         }
         keyToolClass.main(keytoolArgs)
         println 'Created SSL Certificate.'
-    }	
+    }
 
     /**
      * Stops the container
      */
     void stop() {
-    	if(warRun) {
-    		// hit the shutdown port
-			try {
-				new URL("http://${warParams.host}:${warParams.port + 1}").text
-			}catch(e) {}
-    	}
-    	else {
-    		tomcat.stop()
-    	}
-		
-	}
+        if(warRun) {
+            // hit the shutdown port
+            try {
+                new URL("http://${warParams.host}:${warParams.port + 1}").text
+            }catch(e) {}
+        }
+        else {
+            tomcat.stop()
+        }
+
+    }
 
     /**
      * Typically combines the stop() and start() methods in order to restart the container
      */
     void restart() {
-		stop()
-		start()
-	}
+        stop()
+        start()
+    }
 }
 
 class TomcatLoader implements Loader, Lifecycle {
@@ -352,9 +352,9 @@ class TomcatLoader implements Loader, Lifecycle {
     boolean delegate
     boolean reloadable
 
-	TomcatLoader(ClassLoader classLoader) {
-		this.classLoader = new ParentDelegatingClassLoader(classLoader)
-	}
+    TomcatLoader(ClassLoader classLoader) {
+        this.classLoader = new ParentDelegatingClassLoader(classLoader)
+    }
 
     void addPropertyChangeListener(PropertyChangeListener listener) {}
 
@@ -365,7 +365,7 @@ class TomcatLoader implements Loader, Lifecycle {
     void backgroundProcess() {}
 
     String[] findRepositories() {
-          log.warn "Call to findRepositories() returned null." 
+          log.warn "Call to findRepositories() returned null."
     }
 
     String getInfo() { "MyLoader/1.0" }
@@ -383,7 +383,7 @@ class TomcatLoader implements Loader, Lifecycle {
     }
 
     void removeLifecycleListener(LifecycleListener listener) {
-        log.warn "Call to removeLifecycleListener(${listener}) was ignored."	
+        log.warn "Call to removeLifecycleListener(${listener}) was ignored."
     }
 
     void start()  {
@@ -412,31 +412,31 @@ class TomcatLoader implements Loader, Lifecycle {
     }
 }
 class SearchFirstURLClassLoader extends URLClassLoader {
-	SearchFirstURLClassLoader(URL[] urls) {
-		super(urls)
-	}
-	Class loadClass(String name, boolean resolve) {
-		if(name.startsWith("grails.") || name.startsWith("org.codehaus.groovy")) throw new ClassNotFoundException(name)
-		Class c = findLoadedClass(name)
-		if(c==null) {
-			try {
-				c = findClass(name)			
-			}
-			catch(ClassNotFoundException cnfe) {
-					c = getParent().loadClass(name, false)
-			}			
-		}
-		if(resolve) resolveClass(c)
-		
-		return c 
-	}
+    SearchFirstURLClassLoader(URL[] urls) {
+        super(urls)
+    }
+    Class loadClass(String name, boolean resolve) {
+        if(name.startsWith("grails.") || name.startsWith("org.codehaus.groovy")) throw new ClassNotFoundException(name)
+        Class c = findLoadedClass(name)
+        if(c==null) {
+            try {
+                c = findClass(name)
+            }
+            catch(ClassNotFoundException cnfe) {
+                    c = getParent().loadClass(name, false)
+            }
+        }
+        if(resolve) resolveClass(c)
+
+        return c
+    }
 }
 class ParentDelegatingClassLoader extends ClassLoader {
-	ParentDelegatingClassLoader(ClassLoader parent) {
-		super(parent)
-	}
-	
+    ParentDelegatingClassLoader(ClassLoader parent) {
+        super(parent)
+    }
+
     Class<?> findClass(String name) {
-		parent.findClass(name)
-	}
+        parent.findClass(name)
+    }
 }

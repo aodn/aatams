@@ -8,53 +8,46 @@ import de.micromata.opengis.kml.v_2_2_0.Placemark
  * by a geographic location.  An installation can contrain multiple Installation
  * Stations.
  */
-class Installation 
-{
+class Installation  {
     static hasMany = [stations:InstallationStation]
     static belongsTo = [project:Project]
     static auditable = true
-    
+
     String name
     InstallationConfiguration configuration
-    
-    static constraints =
-    {
+
+    static constraints = {
         name(blank:false)
         configuration()
         project()
     }
-     
-    static mapping =
-    {
+
+    static mapping = {
         // Speed up candidateEntitiesService.
         cache true
         project cache:true
     }
-    
+
     static searchable = [only: ['name']]
-    
-    String toString()
-    {
+
+    String toString() {
         return name
     }
 
-    Folder toKmlFolder()
-    {
+    Folder toKmlFolder() {
         Folder installationFolder = new Folder().withName(name)
-        
-        stations.sort()
-        {
+
+        stations.sort() {
             a, b ->
-            
+
             a.name <=> b.name
-        }.each
-        {
+        }.each {
             station ->
 
             final Placemark stationPlacemark = station.toPlacemark()
             installationFolder.getFeature().add(stationPlacemark)
         }
-        
+
         return installationFolder
     }
 }

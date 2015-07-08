@@ -58,7 +58,7 @@ class DeviceController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (deviceInstance.version > version) {
-                    
+
                     deviceInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'device.label', default: 'Device')] as Object[], "Another user has updated this Device while you were editing")
                     render(view: "edit", model: [deviceInstance: deviceInstance])
                     return

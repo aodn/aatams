@@ -193,7 +193,7 @@ class DefaultSearchableCompassClassMappingXmlBuilder implements SearchableCompas
        }
 
        def xml = """<?xml version="1.0"?>
-<!DOCTYPE compass-core-mapping PUBLIC 
+<!DOCTYPE compass-core-mapping PUBLIC
     "-//Compass/Compass Core Mapping DTD 2.0//EN"
     "http://www.compass-project.org/dtd/compass-core-mapping-2.2.dtd">
 """ + writer.toString()

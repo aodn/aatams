@@ -8,16 +8,14 @@ import javax.servlet.ServletContext
  * Report formats are CSV, so that we can easily compare controller output to
  * an expected CSV output. (as opposed to PDF).
  */
-class ReportControllerTests extends AbstractControllerUnitTestCase
-{
+class ReportControllerTests extends AbstractControllerUnitTestCase {
     def permissionUtilsService
 
     def grailsApplication
 
     def dataSource
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockLogging(ReportController, true)
@@ -37,8 +35,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
         controller.detectionExtractService.metaClass.shouldReadAsync = { return false }
     }
 
-    void testExecuteAnimalReleaseSummary()
-    {
+    void testExecuteAnimalReleaseSummary() {
         controller.params._name = "animalReleaseSummary"
         controller.params.filter = [:]
 
@@ -77,8 +74,7 @@ class ReportControllerTests extends AbstractControllerUnitTestCase
 //        }
 //    }
 
-    private void checkResponse(def expectedFileName)
-    {
+    private void checkResponse(def expectedFileName) {
         // Compare the response content with expected.
         String expectedFilePath = constructFilePath(expectedFileName)
 

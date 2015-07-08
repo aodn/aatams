@@ -7,8 +7,7 @@ import org.apache.shiro.UnavailableSecurityManagerException
 
 import org.joda.time.DateTimeZone
 
-class Person extends SecUser
-{
+class Person extends SecUser {
     static hasMany = [projectRoles:ProjectRole, requests:Request]
     static belongsTo = [organisation:Organisation]
 
@@ -25,8 +24,7 @@ class Person extends SecUser
 
     DateTimeZone defaultTimeZone
 
-    static constraints =
-    {
+    static constraints = {
         name(blank:false)
         organisation()
         phoneNumber(blank:true)
@@ -36,8 +34,7 @@ class Person extends SecUser
         defaultTimeZone()
     }
 
-    static mapping =
-    {
+    static mapping = {
         // Speed up candidate entities service/permission utils service.
         cache true
 
@@ -46,22 +43,17 @@ class Person extends SecUser
 
     static searchable = [only: ['name', 'description'], except: ['passwordHash', 'permissions', 'roles']]
 
-    String toString()
-    {
+    String toString() {
         return name
     }
 
-    String getProjects()
-    {
+    String getProjects() {
         return ListUtils.fold(projectRoles, "project")
     }
 
-    static defaultTimeZone()
-    {
-        try
-        {
-            if (!SecurityUtils.subject?.isAuthenticated())
-            {
+    static defaultTimeZone() {
+        try {
+            if (!SecurityUtils.subject?.isAuthenticated()) {
                 return DateTimeZone.getDefault()
             }
 
@@ -69,12 +61,10 @@ class Person extends SecUser
             return principal?.defaultTimeZone
         }
         // This is being thrown for findByUsername in cobertura coverage tests.
-        catch (MissingMethodException e)
-        {
+        catch (MissingMethodException e) {
             return DateTimeZone.getDefault()
         }
-        catch (UnavailableSecurityManagerException e)
-        {
+        catch (UnavailableSecurityManagerException e) {
             return DateTimeZone.getDefault()
         }
     }

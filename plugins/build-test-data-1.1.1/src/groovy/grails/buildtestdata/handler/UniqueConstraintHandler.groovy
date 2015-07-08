@@ -10,7 +10,7 @@ public class UniqueConstraintHandler implements ConstraintHandler {
         // unique isn't supported, if the value we've got in there isn't valid by this point, throw an error letting
         // the user know why we're not passing
         if (appliedConstraint.unique && !constrainedProperty?.validate(domain, domain."$propertyName", new GrailsMockErrors(this))) {
-            String error = "unique constraint support not implemented: property $propertyName of ${domain.class.name}" 
+            String error = "unique constraint support not implemented: property $propertyName of ${domain.class.name}"
             throw new ConstraintHandlerException(error)
         }
     }

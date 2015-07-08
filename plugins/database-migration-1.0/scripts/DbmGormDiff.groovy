@@ -31,31 +31,31 @@ includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrati
  */
 
 target(dbmGormDiff: 'Diff GORM classes against database and generate a changelog') {
-	depends dbmInit
+    depends dbmInit
 
-	if (!okToWrite(0, true)) return
+    if (!okToWrite(0, true)) return
 
-	def realDatabase
-	try {
-		echo "Starting $hyphenatedScriptName"
+    def realDatabase
+    try {
+        echo "Starting $hyphenatedScriptName"
 
-		executeAndWrite argsList[0], { PrintStream out ->
-			MigrationUtils.executeInSession {
-				realDatabase = MigrationUtils.getDatabase(defaultSchema)
-				def gormDatabase = createGormDatabase()
-				MigrationUtils.fixDiffResult(createDiff(gormDatabase, realDatabase).compare()).printChangeLog(out, gormDatabase)
-			}
-		}
+        executeAndWrite argsList[0], { PrintStream out ->
+            MigrationUtils.executeInSession {
+                realDatabase = MigrationUtils.getDatabase(defaultSchema)
+                def gormDatabase = createGormDatabase()
+                MigrationUtils.fixDiffResult(createDiff(gormDatabase, realDatabase).compare()).printChangeLog(out, gormDatabase)
+            }
+        }
 
-		echo "Finished $hyphenatedScriptName"
-	}
-	catch (e) {
-		printStackTrace e
-		exit 1
-	}
-	finally {
-		closeConnection realDatabase
-	}
+        echo "Finished $hyphenatedScriptName"
+    }
+    catch (e) {
+        printStackTrace e
+        exit 1
+    }
+    finally {
+        closeConnection realDatabase
+    }
 }
 
 setDefaultTarget dbmGormDiff

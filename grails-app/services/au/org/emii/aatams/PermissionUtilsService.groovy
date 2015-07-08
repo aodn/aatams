@@ -7,8 +7,7 @@ import org.apache.shiro.SecurityUtils
  *
  * @author jburgess
  */
-class PermissionUtilsService
-{
+class PermissionUtilsService {
     // Cache the Principal Investigator role type to speed things up.
     def piRoleType
 
@@ -25,10 +24,8 @@ class PermissionUtilsService
     private static final Map<Long, String> PI = [:]
     private static final Map<Long, String> RECEIVER = [:]
 
-    ProjectRoleType getPIRoleType()
-    {
-        if (piRoleType == null)
-        {
+    ProjectRoleType getPIRoleType() {
+        if (piRoleType == null) {
             piRoleType = ProjectRoleType.findByDisplayName(ProjectRoleType.PRINCIPAL_INVESTIGATOR)
         }
 
@@ -36,15 +33,13 @@ class PermissionUtilsService
         return piRoleType
     }
 
-    Person setPermissions(ProjectRole projectRole)
-    {
+    Person setPermissions(ProjectRole projectRole) {
         log.debug("projectRole: " + String.valueOf(projectRole))
 
         // Cleanup existing permissions.
         Person user = removePermissions(projectRole)
 
-        if (!user)
-        {
+        if (!user) {
             log.error("Unknown user for role: " + projectRole)
             return null
         }
@@ -64,8 +59,7 @@ class PermissionUtilsService
             user.save()
         }
 
-        if (projectRole.roleType == getPIRoleType() && projectRole.access == ProjectAccess.READ_WRITE)
-        {
+        if (projectRole.roleType == getPIRoleType() && projectRole.access == ProjectAccess.READ_WRITE) {
             log.debug("Adding PI permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
 
             user.addToPermissions(buildPersonWriteAnyPermission())
@@ -82,8 +76,7 @@ class PermissionUtilsService
         // Read access for project (this just allows embargoes data to be
         // views, compared to unauthenticated users).
         if (   projectRole.access == ProjectAccess.READ_ONLY
-            || projectRole.access == ProjectAccess.READ_WRITE)
-        {
+            || projectRole.access == ProjectAccess.READ_WRITE) {
             log.debug("Adding read permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
             String permission = buildProjectReadPermission(projectRole.project.id)
             user.addToPermissions(buildProjectReadAnyPermission())
@@ -91,8 +84,7 @@ class PermissionUtilsService
             log.debug("Added permission: " + permission)
         }
 
-        if (projectRole.access == ProjectAccess.READ_WRITE)
-        {
+        if (projectRole.access == ProjectAccess.READ_WRITE) {
             log.debug("Adding write permission to user: " + String.valueOf(projectRole.person) + ", project: " + String.valueOf(projectRole.project))
             String permission = buildProjectEditChildrenPermission(projectRole.project.id)
             user.addToPermissions(buildProjectWriteAnyPermission())
@@ -103,25 +95,21 @@ class PermissionUtilsService
         return user
     }
 
-    Person removePermissions(ProjectRole projectRole)
-    {
+    Person removePermissions(ProjectRole projectRole) {
         Person user = Person.get(projectRole.person.id)
-        if (!user)
-        {
+        if (!user) {
             log.error("Unknown user for role: " + projectRole)
             return null
         }
 
         if (   projectRole.roleType
-            == getPIRoleType())
-        {
+            == getPIRoleType()) {
             user.removeFromPermissions(buildPrincipalInvestigatorPermission(projectRole.project.id))
             user.removeFromPermissions(buildProjectEditPermission(projectRole.project.id))
             user.removeFromPermissions(buildProjectEditChildrenPermission(projectRole.project.id))
 
             // Only remove these if the user is not a PI on any projects.
-            if (!piOnAnyProject(user, projectRole))
-            {
+            if (!piOnAnyProject(user, projectRole)) {
                 user.removeFromPermissions(buildReceiverCreatePermission())
                 user.removeFromPermissions(buildPersonWriteAnyPermission())
             }
@@ -130,22 +118,18 @@ class PermissionUtilsService
         // Read access for project (this just allows embargoes data to be
         // views, compared to unauthenticated users).
         if (   projectRole.access == ProjectAccess.READ_ONLY
-            || projectRole.access == ProjectAccess.READ_WRITE)
-        {
+            || projectRole.access == ProjectAccess.READ_WRITE) {
             user.removeFromPermissions(buildProjectReadPermission(projectRole.project.id))
 
-            if (!readAnyProject(user, projectRole) && !writeAnyProject(user, projectRole))
-            {
+            if (!readAnyProject(user, projectRole) && !writeAnyProject(user, projectRole)) {
                 user.removeFromPermissions(buildProjectReadAnyPermission())
             }
         }
 
-        if (projectRole.access == ProjectAccess.READ_WRITE)
-        {
+        if (projectRole.access == ProjectAccess.READ_WRITE) {
             user.removeFromPermissions(buildProjectEditChildrenPermission(projectRole.project.id))
 
-            if (!writeAnyProject(user, projectRole))
-            {
+            if (!writeAnyProject(user, projectRole)) {
                 user.removeFromPermissions(buildProjectWriteAnyPermission())
             }
         }
@@ -155,31 +139,25 @@ class PermissionUtilsService
         return user
     }
 
-    private boolean piOnAnyProject(Person user, ProjectRole exceptRole)
-    {
+    private boolean piOnAnyProject(Person user, ProjectRole exceptRole) {
         return !(ProjectRole.findAllByPersonAndRoleType(user, getPIRoleType()) - exceptRole).isEmpty()
     }
 
-    private boolean readAnyProject(Person user, ProjectRole exceptRole)
-    {
+    private boolean readAnyProject(Person user, ProjectRole exceptRole) {
         return !(ProjectRole.findAllByPersonAndAccess(user, ProjectAccess.READ_ONLY) - exceptRole).isEmpty()
     }
 
-    private boolean writeAnyProject(Person user, ProjectRole exceptRole)
-    {
+    private boolean writeAnyProject(Person user, ProjectRole exceptRole) {
         return !(ProjectRole.findAllByPersonAndAccess(user, ProjectAccess.READ_WRITE) - exceptRole).isEmpty()
     }
 
-    private String buildPermission(def id, Map cache, String permFormat)
-    {
-        if (!id)
-        {
+    private String buildPermission(def id, Map cache, String permFormat) {
+        if (!id) {
             return NOT_PERMITTED
         }
 
         String perm = cache.get(Long.valueOf(id))
-        if (!perm)
-        {
+        if (!perm) {
             perm = String.format(permFormat, Long.valueOf(id))
             cache[Long.valueOf(id)] = perm
         }
@@ -190,8 +168,7 @@ class PermissionUtilsService
         return perm
     }
 
-    String buildProjectReadPermission(projectId)
-    {
+    String buildProjectReadPermission(projectId) {
         return buildPermission(projectId, PROJECT_READ, "project:%d:read")
     }
 
@@ -203,50 +180,40 @@ class PermissionUtilsService
      * This permission is checked in the view when determining whether to display
      * the "new" icon for various entities.
      */
-    String buildProjectReadAnyPermission()
-    {
+    String buildProjectReadAnyPermission() {
         return PROJECT_READ_ANY
     }
 
-    String buildProjectEditChildrenPermission(projectId)
-    {
+    String buildProjectEditChildrenPermission(projectId) {
         return buildPermission(projectId, PROJECT_EDIT_CHILDREN, "project:%d:edit_children")
     }
 
-    String buildProjectWriteAnyPermission()
-    {
+    String buildProjectWriteAnyPermission() {
         return PROJECT_WRITE_ANY
     }
 
-    String buildProjectEditPermission(projectId)
-    {
+    String buildProjectEditPermission(projectId) {
         return buildPermission(projectId, PROJECT_EDIT, "project:%d:edit")
     }
 
-    String buildPrincipalInvestigatorPermission(projectId)
-    {
+    String buildPrincipalInvestigatorPermission(projectId) {
         return buildPermission(projectId, PI, "principalInvestigator:%d")
     }
 
-    String buildPersonWriteAnyPermission()
-    {
+    String buildPersonWriteAnyPermission() {
         return PERSON_WRITE_ANY
     }
 
-    String buildReceiverCreatePermission()
-    {
+    String buildReceiverCreatePermission() {
         return RECEIVER_CREATE
     }
 
-    String buildReceiverUpdatePermission(receiverId)
-    {
+    String buildReceiverUpdatePermission(receiverId) {
         return buildPermission(receiverId, RECEIVER, "receiverUpdate:%d")
     }
 
-    static def principal()
-    {
-        if (!isAuthenticated())
-        {
+    static def principal() {
+        if (!isAuthenticated()) {
             return null
         }
 
@@ -256,8 +223,7 @@ class PermissionUtilsService
         return principal
     }
 
-    static boolean isAuthenticated()
-    {
+    static boolean isAuthenticated() {
         return SecurityUtils.subject?.isAuthenticated()
     }
 
@@ -265,16 +231,14 @@ class PermissionUtilsService
      * This should be called by the ReceiverController whenever a receiver is
      * created.
      */
-    def receiverCreated(receiverInstance)
-    {
+    def receiverCreated(receiverInstance) {
         String permissionString = buildReceiverUpdatePermission(receiverInstance?.id)
 
         principal().addToPermissions(permissionString)
         principal().save()
     }
 
-    def receiverDeleted(receiverInstance)
-    {
+    def receiverDeleted(receiverInstance) {
         String permissionString = buildReceiverUpdatePermission(receiverInstance?.id)
 
         log.debug("Deleting permission \'" + permissionString + "\' from all users...")
@@ -283,8 +247,7 @@ class PermissionUtilsService
         // http://stackoverflow.com/questions/2437446/grails-how-can-i-search-through-children-in-a-hasmany-relationship
         def people = Person.list().each{
 
-            if (it.permissions.contains(permissionString))
-            {
+            if (it.permissions.contains(permissionString)) {
                 it.removeFromPermissions(permissionString)
                 it.save()
             }

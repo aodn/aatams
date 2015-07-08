@@ -8,8 +8,7 @@ class ReceiverDownloadFileProgressUpdaterTests extends GrailsUnitTestCase {
     def progress
     def downloadFile
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
         mockLogging(ReceiverDownloadFileProgressUpdater)
         mockDomain(ReceiverDownloadFile)
@@ -30,28 +29,24 @@ class ReceiverDownloadFileProgressUpdaterTests extends GrailsUnitTestCase {
         progress = new ReceiverDownloadFileProgressUpdater(downloadFile, 100)
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         super.tearDown()
     }
 
-    void testStart()
-    {
+    void testStart() {
         progress.start()
 
         assertNotNull(progress.startTime)
         assertNotNull(progress.percentComplete)
     }
 
-    void testUpdateProgress()
-    {
+    void testUpdateProgress() {
         progress.start()
         progress.updateProgress(10)
         assertEquals(10, progress.percentComplete)
     }
 
-    void testAverageTimePerRecord()
-    {
+    void testAverageTimePerRecord() {
         progress.start()
 
         def tenSecondsAgo = System.currentTimeMillis() - 10000
@@ -60,15 +55,12 @@ class ReceiverDownloadFileProgressUpdaterTests extends GrailsUnitTestCase {
         assert avgTime >= (10000 / 20)
     }
 
-    void testLogStatistics()
-    {
-        try
-        {
+    void testLogStatistics() {
+        try {
             progress.start()
             progress.logStatistics(10)
         }
-        catch (Throwable t)
-        {
+        catch (Throwable t) {
             fail("Log statistics should not throw exception")
         }
 

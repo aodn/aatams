@@ -20,22 +20,22 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmUpdateCountSql: 'Applies the next <value> change sets') {
-	depends dbmInit
+    depends dbmInit
 
-	def count = argsList[0]
-	if (!count) {
-		errorAndDie "The $hyphenatedScriptName script requires a change set count argument"
-	}
+    def count = argsList[0]
+    if (!count) {
+        errorAndDie "The $hyphenatedScriptName script requires a change set count argument"
+    }
 
-	if (!count.isNumber()) {
-		errorAndDie "The change set count argument '$count' isn't a number"
-	}
+    if (!count.isNumber()) {
+        errorAndDie "The change set count argument '$count' isn't a number"
+    }
 
-	if (!okToWrite(1)) return
+    if (!okToWrite(1)) return
 
-	doAndClose {
-		liquibase.update count.toInteger(), contexts, newPrintWriter(1)
-	}
+    doAndClose {
+        liquibase.update count.toInteger(), contexts, newPrintWriter(1)
+    }
 }
 
 setDefaultTarget dbmUpdateCountSql

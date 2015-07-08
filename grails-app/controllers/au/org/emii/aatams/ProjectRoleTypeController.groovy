@@ -58,7 +58,7 @@ class ProjectRoleTypeController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (projectRoleTypeInstance.version > version) {
-                    
+
                     projectRoleTypeInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'projectRoleType.label', default: 'ProjectRoleType')] as Object[], "Another user has updated this ProjectRoleType while you were editing")
                     render(view: "edit", model: [projectRoleTypeInstance: projectRoleTypeInstance])
                     return

@@ -3,8 +3,7 @@ package au.org.emii.aatams
 import au.org.emii.aatams.report.ReportController
 import grails.converters.JSON
 
-class InstallationStationController  extends ReportController
-{
+class InstallationStationController  extends ReportController {
 
     def candidateEntitiesService
 
@@ -14,20 +13,18 @@ class InstallationStationController  extends ReportController
         redirect(action: "list", params: params)
     }
 
-    def list = 
-    {
+    def list =  {
         doList("installationStation")
     }
 
-    def export =
-    {
+    def export = {
         doExport("installationStation")
     }
-    
+
     def create = {
         def installationStationInstance = new InstallationStation()
         installationStationInstance.properties = params
-        
+
         def model =
             [installationStationInstance: installationStationInstance] + [candidateInstallations:candidateEntitiesService.installations()]
         return model
@@ -48,20 +45,17 @@ class InstallationStationController  extends ReportController
 
     def show = {
         log.debug("params: " + params)
-        
+
         def installationStationInstance = InstallationStation.get(params.id)
         if (!installationStationInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'installationStation.label', default: 'InstallationStation'), params.id])}"
             redirect(action: "list")
         }
-        else 
-        {
-            if (params.encoding && (params.encoding == 'json'))
-            {
+        else  {
+            if (params.encoding && (params.encoding == 'json')) {
                 render([installationStationInstance: installationStationInstance] as JSON)
             }
-            else
-            {
+            else {
                 [installationStationInstance: installationStationInstance]
             }
         }
@@ -80,16 +74,15 @@ class InstallationStationController  extends ReportController
         }
     }
 
-    def update = 
-    {
+    def update =  {
         log.debug("params: " + params)
-        
+
         def installationStationInstance = InstallationStation.get(params.id)
         if (installationStationInstance) {
             if (params.version) {
                 def version = params.version.toLong()
                 if (installationStationInstance.version > version) {
-                    
+
                     installationStationInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'installationStation.label', default: 'InstallationStation')] as Object[], "Another user has updated this InstallationStation while you were editing")
                     render(view: "edit", model: [installationStationInstance: installationStationInstance])
                     return
@@ -129,9 +122,8 @@ class InstallationStationController  extends ReportController
         }
     }
 
-    def lookupByName =
-    {
+    def lookupByName = {
         def matches = InstallationStation.findAllByNameIlike('%' + params.term + '%')
-        render(matches as JSON) 
+        render(matches as JSON)
     }
 }

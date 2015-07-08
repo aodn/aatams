@@ -5,30 +5,25 @@ package au.org.emii.aatams
  * TODO: this should be abstract but this is causing "unmapped" exceptions
  * with hibernate.
  */
-class Device
-{
+class Device {
     DeviceModel model
     String serialNumber
 
     String comment
 
-    static constraints =
-    {
+    static constraints = {
         serialNumber(blank:false, unique: ['model'])
         comment(nullable:true, blank:true)
     }
 
-    static mapping =
-    {
+    static mapping = {
         cache true
     }
 
     static transients = ['deviceID']
 
-    String getComment()
-    {
-        if (!comment)
-        {
+    String getComment() {
+        if (!comment) {
             return ""
         }
 

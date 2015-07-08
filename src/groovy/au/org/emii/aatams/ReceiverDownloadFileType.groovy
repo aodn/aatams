@@ -1,7 +1,6 @@
 package au.org.emii.aatams
 
-enum ReceiverDownloadFileType
-{
+enum ReceiverDownloadFileType {
     DETECTIONS_CSV('detections (CSV)'),
     EVENTS_CSV('events (CSV)'),
     VRL('VRL'),
@@ -10,35 +9,28 @@ enum ReceiverDownloadFileType
 
     String type
 
-    ReceiverDownloadFileType(type)
-    {
+    ReceiverDownloadFileType(type) {
         this.type = type
     }
 
-    String toString()
-    {
+    String toString() {
         return type
     }
 
-    static list()
-    {
+    static list() {
         [DETECTIONS_CSV, EVENTS_CSV, VRL, RLD, VUE_XML_ZIPPED]
     }
 
-    static detectionTypes()
-    {
+    static detectionTypes() {
         [DETECTIONS_CSV, VRL, RLD]
     }
 
-    static eventTypes()
-    {
+    static eventTypes() {
         [EVENTS_CSV]
     }
 
-    static String getExtension(ReceiverDownloadFileType type)
-    {
-        switch (type)
-        {
+    static String getExtension(ReceiverDownloadFileType type) {
+        switch (type) {
             case EVENTS_CSV:
                 return "csv"
             case DETECTIONS_CSV:
@@ -54,10 +46,8 @@ enum ReceiverDownloadFileType
         }
     }
 
-    static String getCategory(ReceiverDownloadFileType type)
-    {
-        switch (type)
-        {
+    static String getCategory(ReceiverDownloadFileType type) {
+        switch (type) {
             case EVENTS_CSV:
                 return "events"
             case DETECTIONS_CSV:

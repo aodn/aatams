@@ -2,19 +2,16 @@ package au.org.emii.aatams
 
 import javax.servlet.http.Cookie
 
-class AbstractController
-{
+class AbstractController {
     def exportService
     def queryService
     def reportInfoService
 
-    protected def getResultList(queryName)
-    {
+    protected def getResultList(queryName) {
         return queryService.query(reportInfoService.getClassForName(queryName), params)
     }
 
-    protected def doList(queryName)
-    {
+    protected def doList(queryName) {
         params.max = Math.min(params.max ? params.int('max') : grailsApplication.config.grails.gorm.default.list.max, 100)
 
         def resultList = getResultList(queryName)
@@ -27,8 +24,7 @@ class AbstractController
          total: resultList.count]
     }
 
-    protected def displayCountMessage(resultList, queryName)
-    {
+    protected def displayCountMessage(resultList, queryName) {
         def clazz = reportInfoService.getClassForName(queryName)
 
         if (resultList.count < grailsApplication.config.filter.count.max + 1) {
@@ -39,10 +35,8 @@ class AbstractController
         }
     }
 
-    protected def doExport(queryName)
-    {
-        if (!params.format)
-        {
+    protected def doExport(queryName) {
+        if (!params.format) {
             params.format = params._action_export
         }
 
@@ -56,8 +50,7 @@ class AbstractController
         response.flushBuffer()
     }
 
-    protected void indicateExportStart()
-    {
+    protected void indicateExportStart() {
         response.reset()
 
         // Indicate to the client that we have received the export request.
@@ -65,13 +58,11 @@ class AbstractController
         response.addCookie(new Cookie("fileDownloadToken", params.downloadTokenValue))
     }
 
-    private String getExtension(format)
-    {
+    private String getExtension(format) {
         return [PDF: "pdf", CSV: "csv", KML: "kml", KMZ: "kmz", 'KMZ (tag tracks)': "kmz", 'KMZ (bubble plot)': "kmz"][format]
     }
 
-    private String getMimeType(params)
-    {
+    private String getMimeType(params) {
         def mimeTypes =
             [PDF: "application/pdf",
              CSV: "text/csv",
@@ -83,12 +74,10 @@ class AbstractController
         return mimeTypes[params.format]
     }
 
-    protected void flattenParams()
-    {
+    protected void flattenParams() {
         def flattenedParams = [:]
 
-        params.each
-        {
+        params.each {
             k, v ->
 
             if (   !k.startsWith("filter")
@@ -97,8 +86,7 @@ class AbstractController
                 || (k.endsWith(".isNull"))
                 || (k.endsWith(".between.0"))
                 || (k.endsWith(".between.1"))
-                || (k.endsWith(".between.2")))
-            {
+                || (k.endsWith(".between.2"))) {
                 flattenedParams.put(k, v)
             }
         }

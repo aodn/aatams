@@ -5,19 +5,16 @@ import java.text.SimpleDateFormat
 import au.org.emii.aatams.FileFormatException
 import au.org.emii.aatams.event.EventFormat
 
-class EventFormatTests extends GrailsUnitTestCase
-{
+class EventFormatTests extends GrailsUnitTestCase {
     def format
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         format = new EventFormat();
     }
 
-    void testValidFormat()
-    {
+    void testValidFormat() {
         def result = format.parseRow([
             'Date/Time': '2007-09-13 12:38:00',
             'Receiver': 'VR2W-101735',
@@ -40,18 +37,15 @@ class EventFormatTests extends GrailsUnitTestCase
         assertEquals(expectedResult, result)
     }
 
-    void testInvalidFormat()
-    {
-        try
-        {
+    void testInvalidFormat() {
+        try {
             format.parseRow([
                 'Date/Time': '2007/09/13 12:38:00'
             ])
 
             fail()
         }
-        catch (FileFormatException e)
-        {
+        catch (FileFormatException e) {
             assertEquals("Incorrect format for Date/Time expected yyyy-MM-dd HH:mm:ss Z", e.message)
         }
     }

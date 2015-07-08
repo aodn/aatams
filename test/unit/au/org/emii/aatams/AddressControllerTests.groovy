@@ -11,10 +11,9 @@ class AddressControllerTests extends ControllerUnitTestCase {
         super.tearDown()
     }
 
-    void testSomething() 
-    {
+    void testSomething()  {
         controller.metaClass.message = { LinkedHashMap args -> return "${args.code}" }
-        
+
         def address = new Address(id:1,
                                   streetAddress:'1 Smith Street',
                                   suburbTown:'Moonah',
@@ -22,10 +21,10 @@ class AddressControllerTests extends ControllerUnitTestCase {
                                   postcode:'7000',
                                   country:'Australia')
         mockDomain(Address, [address])
-        
+
         controller.params.id = 1
         def returnValue = controller.show()
         assertSame(returnValue.addressInstance, address)
- 
+
     }
 }

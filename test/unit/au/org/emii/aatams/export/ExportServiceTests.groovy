@@ -22,16 +22,14 @@ import au.org.emii.aatams.*
 
 import grails.test.*
 
-class ExportServiceTests extends AbstractGrailsUnitTestCase
-{
+class ExportServiceTests extends AbstractGrailsUnitTestCase {
     def exportService
     def permissionUtilsService
     def queryService
     def receiverList
     def reportInfoService
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockLogging(ExportService, true)
@@ -42,8 +40,7 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
 
         mockLogging(PermissionUtilsService, true)
         permissionUtilsService = new PermissionUtilsService()
-        permissionUtilsService.metaClass.principal =
-        {
+        permissionUtilsService.metaClass.principal = {
             return [name: "Joe Bloggs"]
         }
 
@@ -55,15 +52,13 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
         exportService.permissionUtilsService = permissionUtilsService
         exportService.kmlService = new KmlService()
 
-        exportService.metaClass.getReportStream =
-        {
+        exportService.metaClass.getReportStream = {
             clazz, params ->
 
             return new FileInputStream(new File("web-app/reports/receiverList.jrxml"))
         }
 
-        exportService.metaClass.getSubreportDir =
-        {
+        exportService.metaClass.getSubreportDir = {
             return "web-app/reports/"
         }
 
@@ -80,8 +75,7 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
         imos.save()
 
         receiverList = []
-        20.times
-        {
+        20.times {
             def rxr = new Receiver(model: vr2w, serialNumber: it + 1, organisation: imos)
             receiverList.add(rxr)
         }
@@ -90,49 +84,39 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
         receiverList.each { it.save() }
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         super.tearDown()
     }
 
-    void testExporterNoFormat()
-    {
-        try
-        {
+    void testExporterNoFormat() {
+        try {
             exportService.getExporter([:])
             fail()
         }
-        catch (IllegalArgumentException e)
-        {
+        catch (IllegalArgumentException e) {
             assertEquals("Export format not specified.", e.getMessage())
         }
     }
 
-    void testExporterUnsupportedFormat()
-    {
-        try
-        {
+    void testExporterUnsupportedFormat() {
+        try {
             exportService.getExporter([format: "XYZ"])
             fail()
         }
-        catch (IllegalArgumentException e)
-        {
+        catch (IllegalArgumentException e) {
             assertEquals("Unsupported export format: XYZ", e.getMessage())
         }
     }
 
-    void testExporterCSV()
-    {
+    void testExporterCSV() {
         assertEquals(JRCsvExporter.class, exportService.getExporter([format: "CSV"]).class)
     }
 
-    void testExporterPDF()
-    {
+    void testExporterPDF() {
         assertEquals(JRPdfExporter.class, exportService.getExporter([format: "PDF"]).class)
     }
 
-    void testExportReceiversOneRecord()
-    {
+    void testExportReceiversOneRecord() {
         def expectedOutput = ''',,AATAMS Receivers,,,,,,,,,,,
 ,Parameters,,,,,,,,,,,,
 ,user:,,,,Joe Bloggs,,,,,,,,
@@ -143,8 +127,7 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
         assertExport(expectedOutput, [receiverList[0]])
     }
 
-    void testExportReceiversTwoRecords()
-    {
+    void testExportReceiversTwoRecords() {
         def expectedOutput = ''',,AATAMS Receivers,,,,,,,,,,,
 ,Parameters,,,,,,,,,,,,
 ,user:,,,,Joe Bloggs,,,,,,,,
@@ -157,25 +140,20 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
         assertExport(expectedOutput, [receiverList[0], receiverList[1]])
     }
 
-    private assertExport(expectedOutput, results)
-    {
-        exportService.metaClass.getDataSource =
-        {
+    private assertExport(expectedOutput, results) {
+        exportService.metaClass.getDataSource = {
             queryService, clazz, params ->
 
             PagedBeanDataSource ds = new PagedBeanDataSource(queryService, clazz, params)
-            ds.metaClass.query =
-            {
+            ds.metaClass.query = {
                 theclazz, filterParams ->
 
                 List queryResults
 
-                if (filterParams.offset >= results.size())
-                {
+                if (filterParams.offset >= results.size()) {
                     queryResults = []
                 }
-                else
-                {
+                else {
                     queryResults = results[filterParams.offset..Math.min(filterParams.offset + filterParams.max, results.size - 1)]
                 }
 
@@ -194,22 +172,18 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase
         assertEquals(expectedOutput, removePageFooter(out.toString()))
     }
 
-    private String removePageFooter(String s)
-    {
+    private String removePageFooter(String s) {
         def lineCount = 0
         s.eachLine { lineCount ++}
 
         def retString = ""
         int index = 0
 
-        s.eachLine
-        {
-            if (it.contains("Page"))
-            {
+        s.eachLine {
+            if (it.contains("Page")) {
                 // remove page footer
             }
-            else
-            {
+            else {
                 retString += it + '\n'
             }
 

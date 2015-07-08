@@ -3,17 +3,14 @@ package au.org.emii.aatams
 /**
  * e.g. MALE, FEMALE, UNKNOWN.
  */
-class Sex 
-{
+class Sex  {
     String sex
-    
-    static constraints =
-    {
+
+    static constraints = {
        sex(blank:false, unique:true)
     }
-    
-    String toString()
-    {
+
+    String toString() {
         return sex
     }
 }

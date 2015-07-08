@@ -20,16 +20,16 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmTag: "'Tags' the current database state for future rollback") {
-	depends dbmInit
+    depends dbmInit
 
-	String tag = argsList[0]
-	if (!tag) {
-		errorAndDie "The $hyphenatedScriptName script requires a tag"
-	}
+    String tag = argsList[0]
+    if (!tag) {
+        errorAndDie "The $hyphenatedScriptName script requires a tag"
+    }
 
-	doAndClose {
-		liquibase.tag tag
-	}
+    doAndClose {
+        liquibase.tag tag
+    }
 }
 
 setDefaultTarget dbmTag

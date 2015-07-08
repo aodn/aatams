@@ -1,21 +1,18 @@
 package au.org.emii.aatams
 
 /**
- * Treatment applied during a surgery. 
- * 
+ * Treatment applied during a surgery.
+ *
  * e.g. ANTIBIOTIC, ANISTHETIC.
  */
-class SurgeryTreatmentType 
-{
+class SurgeryTreatmentType  {
     String type
-    
-    static constraints =
-    {
+
+    static constraints = {
         type(blank:false, unique:true)
     }
 
-    String toString()
-    {
+    String toString() {
         return type
     }
 }

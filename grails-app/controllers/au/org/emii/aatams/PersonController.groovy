@@ -21,21 +21,17 @@ class PersonController {
         def personTotal = Person.count()
         def personList = Person.list(params)
 
-        if (!SecurityUtils.getSubject().hasRole("SysAdmin"))
-        {
+        if (!SecurityUtils.getSubject().hasRole("SysAdmin")) {
             // Filter out non-ACTIVE people (only sys admin should see these).
-            personList = personList.grep
-            {
+            personList = personList.grep {
                 return (it.status == EntityStatus.ACTIVE)
             }
 
             // Only count ACTIVE people..
             // TODO: why doesn't count({}) work?
             personTotal = 0
-            Person.list().each
-            {
-                if (it.status == EntityStatus.ACTIVE)
-                {
+            Person.list().each {
+                if (it.status == EntityStatus.ACTIVE) {
                     personTotal++
                 }
             }
@@ -50,12 +46,10 @@ class PersonController {
         return [personInstance: personInstance]
     }
 
-    def save =
-    {
+    def save = {
         PersonCreateCommand createPersonCmd ->
 
-        if (createPersonCmd.validate())
-        {
+        if (createPersonCmd.validate()) {
             def personInstance = createPersonCmd.createPerson()
 
             // If a PI then set Person's status to ACTIVE, otherwise,
@@ -64,29 +58,23 @@ class PersonController {
             // of shiro permission wildcards was back-to-front, so the commented
             // out way of doing things doesn't work.
             if (   !SecurityUtils.getSubject().isAuthenticated()
-                || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission()))
-            {
+                || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission())) {
                 personInstance.status = EntityStatus.PENDING
             }
-            else
-            {
+            else {
                 personInstance.status = EntityStatus.ACTIVE
             }
 
-            if (createPersonCmd.unlistedOrganisationName)
-            {
+            if (createPersonCmd.unlistedOrganisationName) {
                 personInstance.organisation = createUnlistedOrganisation(createPersonCmd, personInstance)
             }
 
             assert(personInstance.organisation)
             personInstance.organisation.addToPeople(personInstance)
 
-            if (personInstance.organisation.save(flush: true))
-            {
-                if (createPersonCmd.unlistedOrganisationName)
-                {
-                    sendMail
-                    {
+            if (personInstance.organisation.save(flush: true)) {
+                if (createPersonCmd.unlistedOrganisationName) {
+                    sendMail {
                         to grailsApplication.config.grails.mail.adminEmailAddress
                         from grailsApplication.config.grails.mail.systemEmailAddress
                         subject "${message(code: 'mail.unlisted.organisation.create.subject', args: [personInstance.organisation.name])}"
@@ -95,34 +83,28 @@ class PersonController {
                 }
 
                 if (   !SecurityUtils.getSubject().isAuthenticated()
-                    || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission()))
-                {
-                    if (personInstance.status == EntityStatus.PENDING)
-                    {
+                    || !SecurityUtils.getSubject().isPermitted(permissionUtilsService.buildPersonWriteAnyPermission())) {
+                    if (personInstance.status == EntityStatus.PENDING) {
                         sendCreationNotificationEmails(personInstance)
                     }
 
                     flash.message = "${message(code: 'default.requested.message', args: [message(code: 'person.label', default: 'Person'), personInstance.toString()])}"
                 }
-                else
-                {
+                else {
                     flash.message = "${message(code: 'default.created.message', args: [message(code: 'person.label', default: 'Person'), personInstance.toString()])}"
                 }
                 redirect(action: "show", id: personInstance.id)
             }
-            else
-            {
+            else {
                 render(view: "create", model: [createPersonCmd:createPersonCmd, organisation: personInstance.organisation])
             }
         }
-        else
-        {
+        else {
             render(view: "create", model: [createPersonCmd:createPersonCmd])
         }
     }
 
-    def createUnlistedOrganisation(createPersonCommand, requester)
-    {
+    def createUnlistedOrganisation(createPersonCommand, requester) {
         String name = createPersonCommand.unlistedOrganisationName
         log.debug("Creating unlisted organisation, name: " + name)
 
@@ -149,42 +131,34 @@ class PersonController {
 
     def show = {
         def personInstance = Person.get(params.id)
-        if (!personInstance)
-        {
+        if (!personInstance) {
             log.debug("Person not found, id: " + params.id)
 
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
             redirect(action: "list")
         }
-        else
-        {
+        else {
             log.debug("Person found, id: " + params.id)
 
             def canEdit = false
 
-            if (!SecurityUtils.subject.isAuthenticated())
-            {
+            if (!SecurityUtils.subject.isAuthenticated()) {
                 // canEdit = false
             }
-            else if (SecurityUtils.subject.hasRole("SysAdmin"))
-            {
+            else if (SecurityUtils.subject.hasRole("SysAdmin")) {
                 canEdit = true
             }
             // A person can edit their own record
-            else if (personInstance.id == SecurityUtils.subject.principal)
-            {
+            else if (personInstance.id == SecurityUtils.subject.principal) {
                 canEdit = true
             }
-            else
-            {
+            else {
                 // Determine if the subject is a PI on any of this person's projects.
-                for (ProjectRole personInstanceRole : personInstance.projectRoles)
-                {
+                for (ProjectRole personInstanceRole : personInstance.projectRoles) {
                     Project project = personInstanceRole?.project
 
                     // If the principal is a PI on this project, then they can edit.
-                    if (SecurityUtils.subject.isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission(project?.id)))
-                    {
+                    if (SecurityUtils.subject.isPermitted(permissionUtilsService.buildPrincipalInvestigatorPermission(project?.id))) {
                         canEdit = true
                     }
                 }
@@ -223,11 +197,9 @@ class PersonController {
             params.username = params.username.toLowerCase()
 
             personInstance.properties = params
-            if (!personInstance.hasErrors() && personInstance.save(flush: true))
-            {
+            if (!personInstance.hasErrors() && personInstance.save(flush: true)) {
                 // Notify organisation activated.
-                if (prevPending && (personInstance.status == EntityStatus.ACTIVE))
-                {
+                if (prevPending && (personInstance.status == EntityStatus.ACTIVE)) {
                     sendActivatedNotificationEmails(personInstance)
                 }
 
@@ -244,26 +216,21 @@ class PersonController {
         }
     }
 
-    def updatePassword =
-    {
+    def updatePassword = {
         PersonUpdatePasswordCommand updatePwdCmd ->
 
         if (   updatePwdCmd.validate()
-            && updatePwdCmd.updatePassword())
-        {
+            && updatePwdCmd.updatePassword()) {
             flash.message = "${message(code: 'person.password.update', default: 'Password changed')}"
             redirect(action: "show", id: updatePwdCmd.id)
         }
-        else
-        {
+        else {
             def personInstance = Person.get(updatePwdCmd.id)
-            if (!personInstance)
-            {
+            if (!personInstance) {
                 flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
                 redirect(action: "list")
             }
-            else
-            {
+            else {
                 return [personInstance: personInstance]
             }
         }
@@ -295,10 +262,8 @@ class PersonController {
      *  - the requesting user
      *  - AATAMS sys admins.
      */
-    def sendCreationNotificationEmails(person)
-    {
-        sendMail
-        {
+    def sendCreationNotificationEmails(person) {
+        sendMail {
             to person?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
@@ -307,10 +272,8 @@ class PersonController {
         }
     }
 
-    def sendActivatedNotificationEmails(person)
-    {
-        sendMail
-        {
+    def sendActivatedNotificationEmails(person) {
+        sendMail {
             to person?.emailAddress
             bcc grailsApplication.config.grails.mail.adminEmailAddress
             from grailsApplication.config.grails.mail.systemEmailAddress
@@ -325,8 +288,7 @@ class PersonController {
  * is to provide validation that the two given passwords match, and to hash
  * the given password when creating a new Person instance.
  */
-class PersonCreateCommand
-{
+class PersonCreateCommand {
     String name
     String username
     String password         // Plain-text password.
@@ -337,26 +299,22 @@ class PersonCreateCommand
     String emailAddress
     DateTimeZone defaultTimeZone
 
-    static constraints =
-    {
+    static constraints = {
         name(blank:false)
         username(blank:false)
         password(blank:false, validator:{val, obj ->
-            if (val != obj.passwordConfirm)
-            {
+            if (val != obj.passwordConfirm) {
                 return "person.password.mismatch"
             }
         })
 
         passwordConfirm(blank:false)
-        organisation(validator:
-        {
+        organisation(validator: {
             val, obj ->
 
             return !(val && obj.unlistedOrganisationName)
         })
-        unlistedOrganisationName(validator:
-        {
+        unlistedOrganisationName(validator: {
             val, obj ->
 
             return !(val && obj.organisation)
@@ -367,8 +325,7 @@ class PersonCreateCommand
         defaultTimeZone(nullable:false)
     }
 
-    Person createPerson()
-    {
+    Person createPerson() {
         def person = new Person(username:username.toLowerCase(),
                                 passwordHash:new Sha256Hash(password).toHex(),
                                 name:name,
@@ -381,36 +338,30 @@ class PersonCreateCommand
     }
 }
 
-class PersonUpdatePasswordCommand
-{
+class PersonUpdatePasswordCommand {
     Integer id
     String password
     String passwordConfirm
 
-    static constraints =
-    {
+    static constraints = {
         id(validator:{val ->
-            if (!Person.get(val))
-            {
+            if (!Person.get(val)) {
                 return "person.id.invalid"
             }
         })
 
         password(blank:false, validator:{val, obj ->
-            if (val != obj.passwordConfirm)
-            {
+            if (val != obj.passwordConfirm) {
                 return "person.password.mismatch"
             }
         })
         passwordConfirm(blank:false)
     }
 
-    Person updatePassword()
-    {
+    Person updatePassword() {
         def person = Person.get(id)
         person.setPasswordHash(new Sha256Hash(password).toHex())
-        if (!person.save(flush:true))
-        {
+        if (!person.save(flush:true)) {
             return null
         }
 

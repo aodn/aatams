@@ -24,79 +24,79 @@ import java.sql.DriverManager
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmDiff: 'Writes description of differences to standard out') {
-	depends dbmInit
+    depends dbmInit
 
-	String otherEnv = argsList[0]
-	if (!otherEnv) {
-		errorAndDie 'You must specify the environment to diff against'
-	}
+    String otherEnv = argsList[0]
+    if (!otherEnv) {
+        errorAndDie 'You must specify the environment to diff against'
+    }
 
-	if (Environment.getEnvironment(otherEnv) == Environment.current ||
-			otherEnv == Environment.current.name) {
-		errorAndDie 'You must specify a different environment than the one the script is running in'
-	}
+    if (Environment.getEnvironment(otherEnv) == Environment.current ||
+            otherEnv == Environment.current.name) {
+        errorAndDie 'You must specify a different environment than the one the script is running in'
+    }
 
-	if (!okToWrite(1, true)) return
+    if (!okToWrite(1, true)) return
 
-	def thisDatabase
-	def otherDatabase
-	try {
-		echo "Starting $hyphenatedScriptName against environment '$otherEnv'"
+    def thisDatabase
+    def otherDatabase
+    try {
+        echo "Starting $hyphenatedScriptName against environment '$otherEnv'"
 
-		executeAndWrite argsList[1], { PrintStream out ->
-			MigrationUtils.executeInSession {
-				thisDatabase = MigrationUtils.getDatabase(defaultSchema)
-				otherDatabase = buildOtherDatabase(otherEnv)
-				createDiff(thisDatabase, otherDatabase).compare().printChangeLog(out, otherDatabase)
-			}
-		}
+        executeAndWrite argsList[1], { PrintStream out ->
+            MigrationUtils.executeInSession {
+                thisDatabase = MigrationUtils.getDatabase(defaultSchema)
+                otherDatabase = buildOtherDatabase(otherEnv)
+                createDiff(thisDatabase, otherDatabase).compare().printChangeLog(out, otherDatabase)
+            }
+        }
 
-		echo "Finished $hyphenatedScriptName"
-	}
-	catch (e) {
-		printStackTrace e
-		exit 1
-	}
-	finally {
-		closeConnection thisDatabase?.connection
-		closeConnection otherDatabase?.connection
-	}
+        echo "Finished $hyphenatedScriptName"
+    }
+    catch (e) {
+        printStackTrace e
+        exit 1
+    }
+    finally {
+        closeConnection thisDatabase?.connection
+        closeConnection otherDatabase?.connection
+    }
 }
 
 // TODO this will fail with JNDI or encryption codec
 buildOtherDatabase = { String otherEnv ->
-	
-	try {
-		// check if it's a full name
-		Environment.valueOf otherEnv
-	}
-	catch (e) {
-		// convert it from short name to full (e.g. 'dev' -> 'development')
-		String fullName = Environment.getEnvironment(otherEnv)?.name
-		if (fullName) {
-			otherEnv = fullName
-		}
-	}
-	
-	def configSlurper = new ConfigSlurper(otherEnv)
-	configSlurper.binding = binding.variables
-	def otherDsConfig = configSlurper.parse(classLoader.loadClass('DataSource')).dataSource
 
-	try {
-		Class.forName otherDsConfig.driverClassName, true, classLoader
-	}
-	catch (e) {
-		errorAndDie "Driver class $otherDsConfig.driverClassName not found"
-	}
+    try {
+        // check if it's a full name
+        Environment.valueOf otherEnv
+    }
+    catch (e) {
+        // convert it from short name to full (e.g. 'dev' -> 'development')
+        String fullName = Environment.getEnvironment(otherEnv)?.name
+        if (fullName) {
+            otherEnv = fullName
+        }
+    }
 
-	if (!otherDsConfig.url || !otherDsConfig.username) {
-		errorAndDie "The comparison DataSource URL and/or username is missing, or the DataSource configuration for environment '$otherEnv' wasn't found"
-	}
+    def configSlurper = new ConfigSlurper(otherEnv)
+    configSlurper.binding = binding.variables
+    def otherDsConfig = configSlurper.parse(classLoader.loadClass('DataSource')).dataSource
 
-	def connection = DriverManager.getConnection(
-		otherDsConfig.url, otherDsConfig.username, otherDsConfig.password ?: null)
+    try {
+        Class.forName otherDsConfig.driverClassName, true, classLoader
+    }
+    catch (e) {
+        errorAndDie "Driver class $otherDsConfig.driverClassName not found"
+    }
 
-	MigrationUtils.getDatabase connection, defaultSchema, null
+    if (!otherDsConfig.url || !otherDsConfig.username) {
+        errorAndDie "The comparison DataSource URL and/or username is missing, or the DataSource configuration for environment '$otherEnv' wasn't found"
+    }
+
+    def connection = DriverManager.getConnection(
+        otherDsConfig.url, otherDsConfig.username, otherDsConfig.password ?: null)
+
+    MigrationUtils.getDatabase connection, defaultSchema, null
 }
 
 setDefaultTarget dbmDiff

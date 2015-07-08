@@ -9,18 +9,15 @@ import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
  *
  * @author jburgess
  */
-class VisibilityControlFilters
-{
+class VisibilityControlFilters {
     def grailsApplication
     def visibilityControlService
 
     def notListActions = 'show|edit|update|delete'
     def visibilityControlControllers = 'animal|animalRelease|detection|sensor|surgery|tag'
 
-    def filters =
-    {
-        genericList(controller: visibilityControlControllers, action:'list')
-        {
+    def filters = {
+        genericList(controller: visibilityControlControllers, action:'list') {
             after = {
                 model ->
 
@@ -32,8 +29,7 @@ class VisibilityControlFilters
             }
         }
 
-        genericNotList(controller: visibilityControlControllers, action: notListActions)
-        {
+        genericNotList(controller: visibilityControlControllers, action: notListActions) {
             after = { model ->
 
                 if (model) {
@@ -51,20 +47,16 @@ class VisibilityControlFilters
         }
     }
 
-    def getRedirectParams(params)
-    {
-        if (SecurityUtils.subject.isAuthenticated())
-        {
+    def getRedirectParams(params) {
+        if (SecurityUtils.subject.isAuthenticated()) {
             return [controller:"auth", action:"unauthorized"]
         }
-        else
-        {
+        else {
             return [controller: "auth", action: "login", params: [targetUri: getTargetUri(params)]]
         }
     }
 
-    def getTargetUri(params)
-    {
+    def getTargetUri(params) {
         return new ApplicationTagLib().createLink(absolute: true, controller: params.controllerName, action: params.actionName, id: params.id)
     }
 }

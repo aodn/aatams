@@ -3,16 +3,14 @@ import org.junit.Test
 
 import pages.*
 
-class ProjectTests extends GrailsCrudTest 
-{
+class ProjectTests extends GrailsCrudTest  {
     def listPage = ProjectListPage
     def showPage = ProjectShowPage
     def createPage = ProjectCreatePage
     def editPage = ProjectEditPage
-    
+
     @Test
-    void testList()
-    {
+    void testList() {
         doTestList(3,
                    [name:"Seal Count", organisations:"CSIRO (CMAR)", principalInvestigator:"Joe Bloggs"],
                    [],
@@ -20,18 +18,16 @@ class ProjectTests extends GrailsCrudTest
     }
 
     @Test
-    void testShow()
-    {
-        doTestShow("Seal Count",  
-                   [name:"Seal Count", 
-                    projectRoles:[[name:"John Citizen", projectRole:"Administrator", access:"Read Only"], 
+    void testShow() {
+        doTestShow("Seal Count",
+                   [name:"Seal Count",
+                    projectRoles:[[name:"John Citizen", projectRole:"Administrator", access:"Read Only"],
                                   [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"]],
                     organisations:[[name:"CSIRO (CMAR)"]]])
     }
-    
+
     @Test
-    void testCreate()
-    {
+    void testCreate() {
         doTestCreate(
             [nameTextField:"Prawns",
              organisationSelect:"5",
@@ -40,58 +36,52 @@ class ProjectTests extends GrailsCrudTest
     }
 
     @Test
-    void testEdit()
-    {
+    void testEdit() {
         doTestEdit("Seal Count")
 
         navigateToEditPageFromShowPage()
         assertAddPerson()
     }
 
-    private void assertAddPerson()
-    {
+    private void assertAddPerson() {
         assert at(getEditPage())
-        
+
         addPersonLink.click()
-        
+
         assert addPersonDialog.rows.size() == 4
         assert addPersonDialog.projectLabel.text() == "Seal Count"
         addPersonDialog.personSelect.value("19")    // Joe Bloggs
         addPersonDialog.roleTypeSelect.value("18")    // Administrator
         addPersonDialog.accessSelect.value("READ_WRITE")
 
-        try
-        {
+        try {
             addPersonDialog.createButton.click()
-            
+
             assert at(getEditPage())
             updateButton.click()
-            
+
             assertShowPageDetails(
                 [projectRoles:[[name:"John Citizen", projectRole:"Administrator", access:"Read Only"],
                                [name:"Joe Bloggs", projectRole:"Principal Investigator", access:"Read/Write"],
                                [name:"Joe Bloggs", projectRole:"Administrator", access:"Read/Write"]]])
         }
-        finally
-        {
+        finally {
             navigateToEditPageFromShowPage()
-            
+
             // Cleanup.
             def newRoleRow = findProjectRoleByNameAndRole(projectRoleRows, "Joe Bloggs", "Administrator")
-            
+
             // This fails on firefox 3.6 - the link is clicked twice.
             // See: http://code.google.com/p/selenium/issues/detail?id=2628
             withConfirm { newRoleRow.deleteLink.click() }
-            
+
             assert at(getEditPage())
         }
     }
 
-    private def findProjectRoleByNameAndRole(roles, name, projectRole)
-    {
-        def actualRole = projectRoleRows.find 
-        {
+    private def findProjectRoleByNameAndRole(roles, name, projectRole) {
+        def actualRole = projectRoleRows.find  {
             (it.name == name) && (it.projectRole == projectRole)
         }
-    }    
+    }
 }

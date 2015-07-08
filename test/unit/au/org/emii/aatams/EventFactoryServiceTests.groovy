@@ -6,8 +6,7 @@ import grails.test.*
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 
-class EventFactoryServiceTests extends GrailsUnitTestCase
-{
+class EventFactoryServiceTests extends GrailsUnitTestCase {
     static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss Z"
 
     def eventFactoryService

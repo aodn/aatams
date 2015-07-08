@@ -11,12 +11,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  */
 
 package org.codehaus.groovy.grails.plugins.jasper
 
-/* 
+/*
  * @author mfpereira 2007
  */
 class JasperTagLib {
@@ -86,9 +86,9 @@ class JasperTagLib {
     }
 
     def addReportParameter = {attrs, body ->
-    		def parameterName = attrs['name']
-    		def parameterType = attrs['type']
-    		out << parameterName + parameterType
+            def parameterName = attrs['name']
+            def parameterType = attrs['type']
+            out << parameterName + parameterType
     }
 
     protected String renderJavascriptForForm(jasperNameNoPunct) {

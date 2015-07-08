@@ -26,43 +26,43 @@ import org.hibernate.cfg.Configuration
  */
 class GormDatabase extends AbstractDatabase {
 
-	Configuration configuration
+    Configuration configuration
 
-	GormDatabase(Configuration configuration) {
-		this.configuration = configuration
-	}
+    GormDatabase(Configuration configuration) {
+        this.configuration = configuration
+    }
 
-	String getDatabaseProductName() { 'GORM Mapping' }
+    String getDatabaseProductName() { 'GORM Mapping' }
 
-	String getTypeName() { 'GORM' }
+    String getTypeName() { 'GORM' }
 
-	// unused interface methods
+    // unused interface methods
 
-	void setConnection(DatabaseConnection conn) {
-		throw new UnsupportedOperationException()
-	}
+    void setConnection(DatabaseConnection conn) {
+        throw new UnsupportedOperationException()
+    }
 
-	boolean isCorrectDatabaseImplementation(DatabaseConnection conn) {
-		throw new UnsupportedOperationException()
-	}
+    boolean isCorrectDatabaseImplementation(DatabaseConnection conn) {
+        throw new UnsupportedOperationException()
+    }
 
-	String getDefaultDriver(String url) {
-		throw new UnsupportedOperationException()
-	}
+    String getDefaultDriver(String url) {
+        throw new UnsupportedOperationException()
+    }
 
-	boolean supportsInitiallyDeferrableColumns() {
-		throw new UnsupportedOperationException()
-	}
+    boolean supportsInitiallyDeferrableColumns() {
+        throw new UnsupportedOperationException()
+    }
 
-	String getCurrentDateTimeFunction() {
-		throw new UnsupportedOperationException()
-	}
+    String getCurrentDateTimeFunction() {
+        throw new UnsupportedOperationException()
+    }
 
-	boolean supportsTablespaces() {
-		throw new UnsupportedOperationException()
-	}
+    boolean supportsTablespaces() {
+        throw new UnsupportedOperationException()
+    }
 
-	int getPriority() {
-		throw new UnsupportedOperationException()
-	}
+    int getPriority() {
+        throw new UnsupportedOperationException()
+    }
 }

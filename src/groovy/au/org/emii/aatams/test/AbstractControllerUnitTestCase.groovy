@@ -13,8 +13,7 @@ import au.org.emii.aatams.export.ExportService
 import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.report.ReportInfoService
 
-abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
-{
+abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase {
     protected hasRole = true
     protected user
     protected authenticated = true
@@ -24,8 +23,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 
     protected Map flashMsgParams
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         hasRole = true
@@ -48,8 +46,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
 
         controller.metaClass.message = { Map params -> flashMsgParams = params }
 
-        try
-        {
+        try {
             mockLogging(QueryService, true)
             mockLogging(ReportInfoService, true)
             controller.queryService = new QueryService()
@@ -65,65 +62,55 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
             controller.reportInfoService.metaClass.getDetectionTimestampMin = { null }
 
         }
-        catch (MissingPropertyException e)
-        {
+        catch (MissingPropertyException e) {
             // Some controllers don't have these properties, just ignore.
         }
 
         controller.params.format = "PDF"
 
-        ExportService.metaClass.getExporter =
-        {
+        ExportService.metaClass.getExporter = {
             params ->
 
             return new JRCsvExporter()
         }
 
-        controller.metaClass.getMimeType =
-        {
+        controller.metaClass.getMimeType = {
             params ->
 
             return "text/csv"
         }
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         // Restore the old meta class on SecurityUtils.
         GroovySystem.metaClassRegistry.setMetaClass(SecurityUtils, this.originalSecurityUtilsMetaClass)
 
         super.tearDown()
     }
 
-    protected Person getUser()
-    {
+    protected Person getUser() {
         Person person = Person.findByUsername('jkburges')
 
-        if (!person)
-        {
+        if (!person) {
             person = new Person(username:"jkburges", name: "Joe Bloggs")
         }
 
         return person
     }
 
-    protected def getPrincipal()
-    {
+    protected def getPrincipal() {
         return getUser()?.id
     }
 
-    protected boolean isAuthenticated()
-    {
+    protected boolean isAuthenticated() {
         return authenticated
     }
 
-    protected boolean hasRole()
-    {
+    protected boolean hasRole() {
         return hasRole
     }
 
-    protected boolean isPermitted(permission)
-    {
+    protected boolean isPermitted(permission) {
         return permitted
     }
 
@@ -144,8 +131,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
         assertContainsAllLines(removePageFooter(controller.response.contentAsString.trim()), removePageFooter(expectedReport.getText()))
     }
 
-    protected String constructFilePath(expectedFileName)
-    {
+    protected String constructFilePath(expectedFileName) {
         String expectedFilePath = \
             System.getProperty("user.dir") + \
             "/test/integration/au/org/emii/aatams/report/resources/" + \
@@ -153,10 +139,8 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
         return expectedFilePath
     }
 
-    protected void assertContainsAllLines(actual, expected)
-    {
-        if (!expected.readLines().containsAll(actual.readLines()) || !actual.readLines().containsAll(expected.readLines()) || !(expected.readLines().size() == actual.readLines().size()))
-        {
+    protected void assertContainsAllLines(actual, expected) {
+        if (!expected.readLines().containsAll(actual.readLines()) || !actual.readLines().containsAll(expected.readLines()) || !(expected.readLines().size() == actual.readLines().size())) {
             println "expected:\n" + expected
             println "\n\nactual:\n" + actual
         }
@@ -165,22 +149,18 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase
         assertEquals(expected.readLines().size(), actual.readLines().size())
     }
 
-    protected String removePageFooter(String s)
-    {
+    protected String removePageFooter(String s) {
         def lineCount = 0
         s.eachLine { lineCount ++ }
 
         def retString = ""
         int index = 0
 
-        s.eachLine
-        {
-            if (it.contains("Page"))
-            {
+        s.eachLine {
+            if (it.contains("Page")) {
                 // remove page footer
             }
-            else
-            {
+            else {
                 retString += it + '\n'
             }
 

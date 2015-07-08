@@ -20,11 +20,11 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmUpdate: 'Updates database to current version') {
-	depends dbmInit
+    depends dbmInit
 
-	doAndClose {
-		liquibase.update contexts
-	}
+    doAndClose {
+        liquibase.update contexts
+    }
 }
 
 setDefaultTarget dbmUpdate

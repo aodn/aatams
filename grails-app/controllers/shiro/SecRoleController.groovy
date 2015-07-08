@@ -58,7 +58,7 @@ class SecRoleController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (secRoleInstance.version > version) {
-                    
+
                     secRoleInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'secRole.label', default: 'SecRole')] as Object[], "Another user has updated this SecRole while you were editing")
                     render(view: "edit", model: [secRoleInstance: secRoleInstance])
                     return

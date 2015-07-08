@@ -20,13 +20,13 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmUpdateSql: 'Writes SQL to update database to current version to STDOUT') {
-	depends dbmInit
+    depends dbmInit
 
-	if (!okToWrite()) return
+    if (!okToWrite()) return
 
-	doAndClose {
-		liquibase.update contexts, newPrintWriter()
-	}
+    doAndClose {
+        liquibase.update contexts, newPrintWriter()
+    }
 }
 
 setDefaultTarget dbmUpdateSql

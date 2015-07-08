@@ -39,82 +39,82 @@ import liquibase.sqlgenerator.core.CreateTableGenerator
 
 class DatabaseMigrationGrailsPlugin {
 
-	String version = '1.0'
-	String grailsVersion = '1.3.0 > *'
-	String author = 'Burt Beckwith'
-	String authorEmail = 'beckwithb@vmware.com'
-	String title = 'Grails Database Migration Plugin'
-	String description = 'Grails Database Migration Plugin'
-	String documentation = 'http://grails.org/plugin/database-migration'
+    String version = '1.0'
+    String grailsVersion = '1.3.0 > *'
+    String author = 'Burt Beckwith'
+    String authorEmail = 'beckwithb@vmware.com'
+    String title = 'Grails Database Migration Plugin'
+    String description = 'Grails Database Migration Plugin'
+    String documentation = 'http://grails.org/plugin/database-migration'
 
-	List pluginExcludes = [
-		'grails-app/domain/**',
-		'docs/**',
-		'src/docs/**',
-		'src/groovy/grails/plugin/databasemigration/test/**'
-	]
+    List pluginExcludes = [
+        'grails-app/domain/**',
+        'docs/**',
+        'src/docs/**',
+        'src/groovy/grails/plugin/databasemigration/test/**'
+    ]
 
-	String license = 'APACHE'
-	def organization = [name: 'SpringSource', url: 'http://www.springsource.org/']
-	def developers = [[name: 'Burt Beckwith', email: 'beckwithb@vmware.com']]
-	def issueManagement = [system: 'JIRA', url: 'http://jira.grails.org/browse/GPDATABASEMIGRATION']
-	def scm = [url: 'https://github.com/grails-plugins/grails-spring-security-core']
+    String license = 'APACHE'
+    def organization = [name: 'SpringSource', url: 'http://www.springsource.org/']
+    def developers = [[name: 'Burt Beckwith', email: 'beckwithb@vmware.com']]
+    def issueManagement = [system: 'JIRA', url: 'http://jira.grails.org/browse/GPDATABASEMIGRATION']
+    def scm = [url: 'https://github.com/grails-plugins/grails-spring-security-core']
 
-	def doWithSpring = {
+    def doWithSpring = {
 
-		MigrationUtils.application = application
+        MigrationUtils.application = application
 
-		if (application.warDeployed) {
-			migrationResourceAccessor(GrailsClassLoaderResourceAccessor)
-		}
-		else {
-			String changelogLocation = MigrationUtils.changelogLocation
-			String changelogLocationPath = new File(changelogLocation).path
-			migrationResourceAccessor(FileSystemResourceAccessor, changelogLocationPath)
-		}
+        if (application.warDeployed) {
+            migrationResourceAccessor(GrailsClassLoaderResourceAccessor)
+        }
+        else {
+            String changelogLocation = MigrationUtils.changelogLocation
+            String changelogLocationPath = new File(changelogLocation).path
+            migrationResourceAccessor(FileSystemResourceAccessor, changelogLocationPath)
+        }
 
-		diffStatusListener(GrailsDiffStatusListener)
-	}
+        diffStatusListener(GrailsDiffStatusListener)
+    }
 
-	def doWithApplicationContext = { ctx ->
-		register ctx
+    def doWithApplicationContext = { ctx ->
+        register ctx
 
-		fixLogging()
+        fixLogging()
 
-		MigrationRunner.autoRun()
-	}
+        MigrationRunner.autoRun()
+    }
 
-	private void register(ctx) {
-		// adds support for .groovy extension
-		ChangeLogParserFactory.instance.register new GrailsChangeLogParser(ctx)
+    private void register(ctx) {
+        // adds support for .groovy extension
+        ChangeLogParserFactory.instance.register new GrailsChangeLogParser(ctx)
 
-		// used by gorm-diff and generate-gorm-changelog
-		DatabaseSnapshotGeneratorFactory.instance.register new GormDatabaseSnapshotGenerator()
+        // used by gorm-diff and generate-gorm-changelog
+        DatabaseSnapshotGeneratorFactory.instance.register new GormDatabaseSnapshotGenerator()
 
-		// adds support for Groovy-based changes in DSL changelogs
-		ChangeFactory.instance.register GrailsChange
+        // adds support for Groovy-based changes in DSL changelogs
+        ChangeFactory.instance.register GrailsChange
 
-		// adds support for Groovy-based preconditions in DSL changelogs
-		PreconditionFactory.instance.register GrailsPrecondition
+        // adds support for Groovy-based preconditions in DSL changelogs
+        PreconditionFactory.instance.register GrailsPrecondition
 
-		// appends 'ENGINE=InnoDB' to 'create table ...' statements in MySQL if using InnoDB
-		SqlGeneratorFactory.instance.unregister CreateTableGenerator
-		SqlGeneratorFactory.instance.register new MysqlAwareCreateTableGenerator()
+        // appends 'ENGINE=InnoDB' to 'create table ...' statements in MySQL if using InnoDB
+        SqlGeneratorFactory.instance.unregister CreateTableGenerator
+        SqlGeneratorFactory.instance.register new MysqlAwareCreateTableGenerator()
 
-		// fixes changelog errors generated from the GORM scripts
-		TypeConverterFactory.instance.register GormDatabaseTypeConverter
-	}
+        // fixes changelog errors generated from the GORM scripts
+        TypeConverterFactory.instance.register GormDatabaseTypeConverter
+    }
 
-	private void fixLogging() {
-		// ensure that classesBySuperclass is populated
-		LogFactory.getLogger 'NOT_A_REAL_LOGGER_NAME'
+    private void fixLogging() {
+        // ensure that classesBySuperclass is populated
+        LogFactory.getLogger 'NOT_A_REAL_LOGGER_NAME'
 
-		try {
-			// register the plugin's logger
-			ServiceLocator.instance.classesBySuperclass[Logger] << Log4jLogger
-		}
-		catch (Throwable t) {
-			// ignored, fall back to default logging
-		}
-	}
+        try {
+            // register the plugin's logger
+            ServiceLocator.instance.classesBySuperclass[Logger] << Log4jLogger
+        }
+        catch (Throwable t) {
+            // ignored, fall back to default logging
+        }
+    }
 }

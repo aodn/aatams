@@ -4,8 +4,7 @@ import grails.test.*
 import au.org.emii.aatams.event.EventFormat
 
 
-class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorServiceTests
-{
+class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorServiceTests {
     protected void setUp()  {
         super.setUp()
 
@@ -26,8 +25,7 @@ class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorSer
 
         assertEquals (records.size(), ValidReceiverEvent.count())
 
-        records.eachWithIndex
-        {
+        records.eachWithIndex {
             record, i ->
 
             assertEquals(record[EventFormat.RECEIVER_COLUMN], ValidReceiverEvent.list()[i].receiverDeployment.receiver.name)
@@ -35,12 +33,10 @@ class VueEventFileProcessorServiceTests extends AbstractVueEventFileProcessorSer
             assertEquals(record[EventFormat.DATA_COLUMN], ValidReceiverEvent.list()[i].data ?: "")
 
             // Special case for #1016
-            if (ValidReceiverEvent.list()[i].units?.startsWith("Shad Bay"))
-            {
+            if (ValidReceiverEvent.list()[i].units?.startsWith("Shad Bay")) {
                 assertEquals("Shad Bay, NS, Canada", ValidReceiverEvent.list()[i].units)
             }
-            else
-            {
+            else {
                 assertEquals(record[EventFormat.UNITS_COLUMN], ValidReceiverEvent.list()[i].units ?: "")
             }
         }

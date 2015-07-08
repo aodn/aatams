@@ -31,38 +31,38 @@ includeTargets << grailsScript("_GrailsEvents")
 
 _hibernateSpatialUpdateConfig = {Map dataSourceOptions = [:] ->
     _hibernateSpatialUpdateDataSourceConfig(dataSourceOptions)
-    
+
     File configDir = new File(grailsSettings.baseDir, '/grails-app/conf/')
     File configFile = new File(configDir, 'Config.groovy')
-    
+
     Set geometryClasses = new LinkedHashSet()
     for (geometry in ['Geometry',
         'GeometryCollection', 'LineString', 'Point', 'Polygon',
         'MultiLineString', 'MultiPoint', 'MultiPolygon',
-        'LinearRing', 'Puntal', 'Lineal', 'Polygonal']) {    
+        'LinearRing', 'Puntal', 'Lineal', 'Polygonal']) {
         geometryClasses << "com.vividsolutions.jts.geom.${geometry}".toString()
     }
-    
-    
+
+
     if (configFile.exists()) {
         try {
             Closure printUserTypes = {writer, String indentation = '' ->
-                for (geometryClass in geometryClasses) {                
+                for (geometryClass in geometryClasses) {
                     writer.println("${indentation}\'user-type\'(type:org.hibernatespatial.GeometryUserType, class:${geometryClass})")
                 }
             }
-            
+
             //File newConfigFile = new File(configDir, "${configFile.name}.tmp")
             File newConfigFile = File.createTempFile(configFile.name, 'tmp', configDir)
             boolean foundDefaultMapping = false
             boolean foundGeometryType = false
             boolean fileChanged = false
-            
+
             Pattern userTypePattern = Pattern.compile('.*["\']user-type["\'].*')
             Pattern geometryTypePattern = Pattern.compile('.*class\\s*:\\s*([A-Za-z\\.]+).*')
             List userTypeLines = []
-            
-            newConfigFile.withPrintWriter {writer ->                
+
+            newConfigFile.withPrintWriter {writer ->
                 configFile.withReader {reader ->
                     String line = null
 
@@ -74,13 +74,13 @@ _hibernateSpatialUpdateConfig = {Map dataSourceOptions = [:] ->
                             }
 
                             if (userTypeLines.size() > 0) {
-                                for (userTypeLine in userTypeLines) {                                    
+                                for (userTypeLine in userTypeLines) {
                                     Matcher matcher = geometryTypePattern.matcher(userTypeLine)
                                     if (matcher.matches()) {
                                         String geometryClass = matcher.replaceAll('$1')
                                         //println "geometryClass ${geometryClass}"
                                         geometryClasses.remove(geometryClass)
-                                        
+
                                     }
                                 }
 
@@ -95,7 +95,7 @@ _hibernateSpatialUpdateConfig = {Map dataSourceOptions = [:] ->
                                     userTypeLines.clear()
                                     fileChanged = true
                                 }
-                                
+
                                 foundDefaultMapping = true
                             }
                         }
@@ -110,9 +110,9 @@ _hibernateSpatialUpdateConfig = {Map dataSourceOptions = [:] ->
                         writer.println('}')
                         fileChanged = true
                     }
-                }                                            
+                }
             }
-            
+
             if (!fileChanged) {
                 ant.delete(file: newConfigFile)
             } else {
@@ -120,13 +120,13 @@ _hibernateSpatialUpdateConfig = {Map dataSourceOptions = [:] ->
                 ant.move(file: configFile, tofile: new File(configDir, "${configFile.name}.backup"))
                 ant.move(file: newConfigFile, tofile: configFile)
             }
-            
+
         } catch (Exception e) {
             event('StatusError', ["Could not update ${configFile}: ${e}"])
             throw e
         }
     }
-    
+
     println ''
     println '================================================================'
     println 'Attention! Make sure you have:'
@@ -137,11 +137,11 @@ _hibernateSpatialUpdateConfig = {Map dataSourceOptions = [:] ->
 
 _hibernateSpatialUpdateDataSourceConfig = {Map dataSourceOptions = [:] ->
     //println "dataSourceOptions ${dataSourceOptions}"
-    
+
     boolean fileChanged = false
     List replacements = []
     Set unreplacedKeys = [] as Set
-    
+
     for (option in dataSourceOptions.entrySet()) {
         Map replacement = [
             option: option,
@@ -149,17 +149,17 @@ _hibernateSpatialUpdateDataSourceConfig = {Map dataSourceOptions = [:] ->
             commentSub: '// $1$2',
             valueSub: '$2'
         ]
-                
+
         replacements << replacement
     }
-    
+
     //println "replacements ${replacements}"
-    
+
     File configDir = new File(grailsSettings.baseDir, '/grails-app/conf/')
     for (fileName in ['DataSource.groovy', 'DataSources.groovy']) {
         File file = new File(configDir, fileName)
         //println "file ${file}"
-        
+
         if (file.exists() && replacements.size() > 0) {
             try {
                 //File newFile = new File(configDir, "${fileName}.tmp")
@@ -173,7 +173,7 @@ _hibernateSpatialUpdateDataSourceConfig = {Map dataSourceOptions = [:] ->
                             if (matcher.matches()) {
                                 if (!matcher.replaceAll(replacement.valueSub).equals(replacement.option.value)) {
                                     newLine = matcher.replaceAll(replacement.commentSub)
-                                    fileChanged = true                               
+                                    fileChanged = true
                                 } else {
                                     unreplacedKeys << replacement.option.key
                                 }
@@ -182,7 +182,7 @@ _hibernateSpatialUpdateDataSourceConfig = {Map dataSourceOptions = [:] ->
                         }
                         writer.println(newLine)
                     }
-                    
+
                     if (dataSourceOptions.keySet() != unreplacedKeys) {
                        writer.println('')
                        writer.println('/* Added by the Hibernate Spatial Plugin. */')
@@ -194,9 +194,9 @@ _hibernateSpatialUpdateDataSourceConfig = {Map dataSourceOptions = [:] ->
                            }
                        }
                        writer.println('}')
-                    }                    
+                    }
                 }
-                
+
                 //println "Updating ${file}"
                 if (fileChanged) {
                     event "StatusUpdate", ["Updating ${file}"]
@@ -205,7 +205,7 @@ _hibernateSpatialUpdateDataSourceConfig = {Map dataSourceOptions = [:] ->
                 } else {
                     ant.delete(file: newFile)
                 }
-                
+
             } catch (Exception e) {
                 event('StatusError', ["Could not update ${file}: ${e}"])
                 throw e

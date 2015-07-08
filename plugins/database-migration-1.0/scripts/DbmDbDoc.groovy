@@ -20,11 +20,11 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmDbDoc: 'Generates Javadoc-like documentation based on current database and change log') {
-	depends dbmInit
+    depends dbmInit
 
-	doAndClose {
-		liquibase.generateDocumentation argsList[0] ?: MigrationUtils.dbDocLocation, contexts
-	}
+    doAndClose {
+        liquibase.generateDocumentation argsList[0] ?: MigrationUtils.dbDocLocation, contexts
+    }
 }
 
 setDefaultTarget dbmDbDoc

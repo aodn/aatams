@@ -18,7 +18,7 @@ package grails.plugin.searchable
 import org.compass.core.engine.SearchEngineQueryParseException
 
 /**
- * Basic web interface for Grails Searchable Plugin 
+ * Basic web interface for Grails Searchable Plugin
  *
  * @author Maurice Nicholson
  */

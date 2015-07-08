@@ -18,15 +18,15 @@ includeTargets << grailsScript("_GrailsInit")
 includeTargets << grailsScript("_GrailsSettings")
 
 target(installJodaTimeGormMappings: "Updates Config.groovy with default GORM mappings for Joda-Time types") {
-	def configFile = new File(basedir, "grails-app/conf/Config.groovy")
-	if (configFile.exists()) {
-		def appConfig = configSlurper.parse(configFile.toURI().toURL())
-		if (appConfig.grails.gorm.default.mapping) {
-			event "StatusUpdate", ["Config.groovy already contains 'grails.gorm.default.mapping'"]
-		} else {
-			event "StatusUpdate", ["Adding default GORM mappings for Joda-Time types to Config.groovy"]
-			configFile.withWriterAppend {
-				it.write """
+    def configFile = new File(basedir, "grails-app/conf/Config.groovy")
+    if (configFile.exists()) {
+        def appConfig = configSlurper.parse(configFile.toURI().toURL())
+        if (appConfig.grails.gorm.default.mapping) {
+            event "StatusUpdate", ["Config.groovy already contains 'grails.gorm.default.mapping'"]
+        } else {
+            event "StatusUpdate", ["Adding default GORM mappings for Joda-Time types to Config.groovy"]
+            configFile.withWriterAppend {
+                it.write """
 // Added by the Joda-Time plugin:
 grails.gorm.default.mapping = {
 \t\"user-type\" type: org.joda.time.contrib.hibernate.PersistentDateTime, class: org.joda.time.DateTime
@@ -39,9 +39,9 @@ grails.gorm.default.mapping = {
 \t\"user-type\" type: org.joda.time.contrib.hibernate.PersistentPeriod, class: org.joda.time.Period
 }
 """
-			}
-		}
-	}
+            }
+        }
+    }
 }
 
 setDefaultTarget(installJodaTimeGormMappings)

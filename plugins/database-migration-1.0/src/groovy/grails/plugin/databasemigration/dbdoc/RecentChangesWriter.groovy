@@ -22,21 +22,21 @@ import liquibase.database.Database
  */
 class RecentChangesWriter extends HTMLWriter {
 
-	RecentChangesWriter(Map files, Database database) {
-		super(files, 'recent', database)
-	}
+    RecentChangesWriter(Map files, Database database) {
+        super(files, 'recent', database)
+    }
 
-	@Override
-	protected String createTitle(object) { 'Recent Changes' }
+    @Override
+    protected String createTitle(object) { 'Recent Changes' }
 
-	@Override
-	protected void writeBody(StringBuilder content, object, List<Change> ranChanges, List<Change> changesToRun) {
-		writeCustomHTML(content, object, ranChanges)
-		writeChanges('Most Recent Changes', content, ranChanges, false)
-	}
+    @Override
+    protected void writeBody(StringBuilder content, object, List<Change> ranChanges, List<Change> changesToRun) {
+        writeCustomHTML(content, object, ranChanges)
+        writeChanges('Most Recent Changes', content, ranChanges, false)
+    }
 
-	@Override
-	protected void writeCustomHTML(StringBuilder content, object, List<Change> changes) {
-		// do nothing
-	}
+    @Override
+    protected void writeCustomHTML(StringBuilder content, object, List<Change> changes) {
+        // do nothing
+    }
 }

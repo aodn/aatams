@@ -2,8 +2,7 @@ dataSource {
     pooled = true
     driverClassName = "org.postgresql.Driver"
 
-    properties
-    {
+    properties {
         maxActive = 20
         validationQuery = "SELECT 1"
     }
@@ -44,12 +43,10 @@ environments {
         }
     }
 
-    production
-    {
+    production {
         // Problems with connecting to database in test/production?
         // Make *sure* you've got Grails Environment set to "production"!!
-        dataSource
-        {
+        dataSource {
             jndiName = "java:comp/env/jdbc/aatams3"
         }
     }

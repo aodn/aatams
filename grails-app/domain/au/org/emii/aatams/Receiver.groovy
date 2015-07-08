@@ -6,8 +6,7 @@ import org.joda.time.DateTime
  * A receiver is a device deployed in the ocean that is able to receive 'ping'
  * transmissions from tags attached or surgically implanted into fish.
  */
-class Receiver extends Device
-{
+class Receiver extends Device {
     static hasMany = [ deployments: ReceiverDeployment ]
     static belongsTo = [ organisation: Organisation ]
     static transients = ['name',
@@ -20,103 +19,83 @@ class Receiver extends Device
 
     static auditable = true
 
-    static mapping =
-    {
+    static mapping = {
         organisation sort:'name'
         cache true
     }
 
     static searchable = [only: ['name']]
 
-    String getName()
-    {
+    String getName() {
         return String.valueOf(model) + "-" + serialNumber
     }
 
-    String getDeviceID()
-    {
+    String getDeviceID() {
         return getName()
     }
 
-    String toString()
-    {
+    String toString() {
         return getName()
     }
 
-    private ReceiverDeployment getMostRecentDeployment(dateTime)
-    {
-        if (!deployments || deployments.isEmpty())
-        {
+    private ReceiverDeployment getMostRecentDeployment(dateTime) {
+        if (!deployments || deployments.isEmpty()) {
             return null
         }
 
         def chronoDeployments = deployments.sort { a, b -> a.deploymentDateTime <=> b.deploymentDateTime }
-        chronoDeployments = chronoDeployments.grep
-        {
+        chronoDeployments = chronoDeployments.grep {
             !it.deploymentDateTime.isAfter(dateTime)
         }
 
-        if (chronoDeployments.isEmpty())
-        {
+        if (chronoDeployments.isEmpty()) {
             return null
         }
 
         return chronoDeployments.last()
     }
 
-    private boolean hasActiveDeployment(dateTime)
-    {
+    private boolean hasActiveDeployment(dateTime) {
         // A receiver is only considered to have an active deployment if the *last* deployment is active.
         return getMostRecentDeployment(dateTime)?.isActive(dateTime)
     }
 
-    private ReceiverRecovery getMostRecentRecovery(dateTime)
-    {
-        if (hasActiveDeployment(dateTime))
-        {
+    private ReceiverRecovery getMostRecentRecovery(dateTime) {
+        if (hasActiveDeployment(dateTime)) {
             return null
         }
 
         def recoveries =
             getSortedByRecoveryDateTime(getRecoveriesBeforeOrEqualToDateTime(dateTime))
 
-        if (recoveries && !recoveries.isEmpty())
-        {
+        if (recoveries && !recoveries.isEmpty()) {
             return recoveries.last()
         }
 
         return null
     }
 
-    private List getRecoveriesBeforeOrEqualToDateTime(dateTime)
-    {
-        return (deployments*.recovery.grep
-        {
+    private List getRecoveriesBeforeOrEqualToDateTime(dateTime) {
+        return (deployments*.recovery.grep {
             it && !it.recoveryDateTime.isAfter(dateTime)
         })
     }
 
-    private List getSortedByRecoveryDateTime(sortees)
-    {
-        return (sortees?.sort
-        {
+    private List getSortedByRecoveryDateTime(sortees) {
+        return (sortees?.sort {
             a, b ->
 
             a.recoveryDateTime <=> b.recoveryDateTime
         })
     }
 
-    DeviceStatus getStatus(DateTime dateTime)
-    {
-        if (hasActiveDeployment(dateTime))
-        {
+    DeviceStatus getStatus(DateTime dateTime) {
+        if (hasActiveDeployment(dateTime)) {
             return DeviceStatus.DEPLOYED
         }
-        else
-        {
+        else {
             def mostRecentRecovery = getMostRecentRecovery(dateTime)
-            if (mostRecentRecovery)
-            {
+            if (mostRecentRecovery) {
                 return mostRecentRecovery.status
             }
         }
@@ -124,18 +103,15 @@ class Receiver extends Device
         return DeviceStatus.NEW
     }
 
-    DeviceStatus getStatus()
-    {
+    DeviceStatus getStatus() {
         return getStatus(now())
     }
 
-    private DateTime now()
-    {
+    private DateTime now() {
         return new DateTime()
     }
 
-    private boolean hasDeployment(deployment)
-    {
+    private boolean hasDeployment(deployment) {
         return deployments*.id?.contains(deployment.id)
     }
 
@@ -150,8 +126,7 @@ class Receiver extends Device
     /**
      * Backward compatibility.
      */
-    static Receiver findByName(name, params=[:])
-    {
+    static Receiver findByName(name, params=[:]) {
         def tokens = name.tokenize("-")
         assert(tokens.size() >= 2): "Invalid receiver name: ${name}"
 

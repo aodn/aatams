@@ -4,19 +4,18 @@ import au.org.emii.aatams.Species
 
 /**
  * Utility class used for generating the tag summary report.
- * 
+ *
  * @author jburgess
  */
-class AnimalReleaseCount 
-{
+class AnimalReleaseCount  {
     Species species
-    
+
     Long currentReleases
-    
+
     Long totalReleases
-    
+
     Long totalEmbargoed
-    
+
     Float percentEmbargoed
 }
 

@@ -23,116 +23,116 @@ package org.grails.plugins.csv
  */
 class CSVWriter {
 
-	private columns = [:]
+    private columns = [:]
 
-	final writer
+    final writer
 
-	private cachedQuote
-	private cachedQuoteEscape
-	private cachedQuoteReplace
-	private cachedValueSeperator
-	private cachedRowSeperator
+    private cachedQuote
+    private cachedQuoteEscape
+    private cachedQuoteReplace
+    private cachedValueSeperator
+    private cachedRowSeperator
 
-	private producers
-	private lastProducer
+    private producers
+    private lastProducer
 
-	private headingsWritten = false
+    private headingsWritten = false
 
-	CSVWriter(Writer writer, Closure definition) {
-		this.writer = writer
+    CSVWriter(Writer writer, Closure definition) {
+        this.writer = writer
 
-		columns = CSVWriterColumnsBuilder.build(definition)
+        columns = CSVWriterColumnsBuilder.build(definition)
 
-		// do these once incase subclasses are reading from config etc.
-		cachedQuote = this.quote
-		cachedQuoteEscape = this.quoteEscape
-		cachedQuoteReplace = this.quoteEscape + this.quote
-		cachedValueSeperator = this.valueSeperator
-		cachedRowSeperator = this.rowSeperator
+        // do these once incase subclasses are reading from config etc.
+        cachedQuote = this.quote
+        cachedQuoteEscape = this.quoteEscape
+        cachedQuoteReplace = this.quoteEscape + this.quote
+        cachedValueSeperator = this.valueSeperator
+        cachedRowSeperator = this.rowSeperator
 
-		producers = columns.values().toList()
-		lastProducer = producers.last()
-	}
+        producers = columns.values().toList()
+        lastProducer = producers.last()
+    }
 
-	def leftShift(row) {
-		write(row)
-		this
-	}
+    def leftShift(row) {
+        write(row)
+        this
+    }
 
-	def write(row) {
-		if (!headingsWritten) {
-			writeHeadings()
-		}
+    def write(row) {
+        if (!headingsWritten) {
+            writeHeadings()
+        }
 
-		writer << this.@cachedRowSeperator
-		for (producer in this.@producers) {
-			writeValue(producer(row).toString())
-			if (!producer.is(this.@lastProducer)) {
-				writer << this.@cachedValueSeperator
-			}
-		}
+        writer << this.@cachedRowSeperator
+        for (producer in this.@producers) {
+            writeValue(producer(row).toString())
+            if (!producer.is(this.@lastProducer)) {
+                writer << this.@cachedValueSeperator
+            }
+        }
 
-		writer
-	}
+        writer
+    }
 
-	def writeAll(Collection rows) {
-		for (row in rows) {
-			write(row)
-		}
-		writer
-	}
+    def writeAll(Collection rows) {
+        for (row in rows) {
+            write(row)
+        }
+        writer
+    }
 
-	protected writeHeadings() {
-		columns.eachWithIndex { column, i ->
-			writeValue(column.key)
-			if (i != (columns.size() - 1)) {
-				writer << this.@cachedValueSeperator
-			}
-		}
-		headingsWritten = true
-	}
+    protected writeHeadings() {
+        columns.eachWithIndex { column, i ->
+            writeValue(column.key)
+            if (i != (columns.size() - 1)) {
+                writer << this.@cachedValueSeperator
+            }
+        }
+        headingsWritten = true
+    }
 
-	protected writeValue(String value) {
-		writer << this.@cachedQuote
-		writer << value.replace(this.@cachedQuote, this.@cachedQuoteReplace)
-		writer << this.@cachedQuote
-	}
+    protected writeValue(String value) {
+        writer << this.@cachedQuote
+        writer << value.replace(this.@cachedQuote, this.@cachedQuoteReplace)
+        writer << this.@cachedQuote
+    }
 
-	protected getQuote() {
-		'"'
-	}
+    protected getQuote() {
+        '"'
+    }
 
-	protected getQuoteEscape() {
-		'"'
-	}
+    protected getQuoteEscape() {
+        '"'
+    }
 
-	protected getValueSeperator() {
-		","
-	}
+    protected getValueSeperator() {
+        ","
+    }
 
-	protected getRowSeperator() {
-		"\n"
-	}
+    protected getRowSeperator() {
+        "\n"
+    }
 }
 
 class CSVWriterColumnsBuilder {
 
-	final columns = [:]
+    final columns = [:]
 
-	CSVWriterColumnsBuilder(Closure definition) {
-		definition.delegate = this
-		definition()
-	}
+    CSVWriterColumnsBuilder(Closure definition) {
+        definition.delegate = this
+        definition()
+    }
 
-	def methodMissing(String name, args) {
-		if (args.size() == 1 && args[0] instanceof Closure) {
-			columns[name] = args[0]
-		} else {
-			throw new IllegalArgumentException('Must have 1 closure argument')
-		}
-	}
+    def methodMissing(String name, args) {
+        if (args.size() == 1 && args[0] instanceof Closure) {
+            columns[name] = args[0]
+        } else {
+            throw new IllegalArgumentException('Must have 1 closure argument')
+        }
+    }
 
-	static build(Closure definition) {
-		new CSVWriterColumnsBuilder(definition).columns
-	}
+    static build(Closure definition) {
+        new CSVWriterColumnsBuilder(definition).columns
+    }
 }

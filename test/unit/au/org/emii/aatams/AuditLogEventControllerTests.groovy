@@ -4,19 +4,16 @@ import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import grails.test.*
 import org.codehaus.groovy.grails.plugins.orm.auditable.AuditLogEvent
 
-class AuditLogEventControllerTests extends AbstractControllerUnitTestCase
-{
+class AuditLogEventControllerTests extends AbstractControllerUnitTestCase {
     def eventSomeone
     def eventJkburges
 
-    protected void setUp()
-    {
+    protected void setUp() {
         super.setUp()
 
         mockDomain(Person)
 
-        Person.metaClass.static.get =
-        {
+        Person.metaClass.static.get = {
             new Person(username: 'jkburges')
         }
 
@@ -29,13 +26,11 @@ class AuditLogEventControllerTests extends AbstractControllerUnitTestCase
         }
     }
 
-    protected void tearDown()
-    {
+    protected void tearDown() {
         super.tearDown()
     }
 
-    void testAllVisibleToSysAdmin()
-    {
+    void testAllVisibleToSysAdmin() {
         hasRole = true
 
         controller.params.max = 10
@@ -47,8 +42,7 @@ class AuditLogEventControllerTests extends AbstractControllerUnitTestCase
         assertTrue(eventList.auditLogEventInstanceList.contains(eventJkburges))
     }
 
-    void testOnlyOwnVisibleToNonSysAdmin()
-    {
+    void testOnlyOwnVisibleToNonSysAdmin() {
         hasRole = false
 
         controller.params.max = 10

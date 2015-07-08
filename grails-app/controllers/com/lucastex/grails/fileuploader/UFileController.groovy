@@ -58,7 +58,7 @@ class UFileController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (UFileInstance.version > version) {
-                    
+
                     UFileInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'UFile.label', default: 'UFile')] as Object[], "Another user has updated this UFile while you were editing")
                     render(view: "edit", model: [UFileInstance: UFileInstance])
                     return

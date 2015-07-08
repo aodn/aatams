@@ -2,10 +2,8 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
-class ReceiverControllerTests extends AbstractControllerUnitTestCase
-{
-    void testSaveWithWithspaceAroundSerialNumber()
-    {
+class ReceiverControllerTests extends AbstractControllerUnitTestCase {
+    void testSaveWithWithspaceAroundSerialNumber() {
         controller.params.serialNumber = " 234 "
         controller.params.organisation = Organisation.findByName("IMOS")
         controller.params.model = ReceiverDeviceModel.findByModelName("VR2W")
@@ -17,13 +15,11 @@ class ReceiverControllerTests extends AbstractControllerUnitTestCase
         receiver.delete(failOnError:true)
     }
 
-    void testExportNoFilter()
-    {
+    void testExportNoFilter() {
         assertExport([:], "testExecuteReceiverNoFilter")
     }
 
-    void testExecuteReceiverFilterByOrg()
-    {
+    void testExecuteReceiverFilterByOrg() {
         assertExport([organisation: [eq:["name", "IMOS"]]], "testExecuteReceiverFilterByOrg")
     }
 }

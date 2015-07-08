@@ -20,12 +20,12 @@ import org.joda.time.DateTimeZone
 
 class DateTimeZoneEditor extends PropertyEditorSupport {
 
-	String getAsText() {
-		value?.ID ?: ""
-	}
+    String getAsText() {
+        value?.ID ?: ""
+    }
 
-	void setAsText(String text) {
-		value = text ? DateTimeZone.forID(text) : null
-	}
+    void setAsText(String text) {
+        value = text ? DateTimeZone.forID(text) : null
+    }
 
 }

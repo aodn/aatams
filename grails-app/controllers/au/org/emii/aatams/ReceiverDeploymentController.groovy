@@ -4,8 +4,7 @@ import au.org.emii.aatams.report.ReportController
 import org.joda.time.*
 import org.joda.time.contrib.hibernate.*
 
-class ReceiverDeploymentController extends ReportController
-{
+class ReceiverDeploymentController extends ReportController {
     def candidateEntitiesService
     def detectionFactoryService
 
@@ -15,13 +14,11 @@ class ReceiverDeploymentController extends ReportController
         redirect(action: "list", params: params)
     }
 
-    def list =
-    {
+    def list = {
         doList("receiverDeployment")
     }
 
-    def export =
-    {
+    def export = {
         doExport("receiverDeployment")
     }
 
@@ -32,29 +29,25 @@ class ReceiverDeploymentController extends ReportController
         renderCreateWithDefaultModel(receiverDeploymentInstance)
     }
 
-    def save =
-    {
+    def save = {
         def receiverDeploymentInstance = new ReceiverDeployment(params)
 
         if (receiverDeploymentInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
             redirect(action: "show", id: receiverDeploymentInstance.id)
         }
-        else
-        {
+        else {
             renderCreateWithDefaultModel(receiverDeploymentInstance)
         }
     }
 
-    private renderCreateWithDefaultModel(ReceiverDeployment receiverDeploymentInstance)
-    {
+    private renderCreateWithDefaultModel(ReceiverDeployment receiverDeploymentInstance) {
         def model = renderDefaultModel(receiverDeploymentInstance)
 
         render(view: "create", model: model)
     }
 
-    private Map renderDefaultModel(ReceiverDeployment receiverDeploymentInstance)
-    {
+    private Map renderDefaultModel(ReceiverDeployment receiverDeploymentInstance) {
         def errors = receiverDeploymentInstance.errors
 
         def model =
@@ -67,22 +60,18 @@ class ReceiverDeploymentController extends ReportController
         return model
     }
 
-    private Collection<Receiver> getCandidateReceivers(deployment)
-    {
+    private Collection<Receiver> getCandidateReceivers(deployment) {
         def retList = candidateEntitiesService.receivers()
-        if (deployment.receiver)
-        {
+        if (deployment.receiver) {
             retList += deployment.receiver
         }
 
         return retList.unique({ a, b -> a.id <=> b.id })
     }
 
-    private Collection<InstallationStation> getCandidateStations(deployment)
-    {
+    private Collection<InstallationStation> getCandidateStations(deployment) {
         def retList = candidateEntitiesService.stations()
-        if (deployment.station)
-        {
+        if (deployment.station) {
             retList.add(0, deployment.station)
         }
 
@@ -133,8 +122,7 @@ class ReceiverDeploymentController extends ReportController
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'receiverDeployment.label', default: 'ReceiverDeployment'), receiverDeploymentInstance.toString()])}"
                 redirect(action: "show", id: receiverDeploymentInstance.id)
             }
-            else
-            {
+            else {
                 render(view: "edit", model: renderDefaultModel(receiverDeploymentInstance))
             }
         }

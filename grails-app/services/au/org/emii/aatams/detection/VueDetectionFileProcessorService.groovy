@@ -10,8 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 /**
  * Process a file downloaded from receiver's VUE application.
  */
-class VueDetectionFileProcessorService extends AbstractBatchProcessor
-{
+class VueDetectionFileProcessorService extends AbstractBatchProcessor {
     def dataSource
     def detectionFactoryService
     def detectionNotificationService

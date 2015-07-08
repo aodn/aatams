@@ -5,12 +5,9 @@ import org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib
 
 class ReceiverDownloadFileFilters {
 
-    def filters = 
-    {
-        receiverDownloadFileList(controller: 'receiverDownloadFile', action:'list')
-        {
-            after =
-            {
+    def filters =  {
+        receiverDownloadFileList(controller: 'receiverDownloadFile', action:'list') {
+            after = {
                 model ->
                     applyVisibility(Person.get(SecurityUtils.subject?.principal)
                         , SecurityUtils.subject.hasRole("SysAdmin"), model)
@@ -19,8 +16,7 @@ class ReceiverDownloadFileFilters {
         }
     }
 
-    def applyVisibility(currentUser, currentUserIsSysAdmin, model)
-    {
+    def applyVisibility(currentUser, currentUserIsSysAdmin, model) {
         model.receiverDownloadFileInstanceList =
             model.receiverDownloadFileInstanceList.findAll({
                 item -> (currentUserIsSysAdmin

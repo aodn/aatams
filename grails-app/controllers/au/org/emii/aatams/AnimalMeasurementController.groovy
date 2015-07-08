@@ -22,13 +22,11 @@ class AnimalMeasurementController extends AbstractController {
 
     def save = {
         def animalMeasurementInstance = new AnimalMeasurement(params)
-        if (animalMeasurementInstance.save(flush: true)) 
-        {
+        if (animalMeasurementInstance.save(flush: true))  {
             flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.toString()])}"
             render ([instance:animalMeasurementInstance, message:flash] as JSON)
         }
-        else 
-        {
+        else  {
             log.error(animalMeasurementInstance.errors)
             render ([errors:animalMeasurementInstance.errors] as JSON)
         }
@@ -62,19 +60,18 @@ class AnimalMeasurementController extends AbstractController {
             if (params.version) {
                 def version = params.version.toLong()
                 if (animalMeasurementInstance.version > version) {
-                    
+
                     animalMeasurementInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement')] as Object[], "Another user has updated this AnimalMeasurement while you were editing")
                     render(view: "edit", model: [animalMeasurementInstance: animalMeasurementInstance])
                     return
                 }
             }
             animalMeasurementInstance.properties = params
-            if (!animalMeasurementInstance.hasErrors() && animalMeasurementInstance.save(flush: true)) 
-            {
+            if (!animalMeasurementInstance.hasErrors() && animalMeasurementInstance.save(flush: true))  {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.toString()])}"
                 def release = animalMeasurementInstance?.release
-                redirect(controller: "animalRelease", 
-                         action: "edit", 
+                redirect(controller: "animalRelease",
+                         action: "edit",
                          id: release?.id,
                          params: [projectId:release?.project?.id])
             }
@@ -88,31 +85,27 @@ class AnimalMeasurementController extends AbstractController {
         }
     }
 
-    def delete = 
-    {
+    def delete =  {
         def animalMeasurementInstance = AnimalMeasurement.get(params.id)
-        if (animalMeasurementInstance) 
-        {
-            try 
-            {
+        if (animalMeasurementInstance)  {
+            try  {
                 animalMeasurementInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.toString()])}"
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), animalMeasurementInstance.toString()])}"
             }
-            
+
             // Redirect to the "owning" animal release edit, since that is where
             // a normal user (i.e. non sysadmin) would have deleted from).
             def release = animalMeasurementInstance?.release
             log.debug("Redirecting to animalRelease, id: " + release?.id)
-            redirect(controller: "animalRelease", 
-                     action: "edit", 
+            redirect(controller: "animalRelease",
+                     action: "edit",
                      id: release?.id,
                      params: [projectId:release?.project?.id])
         }
-        else 
-        {
+        else  {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'animalMeasurement.label', default: 'AnimalMeasurement'), params.id])}"
             redirect(action: "list")
         }

@@ -20,14 +20,14 @@
 includeTargets << new File("$databaseMigrationPluginDir/scripts/_DatabaseMigrationCommon.groovy")
 
 target(dbmStatus: 'Outputs list of unrun change sets') {
-	depends dbmInit
+    depends dbmInit
 
-	if (!okToWrite()) return
+    if (!okToWrite()) return
 
-	doAndClose {
-		boolean verbose = argsMap.verbose == null ? true : Boolean.valueOf(argsMap.verbose)
-		liquibase.reportStatus verbose, contexts, newOutputStreamWriter()
-	}
+    doAndClose {
+        boolean verbose = argsMap.verbose == null ? true : Boolean.valueOf(argsMap.verbose)
+        liquibase.reportStatus verbose, contexts, newOutputStreamWriter()
+    }
 }
 
 setDefaultTarget dbmStatus

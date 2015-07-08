@@ -7,17 +7,14 @@ import org.joda.time.contrib.hibernate.*
  * Surgery is the process of attaching/implanting a tag to/in an animal (given
  * by the owning AnimalRelease).
  */
-class Surgery implements Embargoable
-{
+class Surgery implements Embargoable {
     def grailsApplication
     def sessionFactory
 
     static belongsTo = [release: AnimalRelease, tag: Tag]
 
-    static mapping =
-    {
-        timestamp type: PersistentDateTimeTZ,
-        {
+    static mapping = {
+        timestamp type: PersistentDateTimeTZ, {
             column name: "timestamp_timestamp"
             column name: "timestamp_zone"
         }
@@ -33,8 +30,7 @@ class Surgery implements Embargoable
     SurgeryTreatmentType treatmentType
     String comments
 
-    static constraints =
-    {
+    static constraints = {
         timestamp()
         release()
         tag()
@@ -42,14 +38,12 @@ class Surgery implements Embargoable
         comments(nullable:true, blank:true)
     }
 
-    static searchable =
-    {
+    static searchable = {
         root false
         tag(component:true)
     }
 
-    String toString()
-    {
+    String toString() {
         return "Tag (" + String.valueOf(tag) + "): " + String.valueOf(type)
     }
 
@@ -57,28 +51,23 @@ class Surgery implements Embargoable
      * Each surgery has window, defined by whether the related release is
      * current, and the expected tag life time.
      */
-    boolean isInWindow(Date timestamp)
-    {
-        if (!release.isCurrent())
-        {
+    boolean isInWindow(Date timestamp) {
+        if (!release.isCurrent()) {
             return false
         }
 
         def startWindow = release.releaseDateTime
-        if (new DateTime(timestamp).isBefore(startWindow))
-        {
+        if (new DateTime(timestamp).isBefore(startWindow)) {
             return false
         }
 
         // Is the tag retired?
-        if (tag.status == DeviceStatus.RETIRED)
-        {
+        if (tag.status == DeviceStatus.RETIRED) {
             return false
         }
 
         // Now check window of operation.
-        if (!tag.expectedLifeTimeDays)
-        {
+        if (!tag.expectedLifeTimeDays) {
             // Expected life time not specified (therefore there's no
             // end window limit.
             return true
@@ -86,8 +75,7 @@ class Surgery implements Embargoable
 
         def endWindow = startWindow.plusDays(tag?.expectedLifeTimeDays).plusDays(grailsApplication.config.tag.expectedLifeTime.gracePeriodDays)
 
-        if (new DateTime(timestamp).isAfter(endWindow))
-        {
+        if (new DateTime(timestamp).isAfter(endWindow)) {
             return false
         }
 
@@ -98,16 +86,14 @@ class Surgery implements Embargoable
         return release.embargoed
     }
 
-    def applyEmbargo()
-    {
+    def applyEmbargo() {
         if (isEmbargoed()) {
             return null
         }
         return this
     }
 
-    def getProject()
-    {
+    def getProject() {
         return release.project
     }
 }

@@ -1958,8 +1958,7 @@ databaseChangeLog = {
         createSequence( sequenceName: "hibernate_sequence")
     }
 
-    changeSet(author: "jburgess", id: "1371620272000-1", runOnChange: true)
-    {
+    changeSet(author: "jburgess", id: "1371620272000-1", runOnChange: true) {
         createProcedure('''CREATE OR REPLACE FUNCTION isreleaseembargoed(release_id bigint) RETURNS boolean AS
             $$
             DECLARE
@@ -1970,9 +1969,8 @@ databaseChangeLog = {
             END;
             $$ LANGUAGE plpgsql STRICT;''')
     }
-    
-    changeSet(author: "jburgess", id: "1371620272000-2", runOnChange: true)
-    {
+
+    changeSet(author: "jburgess", id: "1371620272000-2", runOnChange: true) {
         createProcedure('''CREATE OR REPLACE FUNCTION scramblepoint(point geometry) RETURNS geometry AS
             $$
             DECLARE
@@ -1987,9 +1985,8 @@ databaseChangeLog = {
             END;
             $$ LANGUAGE plpgsql STRICT;''')
     }
-    
-    changeSet(author: "jburgess", id: "1371620272000-3", runOnChange: true)
-    {
+
+    changeSet(author: "jburgess", id: "1371620272000-3", runOnChange: true) {
         createProcedure('''
                         CREATE OR REPLACE FUNCTION create_matview(NAME, NAME)
                         RETURNS VOID
@@ -2002,81 +1999,79 @@ databaseChangeLog = {
                             entry matviews%ROWTYPE;
                         BEGIN
                             SELECT * INTO entry FROM matviews WHERE mv_name = matview;
-                        
+
                             IF FOUND THEN
                                 RAISE EXCEPTION 'Materialized view % already exists.', matview;
                             END IF;
-                        
+
                             EXECUTE 'REVOKE ALL ON ' || view_name || ' FROM PUBLIC';
-                        
+
                             EXECUTE 'GRANT SELECT ON ' || view_name || ' TO PUBLIC';
-                        
+
                             EXECUTE 'CREATE TABLE ' || matview || ' AS SELECT * FROM ' || view_name;
-                        
+
                             EXECUTE 'REVOKE ALL ON ' || matview || ' FROM PUBLIC';
-                        
+
                             EXECUTE 'GRANT SELECT ON ' || matview || ' TO PUBLIC';
-                        
+
                             INSERT INTO matviews (mv_name, v_name, last_refresh)
                               VALUES (matview, view_name, CURRENT_TIMESTAMP);
-                            
-                            RETURN;
-                        END;
-                        $$''')
-    }
-    
-    changeSet(author: "jburgess", id: "1371620272000-4", runOnChange: true)
-    {
-        createProcedure('''
-                        CREATE OR REPLACE FUNCTION drop_matview(NAME) RETURNS VOID
-                        SECURITY DEFINER
-                        LANGUAGE plpgsql AS 
-                        $$
-                        DECLARE
-                            matview ALIAS FOR $1;
-                            entry matviews%ROWTYPE;
-                        BEGIN
-                        
-                            SELECT * INTO entry FROM matviews WHERE mv_name = matview;
-                        
-                            IF NOT FOUND THEN
-                                RAISE EXCEPTION 'Materialized view % does not exist.', matview;
-                            END IF;
-                        
-                            EXECUTE 'DROP TABLE ' || matview;
-                            DELETE FROM matviews WHERE mv_name=matview;
-                        
+
                             RETURN;
                         END;
                         $$''')
     }
 
-    changeSet(author: "jburgess", id: "1371620272000-5", runOnChange: true)
-    {
+    changeSet(author: "jburgess", id: "1371620272000-4", runOnChange: true) {
         createProcedure('''
-                        CREATE OR REPLACE FUNCTION refresh_matview(name) RETURNS VOID
+                        CREATE OR REPLACE FUNCTION drop_matview(NAME) RETURNS VOID
                         SECURITY DEFINER
-                        LANGUAGE plpgsql AS 
+                        LANGUAGE plpgsql AS
                         $$
-                        DECLARE 
+                        DECLARE
                             matview ALIAS FOR $1;
                             entry matviews%ROWTYPE;
                         BEGIN
-                        
+
                             SELECT * INTO entry FROM matviews WHERE mv_name = matview;
-                        
+
+                            IF NOT FOUND THEN
+                                RAISE EXCEPTION 'Materialized view % does not exist.', matview;
+                            END IF;
+
+                            EXECUTE 'DROP TABLE ' || matview;
+                            DELETE FROM matviews WHERE mv_name=matview;
+
+                            RETURN;
+                        END;
+                        $$''')
+    }
+
+    changeSet(author: "jburgess", id: "1371620272000-5", runOnChange: true) {
+        createProcedure('''
+                        CREATE OR REPLACE FUNCTION refresh_matview(name) RETURNS VOID
+                        SECURITY DEFINER
+                        LANGUAGE plpgsql AS
+                        $$
+                        DECLARE
+                            matview ALIAS FOR $1;
+                            entry matviews%ROWTYPE;
+                        BEGIN
+
+                            SELECT * INTO entry FROM matviews WHERE mv_name = matview;
+
                             IF NOT FOUND THEN
                                  RAISE EXCEPTION 'Materialized view % does not exist.', matview;
                             END IF;
-                        
+
                             EXECUTE 'DELETE FROM ' || matview;
                             EXECUTE 'INSERT INTO ' || matview
                                 || ' SELECT * FROM ' || entry.v_name;
-                        
+
                             UPDATE matviews
                                 SET last_refresh=CURRENT_TIMESTAMP
                                 WHERE mv_name=matview;
-                        
+
                             RETURN;
                         END;
                         $$''')
@@ -2121,7 +2116,7 @@ databaseChangeLog = {
     changeSet(author: "jburgess (generated)", id: "1371625156687-180") {
         createView('''SELECT count(species.spcode) AS count, species.spcode AS "CAAB code", species.common_name, species.scientific_name FROM ((animal_release JOIN animal ON ((animal_release.animal_id = animal.id))) JOIN species ON ((animal.species_id = species.id))) GROUP BY species.spcode, species.common_name, species.scientific_name ORDER BY count(species.spcode) DESC;''', viewName: "releases_by_species")
     }
-    
+
     changeSet(author: "jburgess (generated)", id: "1371620272075-164") {
         createView('''SELECT valid_detection."timestamp", to_char(timezone('00:00'::text, valid_detection."timestamp"), 'YYYY-MM-DD HH24:MI:SS'::text) AS formatted_timestamp, installation_station.name AS station, installation_station.id AS station_id, installation_station.location, st_y(installation_station.location) AS latitude, st_x(installation_station.location) AS longitude, (((device_model.model_name)::text || '-'::text) || (device.serial_number)::text) AS receiver_name, COALESCE(sensor.transmitter_id, ''::character varying) AS sensor_id, COALESCE(((((((species.spcode)::text || ' - '::text) || (species.scientific_name)::text) || ' ('::text) || (species.common_name)::text) || ')'::text), ''::text) AS species_name, sec_user.name AS uploader, valid_detection.transmitter_id, organisation.name AS organisation, project.name AS project, installation.name AS installation, COALESCE(species.spcode, ''::character varying) AS spcode, animal_release.id AS animal_release_id, animal_release.embargo_date, project.id AS project_id, valid_detection.id AS detection_id, animal_release.project_id AS release_project_id, valid_detection.sensor_value, valid_detection.sensor_unit, valid_detection.provisional FROM (((((((((((((((valid_detection LEFT JOIN receiver_deployment ON ((valid_detection.receiver_deployment_id = receiver_deployment.id))) LEFT JOIN installation_station ON ((receiver_deployment.station_id = installation_station.id))) LEFT JOIN installation ON ((installation_station.installation_id = installation.id))) LEFT JOIN project ON ((installation.project_id = project.id))) LEFT JOIN device ON ((receiver_deployment.receiver_id = device.id))) LEFT JOIN device_model ON ((device.model_id = device_model.id))) LEFT JOIN receiver_download_file ON ((valid_detection.receiver_download_id = receiver_download_file.id))) LEFT JOIN sec_user ON ((receiver_download_file.requesting_user_id = sec_user.id))) LEFT JOIN organisation ON ((device.organisation_id = organisation.id))) LEFT JOIN detection_surgery ON ((valid_detection.id = detection_surgery.detection_id))) LEFT JOIN sensor ON ((detection_surgery.sensor_id = sensor.id))) LEFT JOIN surgery ON ((detection_surgery.surgery_id = surgery.id))) LEFT JOIN animal_release ON ((surgery.release_id = animal_release.id))) LEFT JOIN animal ON ((animal_release.animal_id = animal.id))) LEFT JOIN species ON ((animal.species_id = species.id)));''', viewName: "detection_extract_view")
     }
@@ -2129,7 +2124,7 @@ databaseChangeLog = {
     changeSet(author: "jburgess (generated)", id: "1371620272075-165") {
         createView('''SELECT detection_extract_view."timestamp", detection_extract_view.formatted_timestamp, detection_extract_view.station, detection_extract_view.station_id, detection_extract_view.location, detection_extract_view.latitude, detection_extract_view.longitude, detection_extract_view.receiver_name, detection_extract_view.sensor_id, detection_extract_view.species_name, detection_extract_view.uploader, detection_extract_view.transmitter_id, detection_extract_view.organisation, detection_extract_view.project, detection_extract_view.installation, detection_extract_view.spcode, detection_extract_view.animal_release_id, detection_extract_view.embargo_date, detection_extract_view.project_id, detection_extract_view.detection_id, scramblepoint(detection_extract_view.location) AS public_location, CASE WHEN isreleaseembargoed(detection_extract_view.animal_release_id) THEN 'embargoed'::text ELSE detection_extract_view.species_name END AS public_species_name, CASE WHEN isreleaseembargoed(detection_extract_view.animal_release_id) THEN 'embargoed'::character varying ELSE detection_extract_view.spcode END AS public_spcode FROM detection_extract_view;''', viewName: "public_detection_view")
     }
-    
+
     changeSet(author: "jburgess (generated)", id: "1371620272075-166") {
         createView("SELECT public_detection_view.station, public_detection_view.installation, public_detection_view.project, public_detection_view.public_location, st_x(public_detection_view.public_location) AS public_lon, st_y(public_detection_view.public_location) AS public_lat, ('http://localhost:8080/aatams/installationStation/show/'::text || public_detection_view.station_id) AS installation_station_url, ('http://localhost:8080/aatams/detection/list?filter.receiverDeployment.station.in=name&filter.receiverDeployment.station.in='::text || (public_detection_view.station)::text) AS detection_download_url, count(*) AS detection_count, ((log((GREATEST(count(*), (1)::bigint))::double precision) / log(((SELECT max(t.detection_count) AS max FROM (SELECT public_detection_view.station, count(public_detection_view.station) AS detection_count FROM public_detection_view GROUP BY public_detection_view.station) t))::double precision)) * (10)::double precision) AS relative_detection_count, public_detection_view.station_id FROM public_detection_view GROUP BY public_detection_view.station, public_detection_view.installation, public_detection_view.project, public_detection_view.public_location, public_detection_view.station_id UNION ALL SELECT installation_station.name AS station, installation.name AS installation, project.name AS project, scramblepoint(installation_station.location) AS public_location, st_x(scramblepoint(installation_station.location)) AS public_lon, st_y(scramblepoint(installation_station.location)) AS public_lat, ('http://localhost:8080/aatams/installationStation/show/'::text || installation_station.id) AS installation_station_url, '' AS detection_download_url, 0 AS detection_count, 0 AS relative_detection_count, installation_station.id AS station_id FROM (((installation_station LEFT JOIN installation ON ((installation_station.installation_id = installation.id))) LEFT JOIN project ON ((installation.project_id = project.id))) LEFT JOIN public_detection_view ON ((installation_station.id = public_detection_view.station_id))) WHERE (public_detection_view.station_id IS NULL);", viewName: "detection_count_per_station")
     }

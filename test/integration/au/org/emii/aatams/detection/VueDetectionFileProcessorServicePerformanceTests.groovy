@@ -5,16 +5,13 @@ import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import org.perf4j.StopWatch
 
-class VueDetectionFileProcessorServicePerformanceTests extends AbstractGrailsUnitTestCase
-{
+class VueDetectionFileProcessorServicePerformanceTests extends AbstractGrailsUnitTestCase {
     def vueDetectionFileProcessorService
 
-    void testProcess()
-    {
+    void testProcess() {
         ReceiverDownloadFile download
 
-        try
-        {
+        try {
             download = new ReceiverDownloadFile(type: ReceiverDownloadFileType.DETECTIONS_CSV)
             download.initialiseForProcessing("thefilename")
             download.requestingUser = Person.findByUsername('jbloggs')
@@ -33,8 +30,7 @@ class VueDetectionFileProcessorServicePerformanceTests extends AbstractGrailsUni
             println "Elapsed time (ms): ${elapsedTimeMs}"
             assertTrue(elapsedTimeMs < 350000)
         }
-        finally
-        {
+        finally {
             download = ReceiverDownloadFile.read(download?.id)
             download?.delete()
         }

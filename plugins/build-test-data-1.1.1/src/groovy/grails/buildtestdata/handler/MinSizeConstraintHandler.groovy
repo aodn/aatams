@@ -29,6 +29,6 @@ public class MinSizeConstraintHandler implements ConstraintHandler {
                     domain."addTo${capitalize(propertyName)}"(domainProp?.referencedPropertyType.buildWithoutSave([:], circularCheckList))
                 }
             }
-        }        
+        }
     }
 }

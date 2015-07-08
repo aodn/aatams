@@ -7,7 +7,7 @@ searchable {
         suggestQuery: [userFriendly: true]
     ]
     mirrorChanges = true
-    bulkIndexOnStartup = true
+    bulkIndexOnStartup = "fork"
     releaseLocksOnStartup = true
 }
 

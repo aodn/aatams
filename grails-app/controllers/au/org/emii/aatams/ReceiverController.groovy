@@ -2,51 +2,60 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.report.ReportController
 
-class ReceiverController extends ReportController
-{
+class ReceiverController extends ReportController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
     }
 
-    def list = 
-    {
+    def list = {
         doList("receiver")
     }
-    
-    def export =
-    {
+
+    def listInvalid = {
+        params.max = 1000
+
+        def invalidReceivers = Receiver.list().findAll { rxr ->
+            !rxr.deployments.findAll { deployment ->
+                !deployment.validate()
+            }.isEmpty()
+        }.sort { rxr ->
+
+            rxr.name
+        }
+
+        render(view: 'list', model: [entityList: invalidReceivers, total: invalidReceivers.size()])
+    }
+
+    def export = {
         doExport("receiver")
     }
 
     def create = {
         def receiverInstance = new Receiver()
         receiverInstance.properties = params
-        
+
         def defaultModel = ReceiverDeviceModel.findByModelName("VR2W")
-        if (defaultModel)
-        {
+        if (defaultModel) {
             receiverInstance.model = defaultModel
         }
-        
+
         return [receiverInstance: receiverInstance]
     }
 
     def save = {
-        
+
         def receiverInstance = new Receiver(params)
-        
-        if (receiverInstance.save(flush: true)) 
-        {
+
+        if (receiverInstance.save(flush: true)) {
             // Need to add update permission to subject.
             permissionUtilsService.receiverCreated(receiverInstance)
-            
+
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.toString()])}"
             redirect(action: "show", id: receiverInstance.id)
         }
-        else 
-        {
+        else {
             render(view: "create", model: [receiverInstance: receiverInstance])
         }
     }
@@ -79,7 +88,7 @@ class ReceiverController extends ReportController
             if (params.version) {
                 def version = params.version.toLong()
                 if (receiverInstance.version > version) {
-                    
+
                     receiverInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'receiver.label', default: 'Receiver')] as Object[], "Another user has updated this Receiver while you were editing")
                     render(view: "edit", model: [receiverInstance: receiverInstance])
                     return
@@ -103,13 +112,13 @@ class ReceiverController extends ReportController
     def delete = {
         def receiverInstance = Receiver.get(params.id)
         if (receiverInstance) {
-            try 
+            try
             {
                 receiverInstance.delete(flush: true)
-                
+
                 // Need to delete any update permissions for this receiver.
                 permissionUtilsService.receiverDeleted(receiverInstance)
-                
+
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'receiver.label', default: 'Receiver'), receiverInstance.toString()])}"
                 redirect(action: "list")
             }

@@ -19,8 +19,10 @@
             <g:if test="${flash.message}">
             <div class="message">${flash.message}</div>
             </g:if>
-            
-            <g:listControlForm name="receiver" formats="${['PDF', 'CSV']}" />       
+
+            <g:if test="${params.action != 'listInvalid'}" >
+                <g:listControlForm name="receiver" formats="${['PDF', 'CSV']}" />       
+            </g:if>
             
             <div class="list">
                 <table>
@@ -28,7 +30,6 @@
                         <tr>
                             <td/>
                             
-                            <%--<g:sortableColumn property="name" title="${message(code: 'receiver.name.label', default: 'ID')}" params="${params}"/> --%>
                             <th><g:message code="name.label" default="ID" /></th>
                         
                             <th><g:message code="receiver.model.label" default="Model" /></th>

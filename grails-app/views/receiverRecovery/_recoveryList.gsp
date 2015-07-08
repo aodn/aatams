@@ -56,10 +56,18 @@
                 </tr>
             </thead>
             <tbody>
-            <g:each in="${entityList}" status="i" var="receiverDeployment">
-                <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
 
-                    <td class="rowButton"><g:link class="show" controller="receiverDeployment" action="show" id="${receiverDeployment.id}">.</g:link></td>
+            <g:each in="${entityList}" status="i" var="receiverDeployment">
+
+                <shiro:user>
+                    <g:set var="hasErrors" value="${!receiverDeployment.validate()}" />
+                </shiro:user>
+
+                <tr class="${(i % 2) == 0 ? 'odd' : 'even'} ${hasErrors ? 'errors' : ''}">
+
+                    <td class="rowButton ">
+                        <g:link class="show" controller="receiverDeployment" action="show" id="${receiverDeployment.id}">.</g:link>
+                    </td>
 
                     <td><joda:format value="${receiverDeployment.initialisationDateTime}" /></td>
 

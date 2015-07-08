@@ -139,4 +139,24 @@ class ReceiverDeploymentTests extends GrailsUnitTestCase {
 
         assertEquals('VR2W-1234 @ BL1, deployed 2014-06-01T12:34:56+10:00', deployment.toString())
     }
+
+    void testInitAndDeployDateTimeValidation() {
+        assertDateTimeValidation(null, now, true)
+        assertDateTimeValidation(now, now, true)
+        assertDateTimeValidation(now, now.plusDays(1), true)
+
+        assertDateTimeValidation(now.plusDays(1), now, false)
+    }
+
+    def assertDateTimeValidation(initialisationDateTime, deploymentDateTime, expectValid) {
+       def deployment = new ReceiverDeployment(
+           mooringType: new MooringType(),
+           receiver: new Receiver(),
+           station: new InstallationStation(),
+           initialisationDateTime: initialisationDateTime,
+           deploymentDateTime: deploymentDateTime
+       )
+
+       assertTrue(expectValid == deployment.validate())
+    }
 }

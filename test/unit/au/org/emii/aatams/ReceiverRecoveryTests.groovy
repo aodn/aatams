@@ -1,10 +1,14 @@
 package au.org.emii.aatams
 
 import org.joda.time.DateTime
+import com.vividsolutions.jts.geom.Point
+import com.vividsolutions.jts.io.WKTReader
 
 import grails.test.*
 
 class ReceiverRecoveryTests extends GrailsUnitTestCase {
+
+    def now = new DateTime()
 
     void setUp() {
         super.setUp()
@@ -13,36 +17,22 @@ class ReceiverRecoveryTests extends GrailsUnitTestCase {
         mockDomain(ReceiverRecovery)
     }
 
-    // https://github.com/aodn/aatams/issues/127
-    void testRecoveryDateBeforeDeploymentDate() {
-        def recovery = newRecoveryWithDeployment(recoveryDateIsBeforeDeploymentDate: true)
-
-        assertNotNull(recovery.errors.recoveryDateTime)
-        assertTrue(recovery.errors.recoveryDateTime.contains('invalid.beforeDeploymentDateTime'))
+    void testRecoveryDateTimeValidation() {
+        assertRecoveryDateTimeValidation(now.minusDays(1), now, true)
+        assertRecoveryDateTimeValidation(now, now, false)
+        assertRecoveryDateTimeValidation(now, now.minusDays(1), false)
     }
 
-    void testRecoveryDateAfterDeploymentDate() {
-        def recovery = newRecoveryWithDeployment(recoveryDateIsBeforeDeploymentDate: false)
-
-        assertNull(recovery.errors.recoveryDateTime)
-    }
-
-    def newRecoveryWithDeployment(params) {
-        def deploymentDateTime = new DateTime()
-        def recoveryDateTime =
-            params.recoveryDateIsBeforeDeploymentDate ? deploymentDateTime.minusDays(1) : deploymentDateTime.plusDays(1)
-
-        def deployment = new ReceiverDeployment(
-            deploymentDateTime: deploymentDateTime
-        )
-
+    def assertRecoveryDateTimeValidation(deploymentDateTime, recoveryDateTime, expectValid) {
+        def deployment = new ReceiverDeployment(deploymentDateTime: deploymentDateTime)
         def recovery = new ReceiverRecovery(
-            deployment: deployment,
-            recoveryDateTime: recoveryDateTime
+            location: new WKTReader().read("POINT(30.1234 30.1234)"),
+            recoverer: new ProjectRole(),
+            status: DeviceStatus.RECOVERED,
+            recoveryDateTime: recoveryDateTime,
+            deployment: deployment
         )
 
-        recovery.save()
-
-        return recovery
+        assertTrue(expectValid == recovery.validate())
     }
 }

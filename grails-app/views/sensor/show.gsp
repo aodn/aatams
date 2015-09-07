@@ -1,4 +1,3 @@
-
 <%@ page import="au.org.emii.aatams.Sensor" %>
 <html>
     <head>
@@ -62,7 +61,7 @@
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="sensor.status.label" default="Status" /></td>
 
-                            <td valign="top" class="value"><g:link controller="deviceStatus" action="show" id="${sensorInstance?.status?.id}">${sensorInstance?.status?.encodeAsHTML()}</g:link></td>
+                            <td valign="top" class="value">${sensorInstance?.status?.encodeAsHTML()}</td>
 
                         </tr>
 

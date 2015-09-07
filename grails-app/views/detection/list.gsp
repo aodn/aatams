@@ -36,8 +36,6 @@
 
                             <g:sortableColumn property="transmitterId" title="${message(code: 'detection.transmitterId.label', default: 'Transmitter ID')}" params="${params}"/>
 
-                            <g:sortableColumn property="transmitterName" title="${message(code: 'detection.transmitterName.label', default: 'Transmitter Name')}" params="${params}"/>
-
                             <g:sortableColumn property="transmitterSerialNumber" title="${message(code: 'detection.transmitterSerialNumber.label', default: 'Transmitter Serial Number')}" params="${params}"/>
 
                             <g:sortableColumn property="stationName" title="${message(code: 'detection.stationName.label', default: 'Station Name')}" params="${params}"/>
@@ -60,8 +58,6 @@
                             <td><g:link controller="receiverDeployment" action="show" id="${detectionInstance?.receiverDeployment?.id}">${detectionInstance.receiverDeployment}</g:link></td>
 
                             <td>${detectionInstance.transmitterId}</td>
-
-                            <td>${detectionInstance.transmitterName}</td>
 
                             <td>${detectionInstance.transmitterSerialNumber}</td>
 

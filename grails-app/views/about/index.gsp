@@ -15,11 +15,11 @@
 
     <div class="body">
 
-        <h1>Australian Animal Tagging and Monitoring System (AATAMS)</h1>
+        <h1><g:message code="default.application.fullTitle" /></h1>
 
         <div class="dialog">
             <div style="width: 80%; padding:20px 20px 20px 20px;">
-                <p>The Australian Animal Tagging and Monitoring System (AATAMS)
+                <p>The <g:message code="default.application.fullTitle" />
                 is one of eleven facilities of the Integrated Marine Observing System (IMOS).
                 AATAMS represents the higher biological monitoring of the marine environment
                 for the IMOS program.<br/><br/>

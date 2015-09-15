@@ -29,7 +29,7 @@ class TestBase extends GebReportingTest  {
     protected void login(username, password)  {
         to HomePage
 
-        assert heading.text() == "Australian Animal Tagging and Monitoring System (AATAMS)"
+        assert heading.text() == "Australian Animal Tracking and Monitoring System (AATAMS)"
         loginLink.click()
 
         assert at(LoginPage)

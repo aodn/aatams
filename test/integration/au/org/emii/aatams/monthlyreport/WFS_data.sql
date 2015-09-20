@@ -1,4 +1,4 @@
-SELECT DISTINCT vd.id AS detection_id,
+SELECT DISTINCT vd.detection_id AS detection_id,
 	p.name AS project_name,
 	i.name AS installation_name,
 	ist.name AS station_name,

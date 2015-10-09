@@ -92,7 +92,7 @@ class InstallationStation {
     }
 
     def getNumDeployments() {
-        deployments ? deployments.count() : 0
+        deployments ? deployments.size() : 0
     }
 
     /**
@@ -124,7 +124,7 @@ class InstallationStation {
     }
 
     boolean hasDetections() {
-        return (detectionCount() != 0)
+        return (detectionCount != 0)
     }
 
     long getDetectionCount() {

@@ -18,4 +18,5 @@ databaseChangeLog = {
     include file: 'device_status_as_enum.groovy'
     include file: 'deployment_related_tidy_up.groovy'
     include file: 'simplified_detection_count.groovy'
+    include file: 'rebuild_detection_view.groovy'
 }

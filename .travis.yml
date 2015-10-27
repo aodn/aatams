@@ -34,8 +34,3 @@ before_script:
 script:
   - grails test-app --echoOut
   - grails prod war
-
-notifications:
-  email:
-    - jkburges@gmail.com
-    - dnahodil@utas.edu.au

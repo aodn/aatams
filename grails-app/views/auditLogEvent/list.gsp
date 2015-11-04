@@ -17,52 +17,60 @@
             <g:if test="${flash.message}">
                 <div class="message">${flash.message}</div>
             </g:if>
-            
+
             <div class="list">
                 <table>
                     <thead>
                         <tr>
-                        
+
                             <td>
 
                                <g:sortableColumn property="dateCreated" title="Date" />
-                        
+
                             <g:sortableColumn property="className" title="Type" />
 
                             <g:sortableColumn property="eventName" title="Action" />
 
                             <th>Description</th>
-                            
+
                             <shiro:hasRole name="SysAdmin">
                                 <g:sortableColumn property="actor" title="User" />
                             </shiro:hasRole>
-                        
+
                         </tr>
                     </thead>
                     <tbody>
                         <g:each in="${auditLogEventInstanceList}" status="i" var="auditLogEventInstance">
                             <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
-                            
+
                                 <td class="rowButton">
-                                    <g:link class="show" 
-                                            controller="${WordUtils.uncapitalize(GrailsNameUtils.getShortName(auditLogEventInstance.className))}" 
-                                            action="show" 
+                                    <g:link class="show"
+                                            controller="${WordUtils.uncapitalize(GrailsNameUtils.getShortName(auditLogEventInstance.className))}"
+                                            action="show"
                                             id="${auditLogEventInstance.persistedObjectId}">.
                                     </g:link>
                                 </td>
-                                
+
                                 <td><g:formatDate format="dd/MM/yyyy HH:mm:ss" date="${auditLogEventInstance.dateCreated}" /></td>
-                            
+
                                 <td>${GrailsNameUtils.getShortName(auditLogEventInstance.className)}</td>
-    
+
                                 <td>${fieldValue(bean:auditLogEventInstance, field:'eventName')}</td>
-                            
+
                                 <td>${String.valueOf(ClassUtils.getClass(auditLogEventInstance.className).get(auditLogEventInstance.persistedObjectId))}</td>
-                            
+
                                 <shiro:hasRole name="SysAdmin">
-                                    <td>${fieldValue(bean:auditLogEventInstance, field:'actor')}</td>
+                                    <td>
+                                      <g:set var="person" value="${auditLogEventInstance.person}"/>
+                                      <g:if test="${person}">
+                                        <a href="${createLink(controller: 'person', action: 'show', id: person.id)}">${person}</a>
+                                      </g:if>
+                                      <g:else>
+                                        ${fieldValue(bean:auditLogEventInstance, field:'actor')}
+                                      </g:else>
+                                    </td>
                                 </shiro:hasRole>
-                            
+
                             </tr>
                         </g:each>
                     </tbody>

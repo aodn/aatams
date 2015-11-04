@@ -16,15 +16,28 @@ class AuditLogEventController extends org.codehaus.groovy.grails.plugins.orm.aud
             params.order = 'desc'
         }
 
-        if (SecurityUtils.subject.hasRole("SysAdmin")) {
-            [auditLogEventInstanceList: AuditLogEvent.list(params), auditLogEventInstanceTotal: AuditLogEvent.count()]
+        def result
+        if (SecurityUtils.subject.hasRole("SysAdmin"))
+        {
+            result = [auditLogEventInstanceList: AuditLogEvent.list(params), auditLogEventInstanceTotal: AuditLogEvent.count()]
         }
         else {
             Person user = Person.get(SecurityUtils.subject.principal)
             assert(user)
 
-            [auditLogEventInstanceList: AuditLogEvent.findAllByActor(user.username, params),
+            result = [auditLogEventInstanceList: AuditLogEvent.findAllByActor(user.username, params),
              auditLogEventInstanceTotal: AuditLogEvent.findAllByActor(user.username).size()]
+        }
+
+        insertActor(result)
+
+        return result
+    }
+
+    def insertActor(result) {
+        result.auditLogEventInstanceList.each { event ->
+            def actor = event.actor == 'system' ? null : event.actor
+            event.metaClass.person = Person.get(actor)
         }
     }
 }

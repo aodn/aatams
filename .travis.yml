@@ -16,7 +16,7 @@ env:
     - TZ="Australia/Hobart" JAVA_OPTS="-Xmx1G -Xms512m -XX:PermSize=64m -XX:MaxPermSize=512m"
 
 addons:
-  postgresql: "9.3"
+  postgresql: "9.4"
 
 before_install:
   - rm -rf ~/.gvm

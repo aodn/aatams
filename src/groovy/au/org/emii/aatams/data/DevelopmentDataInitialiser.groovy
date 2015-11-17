@@ -1010,10 +1010,13 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
         // Animals and Animal Releases etc.
         //
         CaabSpecies whiteShark = CaabSpecies.findBySpcode("37010003")
+        CaabSpecies bluefinTuna = CaabSpecies.findBySpcode("37441004")
+        CaabSpecies rightWhale = CaabSpecies.findBySpcode("41110001")
         Sex male = Sex.findBySex('MALE')
 
-        Animal whiteShark1 = new Animal(species:whiteShark,
-                sex:male).save(failOnError:true)
+        Animal whiteShark1 = new Animal(species: whiteShark, sex: male).save(failOnError: true)
+        Animal bluefinTuna1 = new Animal(species: bluefinTuna, sex: male).save(failOnError: true)
+        Animal rightWhale1 = new Animal(species: rightWhale, sex: male).save(failOnError: true)
 
         SurgeryTreatmentType antibiotic = SurgeryTreatmentType.findByType('ANTIBIOTIC')
         SurgeryType external = SurgeryType.findByType('EXTERNAL')
@@ -1124,6 +1127,51 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
         createDetections(rx1Bondi, rx1, embargoedTag, export)
         createDetections(rx1Bondi, rx1, protectedTag, export)
         createDetections(rx1Bondi, rx1, protectedPastEmbargoTag, export)
+
+        // Add more surgeries and releases for unembargoed tag, No extra detections, though
+        AnimalRelease secondUnembargoedRelease = new AnimalRelease(
+            project: unembargoedProject,
+            surgeries: [],
+            measurements: [],
+            animal:bluefinTuna1,
+            captureLocality: 'Neptune Islands',
+            captureLocation: (Point) reader.read("POINT(10.1234 20.1234)"),
+            captureDateTime: new DateTime("2010-02-14T15:10:00"),
+            captureMethod: net,
+            releaseLocality: 'Neptune Islands',
+            releaseLocation: (Point) reader.read("POINT(30.1234 40.1234)"),
+            releaseDateTime: new DateTime("2010-02-14T14:15:00")).save(failOnError: true)
+
+        Surgery secondUnembargoedSurgery = new Surgery(
+            release: secondUnembargoedRelease,
+            tag: unembargoedTag,
+            timestamp: new DateTime("2011-05-14T00:00:00"),
+            type: external,
+            treatmentType: antibiotic)
+        unembargoedTag.addToSurgeries(secondUnembargoedSurgery).save(failOnError: true)
+        secondUnembargoedRelease.addToSurgeries(secondUnembargoedSurgery).save(failOnError: true)
+
+        AnimalRelease thirdUnembargoedRelease = new AnimalRelease(
+            project: unembargoedProject,
+            surgeries: [],
+            measurements: [],
+            animal: rightWhale1,
+            captureLocality: 'Neptune Islands',
+            captureLocation: (Point) reader.read("POINT(10.1234 20.1234)"),
+            captureDateTime: new DateTime("2010-02-18T15:10:00"),
+            captureMethod: net,
+            releaseLocality: 'Neptune Islands',
+            releaseLocation: (Point) reader.read("POINT(30.1234 40.1234)"),
+            releaseDateTime: new DateTime("2010-02-18T14:15:00")).save(failOnError: true)
+
+        Surgery thirdUnembargoedSurgery = new Surgery(
+            release: thirdUnembargoedRelease,
+            tag: unembargoedTag,
+            timestamp: new DateTime("2011-05-18T00:00:00"),
+            type: external,
+            treatmentType: antibiotic)
+        unembargoedTag.addToSurgeries(thirdUnembargoedSurgery).save(failOnError: true)
+        thirdUnembargoedRelease.addToSurgeries(thirdUnembargoedSurgery).save(failOnError: true)
     }
 
     private void initStatistics() {

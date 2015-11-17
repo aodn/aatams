@@ -12,9 +12,8 @@ databaseChangeLog = {
                     else
                         ('infinity')::timestamptz
                     end
-                as end_timestamp_timestamp,
+                as end_timestamp_timestamp
 
-                rank() OVER (partition BY tag_id order by timestamp_timestamp ) = 1 as first_surgery
             from surgery
 
             ''',

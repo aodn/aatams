@@ -1,6 +1,9 @@
 package au.org.emii.aatams.detection
 
 import au.org.emii.aatams.*
+import com.vividsolutions.jts.geom.Coordinate
+import com.vividsolutions.jts.geom.GeometryFactory
+import com.vividsolutions.jts.geom.Point
 import org.joda.time.DateTime
 
 class DetectionTests extends GroovyTestCase {
@@ -114,13 +117,102 @@ class DetectionTests extends GroovyTestCase {
         assertInvalidReason(InvalidDetectionReason.UNKNOWN_RECEIVER, detection)
     }
 
-    def createDetection() {
+    def testNoSurgery() {
+        def detection1 = createDetection(yesterday)
+        def detection2 = createDetection(tomorrow)
+
+
+        // def surgery = createS
+        def d1 = DetectionView.get(detection1.id, dataSource)
+        println "******* d1 $detection1.id"
+        println "d1.speciesName ${ d1.getSpeciesName() } "
+        assertEquals('', d1.getSpeciesName())
+
+
+        def d2 = DetectionView.get(detection2.id, dataSource)
+        println "******* d2 $detection2.id"
+        assertEquals('', d2.getSpeciesName())
+    }
+
+    def testWithSurgery() {
+
+        def detection1 = createDetection(yesterday)
+        def detection2 = createDetection(tomorrow)
+        def surgery = createSurgery(now)
+
+        // def surgery = createS
+        def d1 = DetectionView.get(detection1.id, dataSource)
+        println "******* d1 $detection1.id"
+        println "d1.speciesName ${ d1.getSpeciesName() } "
+        assertEquals('', d1.getSpeciesName())
+
+
+        def d2 = DetectionView.get(detection2.id, dataSource)
+        println "******* d2 $detection2.id"
+        println "d2.speciesName ${ d2.getSpeciesName() } "
+
+        assertEquals('', d2.getSpeciesName())
+
+    }
+
+    def newPoint() {
+        return new GeometryFactory().createPoint(new Coordinate(1, 2))
+    }
+
+    def createSurgery(timestamp) {
+
+        def project = Project.list()[0]
+        def animal = Animal.list()[0]
+        def method = CaptureMethod.list()[0]
+
+        AnimalRelease release = new AnimalRelease(
+                project: project,
+                surgeries: [],
+                measurements: [],
+                animal:animal,
+                captureLocality: 'Neptune Islands',
+                captureLocation: newPoint(),
+                captureDateTime: new DateTime("2010-02-14T15:10:00"),
+                captureMethod: method,
+                releaseLocality: 'Neptune Islands',
+                releaseLocation: newPoint(),
+                releaseDateTime: new DateTime("2010-02-14T14:15:00")).save(failOnError: true)
+
+        def tag = Tag.list()[0]
+        def type = SurgeryType.list()[0]
+        def treatmentType = SurgeryTreatmentType.list()[0]
+
+        Surgery surgery = new Surgery(
+                release: release,
+                tag: tag,
+                timestamp: timestamp,   // the important bit
+                type: type,
+                treatmentType: treatmentType)
+
+        tag.addToSurgeries(surgery).save(failOnError: true)
+        release.addToSurgeries(surgery).save(failOnError: true)
+
+
+        println "release $release"
+        println "surgery $surgery"
+
+        return surgery.save(flush: true, failOnError: true)
+    }
+    def createDetection(timestamp = now) {
+
+        // println "here1";
+
         def download = ReceiverDownloadFile.buildLazy().save(flush: true)
-        return new Detection(timestamp: now,
+        return new Detection(timestamp: timestamp,
                              receiverName: 'VR2W-7654',
                              transmitterId: 'A69-1303-6789',
                              receiverDownloadId: download.id).save(dataSource)
+
+
     }
+
+
+
 
     def createReceiver() {
         return Receiver.buildLazy(model: ReceiverDeviceModel.buildLazy(modelName: 'VR2W'),

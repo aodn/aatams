@@ -140,8 +140,10 @@ class DetectionTests extends GroovyTestCase {
         assertEquals('37010003 - Carcharodon carcharias (White Shark)', d2.getSpeciesName())
     }
 
+    // TODO
     // test to make sure the detection is associated with the correct surgery in time
-
+    // make sure that all the required fields are null, when detection occurs before the surgery
+    // performance
 
     def newPoint() {
         return new GeometryFactory().createPoint(new Coordinate(1, 2))

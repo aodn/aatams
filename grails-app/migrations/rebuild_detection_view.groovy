@@ -3,17 +3,20 @@ databaseChangeLog = {
         createView(
             '''
               select
-                  surgery.*,
-                  case    
-                      when 
-                          lead(timestamp_timestamp) OVER (partition BY tag_id order by timestamp_timestamp ) is not null
-                      then
-                          lead(timestamp_timestamp) OVER (partition BY tag_id order by timestamp_timestamp )
-                      else
-                          ('infinity')::timestamptz
-                      end
-              as end_timestamp_timestamp 
-              from surgery
+                surgery.*,
+                case
+                    when
+                        lead(timestamp_timestamp) OVER (partition BY tag_id order by timestamp_timestamp ) is not null
+                    then
+                        lead(timestamp_timestamp) OVER (partition BY tag_id order by timestamp_timestamp )
+                    else
+                        ('infinity')::timestamptz
+                    end
+                as end_timestamp_timestamp,
+
+                rank() OVER (partition BY tag_id order by timestamp_timestamp ) = 1 as first_surgery
+            from surgery
+
             ''',
             viewName: 'surgery_with_end_date'
         )
@@ -77,12 +80,17 @@ databaseChangeLog = {
 
                 LEFT JOIN sensor ON detection.transmitter_id = sensor.transmitter_id
                 LEFT JOIN device tag ON sensor.tag_id = tag.id
-                LEFT JOIN surgery_with_end_date surgery ON tag.id = surgery.tag_id
+                LEFT JOIN surgery_with_end_date surgery ON tag.id = surgery.tag_id AND (
+                    ((detection."timestamp" >= surgery.timestamp_timestamp) AND (detection."timestamp" < surgery.end_timestamp_timestamp))
+
+
+                )
+
                 LEFT JOIN animal_release release ON surgery.release_id = release.id
                 LEFT JOIN animal ON release.animal_id = animal.id
                 LEFT JOIN species ON animal.species_id = species.id
-                WHERE ((detection."timestamp" >= surgery.timestamp_timestamp) AND (detection."timestamp" < surgery.end_timestamp_timestamp)) 
-                  OR surgery."timestamp_timestamp" is null
+
+
             ''',
             viewName: 'detection_view'
         )

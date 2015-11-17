@@ -134,11 +134,14 @@ class DetectionTests extends GroovyTestCase {
         createSurgery(now)
 
         def d1 = DetectionView.get(detection1.id, dataSource)
-        assertEquals('37010003 - Carcharodon carcharias (White Shark)', d1.getSpeciesName())
+        assertEquals('', d1.getSpeciesName())
 
         def d2 = DetectionView.get(detection2.id, dataSource)
         assertEquals('37010003 - Carcharodon carcharias (White Shark)', d2.getSpeciesName())
     }
+    
+    // test to make sure the detection is associated with the correct surgery in time
+
 
     def newPoint() {
         return new GeometryFactory().createPoint(new Coordinate(1, 2))

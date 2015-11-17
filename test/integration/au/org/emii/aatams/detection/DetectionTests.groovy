@@ -144,6 +144,7 @@ class DetectionTests extends GroovyTestCase {
     // test to make sure the detection is associated with the correct surgery in time
     // make sure that all the required fields are null, when detection occurs before the surgery
     // performance
+    // test multiple case of multiple surgeries, that the result is between
 
     def newPoint() {
         return new GeometryFactory().createPoint(new Coordinate(1, 2))

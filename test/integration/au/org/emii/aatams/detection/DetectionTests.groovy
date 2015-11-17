@@ -139,7 +139,7 @@ class DetectionTests extends GroovyTestCase {
         def d2 = DetectionView.get(detection2.id, dataSource)
         assertEquals('37010003 - Carcharodon carcharias (White Shark)', d2.getSpeciesName())
     }
-    
+
     // test to make sure the detection is associated with the correct surgery in time
 
 

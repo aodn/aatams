@@ -142,16 +142,17 @@ class DetectionTests extends GroovyTestCase {
 
         // def surgery = createS
         def d1 = DetectionView.get(detection1.id, dataSource)
-        println "******* d1 $detection1.id"
+        println "******* d1 $detection1."
+
         println "d1.speciesName ${ d1.getSpeciesName() } "
-        assertEquals('', d1.getSpeciesName())
+        assertEquals('37010003 - Carcharodon carcharias (White Shark)', d1.getSpeciesName())
 
 
         def d2 = DetectionView.get(detection2.id, dataSource)
         println "******* d2 $detection2.id"
         println "d2.speciesName ${ d2.getSpeciesName() } "
 
-        assertEquals('', d2.getSpeciesName())
+        assertEquals('37010003 - Carcharodon carcharias (White Shark)', d2.getSpeciesName())
 
     }
 
@@ -178,7 +179,41 @@ class DetectionTests extends GroovyTestCase {
                 releaseLocation: newPoint(),
                 releaseDateTime: new DateTime("2010-02-14T14:15:00")).save(failOnError: true)
 
-        def tag = Tag.list()[0]
+        def pinger = TransmitterType.findByTransmitterTypeName('PINGER')
+
+        def sensor = Sensor.buildLazy( pingCode: 6789, transmitterType: pinger).save(flush: true)
+
+
+        println "codeMap list"
+        println CodeMap.list()
+
+        println "Sensor: $sensor"
+
+        println Tag.count()
+        Tag tag = Tag.buildLazy(serialNumber: '1000001', codeMap: CodeMap.findByCodeMap('A69-1303')).save(flush: true)
+
+        tag.addToSensors(sensor)
+        tag.save(flush: true, failOnError: true)
+
+        println Tag.count()
+        println "Tag"
+        println "$tag"
+        println tag.deviceID
+        println tag.pinger.transmitterId
+
+
+        println tag.deviceID
+
+
+        println "tag_id for surgery = $tag"
+
+    /*    println "========================="
+        Tag.list().each {
+            println it.pinger
+            println it.deviceID
+        }
+        println "========================="
+*/
         def type = SurgeryType.list()[0]
         def treatmentType = SurgeryTreatmentType.list()[0]
 

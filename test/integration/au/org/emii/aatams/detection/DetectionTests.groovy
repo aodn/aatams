@@ -160,10 +160,10 @@ class DetectionTests extends GroovyTestCase {
         def detection2 = createDetection(today)
         def detection3 = createDetection(dayAfterTomorrow)
 
-        // all detections when no surgeries should have null fields
+        // no surgeries - all detections will have null fields
         detectionHasNullFields(detection1)
         detectionHasNullFields(detection2)
-        detectionHasNullFields(detection2)
+        detectionHasNullFields(detection3)
 
         // create surgery 1
         createSurgery(yesterday, whiteShark)
@@ -174,7 +174,7 @@ class DetectionTests extends GroovyTestCase {
         // detection 2 after surgery has expected fields
         detectionHasExpectedFields(detection2, '37010003 - Carcharodon carcharias (White Shark)')
 
-        // detection 3 also after surgery has expected fields
+        // detection 3 after surgery has expected fields
         detectionHasExpectedFields(detection3, '37010003 - Carcharodon carcharias (White Shark)')
 
         // create surgery 2

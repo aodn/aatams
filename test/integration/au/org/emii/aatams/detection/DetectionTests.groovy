@@ -143,11 +143,12 @@ class DetectionTests extends GroovyTestCase {
         }
 
         def detectionHasNullFields = { detection ->
-            assertEquals('', detection.getSpeciesName())
-            assertNull(detection.embargoDate)
-            assertNull(detection.releaseId)
-            assertNull(detection.releaseProjectId)
-            assertNull(detection.surgeryId)
+            def dv = DetectionView.get(detection.id, dataSource)
+            assertEquals('', dv.getSpeciesName())
+            assertNull(dv.embargoDate)
+            assertNull(dv.releaseId)
+            assertNull(dv.releaseProjectId)
+            assertNull(dv.surgeryId)
         }
 
         def receiver = createReceiver()
@@ -165,8 +166,8 @@ class DetectionTests extends GroovyTestCase {
         def detection3 = createDetection(dayAfterTomorrow)
 
         // test detection d1 before surgery has null fields
-        def d1 = DetectionView.get(detection1.id, dataSource)
-        detectionHasNullFields(d1)
+        //def d1 = DetectionView.get(detection1.id, dataSource)
+        detectionHasNullFields(detection1)
 
         // test detection 2 after surgery has expected fields
         //def d2 = DetectionView.get(detection2.id, dataSource)

@@ -129,30 +129,19 @@ class DetectionTests extends GroovyTestCase {
     }
 
     def testWithSurgery() {
-
-        // we know the receiver
+        
         def receiver = createReceiver()
         def deployment = createDeployment(receiver: receiver, initDateTime: dayBeforeYesterday)
-        def recovery = createRecovery(deployment: deployment, recoveryDateTime: dayAfterTomorrow)
+        createRecovery(deployment: deployment, recoveryDateTime: dayAfterTomorrow)
 
         def detection1 = createDetection(yesterday)
         def detection2 = createDetection(dayAfterTomorrow)
-
-        //def animal = Animal.list()[0]
-
-        println "===========\nspecies list"
-        Species.list().each {
-            println it.name
-            println it.toString()
-        }
 
         def whiteShark= Animal.findBySpecies( Species.findByNameLike('%Carcharodon carcharias%'))
         createSurgery(now, whiteShark)
 
         def d1 = DetectionView.get(detection1.id, dataSource)
         assertEquals('', d1.getSpeciesName())
-
-        // issue with lazy mocking meaning that values are already null
 
         assertNull(d1.embargoDate)
         assertNull(d1.releaseId)

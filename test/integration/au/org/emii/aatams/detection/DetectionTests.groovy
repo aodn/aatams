@@ -132,9 +132,7 @@ class DetectionTests extends GroovyTestCase {
     def testWithSurgery() {
 
         def detectionHasExpectedFields = { detection, expectedSpecies ->
-
             def dv = DetectionView.get(detection.id, dataSource)
-
             assertEquals(expectedSpecies, dv.getSpeciesName())
             assertNotNull(dv.embargoDate)
             assertNotNull(dv.releaseId)
@@ -159,33 +157,36 @@ class DetectionTests extends GroovyTestCase {
         def southernBluefinTuna= Animal.findBySpecies( Species.findByNameLike('%Southern Bluefin Tuna%'))
 
         def detection1 = createDetection(dayBeforeYesterday)
-        // create surgery 1
-        createSurgery(yesterday, whiteShark)
         def detection2 = createDetection(today)
-        // surgery 2 will be created here
         def detection3 = createDetection(dayAfterTomorrow)
 
-        // test detection d1 before surgery has null fields
-        //def d1 = DetectionView.get(detection1.id, dataSource)
+        // all detections when no surgeries should have null fields
+        detectionHasNullFields(detection1)
+        detectionHasNullFields(detection2)
+        detectionHasNullFields(detection2)
+
+        // create surgery 1
+        createSurgery(yesterday, whiteShark)
+
+        // detection 1 before surgery has null fields
         detectionHasNullFields(detection1)
 
-        // test detection 2 after surgery has expected fields
-        //def d2 = DetectionView.get(detection2.id, dataSource)
+        // detection 2 after surgery has expected fields
         detectionHasExpectedFields(detection2, '37010003 - Carcharodon carcharias (White Shark)')
 
-        // test detection 3 after surgery also has expected fields
-        //def d3 = DetectionView.get(detection3.id, dataSource)
+        // detection 3 also after surgery has expected fields
         detectionHasExpectedFields(detection3, '37010003 - Carcharodon carcharias (White Shark)')
 
         // create surgery 2
         createSurgery(tomorrow, southernBluefinTuna)
-        //d2.refresh(dataSource)
-        //d3.refresh(dataSource)
 
-        // d2 should be unchanged and refer to surgery 1
+        // detection 1 unchanged
+        detectionHasNullFields(detection1)
+
+        // detection 2 should be unchanged and refer to surgery 1
         detectionHasExpectedFields(detection2, '37010003 - Carcharodon carcharias (White Shark)')
 
-        // d3 should refer to second surgery
+        // detection 3 should refer to second surgery
         detectionHasExpectedFields(detection3, '37441004 - Thunnus maccoyii (Southern Bluefin Tuna)')
     }
 

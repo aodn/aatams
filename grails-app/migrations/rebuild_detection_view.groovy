@@ -59,7 +59,7 @@ databaseChangeLog = {
                 surgery.id AS surgery_id,
                 release.id AS release_id,
                 release.project_id AS release_project_id,
-                embargo_date
+                release.embargo_date
 
               FROM detection
 
@@ -81,8 +81,6 @@ databaseChangeLog = {
                 LEFT JOIN device tag ON sensor.tag_id = tag.id
                 LEFT JOIN surgery_with_end_date surgery ON tag.id = surgery.tag_id AND (
                     ((detection."timestamp" >= surgery.timestamp_timestamp) AND (detection."timestamp" < surgery.end_timestamp_timestamp))
-
-
                 )
 
                 LEFT JOIN animal_release release ON surgery.release_id = release.id

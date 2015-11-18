@@ -129,15 +129,54 @@ class DetectionTests extends GroovyTestCase {
     }
 
     def testWithSurgery() {
+
+        // we know the receiver
+        def receiver = createReceiver()
+        def deployment = createDeployment(receiver: receiver, initDateTime: dayBeforeYesterday)
+        def recovery = createRecovery(deployment: deployment, recoveryDateTime: dayAfterTomorrow)
+
         def detection1 = createDetection(yesterday)
-        def detection2 = createDetection(tomorrow)
-        createSurgery(now)
+        def detection2 = createDetection(dayAfterTomorrow)
+
+        //def animal = Animal.list()[0]
+
+        println "===========\nspecies list"
+        Species.list().each {
+            println it.name
+            println it.toString()
+        }
+
+        def whiteShark= Animal.findBySpecies( Species.findByNameLike('%Carcharodon carcharias%'))
+        createSurgery(now, whiteShark)
 
         def d1 = DetectionView.get(detection1.id, dataSource)
         assertEquals('', d1.getSpeciesName())
 
+        // issue with lazy mocking meaning that values are already null
+
+        assertNull(d1.embargoDate)
+        assertNull(d1.releaseId)
+        assertNull(d1.releaseProjectId)
+        assertNull(d1.surgeryId)
+
         def d2 = DetectionView.get(detection2.id, dataSource)
+
         assertEquals('37010003 - Carcharodon carcharias (White Shark)', d2.getSpeciesName())
+        assertNotNull(d2.embargoDate)
+        assertNotNull(d2.releaseId)
+        assertNotNull(d2.releaseProjectId)
+        assertNotNull(d2.surgeryId)
+
+        def southernBluefinTuna= Animal.findBySpecies( Species.findByNameLike('%Southern Bluefin Tuna%'))
+        createSurgery(tomorrow, southernBluefinTuna)
+
+        d2.refresh(dataSource)
+
+        assertEquals('37441004 - Thunnus maccoyii (Southern Bluefin Tuna)', d2.getSpeciesName())
+        assertNotNull(d2.embargoDate)
+        assertNotNull(d2.releaseId)
+        assertNotNull(d2.releaseProjectId)
+        assertNotNull(d2.surgeryId)
     }
 
     // TODO
@@ -150,16 +189,17 @@ class DetectionTests extends GroovyTestCase {
         return new GeometryFactory().createPoint(new Coordinate(1, 2))
     }
 
-    def createSurgery(timestamp) {
+    def createSurgery(timestamp, animal) {
 
         def project = Project.list()[0]
-        def animal = Animal.list()[0]
+
         def method = CaptureMethod.list()[0]
 
         AnimalRelease release = new AnimalRelease(
                 project: project,
                 surgeries: [],
                 measurements: [],
+                embargoDate: new Date(2050 - 1900, 1, 1),
                 animal:animal,
                 captureLocality: 'Neptune Islands',
                 captureLocation: newPoint(),

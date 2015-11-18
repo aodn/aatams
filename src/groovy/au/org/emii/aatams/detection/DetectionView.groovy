@@ -27,6 +27,7 @@ import static org.jooq.impl.DSL.*
  *
  * Aside from inserting detections to the DB, this is the class with which client code will typically interact.
  */
+
 class DetectionView extends Detection implements Embargoable {
 
     DateTime embargoDate
@@ -122,7 +123,11 @@ class DetectionView extends Detection implements Embargoable {
         Detection.fromSqlRow(row, detection)
 
         detection.commonName = row.common_name
-        detection.embargoDate = new DateTime(row.embargo_date).withZone(DateTimeZone.UTC)
+
+        if(row.embargo_date) {
+            detection.embargoDate = new DateTime(row.embargo_date).withZone(DateTimeZone.UTC)
+        }
+
         detection.invalidReason = row.invalid_reason
         detection.organisationName = row.organisation_name
         detection.receiverDeploymentId = row.receiver_deployment_id

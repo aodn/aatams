@@ -132,11 +132,14 @@ class DetectionTests extends GroovyTestCase {
     def testWithSurgery() {
 
         def detectionHasExpectedFields = { detection, expectedSpecies ->
-            assertEquals(expectedSpecies, detection.getSpeciesName())
-            assertNotNull(detection.embargoDate)
-            assertNotNull(detection.releaseId)
-            assertNotNull(detection.releaseProjectId)
-            assertNotNull(detection.surgeryId)
+
+            def dv = DetectionView.get(detection.id, dataSource)
+
+            assertEquals(expectedSpecies, dv.getSpeciesName())
+            assertNotNull(dv.embargoDate)
+            assertNotNull(dv.releaseId)
+            assertNotNull(dv.releaseProjectId)
+            assertNotNull(dv.surgeryId)
         }
 
         def detectionHasNullFields = { detection ->
@@ -166,23 +169,23 @@ class DetectionTests extends GroovyTestCase {
         detectionHasNullFields(d1)
 
         // test detection 2 after surgery has expected fields
-        def d2 = DetectionView.get(detection2.id, dataSource)
-        detectionHasExpectedFields(d2, '37010003 - Carcharodon carcharias (White Shark)')
+        //def d2 = DetectionView.get(detection2.id, dataSource)
+        detectionHasExpectedFields(detection2, '37010003 - Carcharodon carcharias (White Shark)')
 
         // test detection 3 after surgery also has expected fields
-        def d3 = DetectionView.get(detection3.id, dataSource)
-        detectionHasExpectedFields(d3, '37010003 - Carcharodon carcharias (White Shark)')
-        
+        //def d3 = DetectionView.get(detection3.id, dataSource)
+        detectionHasExpectedFields(detection3, '37010003 - Carcharodon carcharias (White Shark)')
+
         // create surgery 2
         createSurgery(tomorrow, southernBluefinTuna)
-        d2.refresh(dataSource)
-        d3.refresh(dataSource)
+        //d2.refresh(dataSource)
+        //d3.refresh(dataSource)
 
         // d2 should be unchanged and refer to surgery 1
-        detectionHasExpectedFields(d2, '37010003 - Carcharodon carcharias (White Shark)')
+        detectionHasExpectedFields(detection2, '37010003 - Carcharodon carcharias (White Shark)')
 
         // d3 should refer to second surgery
-        detectionHasExpectedFields(d3, '37441004 - Thunnus maccoyii (Southern Bluefin Tuna)')
+        detectionHasExpectedFields(detection3, '37441004 - Thunnus maccoyii (Southern Bluefin Tuna)')
     }
 
     // TODO

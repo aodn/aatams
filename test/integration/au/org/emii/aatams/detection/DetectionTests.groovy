@@ -11,6 +11,7 @@ class DetectionTests extends GroovyTestCase {
     def dataSource
 
     def now = new DateTime()
+    def today = now
     def yesterday = now.minusDays(1)
     def dayBeforeYesterday = yesterday.minusDays(1)
     def tomorrow = now.plusDays(1)
@@ -129,48 +130,73 @@ class DetectionTests extends GroovyTestCase {
     }
 
     def testWithSurgery() {
-        
+
         def receiver = createReceiver()
         def deployment = createDeployment(receiver: receiver, initDateTime: dayBeforeYesterday)
         createRecovery(deployment: deployment, recoveryDateTime: dayAfterTomorrow)
 
-        def detection1 = createDetection(yesterday)
-        def detection2 = createDetection(dayAfterTomorrow)
-
         def whiteShark= Animal.findBySpecies( Species.findByNameLike('%Carcharodon carcharias%'))
-        createSurgery(now, whiteShark)
+        def southernBluefinTuna= Animal.findBySpecies( Species.findByNameLike('%Southern Bluefin Tuna%'))
 
+        def detection1 = createDetection(dayBeforeYesterday)
+        // create surgery 1
+        createSurgery(yesterday, whiteShark)
+        def detection2 = createDetection(today)
+        // surgery 2 will be created here
+        def detection3 = createDetection(dayAfterTomorrow)
+
+
+        // test detection d1 before surgery has null fields
         def d1 = DetectionView.get(detection1.id, dataSource)
         assertEquals('', d1.getSpeciesName())
-
         assertNull(d1.embargoDate)
         assertNull(d1.releaseId)
         assertNull(d1.releaseProjectId)
         assertNull(d1.surgeryId)
 
+        // test detection 2 after surgery has expected fields
         def d2 = DetectionView.get(detection2.id, dataSource)
-
         assertEquals('37010003 - Carcharodon carcharias (White Shark)', d2.getSpeciesName())
         assertNotNull(d2.embargoDate)
         assertNotNull(d2.releaseId)
         assertNotNull(d2.releaseProjectId)
         assertNotNull(d2.surgeryId)
 
-        def southernBluefinTuna= Animal.findBySpecies( Species.findByNameLike('%Southern Bluefin Tuna%'))
+        // test detection 3 also after surgery also has expected fields
+        def d3 = DetectionView.get(detection3.id, dataSource)
+        assertEquals('37010003 - Carcharodon carcharias (White Shark)', d3.getSpeciesName())
+        assertNotNull(d3.embargoDate)
+        assertNotNull(d3.releaseId)
+        assertNotNull(d3.releaseProjectId)
+        assertNotNull(d3.surgeryId)
+
+        // test detection is not affected by later surgery
+        // create surgery 2
         createSurgery(tomorrow, southernBluefinTuna)
-
         d2.refresh(dataSource)
+        d3.refresh(dataSource)
 
-        assertEquals('37441004 - Thunnus maccoyii (Southern Bluefin Tuna)', d2.getSpeciesName())
+        // d2 should be unchanged and refer to surgery 1
+        assertEquals('37010003 - Carcharodon carcharias (White Shark)', d2.getSpeciesName())
         assertNotNull(d2.embargoDate)
         assertNotNull(d2.releaseId)
         assertNotNull(d2.releaseProjectId)
         assertNotNull(d2.surgeryId)
+
+
+        // d3 should refer to second surgery
+        assertEquals('37441004 - Thunnus maccoyii (Southern Bluefin Tuna)', d3.getSpeciesName())
+        assertNotNull(d3.embargoDate)
+        assertNotNull(d3.releaseId)
+        assertNotNull(d3.releaseProjectId)
+        assertNotNull(d3.surgeryId)
+
+
     }
 
     // TODO
-    // test to make sure the detection is associated with the correct surgery in time
-    // make sure that all the required fields are null, when detection occurs before the surgery
+    // done - test to make sure the detection is associated with the correct surgery in time
+    // done - make sure that all the required fields are null, when detection occurs before the surgery
     // performance
     // test multiple case of multiple surgeries, that the result is between
 

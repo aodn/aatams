@@ -6,3 +6,5 @@ target
 .vagrant
 *~
 aatams.log
+*.swp
+*.swo

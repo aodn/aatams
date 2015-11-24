@@ -2,20 +2,18 @@ databaseChangeLog = {
     changeSet(author: 'dnahodil', id: '1445913902000-00', runOnChange: true, failOnError: true) {
         createView(
             '''
-              select
+            SELECT
                 surgery.*,
-                case
-                    when
-                        lead(timestamp_timestamp) OVER (partition BY tag_id order by timestamp_timestamp ) is not null
-                    then
-                        lead(timestamp_timestamp) OVER (partition BY tag_id order by timestamp_timestamp )
-                    else
-                        ('infinity')::timestamptz
-                    end
-                as end_timestamp_timestamp
-
-            from surgery
-
+                CASE
+                    WHEN
+                        lead(timestamp_timestamp) OVER (partition BY tag_id order by timestamp_timestamp) IS NOT null
+                    THEN
+                        lead(timestamp_timestamp) OVER (partition BY tag_id order by timestamp_timestamp)
+                    ELSE
+                        'infinity'::timestamptz
+                    END
+                AS end_timestamp_timestamp
+            FROM surgery
             ''',
             viewName: 'surgery_with_end_date'
         )
@@ -25,7 +23,7 @@ databaseChangeLog = {
         dropView(viewName: 'detection_view')
 
         createView('''
-              SELECT
+            SELECT
                 detection.id AS detection_id,
                 detection."timestamp",
                 detection.receiver_name,
@@ -37,11 +35,9 @@ databaseChangeLog = {
                 detection.station_name,
                 detection.latitude,
                 detection.longitude,
-
                 detection.receiver_download_id,
                 sec_user.name AS uploader,
                 rxr_organisation.name as organisation_name,
-
                 deployment_and_recovery.receiver_deployment_id,
                 rxr_project.name AS rxr_project_name,
                 installation.name AS installation_name,
@@ -53,7 +49,6 @@ databaseChangeLog = {
                 species.scientific_name,
                 species.common_name,
                 invalid_reason(detection.*, receiver.*, deployment_and_recovery.*) AS invalid_reason,
-
                 sensor.transmitter_id as sensor_id,
                 tag.project_id as tag_project_id,
                 surgery.id AS surgery_id,
@@ -61,8 +56,7 @@ databaseChangeLog = {
                 release.project_id AS release_project_id,
                 release.embargo_date
 
-              FROM detection
-
+            FROM detection
                 JOIN receiver_download_file ON detection.receiver_download_id = receiver_download_file.id
                 JOIN sec_user ON receiver_download_file.requesting_user_id = sec_user.id
 
@@ -76,18 +70,15 @@ databaseChangeLog = {
                 LEFT JOIN installation_station station ON receiver_deployment.station_id = station.id
                 LEFT JOIN installation ON station.installation_id = installation.id
                 LEFT JOIN project rxr_project ON installation.project_id = rxr_project.id
-
                 LEFT JOIN sensor ON detection.transmitter_id = sensor.transmitter_id
                 LEFT JOIN device tag ON sensor.tag_id = tag.id
-                LEFT JOIN surgery_with_end_date surgery ON tag.id = surgery.tag_id AND (
-                    ((detection."timestamp" >= surgery.timestamp_timestamp) AND (detection."timestamp" < surgery.end_timestamp_timestamp))
-                )
-
+                LEFT JOIN surgery_with_end_date surgery 
+                    ON tag.id = surgery.tag_id 
+                    AND detection."timestamp" >= surgery.timestamp_timestamp 
+                    AND detection."timestamp" < surgery.end_timestamp_timestamp
                 LEFT JOIN animal_release release ON surgery.release_id = release.id
                 LEFT JOIN animal ON release.animal_id = animal.id
                 LEFT JOIN species ON animal.species_id = species.id
-
-
             ''',
             viewName: 'detection_view'
         )

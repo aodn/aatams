@@ -10,11 +10,10 @@ class DetectionTests extends GroovyTestCase {
 
     def dataSource
 
-    def now = new DateTime()
-    def today = now
-    def yesterday = now.minusDays(1)
+    def today = new DateTime()
+    def yesterday = today.minusDays(1)
     def dayBeforeYesterday = yesterday.minusDays(1)
-    def tomorrow = now.plusDays(1)
+    def tomorrow = today.plusDays(1)
     def dayAfterTomorrow = tomorrow.plusDays(1)
 
     void testInvalidReasonNoReceiver() {
@@ -32,7 +31,7 @@ class DetectionTests extends GroovyTestCase {
 
     void testInvalidReasonNoRecovery() {
         def receiver = createReceiver()
-        createDeployment(receiver: receiver, initDateTime: now)
+        createDeployment(receiver: receiver, initDateTime: today)
         def detection = createDetection()
 
         assertInvalidReason(InvalidDetectionReason.NO_DEPLOYMENT_AND_RECOVERY_AT_DATE_TIME, detection)
@@ -190,12 +189,6 @@ class DetectionTests extends GroovyTestCase {
         detectionHasExpectedFields(detection3, '37441004 - Thunnus maccoyii (Southern Bluefin Tuna)')
     }
 
-    // TODO
-    // done - test to make sure the detection is associated with the correct surgery in time
-    // done - make sure that all the required fields are null, when detection occurs before the surgery
-    // performance
-    // done - test multiple case of multiple surgeries, that the result is between
-
     def newPoint() {
         return new GeometryFactory().createPoint(new Coordinate(1, 2))
     }
@@ -244,21 +237,15 @@ class DetectionTests extends GroovyTestCase {
 
         return surgery.save(flush: true, failOnError: true)
     }
-    def createDetection(timestamp = now) {
 
-        // println "here1";
+    def createDetection(timestamp = today) {
 
         def download = ReceiverDownloadFile.buildLazy().save(flush: true)
         return new Detection(timestamp: timestamp,
                              receiverName: 'VR2W-7654',
                              transmitterId: 'A69-1303-6789',
                              receiverDownloadId: download.id).save(dataSource)
-
-
     }
-
-
-
 
     def createReceiver() {
         return Receiver.buildLazy(model: ReceiverDeviceModel.buildLazy(modelName: 'VR2W'),

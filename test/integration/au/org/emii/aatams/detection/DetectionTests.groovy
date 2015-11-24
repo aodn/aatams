@@ -196,7 +196,6 @@ class DetectionTests extends GroovyTestCase {
     def createSurgery(timestamp, animal) {
 
         def project = Project.list()[0]
-
         def method = CaptureMethod.list()[0]
 
         AnimalRelease release = new AnimalRelease(

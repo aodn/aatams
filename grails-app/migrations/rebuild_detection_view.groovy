@@ -72,9 +72,9 @@ databaseChangeLog = {
                 LEFT JOIN project rxr_project ON installation.project_id = rxr_project.id
                 LEFT JOIN sensor ON detection.transmitter_id = sensor.transmitter_id
                 LEFT JOIN device tag ON sensor.tag_id = tag.id
-                LEFT JOIN surgery_with_end_date surgery 
-                    ON tag.id = surgery.tag_id 
-                    AND detection."timestamp" >= surgery.timestamp_timestamp 
+                LEFT JOIN surgery_with_end_date surgery
+                    ON tag.id = surgery.tag_id
+                    AND detection."timestamp" >= surgery.timestamp_timestamp
                     AND detection."timestamp" < surgery.end_timestamp_timestamp
                 LEFT JOIN animal_release release ON surgery.release_id = release.id
                 LEFT JOIN animal ON release.animal_id = animal.id

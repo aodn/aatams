@@ -63,7 +63,7 @@
                 <tr class="prop">
                     <td valign="top" class="name">IMOS AATAMS site</td>
 
-                    <td valign="top" class="value"><a href="http://imos.org.au/aatams.html">http://imos.org.au/aatams.html</a>
+                    <td valign="top" class="value"><a href="http://imos.org.au/animaltracking.html">http://imos.org.au/animaltracking.html</a>
                     </td>
 
                 </tr>

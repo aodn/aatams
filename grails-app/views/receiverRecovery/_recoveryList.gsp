@@ -67,6 +67,11 @@
 
                     <td class="rowButton ">
                         <g:link class="show" controller="receiverDeployment" action="show" id="${receiverDeployment.id}">.</g:link>
+
+                        <g:if test="${hasErrors}">
+                            <a href="#" onclick="alert('Errors:\n${receiverDeployment.errors.allErrors*.code.unique().join('\n')}'); return false;" style="background: none;"><img src="/aatams/images/skin/exclamation.png" title="Click to see errors"></a>
+                        </g:if>
+
                     </td>
 
                     <td><joda:format value="${receiverDeployment.initialisationDateTime}" /></td>

@@ -354,22 +354,6 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase {
         return cal.getTime()
     }
 
-    void testAnimalList() {
-        checkList(animalController, "animal")
-    }
-
-    void testAnimalNotList() {
-        controllerName = "animal"
-        actionName = "show"
-
-        checkVisibility(animalController, animalNonEmbargoed, VISIBLE, 'animal')
-        checkVisibility(animalController, animalEmbargoedReadableProject, VISIBLE, 'animal')
-        checkVisibility(animalController, animalEmbargoedNonReadableProject, NOT_VISIBLE, 'animal')
-        checkVisibility(animalController, animalPastEmbargoed, VISIBLE, 'animal')
-        checkVisibility(animalController, animalProtectedReadableProject, VISIBLE, 'animal')
-        checkVisibility(animalController, animalProtectedNonReadableProject, NOT_VISIBLE, 'animal')
-    }
-
     void testAnimalMeasurementList() {
         checkList(animalMeasurementController, "animalMeasurement")
     }

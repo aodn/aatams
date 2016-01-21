@@ -253,8 +253,7 @@ input:focus, select:focus, textarea:focus {
 /* This is for the delete icons which appear within tables, e.g. delete
  * measurement from animal release. */
 .rowButton a.delete {
-    /* background: url(../images/skin/database_delete.png) center no-repeat; */
-    display: none;
+    background: url(../images/skin/database_delete.png) center no-repeat;
 }
 
 /* MESSAGES AND ERRORS */
@@ -466,10 +465,16 @@ th.desc a {
     overflow: visible;
     padding: 2px 6px;
 }
+
 .buttons input.delete {
-    /* background: transparent url(../images/skin/database_delete.png) 5px 50% no-repeat; */
-    /* padding-left: 28px; */
-    display: none;
+    /*
+    padding-left: 28px;*/
+}
+.buttons input.delete {
+    background: transparent url(../images/skin/database_delete.png) 5px 50% no-repeat;
+    background-color: yellow;
+    color: red;
+    padding-left: 28px;
 }
 .buttons input.edit {
     background: transparent url(../images/skin/database_edit.png) 5px 50% no-repeat;

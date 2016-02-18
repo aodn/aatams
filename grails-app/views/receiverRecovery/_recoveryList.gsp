@@ -77,10 +77,12 @@
 
                     <td><g:link controller="installationStation" action="show" id="${receiverDeployment?.station?.id}">${receiverDeployment?.station}</g:link></td>
 
+                    <!-- JA -->
                     <g:if test="${!hideColumns?.contains('deploymentLocation')}">
                         <td>
-                          <g:point name="scrambledLocation"
-                                   value="${receiverDeployment?.station?.scrambledLocation}" />
+                        <g:point name="location"
+                                 value="${receiverDeployment?.location}"
+                                 />
                         </td>
                     </g:if>
 

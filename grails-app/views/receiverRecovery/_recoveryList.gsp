@@ -84,8 +84,7 @@
 
                     <g:if test="${!hideColumns?.contains('deploymentLocation')}">
                         <td>
-                          <g:point name="scrambledLocation"
-                                   value="${receiverDeployment?.station?.scrambledLocation}" />
+                        <g:point name="location" scramble="true" value="${receiverDeployment?.location}" />
                         </td>
                     </g:if>
 

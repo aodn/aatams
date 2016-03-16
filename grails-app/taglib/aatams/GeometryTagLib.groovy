@@ -1,6 +1,7 @@
 package aatams
 
 import au.org.emii.aatams.DatumService
+import au.org.emii.aatams.util.GeometryUtils
 
 class GeometryTagLib  {
     def datumService
@@ -25,9 +26,13 @@ class GeometryTagLib  {
             if (attrs.value == null) {
             }
             else {
-                lon = attrs.value?.getCoordinate()?.x
-                lat = attrs.value?.getCoordinate()?.y
-                srid = attrs.value?.getSRID()
+
+                def value = attrs.scramble && attrs.scramble == "true" ?
+                    GeometryUtils.scrambleLocation(attrs.value) : attrs.value
+
+                lon = value.getCoordinate()?.x
+                lat = value.getCoordinate()?.y
+                srid = value.getSRID()
 
                 pointAsString += Math.abs(lat) + "\u00b0"
                 if (lat >= 0) {

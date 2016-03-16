@@ -24,8 +24,11 @@
                     <g:column property="station.name" title="${message(code: 'receiverDeployment.station.label', default: 'Station')}"
                                       params="${params}" sortable="${sortable}" />
 
+                    <g:column property="stationLocation.name" title="${message(code: 'receiverDeployment.stationLocation.label', default: 'Station Location')}"
+                                      params="${params}" sortable="${sortable}" />
+
                     <g:if test="${!hideColumns?.contains('deploymentLocation')}">
-                        <th><g:message code="receiverDeployment.station.location.label" default="Location" /></th>
+                        <th><g:message code="receiverDeployment.deploymentLocation.label" default="Receiver Deployment Location" /></th>
                     </g:if>
 
                     <!--  Bit of a hack to sort by serial number, but it seems that for all intents and purposes, this will give the
@@ -44,7 +47,7 @@
                                       params="${params}" sortable="${sortable}" />
 
                     <g:if test="${!hideColumns?.contains('recoveryLocation')}">
-                        <th><g:message code="receiverRecovery.location" default="Location" /></th>
+                        <th><g:message code="receiverRecovery.location" default="Receiver Recovery Location" /></th>
                     </g:if>
 
                     <g:column property="recovery.recoveryDateTime" title="${message(code: 'receiverRecovery.recoveryDateTime.label', default: 'Recovery Date')}"
@@ -82,10 +85,11 @@
 
                     <td><g:link controller="installationStation" action="show" id="${receiverDeployment?.station?.id}">${receiverDeployment?.station}</g:link></td>
 
+                    <td><g:point name="stationLocation" scramble="true" value="${receiverDeployment?.station?.location}" /></td>
+
                     <g:if test="${!hideColumns?.contains('deploymentLocation')}">
                         <td>
-                          <g:point name="scrambledLocation"
-                                   value="${receiverDeployment?.station?.scrambledLocation}" />
+                            <g:point name="location" scramble="true" value="${receiverDeployment?.location}" />
                         </td>
                     </g:if>
 

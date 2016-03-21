@@ -20,4 +20,5 @@ databaseChangeLog = {
     include file: 'simplified_detection_count.groovy'
     include file: 'refresh_receiver_mv_concurrently.groovy'
     include file: 'rebuild_detection_view.groovy'
+    include file: 'remove_reporting_matview.groovy'
 }

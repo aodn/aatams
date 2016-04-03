@@ -1,4 +1,4 @@
-﻿set:wq search_path = aatams, public;
+﻿set search_path = aatams, public;
 
 --------------------
 ---- Inadvertent entry into the production db, needs to be deleted.
@@ -33,8 +33,8 @@ AND device.serial_number = '102044' AND initialisationdatetime_timestamp IS NULL
 
 --------------------
 ---- Add 'RANGE TEST' tag as a new type of transmitter in the transmitter_type table. TO DO: update pinger tags which we know are range test tags in the sensor table (Andre to provide list).
--- INSERT INTO transmitter_type (id, version, transmitter_type_name) VALUES
--- (37, 0, 'RANGE TEST');
+INSERT INTO transmitter_type (id, version, transmitter_type_name) VALUES
+(37, 0, 'RANGE TEST');
 
 
 

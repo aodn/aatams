@@ -32,6 +32,15 @@ AND device.serial_number = '102044' AND initialisationdatetime_timestamp IS NULL
 
 
 --------------------
+---- Add 'RANGE TEST' tag as a new type of transmitter in the transmitter_type table. TO DO: update pinger tags which we know are range test tags in the sensor table (Andre to provide list).
+-- INSERT INTO transmitter_type (id, version, transmitter_type_name) VALUES
+-- (37, 0, 'RANGE TEST');
+
+
+
+
+
+--------------------
 ---- Clean up of animal table, 113 records will be deleted. Addresses one of the points made by Dave's second to last comment in #123 
 WITH a AS (
 SELECT a.id FROM animal a 
@@ -60,3 +69,21 @@ WHERE a.id = animal.id;
 -- 
 -- -- Test results
 -- SELECT * FROM animal_release WHERE capture_location IS NULL OR release_location IS NULL; -- Returns 256 rows, can't run the above code if those two fields have null values, CONTACT ANDRE
+
+
+
+
+
+--------------------
+---- Code to fix up #294
+-- Change releases with negative longitudes
+UPDATE aatams.animal_release SET capture_location = ST_POINT(ST_X(capture_location) * (-1), ST_Y(capture_location))
+WHERE ST_X(capture_location) <= 0;
+UPDATE aatams.animal_release SET release_location = ST_POINT(ST_X(release_location) * (-1), ST_Y(release_location))
+WHERE ST_X(release_location) <= 0;
+
+-- Change releases with positive latitudes
+UPDATE aatams.animal_release SET capture_location = ST_POINT(ST_X(capture_location), ST_Y(capture_location) * (-1))
+WHERE ST_Y(capture_location) >= 0;
+UPDATE aatams.animal_release SET release_location = ST_POINT(ST_X(release_location), ST_Y(release_location) * (-1))
+WHERE ST_Y(release_location) >= 0;

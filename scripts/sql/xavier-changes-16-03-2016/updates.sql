@@ -1,5 +1,7 @@
 set search_path = aatams, public;
 
+begin;
+
 --------------------
 ---- Inadvertent entry into the production db, needs to be deleted.
 DELETE FROM sensor where transmitter_id = 'A69-1303-62731' AND transmitter_type_id = 34;
@@ -9,7 +11,7 @@ DELETE FROM sensor where transmitter_id = 'A69-1303-62731' AND transmitter_type_
 
 --------------------
 ---- VR2-AR device model inconsistency. In the device_model table the VR2AR receiver model is stored both as 'VR2-AR' and VR2AR', it should only be stored as 'VR2AR'.
-UPDATE device SET model_id = 129558776 WHERE model_id = 117465295 -- Transforms all receivers registered as VR2-AR into VR2AR
+UPDATE device SET model_id = 129558776 WHERE model_id = 117465295; -- Transforms all receivers registered as VR2-AR into VR2AR
 DELETE FROM device_model WHERE model_name = 'VR2-AR'; -- Delete wrongly named receiver model
 
 ---- Test results
@@ -60,3 +62,4 @@ WHERE a.id = animal.id;
 -- 
 -- -- Test results
 -- SELECT * FROM animal_release WHERE capture_location IS NULL OR release_location IS NULL; -- Returns 256 rows, can't run the above code if those two fields have null values, CONTACT ANDRE
+commit;

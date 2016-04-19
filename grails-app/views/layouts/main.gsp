@@ -142,7 +142,7 @@
 
     <div class="ui-layout-north">
       <div id="logo">
-        <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS_Facility_8.png')}" alt="IMOS Logo"  /></a>
+        <a href="${createLink(uri: '/', absolute: true)}"><img src="https://static.emii.org.au/images/logo/IMOS_Facility_8.png" height="90" alt="IMOS Animal Tracking Logo" /></a>
 
         <div id="userlogin">
           <!-- Shown if not logged in. -->

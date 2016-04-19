@@ -128,7 +128,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase {
 
         File expectedReport = new File(constructFilePath(name))
 
-        assertContainsAllLines(removePageFooter(controller.response.contentAsString.trim()), removePageFooter(expectedReport.getText()))
+        assertContainsAllLines(removeDynamicLines(controller.response.contentAsString.trim()), removeDynamicLines(expectedReport.getText()))
     }
 
     protected String constructFilePath(expectedFileName) {
@@ -149,7 +149,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase {
         assertEquals(expected.readLines().size(), actual.readLines().size())
     }
 
-    protected String removePageFooter(String s) {
+    protected String removeDynamicLines(String s) {
         def lineCount = 0
         s.eachLine { lineCount ++ }
 
@@ -157,7 +157,8 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase {
         int index = 0
 
         s.eachLine {
-            if (it.contains("Page")) {
+            if (it.contains("Page") || (index == 0)) {
+                // remove title line or
                 // remove page footer
             }
             else {

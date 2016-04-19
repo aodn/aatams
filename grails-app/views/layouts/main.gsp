@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html >
   <head>
-    <title><g:layoutTitle default="${message(code: 'default.application.title', default: 'AATAMS')}" /></title>
+    <title><g:layoutTitle default="${message(code: 'default.application.title', default: 'IMOS Animal Tracking')}" /></title>
     <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 
     <script type="text/javascript" src="${resource(dir:'js',file:'utils.js')}"></script>

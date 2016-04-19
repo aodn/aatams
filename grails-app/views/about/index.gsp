@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main"/>
-        <title>About AATAMS</title>
+        <title>About IMOS Animal Tracking Database</title>
     </head>
 
     <body>
@@ -21,12 +21,12 @@
             <div style="width: 80%; padding:20px 20px 20px 20px;">
                 <p>The <g:message code="default.application.fullTitle" />
                 is one of eleven facilities of the Integrated Marine Observing System (IMOS).
-                AATAMS represents the higher biological monitoring of the marine environment
+                <g:message code="default.application.title" /> represents the higher biological monitoring of the marine environment
                 for the IMOS program.<br/><br/>
-                    Currently AATAMS uses acoustic technology, CTD satellite trackers and bio loggers
+                    Currently <g:message code="default.application.title" /> uses acoustic technology, CTD satellite trackers and bio loggers
                     to monitor costal and oceanic movements of marine animals from the Australian
                     mainland to the sub-Antarctic islands and as far south as the Antarctic continent.<br/><br/>
-                    AATAMS is set up to collect data over a long period of time. This sustained approach
+                    <g:message code="default.application.title" /> is set up to collect data over a long period of time. This sustained approach
                     will enable researchers to assess the effects of climate change, ocean acidification
                     and other physical changes that affect animals within the marine environment.<br/><br/>
                     Currently a large range of fish, sharks and mammals are collecting a wide range of data.
@@ -61,7 +61,7 @@
             <table>
                 <tbody>
                 <tr class="prop">
-                    <td valign="top" class="name">IMOS AATAMS site</td>
+                    <td valign="top" class="name">IMOS Animal Tracking site</td>
 
                     <td valign="top" class="value"><a href="http://imos.org.au/animaltracking.html">http://imos.org.au/animaltracking.html</a>
                     </td>
@@ -79,13 +79,6 @@
                     <td valign="top" class="name">Application version</td>
 
                     <td valign="top" class="value"><g:meta name="app.version"/></td>
-
-                </tr>
-
-                <tr class="prop">
-                    <td valign="top" class="name">Grails version</td>
-
-                    <td valign="top" class="value"><g:meta name="app.grails.version"/></td>
 
                 </tr>
 

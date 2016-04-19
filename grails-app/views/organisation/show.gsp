@@ -100,9 +100,11 @@
                 <g:form>
                     <g:hiddenField name="id" value="${organisationInstance?.id}" />
                     <shiro:hasRole name="SysAdmin">
+
                       <span class="button"><g:actionSubmit class="edit" action="edit" value="${message(code: 'default.button.edit.label', default: 'Edit')}" /></span>
                       <span class="button"><g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" /></span>
                     </shiro:hasRole>
+
                 </g:form>
             </div>
         </div>

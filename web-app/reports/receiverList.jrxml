@@ -57,9 +57,9 @@
 				<reportElement style="titleBackground" x="0" y="0" width="802" height="79"/>
 			</rectangle>
 			<staticText>
-				<reportElement style="titleText" mode="Transparent" x="26" y="23" width="262" height="33"/>
+				<reportElement style="titleText" mode="Transparent" x="60" y="23" width="662" height="33"/>
 				<textElement/>
-				<text><![CDATA[AATAMS Receivers]]></text>
+				<text><![CDATA[IMOS Animal Tracking Receivers]]></text>
 			</staticText>
 		</band>
 	</title>

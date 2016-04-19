@@ -78,9 +78,9 @@
 				<reportElement style="titleBackground" x="0" y="0" width="802" height="79"/>
 			</rectangle>
 			<staticText>
-				<reportElement style="titleText" mode="Transparent" x="26" y="23" width="351" height="33"/>
+				<reportElement style="titleText" mode="Transparent" x="60" y="30" width="651" height="33"/>
 				<textElement/>
-				<text><![CDATA[AATAMS Installation Stations]]></text>
+				<text><![CDATA[IMOS Animal Tracking Installation Stations]]></text>
 			</staticText>
 		</band>
 	</title>

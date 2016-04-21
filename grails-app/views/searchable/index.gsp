@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="layout" content="main" />
-    <title><g:if test="${params.q && params.q?.trim() != ''}">${params.q} - </g:if> IMOS Animal Tracking Search</title>
+    <title><g:if test="${params.q && params.q?.trim() != ''}">${params.q} - </g:if> <g:message code="default.application.title" /> Search</title>
 
     <script type="text/javascript">
         var focusQueryInput = function() {

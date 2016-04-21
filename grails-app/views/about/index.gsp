@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main"/>
-        <title>About IMOS Animal Tracking Database</title>
+        <title>About <g:message code="default.application.title" /> Database</title>
     </head>
 
     <body>

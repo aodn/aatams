@@ -31,9 +31,9 @@
 				<reportElement style="titleBackground" x="0" y="0" width="802" height="79"/>
 			</rectangle>
 			<staticText>
-				<reportElement style="titleText" mode="Transparent" x="26" y="23" width="406" height="33"/>
+				<reportElement style="titleText" mode="Transparent" x="60" y="23" width="606" height="33"/>
 				<textElement/>
-				<text><![CDATA[AATAMS Tag Summary]]></text>
+				<text><![CDATA[IMOS Animal Tracking Tag Summary]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="fieldNameText" x="0" y="98" width="100" height="20"/>

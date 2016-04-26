@@ -36,7 +36,7 @@ The following tags have new detections as a result of a recent upload:<br/></p>
             
             <p>
                 Regards,<br/>
-                The AATAMS team
+                The <g:message code="default.application.title" /> Team
             </p>            
         </div>
     </body>

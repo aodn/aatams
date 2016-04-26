@@ -3,8 +3,8 @@
 <!DOCTYPE html>
 <html >
   <head>
-    <title><g:layoutTitle default="${message(code: 'default.application.title', default: 'AATAMS')}" /></title>
-    <link rel="shortcut icon" href="${resource(dir:'images',file:'fish.ico')}" type="image/x-icon" />
+    <title><g:layoutTitle default="${message(code: 'default.application.title', default: 'IMOS Animal Tracking')}" /></title>
+    <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 
     <script type="text/javascript" src="${resource(dir:'js',file:'utils.js')}"></script>
 
@@ -142,7 +142,7 @@
 
     <div class="ui-layout-north">
       <div id="logo">
-        <a href="http://imos.org.au/"><img src="${resource(dir:'images',file:'IMOS_Facility_8.png')}" alt="IMOS Logo"  /></a>
+        <a href="${createLink(uri: '/', absolute: true)}"><img src="https://static.emii.org.au/images/logo/IMOS_Facility_8.png" height="90" alt="IMOS Animal Tracking Logo" /></a>
 
         <div id="userlogin">
           <!-- Shown if not logged in. -->

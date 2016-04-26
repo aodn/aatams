@@ -1,26 +1,11 @@
 package au.org.emii.aatams.export
-
-import java.util.List;
-import java.util.zip.ZipEntry
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
-
-import org.apache.commons.io.IOUtils;
-
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
-
-import de.micromata.opengis.kml.v_2_2_0.Kml;
-
-import net.sf.jasperreports.engine.export.JRCsvExporter;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import au.org.emii.aatams.filter.QueryService;
-import au.org.emii.aatams.report.KmlService;
-import au.org.emii.aatams.report.ReportInfoService;
-import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 import au.org.emii.aatams.*
-
-
-import grails.test.*
+import au.org.emii.aatams.filter.QueryService
+import au.org.emii.aatams.report.KmlService
+import au.org.emii.aatams.report.ReportInfoService
+import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
+import net.sf.jasperreports.engine.export.JRCsvExporter
+import net.sf.jasperreports.engine.export.JRPdfExporter
 
 class ExportServiceTests extends AbstractGrailsUnitTestCase {
     def exportService
@@ -117,24 +102,22 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase {
     }
 
     void testExportReceiversOneRecord() {
-        def expectedOutput = ''',,AATAMS Receivers,,,,,,,,,,,
-,Parameters,,,,,,,,,,,,
+        def expectedOutput = ''',Parameters,,,,,,,,,,,,
 ,user:,,,,Joe Bloggs,,,,,,,,
-,,,code name,,,status,,manufacturer,,model,serial number,,
+,,code name,,,,status,,manufacturer,,model,serial number,,
 ,organisation:,,,IMOS,,,total receivers:,,0,,,,
-,,,vr2w-1,,,NEW,,Vemco,,vr2w,1,,
+,,vr2w-1,,,,NEW,,Vemco,,vr2w,1,,
 '''
         assertExport(expectedOutput, [receiverList[0]])
     }
 
     void testExportReceiversTwoRecords() {
-        def expectedOutput = ''',,AATAMS Receivers,,,,,,,,,,,
-,Parameters,,,,,,,,,,,,
+        def expectedOutput = ''',Parameters,,,,,,,,,,,,
 ,user:,,,,Joe Bloggs,,,,,,,,
-,,,code name,,,status,,manufacturer,,model,serial number,,
+,,code name,,,,status,,manufacturer,,model,serial number,,
 ,organisation:,,,IMOS,,,total receivers:,,0,,,,
-,,,vr2w-1,,,NEW,,Vemco,,vr2w,1,,
-,,,vr2w-2,,,NEW,,Vemco,,vr2w,2,,
+,,vr2w-1,,,,NEW,,Vemco,,vr2w,1,,
+,,vr2w-2,,,,NEW,,Vemco,,vr2w,2,,
 '''
 
         assertExport(expectedOutput, [receiverList[0], receiverList[1]])
@@ -169,7 +152,7 @@ class ExportServiceTests extends AbstractGrailsUnitTestCase {
 
         exportService.export(Receiver.class, params, out)
 
-        assertEquals(expectedOutput, removePageFooter(out.toString()))
+        assertTrue(removePageFooter(out.toString()).contains(expectedOutput));
     }
 
     private String removePageFooter(String s) {

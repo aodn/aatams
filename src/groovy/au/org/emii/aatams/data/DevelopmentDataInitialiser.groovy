@@ -39,7 +39,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
 
         Notification register =
             new Notification(key:"REGISTER",
-                             htmlFragment:"Click here to register to use AATAMS",
+                             htmlFragment:"Click here to register to use the IMOS Animal Tracking Database",
                              anchorSelector:"#userlogin > [href\$='/person/create']",
                              unauthenticated:true).save(failOnError:true)
 

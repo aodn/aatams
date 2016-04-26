@@ -60,7 +60,7 @@ class NotificationControllerTests extends AbstractControllerUnitTestCase  {
 
         register =
             new Notification(key:"REGISTER",
-                             htmlFragment:"Click here to register to user AATAMS",
+                             htmlFragment:"Click here to register to use the IMOS Animal Tracking Database",
                              anchorSelector:"#userlogin > [href^='/aatams/person/create']",
                              unauthenticated:true)
 

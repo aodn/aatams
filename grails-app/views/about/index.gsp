@@ -99,9 +99,9 @@
 
             <br/>
 
-            <p><a href="http://help.aodn.org.au/help/?q=node/90" target="_blank" class="external">Acknowledgement</a>
+            <p><a href="https://help.aodn.org.au/user-guide-introduction/aodn-portal/data-use-acknowledgement/" target="_blank" class="external">Acknowledgement</a>
              | 
-             <a href="http://help.aodn.org.au/help/?q=node/80" target="_blank" class="external">Disclaimer</a></p>
+             <a href="https://help.aodn.org.au/user-guide-introduction/aodn-portal/disclaimer/" target="_blank" class="external">Disclaimer</a></p>
         </div>
 
     </div>

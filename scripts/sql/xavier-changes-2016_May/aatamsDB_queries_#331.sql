@@ -3,7 +3,7 @@
 begin;
 
 -- Fix #331 - Accidentally registered a person in the database twice
-DELETE FROM sec_user WHERE WHERE username = 'jmcallister';
+DELETE FROM sec_user WHERE username = 'jmcallister';
 
 ---- Test results
 -- SELECT *

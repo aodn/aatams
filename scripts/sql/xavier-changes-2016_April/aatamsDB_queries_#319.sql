@@ -45,11 +45,11 @@ DELETE FROM receiver_deployment WHERE id = 4479625;
 DELETE FROM receiver_deployment WHERE id IN (2917441, 2917440);
 
 ---- Test results
-SELECT receiver_deployment.id, serial_number, initialisationdatetime_timestamp, deploymentdatetime_timestamp, deploymentdatetime_zone 
-FROM receiver_deployment
-JOIN device ON device.id = receiver_deployment.receiver_id 
-WHERE serial_number = '101764';
-SELECT COUNT(*) FROM aatams.valid_detection WHERE receiver_deployment_id IN (2917441, 2917440); -- 0 record associated with this deployment
+-- SELECT receiver_deployment.id, serial_number, initialisationdatetime_timestamp, deploymentdatetime_timestamp, deploymentdatetime_zone 
+-- FROM receiver_deployment
+-- JOIN device ON device.id = receiver_deployment.receiver_id 
+-- WHERE serial_number = '101764';
+-- SELECT COUNT(*) FROM aatams.valid_detection WHERE receiver_deployment_id IN (2917441, 2917440); -- 0 record associated with this deployment
 
 -------------------- Andre to advise which need to be removed
 -- 5. A69-1601-12987: 3 releases, delete 2 of those 

@@ -1,10 +1,9 @@
-﻿set search_path = aatams, public;
+set search_path = aatams, public;
 
-begin;
 
 -- Fix #123
 DELETE FROM animal a
-WHERE a.id NOT IN (SELECT animal_id FROM animal_release);
+WHERE a.id NOT IN (SELECT animal_id FROM animal_release) RETURNING *;
 
 ---- Test results
 -- SELECT a.* FROM animal a 
@@ -12,4 +11,3 @@ WHERE a.id NOT IN (SELECT animal_id FROM animal_release);
 -- WHERE animal_id IS NULL 
 -- ORDER BY a.id;
 
-commit;

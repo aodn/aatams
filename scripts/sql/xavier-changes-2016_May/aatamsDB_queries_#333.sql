@@ -1,9 +1,6 @@
-﻿set search_path = aatams, public;
-
-begin;
 
 -- Fix #333 - Remove Andrew Boomer from all projects
-UPDATE project_role SET person_id = 1605188 WHERE person_id = 9106;
+UPDATE project_role SET person_id = 1605188 WHERE person_id = 9106 returning *;
 
 ---- Test results
 -- SELECT pr.*, p.name AS project_name, prt.display_name
@@ -20,5 +17,3 @@ UPDATE project_role SET person_id = 1605188 WHERE person_id = 9106;
 -- FROM sec_user s
 -- WHERE name = 'Andre Steckenreuter'; -- sec_user.id = 1605188
 
-
-commit;

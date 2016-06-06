@@ -10,10 +10,12 @@ set search_path=aatams,public;
 begin;
 
 select runner(:path, 'xavier-changes-2016_April/aatamsDB_queries_#123.sql');
+select runner(:path, 'xavier-changes-2016_April/aatamsDB_queries_#270.sql');
+
 
 
 -- for testing
-select * from events;
+select result from events;
 rollback;
 end;
 

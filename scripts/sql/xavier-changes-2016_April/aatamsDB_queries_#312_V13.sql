@@ -1,11 +1,11 @@
--- set search_path = aatams, public;
+﻿set search_path = aatams, public;
 
--- begin;
+begin;
 
 -- Fix #312 - V13
-DELETE FROM sensor WHERE id = 128427911 returning *; 
-DELETE FROM surgery WHERE id = 128427913 returning *;
-DELETE FROM device WHERE id = 128427910 returning *;
+DELETE FROM sensor WHERE id = 128427911; 
+DELETE FROM surgery WHERE id = 128427913;
+DELETE FROM device WHERE id = 128427910;
 
 ---- Test results
 -- SELECT d.*, s.*, su.*
@@ -14,4 +14,4 @@ DELETE FROM device WHERE id = 128427910 returning *;
 -- JOIN sensor s ON s.tag_id = d.id
 -- WHERE s.transmitter_id = 'A69-1303-34797';
 
--- commit;
+commit;

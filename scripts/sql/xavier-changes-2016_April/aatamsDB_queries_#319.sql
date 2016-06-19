@@ -1,16 +1,14 @@
-﻿set search_path = aatams, public;
 
-begin;
 
 ---- Fix issues listed in Andre's spreadsheet, Sheet 1
 
 --------------------
 -- 1. Delete 'mq' ahd 'Stradbroke Workshop' projects
-DELETE FROM sensor WHERE id IN (77640673, 77640675, 77640701);
-DELETE FROM device WHERE id IN (77640671, 77640699);
-DELETE FROM project_role WHERE id = 129352710;
-DELETE FROM organisation_project WHERE id = 129352708;
-DELETE FROM project WHERE name = 'mq' OR name = 'Stradbroke Workshop';
+DELETE FROM sensor WHERE id IN (77640673, 77640675, 77640701) returning *;
+DELETE FROM device WHERE id IN (77640671, 77640699) returning *;
+DELETE FROM project_role WHERE id = 129352710 returning *;
+DELETE FROM organisation_project WHERE id = 129352708 returning *;
+DELETE FROM project WHERE name = 'mq' OR name = 'Stradbroke Workshop' returning *;
 
 ---- Test results
 -- SELECT * FROM sensor WHERE transmitter_id = 'A180-1105-1111' OR transmitter_id = 'A180-1105-2222' OR transmitter_id = 'A180-1105-3333';
@@ -20,7 +18,7 @@ DELETE FROM project WHERE name = 'mq' OR name = 'Stradbroke Workshop';
 
 --------------------
 -- 2. Delete deployment 2015-01-19, 10:02:06, Coral Bay BB6, receiver 114574
-DELETE FROM receiver_deployment WHERE id = 129352973;
+DELETE FROM receiver_deployment WHERE id = 129352973 returning *;
 
 ---- Test results
 -- SELECT receiver_deployment.id, serial_number, initialisationdatetime_timestamp, deploymentdatetime_timestamp, deploymentdatetime_zone 
@@ -31,7 +29,7 @@ DELETE FROM receiver_deployment WHERE id = 129352973;
 
 --------------------
 -- 3. Delete deployment CL1, 101848, 23/08/08, 15:30
-DELETE FROM receiver_deployment WHERE id = 4479625;
+DELETE FROM receiver_deployment WHERE id = 4479625 returning *;
 
 ---- Test results
 -- SELECT receiver_deployment.id, serial_number, initialisationdatetime_timestamp, deploymentdatetime_timestamp, deploymentdatetime_zone 
@@ -42,7 +40,7 @@ DELETE FROM receiver_deployment WHERE id = 4479625;
 
 --------------------
 -- 4. Delete deployments NL1, 101764, 22/01/08, 23:30
-DELETE FROM receiver_deployment WHERE id IN (2917441, 2917440);
+DELETE FROM receiver_deployment WHERE id IN (2917441, 2917440) returning *;
 
 ---- Test results
 -- SELECT receiver_deployment.id, serial_number, initialisationdatetime_timestamp, deploymentdatetime_timestamp, deploymentdatetime_zone 
@@ -70,8 +68,8 @@ DELETE FROM receiver_deployment WHERE id IN (2917441, 2917440);
 
 --------------------
 -- 6. 101951: delete receiver and associated deployment
-DELETE FROM receiver_deployment WHERE id = 3084877;
-DELETE FROM device WHERE serial_number = '101951';
+DELETE FROM receiver_deployment WHERE id = 3084877 returning *;
+DELETE FROM device WHERE serial_number = '101951' returning *;
 
 ---- Test results
 -- SELECT receiver_deployment.id, serial_number, initialisationdatetime_timestamp, deploymentdatetime_timestamp, deploymentdatetime_zone 
@@ -82,7 +80,7 @@ DELETE FROM device WHERE serial_number = '101951';
 
 --------------------
 -- 7. Take Kate Lee off Rowley/Scotts projects
-DELETE FROM project_role WHERE id IN (117606732, 117606733);
+DELETE FROM project_role WHERE id IN (117606732, 117606733) returning *;
 
 ---- Test results
 -- SELECT username, project.name, project_role.id
@@ -93,7 +91,7 @@ DELETE FROM project_role WHERE id IN (117606732, 117606733);
 
 -------------------- 
 -- 8. A69-9004-588 pinger: to delete
-DELETE FROM sensor WHERE sensor.id = 128190383;
+DELETE FROM sensor WHERE sensor.id = 128190383 returning *;
 
 ---- Test results
 -- SELECT s.id AS sensor_id, s.transmitter_id, d.id AS tag_id, tt.id, transmitter_type_name
@@ -104,8 +102,8 @@ DELETE FROM sensor WHERE sensor.id = 128190383;
 
 -------------------- 
 -- 9. 2 OAR installation: OAR (Sydney) and Offshore Artificial Reef	Migrate the OAR installation that has only a single deployment of receiver VR2W-121036
-UPDATE receiver_deployment SET station_id = 51061077 WHERE id = 80747688;
-DELETE FROM installation_station WHERE id = 19974539;
+UPDATE receiver_deployment SET station_id = 51061077 WHERE id = 80747688 returning *;
+DELETE FROM installation_station WHERE id = 19974539 returning *;
 
 ---- Test results
 -- SELECT * FROM installation_station
@@ -119,7 +117,7 @@ DELETE FROM installation_station WHERE id = 19974539;
 
 --------------------
 -- 10. receiver 1068916 doesn’t exist
-DELETE FROM device WHERE serial_number = '1068916';
+DELETE FROM device WHERE serial_number = '1068916' returning *;
 
 ---- Test results
 -- SELECT * FROM device
@@ -127,11 +125,11 @@ DELETE FROM device WHERE serial_number = '1068916';
 
 -------------------- 
 -- 11. A69-1601-29724: delete double entry with embargo until 30/01/2016 
-DELETE FROM surgery WHERE id = 39504964; 
-DELETE FROM animal_release WHERE id = 39504959;
-DELETE FROM animal WHERE id = 39504958;
-DELETE FROM sensor WHERE tag_id = 39504961;
-DELETE FROM device WHERE id = 39504961;
+DELETE FROM surgery WHERE id = 39504964 returning *; 
+DELETE FROM animal_release WHERE id = 39504959 returning *;
+DELETE FROM animal WHERE id = 39504958 returning *;
+DELETE FROM sensor WHERE tag_id = 39504961 returning *;
+DELETE FROM device WHERE id = 39504961 returning *;
 
 ---- Test results
 -- SELECT d.id AS tag_id, su.id AS surgery_id, s.transmitter_id, su.release_id, ar.*, a.*
@@ -144,8 +142,8 @@ DELETE FROM device WHERE id = 39504961;
 
 -------------------- 
 -- 12. A69-9002-8304: delete entry with SN 1147846, and pinger entry
-DELETE FROM sensor WHERE id = 56773717;
-DELETE FROM sensor WHERE id = 56773823;
+DELETE FROM sensor WHERE id = 56773717 returning *;
+DELETE FROM sensor WHERE id = 56773823 returning *;
 
 ---- Test results
 -- SELECT d.*, s.*, tt.*
@@ -156,7 +154,8 @@ DELETE FROM sensor WHERE id = 56773823;
 
 -------------------- 
 -- 13. A69-9002-8305: delete entry with SN 1147846 (new)
-DELETE FROM sensor WHERE id = 56773719; DELETE FROM device WHERE id = 56773715;
+DELETE FROM sensor WHERE id = 56773719 returning *; 
+DELETE FROM device WHERE id = 56773715 returning *;
 
 ---- Test results
 -- SELECT d.*, s.*, tt.*
@@ -167,7 +166,7 @@ DELETE FROM sensor WHERE id = 56773719; DELETE FROM device WHERE id = 56773715;
 
 -------------------- 
 -- 14. A69-9002-84838482: wrong ID
-DELETE FROM sensor WHERE id = 107795331;
+DELETE FROM sensor WHERE id = 107795331 returning *;
 
 ---- Test results
 -- SELECT d.*, s.*, tt.*
@@ -178,7 +177,7 @@ DELETE FROM sensor WHERE id = 107795331;
 
 -------------------- 
 -- 15. A69-9001-65178, A69-9001-65177, A69-9001-65176, A69-9001-65175, A69-9001-65174: change from pinger to range test transmitter type
-UPDATE sensor SET transmitter_type_id = 129582657 WHERE transmitter_id IN ('A69-9001-65178', 'A69-9001-65177', 'A69-9001-65176', 'A69-9001-65175', 'A69-9001-65174');
+UPDATE sensor SET transmitter_type_id = 129582657 WHERE transmitter_id IN ('A69-9001-65178', 'A69-9001-65177', 'A69-9001-65176', 'A69-9001-65175', 'A69-9001-65174') returning *;
 
 ---- Test results
 -- SELECT s.*, tt.*
@@ -186,4 +185,3 @@ UPDATE sensor SET transmitter_type_id = 129582657 WHERE transmitter_id IN ('A69-
 -- JOIN transmitter_type tt ON s.transmitter_type_id = tt.id
 -- WHERE s.transmitter_id IN ('A69-9001-65178', 'A69-9001-65177', 'A69-9001-65176', 'A69-9001-65175', 'A69-9001-65174');
 
-commit;

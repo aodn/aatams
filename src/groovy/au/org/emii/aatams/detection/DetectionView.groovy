@@ -43,6 +43,7 @@ class DetectionView extends Detection implements Embargoable {
     String invalidReason
     String organisationName
     String scientificName
+    String speciesName
     String sensorId
     String spcode
     String stationStationName
@@ -78,7 +79,7 @@ class DetectionView extends Detection implements Embargoable {
 
     String getSpeciesName() {
         if (!spcode) {
-            return ''
+            return "${speciesName}"
         }
 
         return "${spcode} - ${scientificName} (${commonName})"
@@ -123,6 +124,7 @@ class DetectionView extends Detection implements Embargoable {
         Detection.fromSqlRow(row, detection)
 
         detection.commonName = row.common_name
+        detection.speciesName = row.species_name
 
         if(row.embargo_date) {
             detection.embargoDate = new DateTime(row.embargo_date).withZone(DateTimeZone.UTC)
@@ -135,6 +137,7 @@ class DetectionView extends Detection implements Embargoable {
         detection.releaseProjectId = row.release_project_id
         detection.tagProjectId = row.tag_project_id
         detection.scientificName = row.scientific_name
+	detection.speciesName = row.species_name
         detection.sensorId = row.sensor_id
         detection.spcode = row.spcode
         detection.stationId = row.station_id

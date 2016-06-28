@@ -1,14 +1,16 @@
 [![Build Status](https://travis-ci.org/aodn/aatams.png?branch=master)](https://travis-ci.org/aodn/aatams)
 
 ## Overview
-The Australian Animal Tracking and Monitoring System (AATAMS) is one of eleven facilities of the Integrated Marine Observing System (IMOS). AATAMS represents the higher biological monitoring of the marine environment for the IMOS program.
+Animal Tracking, formerly Australian Animal Tracking and Monitoring System (AATAMS), is one of eleven facilities of the Integrated Marine Observing System (IMOS). Animal Tracking represents the higher biological monitoring of the marine environment for the IMOS program.
 
-This repository is for the web application which supports the management of AATAMS data.
+This repository is for the web application which supports the management of Animal Tracking data.
+
+The repository name remains as AATAMS due to the complexity of changes required in renaming the repository and associated links.
 
 ## Application Features
 
 ### Upload and Storage
-The web app enables the *upload* and *storage* of AATAMS data, which can be broadly categorised as:
+The web app enables the *upload* and *storage* of Animal Tracking data, which can be broadly categorised as:
 
 * tag detections and receiver events
   * downloaded from receivers and uploaded (as CSV files) to the app

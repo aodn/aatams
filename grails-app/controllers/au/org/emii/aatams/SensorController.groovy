@@ -32,8 +32,6 @@ class SensorController extends ReportController {
         def tag = tagFactoryService.lookupOrCreate(params.tag)
         assert(tag)
 
-        params.tag = tag
-
         def sensorInstance = new Sensor(params)
 
         if (tag.hasErrors()) {

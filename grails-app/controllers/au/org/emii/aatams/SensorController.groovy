@@ -29,31 +29,11 @@ class SensorController extends ReportController {
     }
 
     def save = {
-        def tag = tagFactoryService.lookupOrCreate(params.tag)
-        assert(tag)
-
-        params.tag = tag
-
-        def sensorInstance = new Sensor(params)
-
-        if (tag.hasErrors()) {
-            if (params.responseType == 'json') {
-                render([errors: tag.errors] as JSON)
-            }
-            else {
-                render view: "create", model: [
-                    sensorInstance: sensorInstance,
-                    candidateProjects:candidateEntitiesService.projects()
-                ]
-            }
-
-            return
-        }
-
-        // Workaround for http://jira.grails.org/browse/GRAILS-3783
+        Tag tag = new Tag(params.tag)
+        Sensor sensorInstance = new Sensor(params)
         tag.addToSensors(sensorInstance)
 
-        if (sensorInstance.save(flush: true)) {
+        if (tag.save(validate: true, flush:true)) {
             flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
 
             if (params.responseType == 'json') {
@@ -65,10 +45,10 @@ class SensorController extends ReportController {
             }
         }
         else {
-            log.error(sensorInstance.errors)
+            log.error(tag.errors)
 
             if (params.responseType == 'json') {
-                render ([errors:sensorInstance.errors] as JSON)
+                render ([errors:tag.errors] as JSON)
             }
             else {
                 def model =  [sensorInstance: sensorInstance,

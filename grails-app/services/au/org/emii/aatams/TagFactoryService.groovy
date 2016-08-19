@@ -24,7 +24,7 @@ class TagFactoryService {
             log.warn("Tag released in different project, tag's project: " + tag.project + ", release project: " + params.project)
         }
 
-        if (tag.save(flush:true)) {
+        if (tag.save(validate: true, flush:true)) {
             log.info("Saved tag: " + String.valueOf(tag))
         }
         else {

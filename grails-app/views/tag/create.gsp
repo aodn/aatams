@@ -30,7 +30,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="project"><g:message code="tag.project.label" default="Project" /></label>
+                                    <label class="compulsory" for="project"><g:message code="tag.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" 

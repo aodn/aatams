@@ -45,7 +45,7 @@
                         
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="tag.project"><g:message code="tag.project.label" default="Project" /></label>
+                                    <label class="compulsory" for="tag.project"><g:message code="tag.project.label" default="Project" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance.tag, field: 'project', 'errors')}">
                                     <g:select name="tag.project.id" 

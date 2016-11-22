@@ -105,7 +105,7 @@ class ReceiverDeployment {
     static constraints = {
         receiver()
         station()
-        initialisationDateTime(nullable: true, validator: conflictingDeploymentValidator)
+        initialisationDateTime(nullable: true)
         deploymentDateTime(validator: dateTimeValidator)
         recoveryDate(nullable: true, validator: recoveryDateValidator)
         acousticReleaseID(nullable: true)
@@ -130,37 +130,44 @@ class ReceiverDeployment {
         return true
     }
 
-    static def conflictingDeploymentValidator = { initialisationDateTime, deployment ->
-        ReceiverDeploymentValidator.conflictingDeploymentValidator(
-            initialisationDateTime, deployment
-        )
-    }
-
     static def dateTimeValidator = { deploymentDateTime, deployment ->
+
+        /*
+            Xavier says,
+            GUI logic should be,
+              Within each record (row) --> initialisation_date < deployment_date < recovery_date
+              Across records (row)     --> deployment_date (t+1) > recovery_date (t)
+
+            interpret < as <=
+            must fall through to the next test, if current one passes
+        */
+
         def initDateTime = deployment.initialisationDateTime
-        if (!initDateTime) {
-            return true
+        def recoveryDateTime = deployment?.recovery?.recoveryDateTime
+
+        def scheduledRecovery = deployment.recoveryDate ? new DateTime(deployment.recoveryDate) : null
+
+        if (initDateTime && deploymentDateTime.isBefore(initDateTime)) {
+
+            return [ 'deploymentDateTime.isBefore(initDateTime)' ]
         }
 
-        if (!deploymentDateTime.isBefore(initDateTime)) {
-            return true
+        if(recoveryDateTime && recoveryDateTime.isBefore(deploymentDateTime)) {
+
+            return [ 'recoveryDateTime.isBefore(deploymentDateTime))' ]
         }
 
-        [
-            'receiverDeployment.deploymentDateTime.notAfterInitialisationDateTime',
-            deployment.receiver,
-            deploymentDateTime,
-            initDateTime
-        ]
-    }
+        def deployments = deployment.receiver?.deployments?.sort { it.deploymentDateTime }
+        def deploymentIndex = deployments.findIndexOf { it.id == deployment.id }
+        def nextDeployment = deployments ? deployments[deploymentIndex + 1] : null
+        def nextDeploymentDateTime = nextDeployment?.deploymentDateTime
 
-    // Don't want to override 'equals()' as this causes unexpected behaviour with GORM.
-    boolean same(Object other) {
-        if (other == null) {
-            return false
+        if(nextDeploymentDateTime && nextDeploymentDateTime.isBefore(recoveryDateTime)) {
+
+            return [ 'nextDeploymentDateTime.isBefore(recoveryDateTime))' ]
         }
 
-        return (this.receiver.same(other.receiver) && this.undeployableInterval == other.undeployableInterval)
+        return true
     }
 
     String toString() {
@@ -197,32 +204,5 @@ class ReceiverDeployment {
         }
 
         return (!deploymentDateTime.isAfter(dateTime)) && dateTime.isBefore(recovery?.recoveryDateTime)
-    }
-
-    def getUndeployableInterval() {
-        def startDateTime = initialisationDateTime ?: deploymentDateTime
-
-        if (startDateTime && recovery) {
-            // A validation check for this condition has only been recently introduced. Ideally,
-            // we wouldn't need this check, but there are invalid records in the DB currently,
-            // so we need to check, otherwise the creation of the Interval below fails.
-            if (startDateTime > recovery.recoveryDateTime) {
-                log.debug("Invalid interval for deployment: ${String.valueOf(this)}")
-                return
-            }
-
-            if (recovery.status == DeviceStatus.RECOVERED) {
-                return new Interval(startDateTime, recovery.recoveryDateTime)
-            }
-            else {
-                return new OpenInterval(startDateTime)
-            }
-        }
-    }
-
-    def getDeploymentNumber() {
-        receiver?.deployments?.sort { it.deploymentDateTime }.findIndexOf {
-            it.same(this)
-        } + 1
     }
 }

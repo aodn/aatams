@@ -59,10 +59,6 @@ class ReceiverRecovery {
                 obj.deployment.deploymentDateTime
             ]
         }
-
-        ReceiverDeploymentValidator.conflictingDeploymentValidator(
-            obj.deployment.initialisationDateTime, obj.deployment
-        )
     }
 
     String toString() {

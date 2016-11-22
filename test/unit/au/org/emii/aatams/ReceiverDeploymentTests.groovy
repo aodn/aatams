@@ -100,36 +100,6 @@ class ReceiverDeploymentTests extends GrailsUnitTestCase {
         assertFalse(deployment.isActive(recoveryDateTime.plusDays(1)))
     }
 
-    void testUndeployableIntervalNoRecovery() {
-         assertInterval(null, null, null, null, null)
-         assertInterval(now, null, null, null, null)
-         assertInterval(null, now, null, null, null)
-         assertInterval(now, now.plusDays(1), null, null, null)
-    }
-
-    void testUndeployableIntervalWithRecovery() {
-         assertInterval(now, now, now.plusDays(2), DeviceStatus.RECOVERED, new Interval(now, now.plusDays(2)))
-         assertInterval(now, now, now.plusDays(2), DeviceStatus.LOST, new OpenInterval(now))
-    }
-
-    void assertInterval(initDateTime, deployDateTime, recoveryDateTime, recoveryStatus, expectedInterval) {
-        def deployment = new ReceiverDeployment(
-            initialisationDateTime: initDateTime,
-            deploymentDateTime: deployDateTime
-        )
-
-        if (recoveryDateTime && recoveryStatus) {
-            def recovery = new ReceiverRecovery(
-                deployment: deployment,
-                recoveryDateTime: recoveryDateTime,
-                status: recoveryStatus
-            )
-            deployment.recovery = recovery
-        }
-
-        assertEquals(expectedInterval, deployment.undeployableInterval)
-    }
-
     void testToString() {
         def deployment = [
             receiver: [ toString: { 'VR2W-1234' } ] as Receiver,

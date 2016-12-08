@@ -21,8 +21,7 @@ addons:
 before_install:
   - rm -rf ~/.sdkman
   - curl -s "https://get.sdkman.io" | bash 
-  - find / -iname sdkman-init.sh -type f
-  - source "~/.sdkman/bin/sdkman-init.sh"
+  - source "/home/travis/.sdkman/bin/sdkman-init.sh"
   - sdk install grails 1.3.7
   - sdk use grails 1.3.7
 

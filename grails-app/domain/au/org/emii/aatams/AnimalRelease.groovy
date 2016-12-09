@@ -69,7 +69,7 @@ class AnimalRelease implements Embargoable {
 
     static constraints = {
         project()
-        animal()
+        animal(validator: speciesValidator)
         captureLocality(blank:false)
         captureLocation(nullable:true)
         captureDateTime()
@@ -96,6 +96,13 @@ class AnimalRelease implements Embargoable {
         buf.append(String.valueOf(releaseDateTime))
 
         return buf.toString()
+    }
+
+    static def speciesValidator = { animal, deployment ->
+        def species = CaabSpecies.findByName(animal.species.name)
+        if (!species) {
+            ['animalRelease.noSpecies']
+        }
     }
 
     /**

@@ -33,9 +33,8 @@ script:
   - echo whoot
   - ls /home/travis
   - ls /home/travis/build
-  - ls /home/travis/build/aodn
-  - ls /home/travis/build/aatams
-  - cat /home/travis/build/aatams/settings.xml > /home/travis/.m2/settings.xml
+  - ls /home/travis/build/aodn/aatams
+  - cat /home/travis/build/aodn/aatams/settings.xml > /home/travis/.m2/settings.xml
   - cat /home/travis/.m2/settings.xml
   - grails test-app --echoOut
   - grails prod war

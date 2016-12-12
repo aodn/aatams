@@ -31,6 +31,8 @@ before_script:
 
 script:
   - echo whoot
+  - ls /home/travis
+  - cat /home/travis/settings.xml > /home/travis/.m2/settings.xml
   - cat /home/travis/.m2/settings.xml
   - grails test-app --echoOut
   - grails prod war

@@ -194,6 +194,7 @@
 
   <!-- keep the mirrors for now -->
 
+  <mirrors>
     <mirror>
 
       <id>travis-ci-central</id>

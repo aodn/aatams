@@ -195,17 +195,20 @@
   <!-- keep the mirrors for now -->
 
   <mirrors>
+
     <mirror>
-
-      <id>google-maven-central</id>
-
-      <name>Google fun!</name>
-
-      <url>https://maven-central.storage.googleapis.com/</url>
-
+      <id>ibiblio.org</id>
+      <name>ibiblio Mirror of http://repo1.maven.org/maven2/</name>
+      <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
       <mirrorOf>central</mirrorOf>
-
     </mirror>
+
+    <!-- mirror>
+      <id>google-maven-central</id>
+      <name>Google fun!</name>
+      <url>https://maven-central.storage.googleapis.com/</url>
+      <mirrorOf>central</mirrorOf>
+    </mirror -->
 
 
   </mirrors>

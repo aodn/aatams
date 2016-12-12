@@ -30,6 +30,8 @@ before_script:
   - ./init_test_db.sh
 
 script:
-  - echo hi
+  - echo whoot
+  - cat /home/travis/.m2/settings.xml
   - grails test-app --echoOut
   - grails prod war
+

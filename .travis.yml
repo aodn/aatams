@@ -34,6 +34,9 @@ before_install:
   # - find $HOME/.sdkman -type f | wc -l
   # - sdk install grails 1.3.7
   # - sdk use grails 1.3.7
+  - echo $GRAILS_HOME
+  - echo $PATH
+  - echo $JAVA_OPTS
   - wget 'https://github.com/grails/grails-core/releases/download/v1.3.7/grails-1.3.7.zip' -O $HOME/grails-1.3.7.zip
   - unzip $HOME/grails-1.3.7.zip
 

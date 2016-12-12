@@ -8,8 +8,8 @@ jdk:
 
 cache:
   directories:
-    - '/home/travis/.m2/repository'
-    - '/home/travis/.gvm'
+    - $HOME/.m2/repository'
+    - $HOME/.gvm'
 
 
 #### it's the dammn expansion variable no longer works...

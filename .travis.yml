@@ -19,7 +19,7 @@ env:
     global
     - TZ="Australia/Hobart" JAVA_OPTS="-Xmx1G -Xms512m -XX:PermSize=64m -XX:MaxPermSize=512m"
     - GRAILS_HOME=$HOME/grails-1.3.7/
-    - PATH="$PATH:$GRAILS_HOME/bin"
+    - PATH=$PATH:$GRAILS_HOME/bin
 
 
 addons:

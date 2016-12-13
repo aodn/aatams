@@ -10,7 +10,7 @@ cache:
   directories:
     # - $HOME/.sdkman
     - $HOME/.m2/repository
-    - $HOME/.gvm
+    # - $HOME/.gvm
     - $HOME/.ivy2
     - $HOME/grails-1.3.7
 

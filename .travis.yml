@@ -11,8 +11,8 @@ cache:
     # - $HOME/.sdkman
     - $HOME/.m2/repository
     - $HOME/.gvm
-
     - $HOME/.ivy2
+    - $HOME/grails-1.3.7
 
 
 #### it's the dammn expansion variable no longer works...
@@ -38,16 +38,13 @@ before_install:
   # - sdk use grails 1.3.7
   - echo $GRAILS_HOME
   - echo $JAVA_OPTS
-  - echo before
-  - ls -lha $HOME
-  - wget 'https://github.com/grails/grails-core/releases/download/v1.3.7/grails-1.3.7.zip' -O $HOME/grails-1.3.7.zip
-  - unzip -q -d $HOME $HOME/grails-1.3.7.zip
+  - [ -d $HOME/grails-1.3.7 ] || /wget 'https://github.com/grails/grails-core/releases/download/v1.3.7/grails-1.3.7.zip' -O $HOME/grails-1.3.7.zip && unzip -q -d $HOME $HOME/grails-1.3.7.zip
 
   - echo after
   - ls -lha $HOME
-
-  - find '/home/travis/.m2/repository' -type f | wc -l
-  - find '/home/travis/.ivy2' -type f | wc -l
+  - find $HOME/.m2/repository' -type f | wc -l
+  - find $HOME/.ivy2' -type f | wc -l
+  - find $HOME/grails-1.3.7 -type f | wc -l
   - pwd
 
 

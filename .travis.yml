@@ -47,6 +47,6 @@ before_script:
 
 script:
   - ls /home/travis/build/aodn/aatams
-  - grails test-app --echoOut
-  - grails prod war
+  - $GRAILS_HOME/bin/grails test-app --echoOut
+  - $GRAILS_HOME/bin/grails prod war
 

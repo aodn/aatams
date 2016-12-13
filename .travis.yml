@@ -39,14 +39,15 @@ before_install:
   - echo $GRAILS_HOME
   - echo $JAVA_OPTS
   - echo before
-  - ls -lh $HOME
+  - ls -lha $HOME
   - wget 'https://github.com/grails/grails-core/releases/download/v1.3.7/grails-1.3.7.zip' -O $HOME/grails-1.3.7.zip
   - unzip -q -d $HOME $HOME/grails-1.3.7.zip
 
   - echo after
-  - ls -lh $HOME
+  - ls -lha $HOME
 
   - find '/home/travis/.m2/repository' -type f | wc -l
+  - find '/home/travis/.ivy2' -type f | wc -l
   - pwd
 
 

@@ -98,7 +98,7 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <g:each in="${tagInstance.nonPingerSensors}" var="s">
+                                  <g:each in="${tagInstance.sensors}" var="s">
                                     <tr>
                                       <td class="rowButton">
                                         <g:link class="show" controller="sensor" action="show" id="${s?.id}"></g:link>

@@ -133,21 +133,23 @@
                                       </tr>
                                     </thead>
                                     <tbody id="sensor_table_body">
-                                      <g:each in="${tagInstance.nonPingerSensors}" var="s">
+                                      <g:each in="${tagInstance.sensors}" var="s">
                                         <tr>
                                           <td class="rowButton">
                                             <g:link class="show" controller="sensor" action="show" id="${s?.id}"></g:link>
                                           </td>
-                                          <shiro:hasPermission permission="project:${tagInstance?.project?.id}:edit_children">
-                                            <td class="rowButton">
-                                              <g:link controller="sensor"
-                                                      action="delete"
-                                                      class="delete"
-                                                      params="[projectId:tagInstance?.project?.id]"
-                                                      id="${s?.id}"
-                                                      onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">.</g:link>
-                                            </td>
-                                          </shiro:hasPermission>
+                                          <g:if test="${tagInstance.sensors.size() > 1}">
+                                              <shiro:hasPermission permission="project:${tagInstance?.project?.id}:edit_children">
+                                                  <td class="rowButton">
+                                                      <g:link controller="sensor"
+                                                              action="delete"
+                                                              class="delete"
+                                                              params="[projectId:tagInstance?.project?.id]"
+                                                              id="${s?.id}"
+                                                              onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">.</g:link>
+                                                  </td>
+                                              </shiro:hasPermission>
+                                          </g:if>
                                           <td>${s?.transmitterType}</td>
                                           <td>${s?.codeMap}</td>
                                           <td>${s?.pingCode}</td>

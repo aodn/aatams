@@ -253,8 +253,8 @@ input:focus, select:focus, textarea:focus {
 /* This is for the delete icons which appear within tables, e.g. delete
  * measurement from animal release. */
 .rowButton a.delete {
-    /* background: url(../images/skin/database_delete.png) center no-repeat; */
-    display: none;
+     background: url(../images/skin/database_delete.png) center no-repeat;
+    /*display: none;*/
 }
 
 /* MESSAGES AND ERRORS */

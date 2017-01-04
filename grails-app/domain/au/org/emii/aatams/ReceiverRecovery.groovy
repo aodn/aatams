@@ -54,11 +54,13 @@ class ReceiverRecovery {
 
         if (!recoveryDateTime.isAfter(obj.deployment.deploymentDateTime)) {
             return [
-                'invalid.beforeDeploymentDateTime',
+                'not recoveryDateTime is after deploymentDateTime',
                 recoveryDateTime,
                 obj.deployment.deploymentDateTime
             ]
         }
+
+        return true;
     }
 
     String toString() {

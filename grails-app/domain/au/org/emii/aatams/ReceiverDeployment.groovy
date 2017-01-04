@@ -107,7 +107,7 @@ class ReceiverDeployment {
         station()
         initialisationDateTime(nullable: true)
         deploymentDateTime(validator: dateTimeValidator)
-        recoveryDate(nullable: true, validator: recoveryDateValidator)
+        recoveryDate(nullable: true, validator: scheduledRecoveryDateValidator)
         acousticReleaseID(nullable: true)
         mooringType()
         mooringDescriptor(nullable: true, blank: true)
@@ -120,11 +120,14 @@ class ReceiverDeployment {
         batteryLifeDays(nullable: true)
     }
 
-    static def recoveryDateValidator = {
-        recoveryDate, obj ->
+    static def scheduledRecoveryDateValidator = { recoveryDate, obj ->
 
-        if (recoveryDate) {
-            return recoveryDate.after(obj.deploymentDateTime.toDate())
+        if (recoveryDate && !recoveryDate.after(obj.deploymentDateTime.toDate())) {
+            return [
+                'not scheduledRecoverDate after deploymentDateTime',
+                recoveryDate,
+                deploymentDateTime.toDate()
+            ]
         }
 
         return true
@@ -149,12 +152,20 @@ class ReceiverDeployment {
 
         if (initDateTime && deploymentDateTime.isBefore(initDateTime)) {
 
-            return [ 'deploymentDateTime.isBefore(initDateTime)' ]
+            return [
+                    'deploymentDateTime is before initDateTime',
+                    deploymentDateTime.toDate(),
+                    initDateTime
+            ]
         }
 
         if(recoveryDateTime && recoveryDateTime.isBefore(deploymentDateTime)) {
 
-            return [ 'recoveryDateTime.isBefore(deploymentDateTime))' ]
+            return [
+                    'recoveryDateTime is before deploymentDateTime',
+                    recoveryDateTime,
+                    deploymentDateTime.toDate()
+            ]
         }
 
         def deployments = deployment.receiver?.deployments?.sort { it.deploymentDateTime }
@@ -164,10 +175,30 @@ class ReceiverDeployment {
 
         if(nextDeploymentDateTime && nextDeploymentDateTime.isBefore(recoveryDateTime)) {
 
-            return [ 'nextDeploymentDateTime.isBefore(recoveryDateTime))' ]
+            return [
+                    'nextDeploymentDateTime is before recoveryDateTime',
+                    nextDeploymentDateTime,
+                    recoveryDateTime
+            ]
         }
 
         return true
+    }
+
+    String validationErrors() {
+        // Should properly be in the view code, but it's impossible to properly escape in a gsp <g:set/>
+
+        this.errors.allErrors.collect {
+
+            // - note that it.code may exist even if it doesn't appear in the debugger view-
+            // presumably through some extended dynamic property introspection mechanism.
+            // - also, we only have field and rejectedValue in the Java peer class, which makes it difficult
+            // to create properly formatted messages for inequality errors involving two field values
+            // I don't know why the original code returns 3-tuples hen we can't properly access those values,
+            // but I have stuck to the convention
+            "&bull; ${it.code}, ${it.getField()}=${it.getRejectedValue()}";
+
+        }.join('\\n')
     }
 
     String toString() {

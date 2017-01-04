@@ -123,14 +123,18 @@ class ReceiverDeployment {
     static def recoveryDateValidator = {
         recoveryDate, obj ->
 
-        if (recoveryDate) {
-            return recoveryDate.after(obj.deploymentDateTime.toDate())
+/*        if (recoveryDate && !recoveryDate.after(obj.deploymentDateTime.toDate())) {
+            return [ '!recoveryDate.after(obj.deploymentDateTime.toDate())' ]
         }
+*/
+        return [ 'whoot' ]
 
-        return true
+//        return true
     }
 
     static def dateTimeValidator = { deploymentDateTime, deployment ->
+
+        return true;
 
         /*
             Xavier says,
@@ -168,6 +172,15 @@ class ReceiverDeployment {
         }
 
         return true
+    }
+
+
+    String formattedErrors() {
+
+      return this.errors.allErrors.collect{
+          "Field:${it.getField()}| , value:${it.getRejectedValue()}"
+      }.join('\n')
+
     }
 
     String toString() {

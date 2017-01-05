@@ -123,13 +123,13 @@ class ReceiverDeployment {
     static def recoveryDateValidator = {
         recoveryDate, obj ->
 
-/*        if (recoveryDate && !recoveryDate.after(obj.deploymentDateTime.toDate())) {
+        if (recoveryDate && !recoveryDate.after(obj.deploymentDateTime.toDate())) {
             return [ '!recoveryDate.after(obj.deploymentDateTime.toDate())' ]
         }
-*/
-        return [ 'whoot' ]
 
-//        return true
+//        return [ 'whoot' ]
+
+        return true
     }
 
     static def dateTimeValidator = { deploymentDateTime, deployment ->

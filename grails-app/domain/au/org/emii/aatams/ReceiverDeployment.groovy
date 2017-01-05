@@ -107,7 +107,7 @@ class ReceiverDeployment {
         station()
         initialisationDateTime(nullable: true)
         deploymentDateTime(validator: dateTimeValidator)
-        recoveryDate(nullable: true, validator: recoveryDateValidator)
+        recoveryDate(nullable: true, validator: scheduledRecoveryDateValidator)
         acousticReleaseID(nullable: true)
         mooringType()
         mooringDescriptor(nullable: true, blank: true)
@@ -120,14 +120,15 @@ class ReceiverDeployment {
         batteryLifeDays(nullable: true)
     }
 
-    static def recoveryDateValidator = {
-        recoveryDate, obj ->
+    static def scheduledRecoveryDateValidator = { recoveryDate, obj ->
 
         if (recoveryDate && !recoveryDate.after(obj.deploymentDateTime.toDate())) {
-            return [ '!recoveryDate.after(obj.deploymentDateTime.toDate())' ]
+            return [
+                'invalid scheduledRecoverDate',
+                recoveryDate,
+                deploymentDateTime.toDate()
+            ]
         }
-
-//        return [ 'whoot' ]
 
         return true
     }
@@ -153,12 +154,20 @@ class ReceiverDeployment {
 
         if (initDateTime && deploymentDateTime.isBefore(initDateTime)) {
 
-            return [ 'deploymentDateTime.isBefore(initDateTime)' ]
+            return [
+                    'invalid.deploymentDateTime.isBefore.initDateTime',
+                    deploymentDateTime.toDate(),
+                    initDateTime
+            ]
         }
 
         if(recoveryDateTime && recoveryDateTime.isBefore(deploymentDateTime)) {
 
-            return [ 'recoveryDateTime.isBefore(deploymentDateTime))' ]
+            return [
+                    'invalid.recoveryDateTime.isBefore.deploymentDateTime',
+                    recoveryDateTime,
+                    deploymentDateTime.toDate()
+            ]
         }
 
         def deployments = deployment.receiver?.deployments?.sort { it.deploymentDateTime }
@@ -168,19 +177,28 @@ class ReceiverDeployment {
 
         if(nextDeploymentDateTime && nextDeploymentDateTime.isBefore(recoveryDateTime)) {
 
-            return [ 'nextDeploymentDateTime.isBefore(recoveryDateTime))' ]
+            return [
+                    'invalid.nextDeploymentDateTime.isBefore(recoveryDateTime))',
+                    nextDeploymentDateTime,
+                    recoveryDateTime
+            ]
         }
 
         return true
     }
 
+    String formatValidationErrors() {
 
-    String formattedErrors() {
+      return this.errors.allErrors.collect {
 
-      return this.errors.allErrors.collect{
-          "Field:${it.getField()}| , value:${it.getRejectedValue()}"
+          // - note that it.code may exist even though there is no view of it in the debugger -
+          // presumably through some extended dynamic property introspection mechanism.
+          // - also, we only have field and rejectedValue in the Java peer class, which makes it difficult
+          // to create properly format messages for inequality errors involving two field values
+          // - Why the original code returns 3-tuples is not clear, but I have stayed with the convention
+              it.code + "Field: ${it.getField()}, value: ${it.getRejectedValue()}";
+
       }.join('\n')
-
     }
 
     String toString() {

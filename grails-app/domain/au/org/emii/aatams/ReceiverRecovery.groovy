@@ -59,6 +59,8 @@ class ReceiverRecovery {
                 obj.deployment.deploymentDateTime
             ]
         }
+
+        return true;
     }
 
     String toString() {

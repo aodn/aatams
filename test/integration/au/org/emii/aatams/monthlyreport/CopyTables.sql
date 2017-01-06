@@ -29,5 +29,5 @@ SELECT id, name, is_protected FROM aatams.project;
 SELECT detection.id, receiver_deployment_id, timestamp, transmitter_id, detection.receiver_name 
 FROM aatams.detection
 LEFT JOIN aatams.receiver ON detection.receiver_name::text = receiver.receiver_name
-LEFT JOIN aatams.deployment_and_recovery deployment_and_recovery ON receiver.id = deployment_and_recovery.receiver_id AND detection.timestamp >= deployment_and_recovery.initialisationdatetime_timestamp AND detection.timestamp <= deployment_and_recovery.recoverydatetime_timestamp
+LEFT JOIN aatams.deployment_and_recovery deployment_and_recovery ON receiver.id = deployment_and_recovery.receiver_id AND detection.timestamp >= deployment_and_recovery.deploymentdatetime_timestamp AND detection.timestamp <= deployment_and_recovery.recoverydatetime_timestamp
 WHERE aatams.invalid_reason(detection.*, receiver.*, deployment_and_recovery.*) IS NULL;

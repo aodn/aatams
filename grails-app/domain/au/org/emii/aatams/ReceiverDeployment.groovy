@@ -105,9 +105,9 @@ class ReceiverDeployment {
     static constraints = {
         receiver()
         station()
-        initialisationDateTime(nullable: true, validator: conflictingDeploymentValidator)
+        initialisationDateTime(nullable: true)
         deploymentDateTime(validator: dateTimeValidator)
-        recoveryDate(nullable: true, validator: recoveryDateValidator)
+        recoveryDate(nullable: true, validator: scheduledRecoveryDateValidator)
         acousticReleaseID(nullable: true)
         mooringType()
         mooringDescriptor(nullable: true, blank: true)
@@ -120,47 +120,85 @@ class ReceiverDeployment {
         batteryLifeDays(nullable: true)
     }
 
-    static def recoveryDateValidator = {
-        recoveryDate, obj ->
+    static def scheduledRecoveryDateValidator = { recoveryDate, obj ->
 
-        if (recoveryDate) {
-            return recoveryDate.after(obj.deploymentDateTime.toDate())
+        if (recoveryDate && !recoveryDate.after(obj.deploymentDateTime.toDate())) {
+            return [
+                'not scheduledRecoverDate after deploymentDateTime',
+                recoveryDate,
+                deploymentDateTime.toDate()
+            ]
         }
 
         return true
     }
 
-    static def conflictingDeploymentValidator = { initialisationDateTime, deployment ->
-        ReceiverDeploymentValidator.conflictingDeploymentValidator(
-            initialisationDateTime, deployment
-        )
-    }
-
     static def dateTimeValidator = { deploymentDateTime, deployment ->
+
+        /*
+            Xavier says,
+            GUI logic should be,
+              Within each record (row) --> initialisation_date < deployment_date < recovery_date
+              Across records (row)     --> deployment_date (t+1) > recovery_date (t)
+
+            interpret < as <=
+            must fall through to the next test, if current one passes
+        */
+
         def initDateTime = deployment.initialisationDateTime
-        if (!initDateTime) {
-            return true
+        def recoveryDateTime = deployment?.recovery?.recoveryDateTime
+
+        def scheduledRecovery = deployment.recoveryDate ? new DateTime(deployment.recoveryDate) : null
+
+        if (initDateTime && deploymentDateTime.isBefore(initDateTime)) {
+
+            return [
+                    'deploymentDateTime is before initDateTime',
+                    deploymentDateTime.toDate(),
+                    initDateTime
+            ]
         }
 
-        if (!deploymentDateTime.isBefore(initDateTime)) {
-            return true
+        if(recoveryDateTime && recoveryDateTime.isBefore(deploymentDateTime)) {
+
+            return [
+                    'recoveryDateTime is before deploymentDateTime',
+                    recoveryDateTime,
+                    deploymentDateTime.toDate()
+            ]
         }
 
-        [
-            'receiverDeployment.deploymentDateTime.notAfterInitialisationDateTime',
-            deployment.receiver,
-            deploymentDateTime,
-            initDateTime
-        ]
+        def deployments = deployment.receiver?.deployments?.sort { it.deploymentDateTime }
+        def deploymentIndex = deployments.findIndexOf { it.id == deployment.id }
+        def nextDeployment = deployments ? deployments[deploymentIndex + 1] : null
+        def nextDeploymentDateTime = nextDeployment?.deploymentDateTime
+
+        if(nextDeploymentDateTime && nextDeploymentDateTime.isBefore(recoveryDateTime)) {
+
+            return [
+                    'nextDeploymentDateTime is before recoveryDateTime',
+                    nextDeploymentDateTime,
+                    recoveryDateTime
+            ]
+        }
+
+        return true
     }
 
-    // Don't want to override 'equals()' as this causes unexpected behaviour with GORM.
-    boolean same(Object other) {
-        if (other == null) {
-            return false
-        }
+    String validationErrors() {
+        // Should properly be in the view code, but it's impossible to properly escape in a gsp <g:set/>
 
-        return (this.receiver.same(other.receiver) && this.undeployableInterval == other.undeployableInterval)
+        this.errors.allErrors.collect {
+
+            // - note that it.code may exist even if it doesn't appear in the debugger view-
+            // presumably through some extended dynamic property introspection mechanism.
+            // - also, we only have field and rejectedValue in the Java peer class, which makes it difficult
+            // to create properly formatted messages for inequality errors involving two field values
+            // I don't know why the original code returns 3-tuples hen we can't properly access those values,
+            // but I have stuck to the convention
+            "&bull; ${it.code}, ${it.getField()}=${it.getRejectedValue()}";
+
+        }.join('\\n')
     }
 
     String toString() {
@@ -197,32 +235,5 @@ class ReceiverDeployment {
         }
 
         return (!deploymentDateTime.isAfter(dateTime)) && dateTime.isBefore(recovery?.recoveryDateTime)
-    }
-
-    def getUndeployableInterval() {
-        def startDateTime = initialisationDateTime ?: deploymentDateTime
-
-        if (startDateTime && recovery) {
-            // A validation check for this condition has only been recently introduced. Ideally,
-            // we wouldn't need this check, but there are invalid records in the DB currently,
-            // so we need to check, otherwise the creation of the Interval below fails.
-            if (startDateTime > recovery.recoveryDateTime) {
-                log.debug("Invalid interval for deployment: ${String.valueOf(this)}")
-                return
-            }
-
-            if (recovery.status == DeviceStatus.RECOVERED) {
-                return new Interval(startDateTime, recovery.recoveryDateTime)
-            }
-            else {
-                return new OpenInterval(startDateTime)
-            }
-        }
-    }
-
-    def getDeploymentNumber() {
-        receiver?.deployments?.sort { it.deploymentDateTime }.findIndexOf {
-            it.same(this)
-        } + 1
     }
 }

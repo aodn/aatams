@@ -54,15 +54,13 @@ class ReceiverRecovery {
 
         if (!recoveryDateTime.isAfter(obj.deployment.deploymentDateTime)) {
             return [
-                'invalid.beforeDeploymentDateTime',
+                'not recoveryDateTime is after deploymentDateTime',
                 recoveryDateTime,
                 obj.deployment.deploymentDateTime
             ]
         }
 
-        ReceiverDeploymentValidator.conflictingDeploymentValidator(
-            obj.deployment.initialisationDateTime, obj.deployment
-        )
+        return true;
     }
 
     String toString() {

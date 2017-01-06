@@ -23,4 +23,5 @@ databaseChangeLog = {
     include file: 'remove_reporting_matview.groovy'
     include file: 'remove_unavailability_notification.groovy'
     include file: 'update_register_message.groovy'
+    include file: 'match_detections_on_deployment_to_recovery.groovy'
 }

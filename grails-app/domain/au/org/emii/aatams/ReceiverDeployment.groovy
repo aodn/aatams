@@ -185,7 +185,8 @@ class ReceiverDeployment {
         return true
     }
 
-    String formatValidationErrors() {
+    String validationErrors() {
+        // Should properly be in the view code, but it's impossible to properly escape in a gsp <g:set/>
 
         this.errors.allErrors.collect {
 
@@ -195,7 +196,7 @@ class ReceiverDeployment {
             // to create properly formatted messages for inequality errors involving two field values
             // I don't know why the original code returns 3-tuples hen we can't properly access those values,
             // but I have stuck to the convention
-            "&bull; ${it.code} ${it.getField()}=${it.getRejectedValue()}";
+            "&bull; ${it.code}, ${it.getField()}=${it.getRejectedValue()}";
 
         }.join('\\n')
     }

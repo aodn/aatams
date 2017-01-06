@@ -72,7 +72,7 @@
                         <g:link class="show" controller="receiverDeployment" action="show" id="${receiverDeployment.id}">.</g:link>
 
                         <g:if test="${hasErrors}">
-                            <a href="#" onclick="alert('Errors:\n${receiverDeployment.formatValidationErrors()}'); return false;" style="background: none;"><img src="/aatams/images/skin/exclamation.png" title="Click to see errors"></a>
+                            <a href="#" onclick="alert('Errors:\n${receiverDeployment.validationErrors()}'); return false;" style="background: none;"><img src="/aatams/images/skin/exclamation.png" title="Click to see errors"></a>
                         </g:if>
 
                     </td>

@@ -135,8 +135,6 @@ class ReceiverDeployment {
 
     static def dateTimeValidator = { deploymentDateTime, deployment ->
 
-        return true;
-
         /*
             Xavier says,
             GUI logic should be,
@@ -195,8 +193,8 @@ class ReceiverDeployment {
           // presumably through some extended dynamic property introspection mechanism.
           // - also, we only have field and rejectedValue in the Java peer class, which makes it difficult
           // to create properly format messages for inequality errors involving two field values
-          // - Why the original code returns 3-tuples is not clear, but I have stayed with the convention
-              it.code + "Field: ${it.getField()}, value: ${it.getRejectedValue()}";
+          // - Why the original code returns 3-tuples is not clear, but I have stuck to the convention
+              it.code + " field: ${it.getField()}, value: ${it.getRejectedValue()}";
 
       }.join('\n')
     }

@@ -193,7 +193,8 @@ class ReceiverDeployment {
           // presumably through some extended dynamic property introspection mechanism.
           // - also, we only have field and rejectedValue in the Java peer class, which makes it difficult
           // to create properly format messages for inequality errors involving two field values
-          // - Why the original code returns 3-tuples is not clear, but I have stuck to the convention
+          // - Why the original code returns 3-tuples is not clear when we can't properly format the errors,
+          // but I have stuck to the convention
               it.code + " field: ${it.getField()}, value: ${it.getRejectedValue()}";
 
       }.join('\n')

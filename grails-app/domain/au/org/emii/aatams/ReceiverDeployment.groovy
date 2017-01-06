@@ -124,7 +124,7 @@ class ReceiverDeployment {
 
         if (recoveryDate && !recoveryDate.after(obj.deploymentDateTime.toDate())) {
             return [
-                'invalid scheduledRecoverDate',
+                'not scheduledRecoverDate after deploymentDateTime',
                 recoveryDate,
                 deploymentDateTime.toDate()
             ]
@@ -153,7 +153,7 @@ class ReceiverDeployment {
         if (initDateTime && deploymentDateTime.isBefore(initDateTime)) {
 
             return [
-                    'invalid.deploymentDateTime.isBefore.initDateTime',
+                    'deploymentDateTime is before initDateTime',
                     deploymentDateTime.toDate(),
                     initDateTime
             ]
@@ -162,7 +162,7 @@ class ReceiverDeployment {
         if(recoveryDateTime && recoveryDateTime.isBefore(deploymentDateTime)) {
 
             return [
-                    'invalid.recoveryDateTime.isBefore.deploymentDateTime',
+                    'recoveryDateTime is before deploymentDateTime',
                     recoveryDateTime,
                     deploymentDateTime.toDate()
             ]
@@ -176,7 +176,7 @@ class ReceiverDeployment {
         if(nextDeploymentDateTime && nextDeploymentDateTime.isBefore(recoveryDateTime)) {
 
             return [
-                    'invalid.nextDeploymentDateTime.isBefore(recoveryDateTime))',
+                    'nextDeploymentDateTime is before recoveryDateTime',
                     nextDeploymentDateTime,
                     recoveryDateTime
             ]
@@ -187,17 +187,17 @@ class ReceiverDeployment {
 
     String formatValidationErrors() {
 
-      return this.errors.allErrors.collect {
+        this.errors.allErrors.collect {
 
-          // - note that it.code may exist even though there is no view of it in the debugger -
-          // presumably through some extended dynamic property introspection mechanism.
-          // - also, we only have field and rejectedValue in the Java peer class, which makes it difficult
-          // to create properly format messages for inequality errors involving two field values
-          // - Why the original code returns 3-tuples is not clear when we can't properly format the errors,
-          // but I have stuck to the convention
-              it.code + " field: ${it.getField()}, value: ${it.getRejectedValue()}";
+            // - note that it.code may exist even if it doesn't appear in the debugger view-
+            // presumably through some extended dynamic property introspection mechanism.
+            // - also, we only have field and rejectedValue in the Java peer class, which makes it difficult
+            // to create properly formatted messages for inequality errors involving two field values
+            // I don't know why the original code returns 3-tuples hen we can't properly access those values,
+            // but I have stuck to the convention
+            "&bull; ${it.code} ${it.getField()}=${it.getRejectedValue()}";
 
-      }.join('\n')
+        }.join('\\n')
     }
 
     String toString() {

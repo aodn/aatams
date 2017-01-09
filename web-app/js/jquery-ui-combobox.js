@@ -1,6 +1,11 @@
 (function( $ ) {
     $.widget( "ui.combobox", {
         _create: function() {
+
+            if (this.element[0].getAttribute("combobox") == "false") {
+                return false;
+            }
+
             var input,
                 self = this,
                 select = this.element.hide(),

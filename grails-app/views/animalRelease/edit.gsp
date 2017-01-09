@@ -7,6 +7,9 @@
         <g:set var="entityName" value="${message(code: 'animalRelease.label', default: 'AnimalRelease')}" />
         <g:set var="projectId" value="${animalReleaseInstance?.project?.id}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
+
+        <link rel="stylesheet" type="text/css" href="${resource(dir:'css', file:'select2-4.0.2.min.css') }" />
+        <g:javascript src="select2-4.0.2.min.js" />
         <g:javascript src="speciesLookup.js" />
         <g:javascript src="animalLookup.js" />
         <g:javascript src="addsurgerytoanimalrelease.js"/>
@@ -48,11 +51,13 @@
 
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                  <label class="compulsory" for="species"><g:message code="animalRelease.animal.species.label" default="Species" /></label>
+                                    <label class="compulsory" for="species"><g:message code="animalRelease.animal.species.label" default="Species" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'species', 'errors')}">
-                                  <g:hiddenField name="speciesId" value="${animalReleaseInstance?.animal?.species?.id}"/>
-                                  <g:textField name="speciesName" value="${animalReleaseInstance?.animal?.species?.name}" />
+                                <td valign="top" >
+                                    <select name="speciesId" id="placeSelect" combobox="false">
+                                        <option value="${animalReleaseInstance?.animal?.species?.id}">${animalReleaseInstance?.animal?.species?.name}</option>
+                                    </select>
+                                    <g:hiddenField name="speciesName" value="${animalReleaseInstance?.animal?.species?.name}" />
                                 </td>
                             </tr>
 

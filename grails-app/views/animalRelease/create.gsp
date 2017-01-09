@@ -7,7 +7,9 @@
         <meta name="layout" content="main" />
         <g:set var="entityName" value="${message(code: 'animalRelease.label', default: 'AnimalRelease')}" />
         <title><g:message code="default.create.label" args="[entityName]" /></title>
-        
+
+        <link rel="stylesheet" type="text/css" href="${resource(dir:'css', file:'select2-4.0.2.min.css') }" />
+        <g:javascript src="select2-4.0.2.min.js" />
         <g:javascript src="speciesLookup.js" />
         <g:javascript src="animalLookup.js" />
         <g:javascript src="animalRelease.js" />
@@ -45,17 +47,16 @@
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance, field: 'project', 'errors')}">
                                     <g:select name="project.id" class="remember" from="${candidateProjects}" optionKey="id" value="${animalReleaseInstance?.project?.id}"  />
-
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label class="compulsory" for="species"><g:message code="animalRelease.animal.species.label" default="Species" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: animalReleaseInstance.animal, field: 'species', 'errors')}">
-                                  <g:hiddenField name="speciesId" value="${species?.id}"/>
-                                  <g:textField name="speciesName" value="${species?.name}" />
+                                <td valign="top" >
+                                    <select name="speciesId" id="placeSelect" combobox="false"></select>
+                                    <g:hiddenField name="speciesName"/>
                                 </td>
                             </tr>
                         

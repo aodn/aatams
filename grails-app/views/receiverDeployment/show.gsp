@@ -41,9 +41,7 @@
                     
                         <tr class="prop">
                             <td valign="top" class="name"><g:message code="receiverDeployment.deploymentNumber.label" default="Deployment Number" /></td>
-                            
-                            <td valign="top" class="value">${fieldValue(bean: receiverDeploymentInstance, field: "deploymentNumber")}</td>
-                            
+                            <td valign="top" class="value"> ${receiverDeploymentInstance?.deploymentNumber}</td>
                         </tr>
                         
                         <tr class="prop">

@@ -19,7 +19,7 @@ import com.vividsolutions.jts.geom.Point
  */
 class ReceiverDeployment {
     static belongsTo = [station: InstallationStation, receiver: Receiver]
-    static transients = [ 'scrambledLocation', 'active', 'latitude', 'longitude', 'deploymentInterval', 'deploymentNumber' ]
+    static transients = [ 'scrambledLocation', 'active', 'latitude', 'longitude', 'deploymentInterval' ]
     static auditable = true
 
     static hasMany = [ events: ValidReceiverEvent ]
@@ -27,6 +27,8 @@ class ReceiverDeployment {
     DateTime initialisationDateTime
 
     DateTime deploymentDateTime = new DateTime(Person.defaultTimeZone())
+
+    Integer deploymentNumber;
 
     static mapping = {
         initialisationDateTime type: PersistentDateTimeTZ, {

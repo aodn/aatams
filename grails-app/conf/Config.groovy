@@ -99,6 +99,7 @@ environments {
         grails.serverHost = "http://aatams.emii.org.au"
         fileimport.path = new File(System.getProperty('java.io.tmpdir'), "aatams/test_uploads").toString()
         bulkimport.path = new File(fileimport.path, "bulkimports").toString()
+        googleAnalytics.trackingId = null
         grails.mail.host = "localhost"
     }
     development {
@@ -108,6 +109,7 @@ environments {
         bulkimport.path = new File(fileimport.path, "bulkimports").toString()
 
         grails.mail.adminEmailAddress = "jkburges@utas.edu.au"
+        googleAnalytics.trackingId = null
         grails.mail.host = "postoffice.utas.edu.au"
         grails.mail.disabled = true
     }
@@ -115,6 +117,7 @@ environments {
         grails.serverURL = "http://localhost:8090/${grails.util.Metadata.current.getApplicationName()}"
         grails.serverHost = "http://localhost:8090"
         grails.mail.disabled = true
+        googleAnalytics.trackingId = null
 
         fileimport.path = "/tmp"
     }

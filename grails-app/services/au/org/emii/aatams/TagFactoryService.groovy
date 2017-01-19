@@ -4,6 +4,36 @@ class TagFactoryService {
 
     static transactional = true
 
+    def create(params) throws IllegalArgumentException {
+        Tag tag = new Tag(params.tag)
+        Sensor sensor = new Sensor(params)
+        tag.addToSensors(sensor)
+
+        if (tag.save(validate: true)) {
+            log.info("Saved tag: " + String.valueOf(tag))
+        }
+        else {
+            log.error(tag.errors)
+        }
+
+        return tag
+    }
+
+    def update(params) throws IllegalArgumentException {
+        Tag tag = Tag.get(params.tag.id)
+        Sensor sensor = new Sensor(params)
+        tag.addToSensors(sensor)
+
+        if (tag.save(validate: true)) {
+            log.info("Saved tag: " + String.valueOf(tag))
+        }
+        else {
+            log.error(tag.errors)
+        }
+
+        return tag
+    }
+
     def lookupOrCreate(params) throws IllegalArgumentException {
         def tag = Tag.findBySerialNumber(params.serialNumber)
 

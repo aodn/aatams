@@ -28,11 +28,11 @@ class SensorController extends ReportController {
                 candidateProjects:candidateEntitiesService.projects()]
     }
 
-    def save = {
-        def tag = tagFactoryService.lookupOrCreate(params.tag)
+    def createNew = {
+        def tag = tagFactoryService.create(params)
         assert(tag)
 
-        def sensorInstance = new Sensor(params)
+        def sensorInstance = tag.sensors.iterator().next()
 
         if (tag.hasErrors()) {
             if (params.responseType == 'json') {
@@ -40,18 +40,13 @@ class SensorController extends ReportController {
             }
             else {
                 render view: "create", model: [
-                    sensorInstance: sensorInstance,
-                    candidateProjects:candidateEntitiesService.projects()
+                        sensorInstance: sensorInstance,
+                        candidateProjects:candidateEntitiesService.projects()
                 ]
             }
 
             return
-        }
-
-        // Workaround for http://jira.grails.org/browse/GRAILS-3783
-        tag.addToSensors(sensorInstance)
-
-        if (sensorInstance.save(flush: true)) {
+        } else {
             flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
 
             if (params.responseType == 'json') {
@@ -62,16 +57,35 @@ class SensorController extends ReportController {
                 redirect(controller: "tag", action: "show", id: sensorInstance.tag?.id)
             }
         }
-        else {
-            log.error(sensorInstance.errors)
+    }
 
+    def save = {
+        def tag = tagFactoryService.update(params)
+        assert(tag)
+
+        def sensorInstance = tag.sensors.iterator().next()
+
+        if (tag.hasErrors()) {
             if (params.responseType == 'json') {
-                render ([errors:sensorInstance.errors] as JSON)
+                render([errors: tag.errors] as JSON)
             }
             else {
-                def model =  [sensorInstance: sensorInstance,
-                              candidateProjects:candidateEntitiesService.projects()]
-                render(view: "create", model: model)
+                render view: "create", model: [
+                        sensorInstance: sensorInstance,
+                        candidateProjects:candidateEntitiesService.projects()
+                ]
+            }
+
+            return
+        } else {
+            flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
+
+            if (params.responseType == 'json') {
+                render ([instance:sensorInstance, message:flash, tag:[id: tag.id]] as JSON)
+            }
+            else {
+                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'sensor.label', default: 'Tag'), sensorInstance.toString()])}"
+                redirect(controller: "tag", action: "show", id: sensorInstance.tag?.id)
             }
         }
     }

@@ -1,5 +1,7 @@
 package au.org.emii.aatams
 
+import org.apache.commons.lang.StringUtils
+
 /**
  * Represents a single sensor belonging to a tag (there can be more than one
  * sensor on each tag).
@@ -33,7 +35,7 @@ class Sensor implements Embargoable {
     String transmitterId
 
     static constraints = {
-        tag()
+        tag(validator: codeMapValidator)
         pingCode()
         transmitterType(unique: 'tag')
         unit(nullable:true)
@@ -90,6 +92,13 @@ class Sensor implements Embargoable {
         }
 
         return null
+    }
+
+    static def codeMapValidator = { tag, deployment ->
+        if (!deployment.tag.codeMap.listValidTransmitterTypeValues().contains(deployment.transmitterType.toString())) {
+            CodeMap invalidCodeMap = CodeMap.get(tag.codeMap.id)
+            return ['sensor.invalidCodeMapTransmitterType', invalidCodeMap.codeMap, StringUtils.join(invalidCodeMap.listValidTransmitterTypeValues(), ", ")]
+        }
     }
 
     List<Person> getOwningPIs() {

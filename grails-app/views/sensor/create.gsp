@@ -1,4 +1,5 @@
 <%@ page import="au.org.emii.aatams.Sensor" %>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -27,7 +28,7 @@
                     <g:renderErrors bean="${sensorInstance?.tag}" as="list" />
                 </div>
             </g:hasErrors>
-            <g:form action="save" >
+            <g:form action="createNew">
                 <div class="dialog">
                     <table>
                         <tbody>

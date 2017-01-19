@@ -30,6 +30,15 @@ class Tag extends Device implements Embargoable {
     static constraints = {
         project(nullable:true)
         expectedLifeTimeDays(nullable:true)
+        sensors (validator: { sensors ->
+            def error = true
+            sensors.every {
+                if (!it.validate()) {
+                    error = 'tag.invalidCodeMapTransmitterType'
+                }
+            }
+            return  error
+        })
     }
 
     static transients = ['expectedLifeTimeDaysAsString', 'deviceID', 'pinger', 'pingCode', 'pingCodes', 'transmitterTypeNames', 'nonPingerSensors', 'owningPIs']
@@ -132,14 +141,7 @@ class Tag extends Device implements Embargoable {
 
         def typesOnThis = sensors*.transmitterType
         def unusedTypes = TransmitterType.list() - typesOnThis
-
-        return unusedTypes
-    }
-
-    List<TransmitterType> getUnusedSensorTypes() {
-
-        def typesOnThis = sensors*.transmitterType
-        def unusedTypes = TransmitterType.sensorTypes() - typesOnThis
+        unusedTypes.retainAll(codeMap.listValidTransmitterTypes())
 
         return unusedTypes
     }

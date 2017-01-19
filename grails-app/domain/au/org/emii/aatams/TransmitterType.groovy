@@ -6,6 +6,8 @@ package au.org.emii.aatams
 class TransmitterType {
     String transmitterTypeName
 
+    static hasMany = [validCodeMapTransmitterTypes:ValidCodeMapTransmitterType]
+
     static constraints = {
         transmitterTypeName(blank:false, unique:true)
     }
@@ -44,6 +46,4 @@ class TransmitterType {
             return false;
         return true;
     }
-
-
 }

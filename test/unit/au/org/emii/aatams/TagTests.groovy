@@ -243,16 +243,4 @@ class TagTests extends GrailsUnitTestCase {
 
         assertEquals([pinger, temp], tag.unusedTransmitterTypes)
     }
-
-    void testUnusedSensorTypes() {
-
-        assertEquals([], tag.unusedSensorTypes)
-
-        tag.removeFromSensors(tempSensor)
-
-        assertEquals([temp], tag.unusedSensorTypes)
-
-        def newTag = new Tag()
-        assertFalse newTag.unusedSensorTypes.contains(pinger)
-    }
 }

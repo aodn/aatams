@@ -138,19 +138,16 @@
                                           <td class="rowButton">
                                             <g:link class="show" controller="sensor" action="show" id="${s?.id}"></g:link>
                                           </td>
-                                          <g:if test="${tagInstance.sensors.size() > 1}">
-                                              <shiro:hasPermission permission="project:${tagInstance?.project?.id}:edit_children">
-                                                  <td class="rowButton">
-                                                      <g:link controller="sensor"
-                                                              action="delete"
-                                                              class="delete"
-                                                              params="[projectId:tagInstance?.project?.id]"
-                                                              id="${s?.id}"
-                                                              onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">.</g:link>
-                                                  </td>
-                                              </shiro:hasPermission>
-                                          </g:if>
-                                          <td>${s?.transmitterType}</td>
+                                          <shiro:hasPermission permission="project:${tagInstance?.project?.id}:edit_children">
+                                            <td class="rowButton">
+                                                <g:link controller="sensor"
+                                                    action="delete"
+                                                    class="delete"
+                                                    params="[projectId:tagInstance?.project?.id]"
+                                                    id="${s?.id}"
+                                                    onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">.</g:link>
+                                            </td>
+                                          </shiro:hasPermission>                                          <td>${s?.transmitterType}</td>
                                           <td>${s?.codeMap}</td>
                                           <td>${s?.pingCode}</td>
                                           <td>${s?.slope}</td>
@@ -162,7 +159,7 @@
                                       <tr><td><br/></td></tr>
                                       <tr>
                                         <td colspan="5">
-                                          <g:if test="${!tagInstance.unusedSensorTypes.isEmpty()}">
+                                          <g:if test="${!tagInstance.unusedTransmitterTypes.isEmpty()}">
                                             <a href="#" id='add_sensor_to_tag'>${message(code: 'default.add.label', args: [message(code: 'sensor.label', default: 'Sensor...')])}</a>
                                           </g:if>
                                         </td>
@@ -201,7 +198,7 @@
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
                                 <g:select name="transmitterTypeId"
-                                          from="${tagInstance.unusedSensorTypes}"
+                                          from="${tagInstance.unusedTransmitterTypes}"
                                           optionKey="id"
                                           value="${sensorInstance?.transmitterType?.id}"  />
 

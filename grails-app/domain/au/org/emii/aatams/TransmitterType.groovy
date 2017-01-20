@@ -8,8 +8,21 @@ class TransmitterType {
 
     static hasMany = [validCodeMapTransmitterTypes:ValidCodeMapTransmitterType]
 
+    Boolean isSlopeNeeded
+    Boolean isInterceptNeeded
+    Boolean isUnitNeeded
+
     static constraints = {
         transmitterTypeName(blank:false, unique:true)
+        isSlopeNeeded(nullable: false)
+        isInterceptNeeded(nullable: false)
+        isUnitNeeded(nullable: false)
+    }
+
+    static mapping = {
+        isSlopeNeeded defaultValue: false
+        isInterceptNeeded defaultValue: false
+        isUnitNeeded defaultValue: false
     }
 
     String toString() {

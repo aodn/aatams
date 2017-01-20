@@ -38,9 +38,9 @@ class Sensor implements Embargoable {
         tag(validator: codeMapValidator)
         pingCode()
         transmitterType(unique: 'tag')
-        unit(nullable:true)
-        slope(nullable:true)
-        intercept(nullable:true)
+        unit(nullable:true, validator: unitValidator)
+        slope(nullable:true, validator: slopeValidator)
+        intercept(nullable:true, validator: interceptValidator)
         transmitterId(nullable:true)
     }
 
@@ -92,6 +92,30 @@ class Sensor implements Embargoable {
         }
 
         return null
+    }
+
+    static def unitValidator = { unit, deployment ->
+        if (deployment.transmitterType.isUnitNeeded && unit == null) {
+            return ['sensor.unit.empty', deployment.transmitterType]
+        } else if (!deployment.transmitterType.isUnitNeeded && unit != null) {
+            return ['sensor.unit.notEmpty', deployment.transmitterType]
+        }
+    }
+
+    static def slopeValidator = { slope, deployment ->
+        if (deployment.transmitterType.isSlopeNeeded && slope == null) {
+            return ['sensor.slope.empty', deployment.transmitterType]
+        } else if (!deployment.transmitterType.isSlopeNeeded && slope != null) {
+            return ['sensor.slope.notEmpty', deployment.transmitterType]
+        }
+    }
+
+    static def interceptValidator = { intercept, deployment ->
+        if (deployment.transmitterType.isInterceptNeeded && intercept == null) {
+            return ['sensor.intercept.empty', deployment.transmitterType]
+        } else if (!deployment.transmitterType.isInterceptNeeded && intercept != null) {
+            return ['sensor.intercept.notEmpty', deployment.transmitterType]
+        }
     }
 
     static def codeMapValidator = { tag, deployment ->

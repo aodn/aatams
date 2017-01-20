@@ -26,4 +26,6 @@ databaseChangeLog = {
     include file: 'match_detections_on_deployment_to_recovery.groovy'
     include file: 'new_code_map.groovy'
     include file: 'valid_code_map_transmitter_type.groovy'
+    include file: 'add_slope_unit_intercept.groovy'
+    include file: 'add_slope_unit_intercept_values.groovy'
 }

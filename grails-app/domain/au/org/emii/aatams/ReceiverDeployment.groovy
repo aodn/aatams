@@ -138,8 +138,10 @@ class ReceiverDeployment {
         /*
             Xavier says,
             GUI logic should be,
-              Within each record (row) --> initialisation_date < deployment_date < recovery_date
+              Within each record (row) --> initialisation_date < deployment_date < recovery_date   (relax for a new deployment)
               Across records (row)     --> deployment_date (t+1) > recovery_date (t)
+
+
 
             interpret < as <=
             must fall through to the next test, if current one passes
@@ -159,7 +161,7 @@ class ReceiverDeployment {
             ]
         }
 
-        if(recoveryDateTime && recoveryDateTime.isBefore(deploymentDateTime)) {
+        if (recoveryDateTime && recoveryDateTime.isBefore(deploymentDateTime)) {
 
             return [
                     'recoveryDateTime is before deploymentDateTime',
@@ -170,16 +172,41 @@ class ReceiverDeployment {
 
         def deployments = deployment.receiver?.deployments?.sort { it.deploymentDateTime }
         def deploymentIndex = deployments.findIndexOf { it.id == deployment.id }
-        def nextDeployment = deployments ? deployments[deploymentIndex + 1] : null
-        def nextDeploymentDateTime = nextDeployment?.deploymentDateTime
+        if (deploymentIndex >= 0) {
 
-        if(nextDeploymentDateTime && nextDeploymentDateTime.isBefore(recoveryDateTime)) {
+            // deployment is a deployment that is known and already exists in the database,
+            // so check recoveryDateTime(t) < deploymentDateTime(t+1)
+            def nextDeployment = deployments ? deployments[deploymentIndex + 1] : null
+            def nextDeploymentDateTime = nextDeployment?.deploymentDateTime
 
-            return [
-                    'nextDeploymentDateTime is before recoveryDateTime',
-                    nextDeploymentDateTime,
-                    recoveryDateTime
-            ]
+            if (nextDeploymentDateTime && nextDeploymentDateTime.isBefore(recoveryDateTime)) {
+
+                return [
+                        'nextDeploymentDateTime is before recoveryDateTime',
+                        nextDeploymentDateTime,
+                        recoveryDateTime
+                ]
+            }
+        } else {
+            
+            // the deployment is unknown - ie. the user is creating a new one
+            // so check that all deployments for the receiver have been recovered
+
+            def nonRecoveredDeployment = null;
+
+            deployments.each({
+                if(!it.recovery?.recoveryDateTime) {
+                    nonRecoveredDeployment = it;
+                }
+            })
+
+            if(nonRecoveredDeployment) {
+                return [
+                        'new Deployment of existing receiver but not all deployments are recovered',
+                        nonRecoveredDeployment.receiver,
+                        nonRecoveredDeployment.deploymentDateTime
+                ]
+            }
         }
 
         return true

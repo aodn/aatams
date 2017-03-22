@@ -66,10 +66,10 @@ grails.exceptionresolver.params.exclude = ['password']
 grails.converters.json.circular.reference.behaviour = "INSERT_NULL"
 
 // Mail plugin config
-grails.mail.adminEmailAddress = "aatams_admin@emii.org.au"
-grails.mail.systemEmailAddress = "aatams_system@emii.org.au"
-grails.mail.supportEmailAddress = "info@aodn.org.au"
-grails.mail.dataCommitteeEmailAddress = "aatams_data_committee@emii.org.au"
+grails.mail.adminEmailAddress = "a.mckeown@utas.edu.au"
+grails.mail.systemEmailAddress = "a.mckeown@utas.edu.au"
+grails.mail.supportEmailAddress = "a.mckeown@utas.edu.au"
+grails.mail.dataCommitteeEmailAddress = "a.mckeown@utas.edu.au"
 grails.mail.embargoExtension.url = "http://imos.org.au/459.html"
 
 grails.mail.port = 25

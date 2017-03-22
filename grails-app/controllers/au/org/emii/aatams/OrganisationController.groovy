@@ -21,25 +21,9 @@ class OrganisationController {
 
         if (!SecurityUtils.getSubject().hasRole("SysAdmin")) {
             // Filter out non-ACTIVE organisations (only sys admin should see these).
-            organisationList = organisationList.grep {
-                return (it.status == EntityStatus.ACTIVE)
-            }
-
-            // Only count ACTIVE organisations.
-            // TODO: why doesn't .count({}) work here?
-            organisationTotal = 0
-            Organisation.list().each {
-                if (it.status == EntityStatus.ACTIVE) {
-                    organisationTotal++
-                }
-            }
-//            organisationTotal =
-//                Organisation.list().count
-//                {
-//                    it.status == EntityStatus.ACTIVE
-//                }
+            organisationTotal = Organisation.findAllByStatus(EntityStatus.ACTIVE).size();
+            organisationList = Organisation.findAllByStatus(EntityStatus.ACTIVE, params);
         }
-
         [organisationInstanceList: organisationList, organisationInstanceTotal: organisationTotal]
     }
 

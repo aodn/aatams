@@ -22,19 +22,9 @@ class ProjectController {
         def projectList = Project.list(params)
 
         if (!userIsAdmin()) {
-            // Filter out non-ACTIVE organisations (only sys admin should see these).
-            projectList = projectList.grep {
-                return (it.status == EntityStatus.ACTIVE)
-            }
-
-            // Only count ACTIVE projects.
-            // TODO: why doesn't count({}) work?
-            projectTotal = 0
-            Project.list().each {
-                if (it.status == EntityStatus.ACTIVE) {
-                    projectTotal++
-                }
-            }
+            // Filter out non-ACTIVE projects (only sys admin should see these).
+            projectTotal = Project.findAllByStatus(EntityStatus.ACTIVE).size();
+            projectList = Project.findAllByStatus(EntityStatus.ACTIVE, params);
         }
 
         [projectInstanceList: projectList, projectInstanceTotal: projectTotal]

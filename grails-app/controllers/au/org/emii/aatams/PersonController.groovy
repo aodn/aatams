@@ -23,18 +23,8 @@ class PersonController {
 
         if (!SecurityUtils.getSubject().hasRole("SysAdmin")) {
             // Filter out non-ACTIVE people (only sys admin should see these).
-            personList = personList.grep {
-                return (it.status == EntityStatus.ACTIVE)
-            }
-
-            // Only count ACTIVE people..
-            // TODO: why doesn't count({}) work?
-            personTotal = 0
-            Person.list().each {
-                if (it.status == EntityStatus.ACTIVE) {
-                    personTotal++
-                }
-            }
+            personTotal = Person.findAllByStatus(EntityStatus.ACTIVE).size();
+            personList = Person.findAllByStatus(EntityStatus.ACTIVE, params);
         }
 
         [personInstanceList: personList, personInstanceTotal: personTotal]

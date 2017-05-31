@@ -21,6 +21,7 @@ class PersonController {
         def personTotal = Person.count()
         def personList = Person.list(params)
 
+
         if (!SecurityUtils.getSubject().hasRole("SysAdmin")) {
             // Filter out non-ACTIVE people (only sys admin should see these).
             personTotal = Person.findAllByStatus(EntityStatus.ACTIVE).size();

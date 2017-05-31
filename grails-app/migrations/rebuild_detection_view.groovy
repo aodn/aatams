@@ -1,6 +1,11 @@
 databaseChangeLog = {
     changeSet(author: 'dnahodil', id: '1445913902000-00', runOnChange: true, failOnError: true) {
-        createView(
+        dropView(viewName: 'valid_detection')
+        dropView(viewName: 'invalid_detection')
+        dropView(viewName: 'detection_view')
+	dropView(viewName: 'surgery_with_end_date')        
+
+	createView(
             '''
             SELECT
                 surgery.*,
@@ -17,10 +22,6 @@ databaseChangeLog = {
             ''',
             viewName: 'surgery_with_end_date'
         )
-
-        dropView(viewName: 'valid_detection')
-        dropView(viewName: 'invalid_detection')
-        dropView(viewName: 'detection_view')
 
         createView('''
             SELECT
@@ -48,6 +49,7 @@ databaseChangeLog = {
                 species.spcode,
                 species.scientific_name,
                 species.common_name,
+		species.name AS species_name,
                 invalid_reason(detection.*, receiver.*, deployment_and_recovery.*) AS invalid_reason,
                 sensor.transmitter_id AS sensor_id,
                 tag.project_id AS tag_project_id,

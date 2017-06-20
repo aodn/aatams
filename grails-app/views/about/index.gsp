@@ -92,9 +92,9 @@
             <a href="http://www.utas.edu.au/"><img src="https://static.emii.org.au/images/logo/utas/UTAS_MONO_Stacked_208w.png"   height="80" alt="Utas Logo" /></a>
 
             <p><a title="Integrated Marine Observing System" href="http://www.imos.org.au">IMOS</a>
-                is a national collaborative research infrastructure, supported by Australian Government. It is led by
-                <a href="http://www.utas.edu.au/">University of Tasmania</a>
-                in partnership with the Australian marine & climate science community.
+                is a national collaborative research infrastructure, supported by Australian Government.
+                It is operated by a consortium of institutions as an unincorporated joint venture, with the
+                <a href="http://www.utas.edu.au/">University of Tasmania</a> as Lead Agent.
             </p>
 
             <br/>

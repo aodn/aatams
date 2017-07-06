@@ -12,6 +12,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase {
     def tagFactoryService
 
     def codeMap
+    def species
 
     protected void setUp() {
         super.setUp()
@@ -210,17 +211,17 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase {
 
     void testSaveWithSpeciesNoSex() {
         params.animal = null
-        params.speciesId = Species.findByName('White Shark').id
+        params.speciesId = CaabSpecies.findByName(species.name).id
         params.sex = null
         assertNoExceptionAfterSave()
 
         assertNull(animalReleaseInstance.animal.sex)
-        assertEquals(Species.findByName('White Shark'), animalReleaseInstance.animal.species)
+        assertEquals(CaabSpecies.findByName(species.name), animalReleaseInstance.animal.species)
     }
 
     void testSaveWithSpeciesAndSex() {
         params.animal = null
-        params.speciesId = Species.findByName('White Shark').id
+        params.speciesId = CaabSpecies.findByName(species.name).id
         params.sex = [id:Sex.findBySex('MALE').id]
 
         assertNoExceptionAfterSave()
@@ -316,9 +317,9 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase {
         mockDomain(AnimalRelease)
         mockDomain(Surgery)
 
-        Species whiteShark = new Species(name:'White Shark')
-        mockDomain(Species, [whiteShark])
-        whiteShark.save()
+        species = new CaabSpecies(name:'White Shark')
+        mockDomain(CaabSpecies, [species])
+        mockDomain(Species, [species]) // not done automatically by above
 
         Sex male = new Sex(sex:'MALE')
         mockDomain(Sex, [male])
@@ -329,7 +330,7 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase {
         mockDomain(Project, [project])
         project.save()
 
-        Animal animal = new Animal(species:whiteShark)
+        Animal animal = new Animal(species:species)
         mockDomain(Animal, [animal])
         animal.save()
 

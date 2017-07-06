@@ -32,6 +32,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
 
     CodeMap codeMap
 
+    def species
     def person
 
     protected void setUp() {
@@ -109,7 +110,9 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
 
         mockDomain(Animal)
         mockDomain(Sex)
-        mockDomain(Species)
+
+        species = new CaabSpecies(name: "test")
+        mockDomain(CaabSpecies, [species])
 
         codeMap = new CodeMap(codeMap:"A69-1303")
         mockDomain(CodeMap, [codeMap])
@@ -162,7 +165,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
     }
 
     void testSaveWithAnimalNoSurgery() {
-        Animal animal = new Animal(species:new Species(),
+        Animal animal = new Animal(species:species,
                                    sex:new Sex())
         mockDomain(Animal, [animal])
         animal.save()
@@ -176,7 +179,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
     }
 
     void testSaveWithAnimal() {
-        Animal animal = new Animal(species:new Species(),
+        Animal animal = new Animal(species:species,
                                    sex:new Sex())
         mockDomain(Animal, [animal])
         animal.save()
@@ -192,9 +195,8 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
     }
 
     void testSaveWithSpeciesNoSexNoSurgery() {
-        Species species = new Species(name:"white shark")
-        mockDomain(Species, [species])
-        species.save()
+        CaabSpecies species = new CaabSpecies(name:"white shark")
+        mockDomain(CaabSpecies, [species])
 
         mockDomain(Animal)
         mockDomain(AnimalRelease)
@@ -208,13 +210,13 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
 
         assertEquals("animalRelease.noTaggings", model.animalReleaseInstance.errors.getGlobalError().getCode())
         assertEquals(species.id, model.species.id)
-        assertEquals("white shark", model.species.name)
+        assertEquals(species.name, model.species.name)
     }
 
     void testSaveWithSpeciesNoSex() {
-        Species species = new Species()
-        mockDomain(Species, [species])
-        species.save()
+        CaabSpecies species = new CaabSpecies(name:"white shark")
+        mockDomain(CaabSpecies, [species])
+        mockDomain(Species, [species]) // not included above
 
         mockDomain(Animal)
         mockDomain(AnimalRelease)
@@ -235,9 +237,9 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
     }
 
     void testSaveWithSpeciesAndSex() {
-        Species species = new Species()
-        mockDomain(Species, [species])
-        species.save()
+        CaabSpecies species = new CaabSpecies(name:"flathead")
+        mockDomain(CaabSpecies, [species])
+        mockDomain(Species, [species]) // not included above
 
         Sex sex = new Sex(sex:'MALE')
         mockDomain(Sex, [sex])
@@ -301,7 +303,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
     }
 
     void testSaveWithOneSurgery() {
-        Animal animal = new Animal(species:new Species())
+        Animal animal = new Animal(species:species)
         mockDomain(Animal, [animal])
         animal.save()
         controller.params.animal = [id:animal.id]
@@ -353,7 +355,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
     }
 
     void testSaveTagInDifferentProject() {
-        Animal animal = new Animal(species:new Species())
+        Animal animal = new Animal(species:species)
         mockDomain(Animal, [animal])
         animal.save()
         controller.params.animal = [id:animal.id]
@@ -404,7 +406,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
     }
 
     void testSaveWithMultipleSurgeries() {
-        Animal animal = new Animal(species:new Species())
+        Animal animal = new Animal(species:species)
         mockDomain(Animal, [animal])
         animal.save()
         controller.params.animal = [id:animal.id]
@@ -476,7 +478,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
 //    void testSaveWithSurgeriesAndMeasurements()
 
     void testSaveOneSurgeryNewTag() {
-        Animal animal = new Animal(species:new Species())
+        Animal animal = new Animal(species:species)
         mockDomain(Animal, [animal])
         animal.save()
         controller.params.animal = [id:animal.id]
@@ -531,9 +533,8 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
 
 
     void testSaveNoProject() {
-        Species species = new Species()
-        mockDomain(Species, [species])
-        species.save()
+        CaabSpecies species = new CaabSpecies()
+        mockDomain(CaabSpecies, [species])
 
         Animal animal = new Animal(species:species)
         mockDomain(Animal, [animal])
@@ -553,9 +554,8 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
      * Tests that status is set correctly when an animal is re-released.
      */
     void testSaveStatusCurrentPreviousFinished() {
-        Species species = new Species(name:"flathead")
-        mockDomain(Species, [species])
-        species.save()
+        CaabSpecies species = new CaabSpecies(name:"flathead")
+        mockDomain(CaabSpecies, [species])
 
         Animal animal = new Animal(species:species)
         mockDomain(Animal, [animal])
@@ -588,7 +588,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
     }
 
     void testSaveNoEmbargo() {
-        Animal animal = new Animal(species:new Species(),
+        Animal animal = new Animal(species:species,
                                    sex:new Sex())
         mockDomain(Animal, [animal])
         animal.save()
@@ -606,7 +606,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
     }
 
     void testSave3MonthsEmbargo() {
-        Animal animal = new Animal(species:new Species(),
+        Animal animal = new Animal(species:species,
                                    sex:new Sex())
         mockDomain(Animal, [animal])
         animal.save()
@@ -636,7 +636,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
 
     void testUpdateNoEmbargo() {
         // Create the release first...
-        Animal animal = new Animal(species:new Species(),
+        Animal animal = new Animal(species:species,
                                    sex:new Sex())
         mockDomain(Animal, [animal])
         animal.save()
@@ -665,7 +665,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
 
     void testUpdate3MonthsEmbargo() {
         // Create the release first...
-        Animal animal = new Animal(species:new Species(),
+        Animal animal = new Animal(species:species,
                                    sex:new Sex())
         mockDomain(Animal, [animal])
         animal.save()
@@ -701,7 +701,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
     }
 
     void testSave3MonthUpdateNo() {
-        Animal animal = new Animal(species:new Species(),
+        Animal animal = new Animal(species:species,
                                    sex:new Sex())
         mockDomain(Animal, [animal])
         animal.save()

@@ -6,7 +6,7 @@ import grails.converters.JSON
 import grails.converters.XML
 
 class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase {
-    def user
+    Person user
 
     protected void setUp() {
         super.setUp()

@@ -10,19 +10,24 @@ import java.util.Date
 class AnimalReleaseSummaryServiceTests extends GrailsUnitTestCase  {
     def service
 
+    def whiteShark
+    def flathead
+    def stingray
+    def pinkLing
+
     protected void setUp()  {
         super.setUp()
 
         mockLogging(AnimalReleaseSummaryService, true)
         service = new AnimalReleaseSummaryService()
 
-        Species whiteShark = new Species(name:"white shark")
-        Species flathead = new Species(name:"flathead")
-        Species stingray = new Species(name:"stingray")
-        Species pinkLing = new Species(name:"pink ling")
+        whiteShark = new CaabSpecies(name:"white shark")
+        flathead = new CaabSpecies(name:"flathead")
+        stingray = new CaabSpecies(name:"stingray")
+        pinkLing = new CaabSpecies(name:"pink ling")
         def speciesList = [whiteShark, flathead, stingray, pinkLing]
         mockDomain(Species, speciesList)
-        speciesList.each { it.save() }
+        mockDomain(CaabSpecies, speciesList)
 
         Animal whiteShark1 = new Animal(species:whiteShark)
         Animal flathead1 = new Animal(species:flathead)
@@ -77,20 +82,20 @@ class AnimalReleaseSummaryServiceTests extends GrailsUnitTestCase  {
         assertEquals(3, result.size())
 
         AnimalReleaseCount count0 = result[0]
-        assertEquals("white shark", count0.species.name)
+        assertEquals(whiteShark.name, count0.species.name)
         assertEquals(3, count0.currentReleases)
         assertEquals(5, count0.totalReleases)
         println(count0.percentEmbargoed)
         assertTrue(count0.percentEmbargoed - 40.0f < 0.01)
 
         AnimalReleaseCount count1 = result[1]
-        assertEquals("flathead", count1.species.name)
+        assertEquals(flathead.name, count1.species.name)
         assertEquals(2, count1.currentReleases)
         assertEquals(2, count1.totalReleases)
         assertTrue(count1.percentEmbargoed - 100.0f < 0.01)
 
         AnimalReleaseCount count2 = result[2]
-        assertEquals("stingray", count2.species.name)
+        assertEquals(stingray.name, count2.species.name)
         assertEquals(0, count2.currentReleases)
         assertEquals(1, count2.totalReleases)
         assertTrue(count2.percentEmbargoed - 0 < 0.01)

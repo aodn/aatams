@@ -3,7 +3,7 @@ package au.org.emii.aatams
 import grails.test.*
 import org.joda.time.DateTimeZone
 
-class OrganisationTests extends GroovyTestCase  {
+class OrganisationIntegrationTests extends GroovyTestCase  {
     protected void setUp()  {
         super.setUp()
     }

@@ -5,7 +5,7 @@ import org.joda.time.DateTimeZone
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
 
-class PersonControllerTests extends AbstractControllerUnitTestCase {
+class PersonControllerIntegrationTests extends AbstractControllerUnitTestCase {
     boolean mailSent
     String toAddress
 

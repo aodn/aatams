@@ -4,7 +4,7 @@ import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import grails.test.*
 
-class ReceiverEventControllerTests extends AbstractControllerUnitTestCase {
+class ReceiverEventControllerIntegrationTests extends AbstractControllerUnitTestCase {
     def dataSource
 
     protected void setUp() {

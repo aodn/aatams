@@ -4,7 +4,7 @@ import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
 import grails.test.*
 
-class InstallationStationControllerTests extends AbstractControllerUnitTestCase {
+class InstallationStationControllerIntegrationTests extends AbstractControllerUnitTestCase {
     def dataSource
     def slurper = new XmlSlurper()
 

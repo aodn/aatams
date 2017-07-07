@@ -2,7 +2,7 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 
-class SensorControllerTests extends AbstractControllerUnitTestCase {
+class SensorControllerIntegrationTests extends AbstractControllerUnitTestCase {
     protected void setUp() {
         super.setUp()
 

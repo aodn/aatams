@@ -3,7 +3,7 @@ package au.org.emii.aatams
 import grails.test.*
 import groovy.sql.Sql
 
-class InstallationStationTests extends GroovyTestCase {
+class InstallationStationIntegrationTests extends GroovyTestCase {
 
     def dataSource
 

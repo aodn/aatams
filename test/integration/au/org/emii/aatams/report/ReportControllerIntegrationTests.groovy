@@ -8,7 +8,7 @@ import javax.servlet.ServletContext
  * Report formats are CSV, so that we can easily compare controller output to
  * an expected CSV output. (as opposed to PDF).
  */
-class ReportControllerTests extends AbstractControllerUnitTestCase {
+class ReportControllerIntegrationTests extends AbstractControllerUnitTestCase {
     def permissionUtilsService
 
     def grailsApplication

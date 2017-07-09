@@ -1,10 +1,10 @@
 package au.org.emii.aatams.detection
 
-import au.org.emii.aatams.test.AbstractControllerUnitTestCase
+import au.org.emii.aatams.test.AbstractControllerIntegrationTestCase
 
 import grails.test.*
 
-class DetectionControllerIntegrationTests extends AbstractControllerUnitTestCase {
+class DetectionControllerIntegrationTests extends AbstractControllerIntegrationTestCase {
     def dataSource
 
     protected void setUp() {

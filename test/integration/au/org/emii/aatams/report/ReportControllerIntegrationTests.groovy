@@ -1,6 +1,6 @@
 package au.org.emii.aatams.report
 
-import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
+import au.org.emii.aatams.test.AbstractControllerIntegrationTestCase;
 
 import javax.servlet.ServletContext
 
@@ -8,7 +8,7 @@ import javax.servlet.ServletContext
  * Report formats are CSV, so that we can easily compare controller output to
  * an expected CSV output. (as opposed to PDF).
  */
-class ReportControllerIntegrationTests extends AbstractControllerUnitTestCase {
+class ReportControllerIntegrationTests extends AbstractControllerIntegrationTestCase {
     def permissionUtilsService
 
     def grailsApplication

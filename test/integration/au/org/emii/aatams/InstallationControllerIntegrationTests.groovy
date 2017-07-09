@@ -1,9 +1,9 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
+import au.org.emii.aatams.test.AbstractControllerIntegrationTestCase;
 import grails.test.*
 
-class InstallationControllerIntegrationTests extends AbstractControllerUnitTestCase {
+class InstallationControllerIntegrationTests extends AbstractControllerIntegrationTestCase {
     def grailsApplication
 
     List<Installation> installations = []

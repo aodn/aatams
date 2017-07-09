@@ -1,10 +1,10 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.test.AbstractControllerUnitTestCase
+import au.org.emii.aatams.test.AbstractControllerIntegrationTestCase
 
 import grails.test.*
 
-class InstallationStationControllerIntegrationTests extends AbstractControllerUnitTestCase {
+class InstallationStationControllerIntegrationTests extends AbstractControllerIntegrationTestCase {
     def dataSource
     def slurper = new XmlSlurper()
 

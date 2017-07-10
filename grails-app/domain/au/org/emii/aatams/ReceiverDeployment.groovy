@@ -126,7 +126,7 @@ class ReceiverDeployment {
             return [
                 'not scheduledRecoverDate after deploymentDateTime',
                 recoveryDate,
-                deploymentDateTime.toDate()
+                obj.deploymentDateTime.toDate()
             ]
         }
 

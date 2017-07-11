@@ -22,7 +22,7 @@ enum ReceiverDownloadFileType {
     }
 
     static detectionTypes() {
-        [DETECTIONS_CSV, VRL, RLD]
+        [DETECTIONS_CSV]
     }
 
     static eventTypes() {

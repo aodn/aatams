@@ -24,7 +24,16 @@ class EmbargoExpirationJobTests extends GrailsUnitTestCase  {
         Calendar tomorrow = Calendar.getInstance()
         tomorrow.add(Calendar.DAY_OF_YEAR, 1)
 
-        Tag tag = new Tag(codeMap:new CodeMap(codeMap:'A69-1303'))
+        TransmitterType transmitterType = new TransmitterType(transmitterTypeName: "PINGER")
+        mockDomain(TransmitterType, [transmitterType])
+
+        CodeMap codeMap = new CodeMap(codeMap:'A69-1303')
+        mockDomain(CodeMap, [codeMap])
+
+        ValidCodeMapTransmitterType validCodeMapTransmitterType = new ValidCodeMapTransmitterType(codeMap: codeMap, transmitterType: transmitterType)
+        mockDomain(ValidCodeMapTransmitterType, [validCodeMapTransmitterType])
+
+        Tag tag = new Tag(codeMap:codeMap)
         Sensor sensor = new Sensor(pingCode: 1234, tag: tag)
         mockDomain(Sensor, [sensor])
         mockDomain(Tag, [tag])

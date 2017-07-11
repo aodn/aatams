@@ -407,6 +407,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
         TransmitterType temp =
             new TransmitterType(transmitterTypeName:"TEMP").save(failOnError:true)
 
+        TransmitterType.withSession { session -> session.flush() } // Flush to db to ensure sensor codeMap validation works
+
         Sensor sensor1 =
             new Sensor(pingCode:'64000',
                     tag:tag1,

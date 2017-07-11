@@ -67,6 +67,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
 
         mockDomain(Person)
         mockDomain(AnimalRelease)
+        mockDomain(ValidCodeMapTransmitterType)
 
         mockLogging(AnimalFactoryService)
         def animalFactoryService = new AnimalFactoryService()

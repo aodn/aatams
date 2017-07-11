@@ -33,6 +33,8 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase {
         mockDomain(CodeMap, [codeMap])
         codeMap.save()
 
+        mockDomain(ValidCodeMapTransmitterType)
+
         params = setupParams()
 
         animalReleaseInstance = new AnimalRelease()

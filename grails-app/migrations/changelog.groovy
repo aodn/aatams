@@ -24,6 +24,5 @@ databaseChangeLog = {
     include file: 'remove_unavailability_notification.groovy'
     include file: 'update_register_message.groovy'
     include file: 'match_detections_on_deployment_to_recovery.groovy'
-    include file: 'new_code_map.groovy'
     include file: 'valid_code_map_transmitter_type.groovy'
 }

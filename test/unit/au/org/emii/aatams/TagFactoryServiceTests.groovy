@@ -32,6 +32,9 @@ class TagFactoryServiceTests extends GrailsUnitTestCase {
         mockDomain(TransmitterType, [pinger])
         pinger.save()
 
+        mockDomain(ValidCodeMapTransmitterType)
+        mockDomain(Sensor)
+
         sealProject = new Project(name: "Seal Project")
         tunaProject = new Project(name: "Tuna Project")
         def projectList = [sealProject, tunaProject]

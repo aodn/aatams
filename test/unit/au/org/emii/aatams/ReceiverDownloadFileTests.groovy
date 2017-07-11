@@ -11,9 +11,15 @@ class ReceiverDownloadFileTests extends GrailsUnitTestCase {
     protected void setUp() {
         super.setUp()
 
+        TransmitterType transmitterType = new TransmitterType(transmitterTypeName: "PINGER")
+        mockDomain(TransmitterType, [transmitterType])
+
         CodeMap a69_1303 = new CodeMap(codeMap: "A69-1303")
         mockDomain(CodeMap, [a69_1303])
         a69_1303.save()
+
+        ValidCodeMapTransmitterType validCodeMapTransmitterType = new ValidCodeMapTransmitterType(codeMap: a69_1303, transmitterType: transmitterType)
+        mockDomain(ValidCodeMapTransmitterType, [validCodeMapTransmitterType])
 
         tag111 = new Tag(codeMap: a69_1303,
                           model:new TagDeviceModel(),

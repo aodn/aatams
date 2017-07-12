@@ -1,8 +1,8 @@
 package au.org.emii.aatams
 
-import au.org.emii.aatams.test.AbstractControllerUnitTestCase
+import au.org.emii.aatams.test.AbstractControllerIntegrationTestCase
 
-class ReceiverControllerTests extends AbstractControllerUnitTestCase {
+class ReceiverControllerIntegrationTests extends AbstractControllerIntegrationTestCase {
     void testSaveWithWithspaceAroundSerialNumber() {
         controller.params.serialNumber = " 234 "
         controller.params.organisation = Organisation.findByName("IMOS")

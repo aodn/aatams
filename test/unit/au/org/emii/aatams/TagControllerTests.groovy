@@ -54,6 +54,7 @@ class TagControllerTests extends AbstractControllerUnitTestCase {
 
         mockDomain(Sensor)
         mockDomain(TransmitterType)
+        mockDomain(ValidCodeMapTransmitterType)
     }
 
     void testLookupNonDeployedBySerialNumber() {

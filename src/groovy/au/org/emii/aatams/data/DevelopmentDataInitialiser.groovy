@@ -407,6 +407,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
         TransmitterType temp =
             new TransmitterType(transmitterTypeName:"TEMP").save(failOnError:true)
 
+        TransmitterType.withSession { session -> session.flush() } // Flush to db to ensure sensor codeMap validation works
+
         Sensor sensor1 =
             new Sensor(pingCode:'64000',
                     tag:tag1,
@@ -623,6 +625,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
         CaabSpecies blueEyeTrevalla = new CaabSpecies(scientificName:"Hyperoglyphe antarctica", commonName:"Blue-eye Trevalla", spcode:"37445001").save(failOnError:true)
         CaabSpecies southernRightWhale = new CaabSpecies(scientificName:"Eubalaena australis", commonName:"southern right whale", spcode:"41110001").save(failOnError:true)
 
+        CaabSpecies.withSession { session -> session.flush() } // flush to db to enable querying by AnimalRelease
 
         Sex male = new Sex(sex:'MALE').save(failOnError:true)
         Sex female = new Sex(sex:'FEMALE').save(failOnError:true)

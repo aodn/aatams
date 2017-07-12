@@ -2,12 +2,12 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.*
 
-import static ProtectedSpeciesTests.AuthLevel.*
-import static ProtectedSpeciesTests.ProtectionLevel.*
-import static ProtectedSpeciesTests.FilterStatus.*
+import static ProtectedSpeciesIntegrationTests.AuthLevel.*
+import static ProtectedSpeciesIntegrationTests.ProtectionLevel.*
+import static ProtectedSpeciesIntegrationTests.FilterStatus.*
 import static au.org.emii.aatams.test.TestUtils.VisibilityLevel.*
 
-class ProtectedSpeciesTests extends AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests {
+class ProtectedSpeciesIntegrationTests extends AbstractJdbcTemplateVueDetectionFileProcessorServiceIntegrationTests {
 
     def permissionUtilsService
     def controller

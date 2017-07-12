@@ -2,7 +2,7 @@ package au.org.emii.aatams
 
 import grails.test.*
 
-class EmbargoExpirationJobTests extends GroovyTestCase {
+class EmbargoExpirationJobIntegrationTests extends GroovyTestCase {
     def grailsApplication
 
     void testFindEmbargoedReleasesToday() {

@@ -6,7 +6,7 @@ import au.org.emii.aatams.detection.Detection
 import grails.test.*
 import org.joda.time.DateTime
 
-class ReceiverDownloadFileTests extends GroovyTestCase {
+class ReceiverDownloadFileIntegrationTests extends GroovyTestCase {
 
     def dataSource
 

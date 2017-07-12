@@ -13,7 +13,7 @@ class PersonControllerTests extends AbstractControllerUnitTestCase {
 
     boolean mailSent
 
-    def user
+    Person user
 
     protected void setUp() {
         super.setUp()

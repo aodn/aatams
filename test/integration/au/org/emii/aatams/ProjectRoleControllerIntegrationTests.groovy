@@ -5,7 +5,7 @@ import org.joda.time.DateTimeZone;
 import grails.test.*
 import grails.converters.JSON
 
-class ProjectRoleControllerTests extends ControllerUnitTestCase  {
+class ProjectRoleControllerIntegrationTests extends ControllerUnitTestCase  {
     def permissionUtilsService
     def searchableService
     def sessionFactory

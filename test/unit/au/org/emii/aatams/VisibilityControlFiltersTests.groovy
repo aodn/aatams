@@ -106,6 +106,11 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase {
         filters.visibilityControlService = visibilityControlService
         visibilityControlService.permissionUtilsService = permissionUtilsService
 
+        TransmitterType transmitterType = new TransmitterType(transmitterTypeName: "PINGER")
+        mockDomain(TransmitterType, [transmitterType])
+
+        mockDomain(ValidCodeMapTransmitterType)
+
         projectWithMembership = new Project(name: "project 1 (member of)")
         projectNoMembership = new Project(name: "project 2 (not member of)")
         protectedProjectWithMembership = new Project(name: "project 3 (member of, protected)", isProtected: true)
@@ -144,6 +149,7 @@ class VisibilityControlFiltersTests extends AbstractFiltersUnitTestCase {
 
         // Set up some data.
         CodeMap codeMap = new CodeMap(codeMap:"A69-1303")
+        mockDomain(CodeMap, [codeMap])
         tagNonEmbargoed = new Tag(project:projectWithMembership, codeMap:codeMap)
         tagEmbargoedReadableProject = new Tag(project:projectWithMembership, codeMap:codeMap)
         tagEmbargoedNonReadableProject = new Tag(project:projectNoMembership, codeMap:codeMap)

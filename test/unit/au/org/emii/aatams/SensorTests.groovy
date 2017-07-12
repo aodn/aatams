@@ -93,6 +93,9 @@ class SensorTests extends GrailsUnitTestCase {
         mockDomain(TransmitterType, transmitterTypeList)
         transmitterTypeList.each { it.save() }
 
+        mockDomain(ValidCodeMapTransmitterType)
+        mockDomain(Sensor)
+
         a69_1303_1111 = new Sensor(tag: tag1303, pingCode: 1111, transmitterType: pinger)
         a69_1303_2222 = new Sensor(tag: tag1303, pingCode: 2222, transmitterType: temp)
         a69_1303_3333 = new Sensor(tag: tag1303, pingCode: 3333, transmitterType: pressure)

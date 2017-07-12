@@ -135,11 +135,29 @@ class ReceiverDeploymentControllerTests extends AbstractControllerUnitTestCase {
         return recovery
     }
 
-    void testSaveFutureDeployment() {
+    void testSaveFutureDeploymentNotRecovered() {
         def deploymentDateTime = new DateTime()
         createDeployment(deploymentDateTime.plusDays(1))
 
-        assertSuccessfulSaveDeployment(deploymentDateTime)
+        controller.params.deploymentDateTime = deploymentDateTime
+        controller.params.receiver = receiver
+        controller.save()
+
+        assertEquals("create", controller.renderArgs.view)
+
+        def model = controller.renderArgs.model
+        assertNotNull(model.receiverDeploymentInstance)
+        assertEquals(3, model.candidateReceivers.size())
+        assertTrue(model.candidateReceivers.contains(receiver1))
+        assertTrue(model.candidateReceivers.contains(receiver2))
+        assertEquals(2, model.candidateStations.size())
+        assertTrue(model.candidateStations.contains(station1))
+        assertTrue(model.candidateStations.contains(station2))
+        def errors = model.receiverDeploymentInstance.errors
+        assertEquals(1, errors.getErrorCount())
+        def error = errors.getFieldError('deploymentDateTime')
+        assertTrue(error.getDefaultMessage().contains("does not pass custom validation"))
+
     }
 
     void testSaveFutureRecoveryRecovered() {

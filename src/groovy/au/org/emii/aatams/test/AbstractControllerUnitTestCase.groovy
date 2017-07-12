@@ -29,6 +29,7 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase {
         hasRole = true
         authenticated = true
         permitted = false
+        user =  new Person(username:"jkburges", name: "Joe Bloggs")
 
         def subject = [ getPrincipal: { getPrincipal() },
                         isAuthenticated: { isAuthenticated() },
@@ -88,14 +89,8 @@ abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase {
         super.tearDown()
     }
 
-    protected Person getUser() {
-        Person person = Person.findByUsername('jkburges')
-
-        if (!person) {
-            person = new Person(username:"jkburges", name: "Joe Bloggs")
-        }
-
-        return person
+    protected def getUser() {
+        return user
     }
 
     protected def getPrincipal() {

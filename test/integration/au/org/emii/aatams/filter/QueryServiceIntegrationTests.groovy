@@ -7,7 +7,7 @@ import au.org.emii.aatams.test.AbstractGrailsUnitTestCase
 
 import java.text.SimpleDateFormat
 
-class QueryServiceTests extends AbstractGrailsUnitTestCase {
+class QueryServiceIntegrationTests extends AbstractGrailsUnitTestCase {
     def queryService
 
     protected void setUp() {

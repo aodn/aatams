@@ -6,7 +6,7 @@ import com.vividsolutions.jts.geom.GeometryFactory
 import com.vividsolutions.jts.geom.Point
 import org.joda.time.DateTime
 
-class DetectionTests extends GroovyTestCase {
+class DetectionIntegrationTests extends GroovyTestCase {
 
     def dataSource
 

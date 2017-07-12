@@ -1,11 +1,10 @@
 package au.org.emii.aatams
 
+import au.org.emii.aatams.test.AbstractControllerIntegrationTestCase
 import grails.test.*
 import org.joda.time.DateTimeZone
 
-import au.org.emii.aatams.test.AbstractControllerUnitTestCase;
-
-class PersonControllerTests extends AbstractControllerUnitTestCase {
+class PersonControllerIntegrationTests extends AbstractControllerIntegrationTestCase {
     boolean mailSent
     String toAddress
 

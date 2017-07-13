@@ -1,7 +1,6 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
-import grails.test.*
 import org.codehaus.groovy.grails.plugins.orm.auditable.AuditLogEvent
 
 class AuditLogEventControllerTests extends AbstractControllerUnitTestCase {

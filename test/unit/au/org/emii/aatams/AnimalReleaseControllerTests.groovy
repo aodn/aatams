@@ -2,15 +2,10 @@ package au.org.emii.aatams
 
 import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
-
-import grails.test.*
-
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.geom.Point
 import com.vividsolutions.jts.io.WKTReader;
 
 import org.joda.time.*
-import org.joda.time.format.DateTimeFormat
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat

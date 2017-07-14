@@ -1,6 +1,5 @@
 package au.org.emii.aatams.notification
 
-import grails.test.*
 import grails.converters.JSON
 
 import au.org.emii.aatams.*

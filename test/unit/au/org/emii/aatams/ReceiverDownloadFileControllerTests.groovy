@@ -1,9 +1,7 @@
 package au.org.emii.aatams
 
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
-import grails.test.*
 import grails.converters.JSON
-import grails.converters.XML
 
 class ReceiverDownloadFileControllerTests extends AbstractControllerUnitTestCase {
     Person user

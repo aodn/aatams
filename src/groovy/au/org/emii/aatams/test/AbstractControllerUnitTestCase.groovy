@@ -1,168 +1,17 @@
 package au.org.emii.aatams.test
 
-import grails.test.ControllerUnitTestCase
+import au.org.emii.aatams.CaabSpecies
 
-import net.sf.jasperreports.engine.export.JRCsvExporter
-import org.apache.shiro.subject.Subject
-import org.apache.shiro.SecurityUtils
-
-import au.org.emii.aatams.VisibilityControlService
-import au.org.emii.aatams.PermissionUtilsService;
-import au.org.emii.aatams.Person;
-import au.org.emii.aatams.export.ExportService
-import au.org.emii.aatams.filter.QueryService
-import au.org.emii.aatams.report.ReportInfoService
-
-abstract class AbstractControllerUnitTestCase extends ControllerUnitTestCase {
-    protected hasRole = true
-    protected user
-    protected authenticated = true
-    protected permitted = false
-
-    private MetaClass originalSecurityUtilsMetaClass
-
-    protected Map flashMsgParams
-
-    protected void setUp() {
-        super.setUp()
-
-        hasRole = true
-        authenticated = true
-        permitted = false
-        user =  new Person(username:"jkburges", name: "Joe Bloggs")
-
-        def subject = [ getPrincipal: { getPrincipal() },
-                        isAuthenticated: { isAuthenticated() },
-                        hasRole: { hasRole() },
-                        isPermitted: { isPermitted(it) },
-                      ] as Subject
-
-        // Save SecurityUtils' current meta class and clear it from
-        // the registry.
-        def registry = GroovySystem.metaClassRegistry
-        this.originalSecurityUtilsMetaClass = registry.getMetaClass(SecurityUtils)
-        registry.removeMetaClass(SecurityUtils)
-
-        SecurityUtils.metaClass.static.getSubject = { subject }
-
-        controller.metaClass.message = { Map params -> flashMsgParams = params }
-
-        try {
-            mockLogging(QueryService, true)
-            mockLogging(ReportInfoService, true)
-            controller.queryService = new QueryService()
-
-            mockLogging(VisibilityControlService, true)
-            controller.queryService.visibilityControlService = new VisibilityControlService()
-
-            mockLogging(PermissionUtilsService, true)
-            controller.queryService.visibilityControlService.permissionUtilsService = new PermissionUtilsService()
-
-            controller.reportInfoService = new ReportInfoService()
-            controller.reportInfoService.permissionUtilsService = new PermissionUtilsService()
-            controller.reportInfoService.metaClass.getDetectionTimestampMin = { null }
-
-        }
-        catch (MissingPropertyException e) {
-            // Some controllers don't have these properties, just ignore.
-        }
-
-        controller.params.format = "PDF"
-
-        ExportService.metaClass.getExporter = {
-            params ->
-
-            return new JRCsvExporter()
-        }
-
-        controller.metaClass.getMimeType = {
-            params ->
-
-            return "text/csv"
-        }
-    }
-
+abstract class AbstractControllerUnitTestCase extends AbstractControllerTestCase {
+    @Override
     protected void tearDown() {
-        // Restore the old meta class on SecurityUtils.
-        GroovySystem.metaClassRegistry.setMetaClass(SecurityUtils, this.originalSecurityUtilsMetaClass)
+        // Fix pollution of integration test classes with mocked classes (CaabSpecies)
+        // https://rewoo.wordpress.com/2012/08/07/polluted-mocked-test-data-from-unit-in-integration-test-using-grails-1-3-5/
+        // No idea why I need this here.  Without it I get a "not-null property references a null or transient value" error for CaabSpecies
+        // in DevelopmentDataInitialiser.groovy:631 because CaabSpecies has mock test instances
+
+        GroovySystem.metaClassRegistry.removeMetaClass CaabSpecies.class
 
         super.tearDown()
-    }
-
-    protected def getUser() {
-        return user
-    }
-
-    protected def getPrincipal() {
-        return getUser()?.id
-    }
-
-    protected boolean isAuthenticated() {
-        return authenticated
-    }
-
-    protected boolean hasRole() {
-        return hasRole
-    }
-
-    protected boolean isPermitted(permission) {
-        return permitted
-    }
-
-    protected void assertExport(filter, name) {
-        controller.params.filter = filter
-
-        controller.export()
-
-        File actualReport = File.createTempFile(name + ".", ".csv")
-        OutputStream out = new FileOutputStream(actualReport)
-        out.write(controller.response.contentAsByteArray)
-        out.close()
-
-        println("Test output for test '" + name + "' written to: " + actualReport.getAbsolutePath())
-
-        File expectedReport = new File(constructFilePath(name))
-
-        assertContainsAllLines(removeDynamicLines(controller.response.contentAsString.trim()), removeDynamicLines(expectedReport.getText()))
-    }
-
-    protected String constructFilePath(expectedFileName) {
-        String expectedFilePath = \
-            System.getProperty("user.dir") + \
-            "/test/integration/au/org/emii/aatams/report/resources/" + \
-            expectedFileName + ".expected.csv"
-        return expectedFilePath
-    }
-
-    protected void assertContainsAllLines(actual, expected) {
-        if (!expected.readLines().containsAll(actual.readLines()) || !actual.readLines().containsAll(expected.readLines()) || !(expected.readLines().size() == actual.readLines().size())) {
-            println "expected:\n" + expected
-            println "\n\nactual:\n" + actual
-        }
-        assertTrue(expected.readLines().containsAll(actual.readLines()))
-        assertTrue(actual.readLines().containsAll(expected.readLines()))
-        assertEquals(expected.readLines().size(), actual.readLines().size())
-    }
-
-    protected String removeDynamicLines(String s) {
-        def lineCount = 0
-        s.eachLine { lineCount ++ }
-
-        def retString = ""
-        int index = 0
-
-        s.eachLine {
-            if (it.contains("Page") || (index == 0)) {
-                // remove title line or
-                // remove page footer
-            }
-            else {
-                retString += it + '\n'
-            }
-
-            index++
-        }
-
-        return retString
     }
 }

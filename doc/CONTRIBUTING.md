@@ -1,21 +1,22 @@
 # Development Environment
-AATAMS is currently built against JDK6 and Grails 1.3.7. If like me you don't have JDK installed on your shiny new iMac and if like me you don't want to install it then you might want to use Vagrant to build and run the app.
 
-## Prerequisites
-You need [Vagrant](http://wwww.vagrantup.com) installed, because you are installing Vagrant I will assume that you have, or will have Ruby installed as well. FYI I manage my Ruby through [chruby](https://github.com/postmodern/chruby).
-
-This also assumes that you have an AATAMS database restored on your host machine. Some hints to help do this are included below.
-
-### Bundling
-I use [Bundler](http://bundler.io/) to manage my gems for projects, you will at least need Bundler installed into your system gems, I tend to put the latest version of [Rake](http://rake.rubyforge.org/) there too
-
-`$ gem install rake`
-`$ gem install bundler`
-
-I like to keep gems and binstubs local to my project bundle as well, to bundle execute
-`$ bundle install --path=.bundle/vendor --binstubs=.bundle/bin`
-
-I think convention is to not put them in the `.bundle` folder but I have done that because some of our projects have a `bin` directory and it might confuse people to see the stubs in there and alternatively I don't want to `.gitignore` them all. I may when I learn more about `.gitignore` regexes.
-
-### Provision
-Now it should be as simple as `$ vagrant up`
+1. Install git and curl
+1. Clone AATAMS repository
+    `$ git clone https://github.com/aodn/aatams.git`
+1. Switch to AATAMS project directory
+    `$ cd aatams`
+1. Install [SDKMAN](http://sdkman.io/install.html)
+1. Install Grails
+    `$ sdk use grails 1.3.7`
+1. Install Java
+    `$ sdk use java 6u93-zulu`
+1. Install [Postgres](http://postgresguide.com/setup/install.html) and [PostGIS](http://postgis.net/install/)
+1. Setup development database
+    `$ sudo -u postgres ./init_db.sh`
+1. Running app for local development 
+    `$ grails clean`
+    `$ grails run-app`
+1. Running test 
+    `$ grails clean`
+    `$ sudo -u postgres ./init_test_db.sh`
+    `$ grails test-app --echoOut`

@@ -1,7 +1,6 @@
 package au.org.emii.aatams.report
 
 import au.org.emii.aatams.*
-import au.org.emii.aatams.detection.*
 import au.org.emii.aatams.filter.QueryService
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 

@@ -1,9 +1,6 @@
 package au.org.emii.aatams
 
-import org.joda.time.DateTime;
-
-import grails.test.*
-
+import org.joda.time.DateTime
 import au.org.emii.aatams.test.AbstractControllerUnitTestCase
 import com.vividsolutions.jts.geom.*
 

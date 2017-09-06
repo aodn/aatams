@@ -47,6 +47,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase {
             serialNumber:"1111",
             model:model,
             status:DeviceStatus.NEW,
+            expectedLifeTimeDays:1048,
             transmitterType:new TransmitterType()]
     }
 
@@ -91,6 +92,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase {
                     serialNumber:"1111",
                     model:new DeviceModel(),
                     status:DeviceStatus.NEW,
+                    expectedLifeTimeDays:1048,
                     project: sealProject)
 
         Sensor existingSensor = new Sensor(tag: existingTag,

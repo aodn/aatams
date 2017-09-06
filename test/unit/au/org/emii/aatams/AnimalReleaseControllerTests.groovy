@@ -275,7 +275,8 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
         tag = new Tag(codeMap:codeMap,
                       serialNumber:"11111",
                       model:deviceModel,
-                      status:DeviceStatus.NEW)
+                      status:DeviceStatus.NEW,
+                      expectedLifeTimeDays:1203)
         mockDomain(Tag, [tag])
 
         def pinger = new Sensor(pingCode:11111,
@@ -345,7 +346,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
                     type: [id:surgeryType.id],
                     treatmentType : [id:surgeryTreatmentType.id],
                     comments: "",
-                    tag:[codeMap: tag.codeMap, pingCode: tag.pinger.pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
+                    tag:[codeMap: tag.codeMap, pingCode: tag.pinger.pingCode, serialNumber: tag.serialNumber, model:[id: 1], expectedLifeTimeDays: 1203]]
 
         controller.params.surgery = ['0':surgery0]
     }
@@ -377,7 +378,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
             type: [id:surgeryType.id],
             treatmentType : [id:surgeryTreatmentType.id],
             comments: "",
-            tag:[codeMap: tag.codeMap, pingCode: tag.pinger.pingCode, serialNumber: tag.serialNumber, model:[id: 1]]]
+            tag:[codeMap: tag.codeMap, pingCode: tag.pinger.pingCode, serialNumber: tag.serialNumber, model:[id: 1], expectedLifeTimeDays: 1203]]
 
         controller.params.surgery = ['0':surgery0]
 
@@ -430,7 +431,8 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
                                  serialNumber:String.valueOf(it),
                                  transmitterType:pinger,
                                  model:deviceModel,
-                                 status:DeviceStatus.NEW)
+                                 status:DeviceStatus.NEW,
+                                 expectedLifeTimeDays:1203)
             tags.add(newTag)
 
             def surgery = [
@@ -443,7 +445,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
                 type: [id:1],
                 treatmentType : [id:1],
                 comments: "",
-                tag:[codeMap: tag.codeMap, pingCode: tag.pinger.pingCode, serialNumber: newTag.serialNumber, model:[id: 1]]]
+                tag:[codeMap: tag.codeMap, pingCode: tag.pinger.pingCode, serialNumber: newTag.serialNumber, model:[id: 1], expectedLifeTimeDays: 1203]]
 
             surgeryMap.put(String.valueOf(it), surgery)
         })
@@ -502,7 +504,7 @@ class AnimalReleaseControllerTests extends AbstractControllerUnitTestCase {
             type: [id:1],
             treatmentType : [id:1],
             comments: "",
-            tag:[codeMap: codeMap, pingCode: "12345", serialNumber: serialNum, model:[id: deviceModel.id]]]
+            tag:[codeMap: codeMap, pingCode: "12345", serialNumber: serialNum, model:[id: deviceModel.id], expectedLifeTimeDays: 1203]]
 
         controller.params.surgery = ['0':surgery0]
 

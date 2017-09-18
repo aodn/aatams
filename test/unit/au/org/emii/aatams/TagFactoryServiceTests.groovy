@@ -97,7 +97,8 @@ class TagFactoryServiceTests extends GrailsUnitTestCase {
 
         Sensor existingSensor = new Sensor(tag: existingTag,
         transmitterType:pinger,
-        pingCode:1234)
+        pingCode:1234,
+        expectedLifeTimeDays:1048)
         mockDomain(Sensor, [existingSensor])
         existingTag.addToSensors(existingSensor)
 

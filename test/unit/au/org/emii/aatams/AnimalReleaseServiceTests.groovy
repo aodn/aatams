@@ -356,8 +356,8 @@ class AnimalReleaseServiceTests extends GrailsUnitTestCase {
         mockDomain(TransmitterType, [pinger])
         pinger.save()
 
-        Tag tag1 = new Tag(codeMap:codeMap, serialNumber:"12345", model:tagModel, status:DeviceStatus.NEW)
-        Tag tag2 = new Tag(codeMap:codeMap, serialNumber:"22222", model:tagModel, status:DeviceStatus.NEW)
+        Tag tag1 = new Tag(codeMap:codeMap, serialNumber:"12345", model:tagModel, status:DeviceStatus.NEW, expectedLifeTimeDays: 1203)
+        Tag tag2 = new Tag(codeMap:codeMap, serialNumber:"22222", model:tagModel, status:DeviceStatus.NEW, expectedLifeTimeDays: 1203)
         def tagList = [tag1, tag2]
         mockDomain(Tag, tagList)
 

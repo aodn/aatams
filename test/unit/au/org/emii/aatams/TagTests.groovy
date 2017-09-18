@@ -110,6 +110,7 @@ class TagTests extends GrailsUnitTestCase {
                                project:new Project(),
                                serialNumber:"1111",
                                status:DeviceStatus.NEW,
+                               expectedLifeTimeDays:null,
                                transmitterType:new TransmitterType())
             tag1.save(failOnError:true)
 

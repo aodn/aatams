@@ -80,7 +80,7 @@
 
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="tag.expectedLifeTimeDays"><g:message code="tag.expectedLifeTimeDays.label" default="Expected Life Time (days)" /></label>
+                                    <label class="compulsory" for="tag.expectedLifeTimeDays"><g:message code="tag.expectedLifeTimeDays.label" default="Expected Life Time (days)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance.tag, field: 'expectedLifeTimeDays', 'errors')}">
                                     <g:textField name="tag.expectedLifeTimeDays" class="remember" value="${sensorInstance.tag?.expectedLifeTimeDays}" />

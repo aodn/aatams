@@ -28,6 +28,7 @@ class TagTests extends GrailsUnitTestCase {
             new Tag(codeMap:a69_1303,
                     model:new TagDeviceModel(),
                     serialNumber:"1111",
+                    expectedLifeTimeDays:1048,
                     status:DeviceStatus.NEW)
 
         mockDomain(Tag, [tag])
@@ -71,6 +72,7 @@ class TagTests extends GrailsUnitTestCase {
                            project:new Project(),
                            serialNumber:"1111",
                            status:DeviceStatus.NEW,
+                           expectedLifeTimeDays:1048,
                            transmitterType:new TransmitterType())
 
 
@@ -84,8 +86,105 @@ class TagTests extends GrailsUnitTestCase {
                                project:new Project(),
                                serialNumber:"1111",
                                status:DeviceStatus.NEW,
+                               expectedLifeTimeDays:2014,
                                transmitterType:new TransmitterType())
             tag2.save(failOnError:true)
+
+            fail()
+        }
+        catch (Throwable) {
+
+        }
+    }
+
+    void testNullExpectedLifeTimeDays() {
+        mockDomain(Tag)
+
+        TagDeviceModel model = new TagDeviceModel()
+
+        try {
+            Tag tag1 = new Tag(codeName:'A69-1303-2222',
+                               codeMap:new CodeMap(codeMap:'A69-1303'),
+                               pingCode:"2222",
+                               model:model,
+                               project:new Project(),
+                               serialNumber:"1111",
+                               status:DeviceStatus.NEW,
+                               expectedLifeTimeDays:null,
+                               transmitterType:new TransmitterType())
+            tag1.save(failOnError:true)
+
+            fail()
+        }
+        catch (Throwable) {
+
+        }
+    }
+
+    void testIntegerLimitForExpectedLifeTimeDays() {
+        mockDomain(Tag)
+
+        TagDeviceModel model = new TagDeviceModel()
+
+        try {
+            Tag tag1 = new Tag(codeName:'A69-1303-2222',
+                               codeMap:new CodeMap(codeMap:'A69-1303'),
+                               pingCode:"2222",
+                               model:model,
+                               project:new Project(),
+                               serialNumber:"1111",
+                               status:DeviceStatus.NEW,
+                               expectedLifeTimeDays:2147483649,
+                               transmitterType:new TransmitterType())
+            tag1.save(failOnError:true)
+
+            fail()
+        }
+        catch (Throwable) {
+
+        }
+    }
+
+    void testIntegerNegativeLimitForExpectedLifeTimeDays() {
+        mockDomain(Tag)
+
+        TagDeviceModel model = new TagDeviceModel()
+
+        try {
+            Tag tag1 = new Tag(codeName:'A69-1303-2222',
+                               codeMap:new CodeMap(codeMap:'A69-1303'),
+                               pingCode:"2222",
+                               model:model,
+                               project:new Project(),
+                               serialNumber:"1111",
+                               status:DeviceStatus.NEW,
+                               expectedLifeTimeDays:-2147483649,
+                               transmitterType:new TransmitterType())
+            tag1.save(failOnError:true)
+
+            fail()
+        }
+        catch (Throwable) {
+
+        }
+    }
+
+    void testNegativeIntegerForExpectedLifeTimeDays() {
+        mockDomain(Tag)
+
+        TagDeviceModel model = new TagDeviceModel()
+
+        try {
+            Tag tag1 = new Tag(codeName:'A69-1303-2222',
+                               codeMap:new CodeMap(codeMap:'A69-1303'),
+                               pingCode:"2222",
+                               model:model,
+                               project:new Project(),
+                               serialNumber:"1111",
+                               status:DeviceStatus.NEW,
+                               expectedLifeTimeDays:-1947,
+                               transmitterType:new TransmitterType())
+            tag1.save(failOnError:true)
 
             fail()
         }
@@ -148,6 +247,7 @@ class TagTests extends GrailsUnitTestCase {
             new Tag(codeMap:a69_1303,
                     model:new TagDeviceModel(),
                     serialNumber:"1111",
+                    expectedLifeTimeDays:1048,
                     status:DeviceStatus.NEW)
 
         assertNull(newTag.sensors)

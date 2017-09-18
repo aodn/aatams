@@ -47,6 +47,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase {
             serialNumber:"1111",
             model:model,
             status:DeviceStatus.NEW,
+            expectedLifeTimeDays:1048,
             transmitterType:new TransmitterType()]
     }
 
@@ -91,11 +92,13 @@ class TagFactoryServiceTests extends GrailsUnitTestCase {
                     serialNumber:"1111",
                     model:new DeviceModel(),
                     status:DeviceStatus.NEW,
+                    expectedLifeTimeDays:1048,
                     project: sealProject)
 
         Sensor existingSensor = new Sensor(tag: existingTag,
         transmitterType:pinger,
-        pingCode:1234)
+        pingCode:1234,
+        expectedLifeTimeDays:1048)
         mockDomain(Sensor, [existingSensor])
         existingTag.addToSensors(existingSensor)
 

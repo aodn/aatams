@@ -95,7 +95,7 @@
 
                             <tr class="prop">
                                 <td valign="top" class="name">
-                                    <label for="expectedLifeTimeDays"><g:message code="tag.expectedLifeTimeDays.label" default="Expected Life Time (days)" /></label>
+                                    <label class="compulsory" for="expectedLifeTimeDays"><g:message code="tag.expectedLifeTimeDays.label" default="Expected Life Time (days)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: tagInstance, field: 'pingCode', 'errors')}">
                                     <g:textField name="expectedLifeTimeDays" value="${tagInstance?.expectedLifeTimeDays}" />

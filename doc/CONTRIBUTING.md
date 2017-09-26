@@ -14,8 +14,10 @@
 1. Setup development database
     `$ sudo -u postgres ./init_db.sh`
 1. Running app for local development 
+    1. See BootStrap.groovy ( `DevelopmentDataInitialiser` )
+    
     `$ grails clean`
-    `$ grails run-app`
+    `$ grails run-app -DinitialiseWithData=true`
 1. Running test 
     `$ grails clean`
     `$ sudo -u postgres ./init_test_db.sh`

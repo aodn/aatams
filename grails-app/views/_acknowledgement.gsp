@@ -1,4 +1,3 @@
-
     <h2>Acknowledging the IMOS Animal Tracking Database:</h2>
     <p>Any use of the acoustic telemetry data obtained through the <a href="https://animaltracking.aodn.org.au">IMOS Animal Tracking Database</a> or the <a href="https://portal.aodn.org.au/">AODN portal</a> requires the following acknowledgement and citation:</p>
     <p><em>In the Acknowledgments:</em><br>

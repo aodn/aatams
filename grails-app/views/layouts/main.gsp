@@ -19,6 +19,7 @@
     <g:javascript src="asAbove.js"/>
 
     <g:javascript src="jquery.blockUI.js"/>
+    <g:javascript src="jquery.smartModal.min.js"/>
     <g:javascript src="jquery.qtip-1.0.0-rc3.min.js"/>
     <g:javascript src="jquery.cookie.js"/>
     <g:javascript src="notification.js"/>
@@ -31,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'jquery-ui.css')}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'custom-theme/jquery-ui-1.8.13.custom.css')}"/>
     <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'jquery-ui-combobox.css')}"/>
+    <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: 'jquery.smartModal.css')}"/>
 
     <g:set var="versionedMainCssName" value="main.css?v=${grailsApplication.metadata.'app.version'}" />
     <link rel="stylesheet" type="text/css" href="${resource(dir: 'css', file: versionedMainCssName)}" />

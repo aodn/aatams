@@ -15,49 +15,24 @@
 
     <div class="body">
 
-        <h1><g:message code="default.application.fullTitle" /></h1>
-
         <div class="dialog">
-            <div style="width: 80%; padding:20px 20px 20px 20px;">
-                <p>The <g:message code="default.application.fullTitle" />
-                is one of eleven facilities of the Integrated Marine Observing System (IMOS).
-                <g:message code="default.application.title" /> represents the higher biological monitoring of the marine environment
-                for the IMOS program.<br/><br/>
-                    Currently <g:message code="default.application.title" /> uses acoustic technology, CTD satellite trackers and bio loggers
-                    to monitor costal and oceanic movements of marine animals from the Australian
-                    mainland to the sub-Antarctic islands and as far south as the Antarctic continent.<br/><br/>
-                    <g:message code="default.application.title" /> is set up to collect data over a long period of time. This sustained approach
-                    will enable researchers to assess the effects of climate change, ocean acidification
-                    and other physical changes that affect animals within the marine environment.<br/><br/>
-                    Currently a large range of fish, sharks and mammals are collecting a wide range of data.
-                    This includes behavioural and physical data such as the depth, temperature, salinity
-                    and movement effort of individual marine animals.</p>
-            </div>
+            <h1><g:message code="default.application.fullTitle" /></h1>
+            <p>The <g:message code="default.application.fullTitle" /> is a centralised passive acoustic telemetry repository maintained by the <g:message code="default.application.fullTitle" /> (<a href="http://imos.org.au/facilities/animaltracking/">http://imos.org.au/facilities/animaltracking/</a>) and the Australian Ocean Data Network (AODN, <a href="https://portal.aodn.org.au/">https://portal.aodn.org.au/</a>). The data it contains were compiled from a nation-wide array of over 1,000 receivers and document movements of over 100 marine species within Australian coastal waters between 2007-present.</p>
+
+            <p>The <g:message code="default.application.fullTitle" /> is one of eleven facilities of the Integrated Marine Observing System (IMOS). One of its main objectives is to oversee the development and maintenance of a national marine acoustic telemetry network and a public database for the Australian research community, thereby facilitating regional- to national-scale collaborative research and helping the management of Australia’s marine resources.</p>
+
+            <p>Researchers involved in the field of acoustic telemetry are encouraged to join the  <g:message code="default.application.title" /> community by sharing their tag and receiver data and metadata, thereby contributing to this critical national infrastructure and benefitting from automated email notifications when their tags are detected within the continent-wide network.
+                </p>
         </div>
 
-        <h1>Acknowledgements</h1>
 
         <div class="dialog">
-            <table>
-                <tbody>
+            <g:render template="/acknowledgement"></g:render>
 
-                <tr class="prop">
-                    <td valign="top" class="name">Codes for Australian Aquatic Biota (CAAB)</td>
-
-                    <td valign="top" class="value"><b>Rees, A.J.J., Yearsley, G.K., Gowlett-Holmes, K. and Pogonoski, J.</b><br/>
-                        Codes for Australian Aquatic Biota (on-line version).<br/>
-                        CSIRO Marine and Atmospheric Research, World Wide Web electronic publication, 1999 onwards.<br/>
-                        Available at: <a href="http://www.cmar.csiro.au/caab/">http://www.cmar.csiro.au/caab/</a></td>
-
-                </tr>
-
-                </tbody>
-            </table>
         </div>
 
-        <h1>Miscellaneous</h1>
-
         <div class="dialog">
+            <h1>Miscellaneous</h1>
             <table>
                 <tbody>
                 <tr class="prop">
@@ -65,7 +40,6 @@
 
                     <td valign="top" class="value"><a href="http://imos.org.au/animaltracking.html">http://imos.org.au/animaltracking.html</a>
                     </td>
-
                 </tr>
 
                 <tr class="prop">

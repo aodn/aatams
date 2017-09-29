@@ -25,10 +25,24 @@
                 </p>
         </div>
 
-
+        <h1>Acknowledgements</h1>
         <div class="dialog">
-            <g:render template="/acknowledgement"></g:render>
+            <table>
+                <tbody>
+                <tr class="prop">
+                    <g:render template="/acknowledgement"></g:render>
+                </tr>
+                <br>
+                <tr class="prop">
+                    <h3>Codes for Australian Aquatic Biota (CAAB)</h3>
+                    <p>Rees, A.J.J., Yearsley, G.K., Gowlett-Holmes, K. and Pogonoski, J.</b><br/>
+                        Codes for Australian Aquatic Biota (on-line version).<br/>
+                        CSIRO Marine and Atmospheric Research, World Wide Web electronic publication, 1999 onwards.<br/>
+                        Available at: <a href="http://www.cmar.csiro.au/caab/">http://www.cmar.csiro.au/caab/</a></p>
+                </tr>
 
+                </tbody>
+            </table>
         </div>
 
         <div class="dialog">

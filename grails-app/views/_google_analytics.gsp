@@ -9,3 +9,35 @@
         ga('send', 'pageview');
     </script>
 </g:if>
+
+<script>
+    // wrapper to the Google Analytics function
+    function trackUsage(eventCategory, eventAction, eventLabel, eventValue, dimension) {
+
+        if (typeof ga == 'function') {
+            ga('send', 'event', eventCategory, eventAction, eventLabel, eventValue, {
+                dimension1: dimension
+            });
+        }
+        else {
+            // https://developers.google.com/analytics/devguides/collection/analyticsjs/command-queue-reference#send
+            console.log("DEBUG GA: " +['send', 'event',eventCategory, eventAction, eventLabel, eventValue].join())
+        }
+    }
+
+    function trackDownloadUsage(actionKey, label) {
+        trackUsage(
+            "Download",
+            actionKey,
+            label
+        );
+    }
+
+    function trackDownloadFilterUsage(actionKey, label) {
+        trackUsage(
+            "Filtering",
+            actionKey,
+            label
+        );
+    }
+</script>

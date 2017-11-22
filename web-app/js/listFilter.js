@@ -8,6 +8,9 @@ $(function() {
         // (because we don't want to do it in change() below, see: http://redmine.emii.org.au/issues/937
         select: function(event, ui) {
             addTerm.call(this, ui.item.value);
+
+            trackDownloadFilterUsage($('title').html() + " - " + trimFormElementId(this.id), ui.item.value);
+
             submit();
             return false;
         },
@@ -19,7 +22,13 @@ $(function() {
         }
     });
 
+    function trimFormElementId(element) {
+        var splitz = element.split(".");
+        return splitz[splitz.length -2];
+    }
+
     $(".reportFilter").find(":input").not(".ui-autocomplete-input").change(function() {
+        trackDownloadFilterUsage($('title').html() + " - " + this.id, this.value);
         submit();
     });
 

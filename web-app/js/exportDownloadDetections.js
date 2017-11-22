@@ -12,8 +12,15 @@ $(document).ready(function () {
                 showAcknowledgement();
                 return false;
             }
+            trackDownloadUsage("DetectionsAs-" + this.className, getUser())
         }
     });
+
+    function getUser() {
+        var id = $('#userlogout a[name=username]').attr('userid');
+        var name = $('#userlogout a[name=username]').html();
+        return  (name && name.length != 0) ? id + ":" + name : "unauthenticated";
+    }
 
     function showAcknowledgement() {
 

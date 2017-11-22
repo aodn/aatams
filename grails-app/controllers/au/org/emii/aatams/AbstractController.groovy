@@ -20,8 +20,7 @@ class AbstractController {
 
         displayCountMessage(resultList, queryName)
 
-        [entityList: resultList.results,
-         total: resultList.count]
+        [entityList: resultList.results, total: resultList.count ]
     }
 
     protected def displayCountMessage(resultList, queryName) {

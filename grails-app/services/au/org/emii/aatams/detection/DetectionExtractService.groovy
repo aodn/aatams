@@ -80,7 +80,12 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         }
 
         def endTime = System.currentTimeMillis()
-        log.debug("Export finished, num results: ${count}, elapsed time (ms): ${endTime - startTime}, query: ${query}")
+        log.info("Export finished user: ${getUserInfo()}, sqlRows: ${count}, elapsed time (ms): ${endTime - startTime}, query: ${query}")
+    }
+
+    def getUserInfo() {
+        def principal = permissionUtilsService.principal()
+        return (principal != null) ? "${principal.id}:${principal.name}" : "unauthenticated"
     }
 
     protected def writeCsvRow(detection, OutputStream out) {

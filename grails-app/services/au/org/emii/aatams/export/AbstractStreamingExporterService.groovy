@@ -1,13 +1,12 @@
 package au.org.emii.aatams.export
 
 import au.org.emii.aatams.sql.Sql
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
+import javax.servlet.http.Cookie
 import java.util.zip.GZIPOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
-import javax.servlet.http.Cookie
-
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 abstract class AbstractStreamingExporterService {
     def dataSource
@@ -59,7 +58,7 @@ abstract class AbstractStreamingExporterService {
             out.close()
             res.flushBuffer()
 
-            log.info("Elapsed time (ms): " + (System.currentTimeMillis() - startTime))
+            log.debug("Elapsed time (ms): " + (System.currentTimeMillis() - startTime))
         }
     }
 

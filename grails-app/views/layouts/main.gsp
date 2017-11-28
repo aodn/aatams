@@ -146,7 +146,7 @@
             <g:set var="principal" value="${PermissionUtilsService.principal()}" />
 
             <div id="userlogout">
-              Logged in as <g:link controller="person" action="show" id="${principal.id}">${principal.name}</g:link> (<g:link controller="auditLogEvent" action="list">activity</g:link> | <g:link controller="auth" action="signOut">logout</g:link>)
+              Logged in as <g:link controller="person" action="show" name="username" id="${principal.id}" userid="${principal.id}">${principal.name}</g:link> (<g:link controller="auditLogEvent" action="list">activity</g:link> | <g:link controller="auth" action="signOut">logout</g:link>)
             </div>
           </shiro:user>
         </div>

@@ -80,7 +80,9 @@ class DetectionExtractService extends AbstractStreamingExporterService {
         }
 
         def endTime = System.currentTimeMillis()
-        log.info("Export finished user: ${getUserInfo()}, sqlRows: ${count}, elapsed time (ms): ${endTime - startTime}, query: ${query}")
+        def sqlLine = query.toString().replaceAll("[\n\r]", " ").replaceAll("\\s{2,}", " ");
+
+        log.info("Export finished user: ${getUserInfo()}, sqlRows: ${count}, elapsed time (ms): ${endTime - startTime}, query: ${sqlLine}")
     }
 
     def getUserInfo() {

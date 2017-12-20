@@ -76,8 +76,8 @@
 
         <div id="footer">
             <a href="http://imos.org.au/"><img src="https://static.emii.org.au/images/logo/IMOS_logo-stacked.png" height="80" alt="IMOS Logo"  /></a>
-            <img src="https://static.emii.org.au/images/logo/NCRIS_Initiative_inline200.png"  height="80" alt="Australian Government funding entity logo" />
-            <a href="http://www.utas.edu.au/"><img src="https://static.emii.org.au/images/logo/utas/UTAS_MONO_Stacked_208w.png"   height="80" alt="Utas Logo" /></a>
+            <img src="https://static.emii.org.au/images/logo/NCRIS_2017_110.png " height="80" alt="Australian Government funding entity logo" />
+            <a href="http://www.utas.edu.au/"><img src="https://static.emii.org.au/images/logo/utas/UTAS_2017_110.png" height="80" alt="UTAS Logo" /></a>
 
             <p><a title="Integrated Marine Observing System" href="http://www.imos.org.au">IMOS</a>
                 is a national collaborative research infrastructure, supported by Australian Government.

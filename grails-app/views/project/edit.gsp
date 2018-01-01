@@ -57,16 +57,6 @@
                                       <g:each in="${projectInstance.organisationProjects}" var="op">
                                         <tr>
                                           <td class="rowButton"><g:link class="show" controller="organisationProject" action="show" id="${op?.id}">.</g:link></td>
-                                          <shiro:hasPermission permission="project:${projectInstance?.id}:edit">
-                                            <td class="rowButton">
-                                              <g:link controller="organisationProject"
-                                                      action="delete"
-                                                      class="delete"
-                                                      params="[projectId:projectInstance?.id]"
-                                                      id="${op?.id}"
-                                                      onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">.</g:link>
-                                            </td>
-                                          </shiro:hasPermission>
                                           <td>
                                             <g:link controller="organisation" action="show" id="${op?.organisation.id}">${op?.organisation?.encodeAsHTML()}</g:link>
                                           </td>
@@ -100,9 +90,6 @@
                                     <thead>
                                       <tr>
                                         <th/>
-                                        <shiro:hasPermission permission="project:${projectInstance?.id}:edit">
-                                          <th/>
-                                        </shiro:hasPermission>
                                         <th>Name</th>
                                         <th>Project Role</th>
                                         <th>Access</th>
@@ -112,16 +99,6 @@
                                       <g:each in="${projectInstance?.projectRoles?}" var="p">
                                         <tr>
                                           <td class="rowButton"><g:link class="show" controller="projectRole" action="show" id="${p?.id}">.</g:link></td>
-                                          <shiro:hasPermission permission="project:${projectInstance?.id}:edit">
-                                            <td class="rowButton">
-                                              <g:link controller="projectRole"
-                                                      action="delete"
-                                                      class="delete"
-                                                      params="[projectId:projectInstance?.id]"
-                                                      id="${p?.id}"
-                                                      onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');">.</g:link>
-                                            </td>
-                                          </shiro:hasPermission>
                                           <td valign="top" class="value">
                                             <g:link controller="person" action="show" id="${p?.person?.id}">${p?.person?.encodeAsHTML()}</g:link>
                                           </td>

@@ -4,7 +4,7 @@ import grails.converters.JSON
 
 class ProjectRoleController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: ["POST", "GET"]]
+    static allowedMethods = [save: "POST", update: "POST"]
 
     def permissionUtilsService
 
@@ -104,31 +104,7 @@ class ProjectRoleController {
     }
 
     def delete = {
-        def projectRoleInstance = ProjectRole.get(params.id)
-
-        if (projectRoleInstance)  {
-            def projectId = projectRoleInstance?.project?.id
-
-            try  {
-                log.debug("Removing permissions related to project role: " + projectRoleInstance)
-                permissionUtilsService.removePermissions(projectRoleInstance)
-                log.debug("Removing project role: " + projectRoleInstance)
-                projectRoleInstance.delete(flush: true)
-                log.debug("Project role removed")
-
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), projectRoleInstance.toString()])}"
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), projectRoleInstance.toString()])}"
-            }
-
-            log.debug("Redirecting to project page, project ID: " + projectId)
-            redirect(controller:"project", action: "edit", id: projectId, params: [projectId:projectId])
-        }
-        else  {
-            log.error("Project role not found, id: " + params.id)
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'projectRole.label', default: 'ProjectRole'), params.id])}"
-            redirect(action: "list")
-        }
+        flash.message = "Deletes have been disabled to preserve data integrity."
+        redirect(action: "list")
     }
 }

@@ -90,7 +90,7 @@ class ProjectRoleControllerIntegrationTests extends ControllerUnitTestCase  {
     private void deleteRole(projectRole)  {
         controller.params.id = projectRole.id
         controller.delete()
-        assertNoPermissions()
+        assertNotNull(projectRole) // see #415
     }
 
     private void assertProjectInvestigatorPermissions()  {

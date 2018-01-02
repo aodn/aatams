@@ -24,13 +24,13 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'projectRole.id.label', default: 'Id')}" />
                         
-                            <g:sortableColumn property="access" title="${message(code: 'projectRole.access.label', default: 'Access')}" />
-                        
                             <th><g:message code="projectRole.person.label" default="Person" /></th>
                         
                             <th><g:message code="projectRole.project.label" default="Project" /></th>
                         
                             <th><g:message code="projectRole.roleType.label" default="Role Type" /></th>
+
+                            <g:sortableColumn property="access" title="${message(code: 'projectRole.access.label', default: 'Access')}" />
                         
                         </tr>
                     </thead>
@@ -40,13 +40,13 @@
                         
                             <td><g:link action="show" id="${projectRoleInstance.id}">${fieldValue(bean: projectRoleInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: projectRoleInstance, field: "access")}</td>
-                        
                             <td>${fieldValue(bean: projectRoleInstance, field: "person")}</td>
                         
                             <td>${fieldValue(bean: projectRoleInstance, field: "project")}</td>
                         
                             <td>${fieldValue(bean: projectRoleInstance, field: "roleType")}</td>
+
+                            <td>${fieldValue(bean: projectRoleInstance, field: "access")}</td>
                         
                         </tr>
                     </g:each>

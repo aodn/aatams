@@ -4,7 +4,7 @@ import grails.converters.JSON
 
 class OrganisationProjectController {
 
-    static allowedMethods = [saveOrganisationToProject: "POST", save: "POST", update: "POST", delete: ["POST", "GET"]]
+    static allowedMethods = [saveOrganisationToProject: "POST", save: "POST", update: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
@@ -88,22 +88,7 @@ class OrganisationProjectController {
     }
 
     def delete = {
-        def organisationProjectInstance = OrganisationProject.get(params.id)
-        if (organisationProjectInstance) {
-            try {
-                organisationProjectInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), organisationProjectInstance.toString()])}"
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), organisationProjectInstance.toString()])}"
-            }
-
-            def projectId = organisationProjectInstance?.project?.id
-            redirect(controller: "project", action: "edit", id: projectId, params: [projectId:projectId])
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'organisationProject.label', default: 'OrganisationProject'), params.id])}"
-            redirect(action: "list")
-        }
+        flash.message = "Deletes have been disabled to preserve data integrity."
+        redirect(action: "list")
     }
 }

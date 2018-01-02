@@ -9,7 +9,7 @@ class PersonController {
 
     def permissionUtilsService
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST", updatePassword: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", updatePassword: "POST"]
 
     def index = {
         redirect(action: "list", params: params)
@@ -227,22 +227,8 @@ class PersonController {
 
     }
     def delete = {
-        def personInstance = Person.get(params.id)
-        if (personInstance) {
-            try {
-                personInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'person.label', default: 'Person'), personInstance.toString()])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'person.label', default: 'Person'), personInstance.toString()])}"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'person.label', default: 'Person'), params.id])}"
-            redirect(action: "list")
-        }
+        flash.message = "Deletes have been disabled to preserve data integrity."
+        redirect(action: "list")
     }
 
     /**

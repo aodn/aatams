@@ -5,6 +5,7 @@ package au.org.emii.aatams
  * ProjectRole).
  */
 enum ProjectAccess  {
+    NO_ACCESS('Revoked'),
     READ_ONLY('Read Only'),
     READ_WRITE('Read/Write')
 
@@ -19,6 +20,6 @@ enum ProjectAccess  {
     }
 
     static list() {
-        [READ_ONLY, READ_WRITE]
+        [NO_ACCESS, READ_ONLY, READ_WRITE]
     }
 }

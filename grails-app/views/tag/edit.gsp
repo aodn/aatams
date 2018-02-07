@@ -4,6 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
+        <g:javascript src="sensorCreate.js"/>
         <g:set var="entityName" value="${message(code: 'tag.label', default: 'Tag')}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
         <script type="text/javascript" src="${resource(dir:'js',file:'addsensortotag.js')}"></script>
@@ -197,7 +198,7 @@
                                 <label class="compulsory" for="transmitterType"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
-                                <g:select name="transmitterTypeId"
+                                <g:select name="transmitterType.id"
                                           from="${tagInstance.unusedTransmitterTypes}"
                                           optionKey="id"
                                           value="${sensorInstance?.transmitterType?.id}"  />

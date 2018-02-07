@@ -34,18 +34,21 @@ $(function ()
 
 function setSensorFieldsEnabled()
 {
-	var sensorFields = ["#slope", "#intercept", "#unit"];
+	var sensorFields = ["slope", "intercept", "unit"];
 	$.each(sensorFields, function(index, fieldSelector)
 	{
-		if ($("#transmitterType\\.id option:selected").text() == 'PINGER')
+		if (['PINGER','RANGE_TEST'].indexOf($("#transmitterType\\.id option:selected").text()) > -1 )
 		{
-			$(fieldSelector).attr("disabled", "disabled");
-			$(fieldSelector).attr("placeholder", "not applicable");
-		}
+			$("#" + fieldSelector).attr("disabled", "disabled");
+			$("#" +fieldSelector).attr("placeholder", "not applicable");
+            $("label[for=" + fieldSelector + "]").removeClass("compulsory");
+
+        }
 		else
 		{
-			$(fieldSelector).removeAttr("disabled");
-			$(fieldSelector).removeAttr("placeholder");
-		}
+			$("#" + fieldSelector).removeAttr("disabled");
+			$("#" + fieldSelector).removeAttr("placeholder");
+            $("label[for=" + fieldSelector + "]").addClass("compulsory");
+        }
 	});
 }

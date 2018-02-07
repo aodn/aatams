@@ -11,7 +11,8 @@ $(function() {
                 var event = $("#id").val();
                 var tagId = $("#id").val();
                 var tagSerialNumber = $("#serialNumber").val();
-                var transmitterTypeId = $("#transmitterTypeId option:selected").val();
+                var transmitterTypeId = $("#transmitterType\\.id option:selected").val();
+                console.log(transmitterTypeId);
                 var pingCode = $("#sensorPingCode").val();
                 var slope = $("#slope").val();
                 var intercept = $("#intercept").val();

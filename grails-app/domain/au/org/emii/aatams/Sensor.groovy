@@ -38,9 +38,9 @@ class Sensor implements Embargoable {
         tag(validator: codeMapValidator)
         pingCode()
         transmitterType(unique: 'tag')
-        unit(nullable:true)
-        slope(nullable:true)
-        intercept(nullable:true)
+        unit(nullable:true, validator: sensorFieldValidator)
+        slope(nullable:true, validator: sensorFieldValidator)
+        intercept(nullable:true, validator: sensorFieldValidator)
         transmitterId(nullable:true)
     }
 
@@ -99,6 +99,10 @@ class Sensor implements Embargoable {
             CodeMap invalidCodeMap = CodeMap.get(tag.codeMap.id)
             return ['sensor.invalidCodeMapTransmitterType', invalidCodeMap.codeMap, StringUtils.join(invalidCodeMap.listValidTransmitterTypeValues(), ", ")]
         }
+    }
+
+    static def sensorFieldValidator = { field, obj ->
+        ['PINGER','RANGE_TEST'].contains(obj.transmitterType.toString()) || field ?: ['sensor.missingSensorFields', obj.transmitterType.toString()]
     }
 
     List<Person> getOwningPIs() {

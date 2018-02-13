@@ -14,7 +14,7 @@ unlink('Outcomes'); dir.create("Outcomes");
 source('QC_functions/ala_shp.R'); source('QC_functions/shortest_dist.R'); source('QC_functions/qc.R'); source('QC_functions/metadata_extraction.R');
 
 #### Prepare high resolution raster map for shortest path distance calculations
-Aust <- crop(getMap(resolution="high"), extent(110,155,-5,-45));
+Aust <- crop(getMap(resolution="high"), extent(110,155,-45,-5));
 r <- raster(ncol=2000, nrow=2000); extent(r) <- extent(Aust); Aust_raster <- rasterize(Aust, r); rm(Aust);
 Aust_raster[is.na(Aust_raster)] <- 1; Aust_raster[Aust_raster>1] <- NA;
 tr <- transition(Aust_raster,function(x) 1/mean(x) ,directions=8);

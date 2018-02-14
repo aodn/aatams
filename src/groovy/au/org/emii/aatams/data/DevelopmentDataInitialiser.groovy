@@ -416,8 +416,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
                         tag:tag1,
                         transmitterType:depth,
                         unit:'m',
-                        slope:1,
-                        intercept:0)
+                        slope: 1.2,
+                        intercept: 2.3)
 
 
         Sensor sensor2 =
@@ -425,8 +425,8 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
                         tag:tag1,
                         transmitterType:temp,
                         unit:'k',
-                        slope:1,
-                        intercept:0)
+                        slope: 1.2,
+                        intercept: 2.3)
         tag1.addToSensors(sensor1)
         tag1.addToSensors(sensor2)
         tag1.save(failOnError:true)

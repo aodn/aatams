@@ -102,7 +102,7 @@ class Sensor implements Embargoable {
     }
 
     static def sensorFieldValidator = { field, obj ->
-        ['PINGER','RANGE_TEST'].contains(obj.transmitterType.toString()) || field ?: ['sensor.missingSensorFields', obj.transmitterType.toString()]
+        ['PINGER','RANGE_TEST'].contains(obj.transmitterType.toString()) || field ?: ['sensor.missingSensorFields', field, obj.transmitterType.toString()]
     }
 
     List<Person> getOwningPIs() {

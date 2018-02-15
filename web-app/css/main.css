@@ -168,14 +168,21 @@ td.value ul, div.list ul {
     display: inline;
 }
 
-
-
 input, select, textarea {
-    background-color: #fcfcfc;
     border: 1px solid #ccc;
     font: 11px verdana, arial, helvetica, sans-serif;
     margin: 2px 0;
     padding: 2px 4px;
+}
+
+select {
+    background-color: white;
+}
+
+input:read-only,
+input[disabled=disabled] {
+    border-color: #eee;
+    background-color: #fcfcfc;
 }
 
 input[type=text]:not(.manualSizing), textarea {
@@ -625,6 +632,12 @@ label.compulsory:after
 {
     content: " *";
     color: #FF0000;
+}
+
+label.compulsoryReadonly:after
+{
+    content: " *";
+    color: #67695E;
 }
 
 /*table {border: 1px solid #808080;}

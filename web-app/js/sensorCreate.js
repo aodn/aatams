@@ -1,5 +1,8 @@
 $(function()
 {
+
+
+
     var dataSource = contextPath + '/tag/lookupBySerialNumber';
     $("#tag\\.serialNumber").autocomplete({source:dataSource});
     
@@ -13,6 +16,18 @@ $(function()
     });
 });
 
+function setUnit() {
+	var allowedUnits = {
+		"PRESSURE": "m",
+		"TEMPERATURE": "°C",
+		"ACCELEROMETER": "m/s²"
+	};
+	var selectedTransmitterTypeLabel = $("#transmitterType\\.id option:selected").text();
+	var option = allowedUnits[selectedTransmitterTypeLabel];
+
+    $('input[name=unit]').val(option);
+}
+
 function updateTagFields(tag)
 {
 	$("#tag\\.project\\.id").val(tag.project.id);
@@ -22,12 +37,12 @@ function updateTagFields(tag)
 	$("#tag\\.status\\.id").val(tag.status.id);
 }
 
-// Enable/disable slope/intercept/unit based on transmitter type.
 $(function ()
 {
 	setSensorFieldsEnabled();
 	$("#transmitterType\\.id").change(function() 
 	{
+		setUnit();
 		setSensorFieldsEnabled();
 	});
 });
@@ -37,18 +52,20 @@ function setSensorFieldsEnabled()
 	var sensorFields = ["slope", "intercept", "unit"];
 	$.each(sensorFields, function(index, fieldSelector)
 	{
+		var cssClass =  (fieldSelector != "unit") ? "compulsory" : "compulsoryReadonly";
+
 		if (['PINGER','RANGE_TEST'].indexOf($("#transmitterType\\.id option:selected").text()) > -1 )
 		{
 			$("#" + fieldSelector).attr("disabled", "disabled");
 			$("#" +fieldSelector).attr("placeholder", "not applicable");
-            $("label[for=" + fieldSelector + "]").removeClass("compulsory");
+            $("label[for=" + fieldSelector + "]").removeClass();
 
         }
 		else
 		{
 			$("#" + fieldSelector).removeAttr("disabled");
 			$("#" + fieldSelector).removeAttr("placeholder");
-            $("label[for=" + fieldSelector + "]").addClass("compulsory");
+            $("label[for=" + fieldSelector + "]").addClass(cssClass);
         }
 	});
 }

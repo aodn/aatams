@@ -106,7 +106,7 @@
                                     <label class="compulsory" for="transmitterType"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
-                                    <g:select name="transmitterType.id" from="${au.org.emii.aatams.TransmitterType.list()}" optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
+                                    <g:select name="transmitterType.id" from="${au.org.emii.aatams.TransmitterType.list()}"  optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
 
                                 </td>
                             </tr>
@@ -140,13 +140,13 @@
 
                                 </td>
                             </tr>
-                        
+
                             <tr class="prop">
                                 <td valign="top" class="name">
                                     <label for="unit"><g:message code="sensor.unit.label" default="Unit" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'unit', 'errors')}">
-                                    <g:textField name="unit" value="${sensorInstance?.unit}" />
+                                    <g:textField name="unit" readonly="readonly"  value="${sensorInstance?.unit}" from="${sensorInstance.constraints.unit.inList}" />
 
                                 </td>
                             </tr>

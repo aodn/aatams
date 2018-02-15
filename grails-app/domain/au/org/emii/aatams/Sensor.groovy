@@ -38,7 +38,7 @@ class Sensor implements Embargoable {
         tag(validator: codeMapValidator)
         pingCode()
         transmitterType(unique: 'tag')
-        unit(nullable:true, validator: sensorFieldValidator)
+        unit(nullable:true, validator: sensorFieldValidator, inList: ["m", "°C", "m/s²"])
         slope(nullable:true, validator: sensorFieldValidator)
         intercept(nullable:true, validator: sensorFieldValidator)
         transmitterId(nullable:true)
@@ -102,7 +102,7 @@ class Sensor implements Embargoable {
     }
 
     static def sensorFieldValidator = { field, obj ->
-        ['PINGER','RANGE_TEST'].contains(obj.transmitterType.toString()) || field ?: ['sensor.missingSensorFields', field, obj.transmitterType.toString()]
+        ['PINGER','RANGE_TEST'].contains(obj.transmitterType.toString()) || field ?: ['sensor.missingSensorFields', obj.transmitterType.toString()]
     }
 
     List<Person> getOwningPIs() {

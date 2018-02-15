@@ -39,7 +39,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase {
         mockDomain(Project, [project])
 
         pinger = new TransmitterType(transmitterTypeName: 'PINGER')
-        temp = new TransmitterType(transmitterTypeName: 'TEMP')
+        temp = new TransmitterType(transmitterTypeName: 'TEMPERATURE')
         pressure = new TransmitterType(transmitterTypeName: 'PRESSURE')
         def transmitterTypeList = [pinger, temp, pressure]
         mockDomain(TransmitterType, transmitterTypeList)

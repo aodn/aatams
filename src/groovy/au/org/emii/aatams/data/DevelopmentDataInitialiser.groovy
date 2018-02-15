@@ -405,9 +405,9 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
                  expectedLifeTimeDays:1024])
 
         TransmitterType depth =
-                new TransmitterType(transmitterTypeName:"DEPTH").save(failOnError:true)
+                new TransmitterType(transmitterTypeName:"PRESSURE").save(failOnError:true)
         TransmitterType temp =
-                new TransmitterType(transmitterTypeName:"TEMP").save(failOnError:true)
+                new TransmitterType(transmitterTypeName:"TEMPERATURE").save(failOnError:true)
 
         TransmitterType.withSession { session -> session.flush() } // Flush to db to ensure sensor codeMap validation works
 
@@ -419,14 +419,14 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
                         slope: 1.2,
                         intercept: 2.3)
 
-
         Sensor sensor2 =
                 new Sensor(pingCode:'65000',
                         tag:tag1,
                         transmitterType:temp,
-                        unit:'k',
+                        unit:'°C',
                         slope: 1.2,
                         intercept: 2.3)
+
         tag1.addToSensors(sensor1)
         tag1.addToSensors(sensor2)
         tag1.save(failOnError:true)

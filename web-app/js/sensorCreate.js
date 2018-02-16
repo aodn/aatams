@@ -54,7 +54,7 @@ function setSensorFieldsEnabled()
 	{
 		var cssClass =  (fieldSelector != "unit") ? "compulsory" : "compulsoryReadonly";
 
-		if (['PINGER','RANGE_TEST'].indexOf($("#transmitterType\\.id option:selected").text()) > -1 )
+		if (['PINGER','RANGE TEST'].indexOf($("#transmitterType\\.id option:selected").text()) > -1 )
 		{
 			$("#" + fieldSelector).attr("disabled", "disabled");
 			$("#" +fieldSelector).attr("placeholder", "not applicable");

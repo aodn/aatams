@@ -385,6 +385,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
                  codeMap:a69_1303,
                  pingCode:'5555',
                  model:vemcoV8,
+                 project:tunaProject,
                  status:DeviceStatus.NEW,
                  expectedLifeTimeDays:1024])
 
@@ -393,6 +394,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
                  codeMap:a69_1303,
                  pingCode:'6666',
                  model:vemcoV8,
+                 project:tunaProject,
                  status:DeviceStatus.DEPLOYED,
                  expectedLifeTimeDays:1024])
 
@@ -401,6 +403,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
                  codeMap:a69_1303,
                  pingCode:'7777',
                  model:vemcoV8,
+                 project:tunaProject,
                  status:DeviceStatus.DEPLOYED,
                  expectedLifeTimeDays:1024])
 

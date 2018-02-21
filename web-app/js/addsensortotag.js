@@ -3,7 +3,6 @@ $(function() {
     $('#dialog-form-add-sensor').dialog({
         autoOpen: false,
         height: 375,
-        width: 500,
         modal: true,
         buttons: {
             'Create': function() 
@@ -18,7 +17,7 @@ $(function() {
                 var intercept = $("#intercept").val();
                 var unit = $("#unit").val();
                 var projectId = $("#project\\.id option:selected").val();
-                
+
                 $.post(contextPath + '/sensor/save', 
                        {'event.id':event,
                     	'projectId':projectId,
@@ -61,6 +60,6 @@ $(function() {
     });
     
     $('#add_sensor_to_tag').click(function() {
-        $('#dialog-form-add-sensor').dialog('open');
+        $('#dialog-form-add-sensor').dialog('open').dialog( "option", "width", 600 )
     });
 });

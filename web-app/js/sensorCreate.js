@@ -1,8 +1,5 @@
 $(function()
 {
-
-
-
     var dataSource = contextPath + '/tag/lookupBySerialNumber';
     $("#tag\\.serialNumber").autocomplete({source:dataSource});
     
@@ -56,14 +53,17 @@ function setSensorFieldsEnabled()
 
 		if (['PINGER','RANGE TEST'].indexOf($("#transmitterType\\.id option:selected").text()) > -1 )
 		{
-			$("#" + fieldSelector).attr("disabled", "disabled");
+            $("#" + fieldSelector).attr("readonly", "readonly");
+            $("#" + fieldSelector).val("");
 			$("#" +fieldSelector).attr("placeholder", "not applicable");
             $("label[for=" + fieldSelector + "]").removeClass();
 
         }
 		else
 		{
-			$("#" + fieldSelector).removeAttr("disabled");
+			if (fieldSelector != "unit") {
+                $("#" + fieldSelector).removeAttr("readonly");
+			}
 			$("#" + fieldSelector).removeAttr("placeholder");
             $("label[for=" + fieldSelector + "]").addClass(cssClass);
         }

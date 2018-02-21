@@ -1,4 +1,4 @@
-<%@ page import="au.org.emii.aatams.Tag" %>
+<%@ page import="au.org.emii.aatams.Sensor; au.org.emii.aatams.Tag" %>
 <%@ page import="au.org.emii.aatams.TransmitterType" %>
 <html>
     <head>
@@ -241,7 +241,7 @@
                                 <label for="unit"><g:message code="sensor.unit.label" default="Unit" /></label>
                             </td>
                             <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'unit', 'errors')}">
-                                <g:textField name="unit" value="${sensorInstance?.unit}" />
+                                <g:textField name="unit" readonly="readonly"  value="${sensorInstance?.unit}" from="${au.org.emii.aatams.Sensor.constraints.unit.inList}" />
 
                             </td>
                         </tr>
@@ -251,6 +251,7 @@
             </div>
         </g:form>
       </div>
+
 
     </body>
 </html>

@@ -146,7 +146,7 @@
                                     <label for="unit"><g:message code="sensor.unit.label" default="Unit" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'unit', 'errors')}">
-                                    <g:textField name="unit" readonly="readonly"  value="${sensorInstance?.unit}" from="${sensorInstance.constraints.unit.inList}" />
+                                    <g:textField name="unit" readonly="readonly"  value="${sensorInstance?.unit}" from="${au.org.emii.aatams.Sensor.constraints.unit.inList}" />
 
                                 </td>
                             </tr>

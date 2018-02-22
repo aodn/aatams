@@ -34,18 +34,12 @@ function updateTagFields(tag)
 	$("#tag\\.status\\.id").val(tag.status.id);
 }
 
-$(function ()
-{
-	setSensorFieldsEnabled();
-	$("#transmitterType\\.id").change(function() 
-	{
-		setUnit();
-		setSensorFieldsEnabled();
-	});
-});
+function setSensorFields() {
+    setUnit();
+    setSensorFieldsEnabled();
+}
 
-function setSensorFieldsEnabled()
-{
+function setSensorFieldsEnabled() {
 	var sensorFields = ["slope", "intercept", "unit"];
 	$.each(sensorFields, function(index, fieldSelector)
 	{
@@ -69,3 +63,11 @@ function setSensorFieldsEnabled()
         }
 	});
 }
+
+$(function() {
+    setSensorFields();
+
+    $("#transmitterType\\.id").change(function() {
+        setSensorFields();
+    });
+});

@@ -34,7 +34,7 @@ class Tag extends Device implements Embargoable {
             def error = true
             sensors.every {
                 if (!it.validate()) {
-                    error = 'tag.invalidCodeMapTransmitterType'
+                    error = it.errors.toString()
                 }
             }
             return  error

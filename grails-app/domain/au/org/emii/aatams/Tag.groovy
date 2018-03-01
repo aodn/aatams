@@ -28,7 +28,7 @@ class Tag extends Device implements Embargoable {
     Integer expectedLifeTimeDays
 
     static constraints = {
-        project(nullable:true)
+        project(nullable:false)
         expectedLifeTimeDays(nullable:false, min:0)
         sensors (validator: { sensors ->
             def error = true

@@ -37,7 +37,6 @@ class Sensor implements Embargoable {
     static constraints = {
         tag(validator: codeMapValidator)
         pingCode()
-        project(nullable:false)
         transmitterType(unique: 'tag')
         unit(nullable:true, validator: sensorFieldValidator, inList: ["m", "°C", "m/s²"])
         slope(nullable:true, validator: sensorFieldValidator)

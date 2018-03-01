@@ -37,7 +37,7 @@
                                               class="remember"
                                               from="${candidateProjects}" 
                                               optionKey="id" 
-                                              value="${tagInstance?.project?.id}" 
+                                              value="${tagInstance?.project?.id}"
                                               noSelection="['':'unassigned']" />
 
                                 </td>

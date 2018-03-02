@@ -239,7 +239,7 @@ class TagTests extends GrailsUnitTestCase {
         tag.project = null
         tag.save()
 
-        assertTrue(tag.hasErrors())
+        assertFalse(tag.hasErrors())
     }
 
     void testNonPingerSensors() {

@@ -3,6 +3,7 @@ package au.org.emii.aatams.detection
 import au.org.emii.aatams.*
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
+import com.vividsolutions.jts.geom.Point
 import org.joda.time.DateTime
 
 class DetectionIntegrationTests extends GroovyTestCase {
@@ -128,7 +129,7 @@ class DetectionIntegrationTests extends GroovyTestCase {
     }
 
     def testWithSurgery() {
-/*
+
         def detectionHasExpectedFields = { detection, expectedSpecies ->
             def dv = DetectionView.get(detection.id, dataSource)
             assertEquals(expectedSpecies, dv.getSpeciesName())
@@ -149,12 +150,11 @@ class DetectionIntegrationTests extends GroovyTestCase {
 
         def receiver = createReceiver()
         def deployment = createDeployment(receiver: receiver, initDateTime: dayBeforeYesterday)
-        createRecovery(deployment: deployment, recoveryDateTime: dayAfterTomorrow)*/
+        createRecovery(deployment: deployment, recoveryDateTime: dayAfterTomorrow)
 
         def whiteShark= Animal.findBySpecies( Species.findByNameLike('%Carcharodon carcharias%'))
         def southernBluefinTuna= Animal.findBySpecies( Species.findByNameLike('%Southern Bluefin Tuna%'))
 
-/*
         def detection1 = createDetection(dayBeforeYesterday)
         def detection2 = createDetection(today)
         def detection3 = createDetection(dayAfterTomorrow)
@@ -163,7 +163,6 @@ class DetectionIntegrationTests extends GroovyTestCase {
         detectionHasNullFields(detection1)
         detectionHasNullFields(detection2)
         detectionHasNullFields(detection3)
-*/
 
         // create surgery 1
         createSurgery(yesterday, whiteShark)
@@ -198,20 +197,6 @@ class DetectionIntegrationTests extends GroovyTestCase {
 
         def project = Project.list()[0]
         def method = CaptureMethod.list()[0]
-        def codeMap = CodeMap.list()[0]
-
-        def pinger = TransmitterType.findByTransmitterTypeName('PINGER')
-
-        DeviceModel model = DeviceModel.list()[0]
-
-        Tag tag = new Tag(serialNumber: '1000001' + animal.toString() , project: project, codeMap: codeMap, expectedLifeTimeDays: 2, model: model, status: DeviceStatus.NEW)
-        Sensor sensor = new Sensor( pingCode: 6789, tag: tag, transmitterType: pinger)
-
-        tag.addToSensors(sensor)
-        tag.save(flush: true, failOnError: true)
-
-        def type = SurgeryType.list()[0]
-        def treatmentType = SurgeryTreatmentType.list()[0]
 
         AnimalRelease release = new AnimalRelease(
                 project: project,
@@ -225,7 +210,19 @@ class DetectionIntegrationTests extends GroovyTestCase {
                 captureMethod: method,
                 releaseLocality: 'Neptune Islands',
                 releaseLocation: newPoint(),
-                releaseDateTime: new DateTime("2010-02-14T14:15:00")).save(flush: true, failOnError: true)
+                releaseDateTime: new DateTime("2010-02-14T14:15:00")).save(failOnError: true)
+
+        def pinger = TransmitterType.findByTransmitterTypeName('PINGER')
+
+        def sensor = Sensor.buildLazy( pingCode: 6789, transmitterType: pinger).save(flush: true)
+
+        Tag tag = Tag.buildLazy(serialNumber: '1000001', codeMap: CodeMap.findByCodeMap('A69-1303')).save(flush: true)
+
+        tag.addToSensors(sensor)
+        tag.save(flush: true, failOnError: true)
+
+        def type = SurgeryType.list()[0]
+        def treatmentType = SurgeryTreatmentType.list()[0]
 
         Surgery surgery = new Surgery(
                 release: release,

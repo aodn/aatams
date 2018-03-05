@@ -3,8 +3,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="layout" content="main" />
+        <g:javascript src="sensorCreate.js"/>
         <g:set var="entityName" value="${message(code: 'sensor.label', default: 'Sensor')}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
+
     </head>
     <body>
         <div class="nav">
@@ -36,7 +38,7 @@
                                   <label class="compulsory" for="transmitterType"><g:message code="sensor.transmitterType.label" default="Transmitter Type" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'transmitterType', 'errors')}">
-                                    <g:select name="transmitterType.id" from="${sensorInstance.typesCanChangeTo}" optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
+                                    <g:select name="transmitterType.id" from="${sensorInstance.typesCanChangeTo}"  optionKey="id" value="${sensorInstance?.transmitterType?.id}"  />
 
                                 </td>
                             </tr>
@@ -76,7 +78,7 @@
                                   <label for="unit"><g:message code="sensor.unit.label" default="Unit" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: sensorInstance, field: 'unit', 'errors')}">
-                                    <g:textField name="unit" value="${sensorInstance?.unit}" />
+                                    <g:textField name="unit" readonly="readonly" value="${sensorInstance?.unit}" from="${au.org.emii.aatams.Sensor.constraints.unit.inList}" />
 
                                 </td>
                             </tr>

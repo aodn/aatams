@@ -43,9 +43,27 @@ class TagTests extends GrailsUnitTestCase {
 
         mockDomain(ValidCodeMapTransmitterType)
 
-        pingerSensor = new Sensor(tag: tag, transmitterType: pinger, pingCode: 1111)
-        tempSensor = new Sensor(tag: tag, transmitterType: temp, pingCode: 2222)
-        pressureSensor = new Sensor(tag: tag, transmitterType: pressure, pingCode: 3333)
+        pingerSensor = new Sensor(
+                tag: tag,
+                transmitterType: pinger,
+                pingCode: 1111
+        )
+        tempSensor = new Sensor(
+                tag: tag,
+                transmitterType: temp,
+                pingCode: 2222,
+                unit: "m",
+                slope: 1.2,
+                intercept: 2.3
+        )
+        pressureSensor = new Sensor(
+                tag: tag,
+                transmitterType: pressure,
+                pingCode: 3333,
+                unit: "m",
+                slope: 1.2,
+                intercept: 2.3
+        )
         def sensorList = [pingerSensor, tempSensor, pressureSensor]
         mockDomain(Sensor, sensorList)
 

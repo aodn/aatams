@@ -3,7 +3,6 @@ $(function() {
     $('#dialog-form-add-sensor').dialog({
         autoOpen: false,
         height: 375,
-        width: 500,
         modal: true,
         buttons: {
             'Create': function() 
@@ -11,13 +10,13 @@ $(function() {
                 var event = $("#id").val();
                 var tagId = $("#id").val();
                 var tagSerialNumber = $("#serialNumber").val();
-                var transmitterTypeId = $("#transmitterTypeId option:selected").val();
+                var transmitterTypeId = $("#transmitterType\\.id option:selected").val();
                 var pingCode = $("#sensorPingCode").val();
                 var slope = $("#slope").val();
                 var intercept = $("#intercept").val();
                 var unit = $("#unit").val();
                 var projectId = $("#project\\.id option:selected").val();
-                
+
                 $.post(contextPath + '/sensor/save', 
                        {'event.id':event,
                     	'projectId':projectId,
@@ -60,6 +59,8 @@ $(function() {
     });
     
     $('#add_sensor_to_tag').click(function() {
-        $('#dialog-form-add-sensor').dialog('open');
+
+        $('#dialog-form-add-sensor').dialog('open').dialog( "option", "width", 600 );
+        setSensorFields();
     });
 });

@@ -46,6 +46,7 @@ class TagFactoryServiceTests extends GrailsUnitTestCase {
             pingCode:1234,
             serialNumber:"1111",
             model:model,
+            project: sealProject,
             status:DeviceStatus.NEW,
             expectedLifeTimeDays:1048,
             transmitterType:new TransmitterType()]

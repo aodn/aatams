@@ -1,8 +1,6 @@
 package au.org.emii.aatams
 
-import com.vividsolutions.jts.geom.Coordinate
-import com.vividsolutions.jts.geom.GeometryFactory
-import grails.test.*
+import grails.test.GrailsUnitTestCase
 
 class ReceiverDownloadFileTests extends GrailsUnitTestCase {
     Tag tag111, tag222, tag333
@@ -51,7 +49,7 @@ class ReceiverDownloadFileTests extends GrailsUnitTestCase {
         tag111.addToSensors(sensor111)
         tag222.addToSensors(sensor222)
         tag333.addToSensors(sensor333)
-4
+
         mockDomain(ReceiverDownloadFile)
     }
 

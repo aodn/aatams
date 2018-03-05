@@ -385,6 +385,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
                  codeMap:a69_1303,
                  pingCode:'5555',
                  model:vemcoV8,
+                 project:tunaProject,
                  status:DeviceStatus.NEW,
                  expectedLifeTimeDays:1024])
 
@@ -393,6 +394,7 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
                  codeMap:a69_1303,
                  pingCode:'6666',
                  model:vemcoV8,
+                 project:tunaProject,
                  status:DeviceStatus.DEPLOYED,
                  expectedLifeTimeDays:1024])
 
@@ -401,13 +403,14 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
                  codeMap:a69_1303,
                  pingCode:'7777',
                  model:vemcoV8,
+                 project:tunaProject,
                  status:DeviceStatus.DEPLOYED,
                  expectedLifeTimeDays:1024])
 
         TransmitterType depth =
-                new TransmitterType(transmitterTypeName:"DEPTH").save(failOnError:true)
+                new TransmitterType(transmitterTypeName:"PRESSURE").save(failOnError:true)
         TransmitterType temp =
-                new TransmitterType(transmitterTypeName:"TEMP").save(failOnError:true)
+                new TransmitterType(transmitterTypeName:"TEMPERATURE").save(failOnError:true)
 
         TransmitterType.withSession { session -> session.flush() } // Flush to db to ensure sensor codeMap validation works
 
@@ -416,17 +419,17 @@ class DevelopmentDataInitialiser extends AbstractDataInitialiser {
                         tag:tag1,
                         transmitterType:depth,
                         unit:'m',
-                        slope:1,
-                        intercept:0)
-
+                        slope: 1.2,
+                        intercept: 2.3)
 
         Sensor sensor2 =
                 new Sensor(pingCode:'65000',
                         tag:tag1,
                         transmitterType:temp,
-                        unit:'k',
-                        slope:1,
-                        intercept:0)
+                        unit:'°C',
+                        slope: 1.2,
+                        intercept: 2.3)
+
         tag1.addToSensors(sensor1)
         tag1.addToSensors(sensor2)
         tag1.save(failOnError:true)

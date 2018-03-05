@@ -39,7 +39,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase {
         mockDomain(Project, [project])
 
         pinger = new TransmitterType(transmitterTypeName: 'PINGER')
-        temp = new TransmitterType(transmitterTypeName: 'TEMP')
+        temp = new TransmitterType(transmitterTypeName: 'TEMPERATURE')
         pressure = new TransmitterType(transmitterTypeName: 'PRESSURE')
         def transmitterTypeList = [pinger, temp, pressure]
         mockDomain(TransmitterType, transmitterTypeList)
@@ -77,7 +77,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase {
         createTag("12345")
 
         def saveParams = [tag: Tag.findBySerialNumber("12345"),
-                          transmitterType:pressure,
+                          transmitterType:pinger,
                           pingCode:2222]
 
         controller.params.putAll(saveParams)
@@ -92,6 +92,44 @@ class SensorControllerTests extends AbstractControllerUnitTestCase {
         assertNotNull(tag)
 
         assertEquals("12345", tag.serialNumber)
+    }
+
+
+    void testSavePressureSensorRequiredAttriubutes() {
+
+        createTag("12345678")
+
+        def saveParams = [
+            tag: Tag.findBySerialNumber("12345678"),
+            transmitterType: pressure,
+            unit: "m",
+            slope: 1.2,
+            intercept: 2.3,
+            pingCode:2222
+        ]
+
+        controller.params.putAll(saveParams)
+        controller.save()
+
+        assertEquals("tag", controller.redirectArgs.controller)
+
+    }
+
+    void testSaveSensorMissingRequiredAttriubutes() {
+
+        createTag("12345678")
+
+        def saveParams = [
+            tag: Tag.findBySerialNumber("12345678"),
+            transmitterType: pressure,
+            pingCode: 2222
+        ]
+
+        controller.params.putAll(saveParams)
+        controller.save()
+
+        assertEquals(null, controller.redirectArgs.controller)
+
     }
 
     void testSaveSensorExistingSerialNumberSameSensorType() {
@@ -124,6 +162,7 @@ class SensorControllerTests extends AbstractControllerUnitTestCase {
                 codeMap:a69_1303,
                 expectedLifeTimeDays:100,
                 status:DeviceStatus.NEW)
+
         tag.save()
         assertFalse(tag.hasErrors())
     }

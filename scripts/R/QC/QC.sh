@@ -3,7 +3,7 @@ echo `date`
 cd /home/xhoenner/QC/;
 
 echo @@@@@@@@ Download all detections and transmitters @@@@@@@@
-#	/usr/bin/Rscript DownloadDetections.R;
+	/usr/bin/Rscript DownloadDetections.R;
 
 echo @@@@@@@@ Run QC tests @@@@@@@@ 
 	/usr/bin/Rscript QC.R;

@@ -1,6 +1,6 @@
 ##### How to run
 1. Change working directory in terminal to where you've cloned the GitHub repository.
-2. Modify the 'config_db.R' and 'config_workdir.R' configuration files to match your database credentials and folder hierarchy.
+2. Modify the 'config_db.R' and 'config_workdir.R' configuration files to match your database credentials and folder hierarchy. In 'config_workdir.R', modify the projects object if you want the QC to run on specific project(s).
 3. Place species distribution shapefiles into the 'ALA_Shapefile' folder (see example sub-folders in there).
 4. Run sh -x QC.sh > LogFile.txt. This will execute the different R scripts mentioned in 'QC.sh' and will log all terminal activities in 'LogFile.txt'
 

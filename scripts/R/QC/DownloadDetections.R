@@ -1,20 +1,24 @@
 rm(list=ls());
 library(RPostgres); library(RPostgreSQL);
-options(warn=2); Sys.setenv(TZ='GMT'); 
+options(warn=2); Sys.setenv(TZ='GMT');
 
 ##### Load up configuration files and set working directory
-source('config_db.R'); # for db credentials
+setwd('/Users/xhoenner/Work/AATAMS_AcousticTagging/aatams/scripts/R/QC/'); # comment out once all dev work completed
+source('config_db_dev.R'); # for db credentials, change to 'config_db.R' once all dev work completed
 source('config_workdir.R'); # for working directories
 setwd(data_dir); dir.create('Raw',showWarnings=F); setwd('Raw');
+if (length(dir()) > 0) {unlink(dir())} # Remove all files in Raw folder if some are already present
 
 ##### Get list of all tag deployments
 con <- dbConnect(RPostgres::Postgres(), host = server_address, dbname = db_name, user = db_user, port = db_port, password = db_password);
-data <- dbGetQuery(con, 
-	"SELECT DISTINCT transmitter_id, surgery.tag_id, release_id
+query <- paste("SELECT DISTINCT transmitter_id, surgery.tag_id, release_id
   	FROM aatams.sensor
   	JOIN aatams.surgery ON surgery.tag_id = sensor.tag_id
   	JOIN aatams.transmitter_type ON transmitter_type.id = sensor.transmitter_type_id
-  	WHERE transmitter_type_name != 'RANGE TEST';")
+  	JOIN aatams.device ON device.id = sensor.tag_id
+  	JOIN aatams.project ON project.id = device.project_id
+  	WHERE transmitter_type_name != 'RANGE TEST'", ifelse(projects == '', ";", paste(" AND project.name IN (", projects ,");", sep = '')), sep = '')
+data <- dbGetQuery(con, query)
 
 colna <- c("tag_id","transmitter_id","release_id","scientific_name","releasedatetime_timestamp","release_longitude","release_latitude", "detection_id",
 "tag_detection_timestamp","installation_name","station_name","receiver_name","receiver_deployment_id","latitude","longitude","sensor_value");

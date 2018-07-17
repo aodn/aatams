@@ -2,6 +2,7 @@ rm(list=ls())
 library(gmt); library(rgeos, quietly= T); library(sp, quietly= T); library(rgdal, quietly= T); library(rworldmap, quietly= T); library(rworldxtra, quietly= T); library(gdistance, quietly= T); library(raster, quietly= T); library(doParallel); library(foreach);
 
 ##### Load up configuration file and set working directory
+setwd('/Users/xhoenner/Work/AATAMS_AcousticTagging/aatams/scripts/R/QC/'); # comment out once all dev work completed
 source('config_workdir.R'); # for working directories
 setwd(wd);
 options(digits=10)
@@ -11,7 +12,7 @@ unlink(dir(paste(data_dir,'/Processed/',sep=''),full.names=T)); dir.create(paste
 unlink('Outcomes'); dir.create("Outcomes");
 
 #### Load up all QC functions
-source('QC_functions/ala_shp.R'); source('QC_functions/shortest_dist.R'); source('QC_functions/qc.R'); source('QC_functions/metadata_extraction.R');
+source('QC_functions/ala_shp.R'); source('QC_functions/shortest_dist.R'); source('QC_functions/qc.R'); source('QC_functions/tag_metadata_extraction.R'); source('QC_functions/receiver_metadata_extraction.R');
 
 #### Prepare high resolution raster map for shortest path distance calculations
 Aust <- crop(getMap(resolution="high"), extent(110,155,-45,-5));
@@ -42,11 +43,14 @@ for (i in 1:nrow(ttr)){
 }
 
 ##### Configure output datasets
-tag_metadata <- data.frame(matrix(ncol = 22));
-colnames(tag_metadata) <- c('transmitter_id','tag_id','release_id','tag_project_name','scientific_name','common_name','embargo_date','is_protected', 'release_longitude','release_latitude','ReleaseDate', 'sensor_slope', 'sensor_intercept', 'sensor_type', 'sensor_unit', 'tag_model_name', 'tag_serial_number', 'tag_expected_life_time_days', 'tag_status', 'sex', 'measurement','dual_sensor_tag');
+tag_metadata <- data.frame(matrix(ncol = 24));
+colnames(tag_metadata) <- c('transmitter_id','tag_id','release_id','tag_project_name', 'principal_investigators', 'pis_email_addresses', 'scientific_name','common_name','embargo_date','is_protected', 'release_longitude','release_latitude','ReleaseDate', 'sensor_slope', 'sensor_intercept', 'sensor_type', 'sensor_unit', 'tag_model_name', 'tag_serial_number', 'tag_expected_life_time_days', 'tag_status', 'sex', 'measurement','dual_sensor_tag');
 
-outcome <- data.frame(matrix(ncol=10)); 
-colnames(outcome) <- c('transmitter_id','tag_id','release_id','scientific_name','nb_detections', 'nb_detections_releasedate_1','invalid_releaseloc','nb_detections_distribution_2','nb_valid', 'timediff_1stlastdetections_days');
+outcome <- data.frame(matrix(ncol=12)); 
+colnames(outcome) <- c('transmitter_id','tag_id','release_id','common_name','nb_detections', 'nb_detections_releasedate_1','invalid_releaseloc','nb_detections_distribution_2','nb_valid', 'timediff_1stlastdetections_days',
+'longer_lifetime','nb_detections_velocity_2');
+
+colnames_receiver_metadata <- c('installation_name','station_name','receiver_name','receiver_project_name', 'principal_investigators', 'pis_email_addresses', 'InitialisationDate','DeploymentDate','RecoveryDate', 'deployment_longitude','deployment_latitude','deployment_depth');
 
 setwd(paste(data_dir,'/Raw',sep=''));
 ##### Configure parallel processing
@@ -67,7 +71,7 @@ result <- foreach(i=which(ttr$keep == 1), .combine = 'comb', .multicombine = T, 
 		if ((ttr$release_id[s[1]] == ttr$release_id[s[2]] & is.na(ttr$release_id[s[1]]) == F) | 
 			(is.na(ttr$release_id[s[1]]) == T & is.na(ttr$release_id[s[2]]) == T)) {
 			data <- rbind(read.csv(files[i],header=T,sep=';'), read.csv(files[which(ttr$tag_id == ttr$tag_id[i] & (ttr$release_id == ttr$release_id[i] | is.na(ttr$release_id[i] == T)))[2]],header=T,sep=';'))
-		} else {data <- read.csv(files[i],header=T,sep=';')}
+		} #else {data <- read.csv(files[i],header=T,sep=';')}
 	}
 	
 	##### Configure output processed data file
@@ -101,19 +105,22 @@ result <- foreach(i=which(ttr$keep == 1), .combine = 'comb', .multicombine = T, 
 		}
 	}
 	
-	##### Apply QC tests
+	##### Apply QC tests on detections
 	temporal_outcome <- qc(data);
 	
-	##### Extract and output metadata
-	if (length(s) == 1) {tag_metadata <- metadata_extraction(data); tag_metadata$dual_sensor_tag[i] <- F} else {
+	##### Extract and output tag metadata
+	if (length(s) == 1) {tag_metadata <- tag_metadata_extraction(data); tag_metadata$dual_sensor_tag[i] <- F} else {
 		if ((ttr$release_id[s[1]] == ttr$release_id[s[2]] & is.na(ttr$release_id[s[1]]) == F) | 
 			(is.na(ttr$release_id[s[1]]) == T & is.na(ttr$release_id[s[2]]) == T)) {
-		tag_metadata <- metadata_extraction(data[which(as.character(data$transmitter_id) == as.character(ttr$transmitter_id[which(ttr$tag_id == ttr$tag_id[i] & (ttr$release_id == ttr$release_id[i] | is.na(ttr$release_id[i] == T)))[2]])),]);
+		tag_metadata <- tag_metadata_extraction(data[which(as.character(data$transmitter_id) == as.character(ttr$transmitter_id[which(ttr$tag_id == ttr$tag_id[i] & (ttr$release_id == ttr$release_id[i] | is.na(ttr$release_id[i] == T)))[2]])),]);
 		tag_metadata[which(ttr$tag_id == ttr$tag_id[i] & (ttr$release_id == ttr$release_id[i] | is.na(ttr$release_id[i] == T)))[2],] <- tag_metadata[i,];
-		tag_metadata <- metadata_extraction(data[which(as.character(data$transmitter_id) == as.character(ttr$transmitter_id[i])),]);
+		tag_metadata <- tag_metadata_extraction(data[which(as.character(data$transmitter_id) == as.character(ttr$transmitter_id[i])),]);
 		tag_metadata$dual_sensor_tag[i] <- tag_metadata$dual_sensor_tag[which(ttr$tag_id == ttr$tag_id[i] & (ttr$release_id == ttr$release_id[i] | is.na(ttr$release_id[i] == T)))[2]] <- T
-		} else {tag_metadata <- metadata_extraction(data); tag_metadata$dual_sensor_tag[i] <- F}
+		} else {tag_metadata <- tag_metadata_extraction(data); tag_metadata$dual_sensor_tag[i] <- F}
 	}
+	
+	##### Extract and output receiver metadata
+	receiver_metadata <- receiver_metadata_extraction(data); colnames(receiver_metadata) <- colnames_receiver_metadata;
 		
 	##### Produce a 'processed' CSV file for each tag deployment
 	write.table(temporal_outcome, paste(data_dir,'/Processed/',files[i],sep=''), col.names=T, row.names=F, sep=';', quote=F);	
@@ -123,17 +130,19 @@ result <- foreach(i=which(ttr$keep == 1), .combine = 'comb', .multicombine = T, 
 	outcome[i,1] <- ifelse(length(as.character(unique(as.character(data$transmitter_id)))) == 1, as.character(unique(data$transmitter_id)), paste(as.character(unique(data$transmitter_id)),collapse = '/'));
 	outcome[i,2] <- unique(as.character(data$tag_id));
 	outcome[i,3] <- unique(as.character(data$release_id));
-	outcome[i,4] <- as.character(unique(data$scientific_name));
+	outcome[i,4] <- as.character(unique(data$common_name));
 	outcome[i,5] <- nrow(temporal_outcome); # Total number of detections
 	outcome[i,6] <- length(which(temporal_outcome$ReleaseDate_QC == 2)); ## Number of detections prior to release date
 	outcome[i,7] <- temporal_outcome$ReleaseLocation_QC[1] == 2; ## Is tag release outside ALA/FishMap's expert distribution map or farther than 500 km from first detection location?
 	outcome[i,8] <- length(which(temporal_outcome$DetectionDistribution_QC == 2)); ## Number of detections outside the ALA/FishMap's expert distribution map
 	outcome[i,9] <- length(which(temporal_outcome$Detection_QC < 3)); ## Total number of 'valid' or 'likely valid' detections
-	outcome[i,10] <- as.numeric(difftime(temporal_outcome$detection_timestamp[nrow(temporal_outcome)],temporal_outcome$detection_timestamp[1], units = 'days')) ## Time difference, in days, between 1st and last detections
+	outcome[i,10] <- as.numeric(difftime(temporal_outcome$detection_timestamp[nrow(temporal_outcome)], temporal_outcome$detection_timestamp[1], units = 'days')) ## Time difference, in days, between 1st and last detections
+	outcome[i,11] <- ifelse(1.2 * data$tag_expected_life_time_days[1] - as.numeric(difftime(temporal_outcome$detection_timestamp[nrow(temporal_outcome)], temporal_outcome$detection_timestamp[1], units = 'days')) < 0, TRUE, FALSE) ## Tags detected longer than expected life time?
+	outcome[i,12] <- length(which(temporal_outcome$Velocity_QC == 2)); ## Number of detections associated with unrealistic velocities
 	
-	tag_metadata <- tag_metadata[which(is.na(tag_metadata$transmitter_id) == F & duplicated(tag_metadata) == F),];
-	outcome <- outcome[which(is.na(outcome$transmitter_id) == F & duplicated(outcome) == F),];
-	list(tag_metadata, outcome);
+	# tag_metadata <- tag_metadata[which(is.na(tag_metadata$transmitter_id) == F & duplicated(tag_metadata) == F),];
+	# outcome <- outcome[which(is.na(outcome$transmitter_id) == F & duplicated(outcome) == F),];
+	list(tag_metadata, outcome, receiver_metadata);
 };
 stopCluster(cl);
 
@@ -147,3 +156,11 @@ write.table(tag_metadata, '../Processed/TagMetadata.txt', row.names = F, col.nam
 
 outcome <- result[[2]]; outcome <- outcome[which(is.na(outcome$transmitter_id) == F & duplicated(outcome) == F),]
 write.table(outcome, paste(wd, '/Outcomes/QC_OutputSummary.csv', sep = ''), row.names=F, col.names=T, sep = ';', quote = F);
+
+receiver_metadata <- result[[3]]; receiver_metadata <- receiver_metadata[which(duplicated(receiver_metadata) == F),];
+receiver_metadata$installation_name <- as.character(receiver_metadata$installation_name);
+receiver_metadata$station_name <- as.character(receiver_metadata$station_name);
+receiver_metadata$receiver_name <- as.character(receiver_metadata$receiver_name);
+receiver_metadata$DeploymentDate <- strptime(as.character(receiver_metadata$DeploymentDate), '%Y-%m-%d %H:%M:%S', tz = 'UTC')
+receiver_metadata <- receiver_metadata[order(receiver_metadata$installation_name, receiver_metadata$station_name, receiver_metadata$receiver_name, receiver_metadata$DeploymentDate),]
+write.table(receiver_metadata, '../Processed/ReceiverMetadata.txt', row.names = F, col.names = T, sep= ';', quote = F);

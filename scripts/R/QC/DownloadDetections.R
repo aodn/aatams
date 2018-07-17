@@ -11,13 +11,19 @@ if (length(dir()) > 0) {unlink(dir())} # Remove all files in Raw folder if some 
 
 ##### Get list of all tag deployments
 con <- dbConnect(RPostgres::Postgres(), host = server_address, dbname = db_name, user = db_user, port = db_port, password = db_password);
-query <- paste("SELECT DISTINCT transmitter_id, surgery.tag_id, release_id
+query <- paste("SELECT DISTINCT project.name AS tag_project_name, transmitter_id, surgery.tag_id, surgery.release_id,
+	string_agg(su.name, ', ') AS tag_project_principal_investigator_names,
+	string_agg(su.email_address, ', ') AS tag_project_principal_investigator_email_addresses
   	FROM aatams.sensor
   	JOIN aatams.surgery ON surgery.tag_id = sensor.tag_id
   	JOIN aatams.transmitter_type ON transmitter_type.id = sensor.transmitter_type_id
   	JOIN aatams.device ON device.id = sensor.tag_id
   	JOIN aatams.project ON project.id = device.project_id
-  	WHERE transmitter_type_name != 'RANGE TEST'", ifelse(projects == '', ";", paste(" AND project.name IN (", projects ,");", sep = '')), sep = '')
+	JOIN aatams.project_role pr ON project.id = pr.project_id
+	JOIN aatams.project_role_type prt ON prt.id = pr.role_type_id
+	JOIN aatams.sec_user su ON su.id = pr.person_id
+  	WHERE prt.id = 8 AND transmitter_type_name != 'RANGE TEST'", ifelse(projects == '', " ", paste(" AND project.name IN (", projects ,") ", sep = '')), 
+  	"GROUP BY project.name, transmitter_id, surgery.tag_id, surgery.release_id", sep = '')
 data <- dbGetQuery(con, query)
 
 colna <- c("tag_id","transmitter_id","release_id","scientific_name","releasedatetime_timestamp","release_longitude","release_latitude", "detection_id",
@@ -30,8 +36,7 @@ for (i in 1:nrow(data)){
 	
 	con <- dbConnect(RPostgres::Postgres(), host = server_address, dbname = db_name, user = db_user, port = db_port, password = db_password);
   	
-	query <- paste("
-  		SELECT DISTINCT se.tag_id,
+	query <- paste("SELECT DISTINCT se.tag_id,
   		vd.transmitter_id AS transmitter_id,
 	  	vd.release_id,
 	    CASE WHEN vd.scientific_name IS NULL THEN sp.name ELSE vd.scientific_name END AS scientific_name,
@@ -41,16 +46,17 @@ for (i in 1:nrow(data)){
 		CASE WHEN ST_X(ar.release_location) IS NULL THEN ST_X(ar.capture_location) ELSE ST_X(ar.release_location) END AS release_longitude,
 		CASE WHEN ST_Y(ar.release_location) IS NULL THEN ST_Y(ar.capture_location) ELSE ST_Y(ar.release_location) END AS release_latitude,
 		ar.embargo_date,
-		p.name AS tag_project_name,
 		p.is_protected,
-		vd.detection_id,
-		vd.timestamp AS tag_detection_timestamp,
+		vd.timestamp AT TIME ZONE 'UTC' AS tag_detection_timestamp,
 		vd.installation_name,
 		vd.station_station_name AS station_name,
 		vd.receiver_name,
-		vd.receiver_deployment_id,
-		vd.station_latitude AS latitude,
-		vd.station_longitude AS longitude,
+		rd.initialisationdatetime_timestamp AT TIME ZONE 'UTC'AS receiverinitialisationdatetime_timestamp,
+		rd.deploymentdatetime_timestamp AT TIME ZONE 'UTC' AS receiverdeploymentdatetime_timestamp,
+		rr.recoverydatetime_timestamp AT TIME ZONE 'UTC' AS receiverrecoverydatetime_timestamp,
+		CASE WHEN ST_Y(rd.location) IS NOT NULL THEN ST_Y(rd.location) ELSE vd.station_latitude END AS latitude,
+		CASE WHEN ST_X(rd.location) IS NOT NULL THEN ST_X(rd.location) ELSE vd.station_longitude END AS longitude,
+		rd.depth_below_surfacem AS receiver_depth,
 		vd.sensor_value,
 		vd.sensor_unit,
 		se.slope AS sensor_slope,
@@ -70,6 +76,8 @@ for (i in 1:nrow(data)){
 	  FULL JOIN aatams.animal_release ar ON ar.id = vd.release_id
 	  FULL JOIN aatams.animal a ON a.id = ar.animal_id
 	  FULL JOIN aatams.species sp ON sp.id = a.species_id
+	  JOIN aatams.receiver_deployment rd ON rd.id = vd.receiver_deployment_id
+	  JOIN aatams.receiver_recovery rr ON rr.deployment_id = rd.id
 	  WHERE vd.transmitter_id = '",as.character(data$transmitter_id[i]),"' AND se.tag_id ",ifelse(is.na(as.character(data$tag_id[i]))==T,'IS NULL', paste('=',as.character(data$tag_id[i]),sep=''))," AND vd.release_id ",ifelse(is.na(as.character(data$release_id[i]))==T,'IS NULL', paste('=',as.character(data$release_id[i]),sep='')),";",sep='');
 	  
 	rs <- dbGetQuery(con, query);
@@ -77,7 +85,7 @@ for (i in 1:nrow(data)){
 	## Go to next iteration if tag has not been detected
 	if(nrow(rs)==0) next
 	  	
-  	## Add measurement(s) and sex information
+  	## Extract measurement(s) and sex information
 	query <- paste("SELECT ar.id AS release_id, 
 			sex.sex,
 			STRING_AGG(COALESCE(amt.type || ' = ' || am.value || ' ' || mu.unit), ', ') AS measurement 
@@ -90,11 +98,28 @@ for (i in 1:nrow(data)){
 			WHERE ar.id" , paste('=',as.character(data$release_id[i]),sep=''), " GROUP BY ar.id, sex;", sep='');
 	
 	m <- dbGetQuery(con, query);
+
+  	## Extract receiver projects PIs	
+  	rxr_pr <- unique(rs$installation_name)
+	query <- paste("SELECT i.name AS installation_name, p.name AS receiver_project_name, 
+			string_agg(su.name, ', ') AS receiver_project_principal_investigator_names,
+			string_agg(su.email_address, ', ') AS receiver_project_principal_investigator_email_addresses
+			FROM aatams.installation i
+			JOIN aatams.project p on p.id = i.project_id
+			JOIN aatams.project_role pr ON p.id = pr.project_id
+			JOIN aatams.project_role_type prt ON prt.id = pr.role_type_id
+			JOIN aatams.sec_user su ON su.id = pr.person_id
+			WHERE prt.id = 8 AND i.name IN ('", paste(rxr_pr, collapse = "','"), "') GROUP BY i.name, p.name;", sep='');
+	
+	rxr_pis <- dbGetQuery(con, query);
+
 	dbDisconnect(con);
-			  		
+				  		
 	## Produce a CSV file for each tag deployment
 	rs <- cbind(rs, m[,2:3])
-	write.table(rs,paste(data$transmitter_id[i],'_',data$tag_id[i],'_',data$release_id[i],'.csv',sep=''),col.names=T,row.names=F,quote=F,sep=';');
+	rs <- merge(rs, rxr_pis, by = 'installation_name');
+	rs <- merge(rs, data, by = c('transmitter_id', 'tag_id','release_id'))
+	write.table(rs, paste(data$transmitter_id[i],'_',data$tag_id[i],'_',data$release_id[i],'.csv',sep=''),col.names=T,row.names=F,quote=F,sep=';');
 }
 end_time <- Sys.time();
 

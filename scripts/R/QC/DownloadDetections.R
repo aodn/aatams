@@ -1,5 +1,5 @@
 rm(list=ls());
-library(RPostgres); library(RPostgreSQL);
+library(RPostgres); library(RPostgreSQL); library(plyr)
 options(warn=2); Sys.setenv(TZ='GMT');
 
 ##### Load up configuration files and set working directory
@@ -9,11 +9,12 @@ source('config_workdir.R'); # for working directories
 setwd(data_dir); dir.create('Raw',showWarnings=F); setwd('Raw');
 if (length(dir()) > 0) {unlink(dir())} # Remove all files in Raw folder if some are already present
 
-##### Get list of all tag deployments
+##### Get list of all registered tag deployments, associated PIs' details and corresponding species names. Note that range test tags are excluded, but embargoed and protected tags are included at this point
 con <- dbConnect(RPostgres::Postgres(), host = server_address, dbname = db_name, user = db_user, port = db_port, password = db_password);
 query <- paste("SELECT DISTINCT project.name AS tag_project_name, transmitter_id, surgery.tag_id, surgery.release_id,
 	string_agg(su.name, ', ') AS tag_project_principal_investigator_names,
-	string_agg(su.email_address, ', ') AS tag_project_principal_investigator_email_addresses
+	string_agg(su.email_address, ', ') AS tag_project_principal_investigator_email_addresses,
+	scientific_name, common_name
   	FROM aatams.sensor
   	JOIN aatams.surgery ON surgery.tag_id = sensor.tag_id
   	JOIN aatams.transmitter_type ON transmitter_type.id = sensor.transmitter_type_id
@@ -22,13 +23,50 @@ query <- paste("SELECT DISTINCT project.name AS tag_project_name, transmitter_id
 	JOIN aatams.project_role pr ON project.id = pr.project_id
 	JOIN aatams.project_role_type prt ON prt.id = pr.role_type_id
 	JOIN aatams.sec_user su ON su.id = pr.person_id
+	JOIN aatams.animal_release ar ON ar.id = surgery.release_id
+	JOIN aatams.animal a ON a.id = ar.animal_id
+	JOIN aatams.species sp ON sp.id = a.species_id
   	WHERE prt.id = 8 AND transmitter_type_name != 'RANGE TEST'", ifelse(projects == '', " ", paste(" AND project.name IN (", projects ,") ", sep = '')), 
-  	"GROUP BY project.name, transmitter_id, surgery.tag_id, surgery.release_id", sep = '')
+  	"GROUP BY project.name, transmitter_id, surgery.tag_id, surgery.release_id, scientific_name, common_name", sep = '')
 data <- dbGetQuery(con, query)
 
 colna <- c("tag_id","transmitter_id","release_id","scientific_name","releasedatetime_timestamp","release_longitude","release_latitude", "detection_id",
 "tag_detection_timestamp","installation_name","station_name","receiver_name","receiver_deployment_id","latitude","longitude","sensor_value");
 dbDisconnect(con);
+
+##### Find for each species the corresponding ALA expert map shapefile
+# Retrieve species list and corresponding shapefiles
+sp <- ddply(data, .(data$scientific_name, data$common_name), nrow)
+colnames(sp) <- c('scientific_name', 'common_name', 'freq'); 
+
+for (i in 1:nrow(sp)){
+	spe <- gsub(' ', '_', sp[i,1]);
+	if(length(grep('&',spe)) == 0) {
+		if(length(dir(paste(wd,'/ALA_Shapefile/', sep =''))[which(grepl(spe,dir(paste(wd,'/ALA_Shapefile/', sep =''))) == T)]) == 0) s <- data.frame(sp[i,1], NA) else 
+			s <- data.frame(sp[i,1], dir(paste(wd,'/ALA_Shapefile/', sep =''))[which(grepl(spe,dir(paste(wd,'/ALA_Shapefile/', sep =''))) == T)]);
+	} else {
+		spe <- strsplit(spe,'_&_')[[1]]; s <- matrix(ncol=2, nrow= length(spe));
+		for (j in 1:length(spe)){
+			s[j,1] <- as.character(sp[i,1]);
+			# if(length(dir(paste(wd,'/ALA_Shapefile/', sep =''))[which(grepl(spe[j],dir(paste(wd,'/ALA_Shapefile/', sep =''))) == T)]) == 0) next else sel[i] <- dir(paste(wd,'/ALA_Shapefile/', sep =''))[which(grepl(spe[j],dir(paste(wd,'/ALA_Shapefile/', sep =''))) == T)]
+		if(length(dir(paste(wd,'/ALA_Shapefile/', sep =''))[which(grepl(spe[j],dir(paste(wd,'/ALA_Shapefile/', sep =''))) == T)]) == 0) s[j,2] <- NA else 
+			s[j,2] <- dir(paste(wd,'/ALA_Shapefile/', sep =''))[which(grepl(spe[j],dir(paste(wd,'/ALA_Shapefile/', sep =''))) == T)];
+		}
+	}
+	
+	colnames(s) <- c('scientific_name', 'folder_name');
+	if(i == 1) fol_sel <- s else fol_sel <- rbind(fol_sel, s)
+};
+
+# Print diagnostic message for species missing expert map distribution
+for (i in 1:nrow(sp[which(sp[,1] %in% fol_sel[which(is.na(fol_sel[,2]) == T),1]),1:2])){
+	if (i == 1){
+		cat(paste('Missing ALA expert map distribution for :\n', 
+		paste('\t', sp[which(sp[,1] %in% fol_sel[which(is.na(fol_sel[,2]) == T),1]),1:2][i,],collapse = ', '), '\n'));
+	} else {
+		cat(paste('\t', sp[which(sp[,1] %in% fol_sel[which(is.na(fol_sel[,2]) == T),1]),1:2][i,],collapse = ', '),'\n')
+	}
+}
 
 ##### SQL query: for each tag deployment download all detections and metadata, then produce a CSV file
 start_time <- Sys.time();

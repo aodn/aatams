@@ -1,5 +1,6 @@
 rm(list=ls());
 library(plyr, quietly= T); library(rgdal, quietly= T); library(sp, quietly= T); library(rgeos, quietly= T); library(mapdata); library(scales); library(gmt);
+library(grid); library(gridBase); library(gridExtra)
 
 ######################################
 ##### Load up configuration file
@@ -23,44 +24,78 @@ for (i in 1:nrow(species)){
 	if(is.na(species[i,2]) == F) spe <- species[i,2] else spe <- species[i,1];
 	dir.create(paste(wd,'/Outcomes/QC_Maps/', gsub(' ', '_',spe), sep=""))
 	
-	## Collate dataset
+	## Collate datasets
 	for (j in 1:length(sel)){
-# j<-which(dat$transmitter_id[sel] == 'A69-9004-1036')
+		# j<-which(dat$transmitter_id[sel] == 'A69-9004-982')
+		
+		## Load up dataset
 		if (length(strsplit(as.character(dat$transmitter_id[sel[j]]),'/')[[1]]) == 1) {s <- grep(paste(dat$transmitter_id[sel[j]],'_', dat$tag_id[sel[j]], '_', dat$release_id[sel[j]], sep =''), dir());} else {
 			s <- grep(paste(strsplit(as.character(dat$transmitter_id[sel[j]]),'/')[[1]][1],'_', dat$tag_id[sel[j]], '_', dat$release_id[sel[j]], sep =''), dir());
 			if (length(s) == 0) s <- grep(paste(strsplit(as.character(dat$transmitter_id[sel[j]]),'/')[[1]][2],'_', dat$tag_id[sel[j]], '_', dat$release_id[sel[j]], sep =''), dir());
 		}
-		
 		d <- read.csv(dir()[s], header=T, sep=';'); d$detection_timestamp <- strptime(as.character(d$detection_timestamp), '%Y-%m-%d %H:%M:%S', tz = 'UTC');
 		d <- cbind(dat[s,], d, row.names = NULL); d <- d[, c(1:4, 32:37, 19:20, 46:47, 41)] ## Select following columns for plotting: transmitter_id, tag_id, release_id, scientific_name, installation_name, station_name, receiver_name, detection_timestamp, longitude, latitude, release_longitude, release_latitude, ReleaseLocation_QC, Detection_QC, Velocity_QC (not sure last one's needed though)
 				
-		##### 1st figure - Individual tag movements (only for dodgy tags?) - START
+		## Compute metrics
 		releases <- unique(data.frame(d$release_longitude,d$release_latitude, d$ReleaseLocation_QC)); tmp <- d[which(d$Detection_QC <= 2),];
-		dists <- geodist(d$latitude[2:nrow(d)], d$longitude[2:nrow(d)], d$latitude[1:(nrow(d) - 1)], d$longitude[1:(nrow(d) - 1)], units = 'km') * 1000; dists[which(is.nan(dists))] <- 0;
-		times <- abs(as.numeric(difftime(d$detection_timestamp[2:nrow(d)], d$detection_timestamp[1:(nrow(d)-1)], units = 'secs'))); times[which(times == 0)] <- 1;
-		v <- dists/times;
-		dbd <- c(NA,FindBearingDelta(d$latitude[1:(nrow(d)-2)], d$longitude[1:(nrow(d)-2)], d$latitude[2:(nrow(d)-1)], d$longitude[2:(nrow(d)-1)], d$latitude[3:(nrow(d))], d$longitude[3:(nrow(d))]), NA) # 'Bearing delta' - minimum enclosed bearing between two successive bearing
+		dists_d <- c(NA, geodist(d$latitude[2:nrow(d)], d$longitude[2:nrow(d)], d$latitude[1:(nrow(d) - 1)], d$longitude[1:(nrow(d) - 1)], units = 'km') * 1000); dists_d[which(is.nan(dists_d))] <- 0;
+		times_d <- c(NA, abs(as.numeric(difftime(d$detection_timestamp[2:nrow(d)], d$detection_timestamp[1:(nrow(d)-1)], units = 'secs')))); times_d[which(times_d == 0)] <- 1;
+		v_d <- dists_d/times_d;
+
+		## For tags with dubious movements - START
+		dubious <- which(v_d > 10 & dists_d > 2000);
+		if (length(dubious) > 0){
+			d_d <- cbind(d[, 5:8], round(d$longitude, 2), round(d$latitude, 2), round(dists_d/1000, 1), round(v_d, 1)); colnames(d_d)[5:8] <- c('long','lat','distprev_km', 'v_ms')
+			for (kk in 1:length(dubious)){
+				dub <- dubious[kk] + c(-2: 2)
+				if(kk == 1) dubs <- dub else {dubs <- c(dubs, dub)}
+			}; dubs <- unique(dubs);
 			
-		if (length(which(v > 10 & dists > 2000)) > 0){ ## Less sensitive than if any(tmp$Velocity_QC == 2) is added as the latter test doesn't account for spatially overlapping detections for receivers close to each other?
+			trip_id <- 1; d$trip_id[1] <- trip_id
+			for (kk in 2:nrow(d)){
+				if(dists_d[kk] > 0) {d$trip_id[kk] <- trip_id + 1; trip_id <- trip_id + 1;} else {d$trip_id[kk] <- trip_id}
+			}
+			
+			## Summary per trip
+			for (kk in 1:length(unique(d$trip_id))){
+				subsel <- which(d$trip_id == unique(d$trip_id)[kk]);
+				dat.sum <- data.frame(unique(d[subsel,1:3]), as.character(unique(d$installation_name[subsel])), as.character(unique(d$station_name[subsel])),  as.character(unique(d$receiver_name[subsel])), d$detection_timestamp[min(subsel)], d$detection_timestamp[max(subsel)], unique(d$longitude[subsel]), unique(d$latitude[subsel]), nrow(d[subsel,]))
+				if(kk == 1) dat.sum.all <- dat.sum else dat.sum.all <- rbind(dat.sum.all, dat.sum)
+			}
+			colnames(dat.sum.all) <- c('transmitter_id','tag_id','release_id','installation_name','station_name','receiver_name','date_arrival','date_departure','longitude','latitude','nb_locations');
+			
+			dists <- c(NA, geodist(dat.sum.all$latitude[2:nrow(dat.sum.all)], dat.sum.all$longitude[2:nrow(dat.sum.all)], dat.sum.all$latitude[1:(nrow(dat.sum.all) - 1)], dat.sum.all$longitude[1:(nrow(dat.sum.all) - 1)], units = 'km') * 1000); dists[which(is.nan(dists))] <- 0;
+			times <- c(NA, abs(as.numeric(difftime(dat.sum.all$date_arrival[2:nrow(dat.sum.all)], dat.sum.all$date_departure[1:(nrow(dat.sum.all)-1)], units = 'secs')))); times[which(times == 0)] <- 1;
+			v <- dists/times;
+			rec_er <- count(dat.sum.all[which(v > 10 & dists > 2000),c(1,4:6)])
+			if(exists('rec_errors') == F) rec_errors <- rec_er else {rec_errors <- rbind(rec_errors, rec_er)}
+			
+			## 1st figure - Individual tag movements - START
 			png(file = paste(wd,'/Outcomes/QC_Maps/', gsub(' ', '_',spe), "/", unique(d$transmitter_id), ".png",sep=""), width = 1920, height = 800, units = "px", res=92, bg = "white");
-				par(oma = c(0, 0, 2, 0));
+				par(mfrow=c(1,2), oma = c(0, 0, 2, 0));
 				xr <- c(min(c(d$release_longitude,d$longitude), na.rm=T)-.1, max(c(d$release_longitude,d$longitude), na.rm=T) + .1);
 				yr <- c(min(c(d$release_latitude,d$latitude), na.rm=T)-.1, max(c(d$release_latitude,d$latitude), na.rm=T) +.1);
+				# 1st panel
 				map('worldHires',xlim=xr,ylim=yr, fill = T, col = 'grey'); box(); axis(1, cex.axis = 0.8); axis(2, cex.axis = 0.8);
 				points(releases[,1:2], col = ifelse(releases[,3] == 1,'blue','darkorange3'), pch = 4, cex = 2, lwd = ifelse(releases[,3] == 1, 1, 2.5));
-				lines(tmp$longitude, tmp$latitude, col = 'red')
+				lines(dat.sum.all$longitude, dat.sum.all$latitude, col = 'red')
+				points(dat.sum.all$longitude[which(v > 10 & dists > 2000)], dat.sum.all$latitude[which(v > 10 & dists > 2000)], pch = 1, cex = 2, col = 'orange', lwd = 2)
+				text(dat.sum.all$longitude[which(v > 10 & dists > 2000)], dat.sum.all$latitude[which(v > 10 & dists > 2000)], labels = as.character(dat.sum.all$station_name[which(v > 10 & dists > 2000)]), pos = 3,)
 				points(rec$deployment_longitude, rec$deployment_latitude, col = 'dark red', pch = 4, cex = .5)
+				# 2nd panel
+				frame()
+				vps <- baseViewports()
+				pushViewport(vps$inner, vps$figure, vps$plot)
+				grob <-  tableGrob(d_d[dubs,])  
+				grid.draw(grob)
+				
 				mtext(paste(unique(d$transmitter_id), ', ', nrow(tmp), ' detections. Detection_QC <= 2', sep = ''), outer = TRUE, cex = 1.5)
 			dev.off()
-
-		print(which(v > 10 & dists > 2000)) # to delete afterwards - ideas: 1/ print out list of receivers associated with erroneous speeds			
-		rec_er <- count(d[which(v > 10 & dists > 2000) + 1,c(1,5:7,9:10)]); rec_er <- rec_er[order(rec_er$freq, decreasing = T),];
-		if(exists('rec_errors') == F) rec_errors <- rec_er else {rec_errors <- rbind(rec_errors, rec_er)}
+			## 1st figure - Individual tag movements - END		
 		}
-		##### 1st figure - Individual tag movements - END
-			
+		## For tags with dubious movements - START
+
 		d <- count(d[,c(1:7,9:14)]); # Get rid of detection_timestamp for aggregating purposes
-		
 		if (j == 1) {data <- d} else data <- rbind(data,d);
 	}
 	releases <- unique(data.frame(data$release_longitude,data$release_latitude, data$ReleaseLocation_QC))
@@ -101,14 +136,21 @@ for (i in 1:nrow(species)){
 
 	if (exists('shp_b') == T) rm(shp_b);
 };
-
-st_rec <- unique(data.frame(rec_errors$installation_name, rec_errors$station_name, rec_errors$receiver_name)); colnames(st_rec) <- c('installation_name', 'station_name', 'receiver_name')
-for (i in 1:nrow(st_rec)){
-	sel <- rec_errors[which(rec_errors$installation_name == st_rec$installation_name[i] & rec_errors$station_name == st_rec$station_name[i] & rec_errors$receiver_name == st_rec$receiver_name[i]),]
-	st_rec$nb_transmitters[i] <- length(unique(sel$transmitter_id))
-	st_rec$freq[i] <- sum(sel$freq)
-}
-st_rec <- st_rec[order(st_rec$nb_transmitters, st_rec$freq, decreasing = T),]
-##### Print diagnostic metrics
 end_time <- Sys.time();
+
+##### Aggregate info about tags with dubious movements, due to erroneous receiver deployment coordinates - START
+	st_rec <- unique(data.frame(rec_errors$installation_name, rec_errors$station_name, rec_errors$receiver_name)); colnames(st_rec) <- c('installation_name', 'station_name', 'receiver_name')
+	for (i in 1:nrow(st_rec)){
+		sel <- rec_errors[which(rec_errors$installation_name == st_rec$installation_name[i] & rec_errors$station_name == st_rec$station_name[i] & rec_errors$receiver_name == st_rec$receiver_name[i]),]
+		st_rec$nb_transmitters[i] <- length(unique(sel$transmitter_id))
+		st_rec$freq[i] <- sum(sel$freq)
+	}
+	st_rec <- st_rec[order(st_rec$freq, st_rec$nb_transmitters, decreasing = T),];
+	write.table(st_rec, paste(wd,'/Outcomes/ReceiverMetadataErrors_Summary.csv', sep = ''), row.names=F, col.names=T, sep = ';', quote = F);
+	write.table(rec_errors, paste(wd,'/Outcomes/ReceiverMetadataErrors.csv', sep = ''), row.names=F, col.names=T, sep = ';', quote = F);
+##### Aggregate info about tags with dubious movements, due to erroneous receiver deployment coordinates - END
+
+##### Print diagnostic metrics
 print(paste('Start time = ', start_time, '. End time = ', end_time, '. Number of hours to produce all maps =  ', round(as.numeric(difftime(end_time, start_time, units = 'hours')), 1), sep = ''));
+print(paste('# tags with dubious movements = ', length(unique(rec_errors$transmitter_id)), ', # of tags processed = ', nrow(dat), sep = ''));
+rm(rec_errors);

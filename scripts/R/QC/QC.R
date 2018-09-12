@@ -12,7 +12,7 @@ options(digits=10)
 unlink('Outcomes', recursive = T); dir.create("Outcomes");
 
 #### Load up all QC functions
-source('QC_functions/ala_shp.R'); source('QC_functions/shortest_dist.R'); source('QC_functions/qc.R'); #source('QC_functions/tag_metadata_extraction.R'); source('QC_functions/receiver_metadata_extraction.R');
+source('QC_functions/ala_shp.R'); source('QC_functions/shortest_dist.R'); source('QC_functions/qc.R');
 
 #### Prepare high resolution raster map for shortest path distance calculations
 Aust <- crop(getMap(resolution="high"), extent(110,155,-45,-5));

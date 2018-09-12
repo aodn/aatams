@@ -1,13 +1,14 @@
 #!/bin/bash
 echo `date`
-cd /home/xhoenner/QC/;
+# cd /home/xhoenner/QC/; ## On Nectar VM
+cd /Users/xhoenner/Work/AATAMS_AcousticTagging/aatams/scripts/R/QC/ ## On local machine
 
-echo @@@@@@@@ Download all detections and transmitters @@@@@@@@
-	/usr/bin/Rscript DownloadDetections.R;
+#echo @@@@@@@@ Download all detections and transmitters @@@@@@@@
+#	Rscript DownloadDetections.R;
 
 echo @@@@@@@@ Run QC tests @@@@@@@@ 
-	/usr/bin/Rscript QC.R;
+	Rscript QC.R;
 
 echo @@@@@@@@ Summarise QC results @@@@@@@@
-	/usr/bin/Rscript TechnicalValidation/Summarise_QCOutput.R;
-	/usr/bin/Rscript TechnicalValidation/Plot_QCOutput.R;
+	Rscript TechnicalValidation/Summarise_QCOutput.R;
+	Rscript TechnicalValidation/Plot_QCOutput.R;

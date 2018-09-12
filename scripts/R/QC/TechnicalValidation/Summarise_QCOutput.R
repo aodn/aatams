@@ -1,7 +1,7 @@
 rm(list = ls());
 
 ##### Load up configuration file
-setwd('/Users/xhoenner/Work/AATAMS_AcousticTagging/aatams/scripts/R/QC/'); # comment out once all dev work completed
+# setwd('/Users/xhoenner/Work/AATAMS_AcousticTagging/aatams/scripts/R/QC/'); # comment out once all dev work completed
 source('config_workdir.R'); # for working directories
 setwd(paste(data_dir,'/Processed/', sep= ''));
 
@@ -16,7 +16,7 @@ for (i in 1:nrow(dat)){
 	if (i == 1) {dat_all <- cbind(dat[i,], metadata[s,c(4:6,8:22)])} else {dat_all <- rbind(dat_all, dat_all <- cbind(dat[i,], metadata[s,c(4:6,8:22)]))}
 }
 dat <- dat_all; rm(dat_all);
-dat$scientific_name <- as.character(dat$scientific_name); dat$common_name <- as.character(dat$common_name); metadata$scientific_name <- as.character(metadata$scientific_name); metadata$common_name <- as.character(metadata$common_name);
+dat$common_name <- as.character(dat$common_name); metadata$scientific_name <- as.character(metadata$scientific_name); metadata$common_name <- as.character(metadata$common_name);
 write.table(dat, paste(wd,'/Outcomes/QC_OutputSummary.csv', sep = ''), row.names=F, col.names=T, sep = ';');
 
 ##### Invalid species names - delete data files and corresponding records in QC_OutputSummary.csv and TagMetadata.txt

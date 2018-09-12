@@ -4,12 +4,12 @@ library(grid); library(gridBase); library(gridExtra)
 
 ######################################
 ##### Load up configuration file
-setwd('/Users/xhoenner/Work/AATAMS_AcousticTagging/aatams/scripts/R/QC/'); # comment out once all dev work completed
+# setwd('/Users/xhoenner/Work/AATAMS_AcousticTagging/aatams/scripts/R/QC/'); # comment out once all dev work completed
 source('QC_functions/ala_shp.R');
 source('config_workdir.R'); # for working directories
 setwd(paste(data_dir,'/Processed/', sep = ''));
 dat <- read.csv(paste(wd,'/Outcomes/QC_OutputSummary.csv', sep = ''), header = T, sep= ';');
-unlink(paste(wd,'/Outcomes/QC_Maps', sep = '')); dir.create(paste(wd,'/Outcomes/QC_Maps', sep = ''));
+unlink(paste(wd,'/Outcomes/QC_Maps', sep = ''), recursive = T); dir.create(paste(wd,'/Outcomes/QC_Maps', sep = ''));
 
 species <- ddply(dat, .(dat$scientific_name, dat$common_name), nrow); colnames(species) <- c('scientific_name', 'common_name', 'freq'); # Retrieve species list
 rec <- read.csv('ReceiverMetadata.txt', header = T, sep= ';');
@@ -22,7 +22,6 @@ for (i in 1:nrow(species)){
 	## Prepare dataset and folder
 	if(is.na(species[i,1]) == F) sel <- which(dat$scientific_name == species [i,1]);
 	if(is.na(species[i,2]) == F) spe <- species[i,2] else spe <- species[i,1];
-	dir.create(paste(wd,'/Outcomes/QC_Maps/', gsub(' ', '_',spe), sep=""))
 	
 	## Collate datasets
 	for (j in 1:length(sel)){
@@ -34,18 +33,20 @@ for (i in 1:nrow(species)){
 			if (length(s) == 0) s <- grep(paste(strsplit(as.character(dat$transmitter_id[sel[j]]),'/')[[1]][2],'_', dat$tag_id[sel[j]], '_', dat$release_id[sel[j]], sep =''), dir());
 		}
 		d <- read.csv(dir()[s], header=T, sep=';'); d$detection_timestamp <- strptime(as.character(d$detection_timestamp), '%Y-%m-%d %H:%M:%S', tz = 'UTC');
-		d <- cbind(dat[s,], d, row.names = NULL); d <- d[, c(1:4, 32:37, 19:20, 46:47, 41)] ## Select following columns for plotting: transmitter_id, tag_id, release_id, scientific_name, installation_name, station_name, receiver_name, detection_timestamp, longitude, latitude, release_longitude, release_latitude, ReleaseLocation_QC, Detection_QC, Velocity_QC (not sure last one's needed though)
-				
+		d <- cbind(dat[s,], d, row.names = NULL); d <- d[, c(1:4, 32:34, 36:38, 19:20, 47:48, 42)] ## Select following columns for plotting: transmitter_id, tag_id, release_id, scientific_name, installation_name, station_name, receiver_name, detection_timestamp, longitude, latitude, release_longitude, release_latitude, ReleaseLocation_QC, Detection_QC, Velocity_QC (not sure last one's needed though)
+		
 		## Compute metrics
 		releases <- unique(data.frame(d$release_longitude,d$release_latitude, d$ReleaseLocation_QC)); tmp <- d[which(d$Detection_QC <= 2),];
 		dists_d <- c(NA, geodist(d$latitude[2:nrow(d)], d$longitude[2:nrow(d)], d$latitude[1:(nrow(d) - 1)], d$longitude[1:(nrow(d) - 1)], units = 'km') * 1000); dists_d[which(is.nan(dists_d))] <- 0;
 		times_d <- c(NA, abs(as.numeric(difftime(d$detection_timestamp[2:nrow(d)], d$detection_timestamp[1:(nrow(d)-1)], units = 'secs')))); times_d[which(times_d == 0)] <- 1;
-		v_d <- dists_d/times_d;
+		v_d <- dists_d/times_d;		
 
 		## For tags with dubious movements - START
 		dubious <- which(v_d > 10 & dists_d > 2000);
 		if (length(dubious) > 0){
-			d_d <- cbind(d[, 5:8], round(d$longitude, 2), round(d$latitude, 2), round(dists_d/1000, 1), round(v_d, 1)); colnames(d_d)[5:8] <- c('long','lat','distprev_km', 'v_ms')
+			d_d <- cbind(d[, 5:8], round(d$longitude, 2), round(d$latitude, 2), round(dists_d/1000, 1), round(v_d, 1)); colnames(d_d)[5:8] <- c('long','lat','distprev_km', 'v_ms');
+			dir.create(paste(wd,'/Outcomes/QC_Maps/', gsub(' ', '_',spe), sep=""), showWarnings = F);
+			
 			for (kk in 1:length(dubious)){
 				dub <- dubious[kk] + c(-2: 2)
 				if(kk == 1) dubs <- dub else {dubs <- c(dubs, dub)}
@@ -59,7 +60,7 @@ for (i in 1:nrow(species)){
 			## Summary per trip
 			for (kk in 1:length(unique(d$trip_id))){
 				subsel <- which(d$trip_id == unique(d$trip_id)[kk]);
-				dat.sum <- data.frame(unique(d[subsel,1:3]), as.character(unique(d$installation_name[subsel])), as.character(unique(d$station_name[subsel])),  as.character(unique(d$receiver_name[subsel])), d$detection_timestamp[min(subsel)], d$detection_timestamp[max(subsel)], unique(d$longitude[subsel]), unique(d$latitude[subsel]), nrow(d[subsel,]))
+				dat.sum <- data.frame(unique(d[subsel,1:3]), as.character(unique(d$installation_name[subsel])), as.character(unique(d$station_name[subsel])),  as.character(unique(d$receiver_name[subsel])), d$detection_timestamp[min(subsel)], d$detection_timestamp[max(subsel)], unique(d$longitude[subsel]), unique(d$latitude[subsel]), nrow(d[subsel,]), row.names = NULL)
 				if(kk == 1) dat.sum.all <- dat.sum else dat.sum.all <- rbind(dat.sum.all, dat.sum)
 			}
 			colnames(dat.sum.all) <- c('transmitter_id','tag_id','release_id','installation_name','station_name','receiver_name','date_arrival','date_departure','longitude','latitude','nb_locations');
@@ -71,22 +72,22 @@ for (i in 1:nrow(species)){
 			if(exists('rec_errors') == F) rec_errors <- rec_er else {rec_errors <- rbind(rec_errors, rec_er)}
 			
 			## 1st figure - Individual tag movements - START
-			png(file = paste(wd,'/Outcomes/QC_Maps/', gsub(' ', '_',spe), "/", unique(d$transmitter_id), ".png",sep=""), width = 1920, height = 800, units = "px", res=92, bg = "white");
+			png(file = paste(wd,'/Outcomes/QC_Maps/', gsub(' ', '_',spe), "/", gsub('/', '_', unique(d$transmitter_id)), ".png",sep=""), width = 1920, height = 800, units = "px", res=92, bg = "white");
 				par(mfrow=c(1,2), oma = c(0, 0, 2, 0));
-				xr <- c(min(c(d$release_longitude,d$longitude), na.rm=T)-.1, max(c(d$release_longitude,d$longitude), na.rm=T) + .1);
-				yr <- c(min(c(d$release_latitude,d$latitude), na.rm=T)-.1, max(c(d$release_latitude,d$latitude), na.rm=T) +.1);
+				xr <- c(min(c(d$release_longitude,d$longitude), na.rm=T)-.5, max(c(d$release_longitude,d$longitude), na.rm=T) + .5);
+				yr <- c(min(c(d$release_latitude,d$latitude), na.rm=T)-.5, max(c(d$release_latitude,d$latitude), na.rm=T) +.5);
 				# 1st panel
 				map('worldHires',xlim=xr,ylim=yr, fill = T, col = 'grey'); box(); axis(1, cex.axis = 0.8); axis(2, cex.axis = 0.8);
 				points(releases[,1:2], col = ifelse(releases[,3] == 1,'blue','darkorange3'), pch = 4, cex = 2, lwd = ifelse(releases[,3] == 1, 1, 2.5));
 				lines(dat.sum.all$longitude, dat.sum.all$latitude, col = 'red')
 				points(dat.sum.all$longitude[which(v > 10 & dists > 2000)], dat.sum.all$latitude[which(v > 10 & dists > 2000)], pch = 1, cex = 2, col = 'orange', lwd = 2)
-				text(dat.sum.all$longitude[which(v > 10 & dists > 2000)], dat.sum.all$latitude[which(v > 10 & dists > 2000)], labels = as.character(dat.sum.all$station_name[which(v > 10 & dists > 2000)]), pos = 3,)
+				text(dat.sum.all$longitude[which(v > 10 & dists > 2000)], dat.sum.all$latitude[which(v > 10 & dists > 2000)], labels = as.character(dat.sum.all$station_name[which(v > 10 & dists > 2000)]), pos = 3)
 				points(rec$deployment_longitude, rec$deployment_latitude, col = 'dark red', pch = 4, cex = .5)
 				# 2nd panel
 				frame()
 				vps <- baseViewports()
 				pushViewport(vps$inner, vps$figure, vps$plot)
-				grob <-  tableGrob(d_d[dubs,])  
+				grob <-  tableGrob(d_d[head(dubs, 20),])  
 				grid.draw(grob)
 				
 				mtext(paste(unique(d$transmitter_id), ', ', nrow(tmp), ' detections. Detection_QC <= 2', sep = ''), outer = TRUE, cex = 1.5)
@@ -111,8 +112,8 @@ for (i in 1:nrow(species)){
 	png(file = paste(wd,'/Outcomes/QC_Maps/',gsub(' ', '_',spe),".png",sep=""), width = 1920, height = 800, units = "px", res=92, bg = "white");
 		par(mfrow=c(1,2), oma = c(0, 0, 2, 0));
 		# 1st panel - data's spatial extent
-			xr <- c(min(c(data$release_longitude,data$longitude), na.rm=T)-.2,max(c(data$release_longitude,data$longitude), na.rm=T) +.2);
-			yr <- c(min(c(data$release_latitude,data$latitude), na.rm=T)-.2,max(c(data$release_latitude,data$latitude), na.rm=T) +.2);
+			xr <- c(min(c(data$release_longitude,data$longitude), na.rm=T)-.5,max(c(data$release_longitude,data$longitude), na.rm=T) +.5);
+			yr <- c(min(c(data$release_latitude,data$latitude), na.rm=T)-.5,max(c(data$release_latitude,data$latitude), na.rm=T) +.5);
 			map('worldHires',xlim=xr,ylim=yr, fill = T, col = 'grey'); box(); axis(1, cex.axis = 0.8); axis(2, cex.axis = 0.8);
 			if (exists('shp_b') == T) plot(shp_b, add = T, col = alpha('light blue', 0.25));
 			if (length(which(data$Detection_QC < 3)) > 0) points(data$longitude[which(data$Detection_QC < 3)],data$latitude[which(data$Detection_QC < 3)], col = alpha('forestgreen', 0.7), pch = 19, cex = 1); # Plot valid detections
@@ -129,6 +130,10 @@ for (i in 1:nrow(species)){
 			if (length(which(data$Detection_QC < 3)) > 0) points(data$longitude[which(data$Detection_QC < 3)],data$latitude[which(data$Detection_QC < 3)], col = alpha('forestgreen', 0.7), pch = 19, cex = 1); # Plot valid detections
 			if (length(which(data$Detection_QC >= 3)) > 0) points(data$longitude[which(data$Detection_QC >= 3)],data$latitude[which(data$Detection_QC >= 3)], col = 'red', pch = 3, cex = 3); # Plot invalid detections
 			points(releases[,1:2], col = ifelse(releases[,3] == 1,'blue','darkorange3'), pch = 4, cex = 2, lwd = ifelse(releases[,3] == 1, 1, 2.5)); # Plot release locations
+			# for (k in 1:length(unique(all_data$tag_id))){
+				# lines(all_data$longitude[which(all_data$tag_id == unique(all_data$tag_id)[k])], all_data$latitude[which(all_data$tag_id == unique(all_data$tag_id)[k])], col = k)
+			# }
+			
 		}
 		mtext(paste(spe, ', ', length(unique(data$transmitter_id)), ' tag IDs, ', sum(data$freq), ' detections. Detection_QC <= 2', sep = ''), outer = TRUE, cex = 1.5)
 	dev.off();

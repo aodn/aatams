@@ -28,25 +28,29 @@ if (length(invalid_species) > 0){
 	dat <- dat[which(is.na(dat$common_name) == F),]; metadata <- metadata[which(is.na(metadata$common_name) == F),];
 }
 
-##### Exclude data for tags that are currently protected or embargoed
-## Update summary statistics file
-dat$embargo_date <- strptime(as.character(dat$embargo_date), '%Y-%m-%d %H:%M:%S', tz = 'UTC');
-dat <- dat[which(dat$is_protected == F & (as.Date(dat$embargo_date) <= Sys.Date() | is.na(dat$embargo_date) == T)),]; nrow(dat); sum(dat$nb_detections);
-write.table(dat, paste(wd,'/Outcomes/QC_OutputSummary.csv', sep = ''), row.names=F, col.names=T, sep = ';', quote = F);
+##### Exclude data/metadata for protected and embargoed tags. Only apply when running QC on entire dataset
+if (projects == ''){
+	
+	## Update summary statistics file
+	dat$embargo_date <- strptime(as.character(dat$embargo_date), '%Y-%m-%d %H:%M:%S', tz = 'UTC');
+	dat <- dat[which(dat$is_protected == F & (as.Date(dat$embargo_date) <= Sys.Date() | is.na(dat$embargo_date) == T)),]; nrow(dat); sum(dat$nb_detections);
+	write.table(dat, paste(wd,'/Outcomes/QC_OutputSummary.csv', sep = ''), row.names=F, col.names=T, sep = ';', quote = F);
+	
+	## Update tag metadata file
+	print(paste(nrow(metadata) - nrow(metadata[which(metadata$is_protected == F & (as.Date(metadata$embargo_date) <= Sys.Date() | is.na(metadata$embargo_date) == T)),]),' tag IDs embargoed/protected', sep =''));
+	metadata$embargo_date <- strptime(as.character(metadata$embargo_date), '%Y-%m-%d %H:%M:%S', tz = 'UTC');
+	metadata_2 <- metadata[which(metadata$is_protected == F & (as.Date(metadata$embargo_date) <= Sys.Date() | is.na(metadata$embargo_date) == T)),];
+	write.table(metadata_2, 'TagMetadata.txt', row.names=F, col.names=T, sep = ';', quote = F);
+	
+	## Update list of data files by deleting those that are embargoed or protected
+	embprot <- metadata[-which(metadata$is_protected == F & (as.Date(metadata$embargo_date) <= Sys.Date() | is.na(metadata$embargo_date) == T)),]
+	if (nrow(embprot) > 0){
+		embprot <- data.frame(embprot[,c(1:3,7:8)])
+		for(i in 1:nrow(embprot)){
+			unlink(dir()[grep(paste(embprot$tag_id[i],'_',embprot$release_id[i],sep=''),dir())])
+		};	
+	}
 
-## Update tag metadata file
-print(paste(nrow(metadata) - nrow(metadata[which(metadata$is_protected == F & (as.Date(metadata$embargo_date) <= Sys.Date() | is.na(metadata$embargo_date) == T)),]),' tag IDs embargoed/protected', sep =''));
-metadata$embargo_date <- strptime(as.character(metadata$embargo_date), '%Y-%m-%d %H:%M:%S', tz = 'UTC');
-metadata_2 <- metadata[which(metadata$is_protected == F & (as.Date(metadata$embargo_date) <= Sys.Date() | is.na(metadata$embargo_date) == T)),];
-write.table(metadata_2, 'TagMetadata.txt', row.names=F, col.names=T, sep = ';', quote = F);
-
-## Update list of data files by deleting those that are embargoed or protected
-embprot <- metadata[-which(metadata$is_protected == F & (as.Date(metadata$embargo_date) <= Sys.Date() | is.na(metadata$embargo_date) == T)),]
-if (nrow(embprot) > 0){
-	embprot <- data.frame(embprot[,c(1:3,7:8)])
-	for(i in 1:nrow(embprot)){
-		unlink(dir()[grep(paste(embprot$tag_id[i],'_',embprot$release_id[i],sep=''),dir())])
-	};	
 }
 
 ##### Print summary statistics

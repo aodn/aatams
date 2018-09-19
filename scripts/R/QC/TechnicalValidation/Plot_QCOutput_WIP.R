@@ -1,13 +1,12 @@
-rm(list=ls()); options(warn=-1);
-library(plyr, quietly= T); library(rgdal, quietly= T); library(sp, quietly= T); library(rgeos, quietly= T); library(mapdata); library(scales); library(gmt);
-library(grid); library(gridBase); library(gridExtra)
+rm(list=ls());
+library(plyr, quietly= T); library(rgdal, quietly= T); library(sp, quietly= T); library(rgeos, quietly= T); library(mapdata, quietly = TRUE); library(scales, quietly = TRUE); library(gmt, quietly = TRUE); library(grid, quietly = TRUE); library(gridBase, quietly = TRUE); library(gridExtra, quietly = TRUE);
 
 ######################################
 ##### Load up configuration file
 # setwd('/Users/xhoenner/Work/AATAMS_AcousticTagging/aatams/scripts/R/QC/'); # comment out once all dev work completed
 source('config_workdir.R'); # for working directories
 setwd(paste(data_dir,'/Processed/', sep = ''));
-dat <- read.csv(paste(wd,'/Outcomes/QC_OutputSummary.csv', sep = ''), header = T, sep= ';'); ## Uncomment if no issue with precedent scripts, and comment out line below
+dat <- read.csv('TagMetadata.txt', header = T, sep= ';');
 unlink(paste(wd,'/Outcomes/QC_Maps', sep = ''), recursive = T); dir.create(paste(wd,'/Outcomes/QC_Maps', sep = ''));
 
 species <- ddply(dat, .(dat$scientific_name, dat$common_name), nrow); colnames(species) <- c('scientific_name', 'common_name', 'freq'); # Retrieve species list
@@ -35,7 +34,7 @@ for (i in 1:nrow(species)){
 		d$detection_timestamp <- strptime(as.character(d$detection_timestamp), '%Y-%m-%d %H:%M:%S', tz = 'UTC');
 
 		## Select columns for plotting: transmitter_id, tag_id, release_id, scientific_name, installation_name, station_name, receiver_name, detection_timestamp, longitude, latitude, release_longitude, release_latitude, ReleaseLocation_QC, Detection_QC, Velocity_QC
-		d <- cbind(dat[sel[j],], d, row.names = NULL); 	d <- d[, c(1:4, 32:34, 36:38, 19:20, 47:48, 42)] ## Uncomment if no issue with precedent scripts, and comment out line below
+		d <- cbind(dat[sel[j],], d, row.names = NULL); 	d <- d[, c(1:3, 7, 26:28, 30:32, 11:12, 41:42, 36)] ## Uncomment if no issue with precedent scripts, and comment out line below
 		
 		## Compute metrics
 		releases <- unique(data.frame(d$release_longitude,d$release_latitude, d$ReleaseLocation_QC)); tmp <- d[which(d$Detection_QC <= 2),];
@@ -151,13 +150,14 @@ for (i in 1:nrow(species)){
 	##### Load up ALA shapefile(s) - END	
 	
 	##### 2nd figure - Spatial distribution of detections - START
-	binned_detects <- data.frame(data$freq, bin=cut(data$freq, quantile(data$freq, seq(0,1,.25)), include.lowest=TRUE))
+	binned_detects <- data.frame(data$freq, bin=cut(data$freq, unique(quantile(data$freq, seq(0,1,.25))), include.lowest=TRUE))
 	data$binned_detections <- as.numeric(binned_detects$bin)
 	png(file = paste(wd,'/Outcomes/QC_Maps/',gsub(' ', '_', species$common_name[i]),".png",sep=""), width = 1920, height = 800, units = "px", res=92, bg = "white");
 		par(mfrow=c(1,2), oma = c(0, 0, 2, 0));
 		## First panel - Australia's spatial extent
 			map('worldHires',xlim=c(100, 165), ylim = c(-45, -5), fill = T, col = 'grey'); box(); axis(1, cex.axis = 0.8); axis(2, cex.axis = 0.8);
 			if (exists('shp') == T) plot(shp, add = T, col = alpha('dark blue', 0.25)); if (exists('shp_b') == T) plot(shp_b, add = T, col = alpha('light blue', 0.25));
+			points(rec$deployment_longitude[which(!rec$station_name %in% unique(data$station_name))], rec$deployment_latitude[which(!rec$station_name %in% unique(data$station_name))], col = 'dark red', pch = 4, cex = .5); # Plot receiver locations
 			if (length(which(data$Detection_QC == 1)) > 0) points(data$longitude[which(data$Detection_QC == 1)],data$latitude[which(data$Detection_QC == 1)], col = alpha('#1A9641', 0.65), 
 			cex = data$binned_detections[which(data$Detection_QC == 1)], pch = 19); # Plot valid detections
 			if (length(which(data$Detection_QC == 2)) > 0) points(data$longitude[which(data$Detection_QC == 2)],data$latitude[which(data$Detection_QC == 2)], col = alpha('#A6D96A', 0.65), 
@@ -166,8 +166,7 @@ for (i in 1:nrow(species)){
 			cex = data$binned_detections[which(data$Detection_QC == 3)], pch = 19); # Plot valid detections
 			if (length(which(data$Detection_QC == 4)) > 0) points(data$longitude[which(data$Detection_QC == 4)],data$latitude[which(data$Detection_QC == 4)], col = alpha('#D7191C', 0.65), 
 			cex = data$binned_detections[which(data$Detection_QC == 4)], pch = 19); # Plot invalid detections
-			points(rec$deployment_longitude[which(!rec$station_name %in% unique(data$station_name))], rec$deployment_latitude[which(!rec$station_name %in% unique(data$station_name))], col = 'dark red', pch = 4, cex = .5); # Plot all receiver locations
-			points(releases[,1:2], col = 'blue', pch = 4, cex = 2, lwd = 1); # Plot release locations
+			points(releases[,1:2], col = 'blue', pch = 4, cex = 2, lwd = 2); # Plot release locations
 			legend('bottomleft', legend = c('QC flag 1','QC flag 2', 'QC flag 3', 'QC flag 4', 'Tag release location', 'Receiver location'), col = c('#1A9641', '#A6D96A', '#FDAE61', '#D7191C', 'blue', 'dark red'), pch = c(19, 19, 19, 19, 4, 4), cex = 1, bg="transparent", bty = 'n')
 					
 		## Second panel - data's spatial extent + 10 %
@@ -176,7 +175,8 @@ for (i in 1:nrow(species)){
 			xr <- c(min(c(data$release_longitude,data$longitude), na.rm=T) - diff_long,max(c(data$release_longitude,data$longitude), na.rm=T) + diff_long);
 			yr <- c(min(c(data$release_latitude,data$latitude), na.rm=T) - diff_lat,max(c(data$release_latitude,data$latitude), na.rm=T) + diff_lat);
 			map('worldHires',xlim=xr,ylim=yr, fill = T, col = 'grey'); box(); axis(1, cex.axis = 0.8); axis(2, cex.axis = 0.8);
-			if (exists('shp_b') == T) plot(shp_b, add = T, col = alpha('light blue', 0.25));
+			if (exists('shp') == T) plot(shp, add = T, col = alpha('dark blue', 0.25)); if (exists('shp_b') == T) plot(shp_b, add = T, col = alpha('light blue', 0.25));
+			points(rec$deployment_longitude[which(!rec$station_name %in% unique(data$station_name))], rec$deployment_latitude[which(!rec$station_name %in% unique(data$station_name))], col = 'dark red', pch = 4, cex = .5); # Plot receiver locations
 			if (length(which(data$Detection_QC == 1)) > 0) points(data$longitude[which(data$Detection_QC == 1)],data$latitude[which(data$Detection_QC == 1)], col = alpha('#1A9641', 0.65), 
 			cex = data$binned_detections[which(data$Detection_QC == 1)], pch = 19); # Plot valid detections
 			if (length(which(data$Detection_QC == 2)) > 0) points(data$longitude[which(data$Detection_QC == 2)],data$latitude[which(data$Detection_QC == 2)], col = alpha('#A6D96A', 0.65), 
@@ -185,8 +185,7 @@ for (i in 1:nrow(species)){
 			cex = data$binned_detections[which(data$Detection_QC == 3)], pch = 19); # Plot valid detections
 			if (length(which(data$Detection_QC == 4)) > 0) points(data$longitude[which(data$Detection_QC == 4)],data$latitude[which(data$Detection_QC == 4)], col = alpha('#D7191C', 0.65), 
 			cex = data$binned_detections[which(data$Detection_QC == 4)], pch = 19); # Plot invalid detections
-			points(rec$deployment_longitude[which(!rec$station_name %in% unique(data$station_name))], rec$deployment_latitude[which(!rec$station_name %in% unique(data$station_name))], col = 'dark red', pch = 4, cex = .5); # Plot all receiver locations
-			points(releases[,1:2], col = 'blue', pch = 4, cex = 2, lwd = 1); # Plot release locations
+			points(releases[,1:2], col = 'blue', pch = 4, cex = 2, lwd = 2); # Plot release locations
 			
 		mtext(paste(species$scientific_name[i], ', ', length(unique(data$transmitter_id)), ' tags.', sep = ''), outer = TRUE, cex = 1.5)
 		mtext(paste('Total # detections = ', sum(data$freq), ', # invalid detections = ', sum(data$freq[which(data$Detection_QC > 2)]), sep = ''), outer = TRUE, cex = 1.5, line = -2)

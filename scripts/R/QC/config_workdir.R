@@ -16,5 +16,5 @@ home_dir <- '/Users/xhoenner/Work'; ## On local machine
 	# For multiple species, note the use of the double and single quotes <- e.g. "'Dusky Flathead', 'Black Bream'"
 
 projects <- ""
-# species_list <- "'Bigeye Snapper', 'Snapper', 'Yellowtail Kingfish', 'sand flathead (mixed)', 'Southern Sand Flathead', 'Bluespotted Flathead', 'Dusky Flathead', 'Yellowfin Bream', 'Spanish Mackerel', 'Southern Bluefin Tuna', 'Tiger Shark', 'White Shark', 'Bull Shark', 'School Shark'" ## For FRDC workshop
-species_list <- ""
+species_list <- "'Bigeye Snapper', 'Snapper', 'Yellowtail Kingfish', 'sand flathead (mixed)', 'Southern Sand Flathead', 'Bluespotted Flathead', 'Dusky Flathead', 'Yellowfin Bream', 'Spanish Mackerel', 'Southern Bluefin Tuna', 'Tiger Shark', 'White Shark', 'Bull Shark', 'School Shark'" ## For FRDC workshop
+# species_list <- ""

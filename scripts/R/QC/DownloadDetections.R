@@ -20,8 +20,8 @@ query <- paste("SELECT DISTINCT project.name AS tag_project_name, transmitter_id
 	scientific_name, common_name, embargo_date, is_protected,
 	CASE WHEN ST_X(ar.release_location) IS NULL THEN ST_X(ar.capture_location) ELSE ST_X(ar.release_location) END AS release_longitude,
 	CASE WHEN ST_Y(ar.release_location) IS NULL THEN ST_Y(ar.capture_location) ELSE ST_Y(ar.release_location) END AS release_latitude,
-	CASE WHEN ar.releasedatetime_timestamp IS NULL THEN ar.capturedatetime_timestamp AT TIME ZONE 'UTC' 
-		ELSE ar.releasedatetime_timestamp AT TIME ZONE 'UTC' END AS release_date,
+	CASE WHEN ar.releasedatetime_timestamp IS NULL THEN ar.capturedatetime_timestamp AT TIME ZONE 'UTC' AT TIME ZONE capturedatetime_zone
+		ELSE ar.releasedatetime_timestamp AT TIME ZONE 'UTC' AT TIME ZONE releasedatetime_zone END AS release_date,
 	sensor.slope AS sensor_slope,
 	sensor.intercept AS sensor_intercept,
 	transmitter_type.transmitter_type_name,
@@ -42,9 +42,9 @@ query <- paste("SELECT DISTINCT project.name AS tag_project_name, transmitter_id
 	JOIN aatams.animal_release ar ON ar.id = surgery.release_id
 	JOIN aatams.animal a ON a.id = ar.animal_id
 	JOIN aatams.species sp ON sp.id = a.species_id
-  	WHERE prt.id = 8 AND transmitter_type_name != 'RANGE TEST'", ifelse(projects == '', " ", paste(" AND project.name IN (", projects ,") ", sep = '')), ifelse(species_list == '', " ", paste(" AND sp.common_name IN (", species_list ,") ", sep = '')),
+  	WHERE prt.id = 8 AND ar.release_location IS NOT NULL and ar.capture_location IS NOT NULL AND transmitter_type_name != 'RANGE TEST'", ifelse(projects == '', " ", paste(" AND project.name IN (", projects ,") ", sep = '')), ifelse(species_list == '', " ", paste(" AND sp.common_name IN (", species_list ,") ", sep = '')),
   	"GROUP BY project.name, transmitter_id, surgery.tag_id, surgery.release_id, scientific_name, common_name, embargo_date, is_protected, releasedatetime_timestamp, capturedatetime_timestamp, release_location, capture_location,
-  	slope, intercept, transmitter_type_name, model_name, unit, serial_number, expected_life_time_days, device.status", sep = '')
+  	slope, intercept, transmitter_type_name, model_name, unit, serial_number, expected_life_time_days, device.status, capturedatetime_zone, releasedatetime_zone", sep = '')
 data <- dbGetQuery(con, query)
 data <- data[order(data$transmitter_id, data$tag_id, data$release_id),]; print(paste('Total number of tags = ', nrow(data), sep = ''));
 
@@ -90,8 +90,7 @@ if (nrow(sp[which(sp[,1] %in% fol_sel[which(is.na(fol_sel[,2]) == T),1]),1:2]) >
 
 ##### SQL query: for each tag deployment download all detections and metadata, then produce a CSV file
 start_time <- Sys.time();
-# for (i in 1:nrow(data)){
-for (i in 1:50){
+for (i in 1:nrow(data)){
 	
 	con <- dbConnect(RPostgres::Postgres(), host = server_address, dbname = db_name, user = db_user, port = db_port, password = db_password);
   	
@@ -136,7 +135,7 @@ for (i in 1:50){
 	t_metadata <- dbGetQuery(con, query);
 	t_metadata <- merge(data, t_metadata, by = 'release_id'); t_metadata <- data.frame(t_metadata[,3:4], t_metadata[,c(1:2,5:ncol(t_metadata))])
 	if(nrow(t_metadata) > 1) {t_metadata$dual_sensor_tag <- TRUE} else {t_metadata$dual_sensor_tag <- FALSE}
-	if (i == 1) {tag_metadata <- t_metadata} else {tag_metadata <- rbind(tag_metadata, t_metadata)}
+	if (exists('tag_metadata') == F) {tag_metadata <- t_metadata} else {tag_metadata <- rbind(tag_metadata, t_metadata)}
 
   	## Extract receiver projects PIs	
   	rxr_pr <- unique(data.frame(rs$installation_name, rs$receiver_deployment_id)); colnames(rxr_pr) <- c('installation_name', 'receiver_deployment_id')
@@ -147,9 +146,9 @@ for (i in 1:50){
 			p.name AS receiver_project_name, 
 			string_agg(su.name, ', ') AS receiver_project_principal_investigator_names,
 			string_agg(su.email_address, ', ') AS receiver_project_principal_investigator_email_addresses,				
-			rd.initialisationdatetime_timestamp AT TIME ZONE 'UTC' AS initialisation_date,
-			rd.deploymentdatetime_timestamp AT TIME ZONE 'UTC' AS deployment_date,
-			rr.recoverydatetime_timestamp AT TIME ZONE 'UTC' AS recovery_date,
+			rd.initialisationdatetime_timestamp AT TIME ZONE 'UTC' AT TIME ZONE initialisationdatetime_zone AS initialisation_date,
+			rd.deploymentdatetime_timestamp AT TIME ZONE 'UTC' AT TIME ZONE deploymentdatetime_zone AS deployment_date,
+			rr.recoverydatetime_timestamp AT TIME ZONE 'UTC' AT TIME ZONE recoverydatetime_zone AS recovery_date,
 			CASE WHEN ST_X(rd.location) IS NOT NULL THEN ST_X(rd.location) ELSE ST_X(ist.location) END AS deployment_longitude,
 			CASE WHEN ST_Y(rd.location) IS NOT NULL THEN ST_Y(rd.location) ELSE ST_Y(ist.location) END AS deployment_latitude,
 			rd.depth_below_surfacem AS receiver_depth			
@@ -163,20 +162,13 @@ for (i in 1:50){
             JOIN aatams.receiver_recovery rr ON rr.deployment_id = rd.id
             JOIN aatams.receiver rec ON rd.receiver_id = rec.id
 			WHERE prt.id = 8 AND i.name IN ('", paste(unique(rxr_pr$installation_name), collapse = "','"), "') AND rd.id IN (", paste(rxr_pr$receiver_deployment_id, collapse = ","), ") 
-			GROUP BY rd.id, rd.initialisationdatetime_timestamp, rd.deploymentdatetime_timestamp, rr.recoverydatetime_timestamp, rd.depth_below_surfacem, rd.location, ist.location, i.name, ist.name, p.name, rec.receiver_name;", sep='');
+			GROUP BY rd.id, rd.initialisationdatetime_timestamp, rd. initialisationdatetime_zone, rd.deploymentdatetime_timestamp, rd. deploymentdatetime_zone, rr.recoverydatetime_timestamp, rr. recoverydatetime_zone, rd.depth_below_surfacem, rd.location, ist.location, i.name, ist.name, p.name, rec.receiver_name;", sep='');
 	
 	rxr_metadata <- dbGetQuery(con, query);
-	if (i == 1) {receiver_metadata <- rxr_metadata} else {receiver_metadata <- rbind(receiver_metadata, rxr_metadata)}
+	if (exists('receiver_metadata') == F) {receiver_metadata <- rxr_metadata} else {receiver_metadata <- rbind(receiver_metadata, rxr_metadata)}
 
 	dbDisconnect(con);
-	
-	###### STOPPED HERE
-	## TO DO NEXT: write both metadata files as they would be outputted by functions in QC.R, keep running the rest of the QC to see what needs to be changed.
-				  		
-	## Produce a CSV file for each tag deployment
-	# rs <- cbind(rs, m[,2:3])
-	# rs <- merge(rs, rxr_pis, by = 'installation_name');
-	# rs <- merge(rs, data[,1:6], by = c('transmitter_id', 'tag_id','release_id'))
+
 	write.table(rs, paste(data$transmitter_id[i],'_',data$tag_id[i],'_',data$release_id[i],'.csv',sep=''),col.names=T,row.names=F,quote=F,sep=';');
 }
 end_time <- Sys.time();
@@ -186,12 +178,10 @@ tag_metadata <- tag_metadata[which(is.na(tag_metadata$transmitter_id) == F & dup
 tag_metadata <- tag_metadata[order(tag_metadata$release_id, tag_metadata$transmitter_id, tag_metadata$tag_id),];
 write.table(tag_metadata, '../Processed/TagMetadata.txt', row.names = F, col.names = T, sep= ';', quote = F);
 
-
 ##### Receiver metadata
 receiver_metadata <- receiver_metadata[which(duplicated(receiver_metadata$receiver_deployment_id) == F),];
 receiver_metadata <- receiver_metadata[order(receiver_metadata$installation_name, receiver_metadata$station_name, receiver_metadata$receiver_name, receiver_metadata$deployment_date),];
 write.table(receiver_metadata, '../Processed/ReceiverMetadata.txt', row.names = F, col.names = T, sep= ';', quote = F);
-
 
 ##### Print diagnostic metrics
 print(paste("Total number of raw data files = ", length(dir()), " data files. Number of registered tags without detection = ", nrow(data) - length(dir()), ' tags', sep = ''));

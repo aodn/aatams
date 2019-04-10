@@ -11,8 +11,5 @@ aatams.log
 scripts/R/QC/Improvements.txt
 scripts/R/QC/Outcomes/
 scripts/R/QC/config_db_dev.R
-scripts/R/QC/ALA_Shapefile/Expert_distribution_*
-!scripts/R/QC/ALA_Shapefile/Expert_distribution_A*
-scripts/R/QC/NSWDPI_WhalerWhiteTiger/
 .Rapp.history
 LogFile.txt

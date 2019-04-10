@@ -1,12 +1,12 @@
 rm(list=ls());
-library(RPostgres); library(RPostgreSQL); library(plyr)
+library(RPostgres, quietly= T); library(RPostgreSQL, quietly= T); library(plyr, quietly= T)
 options(warn=2); Sys.setenv(TZ='GMT');
 
 ##### Load up configuration files and set working directory
 # setwd('/Users/xhoenner/Work/AATAMS_AcousticTagging/aatams/scripts/R/QC/'); # comment out once all dev work completed
-source('config_db_dev.R'); # for db credentials, change to 'config_db.R' once all dev work completed
+source('config_db.R'); # for db credentials
 source('config_workdir.R'); # for working directories
-setwd(data_dir); dir.create('Raw',showWarnings=F); unlink(dir('Processed',full.names=T)); dir.create('Processed',showWarnings=F); setwd('Raw');
+setwd(data_dir); dir.create('Raw',showWarnings=F); setwd('Raw');
 if (length(dir()) > 0) {unlink(dir())} # Remove all files in Raw folder if some are already present
 
 ##### Get list of all registered tag deployments, associated PIs' details and corresponding species names. Note that range test tags are excluded, but embargoed and protected tags are included at this point
@@ -176,12 +176,12 @@ end_time <- Sys.time();
 ##### Export tag metadata
 tag_metadata <- tag_metadata[which(is.na(tag_metadata$transmitter_id) == F & duplicated(tag_metadata) == F),];
 tag_metadata <- tag_metadata[order(tag_metadata$release_id, tag_metadata$transmitter_id, tag_metadata$tag_id),];
-write.table(tag_metadata, '../Processed/TagMetadata.txt', row.names = F, col.names = T, sep= ';', quote = F);
+write.table(tag_metadata, 'TagMetadata_AllTagsWithDetections.txt', row.names = F, col.names = T, sep= ';', quote = F);
 
 ##### Receiver metadata
 receiver_metadata <- receiver_metadata[which(duplicated(receiver_metadata$receiver_deployment_id) == F),];
 receiver_metadata <- receiver_metadata[order(receiver_metadata$installation_name, receiver_metadata$station_name, receiver_metadata$receiver_name, receiver_metadata$deployment_date),];
-write.table(receiver_metadata, '../Processed/ReceiverMetadata.txt', row.names = F, col.names = T, sep= ';', quote = F);
+write.table(receiver_metadata, 'ReceiverMetadata_AllReceiversWithDetectionsForTags.txt', row.names = F, col.names = T, sep= ';', quote = F);
 
 ##### Print diagnostic metrics
 print(paste("Total number of raw data files = ", length(dir()), " data files. Number of registered tags without detection = ", nrow(data) - length(dir()), ' tags', sep = ''));

@@ -1,5 +1,5 @@
 rm(list=ls()); options(warn = 1);
-library(gmt); library(rgeos, quietly= T); library(sp, quietly= T); library(rgdal, quietly= T); library(rworldmap, quietly= T); library(rworldxtra, quietly= T); library(gdistance, quietly= T); library(raster, quietly= T); library(doParallel); library(foreach);
+library(gmt, quietly= T); library(rgeos, quietly= T); library(sp, quietly= T); library(rgdal, quietly= T); library(rworldmap, quietly= T); library(rworldxtra, quietly= T); library(gdistance, quietly= T); library(raster, quietly= T); library(doParallel, quietly= T); library(foreach, quietly= T);
 
 ##### Load up configuration file and set working directory
 # setwd('/Users/xhoenner/Work/AATAMS_AcousticTagging/aatams/scripts/R/QC/'); # comment out once all dev work completed
@@ -7,9 +7,11 @@ source('config_workdir.R'); # for working directories
 setwd(wd);
 options(digits=10)
 
-##### Empty and re-create folders
-# unlink(dir(paste(data_dir,'/Processed/',sep=''),full.names=T)); dir.create(paste(data_dir,'/Processed/',sep=''),showWarnings=F); 
-unlink('Outcomes', recursive = T); dir.create("Outcomes");
+##### Empty and re-create folders, copy metadata files from Raw to Processed folder
+unlink(dir(paste(data_dir,'/Processed/',sep=''),full.names=T)); dir.create(paste(data_dir,'/Processed/',sep=''),showWarnings=F); ## Create Processed folder
+file.copy(from= paste(data_dir,'/Raw/TagMetadata_AllTagsWithDetections.txt',sep=''), to= paste(data_dir,'/Processed/TagMetadata.txt',sep='')); ## Copy text file listing tag metadata
+file.copy(from= paste(data_dir,'/Raw/ReceiverMetadata_AllReceiversWithDetectionsForTags.txt',sep=''), to= paste(data_dir,'/Processed/ReceiverMetadata.txt',sep='')); ## Copy text file listing receiver metadata
+unlink('Outcomes', recursive = T); dir.create("Outcomes"); ## Create Outcomes folder
 
 #### Load up all QC functions
 source('QC_functions/ala_shp.R'); source('QC_functions/shortest_dist.R'); source('QC_functions/qc.R');
@@ -22,7 +24,7 @@ tr <- transition(Aust_raster,function(x) 1/mean(x) ,directions=8);
 tr <- geoCorrection(tr,type="c",scl=FALSE);
 
 ##### Extract transmitter, tag and release IDs from filenames
-files <- grep(list.files(path=paste(data_dir,'/Raw',sep=''), full.names=F, recursive=FALSE),pattern="NA",invert=T,value=T)
+files <- grep(list.files(path=paste(data_dir,'/Raw',sep=''), pattern = '.csv', full.names=F, recursive=FALSE),pattern="NA",invert=T,value=T)
 
 ttr <- matrix(ncol=3, nrow=length(files)); colnames(ttr) <- c('transmitter_id','tag_id','release_id')
 for (i in 1:length(files)){
@@ -42,39 +44,39 @@ for (i in 1:nrow(ttr)){
 	rm(s);
 }
 
-##### 
+##### Identify files to process
 proc_files <- dir(paste(data_dir, '/Processed', sep = ''), pattern = '.csv')
 ttr_files <- paste(ttr$transmitter_id[which(ttr$keep == 1)], '_', ttr$tag_id[which(ttr$keep == 1)], '_', ttr$release_id[which(ttr$keep == 1)], '.csv', sep = '')
-to_process <- which(!ttr_files %in% proc_files)
-
+to_process <- which(!ttr_files %in% proc_files); rm(list = c('proc_files', 'ttr_files', 'i'));
 
 ##### Configure output datasets
-outcome <- data.frame(matrix(ncol=12)); 
-colnames(outcome) <- c('transmitter_id','tag_id','release_id','scientific_name','nb_detections', 'nb_detections_releasedate_1','invalid_releaseloc','nb_detections_distribution_2','nb_valid', 'timediff_1stlastdetections_days',
-'longer_lifetime','nb_detections_velocity_2');
+outcome <- data.frame(matrix(ncol=11, nrow = length(to_process))); 
+colnames(outcome) <- c('transmitter_id','tag_id','release_id','scientific_name','nb_detections', 'nb_detections_releasedate_1','invalid_releaseloc','nb_detections_distribution_2','nb_valid', 'timediff_1stlastdetections_days','nb_detections_velocity_2');
 
+## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ##
+##### QC tests - START
+start_time <- Sys.time(); print(paste('Start processing ', length(to_process), ' files', sep = ''))
 setwd(paste(data_dir,'/Raw',sep='')); 
 tag_metadata <- read.csv('../Processed/TagMetadata.txt', header = T, sep = ';');
+
 ##### Configure parallel processing
 comb <- function(x, ...) {  
       mapply(rbind,x,...,SIMPLIFY=FALSE)
 }
 cl <- makeCluster(detectCores()); registerDoParallel(cl);
 
-######################
-##### QC tests - START
-start_time <- Sys.time();
-
-result <- foreach(i=which(ttr$keep == 1), .combine = 'comb', .multicombine = T, .packages = c('gmt','raster','rgeos','sp','rgdal','gdistance')) %dopar% {
+result <- foreach(i= to_process, .combine = 'comb', .multicombine = T, .packages = c('gmt','raster','rgeos','sp','rgdal','gdistance')) %dopar% {
 
 	##### Read raw data file
-	s <- which(ttr$tag_id == ttr$tag_id[i] & ttr$release_id == ttr$release_id[i]); s_m <- which(tag_metadata$release_id == ttr$release_id[i] & tag_metadata$release_id == ttr$release_id[i])
-	if (length(s) == 1) {data <- read.csv(files[i],header=T,sep=';')} else {
+	s <- which(ttr$tag_id == ttr$tag_id[which(ttr$keep == 1)[i]] & ttr$release_id == ttr$release_id[which(ttr$keep == 1)[i]]); 
+	s_m <- which(tag_metadata$release_id == ttr$release_id[which(ttr$keep == 1)[i]] & tag_metadata$release_id == ttr$release_id[which(ttr$keep == 1)[i]]);
+	if (length(s) == 1) {data <- read.csv(files[s],header=T,sep=';')} else {
 		if ((ttr$release_id[s[1]] == ttr$release_id[s[2]] & is.na(ttr$release_id[s[1]]) == F) | 
 			(is.na(ttr$release_id[s[1]]) == T & is.na(ttr$release_id[s[2]]) == T)) {
-			data <- rbind(read.csv(files[i],header=T,sep=';'), read.csv(files[which(ttr$tag_id == ttr$tag_id[i] & (ttr$release_id == ttr$release_id[i] | is.na(ttr$release_id[i] == T)))[2]],header=T,sep=';'))
-		} #else {data <- read.csv(files[i],header=T,sep=';')}
+			data <- rbind(read.csv(files[s[1]],header=T,sep=';'), read.csv(files[s[2]],header=T,sep=';'))
+		}
 	}
+	if (unique(data$release_id) != unique(tag_metadata$release_id[s_m])) {print(paste('Error for release_id = ', ttr$release_id[which(ttr$keep == 1)[1]], sep = ''))};
 	
 	##### Configure output processed data file
 	temporal_outcome <- data.frame(matrix(ncol = 18, nrow = nrow(data)));
@@ -111,9 +113,9 @@ result <- foreach(i=which(ttr$keep == 1), .combine = 'comb', .multicombine = T, 
 	temporal_outcome <- qc(data);
 		
 	##### Produce a 'processed' CSV file for each tag deployment
-	write.table(temporal_outcome, paste(data_dir,'/Processed/',files[i],sep=''), col.names=T, row.names=F, sep=';', quote=F);	
+	write.table(temporal_outcome, paste(data_dir,'/Processed/',files[which(ttr$keep == 1)[i]],sep=''), col.names=T, row.names=F, sep=';', quote=F);	
 	if (exists('shp_b') == T) rm(shp_b); if (exists('shp') == T) rm(shp); # Remove ALA shapefiles from environment
-
+	
 	##### Extract summary statistics for each tag
 	outcome[i,1] <- ifelse(length(as.character(unique(as.character(data$transmitter_id)))) == 1, as.character(unique(data$transmitter_id)), paste(as.character(unique(data$transmitter_id)),collapse = '/'));
 	outcome[i,2] <- unique(as.character(data$tag_id));
@@ -125,17 +127,17 @@ result <- foreach(i=which(ttr$keep == 1), .combine = 'comb', .multicombine = T, 
 	outcome[i,8] <- length(which(temporal_outcome$DetectionDistribution_QC == 2)); ## Number of detections outside the ALA/FishMap's expert distribution map
 	outcome[i,9] <- length(which(temporal_outcome$Detection_QC < 3)); ## Total number of 'valid' or 'likely valid' detections
 	outcome[i,10] <- as.numeric(difftime(temporal_outcome$detection_timestamp[nrow(temporal_outcome)], temporal_outcome$detection_timestamp[1], units = 'days')) ## Time difference, in days, between 1st and last detections
-	outcome[i,11] <- ifelse(1.2 * unique(tag_metadata$tag_expected_life_time_days[s_m])[which(is.na(unique(tag_metadata$tag_expected_life_time_days[s_m])) == F)] - as.numeric(difftime(temporal_outcome$detection_timestamp[nrow(temporal_outcome)], temporal_outcome$detection_timestamp[1], units = 'days')) < 0, TRUE, FALSE) ## Tags detected longer than expected life time?
-	outcome[i,12] <- length(which(temporal_outcome$Velocity_QC == 2)); ## Number of detections associated with unrealistic velocities
+	outcome[i,11] <- length(which(temporal_outcome$Velocity_QC == 2)); ## Number of detections associated with unrealistic velocities
 
 	list(outcome);
+	
 };
-stopCluster(cl);
+stopCluster(cl); closeAllConnections();
+## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ##
 
 ##### Print diagnostic metrics
 end_time <- Sys.time();
 print(paste('Start time = ', start_time, '. End time = ', end_time, '. Number of hours to extract and process all detections =  ', round(as.numeric(difftime(end_time, start_time, units = 'hours')), 1), sep = ''));
-
 
 ##### Export summary statistics
 outcome <- result[[1]]; outcome <- outcome[which(is.na(outcome$transmitter_id) == F & duplicated(outcome) == F),]

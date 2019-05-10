@@ -1,8 +1,7 @@
 pipeline {
-    agent none
+    agent { label 'master' }
     stages {
         stage('clean') {
-            agent { label 'master' }
             steps {
                 sh 'git clean -fdx'
             }
@@ -10,12 +9,12 @@ pipeline {
         stage('container') {
             agent {
                 dockerfile {
-                    args '-v ${HOME}/.m2:/home/jenkins/.m2 -v ${HOME}/.grails:/home/jenkins/.grails -v ${HOME}/.ivy2:/home/jenkins/.ivy2'
+                    args '-v ${HOME}/.m2:/home/builder/.m2 -v ${HOME}/.grails:/home/builder/.grails -v ${HOME}/.ivy2:/home/builder/.ivy2'
+                    reuseNode true
                 }
             }
             environment {
-                HOME = '/home/jenkins'
-                JAVA_TOOL_OPTIONS = '-Duser.home=/home/jenkins'
+                JAVA_TOOL_OPTIONS = '-Duser.home=/home/builder'
             }
             stages {
                 stage('package') {

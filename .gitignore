@@ -8,3 +8,8 @@ target
 aatams.log
 *.swp
 *.swo
+scripts/R/QC/Improvements.txt
+scripts/R/QC/Outcomes/
+scripts/R/QC/config_db_dev.R
+.Rapp.history
+LogFile.txt

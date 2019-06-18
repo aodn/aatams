@@ -6,11 +6,12 @@ qc <- function(data){
 		temporal_outcome[,2] <- as.character(data$installation_name);
 		temporal_outcome[,3] <- as.character(data$station_name);
 		temporal_outcome[,4] <- as.character(data$receiver_name);
-		temporal_outcome[,5] <- as.character(data$tag_detection_timestamp);
-		temporal_outcome[,6] <- data$longitude;
-		temporal_outcome[,7] <- data$latitude;
-		temporal_outcome[,8] <- data$sensor_value;
-		temporal_outcome[,9] <- data$sensor_unit;
+		temporal_outcome[,5] <- data$receiver_deployment_id;
+		temporal_outcome[,6] <- as.character(data$tag_detection_timestamp);
+		temporal_outcome[,7] <- data$longitude;
+		temporal_outcome[,8] <- data$latitude;
+		temporal_outcome[,9] <- data$sensor_value;
+		temporal_outcome[,10] <- data$sensor_unit;
 
 		##### False Detection Algorithm test
 		sta_rec <- unique(data$installation_name); sta_rec <- sta_rec[order(sta_rec)];
@@ -20,7 +21,7 @@ qc <- function(data){
 
 			##### Calculate time differences between detections (in minutes)
 			time_diff <- as.numeric(difftime(sub$tag_detection_timestamp[2:nrow(sub)],sub$tag_detection_timestamp[1:(nrow(sub)-1)],units='mins'));	
-			temporal_outcome[sel,10] <- ifelse(length(which(time_diff <= 30)) > length(which((time_diff) >= 720)) & nrow(sub) > 1, 1, 2);
+			temporal_outcome[sel,11] <- ifelse(length(which(time_diff <= 30)) > length(which((time_diff) >= 720)) & nrow(sub) > 1, 1, 2);
 		}
 		
 		##### Distance and Velocity tests
@@ -32,17 +33,17 @@ qc <- function(data){
 
 		if (length(dist) == 1){
 
-				timediff <- as.numeric(difftime(data$releasedatetime_timestamp, data$tag_detection_timestamp, tz = 'UTC', units='secs'));
+				timediff <- as.numeric(difftime(data$release_date, data$tag_detection_timestamp, tz = 'UTC', units='secs'));
 				velocity <- (dist * 1000)/timediff;
 				
-				temporal_outcome[11] <- ifelse(velocity <= 10, 1, 2);
-				temporal_outcome[12] <- ifelse(dist <= 1000, 1, 2);
+				temporal_outcome[12] <- ifelse(velocity <= 10, 1, 2);
+				temporal_outcome[13] <- ifelse(dist <= 1000, 1, 2);
 
 			} else {
 
 				dist_next <- c(dist[2:nrow(dist)], NA);
 
-				time <- c(data$releasedatetime_timestamp[1], data$tag_detection_timestamp);
+				time <- c(data$release_date[1], data$tag_detection_timestamp);
 				timediff <- abs(as.numeric(difftime(time[1:(length(time)-1)], time[2:length(time)], tz = 'UTC', units='secs')));
 				timediff_next <- c(timediff[2:length(timediff)], NA);
 				
@@ -51,47 +52,47 @@ qc <- function(data){
 				velocity <- (dist * 1000)/timediff;	velocity_next <- (dist_next * 1000)/timediff_next;
 				
 				## Velocity test
-				temporal_outcome[,11] <- ifelse(velocity > 10 & velocity_next > 10, 2, 1); 
-				temporal_outcome[1,11] <- ifelse(velocity[1] > 10, 2, 1);
-				temporal_outcome[nrow(data),11] <- ifelse(velocity[nrow(data)] > 10, 2, 1);
+				temporal_outcome[,12] <- ifelse(velocity > 10 & velocity_next > 10, 2, 1); 
+				temporal_outcome[1,12] <- ifelse(velocity[1] > 10, 2, 1);
+				temporal_outcome[nrow(data),12] <- ifelse(velocity[nrow(data)] > 10, 2, 1);
 				
 				## Distance test	
-				temporal_outcome[,12] <- ifelse(dist > 1000 & dist_next > 1000, 2, 1); 
-				temporal_outcome[1,12] <- ifelse(dist[1] > 1000, 2, 1);
-				temporal_outcome[nrow(data),12] <- ifelse(dist[nrow(data)] > 1000, 2, 1);
+				temporal_outcome[,13] <- ifelse(dist > 1000 & dist_next > 1000, 2, 1); 
+				temporal_outcome[1,13] <- ifelse(dist[1] > 1000, 2, 1);
+				temporal_outcome[nrow(data),13] <- ifelse(dist[nrow(data)] > 1000, 2, 1);
 		}
 
 		
 		##### Detection distribution test
-		temporal_outcome[,13] <- ifelse(exists('shp_b') == F, 3, 1);
+		temporal_outcome[,14] <- ifelse(exists('shp_b') == F, 3, 1);
 		if(exists('shp_b') == T) {
 			out <- which(is.na(over(ll,shp_b)) == T);
-			if(length(out) > 0) temporal_outcome[which(data$longitude %in% ll@coords[out,1] & data$latitude %in% ll@coords[out,2]),13] <- 2;
+			if(length(out) > 0) temporal_outcome[which(data$longitude %in% ll@coords[out,1] & data$latitude %in% ll@coords[out,2]),14] <- 2;
 			rm(out);
 		}
 
 		##### Distance from release
 		dist_r <- geodist(data$release_latitude[rep(1,nrow(data))],data$release_longitude[rep(1,nrow(data))],data$latitude,data$longitude,units='km');
-		temporal_outcome[,14] <- ifelse(dist_r > 500, 2, 1);
+		temporal_outcome[,15] <- ifelse(dist_r > 500, 2, 1);
 
 		##### Release date before detection date
-		release_timediff <- as.numeric(difftime(data$tag_detection_timestamp,data$releasedatetime_timestamp, tz = 'UTC', units = 'mins'))
-		temporal_outcome[which(release_timediff >= (-720)),15] <- 1; ## -720 minutes, i.e. 12 hours, to take into account potential time zone differences 
-		temporal_outcome[which(release_timediff < (-720)),15] <- 2;  ## -720 minutes, i.e. 12 hours, to take into account potential time zone differences
+		release_timediff <- as.numeric(difftime(data$tag_detection_timestamp,data$release_date, tz = 'UTC', units = 'mins'))
+		temporal_outcome[which(release_timediff >= (-720)),16] <- 1; ## -720 minutes, i.e. 12 hours, to take into account potential time zone differences 
+		temporal_outcome[which(release_timediff < (-720)),16] <- 2;  ## -720 minutes, i.e. 12 hours, to take into account potential time zone differences
 		
 		##### Release location test
 		if(exists('shp_b') == T) {
-			temporal_outcome[,16] <- ifelse(dist[1] > 500 & length(which(is.na(over(ll_r,shp_b)) == T)) > 0, 2, 1)
+			temporal_outcome[,17] <- ifelse(dist[1] > 500 & length(which(is.na(over(ll_r,shp_b)) == T)) > 0, 2, 1)
 		} else {
-			temporal_outcome[,16] <- ifelse(dist[1] > 500, 2, 1);
+			temporal_outcome[,17] <- ifelse(dist[1] > 500, 2, 1);
 		} 
 	
 		##### Detection QC
-		ones <- as.numeric(rowSums(temporal_outcome[,c(10:14)] == 1));
-		temporal_outcome[which(ones <= 2),17] <- 4;
-		temporal_outcome[which(ones == 3),17] <- 3;		
-		temporal_outcome[which(ones == 4),17] <- 2;
-		temporal_outcome[which(ones == 5),17] <- 1;
+		ones <- as.numeric(rowSums(temporal_outcome[,c(11:15)] == 1));
+		temporal_outcome[which(ones <= 2),18] <- 4;
+		temporal_outcome[which(ones == 3),18] <- 3;		
+		temporal_outcome[which(ones == 4),18] <- 2;
+		temporal_outcome[which(ones == 5),18] <- 1;
 		rm(ones);
 
 	return(temporal_outcome);

@@ -3,6 +3,8 @@ FROM ubuntu:16.04
 ARG BUILDER_UID=9999
 
 ENV GRAILS_VERSION 1.3.7
+ENV HOME /home/builder
+ENV JAVA_TOOL_OPTIONS -Duser.home=/home/builder
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 ENV GRAILS_HOME /usr/lib/jvm/grails
 ENV PATH $GRAILS_HOME/bin:$PATH

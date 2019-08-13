@@ -15,8 +15,11 @@ pipeline {
             when { branch 'master' }
             steps {
                 withCredentials([usernamePassword(credentialsId: env.CREDENTIALS_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    sh 'bumpversion --tag --commit --allow-dirty release'
-                    sh 'git push origin master --follow-tags'
+                    sh '''
+                        export VERSION=$(bump2version --list --allow-dirty release | grep new_version= | sed -r s,"^.*=",,)
+                        git push origin master
+                        git push origin refs/tags/v$VERSION
+                    '''
                 }
             }
         }

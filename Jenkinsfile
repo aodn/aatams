@@ -10,19 +10,16 @@ pipeline {
             }
             stages {
                 stage('set_version') {
+                    when { not { branch "master" } }
                     steps {
-                        sh 'bumpversion patch'
+                        sh './bumpversion.sh build'
                     }
                 }
                 stage('release') {
                     when { branch 'master' }
                     steps {
                         withCredentials([usernamePassword(credentialsId: env.CREDENTIALS_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                            sh '''
-                                export VERSION=$(bump2version --list --allow-dirty release | grep -oP '^new_version=\K.*$')
-                                git push origin master
-                                git push origin tag v$VERSION
-                            '''
+                            sh './bumpversion.sh release'
                         }
                     }
                 }

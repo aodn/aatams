@@ -1,12 +1,6 @@
 pipeline {
     agent none
     stages {
-        stage('clean') {
-            agent { label 'master' }
-            steps {
-                sh 'git clean -fdx'
-            }
-        }
         stage('container') {
             agent {
                 dockerfile {
@@ -15,6 +9,20 @@ pipeline {
                 }
             }
             stages {
+                stage('set_version') {
+                    when { not { branch "master" } }
+                    steps {
+                        sh './bumpversion.sh build'
+                    }
+                }
+                stage('release') {
+                    when { branch 'master' }
+                    steps {
+                        withCredentials([usernamePassword(credentialsId: env.CREDENTIALS_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                            sh './bumpversion.sh release'
+                        }
+                    }
+                }
                 stage('package') {
                     steps {
                         sh 'grails -DARTIFACT_BUILD_NUMBER=${BUILD_NUMBER} -Dgrails.work.dir=${WORKSPACE}//target clean --non-interactive --plain-output'

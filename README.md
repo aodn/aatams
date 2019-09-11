@@ -12,7 +12,7 @@ The repository name remains as AATAMS due to the complexity of changes required 
 ### Upload and Storage
 The web app enables the *upload* and *storage* of Animal Tracking data, which can be broadly categorised as:
 
-* tag detections and receiver events
+* tag detections and receiver eventsa
   * downloaded from receivers and uploaded (as CSV files) to the app
   * information about the presence of a particular tag within the vicinity of a particular receiver and receiver statistics/diagnostic information, respectively
 * metadata

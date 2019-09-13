@@ -8,9 +8,9 @@ ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 ENV GRAILS_HOME /usr/lib/jvm/grails
 ENV PATH $GRAILS_HOME/bin:$PATH
 
-RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common \
-    && add-apt-repository ppa:openjdk-r/ppa \
-    && apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && add-apt-repository ppa:openjdk-r/ppa \
+    && apt-get install -y --no-install-recommends 
+    software-properties-common \
     ca-certificates \
     git \
     openjdk-7-jdk \

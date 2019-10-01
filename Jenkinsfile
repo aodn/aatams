@@ -6,6 +6,7 @@ pipeline {
                 dockerfile {
                     args '-v ${HOME}/.m2:/home/builder/.m2 -v ${HOME}/.grails:/home/builder/.grails -v ${HOME}/.ivy2:/home/builder/.ivy2'
                     additionalBuildArgs '--build-arg BUILDER_UID=$(id -u)'
+                    reuseNode true
                 }
             }
             stages {

@@ -9,6 +9,7 @@ bumpversion_build() {
 }
 
 bumpversion_release() {
+  git fetch --prune origin "+refs/tags/*:refs/tags/*"
   bump2version patch
   VERSION=$(bump2version --list --commit --tag --allow-dirty release | grep -oP '^new_version=\K.*$')
   git push origin tag $VERSION

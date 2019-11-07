@@ -31,9 +31,11 @@ pipeline {
                 }
             }
             post {
-                 success {
-                     archiveArtifacts artifacts: '**/*.war', fingerprint: true, onlyIfSuccessful: true
-                 }
+                success {
+                    dir('target/') {
+                        archiveArtifacts artifacts: '*.war', fingerprint: true, onlyIfSuccessful: true
+                    }
+                }
             }
         }
     }

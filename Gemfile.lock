@@ -109,7 +109,7 @@ GEM
       systemu
       yajl-ruby
     rack (2.0.8)
-    rake (10.1.0)
+    rake (12.3.3)
     rbzip2 (0.2.0)
     rest-client (1.6.7)
       mime-types (>= 1.16)

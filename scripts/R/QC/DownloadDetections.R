@@ -48,8 +48,6 @@ query <- paste("SELECT DISTINCT project.name AS tag_project_name, transmitter_id
 data <- dbGetQuery(con, query)
 data <- data[order(data$transmitter_id, data$tag_id, data$release_id),]; print(paste('Total number of tags = ', nrow(data), sep = ''));
 
-dbDisconnect(con);
-
 ##### Find for each species the corresponding ALA expert map shapefile
 # Retrieve species list 
 sp <- ddply(data, .(data$scientific_name, data$common_name), nrow)
@@ -91,8 +89,6 @@ if (nrow(sp[which(sp[,1] %in% fol_sel[which(is.na(fol_sel[,2]) == T),1]),1:2]) >
 ##### SQL query: for each tag deployment download all detections and metadata, then produce a CSV file
 start_time <- Sys.time();
 for (i in 1:nrow(data)){
-	
-	con <- dbConnect(RPostgres::Postgres(), host = server_address, dbname = db_name, user = db_user, port = db_port, password = db_password);
   	
 	query <- paste("SELECT DISTINCT se.tag_id,
   		vd.transmitter_id AS transmitter_id,
@@ -167,11 +163,11 @@ for (i in 1:nrow(data)){
 	rxr_metadata <- dbGetQuery(con, query);
 	if (exists('receiver_metadata') == F) {receiver_metadata <- rxr_metadata} else {receiver_metadata <- rbind(receiver_metadata, rxr_metadata)}
 
-	dbDisconnect(con);
-
 	write.table(rs, paste(data$transmitter_id[i],'_',data$tag_id[i],'_',data$release_id[i],'.csv',sep=''),col.names=T,row.names=F,quote=F,sep=';');
 }
 end_time <- Sys.time();
+
+dbDisconnect(con);
 
 ##### Export tag metadata
 tag_metadata <- tag_metadata[which(is.na(tag_metadata$transmitter_id) == F & duplicated(tag_metadata) == F),];

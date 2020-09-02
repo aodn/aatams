@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
     && rm -rf /var/lib/apt/lists/*
 
 RUN wget -q https://bootstrap.pypa.io/get-pip.py \
-    && python get-pip.py pip==18.1 \
+    && python get-pip.py pip==18.1 setuptools==49.6.0 wheel==0.35.1 \
     && rm -rf get-pip.py
 
 RUN pip install \

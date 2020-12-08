@@ -28,7 +28,7 @@
 --%>
         <tr>
           <td />
-          <td><input type="submit" value="Sign in" /></td>
+          <td><input disabled type="submit" value="Sign in" /></td>
         </tr>
       </tbody>
     </table>

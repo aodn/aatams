@@ -9,7 +9,8 @@ class PersonController {
 
     def permissionUtilsService
 
-    static allowedMethods = [save: "POST", update: "POST", updatePassword: "POST"]
+//    static allowedMethods = [save: "POST", update: "POST", updatePassword: "POST"]
+    static allowedMethods = []
 
     def index = {
         redirect(action: "list", params: params)
@@ -31,6 +32,7 @@ class PersonController {
     }
 
     def create = {
+        flash.message = "${message(code: 'default.registration.moratorium.message')}"
         def personInstance = new Person()
         personInstance.properties = params
         return [personInstance: personInstance]
@@ -39,7 +41,8 @@ class PersonController {
     def save = {
         PersonCreateCommand createPersonCmd ->
 
-        if (createPersonCmd.validate()) {
+//        if (createPersonCmd.validate()) {
+        if (false) {
             def personInstance = createPersonCmd.createPerson()
 
             // If a PI then set Person's status to ACTIVE, otherwise,
@@ -90,6 +93,7 @@ class PersonController {
             }
         }
         else {
+            flash.message = "${message(code: 'default.registration.moratorium.message')}"
             render(view: "create", model: [createPersonCmd:createPersonCmd])
         }
     }
@@ -154,7 +158,7 @@ class PersonController {
                 }
             }
 
-            [personInstance: personInstance, canEdit:canEdit]
+            [personInstance: personInstance, canEdit: false]
         }
     }
 

@@ -9,7 +9,9 @@ grails.project.dependency.resolution = {
         grailsHome()
         grailsCentral()
         mavenLocal()
-        mavenCentral()
+        // mavenCentral()
+        mavenRepo "https://repo1.maven.org/maven2/"
+        mavenRepo "https://repo.maven.apache.org/maven2/"
     }
     dependencies {
         compile "joda-time:joda-time:1.6.2"

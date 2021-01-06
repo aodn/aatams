@@ -15,11 +15,11 @@
     <resource>org.codehaus.groovy.grails.plugins.jasper.JasperTagLib</resource>
   </resources>
   <repositories>
-    <repository name='grailsCentral' url='http://plugins.grails.org' />
-    <repository name='http://repo.grails.org/grails/plugins' url='http://repo.grails.org/grails/plugins/' />
-    <repository name='http://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />
+    <repository name='grailsCentral' url='https://plugins.grails.org' />
+    <repository name='https://repo.grails.org/grails/plugins' url='http://repo.grails.org/grails/plugins/' />
+    <repository name='https://repo.grails.org/grails/core' url='http://repo.grails.org/grails/core/' />
     <repository name='grailsCore' url='http://svn.codehaus.org/grails/trunk/grails-plugins' />
-    <repository name='mavenCentral' url='http://repo1.maven.org/maven2/' />
+    <repository name='mavenCentral' url='https://repo1.maven.org/maven2/' />
     <repository name='https://repository.jboss.org/nexus/' url='https://repository.jboss.org/nexus/' />
   </repositories>
   <dependencies>

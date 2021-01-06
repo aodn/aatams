@@ -21,6 +21,8 @@ grails.project.dependency.resolution = {
         // from public Maven repositories
         //mavenLocal()
         //mavenCentral()
+        mavenRepo "https://repo1.maven.org/maven2/"
+        mavenRepo "https://repo.maven.apache.org/maven2/"
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"

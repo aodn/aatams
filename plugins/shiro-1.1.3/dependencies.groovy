@@ -10,7 +10,9 @@ grails.project.dependency.resolution = {
         grailsPlugins()
         grailsHome()
         grailsCentral()
-        mavenCentral()
+        // mavenCentral()
+        mavenRepo "https://repo1.maven.org/maven2/"
+        mavenRepo "https://repo.maven.apache.org/maven2/"
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.

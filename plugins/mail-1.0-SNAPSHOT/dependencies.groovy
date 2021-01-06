@@ -4,7 +4,9 @@ grails.project.dependency.resolution = {
     inherits("global")
     repositories {
         grailsHome()
-        mavenRepo "http://download.java.net/maven/2/"
+        //mavenRepo "http://download.java.net/maven/2/"
+        mavenRepo "https://repo1.maven.org/maven2/"
+        mavenRepo "https://repo.maven.apache.org/maven2/"
     }
     dependencies {
         compile "javax.mail:mail:1.4.3"

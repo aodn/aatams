@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/aodn/aatams.png?branch=master)](https://travis-ci.org/aodn/aatams)
+# NOTE
+This codebase has been deprecated. The newly developed application can be accessed at https://animaltracking.aodn.org.au
 
 ## Overview
 Animal Tracking, formerly Australian Animal Tracking and Monitoring System (AATAMS), is one of eleven facilities of the Integrated Marine Observing System (IMOS). Animal Tracking represents the higher biological monitoring of the marine environment for the IMOS program.

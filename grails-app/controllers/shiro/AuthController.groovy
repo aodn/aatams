@@ -18,6 +18,7 @@ class AuthController {
     def index = { redirect(action: "login", params: params) }
 
     def login = {
+        flash.message = message(code: "login.disabled")
         return [ username: params.username, rememberMe: (params.rememberMe != null), targetUri: params.targetUri ]
     }
 
@@ -47,7 +48,7 @@ class AuthController {
             // Perform the actual login. An AuthenticationException
             // will be thrown if the username is unrecognised or the
             // password is incorrect.
-            doLogin(authToken)
+//            doLogin(authToken)
 
             visibilityControlService.clearCache()
 

@@ -16,7 +16,7 @@ class EmbargoExpirationJob implements ApplicationContextAware {
 
     static triggers = {
         // Execute daily at midnight.
-        cron name: 'embargoExpirationDailyTrigger', cronExpression: "30 0 0 * * ?"
+//        cron name: 'embargoExpirationDailyTrigger', cronExpression: "30 0 0 * * ?"
     }
 
     def execute() {
@@ -30,7 +30,7 @@ class EmbargoExpirationJob implements ApplicationContextAware {
         def warningReleases = findEmbargoedReleases(embargoWarningPeriodMonths)
         log.info("Releases requiring embargo warning: " + warningReleases)
         warningReleases.each {
-            sendEmail(it, createWarningSubject(it), createWarningBody(it))
+//            sendEmail(it, createWarningSubject(it), createWarningBody(it))
         }
 
         // Second, find releases whose embargoes have expired today.
@@ -38,7 +38,7 @@ class EmbargoExpirationJob implements ApplicationContextAware {
         def expiresTodayReleases = findEmbargoedReleases(0)
         log.info("Releases requiring embargo expiration: " + expiresTodayReleases)
         expiresTodayReleases.each {
-            sendEmail(it, createExpiringSubject(it), createExpiringBody(it))
+//            sendEmail(it, createExpiringSubject(it), createExpiringBody(it))
         }
     }
 

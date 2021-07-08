@@ -38,7 +38,7 @@
                                     <label class="compulsory" for="name"><g:message code="person.name.label" default="Name" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'name', 'errors')}">
-                                    <g:textField name="name" value="${createPersonCmd?.name}" />
+                                    <g:textField disabled="" name="name" value="${createPersonCmd?.name}" />
 
                                 </td>
                             </tr>
@@ -48,7 +48,7 @@
                                     <label class="compulsory" for="username"><g:message code="secUser.username.label" default="Username" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'username', 'errors')}">
-                                    <g:textField name="username" value="${createPersonCmd?.username}" />
+                                    <g:textField disabled="" name="username" value="${createPersonCmd?.username}" />
 
                                 </td>
                             </tr>
@@ -58,7 +58,7 @@
                                     <label class="compulsory" for="password"><g:message code="secUser.password.label" default="Password" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'password', 'errors')}">
-                                    <input type="password" name="password" value="" />
+                                    <input disabled type="password" name="password" value="" />
                                 </td>
                             </tr>
 
@@ -67,7 +67,7 @@
                                     <label class="compulsory" for="passwordConfirm"><g:message code="secUser.password.label" default="Password (confirm)" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'passwordConfirm', 'errors')}">
-                                    <input type="password" name="passwordConfirm" value="" />
+                                    <input disabled type="password" name="passwordConfirm" value="" />
                                 </td>
                             </tr>
 
@@ -76,19 +76,14 @@
                                     <label class="compulsory" for="organisation"><g:message code="person.organisation.label" default="Organisation" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'organisation', 'errors')}">
-                                    <g:select name="organisation.id" 
-                                              from="${au.org.emii.aatams.Organisation.listActive()}" 
-                                              optionKey="id" 
-                                              value="${createPersonCmd?.organisation?.id}"
-                                              noSelection="${['null':'unlisted']}"/>
-
+                                    <g:textField disabled="" name="organisation" />
                                 </td>
                             </tr>
-                            
+
                             <tr class="prop">
                                 <td/>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'unlistedOrganisationName', 'errors')}">
-                                    <g:textField name="unlistedOrganisationName" 
+                                    <g:textField disabled="" name="unlistedOrganisationName"
                                                  value="${createPersonCmd?.unlistedOrganisationName}"
                                                  placeholder="new organisation name" />
 
@@ -100,7 +95,7 @@
                                     <label class="compulsory" for="phoneNumber"><g:message code="person.phoneNumber.label" default="Phone Number" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'phoneNumber', 'errors')}">
-                                    <g:textField name="phoneNumber" value="${createPersonCmd?.phoneNumber}" />
+                                    <g:textField disabled="" name="phoneNumber" value="${createPersonCmd?.phoneNumber}" />
 
                                 </td>
                             </tr>
@@ -110,7 +105,7 @@
                                     <label class="compulsory" for="emailAddress"><g:message code="person.emailAddress.label" default="Email Address" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'emailAddress', 'errors')}">
-                                    <g:textField name="emailAddress" value="${createPersonCmd?.emailAddress}" />
+                                    <g:textField disabled="" name="emailAddress" value="${createPersonCmd?.emailAddress}" />
 
                                 </td>
                             </tr>
@@ -120,8 +115,7 @@
                                     <label class="compulsory" for="defaultTimeZone"><g:message code="person.defaultTimeZone.label" default="Default Time Zone" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: createPersonCmd, field: 'defaultTimeZone', 'errors')}">
-                                    <joda:dateTimeZoneSelect name="defaultTimeZone" value="${createPersonCmd?.defaultTimeZone}" />
-
+                                    <g:textField disabled="" name="timezone" />
                                 </td>
                             </tr>
                             
@@ -129,7 +123,7 @@
                     </table>
                 </div>
                 <div class="buttons">
-                    <span class="button"><g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
+                    <span class="button"><g:submitButton disabled="" name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
                 </div>
             </g:form>
         </div>
